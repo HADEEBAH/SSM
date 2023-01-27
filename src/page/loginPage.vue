@@ -60,7 +60,6 @@ export default {};
   font-weight: 500;
   font-size: 20px;
   line-height: 23px;
-
   color: #000000;
 }
 .nametitle {
