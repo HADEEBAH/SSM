@@ -1,5 +1,6 @@
 import NavBar from '@/layout/navbarUser.vue';
 import Hello from '@/components/helloWorld.vue';
+import Login from '@/page/loginPage.vue'
 
 const routes = [
   {
@@ -14,6 +15,11 @@ const routes = [
       }
     ]
   },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+  }
 ]
 
 export default routes
