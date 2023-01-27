@@ -1,5 +1,6 @@
 import NavBar from '@/layout/navbarUser.vue';
 import Hello from '@/components/helloWorld.vue';
+import Kingdom from '@/components/admin/kingdomPage.vue'
 
 const routes = [
   {
@@ -14,6 +15,11 @@ const routes = [
       }
     ]
   },
+  {
+    path: '/kingdom',
+    name: 'Kingdom',
+    component: Kingdom,
+  }
 ]
 
 export default routes
