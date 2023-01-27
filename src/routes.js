@@ -1,5 +1,5 @@
-import NavBar from '@/layout/navbarUser.vue';
-import Hello from '@/components/helloWorld.vue';
+import NavBar from '@/layout/navbarAdmin.vue';
+import UserMenagePage from '@/components/user_menage/userMenagePage'
 
 const routes = [
   {
@@ -8,9 +8,9 @@ const routes = [
     component: NavBar,
     children:[
       {
-        path: '/',
-        name: 'Hello',
-        component: Hello,
+        path: '/user/menage',  
+        name: 'UserMenagePage',
+        component: UserMenagePage,
       }
     ]
   },

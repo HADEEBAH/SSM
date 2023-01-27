@@ -1,49 +1,200 @@
 <template>
-  <v-layout>
-
-    <v-app-bar
-      app
-      elevation="4"
-    >
-    </v-app-bar>
-    
-    <v-content>
-      <v-container>
-        <v-row>
-          <v-col>
-            <router-view/>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-content>
-
-  </v-layout>
+  <v-app>
+    <v-layout>
+      <v-app-bar clipped-left app dark fixed elevation="0" src="../assets/navbar/bg-nav-bar.png">
+        <v-app-bar-nav-icon @click="drawer = !drawer" ></v-app-bar-nav-icon>
+        <v-spacer></v-spacer>
+        <v-badge class="mr-5" overlap color="#F03D3E" content="1" message="1">
+          <v-icon dark>mdi-bell-outline</v-icon>
+        </v-badge>
+        <div v-if="!$vuetify.breakpoint.smAndDown">
+          <v-avatar class="mr-2" size="24">
+          <v-img src="https://cdn.vuetifyjs.com/images/lists/4.jpg" size="24" />
+          </v-avatar>
+          <span class="text-white">{{ user.full_name }}</span>
+        </div>
+        <v-menu 
+          v-model="menu"
+          :close-on-content-click="false"
+          bottom 
+          min-width="200px" 
+          rounded 
+          offset-y>
+          <template v-slot:activator="{ on }">
+            <v-btn  icon x-large v-on="on" dark>
+              <v-icon>{{$vuetify.breakpoint.smAndDown? "mdi-dots-vertical" : menu ? "mdi-chevron-up":"mdi-chevron-down" }}</v-icon>
+            </v-btn>
+          </template>
+          <v-card>
+            <v-list-item-content class="justify-center">
+              <div class="mx-auto text-center">
+                <v-avatar color="brown">
+                  <v-img src="https://cdn.vuetifyjs.com/images/lists/4.jpg" size="24" />
+                </v-avatar>
+                <h3>{{ user.full_name }}</h3>
+                <p class="text-caption mt-1">
+                  {{ user.email }}
+                </p>
+                <v-divider class="my-3"></v-divider>
+                <v-btn depressed rounded text> Edit Profile 
+                  <v-icon>mdi-account-edit-outline</v-icon>
+                </v-btn>
+                <v-divider class="my-3"></v-divider>  
+                <v-btn depressed rounded text> Login
+                  <v-icon>mdi-logout</v-icon>
+                </v-btn>
+              </div>
+            </v-list-item-content>
+          </v-card>
+        </v-menu>
+      </v-app-bar>
+      <v-navigation-drawer 
+        clipped
+        app
+        v-model="drawer"
+        :temporary="$vuetify.breakpoint.smAndDown"
+      >
+        <v-list
+          class="pr-0 "
+          nav
+          flat
+          
+        >
+          <div v-for="(list, list_index) in menu_drawer_list" :key="list_index" >
+            <v-list-item  :class="active_menu === list.to ? 'active-menu-list' : ''" @click="selectMenu('head',list.to)" link v-if="list.child.length === 0">
+              <v-list-item-title>{{ list.title }}</v-list-item-title>
+            </v-list-item>
+            <v-list-group
+              v-else
+              active-class="active-menu-list"
+              :value="active_menu === list.to"
+              :class="active_menu === list.to ? 'active-menu-group-list' : ''"
+              @click="selectMenu('head',list.to)"
+            >
+              <template v-slot:activator>
+                <v-list-item-content>
+                  <v-list-item-title>{{ list.title }}</v-list-item-title>
+                </v-list-item-content>
+              </template>
+              <v-list-item
+                @click="selectMenu('child',child.to, list.to)"
+                :class="active_menu_child === child.to ? 'active-menu-group-list-child' : 'ml-8 menu-group-list'" 
+                v-for="(child, index_child) in list.child"
+                :key="index_child"
+                link
+              >
+                <v-list-item-title>{{ child.title }}</v-list-item-title>
+              </v-list-item>
+            </v-list-group>
+          </div>
+        </v-list>
+        <div class="bottom-absolute">
+          <v-divider></v-divider>
+          <v-list-item link >
+            <v-list-item-icon><v-icon>mdi-login</v-icon></v-list-item-icon>
+            <v-list-item-title>ออกจากระบบ</v-list-item-title>
+          </v-list-item>
+        </div>
+      </v-navigation-drawer>
+      <v-main class="bg-admin">
+        <v-container >
+          <router-view />
+        </v-container>
+      </v-main>
+    </v-layout>
+  </v-app>
 </template>
 
 <script>
-  export default {
-    data: () => ({
-      name: "สวัสดีครับ"
-    }),
-
-    created() {
-      
+export default {
+  name: "navbarAdmin",
+  data: () => ({
+    menu : false,
+    drawer : false,
+    active_menu : "",
+    active_menu_child : "",
+    user: {
+      full_name: "John Doe",
+      email: "john.doe@doe.com",
     },
+    menu_drawer_list:[
+      { title : "แดชบอร์ด", to:"dashboard", child :[], }, // to ให้ใส่ name ของ router
+      { title : "ตารางเรียน", to:"schedule", child :[]},
+      { title : "เพิ่มผู้เรียน", to:"addStudent", child :[]},
+      { title : "คอร์สเรียน", to:"course", child :[
+        { title : "จัดการคอร์สทั้งหมด", to:"manageCourses" },
+        { title : "สร้างคอร์สเรียน", to:"createCourses" },
+        { title : "สรา้งอาณาจักร", to:"buildAnEmpire" },
+      ]},
+      { title : "การเงิน", to:"finance", child :[]},
+      { title : "จัดการบันชีผู้ใช้", to:"manageUserAccount", child :[]},
+    ]
+  }),
 
-    mounted() {
-      
-    },
+  created() {},
 
-    watch: {
-
-    },
-
-    computed: {
-
-    },
+  mounted() {
     
-    methods: {
-      
-    },
-  }
+  },
+
+  watch: {},
+
+  computed: {},
+
+  methods: {
+    selectMenu(type, to, head){
+      if(type === "child" && head === this.active_menu ){
+        this.active_menu_child = to
+      }else{
+        this.active_menu_child = to
+        this.active_menu = ""
+      }
+      if(type === "head"){
+        this.active_menu_child = ""
+        this.active_menu = to
+      }
+    }
+  },
+};
 </script>
+<style>
+  .bg-admin{
+    background-color: #FFFFFF;
+  }
+  .menu-list{
+    color: #333333 !important;
+  }
+  .active-menu-list{
+    background: #FFF4FB;
+    border-radius: 8px 0px 0px 8px;
+    font-weight: 700;
+    color: #333333 !important;
+  }
+  .menu-group-list{
+    background: transparent;
+  }
+  .active-menu-group-list{
+    background: #FFF4FB;
+    border-radius: 8px 0px 0px 8px;
+    color: #333333 !important;
+  }
+  .active-menu-group-list .v-list-item__title{ 
+    color: #333333 !important;
+  }
+  .active-menu-group-list .v-list-item__icon{ 
+    color: #333333 !important;
+  }
+  .active-menu-group-list-child{
+    background: #F4E3E3;
+    border-radius: 8px 0px 0px 8px;
+    margin: 0px 0px 0px 24px;
+    font-weight: 700;
+    color: #333333 !important;
+  }
+  .bottom-absolute{
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+  }
+  
+</style>
