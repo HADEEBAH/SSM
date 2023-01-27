@@ -1,39 +1,80 @@
 <template>
+  <v-form>
     <v-container>
-      <div class="titlekingdom">
-        <v-title>สร้างอาณาจักร</v-title>
-      </div>
-      <v-card-text>
-        <v-col cols="12" sm="8">
-          <h2 class="title">ชื่ออาณาจักร</h2>
-          <v-text-field placeholder="กรอกชื่ออาณาจักร" outlined></v-text-field>
-        </v-col>
-        <v-col cols="12" sm="8">
-          <h2 class="title">รายละเอียด</h2>
-          <v-text-field placeholder="กรอกรายละเอียด..." outlined></v-text-field>
-        </v-col>
-      </v-card-text>
+      <v-row>
+        <v-layout align-center justify-center mt-20>
+          <v-col>
+            <div class="titlekingdom"><v-title>สร้างอาณาจักร</v-title></div>
+            <v-card-text>
+              <form>
+                <h2 class="title">ชื่ออาณาจักร</h2>
+                <v-text-field
+                  class="form1"
+                  placeholder="กรอกชื่ออาณาจักร"
+                  outlined
+                ></v-text-field>
+                <h2 class="title">รายละเอียด</h2>
+                <v-textarea
+                  class="form2"
+                  placeholder="กรอกรายละเอียด..."
+                  auto-grow
+                  outlined
+                ></v-textarea>
+                <h2 class="title">อัปโหลดภาพหน้าปกอาณาจักร</h2>
+                <div class="btn text-center">
+                    <v-btn class="btn1" outlined color="error">ยกเลิก</v-btn>
+                    <v-btn class="btn2" outlined>ยืนยัน</v-btn>
+                </div>
+              </form>
+            </v-card-text>
+          </v-col>
+        </v-layout>
+      </v-row>
     </v-container>
-  </template>
-  
-  <script>
-  export default {};
-  </script>
-  
-  <style>
-  .titlekingdom {
-    position: absolute;
-    width: 175px;
-    height: 34px;
-    left: 239px;
-  
-    font-family: "Inter";
-    font-style: normal;
-    font-weight: 700;
-    font-size: 28px;
-    line-height: 34px;
-  
-    color: #000000;
-  }
-  </style>
-  
+  </v-form>
+</template>
+
+<script>
+export default {};
+</script>
+
+<style>
+.titlekingdom {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 34px;
+  margin-left: 15px;
+}
+.title {
+  margin-bottom: 5px;
+  margin-top: 35px;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 23px;
+}
+.form1 {
+  width: 1000px;
+  height: 48px;
+}
+.form2 {
+  width: 1000px;
+  height: 140px;
+  resize: none;
+}
+.btn {
+    margin-top: 150px;
+}
+.btn1 {
+  margin-right: 40px;
+}
+.btn2 {
+  margin-left: 40px;
+}
+.theme--light.v-btn.btn1 {
+    color: red;
+}
+</style>
