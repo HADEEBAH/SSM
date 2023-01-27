@@ -23,7 +23,7 @@
                 <h2 class="title">อัปโหลดภาพหน้าปกอาณาจักร</h2>
                 <div class="btn text-center">
                     <v-btn class="btn1" outlined color="error">ยกเลิก</v-btn>
-                    <v-btn class="btn2" outlined>ยืนยัน</v-btn>
+                    <v-btn class="btn2" >ยืนยัน</v-btn>
                 </div>
               </form>
             </v-card-text>
@@ -49,7 +49,7 @@ export default {};
 }
 .title {
   margin-bottom: 5px;
-  margin-top: 35px;
+  margin-top: 30px;
   font-family: "Roboto";
   font-style: normal;
   font-weight: 500;
@@ -57,12 +57,11 @@ export default {};
   line-height: 23px;
 }
 .form1 {
-  width: 1000px;
-  height: 48px;
+  width: 1085px;
+  height: 45px;
 }
 .form2 {
-  width: 1000px;
-  height: 140px;
+  width: 1085px;
   resize: none;
 }
 .btn {
@@ -76,5 +75,11 @@ export default {};
 }
 .theme--light.v-btn.btn1 {
     color: red;
+}
+.theme--light.v-btn.btn2 {
+    color: white;
+}
+.theme--light.v-btn.v-btn--has-bg {
+    background-color: #f30606;
 }
 </style>
