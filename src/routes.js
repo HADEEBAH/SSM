@@ -1,8 +1,8 @@
 import NavBarAdmin from '@/layout/navbarAdmin.vue';
 import RegisterPage from '@/components/user_menage/registerPage'
 import UserMenagePage from '@/components/user_menage/userMenagePage'
-import NavBarUser from '@/layout/navbarUser.vue';
-import Hello from '@/components/helloWorld.vue';
+// import NavBarUser from '@/layout/navbarUser.vue';
+// import Hello from '@/components/helloWorld.vue';
 import Login from '@/page/loginPage.vue'
 
 const routes = [
