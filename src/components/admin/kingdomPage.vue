@@ -1,10 +1,11 @@
 <template>
   <v-form>
+    <header class="headerkingdom">สร้างอาณาจักร</header>
     <v-container>
       <v-row>
         <v-layout align-center justify-center mt-20>
           <v-col>
-            <div class="titlekingdom"><v-title>สร้างอาณาจักร</v-title></div>
+            <!-- <div class="titlekingdom"><v-title>สร้างอาณาจักร</v-title></div> -->
             <v-card-text>
               <form>
                 <h2 class="title">ชื่ออาณาจักร</h2>
@@ -39,13 +40,13 @@ export default {};
 </script>
 
 <style>
-.titlekingdom {
-  font-family: "Inter";
+.headerkingdom {
   font-style: normal;
   font-weight: 700;
   font-size: 28px;
-  line-height: 34px;
-  margin-left: 15px;
+  margin-left: 195px;
+  margin-top: 50px;
+  margin-bottom: -90px;
 }
 .title {
   margin-bottom: 5px;
@@ -57,11 +58,11 @@ export default {};
   line-height: 23px;
 }
 .form1 {
-  width: 1085px;
+  width: 1120px;
   height: 45px;
 }
 .form2 {
-  width: 1085px;
+  width: 1120px;
   resize: none;
 }
 .btn {
