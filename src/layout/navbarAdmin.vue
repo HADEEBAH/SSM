@@ -2,7 +2,8 @@
   <v-app>
     <v-layout>
       <v-app-bar clipped-left app dark fixed elevation="0" src="../assets/navbar/bg-nav-bar.png">
-        <v-app-bar-nav-icon @click="drawer = !drawer" ></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon @click="drawer = !drawer" > <v-icon >{{drawer ? 'mdi-chevron-double-left':'mdi-dots-vertical' }}</v-icon>  </v-app-bar-nav-icon>
+        <v-app-bar-title><v-img max-height="37" max-width="51" src="../assets/navbar/title_img.jpg"></v-img></v-app-bar-title>
         <v-spacer></v-spacer>
         <v-badge class="mr-5" overlap color="#F03D3E" content="1" message="1">
           <v-icon dark>mdi-bell-outline</v-icon>
@@ -127,7 +128,10 @@ export default {
         { title : "สรา้งอาณาจักร", to:"buildAnEmpire" },
       ]},
       { title : "การเงิน", to:"finance", child :[]},
-      { title : "จัดการบันชีผู้ใช้", to:"manageUserAccount", child :[]},
+      { title : "จัดการผู้ใช้งาน", to:"manageUserAccount", child :[
+        {title : "จัดการผู้ใช้งาน", to:"manageUserAccount"},
+        {title : "จัดการสิทธิ์", to:"managePermission"},
+      ]},
     ]
   }),
 

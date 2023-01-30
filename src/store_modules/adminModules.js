@@ -23,12 +23,27 @@ const AdminMudules = {
   },
   actions: {
     changeDialogRegisterOneId(context, value){
-      context.commit("ShowDialogRegisterOneId",value)
+      if(value){
+        context.commit("ShowDialogRegisterOneId",value)
+      }else{
+        context.commit("ShowDialogRegisterOneId", value)
+        context.commit("UserOneId",{
+          firstname_th : "",
+          lastname_th : "",
+          firstname_en : "",
+          lastname_en : "",
+          phone_number : "",
+          username : "",
+          password : "",
+          confirm_password : "",
+        })
+      }
+      
     },
     changeUserOneId(context, data){
       context.state.user_one_id = data
       console.log(context.state.user_one_id)
-    }
+    },
   },
   getters :{
     getShowDialogRegisterOneId(state){
