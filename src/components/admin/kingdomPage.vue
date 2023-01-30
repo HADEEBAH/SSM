@@ -59,7 +59,7 @@ export default {};
 }
 .form1 {
   width: 1120px;
-  height: 45px;
+  height: 65px;
 }
 .form2 {
   width: 1120px;
@@ -69,10 +69,10 @@ export default {};
     margin-top: 150px;
 }
 .btn1 {
-  margin-right: 40px;
+  margin-right: 30px;
 }
 .btn2 {
-  margin-left: 40px;
+  margin-left: 30px;
 }
 .theme--light.v-btn.btn1 {
     color: red;
