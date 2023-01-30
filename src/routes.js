@@ -1,3 +1,6 @@
+import NavBar from '@/layout/navbarUser.vue';
+import Hello from '@/components/helloWorld.vue';
+import Kingdom from '@/components/admin/kingdomPage.vue'
 import NavBarAdmin from '@/layout/navbarAdmin.vue';
 import RegisterPage from '@/components/user_menage/registerPage'
 import UserMenagePage from '@/components/user_menage/userMenagePage'
@@ -22,6 +25,11 @@ const routes = [
         component: UserMenagePage,
       },
     ]
+  },
+  {
+    path: '/kingdom',
+    name: 'Kingdom',
+    component: Kingdom,
   },
   {
     path: '/login',
