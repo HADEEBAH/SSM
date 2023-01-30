@@ -28,6 +28,9 @@
 
 <script>
   export default {
+    components:{
+      // registerForm
+    },
     data: () => ({
       input: "",
       name: "สวัสดี",
