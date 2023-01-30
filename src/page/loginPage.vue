@@ -1,11 +1,12 @@
 <template>
   <v-container>
+    <header class="nametitle">เข้าสู่ระบบ</header>
     <v-row>
       <v-layout align-center justify-center mt-20>
         <v-flex xs12 sm8 md4>
-          <div class="nametitle">
+          <!-- <div class="nametitle">
             <v-title>เข้าสู่ระบบ</v-title>
-          </div>
+          </div> -->
           <v-card-text>
             <form>
               <v-col>
@@ -48,7 +49,7 @@ export default {};
   font-style: normal;
   font-weight: 500;
   font-size: 20px;
-  width: 330px;
+  width: 450px;
   margin-left: 12px;
   margin-top: 15px;
 }
@@ -63,8 +64,8 @@ export default {};
   color: #000000;
 }
 .nametitle {
-  margin-bottom: 25px;
-  padding-bottom: 30px;
+  margin-bottom:-40px;
+  margin-top: 60px;
   text-align: center;
   font-family: "Roboto";
   font-style: normal;
@@ -96,5 +97,8 @@ export default {};
   margin-top: 20px;
   text-align: center;
   color: #575757;
+}
+.theme--light.v-btn.v-btn--has-bg.loginbutton {
+    background-color: #8d8686;
 }
 </style>
