@@ -1,46 +1,46 @@
 <template>
-   <v-card :flat="crad_flat" class="pa-2">
+   <v-card :flat="crad_flat" :class="$vuetify.breakpoint.mdAndUp ? 'card-padding' : 'py-5'">
     <v-row dense v-if="dialog" >
       <v-col class="text-right">
         <v-btn icon @click="changeDialogRegisterOneId(false)"><v-icon>mdi-close</v-icon></v-btn>
       </v-col>
     </v-row>
-    <v-card-title>
+    <v-card-title >
       <v-row dense>
-        <v-col class="text-center title">{{  title  }}</v-col>
+        <v-col  class="text-center title">{{  title  }}</v-col>
       </v-row>
     </v-card-title>
     <v-card-text>
       <v-row dense>
-        <v-col class="pr-8">
+        <v-col cols="12" sm="6">
           <label>ชื่อ(ภาษาไทย)</label>
-          <v-text-field dense ref="firstname_th" :rules="rules.name_th" required v-model="user_one_id.firstname_th" placeholder="ชื่อ(ภาษาไทย)" outlined></v-text-field>
+          <v-text-field dense ref="firstname_th" :rules="rules.name_th" required v-model="user_one_id.firstname_th" placeholder="ระบุชื่อ(ภาษาไทย)" outlined></v-text-field>
         </v-col>
-        <v-col class="pl-8">
+        <v-col cols="12" sm="6">
           <label>นามสกุล(ภาษาไทย)</label>
-          <v-text-field dense ref="lastname_th" :rules="rules.name_th" required v-model="user_one_id.lastname_th" placeholder="นามสกุล(ภาษาไทย)" outlined></v-text-field>
+          <v-text-field dense ref="lastname_th" :rules="rules.name_th" required v-model="user_one_id.lastname_th" placeholder="ระบุนามสกุล(ภาษาไทย)" outlined></v-text-field>
         </v-col>
       </v-row>
       <v-row dense>
-        <v-col class="pr-8">
+        <v-col cols="12" sm="6">
           <label>ชื่อ(ภาษาอังกฤษ)</label>
-          <v-text-field dense ref="firstname_en" :rules="rules.name_en" required v-model="user_one_id.firstname_en" placeholder="ชื่อ(ภาษาอังกฤษ)" outlined></v-text-field>
+          <v-text-field dense ref="firstname_en" :rules="rules.name_en" required v-model="user_one_id.firstname_en" placeholder="ระบุชื่อ(ภาษาอังกฤษ)" outlined></v-text-field>
         </v-col>
-        <v-col class="pl-8">
+        <v-col cols="12" sm="6">
           <label>นามสกุล(ภาษาอังกฤษ)</label>
-          <v-text-field dense ref="lastname_en" :rules="rules.name_en" required v-model="user_one_id.lastname_en" placeholder="นามสกุล(ภาษาอังกฤษ)" outlined></v-text-field>
+          <v-text-field dense ref="lastname_en" :rules="rules.name_en" required v-model="user_one_id.lastname_en" placeholder="ระบุนามสกุล(ภาษาอังกฤษ)" outlined></v-text-field>
         </v-col>
       </v-row>
       <v-row dense>
         <v-col>
           <label>เบอร์โทร</label>
-          <v-text-field dense ref="phone_number"  maxlength="12" :rules="rules.phone_number" required v-model="user_one_id.phone_number" @input="checkPhoneNumber($event)" placeholder="xxx-xxx-xxxxx" outlined></v-text-field>
+          <v-text-field dense ref="phone_number"  maxlength="12" :rules="rules.phone_number" required v-model="user_one_id.phone_number" @input="checkPhoneNumber($event)" placeholder="ระบุเบอร์โทร" outlined></v-text-field>
         </v-col>
       </v-row>
       <v-row dense>
         <v-col>
-          <label>ผู้ใช้งาน(ภาษาอังกฤษ)</label>
-          <v-text-field dense ref="username" :rules="rules.username" required v-model="user_one_id.username" placeholder="ผู้ใช้งาน(ภาษาอังกฤษ)" outlined></v-text-field>
+          <label>ผู้ใช้งาน/OneID(ภาษาอังกฤษ)</label>
+          <v-text-field dense ref="username" :rules="rules.username" required v-model="user_one_id.username" placeholder="ระบุชื่อผู้ใช้งาน" outlined></v-text-field>
         </v-col>
       </v-row>
       <v-row dense>
@@ -55,7 +55,7 @@
             v-model="user_one_id.password" 
             :append-icon="show_password ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"
             @click:append="show_password = !show_password"
-            placeholder="รหัสผ่าน" 
+            placeholder="ระบุรหัสผ่าน" 
             outlined>
           </v-text-field>
         </v-col>
@@ -73,15 +73,28 @@
             placeholder="ยืนยันรหัสผ่าน" 
             :append-icon="show_confirm_password ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"
             @click:append="show_confirm_password = !show_confirm_password"
+            @change="changeUserOneId(user_one_id)"
             outlined>
           </v-text-field>
+        </v-col>
+      </v-row>
+      <v-row dense>
+        <v-col>
+          <v-checkbox v-model="user_one_id.accept_terms" color="pink lighten-1">
+            <template v-slot:label>
+              <div>
+                <label> การเปิดบัญชี ท่านรับทราบและตกลงตาม </label>
+                <label style="color:#FF6B81" class="cursor-pointer underline " >เงื่อนไขการบริการ & นโยบายความเป็นส่วนตัว</label> 
+              </div>
+            </template>
+          </v-checkbox>
         </v-col>
       </v-row>
     </v-card-text>
     <v-card-actions>
       <v-row dense>
         <v-col class="text-center">
-          <v-btn depressed class="btn-register white--text" @click="save">ลงทะเบียน</v-btn>
+          <v-btn depressed class="white--text" :class="$vuetify.breakpoint.mdAndUp ? 'btn-register' : 'w-full btn-register' " @click="save">ลงทะเบียน</v-btn>
         </v-col>
       </v-row>
     </v-card-actions>
@@ -100,12 +113,12 @@ export default {
     show_password: false,
     show_confirm_password: false,
     rules: {
-      name_th: [val => (val || '').length > 0 || 'This field is required'],
-      name_en: [val => (val || '').length > 0 || 'This field is required'],
-      phone_number: [val => (val || '').length > 0 && val.length === 12 || 'This field is required'],
-      username : [val => (val || '').length > 0 || 'This field is required'],
-      password : [val => (val || '').length > 0 || 'This field is required'],
-      confirm_password : [val => (val || '').length > 0 || 'This field is required'],
+      name_th: [val => (val || '').length > 0 || 'โปรดระบุชื่อ-นามสกุล(ภาษาไทย)'],
+      name_en: [val => (val || '').length > 0 || 'โปรดระบุชื่อ-นามสกุล(ภาษาอังกฤษ)'],
+      phone_number: [val => (val || '').length > 0 && val.length === 12 || 'โปรดระบุเบอร์โทร'],
+      username : [val => (val || '').length > 0 || 'โปรดระบุชื่อผู้ใช้'],
+      password : [val => (val || '').length > 0 || 'โปรดระบุรหัสผ่าน'],
+      confirm_password : [val => (val || '').length > 0 || 'โปรดยืนยันรหัสผ่าน'],
     },
   }),
   created() {},
@@ -115,8 +128,8 @@ export default {
       changeDialogRegisterOneId : "AdminMudules/changeDialogRegisterOneId",
       changeUserOneId : "dminMudules/changeUserOneId",
     }),
-    checkPhoneNumber(value) {
-      let x = value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+    checkPhoneNumber() {
+      let x = this.user_one_id.phone_number.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
       this.user_one_id.phone_number = !x[2] ? x[1] :   x  [1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
     },
     save(){
@@ -148,11 +161,9 @@ export default {
 }
 .btn-register{
   background-color:#FF6B81 !important;
-  padding: 14px 24px;
-  gap: 4px;
-  width: 260px;
-  height: 48px;
-  border-radius: 5px;
+}
+.card-padding{
+  padding: 40px 32px 40px 32px
 }
 </style>
         

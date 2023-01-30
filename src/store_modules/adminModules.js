@@ -11,6 +11,7 @@ const AdminMudules = {
       username : "",
       password : "",
       confirm_password : "",
+      accept_terms : false,
     }
   },
   mutations: {
@@ -36,6 +37,7 @@ const AdminMudules = {
           username : "",
           password : "",
           confirm_password : "",
+          accept_terms : false,
         })
       }
       

@@ -55,6 +55,7 @@
         v-model="drawer"
         :temporary="$vuetify.breakpoint.smAndDown"
       >
+        <v-img src="../assets/navbar/title_img.jpg"></v-img>
         <v-list
           class="pr-0 "
           nav
@@ -62,14 +63,14 @@
           
         >
           <div v-for="(list, list_index) in menu_drawer_list" :key="list_index" >
-            <v-list-item  :class="active_menu === list.to ? 'active-menu-list' : ''" @click="selectMenu('head',list.to)" link v-if="list.child.length === 0">
+            <v-list-item  :class="$route.name === list.to ? 'active-menu-list' : ''" @click="selectMenu('head',list.to)" link v-if="list.child.length === 0">
               <v-list-item-title>{{ list.title }}</v-list-item-title>
             </v-list-item>
             <v-list-group
               v-else
               active-class="active-menu-list"
-              :value="active_menu === list.to"
-              :class="active_menu === list.to ? 'active-menu-group-list' : ''"
+              :value="$route.name === list.to"
+              :class="$route.name === list.to ? 'active-menu-group-list' : ''"
               @click="selectMenu('head',list.to)"
             >
               <template v-slot:activator>
@@ -79,7 +80,7 @@
               </template>
               <v-list-item
                 @click="selectMenu('child',child.to, list.to)"
-                :class="active_menu_child === child.to ? 'active-menu-group-list-child' : 'ml-8 menu-group-list'" 
+                :class="$route.name === child.to ? 'active-menu-group-list-child' : 'ml-8 menu-group-list'" 
                 v-for="(child, index_child) in list.child"
                 :key="index_child"
                 link
@@ -119,18 +120,18 @@ export default {
       email: "john.doe@doe.com",
     },
     menu_drawer_list:[
-      { title : "แดชบอร์ด", to:"dashboard", child :[], }, // to ให้ใส่ name ของ router
-      { title : "ตารางเรียน", to:"schedule", child :[]},
-      { title : "เพิ่มผู้เรียน", to:"addStudent", child :[]},
-      { title : "คอร์สเรียน", to:"course", child :[
-        { title : "จัดการคอร์สทั้งหมด", to:"manageCourses" },
-        { title : "สร้างคอร์สเรียน", to:"createCourses" },
-        { title : "สรา้งอาณาจักร", to:"buildAnEmpire" },
+      { title : "แดชบอร์ด", to:"", child :[], }, // to ให้ใส่ name ของ router
+      { title : "ตารางเรียน", to:"", child :[]},
+      { title : "เพิ่มผู้เรียน", to:"", child :[]},
+      { title : "คอร์สเรียน", to:"", child :[
+        { title : "จัดการคอร์สทั้งหมด", to:"" },
+        { title : "สร้างคอร์สเรียน", to:"CourseCreate" },
+        { title : "สร้างอาณาจักร", to:"Kingdom" },
       ]},
-      { title : "การเงิน", to:"finance", child :[]},
-      { title : "จัดการผู้ใช้งาน", to:"manageUserAccount", child :[
-        {title : "จัดการผู้ใช้งาน", to:"manageUserAccount"},
-        {title : "จัดการสิทธิ์", to:"managePermission"},
+      { title : "การเงิน", to:"", child :[]},
+      { title : "จัดการผู้ใช้งาน", to:"", child :[
+        {title : "จัดการผู้ใช้งาน", to:"UserMenagePage"},
+        {title : "จัดการสิทธิ์", to:""},
       ]},
     ]
   }),
@@ -149,13 +150,13 @@ export default {
     selectMenu(type, to, head){
       if(type === "child" && head === this.active_menu ){
         this.active_menu_child = to
+        this.$router.push({name: to})
       }else{
         this.active_menu_child = to
         this.active_menu = ""
       }
       if(type === "head"){
-        this.active_menu_child = ""
-        this.active_menu = to
+        this.$router.push({name: to})
       }
     }
   },
