@@ -1,102 +1,148 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-layout align-center justify-center mt-20>
-        <v-flex xs12 sm8 md4>
-          <div class="nametitle">
-            <v-title>เข้าสู่ระบบ</v-title>
+  <v-app>
+    <v-container>
+      <v-layout
+        class="flex align-center justify-center my-6 "
+        style="width: 100%; height: 100%"
+      >
+        <v-card :class="$vuetify.breakpoint.mdAndUp ? 'card-padding' : 'py-5'">
+          <div class="ml-20">
+            <img src="@/assets/login/login.png" />
           </div>
           <v-card-text>
-            <form>
+            <v-row dense>
               <v-col>
-                <h2 class="title">ชื่อผู้ใช้งาน/OneID</h2>
+                <h2 class="title-login">ชื่อผู้ใช้งาน/OneID</h2>
                 <v-text-field
-                  background-color="#d9d9d9"
-                  placeholder="กรอกชื่อผู้ใช้"
-                  solo
+                  class="login-form"
+                  dense
+                  ref="username"
+                  :rules="rules.username"
+                  required
+                  v-model="username"
+                  placeholder="ระบุชื่อผู้ใช้งาน"
+                  outlined
                 ></v-text-field>
               </v-col>
+            </v-row>
+            <v-row dense>
               <v-col>
-                <h2 class="title">รหัสผ่าน</h2>
+                <h2 class="title-login">รหัสผ่าน</h2>
                 <v-text-field
-                  background-color="#d9d9d9"
-                  :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                  placeholder="กรอกรหัสผ่าน"
-                  solo
-                ></v-text-field>
+                  class="login-form"
+                  dense
+                  ref="password"
+                  :type="show_password ? 'text' : 'password'"
+                  :rules="rules.password"
+                  required
+                  v-model="password"
+                  :append-icon="
+                    show_password ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
+                  "
+                  @click:append="show_password = !show_password"
+                  placeholder="ระบุรหัสผ่าน"
+                  outlined
+                >
+                </v-text-field>
               </v-col>
-              <h4 to="/" class="forgotpassword">ลืมรหัสผ่าน</h4>
-              <div>
-                <v-btn class="loginbutton" x-large> เข้าสู่ระบบ </v-btn>
-              </div>
-              <h4 to="/" class="register">ลงทะเบียนผู้ใช้ใหม่</h4>
-            </form>
+            </v-row>
           </v-card-text>
-        </v-flex>
+          <v-card-actions>
+            <v-row dense>
+              <v-col class="text-center">
+                <v-btn
+                  depressed
+                  class="white--text btn-login"
+                  :class="
+                    $vuetify.breakpoint.mdAndUp
+                      ? 'btn-login'
+                      : 'w-full btn-login'
+                  "
+                  @click="login"
+                  >เข้าสู่ระบบ</v-btn
+                >
+              </v-col>
+            </v-row>
+          </v-card-actions>
+          <v-card-actions>
+            <v-row dense>
+              <v-col class="text-center">
+                <v-btn
+                  class="btn-register1"
+                  outlined
+                  color="#ff6b81"
+                  width="300px"
+                  :class="
+                    $vuetify.breakpoint.mdAndUp
+                      ? 'btn-register1'
+                      : 'w-full btn-register1'
+                  "
+                  @click="save"
+                  >ลงทะเบียน</v-btn
+                >
+              </v-col>
+            </v-row>
+          </v-card-actions>
+          <h4 to="/" class="text-center forgotpassword mt-3">
+            ลืมรหัสผ่านใช่หรือไม่ ?
+          </h4>
+        </v-card>
       </v-layout>
-    </v-row>
-  </v-container>
+    </v-container>
+  </v-app>
 </template>
 
 <script>
 export default {
-  
+  name: "loginPage",
+  props: {
+    dialog: { type: Boolean, default: false },
+  },
+  data: () => ({
+    show_password: false,
+    rules: {
+      username: [(val) => (val || "").length > 0 || "โปรดระบุชื่อผู้ใช้"],
+      password: [(val) => (val || "").length > 0 || "โปรดระบุรหัสผ่าน"],
+    },
+  }),
+  created() {},
+  mounted() {},
+  methods: {},
+  computed: {},
+  watch: {},
 };
 </script>
 
-<style>
-.loginbutton {
-  font-family: "Prompt";
-  font-style: normal;
-  font-weight: 500;
-  font-size: 20px;
-  width: 330px;
-  margin-left: 12px;
-  margin-top: 15px;
+<style scoped>
+.v-text-field.login-form {
+  width: 300px;
 }
-.title {
-  margin-bottom: 15px;
-  margin-top: -15px;
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 23px;
-  color: #000000;
+.title-login {
+  font-weight: bold;
 }
-.nametitle {
-  margin-bottom: 25px;
-  padding-bottom: 30px;
-  text-align: center;
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 24px;
-  color: #000000;
+.btn-login {
+  background-color: #ff6b81 !important;
+  width: 300px;
+  border-radius: 5px;
 }
+/* .btn-register {
+  background-color: #ff6b81 !important;
+  width: 100%;
+} */
+.card-padding {
+  padding: 40px 40px 40px 40px;
+}
+
 .forgotpassword {
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 19px;
-  text-align: right;
-  text-decoration-line: underline;
-  margin-bottom: 20px;
-  margin-top: -25px;
-  margin-right: 10px;
   cursor: pointer;
-  color: #0c729f;
-}
-.register {
-  font-family: "Roboto";
-  font-style: normal;
+  color: #ff6b81;
   font-weight: 500;
-  font-size: 16px;
-  line-height: 19px;
-  text-decoration-line: underline;
-  margin-top: 20px;
-  text-align: center;
-  color: #575757;
+  font-size: 12px;
+}
+#app {
+  background: url('@/assets/login/login-bg.jpg')
+    no-repeat center center !important;
+  background-size: cover; 
+  
 }
 </style>
