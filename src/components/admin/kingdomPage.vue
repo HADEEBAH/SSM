@@ -6,7 +6,7 @@
         <v-col>
           <h2 class="title1 mb-2">ชื่ออาณาจักร</h2>
           <v-text-field
-            class="form1 mb-8"
+            class="form1 mb-6"
             placeholder="กรอกชื่ออาณาจักร"
             outlined
             v-model="namekingdom"
