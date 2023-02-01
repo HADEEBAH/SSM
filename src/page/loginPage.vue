@@ -6,8 +6,8 @@
         style="width: 100%; height: 100%"
       >
         <v-card :class="$vuetify.breakpoint.mdAndUp ? 'card-padding' : 'py-5'">
-          <div class="ml-20">
-            <img src="@/assets/login/login.png" />
+          <div class="ml-24 mt-5 mr-3">
+            <v-img v-if="$vuetify.breakpoint.smAndUp" class="img-header" src="@/assets/login/login.png" />
           </div>
           <v-card-text>
             <v-row dense>
@@ -139,6 +139,11 @@ export default {
   font-weight: 500;
   font-size: 12px;
 }
+.img-header{
+     
+    max-height: 156px;
+    max-width: 156px;
+  }
 #app {
   background: url('@/assets/login/login-bg.jpg')
     no-repeat center center !important;

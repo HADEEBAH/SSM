@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <headerPage title="สร้างอาณาจักร"></headerPage>
     <v-container>
+      <headerPage title="สร้างอาณาจักร"></headerPage>
       <v-row>
         <v-col>
           <h2 class="title1 mb-2">ชื่ออาณาจักร</h2>

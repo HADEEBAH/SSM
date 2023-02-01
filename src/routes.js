@@ -6,6 +6,7 @@ import CourseCreate from '@/page/course/courseCreate'
 // import NavBarUser from '@/layout/navbarUser.vue';
 // import Hello from '@/components/helloWorld.vue';
 import Login from '@/page/loginPage.vue'
+import Addlearn from '@/components/admin/addlearnPage.vue'
 
 const routes = [
 
@@ -33,6 +34,11 @@ const routes = [
         path: '/kingdom',
         name: 'Kingdom',
         component: Kingdom,
+      },
+      {
+        path: '/addlearn',
+        name: 'Addlearn',
+        component: Addlearn,
       },
     ]
   },
