@@ -58,12 +58,12 @@
     },
     methods: {
       ...mapActions({
-        changeDialogRegisterOneId : "AdminMudules/changeDialogRegisterOneId"
+        changeDialogRegisterOneId : "RegisterModules/changeDialogRegisterOneId"
       })
     },
     computed: {
       ...mapGetters({
-        show_dialog_register_one_id : "AdminMudules/getShowDialogRegisterOneId"
+        show_dialog_register_one_id : "RegisterModules/getShowDialogRegisterOneId"
       })
     },
     watch: {

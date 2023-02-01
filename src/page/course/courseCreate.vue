@@ -10,7 +10,7 @@
               <template v-slot:label>
                 <v-row dense>
                   <v-col cols="4" sm="12">
-                    <v-img src="../../assets/course/general_course_icon.jpg" height="50" max-height="78" max-width="80"></v-img>
+                    <v-img src="../../assets/course/general_course_icon.jpg" height="50" max-height="80" max-width="80"></v-img>
                   </v-col>
                   <v-col cols="8" sm="12">
                     <label>คอร์สทั่วไป</label>
@@ -24,7 +24,7 @@
               <template v-slot:label>
                 <v-row dense>
                   <v-col cols="4" sm="12">
-                    <v-img src="../../assets/course/short_course_icon.jpg" height="50" max-height="78" max-width="80"></v-img>
+                    <v-img src="../../assets/course/short_course_icon.jpg" height="50" max-height="80" max-width="80"></v-img>
                   </v-col>
                   <v-col cols="8" sm="12">
                     <label>คอร์สระยะสั้น</label>
@@ -138,13 +138,8 @@
                     <v-textarea v-model="course_data.music_performance" outlined placeholder="กรอกรายละเอียด..."></v-textarea>
                   </v-col>
                 </v-row>
-                <v-row>
-                  <v-col cols="12">
-                    <label-custom text="catification"></label-custom>
-                    <v-textarea v-model="course_data.catification" outlined placeholder="กรอกรายละเอียด..."></v-textarea>
-                  </v-col>
-                </v-row>
               </template>
+              <!-- Course Type  :: short course -->
               <template v-else>
                 <v-row>
                   <v-col cols="12">
@@ -159,6 +154,12 @@
                   </v-col>
                 </v-row>
               </template>
+              <v-row>
+                <v-col cols="12">
+                  <label-custom text="catification"></label-custom>
+                  <v-textarea v-model="course_data.catification" outlined placeholder="กรอกรายละเอียด..."></v-textarea>
+                </v-col>
+              </v-row>
             </v-card-text>
           </v-card>
           <v-crad>
