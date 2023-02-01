@@ -39,7 +39,7 @@
 export default {};
 </script>
 
-<style>
+<style scoped>
 .headerkingdom {
   font-style: normal;
   font-weight: 700;
