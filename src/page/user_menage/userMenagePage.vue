@@ -28,14 +28,14 @@
       </v-card-text>
     </v-card>
     <v-dialog persistent v-model="show_dialog_register_one_id" width="60vw" >
-      <registerDialogForm></registerDialogForm>
+      <registerDialogForm dialog title="สมัคร One ID"></registerDialogForm>
     </v-dialog>
   </v-container> 
 </template>  
 <script>
-  import headerPage from '../header/headerPage.vue';
-  import childHeader from '../header/childHeader.vue';
-  import registerDialogForm from './registerDialogForm.vue';
+  import headerPage from '../../components/header/headerPage.vue';
+  import childHeader from '../../components/header/childHeader.vue';
+  import registerDialogForm from '../../components/user_menage/registerDialogForm.vue'
   import { mapActions, mapGetters } from 'vuex';
   export default {
     name:"userMenagePage",
@@ -58,16 +58,17 @@
     },
     methods: {
       ...mapActions({
-        changeDialogRegisterOneId : "AdminMudules/changeDialogRegisterOneId"
+        changeDialogRegisterOneId : "RegisterModules/changeDialogRegisterOneId"
       })
     },
     computed: {
       ...mapGetters({
-        show_dialog_register_one_id : "AdminMudules/getShowDialogRegisterOneId"
+        show_dialog_register_one_id : "RegisterModules/getShowDialogRegisterOneId"
       })
     },
-    watch: {},
-   
+    watch: {
+
+    },
   }
 </script>
   

@@ -1,4 +1,4 @@
-const AdminMudules = {
+const RegisterModules = {
   namespaced: true,
   state: {
     show_dialog_register_one_id : false,
@@ -11,6 +11,7 @@ const AdminMudules = {
       username : "",
       password : "",
       confirm_password : "",
+      accept_terms : false,
     }
   },
   mutations: {
@@ -36,6 +37,7 @@ const AdminMudules = {
           username : "",
           password : "",
           confirm_password : "",
+          accept_terms : false,
         })
       }
       
@@ -55,4 +57,4 @@ const AdminMudules = {
   }
 }
 
-export default AdminMudules
+export default RegisterModules

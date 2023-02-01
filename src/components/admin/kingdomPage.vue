@@ -75,6 +75,14 @@ export default {
   font-size: 20px;
   line-height: 23px;
 }
+.headerkingdom {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 28px;
+  margin-left: 195px;
+  margin-top: 50px;
+  margin-bottom: -90px;
+}
 .title2 {
   font-weight: 500;
   font-size: 20px;
