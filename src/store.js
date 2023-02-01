@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import AdminMudules from '@/store_modules/adminModules'
+import RegisterModules from '@/store_modules/registerModules'
 
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   modules: {
-    AdminMudules: AdminMudules,
+    RegisterModules: RegisterModules,
   }
 })
 

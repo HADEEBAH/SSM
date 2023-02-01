@@ -3,14 +3,14 @@
     <v-layout>
       <v-app-bar clipped-left app dark fixed elevation="0" src="../assets/navbar/bg-nav-bar.png">
         <v-app-bar-nav-icon @click="drawer = !drawer" > <v-icon >{{drawer ? 'mdi-chevron-double-left':'mdi-dots-vertical' }}</v-icon>  </v-app-bar-nav-icon>
-        <v-app-bar-title><v-img max-height="37" max-width="51" src="../assets/navbar/title_img.jpg"></v-img></v-app-bar-title>
+        <!-- <v-app-bar-title><v-img max-height="37" max-width="51" src="../assets/navbar/title_img.jpg"></v-img></v-app-bar-title> -->
         <v-spacer></v-spacer>
         <v-badge class="mr-5" overlap color="#F03D3E" content="1" message="1">
           <v-icon dark>mdi-bell-outline</v-icon>
         </v-badge>
         <div v-if="!$vuetify.breakpoint.smAndDown">
           <v-avatar class="mr-2" size="24">
-          <v-img src="https://cdn.vuetifyjs.com/images/lists/4.jpg" size="24" />
+            <v-img src="https://cdn.vuetifyjs.com/images/lists/4.jpg" size="24" />
           </v-avatar>
           <span class="text-white">{{ user.full_name }}</span>
         </div>
@@ -55,7 +55,7 @@
         v-model="drawer"
         :temporary="$vuetify.breakpoint.smAndDown"
       >
-        <v-img src="../assets/navbar/title_img.jpg"></v-img>
+        <v-img src="../assets/navbar/drawer_img.png"></v-img>
         <v-list
           class="pr-0 "
           nav
@@ -198,7 +198,7 @@ export default {
   }
   .bottom-absolute{
     position: absolute;
-    bottom: 10px;
+    bottom: 0px;
     width: 100%;
   }
   

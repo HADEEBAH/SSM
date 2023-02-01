@@ -1,4 +1,4 @@
-const AdminMudules = {
+const RegisterModules = {
   namespaced: true,
   state: {
     show_dialog_register_one_id : false,
@@ -57,4 +57,4 @@ const AdminMudules = {
   }
 }
 
-export default AdminMudules
+export default RegisterModules

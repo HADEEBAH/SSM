@@ -8,6 +8,7 @@ import CourseCreate from '@/page/course/courseCreate'
 import Login from '@/page/loginPage.vue'
 
 const routes = [
+
   {
     path: '/register',  
     name: 'Register',
