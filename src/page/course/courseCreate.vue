@@ -39,7 +39,7 @@
           alt-labels
           v-model="step"
         >
-        <v-stepper-header style="box-shadow : none !important">
+        <v-stepper-header v-if="course_data.type === 'general_course'" style="box-shadow : none !important">
           <template v-for="(header, index) in step_header_data" >
             <v-stepper-step :key="index" color="pink" :step="index+1">
               <label :class="step === index+1 ? 'pink--text font-bold':''">{{ header }}</label>
@@ -76,6 +76,7 @@
               </v-row>
             </v-card-text>
           </v-card>
+          <!-- Detail -->
           <v-card flat>
             <v-card-title class="font-bold text-2xl">รายละเอียด</v-card-title>
             <v-divider></v-divider>
@@ -123,24 +124,41 @@
                   <v-text-field dense outlined v-model="course_data.location" placeholder="ระบุสถานที่เรียน"></v-text-field>
                 </v-col>
               </v-row>
-              <v-row>
-                <v-col cols="12">
-                  <label-custom text="รายละเอียดคอร์ส"></label-custom>
-                  <v-textarea v-model="course_data.detail" outlined placeholder="กรอกรายละเอียด..."></v-textarea>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12">
-                  <label-custom text="music performance"></label-custom>
-                  <v-textarea v-model="course_data.music_performance" outlined placeholder="กรอกรายละเอียด..."></v-textarea>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12">
-                  <label-custom text="catification"></label-custom>
-                  <v-textarea v-model="course_data.catification" outlined placeholder="กรอกรายละเอียด..."></v-textarea>
-                </v-col>
-              </v-row>
+              <!-- Course Type  :: general course -->
+              <template v-if="course_data.type === 'general_course'">
+                <v-row>
+                  <v-col cols="12">
+                    <label-custom text="รายละเอียดคอร์ส"></label-custom>
+                    <v-textarea v-model="course_data.detail" outlined placeholder="กรอกรายละเอียด..."></v-textarea>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12">
+                    <label-custom text="music performance"></label-custom>
+                    <v-textarea v-model="course_data.music_performance" outlined placeholder="กรอกรายละเอียด..."></v-textarea>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12">
+                    <label-custom text="catification"></label-custom>
+                    <v-textarea v-model="course_data.catification" outlined placeholder="กรอกรายละเอียด..."></v-textarea>
+                  </v-col>
+                </v-row>
+              </template>
+              <template v-else>
+                <v-row>
+                  <v-col cols="12">
+                    <label-custom text="โค้ช"></label-custom>
+                    <v-select
+                    dense
+                    v-model="course_data.kingdom_name"
+                    :items="kingdoms"
+                    placeholder="ระบุโค้ช"
+                    outlined
+                  ></v-select>
+                  </v-col>
+                </v-row>
+              </template>
             </v-card-text>
           </v-card>
           <v-crad>
@@ -255,8 +273,9 @@ export default {
     previewUrl : null,
     filter_kingdom : "",
     step_header_data : ["คอร์สเรียน", "ช่วงเวลาและโค้ช", "แพ็คเกจ"],
+    courses:["โค้ชหนุ่ม", "โค้ชพอล"],
     course_data : {
-      type : "",
+      type : "general_course",
       course_name_th : "",
       course_name_en : "",
       kingdom_name : "",
