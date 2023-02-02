@@ -4,27 +4,29 @@
       <headerPage title="เพิ่มผู้เรียน"></headerPage>
       <v-row>
         <v-col>
-          <h2 class="title1 mb-1">ผู้เรียน</h2>
+          <label-custom class="mb-1" text="ผู้เรียน"></label-custom>
+          <label
+            class="sub-register primary--text cursor-pointer underline"
+            @click="changeDialogRegisterOneId(true)"
+            >สมัคร One ID</label
+          >
           <v-row>
             <v-col cols="12" sm="8">
-              <v-select
+              <v-autocomplete
+                prepend-inner-icon="mdi-magnify"
                 dense
                 v-model="selected"
                 :items="student"
                 placeholder="ค้นหา/เลือกผู้เรียน"
+                label="ค้นหา/เลือกผู้เรียน"
+                single-line
                 outlined
                 chips
                 multiple
+                deletable-chips
+                clearable
               >
-                <template v-slot:prepend-item>
-                  <v-text-field
-                    dense
-                    v-model="filter_search"
-                    outlined
-                    placeholder="ค้นหา/เลือกผู้เรียน"
-                  ></v-text-field>
-                </template>
-              </v-select>
+              </v-autocomplete>
             </v-col>
           </v-row>
           <v-card class="mt-6">
@@ -57,11 +59,11 @@
               </v-radio-group>
               <v-row>
                 <v-col cols="12" sm="4">
-                  <label>อาณาจักร</label>
+                  <label-custom text="อาณาจักร"></label-custom>
                   <v-select
                     dense
-                    v-model="add_data.student"
-                    :items="student"
+                    v-model="add_data.kingdom"
+                    :items="kingdom"
                     placeholder="เลือกอาณาจักร"
                     outlined
                   >
@@ -76,11 +78,11 @@
                   </v-select>
                 </v-col>
                 <v-col cols="12" sm="4">
-                  <label>คอร์สเรียน</label>
+                  <label-custom text="คอร์สเรียน"></label-custom>
                   <v-select
                     dense
-                    v-model="add_data.student"
-                    :items="student"
+                    v-model="add_data.course"
+                    :items="course"
                     placeholder="เลือกอาณาจักร"
                     outlined
                   >
@@ -97,11 +99,11 @@
               </v-row>
               <v-row class="">
                 <v-col cols="12" sm="4">
-                  <label>แพ็คเกจ</label>
+                  <label-custom text="แพ็คเกจ"></label-custom>
                   <v-select
                     dense
-                    v-model="add_data.student"
-                    :items="student"
+                    v-model="add_data.coursepackage"
+                    :items="coursepackage"
                     placeholder="เลือกแพ็คเกจ"
                     outlined
                   >
@@ -116,11 +118,11 @@
                   </v-select>
                 </v-col>
                 <v-col cols="12" sm="4">
-                  <label>ระยะเวลา</label>
+                  <label-custom text="ระยะเวลา"></label-custom>
                   <v-select
                     dense
-                    v-model="add_data.student"
-                    :items="student"
+                    v-model="add_data.period"
+                    :items="period"
                     placeholder="เลือกระยะเวลา"
                     outlined
                   >
@@ -135,7 +137,7 @@
                   </v-select>
                 </v-col>
                 <v-col cols="12" sm="2">
-                  <label>จำนวนครั้ง</label>
+                  <label-custom text="จำนวนครั้ง"></label-custom>
                   <template v-slot:prepend-item>
                     <v-text-field
                       dense
@@ -147,11 +149,11 @@
               </v-row>
               <v-row>
                 <v-col cols="12" sm="2">
-                  <label>วัน</label>
+                  <label-custom text="วัน"></label-custom>
                   <v-select
                     dense
-                    v-model="add_data.student"
-                    :items="student"
+                    v-model="add_data.day"
+                    :items="day"
                     placeholder="เลือกวัน"
                     outlined
                   >
@@ -166,11 +168,11 @@
                   </v-select>
                 </v-col>
                 <v-col cols="12" sm="2">
-                  <label>เวลา</label>
+                  <label-custom text="เวลา"></label-custom>
                   <v-select
                     dense
-                    v-model="add_data.student"
-                    :items="student"
+                    v-model="add_data.time"
+                    :items="time"
                     placeholder="เลือกเวลา"
                     outlined
                   >
@@ -185,11 +187,11 @@
                   </v-select>
                 </v-col>
                 <v-col cols="12" sm="4">
-                  <label>โค้ช</label>
+                  <label-custom text="โค้ช"></label-custom>
                   <v-select
                     dense
-                    v-model="add_data.student"
-                    :items="student"
+                    v-model="add_data.coach"
+                    :items="coach"
                     placeholder="เลือกโค้ช"
                     outlined
                   >
@@ -204,39 +206,46 @@
                   </v-select>
                 </v-col>
                 <v-col cols="12" sm="4">
-                  <label>วันเริ่ม</label>
+                  <label-custom text="วันเริ่ม"></label-custom>
                   <v-menu
-                    ref="calender"
-                    v-model="calender"
+                    ref="menu"
+                    v-model="menu"
                     :close-on-content-click="false"
+                    :return-value.sync="date"
                     transition="scale-transition"
                     offset-y
-                    max-width="290px"
                     min-width="auto"
                   >
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
-                        v-model="dateFormatted"
-                        outlined
-                        dense
+                        v-model="date"
                         placeholder="เลือกวันเริ่ม"
                         append-icon="mdi-calendar"
+                        outlined
+                        dense
                         v-bind="attrs"
-                        @blur="date = parseDate(dateFormatted)"
                         v-on="on"
                       ></v-text-field>
                     </template>
-                    <v-date-picker
-                      v-model="date"
-                      no-title
-                      @input="calender = false"
-                    ></v-date-picker>
+                    <v-date-picker v-model="date" no-title scrollable>
+                      <v-spacer></v-spacer>
+                      <v-btn text color="primary" @click="menu = false">
+                        Cancel
+                      </v-btn>
+                      <v-btn
+                        text
+                        color="primary"
+                        @click="$refs.menu.save(date)"
+                      >
+                        OK
+                      </v-btn>
+                    </v-date-picker>
                   </v-menu>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col cols="12" sm="4">
-                  <label>ราคา</label>
+                  <label-custom text="ราคา"></label-custom>
                   <v-text-field
                     dense
                     v-model="add_data.student"
@@ -246,7 +255,7 @@
                   </v-text-field>
                 </v-col>
                 <v-col cols="12" sm="8">
-                  <label>หมายเหตุราคา</label>
+                  <label-custom text="หมายเหตุราคา"></label-custom>
                   <v-textarea
                     class="form-learn"
                     auto-grow
@@ -267,19 +276,29 @@
         >
         <v-btn class="btn2 ml-8 mt-20 mb-5">ยืนยัน</v-btn>
       </div>
+      <v-dialog persistent v-model="show_dialog_register_one_id" width="60vw">
+        <registerDialogForm dialog title="สมัคร One ID"></registerDialogForm>
+      </v-dialog>
     </v-container>
   </v-app>
 </template>
 
 <script>
 import headerPage from "@/components/header/headerPage.vue";
+import LabelCustom from "@/components/label/labelCustom.vue";
+import registerDialogForm from "@/components/user_menage/registerDialogForm.vue";
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "addlearnPage",
   components: {
     headerPage,
+    LabelCustom,
+    registerDialogForm,
   },
   props: {},
   data: () => ({
+    username: "",
+    show_dialog: false,
     filter_search: "",
     add_data: {},
     student: [
@@ -288,6 +307,13 @@ export default {
       "เนตรกมล ศรีโสภา",
       "จารุณี กมลอาทิตย์",
     ],
+    kingdom: ["1", "2", "3"],
+    course: ["3", "2", "1"],
+    coursepackage: ["มา 1 จ่าย 3", "มา 3 จ่ายเงิน"],
+    period: ["3 วัน", "3 เดือน", "3 ปี"],
+    day: ["Monday", "Saturday"],
+    time: ["12", "14"],
+    coach: ["Robert", "Lewandowski"],
     selected: [""],
   }),
 
@@ -295,11 +321,22 @@ export default {
 
   mounted() {},
 
+  methods: {
+    ...mapActions({
+      changeDialogRegisterOneId: "RegisterModules/changeDialogRegisterOneId",
+    }),
+  },
+  computed: {
+    ...mapGetters({
+      show_dialog_register_one_id: "RegisterModules/getShowDialogRegisterOneId",
+    }),
+  },
   watch: {},
-
-  computed: {},
-
-  methods: {},
 };
 </script>
-<style scoped></style>
+<style scoped>
+.sub-register {
+  position: absolute;
+  left: 58%;
+}
+</style>
