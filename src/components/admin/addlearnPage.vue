@@ -60,81 +60,49 @@
               <v-row>
                 <v-col cols="12" sm="4">
                   <label-custom text="อาณาจักร"></label-custom>
-                  <v-select
+                  <v-autocomplete
                     dense
                     v-model="add_data.kingdom"
                     :items="kingdom"
                     placeholder="เลือกอาณาจักร"
                     outlined
                   >
-                    <template v-slot:prepend-item>
-                      <v-text-field
-                        dense
-                        v-model="filter_search"
-                        outlined
-                        placeholder="เลือกอาณาจักร"
-                      ></v-text-field>
-                    </template>
-                  </v-select>
+                  </v-autocomplete>
                 </v-col>
                 <v-col cols="12" sm="4">
                   <label-custom text="คอร์สเรียน"></label-custom>
-                  <v-select
+                  <v-autocomplete
                     dense
                     v-model="add_data.course"
                     :items="course"
                     placeholder="เลือกอาณาจักร"
                     outlined
                   >
-                    <template v-slot:prepend-item>
-                      <v-text-field
-                        dense
-                        v-model="filter_search"
-                        outlined
-                        placeholder="เลือกอาณาจักร"
-                      ></v-text-field>
-                    </template>
-                  </v-select>
+                  </v-autocomplete>
                 </v-col>
               </v-row>
               <v-row class="">
                 <v-col cols="12" sm="4">
                   <label-custom text="แพ็คเกจ"></label-custom>
-                  <v-select
+                  <v-autocomplete
                     dense
                     v-model="add_data.coursepackage"
                     :items="coursepackage"
                     placeholder="เลือกแพ็คเกจ"
                     outlined
                   >
-                    <template v-slot:prepend-item>
-                      <v-text-field
-                        dense
-                        v-model="filter_search"
-                        outlined
-                        placeholder="เลือกแพ็คเกจ"
-                      ></v-text-field>
-                    </template>
-                  </v-select>
+                  </v-autocomplete>
                 </v-col>
                 <v-col cols="12" sm="4">
                   <label-custom text="ระยะเวลา"></label-custom>
-                  <v-select
+                  <v-autocomplete
                     dense
                     v-model="add_data.period"
                     :items="period"
                     placeholder="เลือกระยะเวลา"
                     outlined
                   >
-                    <template v-slot:prepend-item>
-                      <v-text-field
-                        dense
-                        v-model="filter_search"
-                        outlined
-                        placeholder="เลือกระยะเวลา"
-                      ></v-text-field>
-                    </template>
-                  </v-select>
+                  </v-autocomplete>
                 </v-col>
                 <v-col cols="12" sm="2">
                   <label-custom text="จำนวนครั้ง"></label-custom>
@@ -150,60 +118,36 @@
               <v-row>
                 <v-col cols="12" sm="2">
                   <label-custom text="วัน"></label-custom>
-                  <v-select
+                  <v-autocomplete
                     dense
                     v-model="add_data.day"
                     :items="day"
                     placeholder="เลือกวัน"
                     outlined
                   >
-                    <template v-slot:prepend-item>
-                      <v-text-field
-                        dense
-                        v-model="filter_search"
-                        outlined
-                        placeholder="เลือกวัน"
-                      ></v-text-field>
-                    </template>
-                  </v-select>
+                  </v-autocomplete>
                 </v-col>
                 <v-col cols="12" sm="2">
                   <label-custom text="เวลา"></label-custom>
-                  <v-select
+                  <v-autocomplete
                     dense
                     v-model="add_data.time"
                     :items="time"
                     placeholder="เลือกเวลา"
                     outlined
                   >
-                    <template v-slot:prepend-item>
-                      <v-text-field
-                        dense
-                        v-model="filter_search"
-                        outlined
-                        placeholder="เลือกเวลา"
-                      ></v-text-field>
-                    </template>
-                  </v-select>
+                  </v-autocomplete>
                 </v-col>
                 <v-col cols="12" sm="4">
                   <label-custom text="โค้ช"></label-custom>
-                  <v-select
+                  <v-autocomplete
                     dense
                     v-model="add_data.coach"
                     :items="coach"
                     placeholder="เลือกโค้ช"
                     outlined
                   >
-                    <template v-slot:prepend-item>
-                      <v-text-field
-                        dense
-                        v-model="filter_search"
-                        outlined
-                        placeholder="เลือกโค้ช"
-                      ></v-text-field>
-                    </template>
-                  </v-select>
+                  </v-autocomplete>
                 </v-col>
                 <v-col cols="12" sm="4">
                   <label-custom text="วันเริ่ม"></label-custom>
@@ -265,11 +209,66 @@
               </v-row>
             </v-card-text>
           </v-card>
+          <v-card class="mt-20">
+            <v-card-text>
+              <v-radio-group v-model="add_data.type">
+                <v-row dense>
+                  <v-col cols="12" sm="2">
+                    <v-radio color="green" value="general_course">
+                      <template v-slot:label>
+                        <v-row dense>
+                          <v-col cols="8" sm="12">
+                            <label>คอร์สทั่วไป</label>
+                          </v-col>
+                        </v-row>
+                      </template>
+                    </v-radio>
+                  </v-col>
+                  <v-col cols="12" sm="2">
+                    <v-radio color="green" value="short_course">
+                      <template v-slot:label>
+                        <v-row dense>
+                          <v-col cols="8" sm="12">
+                            <label>คอร์สระยะสั้น</label>
+                          </v-col>
+                        </v-row>
+                      </template>
+                    </v-radio>
+                  </v-col>
+                </v-row>
+              </v-radio-group>
+              <v-row>
+                <v-col cols="12" sm="4">
+                  <label-custom text="อาณาจักร"></label-custom>
+                  <v-autocomplete
+                    dense
+                    v-model="add_data.kingdom"
+                    :items="kingdom"
+                    placeholder="เลือกอาณาจักร"
+                    outlined
+                  >
+                  </v-autocomplete>
+                </v-col>
+                <v-col cols="12" sm="4">
+                  <label-custom text="คอร์สเรียน"></label-custom>
+                  <v-autocomplete
+                    dense
+                    v-model="add_data.course"
+                    :items="course"
+                    placeholder="เลือกอาณาจักร"
+                    outlined
+                  >
+                  </v-autocomplete>
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
         </v-col>
       </v-row>
       <div class="btn text-left">
-        <v-btn class="btn3 mt-10">เพิ่มคอร์ส</v-btn>
+        <v-btn class="btn3 mt-10" @click="addCourse">เพิ่มคอร์ส</v-btn>
       </div>
+
       <div class="btn text-center">
         <v-btn class="btn1 mr-8 mt-20 mb-5" outlined color="error"
           >ยกเลิก</v-btn
@@ -315,6 +314,7 @@ export default {
     time: ["12", "14"],
     coach: ["Robert", "Lewandowski"],
     selected: [""],
+    menu: "",
   }),
 
   created() {},
@@ -325,15 +325,20 @@ export default {
     ...mapActions({
       changeDialogRegisterOneId: "RegisterModules/changeDialogRegisterOneId",
     }),
+    addCourse(){
+      this.add_course.course.push({
+        type: "",
+        course : "",
+        kingdom : "",
+      })
+    }
   },
   computed: {
     ...mapGetters({
       show_dialog_register_one_id: "RegisterModules/getShowDialogRegisterOneId",
     }),
   },
-  watch: {
-    
-  },
+  watch: {},
 };
 </script>
 <style scoped>
