@@ -331,7 +331,9 @@ export default {
       show_dialog_register_one_id: "RegisterModules/getShowDialogRegisterOneId",
     }),
   },
-  watch: {},
+  watch: {
+    
+  },
 };
 </script>
 <style scoped>
