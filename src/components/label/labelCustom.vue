@@ -1,5 +1,5 @@
 <template>
-    <label class="font-semibold text-lg">{{ text }}<span v-if="required" class="red--text">*</span></label>
+    <label class="font-semibold ">{{ text }}<span v-if="required" class="red--text">*</span></label>
 </template>
   
   <script>

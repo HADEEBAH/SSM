@@ -40,17 +40,15 @@
           v-model="step"
         >
         <v-stepper-header v-if="course_data.type === 'general_course'" style="box-shadow : none !important">
-          <template v-for="(header, index) in step_header_data" >
-            <v-stepper-step :key="index" color="pink" :step="index+1">
-              <label :class="step === index+1 ? 'pink--text font-bold':''">{{ header }}</label>
+          <template v-for="(header, index) in step_header_data">
+            <v-stepper-step :key="`${index}-step`" color="pink" :step="index+1">
+              <label :class="step == index+1 ? 'pink--text font-bold':''">{{ header }}</label>
             </v-stepper-step>
             <v-divider :key="index" v-if="index !== step_header_data.length -1 "></v-divider>
           </template>
         </v-stepper-header>
         <!-- Step 1 -->
-        <v-stepper-content
-          step="1"
-        >
+        <v-stepper-content step="1">
           <!-- Upload file -->
           <v-card >
             <v-card-text class="border-dashed border-2 border-blue-600 rounded-lg">
@@ -78,13 +76,11 @@
           </v-card>
           <!-- Detail -->
           <v-card flat>
-            <v-card-title class="font-bold text-2xl">รายละเอียด</v-card-title>
-            <v-divider></v-divider>
+            <headerCard title="รายละเอียด" divider></headerCard>
             <v-card-text>
-              <v-row>
+              <v-row dense>
                 <v-col cols="12" sm="6">
                   <label-custom required text="ชื่อคอร์ส(ภาษาไทย)"></label-custom>
-                  <label></label>
                   <v-text-field dense outlined v-model="course_data.course_name_th" placeholder="ระบุชื่อคอร์ส(ภาษาไทย)"></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6">
@@ -92,32 +88,27 @@
                   <v-text-field dense outlined v-model="course_data.course_name_en" placeholder="ระบุชื่อคอร์ส(ภาษาอังกฤษ)"></v-text-field>
                 </v-col>
               </v-row>
-              <v-row>
+              <v-row dense>
                 <v-col cols="12" sm="6">
                   <label-custom required text="ชื่ออาณาจักร"></label-custom>
-                  <label></label>
-                  <v-select
+                  <v-autocomplete
                     dense
+                    :search-input="filter.kingdom"
                     v-model="course_data.kingdom_name"
                     :items="kingdoms"
                     placeholder="ระบุชื่ออาณาจักร"
                     outlined
-                  >
-                  <template v-slot:prepend-item>
-                    <v-text-field dense v-model="filter_kingdom" outlined placeholder="ระบุชื่ออาณาจักร"></v-text-field>
-                  </template>
-                </v-select>
+                  ></v-autocomplete>
                 </v-col>
                 <v-col cols="12" sm="6">
                   <label-custom required text="วันเปิดคอร์ส"></label-custom>
                   <v-text-field dense outlined v-model="course_data.course_open" placeholder="ระบุวันเปิดคอร์ส"></v-text-field>
                 </v-col>
               </v-row>
-              <v-row>
+              <v-row dense>
                 <v-col cols="12" sm="6">
                   <label-custom required text="จำนวนชั่วโมงการเรียน/ครั้ง"></label-custom>
-                  <label></label>
-                  <v-text-field dense type="number" outlined v-model.number="course_data.course_hours" placeholder="ระบุจำนวนชั่วโมงการเรียน/ครั้ง"></v-text-field>
+                  <v-text-field class="input-text-right" suffix="ชั่วโมง" dense type="number" outlined v-model.number="course_data.course_hours" placeholder="ระบุจำนวนชั่วโมงการเรียน/ครั้ง"></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6">
                   <label-custom required text="สถานที่เรียน"></label-custom>
@@ -126,131 +117,288 @@
               </v-row>
               <!-- Course Type  :: general course -->
               <template v-if="course_data.type === 'general_course'">
-                <v-row>
+                <v-row dense>
                   <v-col cols="12">
                     <label-custom text="รายละเอียดคอร์ส"></label-custom>
                     <v-textarea v-model="course_data.detail" outlined placeholder="กรอกรายละเอียด..."></v-textarea>
                   </v-col>
                 </v-row>
-                <v-row>
+                <v-row dense>
                   <v-col cols="12">
                     <label-custom text="music performance"></label-custom>
                     <v-textarea v-model="course_data.music_performance" outlined placeholder="กรอกรายละเอียด..."></v-textarea>
                   </v-col>
                 </v-row>
-              </template>
-              <!-- Course Type  :: short course -->
-              <template v-else>
-                <v-row>
+                <v-row dense>
                   <v-col cols="12">
-                    <label-custom text="โค้ช"></label-custom>
-                    <v-select
-                    dense
-                    v-model="course_data.kingdom_name"
-                    :items="kingdoms"
-                    placeholder="ระบุโค้ช"
-                    outlined
-                  ></v-select>
+                    <label-custom text="catification"></label-custom>
+                    <v-textarea v-model="course_data.catification" outlined placeholder="กรอกรายละเอียด..."></v-textarea>
                   </v-col>
                 </v-row>
               </template>
-              <v-row>
-                <v-col cols="12">
-                  <label-custom text="catification"></label-custom>
-                  <v-textarea v-model="course_data.catification" outlined placeholder="กรอกรายละเอียด..."></v-textarea>
-                </v-col>
-              </v-row>
+              <!-- Course Type  :: short course -->
+              <template v-else>
+                <v-row dense>
+                  <v-col cols="12">
+                    <label-custom text="โค้ช"></label-custom>
+                    <v-autocomplete
+                    dense
+                    v-model="course_data.coachs[0].coach_name"
+                    :items="courses"
+                    placeholder="ระบุโค้ช"
+                    outlined
+                  ></v-autocomplete>
+                  </v-col>
+                </v-row>
+              </template>
             </v-card-text>
+             <!-- Course Type  :: short course -->
+            <template v-if="course_data.type === 'short_course'">
+              <headerCard title="วันและเวลา" divider></headerCard>
+              <v-card-text>
+                <v-divider class="mb-4"></v-divider>
+                <v-row dense>
+                  <v-col cols="12" sm="6">
+                    <label-custom required text="วันที่รับสมัคร"></label-custom>
+                    <InputDateRange></InputDateRange>
+                  </v-col>
+                </v-row>
+                <v-row dense>
+                  <v-col cols="12" sm="6">
+                    <label-custom required text="วันที่เรียน"></label-custom>
+                    <InputDateRange></InputDateRange>
+                  </v-col>
+                  <v-col cols="12" sm="6">
+                    <label-custom required text="เวลาเรียน"></label-custom>
+                    <InputDateRange time_picker icon="mdi-clock-outline"></InputDateRange>
+                  </v-col>
+                </v-row>
+                <v-row dense>
+                  <v-col cols="12">
+                    <label-custom text="รายละเอียดคอร์ส"></label-custom>
+                    <v-textarea v-model="course_data.detail" outlined placeholder="กรอกรายละเอียด..."></v-textarea>
+                  </v-col>
+                </v-row>
+                <v-row dense>
+                  <v-col cols="12">
+                    <label-custom text="catification"></label-custom>
+                    <v-textarea v-model="course_data.catification" outlined placeholder="กรอกรายละเอียด..."></v-textarea>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </template>
           </v-card>
-          <v-crad>
-            <v-card-text>
-              <v-row dense>
-                <v-col class="flex align-center justify-end">
-                  <v-btn class="white--text grey" depressed @click="step = 2">ถัดไป</v-btn>
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </v-crad>
         </v-stepper-content>
          <!-- Step 2 -->
-         <v-stepper-content
-          step="2"
-        >
+        <v-stepper-content step="2">
           <v-card flat>
-            <v-card-title class="font-bold text-2xl">
-              <v-row>
-                <v-col>รายละเอียดเวลาและโค้ช</v-col>
-                <v-col cols="auto">
-                  <v-btn outlined color="pink" @click="addCoach">
-                    <v-icon>mdi-plus-circle-outline</v-icon>
-                    เพิ่มโค้ช
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-card-title>
-            <v-divider></v-divider>
+            <headerCard title="รายละเอียดเวลาและโค้ช" divider>
+              <template v-slot:actions>
+                <v-btn outlined color="pink" @click="addCoach">
+                  <v-icon>mdi-plus-circle-outline</v-icon>
+                  เพิ่มโค้ช
+                </v-btn>
+              </template>
+            </headerCard>
             <v-card-text>
-              <v-card v-for="(coach, index) in course_data.coachs" class="bg-grey-card mb-5" :key="index">
+              <!-- COACH -->
+              <v-card v-for="(coach, coach_index) in course_data.coachs" class="bg-grey-card mb-5" :key="coach_index">
+                 <!-- TEACH DAY -->
+                <template v-for="(teach_day,teach_day_index) in coach.teach_day_data">
+                  <v-card-text :key="`${teach_day_index}-day`">
+                    <v-divider v-if="teach_day_index > 0" :key="teach_day_index"></v-divider>
+                    <v-row dense>
+                      <v-col cols="12" class="flex align-center justify-end">
+                        <v-switch
+                          v-model="coach.close_coach"
+                          color="red"
+                          value="red"
+                          hide-details
+                          label="เปิดสอน"
+                        ></v-switch>
+                      </v-col>
+                    </v-row>
+                    <v-row dense class="flex align-center justify-end">
+                      <v-col cols="12" sm="4">
+                        <label-custom required text="โค้ช"></label-custom>
+                        <v-autocomplete 
+                          dense
+                          :disabled="teach_day_index > 0"
+                          v-model="coach.coach_name"
+                          :items="courses"
+                          placeholder="โค้ช"
+                          outlined
+                        ></v-autocomplete>
+                      </v-col>
+                      <v-col cols="12" sm="4">
+                        <label-custom required text="วันสอน"></label-custom>
+                        <v-autocomplete 
+                        dense
+                        v-model="teach_day.teach_day"
+                        :items="days"
+                        item-text="label"
+                        placeholder="เลือกวันสอน"
+                        outlined
+                        ></v-autocomplete>
+                      </v-col>
+                      <v-col cols="12" sm="2">
+                        <v-btn text v-if="teach_day_index === coach.teach_day_data.length -1" color="green" @click="addTeachDay(coach)">
+                          <v-icon>mdi-calendar-plus-outline</v-icon>
+                          เพิ่มวันสอน
+                        </v-btn>
+                      </v-col>
+                      <v-col cols="12" sm="2">
+                        <v-btn text color="red" v-if="coach.teach_day_data.length > 1" @click="removeTeachDay(coach.teach_day_data, teach_day_index)">
+                          <v-icon>mdi-calendar-plus-outline</v-icon>
+                          ลบวันสอน
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                    <!-- CLASS TIME -->
+                    <template v-for="(class_date, class_date_index) in teach_day.class_date">
+                       <v-row dense class="flex align-center justify-end" :key="`${class_date_index}-date`">
+                        <v-col cols="12" sm="4">
+                          <label-custom required text="ช่วงเวลา"></label-custom>
+                          <InputDateRange time_picker icon="mdi-clock-outline"></InputDateRange>
+                        </v-col>
+                        <v-col cols="12" sm="4">
+                          <label-custom required text="นักเรียนที่รับได้"></label-custom>
+                          <v-text-field class="input-text-right" dense type="number" suffix="คน" outlined v-model="class_date.students" placeholder="ระบุนักเรียนที่รับได้"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="2">
+                          <v-btn text v-if="class_date_index === teach_day.class_date.length -1" color="green" @click="addTime(teach_day)">
+                            <v-icon>mdi-timer-plus-outline</v-icon>
+                            เพิ่มเวลา
+                          </v-btn>
+                        </v-col>
+                        <v-col cols="12" sm="2">
+                          <v-btn v-if="teach_day.class_date.length > 1" text color="red" @click="removeTime( teach_day.class_date, class_date_index)">
+                            <v-icon>mdi-timer-minus-outline</v-icon>
+                            ลบเวลา
+                          </v-btn>
+                        </v-col>
+                      </v-row>
+                    </template>
+                  </v-card-text>
+                </template>
+              </v-card>
+            </v-card-text>
+          </v-card>
+        </v-stepper-content>
+        <!-- Step 3 -->
+        <v-stepper-content step="3">
+          <v-card flat v-for="(package_data, index) in course_data.packages" :key="index">
+            <headerCard :icon="'mdi-card-account-details-outline'" :icon_color="'pink'" :title="`แพ็คเก็ตที่ ${index+1}`" divider></headerCard>
+            <v-card-text>
+              <v-card class="bg-grey-card mb-3">
                 <v-card-text>
-                  <v-row>
-                    <v-col cols="12" class="flex align-center justify-end">
-                      <v-switch
-                        v-model="coach.close_coach"
-                        color="red"
-                        value="red"
-                        hide-details
-                        label="ปิดสอน"
-                      ></v-switch>
+                  <v-row dense>
+                    <v-col>
+                      <label-custom required text="แพ็ตเกจ"></label-custom>
+                      <v-autocomplete dense :filterable="true" :items="packages" v-model="package_data.package" outlined></v-autocomplete>
+                     
                     </v-col>
-                  </v-row>
-                  <v-row class="flex align-center justify-end">
-                    <v-col cols="12" sm="6">
-                      <label-custom required text="โค้ช"></label-custom>
-                      <label></label>
-                      <v-text-field dense type="number" outlined v-model.number="coach.coach_name" placeholder="ระบุโค้ช"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="4">
-                      <label-custom required text="วันสอน"></label-custom>
-                      <v-text-field dense outlined v-model="coach.teach_day" placeholder="ระบุวันสอน"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="2">
-                      <v-btn text color="green">
-                        <v-icon>mdi-calendar-plus-outline</v-icon>
-                        เพิ่มวันสอน
-                      </v-btn>
-                    </v-col>
-                  </v-row>
-                  <v-row class="flex align-center justify-end">
-                    <v-col cols="12" sm="6">
-                      <label-custom required text="ช่วงเวลา"></label-custom>
-                      <label></label>
-                      <v-text-field dense type="number" outlined v-model.number="coach.period" placeholder="ระบุช่วงเวลา"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="4">
-                      <label-custom required text="นักเรียนที่รับได้"></label-custom>
-                      <v-text-field dense outlined v-model="coach.max_students" placeholder="ระบุนักเรียนที่รับได้"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="2">
-                      <v-btn text color="green">
-                        <v-icon>mdi-calendar-plus-outline</v-icon>
-                        เพิ่มวันสอน
-                      </v-btn>
+                    <v-col>
+                      <label-custom required text="จำนวนนักเรียน/คน"></label-custom>
+                      <v-text-field suffix="คน" class="input-text-right" dense outlined v-model="package_data.students"></v-text-field>
                     </v-col>
                   </v-row>
                 </v-card-text>
               </v-card>
+              <v-card class="bg-grey-card" :class="package_data.options.length > 1 ? 'mb-3' :''" v-for="(option, option_index) in package_data.options" :key="option_index">
+                <v-card-text>
+                  <v-row dense class="d-flex align-center">
+                    <v-col cols="4">
+                      <label-custom required text="แพ็ตเกจ"></label-custom>
+                      <v-autocomplete dense :search-input="searchInput" :items="options" v-model="option.period_package" outlined></v-autocomplete>
+                    </v-col>
+                    <v-col cols="4">
+                      <label-custom required text="จำนวนครั้ง/คน"></label-custom>
+                      <v-text-field class="input-text-right" dense outlined placeholder="ระบุจำนวน ครั้ง/คน" v-model="option.amount" ></v-text-field>
+                    </v-col>
+                    <v-col cols="2">
+                      <v-btn v-if="option_index === (package_data.options.length - 1)" @click="addOptions(package_data.options)" class="w-full" outlined color="green">
+                        <v-icon>mdi-plus-box-multiple</v-icon>
+                        เพิ่ม
+                      </v-btn>
+                    </v-col>
+                    <v-col cols="2">
+                      <v-btn v-if="package_data.options.length > 1 " class="w-full" outlined color="red">
+                        <v-icon>mdi-delete-empty</v-icon>
+                        ลบ
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col cols="4">
+                      <label-custom required text="ราคา/คน"></label-custom>
+                      <v-text-field class="input-text-right" dense outlined placeholder="ระบุราคา บาท/คน" v-model="option.price_unit"></v-text-field>
+                    </v-col>
+                    <v-col>
+                      <v-row  class="flex align-center">
+                        <v-col cols="auto">
+                          <v-checkbox
+                            v-model="option.discount"
+                            label="มี่สวนลด"
+                          ></v-checkbox>
+                        </v-col>
+                        <v-col cols="5 pt-8">
+                          <v-text-field 
+                            dense 
+                            class="input-text-right"
+                            :disabled="!option.discount" 
+                            placeholder="ระบุส่วนลด/บาท" 
+                            :outlined="option.discount" 
+                            :filled="!option.discount" 
+                            v-model="option.discount_price"
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col>
+                      <LabelCustom text="สิทธิ์พิเศษ"></LabelCustom>
+                      <v-textarea dense outlined v-model="option.privilege"></v-textarea>
+                    </v-col>
+                  </v-row>
+                  <!-- TOTAL -->
+                  <v-card v-if="option.discount" flat style="background-color : #FBF3F5">
+                    <v-card-text>
+                      <v-row>
+                        <v-col>เหลือราคา</v-col>
+                        <v-col class="pink--text text-right">{{ option.net_price.toLocaleString() }}</v-col>
+                        <v-col>บาท เฉลี่ย</v-col>
+                        <v-col class="pink--text text-right">{{ option.net_price_unit.toLocaleString()}}</v-col>
+                        <v-col>บาท/คน</v-col>
+                      </v-row>
+                    </v-card-text>
+                  </v-card>
+                </v-card-text>
+              </v-card>
             </v-card-text>
           </v-card>
-          <v-card>
-            <v-card-text>
+          <v-row dense>
+            <v-col class="d-flex align-center justify-center" cols="12">
+              <v-btn outlined color="pink" @click="addPackage(course_data.packages)"><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มแพ็คเกจ</v-btn>
+            </v-col>
+          </v-row>
+        </v-stepper-content>
+        <v-card flat>
+            <v-card-text >
               <v-row dense>
-                <v-col class="flex align-center justify-end">
-                  <v-btn class="white--text grey" depressed >ถัดไป</v-btn>
+                <v-col align="right">
+                  <v-btn v-if="step > 1" class="pink--text" style="width: 120px" text @click="step = step-1" >ย้อนกลับ</v-btn>
+                </v-col>
+                <v-col cols="auto" v-if="step < 3">
+                  <v-btn class="white--text grey" style="width: 120px" depressed @click="step = step+1">ถัดไป</v-btn>
+                </v-col>
+                <v-col cols="auto" v-else>
+                  <v-btn class="white--text grey w-full" depressed @click="step = step+1">สร้างคอร์สเรียน</v-btn>
                 </v-col>
               </v-row>
             </v-card-text>
           </v-card>
-        </v-stepper-content>
       </v-stepper>
     </v-container>
   </v-app>
@@ -258,21 +406,41 @@
 <script>
 import headerPage from "@/components/header/headerPage.vue"
 import LabelCustom from '@/components/label/labelCustom.vue';
+import InputDateRange from '@/components/input/inputDateRangePicker.vue'
+import headerCard from "@/components/header/headerCard.vue";
 export default {
   name: "CourseCreate",
   components:{
     headerPage,
-    LabelCustom
+    LabelCustom,
+    InputDateRange,
+    headerCard
   },
   props: {
     title: { type: String },
   },
   data: () => ({
+    menu: false,
     step: 1,
     file: null,
     dragOver: false,
     previewUrl : null,
-    filter_kingdom : "",
+    filter:{
+      kingdom:"",
+      option: "",
+      package : ""
+    },
+    days:[
+      {label:'วันอาทิตย์', value:"Sunday"},
+      {label:'วันจันทร์', value:"Monday"},
+      {label:'วันอังคาร', value:"Tuesday"},
+      {label:'วันพุท', value:"Wednesday"},
+      {label:'วันพฤหัสบดี', value:"Thursday"},
+      {label:'วันศุกร์', value:"Friday"},
+      {label:'วันเสาร์', value:"Saturday"},
+    ],
+    packages:["Exclusive Package", "Family Package", "Group Package"],
+    options:["รายวัน", "รายเดือน", "รายเทมอ", "รายปี"], 
     step_header_data : ["คอร์สเรียน", "ช่วงเวลาและโค้ช", "แพ็คเกจ"],
     courses:["โค้ชหนุ่ม", "โค้ชพอล"],
     course_data : {
@@ -281,7 +449,7 @@ export default {
       course_name_en : "",
       kingdom_name : "",
       kingdom_data : {},
-      course_open : "",
+      course_open_date : "",
       course_hours : 0,
       location : "",
       detail : "",
@@ -291,17 +459,70 @@ export default {
         { 
           close_coach : false,
           coach_name : "",
-          teach_day : "",
-          period : "",
-          max_students : 0,
+          teach_day_data :[{
+            teach_day : "sunday",
+            class_date:[
+              { 
+                class_date_range:{
+                  start_date : "",
+                  menu_start_date : false,
+                  end_date : "",
+                  menu_end_date : false,
+                },
+                students : 0
+              }
+            ]
+          }],
+          class_date_range:{
+            start_date : "",
+            menu_start_date : false,
+            end_date : "",
+            menu_end_date : false,
+          },
+          application_date_range:{
+            start_date : "",
+            menu_start_date : false,
+            end_date : "",
+            menu_end_date : false,
+          },
+          period : {
+            start_date : "",
+            menu_start_date : false,
+            end_date : "",
+            menu_end_date : false,
+          },
        }
+      ],
+      packages:[
+        {
+          package:"",
+          students: 0,
+          options : [
+            {
+              period_package:"",
+              amount: 0,
+              price_unit : 0,
+              discount : false,
+              discount_price : 0,
+              privilege : "",
+              net_price : 0,
+              net_price_unit : 0,
+            }
+          ]
+        }
       ]
     },
     kingdoms : ["อาณาจักรศิลปะสมัยใหม่", "อาณาจักร P.E."],
-  }),
+    }),
   created() {},
   mounted() {},
-  watch: {},
+  watch: {
+    "course_data.type"(newQuestion) {
+      if(newQuestion){
+        this.step = 1
+      }
+    }
+  },
   computed: {},
   methods: {
     OpenFileSelector(){
@@ -318,11 +539,106 @@ export default {
     },
     addCoach(){
       this.course_data.coachs.push({
-        close_coach : false,
-        coach_name : "",
-        teach_day : "",
-        period : "",
-        max_students : 0,
+          close_coach : false,
+          coach_name : "",
+          teach_day_data :[{
+            teach_day : "sunday",
+            class_date:[
+              { 
+                class_date_range:{
+                  start_date : "",
+                  menu_start_date : false,
+                  end_date : "",
+                  menu_end_date : false,
+                },
+                students : 0
+              }
+            ]
+          }],
+          class_date_range:{
+            start_date : "",
+            menu_start_date : false,
+            end_date : "",
+            menu_end_date : false,
+          },
+          application_date_range:{
+            start_date : "",
+            menu_start_date : false,
+            end_date : "",
+            menu_end_date : false,
+          },
+          period : {
+            start_date : "",
+            menu_start_date : false,
+            end_date : "",
+            menu_end_date : false,
+          },
+      })
+    },
+    removeCoach(data, index){
+      data.splice(index, 1)
+    },
+    addTime(data){
+      data.class_date.push({
+        class_date_range:{
+          start_date : "",
+          menu_start_date : false,
+          end_date : "",
+          menu_end_date : false,
+        },
+        students : 0
+      })
+    },
+    removeTime(data, index){
+      data.splice(index, 1)
+    },
+    addTeachDay(data){
+      data.teach_day_data.push({
+        teach_day : "sunday",
+        class_date:[
+          { 
+            class_date_range:{
+              start_date : "",
+              menu_start_date : false,
+              end_date : "",
+              menu_end_date : false,
+            },
+            students : 0
+          }
+        ]
+      })
+    },
+    removeTeachDay(data, index){
+      data.splice(index, 1)
+    },
+    addPackage(data){
+      data.push({
+        package:"",
+        students: 0,
+        options : [
+          {
+            period_package:"",
+            amount: 0,
+            price_unit : 0,
+            discount : false,
+            discount_price : 0,
+            privilege : "",
+            net_price : 0,
+            net_price_unit : 0,
+          }
+        ]
+      })
+    },
+    addOptions(data){
+      data.push({
+        period_package:"",
+        amount: 0,
+        price_unit : 0,
+        discount : false,
+        discount_price : 0,
+        privilege : "",
+        net_price : 0,
+        net_price_unit : 0,
       })
     }
   },
@@ -336,6 +652,9 @@ export default {
   }
   .bg-grey-card{
     background-color: #FCFCFC;
+  }
+  /deep/.input-text-right input{
+    text-align: right !important;
   }
   .img-header{
     position: absolute; 
