@@ -1,5 +1,5 @@
 <template>
-   <v-card :flat="crad_flat" :class="$vuetify.breakpoint.mdAndUp ? 'card-padding' : 'py-5'">
+   <v-card :flat="crad_flat" :class="$vuetify.breakpoint.mdAndUp ? dialog ? '':'card-padding' : 'py-2'">
     <v-row dense v-if="dialog" >
       <v-col class="text-right">
         <v-btn icon @click="changeDialogRegisterOneId(false)"><v-icon>mdi-close</v-icon></v-btn>

@@ -2,7 +2,7 @@
   <v-app>
     <v-layout>
       <v-app-bar clipped-left app dark fixed elevation="0" src="../assets/navbar/bg-nav-bar.png">
-        <v-app-bar-nav-icon @click="drawer = !drawer" > <v-icon >{{drawer ? 'mdi-chevron-double-left':'mdi-dots-vertical' }}</v-icon>  </v-app-bar-nav-icon>
+        <v-app-bar-nav-icon @click="drawer = !drawer" > <v-icon >{{ drawer ? 'mdi-chevron-double-left':'mdi-dots-vertical' }}</v-icon>  </v-app-bar-nav-icon>
         <!-- <v-app-bar-title><v-img max-height="37" max-width="51" src="../assets/navbar/title_img.jpg"></v-img></v-app-bar-title> -->
         <v-spacer></v-spacer>
         <v-badge class="mr-5" overlap color="#F03D3E" content="1" message="1">
@@ -55,12 +55,15 @@
         v-model="drawer"
         :temporary="$vuetify.breakpoint.smAndDown"
       >
-        <v-img src="../assets/navbar/drawer_img.png"></v-img>
+        <v-row>
+          <v-col class="flex align-center justify-center">
+            <v-img src="../assets/navbar/drawer_img.png" max-height="115" max-width="115"></v-img>
+          </v-col>
+        </v-row>
         <v-list
           class="pr-0 "
           nav
           flat
-          
         >
           <div v-for="(list, list_index) in menu_drawer_list" :key="list_index" >
             <v-list-item  :class="$route.name === list.to ? 'active-menu-list' : ''" @click="selectMenu('head',list.to)" link v-if="list.child.length === 0">
@@ -71,7 +74,6 @@
               active-class="active-menu-list"
               :value="$route.name === list.to"
               :class="$route.name === list.to ? 'active-menu-group-list' : ''"
-              @click="selectMenu('head',list.to)"
             >
               <template v-slot:activator>
                 <v-list-item-content>
@@ -90,13 +92,13 @@
             </v-list-group>
           </div>
         </v-list>
-        <div class="bottom-absolute">
+        <template v-slot:append>
           <v-divider></v-divider>
           <v-list-item link >
             <v-list-item-icon><v-icon>mdi-login</v-icon></v-list-item-icon>
             <v-list-item-title>ออกจากระบบ</v-list-item-title>
           </v-list-item>
-        </div>
+        </template>
       </v-navigation-drawer>
       <v-main class="bg-admin">
         <v-container >
@@ -141,11 +143,8 @@ export default {
   mounted() {
     
   },
-
   watch: {},
-
   computed: {},
-
   methods: {
     selectMenu(type, to, head){
       if(type === "child" && head === this.active_menu ){
@@ -190,11 +189,10 @@ export default {
     color: #333333 !important;
   }
   .active-menu-group-list-child{
-    background: #F4E3E3;
     border-radius: 8px 0px 0px 8px;
     margin: 0px 0px 0px 24px;
     font-weight: 700;
-    color: #333333 !important;
+    color: #FF6B81 !important;
   }
   .bottom-absolute{
     position: absolute;
