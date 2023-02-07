@@ -6,7 +6,7 @@
                     <v-icon v-if="icon" :color="icon_color" size="30">{{ icon }}</v-icon>
                     {{ title }}
                 </v-col>
-                <v-col cols="auto">
+                <v-col cols="12" sm="auto">
                     <slot name="actions"></slot>
                 </v-col>
             </v-row>
