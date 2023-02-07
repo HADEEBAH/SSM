@@ -631,7 +631,7 @@
                   color="#FF6B81"
                   class="white--text w-full"
                   depressed
-                  @click="step = step + 1"
+                  @click="save"
                   >สร้างคอร์สเรียน</v-btn
                 >
               </v-col>
@@ -727,6 +727,7 @@ export default {
     ...mapActions({
       ChangeCourseData: "CourseModules/ChangeCourseData",
     }),
+    save(){},
     inputName(e, lang){
       inputValidation(e, lang)
     },
