@@ -328,6 +328,11 @@ export default {
     coach: ["Robert", "Lewandowski"],
     selected: [""],
     pay: "",
+    transfer: [
+      "โอนเข้าบัญชี",
+      "บัตรเครดิต",
+      "เงินสด"
+    ],
     student_data: {
       type: "",
       kingdom: "",

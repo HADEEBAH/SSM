@@ -7,6 +7,7 @@ import CourseCreate from '@/page/course/courseCreate'
 // import Hello from '@/components/helloWorld.vue';
 import Login from '@/page/loginPage.vue'
 import Student from '@/components/admin/addlearnPage.vue'
+import Manageuser from '@/components/admin/manageUsers.vue'
 
 const routes = [
 
@@ -39,6 +40,11 @@ const routes = [
         path: '/student',
         name: 'Student',
         component: Student,
+      },
+      {
+        path: '/manageuser',
+        name: 'Manageuser',
+        component: Manageuser,
       },
     ]
   },
