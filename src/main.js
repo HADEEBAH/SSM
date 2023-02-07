@@ -4,6 +4,8 @@ import vuetify from '@/plugins/vuetify'
 import router from '@/router/index'
 import store from '@/store'
 import './assets/tailwind.css'
+import './assets/main-css.css'
+
 
 Vue.config.productionTip = false
 
