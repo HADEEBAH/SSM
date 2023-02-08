@@ -1,35 +1,68 @@
 <template>
   <v-app>
     <v-container>
-      <headerPage title="จัดการผู้ใช้งาน"></headerPage>
-      <childHeader title="ผู้ใช้งานทั้งหมด"></childHeader>
-      <v-divider></v-divider>
-      <v-col cols="12" sm="8">
-        <v-row class="mt-5" cols="12" md="8">
-          <v-text-field
-            v-model="search"
-            prepend-inner-icon="mdi-magnify"
-            label="ค้นหา"
-            single-line
-            hide-details
-            dense
-            outlined
-          ></v-text-field>
-          <label class="ml-10 mt-2">บทบาท :</label>
-          <label class="ml-20 mt-2">ทั้งหมด</label>
-          <v-btn class="btn-user" to="/user/menage" fab dark color="success">
-            <v-icon dark> mdi-plus </v-icon>
-          </v-btn>
+      <v-row dense>
+      <headerPage  class="mt-5" title="จัดการผู้ใช้งาน"></headerPage>
+      <v-card class="ml-auto mb-5 mt-6 card-user" outlined>
+        <v-row dense>
+          <v-col>
+            <v-img
+              class="ml-2 mt-2"
+              src="@/assets/manageuser/image 78.svg"
+              height="37px"
+              width="37px"
+            ></v-img>
+            <h2 class="text-center">ผู้ใช้งานทั้งหมด</h2>
+          </v-col>
         </v-row>
-      </v-col>
+      </v-card>
+    </v-row>
+      <v-divider></v-divider>
+      <v-card class="pr-3 pl-3" height="">
+        <v-col cols="12" md="8">
+          <v-row class="mt-5">
+            <v-text-field
+              v-model="search"
+              prepend-inner-icon="mdi-magnify"
+              label="ค้นหา"
+              single-line
+              hide-details
+              dense
+              outlined
+            ></v-text-field>
+            <label class="ml-10 mt-2 mr-5">บทบาท</label>
+            <v-autocomplete
+              dense
+              v-model="user_data.users"
+              :items="users"
+              placeholder="ทั้งหมด"
+              outlined
+            >
+            </v-autocomplete>
+            <v-btn
+              class="pr-10 pl-10 btn-user"
+              color="#FF6B81"
+              dark
+              to="/user/menage"
+            >
+              <v-icon left> mdi-plus </v-icon>
+              เพิ่มผู้ใช้
+            </v-btn>
+          </v-row>
+        </v-col>
+      </v-card>
       <template>
         <v-data-table
           :headers="headers"
           :items="datausers"
           :search="search"
+          :page.sync="page"
+          :items-per-page="itemsPerPage"
+          @page-count="pageCount = $event"
+          hide-default-footer
           class="elevation-1 mt-10"
         >
-          <template v-slot:top>
+          <!-- <template v-slot:top>
             <v-toolbar flat>
               <v-dialog v-model="dialog" max-width="500px">
                 <v-card>
@@ -113,29 +146,38 @@
                 </v-card>
               </v-dialog>
             </v-toolbar>
-          </template>
+          </template> -->
           <template v-slot:[`item.actions`]="{ item }">
-            <v-icon small class="mr-2" @click="editItem(item)">
+            <v-icon small class="mr-2" color="#FF6B81">
+              mdi-eye-outline
+            </v-icon>
+            <v-icon small class="mr-2" color="#FF6B81" @click="editItem(item)">
               mdi-pencil
             </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+            <v-icon small color="#FF6B81" @click="deleteItem(item)">
+              mdi-delete
+            </v-icon>
           </template>
           <template v-slot:no-data>
             <v-btn color="primary" @click="initialize"> Reset </v-btn>
           </template>
         </v-data-table>
+        <v-pagination
+          class="mt-5 pb-10 page"
+          v-model="page"
+          color="#FF6B81"
+          :length="pageCount"
+        ></v-pagination>
       </template>
     </v-container>
   </v-app>
 </template>
 <script>
 import headerPage from "@/components/header/headerPage.vue";
-import childHeader from "@/components/header/childHeader.vue";
 export default {
   name: "manageUsers",
   components: {
     headerPage,
-    childHeader,
   },
   data() {
     return {
@@ -144,6 +186,13 @@ export default {
       dialogDelete: false,
       filter: {},
       sortBy: "role",
+      page: 1,
+      itemsPerPage: 10,
+      pageCount: 0,
+      users: ["ทั้งหมด", "Admin", "โค้ช", "นักเรียน", "ผู้ปกครอง"],
+      user_data: {
+        users: "",
+      },
       headers: [
         {
           text: "ลำดับ",
@@ -154,10 +203,10 @@ export default {
         { text: "ชื่อ", value: "name" },
         { text: "นามสกุล", value: "lastname" },
         { text: "อีเมล", value: "email" },
-        { text: "ชื่อผู้ใช้งาน", value: "username" },
-        { text: "ONEID", value: "oneid" },
+        { text: "ผู้ใช้", value: "username" },
+        { text: "One ID", value: "oneid" },
         { text: "บทบาท", value: "role" },
-        { text: "Actions", value: "actions", sortable: false },
+        { text: "", value: "actions", sortable: false },
       ],
       editedIndex: -1,
       editedItem: {
@@ -238,7 +287,87 @@ export default {
           oneid: "mie",
           role: "นักเรียน",
         },
-        
+        {
+          number: 4,
+          name: "robert",
+          lastname: "gogo",
+          email: "vbbbbb",
+          username: "nuunam",
+          oneid: "mie",
+          role: "นักเรียน",
+        },
+        {
+          number: 4,
+          name: "robert",
+          lastname: "gogo",
+          email: "vbbbbb",
+          username: "nuunam",
+          oneid: "mie",
+          role: "นักเรียน",
+        },
+        {
+          number: 4,
+          name: "robert",
+          lastname: "gogo",
+          email: "vbbbbb",
+          username: "nuunam",
+          oneid: "mie",
+          role: "นักเรียน",
+        },
+        {
+          number: 4,
+          name: "robert",
+          lastname: "gogo",
+          email: "vbbbbb",
+          username: "nuunam",
+          oneid: "mie",
+          role: "นักเรียน",
+        },
+        {
+          number: 4,
+          name: "robert",
+          lastname: "gogo",
+          email: "vbbbbb",
+          username: "nuunam",
+          oneid: "mie",
+          role: "นักเรียน",
+        },
+        {
+          number: 4,
+          name: "robert",
+          lastname: "gogo",
+          email: "vbbbbb",
+          username: "nuunam",
+          oneid: "mie",
+          role: "นักเรียน",
+        },
+        {
+          number: 4,
+          name: "robert",
+          lastname: "gogo",
+          email: "vbbbbb",
+          username: "nuunam",
+          oneid: "mie",
+          role: "นักเรียน",
+        },
+        {
+          number: 4,
+          name: "robert",
+          lastname: "gogo",
+          email: "vbbbbb",
+          username: "nuunam",
+          oneid: "mie",
+          role: "นักเรียน",
+        },
+        {
+          number: 4,
+          name: "robert",
+          lastname: "gogo",
+          email: "vbbbbb",
+          username: "nuunam",
+          oneid: "mie",
+          role: "นักเรียน",
+        },
       ];
     },
 
@@ -288,7 +417,17 @@ export default {
 </script>
 <style scoped>
 .btn-user {
-    position: absolute;
-  left: 94%;
+  position: absolute;
+  left: 85%;
+}
+.card-user {
+  width: 250px;
+  height: 58px;
+  border-radius: 8px;
+}
+
+.page {
+  position: absolute;
+  left: 80%;
 }
 </style>
