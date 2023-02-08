@@ -297,23 +297,5 @@
         },
     };
 </script>
-<style>
-.sub-menu {
-  font-weight: 600;
-  color: #2f3542;
-  font-size: 22px;
-}
-.bg-grey-card {
-  background-color: #fcfcfc;
-}
-/deep/.input-text-right input {
-  text-align: right !important;
-}
-.img-header {
-  position: absolute;
-  right: 0px;
-  max-height: 180px;
-  max-width: 250px;
-}
-</style>
+
   

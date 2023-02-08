@@ -2,7 +2,7 @@
   <div>
     <v-row>
       <v-col class="child-header"> 
-        <v-icon v-if="arrow_left" size="30">mdi-chevron-left</v-icon>
+        <v-icon class="cursor-pointer" v-if="arrow_left" size="30" @click="$router.back()">mdi-chevron-left</v-icon>
         {{ title }} <span v-if="sub_title" class="sub-title" :style="`color:${sub_title_color};`">{{`( ${sub_title} )`}}</span>
       </v-col>
     </v-row>
@@ -33,13 +33,6 @@
   };
 </script>
 <style>
-  .child-header{
-    font-weight: 600;
-    font-size: 22px;
-  }
-  .sub-title{
-    font-weight: 700;
-    font-size: 12px;
-  }
+  
 </style>
       
