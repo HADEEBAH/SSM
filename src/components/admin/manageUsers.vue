@@ -2,25 +2,25 @@
   <v-app>
     <v-container>
       <v-row dense>
-      <headerPage  class="mt-5" title="จัดการผู้ใช้งาน"></headerPage>
-      <v-card class="ml-auto mb-5 mt-6 card-user" outlined>
-        <v-row dense>
-          <v-col>
-            <v-img
-              class="ml-2 mt-2"
-              src="@/assets/manageuser/image 78.svg"
-              height="37px"
-              width="37px"
-            ></v-img>
-            <h2 class="text-center">ผู้ใช้งานทั้งหมด</h2>
-          </v-col>
-        </v-row>
-      </v-card>
-    </v-row>
+        <headerPage class="mt-5" title="จัดการผู้ใช้งาน"></headerPage>
+        <v-card class="ml-auto mb-5 mt-6 card-user" outlined>
+          <v-row dense>
+            <v-col>
+              <v-img
+                class="ml-2 mt-2"
+                src="@/assets/manageuser/image 78.svg"
+                height="37px"
+                width="37px"
+              ></v-img>
+              <h2 class="text-center alluser">ผู้ใช้งานทั้งหมด</h2>
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-row>
       <v-divider></v-divider>
-      <v-card class="pr-3 pl-3" height="">
-        <v-col cols="12" md="8">
-          <v-row class="mt-5">
+      <v-card class="pr-3 pl-3">
+        <v-row class="mt-5">
+          <v-col cols="12" sm="5">
             <v-text-field
               v-model="search"
               prepend-inner-icon="mdi-magnify"
@@ -30,7 +30,9 @@
               dense
               outlined
             ></v-text-field>
-            <label class="ml-10 mt-2 mr-5">บทบาท</label>
+          </v-col>
+          <h2 class="mt-5 ml-5 mr-2">บทบาท</h2>
+          <v-col cols="12" sm="3">
             <v-autocomplete
               dense
               v-model="user_data.users"
@@ -39,6 +41,8 @@
               outlined
             >
             </v-autocomplete>
+          </v-col>
+          <v-col cols="12" sm="2">
             <v-btn
               class="pr-10 pl-10 btn-user"
               color="#FF6B81"
@@ -48,8 +52,8 @@
               <v-icon left> mdi-plus </v-icon>
               เพิ่มผู้ใช้
             </v-btn>
-          </v-row>
-        </v-col>
+          </v-col>
+        </v-row>
       </v-card>
       <template>
         <v-data-table
@@ -60,7 +64,7 @@
           :items-per-page="itemsPerPage"
           @page-count="pageCount = $event"
           hide-default-footer
-          class="elevation-1 mt-10"
+          class="elevation-1 mt-5"
         >
           <!-- <template v-slot:top>
             <v-toolbar flat>
@@ -184,12 +188,12 @@ export default {
       search: "",
       dialog: false,
       dialogDelete: false,
-      filter: {},
       sortBy: "role",
       page: 1,
       itemsPerPage: 10,
       pageCount: 0,
-      users: ["ทั้งหมด", "Admin", "โค้ช", "นักเรียน", "ผู้ปกครอง"],
+      filter: "",
+      users: ["ทั้งหมด", "นักเรียน", "ผู้ปกครอง", "โค้ช", "บัญชี", "Admin"],
       user_data: {
         users: "",
       },
@@ -200,12 +204,12 @@ export default {
           value: "number",
           sortable: false,
         },
-        { text: "ชื่อ", value: "name" },
-        { text: "นามสกุล", value: "lastname" },
-        { text: "อีเมล", value: "email" },
-        { text: "ผู้ใช้", value: "username" },
-        { text: "One ID", value: "oneid" },
-        { text: "บทบาท", value: "role" },
+        { text: "ชื่อ", value: "name", sortable: false },
+        { text: "นามสกุล", value: "lastname", sortable: false },
+        { text: "อีเมล", value: "email", sortable: false },
+        { text: "ผู้ใช้", value: "username", sortable: false },
+        { text: "One ID", value: "oneid", sortable: false },
+        { text: "บทบาท", value: "role", sortable: false },
         { text: "", value: "actions", sortable: false },
       ],
       editedIndex: -1,
@@ -288,85 +292,13 @@ export default {
           role: "นักเรียน",
         },
         {
-          number: 4,
-          name: "robert",
-          lastname: "gogo",
-          email: "vbbbbb",
-          username: "nuunam",
-          oneid: "mie",
-          role: "นักเรียน",
-        },
-        {
-          number: 4,
-          name: "robert",
-          lastname: "gogo",
-          email: "vbbbbb",
-          username: "nuunam",
-          oneid: "mie",
-          role: "นักเรียน",
-        },
-        {
-          number: 4,
-          name: "robert",
-          lastname: "gogo",
-          email: "vbbbbb",
-          username: "nuunam",
-          oneid: "mie",
-          role: "นักเรียน",
-        },
-        {
-          number: 4,
-          name: "robert",
-          lastname: "gogo",
-          email: "vbbbbb",
-          username: "nuunam",
-          oneid: "mie",
-          role: "นักเรียน",
-        },
-        {
-          number: 4,
-          name: "robert",
-          lastname: "gogo",
-          email: "vbbbbb",
-          username: "nuunam",
-          oneid: "mie",
-          role: "นักเรียน",
-        },
-        {
-          number: 4,
-          name: "robert",
-          lastname: "gogo",
-          email: "vbbbbb",
-          username: "nuunam",
-          oneid: "mie",
-          role: "นักเรียน",
-        },
-        {
-          number: 4,
-          name: "robert",
-          lastname: "gogo",
-          email: "vbbbbb",
-          username: "nuunam",
-          oneid: "mie",
-          role: "นักเรียน",
-        },
-        {
-          number: 4,
-          name: "robert",
-          lastname: "gogo",
-          email: "vbbbbb",
-          username: "nuunam",
-          oneid: "mie",
-          role: "นักเรียน",
-        },
-        {
-          number: 4,
-          name: "robert",
-          lastname: "gogo",
-          email: "vbbbbb",
-          username: "nuunam",
-          oneid: "mie",
-          role: "นักเรียน",
+          number: 5,
+          name: "koko",
+          lastname: "arrr",
+          email: "dodm@hotmail.com",
+          username: "summer",
+          oneid: "hukio",
+          role: "บัญชี",
         },
       ];
     },
@@ -416,18 +348,28 @@ export default {
 };
 </script>
 <style scoped>
-.btn-user {
-  position: absolute;
-  left: 85%;
-}
 .card-user {
-  width: 250px;
+  width: 222px;
   height: 58px;
   border-radius: 8px;
 }
 
+.btn-user {
+  position: absolute;
+  left: 80%;
+}
 .page {
   position: absolute;
   left: 80%;
 }
+
+.alluser {
+  position: absolute;
+  bottom: 25%;
+  left: 25%;
+}
+::v-deep .v-data-table-header {
+  background-color: #fce0e7;
+}
+
 </style>
