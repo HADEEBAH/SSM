@@ -4,14 +4,14 @@
       <headerPage title="เพิ่มผู้เรียน"></headerPage>
       <v-row>
         <v-col>
-          <label-custom class="mb-1" text="ผู้เรียน"></label-custom>
+          <label-custom text="ผู้เรียน"></label-custom>
           <label
             class="sub-register primary--text cursor-pointer underline"
             @click="changeDialogRegisterOneId(true)"
             >สมัคร One ID</label
           >
           <v-row>
-            <v-col cols="12" sm="8">
+            <v-col cols="12" sm="8" class="mt-1">
               <v-autocomplete
                 prepend-inner-icon="mdi-magnify"
                 dense
