@@ -33,14 +33,16 @@
           </v-col>
           <h2 class="mt-5 ml-5 mr-2">บทบาท</h2>
           <v-col cols="12" sm="3">
+            <template v-if="$vuetify.breakpoint.mdAndUp">
             <v-autocomplete
               dense
-              v-model="user_data.users"
-              :items="users"
+              v-model="sortBy"
+              :items="role"
               placeholder="ทั้งหมด"
               outlined
             >
             </v-autocomplete>
+          </template>
           </v-col>
           <v-col cols="12" sm="2">
             <v-btn
@@ -62,6 +64,7 @@
           :search="search"
           :page.sync="page"
           :items-per-page="itemsPerPage"
+          :sort-by="sortBy.toLowerCase()"
           @page-count="pageCount = $event"
           hide-default-footer
           class="elevation-1 mt-5"
@@ -188,12 +191,12 @@ export default {
       search: "",
       dialog: false,
       dialogDelete: false,
-      sortBy: "role",
       page: 1,
       itemsPerPage: 10,
       pageCount: 0,
-      filter: "",
-      users: ["ทั้งหมด", "นักเรียน", "ผู้ปกครอง", "โค้ช", "บัญชี", "Admin"],
+      filter: {},
+      sortBy: "ทั้งหมด",
+      role: ["ทั้งหมด", "นักเรียน", "ผู้ปกครอง", "โค้ช", "บัญชี", "Admin"],
       user_data: {
         users: "",
       },
@@ -236,7 +239,7 @@ export default {
       return this.editedIndex === -1 ? "Edit" : "Edit";
     },
     filteredKeys() {
-      return this.keys.filter((key) => key !== "Role");
+      return this.keys.filter((key) => key !== "Name");
     },
   },
   watch: {
@@ -371,5 +374,4 @@ export default {
 ::v-deep .v-data-table-header {
   background-color: #fce0e7;
 }
-
 </style>
