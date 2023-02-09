@@ -24,4 +24,11 @@ export default {
   methods: {},
 };
 </script>
+<style scoped>
+#app {
+  background: url('@/assets/login/login-bg.jpg')
+    no-repeat center center !important;
+  background-size: cover;  
+}
+</style>
   

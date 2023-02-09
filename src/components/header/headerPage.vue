@@ -1,5 +1,5 @@
 <template>
-  <v-row class="mb-8">
+  <v-row class="mb-4">
     <v-col class="sub-menu"> {{ title }} </v-col>
   </v-row>
 </template>  
