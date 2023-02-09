@@ -1,8 +1,7 @@
 <template>
     <v-app>
         <v-container>
-            <headerPage title="การเงิน"></headerPage>
-            <childHeader title="รายระเอียดเพิ่มเติม" arrow_left></childHeader>
+            <headerPage :breadcrumbs="breadcrumbs"></headerPage>
             <div class="pl-8 mb-4">
                 <rowData title="หมายเลขคำสั่งซื้อ">{{ `${$route.params.order_id}` }}</rowData>
                 <rowData title="ชื่อผู้เรียน">กมลรัตน์ สิทธิกรชัย, ออกัส สิงหาคม</rowData>
@@ -103,13 +102,16 @@
   
   <script>
   import headerPage from '@/components/header/headerPage.vue';
-  import childHeader from '@/components/header/childHeader.vue';
   import rowData from '@/components/label/rowData.vue';
   export default {
     name:"financeDetail",
-    components: {headerPage, childHeader, rowData},
+    components: {headerPage, rowData},
     data: () => ({
         payment_types:["เงินสด","บัตรเคตดิต","โอนเข้าบัญชีโรงเรียน"],
+        breadcrumbs : [
+            {text:"การเงิน",to:"Finance"},
+            {text:"รายระเอียดเพิ่มเติม",to:""}
+        ],
         course:[
             { course_type : "general_course", course_name : "เปียโนสากล ", category:"ศิลปะดนตรีสมัยใหม่", coach: "อาทิตย์ แย้มยิ้มเบิกบาน", package_name :"Family Package", period_name : "รายเดือน (4 ครั้ง)" ,class_data : "วันเสาร์ (10.00-11.00)" ,course_open : "16 กรกฎาคม 2564", price : 2000},
             { course_type : "short_course", course_name : "ไวโลลินเวิร์กช้อป ", category:"ศิลปะดนตรีสมัยใหม่", coach: "อาทิตย์ แย้มยิ้มเบิกบาน", package_name :"Family Package", period_name : "รายเดือน (4 ครั้ง)" ,class_data : "10.00-11.00" ,course_open : "20 กรกฎาคม 2564", price : 1500},

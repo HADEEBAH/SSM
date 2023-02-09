@@ -38,14 +38,4 @@
       methods: {},
     };
   </script>
-  <style>
-    .child-header{
-      font-weight: 600;
-      font-size: 22px;
-    }
-    .sub-title{
-      font-weight: 700;
-      font-size: 12px;
-    }
-  </style>
         

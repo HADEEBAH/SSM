@@ -2,10 +2,10 @@
     <v-card>
         <v-card-text>
             <v-row>
-                <v-col cols="auto" >
+                <v-col :cols="vertical ? '12':'auto'" align="center">
                     <slot name="img"></slot>
                 </v-col>
-                <v-col>
+                <v-col v-if="!vertical">
                     <v-row dense>
                         <v-col align="center" class="font-bold">{{ title }}</v-col>
                     </v-row>
@@ -23,9 +23,10 @@
   export default {
     name:"imgCard",
     props:{
-      title : {type:String},
-      count : {type:String},
-      units : {type:String},
+        vertical : {type: Boolean, default: false},  
+        title : {type:String},
+        count : {type:String},
+        units : {type:String},
     },
     components: {},
     data: () => ({}),

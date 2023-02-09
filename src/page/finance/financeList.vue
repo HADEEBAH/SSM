@@ -62,7 +62,7 @@
 <script>
 import headerPage from '@/components/header/headerPage.vue';
 export default {
-  name: "financePage",
+  name: "financeList",
   components:{
     headerPage,
   },

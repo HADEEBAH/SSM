@@ -5,6 +5,7 @@ import UserMenagePage from '@/page/user_menage/userMenagePage'
 // Course 
 import CourseCreate from '@/page/course/courseCreate'
 import CourseList from '@/page/course/courseList'
+import CourseDetail from '@/page/course/courseDetail'
 // Finance
 import FinanceList from '@/page/finance/financeList'
 import FinanceDetail from '@/page/finance/financeDetail'
@@ -34,6 +35,11 @@ const routes = [
         path: '/course/create',  
         name: 'CourseCreate',
         component: CourseCreate,
+      },
+      {
+        path: '/course/:course_id',  
+        name: 'Course_courseID',
+        component: CourseDetail,
       },
       {
         path: '/course',  

@@ -61,28 +61,27 @@
           </v-col>
         </v-row>
         <v-list
-          class="pr-0 "
+          class="pr-0"
           nav
           flat
         >
           <div v-for="(list, list_index) in menu_drawer_list" :key="list_index" >
-            <v-list-item  :class="$route.name === list.to ? 'active-menu-list' : ''" @click="selectMenu('head',list.to)" link v-if="list.child.length === 0">
+            <v-list-item  :class="active_menu === list.to ? 'active-menu-list' : ''" @click="selectMenu('head',list.to)" link v-if="list.child.length === 0">
               <v-list-item-title>{{ list.title }}</v-list-item-title>
             </v-list-item>
-            <v-list-group
-              v-else
-              active-class="active-menu-list"
-              :value="$route.name === list.to"
-              :class="$route.name === list.to ? 'active-menu-group-list' : ''"
-            >
+            <v-list-group v-else 
+              :value="active_menu === list.title "
+              :active-class="active_menu === list.title ? 'active-menu-list' : ''"
+              @click="active_menu = list.title"
+              >
               <template v-slot:activator>
                 <v-list-item-content>
                   <v-list-item-title>{{ list.title }}</v-list-item-title>
                 </v-list-item-content>
               </template>
               <v-list-item
-                @click="selectMenu('child',child.to, list.to)"
-                :class="$route.name === child.to ? 'active-menu-group-list-child' : 'ml-8 menu-group-list'" 
+                @click="selectMenu('child',child.to, list.title)"
+                :class="active_menu_child === child.to ? 'active-menu-group-list-child' : 'ml-8 menu-group-list'" 
                 v-for="(child, index_child) in list.child"
                 :key="index_child"
                 link
@@ -101,9 +100,7 @@
         </template>
       </v-navigation-drawer>
       <v-main class="bg-admin">
-        <v-container >
           <router-view />
-        </v-container>
       </v-main>
     </v-layout>
   </v-app>
@@ -133,13 +130,14 @@ export default {
       { title : "การเงิน", to:"Finance", child :[]},
       { title : "จัดการผู้ใช้งาน", to:"", child :[
         {title : "จัดการผู้ใช้งาน", to:"UserMenagePage"},
-        {title : "จัดการสิทธิ์", to:""},
+        {title : "จัดการสิทธิ์", to:"A"},
       ]},
     ]
   }),
 
-  created() {},
-
+  created() {
+    this.active_menu = this.$route.name
+  },
   mounted() {
     
   },
@@ -149,21 +147,23 @@ export default {
     selectMenu(type, to, head){
       if(type === "child" && head === this.active_menu ){
         this.active_menu_child = to
-        this.active_menu = ""
         this.$router.push({name: to})
       }else{
         this.active_menu_child = to
       }
       if(type === "head"){
         this.$router.push({name: to})
+        this.active_menu_child = ""
+        this.active_menu = to
       }
     },
   },
 };
 </script>
 <style>
-  .bg-admin{
-    background-color: #FFFFFF;
+  .bg-admin .v-container{
+    background :linear-gradient(0deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04)), linear-gradient(141.48deg, #FFFAFB 14.35%, #FFFDFA 85.47%);
+    
   }
   .menu-list{
     color: #333333 !important;
