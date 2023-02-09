@@ -26,7 +26,7 @@
               :key="item"
             >
               <v-data-table
-                :headers="colums"
+                :headers="columns"
                 :items="orders"
                 :items-per-page="5"
               >
@@ -69,7 +69,7 @@ export default {
   data: () => ({
     tab : null,
     items: ["ทั้งหมด", "ชำระเงินแล้ว", "รอดำเนินการ"],
-    colums:[
+    columns:[
       {text: 'หมายเลขคำสั่งซื้อ',align: 'start',sortable: false, value: 'order_id'},
       {text: 'ชื่อผู้เรียน',align: 'start',sortable: false, value: 'student_name'},
       {text: 'ชื่อคอร์ส',align: 'start',sortable: false, value: 'course'},

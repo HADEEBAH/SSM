@@ -2,8 +2,11 @@ import Kingdom from '@/components/admin/kingdomPage.vue'
 import NavBarAdmin from '@/layout/navbarAdmin.vue'
 import RegisterPage from '@/page/auth/registerPage'
 import UserMenagePage from '@/page/user_menage/userMenagePage'
+// Course 
 import CourseCreate from '@/page/course/courseCreate'
-import FinancePage from '@/page/finance/financePage'
+import CourseList from '@/page/course/courseList'
+// Finance
+import FinanceList from '@/page/finance/financeList'
 import FinanceDetail from '@/page/finance/financeDetail'
 // import NavBarUser from '@/layout/navbarUser.vue';
 // import Hello from '@/components/helloWorld.vue';
@@ -33,6 +36,11 @@ const routes = [
         component: CourseCreate,
       },
       {
+        path: '/course',  
+        name: 'CourseList',
+        component: CourseList,
+      },
+      {
         path: '/kingdom',
         name: 'Kingdom',
         component: Kingdom,
@@ -45,7 +53,7 @@ const routes = [
       {
         path: '/finance',
         name: 'Finance',
-        component: FinancePage,
+        component: FinanceList,
       },
       {
         path: '/finance/:order_id',

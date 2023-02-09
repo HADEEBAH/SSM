@@ -126,7 +126,7 @@ export default {
       { title : "ตารางเรียน", to:"", child :[]},
       { title : "เพิ่มผู้เรียน", to:"Addlearn", child :[]},
       { title : "คอร์สเรียน", to:"", child :[
-        { title : "จัดการคอร์สทั้งหมด", to:"" },
+        { title : "จัดการคอร์สทั้งหมด", to:"CourseList" },
         { title : "สร้างคอร์สเรียน", to:"CourseCreate" },
         { title : "สร้างอาณาจักร", to:"Kingdom" },
       ]},

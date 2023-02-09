@@ -1,13 +1,17 @@
 <template>
-  <v-row class="mb-4">
-    <v-col class="sub-menu"> {{ title }} </v-col>
+  <v-row class="mb-4 d-flex align-center">
+    <v-col v-if="breadcrumbs" class="sub-menu"> {{ title }} </v-col>
+    <v-col cols="12" sm="auto" align="right">
+      <slot></slot>
+    </v-col>
   </v-row>
 </template>  
 <script>
 export default {
   name: "headerPage",
   props:{
-    title:{type : String}
+    title:{type : String},
+    breadcrumbs : {type: Array}
   },
   data: () => ({}),
 
@@ -23,10 +27,5 @@ export default {
 };
 </script>
 <style scoped>
-.sub-menu{
-  font-weight: 600;
-  color: #2F3542;
-  font-size: 22px;
-}
 </style>
     
