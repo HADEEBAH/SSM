@@ -3,7 +3,7 @@
         <v-card-title>
             <v-row>
                 <v-col class="font-bold"> 
-                    <v-icon v-if="icon" :color="icon_color" size="30">{{ icon }}</v-icon>
+                    <v-icon v-if="icon" :color="icon_color" class="mr-3" size="30">{{ icon }}</v-icon>
                     {{ title }}
                 </v-col>
                 <v-col cols="12" sm="auto">

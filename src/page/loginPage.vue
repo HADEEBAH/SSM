@@ -7,7 +7,7 @@
       >
         <v-card :class="$vuetify.breakpoint.mdAndUp ? 'card-padding' : 'py-5'">
           <div class="ml-24 mt-5 mr-3">
-            <v-img v-if="$vuetify.breakpoint.smAndUp" class="img-header" src="@/assets/login/login.png" />
+            <v-img v-if="$vuetify.breakpoint.smAndUp" class="img-header-login" src="@/assets/login/login.png" />
           </div>
           <v-card-text>
             <v-row dense>
@@ -139,7 +139,7 @@ export default {
   font-weight: 500;
   font-size: 12px;
 }
-.img-header{
+.img-header-login{
      
     max-height: 156px;
     max-width: 156px;

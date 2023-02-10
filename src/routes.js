@@ -12,7 +12,8 @@ import FinanceDetail from '@/page/finance/financeDetail'
 // import NavBarUser from '@/layout/navbarUser.vue';
 // import Hello from '@/components/helloWorld.vue';
 import Login from '@/page/loginPage.vue'
-import Addlearn from '@/components/admin/addlearnPage.vue'
+import Student from '@/components/admin/addlearnPage.vue'
+import Manageuser from '@/components/admin/manageUsers.vue'
 
 const routes = [
 
@@ -52,9 +53,14 @@ const routes = [
         component: Kingdom,
       },
       {
-        path: '/addlearn',
-        name: 'Addlearn',
-        component: Addlearn,
+        path: '/student',
+        name: 'Student',
+        component: Student,
+      },
+      {
+        path: '/manageuser',
+        name: 'Manageuser',
+        component: Manageuser,
       },
       {
         path: '/finance',
