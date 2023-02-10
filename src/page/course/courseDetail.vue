@@ -42,6 +42,9 @@
                 <v-tabs-items v-model="tab">
                     <v-tab-item value="course">
                         <courseCard v-if="course_edit"></courseCard>
+                        <template v-else>
+                            <v-row></v-row>
+                        </template>
                         <v-row v-if="!course_edit" class="px-8">
                             <v-col  align="right">
                                 <v-btn 
