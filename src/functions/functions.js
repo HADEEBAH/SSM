@@ -1,12 +1,20 @@
 export const inputValidation = (e, type)=>{
-    if(type === "en"){
-        if(!(/^[a-zA-Z\s]+$/).test(e.key)){
-            e.preventDefault()
-          }
-    }else if(type === "th"){
-        if(!(/^[ก-๏\s]+$/u).test(e.key)){
-            e.preventDefault()
-        }
+    switch (type) {
+        case "th":
+            if((/^[a-zA-Z\s]+$/).test(e.key)){
+                e.preventDefault()
+              }
+            break;
+        case "en":
+            if((/^[ก-๏\s]+$/u).test(e.key)){
+                e.preventDefault()
+            }
+            break;
+        case "number":
+            if(!(/^[0-9]*$/).test(e.key)){
+                e.preventDefault()
+            }
+            break;
     }
 }
 export const dateFormatter = (date, formatter)=>{

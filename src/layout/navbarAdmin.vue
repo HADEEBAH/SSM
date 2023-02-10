@@ -130,7 +130,7 @@ export default {
         { title : "สร้างคอร์สเรียน", to:"CourseCreate" },
         { title : "สร้างอาณาจักร", to:"Kingdom" },
       ]},
-      { title : "การเงิน", to:"", child :[]},
+      { title : "การเงิน", to:"Finance", child :[]},
       { title : "จัดการผู้ใช้งาน", to:"", child :[
         {title : "จัดการผู้ใช้งาน", to:"Manageuser"},
         {title : "จัดการสิทธิ์", to:""},
@@ -149,15 +149,15 @@ export default {
     selectMenu(type, to, head){
       if(type === "child" && head === this.active_menu ){
         this.active_menu_child = to
+        this.active_menu = ""
         this.$router.push({name: to})
       }else{
         this.active_menu_child = to
-        this.active_menu = ""
       }
       if(type === "head"){
         this.$router.push({name: to})
       }
-    }
+    },
   },
 };
 </script>
