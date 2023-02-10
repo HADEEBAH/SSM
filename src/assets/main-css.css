@@ -26,3 +26,15 @@
     font-weight: 700;
     font-size: 12px;
 }
+.header-table .v-data-table-header tr{
+    background-color: #FCE0E7;
+}
+.header-table .v-data-table-header tr th span{
+    color: #FF6b81;
+}
+.img-card-active.v-card{
+    background-color: #FDF7E3;
+}
+.btn-size-lg{
+    width: 120px;
+}

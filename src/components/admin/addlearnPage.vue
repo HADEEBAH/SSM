@@ -309,6 +309,7 @@ export default {
   },
   props: {},
   data: () => ({
+    date : "",
     username: "",
     show_dialog: false,
     filter_search: "",
