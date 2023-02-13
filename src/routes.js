@@ -10,9 +10,9 @@ import CourseDetail from '@/page/course/courseDetail'
 import FinanceList from '@/page/finance/financeList'
 import FinanceDetail from '@/page/finance/financeDetail'
 // import NavBarUser from '@/layout/navbarUser.vue';
-// import Hello from '@/components/helloWorld.vue';
+// import Hello from '@/components/helloWorld.vue';    
 import Login from '@/page/loginPage.vue'
-import Student from '@/components/admin/addlearnPage.vue'
+import Student from '@/components/admin/createStudent.vue'
 import Manageuser from '@/components/admin/manageUsers.vue'
 
 const routes = [

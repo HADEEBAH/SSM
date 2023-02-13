@@ -2,25 +2,35 @@
   <v-app>
     <v-container>
       <v-row dense>
-        <headerPage class="mt-5" title="จัดการผู้ใช้งาน"></headerPage>
-        <v-card class="ml-auto mb-5 mt-6 card-user" outlined>
-          <v-row dense>
-            <v-col>
+        <headerPage title="จัดการผู้ใช้งาน">
+          <v-card outlined >
+            <v-card-text class="pa-2">   
+            <v-row dense class="d-flex align-center ">
+            <v-col cols="auto">
               <v-img
-                class="ml-2 mt-2"
                 src="@/assets/manageuser/image 78.svg"
                 height="37px"
                 width="37px"
               ></v-img>
-              <h2 class="text-center alluser">ผู้ใช้งานทั้งหมด</h2>
+            </v-col>
+            <v-col cols="auto">
+              <label-custom text="ผู้ใช้งานทั้งหมด" ></label-custom>
+            </v-col>
+            <v-col>
+              <v-avatar size="40" color="#FBF3F5"><div class="pink--text">5</div></v-avatar>
             </v-col>
           </v-row>
+        </v-card-text>
+       
         </v-card>
+        </headerPage>
       </v-row>
-      <v-divider></v-divider>
-      <v-card class="pr-3 pl-3">
-        <v-row class="mt-5">
-          <v-col cols="12" sm="5">
+
+      <!-- search -->
+      <v-card flat class="mb-3" >
+        <v-card-text class="border">
+          <v-row  class="d-flex align-center ">
+          <v-col >
             <v-text-field
               v-model="search"
               prepend-inner-icon="mdi-magnify"
@@ -31,7 +41,7 @@
               outlined
             ></v-text-field>
           </v-col>
-          <h2 class="mt-5 ml-5 mr-2">บทบาท</h2>
+          <label-custom text="บทบาท" ></label-custom>
           <v-col cols="12" sm="3">
             <template v-if="$vuetify.breakpoint.mdAndUp">
             <v-autocomplete
@@ -40,13 +50,17 @@
               :items="role"
               placeholder="ทั้งหมด"
               outlined
+              hide-details
+              multiple
+              color="pink"
+              item-color="#ff6b81"
             >
             </v-autocomplete>
           </template>
           </v-col>
+
           <v-col cols="12" sm="2">
             <v-btn
-              class="pr-10 pl-10 btn-user"
               color="#FF6B81"
               dark
               to="/user/menage"
@@ -56,7 +70,10 @@
             </v-btn>
           </v-col>
         </v-row>
+        </v-card-text>
       </v-card>
+
+      <!-- table -->
       <template>
         <v-data-table
           :headers="headers"
@@ -64,10 +81,9 @@
           :search="search"
           :page.sync="page"
           :items-per-page="itemsPerPage"
-          :sort-by="sortBy.toLowerCase()"
+          :sort-by="sortBy"
           @page-count="pageCount = $event"
-          hide-default-footer
-          class="elevation-1 mt-5"
+          class="elevation-1  header-table"
         >
           <!-- <template v-slot:top>
             <v-toolbar flat>
@@ -169,22 +185,26 @@
             <v-btn color="primary" @click="initialize"> Reset </v-btn>
           </template>
         </v-data-table>
-        <v-pagination
+        <!-- <v-pagination
           class="mt-5 pb-10 page"
           v-model="page"
           color="#FF6B81"
           :length="pageCount"
-        ></v-pagination>
+        ></v-pagination> -->
       </template>
     </v-container>
   </v-app>
 </template>
+
+
 <script>
 import headerPage from "@/components/header/headerPage.vue";
+import LabelCustom from "@/components/label/labelCustom.vue";
 export default {
   name: "manageUsers",
   components: {
     headerPage,
+    LabelCustom,
   },
   data() {
     return {
@@ -195,7 +215,7 @@ export default {
       itemsPerPage: 10,
       pageCount: 0,
       filter: {},
-      sortBy: "ทั้งหมด",
+      sortBy: ["ทั้งหมด"],
       role: ["ทั้งหมด", "นักเรียน", "ผู้ปกครอง", "โค้ช", "บัญชี", "Admin"],
       user_data: {
         users: "",
@@ -350,7 +370,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<!-- <style scoped>
 .card-user {
   width: 222px;
   height: 58px;
@@ -374,4 +394,4 @@ export default {
 ::v-deep .v-data-table-header {
   background-color: #fce0e7;
 }
-</style>
+</style> -->
