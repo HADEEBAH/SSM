@@ -9,11 +9,14 @@ import CourseDetail from '@/page/course/courseDetail'
 // Finance
 import FinanceList from '@/page/finance/financeList'
 import FinanceDetail from '@/page/finance/financeDetail'
-// import NavBarUser from '@/layout/navbarUser.vue';
+import NavBarUser from '@/layout/navbarUser.vue';
 // import Hello from '@/components/helloWorld.vue';    
-import Login from '@/page/loginPage.vue'
+import Login from '@/page/auth/loginPage.vue'
 import Student from '@/components/admin/createStudent.vue'
 import Manageuser from '@/components/admin/manageUsers.vue'
+//user
+import UserKingdom from '@/page/user/catagory/userKingdom.vue'
+
 
 const routes = [
 
@@ -22,8 +25,9 @@ const routes = [
     name: 'Register',
     component: RegisterPage,
   },
+
   {
-    path: '/',
+    path: '/admin',
     name: 'Nav',
     component: NavBarAdmin,
     children:[
@@ -78,7 +82,20 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
-  }
+  },
+  {
+    path: '/',
+    name: 'NavBarUser',
+    component: NavBarUser,
+    children: [
+      {
+        path: '/userKingdom',  
+        name: 'UserKingdom',
+        component: UserKingdom,
+      },
+    ]
+  },
 ]
+
 
 export default routes

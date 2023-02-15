@@ -14,6 +14,7 @@ const RegisterModules = {
       accept_terms : false,
     }
   },
+  // change state
   mutations: {
     ShowDialogRegisterOneId(state, value) {
       state.show_dialog_register_one_id = value

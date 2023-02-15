@@ -28,7 +28,6 @@
                 item-value="student_name"
                 @change="ChangeOrederData(order)"
               >
-              
               </v-autocomplete>
             </v-col>
           </v-row>
@@ -77,7 +76,7 @@
                       color="pink"
                       item-color="pink"
                     >
-                    <template v-slot:no-data>
+                      <template v-slot:no-data>
                         <v-list-item>
                           <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
                         </v-list-item>
@@ -94,7 +93,12 @@
                           >
                         </v-list-item-content>
                         <v-list-item-action>
-                          <v-icon> {{ student_data.kingdom === item ? 'mdi-check-circle' : 'mdi-radiobox-blank' }}</v-icon
+                          <v-icon>
+                            {{
+                              student_data.kingdom === item
+                                ? "mdi-check-circle"
+                                : "mdi-radiobox-blank"
+                            }}</v-icon
                           >
                         </v-list-item-action>
                       </template>
@@ -129,7 +133,12 @@
                           >
                         </v-list-item-content>
                         <v-list-item-action>
-                          <v-icon> {{ student_data.courses === item ? 'mdi-check-circle' : 'mdi-radiobox-blank' }}</v-icon
+                          <v-icon>
+                            {{
+                              student_data.courses === item
+                                ? "mdi-check-circle"
+                                : "mdi-radiobox-blank"
+                            }}</v-icon
                           >
                         </v-list-item-action>
                       </template>
@@ -222,9 +231,8 @@
                       transition="scale-transition"
                       offset-y
                       min-width="auto"
-                      
                     >
-                    <!-- :nudge-right="40" -->
+                      <!-- :nudge-right="40" -->
                       <template v-slot:activator="{ on, attrs }">
                         <!-- <v-text-field
                           v-model="student_data.date"
@@ -238,31 +246,33 @@
                       color="pink"
                         > -->
                         <v-text-field
-                        dense
-                        outlined
-                        v-model="course_data.course_open_date_str"
-                        readonly
-                        :rules="rules.course_open_date"
-                        placeholder="เลือกวันเริ่ม"
-                        v-bind="attrs"
-                        v-on="on"
-                      >
-                      <template v-slot:append>
-                          <v-icon
-                            :color="course_data.course_open_date ? '#FF6B81' : ''"
-                            >mdi-calendar</v-icon
-                          >
-                        </template>
-                      </v-text-field>
+                          dense
+                          outlined
+                          v-model="course_data.course_open_date_str"
+                          readonly
+                          :rules="rules.course_open_date"
+                          placeholder="เลือกวันเริ่ม"
+                          v-bind="attrs"
+                          v-on="on"
+                        >
+                          <template v-slot:append>
+                            <v-icon
+                              :color="
+                                course_data.course_open_date ? '#FF6B81' : ''
+                              "
+                              >mdi-calendar</v-icon
+                            >
+                          </template>
+                        </v-text-field>
                       </template>
                       <!-- <v-date-picker
                         v-model="student_data.date"
                         @input="menu2 = false"
                       ></v-date-picker> -->
                       <v-date-picker
-                      v-model="course_data.course_open_date"
-                      @input="inputDate($event,'course open')"
-                    ></v-date-picker>
+                        v-model="course_data.course_open_date"
+                        @input="inputDate($event, 'course open')"
+                      ></v-date-picker>
                     </v-menu>
                   </v-col>
                 </v-row>
@@ -376,15 +386,25 @@
         >
         <v-btn class="btn2 ml-8 mt-20 mb-5">ยืนยัน</v-btn>
       </div> -->
-      <v-row >
-        <v-col align="right" sm="" cols="12" >
-          <v-btn outlined :class="$vuetify.breakpoint.smAndUp?'btn-size-lg': 'w-full'" color="#ff6b81">
+      <v-row>
+        <v-col align="right" sm="" cols="12">
+          <v-btn
+            outlined
+            :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
+            color="#ff6b81"
+          >
             ยกเลิก
           </v-btn>
         </v-col>
         <v-col sm="auto" cols="12">
-          <v-btn  depressed :class="$vuetify.breakpoint.smAndUp?'btn-size-lg': 'w-full'" dark color="#ff6b81" @click="save(order)"> 
-            ยืนยัน 
+          <v-btn
+            depressed
+            :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
+            dark
+            color="#ff6b81"
+            @click="save(order)"
+          >
+            ยืนยัน
           </v-btn>
         </v-col>
       </v-row>
@@ -398,9 +418,10 @@
 <script>
 import headerPage from "@/components/header/headerPage.vue";
 import LabelCustom from "@/components/label/labelCustom.vue";
+
 import registerDialogForm from "@/components/user_menage/registerDialogForm.vue";
 import { mapActions, mapGetters } from "vuex";
-import {dateFormatter} from "@/functions/functions" 
+import { dateFormatter } from "@/functions/functions";
 export default {
   name: "addlearnPage",
   components: {
@@ -410,7 +431,6 @@ export default {
   },
   props: {},
   data: () => ({
-    
     date: "",
     username: "",
     show_dialog: false,
@@ -426,7 +446,15 @@ export default {
     courses: ["3", "2", "1"],
     coursepackage: ["Exclusive", "Family", "Group"],
     period: ["3 วัน", "3 เดือน", "3 ปี"],
-    day: ["วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัส", "วันศุกร์", "วันเสาร์", "วันอาทิตย์"],
+    day: [
+      "วันจันทร์",
+      "วันอังคาร",
+      "วันพุธ",
+      "วันพฤหัส",
+      "วันศุกร์",
+      "วันเสาร์",
+      "วันอาทิตย์",
+    ],
     time: ["12.00-130.00", "13.00-14.00"],
     coach: ["Robert", "Lewandowski"],
     selected: [""],
@@ -464,18 +492,16 @@ export default {
       ],
     },
 
-    rules: {  
-                
-                course_open_date : [val => (val || '').length > 0 || 'โปรดเลือกวันเริ่มเรียน'],
-            
-            },
+    rules: {
+      course_open_date: [
+        (val) => (val || "").length > 0 || "โปรดเลือกวันเริ่มเรียน",
+      ],
+    },
   }),
 
   created() {},
 
-  mounted() {
-
-  },
+  mounted() {},
 
   methods: {
     ...mapActions({
@@ -497,29 +523,39 @@ export default {
         // price: "",
         // pricedetail: "",
       });
-      this.ChangeOrederData(this.order)
+      this.ChangeOrederData(this.order);
     },
-
-    inputDate(e,data){
-                switch (data) {
-                    case "course open":
-                        this.course_data.course_open_date_str = dateFormatter(e, "DD MT YYYYT")
-                    break;
-                    case "register start date":
-                        this.register_date_range_str.start_date = dateFormatter(e, "DD MT YYYYT")
-                    break;
-                    case "register end date":
-                        this.register_date_range_str.end_date = dateFormatter(e, "DD MT YYYYT")
-                    break;
-                    case "class start date":
-                        this.class_date_range_str.start_date = dateFormatter(e, "DD MT YYYYT")
-                    break;
-                    case "class end date":
-                        this.class_date_range_str.end_date = dateFormatter(e, "DD MT YYYYT")
-                    break;
-                }
-            },
-
+    inputDate(e, data) {
+      switch (data) {
+        case "course open":
+          this.course_data.course_open_date_str = dateFormatter(
+            e,
+            "DD MT YYYYT"
+          );
+          break;
+        case "register start date":
+          this.register_date_range_str.start_date = dateFormatter(
+            e,
+            "DD MT YYYYT"
+          );
+          break;
+        case "register end date":
+          this.register_date_range_str.end_date = dateFormatter(
+            e,
+            "DD MT YYYYT"
+          );
+          break;
+        case "class start date":
+          this.class_date_range_str.start_date = dateFormatter(
+            e,
+            "DD MT YYYYT"
+          );
+          break;
+        case "class end date":
+          this.class_date_range_str.end_date = dateFormatter(e, "DD MT YYYYT");
+          break;
+      }
+    },
   },
   computed: {
     ...mapGetters({

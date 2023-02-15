@@ -1,3 +1,5 @@
+import Swal from "sweetalert2";
+import router from "@/router";
 const orderModules = {
     namespaced: true,
     state: {
@@ -14,6 +16,7 @@ const orderModules = {
             ],
             courses: [
                 {
+                    
                     course_type: "",
                     package: "",
                     time_period: "",
@@ -42,6 +45,19 @@ const orderModules = {
         },
         save(context) {
             console.log(context.state.order);
+            Swal.fire({
+                title: "<strong>เพิ่มผู้เรียนสำเร็จ</strong>",
+                icon: "success",
+            //    imageUrl: '',
+                showCloseButton: true,
+                focusConfirm: true,
+                confirmButtonText: 'ดูสถานะการเงิน',
+            }).then((res) => {
+                if (res.isConfirmed) {
+                    router.push({name:"Finance"})
+                }
+                console.log(res);
+              })
         }
     },
     getters: {
