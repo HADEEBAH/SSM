@@ -1,5 +1,6 @@
 import Kingdom from '@/components/admin/kingdomPage.vue'
 import NavBarAdmin from '@/layout/navbarAdmin.vue'
+import NavBarUser from '@/layout/navbarUser.vue'
 import RegisterPage from '@/page/auth/registerPage'
 import UserMenagePage from '@/page/user_menage/userMenagePage'
 // Course 
@@ -11,12 +12,16 @@ import FinanceList from '@/page/finance/financeList'
 import FinanceDetail from '@/page/finance/financeDetail'
 // import NavBarUser from '@/layout/navbarUser.vue';
 // import Hello from '@/components/helloWorld.vue';
-import Login from '@/page/loginPage.vue'
+import Login from '@/page/auth/loginPage.vue'
 import Student from '@/components/admin/addlearnPage.vue'
 import Manageuser from '@/components/admin/manageUsers.vue'
 
 const routes = [
-
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+  },
   {
     path: '/register',  
     name: 'Register',
@@ -24,6 +29,14 @@ const routes = [
   },
   {
     path: '/',
+    name: 'NavUser',
+    component: NavBarUser,
+    children:[
+      
+    ]
+  },
+  {
+    path: '/admin',
     name: 'Nav',
     component: NavBarAdmin,
     children:[
@@ -74,11 +87,6 @@ const routes = [
       }
     ]
   },
-  {
-    path: '/login',
-    name: 'Login',
-    component: Login,
-  }
 ]
 
 export default routes

@@ -19,12 +19,14 @@
                 <label-custom required text="แพ็ตเกจ"></label-custom>
                 <v-autocomplete 
                     dense
+                    :disabled="disable"
+                    :outlined="!disable"
+                    :filled="disable"
                     v-model="package_data.package"
                     color="#FF6B81"
                     :rules="rules.packages"
                     :items="packages"
                     item-color="pink"
-                    outlined
                 >
                     <template v-slot:no-data>
                     <v-list-item>
@@ -48,11 +50,13 @@
                 <v-text-field
                   suffix="คน"
                   type="number"
+                  :disabled="disable"
+                  :outlined="!disable"
+                  :filled="disable"
                   :rules="rules.packages_student"
                   @focus="$event.target.select()"
                   class="input-text-right"
                   dense
-                  outlined
                   v-model.number="package_data.students"
                 ></v-text-field>
               </v-col>
@@ -71,12 +75,14 @@
                 <label-custom required text="ระยะเวลา"></label-custom>
                 <v-autocomplete 
                     dense
+                    :disabled="disable"
+                    :outlined="!disable"
+                    :filled="disable"
                     v-model="option.period_package"
                     color="#FF6B81"
                     :rules="rules.options"
                     :items="options"
                     item-color="pink"
-                    outlined
                 >
                     <template v-slot:no-data>
                     <v-list-item>
@@ -100,8 +106,10 @@
                 <v-text-field
                   class="input-text-right"
                   dense
+                  :disabled="disable"
+                  :outlined="!disable"
+                  :filled="disable"
                   @focus="$event.target.select()"
-                  outlined
                   :rules="rules.options_amount"
                   type="number"
                   placeholder="ระบุจำนวน ครั้ง/คน"
@@ -111,6 +119,7 @@
               </v-col>
               <v-col cols="6" sm="2">
                 <v-btn
+                  :disabled="disable"
                   v-if="option_index === package_data.options.length - 1"
                   @click="addOptions(package_data.options)"
                   class="w-full"
@@ -123,6 +132,7 @@
               </v-col>
               <v-col cols="6" sm="2">
                 <v-btn
+                  :disabled="disable"
                   v-if="package_data.options.length > 1"
                   class="w-full"
                   outlined
@@ -140,7 +150,9 @@
                 <v-text-field
                   class="input-text-right"
                   dense
-                  outlined
+                  :disabled="disable"
+                  :outlined="!disable"
+                  :filled="disable"
                   :rules="rules.price_unit"
                   @focus="$event.target.select()"
                   type="number"
@@ -153,6 +165,7 @@
                 <v-row class="flex align-center">
                   <v-col cols="12" sm="auto">
                     <v-checkbox
+                      :disabled="disable"
                       v-model="option.discount"
                       label="มีส่วนลด"
                     ></v-checkbox>
@@ -179,7 +192,9 @@
                 <LabelCustom text="สิทธิ์พิเศษ"></LabelCustom>
                 <v-textarea
                   dense
-                  outlined
+                  :disabled="disable"
+                  :outlined="!disable"
+                  :filled="disable"
                   v-model="option.privilege"
                 ></v-textarea>
               </v-col>
@@ -215,6 +230,9 @@ import HeaderCard from "../header/headerCard.vue";
 import LabelCustom from "../label/labelCustom.vue";
 import { mapGetters, mapActions } from "vuex";
 export default {
+  props:{
+    disable: {type: Boolean, default: false}
+  },
   components: {
     LabelCustom,
     HeaderCard

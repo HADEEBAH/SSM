@@ -9,7 +9,7 @@
     </v-card-title>
     <v-card-text>
       <v-row dense>
-        <v-col  class="text-center title">{{  title  }}</v-col>
+        <v-col  class="text-center text-lg font-bold">{{  title  }}</v-col>
       </v-row>
       <v-row dense>
         <v-col cols="12" sm="6">
@@ -81,15 +81,12 @@
         </v-col>
       </v-row>
       <v-row dense class="d-flex align-center">
-        <v-col cols="auto">
+        <v-col sm="auto">
           <v-checkbox v-model="user_one_id.accept_terms" @change="changeUserOneId(user_one_id)" color="pink lighten-1">
-            <template v-slot:label>
-                <label class="cursor-pointer"> การเปิดบัญชี ท่านรับทราบและตกลงตาม </label>
-            </template>
           </v-checkbox>
         </v-col>
-        <v-col>
-          <label class="cursor-pointer underline text-[#FF6B81]" >เงื่อนไขการบริการ & นโยบายความเป็นส่วนตัว</label> 
+        <v-col cols="12" sm>
+          <label > การเปิดบัญชี ท่านรับทราบและตกลงตาม </label><label class="cursor-pointer underline text-[#FF6B81]" >เงื่อนไขการบริการ & นโยบายความเป็นส่วนตัว</label> 
         </v-col>
       </v-row>
     </v-card-text>
