@@ -152,9 +152,11 @@ export default {
         this.active_menu_child = to
       }
       if(type === "head"){
-        this.$router.push({name: to})
-        this.active_menu_child = ""
-        this.active_menu = to
+        if(to){
+          this.$router.push({name: to})
+          this.active_menu_child = ""
+          this.active_menu = to
+        }
       }
     },
   },
