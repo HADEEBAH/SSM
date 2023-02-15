@@ -2,14 +2,14 @@
     <div>
         <v-card
             v-for="(coach, coach_index) in course_data.coachs"
-            class="bg-grey-card mb-5"
+            :class="`bg-[${color}] mb-5` "
             :key="coach_index"
         >
             <!-- TEACH DAY -->
             <template
                 v-for="(teach_day, teach_day_index) in coach.teach_day_data"
             >
-                <v-card-text :key="`${teach_day_index}-day`">
+                <v-card-text :key="`${teach_day_index}-day`" class="border">
                 <v-divider
                     v-if="teach_day_index > 0"
                     :key="teach_day_index"
@@ -17,6 +17,7 @@
                 <v-row dense>
                     <v-col cols="12" class="flex align-center justify-end">
                     <v-switch
+                        :disabled="disable"
                         v-model="teach_day.class_open"
                         color="green"
                         hide-details
@@ -29,11 +30,13 @@
                     <label-custom required text="โค้ช"></label-custom>
                     <v-autocomplete 
                         dense
+                        :disabled="disable"
+                        :outlined="!disable"
+                        :filled="disable"
                         v-model="coach.coach_name"
                         color="#FF6B81"
                         :items="courses"
                         item-color="pink"
-                        outlined
                         :rules="rules.course"
                         placeholder="โค้ช"
                     >
@@ -58,7 +61,9 @@
                     <label-custom required text="วันสอน"></label-custom>
                     <v-autocomplete 
                         dense
-                        outlined
+                        :disabled="disable"
+                        :outlined="!disable"
+                        :filled="disable"
                         chips
                         :rules="rules.class_date"
                         deletable-chips
@@ -73,6 +78,7 @@
                     <v-col cols="6" sm="2">
                         <v-btn
                             text
+                            :disabled="disable"
                             v-if="
                             teach_day_index === coach.teach_day_data.length - 1"
                             color="green"
@@ -84,6 +90,7 @@
                     </v-col>
                     <v-col cols="6" sm="2">
                         <v-btn
+                            :disabled="disable"
                             text
                             color="red"
                             v-if="coach.teach_day_data.length > 1"
@@ -116,7 +123,9 @@
                                     <template v-slot:activator="{ on, attrs }">
                                         <v-text-field
                                         dense
-                                        outlined
+                                        :disabled="disable"
+                                        :outlined="!disable"
+                                        :filled="disable"
                                         :rules="rules.start_time"
                                         placeholder="โปรดเลือกเวลา"
                                         v-model="class_date.class_date_range.start_time"
@@ -148,7 +157,9 @@
                                     <template v-slot:activator="{ on, attrs }">
                                         <v-text-field
                                         dense
-                                        outlined
+                                        :disabled="disable"
+                                        :outlined="!disable"
+                                        :filled="disable"
                                         :rules="rules.end_time"
                                         placeholder="โปรดเลือกเวลา"
                                         v-model="class_date.class_date_range.end_time"
@@ -176,9 +187,11 @@
                             <v-text-field
                                 class="input-text-right"
                                 dense
+                                :disabled="disable"
+                                :outlined="!disable"
+                                :filled="disable"
                                 type="number"
                                 suffix="คน"
-                                outlined
                                 @focus="$event.target.select()"
                                 :rules="rules.students"
                                 v-model="class_date.students"
@@ -187,6 +200,7 @@
                         </v-col>
                         <v-col cols="6" sm="2">
                             <v-btn
+                                :disabled="disable"
                                 text
                                 v-if="class_date_index === teach_day.class_date.length - 1"
                                 color="green"
@@ -198,6 +212,7 @@
                         </v-col>
                         <v-col cols="6" sm="2">
                             <v-btn
+                                :disabled="disable"
                                 v-if="teach_day.class_date.length > 1"
                                 text
                                 color="red"
@@ -221,6 +236,10 @@
     export default {
         components: {
             LabelCustom
+        },
+        props:{
+            color : {type:String , default:'#fcfcfc'},
+            disable : {type: Boolean}
         },
         data: () => ({
             days: [

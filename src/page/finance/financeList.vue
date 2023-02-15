@@ -2,75 +2,79 @@
     <v-app> 
       <v-container>
         <headerPage title="การเงิน"></headerPage>
-        <v-row>
+        <v-row dense class="mb-3">
           <v-col>
-            <v-text-field dense prepend-inner-icon="mdi-magnify" outlined placeholder="ค้นหาหมายเลขใบสั่งซื้อ, ชื่อผู้เรียน, ชื่อคอร์ส"></v-text-field>
+            <v-text-field hide-details dense prepend-inner-icon="mdi-magnify" outlined placeholder="ค้นหาหมายเลขใบสั่งซื้อ, ชื่อผู้เรียน, ชื่อคอร์ส"></v-text-field>
           </v-col>
         </v-row>
-        <v-card>
-          <v-tabs
-            v-model="tab"
-            align-with-title
-          >
-            <v-tabs-slider color="green"></v-tabs-slider>
-            <v-tab
-              v-for="(item, item_index) in items"
-              :key="item"
+        <v-row dense class="mb-3">
+          <v-col cols="12" sm="4"  @click="tab = 'all'" >
+            <img-card title="ทั้งหมด" class="cursor-pointer" :class="tab === 'all' ? 'img-card-active':''" count="5" units="รายการ">
+              <template v-slot:img>
+                <v-img max-height="90" max-width="70" src="../../assets/course/all_course.png"></v-img>
+              </template>
+            </img-card>
+          </v-col>
+          <v-col cols="12" sm="4"  @click="tab = 'paid'" >
+            <img-card title="ชำระแล้ว" class="cursor-pointer" :class="tab === 'paid' ? 'img-card-active':''" count="5" units="รายการ">
+              <template v-slot:img>
+                <v-img max-height="90" max-width="70" src="../../assets/course/file_money.png"></v-img>
+              </template>
+            </img-card>
+          </v-col>
+          <v-col cols="12" sm="4"  @click="tab = 'pending'" >
+            <img-card title="รอดำเนินการ" class="cursor-pointer" :class="tab === 'pending' ? 'img-card-active':''" count="1" units="รายการ">
+              <template v-slot:img>
+                <v-img max-height="90" max-width="70" src="../../assets/course/short_course.png"></v-img>
+              </template>
+            </img-card>
+          </v-col>
+        </v-row>
+        <v-data-table
+          class="elevation-1 header-table"
+          :headers="columns"
+          :items="orders"
+          :items-per-page="5"
+        >
+          <template v-slot:[`item.order_id`] ="{ item }">
+            <span class="font-semibold">{{ item.order_id }}</span>  
+          </template>
+          <template v-slot:[`item.course`] ="{ item }">
+            <span class="font-semibold">{{ item.course }}</span>  
+          </template>
+          <template v-slot:[`item.price`] ="{ item }">
+            <span class="font-semibold">{{ item.price.toLocaleString() }}</span>  
+          </template>
+          <template v-slot:[`item.status`] ="{ item }">
+            <v-chip
+              label
+              :color="item.status === 'รอดำเนินการ' ? '#FFF9E8' : '#F0F9EE' "
+              :text-color="item.status === 'รอดำเนินการ' ? '#FCC419' : '#58A144'"
             >
-              <span :class="tab === item_index ?'green--text' : ''">{{ `${item}(${item === 'ทั้งหมด' ? orders.length : item === 'ชำระเงินแล้ว' ? orders.filter(v => v.status === 'ชำระเงินแล้ว').length : orders.filter(v => v.status === 'รอดำเนินการ').length })` }}</span>
-            </v-tab>
-          </v-tabs>
-          <v-tabs-items v-model="tab">
-            <v-tab-item
-              v-for="item in items"
-              :key="item"
-            >
-              <v-data-table
-                :headers="columns"
-                :items="orders"
-                :items-per-page="5"
-              >
-                <template v-slot:[`item.order_id`] ="{ item }">
-                  <span class="font-semibold">{{ item.order_id }}</span>  
-                </template>
-                <template v-slot:[`item.course`] ="{ item }">
-                  <span class="font-semibold">{{ item.course }}</span>  
-                </template>
-                <template v-slot:[`item.price`] ="{ item }">
-                  <span class="font-semibold">{{ item.price.toLocaleString() }}</span>  
-                </template>
-                <template v-slot:[`item.status`] ="{ item }">
-                  <v-chip
-                    dark
-                    label
-                    outlined
-                    :color="item.status === 'รอดำเนินการ' ? '#EE9B00' : '#53B536' "
-                  >
-                    {{ item.status }}
-                  </v-chip>
-                </template>
-                <template v-slot:[`item.actions`] ="{item}">
-                  <v-btn text class="underline" color="#2F55A4" @click="$router.push({name:'Finance_orderID', params:{order_id : item.order_id}})">เพิ่มเติม</v-btn>
-                </template>
-              </v-data-table>
-            </v-tab-item>
-          </v-tabs-items>
-        </v-card>
+              {{ item.status }}
+            </v-chip>
+          </template>
+          <template v-slot:[`item.actions`] ="{item}">
+            <v-btn text class="underline" color="#FF6B81" @click="$router.push({name:'Finance_orderID', params:{order_id : item.order_id}})">เพิ่มเติม</v-btn>
+          </template>
+        </v-data-table>
       </v-container>
     </v-app>
 </template>
 <script>
+import imgCard from '@/components/course/imgCard.vue';
 import headerPage from '@/components/header/headerPage.vue';
 export default {
   name: "financeList",
   components:{
     headerPage,
+    imgCard
   },
   data: () => ({
-    tab : null,
+    tab : "all",
     items: ["ทั้งหมด", "ชำระเงินแล้ว", "รอดำเนินการ"],
     columns:[
-      {text: 'หมายเลขคำสั่งซื้อ',align: 'start',sortable: false, value: 'order_id'},
+      {text: 'หมายเลขคำสั่งซื้อ',align: 'start',sortable: false, value: 'order_id',width: 150},
       {text: 'ชื่อผู้เรียน',align: 'start',sortable: false, value: 'student_name'},
       {text: 'ชื่อคอร์ส',align: 'start',sortable: false, value: 'course'},
       {text: 'ราคา',align: 'start',sortable: false, value: 'price'},

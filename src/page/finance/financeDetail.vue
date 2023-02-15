@@ -2,100 +2,172 @@
     <v-app>
         <v-container>
             <headerPage :breadcrumbs="breadcrumbs"></headerPage>
-            <div class="pl-8 mb-4">
-                <rowData title="หมายเลขคำสั่งซื้อ">{{ `${$route.params.order_id}` }}</rowData>
-                <rowData title="ชื่อผู้เรียน">กมลรัตน์ สิทธิกรชัย, ออกัส สิงหาคม</rowData>
-                <v-btn color="#FF6B81" text @click="chengeStatus">เปลี่ยนสถานะ</v-btn>
-            </div>
-            <v-divider class="mb-3"></v-divider>
+            <v-card class="mb-3">
+                <v-card-text>
+                    <v-row>
+                        <v-col>
+                            <rowData icon="mdi-notebook-outline" title="หมายเลขคำสั่งซื้อ">: {{ `${$route.params.order_id}` }}</rowData>
+                            <rowData icon="mdi-rename-box-outline" title="ชื่อผู้เรียน">: กมลรัตน์ สิทธิกรชัย, ออกัส สิงหาคม</rowData>
+                        </v-col>
+                        <v-col cols="12" sm="auto">
+                            <v-chip
+                            label
+                            :color="payment.status === 'unpaid' ? '#FFF9E8' : '#F0F9EE' "
+                            :text-color="payment.status === 'unpaid' ? '#FCC419' : '#58A144'"
+                            >
+                            {{ payment.status === 'unpaid' ?'รอดำเนินการ':'ชำระแล้ว' }}
+                            </v-chip>
+                        </v-col>
+                    </v-row>
+                </v-card-text>
+            </v-card>
             <v-row>
-                <v-col cols="7">
-                    <div v-for="(data, index) in course"  :key="index">
-                        <v-card flat class="bg-grey-card">
-                            <v-card-text>
-                                <v-radio-group v-model="data.course_type" class="mt-0">
-                                    <v-radio color="green" v-if="data.course_type === 'general_course'" value="general_course" label="คอร์สทั่วไป"></v-radio>
-                                    <v-radio color="green" v-if="data.course_type === 'short_course'" value="short_course" label="คอร์สระยะสั้น"></v-radio>
-                                </v-radio-group>
-                                <rowData title="คอร์สเรียน">{{ data.course_name }}</rowData>
-                                <rowData title="อาณาจักร">{{ data.category }}</rowData>
-                                <rowData title="โค้ช">{{ data.coach }}</rowData>
-                                <template v-if="data.course_type === 'general_course'">
-                                    <rowData title="แพ็คเกจ">{{ data.package_name }}</rowData>
-                                    <rowData title="ระยะเวลา">{{ data.period_name }}</rowData>
-                                    <rowData title="วัน - เวลา">{{ data.class_data }}</rowData>
-                                    <rowData title="วันที่เริ่ม">{{ data.course_open }}</rowData>
-                                </template>
-                                <rowData v-else title="วัน - เวลา">{{ `${data.course_open} (${data.class_data})` }}</rowData>
-                                <rowData title="ราคา">{{ data.price.toLocaleString() }}</rowData>
-                            </v-card-text>
-                        </v-card>
-                        <v-divider class="my-4" v-if="index !== course.length-1"></v-divider>
-                    </div>
-                </v-col>
-                <v-col cols="5">
-                    <v-card flat>
+                <v-col cols="12" sm="7">
+                    <v-card>
                         <v-card-text>
-                            <rowData col_header="5" :col_detail="7" title="ราคารวม">{{ payment.total_price }}</rowData>
-                            <rowData col_header="5" :col_detail="7" title="หมายเหตุ">{{ payment.remark ? payment.remark : '-' }}</rowData>
-                            <rowData col_header="5" :col_detail="7" title="วันที่ชำระ">{{ payment.paid_at }}</rowData>
-                            <rowData col_header="5" :col_detail="7" title="สถานะการชำระ">
-                                <v-chip
-                                    dark
-                                    label
-                                    outlined
-                                    :color="payment.status === 'รอดำเนินการ' ? '#EE9B00' : '#53B536' "
-                                >
-                                    {{ payment.status }}
-                                </v-chip>
-                            </rowData>
-                            <rowData  v-if="payment.status !== 'รอดำเนินการ'" col_header="5" :col_detail="7" title="วิธีการชำระเงิน">{{ payment.payment_type }}</rowData>
-                            <v-row  v-else dense class="d-flex align-center">
-                                <v-col cols="5" class="font-bold">วิธีการชำระเงิน</v-col>
-                                <v-col cols="7" >
-                                    <v-autocomplete
-                                        class="w-full "
-                                        dense
-                                        hide-details
-                                        v-model="payment.payment_type"
-                                        color="#FF6B81"
-                                        :items="payment_types"
-                                        item-color="pink"
-                                        outlined
-                                        placeholder="ยังไม่ชำระเงิน"
-                                    >
-                                        <template v-slot:no-data>
-                                        <v-list-item>
-                                            <v-list-item-title>
-                                            ไม่พบข้อมูล
-                                            </v-list-item-title>
-                                        </v-list-item>
-                                        </template>
-                                        <template v-slot:item="{ item }" >
-                                        <v-list-item-content >
-                                            <v-list-item-title ><span :class="payment.payment_type === item ? 'font-bold':''">{{ item }}</span></v-list-item-title>
-                                        </v-list-item-content>
-                                        <v-list-item-action>
-                                            <v-icon v-if="payment.payment_type === item">mdi-check-circle</v-icon>
-                                        </v-list-item-action>
-                                        </template>  
-                                    </v-autocomplete>
+                            <v-card class=" mb-3" v-for="(data, index) in course"  :key="index" >
+                                <v-card-title class="bg-[#FEFAFD]">
+                                    <v-img class="headder-card-img pl-3" v-if="data.course_type === 'general_course'" max-height="36.38px" max-width="176px" src="../../assets/finance/Vector.png">
+                                        <span class="font-bold text-base">คอร์สทั่วไป</span>    
+                                    </v-img>
+                                    <v-img class="headder-card-img pl-3"  v-if="data.course_type === 'short_course'" max-height="36.38px" max-width="176px" src="../../assets/finance/Vector (1).png">
+                                        <span class="font-bold text-base">คอร์สระยะสั้น</span>    
+                                    </v-img>
+                                </v-card-title>
+                                <v-card-text class="bg-[#FEFAFD]">
+                                    <v-row>
+                                        <v-col>
+                                            <rowData col_header="12" col_detail="12" title="คอร์สเรียน"> {{ data.course_name }}</rowData>
+                                        </v-col>
+                                        <v-col>
+                                            <rowData col_header="12" col_detail="12"  title="อาณาจักร"> {{ data.category }}</rowData>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row>
+                                        <v-col>
+                                            <rowData col_header="12" col_detail="12" title="โค้ช"> {{ data.coach }}</rowData>
+                                        </v-col>
+                                        <v-col>
+                                            <rowData col_header="12" col_detail="12" title="วันที่เริ่ม"> {{ data.course_open }}</rowData>
+                                        </v-col>
+                                    </v-row>
+                                    <template v-if="data.course_type === 'general_course'">
+                                        <v-row>
+                                            <v-col>
+                                                <rowData col_header="12" col_detail="12"  title="แพ็คเกจ"> {{ data.package_name }}</rowData>
+                                            </v-col>
+                                            <v-col>
+                                                <rowData col_header="12" col_detail="12" title="ระยะเวลา"> {{ data.period_name }}</rowData>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row>
+                                            <v-col>
+                                                <rowData col_header="12" col_detail="12"  title="วัน - เวลา"> {{ data.class_data }}</rowData>
+                                            </v-col>
+                                            <v-col>
+                                                <rowData  col_header="12" col_detail="12" title="ราคา"> {{ data.price.toLocaleString() }}</rowData>
+                                            </v-col>
+                                        </v-row>
+                                    </template>
+                                    <template  v-else>
+                                        <v-row>
+                                            <v-col>
+                                                <rowData  col_header="12" col_detail="12" title="วัน - เวลา"> {{ `${data.course_open} (${data.class_data})` }}</rowData>
+                                            </v-col>
+                                            <v-col>
+                                                <rowData  col_header="12" col_detail="12" title="ราคา"> {{ data.price.toLocaleString() }}</rowData>
+                                            </v-col>
+                                        </v-row>
+                                    </template>
+                                </v-card-text>
+                            </v-card>
+                        </v-card-text>
+                    </v-card>
+                </v-col>
+                <v-col cols="12" sm="5">
+                    <v-card>
+                        <v-card-text>
+                            <v-card class="mb-3">
+                                <v-card-text class="bg-[#FFF5F6]">
+                                    <rowData col_header="5" col_detail="7" title="ราคารวม">: <span class="w-full font-bold">{{ payment.total_price.toLocaleString() }}</span> </rowData>
+                                    <rowData col_header="5" col_detail="7" title="หมายเหตุ">: {{  payment.remark ? payment.remark : '-' }}</rowData>
+                                    <rowData col_header="5" col_detail="7" title="วันที่ชำระ">: {{ payment.paid_at ? payment.paid_at : '-' }}</rowData>
+                                </v-card-text>
+                            </v-card>
+                            <template v-if="payment.status === 'paid'">
+                                <div class="font-bold">วิธีการชำระเงิน</div>
+                                <v-card v-for="(status, index) in payment_status.filter(v => v.value === payment.payment_type)" :key="index"  class="cursor-pointer mb-3 " @click="chengeStatus(status)">
+                                    <v-card-actions>
+                                        <v-row class="d-flex align-center">
+                                            <v-col cols="auto"><v-icon :color="payment.payment_type === status.value ? '#FF6B81' :'' ">{{ payment.payment_type === status.value ? 'mdi-radiobox-marked' :'mdi-radiobox-blank' }}</v-icon></v-col>
+                                            <v-col cols="auto">
+                                                <v-avatar>
+                                                    <v-img v-if="status.value === 'unpaid'" src="../../assets/finance/close.png"></v-img>
+                                                    <v-img v-if="status.value === 'cadit card'" src="../../assets/finance/card.png"></v-img>
+                                                    <v-img v-if="status.value === 'transfer'" src="../../assets/finance/mobile_cash.png"></v-img>
+                                                    <v-img v-if="status.value === 'cash'" src="../../assets/finance/cash.png"></v-img>
+                                                </v-avatar>
+                                            </v-col>
+                                            <v-col>
+                                                {{ status.text }}
+                                            </v-col>
+                                        </v-row>
+                                    </v-card-actions>
+                                </v-card>
+                            </template>
+                            <template v-else>
+                                <div class="font-bold mb-3">เลือกวิธีการชำระเงิน</div>
+                                <v-card v-for="(status, index) in payment_status" :key="index"  class="cursor-pointer mb-3 " @click="chengeStatus(status)">
+                                    <v-card-actions>
+                                        <v-row class="d-flex align-center">
+                                            <v-col cols="auto"><v-icon :color="payment.payment_type === status.value ? '#FF6B81' :'' ">{{ payment.payment_type === status.value ? 'mdi-radiobox-marked' :'mdi-radiobox-blank' }}</v-icon></v-col>
+                                            <v-col cols="auto">
+                                                <v-avatar>
+                                                    <v-img v-if="status.value === 'unpaid'" src="../../assets/finance/close.png"></v-img>
+                                                    <v-img v-if="status.value === 'cadit card'" src="../../assets/finance/card.png"></v-img>
+                                                    <v-img v-if="status.value === 'transfer'" src="../../assets/finance/mobile_cash.png"></v-img>
+                                                    <v-img v-if="status.value === 'cash'" src="../../assets/finance/cash.png"></v-img>
+                                                </v-avatar>
+                                            </v-col>
+                                            <v-col>
+                                                {{ status.text }}
+                                            </v-col>
+                                        </v-row>
+                                    </v-card-actions>
+                                </v-card>
+                            </template>
+                           
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-btn  v-if="payment.status === 'paid'" class="w-full" color="#ff6b81" dark>ออกใบเสร็จฉบับเต็ม</v-btn>
+                            <v-row dense v-else>
+                                <v-col cols="12">
+                                    <v-btn  v-if="payment.payment_type === 'unpaid'" class="w-full" color="#ff6b81" dark>ส่งการแจ้งเตือน</v-btn>
+                                    <v-btn  v-if="payment.payment_type !== 'unpaid'" class="w-full" color="#ff6b81" dark @click="confirmPayment()">ยืนยันการชำระ</v-btn>
+                                </v-col>
+                                <v-col cols="12">
+                                    <v-btn  class="w-full" text color="#ff6b81" dark>ยกเลิกการซื้อคอร์ส</v-btn>
                                 </v-col>
                             </v-row>
-                            <rowData col_header="5" :col_detail="7" title="ผู้รับเงิน">{{ payment.payee }}</rowData>
-                        </v-card-text>
-                            <template v-if="payment.status === 'รอดำเนินการ'">
-                                <v-btn dark color="#FF6B81" class="w-full mb-3">
-                                    <v-icon color="yellow">mdi-bell-outline</v-icon>ส่งแจ้งเตือนการชำระเงิน</v-btn>
-                                <v-btn dark color="#FF6B81" class="w-full  mb-3">
-                                    <v-icon color="green">mdi-check-circle-outline</v-icon>ยืนยันการชำระเงิน</v-btn>
-                                <v-btn dark color="#FF6B81" class="w-full  mb-3">
-                                    <v-icon color="red">mdi-close-circle-outline</v-icon>ยกเลิกการซื้อคอร์ส</v-btn>
-                            </template>
-                            <v-btn v-else-if="payment.status === 'ชำระเงินแล้ว'" dark color="#FF6B81" class="w-full">ออกใบเสร็จรับเงิน</v-btn>
+                        </v-card-actions>
                     </v-card>
                 </v-col>
             </v-row> 
+            <!-- DIALOG -->
+            <v-dialog class="pa-2" width="50vw" v-model="dialog_show" persistent >
+                <v-card>
+                    <v-card-title>
+                        <v-row>
+                            <v-col  cols="12" align="right">
+                                <v-btn icon @click="dialog_show = false">
+                                    <v-icon color="#ff6b81">mdi-close</v-icon>
+                                </v-btn>
+                            </v-col>
+                        </v-row>
+                    </v-card-title>
+                    <dialogCard text="ยืนยันการชำระเงินเรียบร้อย"></dialogCard>
+                </v-card>
+            </v-dialog>
         </v-container>
     </v-app>
   </template>
@@ -103,10 +175,12 @@
   <script>
   import headerPage from '@/components/header/headerPage.vue';
   import rowData from '@/components/label/rowData.vue';
+  import dialogCard from '@/components/dialog/dialogCard.vue';
   export default {
     name:"financeDetail",
-    components: {headerPage, rowData},
+    components: {headerPage, rowData, dialogCard},
     data: () => ({
+        dialog_show: true,
         payment_types:["เงินสด","บัตรเคตดิต","โอนเข้าบัญชีโรงเรียน"],
         breadcrumbs : [
             {text:"การเงิน",to:"Finance"},
@@ -119,45 +193,40 @@
         payment:{
             total_price : 3500,
             remark : '',
-            // paid_at : '22/07/2022',
-            // status : "ชำระเงินแล้ว",
-            // payment_type: "เงินสด",
-            // payee : "พรทรัพย์ ร่ำรวยทอง",
             paid_at : '',
-            status : "รอดำเนินการ",
+            status : "unpaid",
             payment_type: "",
             payee : ""
-        }
+        },
+        payment_status: [
+            {text:"ยังไม่ชำระเงิน", img:"../../assets/finance/close.png", value:"unpaid"},
+            {text:"เครดิต/เดบิท", img:"../../assets/finance/card.png", value:"cadit card"},
+            {text:"โอนเงินเข้าบัญชีโรงเรียน", img:"../../assets/finance/mobile_cash.png", value:"transfer"},
+            {text:"เงินสด", img:"../../assets/finance/cash.png", value:"cash"},
+        ]
     }),
     created() {},
     mounted() {},
     watch: {},
-    computed: {
-
-    },
+    computed: {},
     methods: {
-        chengeStatus(){
-            if(this.payment.status === "รอดำเนินการ"){
-                this.payment = {
-                    total_price : 3500,
-                    remark : '',
-                    paid_at : '22/07/2022',
-                    status : "ชำระเงินแล้ว",
-                    payment_type: "เงินสด",
-                    payee : "พรทรัพย์ ร่ำรวยทอง",
-                }
-            }else{
-                this.payment = {
-                    total_price : 3500,
-                    remark : '',
-                    paid_at : '',
-                    status : "รอดำเนินการ",
-                    payment_type: "",
-                    payee : ""
-                }
-            }
+        chengeStatus(status){
+            this.payment.payment_type = status.value
+        },
+        confirmPayment(){
+            this.payment.status = "paid"
+            this.dialog_show = true
         }
     },
   };
   </script>
+  <style>
+    .headder-card-img{
+        position:relative;
+        left:-23px;
+    }
+    .card-dialog{
+        width : 50vw;
+    }
+  </style>
   

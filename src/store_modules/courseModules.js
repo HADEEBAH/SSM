@@ -2,7 +2,7 @@ const CourseModules = {
   namespaced: true,
   state: {
     course_data: {
-      type: "general_course",
+      type: "short_course",
       course_name_th: "",
       course_name_en: "",
       kingdom_name: "",
