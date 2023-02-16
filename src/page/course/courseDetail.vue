@@ -244,12 +244,7 @@
                                                                     <v-col cols="3" align="center">วันเริ่ม - วันสิ้นสุด</v-col>
                                                                     <v-col cols="1" align="center">ระยะเวลา</v-col>
                                                                     <v-col cols="auto" align="center">จำนวนครั้ง</v-col>
-                                                                    <v-col>
-                                                                        <v-row>
-                                                                            <v-col></v-col>
-                                                                            <v-col></v-col>
-                                                                        </v-row>
-                                                                    </v-col>
+                                                                    <v-col></v-col>
                                                                 </v-row>
                                                             </v-card-text>
                                                         </v-card>

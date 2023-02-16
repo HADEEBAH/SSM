@@ -5,6 +5,7 @@ import CourseModules from '@/store_modules/courseModules'
 import FinanceModules from '@/store_modules/financeModules'
 import OrderModules from '@/store_modules/orderModules'
 import loginModules from '@/store_modules/loginModule'
+import NavberUserModules from '@/store_modules/navberUserModules'
 
 
 Vue.use(Vuex)
@@ -16,6 +17,7 @@ const store = new Vuex.Store({
     FinanceModules: FinanceModules,
     OrderModules: OrderModules,
     loginModules:loginModules,
+    NavberUserModules: NavberUserModules,
   }
 })
 
