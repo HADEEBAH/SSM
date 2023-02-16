@@ -2,9 +2,9 @@
   <v-app>
     <v-layout>
       <v-app-bar app clipped-right class="bg-navbar-user" dark fixed elevation="0" >
-        <v-app-bar-nav-icon><v-icon>mdi-chevron-left</v-icon></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon @click="$router.back()"><v-icon>mdi-chevron-left</v-icon></v-app-bar-nav-icon>
         <v-spacer></v-spacer>
-        <v-app-bar-title>{{ $route.name }}</v-app-bar-title>
+        <v-app-bar-title class="font-bold">{{ titel_navber }}</v-app-bar-title>
         <v-spacer></v-spacer>
         <v-badge class="mr-5" overlap color="#F03D3E" content="1" message="1">
           <v-icon dark>mdi-bell-outline</v-icon>
@@ -56,45 +56,45 @@
       </v-navigation-drawer>
       <v-main class="bg-admin">
           <router-view />
-          <v-footer dark padless class="text-white bg-navbar-user rounded-t-xl">
-            <v-container>
-              <v-row dense align="center" class="mb-2" > 
-                  <v-col cols>
-                    <v-row dense>
-                      <v-col class="font-bold">ติดต่อเราได้ที่</v-col>
-                    </v-row>
-                    <v-row dense>
-                      <v-col cols="auto" class="font-bold"><v-icon dark>mdi-email</v-icon></v-col>
-                      <v-col class="font-medium"><v-icon dark>mdi-chat</v-icon></v-col>
-                    </v-row>
-                    <v-row dense>
-                      <v-col cols="auto" class="font-bold"><v-icon dark>mdi-facebook</v-icon></v-col>
-                      <v-col class="font-medium">Warraphat Learning Sphere</v-col>
-                    </v-row>
-                    <v-row dense>
-                      <v-col cols="auto" ><v-icon dark>mdi-phone</v-icon></v-col>
-                      <v-col class="font-medium">074 - 236020, 074-221142, 0649092140</v-col>
-                    </v-row>
-                  </v-col>
-                  <v-col cols="auto" class="pa-4 bg-white" align="center">
-                    <v-img src="../assets/navbar/qr-footer.png" max-height="96" max-width="89"></v-img>
-                  </v-col>
-                </v-row>
-                <v-row dense class="text-caption border-t">
-                  <v-col col="12" sm=""> Copyright 2022 Tourish Promp. All rights reserved . Design by UI</v-col>
-                  <v-col col="12" sm="auto">
-                     All rights reserved .  | Terms and Coditions | Privacy Police
-                  </v-col>
-                </v-row>
-            </v-container>
-          </v-footer> 
       </v-main>
     </v-layout>
-    
+    <v-footer dark padless class="text-white bg-navbar-user rounded-t-xl">
+      <v-container>
+        <v-row dense align="center" class="mb-2" > 
+            <v-col cols>
+              <v-row dense>
+                <v-col class="font-bold">ติดต่อเราได้ที่</v-col>
+              </v-row>
+              <v-row dense>
+                <v-col cols="auto" class="font-bold"><v-icon dark>mdi-email</v-icon></v-col>
+                <v-col class="font-medium"><v-icon dark>mdi-chat</v-icon></v-col>
+              </v-row>
+              <v-row dense>
+                <v-col cols="auto" class="font-bold"><v-icon dark>mdi-facebook</v-icon></v-col>
+                <v-col class="font-medium">Warraphat Learning Sphere</v-col>
+              </v-row>
+              <v-row dense>
+                <v-col cols="auto" ><v-icon dark>mdi-phone</v-icon></v-col>
+                <v-col class="font-medium">074 - 236020, 074-221142, 0649092140</v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="auto" class="pa-4 bg-white" align="center">
+              <v-img src="../assets/navbar/qr-footer.png" max-height="96" max-width="89"></v-img>
+            </v-col>
+          </v-row>
+          <v-row dense class="text-caption border-t">
+            <v-col col="12" sm=""> Copyright 2022 Tourish Promp. All rights reserved . Design by UI</v-col>
+            <v-col col="12" sm="auto">
+                All rights reserved .  | Terms and Coditions | Privacy Police
+            </v-col>
+          </v-row>
+      </v-container>
+    </v-footer> 
   </v-app>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
   name: "navbarUser",
   data: () => ({
@@ -121,7 +121,11 @@ export default {
     
   },
   watch: {},
-  computed: {},
+  computed: {
+    ...mapGetters({
+      titel_navber : "NavberUserModules/getTitleNavber"
+    })
+  },
   methods: {
     selectMenu(type, to, head){
       if(type === "child" && head === this.active_menu ){
@@ -142,11 +146,8 @@ export default {
 };
 </script>
 <style>
-  .bg-admin .v-container{
-    background :linear-gradient(0deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04)), linear-gradient(141.48deg, #FFFAFB 14.35%, #FFFDFA 85.47%);
-  }
   .bg-navbar-user{
-    background: linear-gradient(141.48deg, #FF6B81 14.35%, #FDCB6E 85.47%);
+    background: linear-gradient(141.48deg, #FF6B81 45%, #FDCB6E 85.47%);
   }
   .menu-list{
     color: #333333 !important;

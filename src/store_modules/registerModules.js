@@ -1,3 +1,4 @@
+import axios from "axios"
 const RegisterModules = {
   namespaced: true,
   state: {
@@ -24,6 +25,14 @@ const RegisterModules = {
     }
   },
   actions: {
+    async registerUserOneId(){
+      try{
+        await axios.post("",{})
+      }catch(error){
+        console.log(error)
+      }
+      
+    },
     changeDialogRegisterOneId(context, value){
       if(value){
         context.commit("ShowDialogRegisterOneId",value)
