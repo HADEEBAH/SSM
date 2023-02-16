@@ -142,11 +142,9 @@ export default {
 };
 </script>
 <style>
-  .bg-admin .v-container{
-    background :linear-gradient(0deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04)), linear-gradient(141.48deg, #FFFAFB 14.35%, #FFFDFA 85.47%);
-  }
+ 
   .bg-navbar-user{
-    background: linear-gradient(141.48deg, #FF6B81 14.35%, #FDCB6E 85.47%);
+    background: linear-gradient(141.48deg, #FF8092 43%, #FDCB6E 85.47%);
   }
   .menu-list{
     color: #333333 !important;

@@ -16,6 +16,8 @@ import Student from '@/components/admin/createStudent.vue'
 import Manageuser from '@/components/admin/manageUsers.vue'
 //user
 import UserKingdom from '@/page/user/catagory/userKingdom.vue'
+//auth
+import UserLoginPage from '@/page/auth/userLoginPage'
 
 
 const routes = [
@@ -29,7 +31,11 @@ const routes = [
     name: 'Register',
     component: RegisterPage,
   },
-
+  {
+    path: '/userlogin',
+    name: 'UserLoginPage',
+    component: UserLoginPage,
+  },
 
   {
     path: '/admin',
