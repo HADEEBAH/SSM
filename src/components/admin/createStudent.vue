@@ -15,22 +15,24 @@
               <v-autocomplete
                 prepend-inner-icon="mdi-magnify"
                 dense
-                v-model="selected"
+                v-model="order.students"
                 :items="student"
                 placeholder="ค้นหา/เลือกผู้เรียน"
                 label="ค้นหา/เลือกผู้เรียน"
-                single-line
                 outlined
                 chips
-                multiple
                 deletable-chips
+                multiple
                 clearable
+                item-color="#ff6b81"
+                item-value="student_name"
+                @change="ChangeOrederData(order)"
               >
               </v-autocomplete>
             </v-col>
           </v-row>
           <v-card
-            v-for="(student_data, index) in student_data.course"
+            v-for="(student_data, index) in order.courses"
             class="mt-6"
             :key="index"
           >
@@ -71,9 +73,38 @@
                       :items="kingdom"
                       placeholder="เลือกอาณาจักร"
                       outlined
+                      color="pink"
+                      item-color="pink"
                     >
+                      <template v-slot:no-data>
+                        <v-list-item>
+                          <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
+                        </v-list-item>
+                      </template>
+                      <template v-slot:item="{ item }">
+                        <v-list-item-content>
+                          <v-list-item-title
+                            ><span
+                              :class="
+                                student_data.kingdom === item ? 'font-bold' : ''
+                              "
+                              >{{ item }}</span
+                            ></v-list-item-title
+                          >
+                        </v-list-item-content>
+                        <v-list-item-action>
+                          <v-icon>
+                            {{
+                              student_data.kingdom === item
+                                ? "mdi-check-circle"
+                                : "mdi-radiobox-blank"
+                            }}</v-icon
+                          >
+                        </v-list-item-action>
+                      </template>
                     </v-autocomplete>
                   </v-col>
+
                   <v-col cols="12" sm="4">
                     <label-custom text="คอร์สเรียน"></label-custom>
                     <v-autocomplete
@@ -82,7 +113,35 @@
                       :items="courses"
                       placeholder="เลือกคอร์สเรียน"
                       outlined
+                      color="pink"
+                      item-color="pink"
                     >
+                      <template v-slot:no-data>
+                        <v-list-item>
+                          <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
+                        </v-list-item>
+                      </template>
+                      <template v-slot:item="{ item }">
+                        <v-list-item-content>
+                          <v-list-item-title
+                            ><span
+                              :class="
+                                student_data.courses === item ? 'font-bold' : ''
+                              "
+                              >{{ item }}</span
+                            ></v-list-item-title
+                          >
+                        </v-list-item-content>
+                        <v-list-item-action>
+                          <v-icon>
+                            {{
+                              student_data.courses === item
+                                ? "mdi-check-circle"
+                                : "mdi-radiobox-blank"
+                            }}</v-icon
+                          >
+                        </v-list-item-action>
+                      </template>
                     </v-autocomplete>
                   </v-col>
                 </v-row>
@@ -90,6 +149,8 @@
                   <v-col cols="12" sm="4">
                     <label-custom text="แพ็คเกจ"></label-custom>
                     <v-autocomplete
+                      item-color="pink"
+                      color="pink"
                       dense
                       v-model="student_data.coursepackage"
                       :items="coursepackage"
@@ -106,6 +167,8 @@
                       :items="period"
                       placeholder="เลือกระยะเวลา"
                       outlined
+                      item-color="pink"
+                      color="pink"
                     >
                     </v-autocomplete>
                   </v-col>
@@ -129,6 +192,8 @@
                       :items="day"
                       placeholder="เลือกวัน"
                       outlined
+                      item-color="pink"
+                      color="pink"
                     >
                     </v-autocomplete>
                   </v-col>
@@ -140,6 +205,8 @@
                       :items="time"
                       placeholder="เลือกเวลา"
                       outlined
+                      item-color="pink"
+                      color="pink"
                     >
                     </v-autocomplete>
                   </v-col>
@@ -151,21 +218,23 @@
                       :items="coach"
                       placeholder="เลือกโค้ช"
                       outlined
+                      item-color="pink"
+                      color="pink"
                     >
                     </v-autocomplete>
                   </v-col>
                   <v-col cols="12" sm="4">
                     <label-custom text="วันเริ่ม"></label-custom>
                     <v-menu
-                      v-model="student_data.menu"
+                      v-model="course_data.menu_course_open_date"
                       :close-on-content-click="false"
-                      :nudge-right="40"
                       transition="scale-transition"
                       offset-y
                       min-width="auto"
                     >
+                      <!-- :nudge-right="40" -->
                       <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
+                        <!-- <v-text-field
                           v-model="student_data.date"
                           placeholder="เลือกวันเริ่ม"
                           append-icon="mdi-calendar"
@@ -173,11 +242,36 @@
                           dense
                           v-bind="attrs"
                           v-on="on"
-                        ></v-text-field>
+                          item-color="pink"
+                      color="pink"
+                        > -->
+                        <v-text-field
+                          dense
+                          outlined
+                          v-model="course_data.course_open_date_str"
+                          readonly
+                          :rules="rules.course_open_date"
+                          placeholder="เลือกวันเริ่ม"
+                          v-bind="attrs"
+                          v-on="on"
+                        >
+                          <template v-slot:append>
+                            <v-icon
+                              :color="
+                                course_data.course_open_date ? '#FF6B81' : ''
+                              "
+                              >mdi-calendar</v-icon
+                            >
+                          </template>
+                        </v-text-field>
                       </template>
-                      <v-date-picker
+                      <!-- <v-date-picker
                         v-model="student_data.date"
                         @input="menu2 = false"
+                      ></v-date-picker> -->
+                      <v-date-picker
+                        v-model="course_data.course_open_date"
+                        @input="inputDate($event, 'course open')"
                       ></v-date-picker>
                     </v-menu>
                   </v-col>
@@ -190,6 +284,8 @@
                       v-model="student_data.price"
                       :items="student"
                       outlined
+                      item-color="pink"
+                      color="pink"
                     >
                     </v-text-field>
                   </v-col>
@@ -200,6 +296,8 @@
                       class="form-learn"
                       auto-grow
                       outlined
+                      item-color="pink"
+                      color="pink"
                     ></v-textarea>
                   </v-col>
                 </v-row>
@@ -282,12 +380,34 @@
           </div>
         </v-col>
       </v-row>
-      <div class="btn text-center">
+      <!-- <div class="btn text-center">
         <v-btn class="btn1 mr-8 mt-20 mb-5" outlined color="error"
           >ยกเลิก</v-btn
         >
         <v-btn class="btn2 ml-8 mt-20 mb-5">ยืนยัน</v-btn>
-      </div>
+      </div> -->
+      <v-row>
+        <v-col align="right" sm="" cols="12">
+          <v-btn
+            outlined
+            :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
+            color="#ff6b81"
+          >
+            ยกเลิก
+          </v-btn>
+        </v-col>
+        <v-col sm="auto" cols="12">
+          <v-btn
+            depressed
+            :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
+            dark
+            color="#ff6b81"
+            @click="save(order)"
+          >
+            ยืนยัน
+          </v-btn>
+        </v-col>
+      </v-row>
       <v-dialog persistent v-model="show_dialog_register_one_id" width="60vw">
         <registerDialogForm dialog title="สมัคร One ID"></registerDialogForm>
       </v-dialog>
@@ -298,8 +418,10 @@
 <script>
 import headerPage from "@/components/header/headerPage.vue";
 import LabelCustom from "@/components/label/labelCustom.vue";
+
 import registerDialogForm from "@/components/user_menage/registerDialogForm.vue";
 import { mapActions, mapGetters } from "vuex";
+import { dateFormatter } from "@/functions/functions";
 export default {
   name: "addlearnPage",
   components: {
@@ -309,7 +431,7 @@ export default {
   },
   props: {},
   data: () => ({
-    date : "",
+    date: "",
     username: "",
     show_dialog: false,
     filter_search: "",
@@ -322,18 +444,22 @@ export default {
     ],
     kingdom: ["1", "2", "3"],
     courses: ["3", "2", "1"],
-    coursepackage: ["มา 1 จ่าย 3", "มา 3 จ่ายเงิน"],
+    coursepackage: ["Exclusive", "Family", "Group"],
     period: ["3 วัน", "3 เดือน", "3 ปี"],
-    day: ["Monday", "Saturday"],
-    time: ["12", "14"],
+    day: [
+      "วันจันทร์",
+      "วันอังคาร",
+      "วันพุธ",
+      "วันพฤหัส",
+      "วันศุกร์",
+      "วันเสาร์",
+      "วันอาทิตย์",
+    ],
+    time: ["12.00-130.00", "13.00-14.00"],
     coach: ["Robert", "Lewandowski"],
     selected: [""],
     pay: "",
-    transfer: [
-      "โอนเข้าบัญชี",
-      "บัตรเครดิต",
-      "เงินสด"
-    ],
+    transfer: ["โอนเข้าบัญชี", "บัตรเครดิต", "เงินสด"],
     student_data: {
       type: "",
       kingdom: "",
@@ -365,6 +491,12 @@ export default {
         },
       ],
     },
+
+    rules: {
+      course_open_date: [
+        (val) => (val || "").length > 0 || "โปรดเลือกวันเริ่มเรียน",
+      ],
+    },
   }),
 
   created() {},
@@ -374,9 +506,11 @@ export default {
   methods: {
     ...mapActions({
       changeDialogRegisterOneId: "RegisterModules/changeDialogRegisterOneId",
+      ChangeOrederData: "OrderModules/ChangeOrederData",
+      save: "OrderModules/save",
     }),
     addCourse() {
-      this.student_data.course.push({
+      this.order.courses.push({
         type: "short_course",
         kingdom: "",
         courses: "",
@@ -389,11 +523,45 @@ export default {
         // price: "",
         // pricedetail: "",
       });
+      this.ChangeOrederData(this.order);
+    },
+    inputDate(e, data) {
+      switch (data) {
+        case "course open":
+          this.course_data.course_open_date_str = dateFormatter(
+            e,
+            "DD MT YYYYT"
+          );
+          break;
+        case "register start date":
+          this.register_date_range_str.start_date = dateFormatter(
+            e,
+            "DD MT YYYYT"
+          );
+          break;
+        case "register end date":
+          this.register_date_range_str.end_date = dateFormatter(
+            e,
+            "DD MT YYYYT"
+          );
+          break;
+        case "class start date":
+          this.class_date_range_str.start_date = dateFormatter(
+            e,
+            "DD MT YYYYT"
+          );
+          break;
+        case "class end date":
+          this.class_date_range_str.end_date = dateFormatter(e, "DD MT YYYYT");
+          break;
+      }
     },
   },
   computed: {
     ...mapGetters({
       show_dialog_register_one_id: "RegisterModules/getShowDialogRegisterOneId",
+      order: "OrderModules/getOrder",
+      course_data: "CourseModules/getCourseData",
     }),
   },
   watch: {},

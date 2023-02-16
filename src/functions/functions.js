@@ -26,7 +26,7 @@ export const dateFormatter = (date, formatter)=>{
         case "DD MT YYYYT":
             date_string = date.getDate()+" "+ months_th_mini[date.getMonth()]+" "+(date.getFullYear() + 543)
             break;
-        case "DD MMT YYYYT":
+        case "DD MMT YYYYT": //เต็มเดือน
             date_string = date.getDate()+" "+ months_th[date.getMonth()]+" "+(date.getFullYear()+543)
             break;
     }
