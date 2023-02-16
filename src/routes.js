@@ -19,6 +19,8 @@ import UserKingdom from '@/page/user/catagory/userKingdom.vue'
 //auth
 import UserLoginPage from '@/page/auth/userLoginPage'
 
+//User Course 
+import userCourseList from '@/page/user/course/userCourseList'
 
 const routes = [
   {
@@ -43,47 +45,47 @@ const routes = [
     component: NavBarAdmin,
     children:[
       {
-        path: '/user/menage',  
+        path: 'admin/menage',  
         name: 'UserMenagePage',
         component: UserMenagePage,
       },
       {
-        path: '/course/create',  
+        path: 'admin/course/create',  
         name: 'CourseCreate',
         component: CourseCreate,
       },
       {
-        path: '/course/:course_id',  
+        path: 'admin/course/:course_id',  
         name: 'Course_courseID',
         component: CourseDetail,
       },
       {
-        path: '/course',  
+        path: 'admin/course',  
         name: 'CourseList',
         component: CourseList,
       },
       {
-        path: '/kingdom',
+        path: 'admin/kingdom',
         name: 'Kingdom',
         component: Kingdom,
       },
       {
-        path: '/student',
+        path: 'admin/student',
         name: 'Student',
         component: Student,
       },
       {
-        path: '/manageuser',
+        path: 'admin/manageuser',
         name: 'Manageuser',
         component: Manageuser,
       },
       {
-        path: '/finance',
+        path: 'admin/finance',
         name: 'Finance',
         component: FinanceList,
       },
       {
-        path: '/finance/:order_id',
+        path: 'admin/finance/:order_id',
         name: 'Finance_orderID',
         component: FinanceDetail,
       }
@@ -99,6 +101,11 @@ const routes = [
         path: '/userKingdom',  
         name: 'UserKingdom',
         component: UserKingdom,
+      },
+      {
+        path: '/course/:kingdom_id',  
+        name: 'userCourseList_kingdomID',
+        component: userCourseList,
       },
     ]
   },
