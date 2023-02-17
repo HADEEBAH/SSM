@@ -1,17 +1,20 @@
 <template>
-    <v-card>
-        <v-card-text>
+    <v-card :flat="flat" :outlined="outlined">
+        <v-card-text :class="`bg-[${color}]`">
             <v-row>
                 <v-col :cols="vertical ? '12':'auto'" align="center">
                     <slot name="img"></slot>
                 </v-col>
                 <v-col v-if="!vertical">
                     <v-row dense>
-                        <v-col align="center" class="font-bold">{{ title }}</v-col>
+                        <v-col>
+                            <slot name="header"></slot>
+                        </v-col>
                     </v-row>
                     <v-row dense class="d-flex align-center">
-                        <v-col align="center" class="text-3xl font-bold">{{ count }}</v-col>
-                        <v-col class="text-sm">{{ units }}</v-col>
+                        <v-col>
+                             <slot name="detail"></slot>
+                        </v-col>
                     </v-row>
                 </v-col>
             </v-row>
@@ -23,10 +26,10 @@
   export default {
     name:"imgCard",
     props:{
+        flat : {type: Boolean},
+        outlined : {type: Boolean},
+        color : {type: String},
         vertical : {type: Boolean, default: false},  
-        title : {type:String},
-        count : {type:String},
-        units : {type:String},
     },
     components: {},
     data: () => ({}),

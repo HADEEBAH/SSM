@@ -1,7 +1,6 @@
-
 <template>
-  <v-app>
-    <v-container>
+  <!-- <v-app> -->
+    <!-- <v-container> -->
       <div
         class="d-flex align-center justify-center"
         style="width: 100%; height: 100%"
@@ -9,8 +8,8 @@
       <loginForm image></loginForm>
       </div>
 
-    </v-container>
-  </v-app>
+    <!-- </v-container> -->
+  <!-- </v-app> -->
 </template>
 
 <script>
@@ -25,8 +24,5 @@ export default {
 </script>
 
 <style scoped>
-#app {
-  background: url("@/assets/login/login-bg.jpg") no-repeat !important;
-  background-size: cover;
-}
+
 </style>
