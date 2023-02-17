@@ -1,3 +1,4 @@
+import router from "@/router";
 const loginModules = {
     namespaced: true,
     state: {
@@ -16,8 +17,13 @@ const loginModules = {
         loginOneId(context, user_data) {
             context.commit("UserOneId", user_data)
             console.log(user_data);
-
+            if (user_data.from == "UserLoginPage") {
+                router.push({ name: "UserKingdom" });
+            } else {
+                router.push({ name: "Nav" });
+          }
         }
+
       
     },
     getters: {

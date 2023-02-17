@@ -146,8 +146,9 @@ export default {
 };
 </script>
 <style>
+ 
   .bg-navbar-user{
-    background: linear-gradient(141.48deg, #FF6B81 45%, #FDCB6E 85.47%);
+    background: linear-gradient(141.48deg, #FF8092 43%, #FDCB6E 85.47%);
   }
   .menu-list{
     color: #333333 !important;

@@ -39,7 +39,8 @@
             <v-card-text>
               <v-radio-group v-model="student_data.type">
                 <v-row dense>
-                  <v-col cols="12" sm="2">
+                  <v-card >
+                  <v-col cols="12" sm="4">
                     <v-radio color="green" value="general_course">
                       <template v-slot:label>
                         <v-row dense>
@@ -50,6 +51,7 @@
                       </template>
                     </v-radio>
                   </v-col>
+                </v-card>
                   <v-col cols="12" sm="2">
                     <v-radio color="green" value="short_course">
                       <template v-slot:label>
