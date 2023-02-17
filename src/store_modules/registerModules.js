@@ -30,7 +30,7 @@ const RegisterModules = {
     async registerUserOneId(context){
       try{
         let phone_number = context.state.user_one_id.phone_number.replaceAll("-","")
-        let {data} = await axios.post(" http://192.168.74.19:3000/api/v1/auth/register",{
+        let {data} = await axios.post(" http://192.168.74.34:3000/api/v1/auth/register",{
           "accountTitleTh": "",
           "firstNameTh": context.state.user_one_id.firstname_th,
           "lastNameTh": context.state.user_one_id.lastname_th,
@@ -44,10 +44,11 @@ const RegisterModules = {
           "userName": context.state.user_one_id.username,
           "passWord": context.state.user_one_id.password
         })
+        console.log(data)
         if(data.statusCode === 201){
           Swal.fire({
             icon: 'success',
-            title: data.message,
+            title: data.data.message,
           }).then((result)=>{
             if(result.isConfirmed){
               router.push({name : 'Login'})
