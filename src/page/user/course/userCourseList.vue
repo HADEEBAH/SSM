@@ -22,7 +22,7 @@
         <v-row dense>
             <template v-if="!loading">
                 <v-col cols="6" sm="4" v-for="(course, course_index) in category.courses" :key="course_index">
-                    <v-card>
+                    <v-card @click="$router.push({name: 'userCourseDetail_courseID', params:{course_id : course.course_id}})">
                         <v-img
                             height="109"
                             src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
@@ -34,7 +34,7 @@
                         <v-card-title class="  font-bold text-sm pa-2">
                         <v-row dense class="d-flex align-center">
                             <v-col>{{ course.course_name }}</v-col>
-                            <v-col class="d-flex align-center text-[#ff6b81]" cols="auto"><v-icon color="#ff6b81" size="18">mdi-account</v-icon>{{ `${course.amount}/${course.maximum}` }}</v-col>
+                            <v-col class="d-flex align-center text-[#ff6b81]" cols="auto"><v-icon color="#ff6b81" size="18">mdi-account-group-outline</v-icon>{{ `${course.amount}/${course.maximum}` }}</v-col>
                         </v-row>  
                         </v-card-title>
                         <v-card-text class="text-xs pa-2">
@@ -69,10 +69,10 @@
             category:{
                 name : "อาณาจักรดนตรีสมัยใหม่",
                 courses:[
-                    {course_name : "เปียโน + ขับร้อง", amount : 9, maximum: 15, detail : "หลักสูตรนี้เน้นการฝึกเล่นเปียโนประกอบการร้องเพลง ทั้งบรรเลงเดี่ยวและรวมวงดนตรีพร้อมทั้งยังมีการผสม ผสานการร้อลเพลงและการเล่นเปีโนอย่างลงตัว...", period: 1},
-                    {course_name : "เปียโน + ขับร้อง", amount : 9, maximum: 15, detail : "หลักสูตรนี้เน้นการฝึกเล่นเปียโนประกอบการร้องเพลง ทั้งบรรเลงเดี่ยวและรวมวงดนตรีพร้อมทั้งยังมีการผสม ผสานการร้อลเพลงและการเล่นเปีโนอย่างลงตัว...", period: 1},
-                    {course_name : "เปียโน + ขับร้อง", amount : 9, maximum: 15, detail : "หลักสูตรนี้เน้นการฝึกเล่นเปียโนประกอบการร้องเพลง ทั้งบรรเลงเดี่ยวและรวมวงดนตรีพร้อมทั้งยังมีการผสม ผสานการร้อลเพลงและการเล่นเปีโนอย่างลงตัว...", period: 1},
-                    {course_name : "เปียโน + ขับร้อง", amount : 9, maximum: 15, detail : "หลักสูตรนี้เน้นการฝึกเล่นเปียโนประกอบการร้องเพลง ทั้งบรรเลงเดี่ยวและรวมวงดนตรีพร้อมทั้งยังมีการผสม ผสานการร้อลเพลงและการเล่นเปีโนอย่างลงตัว...", period: 1},
+                    {course_id : '00001', course_name : "เปียโน + ขับร้อง", amount : 9, maximum: 15, detail : "หลักสูตรนี้เน้นการฝึกเล่นเปียโนประกอบการร้องเพลง ทั้งบรรเลงเดี่ยวและรวมวงดนตรีพร้อมทั้งยังมีการผสม ผสานการร้อลเพลงและการเล่นเปีโนอย่างลงตัว...", period: 1},
+                    {course_id : '00002', course_name : "เปียโน + ขับร้อง", amount : 9, maximum: 15, detail : "หลักสูตรนี้เน้นการฝึกเล่นเปียโนประกอบการร้องเพลง ทั้งบรรเลงเดี่ยวและรวมวงดนตรีพร้อมทั้งยังมีการผสม ผสานการร้อลเพลงและการเล่นเปีโนอย่างลงตัว...", period: 1},
+                    {course_id : '00003', course_name : "เปียโน + ขับร้อง", amount : 9, maximum: 15, detail : "หลักสูตรนี้เน้นการฝึกเล่นเปียโนประกอบการร้องเพลง ทั้งบรรเลงเดี่ยวและรวมวงดนตรีพร้อมทั้งยังมีการผสม ผสานการร้อลเพลงและการเล่นเปีโนอย่างลงตัว...", period: 1},
+                    {course_id : '00004', course_name : "เปียโน + ขับร้อง", amount : 9, maximum: 15, detail : "หลักสูตรนี้เน้นการฝึกเล่นเปียโนประกอบการร้องเพลง ทั้งบรรเลงเดี่ยวและรวมวงดนตรีพร้อมทั้งยังมีการผสม ผสานการร้อลเพลงและการเล่นเปีโนอย่างลงตัว...", period: 1},
                 ]
             }
         }),
