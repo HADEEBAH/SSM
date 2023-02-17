@@ -13,19 +13,46 @@
               <template v-slot:img>
                 <v-img max-height="90" max-width="70" src="../../assets/course/all_course.png"></v-img>
               </template>
+              <template v-slot:header>
+                  <div class="font-bold"> คอร์สทั่วไป </div>
+              </template>
+              <template v-slot:detail>
+                  <v-row class="d-flex align-end">
+                      <v-col align="center" class="text-3xl font-bold">5</v-col>
+                      <v-col class="text-sm">รายการ</v-col>
+                  </v-row>
+              </template>
             </img-card>
           </v-col>
           <v-col cols="12" sm="4"  @click="tab = 'paid'" >
-            <img-card title="ชำระแล้ว" class="cursor-pointer" :class="tab === 'paid' ? 'img-card-active':''" count="5" units="รายการ">
+            <img-card class="cursor-pointer" :class="tab === 'paid' ? 'img-card-active':''" >
               <template v-slot:img>
                 <v-img max-height="90" max-width="70" src="../../assets/course/file_money.png"></v-img>
+              </template>
+              <template v-slot:header>
+                  <div class="font-bold"> ชำระแล้ว </div>
+              </template>
+              <template v-slot:detail>
+                  <v-row class="d-flex align-end">
+                      <v-col align="center" class="text-3xl font-bold">5</v-col>
+                      <v-col class="text-sm">รายการ</v-col>
+                  </v-row>
               </template>
             </img-card>
           </v-col>
           <v-col cols="12" sm="4"  @click="tab = 'pending'" >
-            <img-card title="รอดำเนินการ" class="cursor-pointer" :class="tab === 'pending' ? 'img-card-active':''" count="1" units="รายการ">
+            <img-card  class="cursor-pointer" :class="tab === 'pending' ? 'img-card-active':''">
               <template v-slot:img>
                 <v-img max-height="90" max-width="70" src="../../assets/course/short_course.png"></v-img>
+              </template>
+              <template v-slot:header>
+                  <div class="font-bold"> รอดำเนินการ </div>
+              </template>
+              <template v-slot:detail>
+                  <v-row class="d-flex align-end">
+                      <v-col align="center" class="text-3xl font-bold">1</v-col>
+                      <v-col class="text-sm">รายการ</v-col>
+                  </v-row>
               </template>
             </img-card>
           </v-col>

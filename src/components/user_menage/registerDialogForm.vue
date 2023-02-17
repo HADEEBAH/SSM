@@ -81,12 +81,12 @@
         </v-col>
       </v-row>
       <v-row dense class="d-flex align-center">
-        <v-col sm="auto">
+        <v-col cols="auto">
           <v-checkbox v-model="user_one_id.accept_terms" @change="changeUserOneId(user_one_id)" color="pink lighten-1">
-          </v-checkbox>
-        </v-col>
-        <v-col cols="12" sm>
-          <label > การเปิดบัญชี ท่านรับทราบและตกลงตาม </label><label class="cursor-pointer underline text-[#FF6B81]" >เงื่อนไขการบริการ & นโยบายความเป็นส่วนตัว</label> 
+            <template v-slot:label >
+              <label > การเปิดบัญชี ท่านรับทราบและตกลงตาม <label class="cursor-pointer underline text-[#FF6B81]" >เงื่อนไขการบริการ & นโยบายความเป็นส่วนตัว</label></label>
+            </template>
+          </v-checkbox> 
         </v-col>
       </v-row>
     </v-card-text>
@@ -128,6 +128,7 @@ export default {
     ...mapActions({
       changeDialogRegisterOneId : "RegisterModules/changeDialogRegisterOneId",
       changeUserOneId : "RegisterModules/changeUserOneId",
+      registerUserOneId : 'RegisterModules/registerUserOneId'
     }),
     checkPhoneNumber() {
       let x = this.user_one_id.phone_number.replace(/\D/g, '')
@@ -136,7 +137,7 @@ export default {
       this.user_one_id.phone_number = !x[2] ? x[1] :   x  [1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
     },
     save(){
-
+      this.registerUserOneId()
     },
     Validation(e, lang){
       inputValidation(e, lang)
