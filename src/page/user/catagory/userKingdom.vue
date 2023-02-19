@@ -7,7 +7,7 @@
         class="rounded-none bottomimg"
       >
         <div class="text-2xl ml-5 mt-10 font-bold text-white">Hello, Sarah</div>
-        <v-text-field
+        <!-- <v-text-field
           :class="
             MobileSize
               ? 'mt-14 ml-5 mr-5 bg-white rounded-xl'
@@ -23,18 +23,42 @@
           <template v-slot:append>
             <v-select  class="mySelect mr-2"  dense hide-details  flat :items="[1, 2, 3, 4]" >
             </v-select>
-          </template> </v-text-field
-      ></v-img>
+          </template> </v-text-field> -->
+        <v-autocomplete
+          :class="
+            MobileSize
+              ? 'mt-14 ml-5 mr-5 bg-white rounded-xl'
+              : 'text_field_pc ml-5 mr-5 bg-white rounded-xl'
+          "
+          hide-details
+          dense
+          outlined
+          label="ค้นหาอณาจักการเรียนรู้ที่คุณสนใจได้ที่นี้"
+          suffix="All"
+          prepend-inner-icon="mdi-magnify"
+          :items="[1, 2, 3, 4]"
+        />
+        <div></div>
+      </v-img>
     </div>
     <v-card
-      :class="MobileSize ? 'rounded-xl card_body_sm' : 'rounded-xl card_body'" 
-      @click="$router.push({name:'userCourseList_kingdomID', params: {kingdom_id:'0001'}})"
+      :class="MobileSize ? 'rounded-xl card_body_sm' : 'rounded-xl card_body'"
+      @click="
+        $router.push({
+          name: 'userCourseList_kingdomID',
+          params: { kingdom_id: '0001' },
+        })
+      "
     >
-      <v-img
-        src="../../../assets/navbar_user/banner.png"
-        class="mt-5 rounded-xl ml-15 mr-15 mb-5 center"
-      >
-      </v-img>
+      <center>
+        <v-img
+          src="../../../assets/navbar_user/banner.png"
+         
+          class="rounded-xl mt-5 ml-5 mr-5"
+        >
+        </v-img>
+      </center>
+      <!-- class="mt-5 rounded-xl ml-15 mr-15 mb-5 center" -->
 
       <headerPage title="อาณาจักร" class="ml-5"></headerPage>
 
@@ -43,7 +67,7 @@
           <v-col cols="12" md="4" sm="6" v-for="item in items" :key="item.id">
             <v-card class="rounded-xl">
               <v-img
-                class="align-end text-white rounded-t-xl "
+                class="align-end text-white rounded-t-xl"
                 height="200"
                 src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
                 cover
@@ -70,8 +94,6 @@
 </template>
  
 <script>
-
-
 import headerPage from "@/components/header/headerPage.vue";
 export default {
   components: {
@@ -94,7 +116,7 @@ export default {
   }),
 
   mounted() {
-    this.$store.dispatch("NavberUserModules/changeTitleNavber","อาณาจักร")
+    this.$store.dispatch("NavberUserModules/changeTitleNavber", "อาณาจักร");
   },
   computed: {
     MobileSize() {
@@ -139,12 +161,12 @@ export default {
   position: relative;
 }
 
-.mySelect  {
-   border: none !important;
-   width: 50px;
+.mySelect {
+  border: none !important;
+  width: 50px;
 }
 
-.text_field_pc{
+.text_field_pc {
   top: 200px;
 }
 </style>
