@@ -3,7 +3,7 @@
     <v-img
       v-if="$vuetify.breakpoint.smAndUp"
       class="img-header"
-      src="../../assets/course/img_header.png"
+      src="../../../assets/course/img_header.png"
     ></v-img>
     <v-container>
       <headerPage title="สร้างคอร์สเรียน"></headerPage>
@@ -15,7 +15,7 @@
                 <v-row dense>
                   <v-col cols="4" sm="12">
                     <v-img
-                      src="../../assets/course/general_course_icon.jpg"
+                      src="../../../assets/course/general_course_icon.jpg"
                       height="50"
                       max-height="80"
                       max-width="80"
@@ -34,7 +34,7 @@
                 <v-row dense>
                   <v-col cols="4" sm="12">
                     <v-img
-                      src="../../assets/course/short_course_icon.jpg"
+                      src="../../../assets/course/short_course_icon.jpg"
                       height="50"
                       max-height="80"
                       max-width="80"

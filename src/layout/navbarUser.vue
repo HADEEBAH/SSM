@@ -4,12 +4,12 @@
       <v-app-bar app clipped-right class="bg-navbar-user" dark fixed elevation="0" >
         <v-app-bar-nav-icon @click="$router.back()"><v-icon>mdi-chevron-left</v-icon></v-app-bar-nav-icon>
         <v-spacer></v-spacer>
-        <v-app-bar-title class="font-bold">{{ titel_navber }}</v-app-bar-title>
+        <v-app-bar-title class="pa-2 font-bold">{{ titel_navber }}</v-app-bar-title>
         <v-spacer></v-spacer>
-        <v-badge class="mr-5" overlap color="#F03D3E" content="1" message="1">
+        <v-badge class="mr-3" overlap color="#F03D3E" content="1" message="1">
           <v-icon dark>mdi-bell-outline</v-icon>
         </v-badge>
-        <v-badge class="mr-5" overlap color="#F03D3E" content="1" message="1">
+        <v-badge class="mr-3" overlap color="#F03D3E" content="1" message="1">
           <v-icon dark>mdi-cart</v-icon>
         </v-badge>
         <div v-if="!$vuetify.breakpoint.smAndDown">
@@ -32,7 +32,7 @@
       >
         <v-row class="pt-8 pb-6">
           <v-col class="flex align-center justify-center ">        
-            <img class="img-profile" src="../assets/navbar/drawer_img.png"/>
+            <img class="img-profile" src="@/assets/navbar/drawer_img.png"/>
           </v-col>
         </v-row>
         <v-row dense>

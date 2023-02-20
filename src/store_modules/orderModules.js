@@ -8,15 +8,29 @@ const orderModules = {
             students: [
                 {
                     student_name: "กมลรัตน์ สิทธิกรชัย",
-
+                    username: "",
+                    firstname: "",
+                    lastname: "",
+                    tel: "",
+                    is_other : false,
+                    parents: [
+                       
+                    ]
                 },
                 {
-                    student_name: "กมลพร ศรีโสภา"
+                    student_name: "กมลพร ศรีโสภา",
+                    username : "",
+                    firstname : "",
+                    lastname : "",
+                    tel : "",
+                    is_other : false,
+                    parents: [
+                       
+                    ]
                 },
             ],
             courses: [
                 {
-                    
                     course_type: "",
                     package: "",
                     time_period: "",
@@ -26,11 +40,36 @@ const orderModules = {
                     coach: "",
                     start_day: "",
                     price: 0,
-                    remark: ""
+                    remark: "",
+                    students: [
+                        {
+                            student_name: "กมลรัตน์ สิทธิกรชัย",
+                            username: "",
+                            firstname: "",
+                            lastname: "",
+                            tel: "",
+                            is_other : false,
+                            parents: [
+                               
+                            ]
+                        },
+                        {
+                            student_name: "กมลพร ศรีโสภา",
+                            username : "",
+                            firstname : "",
+                            lastname : "",
+                            tel : "",
+                            is_other : false,
+                            parents: [
+                               
+                            ]
+                        },
+                    ],
                 }
             ],
             payment_status: "",
             payment_type: "",
+            total_price : 0,
       }
     },
     mutations: {

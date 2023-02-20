@@ -8,7 +8,7 @@
             <v-col cols="12" sm="4"  @click="tab = 'all'" >
                 <img-card class="cursor-pointer" :class="tab === 'all' ? 'img-card-active':''">
                     <template v-slot:img> 
-                        <v-img max-height="90" max-width="70" src="../../assets/course/all_course.png"></v-img>
+                        <v-img max-height="90" max-width="70" src="../../../assets/course/all_course.png"></v-img>
                     </template>
                     <template v-slot:header>
                         <div class="font-bold"> คอร์สทั้งหมด </div>
@@ -24,7 +24,7 @@
             <v-col cols="12" sm="4" @click="tab = 'general'">
                 <img-card  class="cursor-pointer" :class="tab === 'general' ? 'img-card-active':''">
                     <template v-slot:img> 
-                        <v-img  max-height="90" max-width="70" src="../../assets/course/general_course.png"></v-img>
+                        <v-img  max-height="90" max-width="70" src="../../../assets/course/general_course.png"></v-img>
                     </template>
                     <template v-slot:header>
                         <div class="font-bold"> คอร์สทั่วไป </div>
@@ -40,7 +40,7 @@
             <v-col cols="12" sm="4" @click="tab = 'short'"> 
                 <img-card  class="cursor-pointer" :class="tab === 'short' ? 'img-card-active':''">
                     <template v-slot:img> 
-                        <v-img  max-height="90" max-width="70" src="../../assets/course/short_course.png"></v-img>
+                        <v-img  max-height="90" max-width="70" src="../../../assets/course/short_course.png"></v-img>
                     </template>
                     <template v-slot:header>
                         <div class="font-bold"> คอร์สระยะสั้น </div>
