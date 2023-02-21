@@ -3,15 +3,44 @@ import router from "@/router";
 const orderModules = {
     namespaced: true,
     state: {
+        courses: {
+            course_type: "",
+            package: "",
+            time_period: "",
+            time_count: 0,
+            day: "",
+            time: "",
+            coach: "",
+            start_day: "",
+            price: 0,
+            remark: "",
+            parents: [],
+            students: [],
+        },
         order: {
             order_id: "",
             students: [
                 {
                     student_name: "กมลรัตน์ สิทธิกรชัย",
-
+                    username: "",
+                    firstname: "",
+                    lastname: "",
+                    tel: "",
+                    is_other : false,
+                    parents: [
+                       
+                    ]
                 },
                 {
-                    student_name: "กมลพร ศรีโสภา"
+                    student_name: "กมลพร ศรีโสภา",
+                    username : "",
+                    firstname : "",
+                    lastname : "",
+                    tel : "",
+                    is_other : false,
+                    parents: [
+                       
+                    ]
                 },
             ],
             courses: [
@@ -25,22 +54,50 @@ const orderModules = {
                     coach: "",
                     start_day: "",
                     price: 0,
-                    remark: ""
+                    remark: "",
+                    parents: [],
+                    students: [
+                        {
+                            student_name: "กมลรัตน์ สิทธิกรชัย",
+                            username: "",
+                            firstname: "",
+                            lastname: "",
+                            tel: "",
+                            is_other : false,
+                            parents: []
+                        },
+                        {
+                            student_name: "กมลพร ศรีโสภา",
+                            username : "",
+                            firstname : "",
+                            lastname : "",
+                            tel : "",
+                            is_other : false,
+                            parents: []
+                        },
+                    ],
                 }
             ],
             payment_status: "",
             payment_type: "",
+            total_price : 0,
       }
     },
     mutations: {
         SetOrder(state, payload) {
             state.order= payload
-      }
+        },
+        SetOrderCourse(state, payload) {
+            state.courses= payload
+        },
     },
     actions: {
-        ChangeOrederData(context, orderData) {
+        changeCourseData(context, courseData){
+            context.commit("SetOrderCourse", courseData)
+            console.log(courseData)
+        },
+        changeOrederData(context, orderData) {
             context.commit("SetOrder", orderData)
-            console.log(orderData);
         },
         save(context) {
             console.log(context.state.order);
@@ -62,7 +119,10 @@ const orderModules = {
     getters: {
         getOrder(state) {
             return state.order
-      }
+        },
+        getCourses(state){
+            return state.courses
+        }
     },
   };
   

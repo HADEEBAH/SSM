@@ -218,9 +218,9 @@
   </v-container>
 </template>
 <script>
-import headerPage from "../../components/header/headerPage.vue";
+import headerPage from "@/components/header/headerPage.vue";
 import headerCard from "@/components/header/headerCard.vue";
-import registerDialogForm from "../../components/user_menage/registerDialogForm.vue";
+import registerDialogForm from "@/components/user_menage/registerDialogForm.vue";
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "userMenagePage",

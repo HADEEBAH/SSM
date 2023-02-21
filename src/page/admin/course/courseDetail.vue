@@ -6,7 +6,7 @@
             <v-col cols="12" sm="3" @click="tab='course'">
                 <img-card vertical class="cursor-pointer" :class="tab === 'course' ? 'img-card-active':''">
                     <template v-slot:img>
-                        <v-img max-height="72" max-width="72" src="../../assets/course/course.png"></v-img>
+                        <v-img max-height="72" max-width="72" src="../../../assets/course/course.png"></v-img>
                         <span class="text-lg font-bold"> คอร์สเรียน </span>
                     </template>
                 </img-card>
@@ -14,7 +14,7 @@
             <v-col cols="12" sm="3" @click="tab='time and coach'">
                 <img-card vertical class="cursor-pointer" :class="tab === 'time and coach' ? 'img-card-active':''">
                     <template v-slot:img>
-                        <v-img max-height="72" max-width="72" src="../../assets/course/time_and_coach.png"></v-img>
+                        <v-img max-height="72" max-width="72" src="../../../assets/course/time_and_coach.png"></v-img>
                         <span class="text-lg font-bold"> ช่วงเวลาและโค้ช </span>
                     </template>
                 </img-card>
@@ -22,7 +22,7 @@
             <v-col cols="12" sm="3"  @click="tab='package'">
                 <img-card vertical class="cursor-pointer" :class="tab === 'package' ? 'img-card-active':''">
                     <template v-slot:img>
-                        <v-img max-height="72" max-width="72" src="../../assets/course/package.png"></v-img>
+                        <v-img max-height="72" max-width="72" src="../../../assets/course/package.png"></v-img>
                         <span class="text-lg font-bold"> แพ็คเกจ </span>
                     </template>
                 </img-card>
@@ -30,7 +30,7 @@
             <v-col cols="12" sm="3" @click="tab='student list'">
                 <img-card vertical class="cursor-pointer" :class="tab === 'student list' ? 'img-card-active':''">
                     <template v-slot:img>
-                        <v-img max-height="72" max-width="72" src="../../assets/course/student_list.png"></v-img>
+                        <v-img max-height="72" max-width="72" src="../../../assets/course/student_list.png"></v-img>
                         <span class="text-lg font-bold"> รายชื่อนักเรียน </span>
                     </template>
                 </img-card>
@@ -47,7 +47,7 @@
                             <v-card flat>
                                 <v-card-text class="border border-2 border-[#ff6b81] border-600 rounded-lg" align="center"> 
                                     <v-img 
-                                        src="../../assets/course/student_list.png" 
+                                        src="../../../assets/course/student_list.png" 
                                         max-height="299"
                                         max-width="365">
                                     </v-img>

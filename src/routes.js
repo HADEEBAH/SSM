@@ -5,15 +5,15 @@ import AuthLayout from '@/layout/authAdminLayout.vue'
 //Auth
 import RegisterPage from '@/page/auth/registerPage'
 import Login from '@/page/auth/loginPage.vue'
-import UserMenagePage from '@/page/user_menage/userMenagePage'
+import UserMenagePage from '@/page/admin/user_menage/userMenagePage'
 // Course 
 import Kingdom from '@/components/admin/kingdomPage.vue'
-import CourseCreate from '@/page/course/courseCreate'
-import CourseList from '@/page/course/courseList'
-import CourseDetail from '@/page/course/courseDetail'
+import CourseCreate from '@/page/admin/course/courseCreate'
+import CourseList from '@/page/admin/course/courseList'
+import CourseDetail from '@/page/admin/course/courseDetail'
 // Finance
-import FinanceList from '@/page/finance/financeList'
-import FinanceDetail from '@/page/finance/financeDetail'
+import FinanceList from '@/page/admin/finance/financeList'
+import FinanceDetail from '@/page/admin/finance/financeDetail'
 // Manage User  
 import Student from '@/components/admin/createStudent.vue'
 import Manageuser from '@/components/admin/manageUsers.vue'
