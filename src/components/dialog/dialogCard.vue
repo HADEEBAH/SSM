@@ -8,6 +8,9 @@
                 {{ text }}
             </v-col>
         </v-row>
+        <v-row>
+            
+        </v-row>
     </v-card-text>
 </template>
   
