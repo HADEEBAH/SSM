@@ -16,7 +16,6 @@ const orderModules = {
             ],
             courses: [
                 {
-                    
                     course_type: "",
                     package: "",
                     time_period: "",
