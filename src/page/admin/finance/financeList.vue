@@ -11,7 +11,7 @@
           <v-col cols="12" sm="4"  @click="tab = 'all'" >
             <img-card title="ทั้งหมด" class="cursor-pointer" :class="tab === 'all' ? 'img-card-active':''" count="5" units="รายการ">
               <template v-slot:img>
-                <v-img max-height="90" max-width="70" src="../../assets/course/all_course.png"></v-img>
+                <v-img max-height="90" max-width="70" src="../../../assets/course/all_course.png"></v-img>
               </template>
               <template v-slot:header>
                   <div class="font-bold"> คอร์สทั่วไป </div>
@@ -27,7 +27,7 @@
           <v-col cols="12" sm="4"  @click="tab = 'paid'" >
             <img-card class="cursor-pointer" :class="tab === 'paid' ? 'img-card-active':''" >
               <template v-slot:img>
-                <v-img max-height="90" max-width="70" src="../../assets/course/file_money.png"></v-img>
+                <v-img max-height="90" max-width="70" src="../../../assets/course/file_money.png"></v-img>
               </template>
               <template v-slot:header>
                   <div class="font-bold"> ชำระแล้ว </div>
@@ -43,7 +43,7 @@
           <v-col cols="12" sm="4"  @click="tab = 'pending'" >
             <img-card  class="cursor-pointer" :class="tab === 'pending' ? 'img-card-active':''">
               <template v-slot:img>
-                <v-img max-height="90" max-width="70" src="../../assets/course/short_course.png"></v-img>
+                <v-img max-height="90" max-width="70" src="../../../assets/course/short_course.png"></v-img>
               </template>
               <template v-slot:header>
                   <div class="font-bold"> รอดำเนินการ </div>

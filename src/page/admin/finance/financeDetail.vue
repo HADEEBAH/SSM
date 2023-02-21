@@ -27,10 +27,10 @@
                         <v-card-text>
                             <v-card class=" mb-3" v-for="(data, index) in course"  :key="index" >
                                 <v-card-title class="bg-[#FEFAFD]">
-                                    <v-img class="headder-card-img pl-3" v-if="data.course_type === 'general_course'" max-height="36.38px" max-width="176px" src="../../assets/finance/Vector.png">
+                                    <v-img class="headder-card-img pl-3" v-if="data.course_type === 'general_course'" max-height="36.38px" max-width="176px" src="../../../assets/finance/Vector.png">
                                         <span class="font-bold text-base">คอร์สทั่วไป</span>    
                                     </v-img>
-                                    <v-img class="headder-card-img pl-3"  v-if="data.course_type === 'short_course'" max-height="36.38px" max-width="176px" src="../../assets/finance/Vector (1).png">
+                                    <v-img class="headder-card-img pl-3"  v-if="data.course_type === 'short_course'" max-height="36.38px" max-width="176px" src="../../../assets/finance/Vector (1).png">
                                         <span class="font-bold text-base">คอร์สระยะสั้น</span>    
                                     </v-img>
                                 </v-card-title>
@@ -102,10 +102,10 @@
                                             <v-col cols="auto"><v-icon :color="payment.payment_type === status.value ? '#FF6B81' :'' ">{{ payment.payment_type === status.value ? 'mdi-radiobox-marked' :'mdi-radiobox-blank' }}</v-icon></v-col>
                                             <v-col cols="auto">
                                                 <v-avatar>
-                                                    <v-img v-if="status.value === 'unpaid'" src="../../assets/finance/close.png"></v-img>
-                                                    <v-img v-if="status.value === 'cadit card'" src="../../assets/finance/card.png"></v-img>
-                                                    <v-img v-if="status.value === 'transfer'" src="../../assets/finance/mobile_cash.png"></v-img>
-                                                    <v-img v-if="status.value === 'cash'" src="../../assets/finance/cash.png"></v-img>
+                                                    <v-img v-if="status.value === 'unpaid'" src="../../../assets/finance/close.png"></v-img>
+                                                    <v-img v-if="status.value === 'cadit card'" src="../../../assets/finance/card.png"></v-img>
+                                                    <v-img v-if="status.value === 'transfer'" src="../../../assets/finance/mobile_cash.png"></v-img>
+                                                    <v-img v-if="status.value === 'cash'" src="../../../assets/finance/cash.png"></v-img>
                                                 </v-avatar>
                                             </v-col>
                                             <v-col>
@@ -123,10 +123,10 @@
                                             <v-col cols="auto"><v-icon :color="payment.payment_type === status.value ? '#FF6B81' :'' ">{{ payment.payment_type === status.value ? 'mdi-radiobox-marked' :'mdi-radiobox-blank' }}</v-icon></v-col>
                                             <v-col cols="auto">
                                                 <v-avatar>
-                                                    <v-img v-if="status.value === 'unpaid'" src="../../assets/finance/close.png"></v-img>
-                                                    <v-img v-if="status.value === 'cadit card'" src="../../assets/finance/card.png"></v-img>
-                                                    <v-img v-if="status.value === 'transfer'" src="../../assets/finance/mobile_cash.png"></v-img>
-                                                    <v-img v-if="status.value === 'cash'" src="../../assets/finance/cash.png"></v-img>
+                                                    <v-img v-if="status.value === 'unpaid'" src="../../../assets/finance/close.png"></v-img>
+                                                    <v-img v-if="status.value === 'cadit card'" src="../../../assets/finance/card.png"></v-img>
+                                                    <v-img v-if="status.value === 'transfer'" src="../../../assets/finance/mobile_cash.png"></v-img>
+                                                    <v-img v-if="status.value === 'cash'" src="../../../assets/finance/cash.png"></v-img>
                                                 </v-avatar>
                                             </v-col>
                                             <v-col>
@@ -199,10 +199,10 @@
             payee : ""
         },
         payment_status: [
-            {text:"ยังไม่ชำระเงิน", img:"../../assets/finance/close.png", value:"unpaid"},
-            {text:"เครดิต/เดบิท", img:"../../assets/finance/card.png", value:"cadit card"},
-            {text:"โอนเงินเข้าบัญชีโรงเรียน", img:"../../assets/finance/mobile_cash.png", value:"transfer"},
-            {text:"เงินสด", img:"../../assets/finance/cash.png", value:"cash"},
+            {text:"ยังไม่ชำระเงิน", img:"../../../assets/finance/close.png", value:"unpaid"},
+            {text:"เครดิต/เดบิท", img:"../../../assets/finance/card.png", value:"cadit card"},
+            {text:"โอนเงินเข้าบัญชีโรงเรียน", img:"../../../assets/finance/mobile_cash.png", value:"transfer"},
+            {text:"เงินสด", img:"../../../assets/finance/cash.png", value:"cash"},
         ]
     }),
     created() {},
