@@ -2,7 +2,7 @@
   <v-app>
     <v-layout>
       <v-app-bar app clipped-right class="bg-navbar-user" dark fixed elevation="0" >
-        <v-app-bar-nav-icon @click="$router.back()"><v-icon>mdi-chevron-left</v-icon></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon v-if="$route.name !== 'UserKingdom'" @click="$router.back()"><v-icon>mdi-chevron-left</v-icon></v-app-bar-nav-icon>
         <v-spacer></v-spacer>
         <v-app-bar-title class="pa-2 font-bold">{{ titel_navber }}</v-app-bar-title>
         <v-spacer></v-spacer>

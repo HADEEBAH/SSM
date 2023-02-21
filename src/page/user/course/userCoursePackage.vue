@@ -27,10 +27,10 @@
         <v-row dense>
             <v-col cols="12" class="text-lg font-bold">เลือกแพ็คเกจ</v-col> 
         </v-row>
-        <v-row dense class="d-flex aling-center">
+        <v-row dense class="d-flex align-center">
             <v-col cols="12" sm class="text-sm text-[#ff6b81]">*มีสิทธิพิเศษสำหรับการสมัครรายเดือน / รายเทอม / รายปี</v-col>
             <v-col cols="12" sm="auto">
-                <v-btn color="#F9B320" class="white--text rounded-xl" depressed>ดูสิทธิพิเศษ</v-btn>
+                <v-btn color="#F9B320" @click="show_dialog_privilege = true" class="white--text rounded-xl" depressed>ดูสิทธิพิเศษ</v-btn>
             </v-col>
         </v-row>
         <!-- BUTTON -->
@@ -96,13 +96,34 @@
                     <v-card-actions class="absolute inset-x-0 bottom-0">
                         <v-row dense>
                             <v-col cols="12">
-                                <v-btn depressed class="w-full font-bold white--text" color="#ff6b81" @click="$router.push({name : 'userCourseOrder_courseID_packageID_optionID', params:{course_id: $route.params.course_id, package_id: selected_package.name, option_id:option.option_name }})">สมัครเรียน</v-btn>
+                                <v-btn depressed class="w-full font-bold white--text" color="#ff6b81" @click="selectedPackage(option)">สมัครเรียน</v-btn>
                             </v-col>
                         </v-row>
                     </v-card-actions>
                 </v-card>
             </v-slide-item>
         </v-slide-group>
+         <!-- DIALOG :: PRIVILEGE -->
+         <v-dialog width="70vw" v-model="show_dialog_privilege" persistent >
+            <v-card>
+                <v-card-title>
+                    <v-row>
+                        <v-col class="font-bold">สิทธิพิเศษ</v-col>
+                        <v-col cols="auto" align="right">
+                            <v-btn icon @click="show_dialog_privilege = false"><v-icon color="#ff6b81">mdi-close</v-icon></v-btn>
+                        </v-col>
+                    </v-row>
+                </v-card-title>
+                <v-card-text>
+                    <v-img src="@/assets/course/privilege.png"></v-img>
+                </v-card-text>
+                <v-card-actions>
+                    <v-row dense>
+                        <v-col align="center"><v-btn @click="show_dialog_privilege = false" class="btn-size-lg" dark depressed color="#ff6b81">Close</v-btn></v-col>
+                    </v-row>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
       </v-container>
     </v-app>
   </template>
@@ -110,10 +131,12 @@
   <script>
     import ImgCard from '@/components/course/imgCard.vue';
     import rowData from '@/components/label/rowData.vue';
+import { mapGetters,mapActions } from 'vuex';
   export default {
     name:"userCourseDetail",
     components: {ImgCard, rowData},
     data: () => ({
+        show_dialog_privilege : false,
         selected_package:{name : "Exclusive Package", value:"Exclusive", students: 1, maximum : 1, remark : 'เรียนเดี่ยว',
             options: [
                 {option_name: "รายวัน",  price:500, amount: 1,},
@@ -131,7 +154,7 @@
                     {option_name: "รายปี",  price:18000, amount: 24,},
                 ]
             },
-            {name : "Family Package", value:"Family", students: 2, maximum : 2,  remark : 'เรียนคู่',
+            {name : "Family Package", value:"Family", students: 1, maximum : 2,  remark : 'เรียนคู่',
                 options: [
                     {option_name: "รายวัน",  price:500, amount: 1,},
                     {option_name: "รายเดือน",  price:2000, amount: 4,},
@@ -139,7 +162,10 @@
                     {option_name: "รายปี",  price:18000, amount: 24,},
                 ]
             },
-            {name : "Gruop Package", value:"Gruop", students: 3, maximum : 8,  remark : 'เรียนกลุ่ม'},
+            {name : "Group Package", value:"Gruop", students: 1, maximum : 8,  remark : 'เรียนกลุ่ม', options:[
+                    {option_name: "รายเทอม",  price:2000, amount: 16,},
+                    {option_name: "รายปี",  price:3000, amount: 24,},
+            ]},
         ]
     }),
     created() {},
@@ -147,8 +173,25 @@
         this.$store.dispatch("NavberUserModules/changeTitleNavber","แพ็คเกจ")
     },
     watch: {},
-    computed: {},
-    methods: {},
+    computed: {
+        ...mapGetters({
+            courses : "OrderModules/getCourses",
+        })
+    },
+    methods: {
+        ...mapActions({
+            changeCourseData : "OrderModules/changeCourseData",
+        }),
+        selectedPackage(option){
+            this.courses.option = option.option_name
+            this.courses.price = option.price
+            this.courses.time_count = option.amount
+            this.courses.package = this.selected_package.name
+            this.courses.package_data = this.selected_package
+            this.changeCourseData(this.courses)
+            this.$router.push({ name : 'userCourseOrder', })
+        }
+    },
   };
   </script>
   <style scoped>
