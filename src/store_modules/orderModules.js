@@ -3,6 +3,20 @@ import router from "@/router";
 const orderModules = {
     namespaced: true,
     state: {
+        courses: {
+            course_type: "",
+            package: "",
+            time_period: "",
+            time_count: 0,
+            day: "",
+            time: "",
+            coach: "",
+            start_day: "",
+            price: 0,
+            remark: "",
+            parents: [],
+            students: [],
+        },
         order: {
             order_id: "",
             students: [
@@ -41,6 +55,7 @@ const orderModules = {
                     start_day: "",
                     price: 0,
                     remark: "",
+                    parents: [],
                     students: [
                         {
                             student_name: "กมลรัตน์ สิทธิกรชัย",
@@ -49,9 +64,7 @@ const orderModules = {
                             lastname: "",
                             tel: "",
                             is_other : false,
-                            parents: [
-                               
-                            ]
+                            parents: []
                         },
                         {
                             student_name: "กมลพร ศรีโสภา",
@@ -60,9 +73,7 @@ const orderModules = {
                             lastname : "",
                             tel : "",
                             is_other : false,
-                            parents: [
-                               
-                            ]
+                            parents: []
                         },
                     ],
                 }
@@ -75,12 +86,18 @@ const orderModules = {
     mutations: {
         SetOrder(state, payload) {
             state.order= payload
-      }
+        },
+        SetOrderCourse(state, payload) {
+            state.courses= payload
+        },
     },
     actions: {
-        ChangeOrederData(context, orderData) {
+        changeCourseData(context, courseData){
+            context.commit("SetOrderCourse", courseData)
+            console.log(courseData)
+        },
+        changeOrederData(context, orderData) {
             context.commit("SetOrder", orderData)
-            console.log(orderData);
         },
         save(context) {
             console.log(context.state.order);
@@ -102,7 +119,10 @@ const orderModules = {
     getters: {
         getOrder(state) {
             return state.order
-      }
+        },
+        getCourses(state){
+            return state.courses
+        }
     },
   };
   

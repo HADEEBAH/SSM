@@ -63,19 +63,19 @@
         <v-row dense align="center" class="mb-2" > 
             <v-col cols>
               <v-row dense>
-                <v-col class="font-bold">ติดต่อเราได้ที่</v-col>
+                <v-col class="font-bold text-sm">ติดต่อเราได้ที่</v-col>
               </v-row>
               <v-row dense>
                 <v-col cols="auto" class="font-bold"><v-icon dark>mdi-email</v-icon></v-col>
-                <v-col class="font-medium"><v-icon dark>mdi-chat</v-icon></v-col>
+                <v-col class="font-medium text-sm"><v-icon dark>mdi-chat</v-icon></v-col>
               </v-row>
               <v-row dense>
                 <v-col cols="auto" class="font-bold"><v-icon dark>mdi-facebook</v-icon></v-col>
-                <v-col class="font-medium">Warraphat Learning Sphere</v-col>
+                <v-col class="font-medium text-sm">Warraphat Learning Sphere</v-col>
               </v-row>
               <v-row dense>
                 <v-col cols="auto" ><v-icon dark>mdi-phone</v-icon></v-col>
-                <v-col class="font-medium">074 - 236020, 074-221142, 0649092140</v-col>
+                <v-col class="font-medium text-sm">074 - 236020, 074-221142, 0649092140</v-col>
               </v-row>
             </v-col>
             <v-col cols="auto" class="pa-4 bg-white" align="center">
@@ -83,9 +83,11 @@
             </v-col>
           </v-row>
           <v-row dense class="text-caption border-t">
-            <v-col col="12" sm=""> Copyright 2022 Tourish Promp. All rights reserved . Design by UI</v-col>
-            <v-col col="12" sm="auto">
-                All rights reserved .  | Terms and Coditions | Privacy Police
+            <v-col col="12" sm> Copyright 2022 Tourish Promp. All rights reserved . Design by UI
+              <label v-if="$vuetify.breakpoint.smAndDown" align="right"> All rights reserved .  | Terms and Coditions | Privacy Police</label> 
+            </v-col>
+            <v-col cols="12" sm="auto"  v-if="!$vuetify.breakpoint.smAndDown">
+               All rights reserved .  | Terms and Coditions | Privacy Police
             </v-col>
           </v-row>
       </v-container>

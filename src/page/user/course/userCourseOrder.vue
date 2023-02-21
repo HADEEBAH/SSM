@@ -25,81 +25,83 @@
             </template>
         </ImgCard>
         <!-- SELECT CLASS DATE -->
-        <v-row dense>
-            <v-col class="text-lg font-bold">
-                เลือกช่วงวันเรียน
-            </v-col>
-        </v-row>
-        <v-radio-group
-            v-model="order.courses[0].day"
-        >
-            <v-row>
-                <v-col cols="6" v-for="(date , date_index) in class_dates" :key="date_index">
-                    <v-radio
-                        :label="date.label"
-                        color="#ff6B81"
-                        :value="date"
-                    ></v-radio>
+        <template v-if="$route.params.package_id !== 'short-course'">
+            <v-row dense>
+                <v-col class="text-lg font-bold">
+                    เลือกช่วงวันเรียน
                 </v-col>
             </v-row>
-        </v-radio-group>
-        <template v-if="order.courses[0].day">
-            <v-row>
-                <v-col class="text-lg font-bold">เลือกช่วงเวลาเรียน</v-col>
-            </v-row>
-            <v-radio-group 
-                @change="order.courses[0].coach = ''"
-                v-model="order.courses[0].time_period"
+            <v-radio-group
+                v-model="courses.day"
             >
                 <v-row>
-                    <v-col cols="6" v-for="(time , time_index) in order.courses[0].day.times" :key="time_index">
+                    <v-col cols="6" v-for="(date , date_index) in class_dates" :key="date_index">
                         <v-radio
+                            :label="date.label"
                             color="#ff6B81"
-                            :value="`${time.start}-${time.end}`"
-                        >
-                            <template v-slot:label>
-                                {{`${time.start}-${time.end}`}} 
-                            </template>
-                        </v-radio>
+                            :value="date"
+                        ></v-radio>
                     </v-col>
                 </v-row>
             </v-radio-group>
-        </template>
-        <template v-if="order.courses[0].time_period">
-            <v-row>
-                <v-col class="text-lg font-bold">เลือกโค้ช</v-col>
-            </v-row>
-            <v-autocomplete
-              dense
-              v-model="order.courses[0].coach"
-              color="#FF6B81"
-              :items="coachs"
-              item-text="name"
-              item-value="coach_id"
-              item-color="pink"
-              outlined
-              placeholder="เลือกโค้ช"
-            >
-              <template v-slot:no-data>
-                <v-list-item>
-                  <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
-                </v-list-item>
-              </template>
-              <template v-slot:item="{ item }">
-                <v-list-item-content>
-                  <v-list-item-title
-                    ><span
-                      :class="order.courses[0].coach === item.coach_id ? 'font-bold' : ''"
-                      >{{ item.name }}</span
-                    ></v-list-item-title>
-                </v-list-item-content>
-                <v-list-item-action>
-                  <v-icon v-if="order.courses[0].coach === item.coach_id"
-                    >mdi-check-circle</v-icon
-                  >
-                </v-list-item-action>
-              </template>
-            </v-autocomplete>
+            <template v-if="courses.day">
+                <v-row>
+                    <v-col class="text-lg font-bold">เลือกช่วงเวลาเรียน</v-col>
+                </v-row>
+                <v-radio-group 
+                    @change="courses.coach = ''"
+                    v-model="courses.time_period"
+                >
+                    <v-row>
+                        <v-col cols="6" v-for="(time , time_index) in courses.day.times" :key="time_index">
+                            <v-radio
+                                color="#ff6B81"
+                                :value="`${time.start}-${time.end}`"
+                            >
+                                <template v-slot:label>
+                                    {{`${time.start}-${time.end}`}} 
+                                </template>
+                            </v-radio>
+                        </v-col>
+                    </v-row>
+                </v-radio-group>
+            </template>
+            <template v-if="courses.time_period">
+                <v-row>
+                    <v-col class="text-lg font-bold">เลือกโค้ช</v-col>
+                </v-row>
+                <v-autocomplete
+                dense
+                v-model="courses.coach"
+                color="#FF6B81"
+                :items="coachs"
+                item-text="name"
+                item-value="coach_id"
+                item-color="pink"
+                outlined
+                placeholder="เลือกโค้ช"
+                >
+                <template v-slot:no-data>
+                    <v-list-item>
+                    <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
+                    </v-list-item>
+                </template>
+                <template v-slot:item="{ item }">
+                    <v-list-item-content>
+                    <v-list-item-title
+                        ><span
+                        :class="courses.coach === item.coach_id ? 'font-bold' : ''"
+                        >{{ item.name }}</span
+                        ></v-list-item-title>
+                    </v-list-item-content>
+                    <v-list-item-action>
+                    <v-icon v-if="courses.coach === item.coach_id"
+                        >mdi-check-circle</v-icon
+                    >
+                    </v-list-item-action>
+                </template>
+                </v-autocomplete>
+            </template>
         </template>
         <!-- REGISTER -->
         <v-row dense>
@@ -121,8 +123,8 @@
             </v-col>
         </v-row>
         <!-- PARENT -->
-        <template v-if="order.courses[0].students.filter(v => v.is_other === false)[0].parents">
-            <div v-for="(parent, index_parent) in order.courses[0].students.filter(v => v.is_other === false)[0].parents" :key="index_parent">
+        <template v-if="courses.students.length > 0">
+            <div class="mb-3" v-for="(parent, index_parent) in courses.students.filter(v => v.is_other === false)[0].parents" :key="`${index_parent}-perent`">
                 <v-row dense class="mb-3"> 
                     <v-col cols="auto"><v-icon color="#ff6b81">mdi-card-account-details-outline</v-icon></v-col>
                     <v-col class="text-lg font-bold">{{ `ผู้ปกครอง` }}</v-col>
@@ -150,20 +152,20 @@
             </div>
         </template>
         <!-- STUDENT -->
-        <div class="mb-3" v-for="(student, index_student) in order.courses[0].students.filter(v => v.is_other === true)" :key="index_student">
+        <div v-for="(student, index_student) in courses.students.filter(v => v.is_other === true)" :key="index_student">
             <v-row dense > 
                 <v-col cols="auto"><v-icon color="#ff6b81">mdi-card-account-details-outline</v-icon></v-col>
                 <v-col class="text-lg font-bold">{{ `ผู้เรียน ${index_student+1}` }}</v-col>
-                <v-col cols="auto" v-if="order.courses[0].students.filter(v => v.is_other === true).length > 1">
+                <v-col cols="auto" v-if="courses.students.filter(v => v.is_other === true).length > 1">
                     <v-btn @click="removeStudent(student)" small icon color="red" dark><v-icon>mdi-close</v-icon></v-btn>
                 </v-col>
             </v-row>
-            <v-card outlined>
+            <v-card outlined class="mb-3">
                 <v-card-text>
                     <v-row dense class="d-flex align-center">
                         <v-col  cols="12" sm="5">
                             <labelCustom text="Username (ถ้ามี)"></labelCustom>
-                            <v-text-field hide-details dense outlined v-model="parent.username"  placeholder="Username"></v-text-field>
+                            <v-text-field hide-details dense outlined v-model="student.username"  placeholder="Username"></v-text-field>
                             <label>
                                 หากยังไม่มีบัญชีผู้ใช้กรุณา
                             </label>
@@ -180,28 +182,36 @@
                         <v-row dense>
                             <v-col cols="12" sm="6">
                                 <labelCustom required text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
-                                <v-text-field dense outlined v-model="parent.firstname_en" placeholder="ชื่อภาษาอังกฤษ"></v-text-field>
+                                <v-text-field dense outlined v-model="student.firstname_en" placeholder="ชื่อภาษาอังกฤษ"></v-text-field>
                             </v-col>
                             <v-col  cols="12" sm="6">
                                 <labelCustom required text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
-                                <v-text-field dense outlined v-model="parent.lastname_en" placeholder="นามสกุลภาษาอังกฤษ"></v-text-field>
+                                <v-text-field dense outlined v-model="student.lastname_en" placeholder="นามสกุลภาษาอังกฤษ"></v-text-field>
                             </v-col>
                         </v-row>
                         <v-row dense>
                             <v-col  cols="12" sm="6">
                                 <labelCustom required text="เบอร์โทรศัพท์"></labelCustom>
-                                <v-text-field dense outlined v-model="parent.tel"  placeholder="เบอร์โทรศัพท์"></v-text-field>
+                                <v-text-field dense outlined v-model="student.tel"  placeholder="เบอร์โทรศัพท์"></v-text-field>
                             </v-col>
                         </v-row>
                     </template>
                 </v-card-text>
             </v-card>
-            <v-row>
+            <v-row dense v-if="index_student === courses.students.filter(v => v.is_other === true).length - 1">
                 <v-col>
-                    <v-btn text dense><v-icon>mdi-plus</v-icon>เพิ่มผู้เรียน</v-btn>
+                    <v-btn @click="addStudent" text dense color="#ff6b81"><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มผู้เรียน</v-btn>
                 </v-col>
             </v-row>
         </div>
+        <v-row dense>
+            <v-col cols="12" sm="6">
+                <v-btn class="w-full" outlined dense color="#ff6b81">เพิ่มรถเข็น</v-btn>
+            </v-col>
+            <v-col cols="12" sm="6">
+                <v-btn class="w-full" dark depressed dense color="#ff6b81">ชำระเงิน</v-btn>
+            </v-col>
+        </v-row>
       </v-container>
       <!-- DIALOG :: ADD PARENT-->
       <v-dialog v-model="dialog_parent">
@@ -241,6 +251,17 @@
             </v-card-actions>
         </v-card>
       </v-dialog>
+      <!-- DIALOG::REGISTER -->
+      <v-dialog
+            persistent
+            v-model="show_dialog_register_one_id"
+            width="60vw"
+          >
+            <registerDialogForm
+              dialog
+              title="สมัคร One ID"
+            ></registerDialogForm>
+          </v-dialog>
     </v-app>
   </template>
   
@@ -249,10 +270,11 @@ import ImgCard from '@/components/course/imgCard.vue'
 import rowData from '@/components/label/rowData.vue'
 import headerCard from '@/components/header/headerCard.vue';
 import labelCustom from '@/components/label/labelCustom.vue';
+import registerDialogForm from '@/components/user_menage/registerDialogForm.vue';
 import { mapActions, mapGetters } from 'vuex';
   export default {
     name:"userCourseOrder",
-    components: {ImgCard, rowData, headerCard, labelCustom},
+    components: {ImgCard, rowData, headerCard, labelCustom, registerDialogForm },
     data: () => ({
         coachs:[
             {name : 'โค้ชหนุ่ม',coach_id : "00001" },
@@ -303,7 +325,7 @@ import { mapActions, mapGetters } from 'vuex';
     watch: {
         "apply_for_yourself" : function(){
             if(this.apply_for_yourself){
-                this.order.courses[0].students.push({
+                this.courses.students.push({
                     student_name: "สุรเชษฐ์ พุฒยืน",
                     username: "surahet",
                     firstname: "สุรเชษฐ์",
@@ -313,7 +335,7 @@ import { mapActions, mapGetters } from 'vuex';
                     is_other : false,
                 })
             }else{
-                this.order.courses[0].students.forEach((student, index)=>{
+                this.courses.students.forEach((student, index)=>{
                     console.log(student, index)
                     if(!student.is_other){
                         this.order.students.splice(index, 1)
@@ -323,7 +345,7 @@ import { mapActions, mapGetters } from 'vuex';
         },
         "apply_for_others" : function(){
             if(this.apply_for_others){
-                this.order.courses[0].students.push({
+                this.courses.students.push({
                     student_name: "",
                     username: "",
                     firstname: "",
@@ -333,7 +355,7 @@ import { mapActions, mapGetters } from 'vuex';
                     is_other : true,
                 })
             }else{
-                this.order.courses[0].students.forEach((student, index)=>{
+                this.courses.students.forEach((student, index)=>{
                     if(student.is_other){
                         this.order.students.splice(index, 1)
                     }
@@ -343,15 +365,19 @@ import { mapActions, mapGetters } from 'vuex';
     },
     computed: {
         ...mapGetters({
-            order: "OrderModules/getOrder"
+            courses : "OrderModules/getCourses",
+            order: "OrderModules/getOrder",
+            show_dialog_register_one_id : "RegisterModules/getShowDialogRegisterOneId"
         })
     },
     methods: {
         ...mapActions({
-            ChangeOrederData: "OrderModules/ChangeOrederData"
+            changeCourseData : "OrderModules/changeCourseData",
+            changeOrederData: "OrderModules/ChangeOrederData",
+            changeDialogRegisterOneId : 'RegisterModules/changeDialogRegisterOneId'
         }),
         addParent(){
-            this.order.courses[0].students.filter(v => v.is_other === false)[0].parents.push({
+            this.courses.students.filter(v => v.is_other === false)[0].parents.push({
               ...this.parent
             })
             this.parent = {
@@ -360,10 +386,22 @@ import { mapActions, mapGetters } from 'vuex';
                 username : "",
                 tel : ""
             }
+            this.changeCourseData(this.courses)
             this.dialog_parent = false
         },
+        addStudent(){
+            this.courses.students.push({
+                student_name: "กมลรัตน์ สิทธิกรชัย",
+                username: "",
+                firstname: "",
+                lastname: "",
+                tel: "",
+                is_other : true,
+                parents: []
+            })
+        },
         removeStudent(student){ 
-            this.order.courses[0].students.splice(this.order.courses[0].students.findIndex(v => v.username === student.username),1 )
+            this.courses.students.splice(this.courses.students.findIndex(v => v.username === student.username),1 )
         },
         closeDialogParent(){
            this.dialog_parent = false

@@ -21,8 +21,8 @@
         </v-row>
         <v-row dense>
             <template v-if="!loading">
-                <v-col cols="6" sm="4" v-for="(course, course_index) in category.courses" :key="course_index">
-                    <v-card @click="$router.push({name: 'userCourseDetail_courseID', params:{course_id : course.course_id}})">
+                <v-col cols="6" sm="4" v-for="(course, course_index) in category.courses.filter(v=>v.course_type === type_selected)" :key="course_index">
+                    <v-card @click="selectedCourse(course)">
                         <v-img
                             height="109"
                             src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
@@ -53,13 +53,12 @@
                     </v-card>
                 </v-col>
             </template>
-           
         </v-row>
       </v-container>
     </v-app>
   </template>
-  
   <script>
+import { mapGetters, mapActions } from 'vuex';
     export default {
         name:"userCourseList",  
         data: () => ({
@@ -69,10 +68,10 @@
             category:{
                 name : "อาณาจักรดนตรีสมัยใหม่",
                 courses:[
-                    {course_id : '00001', course_name : "เปียโน + ขับร้อง", amount : 9, maximum: 15, detail : "หลักสูตรนี้เน้นการฝึกเล่นเปียโนประกอบการร้องเพลง ทั้งบรรเลงเดี่ยวและรวมวงดนตรีพร้อมทั้งยังมีการผสม ผสานการร้อลเพลงและการเล่นเปีโนอย่างลงตัว...", period: 1},
-                    {course_id : '00002', course_name : "เปียโน + ขับร้อง", amount : 9, maximum: 15, detail : "หลักสูตรนี้เน้นการฝึกเล่นเปียโนประกอบการร้องเพลง ทั้งบรรเลงเดี่ยวและรวมวงดนตรีพร้อมทั้งยังมีการผสม ผสานการร้อลเพลงและการเล่นเปีโนอย่างลงตัว...", period: 1},
-                    {course_id : '00003', course_name : "เปียโน + ขับร้อง", amount : 9, maximum: 15, detail : "หลักสูตรนี้เน้นการฝึกเล่นเปียโนประกอบการร้องเพลง ทั้งบรรเลงเดี่ยวและรวมวงดนตรีพร้อมทั้งยังมีการผสม ผสานการร้อลเพลงและการเล่นเปีโนอย่างลงตัว...", period: 1},
-                    {course_id : '00004', course_name : "เปียโน + ขับร้อง", amount : 9, maximum: 15, detail : "หลักสูตรนี้เน้นการฝึกเล่นเปียโนประกอบการร้องเพลง ทั้งบรรเลงเดี่ยวและรวมวงดนตรีพร้อมทั้งยังมีการผสม ผสานการร้อลเพลงและการเล่นเปีโนอย่างลงตัว...", period: 1},
+                    {course_type: 'general_course', course_id : '00001', course_name : "เปียโน + ขับร้อง", amount : 9, maximum: 15, detail : "หลักสูตรนี้เน้นการฝึกเล่นเปียโนประกอบการร้องเพลง ทั้งบรรเลงเดี่ยวและรวมวงดนตรีพร้อมทั้งยังมีการผสม ผสานการร้อลเพลงและการเล่นเปีโนอย่างลงตัว...", period: 1},
+                    {course_type: 'general_course',course_id : '00002', course_name : "เปียโน + ขับร้อง", amount : 9, maximum: 15, detail : "หลักสูตรนี้เน้นการฝึกเล่นเปียโนประกอบการร้องเพลง ทั้งบรรเลงเดี่ยวและรวมวงดนตรีพร้อมทั้งยังมีการผสม ผสานการร้อลเพลงและการเล่นเปีโนอย่างลงตัว...", period: 1},
+                    {course_type: 'general_course',course_id : '00003', course_name : "เปียโน + ขับร้อง", amount : 9, maximum: 15, detail : "หลักสูตรนี้เน้นการฝึกเล่นเปียโนประกอบการร้องเพลง ทั้งบรรเลงเดี่ยวและรวมวงดนตรีพร้อมทั้งยังมีการผสม ผสานการร้อลเพลงและการเล่นเปีโนอย่างลงตัว...", period: 1},
+                    {course_type: 'short_course',course_id : '00004', course_name : "เปียโน + ขับร้อง", amount : 9, maximum: 15, detail : "หลักสูตรนี้เน้นการฝึกเล่นเปียโนประกอบการร้องเพลง ทั้งบรรเลงเดี่ยวและรวมวงดนตรีพร้อมทั้งยังมีการผสม ผสานการร้อลเพลงและการเล่นเปีโนอย่างลงตัว...", period: 1},
                 ]
             }
         }),
@@ -91,8 +90,35 @@
                 }, 200);
             }
         },
-        computed: {},
-        methods: {},
+        computed: {
+            ...mapGetters({
+                courses : "OrderModules/getCourses"
+            })
+        },
+        methods: {
+            ...mapActions({
+                changeCourseData : "OrderModules/changeCourseData"
+            }),
+            selectedCourse(course){
+                this.changeCourseData(
+                    {
+                        course_type: course.course_type,
+                        package: "",
+                        time_period: course.period,
+                        time_count: 0,
+                        day: "",
+                        time: "",
+                        coach: course.course_name,
+                        start_day: "",
+                        price: 0,
+                        remark: "",
+                        parents: [],
+                        students: [],
+                    }
+                )
+                this.$router.push({name : "userCourseDetail_courseID", params:{course_id : course.course_id}})
+            }
+        },
     };
   </script>
   
