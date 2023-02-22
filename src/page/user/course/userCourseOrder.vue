@@ -25,7 +25,7 @@
             </template>
         </ImgCard>
         <!-- SELECT CLASS DATE -->
-        <template v-if="$route.params.package_id !== 'short-course'">
+        <template v-if="courses.course_type == 'general_course'">
             <v-row dense>
                 <v-col class="text-lg font-bold">
                     เลือกช่วงวันเรียน
@@ -33,6 +33,7 @@
             </v-row>
             <v-radio-group
                 v-model="courses.day"
+                @change="validateButton"
             >
                 <v-row>
                     <v-col cols="6" v-for="(date , date_index) in class_dates" :key="date_index">
@@ -50,7 +51,7 @@
                 </v-row>
                 <v-radio-group 
                     @change="courses.coach = ''"
-                    v-model="courses.time_period"
+                    v-model="courses.time"
                 >
                     <v-row>
                         <v-col cols="6" v-for="(time , time_index) in courses.day.times" :key="time_index">
@@ -66,7 +67,7 @@
                     </v-row>
                 </v-radio-group>
             </template>
-            <template v-if="courses.time_period">
+            <template v-if="courses.time">
                 <v-row>
                     <v-col class="text-lg font-bold">เลือกโค้ช</v-col>
                 </v-row>
@@ -79,6 +80,7 @@
                 item-value="coach_id"
                 item-color="pink"
                 outlined
+                @change="validateButton"
                 placeholder="เลือกโค้ช"
                 >
                 <template v-slot:no-data>
@@ -111,7 +113,7 @@
         </v-row>
         <v-row dense class="d-flex align-center">
             <v-col >
-                <v-checkbox v-model="apply_for_yourself" color="#ff6B81" label="สมัครเรียนให้ตัวเอง"></v-checkbox>
+                <v-checkbox :disabled="apply_for_yourself ? false : courses.package_data.maximum <= courses.students.length" @change="validateButton" v-model="apply_for_yourself" color="#ff6B81" label="สมัครเรียนให้ตัวเอง"></v-checkbox>
             </v-col>
             <v-col cols="auto" v-if="apply_for_yourself">
                 <v-btn dense outlined color="#ff6b81" @click="dialog_parent = true"><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มข้อมูลผู้ปกครอง</v-btn>
@@ -119,11 +121,11 @@
         </v-row>
         <v-row dense>
             <v-col cols="12" sm="6">
-                <v-checkbox v-model="apply_for_others" color="#ff6B81" label="สมัครเรียนให้ผู้อื่น"></v-checkbox>
+                <v-checkbox :disabled="apply_for_others ? false : courses.package_data.maximum <= courses.students.length" @change="validateButton" v-model="apply_for_others" color="#ff6B81" label="สมัครเรียนให้ผู้อื่น"></v-checkbox>
             </v-col>
         </v-row>
         <!-- PARENT -->
-        <template v-if="courses.students.length > 0">
+        <template v-if="courses.students.filter(v => v.is_other === false).length > 0">
             <div class="mb-3" v-for="(parent, index_parent) in courses.students.filter(v => v.is_other === false)[0].parents" :key="`${index_parent}-perent`">
                 <v-row dense class="mb-3"> 
                     <v-col cols="auto"><v-icon color="#ff6b81">mdi-card-account-details-outline</v-icon></v-col>
@@ -163,9 +165,18 @@
             <v-card outlined class="mb-3">
                 <v-card-text>
                     <v-row dense class="d-flex align-center">
-                        <v-col  cols="12" sm="5">
+                        <v-col  cols="9" sm="5">
                             <labelCustom text="Username (ถ้ามี)"></labelCustom>
-                            <v-text-field hide-details dense outlined v-model="student.username"  placeholder="Username"></v-text-field>
+                            <v-text-field 
+                                hide-details 
+                                dense 
+                                outlined 
+                                v-model="student.username"  
+                                placeholder="Username">
+                                <template v-slot:append>
+                                    <v-icon v-if="student.is_account" color="green">mdi-checkbox-marked-circle-outline</v-icon>
+                                </template>
+                            </v-text-field>
                             <label>
                                 หากยังไม่มีบัญชีผู้ใช้กรุณา
                             </label>
@@ -175,10 +186,10 @@
                             >สมัคร One ID</label>
                         </v-col>
                         <v-col cols="auto">
-                            <v-btn color="#ff6b81" depressed dark @click="is_account = true">ตกลง</v-btn>
+                            <v-btn color="#ff6b81" depressed dark @click="student.is_account = true">ตกลง</v-btn>
                         </v-col>
                     </v-row>
-                    <template v-if="is_account">
+                    <template v-if="student.is_account">
                         <v-row dense>
                             <v-col cols="12" sm="6">
                                 <labelCustom required text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
@@ -198,18 +209,26 @@
                     </template>
                 </v-card-text>
             </v-card>
-            <v-row dense v-if="index_student === courses.students.filter(v => v.is_other === true).length - 1">
+            <v-row class="mb-3" dense v-if="index_student === courses.students.filter(v => v.is_other === true).length - 1">
                 <v-col>
-                    <v-btn @click="addStudent" text dense color="#ff6b81"><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มผู้เรียน</v-btn>
+                    <v-btn v-if="courses.package_data.maximum > courses.students.length" @click="addStudent" text dense color="#ff6b81"><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มผู้เรียน</v-btn>
                 </v-col>
             </v-row>
         </div>
+        <div v-if="courses.package_data.maximum <= courses.students.length" class="text-[#F03D3E] mb-3">
+                ผู้เรียนครบจำนวนที่คลาสจะรับได้แล้ว
+            </div>
         <v-row dense>
             <v-col cols="12" sm="6">
-                <v-btn class="w-full" outlined dense color="#ff6b81">เพิ่มรถเข็น</v-btn>
+                <v-btn class="w-full" :disabled="disable_add_to_cart" outlined dense color="#ff6b81"  @click="show_dialog_cart = true">เพิ่มรถเข็น</v-btn>
             </v-col>
             <v-col cols="12" sm="6">
-                <v-btn class="w-full" dark depressed dense color="#ff6b81">ชำระเงิน</v-btn>
+                <v-btn 
+                class="w-full white--text" 
+                :disabled="disable_checkout"  
+                elevation="0"
+                dense 
+                :color="disable_checkout ?  '#C4C4C4': '#ff6b81'">ชำระเงิน</v-btn>
             </v-col>
         </v-row>
       </v-container>
@@ -251,6 +270,22 @@
             </v-card-actions>
         </v-card>
       </v-dialog>
+      <v-dialog persistent v-model="show_dialog_cart" width="60vw">
+        <v-card>
+            <v-card-title>
+                <v-row>
+                    <v-col align="right">
+                        <v-btn @click="show_dialog_cart = false" icon ><v-icon color ="#ff6b81">mdi-close</v-icon></v-btn>
+                    </v-col>
+                </v-row>
+            </v-card-title>
+            <dialog-card checkmark text="เพิ่มคอร์สเรียนไปยังรถเข็นเรียบร้อยแล้ว">
+                <template #btn>
+                    <v-btn depressed class="w-full" dense color="#ff6b81" dark @click="addToCart">ตกลง</v-btn>
+                </template>
+            </dialog-card>
+        </v-card>
+      </v-dialog>
       <!-- DIALOG::REGISTER -->
       <v-dialog
             persistent
@@ -271,10 +306,11 @@ import rowData from '@/components/label/rowData.vue'
 import headerCard from '@/components/header/headerCard.vue';
 import labelCustom from '@/components/label/labelCustom.vue';
 import registerDialogForm from '@/components/user_menage/registerDialogForm.vue';
+import dialogCard from '@/components/dialog/dialogCard.vue';
 import { mapActions, mapGetters } from 'vuex';
   export default {
     name:"userCourseOrder",
-    components: {ImgCard, rowData, headerCard, labelCustom, registerDialogForm },
+    components: {ImgCard, rowData, headerCard, labelCustom, registerDialogForm, dialogCard },
     data: () => ({
         coachs:[
             {name : 'โค้ชหนุ่ม',coach_id : "00001" },
@@ -286,9 +322,9 @@ import { mapActions, mapGetters } from 'vuex';
             lastname_en: "พุฒยืน",
             tel: "089-999-9999",
         },
-        is_account : false,
+        show_dialog_cart : false,
         dialog_parent : false,
-        apply_for_yourself : false, 
+        apply_for_yourself : true, 
         apply_for_others : false,
         class_dates :[
             { label : "อาทิตย์", value: 0 ,times : [
@@ -317,6 +353,8 @@ import { mapActions, mapGetters } from 'vuex';
             { label : "เสาร์", value: 6  },
         ],
         register_type : "",
+        disable_add_to_cart : true,
+        disable_checkout : true, 
     }),
     created() {},
     mounted() {
@@ -332,14 +370,8 @@ import { mapActions, mapGetters } from 'vuex';
                     lastname: "พุฒยืน",
                     tel: "089-999-9999",
                     parents: [],
+                    is_account : false,
                     is_other : false,
-                })
-            }else{
-                this.courses.students.forEach((student, index)=>{
-                    console.log(student, index)
-                    if(!student.is_other){
-                        this.order.students.splice(index, 1)
-                    }
                 })
             }
         },
@@ -352,13 +384,8 @@ import { mapActions, mapGetters } from 'vuex';
                     lastname: "",
                     tel: "",
                     parents: [],
+                    is_account : false,
                     is_other : true,
-                })
-            }else{
-                this.courses.students.forEach((student, index)=>{
-                    if(student.is_other){
-                        this.order.students.splice(index, 1)
-                    }
                 })
             }
         }
@@ -368,14 +395,86 @@ import { mapActions, mapGetters } from 'vuex';
             courses : "OrderModules/getCourses",
             order: "OrderModules/getOrder",
             show_dialog_register_one_id : "RegisterModules/getShowDialogRegisterOneId"
-        })
+        }),
+       
     },
     methods: {
         ...mapActions({
             changeCourseData : "OrderModules/changeCourseData",
-            changeOrederData: "OrderModules/ChangeOrederData",
+            resetCourseDate  : "OrderModules/resetCourseDate",
+            changeOrederData: "OrderModules/changeOrederData",
             changeDialogRegisterOneId : 'RegisterModules/changeDialogRegisterOneId'
         }),
+        validateButton(){
+            if(this.courses.course_type === "general_course"){
+                if(this.courses.day && this.courses.time && this.courses.coach){
+                    if(this.apply_for_yourself && this.apply_for_others){
+                        this.disable_add_to_cart = false
+                        this.disable_checkout = false
+                    }else if(this.apply_for_others){
+                        this.disable_add_to_cart = false
+                        this.disable_checkout = false
+                        if(this.courses.students.filter(v => v.is_other === false).length > 0){
+                            this.courses.students.forEach((student, index)=>{
+                                if(!student.is_other){
+                                    this.courses.students.splice(index)
+                                }
+                            })
+                        }
+                    }else if(this.apply_for_yourself){
+                        this.disable_add_to_cart = false
+                        this.disable_checkout = false
+                        if(this.courses.students.filter(v => v.is_other === true).length > 0){
+                            this.courses.students.forEach((student, index)=>{
+                                if(student.is_other){
+                                    this.courses.students.splice(index)
+                                }
+                            })
+                        }
+                    }else{
+                        this.disable_add_to_cart = true
+                        this.disable_checkout = true
+                        this.courses.students.forEach((student, index)=>{
+                            this.courses.students.splice(index)
+                        })
+                    }
+                }
+            }else if(this.courses.course_type === "short_course"){
+                if(this.apply_for_yourself && this.apply_for_others){
+                    this.disable_add_to_cart = false
+                    this.disable_checkout = false
+                }else if(this.apply_for_others){
+                    this.disable_add_to_cart = false
+                    this.disable_checkout = false
+                    if(this.courses.students.filter(v => v.is_other === false).length > 0){
+                        this.courses.students.forEach((student, index)=>{
+                            if(!student.is_other){
+                                this.courses.students.splice(index)
+                            }
+                        })
+                    }
+                }else if(this.apply_for_yourself){
+                    this.disable_add_to_cart = false
+                    this.disable_checkout = false
+                    if(this.courses.students.filter(v => v.is_other === true).length > 0){
+                        this.courses.students.forEach((student, index)=>{
+                            if(student.is_other){
+                                this.courses.students.splice(index)
+                            }
+                        })
+                    }
+                }else{
+                    this.disable_add_to_cart = true
+                    this.disable_checkout = true
+                    this.courses.students.forEach((student, index)=>{
+                        this.courses.students.splice(index)
+                    })
+                }
+            }
+            console.log("student :", this.courses.students)
+            console.log(this.courses.course_type, this.disable_add_to_cart, this.disable_checkout)
+            return 0
+        },
         addParent(){
             this.courses.students.filter(v => v.is_other === false)[0].parents.push({
               ...this.parent
@@ -397,8 +496,18 @@ import { mapActions, mapGetters } from 'vuex';
                 lastname: "",
                 tel: "",
                 is_other : true,
+                is_account : false,
                 parents: []
             })
+        },
+        addToCart(){
+            console.log(this.courses)
+            this.order.courses.push(
+                {...this.courses}
+            )
+            this.resetCourseDate()
+            this.changeOrederData(this.order)
+            this.$router.push({name : "UserKingdom"})
         },
         removeStudent(student){ 
             this.courses.students.splice(this.courses.students.findIndex(v => v.username === student.username),1 )
