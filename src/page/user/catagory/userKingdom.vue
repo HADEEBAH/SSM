@@ -86,11 +86,8 @@
 </template>
  
 <script>
-<<<<<<< HEAD
 import headerPage from "@/components/header/headerPage.vue";
 import { mapActions, mapGetters } from 'vuex';
-=======
->>>>>>> develop
 export default {
   data: () => ({
     search: "",

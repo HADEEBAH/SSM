@@ -28,13 +28,8 @@ import userCourseList from '@/page/user/course/userCourseList'
 import userCourseDetail from '@/page/user/course/userCourseDetail'
 import userCoursePackage from '@/page/user/course/userCoursePackage'
 import userCourseOrder from '@/page/user/course/userCourseOrder'
-<<<<<<< HEAD
 //User menage Course 
 import userMenageCourse from '@/page/user/coach/menageCourse'
-=======
-
-
->>>>>>> develop
 const routes = [
   {
     path: '/auth',
