@@ -6,6 +6,9 @@ import FinanceModules from '@/store_modules/financeModules'
 import OrderModules from '@/store_modules/orderModules'
 import loginModules from '@/store_modules/loginModule'
 import NavberUserModules from '@/store_modules/navberUserModules'
+import CartListModules from '@/store_modules/cartListModules'
+
+
 
 
 Vue.use(Vuex)
@@ -18,6 +21,7 @@ const store = new Vuex.Store({
     OrderModules: OrderModules,
     loginModules:loginModules,
     NavberUserModules: NavberUserModules,
+    CartListModules: CartListModules,
   }
 })
 

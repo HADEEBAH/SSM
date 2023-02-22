@@ -1,6 +1,6 @@
 
 <template>
-  <v-app class="overflow-x-hidden">
+  <v-app class="overflow-x-hidden overflow-y-hidden">
     <div :max-height="MobileSize ? '250 ' : '375'" class="position">
       <v-img
         src="../../../assets/navbar_user/kingdomBg.png"
@@ -47,14 +47,12 @@
       <center>
         <v-img
           src="../../../assets/navbar_user/banner.png"
-         
           class="rounded-xl mt-5 ml-5 mr-5"
         >
         </v-img>
       </center>
       <!-- class="mt-5 rounded-xl ml-15 mr-15 mb-5 center" -->
-
-      <headerPage title="อาณาจักร" class="ml-5"></headerPage>
+      <div class="ml-5 text-lg font-bold mt-2">อาณาจักร</div>
 
       <v-container fluid grid-list-md>
         <v-row>
@@ -88,12 +86,12 @@
 </template>
  
 <script>
+<<<<<<< HEAD
 import headerPage from "@/components/header/headerPage.vue";
 import { mapActions, mapGetters } from 'vuex';
+=======
+>>>>>>> develop
 export default {
-  components: {
-    headerPage,
-  },
   data: () => ({
     search: "",
     drawer: true,
@@ -143,18 +141,13 @@ export default {
 <style scoped>
 .card_body {
   /* margin-top: -250px; */
-  position: absolute;
-  top: 400px;
+
+  margin-top: -800px;
 }
 .card_body_sm {
   margin-top: -70px;
 }
 
-.bgimg {
-  z-index: -5;
-  position: absolute;
-  width: 100%;
-}
 .bottomimg {
   margin-top: -40px;
   max-width: "100%";
@@ -174,6 +167,17 @@ export default {
 }
 
 .text_field_pc {
-  top: 200px;
+  margin-top: 50px;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.example::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.example {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 </style>
