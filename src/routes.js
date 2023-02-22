@@ -27,7 +27,8 @@ import userCourseList from '@/page/user/course/userCourseList'
 import userCourseDetail from '@/page/user/course/userCourseDetail'
 import userCoursePackage from '@/page/user/course/userCoursePackage'
 import userCourseOrder from '@/page/user/course/userCourseOrder'
-
+//User menage Course 
+import userMenageCourse from '@/page/user/coach/menageCourse'
 const routes = [
   {
     path: '/auth',
@@ -113,6 +114,11 @@ const routes = [
         path: '',  
         name: 'UserKingdom',
         component: UserKingdom,
+      },
+      {
+        path: 'menage-course',  
+        name: 'menageCourse',
+        component: userMenageCourse,
       },
       {
         path: 'courses',  
