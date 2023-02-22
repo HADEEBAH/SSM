@@ -19,6 +19,7 @@ import Student from '@/components/admin/createStudent.vue'
 import Manageuser from '@/components/admin/manageUsers.vue'
 //User
 import UserKingdom from '@/page/user/catagory/userKingdom.vue'
+import CartList from '@/page/user/cart/cartList.vue'
 //auth
 import UserLoginPage from '@/page/auth/userLoginPage'
 
@@ -27,6 +28,7 @@ import userCourseList from '@/page/user/course/userCourseList'
 import userCourseDetail from '@/page/user/course/userCourseDetail'
 import userCoursePackage from '@/page/user/course/userCoursePackage'
 import userCourseOrder from '@/page/user/course/userCourseOrder'
+
 
 const routes = [
   {
@@ -133,6 +135,11 @@ const routes = [
         path: '/course/package/:course_id/:package_id/:option_id',  
         name: 'userCourseOrder_courseID_packageID_optionID',
         component: userCourseOrder,
+      },
+      {
+        path: '/cartList',  
+        name: 'CartList',
+        component: CartList,
       },
     ]
   },

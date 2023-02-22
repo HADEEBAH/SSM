@@ -3,73 +3,70 @@
     <v-container>
       <v-row dense>
         <headerPage title="จัดการผู้ใช้งาน">
-          <v-card outlined >
-            <v-card-text class="pa-2">   
-            <v-row dense class="d-flex align-center ">
-            <v-col cols="auto">
-              <v-img
-                src="@/assets/manageuser/image 78.svg"
-                height="37px"
-                width="37px"
-              ></v-img>
-            </v-col>
-            <v-col cols="auto">
-              <label-custom text="ผู้ใช้งานทั้งหมด" ></label-custom>
-            </v-col>
-            <v-col>
-              <v-avatar size="40" color="#FBF3F5"><div class="pink--text">5</div></v-avatar>
-            </v-col>
-          </v-row>
-        </v-card-text>
-       
-        </v-card>
+          <v-card outlined>
+            <v-card-text class="pa-2">
+              <v-row dense class="d-flex align-center">
+                <v-col cols="auto">
+                  <v-img
+                    src="@/assets/manageuser/image 78.svg"
+                    height="37px"
+                    width="37px"
+                  ></v-img>
+                </v-col>
+                <v-col cols="auto">
+                  <label-custom text="ผู้ใช้งานทั้งหมด"></label-custom>
+                </v-col>
+                <v-col>
+                  <v-avatar size="40" color="#FBF3F5"
+                    ><div class="pink--text">5</div></v-avatar
+                  >
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
         </headerPage>
       </v-row>
 
       <!-- search -->
-      <v-card flat class="mb-3" >
+      <v-card flat class="mb-3">
         <v-card-text class="border">
-          <v-row  class="d-flex align-center ">
-          <v-col >
-            <v-text-field
-              v-model="search"
-              prepend-inner-icon="mdi-magnify"
-              label="ค้นหา"
-              single-line
-              hide-details
-              dense
-              outlined
-            ></v-text-field>
-          </v-col>
-          <label-custom text="บทบาท" ></label-custom>
-          <v-col cols="12" sm="3">
-            <template v-if="$vuetify.breakpoint.mdAndUp">
-            <v-autocomplete
-              dense
-              v-model="sortBy"
-              :items="role"
-              placeholder="ทั้งหมด"
-              outlined
-              hide-details
-              multiple
-              color="pink"
-              item-color="#ff6b81"
-            >
-            </v-autocomplete>
-          </template>
-          </v-col>
+          <v-row class="d-flex align-center">
+            <v-col>
+              <v-text-field
+                v-model="search"
+                prepend-inner-icon="mdi-magnify"
+                label="ค้นหา"
+                single-line
+                hide-details
+                dense
+                outlined
+              ></v-text-field>
+            </v-col>
+            <label-custom text="บทบาท"></label-custom>
+            <v-col cols="12" sm="3">
+              <template v-if="$vuetify.breakpoint.mdAndUp">
+                <v-autocomplete
+                  dense
+                  v-model="sortBy"
+                  :items="role"
+                  placeholder="ทั้งหมด"
+                  outlined
+                  hide-details
+                  multiple
+                  color="pink"
+                  item-color="#ff6b81"
+                >
+                </v-autocomplete>
+              </template>
+            </v-col>
 
-          <v-col cols="12" sm="2">
-            <v-btn
-              color="#FF6B81"
-              dark
-              to="/user/menage"
-            >
-              <v-icon left> mdi-plus </v-icon>
-              เพิ่มผู้ใช้
-            </v-btn>
-          </v-col>
-        </v-row>
+            <v-col cols="12" sm="2">
+              <v-btn color="#FF6B81" dark to="/menage">
+                <v-icon left> mdi-plus </v-icon>
+                เพิ่มผู้ใช้
+              </v-btn>
+            </v-col>
+          </v-row>
         </v-card-text>
       </v-card>
 
@@ -83,7 +80,7 @@
           :items-per-page="itemsPerPage"
           :sort-by="sortBy"
           @page-count="pageCount = $event"
-          class="elevation-1  header-table"
+          class="elevation-1 header-table"
         >
           <!-- <template v-slot:top>
             <v-toolbar flat>
@@ -171,13 +168,18 @@
             </v-toolbar>
           </template> -->
           <template v-slot:[`item.actions`]="{ item }">
-            <v-icon small class="mr-2" color="#FF6B81">
+            <v-icon small class="ml-5" color="#FF6B81">
               mdi-eye-outline
             </v-icon>
-            <v-icon small class="mr-2" color="#FF6B81" @click="editItem(item)">
+            <v-icon small class="ml-5" color="#FF6B81" @click="editItem(item)">
               mdi-pencil
             </v-icon>
-            <v-icon small color="#FF6B81" @click="deleteItem(item)">
+            <v-icon
+              class="ml-5"
+              small
+              color="#FF6B81"
+              @click="deleteItem(item)"
+            >
               mdi-delete
             </v-icon>
           </template>
@@ -221,12 +223,6 @@ export default {
         users: "",
       },
       headers: [
-        {
-          text: "ลำดับ",
-          align: "center",
-          value: "number",
-          sortable: false,
-        },
         { text: "ชื่อ", value: "name", sortable: false },
         { text: "นามสกุล", value: "lastname", sortable: false },
         { text: "อีเมล", value: "email", sortable: false },

@@ -15,7 +15,7 @@
             <v-card-text class="mt-3">
               <v-row align="center">
                 <v-col class="ml-5" cols="12" sm="4">
-                  <label>Username(English)</label>
+                  <label class="text-xl font-bold">Username(English)</label>
                   <v-text-field
                     placeholder="กรุณาระบุชื่อผู้ใช้งาน(ภาษาอังกฤษ)"
                     v-model="username"
