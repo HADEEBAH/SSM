@@ -28,8 +28,8 @@ import userCourseList from '@/page/user/course/userCourseList'
 import userCourseDetail from '@/page/user/course/userCourseDetail'
 import userCoursePackage from '@/page/user/course/userCoursePackage'
 import userCourseOrder from '@/page/user/course/userCourseOrder'
-
-
+//User menage Course 
+import userMenageCourse from '@/page/user/coach/menageCourse'
 const routes = [
   {
     path: '/auth',
@@ -42,7 +42,7 @@ const routes = [
         component: Login,
       },
       {
-        path: '/register',  
+        path: 'register',  
         name: 'Register',
         component: RegisterPage,
       },
@@ -60,47 +60,47 @@ const routes = [
     component: NavBarAdmin,
     children:[
       {
-        path: '/menage',  
+        path: 'menage',  
         name: 'UserMenagePage',
         component: UserMenagePage,
       },
       {
-        path: '/course/create',  
+        path: 'course/create',  
         name: 'CourseCreate',
         component: CourseCreate,
       },
       {
-        path: '/course/:course_id',  
+        path: 'course/:course_id',  
         name: 'Course_courseID',
         component: CourseDetail,
       },
       {
-        path: '/course',  
+        path: 'course',  
         name: 'CourseList',
         component: CourseList,
       },
       {
-        path: '/kingdom',
+        path: 'kingdom',
         name: 'Kingdom',
         component: Kingdom,
       },
       {
-        path: '/student',
+        path: 'student',
         name: 'Student',
         component: Student,
       },
       {
-        path: '/manageuser',
+        path: 'manageuser',
         name: 'Manageuser',
         component: Manageuser,
       },
       {
-        path: '/finance',
+        path: 'finance',
         name: 'Finance',
         component: FinanceList,
       },
       {
-        path: '/finance/:order_id',
+        path: 'finance/:order_id',
         name: 'Finance_orderID',
         component: FinanceDetail,
       }
@@ -112,28 +112,33 @@ const routes = [
     component: NavBarUser,
     children: [
       {
-        path: '/',  
+        path: '',  
         name: 'UserKingdom',
         component: UserKingdom,
       },
       {
-        path: '/course/list/:kingdom_id',  
-        name: 'userCourseList_kingdomID',
+        path: 'menage-course',  
+        name: 'menageCourse',
+        component: userMenageCourse,
+      },
+      {
+        path: 'courses',  
+        name: 'userCourseList',
         component: userCourseList,
       },
       {
-        path: '/course/detail/:course_id',  
-        name: 'userCourseDetail_courseID',
+        path: 'course/detail',  
+        name: 'userCourseDetail',
         component: userCourseDetail,
       },
       {
-        path: '/course/package/:course_id',  
-        name: 'userCoursePackage_courseID',
+        path: 'course/package',  
+        name: 'userCoursePackage',
         component: userCoursePackage,
       },
       {
-        path: '/course/package/:course_id/:package_id/:option_id',  
-        name: 'userCourseOrder_courseID_packageID_optionID',
+        path: 'course/order',  
+        name: 'userCourseOrder',
         component: userCourseOrder,
       },
       {

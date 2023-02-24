@@ -2,7 +2,7 @@
   <v-app>
     <v-layout>
       <v-app-bar app clipped-right class="bg-navbar-user" dark fixed elevation="0" >
-        <v-app-bar-nav-icon @click="$router.back()"><v-icon>mdi-chevron-left</v-icon></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon v-if="$route.name !== 'UserKingdom'" @click="$router.back()"><v-icon>mdi-chevron-left</v-icon></v-app-bar-nav-icon>
         <v-spacer></v-spacer>
         <v-app-bar-title class="pa-2 font-bold">{{ titel_navber }}</v-app-bar-title>
         <v-spacer></v-spacer>
@@ -47,9 +47,9 @@
           nav
         >
           <div v-for="(list, list_index) in menu_drawer_list" :key="list_index" >
-            <v-list-item :class="menu_drawer_list.length-1 !== list_index ? 'list-items-border-bottom' : ''">
+            <v-list-item @click="$router.push({name :  list.to })" :class="menu_drawer_list.length-1 !== list_index ? 'list-items-border-bottom' : ''">
               <v-list-item-avatar><v-icon color="#ff6b81">{{ list.icon }}</v-icon></v-list-item-avatar>
-              <v-list-item-title>{{ list.title }}</v-list-item-title>
+              <v-list-item-title :class="$route.name === list.to ? 'text-[#ff6b81]' : ''">{{ list.title }}</v-list-item-title>
             </v-list-item>
           </div>
         </v-list>
@@ -111,6 +111,7 @@ export default {
     menu_drawer_list:[
       { icon: "mdi-account-circle", title : "โปรไฟล์", to:""},
       { icon: "mdi-calendar-month", title : "ตารางเรียน", to:""},
+      { icon: "mdi-book-cog-outline", title : "การจัดการ", to:"menageCourse"},
       { icon: "mdi-history", title : "ประวัติการสั่งซื้อ", to:""},
       { icon: "mdi-logout", title : "ออกจากระบบ", to:""},
     ]

@@ -43,12 +43,6 @@
     </div>
     <v-card
       :class="MobileSize ? 'rounded-xl card_body_sm' : 'rounded-xl card_body'"
-      @click="
-        $router.push({
-          name: 'userCourseList_kingdomID',
-          params: { kingdom_id: '0001' },
-        })
-      "
     >
       <center>
         <v-img
@@ -63,7 +57,7 @@
       <v-container fluid grid-list-md>
         <v-row>
           <v-col cols="12" md="4" sm="6" v-for="item in items" :key="item.id">
-            <v-card class="rounded-xl">
+            <v-card class="rounded-xl" @click="selectedCategory(item)">
               <v-img
                 class="align-end text-white rounded-t-xl"
                 height="200"
@@ -92,20 +86,22 @@
 </template>
  
 <script>
+import headerPage from "@/components/header/headerPage.vue";
+import { mapActions, mapGetters } from 'vuex';
 export default {
   data: () => ({
     search: "",
     drawer: true,
     items: [
-      { id: 1, itemName: "asdsa" },
-      { id: 2, itemName: "asdsa" },
-      { id: 3, itemName: "asdsa" },
-      { id: 4, itemName: "asdsa" },
-      { id: 5, itemName: "asdsa" },
-      { id: 6, itemName: "asdsa" },
-      { id: 7, itemName: "asdsa" },
-      { id: 8, itemName: "asdsa" },
-      { id: 9, itemName: "asdsa" },
+      { id: 1, itemName: "อาณาจักรศิลปะสมัยใหม่" },
+      { id: 2, itemName: "อาณาจักรศิลปะสมัยใหม่" },
+      { id: 3, itemName: "อาณาจักรศิลปะสมัยใหม่" },
+      { id: 4, itemName: "อาณาจักรศิลปะสมัยใหม่" },
+      { id: 5, itemName: "อาณาจักรศิลปะสมัยใหม่" },
+      { id: 6, itemName: "อาณาจักรศิลปะสมัยใหม่" },
+      { id: 7, itemName: "อาณาจักรศิลปะสมัยใหม่" },
+      { id: 8, itemName: "อาณาจักรศิลปะสมัยใหม่" },
+      { id: 9, itemName: "อาณาจักรศิลปะสมัยใหม่" },
     ],
   }),
 
@@ -113,6 +109,9 @@ export default {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "อาณาจักร");
   },
   computed: {
+    ...mapGetters({
+      courses : "OrderModules/getCourses"
+    }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;
@@ -123,7 +122,16 @@ export default {
     },
   },
 
-  methods: {},
+  methods: {
+    ...mapActions({
+      changeCourseData : "OrderModules/changeCourseData",
+    }),
+    selectedCategory(category){
+      this.courses.kingdom = category
+      this.changeCourseData(this.courses)
+      this.$router.push({name : "userCourseList"})
+    }
+  },
 };
 </script>
 

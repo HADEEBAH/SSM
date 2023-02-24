@@ -100,23 +100,12 @@ import { mapGetters, mapActions } from 'vuex';
                 changeCourseData : "OrderModules/changeCourseData"
             }),
             selectedCourse(course){
-                this.changeCourseData(
-                    {
-                        course_type: course.course_type,
-                        package: "",
-                        time_period: course.period,
-                        time_count: 0,
-                        day: "",
-                        time: "",
-                        coach: course.course_name,
-                        start_day: "",
-                        price: 0,
-                        remark: "",
-                        parents: [],
-                        students: [],
-                    }
-                )
-                this.$router.push({name : "userCourseDetail_courseID", params:{course_id : course.course_id}})
+                this.courses.course_name = course.course_name
+                this.courses.course_type = course.course_type
+                this.courses.remark = course.detail
+                this.courses.period = course.period
+                this.changeCourseData(this.courses)
+                this.$router.push({name : "userCourseDetail"})
             }
         },
     };
