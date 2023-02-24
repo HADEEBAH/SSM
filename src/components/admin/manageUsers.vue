@@ -54,8 +54,36 @@
                   hide-details
                   multiple
                   color="pink"
-                  item-color="#ff6b81"
+                  item-color="pink"
                 >
+                <!-- <template v-slot:no-data>
+                        <v-list-item>
+                          <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
+                        </v-list-item>
+                      </template> -->
+                      
+                      <template v-slot:item="{ item }">
+                        <v-list-item-content>
+                          <v-list-item-title
+                            ><span
+                              :class="
+                              // check array ว่ามี stringไหม
+                                sortBy.includes(item)? 'font-bold' : ''
+                              "
+                              >{{ item }}</span
+                            ></v-list-item-title
+                          >
+                        </v-list-item-content>
+                        <v-list-item-action>
+                          <v-icon>
+                            {{
+                              sortBy.includes(item)
+                                ? "mdi-checkbox-marked"
+                                : "mdi-checkbox-blank-outline"
+                            }}</v-icon
+                          >
+                        </v-list-item-action>
+                      </template>
                 </v-autocomplete>
               </template>
             </v-col>
@@ -80,95 +108,10 @@
           :items-per-page="itemsPerPage"
           :sort-by="sortBy"
           @page-count="pageCount = $event"
-          class="elevation-1 header-table"
+          class="elevation-1 header-table "
         >
-          <!-- <template v-slot:top>
-            <v-toolbar flat>
-              <v-dialog v-model="dialog" max-width="500px">
-                <v-card>
-                  <v-card-title>
-                    <span class="text-h5">{{ formTitle }}</span>
-                  </v-card-title>
-                  <v-card-text>
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.number"
-                            label="ลำดับ"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.name"
-                            label="ชื่อ"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.lastname"
-                            label="นามสกุล"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.email"
-                            label="อีเมล"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.username"
-                            label="ชื่อผู้ใช้"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.oneid"
-                            label="ONEID"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.role"
-                            label="บทบาท"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="close">
-                      Cancel
-                    </v-btn>
-                    <v-btn color="blue darken-1" text @click="save">
-                      Save
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-              <v-dialog v-model="dialogDelete" max-width="500px">
-                <v-card>
-                  <v-card-title class="text-h5"
-                    >Are you sure you want to delete this user?</v-card-title
-                  >
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="closeDelete"
-                      >Cancel</v-btn
-                    >
-                    <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                      >OK</v-btn
-                    >
-                    <v-spacer></v-spacer>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-            </v-toolbar>
-          </template> -->
           <template v-slot:[`item.actions`]="{ item }">
-            <v-icon small class="ml-5" color="#FF6B81">
+            <v-icon small color="#FF6B81">
               mdi-eye-outline
             </v-icon>
             <v-icon small class="ml-5" color="#FF6B81" @click="editItem(item)">
@@ -182,9 +125,6 @@
             >
               mdi-delete
             </v-icon>
-          </template>
-          <template v-slot:no-data>
-            <v-btn color="primary" @click="initialize"> Reset </v-btn>
           </template>
         </v-data-table>
         <!-- <v-pagination

@@ -21,7 +21,7 @@ import Manageuser from '@/components/admin/manageUsers.vue'
 import UserKingdom from '@/page/user/catagory/userKingdom.vue'
 import CartList from '@/page/user/cart/cartList.vue'
 //auth
-import UserLoginPage from '@/page/auth/userLoginPage'
+// import UserLoginPage from '@/page/auth/userLoginPage'
 
 //User Course 
 import userCourseList from '@/page/user/course/userCourseList'
@@ -38,7 +38,7 @@ const routes = [
     component: AuthLayout,
     children:[
       {
-        path: '',
+        path: '/login',
         name: 'Login',
         component: Login,
       },
@@ -49,11 +49,11 @@ const routes = [
       },
     ]
   },
-  {
-    path: '/userlogin',
-    name: 'UserLoginPage',
-    component: UserLoginPage,
-  },
+  // {
+  //   path: '/userlogin',
+  //   name: 'UserLoginPage',
+  //   component: UserLoginPage,
+  // },
 
   {
     path: '/admin',
