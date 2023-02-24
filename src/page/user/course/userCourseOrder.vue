@@ -113,7 +113,7 @@
         </v-row>
         <v-row dense class="d-flex align-center">
             <v-col >
-                <v-checkbox :disabled="apply_for_yourself ? false : courses.package_data.maximum <= courses.students.length" @change="validateButton" v-model="apply_for_yourself" color="#ff6B81" label="สมัครเรียนให้ตัวเอง"></v-checkbox>
+                <v-checkbox :disabled="apply_for_yourself ? false : checkMaximumStudent" @change="validateButton" v-model="apply_for_yourself" color="#ff6B81" label="สมัครเรียนให้ตัวเอง"></v-checkbox>
             </v-col>
             <v-col cols="auto" v-if="apply_for_yourself">
                 <v-btn dense outlined color="#ff6b81" @click="dialog_parent = true"><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มข้อมูลผู้ปกครอง</v-btn>
@@ -121,7 +121,7 @@
         </v-row>
         <v-row dense>
             <v-col cols="12" sm="6">
-                <v-checkbox :disabled="apply_for_others ? false : courses.package_data.maximum <= courses.students.length" @change="validateButton" v-model="apply_for_others" color="#ff6B81" label="สมัครเรียนให้ผู้อื่น"></v-checkbox>
+                <v-checkbox :disabled="apply_for_others ? false : checkMaximumStudent" @change="validateButton" v-model="apply_for_others" color="#ff6B81" label="สมัครเรียนให้ผู้อื่น"></v-checkbox>
             </v-col>
         </v-row>
         <!-- PARENT -->
@@ -211,11 +211,11 @@
             </v-card>
             <v-row class="mb-3" dense v-if="index_student === courses.students.filter(v => v.is_other === true).length - 1">
                 <v-col>
-                    <v-btn v-if="courses.package_data.maximum > courses.students.length" @click="addStudent" text dense color="#ff6b81"><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มผู้เรียน</v-btn>
+                    <v-btn v-if="!checkMaximumStudent" @click="addStudent" text dense color="#ff6b81"><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มผู้เรียน</v-btn>
                 </v-col>
             </v-row>
         </div>
-        <div v-if="courses.package_data.maximum <= courses.students.length" class="text-[#F03D3E] mb-3">
+        <div v-if="checkMaximumStudent" class="text-[#F03D3E] mb-3">
                 ผู้เรียนครบจำนวนที่คลาสจะรับได้แล้ว
             </div>
         <v-row dense>
@@ -324,7 +324,7 @@ import { mapActions, mapGetters } from 'vuex';
         },
         show_dialog_cart : false,
         dialog_parent : false,
-        apply_for_yourself : true, 
+        apply_for_yourself : false, 
         apply_for_others : false,
         class_dates :[
             { label : "อาทิตย์", value: 0 ,times : [
@@ -396,7 +396,15 @@ import { mapActions, mapGetters } from 'vuex';
             order: "OrderModules/getOrder",
             show_dialog_register_one_id : "RegisterModules/getShowDialogRegisterOneId"
         }),
-       
+        checkMaximumStudent(){
+            let max = false
+            if(this.courses.course_type === 'general_course'){
+                max = this.courses.package_data.maximum <= this.courses.students.length
+            }else if(this.courses.course_type === 'short_course'){
+                max = false
+            }
+            return max
+        }
     },
     methods: {
         ...mapActions({

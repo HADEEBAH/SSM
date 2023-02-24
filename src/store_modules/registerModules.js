@@ -67,6 +67,7 @@ const RegisterModules = {
         context.commit("ShowDialogRegisterOneId",value)
       }else{
         context.commit("ShowDialogRegisterOneId", value)
+        localStorage.
         context.commit("UserOneId",{
           firstname_th : "",
           lastname_th : "",

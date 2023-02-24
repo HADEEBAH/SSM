@@ -118,6 +118,7 @@ export default {
   computed: {
     ...mapGetters({
       user_one_id: "loginModules/getUserOneId",
+      
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;

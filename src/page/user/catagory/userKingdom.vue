@@ -1,6 +1,6 @@
 
 <template>
-  <v-app class="overflow-x-hidden overflow-y-hidden">
+  <v-app class="overflow-x-hidden">
     <div :max-height="MobileSize ? '250 ' : '375'" class="position">
       <v-img
         src="../../../assets/navbar_user/kingdomBg.png"
@@ -47,12 +47,14 @@
       <center>
         <v-img
           src="../../../assets/navbar_user/banner.png"
+         
           class="rounded-xl mt-5 ml-5 mr-5"
         >
         </v-img>
       </center>
       <!-- class="mt-5 rounded-xl ml-15 mr-15 mb-5 center" -->
-      <div class="ml-5 text-lg font-bold mt-2">อาณาจักร</div>
+
+      <headerPage title="อาณาจักร" class="ml-5"></headerPage>
 
       <v-container fluid grid-list-md>
         <v-row>
@@ -89,6 +91,9 @@
 import headerPage from "@/components/header/headerPage.vue";
 import { mapActions, mapGetters } from 'vuex';
 export default {
+  components: {
+    headerPage,
+  },
   data: () => ({
     search: "",
     drawer: true,

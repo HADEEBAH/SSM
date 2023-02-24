@@ -130,16 +130,24 @@ export default {
       { title : "การเงิน", to:"Finance", child :[]},
       { title : "จัดการผู้ใช้งาน", to:"", child :[
         {title : "จัดการผู้ใช้งาน", to:"Manageuser"},
-        {title : "จัดการสิทธิ์", to:""},
       ]},
     ]
   }),
 
-  created() {
-    this.active_menu = this.$route.name
-  },
+  created() {},
   mounted() {
-    
+    this.menu_drawer_list.forEach((list)=>{
+        if(list.to === this.$route.name){
+          this.active_menu = this.$route.name
+        }else{
+          list.child.forEach((child)=>{
+            if(child.to === this.$route.name){
+              this.active_menu_child = this.$route.name
+              this.active_menu = list.title
+            }
+          })
+        }
+    })
   },
   watch: {},
   computed: {},
