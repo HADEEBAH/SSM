@@ -2,89 +2,6 @@
 <!-- snacbar สำหรับ popup -->
 <template>
   <div class="background">
-<<<<<<< HEAD
-    <v-card
-      :class="
-        MobileSize ? 'bg-white rounded-xl my-15 ' : 'bg-white rounded-xl my-32 '
-      "
-    >
-      <v-card-text>
-        <div class="w-full" align="center" v-if="image">
-          <v-img
-            src="../../assets/login/login.jpg"
-            style="width: 50%; height: 50%"
-          ></v-img>
-        </div>
-        <v-row v-else>
-          <v-col class="text-2xl text-center text-bold text-black">
-            เข้าสู่ระบบ
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col cols="12" class="pa-0 text-bold text-black">
-            <label>ชื่อผู้ใช้งาน / OneID</label>
-            <v-text-field
-              @keypress="validate($event, 'en')"
-              dense
-              ref="username"
-              :rules="rules.username"
-              required
-              v-model="user_one_id.username"
-              placeholder="ระบุชื่อผู้ใช้งาน"
-              outlined
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" class="pa-0 text-bold text-black">
-            <label>รหัสผ่าน</label>
-            <v-text-field
-              @keypress="validate($event, 'en')"
-              dense
-              ref="password"
-              :type="show_password ? 'text' : 'password'"
-              :rules="rules.password"
-              required
-              :append-icon="
-                show_password ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
-              "
-              v-model="user_one_id.password"
-              placeholder="ระบุรหัสผ่าน"
-              @click:append="show_password = !show_password"
-              outlined
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12">
-            <v-btn
-              width="100%"
-              depressed
-              dark
-              color="#ff6b81"
-              @click="loginOneId({ ...user_one_id, from: $route.name })"
-            >
-              เข้าสู่ระบบ
-            </v-btn>
-          </v-col>
-          <v-col cols="12">
-            <v-btn
-              outlined
-              color="#ff6b81"
-              width="100%"
-              @click="toRegisterPage()"
-            >
-              ลงทะเบียน
-            </v-btn>
-          </v-col>
-        </v-row>
-        <div class="text-center mt-2 text_bottom" v-if="bottomtext">
-          ลืมรหัสผ่านใช่หรือไม่ ?
-        </div>
-        <div v-else class="text-center mt-2">
-          ยังไม่มีบัญชีใช่หรือไม่ ? <span class="text_bottom">ลงทะเบียน</span>
-        </div>
-      </v-card-text>
-    </v-card>
-=======
     <v-form ref="form">
       <v-card
         :class="
@@ -170,7 +87,6 @@
         </v-card-text>
       </v-card>
     </v-form>
->>>>>>> develop
   </div>
 </template>
 

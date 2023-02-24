@@ -7,14 +7,9 @@ import './assets/tailwind.css'
 import './assets/main-css.css'
 var VueCookie = require('vue-cookie');
 
-<<<<<<< HEAD
 Vue.use(VueCookie);
 Vue.use(require('vue-moment'));
 
-=======
-var VueCookie = require('vue-cookie');
-Vue.use(VueCookie);
->>>>>>> develop
 Vue.config.productionTip = false
 
 new Vue({
