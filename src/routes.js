@@ -30,6 +30,7 @@ import userCoursePackage from '@/page/user/course/userCoursePackage'
 import userCourseOrder from '@/page/user/course/userCourseOrder'
 //User menage Course 
 import userMenageCourse from '@/page/user/coach/menageCourse'
+import userMenageCourseDetail from '@/page/user/coach/menageCourseDetail'
 const routes = [
   {
     path: '/auth',
@@ -120,6 +121,11 @@ const routes = [
         path: 'menage-course',  
         name: 'menageCourse',
         component: userMenageCourse,
+      },
+      {
+        path: 'menage-course/detail',  
+        name: 'menageCourseDetail',
+        component: userMenageCourseDetail,
       },
       {
         path: 'courses',  

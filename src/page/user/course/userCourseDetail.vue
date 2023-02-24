@@ -14,6 +14,14 @@
       <v-row dense
         ><v-col class="text-md">โดย ศูนย์ดนตรี Manila Tamarind</v-col></v-row
       >
+      <template v-if="courses.course_type === 'short_course'">
+        <v-row dense>
+          <v-col cols="auto">
+            <v-icon color="#ff6b81">mdi-currency-usd</v-icon>
+          </v-col>
+          <v-col class="font-bold">1,600 บาท/คน</v-col>
+        </v-row>
+      </template>
       <!-- GENERAL COURSE -->
       <template v-if="courses.course_type === 'general_course'">
         <rowData col_detail="5" mini icon="mdi-calendar-today"

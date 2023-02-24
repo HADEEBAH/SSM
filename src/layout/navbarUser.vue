@@ -1,29 +1,43 @@
 <template>
   <v-app>
     <v-layout>
-      <v-app-bar app clipped-right class="bg-navbar-user" dark fixed elevation="0" >
+      <v-app-bar app clipped-right class="bg-navbar-user" dark fixed elevation="0">
         <v-app-bar-nav-icon v-if="$route.name !== 'UserKingdom'" @click="$router.back()"><v-icon>mdi-chevron-left</v-icon></v-app-bar-nav-icon>
         <v-spacer></v-spacer>
-        <v-app-bar-title class="pa-2 font-bold">{{ titel_navber }}</v-app-bar-title>
+        <v-app-bar-title class="font-bold">{{ titel_navber }}</v-app-bar-title>
         <v-spacer></v-spacer>
-        <v-badge class="mr-3" overlap color="#F03D3E" content="1" message="1">
-          <v-icon dark>mdi-bell-outline</v-icon>
-        </v-badge>
-        <v-badge class="mr-5" overlap color="#F03D3E" content="1" message="1" >
-          <v-icon dark  @click="$router.push({name: 'CartList'})">mdi-cart</v-icon>
-        </v-badge>
-        <div v-if="!$vuetify.breakpoint.smAndDown">
-          <v-avatar class="mx-2" size="24">
-            <v-img src="https://cdn.vuetifyjs.com/images/lists/4.jpg" size="24" />
-          </v-avatar>
-          <span class="text-white mx-2">{{ user.full_name }}</span>
-        </div>
-        <v-btn icon @click="drawer =!drawer">
-          <v-icon>{{ drawer ? 'mdi-chevron-right':"mdi-menu" }}</v-icon>
-        </v-btn>
+        <template v-if="user_detail">
+          <v-badge class="mr-3" overlap color="#F03D3E" content="1" message="1">
+            <v-icon dark>mdi-bell-outline</v-icon>
+          </v-badge>
+          <v-badge class="mr-5" overlap color="#F03D3E" content="1" message="1" >
+            <v-icon dark  @click="$router.push({name: 'CartList'})">mdi-cart</v-icon>
+          </v-badge>
+          <div v-if="!$vuetify.breakpoint.smAndDown">
+            <v-avatar class="mx-2" size="24">
+              <v-img src="https://cdn.vuetifyjs.com/images/lists/4.jpg" size="24" />
+            </v-avatar>
+            <span class="text-white mx-2">{{ user.full_name }}</span>
+          </div>
+          <v-btn icon @click="drawer =!drawer">
+            <v-icon>{{ drawer ? 'mdi-chevron-right':"mdi-menu" }}</v-icon>
+          </v-btn>
+        </template>
+        <template v-else>
+          <v-btn @click="$router.push({name : 'Login'})" class="mr-2" :text="!$vuetify.breakpoint.smAndDown" :icon="$vuetify.breakpoint.smAndDown" small >
+            <v-icon>mdi-login</v-icon>
+            <template v-if="!$vuetify.breakpoint.smAndDown">เข้าสู่ระบบ</template>
+          </v-btn>
+          <v-btn  @click="$router.push({name : 'Register'})" :text="!$vuetify.breakpoint.smAndDown" :icon="$vuetify.breakpoint.smAndDown" small>
+            <v-icon>mdi-account-plus</v-icon>
+            <template v-if="!$vuetify.breakpoint.smAndDown">ลงทะเบียน</template>
+          </v-btn>
+        </template>
+        
        
       </v-app-bar>
       <v-navigation-drawer 
+        v-if="user_detail"
         right
         clipped 
         app
@@ -114,14 +128,15 @@ export default {
       { icon: "mdi-book-cog-outline", title : "การจัดการ", to:"menageCourse"},
       { icon: "mdi-history", title : "ประวัติการสั่งซื้อ", to:""},
       { icon: "mdi-logout", title : "ออกจากระบบ", to:""},
-    ]
+    ],
+    user_detail : true
   }),
 
   created() {
     this.active_menu = this.$route.name
   },
   mounted() {
-    
+    this.user_detail = true
   },
   watch: {},
   computed: {
