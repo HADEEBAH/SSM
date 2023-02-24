@@ -21,7 +21,7 @@ const orderModules = {
             order_id: "",
             students: [
                 {
-                    student_name: "กมลรัตน์ สิทธิกรชัย",
+                    student_name: "",
                     username: "",
                     firstname: "",
                     lastname: "",
@@ -32,7 +32,7 @@ const orderModules = {
                     ]
                 },
                 {
-                    student_name: "กมลพร ศรีโสภา",
+                    student_name: "",
                     username : "",
                     firstname : "",
                     lastname : "",
