@@ -1,5 +1,5 @@
 <template>
-  <v-app class="overflow-x-hidden">
+  <v-app class="overflow-x-hidden overflow-y-hidden">
     <v-container>
       <v-row class="mb-16">
         <v-col cols="12" v-for="item in items" :key="item.id">
@@ -108,9 +108,7 @@ export default {
     selected: [],
     allSelected: false,
     userIds: [],
-    return: {
-      ex4: ["error"],
-    },
+ 
   }),
 
   mounted() {

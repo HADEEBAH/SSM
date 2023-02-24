@@ -9,6 +9,8 @@
           <v-row class="d-flex align-center">
             <v-col cols="12" sm="8" class="mt-2">
               <v-autocomplete
+                chips
+                deletable-chips
                 hide-details
                 prepend-inner-icon="mdi-magnify"
                 dense
@@ -23,7 +25,8 @@
                 color="#ff6b81"
                 item-value="student_name"
                 @change="ChangeOrederData(order)"
-                ><template v-slot:selection="data">
+              >
+                <template v-slot:selection="data">
                   <v-chip
                     v-bind="data.attrs"
                     :input-value="data.selected"
@@ -47,24 +50,34 @@
             </v-col>
           </v-row>
           <v-card
-            v-for="(student_data, index) in order.courses"
+            v-for="(course, course_index) in order.courses"
             class="mt-6"
-            :key="index"
+            :key="course_index"
           >
             <v-card-text>
+              <v-row dense>
+                <v-col align="right">
+                  <v-icon
+                    larg
+                    color="#FF6B81"
+                    @click="removeCourse(course_index)"
+                    v-if="order.courses.length >= 2"
+                  >
+                    mdi-delete
+                  </v-icon>
+                </v-col>
+              </v-row>
               <v-row>
                 <v-col cols="auto">
                   <v-btn
                     outlined
-                    @click="student_data.course_type = 'general_course'"
+                    @click="course.course_type = 'general_course'"
                     :color="
-                      student_data.course_type === 'general_course'
-                        ? '#ff6b81'
-                        : ''
+                      course.course_type === 'general_course' ? '#ff6b81' : ''
                     "
                     ><v-icon>
                       {{
-                        student_data.course_type === "general_course"
+                        course.course_type === "general_course"
                           ? "mdi-radiobox-marked"
                           : "mdi-radiobox-blank"
                       }}</v-icon
@@ -74,15 +87,13 @@
                 </v-col>
                 <v-col>
                   <v-btn
-                    @click="student_data.course_type = 'short_course'"
+                    @click="course.course_type = 'short_course'"
                     outlined
                     :color="
-                      student_data.course_type === 'short_course'
-                        ? '#ff6b81'
-                        : ''
+                      course.course_type === 'short_course' ? '#ff6b81' : ''
                     "
                     ><v-icon>{{
-                      student_data.course_type === "short_course"
+                      course.course_type === "short_course"
                         ? "mdi-radiobox-marked"
                         : "mdi-radiobox-blank"
                     }}</v-icon>
@@ -90,14 +101,14 @@
                   >
                 </v-col>
               </v-row>
-              <template v-if="student_data.course_type === 'general_course'">
+              <template v-if="course.course_type === 'general_course'">
                 <br />
                 <v-row dense>
                   <v-col cols="12" sm="4">
                     <label-custom text="อาณาจักร"></label-custom>
                     <v-autocomplete
                       dense
-                      v-model="student_data.kingdom"
+                      v-model="course.kingdom"
                       :items="kingdom"
                       placeholder="เลือกอาณาจักร"
                       outlined
@@ -114,7 +125,7 @@
                           <v-list-item-title
                             ><span
                               :class="
-                                student_data.kingdom === item ? 'font-bold' : ''
+                                course.kingdom === item ? 'font-bold' : ''
                               "
                               >{{ item }}</span
                             ></v-list-item-title
@@ -123,7 +134,7 @@
                         <v-list-item-action>
                           <v-icon>
                             {{
-                              student_data.kingdom === item
+                              course.kingdom === item
                                 ? "mdi-check-circle"
                                 : "mdi-radiobox-blank"
                             }}</v-icon
@@ -137,7 +148,7 @@
                     <label-custom text="คอร์สเรียน"></label-custom>
                     <v-autocomplete
                       dense
-                      v-model="student_data.courses"
+                      v-model="course.courses"
                       :items="courses"
                       placeholder="เลือกคอร์สเรียน"
                       outlined
@@ -154,7 +165,7 @@
                           <v-list-item-title
                             ><span
                               :class="
-                                student_data.courses === item ? 'font-bold' : ''
+                                course.courses === item ? 'font-bold' : ''
                               "
                               >{{ item }}</span
                             ></v-list-item-title
@@ -163,7 +174,7 @@
                         <v-list-item-action>
                           <v-icon>
                             {{
-                              student_data.courses === item
+                              course.courses === item
                                 ? "mdi-check-circle"
                                 : "mdi-radiobox-blank"
                             }}</v-icon
@@ -180,7 +191,7 @@
                       item-color="pink"
                       color="pink"
                       dense
-                      v-model="student_data.coursepackage"
+                      v-model="course.coursepackage"
                       :items="coursepackage"
                       placeholder="เลือกแพ็คเกจ"
                       outlined
@@ -191,7 +202,7 @@
                     <label-custom text="ระยะเวลา"></label-custom>
                     <v-autocomplete
                       dense
-                      v-model="student_data.period"
+                      v-model="course.period"
                       :items="period"
                       placeholder="เลือกระยะเวลา"
                       outlined
@@ -216,7 +227,7 @@
                     <label-custom text="วัน"></label-custom>
                     <v-autocomplete
                       dense
-                      v-model="student_data.day"
+                      v-model="course.day"
                       :items="day"
                       placeholder="เลือกวัน"
                       outlined
@@ -229,7 +240,7 @@
                     <label-custom text="เวลา"></label-custom>
                     <v-autocomplete
                       dense
-                      v-model="student_data.time"
+                      v-model="course.time"
                       :items="time"
                       placeholder="เลือกเวลา"
                       outlined
@@ -245,9 +256,7 @@
                         <v-list-item-content>
                           <v-list-item-title
                             ><span
-                              :class="
-                                student_data.time === item ? 'font-bold' : ''
-                              "
+                              :class="course.time === item ? 'font-bold' : ''"
                               >{{ item }}</span
                             ></v-list-item-title
                           >
@@ -255,7 +264,7 @@
                         <v-list-item-action>
                           <v-icon>
                             {{
-                              student_data.time === item
+                              course.time === item
                                 ? "mdi-check-circle"
                                 : "mdi-radiobox-blank"
                             }}</v-icon
@@ -269,7 +278,7 @@
                     <label-custom text="โค้ช"></label-custom>
                     <v-autocomplete
                       dense
-                      v-model="student_data.coach"
+                      v-model="course.coach"
                       :items="coach"
                       placeholder="เลือกโค้ช"
                       outlined
@@ -290,7 +299,7 @@
                       <!-- :nudge-right="40" -->
                       <template v-slot:activator="{ on, attrs }">
                         <!-- <v-text-field
-                          v-model="student_data.date"
+                          v-model="course.date"
                           placeholder="เลือกวันเริ่ม"
                           append-icon="mdi-calendar"
                           outlined
@@ -321,7 +330,7 @@
                         </v-text-field>
                       </template>
                       <!-- <v-date-picker
-                        v-model="student_data.date"
+                        v-model="course.date"
                         @input="menu2 = false"
                       ></v-date-picker> -->
                       <v-date-picker
@@ -336,7 +345,7 @@
                     <label-custom text="ราคา"></label-custom>
                     <v-text-field
                       dense
-                      v-model="student_data.price"
+                      v-model="course.price"
                       :items="student"
                       outlined
                       item-color="pink"
@@ -347,7 +356,7 @@
                   <v-col cols="12" sm="8">
                     <label-custom text="หมายเหตุราคา"></label-custom>
                     <v-textarea
-                      v-model="student_data.pricedetail"
+                      v-model="course.pricedetail"
                       class="form-learn"
                       auto-grow
                       outlined
@@ -363,11 +372,12 @@
                     <label-custom text="อาณาจักร"></label-custom>
                     <v-autocomplete
                       dense
-                      v-model="student_data.kingdom"
+                      v-model="course.kingdom"
                       :items="kingdom"
                       placeholder="เลือกอาณาจักร"
                       outlined
-                      color="#ff6b81"
+                      color="pink"
+                      item-color="pink"
                     >
                     </v-autocomplete>
                   </v-col>
@@ -375,12 +385,111 @@
                     <label-custom text="คอร์สเรียน"></label-custom>
                     <v-autocomplete
                       dense
-                      v-model="student_data.courses"
+                      v-model="course.courses"
                       :items="courses"
                       placeholder="เลือกคอร์สเรียน"
                       outlined
+                      color="pink"
+                      item-color="pink"
                     >
+                      <template v-slot:no-data>
+                        <v-list-item>
+                          <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
+                        </v-list-item>
+                      </template>
+                      <template v-slot:item="{ item }">
+                        <v-list-item-content>
+                          <v-list-item-title
+                            ><span
+                              :class="
+                                course.courses === item ? 'font-bold' : ''
+                              "
+                              >{{ item }}</span
+                            ></v-list-item-title
+                          >
+                        </v-list-item-content>
+                        <v-list-item-action>
+                          <v-icon>
+                            {{
+                              course.courses === item
+                                ? "mdi-check-circle"
+                                : "mdi-radiobox-blank"
+                            }}</v-icon
+                          >
+                        </v-list-item-action>
+                      </template>
                     </v-autocomplete>
+                  </v-col>
+                  <v-col cols="12" sm="4">
+                    <label-custom text="วันที่"></label-custom>
+                    <v-text-field
+                    v-if="course.courses === course.day"
+                      dense
+                      v-model="course.day"
+                      :items="student"
+                      outlined
+                      item-color="pink"
+                      color="pink"
+                      :disabled="validated == 1"
+                    >
+                    </v-text-field>
+                   
+                  </v-col>
+                  <v-col cols="12" sm="4">
+                    <label-custom text="เวลา"></label-custom>
+                    <v-text-field
+                    v-if="course.courses === course.time"
+                      dense
+                      v-model="course.time"
+                      :items="student"
+                      outlined
+                      item-color="pink"
+                      color="pink"
+                      :disabled="validated == 1"
+                    >
+                    </v-text-field>
+                   
+                  </v-col>
+                  <v-col cols="12" sm="4">
+                    <label-custom text="โค้ช"></label-custom>
+                    <v-text-field
+                    v-if="course.courses === course.coach"
+                      dense
+                      v-model="course.coach"
+                      :items="student"
+                      outlined
+                      item-color="pink"
+                      color="pink"
+                      :disabled="validated == 1"
+                    >
+                    </v-text-field>
+                   
+                  </v-col>
+                  <v-col cols="12" sm="4">
+                    <label-custom text="ราคา"></label-custom>
+                    <v-text-field
+                   
+                      dense
+                      v-model="course.price"
+                      :items="student"
+                      outlined
+                      item-color="pink"
+                      color="pink"
+                    >
+                    </v-text-field>
+                   
+                  </v-col>
+                  <v-col cols="12" sm="4">
+                    <label-custom text="หมายเหตุราคา"></label-custom>
+                    <v-textarea
+                      v-model="course.remark"
+                      class="form-learn"
+                      auto-grow
+                      outlined
+                      item-color="pink"
+                      color="pink"
+                    ></v-textarea>
+                   
                   </v-col>
                 </v-row>
               </template>
@@ -393,9 +502,9 @@
           outlined
           class="btn3 mt-10 centerbtn"
           color="#ff6b81"
-          @click="addCourse"
-          ><span class="mdi mdi-plus-circle-outline"></span> เพิ่มคอร์ส</v-btn
-        >
+          @click="addCourse">
+          <span class="mdi mdi-plus-circle-outline">เพิ่มคอร์ส</span> 
+        </v-btn>
       </div>
       <div class="text-lg">สถานะการชำระเงิน</div>
       <hr />
@@ -416,88 +525,113 @@
         </v-col>
 
         <v-col cols="12" sm="8">
-        <v-card class="cursor-pointer mb-3 " @click="order.payment_status='paid'">
-          <v-card-actions>
+          <v-card
+            class="cursor-pointer mb-3"
+            @click="order.payment_status = 'paid'"
+          >
+            <v-card-actions>
               <v-row class="d-flex align-center">
-                  <v-col cols="auto"><v-icon :color="order.payment_status === 'paid' ? '#FF6B81' :'' ">{{order.payment_status === 'paid' ? 'mdi-radiobox-marked' :'mdi-radiobox-blank' }}</v-icon></v-col>
-                  <v-col cols="auto" class="pa-0">
-                      <v-avatar>
-                          <v-img src="@/assets/create_student/check 1.png" max-height="24" max-width="24"></v-img>
-                          
-                      </v-avatar>
-                  </v-col>
-                  <v-col>
-                    ชำระเงินเรียบร้อยแล้ว
-                  </v-col>
+                <v-col cols="auto"
+                  ><v-icon
+                    :color="order.payment_status === 'paid' ? '#FF6B81' : ''"
+                    >{{
+                      order.payment_status === "paid"
+                        ? "mdi-radiobox-marked"
+                        : "mdi-radiobox-blank"
+                    }}</v-icon
+                  ></v-col
+                >
+                <v-col cols="auto" class="pa-0">
+                  <v-avatar>
+                    <v-img
+                      src="@/assets/create_student/check 1.png"
+                      max-height="24"
+                      max-width="24"
+                    ></v-img>
+                  </v-avatar>
+                </v-col>
+                <v-col> ชำระเงินเรียบร้อยแล้ว </v-col>
               </v-row>
-          </v-card-actions> 
+            </v-card-actions>
 
-          <v-row>
-            <v-col cols="auto" class="ml-15">
-<v-autocomplete
-                      dense
-                      v-model="order.payment_type"
-                      :items="transfer"
-                      placeholder="โอนเข้าบัญชี"
-                      outlined
-                      color="pink"
-                      item-color="pink"
-                    >
-                    <template v-slot:no-data>
-                        <v-list-item>
-                          <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
-                        </v-list-item>
-                      </template>
-                      <template v-slot:item="{ item }">
-                        <v-list-item-content>
-                          <v-list-item-title
-                            ><span
-                              :class="
-                                order.payment_type === item ? 'font-bold' : ''
-                              "
-                              >{{ item }}</span
-                            ></v-list-item-title
-                          >
-                        </v-list-item-content>
-                        <v-list-item-action>
-                          <v-icon>
-                            {{
-                              order.payment_type === item
-                                ? "mdi-check-circle"
-                                : "mdi-radiobox-blank"
-                            }}</v-icon
-                          >
-                        </v-list-item-action>
-                      </template>
-                    </v-autocomplete>
-            </v-col>
+            <v-row>
+              <v-col cols="auto" class="ml-15">
+                <v-autocomplete
+                  dense
+                  v-model="order.payment_type"
+                  :items="transfer"
+                  placeholder="โอนเข้าบัญชี"
+                  outlined
+                  color="pink"
+                  item-color="pink"
+                >
+                  <template v-slot:no-data>
+                    <v-list-item>
+                      <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
+                    </v-list-item>
+                  </template>
+                  <template v-slot:item="{ item }">
+                    <v-list-item-content>
+                      <v-list-item-title
+                        ><span
+                          :class="
+                            order.payment_type === item ? 'font-bold' : ''
+                          "
+                          >{{ item }}</span
+                        ></v-list-item-title
+                      >
+                    </v-list-item-content>
+                    <v-list-item-action>
+                      <v-icon>
+                        {{
+                          order.payment_type === item
+                            ? "mdi-check-circle"
+                            : "mdi-radiobox-blank"
+                        }}</v-icon
+                      >
+                    </v-list-item-action>
+                  </template>
+                </v-autocomplete>
+              </v-col>
 
-            
-           <v-col cols="auto" class="pa-5">
-            ผู้รับเงิน : <span class="text-pink-500 font-medium">พรทรัพย์ ร่ำรวยทอง</span>
-                  </v-col>
-          </v-row> 
-        </v-card>
+              <v-col cols="auto" class="pa-5">
+                ผู้รับเงิน :
+                <span class="text-pink-500 font-medium"
+                  >พรทรัพย์ ร่ำรวยทอง</span
+                >
+              </v-col>
+            </v-row>
+          </v-card>
 
-     
-
-        <v-card class="cursor-pointer mb-3 " @click="order.payment_status='warn'">
-          <v-card-actions>
+          <v-card
+            class="cursor-pointer mb-3"
+            @click="order.payment_status = 'warn'"
+          >
+            <v-card-actions>
               <v-row class="d-flex align-center">
-                  <v-col cols="auto"><v-icon :color="order.payment_status === 'warn' ? '#FF6B81' :'' ">{{order.payment_status === 'warn' ? 'mdi-radiobox-marked' :'mdi-radiobox-blank' }}</v-icon></v-col>
-                  <v-col cols="auto" class="pa-0">
-                      <v-avatar>
-                          <v-img src="@/assets/create_student/notification 1.png" max-height="24" max-width="24"></v-img>
-                          
-                      </v-avatar>
-                  </v-col>
-                  <v-col>
-                    ส่งแจ้งเตือนการชำระ
-                  </v-col>
+                <v-col cols="auto"
+                  ><v-icon
+                    :color="order.payment_status === 'warn' ? '#FF6B81' : ''"
+                    >{{
+                      order.payment_status === "warn"
+                        ? "mdi-radiobox-marked"
+                        : "mdi-radiobox-blank"
+                    }}</v-icon
+                  ></v-col
+                >
+                <v-col cols="auto" class="pa-0">
+                  <v-avatar>
+                    <v-img
+                      src="@/assets/create_student/notification 1.png"
+                      max-height="24"
+                      max-width="24"
+                    ></v-img>
+                  </v-avatar>
+                </v-col>
+                <v-col> ส่งแจ้งเตือนการชำระ </v-col>
               </v-row>
-          </v-card-actions>
-        </v-card>
-
+            </v-card-actions>
+          </v-card>
         </v-col>
       </v-row>
 
@@ -570,7 +704,7 @@
             :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
             dark
             color="#ff6b81"
-           @click="openDialog()"
+            @click="openDialog()"
           >
             ยืนยัน
           </v-btn>
@@ -582,30 +716,33 @@
     </v-container>
 
     <!-- DIALOG -->
-    <v-dialog class="pa-2" width="50vw" v-model="dialog_show" persistent >
-                <v-card>
-                    <v-card-title>
-                        <v-row>
-                            <v-col  cols="12" align="right">
-                                <v-btn icon @click="dialog_show = false">
-                                    <v-icon color="#ff6b81">mdi-close</v-icon>
-                                </v-btn>
-                            </v-col>
-                        </v-row>
-                    </v-card-title>
-                    <dialogCard text="ยืนยันการชำระเงินเรียบร้อย"></dialogCard>
-                    <v-btn class="centerbtn mt-10" color="#ff6b81" @click="$router.push({ name: 'Finance'})"><div class="text-white">ดูสถานะการเงิน</div></v-btn>
-                </v-card>
+    <v-dialog class="pa-2" width="50vw" v-model="dialog_show" persistent>
+      <v-card>
+        <v-card-title>
+          <v-row>
+            <v-col cols="12" align="right">
+              <v-btn icon @click="dialog_show = false">
+                <v-icon color="#ff6b81">mdi-close</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-title>
+        <dialogCard text="ยืนยันการชำระเงินเรียบร้อย"></dialogCard>
+        <v-btn
+          class="centerbtn mt-10"
+          color="#ff6b81"
+          @click="$router.push({ name: 'Finance' })"
+          ><div class="text-white">ดูสถานะการเงิน</div></v-btn
+        >
+      </v-card>
     </v-dialog>
   </v-app>
 </template>
 
 <script>
-
-
 import headerPage from "@/components/header/headerPage.vue";
 import LabelCustom from "@/components/label/labelCustom.vue";
-import dialogCard from '@/components/dialog/dialogCard.vue';
+import dialogCard from "@/components/dialog/dialogCard.vue";
 import registerDialogForm from "@/components/user_menage/registerDialogForm.vue";
 import { mapActions, mapGetters } from "vuex";
 import { dateFormatter } from "@/functions/functions";
@@ -683,6 +820,8 @@ export default {
         start_day: "",
         price: 0,
         remark: "",
+        parents: [],
+        students: [],
       });
       this.ChangeOrederData(this.order);
     },
@@ -718,9 +857,15 @@ export default {
       }
     },
     openDialog() {
-      this.dialog_show = true
-      console.log(this.dialog_show, '<---');
-    }
+      this.dialog_show = true;
+      console.log(this.dialog_show, "<---");
+    },
+
+    removeCourse(index) {
+      // this.$delete(this.short_course)
+      this.order.courses.splice(index, 1);
+      this.ChangeOrederData(this.order);
+    },
   },
   computed: {
     ...mapGetters({
@@ -739,7 +884,7 @@ export default {
     }),
   },
   watch: {
-    "student_data.course_type": function (val) {
+    "course.course_type": function (val) {
       console.log(val);
     },
   },

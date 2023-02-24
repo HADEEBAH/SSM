@@ -2,80 +2,6 @@
   <v-app>
     <v-container>
       <headerPage title="สร้างอาณาจักร"></headerPage>
-      <!-- <v-row>
-        <v-col>
-          <label-custom >ชื่ออาณาจักร</label-custom>
-          <v-text-field
-            class="form1 mb-6"
-            placeholder="กรอกชื่ออาณาจักร"
-            outlined
-            v-model="kingdom.kingdom_name"
-          ></v-text-field>
-          <label-custom class="title2 mb-2">รายละเอียด</label-custom>
-          <v-textarea
-            class="form2"
-            placeholder="กรอกรายละเอียด..."
-            auto-grow
-            outlined
-            v-model="kingdom.detail"
-          ></v-textarea>
-          <label-custom class="titleupload">อัปโหลดภาพหน้าปกอาณาจักร</label-custom>
-          UPLOAD
-          <form enctype="multipart/form-data" novalidate>
-            <div class="dropbox">
-              <input
-                type="file"
-                multiple
-                :name="uploadFieldName"
-                :disabled="isSaving"
-                accept="image/*"
-                class="input-file"
-              />
-              <p>Drop file here or click to upload</p>
-              <p v-if="isSaving">Uploading {{ fileCount }} files...</p>
-            </div>
-          </form>
-          <div class="btn text-center">
-            <v-btn class="btn1" outlined color="error">ยกเลิก</v-btn>
-            <v-btn class="btn2">ยืนยัน</v-btn>
-          </div>
-        </v-col>
-      </v-row> -->
-      <v-row dense>
-        <v-col>
-          <label-custom text="ชื่ออาณาจักร(ภาษาไทย)"></label-custom>
-          <v-text-field
-            dense
-            placeholder="กรอกชื่ออาณาจักร"
-            outlined
-            v-model="kingdom.kingdom_name_th"
-          ></v-text-field>
-        </v-col>
-        <v-col>
-          <label-custom text="ชื่ออาณาจักร(ภาษาอังกฤษ)"></label-custom>
-          <v-text-field
-            dense
-            placeholder="กรอกชื่ออาณาจักร"
-            outlined
-            v-model="kingdom.kingdom_name_eng"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-
-      <v-row dense>
-        <v-col>
-          <label-custom text="รายละเอียด"></label-custom>
-          <v-textarea
-            dense
-            class="form2"
-            placeholder="กรอกรายละเอียด..."
-            auto-grow
-            outlined
-            v-model="kingdom.detail"
-          ></v-textarea>
-        </v-col>
-      </v-row>
-
       <v-row dense>
         <v-col>
           <label-custom text="อัปโหลดภาพหน้าปกอาณาจักร"></label-custom>
@@ -124,19 +50,116 @@
           </v-card>
         </v-col>
       </v-row>
+      <br />
 
-      <v-row >
-        <v-col align="right" sm="" cols="12" >
-          <v-btn outlined :class="$vuetify.breakpoint.smAndUp?'btn-size-lg': 'w-full'" color="#ff6b81">
+      <label-custom text="รายละเอียดอาณาจักร"></label-custom>
+      <hr />
+      <br />
+
+      <v-row dense>
+        <v-col cols="12" sm="6">
+          <label-custom text="ชื่ออาณาจักร(ภาษาไทย)"></label-custom>
+          <v-text-field
+            dense
+            placeholder="กรอกชื่ออาณาจักร"
+            outlined
+            v-model="kingdom.kingdom_name_th"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <label-custom text="ชื่ออาณาจักร(ภาษาอังกฤษ)"></label-custom>
+          <v-text-field
+            dense
+            placeholder="กรอกชื่ออาณาจักร"
+            outlined
+            v-model="kingdom.kingdom_name_eng"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+
+      <v-row dense>
+        <v-col cols="12" sm="6">
+          <label-custom text="จัดสอนโดย"></label-custom>
+          <v-text-field
+            dense
+            placeholder="ระบุสถาบันผู้จัดสอน เช่น ศูนย์ดนตรี Manila Tamarind"
+            outlined
+            v-model="kingdom.coach"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+
+      <v-row dense>
+        <v-col cols="12">
+          <label-custom text="รายละเอียด"></label-custom>
+          <v-textarea
+            dense
+            class="form2"
+            placeholder="กรอกรายละเอียด..."
+            auto-grow
+            outlined
+            v-model="kingdom.detail"
+          ></v-textarea>
+        </v-col>
+      </v-row>
+
+      <!-- <div>
+        <input type="text" v-model="inputValue" />
+        <button :class="isInputValid ? 'active' : ''">Submit</button>
+      </div> -->
+
+      <v-row>
+        <v-col align="right" sm="" cols="12">
+          <v-btn
+            outlined
+            :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
+            color="#ff6b81"
+          >
             ยกเลิก
           </v-btn>
         </v-col>
         <v-col sm="auto" cols="12">
-          <v-btn  depressed :class="$vuetify.breakpoint.smAndUp?'btn-size-lg': 'w-full'" dark color="#ff6b81" > 
-            ยืนยัน 
+          <v-btn
+            v-if="!saved"
+            depressed
+            :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
+            class="white--text"
+            :disabled="!isInputValid"
+            :color="isInputValid ? '#ff6b81' : ''"
+            @click="openDialog()"
+          >
+            บันทึก
+          </v-btn>
+
+          <v-btn
+            v-else
+            depressed
+            :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
+            class="white--text"
+            :disabled="!isInputValid"
+            :color="isInputValid ? '#ff6b81' : ''"
+            @click="edit()"
+          >
+            แก้ไข
           </v-btn>
         </v-col>
       </v-row>
+
+      <!-- DIALOG -->
+      <v-dialog class="pa-2" width="50vw" v-model="dialog_show" persistent>
+        <v-card>
+          <v-card-title>
+            <v-row>
+              <v-col cols="12" align="right">
+                <v-btn icon @click="closeDialog">
+                  <v-icon color="#ff6b81">mdi-close</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-title>
+          <dialogCard text="สร้างอาณาจักรเรียบร้อย"></dialogCard>
+        </v-card>
+      </v-dialog>
     </v-container>
   </v-app>
 </template>
@@ -144,20 +167,28 @@
 <script>
 import headerPage from "@/components/header/headerPage.vue";
 import LabelCustom from "../label/labelCustom.vue";
+import dialogCard from "@/components/dialog/dialogCard.vue";
 export default {
   name: "kingdomPage",
   components: {
     headerPage,
     LabelCustom,
+    dialogCard,
   },
-  data: () => ({
-    kingdom: {
-      kingdom_name_th: "",
-      kingdom_name_eng: "",
-      detail: "",
-    },
-    preview_url: null
-  }),
+  data: () => {
+    return {
+      inputValue: "",
+      dialog_show: false,
+      saved: false,
+      preview_url: null,
+      kingdom: {
+        kingdom_name_th: "",
+        kingdom_name_eng: "",
+        detail: "",
+        coach: "",
+      },
+    };
+  },
 
   created() {},
 
@@ -165,11 +196,34 @@ export default {
 
   watch: {},
 
-  computed: {},
+  computed: {
+    isInputValid() {
+      return (
+        this.kingdom.kingdom_name_th.trim().length > 0 &&
+        this.kingdom.kingdom_name_eng.trim().length > 0 &&
+        this.kingdom.coach.trim().length > 0 &&
+        this.kingdom.detail.trim().length > 0
+      );
+    },
+
+    buttonText() {
+      return this.clickCount ? "บันทึก" : "แก้ไข";
+    },
+  },
 
   methods: {
+    closeDialog() {
+      this.dialog_show = false;
+      this.saved = true;
+    },
     openFileSelector() {
       this.$refs.fileInput.click();
+    },
+    edit() {
+      this.$router.push({ name: "Finance" });
+    },
+    openDialog() {
+      this.dialog_show = true;
     },
     uploadFile() {
       this.file = this.$refs.fileInput.files[0];
@@ -183,80 +237,3 @@ export default {
   },
 };
 </script>
-
-<!-- <style scoped>
-.title1 {
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 23px;
-}
-.headerkingdom {
-  font-style: normal;
-  font-weight: 700;
-  font-size: 28px;
-  margin-left: 195px;
-  margin-top: 50px;
-  margin-bottom: -90px;
-}
-.title2 {
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 23px;
-}
-.titleupload {
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 23px;
-}
-.form1 {
-  width: 95%;
-  height: 65px;
-}
-.form2 {
-  width: 95%;
-  resize: none;
-}
-.btn {
-  margin-top: 150px;
-}
-.btn1 {
-  margin-right: 30px;
-}
-.btn2 {
-  margin-left: 30px;
-}
-.theme--light.v-btn.btn1 {
-  color: #ff6b81;
-}
-.theme--light.v-btn.btn2 {
-  color: white;
-}
-.theme--light.v-btn.v-btn--has-bg {
-  background-color: #ff6b81;
-}
-.dropbox {
-  outline: 2px dashed rgb(22, 20, 20); /* the dash box */
-  outline-offset: -10px;
-  background: white;
-  color: rgb(11, 11, 11);
-  margin-left: -8px;
-  width: 40%;
-  height: 90px;
-  position: relative;
-  cursor: pointer;
-}
-
-.input-file {
-  opacity: 0; /* invisible but it's there! */
-  width: 100%;
-  height: 90px;
-  position: absolute;
-  cursor: pointer;
-}
-.dropbox p {
-  font-size: 1.5em;
-  text-align: center;
-  padding: 30px 0;
- 
-}
-</style> -->
