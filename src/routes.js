@@ -148,7 +148,7 @@ const routes = [
         component: userCourseOrder,
       },
       {
-        path: '/cartList',  
+        path: 'cartList',  
         name: 'CartList',
         component: CartList,
       },

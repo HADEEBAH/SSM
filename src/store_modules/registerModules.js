@@ -29,8 +29,9 @@ const RegisterModules = {
   actions: {
     async registerUserOneId(context){
       try{
+        console.log(process.env.APP_URL)
         let phone_number = context.state.user_one_id.phone_number.replaceAll("-","")
-        let {data} = await axios.post(" http://192.168.74.34:3000/api/v1/auth/register",{
+        let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/register`,{
           "accountTitleTh": "",
           "firstNameTh": context.state.user_one_id.firstname_th,
           "lastNameTh": context.state.user_one_id.lastname_th,
