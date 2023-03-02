@@ -1,11 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import routes from '@/routes'
-<<<<<<< HEAD
 //import VueCookie from "vue-cookie"
-=======
-// import VueCookie from "vue-cookie"
->>>>>>> develop
 
 Vue.use(VueRouter)
 

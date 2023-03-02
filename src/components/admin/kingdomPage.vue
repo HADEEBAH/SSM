@@ -177,7 +177,6 @@ export default {
     LabelCustom,
     dialogCard,
   },
-<<<<<<< HEAD
   data: () => {
     return {
       inputValue: "",
@@ -193,20 +192,6 @@ export default {
       
     };
   },
-=======
-  data: () => ({
-    inputValue: "",
-    dialog_show: false,
-    saved: false,
-    preview_url: null,
-    kingdom: {
-      kingdom_name_th: "",
-      kingdom_name_eng: "",
-      detail: "",
-      coach: "",
-    },
-  }),
->>>>>>> develop
 
   created() {},
 

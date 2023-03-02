@@ -9,14 +9,9 @@ const orderModules = {
             kingdom: {},
             course_type: "",
             package: "",
-<<<<<<< HEAD
             package_data : {},
             option : "",
             option_data : "",
-=======
-            package_data: {},
-            option: "",
->>>>>>> develop
             period: 0,
             times_in_class: 0,
             day: "",
