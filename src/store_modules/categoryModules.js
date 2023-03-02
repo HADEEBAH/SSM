@@ -18,10 +18,10 @@ const categoryModules = {
                     context.commit("SetCategorys", data.data)
                 }
             } catch (error) {
-                console.log(error)
+                console.log("error :", error)
             }
         },
-           // async getCategory(context, category_id) { 
+        // async getCategory(context, category_id) { 
 
         // },
     },

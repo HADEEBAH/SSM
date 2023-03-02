@@ -66,13 +66,14 @@
             :key="item.id"
           >
             <v-card class="rounded-xl" @click="selectedCategory(item)">
+              {{ item.img_url }}
               <v-img
                 class="align-end text-white rounded-t-xl"
                 height="200"
                 :src="
-                  item.category_img
-                    ? item.category_img
-                    : 'https://cdn.vuetifyjs.com/images/cards/docks.jpg'
+                  item.img_url
+                    ? item.img_url
+                    : 'mdi-file-image-remove-outline'
                 "
                 cover
               >
