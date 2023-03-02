@@ -7,6 +7,7 @@
         class="rounded-none bottomimg"
       >
         <div class="text-2xl ml-5 mt-10 font-bold text-white">Hello, Sarah</div>
+
         <!-- <v-text-field
           :class="
             MobileSize
@@ -47,7 +48,6 @@
       <center>
         <v-img
           src="../../../assets/navbar_user/banner.png"
-         
           class="rounded-xl mt-5 ml-5 mr-5"
         >
         </v-img>
@@ -58,24 +58,34 @@
 
       <v-container fluid grid-list-md>
         <v-row>
-          <v-col cols="12" md="4" sm="6" v-for="item in items" :key="item.id">
+          <v-col
+            cols="12"
+            md="4"
+            sm="6"
+            v-for="item in categorys"
+            :key="item.id"
+          >
             <v-card class="rounded-xl" @click="selectedCategory(item)">
+
               <v-img
                 class="align-end text-white rounded-t-xl"
                 height="200"
-                src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+                :src="
+                  item.img_url
+                    ? item.img_url
+                    : 'https://cdn.vuetifyjs.com/images/cards/docks.jpg'
+                "
                 cover
               >
               </v-img>
-              <v-card-title>อาณาจักรศิลปะสมัยใหม่</v-card-title>
+              <v-card-title>{{ item.category_name_th }}</v-card-title>
               <v-card-subtitle class="pt-4"
                 >โดย ศูนย์ดนตรี Manila Tamarind</v-card-subtitle
               >
 
               <v-card-text>
                 <div>
-                  เที่ยงคืนพาวเวอร์แฮมเบอร์เกอร์สแควร์เย้ว เก๊ะหมิง
-                  สต๊อกอึ๋มหลวงพี่พลาซ่าหลิน จือฟลุทเยลลี่
+                  {{ item.category_name_en }}
                   <span class="text-red-500 cursor-pointer">อ่านต่อ...</span>
                 </div>
               </v-card-text>
@@ -89,7 +99,7 @@
  
 <script>
 import headerPage from "@/components/header/headerPage.vue";
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 export default {
   components: {
     headerPage,
@@ -108,14 +118,26 @@ export default {
       { id: 8, itemName: "อาณาจักรศิลปะสมัยใหม่" },
       { id: 9, itemName: "อาณาจักรศิลปะสมัยใหม่" },
     ],
+    dataStorage: {},
   }),
+  created() {
+    this.dataStorage = JSON.parse(localStorage.getItem("userDetail"));
+    console.log("true", this.dataStorage);
+    if (this.dataStorage) {
+      console.log("true", this.dataStorage.role);
+    } else {
+      console.log("false");
+    }
+  },
 
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "อาณาจักร");
+    this.$store.dispatch("CategoryModules/getCategorys");
   },
   computed: {
     ...mapGetters({
-      courses : "OrderModules/getCourses"
+      courses: "OrderModules/getCourses",
+      categorys: "CategoryModules/getCategorys",
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
@@ -129,13 +151,14 @@ export default {
 
   methods: {
     ...mapActions({
-      changeCourseData : "OrderModules/changeCourseData",
+      changeCourseData: "OrderModules/changeCourseData",
+      createKingdom: "OrderModules/createKingdom",
     }),
-    selectedCategory(category){
-      this.courses.kingdom = category
-      this.changeCourseData(this.courses)
-      this.$router.push({name : "userCourseList"})
-    }
+    selectedCategory(category) {
+      this.courses.kingdom = category;
+      this.changeCourseData(this.courses);
+      this.$router.push({ name: "userCourseList" });
+    },
   },
 };
 </script>

@@ -168,6 +168,8 @@
 import headerPage from "@/components/header/headerPage.vue";
 import LabelCustom from "../label/labelCustom.vue";
 import dialogCard from "@/components/dialog/dialogCard.vue";
+import Swal from "sweetalert2";
+import axios from "axios";
 export default {
   name: "kingdomPage",
   components: {
@@ -175,6 +177,7 @@ export default {
     LabelCustom,
     dialogCard,
   },
+<<<<<<< HEAD
   data: () => {
     return {
       inputValue: "",
@@ -190,6 +193,20 @@ export default {
       
     };
   },
+=======
+  data: () => ({
+    inputValue: "",
+    dialog_show: false,
+    saved: false,
+    preview_url: null,
+    kingdom: {
+      kingdom_name_th: "",
+      kingdom_name_eng: "",
+      detail: "",
+      coach: "",
+    },
+  }),
+>>>>>>> develop
 
   created() {},
 
@@ -224,14 +241,55 @@ export default {
       this.$router.push({ name: "Finance" });
     },
     openDialog() {
-      this.dialog_show = true;
+      Swal.fire({
+        icon: "question",
+        title: "คุณต้องการสร้างอาณาจักรหรือไม่",
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: "ตกลง",
+        cancelButtonText: "ยกเลิก",
+      }).then(async (result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          try {
+            console.log("preview_url", this.preview_url);
+            let { data } = await axios.post(
+              "http://192.168.72.187:3000/api/category",
+              {
+                category_name_th: this.kingdom.kingdom_name_th,
+                category_name_eng: this.kingdom.kingdom_name_eng,
+                img_file: this.preview_url,
+                detail: this.kingdom.detail,
+                taught_by: this.kingdom.coach,
+              }
+            );
+            console.log(data);
+            if (data.statusCode === 201) {
+              this.dialog_show = true;
+            } else {
+              throw { message: data.message };
+            }
+          } catch (error) {
+            Swal.fire({
+              icon: "error",
+              title: error.message,
+            });
+          }
+        } else if (result.isDenied) {
+          Swal.fire("Changes are not saved", "", "info");
+        }
+      });
+      // this.dialog_show = true;
     },
+    createKingdom() {},
     uploadFile() {
       this.file = this.$refs.fileInput.files[0];
+      console.log(this.file);
       if (!this.file) return;
       const reader = new FileReader();
       reader.onload = (e) => {
-        this.previewUrl = e.target.result;
+        this.preview_url = e.target.result;
+        console.log(this.preview_url);
       };
       reader.readAsDataURL(this.file);
     },
