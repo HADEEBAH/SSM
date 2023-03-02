@@ -11,7 +11,7 @@
                     <v-col cols="auto">
                       <v-img
                         class="align-end text-white rounded-xl mt-5"
-                        src="@/assets/cart/cart.svg"
+                        src="@/assets/cart/cart.png"
                         cover
                         max-width="104"
                         max-height="111"
