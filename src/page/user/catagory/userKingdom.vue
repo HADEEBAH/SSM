@@ -68,12 +68,12 @@
             <v-card class="rounded-xl" @click="selectedCategory(item)">
 
               <v-img
-                class="align-end text-white rounded-t-xl"
-                height="200"
+                class="center text-white rounded-t-xl "
+                height="200" width="150" 
                 :src="
                   item.img_url
                     ? item.img_url
-                    : 'https://cdn.vuetifyjs.com/images/cards/docks.jpg'
+                    : 'https://media.istockphoto.com/id/1216251206/vector/no-image-available-icon.jpg?s=170667a&w=0&k=20&c=N-XIIeLlhUpm2ZO2uGls-pcVsZ2FTwTxZepwZe4DuE4= '
                 "
                 cover
               >
