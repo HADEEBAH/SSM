@@ -129,7 +129,7 @@ export default {
       ]},
       { title : "การเงิน", to:"Finance", child :[]},
       { title : "จัดการผู้ใช้งาน", to:"", child :[
-        {title : "จัดการผู้ใช้งาน", to:"Manageuser"},
+        {title : "จัดการผู้ใช้งาน", to:"UserList"},
       ]},
     ]
   }),

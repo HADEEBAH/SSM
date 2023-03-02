@@ -7,7 +7,8 @@ import OrderModules from '@/store_modules/orderModules'
 import loginModules from '@/store_modules/loginModule'
 import NavberUserModules from '@/store_modules/navberUserModules'
 import CartListModules from '@/store_modules/cartListModules'
-
+import UserManageModules from '@/store_modules/userManageModules'
+import CategoryModules from './store_modules/categoryModules'
 
 
 
@@ -19,9 +20,13 @@ const store = new Vuex.Store({
     CourseModules: CourseModules,
     FinanceModules: FinanceModules,
     OrderModules: OrderModules,
-    loginModules:loginModules,
+    loginModules: loginModules,
     NavberUserModules: NavberUserModules,
     CartListModules: CartListModules,
+    UserManageModules: UserManageModules,
+    CategoryModules: CategoryModules,
+
+
   }
 })
 

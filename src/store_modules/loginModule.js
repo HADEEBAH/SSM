@@ -29,20 +29,32 @@ const loginModules = {
 
         async loginOneId(context) {
             try {
-                let { data } = await axios.post("", {
-                    "userName": context.state.user_one_id.username,
-                    "passWord": context.state.user_one_id.password,
-                    "token": context.state.user_one_id.token,
+                let { data } = await axios.post("http://192.168.72.187:3001/api/v1/auth/login", {
+                    "username": context.state.user_one_id.username,
+                    "password": context.state.user_one_id.password,
+                    "grant_type": "password",
+                    "client_id": "767",
+                    "client_secret": "SpJGzNaU3hIOSjQYxZBSFgKSXXxHwNv0ByX1weAb",
+                    // "token": context.state.user_one_id.token,
                 })
                 console.log("testLog");
                 console.log(data)
-                if (data.statusCode === 201) {
+                console.log(data.data.first_name_en)
+                if (data.statusCode === 200) {
+                    const payload = {
+                        first_name_en: data.data.first_name_en,
+                        first_name_th: data.data.first_name_th,
+                        last_name_en: data.data.last_name_en,
+                        last_name_th: data.data.last_name_th,
+                    }
                     VueCookie.set("token", data.data.token)
-                    localStorage.setItem("userDetail", data.data)
+                    localStorage.setItem("userDetail", JSON.stringify(payload))
+                    let data_local = JSON.parse(localStorage.getItem("userDetail"))
+                    console.log("data_local", data_local);
                     router.push({ name: "UserKingdom" });
                 } else { throw { message: data.message } }
             } catch (error) {
-                Swal.error({
+                Swal.fire({
                     icon: 'error',
                     title: error.message,
                 })

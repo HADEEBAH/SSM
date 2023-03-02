@@ -1,14 +1,16 @@
 import Swal from "sweetalert2";
 import router from "@/router";
+
 const orderModules = {
     namespaced: true,
     state: {
+ 
         courses: {
-            kingdom:{},
+            kingdom: {},
             course_type: "",
             package: "",
-            package_data : {},
-            option : "",
+            package_data: {},
+            option: "",
             period: 0,
             time_count: 0,
             day: "",
@@ -19,6 +21,7 @@ const orderModules = {
             remark: "",
             parents: [],
             students: [],
+
         },
         order: {
             order_id: "",
@@ -29,43 +32,43 @@ const orderModules = {
                     firstname: "",
                     lastname: "",
                     tel: "",
-                    is_other : false,
+                    is_other: false,
                     parents: [
-                       
+
                     ]
                 },
                 {
                     student_name: "",
-                    username : "",
-                    firstname : "",
-                    lastname : "",
-                    tel : "",
-                    is_other : false,
+                    username: "",
+                    firstname: "",
+                    lastname: "",
+                    tel: "",
+                    is_other: false,
                     parents: [
-                       
+
                     ]
                 },
             ],
             courses: [],
             payment_status: "",
             payment_type: "",
-            total_price : 0,
-      }
+            total_price: 0,
+        }
     },
     mutations: {
         SetOrder(state, payload) {
-            state.order= payload
+            state.order = payload
         },
         SetOrderCourse(state, payload) {
-            state.courses= payload
+            state.courses = payload
         },
-        SetResetCourseData(state){
+        SetResetCourseData(state) {
             state.courses = {
-                kingdom:{},
+                kingdom: {},
                 course_type: "",
                 package: "",
-                package_data : {},
-                option : "",
+                package_data: {},
+                option: "",
                 period: 0,
                 time_count: 0,
                 day: "",
@@ -78,12 +81,13 @@ const orderModules = {
                 students: [],
             }
         }
+
     },
     actions: {
-        resetCourseDate(context){
+        resetCourseDate(context) {
             context.commit("SetResetCourseData")
         },
-        changeCourseData(context, courseData){
+        changeCourseData(context, courseData) {
             context.commit("SetOrderCourse", courseData)
             console.log(courseData)
         },
@@ -101,21 +105,23 @@ const orderModules = {
                 confirmButtonText: 'ดูสถานะการเงิน',
             }).then((res) => {
                 if (res.isConfirmed) {
-                    router.push({name:"Finance"})
+                    router.push({ name: "Finance" })
                 }
                 console.log(res);
-              })
-        }
+            })
+        },
+     
+ 
     },
     getters: {
         getOrder(state) {
             return state.order
         },
-        getCourses(state){
+        getCourses(state) {
             return state.courses
         }
+
     },
-  };
-  
-  export default orderModules;
-  
+};
+
+export default orderModules;
