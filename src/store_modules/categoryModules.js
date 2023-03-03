@@ -12,7 +12,7 @@ const categoryModules = {
     actions: {
         async getCategorys(context) {
             try {
-                let { data } = await axios.get("http://192.168.72.187:3000/api/category")
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/category`)
                 console.log("data", data);
                 if (data.statusCode === 200) {
                     context.commit("SetCategorys", data.data)

@@ -45,13 +45,12 @@
                     </template>
                </v-btn>
             </v-col>
-        </v-row>
-        <v-tabs v-model="tab" fixed-tabs class="mb-3 "   color="#ff6b81">
+        </v-row>    
+        <v-tabs class="mb-3" v-model="tab" color="#ff6b81" grow>
             <v-tab class="border-b-2" href="#check in"> เช็คชื่อ </v-tab>
             <v-tab class="border-b-2" href="#assess students"> ประเมินนักเรียน </v-tab>
             <v-tab class="border-b-2" href="#teaching summary"> บันทึกสรุปการสอน </v-tab>
         </v-tabs>
-       
         <v-tabs-items v-model="tab">
             <v-tab-item value="check in">
                 <v-card elevation="1" class="mb-2">
@@ -219,10 +218,110 @@
                         </v-col>
                     </v-row>
                 </div>
-               
+                <div v-else>
+                    <v-card class="mb-2 " flat style="border: 1px solid #999" v-for="(student, index_student) in students" :key="`${index_student}-student`">
+                        <v-card-text >
+                            <v-row class="d-flex align-center">
+                                <v-col cols="5" class="text-lg font-bold">
+                                    {{ student.no }} {{ student.fullname }}
+                                </v-col>
+                                <v-col cols="4" class="text-lg font-bold">
+                                    {{ student.nickname }}
+                                </v-col>
+                                <v-col cols="3" class="pa-1 text-md text-[#999999]">
+                                    <v-row>
+                                        <v-col> การเข้าเรียน: </v-col>
+                                        <v-col>
+                                            <v-chip class="font-bold" :color="check_in_status_options.filter(v => v.value === student.check_in_status)[0].bg_color" :style="`color:${check_in_status_options.filter(v => v.value === student.check_in_status)[0].color}`" v-if="check_in_status_options.filter(v => v.value === student.check_in_status).length > 0" >{{ check_in_status_options.filter(v => v.value === student.check_in_status)[0].label }} </v-chip>
+                                        </v-col>
+                                    </v-row>
+                                </v-col>    
+                            </v-row>
+                            <v-row class="d-flex align-center">
+                                <v-col cols="5">
+                                    <labelCustom text="พัฒนาการ"></labelCustom>
+                                    <v-select outlined dense></v-select>
+                                </v-col>
+                                <v-col cols="4">
+                                    <labelCustom text="ความสนใจ"></labelCustom>
+                                    <v-select outlined dense></v-select>
+                                </v-col>
+                                <v-col cols="3">
+                                    <v-btn outlined class="text-sm" color="#ff6b81" @click="selectStudentComment()">
+                                        แสดงความคิดเห็น
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
+                        </v-card-text>
+                    </v-card>
+                    <v-row>
+                        <v-col cols="12" sm="6">
+                            <v-btn color="#ff6b81" outlined dense class="w-full" > ล้างข้อ </v-btn>
+                        </v-col>
+                        <v-col cols="12" sm="6">
+                            <v-btn color="#ff6b81" dark depressed dense class="w-full"> ส่งข้อมูล </v-btn>
+                        </v-col>
+                    </v-row>
+                </div>
             </v-tab-item>
             <v-tab-item value="teaching summary">
-                
+                <v-row dense>
+                    <v-col>
+                        <labelCustom text="บันทึกการสอน"></labelCustom>
+                        <v-textarea outlined placeholder="ระบุความคิดเห็น..."></v-textarea>
+                    </v-col>
+                </v-row>
+                <v-row dense>
+                    <v-col>
+                        <labelCustom text="พัฒนาการ / การบ้าน"></labelCustom>
+                        <v-textarea outlined placeholder="ระบุความคิดเห็น..."></v-textarea>
+                    </v-col>
+                </v-row>
+                <!-- Upload file -->
+                <v-card flat class="mb-3">
+                    <v-card-text class="border-dashed border-2 border-pink-600 rounded-lg">
+                        <v-row v-if="previewUrl">
+                        <v-col>
+                            <img :src="previewUrl" style="max-height: 200px" />
+                        </v-col>
+                        </v-row>
+                        <v-row v-if="!previewUrl">
+                        <v-col cols="12" class="flex align-center justify-center">
+                            <v-img
+                            src="../../../assets/manage_coach/upload_file.png"
+                            max-height="105"
+                            max-width="122"
+                            ></v-img>
+                        </v-col>
+                        <v-col cols="12" class="flex align-center justify-center text-h5">
+                            แนบไฟล์รูปภาพหรือวิดีโอ
+                        </v-col>
+                        <v-col cols="12" class="flex align-center justify-center">
+                            <v-btn text class="underline" color="#ff6b81" @click="openFileSelector"
+                            >อัพโหลดไฟล์แนบ</v-btn
+                            >
+                            <input
+                            ref="fileInput"
+                            type="file"
+                            @change="uploadFile"
+                            style="display: none"
+                            />
+                        </v-col>
+                        </v-row>
+                    </v-card-text>
+                </v-card>
+                <v-row dense>
+                    <v-col cols="12" sm="6">
+                        <v-btn  class="w-full" text color="#ff6b81">
+                            ล้างข้อมูล
+                        </v-btn>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                        <v-btn class="w-full" depressed color="#ff6b81" dark >
+                            บันทึก
+                        </v-btn>
+                    </v-col>
+                </v-row>
             </v-tab-item>
         </v-tabs-items>
         <v-dialog v-model="show_comment_dialog">
@@ -265,6 +364,7 @@ export default {
     tab:"assess students",
     expanded_index: [],
     check_in : false,
+    previewUrl: null,
     show_comment_dialog : false,
     tab_evaluate : "evaluate_students", // Evaluate students, Assess the learner's potential
     check_in_status_options :[
@@ -318,8 +418,21 @@ export default {
     inputDate(e, item) {
         this.students.filter(v => v.no === item.no)[0].compensation_date_str = dateFormatter(e,"DD MT YYYYT")
     },
+    openFileSelector() {
+      this.$refs.fileInput.click();
+    },
+    uploadFile() {
+      this.file = this.$refs.fileInput.files[0];
+      if (!this.file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.previewUrl = e.target.result;
+      };
+      reader.readAsDataURL(this.file);
+    },
   },
 };
 </script>
 <style>
+
 </style>

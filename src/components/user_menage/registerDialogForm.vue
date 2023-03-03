@@ -98,7 +98,7 @@
       <v-card-actions>
         <v-row dense>
           <v-col class="text-center">
-            <v-btn depressed class="white--text" :class="$vuetify.breakpoint.mdAndUp ? 'btn-register' : 'w-full btn-register' " @click="save">ลงทะเบียน</v-btn>
+            <v-btn :disabled="!user_one_id.accept_terms" depressed class="white--text" :class="$vuetify.breakpoint.mdAndUp ? 'btn-register' : 'w-full btn-register' " @click="save">ลงทะเบียน</v-btn>
           </v-col>
         </v-row>
       </v-card-actions>
@@ -141,7 +141,6 @@ export default {
     checkPhoneNumber() {
       let x = this.user_one_id.phone_number.replace(/\D/g, '')
       x = x.match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
-      console.log(x)
       this.user_one_id.phone_number = !x[2] ? x[1] :   x  [1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
     },
     save(){

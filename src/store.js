@@ -25,8 +25,6 @@ const store = new Vuex.Store({
     CartListModules: CartListModules,
     UserManageModules: UserManageModules,
     CategoryModules: CategoryModules,
-
-
   }
 })
 

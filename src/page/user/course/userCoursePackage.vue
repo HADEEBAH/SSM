@@ -176,11 +176,13 @@ import { mapGetters,mapActions } from 'vuex';
     computed: {
         ...mapGetters({
             courses : "OrderModules/getCourses",
+            order : "OrderModules/getOrder"
         })
     },
     methods: {
         ...mapActions({
             changeCourseData : "OrderModules/changeCourseData",
+            changeOrderData : "OrderModules/changeOrderData",
         }),
         selectedPackage(option){
             this.courses.option = option.option_name
@@ -188,7 +190,9 @@ import { mapGetters,mapActions } from 'vuex';
             this.courses.time_count = option.amount
             this.courses.package = this.selected_package.name
             this.courses.package_data = this.selected_package
+            this.order.order_step = 1
             this.changeCourseData(this.courses)
+            this.changeOrderData(this.order)
             this.$router.push({ name : 'userCourseOrder', })
         }
     },

@@ -122,11 +122,11 @@ export default {
   }),
   created() {
     this.dataStorage = JSON.parse(localStorage.getItem("userDetail"));
-    console.log("true", this.dataStorage);
+    //console.log("true", this.dataStorage);
     if (this.dataStorage) {
-      console.log("true", this.dataStorage.role);
+      //console.log("true", this.dataStorage.role);
     } else {
-      console.log("false");
+      //console.log("false");
     }
   },
 

@@ -4,7 +4,6 @@ import router from "@/router";
 const orderModules = {
     namespaced: true,
     state: {
- 
         courses: {
             kingdom: {},
             course_type: "",
@@ -25,6 +24,7 @@ const orderModules = {
 
         },
         order: {
+            order_step : 0,
             order_id: "",
             students: [
                 {
@@ -92,7 +92,7 @@ const orderModules = {
             context.commit("SetOrderCourse", courseData)
             console.log(courseData)
         },
-        changeOrederData(context, orderData) {
+        changeOrderData(context, orderData) {
             context.commit("SetOrder", orderData)
             console.log(orderData)
         },

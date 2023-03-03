@@ -11,7 +11,6 @@ const router = new VueRouter({
   routes
 })
 // router.beforeEach((to, from, next ) => {
-//   console.log(to,from)
 //   if(to.name !== "Login" && to.name !== "Register"){
 //     if(to.matched[0].name !== "NavBarUser" && !VueCookie.get("token")){
 //       next({name : 'Login'})
@@ -21,7 +20,9 @@ const router = new VueRouter({
 //       next()
 //     }
 //   }else{
-//     next()
+//     if( (to.name === "Login" || to.name === "Login") && !VueCookie.get("token") ){
+//       next()
+//     }
 //   }
 // })
 
