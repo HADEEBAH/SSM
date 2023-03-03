@@ -38,3 +38,31 @@
 .btn-size-lg{
     width: 120px;
 }
+/* Time Picker Ant-Design */
+.ant-time-picker-input{
+    height: 40px !important;
+    border: 1px solid #6e6e6e !important;
+}
+.ant-time-picker-input:hover{
+    border: 1px solid #000 !important;
+}
+.active .ant-time-picker-icon .anticon svg{
+    color:#ff6b81 !important;
+}
+.ant-time-picker-icon {
+    position: absolute;
+    top: 15px !important;
+    height: 24px !important;
+    width: 24px !important;
+}
+.ant-time-picker-clear{
+    position: absolute;
+    top: 15px !important;
+    height: 24px !important;
+    width: 24px !important;
+}
+.anticon svg {
+    color : #5d5d5d !important;
+    height: 24px !important;
+    width: 24px !important;
+}

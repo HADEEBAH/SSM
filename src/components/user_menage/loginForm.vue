@@ -52,6 +52,7 @@
                 placeholder="ระบุรหัสผ่าน"
                 @click:append="show_password = !show_password"
                 outlined
+                @keyup.enter="login()"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -137,7 +138,7 @@ export default {
 
       login() {
       if (this.$refs.form.validate()) {
-        this.loginOneId ({ ...this.user_one_id})
+        this.loginOneId()
       }
     },
 

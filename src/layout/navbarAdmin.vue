@@ -12,7 +12,7 @@
           <v-avatar class="mr-2" size="24">
             <v-img src="https://cdn.vuetifyjs.com/images/lists/4.jpg" size="24" />
           </v-avatar>
-          <span class="text-white">{{ user.full_name }}</span>
+          <span class="text-white">{{ `${user_detail.first_name_en} ${user_detail.last_name_en}` }}</span>
         </div>
         <v-menu 
           v-model="menu"
@@ -32,17 +32,19 @@
                 <v-avatar color="brown">
                   <v-img src="https://cdn.vuetifyjs.com/images/lists/4.jpg" size="24" />
                 </v-avatar>
-                <h3>{{ user.full_name }}</h3>
+                <h3>{{ `${user_detail.first_name_en} ${user_detail.last_name_en}` }}</h3>
                 <p class="text-caption mt-1">
-                  {{ user.email }}
+                  {{ user_detail.email }}
                 </p>
                 <v-divider class="my-3"></v-divider>
-                <v-btn depressed rounded text> Edit Profile 
-                  <v-icon>mdi-account-edit-outline</v-icon>
+                <v-btn depressed rounded text>
+                  <v-icon color="#ff6b81">mdi-account-edit-outline</v-icon>
+                  Edit Profile 
                 </v-btn>
                 <v-divider class="my-3"></v-divider>  
-                <v-btn depressed rounded text> Login
-                  <v-icon>mdi-logout</v-icon>
+                <v-btn depressed rounded text @click="logOut"> 
+                  <v-icon color="#ff6b81">mdi-logout</v-icon>
+                  Logout
                 </v-btn>
               </div>
             </v-list-item-content>
@@ -66,7 +68,11 @@
           flat
         >
           <div v-for="(list, list_index) in menu_drawer_list" :key="list_index" >
-            <v-list-item  :class="active_menu === list.to ? 'active-menu-list' : ''" @click="selectMenu('head',list.to)" link v-if="list.child.length === 0">
+            <v-list-item  
+              :class="active_menu === list.to ? 'active-menu-list' : ''" 
+              @click="selectMenu('head',list.to)" 
+              link 
+              v-if="list.child.length === 0">
               <v-list-item-title>{{ list.title }}</v-list-item-title>
             </v-list-item>
             <v-list-group v-else 
@@ -93,7 +99,7 @@
         </v-list>
         <template v-slot:append>
           <v-divider></v-divider>
-          <v-list-item link >
+          <v-list-item link @click="logOut">
             <v-list-item-icon><v-icon>mdi-login</v-icon></v-list-item-icon>
             <v-list-item-title>ออกจากระบบ</v-list-item-title>
           </v-list-item>
@@ -107,6 +113,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   name: "navbarAdmin",
   data: () => ({
@@ -118,9 +125,10 @@ export default {
       full_name: "John Doe",
       email: "john.doe@doe.com",
     },
+    user_detail : null , 
     menu_drawer_list:[
-      { title : "แดชบอร์ด", to:"", child :[], }, // to ให้ใส่ name ของ router
-      { title : "ตารางเรียน", to:"", child :[]},
+      { title : "แดชบอร์ด", to:"dashbord", child :[], }, // to ให้ใส่ name ของ router
+      { title : "ตารางเรียน", to:"Schedule", child :[]},
       { title : "เพิ่มผู้เรียน", to:"Student", child :[]},
       { title : "คอร์สเรียน", to:"", child :[
         { title : "จัดการคอร์สทั้งหมด", to:"CourseList" },
@@ -131,10 +139,13 @@ export default {
       { title : "จัดการผู้ใช้งาน", to:"", child :[
         {title : "จัดการผู้ใช้งาน", to:"UserList"},
       ]},
+      { title : "หน้าผู้ใช้งาน", to:"UserKingdom", child :[]},
     ]
   }),
 
-  created() {},
+  created() {
+    this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
+  },
   mounted() {
     this.menu_drawer_list.forEach((list)=>{
         if(list.to === this.$route.name){
@@ -152,6 +163,9 @@ export default {
   watch: {},
   computed: {},
   methods: {
+    ...mapActions({
+      logOut : "loginModules/logOut"
+    }),
     selectMenu(type, to, head){
       if(type === "child" && head === this.active_menu ){
         this.active_menu_child = to

@@ -84,7 +84,7 @@
             dense
             placeholder="ระบุสถาบันผู้จัดสอน เช่น ศูนย์ดนตรี Manila Tamarind"
             outlined
-            v-model="kingdom.coach"
+            v-model="kingdom.learning_method"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -177,18 +177,21 @@ export default {
     LabelCustom,
     dialogCard,
   },
-  data: () => ({
-    inputValue: "",
-    dialog_show: false,
-    saved: false,
-    preview_url: null,
-    kingdom: {
-      kingdom_name_th: "",
-      kingdom_name_eng: "",
-      detail: "",
-      coach: "",
-    },
-  }),
+  data: () => {
+    return {
+      inputValue: "",
+      dialog_show: false,
+      saved: false,
+      preview_url: null,
+      kingdom: {
+        kingdom_name_th: "",
+        kingdom_name_eng: "",
+        detail: "",
+        learning_method: "",
+      },
+      
+    };
+  },
 
   created() {},
 
@@ -201,7 +204,7 @@ export default {
       return (
         this.kingdom.kingdom_name_th.trim().length > 0 &&
         this.kingdom.kingdom_name_eng.trim().length > 0 &&
-        this.kingdom.coach.trim().length > 0 &&
+        this.kingdom.learning_method.trim().length > 0 &&
         this.kingdom.detail.trim().length > 0
       );
     },

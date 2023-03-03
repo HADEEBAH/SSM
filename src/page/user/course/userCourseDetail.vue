@@ -120,7 +120,7 @@
           <v-btn
             depressed
             class="w-full font-bold white--text"
-            @click="$router.push({ name: 'userCourseOrder' })"
+            @click="registerCourse"
             color="#ff6b81"
           >
             สมัคร
@@ -185,12 +185,19 @@ export default {
   computed: {
     ...mapGetters({
       courses: "OrderModules/getCourses",
+      order: "OrderModules/getOrder",
     }),
   },
   methods: {
     ...mapActions({
       changeCourseData: "OrderModules/changeCourseData",
+      changeOrderData: "OrderModules/changeOrderData",
     }),
+    registerCourse(){
+      this.order.order_step = 1
+      this.changeOrderData(this.order)
+      this.$router.push({name : "userCourseOrder"})
+    }
   },
 };
 </script>

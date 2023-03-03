@@ -1,3 +1,4 @@
+import axios from "axios";
 const CourseModules = {
   namespaced: true,
   state: {
@@ -73,8 +74,12 @@ const CourseModules = {
         },
       ],
     },
+    cuurses :[],
   },
   mutations: {
+    SetCourses(state, payload){
+      state.courses = payload
+    },
     SetCourseData(state, payload){
       state.course_data = payload
     }
@@ -83,6 +88,22 @@ const CourseModules = {
     ChangeCourseData(context, CourseData){
       console.log("CourseData : ",CourseData)
       context.commit("SetCourseData",CourseData)
+    },
+    async GetCurses(context){
+      try{
+        console.log(process.env.APP_URL)
+        let {data} = await axios.get(process.env.APP_URL+"/api/v1/")
+        if(data.statusCode === 200){
+          console.log(data)
+          context.commit("SetCourseData",data.data)
+        }else{
+          throw {message : data.message}
+        }
+    
+      }catch(error){
+        console.log(error)
+      }
+     
     }
   },
   getters: {

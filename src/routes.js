@@ -58,7 +58,7 @@ const routes = [
 
   {
     path: '/admin',
-    name: 'Nav',
+    name: 'Admin',
     component: NavBarAdmin,
     children:[
       {
