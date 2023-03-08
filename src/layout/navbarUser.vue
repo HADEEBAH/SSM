@@ -17,7 +17,7 @@
             <v-avatar class="mx-2" size="24">
               <v-img src="https://cdn.vuetifyjs.com/images/lists/4.jpg" size="24" />
             </v-avatar>
-            <span class="text-white mx-2">{{ user.full_name }}</span>
+            <span class="text-white mx-2">{{ `${user_detail.first_name_en} ${user_detail.last_name_en}` }}</span>
           </div>
           <v-btn icon @click="drawer =!drawer">
             <v-icon>{{ drawer ? 'mdi-chevron-right':"mdi-menu" }}</v-icon>
@@ -51,17 +51,21 @@
         </v-row>
         <v-row dense>
           <v-col cols="12" class="flex align-center justify-center font-bold text-lg">
-            จิตรลดา  สุวรรณโชค
+            {{ `${user_detail.first_name_en} ${user_detail.last_name_en}` }}
           </v-col>
           <v-col cols="12" class="flex align-center justify-center text-sm">
-            jittalada197@gmail.com
+           {{  user_detail.email  }}
           </v-col>
         </v-row>
         <v-list
           nav
         >
           <div v-for="(list, list_index) in menu_drawer_list" :key="list_index" >
-            <v-list-item @click="$router.push({name :  list.to })" :class="menu_drawer_list.length-1 !== list_index ? 'list-items-border-bottom' : ''">
+            <v-list-item v-if=" list.to !== 'logOut'" @click="$router.push({name :  list.to })" :class="menu_drawer_list.length-1 !== list_index ? 'list-items-border-bottom' : ''">
+              <v-list-item-avatar><v-icon color="#ff6b81">{{ list.icon }}</v-icon></v-list-item-avatar>
+              <v-list-item-title :class="$route.name === list.to ? 'text-[#ff6b81]' : ''">{{ list.title }}</v-list-item-title>
+            </v-list-item>
+            <v-list-item v-if=" list.to === 'logOut'" @click="logOut" :class="menu_drawer_list.length-1 !== list_index ? 'list-items-border-bottom' : ''">
               <v-list-item-avatar><v-icon color="#ff6b81">{{ list.icon }}</v-icon></v-list-item-avatar>
               <v-list-item-title :class="$route.name === list.to ? 'text-[#ff6b81]' : ''">{{ list.title }}</v-list-item-title>
             </v-list-item>
@@ -110,7 +114,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 export default {
   name: "navbarUser",
   data: () => ({
@@ -123,20 +127,35 @@ export default {
       email: "john.doe@doe.com",
     },
     menu_drawer_list:[
-      { icon: "mdi-account-circle", title : "โปรไฟล์", to:""},
-      { icon: "mdi-calendar-month", title : "ตารางเรียน", to:""},
-      { icon: "mdi-book-cog-outline", title : "การจัดการ", to:"menageCourse"},
-      { icon: "mdi-history", title : "ประวัติการสั่งซื้อ", to:""},
-      { icon: "mdi-logout", title : "ออกจากระบบ", to:""},
+      { icon: "mdi-account-circle", title : "โปรไฟล์", to:"", roles:[]},
+      { icon: "mdi-calendar-month", title : "ตารางเรียน", to:"", roles:["student", "parent",  "super admin"]},
+      { icon: "mdi-book-cog-outline", title : "การจัดการ", to:"menageCourse", roles:["coach", "super admin"]},
+      { icon: "mdi-history", title : "ประวัติการสั่งซื้อ", to:"", roles:["student","parent","super admin"]},
+      { icon: "mdi-swap-horizontal-bold", title : "หน้าผู้ดูแลระบบ", to:"Admin", roles: ["super admin"]},
+      { icon: "mdi-logout", title : "ออกจากระบบ", to:"logOut", roles:[]},
+      
     ],
-    user_detail : true
+    user_detail : null
   }),
 
   created() {
     this.active_menu = this.$route.name
+    // localStorage.setItem("userDetail",JSON.stringify({
+    //   account_id : "00001",
+    //   email : "Test20@gmail.com",
+    //   first_name_en : "Test",
+    //   first_name_th : "Test",
+    //   last_name_en : "Test 01",
+    //   last_name_th : "Test 01",
+    //   role : { role_id : "01", role_name_th : "โค้ช",role_name_en : "coach" },
+    //   roles : ["coach"],
+    //   tel : "0821241243",
+    // }))
+    this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
   },
   mounted() {
-    this.user_detail = true
+  
+   
   },
   watch: {},
   computed: {
@@ -145,6 +164,9 @@ export default {
     })
   },
   methods: {
+    ...mapActions({
+      logOut : "loginModules/logOut"
+    }),
     selectMenu(type, to, head){
       if(type === "child" && head === this.active_menu ){
         this.active_menu_child = to

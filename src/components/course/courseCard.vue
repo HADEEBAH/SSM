@@ -134,6 +134,7 @@
                 </v-text-field>
               </template>
               <v-date-picker
+                :theme="'ios'"
                 v-model="course_data.course_open_date"
                 @input="inputDate($event, 'course open')"
               ></v-date-picker>

@@ -35,6 +35,7 @@
                 :first-interval="9"
                 :interval-count="12"
                 :event-overlap-threshold="30"
+                @click:event="$router.push({name : 'menageCourseDetail'})"
             >
             <template v-if="type === 'week'" v-slot:day-body="{ date, week }">
                 <div
@@ -166,7 +167,6 @@ export default {
         },
         colorOfDay(){
             this.events.forEach((event)=>{
-                console.log(event)
                 switch (new Date(event.start).getDay()){
                     case 0 :
                         event.color = "#F898A4"

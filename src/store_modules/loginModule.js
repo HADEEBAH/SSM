@@ -27,43 +27,58 @@ const loginModules = {
         //   }
         // }
 
-        async loginOneId(context) {
+        async loginOneId({ rootState, state}) {
             try {
-                let { data } = await axios.post("http://192.168.73.139:3001/api/v1/auth/login", {
-                    "username": context.state.user_one_id.username,
-                    "password": context.state.user_one_id.password,
-                    "grant_type": "password",
-                    "client_id": "767",
-                    "client_secret": "SpJGzNaU3hIOSjQYxZBSFgKSXXxHwNv0ByX1weAb",
-                    // "token": context.state.user_one_id.token,
+                const { data } = await axios.post("http://192.168.72.187:3001/api/v1/auth/login", {
+                    "username": state.user_one_id.username,
+                    "password": state.user_one_id.password,
                 })
-                console.log("testLog");
-                console.log(data)
-                console.log(data.data.first_name_en)
                 if (data.statusCode === 200) {
-                    const payload = {
-                        first_name_en: data.data.first_name_en,
-                        first_name_th: data.data.first_name_th,
-                        last_name_en: data.data.last_name_en,
-                        last_name_th: data.data.last_name_th,
-                        user_profile: data.data.user_profile
+                    let roles = []
+                    data.data.role.forEach((role) => {
+                        roles.push(role.role_name_en.toLowerCase())
+                    });
+                    let payload = {
+                        account_id : data.data.account_id,
+                        email : data.data.email,
+                        first_name_en : data.data.first_name_en,
+                        first_name_th : data.data.first_name_th,
+                        last_name_en : data.data.last_name_en,
+                        last_name_th : data.data.last_name_th,
+                        role : data.data.role,
+                        roles : roles,
+                        tel : data.data.tel,
                     }
                     VueCookie.set("token", data.data.token)
-                    localStorage.setItem("userDetail", JSON.stringify(payload))
-                    let data_local = JSON.parse(localStorage.getItem("userDetail"))
-                    console.log("data_local", data_local);
-                    router.push({ name: "UserKingdom" });
-                } else { throw { message: data.message } }
-            } catch (error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: error.message,
-                })
+                    localStorage.setItem("userDetail",JSON.stringify(payload))
+                    if(rootState.OrderModules.order.order_step > 0){
+                        router.replace({ name: "userCourseOrder" });
+                    }else{
+                        router.replace({ name: "UserKingdom" });
+                    }
+                } 
+            } catch ({response}) {
+                console.log(response)
+                if( response.status === 401){
+                    Swal.fire({
+                        icon: 'error',
+                        title:"ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง",
+                    }) 
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: "เกิดข้อผิกพลาด",
+                    }) 
+                    console.log(response)
+                }
             }
 
         },
-
-
+        logOut(){
+            VueCookie.delete("token")
+            localStorage.removeItem("userDetail")
+            router.push({ name: "Login" });
+        }
     },
     getters: {
         getUserOneId(state) {

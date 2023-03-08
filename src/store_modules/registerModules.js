@@ -24,13 +24,26 @@ const RegisterModules = {
     },
     UserOneId(state, payload){
       state.user_one_id = payload
+    },
+    ResetUserOneID(state){
+      state.user_one_id  =  {
+        firstname_th : "",
+        lastname_th : "",
+        firstname_en : "",
+        lastname_en : "",
+        phone_number : "",
+        username : "",
+        password : "",
+        confirm_password : "",
+        accept_terms : false,
+      }
     }
   },
   actions: {
     async registerUserOneId(context){
       try{
         let phone_number = context.state.user_one_id.phone_number.replaceAll("-","")
-        let {data} = await axios.post(" http://192.168.74.34:3000/api/v1/auth/register",{
+        let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/register`,{
           "accountTitleTh": "",
           "firstNameTh": context.state.user_one_id.firstname_th,
           "lastNameTh": context.state.user_one_id.lastname_th,
@@ -45,21 +58,31 @@ const RegisterModules = {
           "passWord": context.state.user_one_id.password
         })
         console.log(data)
+        
         if(data.statusCode === 201){
+          context.commit("ResetUserOneID")
           Swal.fire({
             icon: 'success',
-            title: data.data.message,
+            title: "ลงทะเบียนสำเร็จ",
           }).then((result)=>{
             if(result.isConfirmed){
               router.push({name : 'Login'})
             }
           })
-        } else { throw {message: data.message } }
-      }catch(error){
-        Swal.error({
-          icon: 'error',
-          title: error.message,
-        })
+        }
+      }catch({response}){
+        if(response.status === 400){
+          console.log(response)
+          Swal.fire({
+            icon: 'error',
+            title: `กรอกข้อมูลให้ถูกต้อง`,
+          })
+        }else{
+          Swal.fire({
+            icon: 'error',
+            title: `เกิคข้อผิดพลาด`,
+          })
+        }
       }
     },
     changeDialogRegisterOneId(context, value){
@@ -84,7 +107,6 @@ const RegisterModules = {
     },
     changeUserOneId(context, data){
       context.state.user_one_id = data
-      console.log(context.state.user_one_id)
     },
   },
   getters :{
