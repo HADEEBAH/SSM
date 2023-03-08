@@ -3,35 +3,39 @@ import NavBarAdmin from '@/layout/navbarAdmin.vue'
 import NavBarUser from '@/layout/navbarUser.vue'
 import AuthLayout from '@/layout/authAdminLayout.vue'
 //Auth
-import RegisterPage from '@/page/auth/registerPage'
+import RegisterPage from '@/page/auth/registerPage.vue'
 import Login from '@/page/auth/loginPage.vue'
-import UserCreate from '@/page/admin/user_menage/userCreate'
-import UserDetail from '@/page/admin/user_menage/userDetail'
+import UserCreate from '@/page/admin/user_menage/userCreate.vue'
+import UserDetail from '@/page/admin/user_menage/userDetail.vue'
 // Course 
 import Kingdom from '@/components/admin/kingdomPage.vue'
-import CourseCreate from '@/page/admin/course/courseCreate'
-import CourseList from '@/page/admin/course/courseList'
-import CourseDetail from '@/page/admin/course/courseDetail'
+import CourseCreate from '@/page/admin/course/courseCreate.vue'
+import CourseList from '@/page/admin/course/courseList.vue'
+import CourseDetail from '@/page/admin/course/courseDetail.vue'
 // Finance
-import FinanceList from '@/page/admin/finance/financeList'
-import FinanceDetail from '@/page/admin/finance/financeDetail'
+import FinanceList from '@/page/admin/finance/financeList.vue'
+import FinanceDetail from '@/page/admin/finance/financeDetail.vue'
 // Manage User  
 import Student from '@/components/admin/createStudent.vue'
-import UserList from '@/components/admin/userList.vue'
+import UserList from '@/page/admin/user_menage/userList.vue'
 //User
 import UserKingdom from '@/page/user/catagory/userKingdom.vue'
 import CartList from '@/page/user/cart/cartList.vue'
+import StudentProfile from '@/page/user/profile/studentProfile.vue'
+import ParentProfile from '@/page/user/profile/parentProfile.vue'
+import ParentsDetail from '@/page/user/profile/parentsDetail.vue'
+import StudentsDetailInParents from '@/page/user/profile/studentsDetailInParents.vue'
 //auth
 // import UserLoginPage from '@/page/auth/userLoginPage'
 
 //User Course 
-import userCourseList from '@/page/user/course/userCourseList'
-import userCourseDetail from '@/page/user/course/userCourseDetail'
-import userCoursePackage from '@/page/user/course/userCoursePackage'
-import userCourseOrder from '@/page/user/course/userCourseOrder'
+import userCourseList from '@/page/user/course/userCourseList.vue'
+import userCourseDetail from '@/page/user/course/userCourseDetail.vue'
+import userCoursePackage from '@/page/user/course/userCoursePackage.vue'
+import userCourseOrder from '@/page/user/course/userCourseOrder.vue'
 //User menage Course 
-import userMenageCourse from '@/page/user/coach/menageCourse'
-import userMenageCourseDetail from '@/page/user/coach/menageCourseDetail'
+import userMenageCourse from '@/page/user/coach/menageCourse.vue'
+import userMenageCourseDetail from '@/page/user/coach/menageCourseDetail.vue'
 const routes = [
   {
     path: '/auth',
@@ -50,11 +54,6 @@ const routes = [
       },
     ]
   },
-  // {
-  //   path: '/userlogin',
-  //   name: 'UserLoginPage',
-  //   component: UserLoginPage,
-  // },
 
   {
     path: '/admin',
@@ -158,6 +157,26 @@ const routes = [
         path: 'cartList',  
         name: 'CartList',
         component: CartList,
+      },
+      {
+        path: 'studentProfile',  
+        name: 'StudentProfile',
+        component: StudentProfile,
+      },
+      {
+        path: 'parentProfile',  
+        name: 'ParentProfile',
+        component: ParentProfile,
+      },
+      {
+        path: 'parentsDetail',  
+        name: 'ParentsDetail',
+        component: ParentsDetail,
+      },
+      {
+        path: 'studentsDetailInParents',  
+        name: 'StudentsDetailInParents',
+        component: StudentsDetailInParents,
       },
     ]
   },
