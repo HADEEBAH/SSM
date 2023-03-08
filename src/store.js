@@ -9,6 +9,7 @@ import NavberUserModules from '@/store_modules/navberUserModules'
 import CartListModules from '@/store_modules/cartListModules'
 import UserManageModules from '@/store_modules/userManageModules'
 import CategoryModules from './store_modules/categoryModules'
+import ProfileModules from '@/store_modules/profileModules'
 
 
 
@@ -25,6 +26,7 @@ const store = new Vuex.Store({
     CartListModules: CartListModules,
     UserManageModules: UserManageModules,
     CategoryModules: CategoryModules,
+    ProfileModules: ProfileModules,
 
 
   }

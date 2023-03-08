@@ -64,6 +64,7 @@
             placeholder="กรอกชื่ออาณาจักร"
             outlined
             v-model="kingdom.kingdom_name_th"
+            @keypress="validate($event, 'th')"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -73,6 +74,7 @@
             placeholder="กรอกชื่ออาณาจักร"
             outlined
             v-model="kingdom.kingdom_name_eng"
+            @keypress="validate($event, 'en')"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -168,6 +170,7 @@
 import headerPage from "@/components/header/headerPage.vue";
 import LabelCustom from "../label/labelCustom.vue";
 import dialogCard from "@/components/dialog/dialogCard.vue";
+import { inputValidation } from "@/functions/functions";
 import Swal from "sweetalert2";
 import axios from "axios";
 export default {
@@ -202,7 +205,8 @@ export default {
         this.kingdom.kingdom_name_th.trim().length > 0 &&
         this.kingdom.kingdom_name_eng.trim().length > 0 &&
         this.kingdom.coach.trim().length > 0 &&
-        this.kingdom.detail.trim().length > 0
+        this.kingdom.detail.trim().length > 0 &&
+        this.preview_url.trim().length > 0
       );
     },
 
@@ -236,7 +240,8 @@ export default {
           try {
             console.log("preview_url", this.preview_url);
             let { data } = await axios.post(
-              "http://192.168.72.187:3000/api/category",
+              // "http://192.168.72.187:3000/api/category",
+              "https://waraphat.alldemics.com/api/category",
               {
                 category_name_th: this.kingdom.kingdom_name_th,
                 category_name_eng: this.kingdom.kingdom_name_eng,
@@ -274,6 +279,9 @@ export default {
         console.log(this.preview_url);
       };
       reader.readAsDataURL(this.file);
+    },
+    validate(e, type) {
+      inputValidation(e, type);
     },
   },
 };

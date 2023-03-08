@@ -29,7 +29,7 @@ const loginModules = {
 
         async loginOneId(context) {
             try {
-                let { data } = await axios.post("http://192.168.72.187:3001/api/v1/auth/login", {
+                let { data } = await axios.post("http://192.168.73.139:3001/api/v1/auth/login", {
                     "username": context.state.user_one_id.username,
                     "password": context.state.user_one_id.password,
                     "grant_type": "password",
@@ -46,6 +46,7 @@ const loginModules = {
                         first_name_th: data.data.first_name_th,
                         last_name_en: data.data.last_name_en,
                         last_name_th: data.data.last_name_th,
+                        user_profile: data.data.user_profile
                     }
                     VueCookie.set("token", data.data.token)
                     localStorage.setItem("userDetail", JSON.stringify(payload))

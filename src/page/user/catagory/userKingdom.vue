@@ -66,10 +66,14 @@
             :key="item.id"
           >
             <v-card class="rounded-xl" @click="selectedCategory(item)">
-
               <v-img
-                class="center text-white rounded-t-xl "
-                height="200" width="150" 
+                style="
+                  display: block;
+                  margin-left: auto;
+                  margin-right: auto;
+                  border-top-left-radius: 0.75rem;
+                  border-top-right-radius: 0.75rem;
+                "
                 :src="
                   item.img_url
                     ? item.img_url

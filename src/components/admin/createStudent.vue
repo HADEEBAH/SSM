@@ -796,7 +796,22 @@ export default {
 
   created() {},
 
-  mounted() {},
+  mounted() {
+    this.order.courses.push({
+        course_type: "general_course",
+        package: "",
+        time_period: "",
+        time_count: 0,
+        day: "",
+        time: "",
+        coach: "",
+        start_day: "",
+        price: 0,
+        remark: "",
+        parents: [],
+        students: [],
+      });
+  },
 
   methods: {
     ...mapActions({
