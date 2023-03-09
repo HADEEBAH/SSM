@@ -243,8 +243,7 @@ export default {
           try {
             console.log("preview_url", this.preview_url);
             let { data } = await axios.post(
-              // "http://192.168.72.187:3000/api/category",
-              "https://waraphat.alldemics.com/api/category",
+              `${process.env.VUE_APP_URL}/api/category`,
               {
                 category_name_th: this.kingdom.kingdom_name_th,
                 category_name_eng: this.kingdom.kingdom_name_eng,
@@ -253,13 +252,13 @@ export default {
                 taught_by: this.kingdom.coach,
               }
             );
-            console.log(data);
             if (data.statusCode === 201) {
               this.dialog_show = true;
             } else {
               throw { message: data.message };
             }
           } catch (error) {
+            console.log(error);
             Swal.fire({
               icon: "error",
               title: error.message,

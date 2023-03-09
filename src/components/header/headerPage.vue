@@ -11,7 +11,7 @@
         </template>
       </v-row>
     </v-col>
-    <v-col cols="12" sm="auto" align="right">
+    <v-col v-if="slot_tag" cols="12" sm="auto" align="right">
       <slot></slot>
     </v-col>
   </v-row>
@@ -21,7 +21,8 @@ export default {
   name: "headerPage",
   props:{
     title:{type : String},
-    breadcrumbs : {type: Array}
+    breadcrumbs : {type: Array},
+    slot_tag: {type: Boolean}
   },
   data: () => ({}),
 

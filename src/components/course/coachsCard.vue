@@ -35,7 +35,9 @@
                         :filled="disable"
                         v-model="coach.coach_name"
                         color="#FF6B81"
-                        :items="courses"
+                        :items="coachs"
+                        item-value="account_id"
+                        item-text="full_name"
                         item-color="pink"
                         :rules="rules.course"
                         placeholder="โค้ช"
@@ -49,10 +51,10 @@
                         </template>
                         <template v-slot:item="{ item }" >
                         <v-list-item-content >
-                            <v-list-item-title ><span :class="coach.coach_name === item ? 'font-bold':''">{{ item }}</span></v-list-item-title>
+                            <v-list-item-title ><span :class="coach.coach_name === item.account_id ? 'font-bold':''">{{ item.full_name }}</span></v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-action>
-                            <v-icon v-if="coach.coach_name === item">mdi-check-circle</v-icon>
+                            <v-icon v-if="coach.coach_name === item.account_id">mdi-check-circle</v-icon>
                         </v-list-item-action>
                         </template>  
                     </v-autocomplete>
@@ -106,80 +108,39 @@
                 <template
                     v-for="(class_date, class_date_index ) in teach_day.class_date">
                     <v-row dense
-                        class="flex align-center justify-end"
+                        class="d-flex align-center"
                         :key="`${class_date_index}-date`"
                     >
-                        <v-col cols="12" sm="4">
+                        <v-col cols="12" sm="5">
                             <label-custom required text="ช่วงเวลา"></label-custom>
-                            <v-row>
-                                <v-col>
-                                    <v-menu
-                                    v-model="class_date.class_date_range.menu_start_time"
-                                    :close-on-content-click="false"
-                                    transition="scale-transition"
-                                    offset-y
-                                    min-width="auto"
-                                    >
-                                    <template v-slot:activator="{ on, attrs }">
-                                        <v-text-field
-                                        dense
-                                        :disabled="disable"
-                                        :outlined="!disable"
-                                        :filled="disable"
-                                        :rules="rules.start_time"
-                                        placeholder="โปรดเลือกเวลา"
+                            <v-row class="mb-3">
+                                <v-col cols="12" sm="auto"> 
+                                    <TimePicker
+                                        style="width:100% !important"
+                                        class="w-full"
+                                        :minuteStep="60"
+                                        format="HH:mm"
+                                        :class="class_date.class_date_range.start_time? 'active' : ''"
+                                        placeholder="เวลาเริ่มต้น"
                                         v-model="class_date.class_date_range.start_time"
-                                        readonly
-                                        v-bind="attrs"
-                                        v-on="on"
-                                        >
-                                        <template v-slot:append>
-                                            <v-icon :color="class_date.class_date_range.start_time ? '#FF6B81': ''">mdi-clock-outline</v-icon>
-                                        </template>
-                                        </v-text-field>
-                                    </template>
-                                    <v-time-picker
-                                        v-model="class_date.class_date_range.start_time"
-                                    ></v-time-picker>
-                                    </v-menu>
+                                        ></TimePicker>
                                 </v-col>
-                                <v-col cols="auto" class="mt-2 px-0"
+                                <v-col v-if="$vuetify.breakpoint.smAndUp" cols="auto"  class="mt-2 px-0"
                                     ><v-icon>mdi-minus</v-icon></v-col
                                 >
-                                <v-col>
-                                    <v-menu
-                                    v-model="class_date.class_date_range.menu_end_time"
-                                    :close-on-content-click="false"
-                                    transition="scale-transition"
-                                    offset-y
-                                    min-width="auto"
-                                    >
-                                    <template v-slot:activator="{ on, attrs }">
-                                        <v-text-field
-                                        dense
-                                        :disabled="disable"
-                                        :outlined="!disable"
-                                        :filled="disable"
-                                        :rules="rules.end_time"
-                                        placeholder="โปรดเลือกเวลา"
+                                <v-col cols="12" sm="auto">
+                                    <TimePicker
+                                        style="width:100% !important"
+                                        :minuteStep="60"
+                                        format="HH:mm"
+                                        :class="class_date.class_date_range.end_time? 'active' : ''"
+                                        placeholder="เวลาสิ้นสุด"
                                         v-model="class_date.class_date_range.end_time"
-                                        readonly
-                                        v-bind="attrs"
-                                        v-on="on"
-                                        >
-                                        <template v-slot:append>
-                                            <v-icon :color="class_date.class_date_range.end_time? '#FF6B81': ''">mdi-clock-outline</v-icon>
-                                        </template>
-                                        </v-text-field>
-                                    </template>
-                                    <v-time-picker
-                                        v-model="class_date.class_date_range.end_time"
-                                    ></v-time-picker>
-                                    </v-menu>
+                                        ></TimePicker>
                                 </v-col>
-                                </v-row>
+                            </v-row>
                         </v-col>
-                        <v-col cols="12" sm="4">
+                        <v-col cols="12" sm="3">
                             <label-custom
                                 required
                                 text="นักเรียนที่รับได้"
@@ -233,13 +194,18 @@
 <script>
     import LabelCustom from "../label/labelCustom.vue";
     import { mapGetters, mapActions } from 'vuex';
+    import { Input, TimePicker } from 'ant-design-vue';
     export default {
         components: {
-            LabelCustom
+            LabelCustom,
+            TimePicker
         },
         props:{
             color : {type:String , default:'#fcfcfc'},
             disable : {type: Boolean}
+        },
+        directives: {
+            'ant-input': Input,
         },
         data: () => ({
             days: [
@@ -251,7 +217,10 @@
                 { label: "วันศุกร์", value: "Friday" },
                 { label: "วันเสาร์", value: "Saturday" },
             ],
-            courses: ["โค้ชหนุ่ม", "โค้ชพอล"],
+            coachs: [ 
+                {account_id : "16775648309278", first_name_th : 'ฟาติมา', last_name_th : 'จูฮัน', full_name : "ฟาติมา จูฮัน"} ,
+                {account_id : "4294589844485338", first_name_th : 'ทดสอบ', last_name_th : 'ทดสอบ', full_name : "ทดสอบ ทดสอบ"}
+            ],
             rules: {  
                 course: [val => (val || '').length > 0 || 'โปรดเลือกโค้ช'],
                 class_date: [val => (val || '').length > 0 || 'โปรดเลือกวันที่'],

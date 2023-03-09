@@ -5,8 +5,8 @@ import AuthLayout from '@/layout/authAdminLayout.vue'
 //Auth
 import RegisterPage from '@/page/auth/registerPage.vue'
 import Login from '@/page/auth/loginPage.vue'
-import UserCreate from '@/page/admin/user_menage/userCreate.vue'
-import UserDetail from '@/page/admin/user_menage/userDetail.vue'
+import UserCreate from '@/page/admin/user_manage/userCreate'
+import UserDetail from '@/page/admin/user_manage/userDetail'
 // Course 
 import Kingdom from '@/components/admin/kingdomPage.vue'
 import CourseCreate from '@/page/admin/course/courseCreate.vue'
@@ -17,7 +17,7 @@ import FinanceList from '@/page/admin/finance/financeList.vue'
 import FinanceDetail from '@/page/admin/finance/financeDetail.vue'
 // Manage User  
 import Student from '@/components/admin/createStudent.vue'
-import UserList from '@/page/admin/user_menage/userList.vue'
+//import UserList from '@/page/admin/user_menage/userList.vue'
 //User
 import UserKingdom from '@/page/user/catagory/userKingdom.vue'
 import CartList from '@/page/user/cart/cartList.vue'
@@ -34,8 +34,8 @@ import userCourseDetail from '@/page/user/course/userCourseDetail.vue'
 import userCoursePackage from '@/page/user/course/userCoursePackage.vue'
 import userCourseOrder from '@/page/user/course/userCourseOrder.vue'
 //User menage Course 
-import userMenageCourse from '@/page/user/coach/menageCourse.vue'
-import userMenageCourseDetail from '@/page/user/coach/menageCourseDetail.vue'
+import userMenageCourse from '@/page/user/coach/manageCourse'
+import userMenageCourseDetail from '@/page/user/coach/manageCourseDetail'
 const routes = [
   {
     path: '/auth',
@@ -70,11 +70,11 @@ const routes = [
         name: 'UserDetail',
         component: UserDetail,
       },
-      {
-        path: 'userList',
-        name: 'UserList',
-        component: UserList,
-      },
+      // {
+      //   path: 'userList',
+      //   name: 'UserList',
+      //   component: UserList,
+      // },
       {
         path: 'course/create',  
         name: 'CourseCreate',

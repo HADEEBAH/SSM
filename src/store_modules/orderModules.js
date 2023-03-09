@@ -23,6 +23,62 @@ const orderModules = {
             students: [],
 
         },
+        // เขียนใน API
+        order_data : {
+            courses:[{
+                    course_id : "",
+                    course_type_id : "",
+                    category_id : "",
+                    category_name : "",
+                    option_id : "",
+                    option_name : "",
+                    package_id:"",
+                    package_name : "",
+                    day_of_weer_id : "",
+                    day_of_weer : "",
+                    time_id : "",
+                    time : "",
+                    start_date : "",
+                    remark : "",
+                    price : "",
+                    coahc : {
+                        account_id : " ",
+                    },
+                    students :[ {
+                        account_id : "",
+                        username: "",
+                        firstname: "",
+                        lastname: "",
+                        tel: "",
+                        is_other: false,
+                        parents: [{
+                            account_id : "",
+                            username: "",
+                            firstname: "",
+                            lastname: "",
+                                tel: "",
+                        }]
+                    },{
+                        account_id : '',
+                        username: "",
+                        firstname: "",
+                        lastname: "",
+                        tel: "",
+                        is_other: true,
+                        parents: [{
+                            account_id : "",
+                            username: "",
+                            firstname: "",
+                            lastname: "",
+                                tel: "",
+                        }]
+                    }],
+                }   
+            ],
+            payment_status: "",
+            payment_type: "",
+            total_price: 0,
+        },
         order: {
             order_step : 0,
             order_id: "",
@@ -45,9 +101,7 @@ const orderModules = {
                     lastname: "",
                     tel: "",
                     is_other: false,
-                    parents: [
-
-                    ]
+                    parents: []
                 },
             ],
             courses: [],

@@ -114,24 +114,24 @@
                 <v-btn
                   v-if="step > 1"
                   color="#FF6B81"
-                  style="width: 120px"
+                  :class="$vuetify.breakpoint.smAndDown ? 'w-full' : ''"
                   text
                   @click="step = step - 1"
                   >ย้อนกลับ</v-btn
                 >
               </v-col>
-              <v-col cols="auto" v-if="step < 3">
+              <v-col cols="12" sm="auto" v-if="step < 3">
                 <v-btn
                   dark
                   color="#FF6B81"
+                  :class="$vuetify.breakpoint.smAndDown ? 'w-full' : 'btn-size-lg'"
                   class="white--text"
-                  style="width: 120px"
                   depressed
                   @click="step = step + 1"
                   >ถัดไป</v-btn
                 >
               </v-col>
-              <v-col cols="auto" v-else>
+              <v-col cols="12" sm="auto" v-else>
                 <v-btn
                   color="#FF6B81"
                   class="white--text w-full"

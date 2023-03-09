@@ -141,11 +141,10 @@ export default {
         this.loginOneId()
       }
     },
-
     toRegisterPage() {
-      this.$router.push({ name: "Register" });
+      console.log("Register")
+      this.$router.replace({ name: "Register" });
     },
-
     validate(e, type) {
       inputValidation(e, type);
     },

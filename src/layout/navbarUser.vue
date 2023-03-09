@@ -140,17 +140,17 @@ export default {
 
   created() {
     this.active_menu = this.$route.name
-    // localStorage.setItem("userDetail",JSON.stringify({
-    //   account_id : "00001",
-    //   email : "Test20@gmail.com",
-    //   first_name_en : "Test",
-    //   first_name_th : "Test",
-    //   last_name_en : "Test 01",
-    //   last_name_th : "Test 01",
-    //   role : { role_id : "01", role_name_th : "โค้ช",role_name_en : "coach" },
-    //   roles : ["coach"],
-    //   tel : "0821241243",
-    // }))
+    localStorage.setItem("userDetail",JSON.stringify({
+      account_id : "00001",
+      email : "Test20@gmail.com",
+      first_name_en : "Test",
+      first_name_th : "Test",
+      last_name_en : "Test 01",
+      last_name_th : "Test 01",
+      role : { role_id : "01", role_name_th : "โค้ช",role_name_en : "coach" },
+      roles : ["coach"],
+      tel : "0821241243",
+    }))
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
   },
   mounted() {
