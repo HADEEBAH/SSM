@@ -12,7 +12,7 @@
           ></headerCard>
           <v-divider class="mx-10"></v-divider>
 
-          <v-card class="mt-10 ml-10 mr-10" color="#FCFCFC">
+          <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
             <v-card-text class="mt-3">
               <v-row align="center">
                 <v-col cols="12" sm="4">
@@ -54,61 +54,72 @@
             </v-card-text>
           </v-card>
           <div v-if="isMatch === true">
-            <v-card class="mt-10 ml-10 mr-10" color="#FCFCFC">
+            <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
               <v-card-text class="mt-3">
                 <v-row>
-                  <v-col cols="12" sm="3">
-                    <v-card class="rounded-circle border-8">
-                      <div
-                        @click="openFileSelector"
-                        class="upload-photo rounded-circle border-dashed border-4"
+                  <v-col cols="12" sm="4">
+                    <div class="profileCard" @click="openFileSelector">
+                      <v-img
+                        v-if="!previewUrl"
+                        src="@/assets/userManagePage/imgcard.png"
+                        class="iconInCard drop-shadow-md"
                       >
-                        <v-card-text class="upload-photo pa-3">
+                      </v-img>
+
+                      <v-img
+                        v-else
+                        src="@/assets/userManagePage/imgcardafterupload.png"
+                        class="iconInCard drop-shadow-md"
+                        style="position: relative"
+                      >
+                      </v-img>
+
+                      <div style="position: absolute">
+                        <div v-if="previewUrl !== null">
                           <img
                             :src="previewUrl"
                             v-if="previewUrl"
-                            class="rounded-full"
-                            style="height: 150px; width: 200px"
+                            class="profileInCard"
                           />
-                          <v-row v-if="!previewUrl" class="rounded-circle">
-                            <v-col
-                              cols="12"
-                              class="flex align-center justify-center"
-                            >
-                              <v-img
-                                src="@/assets/userManagePage/uploadPhoto.png"
-                                max-height="30"
-                                max-width="30"
-                              >
-                              </v-img>
-                            </v-col>
-                            <v-col
-                              cols="12"
-                              class="flex align-center justify-center text-h5"
-                            >
-                              Upload Photo
-                            </v-col>
-                            <v-col
-                              cols="12"
-                              class="flex align-center justify-center text-caption text-center text-sm"
-                            >
-                              ต้องเป็นไฟล์ภาพ( PNG JPG ) เท่านั้น ขนาดภาพไม่เกิน
-                              500 Mb
-                            </v-col>
-                            <input
-                              ref="fileInput"
-                              type="file"
-                              @change="uploadFile"
-                              style="display: none"
-                              class="rounded-full"
-                            />
-                          </v-row>
-                        </v-card-text>
-                        <!-- <v-card-text v-if="">
-  
-                        </v-card-text> -->
+
+                          <v-img
+                            src="@/assets/userManagePage/camera.png"
+                            max-height="30"
+                            max-width="30"
+                            class="camera"
+                          >
+                          </v-img>
+                        </div>
+
+                        <div v-if="!previewUrl">
+                          <v-img
+                            src="@/assets/userManagePage/uploadPhoto.png"
+                            max-height="30"
+                            max-width="30"
+                            class="mx-15"
+                          >
+                          </v-img>
+                          <v-spacer class="text-center">Upload Photo</v-spacer>
+                          <v-spacer class="text-center"
+                            >ต้องเป็นไฟล์ภาพ</v-spacer
+                          >
+                          <v-spacer class="text-center"
+                            >( PNG JPG ) เท่านั้น</v-spacer
+                          >
+                          <v-spacer class="text-center"
+                            >ขนาดภาพไม่เกิน 500 Mb</v-spacer
+                          >
+                        </div>
+                        <input
+                          ref="fileInput"
+                          type="file"
+                          @change="uploadFile"
+                          style="display: none"
+                          class="rounded-full"
+                          accept="image/*"
+                        />
                       </div>
-                    </v-card>
+                    </div>
                   </v-col>
 
                   <v-col>
@@ -215,7 +226,7 @@
               :title="title2"
             ></headerCard>
             <v-divider class="mx-10"></v-divider>
-            <v-card class="mt-10 ml-10 mr-10" color="#FCFCFC">
+            <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
               <v-card-text class="mt-3">
                 <v-row class="mr-3 ml-3">
                   <v-col cols="12" sm="6">
@@ -306,7 +317,7 @@
                 v-if="user_data.privilege.includes('ผู้ปกครอง')"
               >
                 <v-checkbox
-                  v-model="selectedbox"
+                  v-model="user_data.selectedbox"
                   label="ต้องการเพิ่มนักเรียนในการดูแล"
                   value="Jacob"
                   color="pink"
@@ -324,7 +335,7 @@
                 v-if="user_data.privilege.includes('นักเรียน')"
               >
                 <v-checkbox
-                  v-model="selectedboxParent"
+                  v-model="user_data.selectedboxParent"
                   label="ต้องการเพิ่มผู้ปกครอง"
                   value="parent"
                   color="pink"
@@ -335,7 +346,7 @@
             </v-row>
 
             <!-- Card Add Students -->
-            <div v-if="isCardOpen">
+            <div v-if="user_data.isCardOpen">
               <headerCard
                 class="ml-6 mt-8"
                 :icon="'mdi-file-plus-outline'"
@@ -346,8 +357,9 @@
               <v-card
                 class="mt-10 ml-10 mr-10"
                 color="#FCFCFC"
-                v-for="(student, student_index) in students"
+                v-for="(student, student_index) in students.students_detail"
                 :key="`${student_index}-student`"
+                
               >
                 <v-card-text class="mt-3">
                   <v-row dense>
@@ -356,7 +368,7 @@
                         larg
                         color="#FF6B81"
                         @click="removeCardStudent(student_index)"
-                        v-if="student.length >= 2"
+                        v-if="students.students_detail.length >= 2"
                       >
                         mdi-delete
                       </v-icon>
@@ -372,7 +384,7 @@
                         v-bind:disabled="isDisabled"
                         @keypress="validate($event, 'en', 'number')"
                         hide-details
-                        v-model="students.username"
+                        v-model="student.username"
                         :rules="rules.name"
                         outlined
                         dense
@@ -439,21 +451,19 @@
                       >
                       </v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" align="right">
-                      <v-btn
-                        outlined
-                        class="btn3 mt-10 centerbtn"
-                        color="#ff6b81"
-                        @click="addStudents"
-                      >
-                        <span class="mdimdi-plus-circle-outline"
-                          >เพิ่มคอร์ส</span
-                        >
-                      </v-btn>
-                    </v-col>
                   </v-row>
                 </v-card-text>
               </v-card>
+              <v-col cols="12" sm="6" align="right">
+                <v-btn
+                  outlined
+                  class="btn3 mt-10 "
+                  color="#ff6b81"
+                  @click="addStudentsCard"
+                >
+                  <span class="mdimdi-plus-circle-outline">เพิ่มนักเรียน</span>
+                </v-btn>
+              </v-col>
               <!-- TABLE -->
               <div class="my-5 mx-10">
                 <!-- :items="datausers"
@@ -490,7 +500,7 @@
             </div>
 
             <!-- Card Add Parent -->
-            <div v-if="isCardParentOpen">
+            <div v-if="user_data.isCardParentOpen">
               <headerCard
                 class="ml-6 mt-8"
                 :icon="'mdi-file-plus-outline'"
@@ -498,11 +508,7 @@
                 :title="addParentData"
               ></headerCard>
               <v-divider class="mx-10"></v-divider>
-              <v-card
-                class="mt-10 ml-10 mr-10"
-                color="#FCFCFC"
-     
-              >
+              <v-card class="mt-10 ml-10 mr-10" color="#FCFCFC">
                 <v-card-text class="mt-3">
                   <v-row dense align="center">
                     <v-col cols="12" sm="6">
@@ -583,7 +589,53 @@
                   </v-row>
                 </v-card-text>
               </v-card>
+            <!-- Table -->
+            <div>
+              <headerCard
+                  class="ml-6 mt-8"
+                  :icon="'mdi-school-outline'"
+                  :icon_color="'#FF6B81'"
+                  :title="title3"
+                ></headerCard>
+                <v-divider class="mx-10"></v-divider>
+                <div class="my-5 mx-10">
+                    <!-- :items="datausers"
+                  :search="search"
+                  :page.sync="page"
+                  :items-per-page="itemsPerPage"
+                  :sort-by="user_data.sortBy" -->
+                    <v-data-table
+                      :headers="headersTabs"
+                      @page-count="pageCount = $event"
+                      class="elevation-1 header-table"
+                    >
+                      <template v-slot:[`item.actions`]="{ item }">
+                        <v-icon small color="#FF6B81"> mdi-eye-outline </v-icon>
+                        <v-icon
+                          small
+                          class="ml-5"
+                          color="#FF6B81"
+                          @click="editItem(item)"
+                        >
+                          mdi-pencil
+                        </v-icon>
+                        <v-icon
+                          class="ml-5"
+                          small
+                          color="#FF6B81"
+                          @click="deleteItem(item)"
+                        >
+                          mdi-delete
+                        </v-icon>
+                      </template>
+                    </v-data-table>
+                  </div>
+
+              </div>
+
             </div>
+
+           
           </div>
 
           <!-- Dialog ONE ID -->
@@ -629,7 +681,7 @@
               :color="isInputValid ? '#ff6b81' : ''"
               @click="edit()"
             >
-            <span class="mdi mdi-pencil-outline"></span> แก้ไข
+              <span class="mdi mdi-pencil-outline"></span> แก้ไข
             </v-btn>
           </v-col>
         </v-card>
@@ -694,7 +746,7 @@ export default {
     //     firstname: "",
     //     lastname: "",
     //     tel: "",
-    //   },
+    //   },changeUserData
     // ],
     // parents: [
     //   {
@@ -731,6 +783,16 @@ export default {
       { text: "ระยะเวลา", value: "role", sortable: false },
       { text: "วัน - เวลา", value: "actions", sortable: false },
     ],
+    headersTabs: [
+      { text: "ชื่อ-นามสกุล", value: "name,lastname", sortable: false },
+      { text: "ชื่อคอร์ส", value: "lastname", sortable: false },
+      { text: "แพ็คเกจ", value: "email", sortable: false },
+      { text: "โค้ช", value: "username", sortable: false },
+      { text: "ประเภท", value: "oneid", sortable: false },
+      { text: "ระยะเวลา", value: "role", sortable: false },
+      { text: "วัน - เวลา", value: "actions", sortable: false },
+      { text: "ราคา", value: "price", sortable: false },
+    ],
     period: ["admin", "Super admin", "โค้ช", "ผู้ปกครอง"],
     breadcrumbs: [
       { text: "จัดการผู้ใช้งาน", to: "UserList" },
@@ -738,6 +800,7 @@ export default {
     ],
     title: "ข้อมูลผู้ใช้งาน",
     title2: "การจัดการสิทธิ์",
+    title3: "ข้อมูลคอร์สเรียน",
     addStudentData: "เพิ่มข้อมูลผู้ใช้นักเรียน",
     addParentData: "เพิ่มข้อมูลผู้ใช้ของผู้ปกครอง",
     rules: {
@@ -762,21 +825,29 @@ export default {
     },
 
     clickCount: 0,
-    selectedbox: false,
-    isCardOpen: false,
-    selectedboxParent: false,
-    isCardParentOpen: false,
   }),
 
   created() {},
   mounted() {
     if (this.$route.params.action == "edit") {
       this.isMatch = true;
-      if (this.selectedbox == this.user_data.privilege.includes('นักเรียน')) {
+      if (
+        this.user_data.selectedbox ==
+        this.user_data.privilege.includes("นักเรียน")
+      ) {
         console.log("นักเรียน");
-        this.isCardOpen = true;
-      } else if (this.selectedbox == this.user_data.privilege.includes("ผู้ปกครอง")) {
-        this.isCardParentOpen = true;
+        this.user_data.isCardOpen = true;
+        }
+        if (
+        this.user_data.selectedbox == false
+          ) {
+            console.log("ปิดนักเรียน");
+            this.user_data.isCardOpen = false;
+          } else if (
+        this.user_data.selectedbox ==
+        this.user_data.privilege.includes("ผู้ปกครอง")
+      ) {
+        this.user_data.isCardParentOpen = true;
       }
     }
   },
@@ -825,6 +896,7 @@ export default {
       changeStudentsData: "UserManageModules/changeStudentsData",
       changeUserData: "UserManageModules/changeUserData",
       changeParentData: "UserManageModules/changeParentData",
+      ChangeCardStudens: "UserManageModules/ChangeCardStudens"
     }),
     validate(e, type) {
       inputValidation(e, type);
@@ -866,36 +938,38 @@ export default {
     },
 
     onCheckboxChange() {
-      if (this.selectedbox) {
+      if (this.user_data.selectedbox) {
         // Checkbox is selected, open the card
-        this.isCardOpen = true;
+        this.user_data.isCardOpen = true;
       } else {
         // Checkbox is unselected, close the card
-        this.isCardOpen = false;
+        this.user_data.isCardOpen = false;
       }
     },
 
     onCheckboxChangeParent() {
-      if (this.selectedboxParent) {
+      if (this.user_data.selectedboxParent) {
         // Checkbox is selected, open the card
-        this.isCardParentOpen = true;
+        this.user_data.isCardParentOpen = true;
       } else {
         // Checkbox is unselected, close the card
-        this.isCardParentOpen = false;
+        this.user_data.isCardParentOpen = false;
       }
     },
 
-    addStudents() {
-      this.students.push({
+    addStudentsCard() {
+      this.students.students_detail.push({
         username: "",
         firstname: "",
         lastname: "",
         tel: "",
       });
+      this.ChangeCardStudens(this.students);
     },
 
     removeCardStudent(index) {
-      this.students.splice(index, 1);
+      this.students.students_detail.splice(index, 1);
+      this.ChangeCardStudens(this.students);
     },
     remove(item) {
       console.log(item, "dddd");
@@ -973,6 +1047,40 @@ export default {
 }
 .upload-photo {
   border-color: #ff6b81;
+}
+
+.profileCard {
+  min-height: 200px;
+  min-width: 200px;
+  max-height: 200px;
+  max-width: 200px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.iconInCard {
+  min-height: 200px;
+  min-width: 200px;
+  max-height: 200px;
+  max-width: 200px;
+}
+
+.profileInCard {
+  min-height: 160px;
+  min-width: 160px;
+  max-height: 160px;
+  max-width: 160px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.camera {
+  position: absolute; 
+  margin-left: 60px; 
 }
 </style>
   

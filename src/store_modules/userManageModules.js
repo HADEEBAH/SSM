@@ -6,27 +6,43 @@ const UserManageModules = {
       username_en: "",
       fname_th: "",
       lname_th: "",
-      fname_en: "MUMI",
-      lname_en: "MIMU",
+      fname_en: "",
+      lname_en: "",
       email: "",
       phone_num: "",
       roles: [],
       privilege: '',
       previewUrl: null,
+      selectedbox: false,
+      isCardOpen: false,
+      // selectedboxParent: false,
+      isCardParentOpen: false,
+
     },
     searchTerm: "",
     inputValue: "",
-   
 
 
-    students: [
-      {
-        username: "",
-        firstname: "",
-        lastname: "",
-        tel: "",
-      },
-    ],
+
+    students: {
+      students_detail: [
+        {
+          username: "",
+          firstname: "",
+          lastname: "",
+          tel: "",
+        },
+      ],
+
+
+      students_card: [],
+      certificates: [],
+      certificate_detail: {
+        name_certificate: "",
+        certificate_date: "",
+        previewUrl: null,
+      }
+    },
     parents: [
       {
         username: "",
@@ -44,6 +60,12 @@ const UserManageModules = {
     SetUserData(state, payload) {
       state.userData = payload
     },
+
+    SetCertificate(state, payload) {
+      console.log(555,payload);
+      state.students.certificates = payload
+    },
+
   },
 
   actions: {
@@ -61,6 +83,15 @@ const UserManageModules = {
       context.commit("ParentData", ParentData)
       console.log(ParentData)
     },
+
+    ChangeCardStudens(context, studentcardData) {
+      context.commit("SetStudent", studentcardData)
+      console.log(studentcardData)
+    },
+    changeStudentsCertificate(context, students) {
+      context.commit("SetCertificate", students)
+      console.log(555,students)
+    }
   },
 
   getters: {
@@ -72,6 +103,10 @@ const UserManageModules = {
     },
     getUserData(state) {
       return state.user_data
+    },
+    getCertificate(state) {
+      console.log(555);
+      return state.students.certificates
     },
   },
 };
