@@ -17,7 +17,7 @@ import FinanceList from '@/page/admin/finance/financeList.vue'
 import FinanceDetail from '@/page/admin/finance/financeDetail.vue'
 // Manage User  
 import Student from '@/components/admin/createStudent.vue'
-import UserList from '@/page/admin/user_menage/userList.vue'
+//import UserList from '@/page/admin/user_menage/userList.vue'
 //User
 import UserKingdom from '@/page/user/catagory/userKingdom.vue'
 import CartList from '@/page/user/cart/cartList.vue'
@@ -70,11 +70,11 @@ const routes = [
         name: 'UserDetail',
         component: UserDetail,
       },
-      {
-        path: 'userList',
-        name: 'UserList',
-        component: UserList,
-      },
+      // {
+      //   path: 'userList',
+      //   name: 'UserList',
+      //   component: UserList,
+      // },
       {
         path: 'course/create',  
         name: 'CourseCreate',
