@@ -5,8 +5,8 @@ import AuthLayout from '@/layout/authAdminLayout.vue'
 //Auth
 import RegisterPage from '@/page/auth/registerPage'
 import Login from '@/page/auth/loginPage.vue'
-import UserCreate from '@/page/admin/user_menage/userCreate'
-import UserDetail from '@/page/admin/user_menage/userDetail'
+import UserCreate from '@/page/admin/user_manage/userCreate'
+import UserDetail from '@/page/admin/user_manage/userDetail'
 // Course 
 import Kingdom from '@/components/admin/kingdomPage.vue'
 import CourseCreate from '@/page/admin/course/courseCreate'
@@ -30,8 +30,8 @@ import userCourseDetail from '@/page/user/course/userCourseDetail'
 import userCoursePackage from '@/page/user/course/userCoursePackage'
 import userCourseOrder from '@/page/user/course/userCourseOrder'
 //User menage Course 
-import userMenageCourse from '@/page/user/coach/menageCourse'
-import userMenageCourseDetail from '@/page/user/coach/menageCourseDetail'
+import userMenageCourse from '@/page/user/coach/manageCourse'
+import userMenageCourseDetail from '@/page/user/coach/manageCourseDetail'
 const routes = [
   {
     path: '/auth',
