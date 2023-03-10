@@ -96,14 +96,12 @@
           {{ parents_data.id_card }}
         </div>
         <div v-else>
-          
           <v-text-field
             v-bind:disabled="!isDisabled"
             @keypress="validate($event, 'th')"
-          v-model="parents_data.id_card" 
+            v-model="parents_data.id_card"
             outlined
             dense
-            @input="showIcCard"
           >
           </v-text-field>
         </div>
@@ -123,12 +121,9 @@
             outlined
             dense
           >
-          <template v-slot:append>
-                            <v-icon
-                              color="#FF6B81"
-                              >mdi-calendar</v-icon
-                            >
-                          </template>
+            <template v-slot:append>
+              <v-icon color="#FF6B81">mdi-calendar</v-icon>
+            </template>
           </v-text-field>
         </div>
       </v-col>
@@ -171,26 +166,23 @@
           </v-text-field>
         </div>
       </v-col>
- <!-- BTN -->
+      <!-- BTN -->
 
       <v-col cols="12" sm="12" v-if="isEnabled">
-                        <v-btn
-                       
-                          class="white--text my-5 w-full "
-                          depressed
-                          color="#ff6b81"
-                          @click="submitEdit()"
-                        >
-                          บันทึก
-                        </v-btn>
-                      </v-col>
+        <v-btn
+          class="white--text my-5 w-full"
+          depressed
+          color="#ff6b81"
+          @click="submitEdit()"
+        >
+          บันทึก
+        </v-btn>
+      </v-col>
     </v-row>
-   
-
   </v-container>
 </template>
-
-<script>
+  
+  <script>
 import { mapActions, mapGetters } from "vuex";
 import { inputValidation } from "@/functions/functions";
 import LabelCustom from "@/components/label/labelCustom.vue";
@@ -229,6 +221,11 @@ export default {
       this.isEnabled = true;
       this.buttonName = "บันทึก";
     },
+    submitEdit() {
+      this.isDisabled = true;
+      this.isEnabled = false;
+      this.buttonName = "แก้ไข";
+    },
     validate(e, type) {
       inputValidation(e, type);
     },
@@ -249,8 +246,8 @@ export default {
   },
 };
 </script>
-
-<style script>
+  
+  <style script>
 .profileCard {
   min-height: 200px;
   min-width: 200px;

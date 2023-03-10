@@ -41,6 +41,7 @@ const UserManageModules = {
         name_certificate: "",
         certificate_date: "",
         previewUrl: null,
+        fileName: ''
       }
     },
     parents: [
