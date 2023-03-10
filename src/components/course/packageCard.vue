@@ -81,6 +81,8 @@
                     v-model="option.period_package"
                     color="#FF6B81"
                     :rules="rules.options"
+                    item-text="option_name"
+                    item-value="option_id"
                     :items="options"
                     item-color="pink"
                 >
@@ -93,10 +95,10 @@
                     </template>
                     <template v-slot:item="{ item }" >
                     <v-list-item-content >
-                        <v-list-item-title ><span :class="option.period_package === item ? 'font-bold':''">{{ item }}</span></v-list-item-title>
+                        <v-list-item-title ><span :class="option.period_package === item.option_id ? 'font-bold':''">{{ item.option_name }}</span></v-list-item-title>
                     </v-list-item-content>
                     <v-list-item-action>
-                        <v-icon v-if="option.period_package === item">mdi-check-circle</v-icon>
+                        <v-icon v-if="option.period_package === item.option_id">mdi-check-circle</v-icon>
                     </v-list-item-action>
                     </template>  
                 </v-autocomplete>
@@ -238,9 +240,14 @@ export default {
     HeaderCard
   },
   data: () => ({
-    packages: ["Exclusive Package", "Family Package", "Group Package"],
+    packages: [{package_id: "PACK_1", package_name:"Exclusive Package"}, {package_id: "PACK_2", package_name:"Family Package"}, {package_id: "PACK_3", package_name:"Group Package"}],
+    options: [
+      {option_id : "OP_1", option_name : "รายวัน"},
+      {option_id : "OP_2", option_name : "รายเดือน"},
+      {option_id : "OP_3", option_name : "รายเทมอ"},
+      {option_id : "OP_4", option_name : "รายปี"}
+    ],
     packages_selected: [],
-    options: ["รายวัน", "รายเดือน", "รายเทมอ", "รายปี"],
     options_selected: [],
     rules: {  
       packages: [val => (val || '').length > 0 || 'โปรดเลือกแพ็คเกจ'],

@@ -77,9 +77,11 @@
             <v-autocomplete
               dense
               :rules="rules.kingdom"
-              v-model="course_data.kingdom_name"
+              v-model="course_data.category_id"
               color="#FF6B81"
-              :items="kingdoms"
+              :items="categorys"
+              item-text="category_name_th"
+              item-value="category_id"
               item-color="pink"
               outlined
               placeholder="ระบุชื่ออาณาจักร"
@@ -93,12 +95,12 @@
                 <v-list-item-content>
                   <v-list-item-title
                     ><span
-                      :class="course_data.kingdom_name === item ? 'font-bold' : ''"
-                      >{{ item }}</span
+                      :class="course_data.category_id === item.category_id ? 'font-bold' : ''"
+                      >{{ item.category_name_th }}</span
                     ></v-list-item-title>
                 </v-list-item-content>
                 <v-list-item-action>
-                  <v-icon v-if="course_data.kingdom_name === item"
+                  <v-icon v-if="course_data.category_id === item.category_id"
                     >mdi-check-circle</v-icon
                   >
                 </v-list-item-action>
@@ -214,7 +216,9 @@
                 :rules="rules.course"
                 v-model="course_data.coachs[0].coach_name"
                 color="#FF6B81"
-                :items="courses"
+                :items="coachs"
+                item-value="account_id"
+                item-text="full_name"
                 item-color="pink"
                 outlined
                 placeholder="ระบุโค้ช"
@@ -229,16 +233,16 @@
                     <v-list-item-title
                       ><span
                         :class="
-                          course_data.coachs[0].coach_name === item
+                          course_data.coachs[0].coach_name === item.account_id
                             ? 'font-bold'
                             : ''
                         "
-                        >{{ item }}</span
+                        >{{ `${item.first_name_th} ${item.last_name_th}` }}</span
                       ></v-list-item-title
                     >
                   </v-list-item-content>
                   <v-list-item-action>
-                    <v-icon v-if="course_data.coachs[0].coach_name === item"
+                    <v-icon v-if="course_data.coachs[0].coach_name === item.account_id"
                       >mdi-check-circle</v-icon
                     >
                   </v-list-item-action>
@@ -440,79 +444,25 @@
               <label-custom required text="เวลาเรียน"></label-custom>
               <v-row>
                 <v-col>
-                  <v-menu
-                    v-model="course_data.coachs[0].period.menu_start_time"
-                    :close-on-content-click="false"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="auto"
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
-                        dense
-                        outlined
-                        :rules="rules.start_time"
-                        v-model="course_data.coachs[0].period.start_time"
-                        readonly
-                        placeholder="เลือกเวลา"
-                        v-bind="attrs"
-                        v-on="on"
-                      >
-                        <template v-slot:append>
-                          <v-icon
-                            :color="
-                              course_data.coachs[0].period.start_time
-                                ? '#FF6B81'
-                                : ''
-                            "
-                            >mdi-clock-outline</v-icon
-                          >
-                        </template>
-                      </v-text-field>
-                    </template>
-                    <v-time-picker
+                  <TimePicker
+                      :minuteStep="60"
+                      format="HH:mm"
+                      :class="course_data.coachs[0].period.start_time ? 'active' : ''"
+                      placeholder="เวลาเริ่มต้น"
                       v-model="course_data.coachs[0].period.start_time"
-                    ></v-time-picker>
-                  </v-menu>
+                      ></TimePicker>
                 </v-col>
                 <v-col cols="auto" class="mt-2 px-0"
                   ><v-icon>mdi-minus</v-icon></v-col
                 >
                 <v-col>
-                  <v-menu
-                    v-model="course_data.coachs[0].period.menu_end_time"
-                    :close-on-content-click="false"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="auto"
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
-                        dense
-                        outlined
-                        :rules="rules.end_time"
-                        v-model="course_data.coachs[0].period.end_time"
-                        readonly
-                        placeholder="เลือกเวลา"
-                        v-bind="attrs"
-                        v-on="on"
-                      >
-                        <template v-slot:append>
-                          <v-icon
-                            :color="
-                              course_data.coachs[0].period.end_time
-                                ? '#FF6B81'
-                                : ''
-                            "
-                            >mdi-clock-outline</v-icon
-                          >
-                        </template>
-                      </v-text-field>
-                    </template>
-                    <v-time-picker
+                  <TimePicker
+                      :minuteStep="60"
+                      format="HH:mm"
+                      :class="course_data.coachs[0].period.end_time ? 'active' : ''"
+                      placeholder="เวลาสิ้นสุด"
                       v-model="course_data.coachs[0].period.end_time"
-                    ></v-time-picker>
-                  </v-menu>
+                      ></TimePicker>
                 </v-col>
               </v-row>
             </v-col>
@@ -547,17 +497,24 @@
 import LabelCustom from "@/components/label/labelCustom.vue";
 import headerCard from "@/components/header/headerCard.vue";
 import { mapGetters, mapActions } from "vuex";
+import { Input, TimePicker } from 'ant-design-vue';
 import { inputValidation, dateFormatter } from "@/functions/functions";
 export default {
   name: "courseCard",
   components: {
     LabelCustom,
     headerCard,
+    TimePicker
+  },
+  directives: {
+    'ant-input': Input,
   },
   data: () => ({
     previewUrl: null,
-    kingdoms: ["อาณาจักรศิลปะสมัยใหม่", "อาณาจักร P.E."],
-    courses: ["โค้ชหนุ่ม", "โค้ชพอล"],
+    coachs: [ 
+      {account_id : "16775648309278", first_name_th : 'ฟาติมา', last_name_th : 'จูฮัน', full_name : "ฟาติมา จูฮัน"} ,
+      {account_id : "4294589844485338", first_name_th : 'ทดสอบ', last_name_th : 'ทดสอบ', full_name : "ทดสอบ ทดสอบ"}
+    ],
     rules: {
       course_name_th: [
         (val) => (val || "").length > 0 || "โปรดระบุชื่อคอร์ส(ภาษาไทย)",
@@ -570,7 +527,7 @@ export default {
         (val) => (val || "").length > 0 || "โปรดเลือกวันที่เปิดคอร์ส",
       ],
       course_hours: [
-        (val) => (val || "").length > 0 || "โปรดระบุชั่วโมงการเรียน/ครั้ง",
+        (val) => (val || "") > 0 || "โปรดระบุชั่วโมงการเรียน/ครั้ง",
       ],
       location: [(val) => (val || "").length > 0 || "โปรดระบุสถานที่"],
       course: [(val) => (val || "").length > 0 || "โปรดระบุโค้ช"],
@@ -589,12 +546,15 @@ export default {
       end_date: "",
     },
   }),
-  created() {},
+  created() {
+    this.$store.dispatch("CategoryModules/getCategorys")
+  },
   mounted() {},
   watch: {},
   computed: {
     ...mapGetters({
       course_data: "CourseModules/getCourseData",
+      categorys : "CategoryModules/getCategorys"
     }),
   },
   methods: {

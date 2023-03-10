@@ -13,7 +13,7 @@
             </v-row>
         </template>
         <v-card v-if="type === 'week' || $vuetify.breakpoint.smAndUp">
-            <v-card-title v-if=" $vuetify.breakpoint.smAndUp">
+            <v-card-title>
                 <v-row >
                     <v-col cols="auto">
                         <v-btn icon @click="prev"><v-icon>mdi-chevron-left</v-icon></v-btn>
@@ -66,31 +66,35 @@
                 </v-row>
                 <template  v-if="event_date.length > 0">
                     <div v-for="(event, event_index) in event_date" :key="event_index">
-                        <v-row dense>
-                            <v-col cols="auto" class="text-sm text-[#999999]">
-                            {{`${event.start_time}`}}<br>{{`${event.end_time}`}}
-                            </v-col>
-                            <v-col cols="auto" >
-                                <v-icon small :color="event.color">mdi-circle</v-icon>
-                            </v-col>
-                            <v-col>
+                        <v-card flat>
+                            <v-card-text class="border-2 border-[#ff6b81] " >
                                 <v-row dense>
+                                    <v-col cols="auto" class="text-sm text-[#999999]">
+                                    {{`${event.start_time}`}}<br>{{`${event.end_time}`}}
+                                    </v-col>
+                                    <v-col cols="auto" >
+                                        <v-icon small :color="event.color">mdi-circle</v-icon>
+                                    </v-col>
                                     <v-col>
-                                        <label  class="font-bold">{{ event.name }}</label> 
-                                        <span class="text-xs text-[#999999]"> {{event.subtitle}}</span>
+                                        <v-row dense>
+                                            <v-col>
+                                                <label  class="font-bold">{{ event.name }}</label> 
+                                                <span class="text-xs text-[#999999]"> {{event.subtitle}}</span>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row dense>
+                                            <v-col class="text-sm">
+                                                โค้ช: {{ event.coach }} <br>
+                                                <v-btn @click="$router.push({name : 'menageCourseDetail'})" small text class="underline pa-0" color="#ff6b81">
+                                                    ดูรายละเอียดคอร์สเรียน
+                                                </v-btn>
+                                            </v-col>
+                                        </v-row> 
                                     </v-col>
                                 </v-row>
-                                <v-row dense>
-                                    <v-col class="text-sm">
-                                        โค้ช: {{ event.coach }} <br>
-                                        <v-btn @click="$router.push({name : 'menageCourseDetail'})" small text class="underline pa-0" color="#ff6b81">
-                                            ดูรายละเอียดคอร์สเรียน
-                                        </v-btn>
-                                    </v-col>
-                                </v-row> 
-                            </v-col>
-                        </v-row>
-                        <v-divider v-if="event_date.length !== event_index + 1" class="my-2"></v-divider>
+                            </v-card-text>
+                        </v-card>
+                        <!-- <v-divider v-if="event_date.length !== event_index + 1" class="my-2"></v-divider> -->
                     </div>
                 </template>
                 <div v-else>
