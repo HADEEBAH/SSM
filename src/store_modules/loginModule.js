@@ -26,10 +26,10 @@ const loginModules = {
         //         router.push({ name: "Nav" });
         //   }
         // }
-
+        // "http://192.168.72.187:3001/api/v1/auth/login"
         async loginOneId({ rootState, state}) {
             try {
-                const { data } = await axios.post("http://192.168.72.187:3001/api/v1/auth/login", {
+                const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login`, {
                     "username": state.user_one_id.username,
                     "password": state.user_one_id.password,
                 })

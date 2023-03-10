@@ -988,23 +988,6 @@ export default {
       parents: "UserManageModules/getParent",
     }),
 
-    // disableSubItems() {
-    //   let disable = false;
-    //   if ((this.sortBy === this.privilege) === "ผู้ปกครอง") {
-    //     disable = true;
-    //   } else {
-    //     disable = false;
-    //   }
-    //   return disable;
-    // },
-
-    // buttonText() {
-    //   return this.clickCount === 0 ? "บันทึก" : "แก้ไข";
-    // },
-    // showModal() {
-    //   return this.clickCount === 0;
-    // },
-
     isInputValid() {
       return (
         this.user_data.username_en.trim().length > 0 &&

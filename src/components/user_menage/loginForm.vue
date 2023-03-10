@@ -1,13 +1,13 @@
 
 <!-- snacbar สำหรับ popup -->
 <template>
-  <div class="background">
+  <div :style=" MobileSize? 'width: 90%; ':'width: 50%;' ">
     <v-form ref="form">
       <v-card
         :class="
           MobileSize
-            ? 'bg-white rounded-xl my-15 '
-            : 'bg-white rounded-xl my-32 '
+            ? 'bg-white rounded-xl my-20 drop-shadow-lg '
+            : 'bg-white rounded-xl my-20 drop-shadow-lg '
         "
       >
         <v-card-text>
@@ -158,8 +158,6 @@ export default {
   color: #ff6b81;
 }
 
-.background {
-  src: ("");
-}
+
 </style>
   

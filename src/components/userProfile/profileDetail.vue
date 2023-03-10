@@ -18,8 +18,23 @@
           </div>
         </div>
       </div>
+      <!-- Button -->
+      
+      <div v-if="!isEnabled">
+        <v-row>
+          <v-col class="my-3 text-center">
+            <v-btn
+              class="white--text mb-5"
+              depressed
+              color="#ff6b81"
+              @click="edit()"
+            >
+              <span class="mdi mdi-pencil-outline">แก้ไข</span>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </div>
       <!-- <div class="text-center font-bold">{{ data_local.first_name_en }}</div> -->
-   
       <v-row dense>
         <!--TH NAME -->
         <v-col cols="12" sm="6">
@@ -82,11 +97,10 @@
             {{ parents_data.id_card }}
           </div>
           <div v-else>
-            
             <v-text-field
               v-bind:disabled="!isDisabled"
               @keypress="validate($event, 'th')"
-            v-model="parents_data.id_card" 
+              v-model="parents_data.id_card"
               outlined
               dense
               @input="showIcCard"
@@ -109,12 +123,9 @@
               outlined
               dense
             >
-            <template v-slot:append>
-                              <v-icon
-                                color="#FF6B81"
-                                >mdi-calendar</v-icon
-                              >
-                            </template>
+              <template v-slot:append>
+                <v-icon color="#FF6B81">mdi-calendar</v-icon>
+              </template>
             </v-text-field>
           </div>
         </v-col>
@@ -157,22 +168,19 @@
             </v-text-field>
           </div>
         </v-col>
-   <!-- BTN -->
+        <!-- BTN -->
   
         <v-col cols="12" sm="12" v-if="isEnabled">
-                          <v-btn
-                         
-                            class="white--text my-5 w-full "
-                            depressed
-                            color="#ff6b81"
-                            @click="submitEdit()"
-                          >
-                            บันทึก
-                          </v-btn>
-                        </v-col>
+          <v-btn
+            class="white--text my-5 w-full"
+            depressed
+            color="#ff6b81"
+            @click="submitEdit()"
+          >
+            บันทึก
+          </v-btn>
+        </v-col>
       </v-row>
-     
-  
     </v-container>
   </template>
   
@@ -237,3 +245,30 @@
   </script>
   
   <style script>
+  .profileCard {
+    min-height: 200px;
+    min-width: 200px;
+    max-height: 200px;
+    max-width: 200px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .profileInCard {
+    min-height: 160px;
+    min-width: 160px;
+    max-height: 160px;
+    max-width: 160px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .center {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  </style>
