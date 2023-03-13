@@ -21,9 +21,6 @@ const categoryModules = {
                 console.log("error :", error)
             }
         },
-        // async getCategory(context, category_id) { 
-
-        // },
     },
     getters: {
         getCategorys(state) {
