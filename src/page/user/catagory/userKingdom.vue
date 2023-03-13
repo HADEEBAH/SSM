@@ -75,21 +75,21 @@
                   border-top-right-radius: 0.75rem;
                 "
                 :src="
-                  item.img_url
-                    ? item.img_url
+                  item.categoryImg
+                    ? item.categoryImg
                     : 'https://media.istockphoto.com/id/1216251206/vector/no-image-available-icon.jpg?s=170667a&w=0&k=20&c=N-XIIeLlhUpm2ZO2uGls-pcVsZ2FTwTxZepwZe4DuE4= '
                 "
                 cover
               >
               </v-img>
-              <v-card-title>{{ item.category_name_th }}</v-card-title>
+              <v-card-title>{{ item.categoryNameTh }}</v-card-title>
               <v-card-subtitle class="pt-4"
                 >โดย ศูนย์ดนตรี Manila Tamarind</v-card-subtitle
               >
 
               <v-card-text>
                 <div>
-                  {{ item.category_name_en }}
+                  {{ item.categoryNameEng }}
                   <span class="text-red-500 cursor-pointer">อ่านต่อ...</span>
                 </div>
               </v-card-text>
@@ -125,6 +125,7 @@ export default {
     dataStorage: {},
   }),
   created() {
+    
     this.dataStorage = JSON.parse(localStorage.getItem("userDetail"));
     //console.log("true", this.dataStorage);
     if (this.dataStorage) {
@@ -135,8 +136,8 @@ export default {
   },
 
   mounted() {
+    this.$store.dispatch("CategoryModules/GetCategorys");
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "อาณาจักร");
-    this.$store.dispatch("CategoryModules/getCategorys");
   },
   computed: {
     ...mapGetters({

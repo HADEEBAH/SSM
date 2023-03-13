@@ -1,4 +1,3 @@
-import router from "@/router"
 import axios from "axios"
 import Swal from "sweetalert2"
 const RegisterModules = {
@@ -57,16 +56,17 @@ const RegisterModules = {
           "userName": context.state.user_one_id.username,
           "passWord": context.state.user_one_id.password
         })
-        console.log(data)
-        
         if(data.statusCode === 201){
-          context.commit("ResetUserOneID")
           Swal.fire({
             icon: 'success',
             title: "ลงทะเบียนสำเร็จ",
           }).then((result)=>{
             if(result.isConfirmed){
-              router.push({name : 'Login'})
+              context.dispatch('loginModules/loginOneId', {
+                "username": context.state.user_one_id.usernamee,
+                "password": context.state.user_one_id.password,
+              })
+              context.commit("ResetUserOneID")
             }
           })
         }

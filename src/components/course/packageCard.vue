@@ -26,6 +26,8 @@
                     color="#FF6B81"
                     :rules="rules.packages"
                     :items="packages"
+                    item-value="packageId"
+                    item-text="packageName"
                     item-color="pink"
                 >
                     <template v-slot:no-data>
@@ -37,10 +39,10 @@
                     </template>
                     <template v-slot:item="{ item }" >
                     <v-list-item-content >
-                        <v-list-item-title ><span :class="package_data.package === item ? 'font-bold':''">{{ item }}</span></v-list-item-title>
+                        <v-list-item-title ><span :class="package_data.package === item.packageId ? 'font-bold':''">{{ item.packageName }}</span></v-list-item-title>
                     </v-list-item-content>
                     <v-list-item-action>
-                        <v-icon v-if="package_data.package === item">mdi-check-circle</v-icon>
+                        <v-icon v-if="package_data.package === item.packageId">mdi-check-circle</v-icon>
                     </v-list-item-action>
                     </template>  
                 </v-autocomplete>
@@ -81,8 +83,8 @@
                     v-model="option.period_package"
                     color="#FF6B81"
                     :rules="rules.options"
-                    item-text="option_name"
-                    item-value="option_id"
+                    item-text="optionName"
+                    item-value="optionId"
                     :items="options"
                     item-color="pink"
                 >
@@ -95,10 +97,10 @@
                     </template>
                     <template v-slot:item="{ item }" >
                     <v-list-item-content >
-                        <v-list-item-title ><span :class="option.period_package === item.option_id ? 'font-bold':''">{{ item.option_name }}</span></v-list-item-title>
+                        <v-list-item-title ><span :class="option.period_package === item.optionId ? 'font-bold':''">{{ item.optionName }}</span></v-list-item-title>
                     </v-list-item-content>
                     <v-list-item-action>
-                        <v-icon v-if="option.period_package === item.option_id">mdi-check-circle</v-icon>
+                        <v-icon v-if="option.period_package === item.optionId">mdi-check-circle</v-icon>
                     </v-list-item-action>
                     </template>  
                 </v-autocomplete>
@@ -233,20 +235,22 @@ import LabelCustom from "../label/labelCustom.vue";
 import { mapGetters, mapActions } from "vuex";
 export default {
   props:{
-    disable: {type: Boolean, default: false}
+    disable: {type: Boolean, default: false},
+    packages : {type : Array},
+    options : {type : Array},
   },
   components: {
     LabelCustom,
     HeaderCard
   },
   data: () => ({
-    packages: [{package_id: "PACK_1", package_name:"Exclusive Package"}, {package_id: "PACK_2", package_name:"Family Package"}, {package_id: "PACK_3", package_name:"Group Package"}],
-    options: [
-      {option_id : "OP_1", option_name : "รายวัน"},
-      {option_id : "OP_2", option_name : "รายเดือน"},
-      {option_id : "OP_3", option_name : "รายเทมอ"},
-      {option_id : "OP_4", option_name : "รายปี"}
-    ],
+    // packages: [{package_id: "PACK_1", package_name:"Exclusive Package"}, {package_id: "PACK_2", package_name:"Family Package"}, {package_id: "PACK_3", package_name:"Group Package"}],
+    // options: [
+    //   {option_id : "OP_1", option_name : "รายวัน"},
+    //   {option_id : "OP_2", option_name : "รายเดือน"},
+    //   {option_id : "OP_3", option_name : "รายเทมอ"},
+    //   {option_id : "OP_4", option_name : "รายปี"}
+    // ],
     packages_selected: [],
     options_selected: [],
     rules: {  
@@ -257,12 +261,15 @@ export default {
       price_unit : [val => (val || '').length > 0 || 'โปรดระบุราคาต่อ/คน'],
     },
   }),
-  created() {},
+  created() {
+    
+  },
   mounted() {},
   watch: {},
   computed: {
     ...mapGetters({
       course_data: "CourseModules/getCourseData",
+     
     }),
   },
   methods: {

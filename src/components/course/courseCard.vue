@@ -4,8 +4,10 @@
     <v-card class="mx-3" flat>
       <v-card-text class="border-dashed border-2 border-blue-600 rounded-lg">
         <v-row v-if="previewUrl">
-          <v-col>
-            <img :src="previewUrl" style="max-height: 200px" />
+          <v-col align="center"  class="rounded-lg pa-0">
+            <v-img  :src="previewUrl" style="max-width: 200px" align="right">
+              <v-btn icon class="bg-[#f00]" dark><v-icon>mdi-close</v-icon></v-btn>
+            </v-img>
           </v-col>
         </v-row>
         <v-row v-if="!previewUrl">
@@ -52,8 +54,9 @@
               @keypress="inputName($event, 'th')"
               :rules="rules.course_name_th"
               outlined
+              @change="ChangeCourseData(course_data)"
               @focus="$event.target.select()"
-              :v-model="course_data.course_name_th"
+              v-model="course_data.course_name_th"
               placeholder="ระบุชื่อคอร์ส(ภาษาไทย)"
             ></v-text-field>
           </v-col>
@@ -66,6 +69,7 @@
               @keypress="inputName($event, 'en')"
               :rules="rules.course_name_en"
               v-model="course_data.course_name_en"
+              @change="ChangeCourseData(course_data)"
               placeholder="ระบุชื่อคอร์ส(ภาษาอังกฤษ)"
             ></v-text-field>
           </v-col>
@@ -80,10 +84,11 @@
               v-model="course_data.category_id"
               color="#FF6B81"
               :items="categorys"
-              item-text="category_name_th"
-              item-value="category_id"
+              item-text="categoryNameTh"
+              item-value="categoryId"
               item-color="pink"
               outlined
+              @change="ChangeCourseData(course_data)"
               placeholder="ระบุชื่ออาณาจักร"
             >
               <template v-slot:no-data>
@@ -95,12 +100,12 @@
                 <v-list-item-content>
                   <v-list-item-title
                     ><span
-                      :class="course_data.category_id === item.category_id ? 'font-bold' : ''"
-                      >{{ item.category_name_th }}</span
+                      :class="course_data.category_id === item.categoryId ? 'font-bold' : ''"
+                      >{{ item.categoryNameTh }}</span
                     ></v-list-item-title>
                 </v-list-item-content>
                 <v-list-item-action>
-                  <v-icon v-if="course_data.category_id === item.category_id"
+                  <v-icon v-if="course_data.category_id === item.categoryId"
                     >mdi-check-circle</v-icon
                   >
                 </v-list-item-action>
@@ -124,6 +129,7 @@
                   readonly
                   :rules="rules.course_open_date"
                   placeholder="ระบุวันที่เปิดคอร์ส"
+                  @change="ChangeCourseData(course_data)"
                   v-bind="attrs"
                   v-on="on"
                 >
@@ -136,7 +142,7 @@
                 </v-text-field>
               </template>
               <v-date-picker
-                :theme="'ios'"
+                :min="today.toISOString()"
                 v-model="course_data.course_open_date"
                 @input="inputDate($event, 'course open')"
               ></v-date-picker>
@@ -156,6 +162,7 @@
               @focus="$event.target.select()"
               type="number"
               outlined
+              @change="ChangeCourseData(course_data)"
               :rules="rules.course_hours"
               v-model.number="course_data.course_hours"
               placeholder="ระบุจำนวนชั่วโมงการเรียน/ครั้ง"
@@ -181,6 +188,7 @@
               <v-textarea
                 v-model="course_data.detail"
                 outlined
+                @change="ChangeCourseData(course_data)"
                 placeholder="กรอกรายละเอียด..."
               ></v-textarea>
             </v-col>
@@ -191,6 +199,7 @@
               <v-textarea
                 v-model="course_data.music_performance"
                 outlined
+                @change="ChangeCourseData(course_data)"
                 placeholder="กรอกรายละเอียด..."
               ></v-textarea>
             </v-col>
@@ -201,6 +210,7 @@
               <v-textarea
                 v-model="course_data.catification"
                 outlined
+                @change="ChangeCourseData(course_data)"
                 placeholder="กรอกรายละเอียด..."
               ></v-textarea>
             </v-col>
@@ -210,18 +220,19 @@
         <template v-else>
           <v-row dense>
             <v-col cols="12">
-              <label-custom text="โค้ช"></label-custom>
+              <label-custom required text="โค้ช"></label-custom>
               <v-autocomplete
                 dense
-                :rules="rules.course"
-                v-model="course_data.coachs[0].coach_name"
+                :rules="rules.coach"
+                v-model="course_data.coachs[0].coach_id"
                 color="#FF6B81"
                 :items="coachs"
-                item-value="account_id"
-                item-text="full_name"
+                item-value="accountId"
+                item-text="fullNameTh"
                 item-color="pink"
                 outlined
                 placeholder="ระบุโค้ช"
+                @change="ChangeCourseData(course_data)"
               >
                 <template v-slot:no-data>
                   <v-list-item>
@@ -233,16 +244,16 @@
                     <v-list-item-title
                       ><span
                         :class="
-                          course_data.coachs[0].coach_name === item.account_id
+                          course_data.coachs[0].coach_id === item.accountId
                             ? 'font-bold'
                             : ''
                         "
-                        >{{ `${item.first_name_th} ${item.last_name_th}` }}</span
+                        >{{ `${item.firstNameTh} ${item.lastNameTh}` }}</span
                       ></v-list-item-title
                     >
                   </v-list-item-content>
                   <v-list-item-action>
-                    <v-icon v-if="course_data.coachs[0].coach_name === item.account_id"
+                    <v-icon v-if="course_data.coachs[0].coach_id === item.accountId"
                       >mdi-check-circle</v-icon
                     >
                   </v-list-item-action>
@@ -263,9 +274,7 @@
               <v-row>
                 <v-col>
                   <v-menu
-                    v-model="
-                      course_data.coachs[0].register_date_range.menu_start_date
-                    "
+                    v-model=" course_data.coachs[0].register_date_range.menu_start_date"
                     :close-on-content-click="false"
                     transition="scale-transition"
                     offset-y
@@ -278,18 +287,14 @@
                         :rules="rules.start_date"
                         v-model="register_date_range_str.start_date"
                         readonly
+                        @change="ChangeCourseData(course_data)"
                         placeholder="เลือกวันที่เริ่ม"
                         v-bind="attrs"
                         v-on="on"
                       >
                         <template v-slot:append>
                           <v-icon
-                            :color="
-                              course_data.coachs[0].register_date_range
-                                .start_date
-                                ? '#FF6B81'
-                                : ''
-                            "
+                            :color="course_data.coachs[0].register_date_range.start_date ? '#FF6B81': ''"
                             >mdi-calendar</v-icon
                           >
                         </template>
@@ -297,9 +302,8 @@
                     </template>
                     <v-date-picker
                       @input="inputDate($event, 'register start date')"
-                      v-model="
-                        course_data.coachs[0].register_date_range.start_date
-                      "
+                      :min="today.toISOString()"
+                      v-model=" course_data.coachs[0].register_date_range.start_date"
                     ></v-date-picker>
                   </v-menu>
                 </v-col>
@@ -308,9 +312,7 @@
                 >
                 <v-col>
                   <v-menu
-                    v-model="
-                      course_data.coachs[0].register_date_range.menu_end_date
-                    "
+                    v-model="course_data.coachs[0].register_date_range.menu_end_date"
                     :close-on-content-click="false"
                     transition="scale-transition"
                     offset-y
@@ -320,6 +322,7 @@
                       <v-text-field
                         dense
                         outlined
+                        @change="ChangeCourseData(course_data)"
                         :rules="rules.end_date"
                         placeholder="เลือกวันที่สิ้นสุด"
                         v-model="register_date_range_str.end_date"
@@ -329,21 +332,16 @@
                       >
                         <template v-slot:append>
                           <v-icon
-                            :color="
-                              course_data.coachs[0].register_date_range.end_date
-                                ? '#FF6B81'
-                                : ''
-                            "
+                            :color="course_data.coachs[0].register_date_range.end_date ? '#FF6B81': ''"
                             >mdi-calendar</v-icon
                           >
                         </template>
                       </v-text-field>
                     </template>
                     <v-date-picker
+                      :min="course_data.coachs[0].register_date_range.start_date ? course_data.coachs[0].register_date_range.start_date : today.toISOString()"
                       @input="inputDate($event, 'register end date')"
-                      v-model="
-                        course_data.coachs[0].register_date_range.end_date
-                      "
+                      v-model=" course_data.coachs[0].register_date_range.end_date"
                     ></v-date-picker>
                   </v-menu>
                 </v-col>
@@ -367,6 +365,7 @@
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
                         dense
+                        @change="ChangeCourseData(course_data)"
                         outlined
                         :rules="rules.start_date"
                         placeholder="เลือกวันที่เริ่ม"
@@ -377,21 +376,16 @@
                       >
                         <template v-slot:append>
                           <v-icon
-                            :color="
-                              course_data.coachs[0].class_date_range.start_date
-                                ? '#FF6B81'
-                                : ''
-                            "
+                            :color="course_data.coachs[0].class_date_range.start_date ? '#FF6B81': ''"
                             >mdi-calendar</v-icon
                           >
                         </template>
                       </v-text-field>
                     </template>
                     <v-date-picker
+                      :min="today.toISOString()"
                       @input="inputDate($event, 'class start date')"
-                      v-model="
-                        course_data.coachs[0].class_date_range.start_date
-                      "
+                      v-model=" course_data.coachs[0].class_date_range.start_date "
                     ></v-date-picker>
                   </v-menu>
                 </v-col>
@@ -412,6 +406,7 @@
                       <v-text-field
                         dense
                         outlined
+                        @change="ChangeCourseData(course_data)"
                         :rules="rules.end_date"
                         v-model="class_date_range_str.end_date"
                         readonly
@@ -421,17 +416,14 @@
                       >
                         <template v-slot:append>
                           <v-icon
-                            :color="
-                              course_data.coachs[0].class_date_range.end_date
-                                ? '#FF6B81'
-                                : ''
-                            "
+                            :color=" course_data.coachs[0].class_date_range.end_date? '#FF6B81' : '' "
                             >mdi-calendar</v-icon
                           >
                         </template>
                       </v-text-field>
                     </template>
                     <v-date-picker
+                    :min="course_data.coachs[0].class_date_range.start_date ? course_data.coachs[0].class_date_range.start_date : today.toISOString()"
                       @input="inputDate($event, 'class end date')"
                       v-model="course_data.coachs[0].class_date_range.end_date"
                     ></v-date-picker>
@@ -447,20 +439,24 @@
                   <TimePicker
                       :minuteStep="60"
                       format="HH:mm"
+                      style="width: 100% !important"
                       :class="course_data.coachs[0].period.start_time ? 'active' : ''"
                       placeholder="เวลาเริ่มต้น"
+                      @change="genStartTimeEndTime($event)"
                       v-model="course_data.coachs[0].period.start_time"
                       ></TimePicker>
                 </v-col>
                 <v-col cols="auto" class="mt-2 px-0"
                   ><v-icon>mdi-minus</v-icon></v-col
                 >
-                <v-col>
+                <v-col cols="12" sm="6">
                   <TimePicker
                       :minuteStep="60"
                       format="HH:mm"
+                      style="width: 100% !important"
                       :class="course_data.coachs[0].period.end_time ? 'active' : ''"
                       placeholder="เวลาสิ้นสุด"
+                      @change="limitEndTime($event)"
                       v-model="course_data.coachs[0].period.end_time"
                       ></TimePicker>
                 </v-col>
@@ -473,6 +469,7 @@
               <v-textarea
                 v-model="course_data.detail"
                 outlined
+                @change="ChangeCourseData(course_data)"
                 placeholder="กรอกรายละเอียด..."
               ></v-textarea>
             </v-col>
@@ -483,6 +480,7 @@
               <v-textarea
                 v-model="course_data.catification"
                 outlined
+                @change="ChangeCourseData(course_data)"
                 placeholder="กรอกรายละเอียด..."
               ></v-textarea>
             </v-col>
@@ -491,6 +489,7 @@
       </template>
     </v-card>
   </div>
+
 </template>
   
   <script>
@@ -499,8 +498,13 @@ import headerCard from "@/components/header/headerCard.vue";
 import { mapGetters, mapActions } from "vuex";
 import { Input, TimePicker } from 'ant-design-vue';
 import { inputValidation, dateFormatter } from "@/functions/functions";
+import moment from 'moment';
 export default {
   name: "courseCard",
+  props:{
+    categorys : {type : Array},
+    coachs : {type : Array},
+  },
   components: {
     LabelCustom,
     headerCard,
@@ -510,11 +514,12 @@ export default {
     'ant-input': Input,
   },
   data: () => ({
+    today:new Date(),
     previewUrl: null,
-    coachs: [ 
-      {account_id : "16775648309278", first_name_th : 'ฟาติมา', last_name_th : 'จูฮัน', full_name : "ฟาติมา จูฮัน"} ,
-      {account_id : "4294589844485338", first_name_th : 'ทดสอบ', last_name_th : 'ทดสอบ', full_name : "ทดสอบ ทดสอบ"}
-    ],
+    // coachs: [ 
+    //   {account_id : "16775648309278", first_name_th : 'ฟาติมา', last_name_th : 'จูฮัน', full_name : "ฟาติมา จูฮัน"} ,
+    //   {account_id : "4294589844485338", first_name_th : 'ทดสอบ', last_name_th : 'ทดสอบ', full_name : "ทดสอบ ทดสอบ"}
+    // ],
     rules: {
       course_name_th: [
         (val) => (val || "").length > 0 || "โปรดระบุชื่อคอร์ส(ภาษาไทย)",
@@ -530,7 +535,7 @@ export default {
         (val) => (val || "") > 0 || "โปรดระบุชั่วโมงการเรียน/ครั้ง",
       ],
       location: [(val) => (val || "").length > 0 || "โปรดระบุสถานที่"],
-      course: [(val) => (val || "").length > 0 || "โปรดระบุโค้ช"],
+      coach: [(val) => (val || "").length > 0 || "โปรดระบุโค้ช"],
       start_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันที่เริ่ม"],
       end_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันที่สิ้นสุด"],
       start_time: [(val) => (val || "").length > 0 || "โปรดเลือกเวลาเริ่ม"],
@@ -547,20 +552,39 @@ export default {
     },
   }),
   created() {
-    this.$store.dispatch("CategoryModules/getCategorys")
   },
-  mounted() {},
+  mounted() {
+   
+  },
   watch: {},
   computed: {
     ...mapGetters({
       course_data: "CourseModules/getCourseData",
-      categorys : "CategoryModules/getCategorys"
     }),
   },
   methods: {
     ...mapActions({
       ChangeCourseData: "CourseModules/ChangeCourseData",
     }),
+    genStartTimeEndTime(value){
+      if (value) {
+        const end = moment(value).add(this.course_data.course_hours, 'hour')
+        this.course_data.coachs[0].period.end_time = end
+      }
+      this.ChangeCourseData(this.course_data)
+    },
+    limitEndTime(value){
+      let start = this.course_data.coachs[0].period.start_time
+      let end =  moment(value)
+      if (start.isAfter(end)) {
+        const endTime = moment(start).add(this.course_data.course_hours, 'hour')
+        this.course_data.coachs[0].period.end_time = endTime
+      }
+      this.ChangeCourseData(this.course_data)
+    },
+    removeFile(){
+      this.previewUrl = ""
+    },
     inputName(e, lang) {
       inputValidation(e, lang);
     },
