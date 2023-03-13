@@ -73,7 +73,7 @@
         </v-stepper-header>
         <!-- Step 1 -->
         <v-stepper-content step="1" class="pa-2 pt-3">
-          <course-card></course-card>
+          <course-card :categorys="categorys" :coachs="coachs"></course-card>
         </v-stepper-content>
         <!-- Step 2 -->
         <v-stepper-content step="2" class="pa-2">
@@ -89,13 +89,13 @@
             <v-card-text class="pt-0">
               <v-divider class="mb-3"></v-divider>
               <!-- COACH -->
-              <coachs-card></coachs-card>
+              <coachs-card :coachs="coachs"></coachs-card>
             </v-card-text>
           </v-card>
         </v-stepper-content>
         <!-- Step 3 -->
         <v-stepper-content step="3" class="pa-2">
-          <package-card></package-card>
+          <package-card :packages="packages" :options="options"></package-card>
           <v-row dense>
             <v-col class="d-flex align-center justify-center" cols="12">
               <v-btn
@@ -195,10 +195,10 @@ export default {
       { label: "วันศุกร์", value: "Friday" },
       { label: "วันเสาร์", value: "Saturday" },
     ],
-    packages: ["Exclusive Package", "Family Package", "Group Package"],
-    packages_selected: [],
-    options: ["รายวัน", "รายเดือน", "รายเทมอ", "รายปี"],
-    options_selected: [],
+    // packages: ["Exclusive Package", "Family Package", "Group Package"],
+    // packages_selected: [],
+    // options: ["รายวัน", "รายเดือน", "รายเทมอ", "รายปี"],
+    // options_selected: [],
     step_header_data: ["คอร์สเรียน", "ช่วงเวลาและโค้ช", "แพ็คเกจ"],
     courses: ["โค้ชหนุ่ม", "โค้ชพอล"],
     kingdoms: ["อาณาจักรศิลปะสมัยใหม่", "อาณาจักร P.E."],
@@ -225,8 +225,14 @@ export default {
       end_date : "",
     }
   }),
-  created() {},
-  mounted() {},
+  created() {
+  },
+  mounted() {
+    this.$store.dispatch("CategoryModules/GetCategorys")
+    this.$store.dispatch("CourseModules/GetCoachs");
+    this.$store.dispatch("CourseModules/GetPackages")
+    this.$store.dispatch("CourseModules/GetOptions")
+  },
   watch: {
     "course_data.type"(newQuestion) {
       if (newQuestion) {
@@ -237,13 +243,20 @@ export default {
   computed: {
     ...mapGetters({
       course_data: "CourseModules/getCourseData",
+      coachs: "CourseModules/getCoachs",
+      categorys : "CategoryModules/getCategorys",
+      packages : "CourseModules/getPackages",
+      options : "CourseModules/getOptions",
     }),
   },
   methods: {
     ...mapActions({
       ChangeCourseData: "CourseModules/ChangeCourseData",
+      CreateCourse : "CourseModules/CreateCourse",
     }),
-    save(){},
+    save(){
+      this.CreateCourse()
+    },
     inputName(e, lang){
       inputValidation(e, lang)
     },
@@ -280,18 +293,20 @@ export default {
     },
     addCoach() {
       this.course_data.coachs.push({
-        close_coach: false,
+        coach_id : "",
         coach_name: "",
+        teach_days_used : [],
         teach_day_data: [
           {
+            class_open: false,
             teach_day: [],
             class_date: [
               {
                 class_date_range: {
-                  start_date: "",
-                  menu_start_date: false,
-                  end_date: "",
-                  menu_end_date: false,
+                  start_time: "",
+                  menu_start_time: false,
+                  end_time: "",
+                  menu_end_time: false,
                 },
                 students: 0,
               },
@@ -311,10 +326,8 @@ export default {
           menu_end_date: false,
         },
         period: {
-          start_date: "",
-          menu_start_date: false,
-          end_date: "",
-          menu_end_date: false,
+          start_time: "",
+          end_time: "",
         },
       });
       this.ChangeCourseData(this.course_data);

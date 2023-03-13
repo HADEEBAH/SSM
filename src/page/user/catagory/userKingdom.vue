@@ -46,7 +46,7 @@
 
               <v-card-text>
                 <div>
-                  {{ item.category_name_en }}
+                  {{ item.categoryNameEng }}
                   <span class="text-red-500 cursor-pointer">อ่านต่อ...</span>
                 </div>
               </v-card-text>
@@ -93,6 +93,7 @@ export default {
     dataStorage: {},
   }),
   created() {
+    
     this.dataStorage = JSON.parse(localStorage.getItem("userDetail"));
     //console.log("true", this.dataStorage);
     if (this.dataStorage) {
@@ -103,8 +104,8 @@ export default {
   },
 
   mounted() {
-    this.$store.dispatch("NavberUserModules/changeTitleNavber", "อาณาจักร");
     this.$store.dispatch("CategoryModules/GetCategorys");
+    this.$store.dispatch("NavberUserModules/changeTitleNavber", "อาณาจักร");
   },
   computed: {
     ...mapGetters({
