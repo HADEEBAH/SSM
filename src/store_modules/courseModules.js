@@ -78,7 +78,7 @@ const CourseModules = {
         },
       ],
     },
-    cuurses :[],
+    courses :[],
     packages : [],
     options: [],
     coachs :[],
@@ -120,7 +120,7 @@ const CourseModules = {
         console.log(error)
       }
     },
-    // COURSE :: LIST
+    // COACH :: LIST
     async GetCoachs(context){
       try{
         let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/role/R_3`)
@@ -143,11 +143,31 @@ const CourseModules = {
       console.log("CourseData : ",course_data)
       context.commit("SetCourseData",course_data)
     },
+    // COURSE :: LIST 
+    async GetCoursesList(context,){
+      try{
+        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/list?limit=10&page=1`)
+        let courses = []
+        await data.data.forEach((course)=>{
+          courses.push({
+            course_id : course.c_course_id,
+            category_id : course.c_category_id,
+            category : "ยังไม่ได้",
+            course : `${course.c_course_name_th}(${course.c_course_name_en})`,
+            status : course.c_course_status,
+            course_open : course.c_course_open_date ? course.c_course_open_date : "-"
+          })
+        })
+        context.commit("SetCourses",courses)
+      }catch(error){
+        console.log(error)
+      }
+    },
     // COURSE :: DETAIL
     async GetCourse(context, course_id){
+      console.log("GetCourse")
       try{
           let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
-          
           let payload = {
             course_id : data.data.courseId,
             course_type_id : data.data.courseTypeId,
@@ -167,44 +187,46 @@ const CourseModules = {
             coachs: [],
             packages: [],
           }
-          if(data.data.courseTypeId === "CT_1"){
-            data.data.coachs.forEach((coach)=>{
-              let teach_day_data = []
-              data.data.dayOfWeek.filter(v => v.accountID === coach.accountID).forEach((coach_date)=>{
-                teach_day_data.push( {
-                  class_open: coach_date.status === 'Active' ? true : false,
-                  teach_day: [coach_date.dayOfWeekName],
-                  course_coach_id : coach_date.courseCoachId,
-                  class_date: [],
+          if(data.statusCode === 200){
+            if(data.data.courseTypeId === "CT_1"){
+              data.data.coachs.forEach((coach)=>{
+                let teach_day_data = []
+                data.data.dayOfWeek.filter(v => v.accountID === coach.accountID).forEach((coach_date)=>{
+                  teach_day_data.push( {
+                    class_open: coach_date.status === 'Active' ? true : false,
+                    teach_day: [coach_date.dayOfWeekName],
+                    course_coach_id : coach_date.courseCoachId,
+                    class_date: [],
+                  })
                 })
+                payload.coachs.push(
+                  { 
+                    coach_id : coach.coachId,
+                    coach_name: `${coach.coachFirstNameTH} ${coach.coachLastNameTH}`,
+                    teach_day_data: [],
+                    class_date_range: {
+                      start_date: coach.courseStudyStartDate,
+                      menu_start_date: false,
+                      end_date: coach.courseStudyEndDate,
+                      menu_end_date: false,
+                    },
+                    register_date_range: {
+                      start_date: coach.courseRegisterStartDate,
+                      menu_start_date: false,
+                      end_date: coach.courseRegisterEndDate,
+                      menu_end_date: false,
+                    },
+                    period: {
+                      start_time: coach.coursePeriodEndDate,
+                      end_time: coach.coursePeriodStartDate,
+                    },
+                  },
+                )
+               
               })
-              payload.coachs.push(
-                { 
-                  coach_id : coach.coachId,
-                  coach_name: `${coach.coachFirstNameTH} ${coach.coachLastNameTH}`,
-                  teach_day_data: [],
-                  class_date_range: {
-                    start_date: coach.courseStudyStartDate,
-                    menu_start_date: false,
-                    end_date: coach.courseStudyEndDate,
-                    menu_end_date: false,
-                  },
-                  register_date_range: {
-                    start_date: coach.courseRegisterStartDate,
-                    menu_start_date: false,
-                    end_date: coach.courseRegisterEndDate,
-                    menu_end_date: false,
-                  },
-                  period: {
-                    start_time: coach.coursePeriodEndDate,
-                    end_time: coach.coursePeriodStartDate,
-                  },
-                },
-              )
-             
-            })
+            }
+            context.commit("SetCourseData",data.data)
           }
-          context.commit("SetCourseData",data.data)
       }catch(error){
         console.log(error)
       }
@@ -297,31 +319,8 @@ const CourseModules = {
         console.log(error)
       }
     },
-    async GetCourseDetail(context){
-      try{
-        let course = {
-          type: "course_type_name_th",
-          type_id : "course_type_id",
-          course_name_th: "c_course_name_th",
-          course_name_en: "c_course_name_en",
-          course_img : "c_course_img",
-          category_id : "category_id",
-          category_name: "category_name_th",
-          course_open_date: "c_course_open_date",
-          course_hours: "c_course_per_time",
-          location: "c_course_location",
-          detail: "c_course_description",
-          music_performance: "c_course_music_performance",
-          catification: "c_course_certification",
-          sttus :  "c_course_status",
-          price : "c_course_price"
-        }
-        context.commit("SetCourseData",course)
-      }catch(error){
-        console.log(error)
-      }
-    },
-    async GetCourses(context,category_id, status, course_type_id){
+   
+    async GetCoursesFilter(context,category_id, status, course_type_id){
       try{
         console.log(process.env.APP_URL)
         let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/fillter/?category_id=${category_id}&status=${status}&course_type_id=${course_type_id}`)
@@ -375,6 +374,10 @@ const CourseModules = {
     },
     getTeachDays(state){
       return state.teach_days
+    },
+    getCourses(state){
+      console.log(state.course_data)
+      return state.courses
     }
   },
 };
