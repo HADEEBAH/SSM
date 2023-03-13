@@ -21,10 +21,15 @@ import Student from '@/components/admin/createStudent.vue'
 //User
 import UserKingdom from '@/page/user/catagory/userKingdom.vue'
 import CartList from '@/page/user/cart/cartList.vue'
-import StudentProfile from '@/page/user/profile/studentProfile.vue'
-import ParentProfile from '@/page/user/profile/parentProfile.vue'
-import ParentsDetail from '@/page/user/profile/parentsDetail.vue'
-import StudentsDetailInParents from '@/page/user/profile/studentsDetailInParents.vue'
+import ProfileRelations from '@/page/user/profile/profileRelations.vue'
+import ProfileDetail from '@/page/user/profile/profileDetail.vue'
+import UserProfile from '@/page/user/profile/userProfile.vue'
+import ProfileCertificate from '@/page/user/profile/profileCertificate.vue'
+import ProfilePassword from '@/page/user/profile/profilePassword.vue'
+import ProfileResetPassword from '@/page/user/profile/profileResetPassword.vue'
+import ProfileLanguages from '@/page/user/profile/profileLanguages.vue'
+import ProfilePolicy from '@/page/user/profile/profilePolicy.vue'
+import ProfileRules from '@/page/user/profile/profileRules.vue'
 //auth
 // import UserLoginPage from '@/page/auth/userLoginPage'
 
@@ -159,25 +164,51 @@ const routes = [
         component: CartList,
       },
       {
-        path: 'studentProfile',  
-        name: 'StudentProfile',
-        component: StudentProfile,
+        path: 'profileRelations/:action/:profile_id',  
+        name: 'ProfileRelations',
+        component: ProfileRelations,
       },
       {
-        path: 'parentProfile',  
-        name: 'ParentProfile',
-        component: ParentProfile,
+        path: 'profileDetail/:profile_id',  
+        name: 'ProfileDetail',
+        component: ProfileDetail,
       },
       {
-        path: 'parentsDetail',  
-        name: 'ParentsDetail',
-        component: ParentsDetail,
+        path: 'userProfile',  
+        name: 'UserProfile',
+        component: UserProfile,
       },
       {
-        path: 'studentsDetailInParents',  
-        name: 'StudentsDetailInParents',
-        component: StudentsDetailInParents,
+        path: 'profileCertificate',  
+        name: 'ProfileCertificate',
+        component: ProfileCertificate,
       },
+      {
+        path: 'profilePassword',  
+        name: 'ProfilePassword',
+        component: ProfilePassword,
+      },
+      {
+        path: 'profileResetPassword',  
+        name: 'ProfileResetPassword',
+        component: ProfileResetPassword,
+      },
+      {
+        path: 'profileLanguages',  
+        name: 'ProfileLanguages',
+        component: ProfileLanguages,
+      },
+      {
+        path: 'profilePolicy',  
+        name: 'ProfilePolicy',
+        component: ProfilePolicy,
+      },
+      {
+        path: 'profileRules',  
+        name: 'ProfileRules',
+        component: ProfileRules,
+      },
+      
     ]
   },
 ]

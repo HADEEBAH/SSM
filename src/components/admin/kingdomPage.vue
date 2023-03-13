@@ -9,11 +9,25 @@
             <v-card-text
               class="border-dashed border-2 border-blue-600 rounded-lg"
             >
-              <v-row v-if="preview_url">
-                <v-col>
-                  <img :src="preview_url" style="max-height: 200px" />
+            <!-- @click="openFileSelector" -->
+            <div >
+              <v-row v-if="preview_url" >
+                <v-col  class="flex align-center justify-center">
+                  <v-img :src="preview_url" style="max-width: 150px" class="text-right">
+                    <v-btn icon>
+                <v-icon color="#ff6b81" @click="closeImage()">mdi-close-circle</v-icon>
+              </v-btn>
+                  </v-img>
                 </v-col>
+                <input
+                    ref="fileInput"
+                    type="file"
+                    @change="uploadFile"
+                    style="display: none"
+                  />
               </v-row>
+
+            </div>
               <v-row v-if="!preview_url">
                 <v-col cols="12" class="flex align-center justify-center">
                   <v-img
@@ -46,6 +60,7 @@
                   />
                 </v-col>
               </v-row>
+           
             </v-card-text>
           </v-card>
         </v-col>
@@ -59,7 +74,11 @@
       <v-row dense>
         <v-col cols="12" sm="6">
           <label-custom text="ชื่ออาณาจักร(ภาษาไทย)"></label-custom>
+          <div v-if="isEnabled">
+            {{ kingdom.kingdom_name_th }}
+          </div>
           <v-text-field
+            v-else
             dense
             placeholder="กรอกชื่ออาณาจักร"
             outlined
@@ -69,7 +88,12 @@
         </v-col>
         <v-col cols="12" sm="6">
           <label-custom text="ชื่ออาณาจักร(ภาษาอังกฤษ)"></label-custom>
+          <div v-if="isEnabled">
+            {{ kingdom.kingdom_name_eng }}
+          </div>
           <v-text-field
+            v-else
+            v-bind:disabled="isDisabled"
             dense
             placeholder="กรอกชื่ออาณาจักร"
             outlined
@@ -82,7 +106,12 @@
       <v-row dense>
         <v-col cols="12" sm="6">
           <label-custom text="จัดสอนโดย"></label-custom>
+          <div v-if="isEnabled">
+            {{ kingdom.learning_method }}
+          </div>
           <v-text-field
+            v-else
+            v-bind:disabled="isDisabled"
             dense
             placeholder="ระบุสถาบันผู้จัดสอน เช่น ศูนย์ดนตรี Manila Tamarind"
             outlined
@@ -94,7 +123,12 @@
       <v-row dense>
         <v-col cols="12">
           <label-custom text="รายละเอียด"></label-custom>
+          <div v-if="isEnabled">
+            {{ kingdom.detail }}
+          </div>
           <v-textarea
+            v-else
+            v-bind:disabled="isDisabled"
             dense
             class="form2"
             placeholder="กรอกรายละเอียด..."
@@ -110,8 +144,8 @@
         <button :class="isInputValid ? 'active' : ''">Submit</button>
       </div> -->
 
-      <v-row>
-        <v-col align="right" sm="" cols="12">
+      <v-row dense v-if="!isEnabled">
+        <!-- <v-col align="right" sm="" cols="12">
           <v-btn
             outlined
             :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
@@ -144,9 +178,46 @@
           >
             แก้ไข
           </v-btn>
+        </v-col> -->
+      
+        <v-col align="right" sm="" cols="12" >
+          <v-btn
+            outlined
+            :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
+            color="#ff6b81"
+            @click="cancleText()"
+          >
+            ยกเลิก
+          </v-btn>
         </v-col>
-      </v-row>
 
+        <v-col sm="auto" cols="12">
+          <v-btn
+            class="white--text mb-5 "
+            depressed
+            :disabled="!isInputValid"
+            :color="isInputValid ? '#ff6b81' : ''"
+            :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
+            @click="openDialog()"
+
+            >บันทึก
+          </v-btn>
+        </v-col>
+
+       
+      </v-row>
+ <v-col cols="12" sm="12" v-if="isEnabled" align="right">
+          <v-btn
+            class="white--text my-5 w-full"
+            depressed
+            :disabled="!isInputValid"
+            :color="isInputValid ? '#ff6b81' : ''"
+            :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
+            @click="submitEdit()"
+          >
+            <span class="mdi mdi-pencil-outline">แก้ไข</span>
+          </v-btn>
+        </v-col>
       <!-- DIALOG -->
       <v-dialog class="pa-2" width="50vw" v-model="dialog_show" persistent>
         <v-card>
@@ -184,6 +255,8 @@ export default {
     return {
       inputValue: "",
       dialog_show: false,
+      isEnabled: false,
+      isDisabled: false,
       saved: false,
       preview_url: null,
       kingdom: {
@@ -192,7 +265,6 @@ export default {
         detail: "",
         learning_method: "",
       },
-      
     };
   },
 
@@ -207,7 +279,7 @@ export default {
       return (
         this.kingdom.kingdom_name_th.trim().length > 0 &&
         this.kingdom.kingdom_name_eng.trim().length > 0 &&
-        this.kingdom.coach.trim().length > 0 &&
+        this.kingdom.learning_method.trim().length > 0 &&
         this.kingdom.detail.trim().length > 0 &&
         this.preview_url.trim().length > 0
       );
@@ -223,11 +295,21 @@ export default {
       this.dialog_show = false;
       this.saved = true;
     },
+    closeImage() {
+        this.preview_url = null
+    },
     openFileSelector() {
       this.$refs.fileInput.click();
     },
     edit() {
       this.$router.push({ name: "Finance" });
+    },
+    cancleText() {
+      this.kingdom.kingdom_name_th = ''
+        this.kingdom.kingdom_name_eng = ''
+        this.kingdom.learning_method = ''
+        this.kingdom.detail =''
+        this.preview_url = ''
     },
     openDialog() {
       Swal.fire({
@@ -249,7 +331,7 @@ export default {
                 category_name_eng: this.kingdom.kingdom_name_eng,
                 img_file: this.preview_url,
                 detail: this.kingdom.detail,
-                taught_by: this.kingdom.coach,
+                taught_by: this.kingdom.learning_method,
               }
             );
             if (data.statusCode === 201) {
@@ -268,9 +350,10 @@ export default {
           Swal.fire("Changes are not saved", "", "info");
         }
       });
-      // this.dialog_show = true;
+      this.isDisabled = false;
+    this.isEnabled = true;
+    this.buttonName = "แก้ไข";
     },
-    createKingdom() {},
     uploadFile() {
       this.file = this.$refs.fileInput.files[0];
       console.log(this.file);
@@ -285,6 +368,13 @@ export default {
     validate(e, type) {
       inputValidation(e, type);
     },
+
+    submitEdit() {
+    this.isDisabled = true;
+    this.isEnabled = false;
+    this.buttonName = "แก้ไข";
   },
+  },
+
 };
 </script>

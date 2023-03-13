@@ -148,7 +148,7 @@ export default {
       last_name_en : "Test 01",
       last_name_th : "Test 01",
       role : { role_id : "01", role_name_th : "โค้ช",role_name_en : "coach" },
-      roles : ["coach"],
+      roles : ["parent"],
       tel : "0821241243",
     }))
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"))

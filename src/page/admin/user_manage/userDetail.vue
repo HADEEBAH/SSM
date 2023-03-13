@@ -540,11 +540,13 @@
                       v-model="search"
                       prepend-inner-icon="mdi-magnify"
                       label="ค้นหา"
-                      single-line
                       hide-details
                       dense
                       outlined
+                      color="pink"
                     ></v-text-field>
+                 
+                  
                   </v-col>
 
                   <v-col cols="12" sm="6" align="right">
@@ -557,70 +559,71 @@
                   </v-col>
                 </v-row>
                 <!-- Card Certificate -->
+
                 <v-card
-                  v-model="cart_certificate"
                   class="mb-5"
-                  v-for="(
-                    certificate, certificate_index
-                  ) in students.certificates"
-                  :key="`${certificate_index}-certificate`"
+                  v-for="(item, index) in students.certificates"
+                  :key=index
                 >
-                  <v-row class="mx-5 my-5">
-                    <!-- col 1 -->
-                    <v-col cols="12" sm="7">
+                <div class="mx-5 my-5">
+                  <v-row>
+                    <v-col cols="12" sm="6" class="ml-5 front-bold">{{ item.name_certificate }}</v-col>
+                    <v-col cols="12" sm="">วันที่แข่ง:{{ item.certificate_date }}</v-col>
+                  </v-row>
+
+                  <v-row>
+                    <v-col cols="8">
                       <v-row>
-                        <v-col cols="12" sm="6" class="ml-5 front-bold">
-                          {{ certificate.name_certificate }}
-                        </v-col>
-                        <v-col cols="12" sm="">
-                          วันที่แข่ง:{{ certificate.certificate_date }}
-                        </v-col>
-                      </v-row>
-                      <v-row class="ml-2">
-                        <v-col>
+                        <v-col cols="1">
                           <v-img
                             src="@/assets/userManagePage/certificate .png"
                             width="50px"
                             height="50px"
+                            contain
                           ></v-img>
-                          <span class="pink--text cursor-pointer">{{
-                            certificate.previewUrl
-                          }}</span>
+                        </v-col>
+                        <v-col cols="" align-self="center"><span class="pink--text underline underline-offset-2">{{item.fileName }}</span></v-col>
+                      </v-row>
+                    </v-col>
+
+                    <v-col cols="4" align="end">
+                      <v-row>
+                        <v-col cols="10" align="end">
+                          <v-btn
+                            v-if="!item.previewUrl"
+                            depressed
+                            class="white--text"
+                            color="#ff6b81"
+                            @click="editCertificateDialog(item, index)"
+                          >
+                            <span class="mdi mdi-plus"></span> เพิ่มหนังสือรับรอง
+                          </v-btn>
+                          <v-btn
+                            v-else
+                            depressed
+                            class="white--text"
+                            color="#ff6b81"
+                            @click="detailCertificateDialog(item, index)"
+                          >
+                            แสดงหนังสือรับรอง
+                          </v-btn>
+                        </v-col>
+
+                        <v-col cols="2" align="end">
+                          <v-icon
+                            larg
+                            color="#FF6B81"
+                            @click="removeCertificate(index)"
+                            v-if="students.certificates.length >= 2"
+                          >
+                            mdi-delete
+                          </v-icon>
                         </v-col>
                       </v-row>
                     </v-col>
-                    <!-- col 2 -->
-                    <v-col cols="12" sm="3">
-                      <v-btn
-                        v-if="!certificate.previewUrl"
-                        depressed
-                        class="white--text"
-                        color="#ff6b81"
-                        @click="addCertificateDialog(certificate_index)"
-                      >
-                        <span class="mdi mdi-plus"></span> เพิ่มหนังสือรับรอง
-                      </v-btn>
-                      <v-btn
-                        v-else
-                        depressed
-                        class="white--text"
-                        color="#ff6b81"
-                        @click="showCertificate(true)"
-                      >
-                        แสดงหนังสือรับรอง
-                      </v-btn>
-                    </v-col>
-                    <v-col cols="12" sm="2" align="right">
-                      <v-icon
-                        larg
-                        color="#FF6B81"
-                        @click="removeCertificate(certificate_index)"
-                        v-if="students.certificates.length >= 2"
-                      >
-                        mdi-delete
-                      </v-icon>
-                    </v-col>
                   </v-row>
+                </div>
+                  
                 </v-card>
 
                 <!-- DIALOG -->
@@ -632,6 +635,7 @@
                 >
                   <v-card>
                     <v-card-title>
+                      {{ selectedIndex }}
                       <v-row>
                         <v-col cols="12" align="right">
                           <v-btn icon @click="closeDialog">
@@ -671,18 +675,12 @@
                         </v-text-field>
                       </v-col>
                     </v-row>
-
                     <!-- Upload file -->
                     <v-card class="mx-5 my-5" flat>
                       <v-card-text
                         class="border-dashed border-2 border-blue-600 rounded-lg"
                       >
-                        <v-row v-if="previewUrl">
-                          <v-col>
-                            <img :src="previewUrl" style="max-height: 200px" />
-                          </v-col>
-                        </v-row>
-                        <v-row v-if="!previewUrl">
+                        <v-row>
                           <v-col
                             cols="12"
                             class="flex align-center justify-center"
@@ -726,9 +724,19 @@
                         </v-row>
                       </v-card-text>
                     </v-card>
+                    <v-card v-if="fileName !== ''" class="pa-4 ma-4">
+                      <v-row>
+                        <v-col cols="2">
+                          <v-img src="../../../assets/userManagePage/pdfIcon.png" width="30px" height="30px"></v-img>
+                        </v-col>
+                        <v-col cols="8"><span>{{ fileName }}</span></v-col>
+                        <v-col cols="2" align="end"><v-icon @click="removeFile()">mdi-close</v-icon></v-col>
+                      </v-row>
+                    </v-card>
 
                     <div class="text-center mx-5 mb-5">
                       <v-btn
+                      v-if="status === 'create'"
                         depressed
                         class="white--text"
                         color="#ff6b81"
@@ -736,12 +744,30 @@
                       >
                         บันทึก
                       </v-btn>
+                      <v-btn
+                      v-else-if="status === 'edit'"
+                        depressed
+                        class="white--text"
+                        color="#ff6b81"
+                        @click="saveEditDialog(selectedIndex)"
+                      >
+                        บันทึก
+                      </v-btn>
+                      <v-btn
+                      v-else
+                        depressed
+                        class="white--text"
+                        color="#ff6b81"
+                        @click="certificate_dialog_show = false"
+                      >
+                        ปิด
+                      </v-btn>
                     </div>
                   </v-card>
                 </v-dialog>
 
                 <!-- DIALOG SHOW CERTIFICATE -->
-                <v-dialog v-model="certificate_show">
+                <!-- <v-dialog v-model="certificate_show">
                   <v-row>
                     <v-col cols="12" align="right">
                       <v-btn icon @click="closeDialog">
@@ -757,7 +783,7 @@
                   >
                     {{ certificate.previewUrl }}
                   </div>
-                </v-dialog>
+                </v-dialog> -->
               </div>
             </div>
           </v-card>
@@ -853,7 +879,11 @@ export default {
     certificate_show: false,
     addCertificate_dialog_show: false,
     certificate_dialog_show: false,
+    fileName: '',
     previewUrl: null,
+    status: 'create',
+    selectedIndex: ''
+
   }),
   created() {},
   mounted() {
@@ -989,49 +1019,95 @@ export default {
     },
     uploadFile() {
       this.file = this.$refs.fileInput.files[0];
+      this.fileName = this.file.name
+      console.log(this.file);
       if (!this.file) return;
       const reader = new FileReader();
       reader.onload = (e) => {
+        console.log(e);
         this.previewUrl = e.target.result;
       };
       reader.readAsDataURL(this.file);
     },
-    saveDialog() {
-      console.log("success", {
-        name_certificate: this.name_certificate,
-        certificate_date: this.certificate_date,
-        previewUrl: this.previewUrl,
-      });
-      this.certificate_dialog_show = false;
-      this.addCertificate_dialog_show = false;
-
-      if (this.certificateType == "add") {
-        this.students.certificates.push({
-          name_certificate: this.name_certificate,
-          certificate_date: this.certificate_date,
-          previewUrl: this.previewUrl,
-        });
-      } else {
-        this.students.certificates[this.certificateType].previewUrl;
-      }
-    },
-    removeCertificate(index) {
-      this.students.certificates.splice(index, 1);
+    removeFile() {
+      this.fileName = ''
     },
     addCertificateCard() {
       this.students.certificates.push({
         name_certificate: "",
         certificate_date: "",
         previewUrl: null,
+        
       });
     },
     showCertificate() {
       this.certificate_show = true;
     },
+
     addCertificateDialog(type) {
-      this.certificate_dialog_show = true;
-      this.certificateType = type;
+      this.status = 'create'
+      this.name_certificate = ''
+      this.certificate_date = ''
+      this.file = ''
+      this.fileName = ''
+      this.previewUrl = null
+      this.certificate_dialog_show = true
+      this.certificateType = type
     },
+    editCertificateDialog(item, index) {
+      this.status = 'edit'
+      this.selectedIndex = index
+      this.name_certificate = item.name_certificate
+      this.certificate_date = item.certificate_date
+      this.previewUrl = item.previewUrl
+      this.certificate_dialog_show = true
+    },
+    detailCertificateDialog(item, index) {
+      this.status = 'detail'
+      this.selectedIndex = index
+      this.name_certificate = item.name_certificate
+      this.certificate_date = item.certificate_date
+      this.previewUrl = item.previewUrl
+      this.certificate_dialog_show = true
+    },
+    saveDialog() {
+      console.log("create success", {
+        name_certificate: this.name_certificate,
+        certificate_date: this.certificate_date,
+        previewUrl: this.previewUrl,
+
+      });
+
+      if (this.status == "create") {
+        this.students.certificates.push({
+          name_certificate: this.name_certificate,
+          certificate_date: this.certificate_date,
+          previewUrl: this.previewUrl,
+          fileName: this.fileName
+        });
+      }
+      this.certificate_dialog_show = false;
+    },
+    saveEditDialog(index) {
+      console.log("create success", {
+        name_certificate: this.name_certificate,
+        certificate_date: this.certificate_date,
+        previewUrl: this.previewUrl,
+      });
+
+      if (this.status !== "create") {
+        console.log('edit select array', this.students.certificates[index]);
+        this.students.certificates[index].name_certificate = this.name_certificate;
+        this.students.certificates[index].certificate_date = this.certificate_date;
+        this.students.certificates[index].previewUrl = this.previewUrl;
+        this.students.certificates[index].fileName = this.fileName;
+      }
+      this.certificate_dialog_show = false;
+    },
+    removeCertificate(index) {
+      this.students.certificates.splice(index, 1);
+    }
+
   },
   computed: {
     ...mapGetters({
