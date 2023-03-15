@@ -11,7 +11,7 @@ RUN npm run build
 FROM nginx:stable-alpine as production-stage
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 #COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY ./deployments/nginx /etc/nginx/
+COPY ./deployments/nginx/sites-enabled/deploy.conf /etc/nginx/conf.d/default.conf
 
 ENV TZ=Asia/Bangkok
 
