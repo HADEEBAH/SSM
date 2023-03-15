@@ -139,18 +139,18 @@ const routes = [
         component: userMenageCourseDetail,
       },
       {
-        path: 'courses',  
-        name: 'userCourseList',
+        path: 'course/:category_id',  
+        name: 'userCourseList_categoryId',
         component: userCourseList,
       },
       {
-        path: 'course/detail',  
-        name: 'userCourseDetail',
+        path: 'course/detail/:course_id',  
+        name: 'userCourseDetail_courseId',
         component: userCourseDetail,
       },
       {
-        path: 'course/package',  
-        name: 'userCoursePackage',
+        path: 'course/package/:course_id',  
+        name: 'userCoursePackage_courseId',
         component: userCoursePackage,
       },
       {

@@ -25,39 +25,39 @@
             </template>
         </ImgCard>
         <!-- SELECT CLASS DATE -->
-        <template v-if="courses.course_type == 'general_course'">
+        <template v-if="course_order.course_type_id == 'CT_1'">
             <v-row dense>
                 <v-col class="text-lg font-bold">
                     เลือกช่วงวันเรียน
                 </v-col>
             </v-row>
             <v-radio-group
-                v-model="courses.day"
+                v-model="course_order.day"
                 @change="validateButton"
             >
                 <v-row>
-                    <v-col cols="6" v-for="(date , date_index) in class_dates" :key="date_index">
+                    <v-col cols="6" v-for="(date , date_index) in course_data.days_of_class" :key="date_index">
                         <v-radio
-                            :label="date.label"
+                            :label="dayOfWeekArray(date.day)"
                             color="#ff6B81"
                             :value="date"
                         ></v-radio>
                     </v-col>
                 </v-row>
             </v-radio-group>
-            <template v-if="courses.day">
+            {{course_order.students}}
+            <template v-if="course_order.day">
                 <v-row>
                     <v-col class="text-lg font-bold">เลือกช่วงเวลาเรียน</v-col>
                 </v-row>
                 <v-radio-group 
-                    @change="courses.coach = ''"
-                    v-model="courses.time"
+                    v-model="course_order.time"
                 >
                     <v-row>
-                        <v-col cols="6" v-for="(time , time_index) in courses.day.times" :key="time_index">
+                        <v-col cols="6" v-for="(time , time_index) in course_order.day.times" :key="time_index">
                             <v-radio
                                 color="#ff6B81"
-                                :value="`${time.start}-${time.end}`"
+                                :value="time"
                             >
                                 <template v-slot:label>
                                     {{`${time.start}-${time.end}`}} 
@@ -67,17 +67,18 @@
                     </v-row>
                 </v-radio-group>
             </template>
-            <template v-if="courses.time">
+            {{ course_order.time }}
+            <template v-if="course_order.time">
                 <v-row>
                     <v-col class="text-lg font-bold">เลือกโค้ช</v-col>
                 </v-row>
                 <v-autocomplete
                 dense
-                v-model="courses.coach"
+                v-model="course_order.coach"
                 color="#FF6B81"
-                :items="coachs"
-                item-text="name"
-                item-value="coach_id"
+                :items="course_data.coachs.filter(v => course_order.day.course_coach_id.includes(v.course_coach_id))"
+                item-text="coach_name"
+                item-value="course_coach_id"
                 item-color="pink"
                 outlined
                 @change="validateButton"
@@ -92,12 +93,12 @@
                     <v-list-item-content>
                     <v-list-item-title
                         ><span
-                        :class="courses.coach === item.coach_id ? 'font-bold' : ''"
-                        >{{ item.name }}</span
+                        :class="course_order.coach === item.course_coach_id ? 'font-bold' : ''"
+                        >{{ item.coach_name }}</span
                         ></v-list-item-title>
                     </v-list-item-content>
                     <v-list-item-action>
-                    <v-icon v-if="courses.coach === item.coach_id"
+                    <v-icon v-if="course_order.coach === item.course_coach_id"
                         >mdi-check-circle</v-icon
                     >
                     </v-list-item-action>
@@ -125,8 +126,8 @@
             </v-col>
         </v-row>
         <!-- PARENT -->
-        <template v-if="courses.students.filter(v => v.is_other === false).length > 0">
-            <div class="mb-3" v-for="(parent, index_parent) in courses.students.filter(v => v.is_other === false)[0].parents" :key="`${index_parent}-perent`">
+        <template v-if="course_order.students.filter(v => v.is_other === false).length > 0">
+            <div class="mb-3" v-for="(parent, index_parent) in course_order.students.filter(v => v.is_other === false)[0].parents" :key="`${index_parent}-perent`">
                 <v-row dense class="mb-3"> 
                     <v-col cols="auto"><v-icon color="#ff6b81">mdi-card-account-details-outline</v-icon></v-col>
                     <v-col class="text-lg font-bold">{{ `ผู้ปกครอง` }}</v-col>
@@ -154,11 +155,11 @@
             </div>
         </template>
         <!-- STUDENT -->
-        <div v-for="(student, index_student) in courses.students.filter(v => v.is_other === true)" :key="index_student">
+        <div v-for="(student, index_student) in course_order.students.filter(v => v.is_other === true)" :key="index_student">
             <v-row dense > 
                 <v-col cols="auto"><v-icon color="#ff6b81">mdi-card-account-details-outline</v-icon></v-col>
                 <v-col class="text-lg font-bold">{{ `ผู้เรียน ${index_student+1}` }}</v-col>
-                <v-col cols="auto" v-if="courses.students.filter(v => v.is_other === true).length > 1">
+                <v-col cols="auto" v-if="course_order.students.filter(v => v.is_other === true).length > 1">
                     <v-btn @click="removeStudent(student)" small icon color="red" dark><v-icon>mdi-close</v-icon></v-btn>
                 </v-col>
             </v-row>
@@ -209,7 +210,7 @@
                     </template>
                 </v-card-text>
             </v-card>
-            <v-row class="mb-3" dense v-if="index_student === courses.students.filter(v => v.is_other === true).length - 1">
+            <v-row class="mb-3" dense v-if="index_student === course_order.students.filter(v => v.is_other === true).length - 1">
                 <v-col>
                     <v-btn v-if="!checkMaximumStudent" @click="addStudent" text dense color="#ff6b81"><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มผู้เรียน</v-btn>
                 </v-col>
@@ -228,6 +229,7 @@
                 :disabled="disable_checkout"  
                 elevation="0"
                 dense 
+                @click="checkOut"
                 :color="disable_checkout ?  '#C4C4C4': '#ff6b81'">ชำระเงิน</v-btn>
             </v-col>
         </v-row>
@@ -322,62 +324,46 @@ import { mapActions, mapGetters } from 'vuex';
             lastname_en: "พุฒยืน",
             tel: "089-999-9999",
         },
+        user_login : {},
         show_dialog_cart : false,
         dialog_parent : false,
         apply_for_yourself : false, 
         apply_for_others : false,
-        class_dates :[
-            { label : "อาทิตย์", value: 0 ,times : [
-                {start : '9:00',end : '10:00', maximum_student : 38, students_amount : 26 },
-                {start : '10:00',end : '11:00', maximum_student : 38, students_amount : 26 },
-                {start : '11:00',end : '12:00', maximum_student : 38, students_amount : 26 },
-                {start : '12:00',end : '13:00', maximum_student : 38, students_amount : 26 },
-            ] },
-            { label : "จันทร์", value: 1 ,times : [
-                {start : '9:00',end : '10:00', maximum_student : 38, students_amount : 26 },
-                {start : '10:00',end : '11:00', maximum_student : 38, students_amount : 26 },
-                {start : '11:00',end : '12:00', maximum_student : 38, students_amount : 26 },
-            ] },
-            { label : "อังคาร", value: 2 ,times : [
-                {start : '9:00',end : '10:00', maximum_student : 38, students_amount : 26 },
-                {start : '10:00',end : '11:00', maximum_student : 38, students_amount : 26 },
-                {start : '11:00',end : '12:00', maximum_student : 38, students_amount : 26 },
-            ]  },
-            { label : "พุทธ", value: 3 ,times : [
-                {start : '9:00',end : '10:00', maximum_student : 38, students_amount : 26 },
-                {start : '10:00',end : '11:00', maximum_student : 38, students_amount : 26 },
-                {start : '11:00',end : '12:00', maximum_student : 38, students_amount : 26 },
-            ]  },
-            { label : "พฤหัสบดี", value: 4  },
-            { label : "ศุกร์", value: 5  },
-            { label : "เสาร์", value: 6  },
-        ],
         register_type : "",
         disable_add_to_cart : true,
         disable_checkout : true, 
     }),
     created() {},
     mounted() {
+        this.user_login = JSON.parse(localStorage.getItem("userDetail"))
         this.$store.dispatch("NavberUserModules/changeTitleNavber","สมัครเรียน")
     },
     watch: {
         "apply_for_yourself" : function(){
             if(this.apply_for_yourself){
-                this.courses.students.push({
-                    student_name: "สุรเชษฐ์ พุฒยืน",
+                this.course_order.students.push({
+                    account_id: this.user_login.account_id,
+                    student_name: `${this.user_login.first_name_th} ${this.user_login.last_name_th}`,
                     username: "surahet",
-                    firstname: "สุรเชษฐ์",
-                    lastname: "พุฒยืน",
-                    tel: "089-999-9999",
+                    firstname: this.user_login.first_name_th,
+                    lastname: this.user_login.last_name_th,
+                    tel: this.user_login.tel,
                     parents: [],
                     is_account : false,
                     is_other : false,
+                })
+            }else{
+                this.course_order.students.forEach((student, index)=>{
+                    if(student.is_other === false){
+                        this.course_order.students.splice(index,1)
+                    }
+                  
                 })
             }
         },
         "apply_for_others" : function(){
             if(this.apply_for_others){
-                this.courses.students.push({
+                this.course_order.students.push({
                     student_name: "",
                     username: "",
                     firstname: "",
@@ -387,20 +373,27 @@ import { mapActions, mapGetters } from 'vuex';
                     is_account : false,
                     is_other : true,
                 })
+            }else{
+                this.course_order.students.forEach((student, index)=>{
+                    if(student.is_other === true){
+                        this.course_order.students.splice(index,1)
+                    }
+                })
             }
         }
     },
     computed: {
         ...mapGetters({
-            courses : "OrderModules/getCourses",
+            course_order : "OrderModules/getCourseOrder",
+            course_data : "CourseModules/getCourseData",
             order: "OrderModules/getOrder",
             show_dialog_register_one_id : "RegisterModules/getShowDialogRegisterOneId"
         }),
         checkMaximumStudent(){
             let max = false
-            if(this.courses.course_type === 'general_course'){
-                max = this.courses.package_data.maximum <= this.courses.students.length
-            }else if(this.courses.course_type === 'short_course'){
+            if(this.course_order.course_type === 'CT_1'){
+                max = this.course_order.package_data.maximum <= this.course_order.students.length
+            }else if(this.course_order.course_type === 'CT_2'){
                 max = false
             }
             return max
@@ -409,82 +402,93 @@ import { mapActions, mapGetters } from 'vuex';
     methods: {
         ...mapActions({
             changeCourseData : "OrderModules/changeCourseData",
-            resetCourseDate  : "OrderModules/resetCourseDate",
-            changeOrederData: "OrderModules/changeOrederData",
+            resetCourseData  : "OrderModules/resetCourseData",
+            changeOrderData: "OrderModules/changeOrderData",
             changeDialogRegisterOneId : 'RegisterModules/changeDialogRegisterOneId'
         }),
+        dayOfWeekArray(day) {
+            const daysOfWeek = ["วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"];
+            if (day >= 0 && day <= 6) {
+                return daysOfWeek[day];
+            } else {
+                return "Invalid day";
+            }
+        },
         validateButton(){
-            if(this.courses.course_type === "general_course"){
-                if(this.courses.day && this.courses.time && this.courses.coach){
+            
+            if(this.course_order.course_type_id === "CT_1"){
+                if(this.course_order.day && this.course_order.time && this.course_order.coach){
                     if(this.apply_for_yourself && this.apply_for_others){
                         this.disable_add_to_cart = false
                         this.disable_checkout = false
                     }else if(this.apply_for_others){
                         this.disable_add_to_cart = false
                         this.disable_checkout = false
-                        if(this.courses.students.filter(v => v.is_other === false).length > 0){
-                            this.courses.students.forEach((student, index)=>{
+                        if(this.course_order.students.filter(v => v.is_other === false).length > 0){
+                            this.course_order.students.forEach((student, index)=>{
                                 if(!student.is_other){
-                                    this.courses.students.splice(index)
+                                    this.course_order.students.splice(index)
                                 }
                             })
                         }
                     }else if(this.apply_for_yourself){
                         this.disable_add_to_cart = false
                         this.disable_checkout = false
-                        if(this.courses.students.filter(v => v.is_other === true).length > 0){
-                            this.courses.students.forEach((student, index)=>{
+                        if(this.course_order.students.filter(v => v.is_other === true).length > 0){
+                            this.course_order.students.forEach((student, index)=>{
                                 if(student.is_other){
-                                    this.courses.students.splice(index)
+                                    this.course_order.students.splice(index)
                                 }
                             })
                         }
                     }else{
                         this.disable_add_to_cart = true
                         this.disable_checkout = true
-                        this.courses.students.forEach((student, index)=>{
-                            this.courses.students.splice(index)
+                        this.course_order.students.forEach((student, index)=>{
+                            this.course_order.students.splice(index)
                         })
                     }
                 }
-            }else if(this.courses.course_type === "short_course"){
+            }else if(this.course_order.course_type_id === "CT_2"){
                 if(this.apply_for_yourself && this.apply_for_others){
                     this.disable_add_to_cart = false
                     this.disable_checkout = false
                 }else if(this.apply_for_others){
                     this.disable_add_to_cart = false
                     this.disable_checkout = false
-                    if(this.courses.students.filter(v => v.is_other === false).length > 0){
-                        this.courses.students.forEach((student, index)=>{
+                    if(this.course_order.students.filter(v => v.is_other === false).length > 0){
+                        this.course_order.students.forEach((student, index)=>{
                             if(!student.is_other){
-                                this.courses.students.splice(index)
+                                this.course_order.students.splice(index)
                             }
                         })
                     }
                 }else if(this.apply_for_yourself){
                     this.disable_add_to_cart = false
                     this.disable_checkout = false
-                    if(this.courses.students.filter(v => v.is_other === true).length > 0){
-                        this.courses.students.forEach((student, index)=>{
+                    if(this.course_order.students.filter(v => v.is_other === true).length > 0){
+                        this.course_order.students.forEach((student, index)=>{
                             if(student.is_other){
-                                this.courses.students.splice(index)
+                                this.course_order.students.splice(index)
                             }
                         })
                     }
                 }else{
                     this.disable_add_to_cart = true
                     this.disable_checkout = true
-                    this.courses.students.forEach((student, index)=>{
-                        this.courses.students.splice(index)
+                    this.course_order.students.forEach((student, index)=>{
+                        this.course_order.students.splice(index)
                     })
                 }
             }
-            console.log("student :", this.courses.students)
-            console.log(this.courses.course_type, this.disable_add_to_cart, this.disable_checkout)
+            this.course_order.coach_name = this.course_data.coachs.filter(v => v.course_coach_id === this.course_order.coach)[0].coach_name 
+            this.course_order.coach_id = this.course_data.coachs.filter(v => v.course_coach_id === this.course_order.coach)[0].coach_id 
+            // console.log("student :", this.course_order.students)
+            // console.log(this.course_order.course_type, this.disable_add_to_cart, this.disable_checkout)
             return 0
         },
         addParent(){
-            this.courses.students.filter(v => v.is_other === false)[0].parents.push({
+            this.course_order.students.filter(v => v.is_other === false)[0].parents.push({
               ...this.parent
             })
             this.parent = {
@@ -497,7 +501,7 @@ import { mapActions, mapGetters } from 'vuex';
             this.dialog_parent = false
         },
         addStudent(){
-            this.courses.students.push({
+            this.course_order.students.push({
                 student_name: "กมลรัตน์ สิทธิกรชัย",
                 username: "",
                 firstname: "",
@@ -509,22 +513,32 @@ import { mapActions, mapGetters } from 'vuex';
             })
         },
         addToCart(){
-            console.log(this.courses)
             this.order.courses.push(
-                {...this.courses}
+                {...this.course_order}
             )
-            this.resetCourseDate()
-            this.changeOrederData(this.order)
+            this.order.created_by = this.user_login.account_id
+            this.changeOrderData(this.order)
+            localStorage.setItem(this.user_login.account_id, JSON.stringify(this.order))
+            this.resetCourseData()
             this.$router.push({name : "UserKingdom"})
         },
         removeStudent(student){ 
-            this.courses.students.splice(this.courses.students.findIndex(v => v.username === student.username),1 )
+            this.course_order.students.splice(this.course_order.students.findIndex(v => v.username === student.username),1 )
         },
         closeDialogParent(){
            this.dialog_parent = false
         },
+        checkOut(){
+        
+            this.order.courses.push(
+                {...this.course_order}
+            )
+            this.order.created_by = this.user_login.account_id
+            this.changeOrderData(this.order)
+        }
 
     },
   };
+  
   </script>
   

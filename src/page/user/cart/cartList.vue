@@ -1,6 +1,7 @@
 <template>
   <v-app class="overflow-x-hidden overflow-y-hidden">
     <v-container>
+      {{ cart }}
       <v-row class="mb-16">
         <v-col cols="12" v-for="item in items" :key="item.id">
           <v-card class="rounded-xl mt-5">
@@ -94,6 +95,7 @@ export default {
   data: () => ({
     search: "",
     drawer: true,
+    cart : null,
     items: [
       { id: 1, name: "A", selected: false, price: 500 },
       { id: 2, name: "B", selected: false, price: 500 },
@@ -110,8 +112,10 @@ export default {
     userIds: [],
  
   }),
-
   mounted() {
+    this.user_login = JSON.parse(localStorage.getItem("userDetail"))
+    this.cart = JSON.parse(localStorage.getItem(this.user_login.account_id))
+    console.log(this.cart)
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "รถเข็น");
   },
 

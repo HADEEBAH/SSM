@@ -111,17 +111,6 @@ export default {
   data: () => ({
     search: "",
     drawer: true,
-    items: [
-      { id: 1, itemName: "อาณาจักรศิลปะสมัยใหม่" },
-      { id: 2, itemName: "อาณาจักรศิลปะสมัยใหม่" },
-      { id: 3, itemName: "อาณาจักรศิลปะสมัยใหม่" },
-      { id: 4, itemName: "อาณาจักรศิลปะสมัยใหม่" },
-      { id: 5, itemName: "อาณาจักรศิลปะสมัยใหม่" },
-      { id: 6, itemName: "อาณาจักรศิลปะสมัยใหม่" },
-      { id: 7, itemName: "อาณาจักรศิลปะสมัยใหม่" },
-      { id: 8, itemName: "อาณาจักรศิลปะสมัยใหม่" },
-      { id: 9, itemName: "อาณาจักรศิลปะสมัยใหม่" },
-    ],
     dataStorage: {},
   }),
   created() {
@@ -141,7 +130,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      courses: "OrderModules/getCourses",
+      course_order : "OrderModules/getCourseOrder",
       categorys: "CategoryModules/getCategorys",
     }),
     MobileSize() {
@@ -156,13 +145,15 @@ export default {
 
   methods: {
     ...mapActions({
-      changeCourseData: "OrderModules/changeCourseData",
+      changeCourseOrderData: "OrderModules/changeCourseOrderData",
       createKingdom: "OrderModules/createKingdom",
     }),
     selectedCategory(category) {
-      this.courses.kingdom = category;
-      this.changeCourseData(this.courses);
-      this.$router.push({ name: "userCourseList" });
+      console.log("category",category)
+      this.course_order.kingdom = category.categoryNameTh;
+      this.course_order.category_id = category.categoryId;
+      this.changeCourseOrderData(this.course_order);
+      this.$router.push({ name: "userCourseList_categoryId",params:{ category_id : category.categoryId } });
     },
   },
 };

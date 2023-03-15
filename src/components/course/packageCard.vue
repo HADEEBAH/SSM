@@ -25,7 +25,7 @@
                     v-model="package_data.package"
                     color="#FF6B81"
                     :rules="rules.packages"
-                    :items="packages"
+                    :items="packages_data"
                     item-value="packageId"
                     item-text="packageName"
                     item-color="pink"
@@ -85,7 +85,7 @@
                     :rules="rules.options"
                     item-text="optionName"
                     item-value="optionId"
-                    :items="options"
+                    :items="options_data"
                     item-color="pink"
                 >
                     <template v-slot:no-data>
@@ -236,21 +236,12 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   props:{
     disable: {type: Boolean, default: false},
-    packages : {type : Array},
-    options : {type : Array},
   },
   components: {
     LabelCustom,
     HeaderCard
   },
   data: () => ({
-    // packages: [{package_id: "PACK_1", package_name:"Exclusive Package"}, {package_id: "PACK_2", package_name:"Family Package"}, {package_id: "PACK_3", package_name:"Group Package"}],
-    // options: [
-    //   {option_id : "OP_1", option_name : "รายวัน"},
-    //   {option_id : "OP_2", option_name : "รายเดือน"},
-    //   {option_id : "OP_3", option_name : "รายเทมอ"},
-    //   {option_id : "OP_4", option_name : "รายปี"}
-    // ],
     packages_selected: [],
     options_selected: [],
     rules: {  
@@ -264,12 +255,16 @@ export default {
   created() {
     
   },
-  mounted() {},
+  mounted() {
+    this.$store.dispatch("CourseModules/GetPackages")
+    this.$store.dispatch("CourseModules/GetOptions")
+  },
   watch: {},
   computed: {
     ...mapGetters({
       course_data: "CourseModules/getCourseData",
-     
+      packages_data : "CourseModules/getPackages",
+      options_data : "CourseModules/getOptions",
     }),
   },
   methods: {

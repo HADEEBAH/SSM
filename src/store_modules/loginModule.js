@@ -9,14 +9,28 @@ const loginModules = {
             username: "",
             password: "",
             token: "",
-        }
+        },
+        user_data:{},
     },
     mutations: {
         UserOneId(state, payload) {
             state.user_one_id = payload
+        },
+        SetUserDetail(state, payload){
+            state.user_one_id = payload
         }
     },
     actions: {
+        async checkUsernameOneid(context,{username,status}){
+            try{
+                let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account?username=${username}&status=${status}`)
+                if(data.statusCode === 200){
+                    console.log(data)
+                }
+            }catch(error){
+                console.log(error)
+            }
+        },
         //  loginOneId(context, user_data) {
         //     context.commit("UserOneId", user_data)
         //     console.log(user_data);

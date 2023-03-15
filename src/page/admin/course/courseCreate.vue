@@ -95,7 +95,7 @@
         </v-stepper-content>
         <!-- Step 3 -->
         <v-stepper-content step="3" class="pa-2">
-          <package-card :packages="packages" :options="options"></package-card>
+          <package-card></package-card>
           <v-row dense>
             <v-col class="d-flex align-center justify-center" cols="12">
               <v-btn
@@ -230,8 +230,6 @@ export default {
   mounted() {
     this.$store.dispatch("CategoryModules/GetCategorys")
     this.$store.dispatch("CourseModules/GetCoachs");
-    this.$store.dispatch("CourseModules/GetPackages")
-    this.$store.dispatch("CourseModules/GetOptions")
   },
   watch: {
     "course_data.type"(newQuestion) {
@@ -245,8 +243,6 @@ export default {
       course_data: "CourseModules/getCourseData",
       coachs: "CourseModules/getCoachs",
       categorys : "CategoryModules/getCategorys",
-      packages : "CourseModules/getPackages",
-      options : "CourseModules/getOptions",
     }),
   },
   methods: {
@@ -255,6 +251,8 @@ export default {
       CreateCourse : "CourseModules/CreateCourse",
     }),
     save(){
+      this.course_data.course_file = this.file
+      this.ChangeCourseData(this.course_data);
       this.CreateCourse()
     },
     inputName(e, lang){
