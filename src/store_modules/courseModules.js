@@ -108,14 +108,20 @@ const CourseModules = {
     },
     SetCoursesIsLoading(state, payload){
       state.courses_is_loading = payload
+    },
+    SetCourseTypes(state, payload){
+      state.course_types = payload
     }
   },
   actions: {
     // COURSE TYPES 
-    async GetCourseTypes(){
+    async GetCourseTypes(context){
       try{
         let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/type`)
-        console.log(data)
+        if(data.statusCode === 200){
+          console.log(data)
+          context.commit("SetCourseTypes",data.data)
+        }
       }catch(error){
         console.log(error)
       }
@@ -443,6 +449,9 @@ const CourseModules = {
     }
   },
   getters: {
+    getCourseTypes(state){
+      return state.course_types
+    },
     getCourseData(state){
       return state.course_data
     },

@@ -139,7 +139,7 @@ const routes = [
         component: userMenageCourseDetail,
       },
       {
-        path: 'course/:category_id',  
+        path: 'course/category/:category_id',  
         name: 'userCourseList_categoryId',
         component: userCourseList,
       },

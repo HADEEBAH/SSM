@@ -77,7 +77,7 @@
                 :src="
                   item.categoryImg
                     ? item.categoryImg
-                    : 'https://media.istockphoto.com/id/1216251206/vector/no-image-available-icon.jpg?s=170667a&w=0&k=20&c=N-XIIeLlhUpm2ZO2uGls-pcVsZ2FTwTxZepwZe4DuE4= '
+                    : ''
                 "
                 cover
               >
@@ -153,6 +153,7 @@ export default {
       this.course_order.kingdom = category.categoryNameTh;
       this.course_order.category_id = category.categoryId;
       this.changeCourseOrderData(this.course_order);
+      localStorage.setItem("Order", JSON.stringify(this.course_order))
       this.$router.push({ name: "userCourseList_categoryId",params:{ category_id : category.categoryId } });
     },
   },

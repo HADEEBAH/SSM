@@ -10,17 +10,17 @@
                 </v-row>
             </template>
             <template v-slot:header>
-                <div class="text-md font-bold"> เปียโนป๊อปเบื้องต้น (Popular ... </div>
-                <div class="text-sm"> โดย ศูนย์ดนตรี Manila Tamarind ... </div>
+                <div class="text-md font-bold">{{ `${course_data.course_name_th}(${course_data.course_name_en})`}} </div>
+                <div class="text-sm">{{ course_data.location }}</div>
             </template>
             <template v-slot:detail>
                 <v-row dense>
                     <v-col cols="12" sm="6" class="pa-0">
-                        <rowData mini col_detail="5" icon="mdi-clock-outline">1 ชม. / ครั้ง</rowData>
+                        <rowData mini col_detail="5" icon="mdi-clock-outline"> {{ course_data.course_hours  }} ชม. / ครั้ง</rowData>
                     </v-col>
-                    <v-col cols="12" sm="6"  class="pa-0"> 
+                    <!-- <v-col cols="12" sm="6"  class="pa-0"> 
                         <rowData mini col_detail="5" icon="mdi-account-group-outline">9 / 15 ที่นั่ง</rowData> 
-                    </v-col>
+                    </v-col> -->
                 </v-row>
             </template>
         </ImgCard>
@@ -117,7 +117,7 @@
                 <v-checkbox :disabled="apply_for_yourself ? false : checkMaximumStudent" @change="validateButton" v-model="apply_for_yourself" color="#ff6B81" label="สมัครเรียนให้ตัวเอง"></v-checkbox>
             </v-col>
             <v-col cols="auto" v-if="apply_for_yourself">
-                <v-btn dense outlined color="#ff6b81" @click="dialog_parent = true"><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มข้อมูลผู้ปกครอง</v-btn>
+                <v-btn :disabled="course_order.students.filter(v => v.is_other === false)[0].parents.length > 0" dense outlined color="#ff6b81" @click="dialog_parent = true"><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มข้อมูลผู้ปกครอง</v-btn>
             </v-col>
         </v-row>
         <v-row dense>
@@ -129,25 +129,33 @@
         <template v-if="course_order.students.filter(v => v.is_other === false).length > 0">
             <div class="mb-3" v-for="(parent, index_parent) in course_order.students.filter(v => v.is_other === false)[0].parents" :key="`${index_parent}-perent`">
                 <v-row dense class="mb-3"> 
+                    {{ user_data }}
                     <v-col cols="auto"><v-icon color="#ff6b81">mdi-card-account-details-outline</v-icon></v-col>
                     <v-col class="text-lg font-bold">{{ `ผู้ปกครอง` }}</v-col>
                 </v-row>
                 <v-card outlined>
                     <v-card-text>
-                        <v-row dense>
-                            <v-col cols="12" sm="6">
-                                <labelCustom required text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
-                                <v-text-field dense outlined v-model="parent.firstname_en" placeholder="ชื่อภาษาอังกฤษ"></v-text-field>
+                        <v-row dense class="d-flex align-center">
+                            <v-col  cols="12" sm="6">
+                                <labelCustom text="Username (ถ้ามี)"></labelCustom>
+                                <v-text-field :disabled="user_data.length > 0" @blur="checkUsername(parent.username)" @keyup.enter="checkUsername(parent.username)" dense outlined v-model="parent.username"  placeholder="Username" ></v-text-field>
                             </v-col>
                             <v-col  cols="12" sm="6">
-                                <labelCustom required text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
-                                <v-text-field dense outlined v-model="parent.lastname_en" placeholder="นามสกุลภาษาอังกฤษ"></v-text-field>
+                                <v-btn dense outlined color="#ff6b81" @click="dialog_parent = true"><v-icon>mdi-account-edit-outline</v-icon>เพิ่มข้อมูลผู้ปกครอง</v-btn>
                             </v-col>
                         </v-row>
                         <v-row dense>
-                            <v-col  cols="12" sm="6">
+                            <v-col cols="12" sm="4">
+                                <labelCustom required text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
+                                <v-text-field :disabled="user_data.length > 0" dense outlined v-model="parent.firstname_en" placeholder="ชื่อภาษาอังกฤษ"></v-text-field>
+                            </v-col>
+                            <v-col  cols="12" sm="4">
+                                <labelCustom required text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
+                                <v-text-field :disabled="user_data.length > 0" dense outlined v-model="parent.lastname_en" placeholder="นามสกุลภาษาอังกฤษ"></v-text-field>
+                            </v-col>
+                            <v-col  cols="12" sm="4">
                                 <labelCustom required text="เบอร์โทรศัพท์"></labelCustom>
-                                <v-text-field dense outlined v-model="parent.tel"  placeholder="เบอร์โทรศัพท์"></v-text-field>
+                                <v-text-field :disabled="user_data.length > 0" dense outlined v-model="parent.tel"  placeholder="เบอร์โทรศัพท์"></v-text-field>
                             </v-col>
                         </v-row>
                     </v-card-text>
@@ -169,42 +177,46 @@
                         <v-col  cols="9" sm="5">
                             <labelCustom text="Username (ถ้ามี)"></labelCustom>
                             <v-text-field 
-                                hide-details 
+                                :hide-details="!student.account_id" 
                                 dense 
                                 outlined 
                                 v-model="student.username"  
+                                @blur="checkUsername(student.username, 'student', index_student)"
+                                @keyup.enter="checkUsername(student.username, 'student', index_student)"
                                 placeholder="Username">
                                 <template v-slot:append>
-                                    <v-icon v-if="student.is_account" color="green">mdi-checkbox-marked-circle-outline</v-icon>
+                                    <v-icon v-if="student.account_id" color="green">mdi-checkbox-marked-circle-outline</v-icon>
                                 </template>
                             </v-text-field>
-                            <label>
-                                หากยังไม่มีบัญชีผู้ใช้กรุณา
-                            </label>
-                            <label
-                                class="text-[#ff6b81] underline cursor-pointer mt-5"
-                                @click="changeDialogRegisterOneId(true)"
-                            >สมัคร One ID</label>
+                            <template  v-if="!student.account_id">
+                                <label>
+                                    หากยังไม่มีบัญชีผู้ใช้กรุณา
+                                </label>
+                                <label
+                                    class="text-[#ff6b81] underline cursor-pointer mt-5"
+                                    @click="changeDialogRegisterOneId(true)"
+                                >สมัคร One ID</label>
+                            </template>
                         </v-col>
-                        <v-col cols="auto">
-                            <v-btn color="#ff6b81" depressed dark @click="student.is_account = true">ตกลง</v-btn>
+                        <v-col cols="auto" class="mb-2">
+                            <v-btn color="#ff6b81" @click="checkUsername(student.username, 'student', index_student)" depressed dark>ตกลง</v-btn>
                         </v-col>
                     </v-row>
-                    <template v-if="student.is_account">
+                    <template v-if="student.account_id">
                         <v-row dense>
                             <v-col cols="12" sm="6">
                                 <labelCustom required text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
-                                <v-text-field dense outlined v-model="student.firstname_en" placeholder="ชื่อภาษาอังกฤษ"></v-text-field>
+                                <v-text-field :disabled="student.account_id" dense outlined v-model="student.firstname_en" placeholder="ชื่อภาษาอังกฤษ"></v-text-field>
                             </v-col>
                             <v-col  cols="12" sm="6">
                                 <labelCustom required text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
-                                <v-text-field dense outlined v-model="student.lastname_en" placeholder="นามสกุลภาษาอังกฤษ"></v-text-field>
+                                <v-text-field :disabled="student.account_id" dense outlined v-model="student.lastname_en" placeholder="นามสกุลภาษาอังกฤษ"></v-text-field>
                             </v-col>
                         </v-row>
                         <v-row dense>
                             <v-col  cols="12" sm="6">
                                 <labelCustom required text="เบอร์โทรศัพท์"></labelCustom>
-                                <v-text-field dense outlined v-model="student.tel"  placeholder="เบอร์โทรศัพท์"></v-text-field>
+                                <v-text-field :disabled="student.account_id" dense outlined v-model="student.tel"  placeholder="เบอร์โทรศัพท์"></v-text-field>
                             </v-col>
                         </v-row>
                     </template>
@@ -216,6 +228,7 @@
                 </v-col>
             </v-row>
         </div>
+        <pre>{{ course_order.students.filter(v => v.is_other === true) }}</pre>
         <div v-if="checkMaximumStudent" class="text-[#F03D3E] mb-3">
                 ผู้เรียนครบจำนวนที่คลาสจะรับได้แล้ว
             </div>
@@ -240,25 +253,29 @@
             <header-card icon="mdi-card-account-details-outline" icon_color="#ff6b81" title="ผู้ปกครอง"></header-card>
             <v-card-text class="pb-2">
                 <v-row dense>
-                    <v-col cols="12" sm="6">
-                        <labelCustom required text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
-                        <v-text-field dense outlined v-model="parent.firstname_en" placeholder="ชื่อภาษาอังกฤษ"></v-text-field>
-                    </v-col>
-                    <v-col  cols="12" sm="6">
-                        <labelCustom required text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
-                        <v-text-field dense outlined v-model="parent.lastname_en" placeholder="นามสกุลภาษาอังกฤษ"></v-text-field>
-                    </v-col>
-                </v-row>
-                <v-row dense>
-                    <v-col  cols="12" sm="6">
-                        <labelCustom required text="เบอร์โทรศัพท์"></labelCustom>
-                        <v-text-field dense outlined v-model="parent.tel"  placeholder="เบอร์โทรศัพท์"></v-text-field>
-                    </v-col>
                     <v-col  cols="12" sm="6">
                         <labelCustom text="Username (ถ้ามี)"></labelCustom>
-                        <v-text-field dense outlined v-model="parent.username"  placeholder="Username"></v-text-field>
+                        <v-text-field @blur="checkUsername(parent.username)" @keyup.enter="checkUsername(parent.username)" dense outlined v-model="parent.username"  placeholder="Username" ></v-text-field>
                     </v-col>
                 </v-row>
+                <template> 
+                    <v-row dense>
+                        <v-col cols="12" sm="6">
+                            <labelCustom required text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
+                            <v-text-field :disabled="user_data.length > 0" dense outlined v-model="parent.firstname_en" placeholder="ชื่อภาษาอังกฤษ"></v-text-field>
+                        </v-col>
+                        <v-col  cols="12" sm="6">
+                            <labelCustom required text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
+                            <v-text-field :disabled="user_data.length > 0" dense outlined v-model="parent.lastname_en" placeholder="นามสกุลภาษาอังกฤษ"></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row dense>
+                        <v-col  cols="12" sm="6">
+                            <labelCustom required text="เบอร์โทรศัพท์"></labelCustom>
+                            <v-text-field :disabled="user_data.length > 0" dense outlined v-model="parent.tel"  placeholder="เบอร์โทรศัพท์"></v-text-field>
+                        </v-col>
+                    </v-row>
+                </template>
             </v-card-text>
             <v-card-actions class="px-6">
                 <v-row dense>
@@ -318,11 +335,13 @@ import { mapActions, mapGetters } from 'vuex';
             {name : 'โค้ชหนุ่ม',coach_id : "00001" },
             {name : 'โค้ชพอล',coach_id : "00002" },
         ],
+        order_data : null,
         parent:{
-            username: "surahet",
-            firstname_en: "สุรเชษฐ์",
-            lastname_en: "พุฒยืน",
-            tel: "089-999-9999",
+            account_id : "",
+            username: "",
+            firstname_en: "",
+            lastname_en: "",
+            tel: "",
         },
         user_login : {},
         show_dialog_cart : false,
@@ -333,10 +352,17 @@ import { mapActions, mapGetters } from 'vuex';
         disable_add_to_cart : true,
         disable_checkout : true, 
     }),
-    created() {},
+    created() {
+         this.order_data = JSON.parse(localStorage.getItem("Order"))
+         this.user_login = JSON.parse(localStorage.getItem("userDetail"))
+    },
     mounted() {
-        this.user_login = JSON.parse(localStorage.getItem("userDetail"))
         this.$store.dispatch("NavberUserModules/changeTitleNavber","สมัครเรียน")
+        console.log("order_data : ",this.order_data)
+        if(this.order_data){
+            this.GetCourse( this.order_data.course_id)
+            this.course_order = this.order_data
+        }
     },
     watch: {
         "apply_for_yourself" : function(){
@@ -345,8 +371,8 @@ import { mapActions, mapGetters } from 'vuex';
                     account_id: this.user_login.account_id,
                     student_name: `${this.user_login.first_name_th} ${this.user_login.last_name_th}`,
                     username: "surahet",
-                    firstname: this.user_login.first_name_th,
-                    lastname: this.user_login.last_name_th,
+                    firstname_en: this.user_login.first_name_th,
+                    lastname_en: this.user_login.last_name_th,
                     tel: this.user_login.tel,
                     parents: [],
                     is_account : false,
@@ -366,8 +392,8 @@ import { mapActions, mapGetters } from 'vuex';
                 this.course_order.students.push({
                     student_name: "",
                     username: "",
-                    firstname: "",
-                    lastname: "",
+                    firstname_en: "",
+                    lastname_en: "",
                     tel: "",
                     parents: [],
                     is_account : false,
@@ -387,7 +413,9 @@ import { mapActions, mapGetters } from 'vuex';
             course_order : "OrderModules/getCourseOrder",
             course_data : "CourseModules/getCourseData",
             order: "OrderModules/getOrder",
-            show_dialog_register_one_id : "RegisterModules/getShowDialogRegisterOneId"
+            show_dialog_register_one_id : "RegisterModules/getShowDialogRegisterOneId",
+            user_data : "loginModules/getUserData",
+            user_student_data : "loginModules/getUserStudentData"
         }),
         checkMaximumStudent(){
             let max = false
@@ -401,10 +429,13 @@ import { mapActions, mapGetters } from 'vuex';
     },
     methods: {
         ...mapActions({
-            changeCourseData : "OrderModules/changeCourseData",
+            GetCourse : "CourseModules/GetCourse",
+            changeCourseOrderData : "OrderModules/changeCourseOrderData",
             resetCourseData  : "OrderModules/resetCourseData",
             changeOrderData: "OrderModules/changeOrderData",
-            changeDialogRegisterOneId : 'RegisterModules/changeDialogRegisterOneId'
+            changeDialogRegisterOneId : 'RegisterModules/changeDialogRegisterOneId',
+            saveOrder : "OrderModules/saveOrder",
+            checkUsernameOneid : "loginModules/checkUsernameOneid"
         }),
         dayOfWeekArray(day) {
             const daysOfWeek = ["วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"];
@@ -415,7 +446,6 @@ import { mapActions, mapGetters } from 'vuex';
             }
         },
         validateButton(){
-            
             if(this.course_order.course_type_id === "CT_1"){
                 if(this.course_order.day && this.course_order.time && this.course_order.coach){
                     if(this.apply_for_yourself && this.apply_for_others){
@@ -481,8 +511,11 @@ import { mapActions, mapGetters } from 'vuex';
                     })
                 }
             }
-            this.course_order.coach_name = this.course_data.coachs.filter(v => v.course_coach_id === this.course_order.coach)[0].coach_name 
-            this.course_order.coach_id = this.course_data.coachs.filter(v => v.course_coach_id === this.course_order.coach)[0].coach_id 
+            if(this.course_data.coachs.length > 0){
+                console.log(this.course_data.coachs.filter(v => v.course_coach_id === this.course_order.coach))
+                this.course_order.coach_name = this.course_data.coachs.filter(v => v.course_coach_id === this.course_order.coach)[0].coach_name 
+                this.course_order.coach_id = this.course_data.coachs.filter(v => v.course_coach_id === this.course_order.coach)[0].coach_id 
+            }
             // console.log("student :", this.course_order.students)
             // console.log(this.course_order.course_type, this.disable_add_to_cart, this.disable_checkout)
             return 0
@@ -492,20 +525,23 @@ import { mapActions, mapGetters } from 'vuex';
               ...this.parent
             })
             this.parent = {
+                account_id : "",
                 firstname_en : "",
-                lastname : "",
+                lastname_en : "",
                 username : "",
                 tel : ""
             }
-            this.changeCourseData(this.courses)
+            this.user_data = []
+            this.changeCourseOrderData(this.course_order)
             this.dialog_parent = false
         },
         addStudent(){
             this.course_order.students.push({
-                student_name: "กมลรัตน์ สิทธิกรชัย",
+                account_id: "",
+                student_name: "",
                 username: "",
-                firstname: "",
-                lastname: "",
+                firstname_en: "",
+                lastname_en: "",
                 tel: "",
                 is_other : true,
                 is_account : false,
@@ -529,15 +565,56 @@ import { mapActions, mapGetters } from 'vuex';
            this.dialog_parent = false
         },
         checkOut(){
-        
-            this.order.courses.push(
-                {...this.course_order}
-            )
+            console.log(this.course_order.course_id , this.order.courses)
+            if(this.order.courses.filter(v => v.course_id === this.course_order.course_id).length === 0){
+                this.order.courses.push(
+                    {...this.course_order}
+                )
+            }
             this.order.created_by = this.user_login.account_id
             this.changeOrderData(this.order)
-        }
+            this.saveOrder()
+        },
+        checkUsername(username, type, index){
+            console.log(username)
+            if(username){
+                this.checkUsernameOneid({username : username, status : "", type : type}).then(()=>{
+                    if(type === 'student'){
+                        if(this.user_student_data.length > 0){
+                            this.course_order.students.filter(v => v.username === username)[0].firstname_en =  this.user_student_data[0].firstNameEng
+                            this.course_order.students.filter(v => v.username === username)[0].lastname_en  =  this.user_student_data[0].lastNameEng
+                            this.course_order.students.filter(v => v.username === username)[0].student_name  = `${this.user_student_data[0].firstNameEng} ${this.user_student_data[0].lastNameEng} `
+                            this.course_order.students.filter(v => v.username === username)[0].tel = this.user_student_data[0].mobileNo
+                            this.course_order.students.filter(v => v.username === username)[0].username =  username
+                            this.course_order.students.filter(v => v.username === username)[0].account_id =  this.user_student_data[0].userOneId
+                            console.log("course_order",this.course_order.students[index])
+                            console.log("user_student_data",this.user_student_data)
+                        }else{
+                            this.course_order.students.filter(v => v.username === username)[0].firstname_en = ""
+                            this.course_order.students.filter(v => v.username === username)[0].lastname_en  =  ""
+                            this.course_order.students.filter(v => v.username === username)[0].student_name  = ""
+                            this.course_order.students.filter(v => v.username === username)[0].tel = ""
+                            this.course_order.students.filter(v => v.username === username)[0].username = username
+                            this.course_order.students.filter(v => v.username === username)[0].account_id = ""
+                        }
+                        
+                    }else{
+                        if(this.user_data.length > 0){
+                            this.parent.firstname_en = this.user_data[0].firstNameEng
+                            this.parent.lastname_en = this.user_data[0].lastNameEng
+                            this.parent.tel = this.user_data[0].mobileNo
+                            this.parent.account_id = this.user_data[0].userOneId
+                            this.parent.username = username 
+                        }
+                    }
 
-    },
+                  
+                })
+            }else{
+                this.user_data = []
+            }
+        },
+    }
   };
   
   </script>

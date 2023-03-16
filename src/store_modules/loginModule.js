@@ -10,22 +10,34 @@ const loginModules = {
             password: "",
             token: "",
         },
-        user_data:{},
+        user_data:[],
+        user_student_data:[],
     },
     mutations: {
         UserOneId(state, payload) {
             state.user_one_id = payload
         },
-        SetUserDetail(state, payload){
-            state.user_one_id = payload
+        SetUserData(state, payload){
+            state.user_data = payload
+        },
+        SetUserStudentData(state, payload){
+            state.user_student_data = payload
         }
     },
     actions: {
-        async checkUsernameOneid(context,{username,status}){
+        async checkUsernameOneid(context,{username,status,type}){
             try{
+                if(status){
+                    status = 'Active'
+                }
                 let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account?username=${username}&status=${status}`)
+                console.log(data)
                 if(data.statusCode === 200){
-                    console.log(data)
+                    if(type === 'student'){
+                        context.commit("SetUserStudentData",data.data)
+                    }else{
+                        context.commit("SetUserData",data.data)
+                    }
                 }
             }catch(error){
                 console.log(error)
@@ -97,6 +109,12 @@ const loginModules = {
     getters: {
         getUserOneId(state) {
             return state.user_one_id
+        },
+        getUserData(state){
+            return state.user_data
+        },
+        getUserStudentData(state){
+            return state.user_student_data
         }
     },
 };

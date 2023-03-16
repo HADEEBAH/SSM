@@ -7,6 +7,7 @@ const orderModules = {
             kingdom: {},
             course_type: "",
             course_type_id : "CT_1",
+            category_id: "",
             package: "",
             package_data : {},
             option : "",
@@ -20,6 +21,7 @@ const orderModules = {
             price: 0,
             detail : "",
             remark: "",
+            selected : true,
             parents: [],
             students: [],
 
@@ -109,6 +111,7 @@ const orderModules = {
                 price: 0,
                 detail : "",
                 remark: "",
+                selected : true,
                 parents: [],
                 students: [],
             }
@@ -127,86 +130,71 @@ const orderModules = {
             context.commit("SetOrder", orderData)
             console.log(orderData)
         },
-        async saveOrder() {
+        async saveOrder(context) {
             try{
-                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/regis/course`,{
-                    "courses": [
-                        {
-                            "coursePackageOptionId": "a4c70208-5625-47f1-a530-9695ef867e26",
-                            "dayOfWeekId": "DOWW_33",
-                            "timeId": "TT_33",
-                            "time": "111",
-                            "startDate": "SD_33",
-                            "remark": "RMK",
-                            "price": "300",
-                            "coach": {
-                                "accountId": "accountId",
-                                "firstNameTh": "firstNameTh",
-                            },
-                            "student": [
-                                {
-                                    "accountId": "15",
-                                    "userName": "userName",
-                                    "firstNameTh": "firstNameTh",
-                                    "lastNameTh": "lastNameTh",
-                                    "tel": "tel",
-                                    "isOther": true,
-                                    "parent": {
-                                        "accountId": "16",
-                                        "parentFirstnameTh": "parentFirstnameThfromregis",
-                                        "parentLastnameTh": "parentLastnameTh",
-                                        "parentFirstnameEn": "parentFirstnameEn",
-                                        "parentLastnameEn": "parentLastnameEn",
-                                        "parentTel": "parentTel"
-                                    }
-                                },
-                                {
-                                    "accountId": "17",
-                                    "userName": "userName",
-                                    "firstNameTh": "firstNameTh",
-                                    "lastNameTh": "lastNameTh",
-                                    "tel": "tel",
-                                    "isOther": false,
-                                    "parent": {}
-                                }
-                            ]
-                        },
-                        {
-                            "coursePackageOptionId": "46d912bf-e01e-4a8b-926f-afe0b6c06f83",
-                            "dayOfWeekId": "111",
-                            "timeId": "111",
-                            "time": "111",
-                            "startDate": "111",
-                            "remark": "111",
-                            "price": "111",
-                            "coach": {
-                                "accountId": "accountId",
-                                "firstNameTh": "firstNameTh",
-                            },
-                            "student": [
-                                {
-                                    "accountId": "15",
-                                    "userName": "userName",
-                                    "firstNameTh": "firstNameTh",
-                                    "lastNameTh": "lastNameTh",
-                                    "tel": "tel",
-                                    "isOther": false,
-                                    "parent": {
-                                        "accountId": "16",
-                                        "parentFirstnameTh": "parentFirstnameThfromregis",
-                                        "parentLastnameTh": "parentLastnameTh",
-                                        "parentFirstnameEn": "parentFirstnameEn",
-                                        "parentLastnameEn": "parentLastnameEn",
-                                        "parentTel": "parentTel"
-                                    }
-                                }
-                            ]
+                let order = context.state.order
+                console.log(order)
+                let payload = {
+                    order_id : "",
+                    courses : [],
+                    created_by : "",
+                    paymentStatus: "pending",
+                    paymentType: "",
+                    totalPrice: 0,
+                }
+                let total_price = 0
+                await order.courses.forEach((course)=>{
+                    let students = []
+                    course.students.forEach((student)=>{
+                        console.log("student",student.parents[0])
+                        if(student.parents[0]){   
+                            students.push({
+                                "accountId": student.account_id ? student.account_id : "",
+                                "userName": student.username,
+                                "firstNameTh": student.firstname,
+                                "lastNameTh": student.lastname,
+                                "tel": student.tel,
+                                "isOther": student.is_other,
+                                "parent":{
+                                    "accountId": student.parents[0].account_id,
+                                    "parentFirstnameTh": student.parents[0].firstname_th ?  student.parents[0].firstname_th :"" ,
+                                    "parentLastnameTh":student.parents[0].lastname_en ?  student.parents[0].lastname_en :"" ,
+                                    "parentFirstnameEn":student.parents[0].firstname_en,
+                                    "parentLastnameEn":student.parents[0].lastname_en,
+                                    "parentTel": student.parents[0].tel,
+                                }  
+                            })
+                        }else{
+                            students.push({
+                                "accountId": student.account_id ? student.account_id : "",
+                                "userName": student.username,
+                                "firstNameTh": student.firstname,
+                                "lastNameTh": student.lastname,
+                                "tel": student.tel,
+                                "isOther": student.is_other,
+                                "parent":{}
+                            })
                         }
-                    ],
-                    "paymentStatus": "pending",
-                    "paymentType": "",
-                    "totalPrice": 3000,
+                    })
+                    payload.courses.push({
+                        "coursePackageOptionId": course.option.course_package_option_id,
+                        "dayOfWeekId": course.time.dayOfWeekId,
+                        "timeId": course.time.timeId,
+                        "time": course.time,
+                        "startDate": "",
+                        "remark": "",
+                        "price": course.option.net_price,
+                        "coach": {
+                            "accountId": course.coach_id,
+                            "fullName": course.coach_name,
+                        },
+                        "student": students
+                    })
+                    total_price =  total_price + course.option.net_price
                 })
+                payload.totalPrice = total_price
+                console.log("saveOrder",payload)
+                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/regis/course`,payload)
                 console.log(data)
             }catch(error){
                 console.log(error)

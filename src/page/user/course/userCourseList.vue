@@ -11,15 +11,16 @@
             <v-col class="text-lg font-bold">{{ category.categoryNameTh }}</v-col>
         </v-row>
         <v-row dense>
-            <v-col cols="5" v-for="(type, type_index) in course_type" :key="type_index">
+            <v-col cols="5" v-for="(type, type_index) in course_types" :key="type_index">
                 <v-card flat @click="selectCourseType(type)" class="rounded-lg">
-                    <v-card-text :class="type_selected === type.value ? 'bg-[#FF6B81]' : 'bg-[#F5F5F5]'" class="rounded-lg flex justify-center align-center pa-2">
-                        <label :class="type_selected === type.value ? 'text-white' : ' text-[#B3B3B3]' " class="font-bold mr-2">{{type.name}}</label>
-                        <v-avatar size="32" color="white" class="font-bold" :class="type_selected === type.value ? 'text-[#ff6b81]' : 'text-[#B3B3B3]'"> - </v-avatar>
+                    <v-card-text :class="type_selected === type.course_type_id ? 'bg-[#FF6B81]' : 'bg-[#F5F5F5]'" class="rounded-lg flex justify-center align-center pa-2">
+                        <label :class="type_selected === type.course_type_id ? 'text-white' : ' text-[#B3B3B3]' " class="font-bold mr-2">{{type.course_type_name_th}}</label>
+                        <v-avatar size="32" color="white" class="font-bold" :class="type_selected === type.course_type_id ? 'text-[#ff6b81]' : 'text-[#B3B3B3]'"> {{ type.total_course }} </v-avatar>
                     </v-card-text>
                 </v-card>
             </v-col>
         </v-row>
+        {{ courses }}
         <v-row dense>
             <template v-if="!courses_is_loading">
                 <v-col cols="6" sm="4" v-for="(course, course_index) in courses" :key="course_index">
@@ -66,15 +67,17 @@ import { mapGetters, mapActions } from 'vuex';
         data: () => ({
             loading : true,
             course_type : [{course_type_id : "CT_1", name : "คอร์สทั่วไป", amount : "8", value:"general_course"},{course_type_id : "CT_2",name : "คอร์สระยะสั้น", amount : "2", value:'short_course'}],
-            type_selected : "general_course",
+            type_selected :"",
         }),
         created() {
             this.$store.dispatch("CourseModules/GetCoursesFilter",{ category_id : this.$route.params.category_id, status : "Active", })  
         },
         mounted() {
+            
             this.GetCourseTypes()
             this.GetCategory({category_id : this.$route.params.category_id})
             this.$store.dispatch("NavberUserModules/changeTitleNavber","คอร์สเรียน")
+            this.type_selected = this.course_types[0].course_type_id
         },
         watch: {},
         computed: {
@@ -82,7 +85,8 @@ import { mapGetters, mapActions } from 'vuex';
                 courses_is_loading : "CourseModules/getCoursesIsLoading",
                 courses : "CourseModules/getCourses",
                 course_order : "OrderModules/getCourseOrder",
-                category : "CategoryModules/getCategory"
+                category : "CategoryModules/getCategory",
+                course_types : "CourseModules/getCourseTypes"
             })
         },
         methods: {
@@ -93,7 +97,7 @@ import { mapGetters, mapActions } from 'vuex';
                 GetCoursesFilter : 'CourseModules/GetCoursesFilter'
             }),
             selectCourseType(course_type){
-                this.type_selected = course_type.value
+                this.type_selected = course_type.course_type_id
                 this.GetCoursesFilter({
                     category_id: this.$route.params.category_id, 
                     status : "Active", 
@@ -107,6 +111,7 @@ import { mapGetters, mapActions } from 'vuex';
                 this.course_order.detail = course.course_detail
                 this.course_order.period = course.period
                 this.changeCourseOrderData(this.course_order)
+                localStorage.setItem("Order", JSON.stringify(this.course_order))
                 this.$router.push({name : "userCourseDetail_courseId", params:{course_id:course.course_id}})
             }
         },
