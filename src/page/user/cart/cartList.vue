@@ -1,8 +1,14 @@
 <template>
   <v-app class="overflow-x-hidden overflow-y-hidden">
     <v-container>
+      <pre>{{ carts.total_price }}</pre>
       <v-row class="mb-16">
-        <v-col cols="12" v-for="item in items" :key="item.id">
+        <v-col
+          cols="12"
+          v-for="(item, index_item) in carts.courses"
+          :key="`${index_item}-cart`"
+        >
+          <!-- <pre>{{item}}</pre> -->
           <v-card class="rounded-xl mt-5">
             <v-card-text>
               <v-row dense>
@@ -20,23 +26,27 @@
                     </v-col>
                     <v-col>
                       <v-row dense>
-                        <v-col class="text-lg font-bold">{{item.name}}</v-col>
+                        <v-col class="text-lg font-bold">{{
+                          item.course_name
+                        }}</v-col>
                         <v-col cols="auto">
                           <v-checkbox
                             class="card_checkbox"
                             color="error"
                             hide-details
-                            v-model="item.selected"
+                            @change="selectOne($event, item.course_id)"
+                            v-model="item.checked"
                           >
                           </v-checkbox>
+                          {{ item.checked }}
                         </v-col>
                       </v-row>
                       <v-row dense>
                         <v-col cols="12" sm="6" class="text-md font-semibold">
-                          โค้ช : อัครพงศ์ เวชสุวรรณ
+                          โค้ช : {{ item.coach_name }}
                         </v-col>
                         <v-col cols="12" sm="6" class="text-md font-semibold">
-                          เวลา : 13.00-14.00
+                          เวลา : {{ item.time.start }}-{{ item.time.end }}
                         </v-col>
                       </v-row>
                       <v-row dense>
@@ -57,10 +67,30 @@
                   `09/07/2022 15:21`
                 }}</v-col>
 
+                <v-col cols="6"> ราคา</v-col>
+                <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
+                  {{ item.option.total_price.toLocaleString() }}</v-col
+                >
+                <v-col cols="6"> จำนวนครั้งที่เรียน</v-col>
+                <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
+                  {{ item.option.amount.toLocaleString()
+                  }}<span> ครั้ง</span></v-col
+                >
+
+                <v-col cols="6"> ราคา/ครั้ง</v-col>
+                <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
+                  {{ item.option.price_unit.toLocaleString() }}</v-col
+                >
+
+                <v-col cols="6"> ส่วนลด</v-col>
+                <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
+                  {{ item.option.discount_price.toLocaleString() }}</v-col
+                >
+
                 <v-col cols="6"> ราคาชำระ</v-col>
-                <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">{{
-                  item.price
-                }}</v-col>
+                <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
+                  {{ item.option.net_price.toLocaleString() }}</v-col
+                >
               </v-row>
             </v-card-text>
           </v-card>
@@ -72,17 +102,19 @@
           <v-checkbox
             class="card_checkbox"
             color="error"
-            value="error"
             hide-details
             label="ทั้งหมด"
             @change="selectAll($event)"
+            v-model="selected_all"
           ></v-checkbox>
         </div>
         <div :class="MobileSize ? 'mt-2 col-span-5' : 'mt-2 col-span-5 ml-40 '">
-          รวมทั้งหมด<b class="text-[#ff6b81] ml-1">{{ sumtotal.toLocaleString() }}บาท</b>
+          รวมทั้งหมด<b class="text-[#ff6b81] ml-1"
+            >{{ carts.total_price.toLocaleString() }}บาท</b
+          >
         </div>
         <div :class="MobileSize ? 'mt-2 ' : 'mt-2 ml-56 '">
-          <v-btn depressed dark color="#ff6b81"> ชำระเงิน (2) </v-btn>
+          <v-btn depressed dark color="#ff6b81"> ชำระเงิน ({{ count_selected_cart }}) </v-btn>
         </div>
       </div>
     </v-container>
@@ -94,52 +126,353 @@ export default {
   data: () => ({
     search: "",
     drawer: true,
-    items: [
-      { id: 1, name: "A", selected: false, price: 500 },
-      { id: 2, name: "B", selected: false, price: 500 },
-      { id: 3, name: "C", selected: false, price: 500 },
-      { id: 4, name: "D", selected: false, price: 500 },
-      { id: 5, name: "E", selected: false, price: 500 },
-      { id: 6, name: "F", selected: false, price: 500 },
-      { id: 7, name: "G", selected: false, price: 500 },
-      { id: 8, name: "H", selected: false, price: 500 },
-      { id: 9, name: "I", selected: false, price: 500 },
-    ],
+    // carts:{ "order_step": 1,  "order_number": "", "courses": [ { "kingdom": "เปียนโนสุดหรรษา", "course_type": "คอร์สทั่วไป", "course_type_id": "CT_1", "package": "Exclusive Package", "package_data": { "package_id": "PACK_1", "package": "Exclusive Package", "students": 1, "options": [ { "package_id": "PACK_1", "option_id": "OP_2", "period_package": "รายเดือน", "amount": 4, "price_unit": 1800, "discount": false, "discount_price": 100, "privilege": "", "total_price": 7200, "net_price": 7100, "net_price_unit": 1775 }, { "package_id": "PACK_1", "option_id": "OP_1", "period_package": "รายวัน", "amount": 1, "price_unit": 500, "discount": true, "discount_price": 0, "privilege": "", "total_price": 500, "net_price": 500, "net_price_unit": 500 } ] }, "option": { "package_id": "PACK_1", "option_id": "OP_2", "period_package": "รายเดือน", "amount": 4, "price_unit": 1800, "discount": false, "discount_price": 100, "privilege": "", "total_price": 7200, "net_price": 7100, "net_price_unit": 1775 }, "option_data": "", "period": 1, "times_in_class": 0, "day": { "course_coach_id": [ "328e3dde-2ee6-488e-83b1-7d397a46e797" ], "day": "0", "times": [ { "start": "17:00", "end": "18:00", "maximumStudent": 10, "dayOfWeekId": "03f3eb4c-05f6-43a1-ba8f-3558a3a4f2ac", "timeId": "07e02360-a952-4c10-b32f-c12781ed503e" }, { "start": "16:00", "end": "17:00", "maximumStudent": 10, "dayOfWeekId": "03f3eb4c-05f6-43a1-ba8f-3558a3a4f2ac", "timeId": "8414d7d0-f418-4a6d-aba3-3731137af8a4" } ] }, "time": { "start": "17:00", "end": "18:00", "maximumStudent": 10, "dayOfWeekId": "03f3eb4c-05f6-43a1-ba8f-3558a3a4f2ac", "timeId": "07e02360-a952-4c10-b32f-c12781ed503e" }, "coach": "328e3dde-2ee6-488e-83b1-7d397a46e797", "start_day": "", "price": 7200, "detail": "", "remark": "", "parents": [], "students": [ { "account_id": "00001", "student_name": "Test Test 01", "username": "surahet", "firstname": "Test", "lastname": "Test 01", "tel": "0821241243", "parents": [], "is_account": false, "is_other": false } ], "category_id": "c13589d1-a78f-496e-9ac3-91cc36388427", "course_name": "ไวโอลีน(Violin)", "time_count": 4 }, { "kingdom": "เปียนโนสุดหรรษา", "course_type": "คอร์สทั่วไป", "course_type_id": "CT_1", "package": "Exclusive Package", "package_data": { "package_id": "PACK_1", "package": "Exclusive Package", "students": 1, "options": [ { "package_id": "PACK_1", "option_id": "OP_2", "period_package": "รายเดือน", "amount": 4, "price_unit": 1800, "discount": false, "discount_price": 100, "privilege": "", "total_price": 7200, "net_price": 7100, "net_price_unit": 1775 }, { "package_id": "PACK_1", "option_id": "OP_1", "period_package": "รายวัน", "amount": 1, "price_unit": 500, "discount": true, "discount_price": 0, "privilege": "", "total_price": 500, "net_price": 500, "net_price_unit": 500 } ] }, "option": { "package_id": "PACK_1", "option_id": "OP_2", "period_package": "รายเดือน", "amount": 4, "price_unit": 1800, "discount": false, "discount_price": 100, "privilege": "", "total_price": 7200, "net_price": 7100, "net_price_unit": 1775 }, "option_data": "", "period": 1, "times_in_class": 0, "day": { "course_coach_id": [ "328e3dde-2ee6-488e-83b1-7d397a46e797" ], "day": "0", "times": [ { "start": "17:00", "end": "18:00", "maximumStudent": 10, "dayOfWeekId": "03f3eb4c-05f6-43a1-ba8f-3558a3a4f2ac", "timeId": "07e02360-a952-4c10-b32f-c12781ed503e" }, { "start": "16:00", "end": "17:00", "maximumStudent": 10, "dayOfWeekId": "03f3eb4c-05f6-43a1-ba8f-3558a3a4f2ac", "timeId": "8414d7d0-f418-4a6d-aba3-3731137af8a4" } ] }, "time": { "start": "17:00", "end": "18:00", "maximumStudent": 10, "dayOfWeekId": "03f3eb4c-05f6-43a1-ba8f-3558a3a4f2ac", "timeId": "07e02360-a952-4c10-b32f-c12781ed503e" }, "coach": "328e3dde-2ee6-488e-83b1-7d397a46e797", "start_day": "", "price": 7200, "detail": "", "remark": "", "parents": [], "students": [ { "account_id": "00001", "student_name": "Test Test 01", "username": "surahet", "firstname": "Test", "lastname": "Test 01", "tel": "0821241243", "parents": [], "is_account": false, "is_other": false } ], "category_id": "c13589d1-a78f-496e-9ac3-91cc36388427", "course_id": "a37de582-501e-4a70-a4df-1d9e395871bf", "course_name": "ไวโอลีน(Violin)", "time_count": 4 } ], "created_by": "00001", "payment_status": "", "payment_type": "", "total_price": 0, "selected": false  },
+    carts: {
+      order_step: 1,
+      order_number: "",
+      courses: [
+        {
+          kingdom: "เปียนโนสุดหรรษา",
+          course_type: "คอร์สทั่วไป",
+          course_type_id: "CT_1",
+          package: "Exclusive Package",
+          package_data: {
+            package_id: "PACK_1",
+            package: "Exclusive Package",
+            students: 1,
+            options: [
+              {
+                course_package_option_id:
+                  "2a90df52-4779-45bd-9ca6-adcba46bb5e1",
+                package_id: "PACK_1",
+                option_id: "OP_2",
+                period_package: "รายเดือน",
+                amount: 4,
+                price_unit: 1800,
+                discount: true,
+                discount_price: 100,
+                privilege: "",
+                total_price: 7200,
+                net_price: 7100,
+                net_price_unit: 1775,
+              },
+              {
+                course_package_option_id:
+                  "57824019-de18-433f-badd-2ce4fc8ccf1f",
+                package_id: "PACK_1",
+                option_id: "OP_1",
+                period_package: "รายวัน",
+                amount: 1,
+                price_unit: 500,
+                discount: false,
+                discount_price: 0,
+                privilege: "",
+                total_price: 500,
+                net_price: 500,
+                net_price_unit: 500,
+              },
+            ],
+          },
+          option: {
+            course_package_option_id: "2a90df52-4779-45bd-9ca6-adcba46bb5e1",
+            package_id: "PACK_1",
+            option_id: "OP_2",
+            period_package: "รายเดือน",
+            amount: 4,
+            price_unit: 1800,
+            discount: true,
+            discount_price: 100,
+            privilege: "",
+            total_price: 7200,
+            net_price: 7100,
+            net_price_unit: 1775,
+          },
+          option_data: "",
+          period: 1,
+          times_in_class: 0,
+          day: {
+            course_coach_id: ["328e3dde-2ee6-488e-83b1-7d397a46e797"],
+            day: "0",
+            times: [
+              {
+                start: "17:00",
+                end: "18:00",
+                maximumStudent: 10,
+                dayOfWeekId: "03f3eb4c-05f6-43a1-ba8f-3558a3a4f2ac",
+                timeId: "07e02360-a952-4c10-b32f-c12781ed503e",
+              },
+              {
+                start: "16:00",
+                end: "17:00",
+                maximumStudent: 10,
+                dayOfWeekId: "03f3eb4c-05f6-43a1-ba8f-3558a3a4f2ac",
+                timeId: "8414d7d0-f418-4a6d-aba3-3731137af8a4",
+              },
+            ],
+          },
+          time: {
+            start: "17:00",
+            end: "18:00",
+            maximumStudent: 10,
+            dayOfWeekId: "03f3eb4c-05f6-43a1-ba8f-3558a3a4f2ac",
+            timeId: "07e02360-a952-4c10-b32f-c12781ed503e",
+          },
+          coach: "328e3dde-2ee6-488e-83b1-7d397a46e797",
+          start_day: "",
+          price: 7200,
+          detail: "",
+          remark: "",
+          parents: [],
+          students: [
+            {
+              account_id: "00001",
+              student_name: "Test Test 01",
+              username: "surahet",
+              firstname: "Test",
+              lastname: "Test 01",
+              tel: "0821241243",
+              parents: [],
+              is_account: false,
+              is_other: false,
+            },
+          ],
+          category_id: "c13589d1-a78f-496e-9ac3-91cc36388427",
+          course_id: "a37de582-501e-4a70-a4df-1d9e395871bf",
+          course_name: "ไวโอลีน(Violin)",
+          time_count: 4,
+          coach_name: "จิรายุทธ ช่างเรือ",
+          coach_id: "1335419642465165",
+        },
+        {
+          kingdom: "เปียนโนสุดหรรษา",
+          course_type: "คอร์สทั่วไป",
+          course_type_id: "CT_1",
+          package: "Exclusive Package",
+          package_data: {
+            package_id: "PACK_1",
+            package: "Exclusive Package",
+            students: 1,
+            options: [
+              {
+                course_package_option_id:
+                  "2a90df52-4779-45bd-9ca6-adcba46bb5e1",
+                package_id: "PACK_1",
+                option_id: "OP_2",
+                period_package: "รายเดือน",
+                amount: 4,
+                price_unit: 1800,
+                discount: true,
+                discount_price: 100,
+                privilege: "",
+                total_price: 7200,
+                net_price: 7100,
+                net_price_unit: 1775,
+              },
+              {
+                course_package_option_id:
+                  "57824019-de18-433f-badd-2ce4fc8ccf1f",
+                package_id: "PACK_1",
+                option_id: "OP_1",
+                period_package: "รายวัน",
+                amount: 1,
+                price_unit: 500,
+                discount: false,
+                discount_price: 0,
+                privilege: "",
+                total_price: 500,
+                net_price: 500,
+                net_price_unit: 500,
+              },
+            ],
+          },
+          option: {
+            course_package_option_id: "2a90df52-4779-45bd-9ca6-adcba46bb5e1",
+            package_id: "PACK_1",
+            option_id: "OP_2",
+            period_package: "รายเดือน",
+            amount: 4,
+            price_unit: 1800,
+            discount: true,
+            discount_price: 100,
+            privilege: "",
+            total_price: 7200,
+            net_price: 7100,
+            net_price_unit: 1775,
+          },
+          option_data: "",
+          period: 1,
+          times_in_class: 0,
+          day: {
+            course_coach_id: ["328e3dde-2ee6-488e-83b1-7d397a46e797"],
+            day: "0",
+            times: [
+              {
+                start: "17:00",
+                end: "18:00",
+                maximumStudent: 10,
+                dayOfWeekId: "03f3eb4c-05f6-43a1-ba8f-3558a3a4f2ac",
+                timeId: "07e02360-a952-4c10-b32f-c12781ed503e",
+              },
+              {
+                start: "16:00",
+                end: "17:00",
+                maximumStudent: 10,
+                dayOfWeekId: "03f3eb4c-05f6-43a1-ba8f-3558a3a4f2ac",
+                timeId: "8414d7d0-f418-4a6d-aba3-3731137af8a4",
+              },
+            ],
+          },
+          time: {
+            start: "17:00",
+            end: "18:00",
+            maximumStudent: 10,
+            dayOfWeekId: "03f3eb4c-05f6-43a1-ba8f-3558a3a4f2ac",
+            timeId: "07e02360-a952-4c10-b32f-c12781ed503e",
+          },
+          coach: "328e3dde-2ee6-488e-83b1-7d397a46e797",
+          start_day: "",
+          price: 7200,
+          detail: "",
+          remark: "",
+          parents: [],
+          students: [
+            {
+              account_id: "00001",
+              student_name: "Test Test 01",
+              username: "surahet",
+              firstname: "Test",
+              lastname: "Test 01",
+              tel: "0821241243",
+              parents: [],
+              is_account: false,
+              is_other: false,
+            },
+          ],
+          category_id: "c13589d1-a78f-496e-9ac3-91cc36388427",
+          course_id: "a37de582-501e-4a70-a4df-1d9e395871bf",
+          course_name: "ไวโอลีน(Violin)",
+          time_count: 4,
+          coach_name: "จิรายุทธ ช่างเรือ",
+          coach_id: "1335419642465165",
+        },
+      ],
+      created_by: "00001",
+      payment_status: "",
+      payment_type: "",
+      total_price: 0,
+    },
+
     selected: [],
     allSelected: false,
     userIds: [],
- 
+    oneSelect: [],
+    selectedCourse: [],
+    selected_all: false,
+    count_selected_cart: 0
   }),
+  created() {
+    // console.log("selectedCourse", this.selectedCourse)
+    this.carts.courses.map((val) => {
+      val.checked = false;
+    });
+  },
 
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "รถเข็น");
   },
 
   methods: {
-    selectAll(e) {
-      if (e) {
-        this.items.forEach((item) => {
-          item.selected = true;
-        });
-      } else {
-        this.items.forEach((item) => {
-          item.selected = false;
-        });
+    // selectAll(e) {
+    //   if (e) {
+    //     this.items.forEach((item) => {
+    //       item.selected = true;
+    //     });
+    //   } else {
+    //     this.items.forEach((item) => {
+    //       item.selected = false;
+    //     });
+    //   }
+    // },
+
+    sumtotal() {
+      this.carts.total_price = 0;
+      this.count_selected_cart = this.carts.courses.filter((v)=>v.checked).length
+      this.carts.courses.forEach((course) => {
+        console.log("course.checked", course.checked);
+        if (course.checked) {
+          this.carts.total_price =
+            this.carts.total_price + course.option.net_price;
+        }
+      });
+    },
+
+    selectOne(bool, key) {
+      console.log("bool", bool);
+      console.log("key", key);
+
+      let result = this.carts.courses.map((element, index) => {
+        console.log("element", element);
+        console.log("index", index);
+
+        if (element.category_id == key) {
+          element.checked = bool;
+        }
+
+        return element;
+      });
+
+      let resultAll = result.filter((element) => {
+        if (!element.checked) {
+          this.selected_all = false;
+          return element;
+        }
+      });
+
+      console.log("resultAll", resultAll);
+
+      if (resultAll.length == 0) {
+        this.selected_all = true;
       }
+
+      
+
+      // if (!this.oneSelect.includes(courseId)) {
+      //   this.oneSelect.push(courseId);
+      //   console.log("cheekOne", this.oneSelect);
+      // } else {
+      //   this.oneSelect.splice(this.index_item, 1);
+      // }
+      this.sumtotal();
+    },
+
+    selectAll(bool) {
+      console.log("bool", bool);
+      let result = this.carts.courses.map((element) => {
+        console.log("element", element);
+        element.checked = bool;
+
+        return element;
+      });
+
+      console.log("result", result);
+
+      this.sumtotal();
+      this.carts.courses = result;
+     
     },
   },
 
   computed: {
-    sumtotal() {
-      let total = 0;
-      this.items
-        .filter((v) => (v.selected === true))
-        .forEach((item) => {
-          total = total + item.price;
-        });
+    // sumtotal() {
+    //   let total = this.carts.total_price;
+    //   console.log("total",this.carts.total_price);
+    //   this.carts.courses.forEach((course) => {
+    //       total = total + course.price
+    //       console.log(course.price);
+    //   } )
 
-      return total;
-    },
+    //   return total;
+    // },
 
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
