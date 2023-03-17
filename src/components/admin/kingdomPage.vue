@@ -12,8 +12,10 @@
             >
               <!-- @click="openFileSelector" -->
               <div v-if="isEnabled">
+                <!-- <v-img     
+                :src="showImg(file)"></v-img> -->
                 <v-img     
-                :src="showImg(file)"></v-img>
+                src=""></v-img>
          
           </div>
               <div v-else>
@@ -302,8 +304,10 @@ export default {
       this.saved = true;
     },
     showImg(item) {
-      console.log("img", `${process.env.VUE_APP_URL}/api/v1/category/${item}`);
-      return `${process.env.VUE_APP_URL}/api/v1/category/${item}`
+      // console.log("img", `${process.env.VUE_APP_URL}/api/v1/category/${item}`);
+      // return `${process.env.VUE_APP_URL}/api/v1/category/${item}`
+      console.log("img", `localhost:3000/api/v1/files/category/${item}`);
+      return `localhost:3000/api/v1/files/category/${item}`
     },
     closeImage() {
       this.preview_url = null;
@@ -323,7 +327,7 @@ export default {
       this.categoryImg = "";
     },
     openDialog() {
-      
+      console.log("first")
       Swal.fire({
         icon: "question",
         title: "คุณต้องการสร้างอาณาจักรหรือไม่",
@@ -332,22 +336,25 @@ export default {
         confirmButtonText: "ตกลง",
         cancelButtonText: "ยกเลิก",
       }).then(async (result) => {
-        /* Read more about isConfirmed, isDenied below */
+        console.log("result", result)
        
         if (result.isConfirmed) {
           try {
            
-
             console.log("preview_url", this.file);
-            var bodyFormData = new FormData();
-            bodyFormData.append('image', this.file); 
+            let bodyFormData = new FormData();
+            bodyFormData.append('img_url', this.file); 
             bodyFormData.append('category_name_th', this.kingdom.kingdom_name_th);
             bodyFormData.append('category_name_en', this.kingdom.kingdom_name_eng); 
             bodyFormData.append('category_description', this.kingdom.detail); 
             bodyFormData.append('taught_by', this.kingdom.learning_method); 
 
+            // console.log("bodyFormData", bodyFormData)
+            // console.log("this.file", this.file)
+
             let { data } = await axios.post(
               `${process.env.VUE_APP_URL}/api/v1/category`,bodyFormData
+              // `loclahost:3000/api/v1/category`,bodyFormData
               // {
                 
               //   category_name_th: this.kingdom.kingdom_name_th,
@@ -369,7 +376,7 @@ export default {
               title: error.message,
             });
           }
-        } else if (result.isDenied) {
+        } else {
           Swal.fire("Changes are not saved", "", "info");
         }
       });

@@ -64,7 +64,7 @@
             v-for="item in categorys"
             :key="item.id"
           >
-            <v-card class="rounded-xl" @click="selectedCategory(item)">
+            <v-card class="rounded-xl w-50 h-50" @click="selectedCategory(item)">
               <v-img
                 style="
                   display: block;
@@ -72,8 +72,10 @@
                   margin-right: auto;
                   border-top-left-radius: 0.75rem;
                   border-top-right-radius: 0.75rem;
-                  max-width: 100%;
-                  max-height: 100%;
+                  /* max-width: 300px;
+                  max-height: 300px; */
+                  width: 300px;
+                  height: 300px;
                 "
                 :src="
                   item.categoryImg ? showImg(item.categoryImg) : defaultImageUrl
