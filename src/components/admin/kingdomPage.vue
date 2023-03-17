@@ -5,12 +5,18 @@
       <v-row dense>
         <v-col>
           <label-custom text="อัปโหลดภาพหน้าปกอาณาจักร"></label-custom>
+   
           <v-card class="mx-3" flat>
             <v-card-text
               class="border-dashed border-2 border-blue-600 rounded-lg"
             >
               <!-- @click="openFileSelector" -->
-              <div>
+              <div v-if="isEnabled">
+                <v-img     
+                :src="showImg(file)"></v-img>
+         
+          </div>
+              <div v-else>
                 <v-row v-if="preview_url">
                   <v-col class="flex align-center justify-center">
                     <v-img
@@ -32,7 +38,7 @@
                     style="display: none"
                   />
                 </v-row>
-              </div>
+              
               <v-row v-if="!preview_url">
                 <v-col cols="12" class="flex align-center justify-center">
                   <v-img
@@ -65,6 +71,7 @@
                   />
                 </v-col>
               </v-row>
+            </div>
             </v-card-text>
           </v-card>
         </v-col>
@@ -95,9 +102,10 @@
           <div v-if="isEnabled">
             {{ kingdom.kingdom_name_eng }}
           </div>
+          <!-- v-bind:disabled="isDisabled" -->
+          
           <v-text-field
             v-else
-            v-bind:disabled="isDisabled"
             dense
             placeholder="กรอกชื่ออาณาจักร"
             outlined
@@ -115,7 +123,6 @@
           </div>
           <v-text-field
             v-else
-            v-bind:disabled="isDisabled"
             dense
             placeholder="ระบุสถาบันผู้จัดสอน เช่น ศูนย์ดนตรี Manila Tamarind"
             outlined
@@ -132,7 +139,6 @@
           </div>
           <v-textarea
             v-else
-            v-bind:disabled="isDisabled"
             dense
             class="form2"
             placeholder="กรอกรายละเอียด..."
@@ -265,7 +271,6 @@ export default {
         kingdom_name_eng: "",
         detail: "",
         learning_method: "",
-        
       },
     };
   },
@@ -296,6 +301,10 @@ export default {
       this.dialog_show = false;
       this.saved = true;
     },
+    showImg(item) {
+      console.log("img", `${process.env.VUE_APP_URL}/api/v1/category/${item}`);
+      return `${process.env.VUE_APP_URL}/api/v1/category/${item}`
+    },
     closeImage() {
       this.preview_url = null;
     },
@@ -310,8 +319,8 @@ export default {
       this.kingdom.kingdom_name_eng = "";
       this.kingdom.learning_method = "";
       this.kingdom.detail = "";
-      this.preview_url = "";
-      this.categoryImg = null;
+      this.file = "";
+      this.categoryImg = "";
     },
     openDialog() {
       
@@ -351,7 +360,7 @@ export default {
             if (data.statusCode === 201) {
               this.dialog_show = true;
             } else {
-              throw { message: data.message };
+              throw { message: data.message }
             }
           } catch (error) {
             console.log(error);

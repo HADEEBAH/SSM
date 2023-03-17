@@ -27,7 +27,7 @@ const loginModules = {
         //   }
         // }
         // "http://192.168.72.187:3001/api/v1/auth/login"
-        async loginOneId(context ) {
+        async loginOneId(context) {
             try {
                 const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login`, {
                     "username": context.state.user_one_id.username,
@@ -55,13 +55,15 @@ const loginModules = {
                     VueCookie.set("token", data.data.token)
                     localStorage.setItem("userDetail", JSON.stringify(payload))
                     router.replace({ name: "UserKingdom" });
-                    // console.log(context.rootState)
+
+                   console.log(context.rootState)
                     // if (context.rootState.OrderModules.order.order_step > 0) {
                     //     router.replace({ name: "userCourseOrder" });
                     // } else {
                     //     console.log("UserKingdom")
                     //     router.replace({ name: "UserKingdom" });
                     // }
+                
                 }
             } catch (response) {
                 console.log(response)
@@ -72,18 +74,20 @@ const loginModules = {
                 if (response.status === 401) {
                     Swal.fire({
                         icon: 'error',
-                        title: "เกิดข้อผิดพลาด",
+                        title: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง",
                     })
                 } else {
                     Swal.fire({
                         icon: 'error',
-                        title: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง",
+                        title: "เกิดข้อผิดพลาด",
                     })
                     console.log(response)
                 }
             }
 
         },
+
+       
         logOut() {
             VueCookie.delete("token")
             localStorage.removeItem("userDetail")

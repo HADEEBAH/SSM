@@ -1,7 +1,7 @@
 <template>
   <v-app class="overflow-x-hidden overflow-y-hidden">
     <v-container>
-      <pre>{{ carts.total_price }}</pre>
+      <!-- <pre>{{ carts.total_price }}</pre> -->
       <v-row class="mb-16">
         <v-col
           cols="12"
@@ -379,6 +379,9 @@ export default {
 
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "รถเข็น");
+    this.user_login = JSON.parse(localStorage.getItem("userDetail"))
+    this.cart = JSON.parse(localStorage.getItem(this.user_login.account_id))
+    console.log(this.user_login);
   },
 
   methods: {

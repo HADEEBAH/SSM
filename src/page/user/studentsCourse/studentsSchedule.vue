@@ -31,27 +31,35 @@
         </v-col> -->
       </v-row>
       <v-expand-x-transition transition="scale-transition">
-   
-        <div
-          v-if="type_selected == 'students_course'"
-         
-        >
-          <v-card v-for="(item, item_index) in course_data" :key="item_index">
-            <v-card class="pa-2">
-                <v-row>
-                    <v-col cols="4">
-                        {{ item.category_id }}
-                    </v-col>
-                    <v-col cols="4">
+        <div v-if="type_selected == 'students_course'">
+          <v-card v-for="(item, item_index) in course_data" :key="item_index" class=" my-5">
+            <div >
+              <v-row dense>
+                <v-col cols="4" sm="6">
+                  <v-col>
+                    {{ item.courseImg }}
+                  </v-col>
+                </v-col>
+                <v-col cols="4"  >
+                  <v-col sm="6" class="text-lg font-bold">
+                    {{ item.courseNameTh }}
+                  </v-col>
+                  <v-col sm="6" class="text-slate-400">
+                    {{ item.courseNameEn }}
+                  </v-col>
+                  <v-col sm="6" class="text-slate-400">
+                    <span class="mdi mdi-account"></span> {{ item.courseNameTh }}
+                  </v-col>
+                </v-col>
 
-                    </v-col>
-                    <v-col cols="4">
-
-                    </v-col>
-                </v-row>
-                 {{ item.courseNameEn }}
-            </v-card>
-           
+                <v-col cols="4"  sm="6">
+                  <v-col>
+                    {{ item.courseNameEn }}
+                  </v-col>
+                </v-col>
+              </v-row>
+             
+            </div>
           </v-card>
         </div>
       </v-expand-x-transition>
@@ -92,12 +100,11 @@ export default {
       "ข้อมูลตารางเรียน"
     );
     // this.GetCourse(this.courseId)
-        // this.$store.dispatch('GetCourse', (this.course_data.course_id))
-        // this.$store.dispatch('GetCourse', this.$route.params.course_id)
-
+    // this.$store.dispatch('GetCourse', (this.course_data.course_id))
+    // this.$store.dispatch('GetCourse', this.$route.params.course_id)
   },
-      created() {
-    this.GetCourse(this.course_data.course_id)
+  created() {
+    this.GetCourse(this.course_data.course_id);
     // this.$store.dispatch('GetCourse', this.course_data.course_id);
   },
   watch: {
@@ -121,14 +128,13 @@ export default {
 
   computed: {
     ...mapGetters({
-          course_data: "CourseModules/getCourseData",
-    
+      course_data: "CourseModules/getCourseData",
     }),
     courseData: {
-   get() {
-       return this.course_data
-   },
- },
+      get() {
+        return this.course_data;
+      },
+    },
   },
 };
 </script>
