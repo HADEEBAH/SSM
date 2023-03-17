@@ -144,7 +144,7 @@ const CourseModules = {
       context.commit("SetCourseData", course_data)
     },
     // COURSE :: LIST 
-    async GetCoursesList(context,) {
+    async GetCoursesList(context) {
       try {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/list?limit=10&page=1`)
         let courses = []
@@ -163,6 +163,26 @@ const CourseModules = {
         console.log(error)
       }
     },
+    // COURSE :: LIST 
+    // async GetCoursesList(context,){
+    //   try{
+    //     let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/list?limit=10&page=1`)
+    //     let courses = []
+    //     await data.data.forEach((course)=>{
+    //       courses.push({
+    //         course_id : course.c_course_id,
+    //         category_id : course.c_category_id,
+    //         category : "ยังไม่ได้",
+    //         course : `${course.c_course_name_th}(${course.c_course_name_en})`,
+    //         status : course.c_course_status,
+    //         course_open : course.c_course_open_date ? course.c_course_open_date : "-"
+    //       })
+    //     })
+    //     context.commit("SetCourses",courses)
+    //   }catch(error){
+    //     console.log(error)
+    //   }
+    // },
     // COURSE :: DETAIL
     async GetCourse(context, course_id) {
       console.log("GetCourse",course_id)

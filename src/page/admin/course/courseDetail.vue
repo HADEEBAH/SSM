@@ -47,7 +47,7 @@
                             <v-card flat>
                                 <v-card-text class="border border-2 border-[#ff6b81] border-600 rounded-lg" align="center"> 
                                     <v-img 
-                                        src="../../../assets/course/student_list.png" 
+                                        :src="courseImg ? courseImg : '../../../assets/course/student_list.png'" 
                                         max-height="299"
                                         max-width="365">
                                     </v-img>
@@ -60,36 +60,37 @@
                                     <v-row>
                                         <v-col>
                                             <rowData title="ชื่อคอร์ส (ภาษาไทย)" vertical>
+                                                {{  course_data.courseNameTh  }}
                                                 เวิร์คช้อปไวโอลินพื้นฐาน
                                             </rowData>
                                         </v-col>
                                         <v-col>
                                             <rowData title="ชื่อคอร์ส (ภาษาอังกฤษ)" vertical>
-                                                Violin foundation workshop
+                                                {{course_data.courseNameEn}}
                                             </rowData>
                                         </v-col>
                                     </v-row>
                                     <v-row>
                                         <v-col>
                                             <rowData title="ชื่ออาณาจักร" vertical>
-                                                อาณาจักรสมัยใหม่
+                                               {{ course_data.categoryNameTh }}
                                             </rowData>
                                         </v-col>
                                         <v-col>
                                             <rowData title="วันเปิดคอร์ส" vertical>
-                                                16 ม.ค. 2566
+                                                {{ course_data.courseOpenDate }}
                                             </rowData>
                                         </v-col>
                                     </v-row>
                                     <v-row>
                                         <v-col>
                                             <rowData title="จำนวนชั่วโมงการเรียน /ครั้ง" vertical>
-                                                60 นาที
+                                                {{ course_data.coursePerTime }}นาที
                                             </rowData>
                                         </v-col>
                                         <v-col>
                                             <rowData title="สถานที่เรียน" vertical>
-                                                ศูนย์กรุงเทพ
+                                                {{ course_data.courseLocation }}
                                             </rowData>
                                         </v-col>
                                     </v-row>
@@ -97,19 +98,13 @@
                                         โค้ชพอล
                                     </rowData>
                                     <rowData title="รายละเอียดคอร์ส" vertical>
-                                        หลักสูตรนี้รียนตั้งแต่ระดับพื้นฐานจนกึ่งการเล่นพลงคลาสสิคระดับสูง โดยใช้ตำรา
-                                        แบบฝึกของ Suzuki Violin เน้นทักษะการอ่านโน้ต ทักษะการฟังแยกเสียง และสอนแทรกทฤษฎีดนตรีสากล ตลอดจนการดนตรีจากประเทศอังกฤษและประเทศชั้นนำ
+                                        {{ course_data.courseDescription }}
                                     </rowData>
                                     <rowData title="Music performance" vertical>
-                                        A   สุนทรียะด้านการฟังและเล่นดนตรี
-                                        K   ทฤษฎีดนตรีสากล
-                                        ร1 ทักษะการอ่านโน้ตดนตรีสากล
-                                        s2 ทักษะการฟังเสียง (Ear training)
-                                        S3 ทักษะการบรรเลงเตี่ยว (Solo)
-                                        S4 ทักษะการบรรเลงรวมวง (Accom)
+                                        {{ course_data.courseMusicPerformance }}
                                     </rowData>
                                     <rowData title="Certification" vertical>
-                                        สู่การสอบเทียนมาตรฐาน Trinity แล: ABRSM
+                                        {{ course_data.courseCertification }}
                                     </rowData>
                                 </v-card-text>
                             </v-card>
@@ -117,7 +112,7 @@
                     </v-tab-item>
                     <!-- COACH AND TIME -->
                     <v-tab-item value="time and coach"> 
-                        <coachs-card disable></coachs-card>
+                        <coachs-card disable ></coachs-card>
                     </v-tab-item>
                     <!-- PACKAGE -->
                     <v-tab-item value="package">
@@ -147,7 +142,7 @@
                                         </v-row>
                                     </v-card-text>
                                 </v-card>
-                                <div v-for="(course_data,course_index) in course" :key="course_index">
+                                <div v-for="(course_data,course_index) in student_courses" :key="course_index">
                                     <v-card @click="selectCoach(course_index)" outlined dense class=" rounded-lg cursor-pointer mb-3 bg-[#FCFCFC]">
                                         <v-card-text class="pa-2" >
                                             <v-row dense class="d-flex align-center">
@@ -345,6 +340,7 @@ import HeaderPage from '@/components/header/headerPage.vue';
 import headerCard from '@/components/header/headerCard.vue';
 import ImgCard from '@/components/course/imgCard.vue';
 import rowData from '@/components/label/rowData.vue';
+import { mapGetters } from 'vuex';
     export default {
         name:"coureDetail",
         components: {HeaderPage, ImgCard, courseCard, headerCard ,rowData, coachsCard, packageCard},
@@ -370,7 +366,7 @@ import rowData from '@/components/label/rowData.vue';
             tab : "student list",
             student_tab : null,
             course_edit : false,
-            course : [
+            student_courses : [
                 {
                     name : "องศา วงกลม",
                     schedule : [
@@ -507,14 +503,20 @@ import rowData from '@/components/label/rowData.vue';
                 }
             ]
         }),
-        created() {},
+        created() {
+            this.$store.dispatch("CourseModules/GetCourse",this.$route.params.course_id)
+        },
         mounted() {},
         watch: {
             "tab":function(){
                 this.course_edit = false
             }
         },
-        computed: {},
+        computed: {
+            ...mapGetters({
+                course_data : "CourseModules/getCourseData"
+            })
+        },
         methods: {
             selectCoach(coach){
                 if(this.selected_coach !== coach){

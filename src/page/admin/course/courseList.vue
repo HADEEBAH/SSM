@@ -54,10 +54,11 @@
                 </img-card>
             </v-col>
         </v-row>
-        <v-data-table
+        <v-data-table 
             class="elevation-1 header-table"
             :headers="column"
             :items="courses"
+            :loading="LoadingTable"
         >
         <template v-slot:[`item.status`]="{ item }">
             <v-autocomplete dense outlined hide-details item-color="pink" :items="status" v-model="item.status">
@@ -76,6 +77,7 @@
   <script>
   import headerPage from '@/components/header/headerPage.vue';
   import imgCard from '@/components/course/imgCard.vue';
+import { mapGetters } from 'vuex';
   export default {
     name:"courseList",
     components: {
@@ -98,18 +100,28 @@
             {text: 'สถานะ',align: 'center',sortable: false, value: 'status'},
             {text: '', align: 'center', value: 'actions', sortable: false },
         ],
-        courses:[
-            {course_id:'000001', course : "เปียโน Kpop",category : "ศิลปะสมัยใหม่", course_type:"คอร์สทั่วไป",course_open : "12 มี.ค. - 29 มี.ค. 2566", status:"เปิดเรียน"},
-            {course_id:'000002', course : "เปียโนสากล",category : "ศิลปะสมัยใหม่", course_type:"คอร์สระยะสั้น",course_open : "12 มี.ค. - 29 มี.ค. 2566", status:"ปิดคอร์สเรียน"},
-            {course_id:'000003', course : "ไวโอลิน",category : "ศิลปะสมัยใหม่", course_type:"คอร์สทั่วไป",course_open : "12 มี.ค. - 29 มี.ค. 2566", status:"ปิดชั่วคราว"},
-            {course_id:'000004', course : "เวิร์กช๊อปกีต้าร์ไฟฟ้า เบื้องต้น",category : "คอร์สระยะสั้น", course_type:"คอร์สทั่วไป",course_open : "12 มี.ค. - 29 มี.ค. 2566", status:"เปิดเรียน"},
-            {course_id:'000005', course : "ว่ายน้ำ",category : "กีฬา P.E.", course_type:"คอร์สทั่วไป",course_open : "12 มี.ค. - 29 มี.ค. 2566", status:"เปิดเรียน"},
-        ],
+        // courses:[
+        //     {course_id:'000001', course : "เปียโน Kpop",category : "ศิลปะสมัยใหม่", course_type:"คอร์สทั่วไป",course_open : "12 มี.ค. - 29 มี.ค. 2566", status:"เปิดเรียน"},
+        //     {course_id:'000002', course : "เปียโนสากล",category : "ศิลปะสมัยใหม่", course_type:"คอร์สระยะสั้น",course_open : "12 มี.ค. - 29 มี.ค. 2566", status:"ปิดคอร์สเรียน"},
+        //     {course_id:'000003', course : "ไวโอลิน",category : "ศิลปะสมัยใหม่", course_type:"คอร์สทั่วไป",course_open : "12 มี.ค. - 29 มี.ค. 2566", status:"ปิดชั่วคราว"},
+        //     {course_id:'000004', course : "เวิร์กช๊อปกีต้าร์ไฟฟ้า เบื้องต้น",category : "คอร์สระยะสั้น", course_type:"คอร์สทั่วไป",course_open : "12 มี.ค. - 29 มี.ค. 2566", status:"เปิดเรียน"},
+        //     {course_id:'000005', course : "ว่ายน้ำ",category : "กีฬา P.E.", course_type:"คอร์สทั่วไป",course_open : "12 มี.ค. - 29 มี.ค. 2566", status:"เปิดเรียน"},
+        // ],
     }),
-    created() {},
+    created() {
+        this.$store.dispatch("CourseModules/GetCoursesList")
+    },
     mounted() {},
     watch: {},
-    computed: {},
+    computed: {
+        ...mapGetters({
+            courses : "CourseModules/getCourses"
+        }),
+        LoadingTable(){
+            console.log(this.courses)
+            return !this.courses
+        } 
+    },
     methods: {},
   };
   </script>
