@@ -16,6 +16,7 @@ const categoryModules = {
     actions: {
         async GetCategorys(context) {
             try {
+                console.log(process.env.VUE_APP_URL)
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category`)
                 console.log("data", data);
                 if (data.statusCode === 200) {

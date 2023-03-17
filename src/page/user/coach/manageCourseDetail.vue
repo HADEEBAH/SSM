@@ -421,12 +421,23 @@ export default {
     openFileSelector() {
       this.$refs.fileInput.click();
     },
+    // uploadFile() {
+    //   this.file = this.$refs.fileInput.files[0];
+    //   if (!this.file) return;
+    //   const reader = new FileReader();
+    //   reader.onload = (e) => {
+    //     this.previewUrl = e.target.result;
+    //   };
+    //   reader.readAsDataURL(this.file);
+    // },
+
     uploadFile() {
       this.file = this.$refs.fileInput.files[0];
+      console.log("file=>",this.file);
       if (!this.file) return;
       const reader = new FileReader();
       reader.onload = (e) => {
-        this.previewUrl = e.target.result;
+        this.preview_url = e.target.result;
       };
       reader.readAsDataURL(this.file);
     },

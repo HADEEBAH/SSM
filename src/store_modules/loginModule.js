@@ -107,7 +107,9 @@ const loginModules = {
             }
 
         },
-        logOut(){
+
+       
+        logOut() {
             VueCookie.delete("token")
             localStorage.removeItem("userDetail")
             router.push({ name: "Login" });

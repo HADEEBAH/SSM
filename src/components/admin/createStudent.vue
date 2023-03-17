@@ -68,6 +68,7 @@
                 </v-col>
               </v-row>
               <v-row>
+                <!--  คอร์สทั่วไป btn -->
                 <v-col cols="auto">
                   <v-btn
                     outlined
@@ -85,6 +86,7 @@
                     คอร์สทั่วไป</v-btn
                   >
                 </v-col>
+                <!-- คอร์สระยะสั้น btn -->
                 <v-col>
                   <v-btn
                     @click="course.course_type = 'short_course'"
@@ -101,19 +103,24 @@
                   >
                 </v-col>
               </v-row>
+              <!-- คอร์สทั่วไป detail -->
               <template v-if="course.course_type === 'general_course'">
                 <br />
                 <v-row dense>
                   <v-col cols="12" sm="4">
                     <label-custom text="อาณาจักร"></label-custom>
+                    {{ course_id }}
                     <v-autocomplete
                       dense
-                      v-model="course.kingdom"
-                      :items="kingdom"
+                      item-value="categoryId"
+                      item-text="categoryNameTh"
+                      v-model="course_id"
+                      :items="categorys"
                       placeholder="เลือกอาณาจักร"
                       outlined
                       color="pink"
                       item-color="pink"
+                      @change="selectCategory($event, course.course_type)"
                     >
                       <template v-slot:no-data>
                         <v-list-item>
@@ -125,16 +132,16 @@
                           <v-list-item-title
                             ><span
                               :class="
-                                course.kingdom === item ? 'font-bold' : ''
+                                course_id === item.categoryId ? 'font-bold' : ''
                               "
-                              >{{ item }}</span
+                              >{{ item.categoryNameTh }}</span
                             ></v-list-item-title
                           >
                         </v-list-item-content>
                         <v-list-item-action>
                           <v-icon>
                             {{
-                              course.kingdom === item
+                              course_id === item.categoryId
                                 ? "mdi-check-circle"
                                 : "mdi-radiobox-blank"
                             }}</v-icon
@@ -145,15 +152,19 @@
                   </v-col>
 
                   <v-col cols="12" sm="4">
+                    {{ courses }}
                     <label-custom text="คอร์สเรียน"></label-custom>
                     <v-autocomplete
                       dense
-                      v-model="course.courses"
+                      item-value="course_id"
+                      item-text="course_name_th"
+                      v-model="course_name_th"
                       :items="courses"
                       placeholder="เลือกคอร์สเรียน"
                       outlined
                       color="pink"
                       item-color="pink"
+                      @change="selectPackage($event, course.courseId)"
                     >
                       <template v-slot:no-data>
                         <v-list-item>
@@ -167,7 +178,7 @@
                               :class="
                                 course.courses === item ? 'font-bold' : ''
                               "
-                              >{{ item }}</span
+                              >{{ item.course_name_th }}</span
                             ></v-list-item-title
                           >
                         </v-list-item-content>
@@ -186,13 +197,16 @@
                 </v-row>
                 <v-row dense>
                   <v-col cols="12" sm="4">
+                    {{packages }}
                     <label-custom text="แพ็คเกจ"></label-custom>
                     <v-autocomplete
+                      item-value="course_id"
+                      item-text="packages"
                       item-color="pink"
                       color="pink"
                       dense
-                      v-model="course.coursepackage"
-                      :items="coursepackage"
+                      v-model="packages"
+                      :items="packages"
                       placeholder="เลือกแพ็คเกจ"
                       outlined
                     >
@@ -289,26 +303,15 @@
                   </v-col>
                   <v-col cols="12" sm="4">
                     <label-custom text="วันเริ่ม"></label-custom>
-                    <v-menu
+                    <!-- <v-menu
                       v-model="course_data.menu_course_open_date"
                       :close-on-content-click="false"
                       transition="scale-transition"
                       offset-y
                       min-width="auto"
                     >
-                      <!-- :nudge-right="40" -->
                       <template v-slot:activator="{ on, attrs }">
-                        <!-- <v-text-field
-                          v-model="course.date"
-                          placeholder="เลือกวันเริ่ม"
-                          append-icon="mdi-calendar"
-                          outlined
-                          dense
-                          v-bind="attrs"
-                          v-on="on"
-                          item-color="pink"
-                      color="pink"
-                        > -->
+             
                         <v-text-field
                           dense
                           outlined
@@ -329,15 +332,12 @@
                           </template>
                         </v-text-field>
                       </template>
-                      <!-- <v-date-picker
-                        v-model="course.date"
-                        @input="menu2 = false"
-                      ></v-date-picker> -->
+                    
                       <v-date-picker
                         v-model="course_data.course_open_date"
                         @input="inputDate($event, 'course open')"
                       ></v-date-picker>
-                    </v-menu>
+                    </v-menu> -->
                   </v-col>
                 </v-row>
                 <v-row dense>
@@ -366,13 +366,14 @@
                   </v-col>
                 </v-row>
               </template>
+              <!-- คอร์สระยะสั้น detail -->
               <template v-else>
                 <v-row>
                   <v-col cols="12" sm="4">
                     <label-custom text="อาณาจักร"></label-custom>
                     <v-autocomplete
                       dense
-                      v-model="course.kingdom"
+                      v-model="course_id"
                       :items="kingdom"
                       placeholder="เลือกอาณาจักร"
                       outlined
@@ -423,7 +424,7 @@
                   <v-col cols="12" sm="4">
                     <label-custom text="วันที่"></label-custom>
                     <v-text-field
-                    v-if="course.courses === course.day"
+                      v-if="course.courses === course.day"
                       dense
                       v-model="course.day"
                       :items="student"
@@ -433,12 +434,11 @@
                       :disabled="validated == 1"
                     >
                     </v-text-field>
-                   
                   </v-col>
                   <v-col cols="12" sm="4">
                     <label-custom text="เวลา"></label-custom>
                     <v-text-field
-                    v-if="course.courses === course.time"
+                      v-if="course.courses === course.time"
                       dense
                       v-model="course.time"
                       :items="student"
@@ -448,12 +448,11 @@
                       :disabled="validated == 1"
                     >
                     </v-text-field>
-                   
                   </v-col>
                   <v-col cols="12" sm="4">
                     <label-custom text="โค้ช"></label-custom>
                     <v-text-field
-                    v-if="course.courses === course.coach"
+                      v-if="course.courses === course.coach"
                       dense
                       v-model="course.coach"
                       :items="student"
@@ -463,12 +462,10 @@
                       :disabled="validated == 1"
                     >
                     </v-text-field>
-                   
                   </v-col>
                   <v-col cols="12" sm="4">
                     <label-custom text="ราคา"></label-custom>
                     <v-text-field
-                   
                       dense
                       v-model="course.price"
                       :items="student"
@@ -477,7 +474,6 @@
                       color="pink"
                     >
                     </v-text-field>
-                   
                   </v-col>
                   <v-col cols="12" sm="4">
                     <label-custom text="หมายเหตุราคา"></label-custom>
@@ -489,7 +485,6 @@
                       item-color="pink"
                       color="pink"
                     ></v-textarea>
-                   
                   </v-col>
                 </v-row>
               </template>
@@ -502,8 +497,9 @@
           outlined
           class="btn3 mt-10 centerbtn"
           color="#ff6b81"
-          @click="addCourse">
-          <span class="mdi mdi-plus-circle-outline">เพิ่มคอร์ส</span> 
+          @click="addCourse"
+        >
+          <span class="mdi mdi-plus-circle-outline">เพิ่มคอร์ส</span>
         </v-btn>
       </div>
       <div class="text-lg">สถานะการชำระเงิน</div>
@@ -756,6 +752,10 @@ export default {
   },
   props: {},
   data: () => ({
+    course_name_th: "",
+    course_id: "",
+    // packages: [],
+
     dialog_show: false,
     date: "",
     username: "",
@@ -769,7 +769,7 @@ export default {
       "จารุณี กมลอาทิตย์",
     ],
     kingdom: ["อาณาจักรศิลปะสมัยใหม่", "อาณาจักร P.E."],
-    courses: ["ไวโอลินเบื้องต้น"],
+    // courses: [],
     coursepackage: ["Exclusive", "Family", "Group"],
     period: ["3 วัน", "3 เดือน", "3 ปี"],
     day: [
@@ -797,7 +797,11 @@ export default {
   created() {},
 
   mounted() {
-    this.order.courses.push({
+    this.GetCategorys(),
+    // this.GetCourse(),
+      // this.GetPackages(),
+
+      this.order.courses.push({
         course_type: "general_course",
         package: "",
         time_period: "",
@@ -818,6 +822,11 @@ export default {
       changeDialogRegisterOneId: "RegisterModules/changeDialogRegisterOneId",
       ChangeOrederData: "OrderModules/ChangeOrederData",
       save: "OrderModules/save",
+
+      GetCategorys: "CategoryModules/GetCategorys",
+      GetCoursesFilter: "CourseModules/GetCoursesFilter",
+      GetPackages: "CourseModules/GetPackages",
+      GetCourse: "CourseModules/GetCourse"
     }),
     remove(item) {
       const index = this.order.students.indexOf(item);
@@ -881,22 +890,40 @@ export default {
       this.order.courses.splice(index, 1);
       this.ChangeOrederData(this.order);
     },
+
+    selectCategory(categoryId, course_type) {
+      console.log(course_type);
+
+      this.GetCoursesFilter({
+        category_id: categoryId,
+        status: "Active",
+        course_type_id: course_type === "general_course" ? "CT_1" : "CT_2",
+      });
+    },
+    selectPackage(courseId) {
+      console.log("course_id", courseId );
+      this.GetCourse(courseId)
+      
+    }
   },
   computed: {
     ...mapGetters({
       show_dialog_register_one_id: "RegisterModules/getShowDialogRegisterOneId",
       order: "OrderModules/getOrder",
+      categorys: "CategoryModules/getCategorys",
       course_data: "CourseModules/getCourseData",
-
-      MobileSize() {
-        const { xs } = this.$vuetify.breakpoint;
-        return !!xs;
-      },
-      IpadSize() {
-        const { sm } = this.$vuetify.breakpoint;
-        return !!sm;
-      },
+      courses: "CourseModules/getCourses",
+      packages: "CourseModules/getPackages",
+      getCourses: "CourseModules/getCourses",
     }),
+    MobileSize() {
+      const { xs } = this.$vuetify.breakpoint;
+      return !!xs;
+    },
+    IpadSize() {
+      const { sm } = this.$vuetify.breakpoint;
+      return !!sm;
+    },
   },
   watch: {
     "course.course_type": function (val) {
