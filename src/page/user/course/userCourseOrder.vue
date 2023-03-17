@@ -138,7 +138,7 @@
                         <v-row dense class="d-flex align-center">
                             <v-col  cols="12" sm="6">
                                 <labelCustom text="Username (ถ้ามี)"></labelCustom>
-                                <v-text-field :disabled="user_data.length > 0" @blur="checkUsername(parent.username)" @keyup.enter="checkUsername(parent.username)" dense outlined v-model="parent.username"  placeholder="Username" ></v-text-field>
+                                <v-text-field :disabled="user_data.length > 0" @change="checkUsername(parent.username)" @keyup.enter="checkUsername(parent.username)" dense outlined v-model="parent.username"  placeholder="Username" ></v-text-field>
                             </v-col>
                             <v-col  cols="12" sm="6">
                                 <v-btn dense outlined color="#ff6b81" @click="dialog_parent = true"><v-icon>mdi-account-edit-outline</v-icon>เพิ่มข้อมูลผู้ปกครอง</v-btn>
@@ -181,7 +181,7 @@
                                 dense 
                                 outlined 
                                 v-model="student.username"  
-                                @blur="checkUsername(student.username, 'student', index_student)"
+                                @change="checkUsername(student.username, 'student', index_student)"
                                 @keyup.enter="checkUsername(student.username, 'student', index_student)"
                                 placeholder="Username">
                                 <template v-slot:append>
@@ -255,7 +255,7 @@
                 <v-row dense>
                     <v-col  cols="12" sm="6">
                         <labelCustom text="Username (ถ้ามี)"></labelCustom>
-                        <v-text-field @blur="checkUsername(parent.username)" @keyup.enter="checkUsername(parent.username)" dense outlined v-model="parent.username"  placeholder="Username" ></v-text-field>
+                        <v-text-field @change="checkUsername(parent.username)" @keyup.enter="checkUsername(parent.username)" dense outlined v-model="parent.username"  placeholder="Username" ></v-text-field>
                     </v-col>
                 </v-row>
                 <template> 

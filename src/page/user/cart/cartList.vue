@@ -115,7 +115,6 @@ export default {
   mounted() {
     this.user_login = JSON.parse(localStorage.getItem("userDetail"))
     this.cart = JSON.parse(localStorage.getItem(this.user_login.account_id))
-    console.log(this.cart)
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "รถเข็น");
   },
 

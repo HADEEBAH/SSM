@@ -6,7 +6,6 @@
                 <v-text-field  outlined hide-details dense prepend-inner-icon="mdi-magnify" placeholder="ค้นหาอาณาจัดรการเรียนรู้ที่คุณสนใจได้ที่นี่"></v-text-field>
             </v-col>
         </v-row>
-        {{  }}
         <v-row dense>
             <v-col class="text-lg font-bold">{{ category.categoryNameTh }}</v-col>
         </v-row>
@@ -20,7 +19,6 @@
                 </v-card>
             </v-col>
         </v-row>
-        {{ courses }}
         <v-row dense>
             <template v-if="!courses_is_loading">
                 <v-col cols="6" sm="4" v-for="(course, course_index) in courses" :key="course_index">
@@ -70,11 +68,10 @@ import { mapGetters, mapActions } from 'vuex';
             type_selected :"",
         }),
         created() {
+            this.GetCourseTypes({category_id : this.$route.params.category_id})
             this.$store.dispatch("CourseModules/GetCoursesFilter",{ category_id : this.$route.params.category_id, status : "Active", })  
         },
         mounted() {
-            
-            this.GetCourseTypes()
             this.GetCategory({category_id : this.$route.params.category_id})
             this.$store.dispatch("NavberUserModules/changeTitleNavber","คอร์สเรียน")
             this.type_selected = this.course_types[0].course_type_id

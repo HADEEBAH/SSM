@@ -57,32 +57,33 @@
             </img-card>
           </v-col>
         </v-row>
+        <!-- <pre>{{ orders }}</pre> -->
         <v-data-table
           class="elevation-1 header-table"
           :headers="columns"
           :items="orders"
           :items-per-page="5"
         >
-          <template v-slot:[`item.order_id`] ="{ item }">
-            <span class="font-semibold">{{ item.order_id }}</span>  
+          <template v-slot:[`item.orderNumber`] ="{ item }">
+            <span class="font-semibold">{{ item.orderNumber }}</span>  
           </template>
           <template v-slot:[`item.course`] ="{ item }">
             <span class="font-semibold">{{ item.course }}</span>  
           </template>
-          <template v-slot:[`item.price`] ="{ item }">
-            <span class="font-semibold">{{ item.price.toLocaleString() }}</span>  
+          <template v-slot:[`item.totalPrice`] ="{ item }">
+            <span class="font-semibold">{{ item.totalPrice ? genPrice(item.totalPrice) : '-' }}</span>  
           </template>
-          <template v-slot:[`item.status`] ="{ item }">
+          <template v-slot:[`item.paymentStatus`] ="{ item }">
             <v-chip
               label
-              :color="item.status === 'รอดำเนินการ' ? '#FFF9E8' : '#F0F9EE' "
-              :text-color="item.status === 'รอดำเนินการ' ? '#FCC419' : '#58A144'"
+              :color="item.paymentStatus === 'pending' ? '#FFF9E8' : '#F0F9EE' "
+              :text-color="item.paymentStatus === 'pending' ? '#FCC419' : '#58A144'"
             >
-              {{ item.status }}
+              {{ item.paymentStatus == 'pending' ? 'รอดำเนินการ' : item.paymentStatus  }}
             </v-chip>
           </template>
           <template v-slot:[`item.actions`] ="{item}">
-            <v-btn text class="underline" color="#FF6B81" @click="$router.push({name:'Finance_orderID', params:{order_id : item.order_id}})">เพิ่มเติม</v-btn>
+            <v-btn text class="underline" color="#FF6B81" @click="$router.push({name:'Finance_orderID', params:{order_id : item.orderId}})">เพิ่มเติม</v-btn>
           </template>
         </v-data-table>
       </v-container>
@@ -91,6 +92,7 @@
 <script>
 import imgCard from '@/components/course/imgCard.vue';
 import headerPage from '@/components/header/headerPage.vue';
+import { mapActions, mapGetters } from 'vuex';
 export default {
   name: "financeList",
   components:{
@@ -101,25 +103,38 @@ export default {
     tab : "all",
     items: ["ทั้งหมด", "ชำระเงินแล้ว", "รอดำเนินการ"],
     columns:[
-      {text: 'หมายเลขคำสั่งซื้อ',align: 'start',sortable: false, value: 'order_id',width: 150},
+      {text: 'หมายเลขคำสั่งซื้อ',align: 'start',sortable: false, value: 'orderNumber',width: 150},
       {text: 'ชื่อผู้เรียน',align: 'start',sortable: false, value: 'student_name'},
       {text: 'ชื่อคอร์ส',align: 'start',sortable: false, value: 'course'},
-      {text: 'ราคา',align: 'start',sortable: false, value: 'price'},
-      {text: 'สถานะการชำระ',align: 'center',sortable: false, value: 'status'},
+      {text: 'ราคา',align: 'start',sortable: false, value: 'totalPrice'},
+      {text: 'สถานะการชำระ',align: 'center',sortable: false, value: 'paymentStatus'},
       {text: 'วันที่ชำระ',align: 'start',sortable: false, value: 'paid_date'},
       { text: '', align: 'center', value: 'actions', sortable: false },
     ],
-    orders : [
-      {order_id: "00000001", student_name: ["กมลรัตน์ สิทธิกรชัย", "ออกัส สิงหาคม"], course: "เปียโนสากล (Family)", price: 2000, status:'ชำระเงินแล้ว', paid_date: "22/07/2022" },
-      {order_id: "00000222", student_name: ["น่านฟ้า ทะเลไกล"], course: "ไวโอลินเบื้องต้น (Exclusive)", price: 2000, status:'รอดำเนินการ', paid_date: ""},
-      {order_id: "00000333", student_name: ["ออกัส สิงหาคม"], course: "ไวโอลินเบื้องต้น (Exclusive)ไวโอลินเวิร์คช้อป", price: 1000, status:'ชำระเงินแล้ว', paid_date: "22/07/2022"},
-      {order_id: "00000004", student_name: ["วรวุฒิ สาระวงศ์"], course: "เปียโนสากล (Exclusive)", price: 2000, status:'รอดำเนินการ', paid_date: ""},
-    ]
+    // orders : [
+    //   {order_id: "00000001", student_name: ["กมลรัตน์ สิทธิกรชัย", "ออกัส สิงหาคม"], course: "เปียโนสากล (Family)", price: 2000, status:'ชำระเงินแล้ว', paid_date: "22/07/2022" },
+    //   {order_id: "00000222", student_name: ["น่านฟ้า ทะเลไกล"], course: "ไวโอลินเบื้องต้น (Exclusive)", price: 2000, status:'รอดำเนินการ', paid_date: ""},
+    //   {order_id: "00000333", student_name: ["ออกัส สิงหาคม"], course: "ไวโอลินเบื้องต้น (Exclusive)ไวโอลินเวิร์คช้อป", price: 1000, status:'ชำระเงินแล้ว', paid_date: "22/07/2022"},
+    //   {order_id: "00000004", student_name: ["วรวุฒิ สาระวงศ์"], course: "เปียโนสากล (Exclusive)", price: 2000, status:'รอดำเนินการ', paid_date: ""},
+    // ]
   }),
   created() {},
-  mounted() {},
-  methods: {},
-  computed: {},
+  mounted() {
+    this.GetOrders()
+  },
+  methods: {
+    ...mapActions({
+      GetOrders : "OrderModules/GetOrders"
+    }),
+    genPrice(price){
+      return price.toLocaleString() 
+    }
+  },
+  computed: {
+    ...mapGetters({
+      orders : "OrderModules/getOrders"
+    })
+  },
   watch: {},
 };
 </script>

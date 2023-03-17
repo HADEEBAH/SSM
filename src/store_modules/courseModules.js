@@ -115,11 +115,12 @@ const CourseModules = {
   },
   actions: {
     // COURSE TYPES 
-    async GetCourseTypes(context){
+    async GetCourseTypes(context,{category_id}){
       try{
-        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/type`)
+        console.log("category_id :",category_id)
+        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/type?category_id=${category_id}`)
         if(data.statusCode === 200){
-          console.log(data)
+          console.log("SetCourseTypes", data.data)
           context.commit("SetCourseTypes",data.data)
         }
       }catch(error){

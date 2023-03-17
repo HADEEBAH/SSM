@@ -14,6 +14,8 @@ export default {
     RegisterDialogForm,
   },
   data: () => ({}),
+  created(){
+  },
   mounted() {},
   watch: {},
   computed: {},

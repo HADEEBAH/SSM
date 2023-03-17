@@ -33,69 +33,76 @@ const loginModules = {
                 let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account?username=${username}&status=${status}`)
                 console.log(data)
                 if(data.statusCode === 200){
-                    if(type === 'student'){
-                        context.commit("SetUserStudentData",data.data)
+                    if(data.data.length > 0){
+                        if(type === 'student'){
+                            context.commit("SetUserStudentData",data.data)
+                        }else{
+                            context.commit("SetUserData",data.data)
+                        }
                     }else{
-                        context.commit("SetUserData",data.data)
+                        Swal.fire({
+                            icon: "error",
+                            title: "ไม่พบผู้ใช้"
+                        }).then((result)=>{
+                            if(result.isConfirmed){
+                                if(type === 'student'){
+                                    context.commit("SetUserStudentData",[])
+                                }else{
+                                    context.commit("SetUserData",[])
+                                }
+                            }
+                        })
                     }
                 }
             }catch(error){
+                Swal.fire({
+                    icon: "error",
+                    title: error.message
+                })
                 console.log(error)
             }
         },
-        //  loginOneId(context, user_data) {
-        //     context.commit("UserOneId", user_data)
-        //     console.log(user_data);
-        //     if (user_data.from == "UserLoginPage") {
-        //         router.push({ name: "UserKingdom" });
-        //     } else {
-        //         router.push({ name: "Nav" });
-        //   }
-        // }
-        // "http://192.168.72.187:3001/api/v1/auth/login"
-        async loginOneId({ rootState, state}) {
+        async loginOneId(context) {
             try {
                 const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login`, {
-                    "username": state.user_one_id.username,
-                    "password": state.user_one_id.password,
+                    "username": context.state.user_one_id.username,
+                    "password": context.state.user_one_id.password,
                 })
+                console.log(data);
                 if (data.statusCode === 200) {
                     let roles = []
-                    data.data.role.forEach((role) => {
-                        roles.push(role.role_name_en.toLowerCase())
-                    });
+                    if (data.data.roles.length > 0) {
+                        data.data.roles.forEach((role) => {
+                            roles.push(role.role_name_en)
+                        });
+                     }
                     let payload = {
-                        account_id : data.data.account_id,
-                        email : data.data.email,
-                        first_name_en : data.data.first_name_en,
-                        first_name_th : data.data.first_name_th,
-                        last_name_en : data.data.last_name_en,
-                        last_name_th : data.data.last_name_th,
-                        role : data.data.role,
-                        roles : roles,
-                        tel : data.data.tel,
+                        account_id: data.data.account_id,
+                        email: data.data.email,
+                        first_name_en: data.data.first_name_en,
+                        first_name_th: data.data.first_name_th,
+                        last_name_en: data.data.last_name_en,
+                        last_name_th: data.data.last_name_th,
+                        role: data.data.role,
+                        roles: roles,
+                        tel: data.data.tel,
                     }
                     VueCookie.set("token", data.data.token)
-                    localStorage.setItem("userDetail",JSON.stringify(payload))
-                    if(rootState.OrderModules.order.order_step > 0){
-                        router.replace({ name: "userCourseOrder" });
-                    }else{
-                        router.replace({ name: "UserKingdom" });
-                    }
-                } 
-            } catch ({response}) {
+                    localStorage.setItem("userDetail", JSON.stringify(payload))
+                    router.replace({ name: "UserKingdom" })
+                }
+            } catch (response) {
                 console.log(response)
-                if( response.status === 401){
+                if (response.message === "Request failed with status code 401") {
                     Swal.fire({
                         icon: 'error',
-                        title:"ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง",
-                    }) 
-                }else{
+                        title: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง",
+                    })
+                } else {
                     Swal.fire({
                         icon: 'error',
-                        title: "เกิดข้อผิกพลาด",
-                    }) 
-                    console.log(response)
+                        title: "เกิดข้อผิดพลาด",
+                    })
                 }
             }
 

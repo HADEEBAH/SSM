@@ -1,5 +1,6 @@
 import axios from "axios";
-
+import Swal from "sweetalert2";
+import router from "@/router";
 const orderModules = {
     namespaced: true,
     state: {
@@ -84,12 +85,18 @@ const orderModules = {
             payment_status: "",
             payment_type: "",
             total_price: 0,
-        }
+        },
+        orders : [],
+        order_detail : {},
     },
     mutations: {
         SetOrder(state, payload) {
             state.order = payload
         },
+        SetOrders(state, payload){
+            state.orders = payload
+        },
+        SetOrderDetail(){},
         SetOrderCourse(state, payload) {
             state.course_order = payload
         },
@@ -116,7 +123,6 @@ const orderModules = {
                 students: [],
             }
         }
-
     },
     actions: {
         resetCourseData(context) {
@@ -129,6 +135,19 @@ const orderModules = {
         changeOrderData(context, orderData) {
             context.commit("SetOrder", orderData)
             console.log(orderData)
+        },
+        async GetOrders(context){
+            try{
+                let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order`)
+                console.log(data)
+                if(data.statusCode === 200){
+                    context.commit("SetOrders",data.data)
+                }else{
+                    throw {error : data}
+                }
+            }catch(error){
+                console.log(error)
+            }
         },
         async saveOrder(context) {
             try{
@@ -194,14 +213,23 @@ const orderModules = {
                 })
                 payload.totalPrice = total_price
                 console.log("saveOrder",payload)
-                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/regis/course`,payload)
+                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/regis/course`,payload)
                 console.log(data)
+                if(data.statusCode === 200){
+                    Swal.fire({
+                        icon : "success",
+                        title : "ไปยังหน้า E-cashier"
+                    }).then((result)=>{
+                        if(result.isConfirmed){
+                            localStorage.removeItem("Order")
+                            router.replace({ name: "UserKingdom" });
+                        }
+                    })
+                }
             }catch(error){
                 console.log(error)
             }
         },
-     
- 
     },
     getters: {
         getOrder(state) {
@@ -209,6 +237,9 @@ const orderModules = {
         },
         getCourseOrder(state) {
             return state.course_order
+        },
+        getOrders(state){
+            return state.orders
         }
 
     },
