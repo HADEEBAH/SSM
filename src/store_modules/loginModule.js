@@ -9,24 +9,59 @@ const loginModules = {
             username: "",
             password: "",
             token: "",
-        }
+        },
+        user_data:[],
+        user_student_data:[],
     },
     mutations: {
         UserOneId(state, payload) {
             state.user_one_id = payload
+        },
+        SetUserData(state, payload){
+            state.user_data = payload
+        },
+        SetUserStudentData(state, payload){
+            state.user_student_data = payload
         }
     },
     actions: {
-        //  loginOneId(context, user_data) {
-        //     context.commit("UserOneId", user_data)
-        //     console.log(user_data);
-        //     if (user_data.from == "UserLoginPage") {
-        //         router.push({ name: "UserKingdom" });
-        //     } else {
-        //         router.push({ name: "Nav" });
-        //   }
-        // }
-        // "http://192.168.72.187:3001/api/v1/auth/login"
+        async checkUsernameOneid(context,{username,status,type}){
+            try{
+                if(status){
+                    status = 'Active'
+                }
+                let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account?username=${username}&status=${status}`)
+                console.log(data)
+                if(data.statusCode === 200){
+                    if(data.data.length > 0){
+                        if(type === 'student'){
+                            context.commit("SetUserStudentData",data.data)
+                        }else{
+                            context.commit("SetUserData",data.data)
+                        }
+                    }else{
+                        Swal.fire({
+                            icon: "error",
+                            title: "ไม่พบผู้ใช้"
+                        }).then((result)=>{
+                            if(result.isConfirmed){
+                                if(type === 'student'){
+                                    context.commit("SetUserStudentData",[])
+                                }else{
+                                    context.commit("SetUserData",[])
+                                }
+                            }
+                        })
+                    }
+                }
+            }catch(error){
+                Swal.fire({
+                    icon: "error",
+                    title: error.message
+                })
+                console.log(error)
+            }
+        },
         async loginOneId(context) {
             try {
                 const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login`, {
@@ -54,24 +89,11 @@ const loginModules = {
                     }
                     VueCookie.set("token", data.data.token)
                     localStorage.setItem("userDetail", JSON.stringify(payload))
-                    router.replace({ name: "UserKingdom" });
-
-                   console.log(context.rootState)
-                    // if (context.rootState.OrderModules.order.order_step > 0) {
-                    //     router.replace({ name: "userCourseOrder" });
-                    // } else {
-                    //     console.log("UserKingdom")
-                    //     router.replace({ name: "UserKingdom" });
-                    // }
-                
+                    router.replace({ name: "UserKingdom" })
                 }
             } catch (response) {
                 console.log(response)
-                    // Swal.fire({
-                    //     icon: 'error',
-                    //     title: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง",
-                    // })
-                if (response.status === 401) {
+                if (response.message === "Request failed with status code 401") {
                     Swal.fire({
                         icon: 'error',
                         title: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง",
@@ -81,7 +103,6 @@ const loginModules = {
                         icon: 'error',
                         title: "เกิดข้อผิดพลาด",
                     })
-                    console.log(response)
                 }
             }
 
@@ -97,6 +118,12 @@ const loginModules = {
     getters: {
         getUserOneId(state) {
             return state.user_one_id
+        },
+        getUserData(state){
+            return state.user_data
+        },
+        getUserStudentData(state){
+            return state.user_student_data
         }
     },
 };

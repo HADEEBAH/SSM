@@ -10,17 +10,17 @@
                 </v-row>
             </template>
             <template v-slot:header>
-                <div class="text-md font-bold"> เปียโนป๊อปเบื้องต้น (Popular ... </div>
-                <div class="text-sm"> โดย ศูนย์ดนตรี Manila Tamarind ... </div>
+                <div class="text-md font-bold">{{ `${course_data.course_name_th}(${course_data.course_name_en})`}} </div>
+                <div class="text-sm">{{ course_data.location }}</div>
             </template>
             <template v-slot:detail>
                 <v-row dense>
                     <v-col cols="12" sm="6" class="pa-0">
-                        <rowData mini col_detail="5" icon="mdi-clock-outline">1 ชม. / ครั้ง</rowData>
+                        <rowData mini col_detail="5" icon="mdi-clock-outline"> {{ course_data.course_hours  }} ชม. / ครั้ง</rowData>
                     </v-col>
-                    <v-col cols="12" sm="6"  class="pa-0"> 
+                    <!-- <v-col cols="12" sm="6"  class="pa-0"> 
                         <rowData mini col_detail="5" icon="mdi-account-group-outline">9 / 15 ที่นั่ง</rowData> 
-                    </v-col>
+                    </v-col> -->
                 </v-row>
             </template>
         </ImgCard>
@@ -35,20 +35,20 @@
         </v-row>
         <!-- BUTTON -->
         <v-row dense>
-            <v-col cols="12" sm="auto" v-for="(package_course, package_index) in packages" :key="package_index">
+            <v-col cols="12" sm="auto" v-for="(package_course, package_index) in course_data.packages" :key="package_index">
                 <v-btn 
                     dense
                     depressed
                     class="w-full"
-                    :color="selected_package.value === package_course.value ? '#ff6b81' : '#F5F5F5'" 
-                    :class="selected_package.value === package_course.value ? 'white--text' : 'text-[#B3B3B3]'" 
+                    :color="selected_package.package_id === package_course.package_id ? '#ff6b81' : '#F5F5F5'" 
+                    :class="selected_package.package_id === package_course.package_id ? 'white--text' : 'text-[#B3B3B3]'" 
                     @click="selected_package = package_course">
-                        {{ package_course.name }}
+                        {{ package_course.package }}
                     </v-btn>
             </v-col>
         </v-row>
         <v-row>
-            <v-col>{{ `${selected_package.remark} ${selected_package.students}:${selected_package.maximum}` }}</v-col>
+            <v-col>{{ `${selected_package.package} ${selected_package.students}:${selected_package.students}` }}</v-col>
         </v-row>
         <v-slide-group
             center-active
@@ -57,18 +57,27 @@
                 v-for="(option, option_index) in selected_package.options"
                 :key="option_index"
                 v-slot="{ active, toggle }"
-            >
+            > 
+                
                 <v-card :class="active ? '':''" class="ma-4  card-package-size" @click="toggle">
                     <v-card-text align="center">
+                    
                         <v-row dense>
-                            <v-col  class="text-lg font-bold">{{ `${option.option_name}(${option.amount}ครั้ง)`}} </v-col>
+                            <v-col  class="text-lg font-bold">{{ `${option.period_package}(${option.amount}ครั้ง)`}} </v-col>
                         </v-row>
                         <v-row dense>
                             <v-col ><div class="line-card-package"></div></v-col>
                         </v-row>  
-                        <v-row dense>
+                        <v-row dense v-if="option.discount">
                             <v-col class="text-lg font-bold">
-                               <span class="text-5xl font-black">{{  option.price.toLocaleString()  }}</span>
+                               <span class="text-5xl font-black">{{  option.total_price.toLocaleString() }}</span>
+                               บาท 
+                            </v-col>
+                        </v-row>  
+                        <v-row dense v-else>
+                            <v-col class="text-lg font-bold">
+                               <span class="text-md line-through font-black">{{  option.total_price.toLocaleString() }}</span>
+                               <span class="text-5xl red--text font-black">{{  option.net_price.toLocaleString()}}</span>
                                บาท 
                             </v-col>
                         </v-row>  
@@ -137,62 +146,42 @@ import { mapGetters,mapActions } from 'vuex';
     components: {ImgCard, rowData},
     data: () => ({
         show_dialog_privilege : false,
-        selected_package:{name : "Exclusive Package", value:"Exclusive", students: 1, maximum : 1, remark : 'เรียนเดี่ยว',
-            options: [
-                {option_name: "รายวัน",  price:500, amount: 1,},
-                {option_name: "รายเดือน",  price:2000, amount: 4,},
-                {option_name: "รายเทอม",  price:8000, amount: 16,},
-                {option_name: "รายปี",  price:18000, amount: 24,},
-            ]
-        },
-        packages: [
-            {name : "Exclusive Package", value:"Exclusive", students: 1, maximum : 1, remark : 'เรียนเดี่ยว', 
-                options: [
-                    {option_name: "รายวัน",  price:500, amount: 1,},
-                    {option_name: "รายเดือน",  price:2000, amount: 4,},
-                    {option_name: "รายเทอม",  price:8000, amount: 16,},
-                    {option_name: "รายปี",  price:18000, amount: 24,},
-                ]
-            },
-            {name : "Family Package", value:"Family", students: 1, maximum : 2,  remark : 'เรียนคู่',
-                options: [
-                    {option_name: "รายวัน",  price:500, amount: 1,},
-                    {option_name: "รายเดือน",  price:2000, amount: 4,},
-                    {option_name: "รายเทอม",  price:8000, amount: 16,},
-                    {option_name: "รายปี",  price:18000, amount: 24,},
-                ]
-            },
-            {name : "Group Package", value:"Gruop", students: 1, maximum : 8,  remark : 'เรียนกลุ่ม', options:[
-                    {option_name: "รายเทอม",  price:2000, amount: 16,},
-                    {option_name: "รายปี",  price:3000, amount: 24,},
-            ]},
-        ]
+        selected_package: {},
+
     }),
     created() {},
     mounted() {
+        this.GetCourse(this.$route.params.course_id)
         this.$store.dispatch("NavberUserModules/changeTitleNavber","แพ็คเกจ")
+        this.selected_package = this.course_data.packages[0]
     },
     watch: {},
     computed: {
         ...mapGetters({
-            courses : "OrderModules/getCourses",
+            course_data : "CourseModules/getCourseData",
+            course_order : "OrderModules/getCourseOrder",
             order : "OrderModules/getOrder"
         })
     },
     methods: {
         ...mapActions({
-            changeCourseData : "OrderModules/changeCourseData",
+            GetCourse : "CourseModules/GetCourse",
+            changeCourseOrderData : "OrderModules/changeCourseOrderData",
             changeOrderData : "OrderModules/changeOrderData",
         }),
+       
         selectedPackage(option){
-            this.courses.option = option.option_name
-            this.courses.price = option.price
-            this.courses.time_count = option.amount
-            this.courses.package = this.selected_package.name
-            this.courses.package_data = this.selected_package
+            console.log("Options :",option)
+            console.log("Select :",this.selected_package)
+            this.course_order.option = option
+            this.course_order.price = option.total_price
+            this.course_order.time_count = option.amount
+            this.course_order.package = this.selected_package.package
+            this.course_order.package_data = this.selected_package
             this.order.order_step = 1
-            this.changeCourseData(this.courses)
+            this.changeCourseOrderData(this.course_order)
             this.changeOrderData(this.order)
+            localStorage.setItem("Order", JSON.stringify(this.course_order))
             this.$router.push({ name : 'userCourseOrder', })
         }
     },

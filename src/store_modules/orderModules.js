@@ -1,12 +1,14 @@
+import axios from "axios";
 import Swal from "sweetalert2";
 import router from "@/router";
-
 const orderModules = {
     namespaced: true,
     state: {
-        courses: {
+        course_order: {
             kingdom: {},
             course_type: "",
+            course_type_id : "CT_1",
+            category_id: "",
             package: "",
             package_data : {},
             option : "",
@@ -18,162 +20,226 @@ const orderModules = {
             coach: "",
             start_day: "",
             price: 0,
+            detail : "",
             remark: "",
+            selected : true,
             parents: [],
             students: [],
 
         },
         // เขียนใน API
-        order_data : {
-            courses:[{
-                    course_id : "",
-                    course_type_id : "",
-                    category_id : "",
-                    category_name : "",
-                    option_id : "",
-                    option_name : "",
-                    package_id:"",
-                    package_name : "",
-                    day_of_weer_id : "",
-                    day_of_weer : "",
-                    time_id : "",
-                    time : "",
-                    start_date : "",
-                    remark : "",
-                    price : "",
-                    coahc : {
-                        account_id : " ",
-                    },
-                    students :[ {
-                        account_id : "",
-                        username: "",
-                        firstname: "",
-                        lastname: "",
-                        tel: "",
-                        is_other: false,
-                        parents: [{
-                            account_id : "",
-                            username: "",
-                            firstname: "",
-                            lastname: "",
-                                tel: "",
-                        }]
-                    },{
-                        account_id : '',
-                        username: "",
-                        firstname: "",
-                        lastname: "",
-                        tel: "",
-                        is_other: true,
-                        parents: [{
-                            account_id : "",
-                            username: "",
-                            firstname: "",
-                            lastname: "",
-                                tel: "",
-                        }]
-                    }],
-                }   
-            ],
+        // courses:[{
+        //     course_id : "",
+        //     course_type_id : "",
+        //     category_id : "",
+        //     category_name : "",
+        //     option_id : "",
+        //     option_name : "",
+        //     package_id:"",
+        //     package_name : "",
+        //     day_of_weer_id : "",
+        //     day_of_weer : "",
+        //     time_id : "",
+        //     time : "",
+        //     start_date : "",
+        //     remark : "",
+        //     price : "",
+        //     coahc : {
+        //         account_id : " ",
+        //     },
+        //     students :[ {
+        //         account_id : "",
+        //         username: "",
+        //         firstname: "",
+        //         lastname: "",
+        //         tel: "",
+        //         is_other: false,
+        //         parents: [{
+        //             account_id : "",
+        //             username: "",
+        //             firstname: "",
+        //             lastname: "",
+        //                 tel: "",
+        //         }]
+        //     },{
+        //         account_id : '',
+        //         username: "",
+        //         firstname: "",
+        //         lastname: "",
+        //         tel: "",
+        //         is_other: true,
+        //         parents: [{
+        //             account_id : "",
+        //             username: "",
+        //             firstname: "",
+        //             lastname: "",
+        //                 tel: "",
+        //         }]
+        //     }],
+        // }]
+        order: {
+            order_step : 0,
+            order_number: "",
+            courses:[],
+            created_by : "",
             payment_status: "",
             payment_type: "",
             total_price: 0,
         },
-        order: {
-            order_step : 0,
-            order_id: "",
-            students: [
-                {
-                    student_name: "",
-                    username: "",
-                    firstname: "",
-                    lastname: "",
-                    tel: "",
-                    is_other: false,
-                    parents: [
-
-                    ]
-                },
-                {
-                    student_name: "",
-                    username: "",
-                    firstname: "",
-                    lastname: "",
-                    tel: "",
-                    is_other: false,
-                    parents: []
-                },
-            ],
-            courses: [],
-            payment_status: "",
-            payment_type: "",
-            total_price: 0,
-        }
+        orders : [],
+        order_detail : {},
     },
     mutations: {
         SetOrder(state, payload) {
             state.order = payload
         },
+        SetOrders(state, payload){
+            state.orders = payload
+        },
+        SetOrderDetail(){},
         SetOrderCourse(state, payload) {
-            state.courses = payload
+            state.course_order = payload
         },
         SetResetCourseData(state) {
-            state.courses = {
+            state.course_order = {
                 kingdom: {},
                 course_type: "",
+                course_type_id : "CT_1",
                 package: "",
-                package_data: {},
-                option: "",
+                package_data : {},
+                option : "",
+                option_data : "",
                 period: 0,
-                time_count: 0,
+                times_in_class: 0,
                 day: "",
                 time: "",
                 coach: "",
                 start_day: "",
                 price: 0,
+                detail : "",
                 remark: "",
+                selected : true,
                 parents: [],
                 students: [],
             }
         }
-
     },
     actions: {
-        resetCourseDate(context) {
+        resetCourseData(context) {
             context.commit("SetResetCourseData")
         },
-        changeCourseData(context, courseData) {
+        changeCourseOrderData(context, courseData) {
+            console.log("changeCourseOrderData :",courseData)
             context.commit("SetOrderCourse", courseData)
-            console.log(courseData)
         },
         changeOrderData(context, orderData) {
             context.commit("SetOrder", orderData)
             console.log(orderData)
         },
-        save(context) {
-            console.log(context.state.order);
-            Swal.fire({
-                title: "<strong>เพิ่มผู้เรียนสำเร็จ</strong>",
-                icon: "success",
-                showCloseButton: true,
-                focusConfirm: true,
-                confirmButtonText: 'ดูสถานะการเงิน',
-            }).then((res) => {
-                if (res.isConfirmed) {
-                    router.push({ name: "Finance" })
+        async GetOrders(context){
+            try{
+                let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order`)
+                console.log(data)
+                if(data.statusCode === 200){
+                    context.commit("SetOrders",data.data)
+                }else{
+                    throw {error : data}
                 }
-                console.log(res);
-            })
+            }catch(error){
+                console.log(error)
+            }
         },
-     
- 
+        async saveOrder(context) {
+            try{
+                let order = context.state.order
+                console.log(order)
+                let payload = {
+                    order_id : "",
+                    courses : [],
+                    created_by : "",
+                    paymentStatus: "pending",
+                    paymentType: "",
+                    totalPrice: 0,
+                }
+                let total_price = 0
+                await order.courses.forEach((course)=>{
+                    let students = []
+                    course.students.forEach((student)=>{
+                        console.log("student",student.parents[0])
+                        if(student.parents[0]){   
+                            students.push({
+                                "accountId": student.account_id ? student.account_id : "",
+                                "userName": student.username,
+                                "firstNameTh": student.firstname,
+                                "lastNameTh": student.lastname,
+                                "tel": student.tel,
+                                "isOther": student.is_other,
+                                "parent":{
+                                    "accountId": student.parents[0].account_id,
+                                    "parentFirstnameTh": student.parents[0].firstname_th ?  student.parents[0].firstname_th :"" ,
+                                    "parentLastnameTh":student.parents[0].lastname_en ?  student.parents[0].lastname_en :"" ,
+                                    "parentFirstnameEn":student.parents[0].firstname_en,
+                                    "parentLastnameEn":student.parents[0].lastname_en,
+                                    "parentTel": student.parents[0].tel,
+                                }  
+                            })
+                        }else{
+                            students.push({
+                                "accountId": student.account_id ? student.account_id : "",
+                                "userName": student.username,
+                                "firstNameTh": student.firstname,
+                                "lastNameTh": student.lastname,
+                                "tel": student.tel,
+                                "isOther": student.is_other,
+                                "parent":{}
+                            })
+                        }
+                    })
+                    payload.courses.push({
+                        "coursePackageOptionId": course.option.course_package_option_id,
+                        "dayOfWeekId": course.time.dayOfWeekId,
+                        "timeId": course.time.timeId,
+                        "time": course.time,
+                        "startDate": "",
+                        "remark": "",
+                        "price": course.option.net_price,
+                        "coach": {
+                            "accountId": course.coach_id,
+                            "fullName": course.coach_name,
+                        },
+                        "student": students
+                    })
+                    total_price =  total_price + course.option.net_price
+                })
+                payload.totalPrice = total_price
+                console.log("saveOrder",payload)
+                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/regis/course`,payload)
+                console.log(data)
+                if(data.statusCode === 200){
+                    Swal.fire({
+                        icon : "success",
+                        title : "ไปยังหน้า E-cashier"
+                    }).then((result)=>{
+                        if(result.isConfirmed){
+                            localStorage.removeItem("Order")
+                            router.replace({ name: "UserKingdom" });
+                        }
+                    })
+                }
+            }catch(error){
+                console.log(error)
+            }
+        },
     },
     getters: {
         getOrder(state) {
             return state.order
         },
-        getCourses(state) {
-            return state.courses
+        getCourseOrder(state) {
+            return state.course_order
+        },
+        getOrders(state){
+            return state.orders
         }
 
     },

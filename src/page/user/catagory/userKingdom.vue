@@ -157,13 +157,17 @@ export default {
 
   methods: {
     ...mapActions({
-      changeCourseData: "OrderModules/changeCourseData",
+      changeCourseOrderData: "OrderModules/changeCourseOrderData",
       createKingdom: "OrderModules/createKingdom",
     }),
+
     selectedCategory(category) {
-      this.courses.kingdom = category;
-      this.changeCourseData(this.courses);
-      this.$router.push({ name: "userCourseList" });
+      console.log("category",category)
+      this.course_order.kingdom = category.categoryNameTh;
+      this.course_order.category_id = category.categoryId;
+      this.changeCourseOrderData(this.course_order);
+      localStorage.setItem("Order", JSON.stringify(this.course_order))
+      this.$router.push({ name: "userCourseList_categoryId",params:{ category_id : category.categoryId } });
     },
     showImg(item) {
       console.log("img", `${process.env.VUE_APP_URL}/api/v1/files/${item}`);
@@ -173,7 +177,7 @@ export default {
 
   computed: {
     ...mapGetters({
-      courses: "OrderModules/getCourses",
+      course_order : "OrderModules/getCourseOrder",
       categorys: "CategoryModules/getCategorys",
     }),
     MobileSize() {

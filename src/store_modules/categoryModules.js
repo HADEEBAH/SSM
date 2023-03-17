@@ -3,10 +3,14 @@ const categoryModules = {
     namespaced: true,
     state: {
         categorys: [],
+        category:{}
     },
     mutations: {
         SetCategorys(state, payload) {
             state.categorys = payload
+        },
+        SetCategory(state,payload){
+            state.category = payload
         }
     },
     actions: {
@@ -22,10 +26,23 @@ const categoryModules = {
                 console.log("error :", error)
             }
         },
+        async GetCategory(context,{category_id}){
+            try{
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category/${category_id}`)
+                if(data.statusCode === 200){
+                    context.commit("SetCategory", data.data)
+                }
+            }catch(error){
+                console.log(error)
+            }
+        }
     },
     getters: {
         getCategorys(state) {
             return state.categorys
+        },
+        getCategory(state){
+            return state.category
         }
     },
 };
