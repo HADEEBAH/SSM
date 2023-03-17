@@ -222,6 +222,16 @@ const orderModules = {
                     }).then((result)=>{
                         if(result.isConfirmed){
                             localStorage.removeItem("Order")
+                            context.commit("SetResetCourseData")
+                            context.commit("SetOrder",{
+                              order_step : 0,
+                              order_number: "",
+                              courses:[],
+                              created_by : "",
+                              payment_status: "",
+                              payment_type: "",
+                              total_price: 0,
+                          })
                             router.replace({ name: "UserKingdom" });
                         }
                     })

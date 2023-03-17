@@ -1,5 +1,7 @@
 import axios from "axios";
 import moment from "moment";
+import Swal from "sweetalert2";
+import router from "@/router";
 const CourseModules = {
   namespaced: true,
   state: {
@@ -388,6 +390,14 @@ const CourseModules = {
         let {data} = await axios.post(process.env.VUE_APP_URL+"/api/v1/course/create", payload)
         if(data.statusCode === 201){
           console.log(data)
+          Swal.fire({
+            icon: "success",
+            title: "สร้างคอร์สสำเร็จ"
+          }).then((result)=>{
+            if (result.isConfirmed) {
+              router.replace({name: "CourseList"})
+            }
+          })
          // context.commit("SetCourseData",data.data)
         }else{
           throw {message : data}

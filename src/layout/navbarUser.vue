@@ -119,7 +119,7 @@ export default {
   name: "navbarUser",
   data: () => ({
     menu : false,
-    drawer : false,
+    drawer : true,
     active_menu : "",
     active_menu_child : "",
     user: {

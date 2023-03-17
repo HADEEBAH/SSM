@@ -45,7 +45,6 @@
                     </v-col>
                 </v-row>
             </v-radio-group>
-            {{course_order.students}}
             <template v-if="course_order.day">
                 <v-row>
                     <v-col class="text-lg font-bold">เลือกช่วงเวลาเรียน</v-col>
@@ -67,7 +66,6 @@
                     </v-row>
                 </v-radio-group>
             </template>
-            {{ course_order.time }}
             <template v-if="course_order.time">
                 <v-row>
                     <v-col class="text-lg font-bold">เลือกโค้ช</v-col>
@@ -129,7 +127,6 @@
         <template v-if="course_order.students.filter(v => v.is_other === false).length > 0">
             <div class="mb-3" v-for="(parent, index_parent) in course_order.students.filter(v => v.is_other === false)[0].parents" :key="`${index_parent}-perent`">
                 <v-row dense class="mb-3"> 
-                    {{ user_data }}
                     <v-col cols="auto"><v-icon color="#ff6b81">mdi-card-account-details-outline</v-icon></v-col>
                     <v-col class="text-lg font-bold">{{ `ผู้ปกครอง` }}</v-col>
                 </v-row>
@@ -228,7 +225,7 @@
                 </v-col>
             </v-row>
         </div>
-        <pre>{{ course_order.students.filter(v => v.is_other === true) }}</pre>
+        <!-- <pre>{{ course_order.students.filter(v => v.is_other === true) }}</pre> -->
         <div v-if="checkMaximumStudent" class="text-[#F03D3E] mb-3">
                 ผู้เรียนครบจำนวนที่คลาสจะรับได้แล้ว
             </div>

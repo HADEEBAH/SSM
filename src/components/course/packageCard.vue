@@ -246,10 +246,10 @@ export default {
     options_selected: [],
     rules: {  
       packages: [val => (val || '').length > 0 || 'โปรดเลือกแพ็คเกจ'],
-      packages_student: [val => (val || '').length > 0 || 'โปรดระบุจำนวนนักเรียน'],
+      packages_student: [val => (val || '') > 0 || 'โปรดระบุจำนวนนักเรียน'],
       options : [val => (val || '').length > 0 || 'โปรดเลือกระยะเวลา'],
-      options_amount : [val => (val || '').length > 0 || 'โปรดระบุจำนวนครั้ง/คน'],
-      price_unit : [val => (val || '').length > 0 || 'โปรดระบุราคาต่อ/คน'],
+      options_amount : [val => (val || '') > 0 || 'โปรดระบุจำนวนครั้ง/คน'],
+      price_unit : [val => (val || '') > 0 || 'โปรดระบุราคาต่อ/คน'],
     },
   }),
   created() {
