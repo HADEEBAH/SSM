@@ -1017,15 +1017,25 @@ export default {
       this.certificate_show = false;
       this.addCertificate_dialog_show = false;
     },
+    // uploadFile() {
+    //   this.file = this.$refs.fileInput.files[0];
+    //   this.fileName = this.file.name
+    //   console.log(this.file);
+    //   if (!this.file) return;
+    //   const reader = new FileReader();
+    //   reader.onload = (e) => {
+    //     console.log(e);
+    //     this.previewUrl = e.target.result;
+    //   };
+    //   reader.readAsDataURL(this.file);
+    // },
     uploadFile() {
       this.file = this.$refs.fileInput.files[0];
-      this.fileName = this.file.name
-      console.log(this.file);
+      console.log("file=>",this.file);
       if (!this.file) return;
       const reader = new FileReader();
       reader.onload = (e) => {
-        console.log(e);
-        this.previewUrl = e.target.result;
+        this.preview_url = e.target.result;
       };
       reader.readAsDataURL(this.file);
     },

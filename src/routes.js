@@ -5,8 +5,9 @@ import AuthLayout from '@/layout/authAdminLayout.vue'
 //Auth
 import RegisterPage from '@/page/auth/registerPage.vue'
 import Login from '@/page/auth/loginPage.vue'
-import UserCreate from '@/page/admin/user_manage/userCreate'
-import UserDetail from '@/page/admin/user_manage/userDetail'
+import UserCreate from '@/page/admin/user_manage/userCreate.vue'
+import UserDetail from '@/page/admin/user_manage/userDetail.vue'
+import UserList from '@/page/admin/user_manage/userList.vue'
 // Course 
 import Kingdom from '@/components/admin/kingdomPage.vue'
 import CourseCreate from '@/page/admin/course/courseCreate.vue'
@@ -17,7 +18,6 @@ import FinanceList from '@/page/admin/finance/financeList.vue'
 import FinanceDetail from '@/page/admin/finance/financeDetail.vue'
 // Manage User  
 import Student from '@/components/admin/createStudent.vue'
-//import UserList from '@/page/admin/user_menage/userList.vue'
 //User
 import UserKingdom from '@/page/user/catagory/userKingdom.vue'
 import CartList from '@/page/user/cart/cartList.vue'
@@ -30,6 +30,7 @@ import ProfileResetPassword from '@/page/user/profile/profileResetPassword.vue'
 import ProfileLanguages from '@/page/user/profile/profileLanguages.vue'
 import ProfilePolicy from '@/page/user/profile/profilePolicy.vue'
 import ProfileRules from '@/page/user/profile/profileRules.vue'
+import StudentsSchedule from '@/page/user/studentsCourse/studentsSchedule.vue'
 //auth
 // import UserLoginPage from '@/page/auth/userLoginPage'
 
@@ -75,11 +76,11 @@ const routes = [
         name: 'UserDetail',
         component: UserDetail,
       },
-      // {
-      //   path: 'userList',
-      //   name: 'UserList',
-      //   component: UserList,
-      // },
+      {
+        path: 'userList',
+        name: 'UserList',
+        component: UserList,
+      },
       {
         path: 'course/create',  
         name: 'CourseCreate',
@@ -207,6 +208,11 @@ const routes = [
         path: 'profileRules',  
         name: 'ProfileRules',
         component: ProfileRules,
+      },
+      {
+        path: 'studentsSchedule',  
+        name: 'StudentsSchedule',
+        component: StudentsSchedule,
       },
       
     ]
