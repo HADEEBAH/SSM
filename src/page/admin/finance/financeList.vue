@@ -74,13 +74,10 @@
             <span class="font-semibold">{{ item.totalPrice ? genPrice(item.totalPrice) : '-' }}</span>  
           </template>
           <template v-slot:[`item.paymentStatus`] ="{ item }">
-            <v-chip
-              label
-              :color="item.paymentStatus === 'pending' ? '#FFF9E8' : '#F0F9EE' "
-              :text-color="item.paymentStatus === 'pending' ? '#FCC419' : '#58A144'"
-            >
-              {{ item.paymentStatus == 'pending' ? 'รอดำเนินการ' : item.paymentStatus  }}
-            </v-chip>
+            <div class="d-flex align-center pa-1 rounded-lg" 
+            :class="item.paymentStatus === 'pending' ? 'bg-[#FFF9E8] text-[#FCC419]' : item.paymentStatus === 'success' ? 'bg-[#F0F9EE] text-[#58A144]' : 'bg-[#ffeeee] text-[#f00808]'">
+              <span class="w-full text-center">{{ item.paymentStatus == 'pending' ? 'รอดำเนินการ' : item.paymentStatus === "success" ? "สำเร็จ": "ยกเลิก"   }}</span>
+            </div>
           </template>
           <template v-slot:[`item.actions`] ="{item}">
             <v-btn text class="underline" color="#FF6B81" @click="$router.push({name:'Finance_orderID', params:{order_id : item.orderId}})">เพิ่มเติม</v-btn>

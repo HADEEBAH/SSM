@@ -1,5 +1,6 @@
 <template>
   <div>
+    
     <!-- Upload file -->
     <v-card class="mx-3" flat>
       <v-card-text class="border-dashed border-2 border-blue-600 rounded-lg">
@@ -112,7 +113,7 @@
               </template>
             </v-autocomplete>
           </v-col>
-          <v-col cols="12" sm="6">
+          <v-col cols="12" sm="6" v-if="course_data.type === 'general_course'">
             <label-custom required text="วันเปิดคอร์ส"></label-custom>
             <v-menu
               v-model="course_data.menu_course_open_date"
@@ -148,8 +149,6 @@
               ></v-date-picker>
             </v-menu>
           </v-col>
-        </v-row>
-        <v-row dense>
           <v-col cols="12" sm="6">
             <label-custom
               required
@@ -176,6 +175,17 @@
               @focus="$event.target.select()"
               :rules="rules.location"
               v-model="course_data.location"
+              placeholder="ระบุสถานที่เรียน"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" sm="6" v-if="course_data.type === 'short_course'">
+            <label-custom required text="จำนวนนักเรียนที่รับได้/ครั้ง"></label-custom>
+            <v-text-field
+              dense
+              outlined
+              type="number"
+              @focus="$event.target.select()"
+              v-model="course_data.student_recived"
               placeholder="ระบุสถานที่เรียน"
             ></v-text-field>
           </v-col>
@@ -219,7 +229,7 @@
         <!-- Course Type  :: short course -->
         <template v-else>
           <v-row dense>
-            <v-col cols="12">
+            <v-col cols="12" sm="6">
               <label-custom required text="โค้ช"></label-custom>
               <v-autocomplete
                 dense
@@ -259,6 +269,20 @@
                   </v-list-item-action>
                 </template>
               </v-autocomplete>
+            </v-col>
+            <v-col cols="12" sm="6">
+              <label-custom required text="ราคา/คน"></label-custom>
+              <v-text-field
+                placeholder="ระบุราคา"
+                dense
+                outlined
+                @focus="$event.target.select()"
+                class="input-text-right"
+                type="number"
+                v-model="course_data.price_course"
+                @change="ChangeCourseData(course_data)"
+              >
+              </v-text-field>
             </v-col>
           </v-row>
         </template>
@@ -383,12 +407,12 @@
                       </v-text-field>
                     </template>
                     <v-date-picker
-                      :min="today.toISOString()"
+                      :min="course_data.coachs[0].register_date_range.end_date ? course_data.coachs[0].register_date_range.end_date : today.toISOString()"
                       @input="inputDate($event, 'class start date')"
                       v-model=" course_data.coachs[0].class_date_range.start_date "
                     ></v-date-picker>
                   </v-menu>
-                </v-col>
+                </v-col>  
                 <v-col cols="auto" class="mt-2 px-0"
                   ><v-icon>mdi-minus</v-icon></v-col
                 >
@@ -423,7 +447,7 @@
                       </v-text-field>
                     </template>
                     <v-date-picker
-                    :min="course_data.coachs[0].class_date_range.start_date ? course_data.coachs[0].class_date_range.start_date : today.toISOString()"
+                      :min="course_data.coachs[0].class_date_range.start_date ? course_data.coachs[0].class_date_range.start_date : today.toISOString()"
                       @input="inputDate($event, 'class end date')"
                       v-model="course_data.coachs[0].class_date_range.end_date"
                     ></v-date-picker>
@@ -431,15 +455,25 @@
                 </v-col>
               </v-row>
             </v-col>
-            <!-- PERIOD -->
-            <v-col cols="12" sm="6">
+          </v-row>
+          <v-row dense>
+              <!-- PERIOD -->
+              <v-col cols="12" sm="6">
               <label-custom required text="เวลาเรียน"></label-custom>
               <v-row>
-                <v-col>
+                <v-col  cols="12" sm>
+                  <v-text-field  
+                    outlined
+                    dense
+                    style="position: absolute; display: block; z-index:0; width:130px;"
+                    @focus="isTimePickerVisible = true"
+                    :rules="rules.start_time" 
+                    v-model="course_data.coachs[0].period.start_time">
+                  </v-text-field>
                   <TimePicker
                       :minuteStep="60"
                       format="HH:mm"
-                      style="width: 100% !important"
+                      style="width: 100% !important; z-index: 2"
                       :class="course_data.coachs[0].period.start_time ? 'active' : ''"
                       placeholder="เวลาเริ่มต้น"
                       @change="genStartTimeEndTime($event)"
@@ -449,16 +483,26 @@
                 <v-col cols="auto" class="mt-2 px-0"
                   ><v-icon>mdi-minus</v-icon></v-col
                 >
-                <v-col cols="12" sm="6">
+                <v-col cols="12" sm>
+                  <v-text-field  
+                    outlined
+                    dense
+                    style="position: absolute; display: block; z-index:0; width:130px;"
+                    @focus="isTimePickerVisible = true"
+                    :rules="rules.end_time" 
+                    v-model="course_data.coachs[0].period.end_time">
+                  </v-text-field>
                   <TimePicker
-                      :minuteStep="60"
-                      format="HH:mm"
-                      style="width: 100% !important"
-                      :class="course_data.coachs[0].period.end_time ? 'active' : ''"
-                      placeholder="เวลาสิ้นสุด"
-                      @change="limitEndTime($event)"
-                      v-model="course_data.coachs[0].period.end_time"
-                      ></TimePicker>
+                    disabled
+                    :minuteStep="60"
+                    format="HH:mm"
+                    :rules="rules.end_time"
+                    style="width: 100% !important; z-index: 2"
+                    :class="course_data.coachs[0].period.end_time ? 'active' : ''"
+                    placeholder="เวลาสิ้นสุด"
+                    @change="limitEndTime($event)"
+                    v-model="course_data.coachs[0].period.end_time"
+                    ></TimePicker>
                 </v-col>
               </v-row>
             </v-col>
@@ -538,8 +582,10 @@ export default {
       coach: [(val) => (val || "").length > 0 || "โปรดระบุโค้ช"],
       start_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันที่เริ่ม"],
       end_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันที่สิ้นสุด"],
-      start_time: [(val) => (val || "").length > 0 || "โปรดเลือกเวลาเริ่ม"],
-      end_time: [(val) => (val || "").length > 0 || "โปรดเลือกเวลาสิ้นสุด"],
+      start_time: [(val) => (val || "") > 0 || "โปรดเลือกเวลาเริ่ม"],
+      end_time: [(val) => (val || "") > 0 || "โปรดเลือกเวลาสิ้นสุด"],
+      student_recived : [(val) => (val || "") > 0 || "โปรดระบุจำนวนนักเรียนที่รับได้"],
+      price : [(val) => (val || "") > 0 || "โปรดระบุราคา"],
     },
     course_open_date_str: "",
     register_date_range_str: {
@@ -556,7 +602,9 @@ export default {
   mounted() {
    
   },
-  watch: {},
+  watch: {
+
+  },
   computed: {
     ...mapGetters({
       course_data: "CourseModules/getCourseData",
@@ -566,6 +614,7 @@ export default {
     ...mapActions({
       ChangeCourseData: "CourseModules/ChangeCourseData",
     }),
+   
     genStartTimeEndTime(value){
       if (value) {
         const end = moment(value).add(this.course_data.course_hours, 'hour')
@@ -603,10 +652,7 @@ export default {
           );
           break;
         case "register end date":
-          this.register_date_range_str.end_date = dateFormatter(
-            e,
-            "DD MT YYYYT"
-          );
+          this.register_date_range_str.end_date = dateFormatter(e,"DD MT YYYYT");
           break;
         case "class start date":
           this.class_date_range_str.start_date = dateFormatter(

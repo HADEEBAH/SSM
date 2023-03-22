@@ -94,22 +94,30 @@ const RegisterModules = {
               //context.commit("ResetUserOneID")
             }
           })
-        }else{
-          throw {error : data}
         }
-      }catch(error){
-        if(error.statusCode === 400){
-          console.log(error)
-          Swal.fire({
-            icon: 'error',
-            title: `กรอกข้อมูลให้ถูกต้อง`,
-          })
-        }else{
-          Swal.fire({
-            icon: 'error',
-            title: `เกิคข้อผิดพลาด${error.message}`,
-          })
-        }
+      }catch({response}){
+        console.log(response)
+        // let text = ""
+        // if(data.message.result.username){
+        //   if(data.message.result.username[0] === "username duplicate"){
+        //     text = 'username นี้ถูกใช้แล้ว'
+        //   }
+          
+        //   Swal.fire({
+        //     icon: 'error',
+        //     title: `กรอกข้อมูลให้ถูกต้อง`,
+        //     text : text
+        //   })
+        // }else {
+        //   Swal.fire({
+        //     icon: 'error',
+        //     title: `กรอกข้อมูลให้ถูกต้อง`,
+        //   })
+        // }
+        Swal.fire({
+          icon: 'error',
+          title: `เกิคข้อผิดพลาด${response.message}`,
+        })
       }
     },
     changeDialogRegisterOneId(context, value){

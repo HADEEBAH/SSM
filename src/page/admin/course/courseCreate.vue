@@ -73,39 +73,45 @@
         </v-stepper-header>
         <!-- Step 1 -->
         <v-stepper-content step="1" class="pa-2 pt-3">
-          <course-card :categorys="categorys" :coachs="coachs"></course-card>
+          <v-form ref="course_form" v-model="steps[step-1]">
+            <course-card :categorys="categorys" :coachs="coachs"></course-card>
+          </v-form>
         </v-stepper-content>
         <!-- Step 2 -->
         <v-stepper-content step="2" class="pa-2">
-          <v-card flat>
-            <headerCard title="รายละเอียดเวลาและโค้ช">
-              <template v-slot:actions>
-                <v-btn outlined color="#FF6B81" @click="addCoach">
-                  <v-icon>mdi-plus-circle-outline</v-icon>
-                  เพิ่มโค้ช
-                </v-btn>
-              </template>
-            </headerCard>
-            <v-card-text class="pt-0">
-              <v-divider class="mb-3"></v-divider>
-              <!-- COACH -->
-              <coachs-card :coachs="coachs"></coachs-card>
-            </v-card-text>
-          </v-card>
+          <v-form ref="coach_form" v-model="steps[step-1]">
+            <v-card flat>
+              <headerCard title="รายละเอียดเวลาและโค้ช">
+                <template v-slot:actions>
+                  <v-btn outlined color="#FF6B81" @click="addCoach">
+                    <v-icon>mdi-plus-circle-outline</v-icon>
+                    เพิ่มโค้ช
+                  </v-btn>
+                </template>
+              </headerCard>
+              <v-card-text class="pt-0">
+                <v-divider class="mb-3"></v-divider>
+                <!-- COACH -->
+                <coachs-card :coachs="coachs"></coachs-card>
+              </v-card-text>
+            </v-card>
+          </v-form>
         </v-stepper-content>
         <!-- Step 3 -->
         <v-stepper-content step="3" class="pa-2">
-          <package-card></package-card>
-          <v-row dense>
-            <v-col class="d-flex align-center justify-center" cols="12">
-              <v-btn
-                outlined
-                color="#FF6B81"
-                @click="addPackage(course_data.packages)"
-                ><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มแพ็คเกจ</v-btn
-              >
-            </v-col>
-          </v-row>
+          <v-form ref="package_form" v-model="steps[step-1]">
+            <package-card></package-card>
+            <v-row dense>
+              <v-col class="d-flex align-center justify-center" cols="12">
+                <v-btn
+                  outlined
+                  color="#FF6B81"
+                  @click="addPackage(course_data.packages)"
+                  ><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มแพ็คเกจ</v-btn
+                >
+              </v-col>
+            </v-row>
+          </v-form>
         </v-stepper-content>
         <v-card flat>
           <v-card-text>
@@ -127,7 +133,7 @@
                   :class="$vuetify.breakpoint.smAndDown ? 'w-full' : 'btn-size-lg'"
                   class="white--text"
                   depressed
-                  @click="step = step + 1"
+                  @click="submitStep(step-1)"
                   >ถัดไป</v-btn
                 >
               </v-col>
@@ -136,7 +142,7 @@
                   color="#FF6B81"
                   class="white--text w-full"
                   depressed
-                  @click="save"
+                  @click="submitStep(step-1)"
                   >สร้างคอร์สเรียน</v-btn
                 >
               </v-col>
@@ -147,7 +153,7 @@
                   color="#FF6B81"
                   class="white--text"
                   depressed
-                  @click="save"
+                  @click="submitStep(step-1)"
                   >สร้างคอร์สเรียน</v-btn
                 >
               </v-col>
@@ -178,6 +184,7 @@ export default {
   data: () => ({
     menu: false,
     step: 1,
+    steps:[false, false, false],
     file: null,
     dragOver: false,
     previewUrl: null,
@@ -186,35 +193,9 @@ export default {
       option: "",
       package: "",
     },
-    days: [
-      { label: "วันอาทิตย์", value: "Sunday" },
-      { label: "วันจันทร์", value: "Monday" },
-      { label: "วันอังคาร", value: "Tuesday" },
-      { label: "วันพุท", value: "Wednesday" },
-      { label: "วันพฤหัสบดี", value: "Thursday" },
-      { label: "วันศุกร์", value: "Friday" },
-      { label: "วันเสาร์", value: "Saturday" },
-    ],
-    // packages: ["Exclusive Package", "Family Package", "Group Package"],
-    // packages_selected: [],
-    // options: ["รายวัน", "รายเดือน", "รายเทมอ", "รายปี"],
-    // options_selected: [],
     step_header_data: ["คอร์สเรียน", "ช่วงเวลาและโค้ช", "แพ็คเกจ"],
     courses: ["โค้ชหนุ่ม", "โค้ชพอล"],
     kingdoms: ["อาณาจักรศิลปะสมัยใหม่", "อาณาจักร P.E."],
-    rules: {  
-      course_name_th: [val => (val || '').length > 0 || 'โปรดระบุชื่อคอร์ส(ภาษาไทย)'],
-      course_name_en: [val => (val || '').length > 0 || 'โปรดระบุชื่อคอร์ส(ภาษาอังกฤษ)'],
-      kingdom: [val => (val || '').length > 0 || 'โปรดเลือกอาณาจักร'],
-      course_open_date : [val => (val || '').length > 0 || 'โปรดเลือกวันที่เปิดคอร์ส'],
-      course_hours : [val => (val || '').length > 0 || 'โปรดระบุชั่วโมงการเรียน/ครั้ง'],
-      location : [val => (val || '').length > 0 || 'โปรดระบุสถานที่'],
-      course :[val => (val || '').length > 0 || 'โปรดระบุโค้ช'],
-      start_date : [val => (val || '').length > 0 || 'โปรดเลือกวันที่เริ่ม'],
-      end_date : [val => (val || '').length > 0 || 'โปรดเลือกวันที่สิ้นสุด'],
-      start_time : [val => (val || '').length > 0 || 'โปรดเลือกเวลาเริ่ม'],
-      end_time : [val => (val || '').length > 0 || 'โปรดเลือกเวลาสิ้นสุด'],
-    },
     course_open_date_str : "",
     register_date_range_str : {
       start_date : "",
@@ -226,6 +207,7 @@ export default {
     }
   }),
   created() {
+    this.ResetCourseData()
   },
   mounted() {
     this.$store.dispatch("CategoryModules/GetCategorys")
@@ -249,6 +231,7 @@ export default {
     ...mapActions({
       ChangeCourseData: "CourseModules/ChangeCourseData",
       CreateCourse : "CourseModules/CreateCourse",
+      ResetCourseData : "CourseModules/ResetCourseData"
     }),
     save(){
       this.course_data.course_file = this.file
@@ -280,15 +263,32 @@ export default {
     openFileSelector() {
       this.$refs.fileInput.click();
     },
-    // uploadFile() {
-    //   this.file = this.$refs.fileInput.files[0];
-    //   if (!this.file) return;
-    //   const reader = new FileReader();
-    //   reader.onload = (e) => {
-    //     this.previewUrl = e.target.result;
-    //   };
-    //   reader.readAsDataURL(this.file);
-    // },
+    submitStep(index){
+      console.log(this.course_data.type)
+      if(this.course_data.type === "general_course"){
+        if(index === 0){
+          this.$refs.course_form.validate()
+          if(this.steps[index]){
+            this.step += 1;
+          }
+        }else if(index === 1){
+          this.$refs.coach_form.validate()
+          if(this.steps[index]){
+            this.step += 1;
+          }
+        }else if(index === 2){
+          this.$refs.package_form.validate()
+          if(this.steps[index]){
+            this.save()
+          }
+        }
+      }else if(this.course_data.type === "short_course"){
+        this.$refs.course_form.validate()
+          if(this.steps[index]){
+            this.save()
+          }
+      } 
+    },
     uploadFile() {
       this.file = this.$refs.fileInput.files[0];
       console.log("file=>",this.file);

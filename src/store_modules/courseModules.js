@@ -16,13 +16,14 @@ const CourseModules = {
       category_id : "",
       kingdom_name: "",
       course_open_date: "",
+      menu_course_open_date : false,
       course_hours: 1,
       location: "",
       detail: "",
       music_performance: "",
       catification: "",
       price_course : 0,
-      student_ecived : 0,
+      student_recived : 0,
       coachs: [
         { 
           coach_id : "",
@@ -113,6 +114,94 @@ const CourseModules = {
     },
     SetCourseTypes(state, payload){
       state.course_types = payload
+    },
+    ResetCourse(state){
+      state.course_data = {
+        course_id : "",
+        type: "general_course",
+        course_name_th: "",
+        course_name_en: "",
+        course_img : "",
+        category_id : "",
+        kingdom_name: "",
+        course_open_date: "",
+        menu_course_open_date : false,
+        course_hours: 1,
+        location: "",
+        detail: "",
+        music_performance: "",
+        catification: "",
+        price_course : 0,
+        student_recived : 0,
+        coachs: [
+          { 
+            coach_id : "",
+            coach_name: "",
+            teach_days_used : [],
+            days: [
+              { label: "วันอาทิตย์", value: 0 },
+              { label: "วันจันทร์", value: 1 },
+              { label: "วันอังคาร", value:2 },
+              { label: "วันพุท", value: 3 },
+              { label: "วันพฤหัสบดี", value:4 },
+              { label: "วันศุกร์", value: 5 },
+              { label: "วันเสาร์", value: 6 },
+            ],
+            teach_day_data: [
+              {
+                class_open: true,
+                teach_day: [],
+                class_date: [
+                  {
+                    class_date_range: {
+                      start_time: "",
+                      menu_start_time: false,
+                      end_time: "",
+                      menu_end_time: false,
+                    },
+                    students: 0,
+                  },
+                ],
+              },
+            ],
+            class_date_range: {
+              start_date: "",
+              menu_start_date: false,
+              end_date: "",
+              menu_end_date: false,
+            },
+            register_date_range: {
+              start_date: "",
+              menu_start_date: false,
+              end_date: "",
+              menu_end_date: false,
+            },
+            period: {
+              start_time: "",
+              end_time: "",
+            },
+          },
+        ],
+        packages: [
+          {
+            package_id : "",
+            package: "",
+            students: 0,
+            options: [
+              {
+                period_package: "",
+                amount: 0,
+                price_unit: 0,
+                discount: false,
+                discount_price: 0,
+                privilege: "",
+                net_price: 0,
+                net_price_unit: 0,
+              },
+            ],
+          },
+        ],
+      }
     }
   },
   actions: {
@@ -169,18 +258,27 @@ const CourseModules = {
     // COURSE :: LIST 
     async GetCoursesList(context,){
       try{
+        
         let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/list?limit=10&page=1`)
         let courses = []
-        await data.data.forEach((course)=>{
-          courses.push({
-            course_id : course.c_course_id,
-            category_id : course.c_category_id,
-            category : "ยังไม่ได้",
-            course : `${course.c_course_name_th}(${course.c_course_name_en})`,
-            status : course.c_course_status,
-            course_open : course.c_course_open_date ? course.c_course_open_date : "-"
-          })
+        let category = {}
+        await data.data.forEach(async (course)=>{
+          category = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category/${course.c_category_id}`)
+          console.log("category : ", category.data)
+          if(category.data.statusCode === 200){
+            courses.push({
+              course_id : course.c_course_id,
+              category_id : course.c_category_id,
+              category : category.data.categoryNameTh ? category.data.categoryNameTh : "-",
+              course_type : course.c_course_type_id === "CT_1" ? "คอร์สทั่วไป" : "คอร์สระยะสั้น",
+              course_type_id : course.c_course_type_id,
+              course : `${course.c_course_name_th}(${course.c_course_name_en})`,
+              status : course.c_course_status,
+              course_open : course.c_course_open_date ? new Date(course.c_course_open_date).toLocaleDateString('th-TH',{ year: 'numeric', month: 'short', day: 'numeric',}) : "-"
+            })
+          }
         })
+        console.log("courses :",courses)
         context.commit("SetCourses",courses)
       }catch(error){
         console.log(error)
@@ -192,7 +290,6 @@ const CourseModules = {
       try{
           let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
           console.log(data.data)
-         
           let payload = {
             course_id : data.data.courseId,
             course_type_id : data.data.courseTypeId,
@@ -203,6 +300,7 @@ const CourseModules = {
             category_id :  data.data.categoryId,
             category_name_th: data.data.categoryNameTh,
             course_open_date: data.data.courseOpenDate,
+            menu_course_open_date : false,
             course_hours: data.data.coursePerTime,
             location: data.data.courseLocation,
             detail: data.data.courseDescription,
@@ -295,9 +393,9 @@ const CourseModules = {
                   discount: package_data.discountStatus == '0' ? true : false,
                   discount_price: package_data.discountPrice ? package_data.discountPrice : 0,
                   privilege: package_data.optionDescription,
-                  total_price :  package_data.pricePerPerson  * package_data.hourPerTime,
-                  net_price:  package_data.pricePerPerson  * package_data.hourPerTime - (package_data.discountPrice? package_data.discountPrice : 0) ,
-                  net_price_unit: (package_data.pricePerPerson  * package_data.hourPerTime - (package_data.discountPrice? package_data.discountPrice : 0 ))/ package_data.hourPerTime,
+                  total_price :  package_data.pricePerPerson,
+                  net_price:  package_data.pricePerPerson - (package_data.discountPrice? package_data.discountPrice : 0) ,
+                  net_price_unit: (package_data.pricePerPerson  - (package_data.discountPrice? package_data.discountPrice : 0 ))/ package_data.hourPerTime,
                 })
               })
               payload.packages.forEach((package_data)=>{
@@ -323,7 +421,7 @@ const CourseModules = {
             "courseNameEn": course.course_name_en,
             "courseOpenDate":course.course_open_date,
             "coursePerTime": course.course_hours,
-            "courseStudentRecived": course.student_ecived,
+            "courseStudentRecived": course.student_recived,
             "courseLocation": course.location,
             "courseDescription": course.detail,
             "courseMusic_performance":course.music_performance ,
@@ -337,13 +435,13 @@ const CourseModules = {
           // Short Course
             payload.coachs.push({
               "accountId": coach.coach_id,
-              "classDateRange": {
-                  "courseRegisterStartDate": coach.class_date_range.start_date,
-                  "courseRegisterEndDate": coach.class_date_range.end_date
-              },
               "registerDateRange": {
-                  "courseStudyStartDate": coach.register_date_range.start_date,
-                  "courseStudyEndDate": coach.register_date_range.end_date,
+                  "courseRegisterStartDate": coach.register_date_range.start_date,
+                  "courseRegisterEndDate": coach.register_date_range.end_date,
+              },
+              "classDateRange": {
+                "courseStudyStartDate": coach.class_date_range.start_date,
+                "courseStudyEndDate": coach.class_date_range.end_date,
               },
               "period": {
                   "coursePeriodStartDate":coach.period.start_time ? moment(coach.period.start_time).format('HH:mm') : '',
@@ -387,6 +485,10 @@ const CourseModules = {
           })
         }
         console.log(payload)
+        // const data_payload = new FormData()
+        // data_payload.append("payload",JSON.stringify(payload))
+        // data_payload.append("file",)
+        // console.log(data_payload.getAll("payload"))
         let {data} = await axios.post(process.env.VUE_APP_URL+"/api/v1/course/create", payload)
         if(data.statusCode === 201){
           console.log(data)
@@ -457,6 +559,10 @@ const CourseModules = {
       }catch(error){
         console.log(error)
       }
+    },
+    ResetCourseData(context){
+      context.commit("ResetCourse")
+      console.state.course_data
     }
   },
   getters: {
