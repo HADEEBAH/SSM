@@ -27,6 +27,34 @@ const orderModules = {
             students: [],
 
         },
+        //students :[ {
+        //         account_id : "",
+        //         username: "",
+        //         firstname: "",
+        //         lastname: "",
+        //         tel: "",
+        //         is_other: false,
+        //         parents: [{
+        //             account_id : "",
+        //             username: "",
+        //             firstname: "",
+        //             lastname: "",
+        //                 tel: "",
+        //         }
+        //     },{
+        //         account_id : '',
+        //         username: "",
+        //         firstname: "",
+        //         lastname: "",
+        //         tel: "",
+        //         is_other: true,
+        //         parents: [{
+        //             account_id : "",
+        //             username: "",
+        //             firstname: "",
+        //             lastname: "",
+        //                 tel: "",
+        //         }]
         // เขียนใน API
         // courses:[{
         //     course_id : "",
@@ -47,34 +75,7 @@ const orderModules = {
         //     coahc : {
         //         account_id : " ",
         //     },
-        //     students :[ {
-        //         account_id : "",
-        //         username: "",
-        //         firstname: "",
-        //         lastname: "",
-        //         tel: "",
-        //         is_other: false,
-        //         parents: [{
-        //             account_id : "",
-        //             username: "",
-        //             firstname: "",
-        //             lastname: "",
-        //                 tel: "",
-        //         }]
-        //     },{
-        //         account_id : '',
-        //         username: "",
-        //         firstname: "",
-        //         lastname: "",
-        //         tel: "",
-        //         is_other: true,
-        //         parents: [{
-        //             account_id : "",
-        //             username: "",
-        //             firstname: "",
-        //             lastname: "",
-        //                 tel: "",
-        //         }]
+        //     students:[],
         //     }],
         // }]
         order: {
@@ -149,6 +150,99 @@ const orderModules = {
                 console.log(error)
             }
         },
+        async saveCart(context, {cart_data}) {
+            console.log(cart_data)
+            try{
+                let order = cart_data
+                console.log(order)
+                let payload = {
+                    order_id : "",
+                    courses : [],
+                    created_by : "",
+                    paymentStatus: "pending",
+                    paymentType: "",
+                    totalPrice: 0,
+                }
+                let total_price = 0
+                await order.courses.forEach((course)=>{
+                    let students = []
+                    course.students.forEach((student)=>{
+                        console.log("student",student.parents[0])
+                        if(student.parents[0]){   
+                            students.push({
+                                "accountId": student.account_id ? student.account_id : "",
+                                "userName": student.username,
+                                "firstNameTh": student.firstname,
+                                "lastNameTh": student.lastname,
+                                "tel": student.tel,
+                                "isOther": student.is_other,
+                                "parent":{
+                                    "accountId": student.parents[0].account_id,
+                                    "parentFirstnameTh": student.parents[0].firstname_th ?  student.parents[0].firstname_th :"" ,
+                                    "parentLastnameTh":student.parents[0].lastname_en ?  student.parents[0].lastname_en :"" ,
+                                    "parentFirstnameEn":student.parents[0].firstname_en,
+                                    "parentLastnameEn":student.parents[0].lastname_en,
+                                    "parentTel": student.parents[0].tel,
+                                }  
+                            })
+                        }else{
+                            students.push({
+                                "accountId": student.account_id ? student.account_id : "",
+                                "userName": student.username,
+                                "firstNameTh": student.firstname,
+                                "lastNameTh": student.lastname,
+                                "tel": student.tel,
+                                "isOther": student.is_other,
+                                "parent":{}
+                            })
+                        }
+                    })
+                    payload.courses.push({
+                        "courseId" :  course.course_id,
+                        "courseName" : course.course_name,
+                        "coursePackageOptionId": course.option.course_package_option_id ? course.option.course_package_option_id : "",
+                        "dayOfWeekId": course.time.dayOfWeekId ? course.time.dayOfWeekId : "",
+                        "timeId": course.time.timeId ? course.time.timeId : "",
+                        "time": course.time ? course.time : "",
+                        "startDate": "",
+                        "remark": "",
+                        "price": course.option.net_price ? course.option.net_price : course.price,
+                        "coach": {
+                            "accountId": course.coach_id,
+                            "fullName": course.coach_name,
+                        },
+                        "student": students
+                    })
+                    total_price =  total_price + course.option.net_price
+                })
+                payload.totalPrice = total_price
+                console.log("saveOrder",payload)
+                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/regis/course`,payload)
+                if(data.statusCode === 200){
+                    Swal.fire({
+                        icon : "success",
+                        title : "ไปยังหน้า E-cashier"
+                    }).then((result)=>{
+                        if(result.isConfirmed){
+                            localStorage.removeItem("Order")
+                            context.commit("SetResetCourseData")
+                            context.commit("SetOrder",{
+                              order_step : 0,
+                              order_number: "",
+                              courses:[],
+                              created_by : "",
+                              payment_status: "",
+                              payment_type: "",
+                              total_price: 0,
+                          })
+                            router.replace({ name: "UserKingdom" });
+                        }
+                    })
+                }
+            }catch(error){
+                console.log(error)
+            }
+        },
         async saveOrder(context) {
             try{
                 let order = context.state.order
@@ -196,6 +290,7 @@ const orderModules = {
                         }
                     })
                     payload.courses.push({
+                        "courseId" :  course.course_id,
                         "coursePackageOptionId": course.option.course_package_option_id,
                         "dayOfWeekId": course.time.dayOfWeekId,
                         "timeId": course.time.timeId,
@@ -214,7 +309,6 @@ const orderModules = {
                 payload.totalPrice = total_price
                 console.log("saveOrder",payload)
                 let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/regis/course`,payload)
-                console.log(data)
                 if(data.statusCode === 200){
                     Swal.fire({
                         icon : "success",
