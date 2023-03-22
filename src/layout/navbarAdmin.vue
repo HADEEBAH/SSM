@@ -133,7 +133,12 @@ export default {
       { title : "คอร์สเรียน", to:"", child :[
         { title : "จัดการคอร์สทั้งหมด", to:"CourseList" },
         { title : "สร้างคอร์สเรียน", to:"CourseCreate" },
+      ]
+      },
+      { title : "อาณาจักร", to:"", child :[
+        { title : "จัดการอาณาจักร", to:"ManageKingdom" },
         { title : "สร้างอาณาจักร", to:"Kingdom" },
+
       ]},
       { title : "การเงิน", to:"Finance", child :[]},
       { title : "จัดการผู้ใช้งาน", to:"", child :[ 

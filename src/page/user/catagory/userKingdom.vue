@@ -64,18 +64,16 @@
             v-for="item in categorys"
             :key="item.id"
           >
-            <v-card class="rounded-xl w-50 h-50" @click="selectedCategory(item)">
-              <v-img
+            <!-- <v-card class="rounded-xl" style="width: ;" @click="selectedCategory(item)">
+              <v-img class=""
                 style="
                   display: block;
                   margin-left: auto;
                   margin-right: auto;
                   border-top-left-radius: 0.75rem;
                   border-top-right-radius: 0.75rem;
-                  /* max-width: 300px;
-                  max-height: 300px; */
-                  width: 300px;
-                  height: 300px;
+                  /* max-width: 100%;
+                  height: auto; */
                 "
                 :src="
                   item.categoryImg ? showImg(item.categoryImg) : defaultImageUrl
@@ -95,7 +93,58 @@
                   <span class="text-red-500 cursor-pointer">อ่านต่อ...</span>
                 </div>
               </v-card-text>
-            </v-card>
+            </v-card> -->
+            <v-card
+    class="mx-auto block rounded-xl drop-shadow-lg"
+    max-width="344"
+    @click="selectedCategory(item)"
+  >
+    <v-img
+    :src="
+                  item.categoryImg ? showImg(item.categoryImg) : defaultImageUrl
+                "
+      height="300px"
+    ></v-img>
+
+    <v-card-title>
+      {{ item.categoryNameTh }}
+    </v-card-title>
+
+    <v-card-subtitle>
+      <div>
+                  {{ item.categoryNameEng }}
+                  <span class="text-red-500 cursor-pointer">อ่านต่อ...</span>
+      </div>
+    </v-card-subtitle>
+
+    <!-- <v-card-actions>
+      <v-btn
+        color="orange lighten-2"
+        text
+      >
+        Explore
+      </v-btn>
+
+      <v-spacer></v-spacer>
+
+      <v-btn
+        icon
+        @click="show = !show"
+      >
+        <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+      </v-btn>
+    </v-card-actions> -->
+
+    <!-- <v-expand-transition>
+      <div v-show="show">
+        <v-divider></v-divider>
+
+        <v-card-text>
+          I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
+        </v-card-text>
+      </div>
+    </v-expand-transition> -->
+  </v-card>
           </v-col>
         </v-row>
       </v-container>
@@ -113,7 +162,7 @@ export default {
   data: () => ({
     imgurl: "categoryImg",
     defaultImageUrl:
-      "https://media.istockphoto.com/id/1216251206/vector/no-image-available-icon.jpg?s=170667a&w=0&k=20&c=N-XIIeLlhUpm2ZO2uGls-pcVsZ2FTwTxZepwZe4DuE4= ",
+      "https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg",
     search: "",
     drawer: true,
     items: [
@@ -170,7 +219,6 @@ export default {
       this.$router.push({ name: "userCourseList_categoryId",params:{ category_id : category.categoryId } });
     },
     showImg(item) {
-      console.log("img", `${process.env.VUE_APP_URL}/api/v1/files/${item}`);
       return `${process.env.VUE_APP_URL}/api/v1/files/${item}`
     }
   },
@@ -217,4 +265,14 @@ export default {
   scrollbar-width: none;
   /* Firefox */
 }
+
+.item {
+    width: 300px;
+    min-height: 120px;
+    /* max-height: auto;
+    float: left; */
+    /* margin: 3px;
+    padding: 3px; */
+}
+
 </style>

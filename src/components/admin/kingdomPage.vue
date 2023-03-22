@@ -5,75 +5,80 @@
       <v-row dense>
         <v-col>
           <label-custom text="อัปโหลดภาพหน้าปกอาณาจักร"></label-custom>
-   
+
           <v-card class="mx-3" flat>
             <v-card-text
               class="border-dashed border-2 border-blue-600 rounded-lg"
             >
-              <!-- @click="openFileSelector" -->
-              <div v-if="isEnabled">
-                <!-- <v-img     
-                :src="showImg(file)"></v-img> -->
-                <v-img     
-                src=""></v-img>
-         
-          </div>
-              <div v-else>
-                <v-row v-if="preview_url">
-                  <v-col class="flex align-center justify-center">
-                    <v-img
-                      :src="preview_url"
-                      style="max-width: 150px"
-                      class="text-right"
+            
+                <v-img
+                  v-if="!enabled"
+                  style="
+                    max-height: 105px;
+                    max-width: 122px;
+                    margin-left: auto;
+                    margin-right: auto;
+                  "
+                  :src="showImg"
+                >
+                </v-img>
+
+                <div v-else>
+                  <v-row v-if="preview_url">
+                    <v-col class="flex align-center justify-center">
+                      <v-img
+                        :src="preview_url"
+                        style="max-width: 150px"
+                        class="text-right"
+                      >
+                        <v-btn icon>
+                          <v-icon color="#ff6b81" @click="closeImage()"
+                            >mdi-close-circle</v-icon
+                          >
+                        </v-btn>
+                      </v-img>
+                    </v-col>
+                    <input
+                      ref="fileInput"
+                      type="file"
+                      @change="uploadFile"
+                      style="display: none"
+                    />
+                  </v-row>
+
+                  <v-row v-if="!preview_url">
+                    <v-col cols="12" class="flex align-center justify-center">
+                      <v-img
+                        src="../../assets/course/upload_file.png"
+                        max-height="105"
+                        max-width="122"
+                      ></v-img>
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      class="flex align-center justify-center text-h5"
                     >
-                      <v-btn icon>
-                        <v-icon color="#ff6b81" @click="closeImage()"
-                          >mdi-close-circle</v-icon
-                        >
-                      </v-btn>
-                    </v-img>
-                  </v-col>
-                  <input
-                    ref="fileInput"
-                    type="file"
-                    @change="uploadFile"
-                    style="display: none"
-                  />
-                </v-row>
-              
-              <v-row v-if="!preview_url">
-                <v-col cols="12" class="flex align-center justify-center">
-                  <v-img
-                    src="../../assets/course/upload_file.png"
-                    max-height="105"
-                    max-width="122"
-                  ></v-img>
-                </v-col>
-                <v-col
-                  cols="12"
-                  class="flex align-center justify-center text-h5"
-                >
-                  อัพโหลดภาพหน้าปกคอร์สเรียน
-                </v-col>
-                <v-col
-                  cols="12"
-                  class="flex align-center justify-center text-caption"
-                >
-                  ( ขนาดไฟล์งานไม่เกิน 500 Mb ต้องเป็นไฟล์ JPG, PNG )
-                </v-col>
-                <v-col cols="12" class="flex align-center justify-center">
-                  <v-btn outlined color="blue" @click="openFileSelector"
-                    >เลือกไฟล์</v-btn
-                  >
-                  <input
-                    ref="fileInput"
-                    type="file"
-                    @change="uploadFile"
-                    style="display: none"
-                  />
-                </v-col>
-              </v-row>
-            </div>
+                      อัพโหลดภาพหน้าปกคอร์สเรียน
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      class="flex align-center justify-center text-caption"
+                    >
+                      ( ขนาดไฟล์งานไม่เกิน 500 Mb ต้องเป็นไฟล์ JPG, PNG )
+                    </v-col>
+                    <v-col cols="12" class="flex align-center justify-center">
+                      <v-btn outlined color="blue" @click="openFileSelector"
+                        >เลือกไฟล์</v-btn
+                      >
+                      <input
+                        ref="fileInput"
+                        type="file"
+                        @change="uploadFile"
+                        style="display: none"
+                      />
+                    </v-col>
+                  </v-row>
+                </div>
             </v-card-text>
           </v-card>
         </v-col>
@@ -87,147 +92,115 @@
       <v-row dense>
         <v-col cols="12" sm="6">
           <label-custom text="ชื่ออาณาจักร(ภาษาไทย)"></label-custom>
-          <div v-if="isEnabled">
-            {{ kingdom.kingdom_name_th }}
-          </div>
-          <v-text-field
-            v-else
-            dense
-            placeholder="กรอกชื่ออาณาจักร"
-            outlined
-            v-model="kingdom.kingdom_name_th"
-            @keypress="validate($event, 'th')"
-          ></v-text-field>
+
+            <div v-if="!enabled">
+              {{ kingdom.kingdom_name_th }}
+            </div>
+            <v-text-field
+              v-else
+              dense
+              placeholder="กรอกชื่ออาณาจักร"
+              outlined
+              v-model="kingdom.kingdom_name_th"
+              @keypress="validate($event, 'th')"
+            ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
           <label-custom text="ชื่ออาณาจักร(ภาษาอังกฤษ)"></label-custom>
-          <div v-if="isEnabled">
-            {{ kingdom.kingdom_name_eng }}
-          </div>
-          <!-- v-bind:disabled="isDisabled" -->
-          
-          <v-text-field
-            v-else
-            dense
-            placeholder="กรอกชื่ออาณาจักร"
-            outlined
-            v-model="kingdom.kingdom_name_eng"
-            @keypress="validate($event, 'en')"
-          ></v-text-field>
+
+         
+            <div v-if="!enabled">
+              {{ kingdom.kingdom_name_eng }}
+            </div>
+
+            <v-text-field
+              v-else
+              dense
+              placeholder="กรอกชื่ออาณาจักร"
+              outlined
+              v-model="kingdom.kingdom_name_eng"
+              @keypress="validate($event, 'en')"
+            ></v-text-field>
+         
         </v-col>
       </v-row>
 
       <v-row dense>
         <v-col cols="12" sm="6">
           <label-custom text="จัดสอนโดย"></label-custom>
-          <div v-if="isEnabled">
-            {{ kingdom.learning_method }}
-          </div>
-          <v-text-field
-            v-else
-            dense
-            placeholder="ระบุสถาบันผู้จัดสอน เช่น ศูนย์ดนตรี Manila Tamarind"
-            outlined
-            v-model="kingdom.learning_method"
-          ></v-text-field>
+
+        
+            <div v-if="!enabled">
+              {{ kingdom.learning_method }}
+            </div>
+            <v-text-field
+              v-else
+              dense
+              placeholder="ระบุสถาบันผู้จัดสอน เช่น ศูนย์ดนตรี Manila Tamarind"
+              outlined
+              v-model="kingdom.learning_method"
+            ></v-text-field>
         </v-col>
       </v-row>
 
       <v-row dense>
         <v-col cols="12">
           <label-custom text="รายละเอียด"></label-custom>
-          <div v-if="isEnabled">
-            {{ kingdom.detail }}
-          </div>
-          <v-textarea
-            v-else
-            dense
-            class="form2"
-            placeholder="กรอกรายละเอียด..."
-            auto-grow
-            outlined
-            v-model="kingdom.detail"
-          ></v-textarea>
+
+        
+            <div v-if="!enabled">
+              {{ kingdom.detail }}
+            </div>
+            <v-textarea
+              v-else
+              dense
+              class="form2"
+              placeholder="กรอกรายละเอียด..."
+              auto-grow
+              outlined
+              v-model="kingdom.detail"
+            ></v-textarea>
+         
         </v-col>
       </v-row>
 
-      <!-- <div>
-        <input type="text" v-model="inputValue" />
-        <button :class="isInputValid ? 'active' : ''">Submit</button>
-      </div> -->
+   
+        <v-row dense v-if="enabled">
+          <v-col align="right" sm="" cols="12">
+            <v-btn
+              outlined
+              :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
+              color="#ff6b81"
+              @click="cancleText()"
+            >
+              ยกเลิก
+            </v-btn>
+          </v-col>
 
-      <v-row dense v-if="!isEnabled">
-        <!-- <v-col align="right" sm="" cols="12">
+          <v-col sm="auto" cols="12">
+            <v-btn
+              class="white--text mb-5"
+              depressed
+              :disabled="!isInputValid"
+              :color="isInputValid ? '#ff6b81' : ''"
+              :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
+              @click="openDialog()"
+              >บันทึก
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-col cols="12" sm="12" v-if="!enabled" align="right">
           <v-btn
-            outlined
-            :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
-            color="#ff6b81"
-          >
-            ยกเลิก
-          </v-btn>
-        </v-col>
-        <v-col sm="auto" cols="12">
-          <v-btn
-            v-if="!saved"
-            depressed
-            :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
-            class="white--text"
-            :disabled="!isInputValid"
-            :color="isInputValid ? '#ff6b81' : ''"
-            @click="openDialog()"
-          >
-            บันทึก
-          </v-btn>
-
-          <v-btn
-            v-else
-            depressed
-            :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
-            class="white--text"
-            :disabled="!isInputValid"
-            :color="isInputValid ? '#ff6b81' : ''"
-            @click="edit()"
-          >
-            แก้ไข
-          </v-btn>
-        </v-col> -->
-
-        <v-col align="right" sm="" cols="12">
-          <v-btn
-            outlined
-            :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
-            color="#ff6b81"
-            @click="cancleText()"
-          >
-            ยกเลิก
-          </v-btn>
-        </v-col>
-
-        <v-col sm="auto" cols="12">
-          <v-btn
-            class="white--text mb-5"
+            class="white--text my-5 w-full"
             depressed
             :disabled="!isInputValid"
             :color="isInputValid ? '#ff6b81' : ''"
             :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
-            @click="openDialog()"
-            >บันทึก
+            @click="showBtn()"
+          >
+            <span class="mdi mdi-pencil-outline">แก้ไข</span>
           </v-btn>
         </v-col>
-      </v-row>
-      <v-col cols="12" sm="12" v-if="isEnabled" align="right">
-        <v-btn
-          class="white--text my-5 w-full"
-          depressed
-          :disabled="!isInputValid"
-          :color="isInputValid ? '#ff6b81' : ''"
-          :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
-          @click="submitEdit()"
-        >
-          <span class="mdi mdi-pencil-outline">แก้ไข</span>
-        </v-btn>
-      </v-col>
-      <!-- DIALOG -->
       <v-dialog class="pa-2" width="50vw" v-model="dialog_show" persistent>
         <v-card>
           <v-card-title>
@@ -240,6 +213,11 @@
             </v-row>
           </v-card-title>
           <dialogCard text="สร้างอาณาจักรเรียบร้อย"></dialogCard>
+          <div class="my-5 text-center">
+          <v-btn color="#ff6b81"  @click="goToManageKingdomPage()" >
+            ตกลง
+        </v-btn>
+      </div>
         </v-card>
       </v-dialog>
     </v-container>
@@ -264,10 +242,12 @@ export default {
     return {
       inputValue: "",
       dialog_show: false,
-      isEnabled: false,
-      isDisabled: false,
+      enabled: true,
+      editFile: false,
+      disable: false,
       saved: false,
       preview_url: null,
+      showImg: "",
       kingdom: {
         kingdom_name_th: "",
         kingdom_name_eng: "",
@@ -292,22 +272,12 @@ export default {
         this.kingdom.detail.trim().length > 0
       );
     },
-
-    buttonText() {
-      return this.clickCount ? "บันทึก" : "แก้ไข";
-    },
   },
 
   methods: {
     closeDialog() {
       this.dialog_show = false;
       this.saved = true;
-    },
-    showImg(item) {
-      // console.log("img", `${process.env.VUE_APP_URL}/api/v1/category/${item}`);
-      // return `${process.env.VUE_APP_URL}/api/v1/category/${item}`
-      console.log("img", `localhost:3000/api/v1/files/category/${item}`);
-      return `localhost:3000/api/v1/files/category/${item}`
     },
     closeImage() {
       this.preview_url = null;
@@ -318,16 +288,17 @@ export default {
     edit() {
       this.$router.push({ name: "Finance" });
     },
+    goToManageKingdomPage() {
+      this.$router.push({ name: "UserKingdom" })
+    },
     cancleText() {
       this.kingdom.kingdom_name_th = "";
       this.kingdom.kingdom_name_eng = "";
       this.kingdom.learning_method = "";
       this.kingdom.detail = "";
-      this.file = "";
-      this.categoryImg = "";
+      this.preview_url = "";
     },
     openDialog() {
-      console.log("first")
       Swal.fire({
         icon: "question",
         title: "คุณต้องการสร้างอาณาจักรหรือไม่",
@@ -336,38 +307,39 @@ export default {
         confirmButtonText: "ตกลง",
         cancelButtonText: "ยกเลิก",
       }).then(async (result) => {
-        console.log("result", result)
-       
         if (result.isConfirmed) {
           try {
-           
             console.log("preview_url", this.file);
             let bodyFormData = new FormData();
-            bodyFormData.append('img_url', this.file); 
-            bodyFormData.append('category_name_th', this.kingdom.kingdom_name_th);
-            bodyFormData.append('category_name_en', this.kingdom.kingdom_name_eng); 
-            bodyFormData.append('category_description', this.kingdom.detail); 
-            bodyFormData.append('taught_by', this.kingdom.learning_method); 
-
-            // console.log("bodyFormData", bodyFormData)
-            // console.log("this.file", this.file)
+            // bodyFormData.append("file", this.file);
+            // bodyFormData.append(
+            //   "payload",
+            //   JSON.stringify(this.kingdom)
+            // );
+            bodyFormData.append("img_url", this.file);
+            bodyFormData.append(
+              "category_name_th",
+              this.kingdom.kingdom_name_th
+            );
+            bodyFormData.append(
+              "category_name_en",
+              this.kingdom.kingdom_name_eng
+            );
+            bodyFormData.append("category_description", this.kingdom.detail);
+            bodyFormData.append("taught_by", this.kingdom.learning_method);
 
             let { data } = await axios.post(
-              `${process.env.VUE_APP_URL}/api/v1/category`,bodyFormData
-              // `loclahost:3000/api/v1/category`,bodyFormData
-              // {
-                
-              //   category_name_th: this.kingdom.kingdom_name_th,
-              //   category_name_en: this.kingdom.kingdom_name_eng,
-              //   img_file: bodyFormData,
-              //   category_description: this.kingdom.detail,
-              //   taught_by: this.kingdom.learning_method,
-              // }
+              `${process.env.VUE_APP_URL}/api/v1/category`,
+              bodyFormData
             );
             if (data.statusCode === 201) {
+              this.showImg = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.categoryImg}`;
               this.dialog_show = true;
+              this.disable = false;
+              this.enabled = false;
+              this.buttonName = "แก้ไข";
             } else {
-              throw { message: data.message }
+              throw { message: data.message };
             }
           } catch (error) {
             console.log(error);
@@ -377,12 +349,61 @@ export default {
             });
           }
         } else {
-          Swal.fire("Changes are not saved", "", "info");
+          Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
         }
       });
-      this.isDisabled = false;
-      this.isEnabled = true;
-      this.buttonName = "แก้ไข";
+    },
+
+    submitEdit(category_id) {
+      Swal.fire({
+        icon: "question",
+        title: "คุณต้องกาแก้ไขอาณาจักรหรือไม่",
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: "ตกลง",
+        cancelButtonText: "ยกเลิก",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            let bodyFormData = new FormData();
+            bodyFormData.append("img_url", this.file);
+            bodyFormData.append(
+              "category_name_th",
+              this.kingdom.kingdom_name_th
+            );
+            bodyFormData.append(
+              "category_name_en",
+              this.kingdom.kingdom_name_eng
+            );
+            bodyFormData.append("category_description", this.kingdom.detail);
+            bodyFormData.append("taught_by", this.kingdom.learning_method);
+
+            let { data } = await axios.patch(
+              `${process.env.VUE_APP_URL}/api/v1/categoryapi/v1/category/${category_id}`,
+              bodyFormData
+            );
+            if (data.statusCode === 200) {
+              Swal.fire({
+                icon: "success",
+                title: "บันทึกข้อมูลเรียบร้อย",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              console.log("success");
+            } else {
+              throw { message: data.message };
+            }
+          } catch (error) {
+            console.log(error);
+            Swal.fire({
+              icon: "error",
+              title: error.message,
+            });
+          }
+        } else {
+          Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
+        }
+      });
     },
 
     uploadFile() {
@@ -409,10 +430,10 @@ export default {
       inputValidation(e, type);
     },
 
-    submitEdit() {
-      this.isDisabled = true;
-      this.isEnabled = false;
-      this.buttonName = "แก้ไข";
+    showBtn() {
+      this.editFile = true;
+      this.disable = false;
+      this.enabled = false;
     },
   },
 };

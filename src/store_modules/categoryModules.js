@@ -18,19 +18,21 @@ const categoryModules = {
             try {
                 console.log(process.env.VUE_APP_URL)
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category`)
-                console.log("data", data);
+                // console.log("data", data);
                 if (data.statusCode === 200) {
+                    console.log("data", data.data);
                     context.commit("SetCategorys", data.data)
                 }
             } catch (error) {
                 console.log("error :", error)
             }
         },
-        async GetCategory(context,{category_id}){
+        async GetCategory(context, category_id){
             try{
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category/${category_id}`)
                 if(data.statusCode === 200){
                     context.commit("SetCategory", data.data)
+                    console.log("SetCategory", data.data);
                 }
             }catch(error){
                 console.log(error)
@@ -41,8 +43,10 @@ const categoryModules = {
         getCategorys(state) {
             return state.categorys
         },
-        getCategory(state){
+        getCategory(state) {
+            console.log("abc");
             return state.category
+            
         }
     },
 };
