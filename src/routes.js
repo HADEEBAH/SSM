@@ -8,8 +8,12 @@ import Login from '@/page/auth/loginPage.vue'
 import UserCreate from '@/page/admin/user_manage/userCreate.vue'
 import UserDetail from '@/page/admin/user_manage/userDetail.vue'
 import UserList from '@/page/admin/user_manage/userList.vue'
-// Course 
+
+// kingdom
 import Kingdom from '@/components/admin/kingdomPage.vue'
+import ManageKingdom from '@/page/admin/kingdom/manageKingdom.vue';
+import EditKingdom from '@/page/admin/kingdom/editKingdom.vue';
+// Course 
 import CourseCreate from '@/page/admin/course/courseCreate.vue'
 import CourseList from '@/page/admin/course/courseList.vue'
 import CourseDetail from '@/page/admin/course/courseDetail.vue'
@@ -100,6 +104,16 @@ const routes = [
         path: 'kingdom',
         name: 'Kingdom',
         component: Kingdom,
+      },
+      {
+        path: 'manageKingdom',
+        name: 'ManageKingdom',
+        component: ManageKingdom,
+      },
+      {
+        path: 'editKingdom/:category_id',
+        name: 'EditKingdom',
+        component: EditKingdom,
       },
       {
         path: 'student',
