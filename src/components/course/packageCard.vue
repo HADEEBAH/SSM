@@ -25,10 +25,11 @@
                     v-model="package_data.package"
                     color="#FF6B81"
                     :rules="rules.packages"
-                    :items="packages_data"
+                    :items="packageList(index)"
                     item-value="packageId"
                     item-text="packageName"
                     item-color="pink"
+                    @change="checkPackage(package_data.package, package_data)"
                 >
                     <template v-slot:no-data>
                     <v-list-item>
@@ -52,7 +53,7 @@
                 <v-text-field
                   suffix="คน"
                   type="number"
-                  :disabled="disable"
+                  :disabled="package_data.package !== 'PACK_3' ? true : disable "
                   :outlined="!disable"
                   :filled="disable"
                   :rules="rules.packages_student"
@@ -85,8 +86,9 @@
                     :rules="rules.options"
                     item-text="optionName"
                     item-value="optionId"
-                    :items="options_data"
+                    :items="optionsList(index, option_index)"
                     item-color="pink"
+                    @change="checkOption(option, option_index, package_data)"
                 >
                     <template v-slot:no-data>
                     <v-list-item>
@@ -244,16 +246,17 @@ export default {
   data: () => ({
     packages_selected: [],
     options_selected: [],
-    rules: {  
-      packages: [val => (val || '').length > 0 || 'โปรดเลือกแพ็คเกจ'],
-      packages_student: [val => (val || '') > 0 || 'โปรดระบุจำนวนนักเรียน'],
-      options : [val => (val || '').length > 0 || 'โปรดเลือกระยะเวลา'],
-      options_amount : [val => (val || '') > 0 || 'โปรดระบุจำนวนครั้ง/คน'],
-      price_unit : [val => (val || '') > 0 || 'โปรดระบุราคาต่อ/คน'],
-    },
+    minimum_students: 0,
+    // rules: {  
+    //   packages: [val => (val || '').length > 0 || 'โปรดเลือกแพ็คเกจ'],
+    //   packages_student: [val => (val || '') > this.minimum_students ? this.minimum_students : 0 || 'โปรดระบุจำนวนนักเรียน'],
+    //   options : [val => (val || '').length > 0 || 'โปรดเลือกระยะเวลา'],
+    //   options_amount : [val => (val || '') > 0 || 'โปรดระบุจำนวนครั้ง/คน'],
+    //   price_unit : [val => (val || '') > 0 || 'โปรดระบุราคาต่อ/คน'],
+    // },
   }),
   created() {
-    
+     
   },
   mounted() {
     this.$store.dispatch("CourseModules/GetPackages")
@@ -266,16 +269,80 @@ export default {
       packages_data : "CourseModules/getPackages",
       options_data : "CourseModules/getOptions",
     }),
+    rules() {
+      const vm = this // bind 'this' to the Vue component instance
+      return {
+        packages: [function(val) {
+          return (val || '').length > 0 || 'โปรดเลือกแพ็คเกจ'
+        }],
+        packages_student: [function(val) {
+          return (val || '') > vm.minimum_students ? vm.minimum_students : 0 || 'โปรดระบุจำนวนนักเรียน'
+        }],
+        options: [function(val) {
+          return (val || '').length > 0 || 'โปรดเลือกระยะเวลา'
+        }],
+        options_amount: [function(val) {
+          return (val || '') > 0 || 'โปรดระบุจำนวนครั้ง/คน'
+        }],
+        price_unit: [function(val) {
+          return (val || '') > 0 || 'โปรดระบุราคาต่อ/คน'
+        }]
+      }
+    },
+   
   },
   methods: {
     ...mapActions({
       ChangeCourseData: "CourseModules/ChangeCourseData",
     }),
+    packageList(package_index){
+      let used_package = []
+      let current_package = this.course_data.packages[package_index].package
+      for(const package_data of  this.course_data.packages){
+        if (package_data.package !== current_package) {
+          used_package.push(package_data.package);
+        }
+      }
+      return this.packages_data.filter(v => !used_package.includes(v.packageId))
+    },
+    optionsList(package_index, options_index){
+      let used_options = []
+      let current_option = this.course_data.packages[package_index].options[options_index].period_package
+      for(const option_data of  this.course_data.packages[package_index].options){
+        if (option_data.period_package !== current_option) {
+          used_options.push(option_data.period_package);
+        }
+      }
+      return this.options_data.filter(v => !used_options.includes(v.optionId))
+    },
     calNetPrice(data){
       if(data.discount){
-        data.net_price = (data.price_unit * data.amount) - data.discount_price
+        data.net_price = data.price_unit - data.discount_price
         data.net_price_unit = data.net_price / data.amount
       }
+    },
+    checkOption(option_data){
+      if(option_data.period_package === "OP_1"){
+        option_data.amount = 1
+      }else if(option_data.period_package === "OP_2") {
+        option_data.amount = 4
+      }else if(option_data.period_package === "OP_3"){
+        option_data.amount = 12
+      }else if(option_data.period_package === "OP_4"){
+        option_data.amount = 24
+      } 
+    },
+    checkPackage(package_data, packages){
+      let minimum_students_data = this.minimum_students
+      if(package_data === "PACK_1"){
+        packages.students = 1
+      }else if(package_data === "PACK_2") {
+        packages.students = 2
+      }else if(package_data === "PACK_3"){
+        packages.students = 3
+        minimum_students_data = 3
+      } 
+      return {packages, minimum_students_data}
     },
     addOptions(data) {
       data.push({

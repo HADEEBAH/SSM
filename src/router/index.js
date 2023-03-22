@@ -11,6 +11,7 @@ const router = new VueRouter({
   routes
 })
 router.beforeEach((to, from, next ) => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
   if(to.name !== "Login" && to.name !== "Register"){
     if(to.matched[0].name !== "NavBarUser" && !VueCookie.get("token")){
       next({name : 'Login'})

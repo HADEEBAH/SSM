@@ -1,3 +1,4 @@
+
 export const inputValidation = (e, type)=>{
     switch (type) {
         case "th":
@@ -7,7 +8,10 @@ export const inputValidation = (e, type)=>{
             break;
         case "en":
             if((/^[ก-๏\s]+$/u).test(e.key)){
-                e.preventDefault()
+                console.log(e.key)
+                if(e.key !== " "){
+                    e.preventDefault()
+                }
             }
             break;
         case "number":

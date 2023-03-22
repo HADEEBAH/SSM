@@ -33,7 +33,7 @@
                 :filled="disable"
                 v-model="coach.coach_id"
                 color="#FF6B81"
-                :items="coach.coach_id ? coachs : coachsOptions"
+                :items="coachsOptions(coach)"
                 item-value="accountId"
                 item-text="fullNameTh"
                 item-color="pink"
@@ -76,17 +76,30 @@
                 chips
                 :rules="rules.class_date"
                 deletable-chips
-                item-color="#FF6B81"
+                item-color="pink"
                 multiple
-                small-chips
                 color="#FF6B81"
-                :items="days"
+                :items="filteredDays(coach_index, teach_day_index)"
                 item-text="label"
                 item-value="value"
                 placeholder="โปรดเลือกเวลา"
                 v-model="teach_day.teach_day"
-                @change="ChangeCourseData(course_data)"
-              ></v-autocomplete>
+                @change="selectDays(teach_day.teach_day, coach_index, teach_day_index)"
+              >
+              <template v-slot:selection="{ attrs, item, selected }">
+                <v-chip
+                  v-bind="attrs"
+                  :input-value="selected"
+                  close
+                  small
+                  color="#ffeeee"
+                  text-color="#ff6b81"
+                  @click:close="removeChip(item, teach_day.teach_day)"
+                >
+                  <strong>{{ item.label }}</strong>
+                </v-chip>
+              </template>
+            </v-autocomplete>
             </v-col>
             <v-col cols="6" sm="2">
               <v-btn
@@ -117,31 +130,59 @@
             v-for="(class_date, class_date_index) in teach_day.class_date"
           >
             <v-row
+              v-if="coach.teach_days_used"
               dense
               :key="`${class_date_index}-date`"
             >
               <v-col cols="12" sm="6">
+                {{ class_date }}
                 <label-custom required text="ช่วงเวลา"></label-custom>
                 <v-row dense class="mb-3">
                   <v-col class="px-2" cols="12" sm="6">
+                    <v-text-field  
+                      outlined
+                      dense
+                      style="position: absolute; display: block; z-index:0; width:130px;"
+                      :rules="rules.start_time" 
+                      v-model="class_date.class_date_range.start_time">
+                    </v-text-field>
                     <TimePicker
-                      style="width: 100% !important"
+                      v-if="coach.disabled_hours"
+                      style="width: 100% !important; z-index: 2"
                       class="w-full"
-                      :minuteStep="60"
+                      :minuteStep="15"
                       format="HH:mm"
-                      :class="
-                        class_date.class_date_range.start_time ? 'active' : ''
-                      "
+                      @focus="class_date.class_date_range.start_time = ''"
+                      :class="class_date.class_date_range.start_time ? 'active' : ''"
+                      :disabledMinutes="(hour) => { return disabledMinutes(hour, coach_index, teach_day_index )  }" 
+                      placeholder="เวลาเริ่มต้น"
+                      @change="genStartTimeEndTime($event, coach_index, teach_day_index, class_date_index)"
+                      v-model="class_date.class_date_range.start_time"
+                    ></TimePicker>
+                    <TimePicker
+                      v-else
+                      style="width: 100% !important ; z-index: 2"
+                      class="w-full"
+                      :minuteStep="15"
+                      format="HH:mm"
+                      :class="class_date.class_date_range.start_time ? 'active' : ''"
                       placeholder="เวลาเริ่มต้น"
                       @change="genStartTimeEndTime($event, coach_index, teach_day_index, class_date_index)"
                       v-model="class_date.class_date_range.start_time"
                     ></TimePicker>
                   </v-col>
                   <v-col class="px-2" cols="12" sm="6">
+                    <v-text-field  
+                      outlined
+                      dense
+                      style="position: absolute; display: block; z-index:0; width:130px;"
+                      :rules="rules.end_time" 
+                      v-model="class_date.class_date_range.end_time">
+                    </v-text-field>
                     <TimePicker
                       disabled 
-                      style="width: 100% !important"
-                      :minuteStep="60"
+                      style="width: 100% !important; z-index: 2"
+                      :minuteStep="15"
                       format="HH:mm"
                       :class="class_date.class_date_range.end_time ? 'active' : ''"
                       placeholder="เวลาสิ้นสุด"
@@ -151,7 +192,7 @@
                   </v-col>
                 </v-row>
               </v-col>
-              <v-col cols="12" sm="3">
+              <v-col cols="12" sm="2">
                 <label-custom required text="นักเรียนที่รับได้"></label-custom>
                 <v-text-field
                   class="input-text-right"
@@ -220,7 +261,7 @@ export default {
   data: () => ({
     select_coachs : [],
     coachs_option : [],
-    days: [
+    days_confix: [
       { label: "วันอาทิตย์", value: 0 },
       { label: "วันจันทร์", value: 1 },
       { label: "วันอังคาร", value:2 },
@@ -232,8 +273,8 @@ export default {
     rules: {
       course: [(val) => (val || "").length > 0 || "โปรดเลือกโค้ช"],
       class_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันที่"],
-      start_time: [(val) => (val || "").length > 0 || "โปรดเลือกเวลาเริ่ม"],
-      end_time: [(val) => (val || "").length > 0 || "โปรดเลือกเวลาสิ้นสุด"],
+      start_time: [(val) => (val || "") > 0 || "โปรดเลือกเวลาเริ่ม"],
+      end_time: [(val) => (val || "") > 0 || "โปรดเลือกเวลาสิ้นสุด"],
       students: [(val) => (val || "").length > 0 || "โปรดระบุจำนวนนักเรียน"],
     },
   }),
@@ -242,28 +283,130 @@ export default {
    this.coachs_option = this.coachs
   },
   mounted() {},
-  watch: {
-
-  },
+  watch: {},
   computed: {
     ...mapGetters({
       course_data: "CourseModules/getCourseData",
       teach_days : "CourseModules/getTeachDays"
     }),
-    coachsOptions(){
-      console.log(this.select_coachs)
-      if (this.select_coachs.length === 0) return this.coachs;
-      return this.coachs_option.filter(
-        (item) => this.select_coachs.includes(item.accountId)
-      );
-    },
   },
   methods: {
     ...mapActions({
       ChangeCourseData: "CourseModules/ChangeCourseData",
       GetTeachDays: "CourseModules/GetTeachDays",
     }),
-    
+    coachsOptions(coach_selected){
+      // Get the IDs of the coaches that have already been selected
+      const selectedCoachIds = this.course_data.coachs.map((coach) => coach.coach_id);
+
+      console.log(selectedCoachIds)
+      // Filter out the coaches that have already been selected
+      const availableCoaches = this.coachs.filter(
+        (coach) => !selectedCoachIds.includes(coach.accountId) || coach.accountId === coach_selected.coach_id
+      );
+
+      return availableCoaches;
+
+      // console.log(this.select_coachs)
+      // return this.coachs.filter(
+      //   (item) => !this.select_coachs.includes(item.accountId)
+      // );
+    },
+    filteredDays(coachIndex, teachDayIndex) {
+      const teachDayData = this.course_data.coachs[coachIndex].teach_day_data;
+      const currentTeachDay = teachDayData[teachDayIndex];
+      const usedDays = [];
+
+      // Loop through all teach_day_data and collect used days
+      teachDayData.forEach((teachDay) => {
+        if (teachDay !== currentTeachDay) {
+          usedDays.push(...teachDay.teach_day);
+        }
+      });
+
+      // Filter out used days from the available days
+      return this.days_confix.filter(
+        (day) => !usedDays.includes(day.value)
+      );
+    },
+    removeChip (item, value) {
+      value.splice(value.indexOf(item), 1)
+    },
+    disabledMinutes(hour, coachIndex, teachDayIndex){
+      const teach_days_used = this.course_data.coachs[coachIndex].teach_days_used;
+      const current_teach_day = this.course_data.coachs[coachIndex].teach_day_data[teachDayIndex];
+      const used_minutes= [];
+      teach_days_used.forEach((teach_day) => {
+        if (current_teach_day.teach_day.includes(parseInt(teach_day.date_value))) {
+          teach_day.times.forEach((time) => {
+            const start_hour = parseInt(time.start.split(':')[0]);
+            const start_minute = parseInt(time.start.split(':')[1])
+            const end_hour = parseInt(time.end.split(':')[0]);
+            const end_minute = parseInt(time.start.split(':')[1])
+            // Disable all minutes within the range of this time
+            if (hour === start_hour && hour === end_hour) {
+              for (let i = start_minute; i <= end_minute; i += 15) {
+                used_minutes.push(i);
+              }
+            } else if (hour === start_hour) {
+              for (let i = start_minute; i <= 45; i += 15) {
+                used_minutes.push(i);
+              }
+            } else if (hour === end_hour) {
+              for (let i = 0; i <= end_minute; i += 15) {
+                used_minutes.push(i);
+              }
+            }
+          })
+        }
+      })
+      return used_minutes;
+    },
+    selectDays(selectedDays, coachIndex, teachDayIndex) {
+      const teachDayData = this.course_data.coachs[coachIndex].teach_day_data;
+      const currentTeachDay = teachDayData[teachDayIndex];
+
+      // Check if the selected day has already been selected by another teach_day
+      const conflictTeachDay = teachDayData.find(
+        (teachDay, index) =>
+          index !== teachDayIndex &&
+          teachDay.teach_day.some((day) => selectedDays.includes(day))
+      );
+
+      if (conflictTeachDay) {
+         // If there is a conflict, show an error message and reset the selection
+        console.log(`Cannot select ${selectedDays.join(', ')} because it has already been selected by teach_day ${conflictTeachDay.class_date[0].class_date_range.start_time}`)
+        currentTeachDay.teach_day = currentTeachDay.teach_day.filter(day => !selectedDays.includes(day));
+      } else {
+        this.course_data.coachs[coachIndex].disabled_hours = []
+        const teach_days_used = this.course_data.coachs[coachIndex].teach_days_used;
+        const current_teach_day = this.course_data.coachs[coachIndex].teach_day_data[teachDayIndex];
+        const used_hours = [];
+        console.log("teach_days_used :", teach_days_used)
+        console.log("current_teach_day :", current_teach_day.teach_day)
+        teach_days_used.forEach((teach_day) => {
+          console.log("teach_day :",teach_day)
+          console.log("current_teach_day :", current_teach_day.teach_day.includes(parseInt(teach_day.date_value)))
+          if (current_teach_day.teach_day.includes(parseInt(teach_day.date_value))) {
+            teach_day.times.forEach((time) => {
+              const start_hour = parseInt(time.start.split(':')[0]);
+              const end_hour = parseInt(time.end.split(':')[0]);
+              for (let hour = start_hour; hour <= end_hour; hour++) {
+                const used_hour = hour;
+                if (!used_hours.includes(used_hour)) {
+                  used_hours.push(used_hour);
+                }
+              }
+            });
+          }
+        });
+        console.log(used_hours)
+        this.course_data.coachs[coachIndex].disabled_hours = used_hours;
+        // If there is no conflict, update the selected days for the current teach_day
+        currentTeachDay.teach_day = selectedDays;
+      }
+    },
+
     genStartTimeEndTime(value, coach_index, teach_day_index, class_date_index){
       if (value) {
         const end = moment(value).add(this.course_data.course_hours, 'hour')
@@ -279,7 +422,7 @@ export default {
       }
     },
     findTeachDays(coach_data, coach_index) {
-      this.select_coachs.push({coach:coach_data, index:coach_index})
+      this.select_coachs.push(coach_data.coach_id)
       this.GetTeachDays(coach_data).then(()=>{
         this.course_data.coachs[coach_index].teach_days_used = this.teach_days
       })
@@ -296,6 +439,8 @@ export default {
               menu_start_date: false,
               end_date: "",
               menu_end_date: false,
+              start_time: "",
+              end_time : "",  
             },
             students: 0,
           },
@@ -308,12 +453,15 @@ export default {
       this.ChangeCourseData(this.course_data);
     },
     addTime(data) {
+      console.log(data)
       data.class_date.push({
         class_date_range: {
           start_date: "",
           menu_start_date: false,
           end_date: "",
           menu_end_date: false,
+          start_time: "",
+          end_time : "",  
         },
         students: 0,
       });
