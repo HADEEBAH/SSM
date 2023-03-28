@@ -40,11 +40,12 @@
 }
 /* Time Picker Ant-Design */
 .ant-time-picker-input{
-    height: 40px !important;
-    border: 1px solid #6e6e6e !important;
+    height: 34px !important;
+    margin: 2px;
+    border: 3px solid transparent !important;
 }
 .ant-time-picker-input:hover{
-    border: 1px solid #000 !important;
+    border: 1px solid transparent !important;
 }
 .active .ant-time-picker-icon .anticon svg{
     color:#ff6b81 !important;

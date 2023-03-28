@@ -4,14 +4,14 @@
     <!-- Upload file -->
     <v-card class="mx-3" flat>
       <v-card-text class="border-dashed border-2 border-blue-600 rounded-lg">
-        <v-row v-if="previewUrl">
+        <v-row v-if="preview_url">
           <v-col align="center"  class="rounded-lg pa-0">
-            <v-img  :src="previewUrl" style="max-width: 200px" align="right">
+            <v-img  :src="preview_url" style="max-width: 200px" align="right">
               <v-btn icon class="bg-[#f00]" dark><v-icon>mdi-close</v-icon></v-btn>
             </v-img>
           </v-col>
         </v-row>
-        <v-row v-if="!previewUrl">
+        <v-row v-if="!preview_url">
           <v-col cols="12" class="flex align-center justify-center">
             <v-img
               src="../../assets/course/upload_file.png"
@@ -461,11 +461,12 @@
               <v-col cols="12" sm="6">
               <label-custom required text="เวลาเรียน"></label-custom>
               <v-row>
-                <v-col  cols="12" sm>
+                <v-col>
                   <v-text-field  
                     outlined
                     dense
-                    style="position: absolute; display: block; z-index:0; width:130px;"
+                    style="position: absolute; display: block; z-index:0; "
+                    :style="`width:${width()}px;`"
                     @focus="isTimePickerVisible = true"
                     :rules="rules.start_time" 
                     v-model="course_data.coachs[0].period.start_time">
@@ -473,7 +474,8 @@
                   <TimePicker
                       :minuteStep="60"
                       format="HH:mm"
-                      style="width: 100% !important; z-index: 2"
+                      style="z-index: 2"
+                      :style="`width:${width()-4}px !important;`"
                       :class="course_data.coachs[0].period.start_time ? 'active' : ''"
                       placeholder="เวลาเริ่มต้น"
                       @change="genStartTimeEndTime($event)"
@@ -483,11 +485,12 @@
                 <v-col cols="auto" class="mt-2 px-0"
                   ><v-icon>mdi-minus</v-icon></v-col
                 >
-                <v-col cols="12" sm>
+                <v-col>
                   <v-text-field  
                     outlined
                     dense
-                    style="position: absolute; display: block; z-index:0; width:130px;"
+                    style="position: absolute; display: block; z-index:0;"
+                    :style="`width:${width()}px;`"
                     @focus="isTimePickerVisible = true"
                     :rules="rules.end_time" 
                     v-model="course_data.coachs[0].period.end_time">
@@ -497,7 +500,8 @@
                     :minuteStep="60"
                     format="HH:mm"
                     :rules="rules.end_time"
-                    style="width: 100% !important; z-index: 2"
+                    style="z-index: 2"
+                    :style="`width:${width()-4}px !important;`"
                     :class="course_data.coachs[0].period.end_time ? 'active' : ''"
                     placeholder="เวลาสิ้นสุด"
                     @change="limitEndTime($event)"
@@ -559,7 +563,7 @@ export default {
   },
   data: () => ({
     today:new Date(),
-    previewUrl: null,
+    preview_url: null,
     // coachs: [ 
     //   {account_id : "16775648309278", first_name_th : 'ฟาติมา', last_name_th : 'จูฮัน', full_name : "ฟาติมา จูฮัน"} ,
     //   {account_id : "4294589844485338", first_name_th : 'ทดสอบ', last_name_th : 'ทดสอบ', full_name : "ทดสอบ ทดสอบ"}
@@ -614,7 +618,15 @@ export default {
     ...mapActions({
       ChangeCourseData: "CourseModules/ChangeCourseData",
     }),
-   
+    width () {
+        switch (this.$vuetify.breakpoint.name) {
+          case 'xs': return 99
+          case 'sm': return 147.5
+          case 'md': return 180.5
+          case 'lg': return 251.5
+          case 'xl': return 401.75
+        }
+      },
     genStartTimeEndTime(value){
       if (value) {
         const end = moment(value).add(this.course_data.course_hours, 'hour')
@@ -632,7 +644,7 @@ export default {
       this.ChangeCourseData(this.course_data)
     },
     removeFile(){
-      this.previewUrl = ""
+      this.preview_url = ""
     },
     inputName(e, lang) {
       inputValidation(e, lang);
@@ -668,18 +680,11 @@ export default {
     openFileSelector() {
       this.$refs.fileInput.click();
     },
-    // uploadFile() {
-    //   this.file = this.$refs.fileInput.files[0];
-    //   if (!this.file) return;
-    //   const reader = new FileReader();
-    //   reader.onload = (e) => {
-    //     this.previewUrl = e.target.result;
-    //   };
-    //   reader.readAsDataURL(this.file);
-    // },
 
     uploadFile() {
       this.file = this.$refs.fileInput.files[0];
+      this.course_data.course_img = this.file
+      this.ChangeCourseData(this.course_data)
       console.log("file=>",this.file);
       if (!this.file) return;
       const reader = new FileReader();

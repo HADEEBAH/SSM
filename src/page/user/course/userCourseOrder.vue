@@ -432,6 +432,7 @@ import { mapActions, mapGetters } from 'vuex';
             changeOrderData: "OrderModules/changeOrderData",
             changeDialogRegisterOneId : 'RegisterModules/changeDialogRegisterOneId',
             saveOrder : "OrderModules/saveOrder",
+            saveCart : "OrderModules/saveCart",
             checkUsernameOneid : "loginModules/checkUsernameOneid"
         }),
         dayOfWeekArray(day) {
@@ -552,6 +553,7 @@ import { mapActions, mapGetters } from 'vuex';
             this.order.created_by = this.user_login.account_id
             this.changeOrderData(this.order)
             localStorage.setItem(this.user_login.account_id, JSON.stringify(this.order))
+            this.saveCart({cart_data : this.order})
             this.resetCourseData()
             this.$router.push({name : "UserKingdom"})
         },

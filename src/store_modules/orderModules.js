@@ -1,6 +1,6 @@
 import axios from "axios";
-import Swal from "sweetalert2";
-import router from "@/router";
+// import Swal from "sweetalert2";
+// import router from "@/router";
 const orderModules = {
     namespaced: true,
     state: {
@@ -179,7 +179,7 @@ const orderModules = {
                                 "parent":{
                                     "accountId": student.parents[0].account_id,
                                     "parentFirstnameTh": student.parents[0].firstname_th ?  student.parents[0].firstname_th :"" ,
-                                    "parentLastnameTh":student.parents[0].lastname_en ?  student.parents[0].lastname_en :"" ,
+                                    "parentLastnameTh":student.parents[0].lastname_th ?  student.parents[0].lastname_th :"" ,
                                     "parentFirstnameEn":student.parents[0].firstname_en,
                                     "parentLastnameEn":student.parents[0].lastname_en,
                                     "parentTel": student.parents[0].tel,
@@ -216,28 +216,29 @@ const orderModules = {
                     total_price =  total_price + course.option.net_price
                 })
                 payload.totalPrice = total_price
-                console.log("saveOrder",payload)
-                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/regis/course`,payload)
-                if(data.statusCode === 200){
-                    Swal.fire({
-                        icon : "success",
-                        title : "ไปยังหน้า E-cashier"
-                    }).then((result)=>{
-                        if(result.isConfirmed){
-                            localStorage.removeItem("Order")
-                            context.commit("SetResetCourseData")
-                            context.commit("SetOrder",{
-                              order_step : 0,
-                              order_number: "",
-                              courses:[],
-                              created_by : "",
-                              payment_status: "",
-                              payment_type: "",
-                              total_price: 0,
-                          })
-                            router.replace({ name: "UserKingdom" });
-                        }
-                    })
+                let {data} = await axios.post(`http://localhost:3002/api/v1/order/cart`,payload)
+                // let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/cart`,payload)
+                if(data.statusCode === 201){
+                    //router.replace({ name: "UserKingdom" });
+                    // Swal.fire({
+                    //     icon : "success",
+                    //     title : "ไปยังหน้า E-cashier"
+                    // }).then((result)=>{
+                    //     if(result.isConfirmed){
+                    //         localStorage.removeItem("Order")
+                    //         context.commit("SetResetCourseData")
+                    //         context.commit("SetOrder",{
+                    //           order_step : 0,
+                    //           order_number: "",
+                    //           courses:[],
+                    //           created_by : "",
+                    //           payment_status: "",
+                    //           payment_type: "",
+                    //           total_price: 0,
+                    //       })
+                    //         router.replace({ name: "UserKingdom" });
+                    //     }
+                    // })
                 }
             }catch(error){
                 console.log(error)
@@ -309,26 +310,52 @@ const orderModules = {
                 payload.totalPrice = total_price
                 console.log("saveOrder",payload)
                 let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/regis/course`,payload)
-                if(data.statusCode === 200){
-                    Swal.fire({
-                        icon : "success",
-                        title : "ไปยังหน้า E-cashier"
-                    }).then((result)=>{
-                        if(result.isConfirmed){
-                            localStorage.removeItem("Order")
-                            context.commit("SetResetCourseData")
-                            context.commit("SetOrder",{
-                              order_step : 0,
-                              order_number: "",
-                              courses:[],
-                              created_by : "",
-                              payment_status: "",
-                              payment_type: "",
-                              total_price: 0,
-                          })
-                            router.replace({ name: "UserKingdom" });
-                        }
-                    })
+                console.log(data)
+                if(data.statusCode === 201){
+                    let payment = await axios.post(`${process.env.VUE_APP_URL}/api/v1/payment/code`,
+                    {
+
+                        "orderId": data.data.orderNumber,
+                        "total": data.data.totalPrice,
+                        "subtotal": 0.00,
+                        "vat": 0,
+                        "vatRate": 0,
+                        "orderDesc": ""
+                    }
+                )
+
+                    // let payment = await axios.post(`${process.env.VUE_APP_URL}/api/v1/payment/code`,
+                    //     {
+
+                    //         "orderId": data.data.orderNumber,
+                    //         "total": data.data.totalPrice,
+                    //         "subtotal": 0.00,
+                    //         "vat": 0,
+                    //         "vatRate": 0,
+                    //         "orderDesc": ""
+                    //     }
+                    // )
+                    console.log(payment)
+
+                    // Swal.fire({
+                    //     icon : "success",
+                    //     title : "ไปยังหน้า E-cashier"
+                    // }).then((result)=>{
+                    //     if(result.isConfirmed){
+                    //         localStorage.removeItem("Order")
+                    //         context.commit("SetResetCourseData")
+                    //         context.commit("SetOrder",{
+                    //           order_step : 0,
+                    //           order_number: "",
+                    //           courses:[],
+                    //           created_by : "",
+                    //           payment_status: "",
+                    //           payment_type: "",
+                    //           total_price: 0,
+                    //       })
+                    //         router.replace({ name: "UserKingdom" });
+                    //     }
+                    // })
                 }
             }catch(error){
                 console.log(error)
