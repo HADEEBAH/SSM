@@ -43,6 +43,7 @@ import userCourseList from '@/page/user/course/userCourseList.vue'
 import userCourseDetail from '@/page/user/course/userCourseDetail.vue'
 import userCoursePackage from '@/page/user/course/userCoursePackage.vue'
 import userCourseOrder from '@/page/user/course/userCourseOrder.vue'
+import userCoursePayment from '@/page/user/course/userCoursePayment.vue'
 //User menage Course 
 import userMenageCourse from '@/page/user/coach/manageCourse'
 import userMenageCourseDetail from '@/page/user/coach/manageCourseDetail'
@@ -172,6 +173,11 @@ const routes = [
         path: 'course/order',  
         name: 'userCourseOrder',
         component: userCourseOrder,
+      },
+      {
+        path: 'course/payment',  
+        name: 'userCoursePayment',
+        component: userCoursePayment,
       },
       {
         path: 'cartList',  

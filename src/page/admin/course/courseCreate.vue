@@ -289,16 +289,16 @@ export default {
           }
       } 
     },
-    uploadFile() {
-      this.file = this.$refs.fileInput.files[0];
-      console.log("file=>",this.file);
-      if (!this.file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.preview_url = e.target.result;
-      };
-      reader.readAsDataURL(this.file);
-    },
+    // uploadFile() {
+    //   this.file = this.$refs.fileInput.files[0];
+    //   console.log("file=>",this.file);
+    //   if (!this.file) return;
+    //   const reader = new FileReader();
+    //   reader.onload = (e) => {
+    //     this.preview_url = e.target.result;
+    //   };
+    //   reader.readAsDataURL(this.file);
+    // },
     
     addCoach() {
       this.course_data.coachs.push({

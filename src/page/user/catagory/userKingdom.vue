@@ -200,7 +200,7 @@ export default {
   },
 
   mounted() {
-    this.$store.dispatch("CategoryModules/GetCategorys");
+    this.$store.dispatch("CategoryModules/GetCategoryCourse");
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "อาณาจักร");
   },
 

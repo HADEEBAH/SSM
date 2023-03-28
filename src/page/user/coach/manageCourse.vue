@@ -53,7 +53,19 @@
         </template>
       </div>
       <div v-if="tab === 'my teaching'">
-       
+        <v-row>
+          <v-col cols="auto">
+            ข้อมูลการสอนข้อฉัน : 
+          </v-col>
+          <v-col class="font-bold">
+            {{ `${user_detail.first_name_th} ${user_detail.last_name_th}`}}
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            
+          </v-col>
+        </v-row>
       </div>
       <div v-if="tab === 'request leave'">request leave</div>
     </v-container>
@@ -68,6 +80,7 @@ export default {
   name: "menageCourse",
   components: { calendarCoach, headerPage, courseCardList },
   data: () => ({
+    user_detail : "",
     tab: "teaching list",
     tabs : [
       {label: "รายการสอนวันนี้", value:"teaching list"},
@@ -163,8 +176,11 @@ export default {
       },
     ],
   }),
-  created() {},
+  created() {
+    this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
+  },
   mounted() {
+
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "จัดการ");
   },
   watch: {},

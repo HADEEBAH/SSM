@@ -123,7 +123,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+// import { mapActions } from 'vuex';
 export default {
   data: () => ({
     search: "",
@@ -166,13 +166,6 @@ export default {
     //     });
     //   }
     // },
-    ...mapActions({
-      saveCart : "OrderModules/saveCart"
-    }),
-    saveCartData(){
-      console.log(this.carts)
-      this.saveCart({cart_data : this.carts})
-    },
     sumtotal() {
       this.carts.total_price = 0;
       this.count_selected_cart = this.carts.courses.filter((v)=>v.checked).length

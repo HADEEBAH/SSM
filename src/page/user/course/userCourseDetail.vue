@@ -116,7 +116,7 @@
             สมัคร
           </v-btn>
         </v-col>
-        <v-col
+        <!-- <v-col
           v-if="course_order.course_type_id === 'CT_2'"
           cols="12"
           class="flex justify-center"
@@ -129,7 +129,7 @@
           >
             สมัคร (เต็ม)
           </v-btn>
-        </v-col>
+        </v-col> -->
       </v-row>
         <!-- DIALOG :: COURSE FULL -->
         <v-dialog width="60vw" v-model="show_dialog" persistent >
