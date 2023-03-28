@@ -312,7 +312,7 @@ const orderModules = {
                 let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/regis/course`,payload)
                 console.log(data)
                 if(data.statusCode === 201){
-                    let payment = await axios.post(`http://localhost:3003/api/v1/payment/code`,
+                    let payment = await axios.post(`${process.env.VUE_APP_URL}/api/v1/payment/code`,
                     {
 
                         "orderId": data.data.orderNumber,
