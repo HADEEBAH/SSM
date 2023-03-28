@@ -64,10 +64,33 @@ const RegisterModules = {
             title: "ลงทะเบียนสำเร็จ",
           }).then((result)=>{
             if(result.isConfirmed){
-              this.loginOneId({
-                "username": context.state.user_one_id.username,
-                "password": context.state.user_one_id.password,
-              })
+             axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login`, {
+              "username": context.state.user_one_id.username,
+              "password": context.state.user_one_id.password,
+            }).then((res)=>{
+              console.log("res : ",res)
+              if (res.data.statusCode === 200) {
+                  let roles_data = []
+                  res.data.data.roles.forEach((role) => {
+                      roles_data.push(role?.role_name_en)
+                  });
+                  let payload = {
+                      account_id : res.data.data.account_id,
+                      email : res.data.data.email,
+                      first_name_en : res.data.data.first_name_en,
+                      first_name_th : res.data.data.first_name_th,
+                      last_name_en : res.data.data.last_name_en,
+                      last_name_th : res.data.data.last_name_th,
+                      role : res.data.data.role,
+                      roles : roles_data,  
+                      tel : res.data.data.tel,
+                  }
+                  VueCookie.set("token", res.data.data.token)
+                  localStorage.setItem("userDetail",JSON.stringify(payload))
+                  console.log("UserKingdom")
+                  router.replace({ name: "UserKingdom" });
+              }
+            })
               context.commit("ResetUserOneID")
             }
           })
@@ -100,33 +123,7 @@ const RegisterModules = {
         }
       }
     },
-    // axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login`, {
-    //   "username": context.state.user_one_id.username,
-    //   "password": context.state.user_one_id.password,
-    // }).then((res)=>{
-    //   console.log("res : ",res)
-    //   if (res.data.statusCode === 200) {
-    //       let roles_data = []
-    //       res.data.data.roles.forEach((role) => {
-    //           roles_data.push(role?.role_name_en)
-    //       });
-    //       let payload = {
-    //           account_id : res.data.data.account_id,
-    //           email : res.data.data.email,
-    //           first_name_en : res.data.data.first_name_en,
-    //           first_name_th : res.data.data.first_name_th,
-    //           last_name_en : res.data.data.last_name_en,
-    //           last_name_th : res.data.data.last_name_th,
-    //           role : res.data.data.role,
-    //           roles : roles_data,  
-    //           tel : res.data.data.tel,
-    //       }
-    //       VueCookie.set("token", res.data.data.token)
-    //       localStorage.setItem("userDetail",JSON.stringify(payload))
-    //       console.log("UserKingdom")
-    //       router.replace({ name: "UserKingdom" });
-    //   }
-    // })
+   
     async loginOneId(context) {
         try {
             const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login`, {
