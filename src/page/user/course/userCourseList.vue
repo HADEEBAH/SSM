@@ -68,11 +68,11 @@ import { mapGetters, mapActions } from 'vuex';
             type_selected :"",
         }),
         created() {
-            this.GetCourseTypes({category_id : this.$route.params.category_id})
+            this.GetCourseTypes({category_id : this.$route.params.category_id})zz
             this.$store.dispatch("CourseModules/GetCoursesFilter",{ category_id : this.$route.params.category_id, status : "Active", })  
         },
         mounted() {
-            this.GetCategory({category_id : this.$route.params.category_id})
+            this.GetCategory(this.$route.params.category_id)
             this.$store.dispatch("NavberUserModules/changeTitleNavber","คอร์สเรียน")
             this.type_selected = this.course_types[0].course_type_id
         },
