@@ -5,7 +5,9 @@
       src="../../../assets/navbar_user/kingdomBg.png"
       class="rounded-none bottomimg"
     >
-      <div class="text-2xl ml-5 mt-10 font-bold text-white">Hello {{dataStorage.first_name_en}}</div>
+
+
+      <div class="text-2xl ml-5 mt-10 font-bold text-white" >Hello {{dataStorage ? dataStorage.first_name_en : ''}}</div>
       <v-autocomplete
         :class="
           MobileSize
@@ -190,6 +192,7 @@ export default {
       },
     ],
     dataStorage: {},
+    userDetail: false
   }),
   created() {
     this.dataStorage = JSON.parse(localStorage.getItem("userDetail"));
