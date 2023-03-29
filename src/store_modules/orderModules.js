@@ -313,9 +313,8 @@ const orderModules = {
                 let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/regis/course`,payload)
                 console.log(data)
                 if(data.statusCode === 201){
-                    let payment = await axios.post(`${process.env.VUE_APP_URL}/api/v1/payment/code`,
-                    {
-
+                    console.log("data.statusCode === 201")
+                    let payment_payload = {
                         "orderId": data.data.orderNumber,
                         "total": data.data.totalPrice,
                         "subtotal": 0.00,
@@ -323,20 +322,16 @@ const orderModules = {
                         "vatRate": 0,
                         "orderDesc": ""
                     }
-                )
-
-                    // let payment = await axios.post(`${process.env.VUE_APP_URL}/api/v1/payment/code`,
-                    //     {
-
-                    //         "orderId": data.data.orderNumber,
-                    //         "total": data.data.totalPrice,
-                    //         "subtotal": 0.00,
-                    //         "vat": 0,
-                    //         "vatRate": 0,
-                    //         "orderDesc": ""
-                    //     }
-                    // )
-                    console.log(payment)
+                    let payment = await axios.post(`${process.env.VUE_APP_URL}/api/v1/payment/code`,payment_payload)
+                    console.log("payment",payment)
+                    console.log("payment statusCode",payment.data.statusCode)
+                    if(payment.data.statusCode === 201){
+                        localStorage.removeItem("Order")
+                        context.commit("SetResetCourseData")
+                        // router.replace({ name: "UserKingdom" });
+                        window.location.href = payment.data.data
+                    }
+                    
 
                     // Swal.fire({
                     //     icon : "success",
@@ -354,8 +349,7 @@ const orderModules = {
                     //           payment_type: "",
                     //           total_price: 0,
                     //       })
-                    //         router.replace({ name: "UserKingdom" });
-                    //     }
+                    //         
                     // })
                 }
             }catch(error){

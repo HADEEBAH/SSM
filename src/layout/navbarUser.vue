@@ -7,10 +7,10 @@
         <v-app-bar-title class="font-bold">{{ titel_navber }}</v-app-bar-title>
         <v-spacer></v-spacer>
         <template v-if="user_detail">
-          <v-badge class="mr-3" overlap color="#F03D3E" content="1" message="1">
+          <v-badge class="mr-3" overlap color="#F03D3E" >
             <v-icon dark>mdi-bell-outline</v-icon>
           </v-badge>
-          <v-badge class="mr-5" overlap color="#F03D3E" content="1" message="1" >
+          <v-badge class="mr-5" overlap color="#F03D3E" >
             <v-icon dark  @click="$router.push({name: 'CartList'})">mdi-cart</v-icon>
           </v-badge>
           <div v-if="!$vuetify.breakpoint.smAndDown">

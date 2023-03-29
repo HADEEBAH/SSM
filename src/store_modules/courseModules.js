@@ -417,7 +417,7 @@ const CourseModules = {
         let payload = {
             "categoryId": course.category_id,
             "courseTypeId": course.type === 'general_course' ? 'CT_1' : 'CT_2',
-            "courseImg": course.course_img,
+            "courseImg": "",
             "courseNameTh": course.course_name_th,
             "courseNameEn": course.course_name_en,
             "courseOpenDate":course.course_open_date,

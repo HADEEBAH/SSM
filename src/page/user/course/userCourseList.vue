@@ -68,7 +68,7 @@ import { mapGetters, mapActions } from 'vuex';
             type_selected :"",
         }),
         created() {
-            this.GetCourseTypes({category_id : this.$route.params.category_id})zz
+            this.GetCourseTypes({category_id : this.$route.params.category_id})
             this.$store.dispatch("CourseModules/GetCoursesFilter",{ category_id : this.$route.params.category_id, status : "Active", })  
         },
         mounted() {
