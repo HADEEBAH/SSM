@@ -7,7 +7,7 @@
     >
 
 
-      <div class="text-2xl ml-5 mt-10 font-bold text-white" >Hello {{dataStorage ? dataStorage.first_name_en : ''}}</div>
+      <div class="text-2xl ml-5 mt-10 font-bold text-white">Hello {{dataStorage ? dataStorage.first_name_en : ''}}</div>
       <v-autocomplete
         :class="
           MobileSize
