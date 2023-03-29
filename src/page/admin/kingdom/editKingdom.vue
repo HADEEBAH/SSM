@@ -4,7 +4,7 @@
     <headerPage title="แก้ไขอาณาจักร" class="my-5"></headerPage>
     <label-custom text="อัปโหลดภาพหน้าปกอาณาจักร"></label-custom>
     <v-card style="border: dashed blue">
-      <v-card-title primary-title>
+      <v-card-title primary-title  align="end">
         <v-btn icon v-if="preview_url">
           <v-icon color="#ff6b81" @click="closeImage()"
             >mdi-close-circle</v-icon
@@ -38,15 +38,71 @@
               "
               :src="preview_url ? preview_url : showImg(category.categoryImg)"
             />
-
-            <input
-              ref="fileInput"
-              type="file"
-              @change="uploadFile"
-              style="display: none"
-            />
+            <v-row v-if="!preview_url" >
+                    <v-col cols="12" class="flex align-center justify-center mt-5">
+                      <v-btn outlined color="blue" @click="openFileSelector"
+                        >เลือกไฟล์</v-btn
+                      >
+                      <input
+                        ref="fileInput"
+                        type="file"
+                        @change="uploadFile"
+                        style="display: none"
+                      />
+                    </v-col>
+                  </v-row>
           </div>
         </div>
+       
+        <!-- <div v-if="category.categoryImg">
+        <v-img
+            v-if="showData"
+            style="
+              max-height: 105px;
+              max-width: 122px;
+              margin-left: auto;
+              margin-right: auto;
+            "
+            :src="showImg(category.categoryImg)"
+          >
+          </v-img>
+
+        <div v-else>
+
+          <v-row v-if="preview_url">
+                    <v-col class="flex align-center justify-center">
+                      <v-img
+                        :src="preview_url"
+                        style="max-width: 150px"
+                        class="text-right"
+                      >
+                      </v-img>
+                    </v-col>
+                    <input
+                      ref="fileInput"
+                      type="file"
+                      @change="uploadFile"
+                      style="display: none"
+                    />
+                  </v-row>
+
+                  <v-row v-if="!preview_url">
+                    <v-col cols="12" class="flex align-center justify-center">
+                      <v-btn outlined color="blue" @click="openFileSelector"
+                        >เลือกไฟล์</v-btn
+                      >
+                      <input
+                        ref="fileInput"
+                        type="file"
+                        @change="uploadFile"
+                        style="display: none"
+                      />
+                    </v-col>
+                  </v-row>
+        </div>
+       
+      </div> -->
+       
         <div v-else class="text-center">
         <v-progress-circular  
         indeterminate 
@@ -180,6 +236,7 @@ import { inputValidation } from "@/functions/functions";
 import headerPage from "@/components/header/headerPage.vue";
 import { mapActions, mapGetters } from "vuex";
 import LabelCustom from "../../../components/label/labelCustom.vue";
+import VueCookie from "vue-cookie"
 export default {
   components: {
     headerPage,
@@ -254,7 +311,7 @@ export default {
     openDialog() {
       Swal.fire({
         icon: "question",
-        title: "คุณต้องกาแก้ไขอาณาจักรหรือไม่",
+        title: "คุณต้องการแก้ไขอาณาจักรหรือไม่",
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: "ตกลง",
@@ -269,24 +326,21 @@ export default {
             //   "payload",
             //   JSON.stringify(this.category)
             // );
-            bodyFormData.append("img_url", this.file);
-            bodyFormData.append(
-              "category_categoryNameTh",
-              this.category.categoryNameTh
-            );
-            bodyFormData.append(
-              "category_categoryNameEng",
-              this.category.categoryNameEng
-            );
-            bodyFormData.append("category_taughtBy", this.category.taughtBy);
-            bodyFormData.append(
-              "category_categoryDescription",
-              this.category.categoryDescription
-            );
-
+            bodyFormData.append("categoryImg", this.file ?  this.file : null);
+            bodyFormData.append("categoryNameTh",this.category.categoryNameTh );
+            bodyFormData.append( "categoryNameEng", this.category.categoryNameEng );
+            bodyFormData.append("taughtBy", this.category.taughtBy);
+            bodyFormData.append( "categoryDescription", this.category.categoryDescription  );
+            let config = {
+                    headers:{
+                        "Access-Control-Allow-Origin" : "*",
+                        "Content-type": "Application/json",
+                        'Authorization' : `Bearer ${VueCookie.get("token")}`
+                    }
+                }
             let { data } = await axios.patch(
               `${process.env.VUE_APP_URL}/api/v1/category/${this.$route.params.category_id}`,
-              bodyFormData
+              bodyFormData, config
             );
             if (data.statusCode === 200) {
               this.dialog_show = true;

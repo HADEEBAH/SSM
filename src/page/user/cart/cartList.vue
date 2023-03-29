@@ -5,7 +5,7 @@
       <v-row class="mb-16">
         <v-col
           cols="12"
-          v-for="(item, index_item) in carts.courses"
+          v-for="(item, index_item) in cart_list"
           :key="`${index_item}-cart`"
         >
           <!-- <pre>{{item}}</pre> -->
@@ -26,9 +26,8 @@
                     </v-col>
                     <v-col>
                       <v-row dense>
-                        <v-col class="text-lg font-bold">{{
-                          item.course_name
-                        }}</v-col>
+                        <v-col class="text-lg font-bold">
+                          {{item.course_name_th}}({{ item.course_name_en}}) </v-col>
                         <v-col cols="auto">
                           <v-checkbox
                             class="card_checkbox"
@@ -46,7 +45,7 @@
                           โค้ช : {{ item.coach_name }}
                         </v-col>
                         <v-col cols="12" sm="6" class="text-md font-semibold">
-                          เวลา : {{ item.time.start }}-{{ item.time.end }}
+                          <!-- เวลา : {{ item.time.start }}-{{ item.time.end }} -->
                         </v-col>
                       </v-row>
                       <v-row dense>
@@ -59,13 +58,9 @@
                   </v-row>
                 </v-col>
 
-                <v-col cols="6"> หมายเลขคำสั่งซื้อ :</v-col>
-                <v-col cols="6" class="text-md font-semibold"> 147935248</v-col>
-
                 <v-col cols="6">เวลาที่ทำรายการ</v-col>
-                <v-col cols="6" class="text-md font-semibold">{{
-                  `09/07/2022 15:21`
-                }}</v-col>
+                <v-col cols="6" class="text-md font-semibold">
+                  {{}}</v-col>
 
                 <v-col cols="6"> ราคา</v-col>
                 <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
@@ -73,8 +68,7 @@
                 >
                 <v-col cols="6"> จำนวนครั้งที่เรียน</v-col>
                 <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
-                  {{ item.option.amount
-                  }}<span> ครั้ง</span></v-col
+                  {{ item.option.amount}}<span> ครั้ง</span></v-col
                 >
 
                 <v-col cols="6"> ราคา/ครั้ง</v-col>
@@ -114,16 +108,16 @@
           >
         </div>
         <div :class="MobileSize ? 'mt-2 ' : 'mt-2 ml-56 '">
-          <!-- <v-btn depressed dark color="#ff6b81" @click="saveCart"> ชำระเงิน ({{ count_selected_cart }}) </v-btn> -->
+          <v-btn depressed dark color="#ff6b81" @click="savePaymen"> ชำระเงิน ({{ count_selected_cart }}) </v-btn>
         </div>      
       </div>
-      <v-btn depressed dark color="#ff6b81" @click="saveCartData"> ชำระเงิน  </v-btn>
+      <!-- <v-btn depressed dark color="#ff6b81" @click="saveCartData"> ชำระเงิน  </v-btn> -->
     </v-container>
   </v-app>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 export default {
   data: () => ({
     search: "",
@@ -142,19 +136,28 @@ export default {
     // console.log("selectedCourse", this.selectedCourse)
     this.user_login = JSON.parse(localStorage.getItem("userDetail"))
     this.carts = JSON.parse(localStorage.getItem(this.user_login.account_id))
+    this.GetCartList(this.user_login.account_id)
     
-    this.carts.courses.map((val) => {
+    this.cart_list.map((val) => {
       val.checked = false;
     });
+
+  
+
+
   },
 
   mounted() {
-    console.log(this.user_login)
+    console.log(this.user_login.account_id)
     console.log(this.carts)
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "รถเข็น");
+    
+   
+   
   },
 
   methods: {
+
     // selectAll(e) {
     //   if (e) {
     //     this.items.forEach((item) => {
@@ -166,17 +169,12 @@ export default {
     //     });
     //   }
     // },
-    ...mapActions({
-      saveCart : "OrderModules/saveCart"
-    }),
-    saveCartData(){
-      console.log(this.carts)
-      this.saveCart({cart_data : this.carts})
-    },
+    ...mapActions({ GetCartList: 'OrderTestModules/GetCartList'}),
+  
     sumtotal() {
       this.carts.total_price = 0;
-      this.count_selected_cart = this.carts.courses.filter((v)=>v.checked).length
-      this.carts.courses.forEach((course) => {
+      this.count_selected_cart = this.cart_list.filter((v)=>v.checked).length
+      this.cart_list.forEach((course) => {
         if (course.checked) {
           this.carts.total_price =
             this.carts.total_price + course.option.net_price;
@@ -188,7 +186,7 @@ export default {
       console.log("bool", bool);
       console.log("key", key);
 
-      let result = this.carts.courses.map((element, index) => {
+      let result = this.cart_list.map((element, index) => {
         console.log("element", element);
         console.log("index", index);
 
@@ -225,7 +223,7 @@ export default {
 
     selectAll(bool) {
       console.log("bool", bool);
-      let result = this.carts.courses.map((element) => {
+      let result = this.cart_list.map((element) => {
         console.log("element", element);
         element.checked = bool;
 
@@ -235,16 +233,24 @@ export default {
       console.log("result", result);
 
       this.sumtotal();
-      this.carts.courses = result;
+      this.cart_list = result;
     },
+
+    savePaymen() {
+      console.log("savePaymen");
+    }
    
   },
 
   computed: {
+
+    ...mapGetters({
+      cart_list: "OrderTestModules/getCartList",
+    }),
     // sumtotal() {
     //   let total = this.carts.total_price;
     //   console.log("total",this.carts.total_price);
-    //   this.carts.courses.forEach((course) => {
+    //   this.cart_list.forEach((course) => {
     //       total = total + course.price
     //       console.log(course.price);
     //   } )

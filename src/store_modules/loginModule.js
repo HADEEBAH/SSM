@@ -73,7 +73,7 @@ const loginModules = {
                     let roles = []
                     if (data.data.roles.length > 0) {
                         data.data.roles.forEach((role) => {
-                            roles.push(role.role_name_en)
+                            roles.push(role.roleId)
                         });
                      }
                     let payload = {
@@ -83,7 +83,7 @@ const loginModules = {
                         first_name_th: data.data.first_name_th,
                         last_name_en: data.data.last_name_en,
                         last_name_th: data.data.last_name_th,
-                        role: data.data.role,
+                        role: data.data.roles,
                         roles: roles,
                         tel: data.data.tel,
                     }

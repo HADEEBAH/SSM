@@ -93,11 +93,7 @@
         <v-col cols="12" sm="6">
           <label-custom text="ชื่ออาณาจักร(ภาษาไทย)"></label-custom>
 
-            <div v-if="!enabled">
-              {{ kingdom.kingdom_name_th }}
-            </div>
             <v-text-field
-              v-else
               dense
               placeholder="กรอกชื่ออาณาจักร"
               outlined
@@ -108,13 +104,7 @@
         <v-col cols="12" sm="6">
           <label-custom text="ชื่ออาณาจักร(ภาษาอังกฤษ)"></label-custom>
 
-         
-            <div v-if="!enabled">
-              {{ kingdom.kingdom_name_eng }}
-            </div>
-
             <v-text-field
-              v-else
               dense
               placeholder="กรอกชื่ออาณาจักร"
               outlined
@@ -129,12 +119,7 @@
         <v-col cols="12" sm="6">
           <label-custom text="จัดสอนโดย"></label-custom>
 
-        
-            <div v-if="!enabled">
-              {{ kingdom.learning_method }}
-            </div>
             <v-text-field
-              v-else
               dense
               placeholder="ระบุสถาบันผู้จัดสอน เช่น ศูนย์ดนตรี Manila Tamarind"
               outlined
@@ -147,12 +132,7 @@
         <v-col cols="12">
           <label-custom text="รายละเอียด"></label-custom>
 
-        
-            <div v-if="!enabled">
-              {{ kingdom.detail }}
-            </div>
             <v-textarea
-              v-else
               dense
               class="form2"
               placeholder="กรอกรายละเอียด..."
@@ -231,6 +211,7 @@ import dialogCard from "@/components/dialog/dialogCard.vue";
 import { inputValidation } from "@/functions/functions";
 import Swal from "sweetalert2";
 import axios from "axios";
+import VueCookie from "vue-cookie"
 export default {
   name: "kingdomPage",
   components: {
@@ -289,7 +270,7 @@ export default {
       this.$router.push({ name: "Finance" });
     },
     goToManageKingdomPage() {
-      this.$router.push({ name: "UserKingdom" })
+      this.$router.push({ name: "ManageKingdom" })
     },
     cancleText() {
       this.kingdom.kingdom_name_th = "";
@@ -309,29 +290,23 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
+
+            let config = {
+                headers:{
+                    "Access-Control-Allow-Origin" : "*",
+                    "Content-type": "Application/json",
+                    'Authorization' : `Bearer ${VueCookie.get("token")}`
+                }
+            }
             console.log("preview_url", this.file);
             let bodyFormData = new FormData();
-            // bodyFormData.append("file", this.file);
-            // bodyFormData.append(
-            //   "payload",
-            //   JSON.stringify(this.kingdom)
-            // );
             bodyFormData.append("img_url", this.file);
-            bodyFormData.append(
-              "category_name_th",
-              this.kingdom.kingdom_name_th
-            );
-            bodyFormData.append(
-              "category_name_en",
-              this.kingdom.kingdom_name_eng
-            );
+            bodyFormData.append("category_name_th",this.kingdom.kingdom_name_th);
+            bodyFormData.append("category_name_en",this.kingdom.kingdom_name_eng);
             bodyFormData.append("category_description", this.kingdom.detail);
             bodyFormData.append("taught_by", this.kingdom.learning_method);
-
-            let { data } = await axios.post(
-              `${process.env.VUE_APP_URL}/api/v1/category`,
-              bodyFormData
-            );
+            console.log("header", config);
+            let { data } = await axios.post( `${process.env.VUE_APP_URL}/api/v1/category`, bodyFormData, config);
             if (data.statusCode === 201) {
               this.showImg = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.categoryImg}`;
               this.dialog_show = true;
@@ -354,57 +329,7 @@ export default {
       });
     },
 
-    submitEdit(category_id) {
-      Swal.fire({
-        icon: "question",
-        title: "คุณต้องกาแก้ไขอาณาจักรหรือไม่",
-        showDenyButton: false,
-        showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            let bodyFormData = new FormData();
-            bodyFormData.append("img_url", this.file);
-            bodyFormData.append(
-              "category_name_th",
-              this.kingdom.kingdom_name_th
-            );
-            bodyFormData.append(
-              "category_name_en",
-              this.kingdom.kingdom_name_eng
-            );
-            bodyFormData.append("category_description", this.kingdom.detail);
-            bodyFormData.append("taught_by", this.kingdom.learning_method);
 
-            let { data } = await axios.patch(
-              `${process.env.VUE_APP_URL}/api/v1/categoryapi/v1/category/${category_id}`,
-              bodyFormData
-            );
-            if (data.statusCode === 200) {
-              Swal.fire({
-                icon: "success",
-                title: "บันทึกข้อมูลเรียบร้อย",
-                showConfirmButton: false,
-                timer: 1500,
-              });
-              console.log("success");
-            } else {
-              throw { message: data.message };
-            }
-          } catch (error) {
-            console.log(error);
-            Swal.fire({
-              icon: "error",
-              title: error.message,
-            });
-          }
-        } else {
-          Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
-        }
-      });
-    },
 
     uploadFile() {
       this.file = this.$refs.fileInput.files[0];

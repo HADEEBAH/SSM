@@ -37,8 +37,8 @@
                   {{ user_detail.email }}
                 </p>
                 <v-divider class="my-3"></v-divider>
-                <v-btn depressed rounded text>
-                  <v-icon color="#ff6b81">mdi-account-edit-outline</v-icon>
+                <v-btn depressed rounded text @click="$router.push({name: 'UserProfile'})">
+                  <v-icon color="#ff6b81" >mdi-account-edit-outline</v-icon>
                   Edit Profile 
                 </v-btn>
                 <v-divider class="my-3"></v-divider>  

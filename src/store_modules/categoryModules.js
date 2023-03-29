@@ -1,4 +1,5 @@
 import axios from "axios"
+
 const categoryModules = {
     namespaced: true,
     state: {
@@ -15,7 +16,9 @@ const categoryModules = {
     },
     actions: {
         async GetCategorys(context) {
+         
             try {
+             
                 console.log(process.env.VUE_APP_URL)
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category`)
                 // console.log("data", data);
@@ -28,7 +31,8 @@ const categoryModules = {
             }
         },
         async GetCategory(context, category_id){
-            try{
+            try {
+              
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category/${category_id}`)
                 if(data.statusCode === 200){
                     context.commit("SetCategory", data.data)

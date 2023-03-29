@@ -60,7 +60,7 @@
   </div>
 </template>
   <script>
-import calendarCoach from "@/components/calendar_coach/calendarCoach.vue";
+import calendarCoach from "@/components/calendar/calendarCoach.vue";
 import headerPage from '../../../components/header/headerPage.vue';
 // import rowData from '../../../components/label/rowData.vue';
 import courseCardList from "../../../components/course/courseCardList.vue";

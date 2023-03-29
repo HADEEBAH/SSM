@@ -285,11 +285,11 @@ const CourseModules = {
       }
     },
     // COURSE :: DETAIL
-    async GetCourse(context, course_id){
+    async GetCourse(context,course_id){
       console.log("GetCourse")
       try{
           let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
-          console.log(data.data)
+          console.log("GetCourse",data.data)
           let payload = {
             course_id : data.data.courseId,
             course_type_id : data.data.courseTypeId,

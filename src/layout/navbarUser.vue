@@ -127,7 +127,7 @@ export default {
       email: "john.doe@doe.com",
     },
     menu_drawer_list:[
-      { icon: "mdi-account-circle", title : "โปรไฟล์", to:"", roles:[]},
+      { icon: "mdi-account-circle", title : "โปรไฟล์", to:"UserProfile", roles:[]},
       { icon: "mdi-calendar-month", title : "ตารางเรียน", to:"", roles:["student", "parent",  "super admin"]},
       { icon: "mdi-book-cog-outline", title : "การจัดการ", to:"menageCourse", roles:["coach", "super admin"]},
       { icon: "mdi-history", title : "ประวัติการสั่งซื้อ", to:"", roles:["student","parent","super admin"]},
@@ -148,7 +148,7 @@ export default {
     //   last_name_en : "Test 01",
     //   last_name_th : "Test 01",
     //   role : { role_id : "01", role_name_th : "โค้ช",role_name_en : "coach" },
-    //   roles : ["parent"],
+    //   roles : ["student"],
     //   tel : "0821241243",
     // }))
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"))

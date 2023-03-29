@@ -5,7 +5,7 @@
       src="../../../assets/navbar_user/kingdomBg.png"
       class="rounded-none bottomimg"
     >
-      <div class="text-2xl ml-5 mt-10 font-bold text-white">Hello, Sarah</div>
+      <div class="text-2xl ml-5 mt-10 font-bold text-white">Hello {{dataStorage.first_name_en}}</div>
       <v-autocomplete
         :class="
           MobileSize
@@ -35,7 +35,7 @@
         <v-carousel
           cycle
           hide-delimiter-background
-          style="
+          style=" 
             max-width: 97%;
             max-height: 100%;
             margin-left: 20px;
@@ -164,7 +164,9 @@ export default {
     defaultImageUrl:
       "https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg",
     search: "",
+    first_name_en:"",
     drawer: true,
+    user_detail : null,
     items: [
       { id: 1, itemName: "อาณาจักรศิลปะสมัยใหม่" },
       { id: 2, itemName: "อาณาจักรศิลปะสมัยใหม่" },

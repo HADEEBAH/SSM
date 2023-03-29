@@ -34,7 +34,11 @@ import ProfileResetPassword from '@/page/user/profile/profileResetPassword.vue'
 import ProfileLanguages from '@/page/user/profile/profileLanguages.vue'
 import ProfilePolicy from '@/page/user/profile/profilePolicy.vue'
 import ProfileRules from '@/page/user/profile/profileRules.vue'
+// studentCourse
 import StudentsSchedule from '@/page/user/studentsCourse/studentsSchedule.vue'
+import StudentCourse from '@/page/user/studentsCourse/studentCourse.vue'
+import StudentBookedDetail from '@/page/user/studentsCourse/studentBookedDetail.vue'
+
 //auth
 // import UserLoginPage from '@/page/auth/userLoginPage'
 
@@ -227,6 +231,16 @@ const routes = [
         path: 'studentsSchedule',  
         name: 'StudentsSchedule',
         component: StudentsSchedule,
+      },
+      {
+        path: 'studentCourse',  
+        name: 'StudentCourse',
+        component: StudentCourse,
+      },
+      {
+        path: 'studentBookedDetail',  
+        name: 'StudentBookedDetail',
+        component: StudentBookedDetail,
       },
       
     ]

@@ -217,7 +217,7 @@ const orderModules = {
                 })
                 payload.totalPrice = total_price
                 console.log("saveOrder",payload)
-                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/regis/course`,payload)
+                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/cart`,payload)
                 if(data.statusCode === 200){
                     Swal.fire({
                         icon : "success",
@@ -350,3 +350,19 @@ const orderModules = {
 };
 
 export default orderModules;
+
+// student_data: {
+//     order_student_id: "",
+//     order_item_id: "",
+//     student_id: "",
+//     is_other: ""
+// }
+
+// SetStudentData(state, payload) {
+//     state.student_data = payload
+//   }
+
+// STUDENT :: DETAIL
+// async GetStudentData(context, orderItemId) {
+      
+// }
