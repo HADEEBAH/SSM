@@ -64,61 +64,110 @@ const RegisterModules = {
             title: "ลงทะเบียนสำเร็จ",
           }).then((result)=>{
             if(result.isConfirmed){
-              axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login`, {
-                "username": context.state.user_one_id.username,
-                "password": context.state.user_one_id.password,
-              }).then((res)=>{
-                console.log("res : ",res)
-                if (res.data.statusCode === 200) {
-                    let roles_data = []
-                    res.data.data.roles.forEach((role) => {
-                        roles_data.push(role?.role_name_en)
-                    });
-                    let payload = {
-                        account_id : res.data.data.account_id,
-                        email : res.data.data.email,
-                        first_name_en : res.data.data.first_name_en,
-                        first_name_th : res.data.data.first_name_th,
-                        last_name_en : res.data.data.last_name_en,
-                        last_name_th : res.data.data.last_name_th,
-                        role : res.data.data.role,
-                        roles : roles_data,  
-                        tel : res.data.data.tel,
-                    }
-                    VueCookie.set("token", res.data.data.token)
-                    localStorage.setItem("userDetail",JSON.stringify(payload))
-                    console.log("UserKingdom")
-                    router.replace({ name: "UserKingdom" });
-                }
-              })
-              //context.commit("ResetUserOneID")
+             axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login`, {
+              "username": context.state.user_one_id.username,
+              "password": context.state.user_one_id.password,
+            }).then((res)=>{
+              console.log("res : ",res)
+              if (res.data.statusCode === 200) {
+                  let roles_data = []
+                  res.data.data.roles.forEach((role) => {
+                      roles_data.push(role?.role_name_en)
+                  });
+                  let payload = {
+                      account_id : res.data.data.account_id,
+                      email : res.data.data.email,
+                      first_name_en : res.data.data.first_name_en,
+                      first_name_th : res.data.data.first_name_th,
+                      last_name_en : res.data.data.last_name_en,
+                      last_name_th : res.data.data.last_name_th,
+                      role : res.data.data.role,
+                      roles : roles_data,  
+                      tel : res.data.data.tel,
+                  }
+                  VueCookie.set("token", res.data.data.token)
+                  localStorage.setItem("userDetail",JSON.stringify(payload))
+                  console.log("UserKingdom")
+                  router.replace({ name: "UserKingdom" });
+              }
+            })
+              context.commit("ResetUserOneID")
             }
           })
         }
       }catch({response}){
         console.log(response)
-        // let text = ""
-        // if(data.message.result.username){
-        //   if(data.message.result.username[0] === "username duplicate"){
-        //     text = 'username นี้ถูกใช้แล้ว'
-        //   }
-          
-        //   Swal.fire({
-        //     icon: 'error',
-        //     title: `กรอกข้อมูลให้ถูกต้อง`,
-        //     text : text
-        //   })
-        // }else {
-        //   Swal.fire({
-        //     icon: 'error',
-        //     title: `กรอกข้อมูลให้ถูกต้อง`,
-        //   })
-        // }
-        Swal.fire({
-          icon: 'error',
-          title: `เกิคข้อผิดพลาด${response.message}`,
-        })
+        if(response.data.statusCode === 400){
+          let text = ""
+          switch (response.data.message.message){
+            case "The mobile no must be at least 10 characters.":
+              text = 'หมายเลขมือถือต้องมีอย่างน้อย 10 ตัวอักษร'
+            break;
+            case "username duplicate":
+              text = 'username นี้ถูกใช้แล้ว'
+            break;
+            case "The password format is invalid.":
+              text = 'รูปแบบรหัสผ่านไม่ถูกต้อง'
+            break
+          }
+          Swal.fire({
+            icon: 'error',
+            title: `กรอกข้อมูลให้ถูกต้อง`,
+            text : text
+          })
+        }else{
+          Swal.fire({
+            icon: 'error',
+            title: `เกิคข้อผิดพลาด`,
+          })
+        }
       }
+    },
+   
+    async loginOneId(context) {
+        try {
+            const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login`, {
+                "username": context.state.user_one_id.username,
+                "password": context.state.user_one_id.password,
+            })
+            console.log(data);
+            if (data.statusCode === 200) {
+                let roles = []
+                if (data.data.roles.length > 0) {
+                    data.data.roles.forEach((role) => {
+                        roles.push(role.roleId)
+                    });
+                }
+                let payload = {
+                    account_id: data.data.account_id,
+                    email: data.data.email,
+                    first_name_en: data.data.first_name_en,
+                    first_name_th: data.data.first_name_th,
+                    last_name_en: data.data.last_name_en,
+                    last_name_th: data.data.last_name_th,
+                    role: data.data.roles,
+                    roles: roles,
+                    tel: data.data.tel,
+                }
+                VueCookie.set("token", data.data.token)
+                localStorage.setItem("userDetail", JSON.stringify(payload))
+                router.replace({ name: "UserKingdom" })
+            }
+        } catch (response) {
+            console.log(response)
+            if (response.message === "Request failed with status code 401") {
+                Swal.fire({
+                    icon: 'error',
+                    title: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง",
+                })
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: "เกิดข้อผิดพลาด",
+                })
+            }
+        }
+
     },
     changeDialogRegisterOneId(context, value){
       if(value){

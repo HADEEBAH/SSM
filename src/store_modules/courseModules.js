@@ -2,6 +2,7 @@ import axios from "axios";
 import moment from "moment";
 import Swal from "sweetalert2";
 import router from "@/router";
+import VueCookie from "vue-cookie"
 const CourseModules = {
   namespaced: true,
   state: {
@@ -467,7 +468,6 @@ const CourseModules = {
               })
             } 
         })
-        // Package
         if(course.type === "general_course"){
           course.packages.forEach((package_course)=>{
             package_course.options.forEach((option)=>{
@@ -484,12 +484,18 @@ const CourseModules = {
             })
           })
         }
-        console.log(payload)
-        // const data_payload = new FormData()
-        // data_payload.append("payload",JSON.stringify(payload))
-        // data_payload.append("file",)
-        // console.log(data_payload.getAll("payload"))
-        let {data} = await axios.post(process.env.VUE_APP_URL+"/api/v1/course/create", payload)
+        const data_payload = new FormData()
+        data_payload.append("payload",JSON.stringify(payload))
+        data_payload.append("img_url",course.course_img)
+        console.log(data_payload.getAll("payload"))
+        let config = {
+          headers:{
+              "Access-Control-Allow-Origin" : "*",
+              "Content-type": "Application/json",
+              'Authorization' : `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        let {data} = await axios.post(process.env.VUE_APP_URL+"/api/v1/course/create", data_payload, config)
         if(data.statusCode === 201){
           console.log(data)
           Swal.fire({
@@ -500,7 +506,6 @@ const CourseModules = {
               router.replace({name: "CourseList"})
             }
           })
-         // context.commit("SetCourseData",data.data)
         }else{
           throw {message : data}
         }
@@ -518,7 +523,6 @@ const CourseModules = {
         if(!course_type_id){
           course_type_id = 'CT_1'
         }
-        console.log(`category_id :${category_id}, status:${status} course_type_id:${course_type_id}`)
         let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/filter?category_id=${category_id}&status=${status}&course_type_id=${course_type_id}`)
         if(data.statusCode === 200){
           console.log(data)
@@ -536,6 +540,7 @@ const CourseModules = {
     },
     async GetPackages(context){
       try{
+
         let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/package`)
         console.log("Package :",data.data)
         if(data.statusCode === 200){

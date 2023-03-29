@@ -30,6 +30,20 @@ const categoryModules = {
                 console.log("error :", error)
             }
         },
+        async GetCategoryCourse(context) {
+            try {
+                console.log(process.env.VUE_APP_URL)
+                //let { data } = await axios.get(`http://localhost:3000/api/v1/category/course`)
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category/course`)
+                // console.log("data", data);
+                if (data.statusCode === 200) {
+                    console.log("data", data.data);
+                    context.commit("SetCategorys", data.data)
+                }
+            } catch (error) {
+                console.log("error :", error)
+            }
+        },
         async GetCategory(context, category_id){
             try {
               

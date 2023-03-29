@@ -135,20 +135,21 @@
               :key="`${class_date_index}-date`"
             >
               <v-col cols="12" sm="6">
-                {{ class_date }}
                 <label-custom required text="ช่วงเวลา"></label-custom>
                 <v-row dense class="mb-3">
                   <v-col class="px-2" cols="12" sm="6">
                     <v-text-field  
                       outlined
                       dense
-                      style="position: absolute; display: block; z-index:0; width:130px;"
+                      style="position: absolute; display: block; z-index:0;"
+                      :style="`width:${width()}px;`"
                       :rules="rules.start_time" 
                       v-model="class_date.class_date_range.start_time">
                     </v-text-field>
                     <TimePicker
                       v-if="coach.disabled_hours"
-                      style="width: 100% !important; z-index: 2"
+                      style=" z-index: 2"
+                      :style="`width:${width()-4}px !important; `"
                       class="w-full"
                       :minuteStep="15"
                       format="HH:mm"
@@ -161,7 +162,8 @@
                     ></TimePicker>
                     <TimePicker
                       v-else
-                      style="width: 100% !important ; z-index: 2"
+                      style="z-index: 2"
+                      :style="`width:${width()-4}px !important; `"
                       class="w-full"
                       :minuteStep="15"
                       format="HH:mm"
@@ -175,13 +177,15 @@
                     <v-text-field  
                       outlined
                       dense
-                      style="position: absolute; display: block; z-index:0; width:130px;"
+                      style="position: absolute; display: block; z-index:0;"
+                      :style="`width:${width()}px;`"
                       :rules="rules.end_time" 
                       v-model="class_date.class_date_range.end_time">
                     </v-text-field>
                     <TimePicker
                       disabled 
-                      style="width: 100% !important; z-index: 2"
+                      style=" z-index: 2"
+                      :style="`width:${width()-4}px !important; `"
                       :minuteStep="15"
                       format="HH:mm"
                       :class="class_date.class_date_range.end_time ? 'active' : ''"
@@ -265,7 +269,7 @@ export default {
       { label: "วันอาทิตย์", value: 0 },
       { label: "วันจันทร์", value: 1 },
       { label: "วันอังคาร", value:2 },
-      { label: "วันพุท", value: 3 },
+      { label: "วันพุทธ", value: 3 },
       { label: "วันพฤหัสบดี", value:4 },
       { label: "วันศุกร์", value: 5 },
       { label: "วันเสาร์", value: 6 },
@@ -295,6 +299,15 @@ export default {
       ChangeCourseData: "CourseModules/ChangeCourseData",
       GetTeachDays: "CourseModules/GetTeachDays",
     }),
+    width () {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return 210
+        case 'sm': return 147.5
+        case 'md': return 180.5
+        case 'lg': return 251.5
+        case 'xl': return 401.75
+      }
+    },
     coachsOptions(coach_selected){
       // Get the IDs of the coaches that have already been selected
       const selectedCoachIds = this.course_data.coachs.map((coach) => coach.coach_id);
