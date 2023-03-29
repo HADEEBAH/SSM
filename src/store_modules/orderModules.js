@@ -1,6 +1,6 @@
 import axios from "axios";
 // import Swal from "sweetalert2";
-// import router from "@/router";
+import router from "@/router";
 const orderModules = {
     namespaced: true,
     state: {
@@ -239,6 +239,7 @@ const orderModules = {
                     //         router.replace({ name: "UserKingdom" });
                     //     }
                     // })
+                    router.replace({ name: "UserKingdom" });
                 }
             }catch(error){
                 console.log(error)
@@ -377,3 +378,19 @@ const orderModules = {
 };
 
 export default orderModules;
+
+// student_data: {
+//     order_student_id: "",
+//     order_item_id: "",
+//     student_id: "",
+//     is_other: ""
+// }
+
+// SetStudentData(state, payload) {
+//     state.student_data = payload
+//   }
+
+// STUDENT :: DETAIL
+// async GetStudentData(context, orderItemId) {
+      
+// }

@@ -26,7 +26,7 @@
         </v-btn>
       </div>
       <!-- ROLE PARENT ทั่วไป -->
-      <div v-if="data_local.roles.includes('parent')">
+      <div v-if="data_local.roles.includes('R_4')">
       <div class="mt-8">
         <label-custom text="ทั่วไป"></label-custom>
       </div>
@@ -58,8 +58,9 @@
         </v-col>
       </v-row>
     </div>
+
     <!-- ROLE STUDENT คอร์สเรียน-->
-    <div v-if="data_local.roles.includes('student')">
+    <div v-if="data_local.roles.includes('R_5')">
         <div class="mt-8">
         <label-custom text="คอร์สเรียน"></label-custom>
       </div>
@@ -69,7 +70,7 @@
         <v-col cols="2" sm="1">
           <img src="../../../assets/profile/cource.png" />
         </v-col>
-        <v-col cols="5" sm="6" align="left" class="mt-1">
+        <v-col cols="5" sm="6" align="left" class="mt-1" @click="$router.push({name:'StudentsSchedule'})">
           <label>คอร์สเรียนของฉัน</label>
         </v-col>
         <v-col cols="3" sm="4" align="right" class="mt-1">
@@ -96,7 +97,7 @@
       </v-row>
     </div>
   <!-- ROLE COACH ทั่วไป-->
-  <div v-if="data_local.roles.includes('coach')">
+  <div v-if="data_local.roles.includes('R_3')">
       <div class="mt-8">
         <label-custom text="ทั่วไป"></label-custom>
       </div>
@@ -129,7 +130,7 @@
       </v-row>
     </div>
     <!-- ROLE PARENT ข้อมูลนักเรียนในความดูแล-->
-    <div v-if="data_local.roles.includes('parent')">
+    <div v-if="data_local.roles.includes('R_4')">
       <div class="mt-8">
         <label-custom text="ข้อมูลนักเรียนในความดูแล"></label-custom>
       </div>
@@ -162,9 +163,10 @@
         </v-row>
       </v-card>
   </div>
-  
+  <div v-if="data_local.roles.includes('R_2')">
+  ADMIN</div>
   <!-- ROLE STUDENT ข้อมูลผู้ปกครอง -->
-     <div v-if="data_local.roles.includes('student')">
+     <div v-if="data_local.roles.includes('R_5')">
       <div class="mt-8">
         <label-custom text="ข้อมูลผู้ปกครอง"></label-custom>
       </div>
@@ -199,13 +201,13 @@
      </div>
 
 <!-- ROLE STUDENT ทั่วไป -->
-     <div v-if="data_local.roles.includes('student')">
+<div v-if="data_local.roles.includes('R_5')">
       <div class="mt-8">
         <label-custom text="ทั่วไป"></label-custom>
       </div>
-      <v-divider class="mx-10"></v-divider>
+      <v-divider class=""></v-divider>
       <!-- password -->
-      <v-row dense class="mt-3"  @click="show_password()">
+      <v-row dense class="mt-3" @click="show_password()">
         <v-col cols="2" sm="1">
           <img src="@/assets/profile/password.png" />
         </v-col>
@@ -234,7 +236,7 @@
 
     <!-- ROLE ALL -->
       <div class="mt-8">
-        <label-custom text="คอร์สเรียน"></label-custom>
+        <label-custom text="นโยบาย"></label-custom>
       </div>
       <v-divider class=""></v-divider>
       <!-- policy -->
@@ -321,6 +323,15 @@
        
       ],
     }),
+    created() {
+    // this.getStudentData(this.student_data.order_item_id);
+    // this.$store.dispatch('getStudentData', this.orderItemId)
+    // this.getStudentData(this.$route.params.order_item_id)
+        this.GetStudentData(this.$route.params.order_item_id)
+        this.user_login = JSON.parse(localStorage.getItem("userDetail"))
+    console.log("userDetail", this.user_login);
+    //this.$store.dispatch('GetStudentData', this.$route.params.order_item_id)
+  },
     mounted() {
       this.$store.dispatch("NavberUserModules/changeTitleNavber", "บัญชีผู้ใช้");
     },
@@ -328,16 +339,25 @@
     methods: {
       ...mapActions({
         loginOneId: "loginModules/loginOneId",
+        GetStudentData: "OrderTestModules/GetStudentData"
       }),
+
+      async getStudentData(order_item_id) {
+    await this.$store.dispatch('getStudentData', order_item_id)
+    // Access the data in your component
+    const studentData = this.$store.state.studentData
+    console.log(studentData)
+        },
+  
       show_detail() {
-          this.$router.push({ name: 'ProfileDetail', params:{profile_id : "00001"} })
+          this.$router.push({ name: 'ProfileDetail', params:{profile_id : this.data_local.account_id} })
       },
         show_relations() {
           // role parent
           if (this.data_local.roles.includes('parent')) {
-            this.$router.push({ name: "ProfileRelations",params:{action: "Roleparent_view", profile_id: "0001"} });
+            this.$router.push({ name: "ProfileRelations",params:{action: "Roleparent_view", profile_id : this.data_local.account_id} });
           } else {
-            this.$router.push({ name: "ProfileRelations",params:{action: "Rolestudent_view", profile_id: "0002"} });
+            this.$router.push({ name: "ProfileRelations",params:{action: "Rolestudent_view", profile_id : this.data_local.account_id} });
           }
         
       },
@@ -354,12 +374,19 @@
           this.$router.push({name: 'ProfileRules'})
       },
 
-
     },
     computed: {
       ...mapGetters({
         user_one_id: "loginModules/getUserOneId",
+        student_data: "OrderTestModules/getStudentData"
       }),
+
+
+      studentData: {
+      get() {
+        return this.student_data;
+      },
+    },
     },
   };
   </script>
