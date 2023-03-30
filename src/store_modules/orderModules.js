@@ -1,6 +1,8 @@
 import axios from "axios";
 // import Swal from "sweetalert2";
 import router from "@/router";
+import VueCookie from "vue-cookie"
+
 const orderModules = {
     namespaced: true,
     state: {
@@ -217,8 +219,15 @@ const orderModules = {
                     total_price =  total_price + price
                 })
                 payload.totalPrice = total_price
-                let {data} = await axios.post(`http://localhost:3002/api/v1/order/cart`,payload)
-                // let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/cart`,payload)
+                let config = {
+                  headers:{
+                      "Access-Control-Allow-Origin" : "*",
+                      "Content-type": "Application/json",
+                      'Authorization' : `Bearer ${VueCookie.get("token")}`
+                  }
+                }
+                // let {data} = await axios.post(`http://localhost:3002/api/v1/order/cart`,payload, config)
+                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/cart`,payload, config)
                 if(data.statusCode === 201){
                     //router.replace({ name: "UserKingdom" });
                     // Swal.fire({
