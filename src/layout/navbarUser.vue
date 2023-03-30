@@ -7,10 +7,10 @@
         <v-app-bar-title class="font-bold">{{ titel_navber }}</v-app-bar-title>
         <v-spacer></v-spacer>
         <template v-if="user_detail">
-          <v-badge class="mr-3" overlap color="#F03D3E" content="1" message="1">
+          <v-badge class="mr-3" overlap color="#F03D3E" >
             <v-icon dark>mdi-bell-outline</v-icon>
           </v-badge>
-          <v-badge class="mr-5" overlap color="#F03D3E" content="1" message="1" >
+          <v-badge class="mr-5" overlap color="#F03D3E" >
             <v-icon dark  @click="$router.push({name: 'CartList'})">mdi-cart</v-icon>
           </v-badge>
           <div v-if="!$vuetify.breakpoint.smAndDown">
@@ -61,10 +61,12 @@
           nav
         >
           <div v-for="(list, list_index) in menu_drawer_list" :key="list_index" >
-            <v-list-item v-if=" list.to !== 'logOut'" @click="$router.push({name :  list.to })" :class="menu_drawer_list.length-1 !== list_index ? 'list-items-border-bottom' : ''">
-              <v-list-item-avatar><v-icon color="#ff6b81">{{ list.icon }}</v-icon></v-list-item-avatar>
-              <v-list-item-title :class="$route.name === list.to ? 'text-[#ff6b81]' : ''">{{ list.title }}</v-list-item-title>
-            </v-list-item>
+            <template  v-if=" list.to !== 'logOut'">
+              <v-list-item v-if="list.roles.length > 0 ? list.roles.filter(v => user_detail?.roles.includes(v)).length > 0 : true" @click="$router.push({name :  list.to })" :class="menu_drawer_list.length-1 !== list_index ? 'list-items-border-bottom' : ''">
+                <v-list-item-avatar><v-icon color="#ff6b81">{{ list.icon }}</v-icon></v-list-item-avatar>
+                <v-list-item-title :class="$route.name === list.to ? 'text-[#ff6b81]' : ''">{{ list.title }}</v-list-item-title>
+              </v-list-item>
+            </template>
             <v-list-item v-if=" list.to === 'logOut'" @click="logOut" :class="menu_drawer_list.length-1 !== list_index ? 'list-items-border-bottom' : ''">
               <v-list-item-avatar><v-icon color="#ff6b81">{{ list.icon }}</v-icon></v-list-item-avatar>
               <v-list-item-title :class="$route.name === list.to ? 'text-[#ff6b81]' : ''">{{ list.title }}</v-list-item-title>
@@ -128,10 +130,10 @@ export default {
     },
     menu_drawer_list:[
       { icon: "mdi-account-circle", title : "โปรไฟล์", to:"UserProfile", roles:[]},
-      { icon: "mdi-calendar-month", title : "ตารางเรียน", to:"", roles:["student", "parent",  "super admin"]},
-      { icon: "mdi-book-cog-outline", title : "การจัดการ", to:"menageCourse", roles:["coach", "super admin"]},
-      { icon: "mdi-history", title : "ประวัติการสั่งซื้อ", to:"", roles:["student","parent","super admin"]},
-      { icon: "mdi-swap-horizontal-bold", title : "หน้าผู้ดูแลระบบ", to:"Admin", roles: ["super admin"]},
+      { icon: "mdi-calendar-month", title : "ตารางเรียน", to:"", roles:[]},
+      { icon: "mdi-book-cog-outline", title : "การจัดการ", to:"menageCourse", roles:["R_1","R_2","R_3"]},
+      { icon: "mdi-history", title : "ประวัติการสั่งซื้อ", to:"", roles:[]},
+      { icon: "mdi-swap-horizontal-bold", title : "หน้าผู้ดูแลระบบ", to:"Admin", roles: ["R_1","R_2"]},
       { icon: "mdi-logout", title : "ออกจากระบบ", to:"logOut", roles:[]},
       
     ],
@@ -140,17 +142,6 @@ export default {
 
   created() {
     this.active_menu = this.$route.name
-    // localStorage.setItem("userDetail",JSON.stringify({
-    //   account_id : "00001",
-    //   email : "Test20@gmail.com",
-    //   first_name_en : "Test",
-    //   first_name_th : "Test",
-    //   last_name_en : "Test 01",
-    //   last_name_th : "Test 01",
-    //   role : { role_id : "01", role_name_th : "โค้ช",role_name_en : "coach" },
-    //   roles : ["student"],
-    //   tel : "0821241243",
-    // }))
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
   },
   mounted() {

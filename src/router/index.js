@@ -17,7 +17,33 @@ router.beforeEach((to, from, next ) => {
       next({name : 'Login'})
     }else if(to.name === 'userCourseOrder' && !VueCookie.get("token")){
       next({name : 'Login'})
-    }else{
+    }else if(VueCookie.get("token")){
+      let order =  JSON.parse(localStorage.getItem("Order"))
+      let user_detail = JSON.parse(localStorage.getItem("userDetail"))
+      console.log(from.name)
+      if(to.name == "userCourseDetail_courseId" || to.name == "userCoursePackage_courseId" || to.name == "userCoursePayment"){
+        console.log("order",order)
+        if(order){
+          if(from.name === "Login" && order.course_id && order.category_id){
+            next()
+          }else{
+            next()
+          }
+        }else{
+          next({name : 'UserKingdom'})
+        }
+       
+      }else if(to.matched[0].name === "Admin"){
+        console.log("user_detail",user_detail)
+        if(user_detail?.roles.includes("R_2") || user_detail?.roles.includes("R_1")){
+          next()
+        }else{
+          next({name : 'UserKingdom'})
+        }
+      }else{
+        next()
+      }
+    }else {
       next()
     }
   }else{

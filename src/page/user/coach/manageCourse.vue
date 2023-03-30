@@ -61,11 +61,45 @@
             {{ `${user_detail.first_name_th} ${user_detail.last_name_th}`}}
           </v-col>
         </v-row>
-        <v-row>
+        <v-row dense>
           <v-col>
-            
+              <span class="font-bold">เลือกคอร์ส</span>
+              <v-select outlined dense></v-select>
           </v-col>
         </v-row>
+        <v-card dense elevation="0" flat >
+          <v-card-text class="bg-[#FBF3F5]">
+            <v-row>
+              <v-col cols="4">
+                
+              </v-col>
+              <v-col>
+                <v-row>
+                  <v-col class="font-bold text-md">วันจันทร์ที่ 25 กรกฎาคม 2565</v-col>
+                </v-row>
+                <v-row dense>
+                  <v-col cols="12">
+                    <rowData mini  icon="mdi-account">อาณาจักร : ศิลปะสมัยใหม่</rowData>
+                  </v-col>
+                  <v-col cols="12">
+                    <rowData mini  icon="mdi-bookshelf">คอร์สเรียน : เปียโนป๊อป</rowData>
+                  </v-col>
+                  <v-col cols="12">
+                    <rowData mini  icon="mdi-clock-time-four-outline">เวลาสอน 1 ชั่วโมง</rowData>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-chip small color="#F9B320" dark>16:00-17:00น.</v-chip>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+            <v-row dense>
+              <v-col>ประเมินนักเรียน</v-col>
+              <v-col>ประเมินศักยภาพ</v-col>
+              <v-col>ประเมินภาพรวม</v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
       </div>
       <div v-if="tab === 'request leave'">request leave</div>
     </v-container>
@@ -74,11 +108,11 @@
   <script>
 import calendarCoach from "@/components/calendar/calendarCoach.vue";
 import headerPage from '../../../components/header/headerPage.vue';
-// import rowData from '../../../components/label/rowData.vue';
+import rowData from '../../../components/label/rowData.vue';
 import courseCardList from "../../../components/course/courseCardList.vue";
 export default {
   name: "menageCourse",
-  components: { calendarCoach, headerPage, courseCardList },
+  components: { calendarCoach, headerPage, courseCardList, rowData },
   data: () => ({
     user_detail : "",
     tab: "teaching list",
