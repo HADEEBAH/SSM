@@ -104,8 +104,9 @@ const loginModules = {
                     }
                     VueCookie.set("token", data.data.token)
                     localStorage.setItem("userDetail", JSON.stringify(payload))
-                    let order = localStorage.getItem("Order")
+                    let order = JSON.parse(localStorage.getItem("Order"))
                     context.commit("SetIsLoading", false)
+
                     if(order?.category_id && order?.course_id){
                         if(order.course_type_id === "CT_1"){
                             router.replace({ name: "userCoursePackage_courseId", params:{course_id :order.course_id}})

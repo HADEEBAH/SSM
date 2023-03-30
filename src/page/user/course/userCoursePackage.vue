@@ -153,7 +153,9 @@ import { mapGetters,mapActions } from 'vuex';
     mounted() {
         this.GetCourse(this.$route.params.course_id)
         this.$store.dispatch("NavberUserModules/changeTitleNavber","แพ็คเกจ")
-        this.selected_package = this.course_data.packages[0]
+        if(this.course_data){
+            this.selected_package = this.course_data.packages[0]
+        } 
     },
     watch: {},
     computed: {
