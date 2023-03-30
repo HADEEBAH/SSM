@@ -21,10 +21,20 @@ router.beforeEach((to, from, next ) => {
     }else if(VueCookie.get("token")){
       let order =  JSON.parse(localStorage.getItem("Order"))
       let user_detail = JSON.parse(localStorage.getItem("userDetail"))
-      if(to.name == "userCourseDetail_courseId" || to.name == "userCoursePackage_courseId" || to.name == "userCourseOrder" || to.name == "userCoursePayment"){
-        if(order.course_id && order.category_id){
-          next({name : "userCourseOrder"})
+      
+      console.log(from.name)
+      if(to.name == "userCourseDetail_courseId" || to.name == "userCoursePackage_courseId" || to.name == "userCoursePayment"){
+        console.log("order",order)
+        if(order){
+          if(from.name === "Login" && order.course_id && order.category_id){
+            next()
+          }else{
+            next()
+          }
+        }else{
+          next({name : 'UserKingdom'})
         }
+       
       }else if(to.matched[0].name === "Admin"){
         console.log("user_detail",user_detail)
         if(user_detail?.roles.includes("R_2") || user_detail?.roles.includes("R_1")){
@@ -35,6 +45,8 @@ router.beforeEach((to, from, next ) => {
       }else{
         next()
       }
+    }else {
+      next()
     }
   }else{
     next()
