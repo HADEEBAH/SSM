@@ -213,7 +213,8 @@ const orderModules = {
                         },
                         "student": students
                     })
-                    total_price =  total_price + course.option.net_price
+                    let price = course.option.net_price ? course.option.net_price : course.price
+                    total_price =  total_price + price
                 })
                 payload.totalPrice = total_price
                 let {data} = await axios.post(`http://localhost:3002/api/v1/order/cart`,payload)
@@ -306,7 +307,8 @@ const orderModules = {
                         },
                         "student": students
                     })
-                    total_price =  total_price + course.option.net_price
+                    let price = course.option.net_price ? course.option.net_price : course.price
+                    total_price =  total_price + price
                 })
                 payload.totalPrice = total_price
                 console.log("saveOrder",payload)
@@ -328,29 +330,17 @@ const orderModules = {
                     if(payment.data.statusCode === 201){
                         localStorage.removeItem("Order")
                         context.commit("SetResetCourseData")
-                        // router.replace({ name: "UserKingdom" });
+                        context.commit("SetOrder",{
+                            order_step : 0,
+                            order_number: "",
+                            courses:[],
+                            created_by : "",
+                            payment_status: "",
+                            payment_type: "",
+                            total_price: 0,
+                        })
                         window.location.href = payment.data.data
                     }
-                    
-
-                    // Swal.fire({
-                    //     icon : "success",
-                    //     title : "ไปยังหน้า E-cashier"
-                    // }).then((result)=>{
-                    //     if(result.isConfirmed){
-                    //         localStorage.removeItem("Order")
-                    //         context.commit("SetResetCourseData")
-                    //         context.commit("SetOrder",{
-                    //           order_step : 0,
-                    //           order_number: "",
-                    //           courses:[],
-                    //           created_by : "",
-                    //           payment_status: "",
-                    //           payment_type: "",
-                    //           total_price: 0,
-                    //       })
-                    //         
-                    // })
                 }
             }catch(error){
                 console.log(error)

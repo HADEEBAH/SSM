@@ -61,10 +61,12 @@
           nav
         >
           <div v-for="(list, list_index) in menu_drawer_list" :key="list_index" >
-            <v-list-item v-if=" list.to !== 'logOut'" @click="$router.push({name :  list.to })" :class="menu_drawer_list.length-1 !== list_index ? 'list-items-border-bottom' : ''">
-              <v-list-item-avatar><v-icon color="#ff6b81">{{ list.icon }}</v-icon></v-list-item-avatar>
-              <v-list-item-title :class="$route.name === list.to ? 'text-[#ff6b81]' : ''">{{ list.title }}</v-list-item-title>
-            </v-list-item>
+            <template  v-if=" list.to !== 'logOut'">
+              <v-list-item v-if="list.roles.length > 0 ? list.roles.filter(v => user_detail?.roles.includes(v)).length > 0 : true" @click="$router.push({name :  list.to })" :class="menu_drawer_list.length-1 !== list_index ? 'list-items-border-bottom' : ''">
+                <v-list-item-avatar><v-icon color="#ff6b81">{{ list.icon }}</v-icon></v-list-item-avatar>
+                <v-list-item-title :class="$route.name === list.to ? 'text-[#ff6b81]' : ''">{{ list.title }}</v-list-item-title>
+              </v-list-item>
+            </template>
             <v-list-item v-if=" list.to === 'logOut'" @click="logOut" :class="menu_drawer_list.length-1 !== list_index ? 'list-items-border-bottom' : ''">
               <v-list-item-avatar><v-icon color="#ff6b81">{{ list.icon }}</v-icon></v-list-item-avatar>
               <v-list-item-title :class="$route.name === list.to ? 'text-[#ff6b81]' : ''">{{ list.title }}</v-list-item-title>
@@ -128,10 +130,10 @@ export default {
     },
     menu_drawer_list:[
       { icon: "mdi-account-circle", title : "โปรไฟล์", to:"UserProfile", roles:[]},
-      { icon: "mdi-calendar-month", title : "ตารางเรียน", to:"", roles:["student", "parent",  "super admin"]},
-      { icon: "mdi-book-cog-outline", title : "การจัดการ", to:"menageCourse", roles:["coach", "super admin"]},
-      { icon: "mdi-history", title : "ประวัติการสั่งซื้อ", to:"", roles:["student","parent","super admin"]},
-      { icon: "mdi-swap-horizontal-bold", title : "หน้าผู้ดูแลระบบ", to:"Admin", roles: ["super admin"]},
+      { icon: "mdi-calendar-month", title : "ตารางเรียน", to:"", roles:[]},
+      { icon: "mdi-book-cog-outline", title : "การจัดการ", to:"menageCourse", roles:["R_1","R_2","R_3"]},
+      { icon: "mdi-history", title : "ประวัติการสั่งซื้อ", to:"", roles:[]},
+      { icon: "mdi-swap-horizontal-bold", title : "หน้าผู้ดูแลระบบ", to:"Admin", roles: ["R_1","R_2"]},
       { icon: "mdi-logout", title : "ออกจากระบบ", to:"logOut", roles:[]},
       
     ],

@@ -16,12 +16,16 @@ const RegisterModules = {
       password : "",
       confirm_password : "",
       accept_terms : false,
-    }
+    },
+    is_loading : false,
   },
   // change state
   mutations: {
     ShowDialogRegisterOneId(state, value) {
       state.show_dialog_register_one_id = value
+    },
+    SetIsLoading(state, value){
+      state.is_loading = value
     },
     UserOneId(state, payload){
       state.user_one_id = payload
@@ -42,6 +46,7 @@ const RegisterModules = {
   },
   actions: {
     async registerUserOneId(context){
+      context.commit("SetIsLoading", true)
       try{
         let phone_number = context.state.user_one_id.phone_number.replaceAll("-","")
         let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/register`,{
@@ -88,6 +93,7 @@ const RegisterModules = {
                   VueCookie.set("token", res.data.data.token)
                   localStorage.setItem("userDetail",JSON.stringify(payload))
                   console.log("UserKingdom")
+                  context.commit("SetIsLoading", false)
                   router.replace({ name: "UserKingdom" });
               }
             })
@@ -96,8 +102,9 @@ const RegisterModules = {
           })
         }
       }catch({response}){
+        context.commit("SetIsLoading", false)
         console.log(response)
-        if(response.data.statusCode === 400){
+        if(response?.data.statusCode === 400){
           let text = ""
           switch (response.data.message.message){
             case "The mobile no must be at least 10 characters.":
@@ -108,12 +115,18 @@ const RegisterModules = {
             break;
             case "The password format is invalid.":
               text = 'รูปแบบรหัสผ่านไม่ถูกต้อง'
-            break
+            break;
+            case "The last name th format is invalid.":
+              text = 'รูปแบบนามสกุลภาษาไทยไม่ถูกต้อง'
+              break;
+            case "The last name en format is invalid.":
+              text = 'รูปแบบนามสกุลภาษาอังกฤษไม่ถูกต้อง'
+              break;
           }
           Swal.fire({
             icon: 'error',
             title: `กรอกข้อมูลให้ถูกต้อง`,
-            text : text
+            text : text ? text : response.data.message.message
           })
         }else{
           Swal.fire({
@@ -125,6 +138,7 @@ const RegisterModules = {
     },
    
     async loginOneId(context) {
+      context.commit("SetIsLoading", true)
         try {
             const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login`, {
                 "username": context.state.user_one_id.username,
@@ -151,9 +165,11 @@ const RegisterModules = {
                 }
                 VueCookie.set("token", data.data.token)
                 localStorage.setItem("userDetail", JSON.stringify(payload))
+                context.commit("SetIsLoading", false)
                 router.replace({ name: "UserKingdom" })
             }
         } catch (response) {
+          context.commit("SetIsLoading", false)
             console.log(response)
             if (response.message === "Request failed with status code 401") {
                 Swal.fire({
@@ -194,6 +210,9 @@ const RegisterModules = {
     },
   },
   getters :{
+    getIsLoading(state){
+      return state.is_loading
+    },
     getShowDialogRegisterOneId(state){
       return state.show_dialog_register_one_id
     },

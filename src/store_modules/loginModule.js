@@ -12,6 +12,7 @@ const loginModules = {
         },
         user_data:[],
         user_student_data:[],
+        is_loading : false,
     },
     mutations: {
         UserOneId(state, payload) {
@@ -20,8 +21,21 @@ const loginModules = {
         SetUserData(state, payload){
             state.user_data = payload
         },
+        SetIsLoading(state, value){
+            state.is_loading = value
+        },
         SetUserStudentData(state, payload){
             state.user_student_data = payload
+        },
+        ResetUserOneId(state){
+            state.user_one_id = {
+                username: "",
+                password: "",
+                token: "",
+            }
+        },
+        ResetUserData(state){
+            state.user_data = []
         }
     },
     actions: {
@@ -63,6 +77,7 @@ const loginModules = {
             }
         },
         async loginOneId(context) {
+            context.commit("SetIsLoading", true)
             try {
                 const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login`, {
                     "username": context.state.user_one_id.username,
@@ -89,10 +104,22 @@ const loginModules = {
                     }
                     VueCookie.set("token", data.data.token)
                     localStorage.setItem("userDetail", JSON.stringify(payload))
-                    router.replace({ name: "UserKingdom" })
+                    let order = localStorage.getItem("Order")
+                    context.commit("SetIsLoading", false)
+                    if(order?.category_id && order?.course_id){
+                        if(order.course_type_id === "CT_1"){
+                            router.replace({ name: "userCoursePackage_courseId", params:{course_id :order.course_id}})
+                        }else{
+                            router.replace({ name: "userCourseDetail_courseId", params:{course_id :order.course_id}})
+                        }
+                    }else{
+                        router.replace({ name: "UserKingdom" })
+                    }
+                   
                 }
             } catch (response) {
                 console.log(response)
+                context.commit("SetIsLoading", false)
                 if (response.message === "Request failed with status code 401") {
                     Swal.fire({
                         icon: 'error',
@@ -109,9 +136,12 @@ const loginModules = {
         },
 
        
-        logOut() {
+        logOut(context) {
             VueCookie.delete("token")
+            context.commit("ResetUserOneId")
+            context.commit("ResetUserData")
             localStorage.removeItem("userDetail")
+            localStorage.removeItem("Order")
             router.push({ name: "Login" });
         }
     },
@@ -124,6 +154,9 @@ const loginModules = {
         },
         getUserStudentData(state){
             return state.user_student_data
+        },
+        getIsLoading(state){
+            return state.is_loading
         }
     },
 };

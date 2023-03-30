@@ -98,7 +98,7 @@
       <v-card-actions>
         <v-row dense>
           <v-col class="text-center">
-            <v-btn :disabled="!user_one_id.accept_terms" depressed class="white--text" :class="$vuetify.breakpoint.mdAndUp ? 'btn-register' : 'w-full btn-register' " @click="save">ลงทะเบียน</v-btn>
+            <v-btn :loading="is_loading" :disabled="!user_one_id.accept_terms" depressed class="white--text" :class="$vuetify.breakpoint.mdAndUp ? 'btn-register' : 'w-full btn-register' " @click="save">ลงทะเบียน</v-btn>
           </v-col>
         </v-row>
       </v-card-actions>
@@ -155,6 +155,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      is_loading : "RegisterModules/getIsLoading",
       show_dialog_register_one_id : "RegisterModules/getShowDialogRegisterOneId",
       user_one_id : "RegisterModules/getUserOneId"
     })

@@ -48,7 +48,7 @@
           <v-expansion-panel-content class="border-t pt-3">
             <v-row dense>
               <v-col cols="auto">วันรับสมัคร:</v-col>
-              <v-col> 10 ก.พ -10 มี.ค. 2566</v-col>
+              <v-col> {{course_data.courseRegisterEndDate}}</v-col>
             </v-row>
             <v-row dense>
               <v-col cols="auto">วันเรียน:</v-col>
@@ -188,6 +188,11 @@ export default {
     }),
     registerCourse(){
       this.order.order_step = 1
+      console.log(this.course_data.price_course)
+      if( this.course_data.course_type_id === "CT_2" ){
+        this.course_order.price = parseFloat(this.course_data.price_course)
+        this.changeCourseOrderData(this.course_order)
+      }
       this.changeOrderData(this.order)
       this.$router.push({name : "userCourseOrder"})
     }
