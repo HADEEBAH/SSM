@@ -219,6 +219,7 @@ const orderModules = {
                     total_price =  total_price + price
                 })
                 payload.totalPrice = total_price
+<<<<<<< HEAD
                 let config = {
                   headers:{
                       "Access-Control-Allow-Origin" : "*",
@@ -228,27 +229,21 @@ const orderModules = {
                 }
                 // let {data} = await axios.post(`http://localhost:3002/api/v1/order/cart`,payload, config)
                 let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/cart`,payload, config)
+=======
+                // let {data} = await axios.post(`http://localhost:3002/api/v1/order/cart`,payload)
+                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/cart`,payload)
+>>>>>>> develop
                 if(data.statusCode === 201){
-                    //router.replace({ name: "UserKingdom" });
-                    // Swal.fire({
-                    //     icon : "success",
-                    //     title : "ไปยังหน้า E-cashier"
-                    // }).then((result)=>{
-                    //     if(result.isConfirmed){
-                    //         localStorage.removeItem("Order")
-                    //         context.commit("SetResetCourseData")
-                    //         context.commit("SetOrder",{
-                    //           order_step : 0,
-                    //           order_number: "",
-                    //           courses:[],
-                    //           created_by : "",
-                    //           payment_status: "",
-                    //           payment_type: "",
-                    //           total_price: 0,
-                    //       })
-                    //         router.replace({ name: "UserKingdom" });
-                    //     }
-                    // })
+                    localStorage.removeItem("Order")
+                    context.commit("SetResetCourseData")
+                    context.commit("SetOrder",{
+                    order_step : 0,
+                    order_number: "",
+                    courses:[],
+                    created_by : "",
+                    payment_status: "",
+                    payment_type: "",
+                    total_price: 0, })
                     router.replace({ name: "UserKingdom" });
                 }
             }catch(error){
@@ -262,7 +257,7 @@ const orderModules = {
                 let payload = {
                     order_id : "",
                     courses : [],
-                    created_by : "",
+                    created_by : order.created_by,
                     paymentStatus: "pending",
                     paymentType: "",
                     totalPrice: 0,
@@ -304,8 +299,8 @@ const orderModules = {
                     payload.courses.push({
                         "courseId" :  course.course_id,
                         "coursePackageOptionId": course.option.course_package_option_id,
-                        "dayOfWeekId": course.time.dayOfWeekId,
-                        "timeId": course.time.timeId,
+                        "dayOfWeekId": course?.time ? course.time.dayOfWeekId : course.dayOfWeekId,
+                        "timeId":  course?.time ? course.time.timeId : course.timeId,
                         "time": course.time,
                         "startDate": "",
                         "remark": "",

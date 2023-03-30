@@ -2,10 +2,9 @@
   <v-container>
     <div class="mx-10 my-5">
       <label class="text-xl font-bold">ข้อมูลตารางเรียน</label>
-      {{ student_data }}
-
+      <!-- <pre>{{ student_data }}</pre> -->
+      <!-- <pre>{{ courseData }}</pre> -->
       <v-row dense class="my-3">
-        <!-- <pre>{{ courseData }}</pre> -->
         <v-col
           cols="4"
           v-for="(type, type_index) in course_type"

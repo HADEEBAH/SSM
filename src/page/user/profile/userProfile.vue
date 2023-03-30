@@ -25,39 +25,7 @@
           ดูข้อมูลส่วนตัว
         </v-btn>
       </div>
-      <!-- ROLE PARENT ทั่วไป -->
-      <div v-if="data_local.roles.includes('R_4')">
-      <div class="mt-8">
-        <label-custom text="ทั่วไป"></label-custom>
-      </div>
-      <v-divider class=""></v-divider>
-      <!-- password -->
-      <v-row dense class="mt-3"  @click="show_password()">
-        <v-col cols="2" sm="1">
-          <img src="@/assets/profile/password.png" />
-        </v-col>
-        <v-col cols="8" sm="9" align="left" class="mt-1">
-          <label>รหัสผ่าน</label>
-        </v-col>
-  
-        <v-col cols="2" sm="2" align="right">
-          <span class="mdi mdi-chevron-right"></span>
-        </v-col>
-      </v-row>
-      <!-- translate -->
-      <v-row dense class="mt-3 ">
-        <v-col cols="2" sm="1">
-          <img src="@/assets/profile/langueges.png" />
-        </v-col>
-        <v-col cols="8" sm="9" align="left" class="mt-1">
-          <label>ภาษา</label>
-        </v-col>
-  
-        <v-col cols="2" sm="2" align="right">
-          <span class="mdi mdi-chevron-right"></span>
-        </v-col>
-      </v-row>
-    </div>
+
 
     <!-- ROLE STUDENT คอร์สเรียน-->
     <div v-if="data_local.roles.includes('R_5')">
@@ -66,11 +34,11 @@
       </div>
       <v-divider class=""></v-divider>
       <!-- COURSE -->
-      <v-row dense class="mt-3">
+      <v-row dense class="mt-3" @click="$router.push({name:'StudentsSchedule'})">
         <v-col cols="2" sm="1">
           <img src="../../../assets/profile/cource.png" />
         </v-col>
-        <v-col cols="5" sm="6" align="left" class="mt-1" @click="$router.push({name:'StudentsSchedule'})">
+        <v-col cols="5" sm="6" align="left" class="mt-1" >
           <label>คอร์สเรียนของฉัน</label>
         </v-col>
         <v-col cols="3" sm="4" align="right" class="mt-1">
@@ -96,8 +64,47 @@
         </v-col>
       </v-row>
     </div>
-  <!-- ROLE COACH ทั่วไป-->
-  <div v-if="data_local.roles.includes('R_3')">
+
+ 
+  <div v-if="data_local.roles.includes('R_2')">
+  ADMIN</div>
+  <!-- ROLE STUDENT ข้อมูลผู้ปกครอง -->
+     <div v-if="data_local.roles.includes('R_5')">
+      <div class="mt-8">
+        <label-custom text="ข้อมูลผู้ปกครอง"></label-custom>
+      </div>
+      <v-divider class=""></v-divider>
+      <!-- card parent -->
+      <v-card class=" mt-8 " v-for="parentData in parents" :key="parentData.id" @click="show_relations">
+        <v-row dense class="my-5">
+          <!-- col avatar -->
+          <v-col cols="4" sm="2">
+            <img
+              :src="parentData.imageUrl"
+              alt="Card image"
+              class="rounded-full ml-3"
+              style="max-width: 100px; max-height: 100px"
+            />
+          </v-col>
+          <!-- col name -->
+          <v-col cols="8" sm="10">
+            <v-row dense>
+              <v-col>
+              <v-col cols="12">{{ parentData.title }}</v-col>
+              <v-col cols="12" class="text-slate-400">{{ parentData.tel }}</v-col>
+            </v-col>
+            <!-- col arrow -->
+          <v-col cols="6" sm="2" class="mt-5" align="center">
+            <span class="mdi mdi-chevron-right"></span>
+          </v-col>
+            </v-row>
+        </v-col>
+        </v-row>
+      </v-card>
+     </div>
+
+<!-- ROLE ALL ทั่วไป -->
+<div >
       <div class="mt-8">
         <label-custom text="ทั่วไป"></label-custom>
       </div>
@@ -129,8 +136,8 @@
         </v-col>
       </v-row>
     </div>
-    <!-- ROLE PARENT ข้อมูลนักเรียนในความดูแล-->
-    <div v-if="data_local.roles.includes('R_4')">
+   <!-- ROLE PARENT ข้อมูลนักเรียนในความดูแล-->
+   <div v-if="data_local.roles.includes('R_4')">
       <div class="mt-8">
         <label-custom text="ข้อมูลนักเรียนในความดูแล"></label-custom>
       </div>
@@ -163,77 +170,6 @@
         </v-row>
       </v-card>
   </div>
-  <div v-if="data_local.roles.includes('R_2')">
-  ADMIN</div>
-  <!-- ROLE STUDENT ข้อมูลผู้ปกครอง -->
-     <div v-if="data_local.roles.includes('R_5')">
-      <div class="mt-8">
-        <label-custom text="ข้อมูลผู้ปกครอง"></label-custom>
-      </div>
-      <v-divider class=""></v-divider>
-      <!-- card parent -->
-      <v-card class=" mt-8 " v-for="parentData in parents" :key="parentData.id" @click="show_relations">
-        <v-row dense class="my-5">
-          <!-- col avatar -->
-          <v-col cols="4" sm="2">
-            <img
-              :src="parentData.imageUrl"
-              alt="Card image"
-              class="rounded-full ml-3"
-              style="max-width: 100px; max-height: 100px"
-            />
-          </v-col>
-          <!-- col name -->
-          <v-col cols="8" sm="10">
-            <v-row dense>
-              <v-col>
-              <v-col cols="12">{{ parentData.title }}</v-col>
-              <v-col cols="12" class="pink--text">{{ parentData.id }}คอร์ส</v-col>
-            </v-col>
-            <!-- col arrow -->
-          <v-col cols="6" sm="2" class="mt-5" align="center">
-            <span class="mdi mdi-chevron-right"></span>
-          </v-col>
-            </v-row>
-        </v-col>
-        </v-row>
-      </v-card>
-     </div>
-
-<!-- ROLE STUDENT ทั่วไป -->
-<div v-if="data_local.roles.includes('R_5')">
-      <div class="mt-8">
-        <label-custom text="ทั่วไป"></label-custom>
-      </div>
-      <v-divider class=""></v-divider>
-      <!-- password -->
-      <v-row dense class="mt-3" @click="show_password()">
-        <v-col cols="2" sm="1">
-          <img src="@/assets/profile/password.png" />
-        </v-col>
-        <v-col cols="8" sm="9" align="left" class="mt-1">
-          <label>รหัสผ่าน</label>
-        </v-col>
-  
-        <v-col cols="2" sm="2" align="right">
-          <span class="mdi mdi-chevron-right"></span>
-        </v-col>
-      </v-row>
-      <!-- translate -->
-      <v-row dense class="mt-3">
-        <v-col cols="2" sm="1">
-          <img src="@/assets/profile/langueges.png" />
-        </v-col>
-        <v-col cols="8" sm="9" align="left" class="mt-1">
-          <label>ภาษา</label>
-        </v-col>
-  
-        <v-col cols="2" sm="2" align="right">
-          <span class="mdi mdi-chevron-right"></span>
-        </v-col>
-      </v-row>
-    </div>
-
     <!-- ROLE ALL -->
       <div class="mt-8">
         <label-custom text="นโยบาย"></label-custom>
@@ -310,12 +246,14 @@
         {
           id: 1,
           title: "DADA",
+          tel : "099-9999999",
           description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
           imageUrl: "https://picsum.photos/id/1/200/200",
         },
         {
           id: 2,
           title: "MOM",
+          tel : "077-7777777",
           description:
             "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
           imageUrl: "https://picsum.photos/id/2/200/200",
@@ -327,9 +265,9 @@
     // this.getStudentData(this.student_data.order_item_id);
     // this.$store.dispatch('getStudentData', this.orderItemId)
     // this.getStudentData(this.$route.params.order_item_id)
-        this.GetStudentData(this.$route.params.order_item_id)
+        // this.GetStudentData(this.$route.params.order_item_id)
         this.user_login = JSON.parse(localStorage.getItem("userDetail"))
-    console.log("userDetail", this.user_login);
+    // console.log("userDetail", this.user_login);
     //this.$store.dispatch('GetStudentData', this.$route.params.order_item_id)
   },
     mounted() {
@@ -339,7 +277,7 @@
     methods: {
       ...mapActions({
         loginOneId: "loginModules/loginOneId",
-        GetStudentData: "OrderTestModules/GetStudentData"
+        // GetStudentData: "OrderTestModules/GetStudentData"
       }),
 
       async getStudentData(order_item_id) {
@@ -378,7 +316,7 @@
     computed: {
       ...mapGetters({
         user_one_id: "loginModules/getUserOneId",
-        student_data: "OrderTestModules/getStudentData"
+        // student_data: "OrderTestModules/getStudentData"
       }),
 
 
