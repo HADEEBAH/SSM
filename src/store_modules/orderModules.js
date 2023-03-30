@@ -253,7 +253,7 @@ const orderModules = {
                 let payload = {
                     order_id : "",
                     courses : [],
-                    created_by : "",
+                    created_by : order.created_by,
                     paymentStatus: "pending",
                     paymentType: "",
                     totalPrice: 0,
@@ -295,8 +295,8 @@ const orderModules = {
                     payload.courses.push({
                         "courseId" :  course.course_id,
                         "coursePackageOptionId": course.option.course_package_option_id,
-                        "dayOfWeekId": course.time.dayOfWeekId,
-                        "timeId": course.time.timeId,
+                        "dayOfWeekId": course?.time ? course.time.dayOfWeekId : course.dayOfWeekId,
+                        "timeId":  course?.time ? course.time.timeId : course.timeId,
                         "time": course.time,
                         "startDate": "",
                         "remark": "",

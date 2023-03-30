@@ -3,17 +3,15 @@
     <v-container>
       <v-row v-if="cart_list.length == 0">
         <v-col cols="12">
-          <v-img src="../../../assets/cart/noCart.png" >
-          </v-img>
+          <v-img src="../../../assets/cart/noCart.png"> </v-img>
         </v-col>
-        <v-col cols="12" class="text-xl font-bold text-center my-5 pink--text" >
+        <v-col cols="12" class="text-xl font-bold text-center my-5 pink--text">
           ไม่พบข้อมูลในตะกร้า
         </v-col>
-        
       </v-row>
-   
+
       <div v-else>
-        <v-row class="mb-16" >
+        <v-row class="mb-16">
           <v-col
             cols="12"
             v-for="(item, index_item) in cart_list"
@@ -38,7 +36,8 @@
                       <v-col>
                         <v-row dense>
                           <v-col class="text-lg font-bold">
-                            {{item.course_name_th}}({{ item.course_name_en}}) </v-col>
+                            {{ item.course_name_th }}({{ item.course_name_en }})
+                          </v-col>
                           <v-col cols="auto">
                             <v-checkbox
                               class="card_checkbox"
@@ -61,8 +60,9 @@
                         </v-row>
                         <v-row dense>
                           <v-col>
-                            ศูนย์รวมครูสอนกีต้าร์แห่งประเทศไทยสอนโดยคุณครู ฝีมือดี
-                            หลักสูตรทันสมัย หลักสูตรที่ออกแบบเพื่อนัก เรียนทุกเพศ
+                            ศูนย์รวมครูสอนกีต้าร์แห่งประเทศไทยสอนโดยคุณครู
+                            ฝีมือดี หลักสูตรทันสมัย หลักสูตรที่ออกแบบเพื่อนัก
+                            เรียนทุกเพศ
                           </v-col>
                         </v-row>
                       </v-col>
@@ -75,11 +75,12 @@
 
                   <v-col cols="6"> ราคา</v-col>
                   <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
-                    {{ item.option.price_unit * item.students.length }} บาท</v-col
+                    {{ item.option.price_unit * item.students.length }}
+                    บาท</v-col
                   >
                   <v-col cols="6"> จำนวนครั้งที่เรียน</v-col>
                   <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
-                    {{ item.option.amount}} ครั้ง</v-col
+                    {{ item.option.amount }} ครั้ง</v-col
                   >
 
                   <!-- <v-col cols="6"> ราคา/ครั้ง</v-col>
@@ -89,7 +90,8 @@
 
                   <v-col cols="6"> จำนวนนักเรียน</v-col>
                   <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
-                    {{ item.students.length }} คน</v-col>
+                    {{ item.students.length }} คน</v-col
+                  >
 
                   <v-col cols="6"> ส่วนลด</v-col>
                   <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
@@ -127,8 +129,8 @@
           </div>      
         </div> -->
 
-      <v-row dense>
-          <v-col cols="12" sm="4" >
+        <v-row dense>
+          <v-col cols="12" sm="4">
             <v-checkbox
               class="card_checkbox"
               color="error"
@@ -138,22 +140,24 @@
               v-model="selected_all"
             ></v-checkbox>
           </v-col>
-          <v-col cols="6" sm="4" >
-            รวมทั้งหมด <b class="text-[#ff6b81]">{{ cart_list.total_price }} บาท</b>
+          <v-col cols="6" sm="4">
+            รวมทั้งหมด
+            <b class="text-[#ff6b81]">{{ total_price }} บาท</b>
           </v-col>
           <v-col cols="6" sm="4" align="end">
-            <v-btn depressed dark color="#ff6b81" @click="savePaymen"> ชำระเงิน ({{ count_selected_cart }}) </v-btn>
+            <v-btn depressed dark color="#ff6b81" @click="savePaymen">
+              ชำระเงิน ({{ count_selected_cart }})
+            </v-btn>
           </v-col>
         </v-row>
-
-  </div>
+      </div>
       <!-- <v-btn depressed dark color="#ff6b81" @click="saveCartData"> ชำระเงิน  </v-btn> -->
     </v-container>
   </v-app>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 export default {
   data: () => ({
     search: "",
@@ -167,7 +171,8 @@ export default {
     selected_all: false,
     count_selected_cart: 0,
     // carts: {},
-    user_login: {}
+    total_price: 0,
+    user_login: {},
   }),
   created() {},
 
@@ -176,17 +181,16 @@ export default {
     // console.log(this.carts)
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "รถเข็น");
 
-    this.user_login = JSON.parse(localStorage.getItem("userDetail"))
+    this.user_login = JSON.parse(localStorage.getItem("userDetail"));
     // this.carts = JSON.parse(localStorage.getItem(this.user_login.account_id))
-    this.GetCartList(this.user_login.account_id)
+    this.GetCartList(this.user_login.account_id);
     this.cart_list.map((val) => {
       val.checked = false;
     });
-  //  this.getCourseOrder()
+    //  this.getCourseOrder()
   },
 
   methods: {
-
     // selectAll(e) {
     //   if (e) {
     //     this.items.forEach((item) => {
@@ -199,17 +203,17 @@ export default {
     //   }
     // },
     ...mapActions({
-      GetCartList: 'OrderTestModules/GetCartList',
-      saveOrder: 'OrderModules/saveOrder'
+      GetCartList: "OrderTestModules/GetCartList",
+      saveOrder: "OrderModules/saveOrder",
+      changeOrderData: "OrderModules/changeOrderData",
     }),
-  
+
     sumtotal() {
-      this.cart_list.total_price = 0;
-      this.count_selected_cart = this.cart_list.filter((v)=>v.checked).length
+      this.total_price = 0;
+      this.count_selected_cart = this.cart_list.filter((v) => v.checked).length;
       this.cart_list.forEach((course) => {
         if (course.checked) {
-          this.cart_list.total_price =
-            this.cart_list.total_price + course.option.net_price;
+          this.total_price = this.total_price + course.option.net_price;
         }
       });
     },
@@ -242,8 +246,6 @@ export default {
         this.selected_all = true;
       }
 
-      
-
       // if (!this.oneSelect.includes(courseId)) {
       //   this.oneSelect.push(courseId);
       //   console.log("cheekOne", this.oneSelect);
@@ -269,18 +271,24 @@ export default {
     },
 
     savePaymen() {
-      this.saveOrder()
+      console.log(this.order);
+      console.log(this.cart_list);
+      this.order.courses = this.cart_list;
+      this.order.total_price = this.total_price;
+      this.order.payment_status = "pending";
+      this.order.created_by = this.user_login.account_id;
+      this.changeOrderData(this.order);
+      this.saveOrder();
       console.log("saveOrder");
-    }
-   
+    },
   },
 
   computed: {
-
     ...mapGetters({
       cart_list: "OrderTestModules/getCartList",
-     course_order: "OrderModules/getCourseOrder",
+      course_order: "OrderModules/getCourseOrder",
 
+      order: "OrderModules/getOrder",
     }),
     // sumtotal() {
     //   let total = this.carts.total_price;
