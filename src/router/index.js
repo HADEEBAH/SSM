@@ -12,7 +12,6 @@ const router = new VueRouter({
 })
 router.beforeEach((to, from, next ) => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
-  console.log(to.matched[0].name)
   if(to.name !== "Login" && to.name !== "Register"){
     if(to.matched[0].name !== "NavBarUser" && !VueCookie.get("token")){
       next({name : 'Login'})
@@ -21,7 +20,6 @@ router.beforeEach((to, from, next ) => {
     }else if(VueCookie.get("token")){
       let order =  JSON.parse(localStorage.getItem("Order"))
       let user_detail = JSON.parse(localStorage.getItem("userDetail"))
-      
       console.log(from.name)
       if(to.name == "userCourseDetail_courseId" || to.name == "userCoursePackage_courseId" || to.name == "userCoursePayment"){
         console.log("order",order)
