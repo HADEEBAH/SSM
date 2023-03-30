@@ -231,7 +231,7 @@
             </div>
         <v-row dense>
             <v-col cols="12" sm="6">
-                <v-btn class="w-full" :disabled="disable_add_to_cart" outlined dense color="#ff6b81"  @click="show_dialog_cart = true">เพิ่มรถเข็น</v-btn>
+                <v-btn class="w-full" :disabled="disable_add_to_cart" outlined dense color="#ff6b81"  @click="addToCart">เพิ่มรถเข็น</v-btn>
             </v-col>
             <v-col cols="12" sm="6">
                 <v-btn 
@@ -291,13 +291,13 @@
             <v-card-title>
                 <v-row>
                     <v-col align="right">
-                        <v-btn @click="show_dialog_cart = false" icon ><v-icon color ="#ff6b81">mdi-close</v-icon></v-btn>
+                        <v-btn @click="closeDialogCart" icon ><v-icon color ="#ff6b81">mdi-close</v-icon></v-btn>
                     </v-col>
                 </v-row>
             </v-card-title>
             <dialog-card checkmark text="เพิ่มคอร์สเรียนไปยังรถเข็นเรียบร้อยแล้ว">
                 <template #btn>
-                    <v-btn depressed class="w-full" dense color="#ff6b81" dark @click="addToCart">ตกลง</v-btn>
+                    <v-btn depressed class="w-full" dense color="#ff6b81" dark @click="closeDialogCart">ตกลง</v-btn>
                 </template>
             </dialog-card>
         </v-card>
@@ -546,6 +546,10 @@ import { mapActions, mapGetters } from 'vuex';
                 parents: []
             })
         },
+        closeDialogCart(){
+            this.show_dialog_cart = false
+            this.$router.push({name : "UserKingdom"})
+        },
         addToCart(){
             this.order.courses.push(
                 {...this.course_order}
@@ -555,6 +559,7 @@ import { mapActions, mapGetters } from 'vuex';
             localStorage.setItem(this.user_login.account_id, JSON.stringify(this.order))
             this.saveCart({cart_data : this.order})
             this.resetCourseData()
+            this.show_dialog_cart = true
             this.$router.push({name : "UserKingdom"})
         },
         removeStudent(student){ 

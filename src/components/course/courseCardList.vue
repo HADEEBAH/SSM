@@ -22,7 +22,7 @@
                             <rowData mini  icon="mdi-clock-outline">{{ course_per_time }} ชม.</rowData>
                         </v-col>
                         <v-col v-if="period" cols="12" sm="4" class="pa-0">
-                            <v-chip color="#F9B320" dark>{{ period }}น.</v-chip>
+                            <v-chip small color="#F9B320" dark>{{ period }}น.</v-chip>
                         </v-col>
                     </v-row>
                 </v-col>

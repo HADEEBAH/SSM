@@ -213,7 +213,8 @@ const orderModules = {
                         },
                         "student": students
                     })
-                    total_price =  total_price + course.option.net_price
+                    let price = course.option.net_price ? course.option.net_price : course.price
+                    total_price =  total_price + price
                 })
                 payload.totalPrice = total_price
                 let {data} = await axios.post(`http://localhost:3002/api/v1/order/cart`,payload)
@@ -306,16 +307,16 @@ const orderModules = {
                         },
                         "student": students
                     })
-                    total_price =  total_price + course.option.net_price
+                    let price = course.option.net_price ? course.option.net_price : course.price
+                    total_price =  total_price + price
                 })
                 payload.totalPrice = total_price
                 console.log("saveOrder",payload)
                 let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/regis/course`,payload)
                 console.log(data)
                 if(data.statusCode === 201){
-                    let payment = await axios.post(`${process.env.VUE_APP_URL}/api/v1/payment/code`,
-                    {
-
+                    console.log("data.statusCode === 201")
+                    let payment_payload = {
                         "orderId": data.data.orderNumber,
                         "total": data.data.totalPrice,
                         "subtotal": 0.00,
@@ -323,40 +324,23 @@ const orderModules = {
                         "vatRate": 0,
                         "orderDesc": ""
                     }
-                )
-
-                    // let payment = await axios.post(`${process.env.VUE_APP_URL}/api/v1/payment/code`,
-                    //     {
-
-                    //         "orderId": data.data.orderNumber,
-                    //         "total": data.data.totalPrice,
-                    //         "subtotal": 0.00,
-                    //         "vat": 0,
-                    //         "vatRate": 0,
-                    //         "orderDesc": ""
-                    //     }
-                    // )
-                    console.log(payment)
-
-                    // Swal.fire({
-                    //     icon : "success",
-                    //     title : "ไปยังหน้า E-cashier"
-                    // }).then((result)=>{
-                    //     if(result.isConfirmed){
-                    //         localStorage.removeItem("Order")
-                    //         context.commit("SetResetCourseData")
-                    //         context.commit("SetOrder",{
-                    //           order_step : 0,
-                    //           order_number: "",
-                    //           courses:[],
-                    //           created_by : "",
-                    //           payment_status: "",
-                    //           payment_type: "",
-                    //           total_price: 0,
-                    //       })
-                    //         router.replace({ name: "UserKingdom" });
-                    //     }
-                    // })
+                    let payment = await axios.post(`${process.env.VUE_APP_URL}/api/v1/payment/code`,payment_payload)
+                    console.log("payment",payment)
+                    console.log("payment statusCode",payment.data.statusCode)
+                    if(payment.data.statusCode === 201){
+                        localStorage.removeItem("Order")
+                        context.commit("SetResetCourseData")
+                        context.commit("SetOrder",{
+                            order_step : 0,
+                            order_number: "",
+                            courses:[],
+                            created_by : "",
+                            payment_status: "",
+                            payment_type: "",
+                            total_price: 0,
+                        })
+                        window.location.href = payment.data.data
+                    }
                 }
             }catch(error){
                 console.log(error)

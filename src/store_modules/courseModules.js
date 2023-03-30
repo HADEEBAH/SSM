@@ -308,6 +308,14 @@ const CourseModules = {
             music_performance: data.data.courseMusicPerformance,
             catification: data.data.courseCertification,
             price_course : data.data.coursePrice,
+            course_register_start_date : data.data.courseRegisterStartDate,
+            course_register_end_date : data.data.courseRegisterEndDate,
+            course_period_start_date : data.data.coursePeriodStartDate,
+            course_period_end_date : data.data.coursePeriodEndDate,
+            course_per_time : data.data.coursePerTime,
+            course_student_recived : data.data.courseStudentRecived,
+            course_study_end_date : data.data.courseStudyEndDate,
+            course_study_start_date : data.data.courseStudyStartDate,
             coachs: [],
             packages: [],
             days_of_class : []
@@ -403,6 +411,35 @@ const CourseModules = {
                 package_data.options = options.filter(v=>v.package_id === package_data.package_id)
               })
             }
+            if(data.data.courseTypeId === "CT_2"){
+              data.data.coachs.forEach((coach)=>{
+                payload.coachs.push(
+                  { 
+                    coach_id : coach.accountId,
+                    course_coach_id : coach.courseCoachId,
+                    coach_name: `${coach.coachFirstNameTh} ${coach.coachLastNameTh}`,
+                    teach_day_data: [],
+                    class_date_range: {
+                      start_date: data.data.courseStudyStartDate,
+                      menu_start_date: false,
+                      end_date:  data.data.courseStudyEndDate,
+                      menu_end_date: false,
+                    },
+                    register_date_range: {
+                      start_date:  data.data.courseRegisterStartDate,
+                      menu_start_date: false,
+                      end_date:  data.data.courseRegisterEndDate,
+                      menu_end_date: false,
+                    },
+                    period: {
+                      start_time:  data.data.coursePeriodEndDate,
+                      end_time:  data.data.coursePeriodStartDate,
+                    },
+                  },
+                )
+              })
+           
+            }
             console.log(payload)
             context.commit("SetCourseData",payload)
           }
@@ -417,7 +454,7 @@ const CourseModules = {
         let payload = {
             "categoryId": course.category_id,
             "courseTypeId": course.type === 'general_course' ? 'CT_1' : 'CT_2',
-            "courseImg": course.course_img,
+            "courseImg": "",
             "courseNameTh": course.course_name_th,
             "courseNameEn": course.course_name_en,
             "courseOpenDate":course.course_open_date,

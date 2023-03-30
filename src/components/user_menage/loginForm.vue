@@ -62,6 +62,7 @@
                 width="100%"
                 depressed
                 dark
+                :loading="is_loading"
                 color="#ff6b81"
                 @click="login()"
               >
@@ -71,6 +72,7 @@
             <v-col cols="12">
               <v-btn
                 outlined
+                :disabled="is_loading"
                 color="#ff6b81"
                 width="100%"
                 @click="toRegisterPage()"
@@ -119,7 +121,7 @@ export default {
   computed: {
     ...mapGetters({
       user_one_id: "loginModules/getUserOneId",
-      
+      is_loading : "loginModules/getIsLoading"
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
@@ -136,7 +138,7 @@ export default {
       loginOneId: "loginModules/loginOneId",
     }),
 
-      login() {
+    login() {
       if (this.$refs.form.validate()) {
         this.loginOneId()
       }
