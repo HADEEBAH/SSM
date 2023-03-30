@@ -33,20 +33,23 @@
           : ''
       "
     >
-      <template>
-        <v-carousel
-          cycle
-          hide-delimiter-background
-          style=" 
-            max-width: 97%;
-            max-height: 100%;
+    <v-card  class="mx-auto block rounded-xl drop-shadow-lg mt-3 ml-3 mr-3" max-width="">
+      <template >
+        <!-- max-width: 97%;
+            max-height: 100%; -->
+            <!-- style=" 
+            
             margin-left: 20px;
             margin-top: 20px;
             margin-bottom: 10px;
             border-radius: 0.75rem;
-          "
+          " -->
+        <v-carousel
+          cycle
+          hide-delimiter-background 
         >
           <v-carousel-item
+          height="300px"
             v-for="(slide, i) in slides"
             :key="i"
             :src="slide.src"
@@ -54,7 +57,7 @@
           ></v-carousel-item>
         </v-carousel>
       </template>
-
+    </v-card>
       <headerPage title="อาณาจักร" class="ml-5"></headerPage>
 
       <v-container fluid grid-list-md>
