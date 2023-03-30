@@ -25,6 +25,7 @@ import Student from '@/components/admin/createStudent.vue'
 //User
 import UserKingdom from '@/page/user/catagory/userKingdom.vue'
 import CartList from '@/page/user/cart/cartList.vue'
+  //userProfile 
 import ProfileRelations from '@/page/user/profile/profileRelations.vue'
 import ProfileDetail from '@/page/user/profile/profileDetail.vue'
 import UserProfile from '@/page/user/profile/userProfile.vue'
@@ -51,6 +52,8 @@ import userCoursePayment from '@/page/user/course/userCoursePayment.vue'
 //User menage Course 
 import userMenageCourse from '@/page/user/coach/manageCourse'
 import userMenageCourseDetail from '@/page/user/coach/manageCourseDetail'
+// coach leave
+import LeaveList from '@/page/admin/coachLeave/leaveList.vue'
 const routes = [
   {
     path: '/auth',
@@ -135,9 +138,17 @@ const routes = [
         path: 'finance/:order_id',
         name: 'Finance_orderID',
         component: FinanceDetail,
-      }
+      },
+      {
+        path: 'leavelist',
+        name: 'LeaveList',
+        component: LeaveList,
+      },
+
     ]
   },
+
+  // user
   {
     path: '/',
     name: 'NavBarUser',
@@ -248,6 +259,7 @@ const routes = [
         name: 'StudentBookedDetail',
         component: StudentBookedDetail,
       },
+    
       
     ]
   },

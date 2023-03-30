@@ -2,7 +2,7 @@
   <v-container>
     <div class="mx-10 my-5">
       <label class="text-xl font-bold">ข้อมูลตารางเรียน</label>
-      {{ student_data }}
+      <!-- <pre>{{ student_data }}</pre> -->
 
       <v-row dense class="my-3">
         <!-- <pre>{{ courseData }}</pre> -->

@@ -39,14 +39,14 @@
       <v-col cols="12" sm="6">
         <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
         <div v-if="!isEnabled">
-          {{ parents_data.fname_th }}
+          {{ user_detail.first_name_th }}
         </div>
         <div v-else>
           <v-text-field
             v-bind:disabled="isDisabled"
             @keypress="validate($event, 'th')"
             placeholder=""
-            v-model="parents_data.fname_th"
+            v-model="user_detail.first_name_th"
             outlined
             dense
           >
@@ -57,14 +57,14 @@
       <v-col cols="12" sm="6">
         <label-custom text="นามสกุล (ภาษาไทย)"></label-custom>
         <div v-if="!isEnabled">
-          {{ parents_data.lname_th }}
+          {{ user_detail.last_name_th }}
         </div>
         <div v-else>
           <v-text-field
             v-bind:disabled="isDisabled"
             @keypress="validate($event, 'th')"
             placeholder=""
-            v-model="parents_data.lname_th"
+            v-model="user_detail.last_name_th"
             outlined
             dense
           >
@@ -75,14 +75,14 @@
       <v-col cols="12" sm="6">
         <label-custom text="สัญชาติ"></label-custom>
         <div v-if="!isEnabled">
-          {{ parents_data.nationality }}
+          {{ user_data.nationality }}
         </div>
         <div v-else>
           <v-text-field
             v-bind:disabled="isDisabled"
             @keypress="validate($event, 'th')"
             placeholder=""
-            v-model="parents_data.nationality"
+            v-model="user_data.nationality"
             outlined
             dense
           >
@@ -93,13 +93,13 @@
       <v-col cols="12" sm="6">
         <label-custom text="เลขบัตรประชาชน"></label-custom>
         <div v-if="!isEnabled">
-          {{ parents_data.id_card }}
+          {{ user_data.id_card }}
         </div>
         <div v-else>
           <v-text-field
             v-bind:disabled="!isDisabled"
             @keypress="validate($event, 'th')"
-            v-model="parents_data.id_card"
+            v-model="user_data.id_card"
             outlined
             dense
           >
@@ -110,14 +110,14 @@
       <v-col cols="12" sm="6">
         <label-custom text="วันเกิด"></label-custom>
         <div v-if="!isEnabled">
-          {{ parents_data.date_of_birth }}
+          {{ user_data.date_of_birth }}
         </div>
         <div v-else>
           <v-text-field
             v-bind:disabled="isDisabled"
             @keypress="validate($event, 'th')"
             placeholder=""
-            v-model="parents_data.date_of_birth"
+            v-model="user_data.date_of_birth"
             outlined
             dense
           >
@@ -131,7 +131,7 @@
       <v-col cols="12" sm="6">
         <label-custom text="เบอร์โทรศัพท์"></label-custom>
         <div v-if="!isEnabled">
-          {{ parents_data.tel }}
+          {{ user_detail.tel }}
         </div>
         <div v-else>
           <v-text-field
@@ -141,7 +141,7 @@
             maxlength="12"
             required
             placeholder=""
-            v-model="parents_data.tel"
+            v-model="user_detail.tel"
             outlined
             dense
           >
@@ -152,13 +152,13 @@
       <v-col cols="12" sm="6">
         <label-custom text="อีเมล"></label-custom>
         <div v-if="!isEnabled">
-          {{ parents_data.email }}
+          {{ user_detail.email }}
         </div>
         <div v-else>
           <v-text-field
             v-bind:disabled="!isDisabled"
             placeholder=""
-            v-model="parents_data.email"
+            v-model="user_detail.email"
             outlined
             dense
             :rules="rules.email"
@@ -203,7 +203,14 @@ export default {
         },
       ],
     },
+
+    user_detail:{}
   }),
+
+  created() {
+    this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
+    console.log("userDetail", this.user_detail);
+  },
   mounted() {
     this.$store.dispatch(
       "NavberUserModules/changeTitleNavber",
@@ -214,7 +221,8 @@ export default {
   methods: {
     ...mapActions({
       loginOneId: "loginModules/loginOneId",
-      ChangeParentsData: "ProfileModules/ChangeParentsData",
+      GetUserData: "ProfileModules/GetUserData",
+      GetParentData: "ProfileModules/GetParentData",
     }),
     edit() {
       this.isDisabled = false;
@@ -241,7 +249,8 @@ export default {
   computed: {
     ...mapGetters({
       user_one_id: "loginModules/getUserOneId",
-      parents_data: "ProfileModules/getParentsData",
+      user_data: "ProfileModules/getUserData",
+      parent_data: "ProfileModules/getParentData",
     }),
   },
 };

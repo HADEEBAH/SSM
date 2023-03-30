@@ -1,7 +1,8 @@
+import axios from "axios";
 const profileModules = {
     namespaced: true,
     state: {
-      parents_data: {
+      user_data: {
         fname_th: "dieb",
         lname_th: "dieb",
         nationality: "TH",
@@ -11,6 +12,19 @@ const profileModules = {
         email: "gg@gmail.com",
 
       },
+
+      parent_data: [
+        {
+          studentId: "",
+          parentId: "",
+          parentFirstnameTh: "",
+          parentfirstnameEn: "",
+          parentLastnameTh: "",
+          parentLastnameEn: "",
+          parentTel: "" 
+        }
+      ],
+
 
       certificate_data: [
         {
@@ -41,10 +55,14 @@ const profileModules = {
     
     },
   mutations: {
-    SetParentsData(state, payload) {
-      state.parents_data = payload
-      console.log("payload", payload);
+    SetUserData(state, payload) {
+      state.user_data = payload
     },
+
+    SetParentData(state, payload) {
+      state.parent_data = payload
+    },
+
     SetCertificateData(state, payload) {
       state.certificate_data = payload
     },
@@ -54,10 +72,31 @@ const profileModules = {
 
     },
   actions: {
-    ChangeParentsData(context, ParentsData) {
-      context.commit("SetParentsData", ParentsData)
-      console.log("SetParentsData", this.SetParentsData);
+
+    GetUserData(context, UserData) {
+      context.commit("SetUserData", UserData)
+      console.log("SetUserData", UserData);
     },
+
+    async GetParentData(context, student_id) {
+      console.log("student_id", student_id);
+      try {
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${student_id}`)
+        console.log(data)
+        if (data.statusCode === 200) {
+            context.commit("SetParentData", data.data)
+            console.log("SetParentData", data.data);
+        } else {
+            throw { error: data }
+        }
+    } catch (error) {
+        console.log(error)
+    }
+    },
+    // ChangeParentsData(context, ParentsData) {
+    //   context.commit("SetUserData", ParentsData)
+    //   console.log("SetUserData", this.SetUserData);
+    // },
     ChangeCertificateData(context, certificateData) {
       context.commit("SetCertificateData", certificateData)
     },
@@ -67,8 +106,12 @@ const profileModules = {
     }
     },
   getters: {
-    getParentsData(state) {
-      return state.parents_data
+    getUserData(state) {
+      return state.user_data
+    },
+    getParentData(state) {
+      console.log("object");
+      return state.parent_data
     },
     getCertificateData(state) {
       return state.certificate_data
