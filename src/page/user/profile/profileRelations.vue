@@ -20,19 +20,20 @@
           </div>
         </div>
       </div>
+      {{ parent_data }}
       <v-row dense>
         <!--TH NAME -->
         <v-col cols="12" sm="6">
           <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
           <div v-if="!isEnabled">
-            {{ parents_data.fname_th }}
+            {{ parent_data.fname_th }}
           </div>
           <div v-else>
             <v-text-field
               v-bind:disabled="isDisabled"
               @keypress="validate($event, 'th')"
               placeholder=""
-              v-model="parents_data.fname_th"
+              v-model="parent_data.fname_th"
               outlined
               dense
             >
@@ -43,14 +44,14 @@
         <v-col cols="12" sm="6">
           <label-custom text="นามสกุล (ภาษาไทย)"></label-custom>
           <div v-if="!isEnabled">
-            {{ parents_data.lname_th }}
+            {{ parent_data.lname_th }}
           </div>
           <div v-else>
             <v-text-field
               v-bind:disabled="isDisabled"
               @keypress="validate($event, 'th')"
               placeholder=""
-              v-model="parents_data.lname_th"
+              v-model="parent_data.lname_th"
               outlined
               dense
             >
@@ -61,14 +62,14 @@
         <v-col cols="12" sm="6">
           <label-custom text="สัญชาติ"></label-custom>
           <div v-if="!isEnabled">
-            {{ parents_data.nationality }}
+            {{ parent_data.nationality }}
           </div>
           <div v-else>
             <v-text-field
               v-bind:disabled="isDisabled"
               @keypress="validate($event, 'th')"
               placeholder=""
-              v-model="parents_data.nationality"
+              v-model="parent_data.nationality"
               outlined
               dense
             >
@@ -79,13 +80,13 @@
         <v-col cols="12" sm="6">
           <label-custom text="เลขบัตรประชาชน"></label-custom>
           <div v-if="!isEnabled">
-            {{ parents_data.id_card }}
+            {{ parent_data.id_card }}
           </div>
           <div v-else>
             <v-text-field
               v-bind:disabled="!isDisabled"
               @keypress="validate($event, 'th')"
-              v-model="parents_data.id_card"
+              v-model="parent_data.id_card"
               outlined
               dense
             >
@@ -96,14 +97,14 @@
         <v-col cols="12" sm="6">
           <label-custom text="วันเกิด"></label-custom>
           <div v-if="!isEnabled">
-            {{ parents_data.date_of_birth }}
+            {{ parent_data.date_of_birth }}
           </div>
           <div v-else>
             <v-text-field
               v-bind:disabled="isDisabled"
               @keypress="validate($event, 'th')"
               placeholder=""
-              v-model="parents_data.date_of_birth"
+              v-model="parent_data.date_of_birth"
               outlined
               dense
             >
@@ -117,7 +118,7 @@
         <v-col cols="12" sm="6">
           <label-custom text="เบอร์โทรศัพท์"></label-custom>
           <div v-if="!isEnabled">
-            {{ parents_data.tel }}
+            {{ parent_data.tel }}
           </div>
           <div v-else>
             <v-text-field
@@ -127,7 +128,7 @@
               maxlength="12"
               required
               placeholder=""
-              v-model="parents_data.tel"
+              v-model="parent_data.tel"
               outlined
               dense
             >
@@ -138,13 +139,13 @@
         <v-col cols="12" sm="6">
           <label-custom text="อีเมล"></label-custom>
           <div v-if="!isEnabled">
-            {{ parents_data.email }}
+            {{ parent_data.email }}
           </div>
           <div v-else>
             <v-text-field
               v-bind:disabled="!isDisabled"
               placeholder=""
-              v-model="parents_data.email"
+              v-model="parent_data.email"
               outlined
               dense
               :rules="rules.email"
@@ -211,14 +212,14 @@
         <v-col cols="12" sm="6">
           <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
           <div v-if="!isEnabled">
-            {{ parents_data.fname_th }}
+            {{ parent_data.fname_th }}
           </div>
           <div v-else>
             <v-text-field
               v-bind:disabled="isDisabled"
               @keypress="validate($event, 'th')"
               placeholder=""
-              v-model="parents_data.fname_th"
+              v-model="parent_data.fname_th"
               outlined
               dense
             >
@@ -229,14 +230,14 @@
         <v-col cols="12" sm="6">
           <label-custom text="นามสกุล (ภาษาไทย)"></label-custom>
           <div v-if="!isEnabled">
-            {{ parents_data.lname_th }}
+            {{ parent_data.lname_th }}
           </div>
           <div v-else>
             <v-text-field
               v-bind:disabled="isDisabled"
               @keypress="validate($event, 'th')"
               placeholder=""
-              v-model="parents_data.lname_th"
+              v-model="parent_data.lname_th"
               outlined
               dense
             >
@@ -247,14 +248,14 @@
         <v-col cols="12" sm="6">
           <label-custom text="สัญชาติ"></label-custom>
           <div v-if="!isEnabled">
-            {{ parents_data.nationality }}
+            {{ parent_data.nationality }}
           </div>
           <div v-else>
             <v-text-field
               v-bind:disabled="isDisabled"
               @keypress="validate($event, 'th')"
               placeholder=""
-              v-model="parents_data.nationality"
+              v-model="parent_data.nationality"
               outlined
               dense
             >
@@ -265,13 +266,13 @@
         <v-col cols="12" sm="6">
           <label-custom text="เลขบัตรประชาชน"></label-custom>
           <div v-if="!isEnabled">
-            {{ parents_data.id_card }}
+            {{ parent_data.id_card }}
           </div>
           <div v-else>
             <v-text-field
               v-bind:disabled="!isDisabled"
               @keypress="validate($event, 'th')"
-              v-model="parents_data.id_card"
+              v-model="parent_data.id_card"
               outlined
               dense
             >
@@ -282,14 +283,14 @@
         <v-col cols="12" sm="6">
           <label-custom text="วันเกิด"></label-custom>
           <div v-if="!isEnabled">
-            {{ parents_data.date_of_birth }}
+            {{ parent_data.date_of_birth }}
           </div>
           <div v-else>
             <v-text-field
               v-bind:disabled="isDisabled"
               @keypress="validate($event, 'th')"
               placeholder=""
-              v-model="parents_data.date_of_birth"
+              v-model="parent_data.date_of_birth"
               outlined
               dense
             >
@@ -303,7 +304,7 @@
         <v-col cols="12" sm="6">
           <label-custom text="เบอร์โทรศัพท์"></label-custom>
           <div v-if="!isEnabled">
-            {{ parents_data.tel }}
+            {{ parent_data.tel }}
           </div>
           <div v-else>
             <v-text-field
@@ -313,7 +314,7 @@
               maxlength="12"
               required
               placeholder=""
-              v-model="parents_data.tel"
+              v-model="parent_data.tel"
               outlined
               dense
             >
@@ -324,13 +325,13 @@
         <v-col cols="12" sm="6">
           <label-custom text="อีเมล"></label-custom>
           <div v-if="!isEnabled">
-            {{ parents_data.email }}
+            {{ parent_data.email }}
           </div>
           <div v-else>
             <v-text-field
               v-bind:disabled="!isDisabled"
               placeholder=""
-              v-model="parents_data.email"
+              v-model="parent_data.email"
               outlined
               dense
               :rules="rules.email"
@@ -376,12 +377,15 @@ export default {
         "NavberUserModules/changeTitleNavber",
         "ข้อมูลนักเรียน"
       );
+
+    this.user_login = JSON.parse(localStorage.getItem("userDetail"))
+    this.GetParentData(this.user_login.account_id)
   },
 
   methods: {
     ...mapActions({
       loginOneId: "loginModules/loginOneId",
-      ChangeParentsData: "ProfileModules/ChangeParentsData",
+      GetParentData: "ProfileModules/GetParentData",
     }),
     edit() {
       this.isDisabled = false;
@@ -414,7 +418,7 @@ export default {
   computed: {
     ...mapGetters({
       user_one_id: "loginModules/getUserOneId",
-      parents_data: "ProfileModules/getParentsData",
+      parent_data: "ProfileModules/getParentData",
     }),
   },
 };

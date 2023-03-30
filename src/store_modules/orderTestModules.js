@@ -90,46 +90,46 @@ const orderModules = {
         orders: [],
         order_detail: {},
         student_data: [
-                {
-                    courseId: "",
-                    courseNameTh: "",
-                    courseNameEng: "",
-                    courseOpenDate: "",
-                    courseLocation: "",
-                    courseDescription: "",
-                    courseMusicPerformance: null,
-                    courseStatus: "",
-                    courseCertification: "",
-                    courseImg: "",
-                    coursePerTime: "",
-                    courseRegisterStartDate: null,
-                    courseRegisterEndDate: null,
-                    courseStudyStartDate: null,
-                    courseStudyEndDate: null,
-                    coursePeriodEndDate: null,
-                    coursePeriodStartDate: null,
-                    coursePrice: "",
-                    courseStudentRecived: "",
-                    courseStudentTotal: null,
-                    totalAmount: "",
-                    successCount: "",
-                    pendingCount: "",
-                    dates: [],
-                    orderId: "",
-                    orderItemId: "",
-                    cpoId: "",
-                    dayOfWeekId: "",
-                    timeId: "",
-                    coachId: "",
-                    coachName: "",
-                    orderStudentId: "",
-                    studentId: "",
-                    coursePackageOptionId: "",
-                    courseNameEn: "",
-                    start: "",
-                    end: "",
-                    dayOfWeekName: []
-                }
+            {
+                courseId: "",
+                courseNameTh: "",
+                courseNameEng: "",
+                courseOpenDate: "",
+                courseLocation: "",
+                courseDescription: "",
+                courseMusicPerformance: null,
+                courseStatus: "",
+                courseCertification: "",
+                courseImg: "",
+                coursePerTime: "",
+                courseRegisterStartDate: null,
+                courseRegisterEndDate: null,
+                courseStudyStartDate: null,
+                courseStudyEndDate: null,
+                coursePeriodEndDate: null,
+                coursePeriodStartDate: null,
+                coursePrice: "",
+                courseStudentRecived: "",
+                courseStudentTotal: null,
+                totalAmount: "",
+                successCount: "",
+                pendingCount: "",
+                dates: [],
+                orderId: "",
+                orderItemId: "",
+                cpoId: "",
+                dayOfWeekId: "",
+                timeId: "",
+                coachId: "",
+                coachName: "",
+                orderStudentId: "",
+                studentId: "",
+                coursePackageOptionId: "",
+                courseNameEn: "",
+                start: "",
+                end: "",
+                dayOfWeekName: []
+            }
         ],
 
         cart_list: [
@@ -192,8 +192,8 @@ const orderModules = {
                 coach_name: ""
             }
         ],
-     
-       
+
+
 
     },
     mutations: {
@@ -232,11 +232,12 @@ const orderModules = {
         },
         SetStudentData(state, payload) {
             state.student_data = payload
-        }, 
+        },
         SetCartList(state, payload) {
             state.cart_list = payload
         }
     },
+
     actions: {
         resetCourseData(context) {
             context.commit("SetResetCourseData")
@@ -454,7 +455,7 @@ const orderModules = {
         //         const student_data = data.data
         //         console.log("Getstudenet", data.data)
         //         console.log("order_item_id =>", user_data);
-            
+
         //         console.log("order_item_id 2 =>", user_data);
         //         if(data.statusCode === 200){
         //             console.log("success", data);
@@ -481,14 +482,25 @@ const orderModules = {
             }
         },
 
-        async GetCartList(context, account_id) { 
+        async GetCartList(context, account_id) {
             console.log("account_id", account_id);
             try {
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/cart/account/${account_id}`)
                 console.log(data)
                 if (data.statusCode === 200) {
+                    for (const item of data.data) {
+                        let discount = item.option.discount ? item.option.discount_price : 0
+                        // console.log("discount", discount)
+                        // ราคา/ครั้ง
+                        item.option.net_price_unit = item.option.price_unit / item.option.amount 
+                        // console.log("net_price_unit", item.option.net_price_unit)
+                        // ราคา
+                        item.option.net_price = item.option.price_unit - discount
+                        
+                    }
+
                     context.commit("SetCartList", data.data)
-                    console.log("SetCartList", data.data);
+                    // console.log("SetCartList", data.data);
                 } else {
                     throw { error: data }
                 }
@@ -505,6 +517,7 @@ const orderModules = {
             return state.order
         },
         getCourseOrder(state) {
+            console.log( "course_order", this.course_order  );
             return state.course_order
         },
         getOrders(state) {

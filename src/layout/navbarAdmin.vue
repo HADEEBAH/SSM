@@ -144,7 +144,8 @@ export default {
       { title : "จัดการผู้ใช้งาน", to:"", child :[ 
         {title : "จัดการผู้ใช้งาน", to:"UserList"},
       ]},
-      { title : "หน้าผู้ใช้งาน", to:"UserKingdom", child :[]},
+      { title: "หน้าผู้ใช้งาน", to: "UserKingdom", child: [] },
+      { title : "การอนุมัติลา", to:"LeaveList", child :[]},
     ]
   }),
 
