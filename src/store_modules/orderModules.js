@@ -217,29 +217,19 @@ const orderModules = {
                     total_price =  total_price + price
                 })
                 payload.totalPrice = total_price
-                let {data} = await axios.post(`http://localhost:3002/api/v1/order/cart`,payload)
-                // let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/cart`,payload)
+                // let {data} = await axios.post(`http://localhost:3002/api/v1/order/cart`,payload)
+                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/cart`,payload)
                 if(data.statusCode === 201){
-                    //router.replace({ name: "UserKingdom" });
-                    // Swal.fire({
-                    //     icon : "success",
-                    //     title : "ไปยังหน้า E-cashier"
-                    // }).then((result)=>{
-                    //     if(result.isConfirmed){
-                    //         localStorage.removeItem("Order")
-                    //         context.commit("SetResetCourseData")
-                    //         context.commit("SetOrder",{
-                    //           order_step : 0,
-                    //           order_number: "",
-                    //           courses:[],
-                    //           created_by : "",
-                    //           payment_status: "",
-                    //           payment_type: "",
-                    //           total_price: 0,
-                    //       })
-                    //         router.replace({ name: "UserKingdom" });
-                    //     }
-                    // })
+                    localStorage.removeItem("Order")
+                    context.commit("SetResetCourseData")
+                    context.commit("SetOrder",{
+                    order_step : 0,
+                    order_number: "",
+                    courses:[],
+                    created_by : "",
+                    payment_status: "",
+                    payment_type: "",
+                    total_price: 0, })
                     router.replace({ name: "UserKingdom" });
                 }
             }catch(error){
