@@ -1,87 +1,90 @@
-<template>
+<!-- <template>
     <v-container>
         <headerPage title="การอนุมัติลา"></headerPage>
     
-        <v-row class="mb-2">
-            <v-col cols="12" sm="3"  @click="tab = 'all'" >
-                <img-card class="cursor-pointer" :class="tab === 'all' ? 'img-card-active':''">
-                    <template v-slot:img> 
-                        <v-img max-height="90" max-width="70" src="../../../assets/coachLeave/all.png"></v-img>
-                    </template>
-                    <template v-slot:header>
-                        <div class="font-bold"> ทั้งหมด </div>
-                    </template>
-                    <template v-slot:detail>
-                        <v-row class="d-flex align-end">
-                            <v-col align="center" class="text-3xl font-bold">10</v-col>
-                            <v-col class="text-sm">รายการ</v-col>
-                        </v-row>
-                    </template>
-                </img-card>
-            </v-col>
-            <v-col cols="12" sm="3" @click="tab = 'accepted'">
-                <img-card  class="cursor-pointer" :class="tab === 'accepted' ? 'img-card-active':''">
-                    <template v-slot:img> 
-                        <v-img  max-height="90" max-width="70" src="../../../assets/coachLeave/accept.png"></v-img>
-                    </template>
-                    <template v-slot:header>
-                        <div class="font-bold"> อนุมัติ </div>
-                    </template>
-                    <template v-slot:detail>
-                        <v-row class="d-flex align-end">
-                            <v-col align="center" class="text-3xl font-bold">5</v-col>
-                            <v-col class="text-sm">รายการ</v-col>
-                        </v-row>
-                    </template>
-                </img-card>
-            </v-col>
-            <v-col cols="12" sm="3" @click="tab = 'waitToAccept'"> 
-                <img-card  class="cursor-pointer" :class="tab === 'waitToAccept' ? 'img-card-active':''">
-                    <template v-slot:img> 
-                        <v-img  max-height="90" max-width="70" src="../../../assets/coachLeave/wait.png"></v-img>
-                    </template>
-                    <template v-slot:header>
-                        <div class="font-bold"> รออนุมัติ </div>
-                    </template>
-                    <template v-slot:detail>
-                        <v-row class="d-flex align-end">
-                            <v-col align="center" class="text-3xl font-bold">5</v-col>
-                            <v-col class="text-sm">รายการ</v-col>
-                        </v-row>
-                    </template>
-                </img-card>
-            </v-col>
-            <v-col cols="12" sm="3" @click="tab = 'disaccept'"> 
-                <img-card  class="cursor-pointer" :class="tab === 'disaccept' ? 'img-card-active':''">
-                    <template v-slot:img> 
-                        <v-img  max-height="90" max-width="70" src="../../../assets/coachLeave/disaccept.png"></v-img>
-                    </template>
-                    <template v-slot:header>
-                        <div class="font-bold"> ปฏิเสธ </div>
-                    </template>
-                    <template v-slot:detail>
-                        <v-row class="d-flex align-end">
-                            <v-col align="center" class="text-3xl font-bold">5</v-col>
-                            <v-col class="text-sm">รายการ</v-col>
-                        </v-row>
-                    </template>
-                </img-card>
-            </v-col>
-        </v-row>
-
+      
+        <div v-for="(type, type_index) in course_type" :key="type_index">
+            <v-row class="mb-2">
+                <v-col cols="12" sm="3"   @click="type_selected = type.value" >
+                    <img-card class="cursor-pointer" :class="type_selected === type.value ? 'img-card-active':''">
+                        <template v-slot:img> 
+                            <v-img max-height="90" max-width="70" src="../../../assets/coachLeave/all.png"></v-img>
+                        </template>
+                        <template v-slot:header>
+                            <div class="font-bold"> {{ type.name }} </div>
+                        </template>
+                        <template v-slot:detail>
+                            <v-row class="d-flex align-end">
+                                <v-col align="center" class="text-3xl font-bold">10</v-col>
+                                <v-col class="text-sm">รายการ</v-col>
+                            </v-row>
+                        </template>
+                    </img-card>
+                </v-col>
+                <v-col cols="12" sm="3" @click="type_selected = 'accepted'">
+                    <img-card  class="cursor-pointer" :class="type_selected === 'accepted' ? 'img-card-active':''">
+                        <template v-slot:img> 
+                            <v-img  max-height="90" max-width="70" src="../../../assets/coachLeave/accept.png"></v-img>
+                        </template>
+                        <template v-slot:header>
+                            <div class="font-bold"> {{ type.name }} </div>
+                        </template>
+                        <template v-slot:detail>
+                            <v-row class="d-flex align-end">
+                                <v-col align="center" class="text-3xl font-bold">5</v-col>
+                                <v-col class="text-sm">รายการ</v-col>
+                            </v-row>
+                        </template>
+                    </img-card>
+                </v-col>
+                <v-col cols="12" sm="3" @click="type_selected = 'waitToAccept'"> 
+                    <img-card  class="cursor-pointer" :class="type_selected === 'waitToAccept' ? 'img-card-active':''">
+                        <template v-slot:img> 
+                            <v-img  max-height="90" max-width="70" src="../../../assets/coachLeave/wait.png"></v-img>
+                        </template>
+                        <template v-slot:header>
+                            <div class="font-bold"> {{ type.name }} </div>
+                        </template>
+                        <template v-slot:detail>
+                            <v-row class="d-flex align-end">
+                                <v-col align="center" class="text-3xl font-bold">5</v-col>
+                                <v-col class="text-sm">รายการ</v-col>
+                            </v-row>
+                        </template>
+                    </img-card>
+                </v-col>
+                <v-col cols="12" sm="3" @click="type_selected == 'disaccept'"> 
+                    <img-card  class="cursor-pointer" :class="type_selected === 'disaccept' ? 'img-card-active':''">
+                        <template v-slot:img> 
+                            <v-img  max-height="90" max-width="70" src="../../../assets/coachLeave/disaccept.png"></v-img>
+                        </template>
+                        <template v-slot:header>
+                            <div class="font-bold"> {{ type.name }} </div>
+                        </template>
+                        <template v-slot:detail>
+                            <v-row class="d-flex align-end">
+                                <v-col align="center" class="text-3xl font-bold">5</v-col>
+                                <v-col class="text-sm">รายการ</v-col>
+                            </v-row>
+                        </template>
+                    </img-card>
+                </v-col>
+            </v-row> 
+        </div>
         <v-expand-x-transition transition="scale-transition">
-        <div v-if="tab = 'all'">
-            <!--   v-for="(item, item_index) in student_data"
-            :key="item_index" -->
+        <div v-if="type_selected == 'all'">
+      
           <v-card
           
             class="my-5"
           >
+       
           <v-data-table 
             class="elevation-1 header-table"
-            :headers="column"
             :items="courses"
-            :loading="LoadingTable"
+            :loading="LoadingTable" 
+            :headers="column"
+         
         >
         <template v-slot:[`item.status`]="{ item }">
             <v-autocomplete dense outlined hide-details item-color="pink" :items="status" v-model="item.status">
@@ -95,6 +98,12 @@
         </template>
         </v-data-table>
           </v-card>
+        </div>
+      </v-expand-x-transition>
+
+      <v-expand-x-transition transition="scale-transition">
+        <div v-if="type_selected == 'accepted'">
+          ahhhsdghsgfj
         </div>
       </v-expand-x-transition>
   
@@ -111,8 +120,8 @@
           imgCard
     },
       data: () => ({
-            tab: "all",
-            column:[
+        type_selected: "all",
+        column:[
             {text: 'รหัสโค้ช',align: 'start',sortable: false, value: ''},
             {text: 'ชื่อ - นามสกุล',align: 'start',sortable: false, value: ''},
             {text: 'ประเภทการลา',align: 'start',sortable: false, value: ''},
@@ -120,7 +129,13 @@
             {text: 'วันที่ส่งคำขอ',align: 'center',sortable: false, value: ''},
             {text: '', align: 'center', value: 'actions', sortable: false },
             {text: '', align: 'center', value: 'show', sortable: false },
-        ],
+            ],
+    course_type: [
+      { name: "ทั้งหมด", value: "all" },
+      { name: "อนุมัติ", value: "accepted" },
+      { name: "รออนุมัติ", value: "waitToAccept" },
+      { name: "ปฏิเสธ", value: "disAccept" },
+    ],
       }),
       mounted() { },
       methods: {
@@ -134,4 +149,4 @@
   
   <style>
   
-  </style>
+  </style> -->

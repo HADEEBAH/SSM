@@ -14,16 +14,26 @@ const profileModules = {
       },
 
       parent_data: [
-        {
-          studentId: "",
-          parentId: "",
-          parentFirstnameTh: "",
-          parentfirstnameEn: "",
-          parentLastnameTh: "",
-          parentLastnameEn: "",
-          parentTel: "" 
-        }
+      
+          {
+          relation_id: "",
+          student_id: "",
+          parent_id: "",
+          parent_firstname_th: "",
+          parent_firstname_en: "",
+          parent_lastname_th: "",
+          parent_lastname_en: "",
+          parent_tel: "",
+          accountId: "",
+          email: "",
+          firstNameTh: "",
+          lastNameTh: "",
+          nation: "",
+          tel: ""
+          },
+       
       ],
+        
 
 
       certificate_data: [
