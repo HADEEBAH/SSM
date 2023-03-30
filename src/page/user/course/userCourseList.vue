@@ -74,7 +74,9 @@ import { mapGetters, mapActions } from 'vuex';
         mounted() {
             this.GetCategory(this.$route.params.category_id)
             this.$store.dispatch("NavberUserModules/changeTitleNavber","คอร์สเรียน")
-            this.type_selected = this.course_types[0].course_type_id
+            if(this.course_types.length > 0){
+                this.type_selected = this.course_types[0].course_type_id
+            }
         },
         watch: {},
         computed: {

@@ -157,7 +157,7 @@ const orderModules = {
                 console.log(order)
                 let payload = {
                     order_id : "",
-                    courses : [],
+                    courses : {},
                     created_by : "",
                     paymentStatus: "pending",
                     paymentType: "",
@@ -197,7 +197,7 @@ const orderModules = {
                             })
                         }
                     })
-                    payload.courses.push({
+                    payload.courses = {
                         "courseId" :  course.course_id,
                         "courseName" : course.course_name,
                         "coursePackageOptionId": course.option.course_package_option_id ? course.option.course_package_option_id : "",
@@ -212,7 +212,7 @@ const orderModules = {
                             "fullName": course.coach_name,
                         },
                         "student": students
-                    })
+                    }
                     let price = course.option.net_price ? course.option.net_price : course.price
                     total_price =  total_price + price
                 })
@@ -220,26 +220,17 @@ const orderModules = {
                 let {data} = await axios.post(`http://localhost:3002/api/v1/order/cart`,payload)
                 // let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/cart`,payload)
                 if(data.statusCode === 201){
-                    //router.replace({ name: "UserKingdom" });
-                    // Swal.fire({
-                    //     icon : "success",
-                    //     title : "ไปยังหน้า E-cashier"
-                    // }).then((result)=>{
-                    //     if(result.isConfirmed){
-                    //         localStorage.removeItem("Order")
-                    //         context.commit("SetResetCourseData")
-                    //         context.commit("SetOrder",{
-                    //           order_step : 0,
-                    //           order_number: "",
-                    //           courses:[],
-                    //           created_by : "",
-                    //           payment_status: "",
-                    //           payment_type: "",
-                    //           total_price: 0,
-                    //       })
-                    //         router.replace({ name: "UserKingdom" });
-                    //     }
-                    // })
+                    localStorage.removeItem("Order")
+                    context.commit("SetResetCourseData")
+                    context.commit("SetOrder",{
+                        order_step : 0,
+                        order_number: "",
+                        courses:[],
+                        created_by : "",
+                        payment_status: "",
+                        payment_type: "",
+                        total_price: 0,
+                    })
                     router.replace({ name: "UserKingdom" });
                 }
             }catch(error){

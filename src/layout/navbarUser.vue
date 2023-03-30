@@ -144,10 +144,7 @@ export default {
     this.active_menu = this.$route.name
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
   },
-  mounted() {
-  
-   
-  },
+  mounted() {},
   watch: {},
   computed: {
     ...mapGetters({

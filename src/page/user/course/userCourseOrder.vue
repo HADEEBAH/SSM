@@ -417,7 +417,7 @@ import { mapActions, mapGetters } from 'vuex';
         checkMaximumStudent(){
             let max = false
             if(this.course_order.course_type === 'CT_1'){
-                max = this.course_order.package_data.maximum <= this.course_order.students.length
+                max = this.course_order.package_data.students <= this.course_order.students.length
             }else if(this.course_order.course_type === 'CT_2'){
                 max = false
             }
