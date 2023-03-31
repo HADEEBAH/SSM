@@ -78,7 +78,9 @@ import { mapGetters, mapActions } from 'vuex';
                 this.type_selected = this.course_types[0].course_type_id
             }
         },
-        watch: {},
+        watch: {
+            
+        },
         computed: {
             ...mapGetters({
                 courses_is_loading : "CourseModules/getCoursesIsLoading",
@@ -87,6 +89,7 @@ import { mapGetters, mapActions } from 'vuex';
                 category : "CategoryModules/getCategory",
                 course_types : "CourseModules/getCourseTypes"
             })
+            
         },
         methods: {
             ...mapActions({

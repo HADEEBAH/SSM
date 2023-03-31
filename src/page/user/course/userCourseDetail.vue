@@ -37,9 +37,11 @@
           </v-col>
         </v-row>
       </template>
+     
       <v-expansion-panels flat>
         <v-expansion-panel  v-if="course_data.course_type_id === 'CT_2'">
           <v-expansion-panel-header class="px-0 font-bold">
+           
             วันและเวลา
             <template v-slot:actions>
               <v-icon color="#ff6b81"> $expand </v-icon>
@@ -47,8 +49,9 @@
           </v-expansion-panel-header>
           <v-expansion-panel-content class="border-t pt-3">
             <v-row dense>
+           
               <v-col cols="auto">วันรับสมัคร:</v-col>
-              <v-col> {{course_data.courseRegisterEndDate}}</v-col>
+              <v-col> {{ new Date(course_data.course_register_end_date).toLocaleDateString("th-TH",date_options)}}    {{course_data}}</v-col>
             </v-row>
             <v-row dense>
               <v-col cols="auto">วันเรียน:</v-col>
@@ -166,6 +169,12 @@ export default {
   components: { rowData, dialogCard },
   data: () => ({
     show_dialog: false,
+    date_options: {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      locale: 'th-TH'
+    }
   }),
   created() {},
   mounted() {

@@ -262,7 +262,6 @@ const orderModules = {
                 await order.courses.forEach((course)=>{
                     let students = []
                     course.students.forEach((student)=>{
-                        console.log("student",student.parents[0])
                         if(student.parents[0]){   
                             students.push({
                                 "accountId": student.account_id ? student.account_id : "",
@@ -308,7 +307,7 @@ const orderModules = {
                         "student": students
                     })
                     let price = course.option.net_price ? course.option.net_price : course.price
-                    total_price =  total_price + price
+                    total_price =  total_price + (price * course.students.lenght )
                 })
                 payload.totalPrice = total_price
                 console.log("saveOrder",payload)
