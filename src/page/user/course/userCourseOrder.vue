@@ -5,7 +5,7 @@
             <template v-slot:img>
                 <v-row dense class="d-flex align-center h-full">
                     <v-col>
-                        <v-img class="rounded-lg" src="https://cdn.vuetifyjs.com/images/cards/cooking.png" max-height="122" max-width="122"></v-img>
+                        <v-img class="rounded-lg" :src="course_data.course_img" max-height="122" max-width="122"></v-img>
                     </v-col>
                 </v-row>
             </template>
@@ -112,7 +112,7 @@
         </v-row>
         <v-row dense class="d-flex align-center">
             <v-col >
-                <v-checkbox :disabled="apply_for_yourself ? false : checkMaximumStudent" @change="validateButton" v-model="apply_for_yourself" color="#ff6B81" label="สมัครเรียนให้ตัวเอง"></v-checkbox>
+                <v-checkbox :disabled="apply_for_yourself ? false : checkMaximumStudent()" @change="validateButton" v-model="apply_for_yourself" color="#ff6B81" label="สมัครเรียนให้ตัวเอง"></v-checkbox>
             </v-col>
             <v-col cols="auto" v-if="apply_for_yourself">
                 <v-btn :disabled="course_order.students.filter(v => v.is_other === false)[0].parents.length > 0" dense outlined color="#ff6b81" @click="dialog_parent = true"><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มข้อมูลผู้ปกครอง</v-btn>
@@ -120,7 +120,7 @@
         </v-row>
         <v-row dense>
             <v-col cols="12" sm="6">
-                <v-checkbox :disabled="apply_for_others ? false : checkMaximumStudent" @change="validateButton" v-model="apply_for_others" color="#ff6B81" label="สมัครเรียนให้ผู้อื่น"></v-checkbox>
+                <v-checkbox :disabled="apply_for_others ? false : checkMaximumStudent()" @change="validateButton" v-model="apply_for_others" color="#ff6B81" label="สมัครเรียนให้ผู้อื่น"></v-checkbox>
             </v-col>
         </v-row>
         <!-- PARENT -->
@@ -165,7 +165,7 @@
                 <v-col cols="auto"><v-icon color="#ff6b81">mdi-card-account-details-outline</v-icon></v-col>
                 <v-col class="text-lg font-bold">{{ `ผู้เรียน ${index_student+1}` }}</v-col>
                 <v-col cols="auto" v-if="course_order.students.filter(v => v.is_other === true).length > 1">
-                    <v-btn @click="removeStudent(student)" small icon color="red" dark><v-icon>mdi-close</v-icon></v-btn>
+                    <v-btn @click="removeStudent(student)"  small icon color="red" dark><v-icon>mdi-close</v-icon></v-btn>
                 </v-col>
             </v-row>
             <v-card outlined class="mb-3">
@@ -180,6 +180,7 @@
                                 v-model="student.username"  
                                 @change="checkUsername(student.username, 'student', index_student)"
                                 @keyup.enter="checkUsername(student.username, 'student', index_student)"
+                                @blur="checkUsername(student.username, 'student', index_student)"
                                 placeholder="Username">
                                 <template v-slot:append>
                                     <v-icon v-if="student.account_id" color="green">mdi-checkbox-marked-circle-outline</v-icon>
@@ -196,10 +197,10 @@
                             </template>
                         </v-col>
                         <v-col cols="auto" class="mb-2">
-                            <v-btn color="#ff6b81" @click="checkUsername(student.username, 'student', index_student)" depressed dark>ตกลง</v-btn>
+                            <v-btn :loading="is_loading" color="#ff6b81" @click="checkUsername(student.username, 'student', index_student)" depressed dark>ตกลง</v-btn>
                         </v-col>
                     </v-row>
-                    <template v-if="student.account_id">
+                    <template v-if="student.account_id && !is_loading">
                         <v-row dense>
                             <v-col cols="12" sm="6">
                                 <labelCustom required text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
@@ -221,12 +222,12 @@
             </v-card>
             <v-row class="mb-3" dense v-if="index_student === course_order.students.filter(v => v.is_other === true).length - 1">
                 <v-col>
-                    <v-btn v-if="!checkMaximumStudent" @click="addStudent" text dense color="#ff6b81"><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มผู้เรียน</v-btn>
+                    <v-btn v-if="!checkMaximumStudent()" @click="addStudent" text dense color="#ff6b81"><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มผู้เรียน</v-btn>
                 </v-col>
             </v-row>
         </div>
         <!-- <pre>{{ course_order.students.filter(v => v.is_other === true) }}</pre> -->
-        <div v-if="checkMaximumStudent" class="text-[#F03D3E] mb-3">
+        <div v-if="checkMaximumStudent()" class="text-[#F03D3E] mb-3">
                 ผู้เรียนครบจำนวนที่คลาสจะรับได้แล้ว
             </div>
         <v-row dense>
@@ -324,6 +325,7 @@ import labelCustom from '@/components/label/labelCustom.vue';
 import registerDialogForm from '@/components/user_menage/registerDialogForm.vue';
 import dialogCard from '@/components/dialog/dialogCard.vue';
 import { mapActions, mapGetters } from 'vuex';
+import router from '../../../router';
   export default {
     name:"userCourseOrder",
     components: {ImgCard, rowData, headerCard, labelCustom, registerDialogForm, dialogCard },
@@ -412,17 +414,9 @@ import { mapActions, mapGetters } from 'vuex';
             order: "OrderModules/getOrder",
             show_dialog_register_one_id : "RegisterModules/getShowDialogRegisterOneId",
             user_data : "loginModules/getUserData",
-            user_student_data : "loginModules/getUserStudentData"
+            user_student_data : "loginModules/getUserStudentData",
+            is_loading : "loginModules/getIsLoading"
         }),
-        checkMaximumStudent(){
-            let max = false
-            if(this.course_order.course_type === 'CT_1'){
-                max = this.course_order.package_data.students <= this.course_order.students.length
-            }else if(this.course_order.course_type === 'CT_2'){
-                max = false
-            }
-            return max
-        }
     },
     methods: {
         ...mapActions({
@@ -442,6 +436,22 @@ import { mapActions, mapGetters } from 'vuex';
             } else {
                 return "Invalid day";
             }
+        },
+        checkMaximumStudent(){
+            console.log("package_data,students", this.course_order.package_data.students)
+            console.log("students", this.course_order.students)
+            let max = false
+            if(this.course_order.course_type_id === 'CT_1'){
+                if(this.course_order.package_data.students){
+                    max = this.course_order.package_data.students <= this.course_order.students.length
+                }else{
+                    router.push({name: "UserKingdom"})
+                }
+                
+            }else if(this.course_order.course_type_id === 'CT_2'){
+                max = false
+            }
+            return max
         },
         validateButton(){
             if(this.course_order.course_type_id === "CT_1"){
@@ -510,6 +520,7 @@ import { mapActions, mapGetters } from 'vuex';
                 }
             }
             if(this.course_data.coachs.length > 0){
+                console.log("coach :",this.course_order)
                 console.log(this.course_data.coachs.filter(v => v.course_coach_id === this.course_order.coach))
                 this.course_order.coach_name = this.course_data.coachs.filter(v => v.course_coach_id === this.course_order.coach)[0].coach_name 
                 this.course_order.coach_id = this.course_data.coachs.filter(v => v.course_coach_id === this.course_order.coach)[0].coach_id 
@@ -611,8 +622,6 @@ import { mapActions, mapGetters } from 'vuex';
                             this.parent.username = username 
                         }
                     }
-
-                  
                 })
             }else{
                 this.user_data = []

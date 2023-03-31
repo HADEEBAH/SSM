@@ -371,6 +371,40 @@
                 </v-col>
               </v-row>
             </v-col>
+            <v-col cols="12" sm="6">
+              <label-custom required text="วันสอน"></label-custom>
+              <v-autocomplete
+                dense
+                :disabled="disable"
+                :outlined="!disable"
+                :filled="disable"
+                chips
+                :rules="rules.class_date"
+                deletable-chips
+                item-color="pink"
+                multiple
+                color="#FF6B81"
+                :items="days_confix"
+                item-text="label"
+                item-value="value"
+                placeholder="โปรดเลือกวันสอน"
+                v-model="course_data.coachs[0].teach_day_data.teach_day"
+              >
+              <template v-slot:selection="{ attrs, item, selected }">
+                <v-chip
+                  v-bind="attrs"
+                  :input-value="selected"
+                  close
+                  small
+                  color="#ffeeee"
+                  text-color="#ff6b81"
+                  @click:close="removeChip(item, course_data.coachs[0].teach_day_data.teach_day)"
+                >
+                  <strong>{{ item.label }}</strong>
+                </v-chip>
+              </template>
+            </v-autocomplete>
+            </v-col>
           </v-row>
           <v-row dense>
             <v-col cols="12" sm="6">
@@ -455,10 +489,7 @@
                 </v-col>
               </v-row>
             </v-col>
-          </v-row>
-          <v-row dense>
-              <!-- PERIOD -->
-              <v-col cols="12" sm="6">
+            <v-col cols="12" sm="6">
               <label-custom required text="เวลาเรียน"></label-custom>
               <v-row>
                 <v-col>
@@ -512,6 +543,10 @@
             </v-col>
           </v-row>
           <v-row dense>
+              <!-- PERIOD -->
+         
+          </v-row>
+          <v-row dense>
             <v-col cols="12">
               <label-custom text="รายละเอียดคอร์ส"></label-custom>
               <v-textarea
@@ -552,6 +587,7 @@ export default {
   props:{
     categorys : {type : Array},
     coachs : {type : Array},
+    disable : {type : Boolean , default: false}
   },
   components: {
     LabelCustom,
@@ -564,10 +600,15 @@ export default {
   data: () => ({
     today:new Date(),
     preview_url: null,
-    // coachs: [ 
-    //   {account_id : "16775648309278", first_name_th : 'ฟาติมา', last_name_th : 'จูฮัน', full_name : "ฟาติมา จูฮัน"} ,
-    //   {account_id : "4294589844485338", first_name_th : 'ทดสอบ', last_name_th : 'ทดสอบ', full_name : "ทดสอบ ทดสอบ"}
-    // ],
+    days_confix: [
+      { label: "วันอาทิตย์", value: 0 },
+      { label: "วันจันทร์", value: 1 },
+      { label: "วันอังคาร", value:2 },
+      { label: "วันพุทธ", value: 3 },
+      { label: "วันพฤหัสบดี", value:4 },
+      { label: "วันศุกร์", value: 5 },
+      { label: "วันเสาร์", value: 6 },
+    ],
     rules: {
       course_name_th: [
         (val) => (val || "").length > 0 || "โปรดระบุชื่อคอร์ส(ภาษาไทย)",
@@ -618,6 +659,9 @@ export default {
     ...mapActions({
       ChangeCourseData: "CourseModules/ChangeCourseData",
     }),
+    removeChip (item, value) {
+      value.splice(value.indexOf(item), 1)
+    },
     width () {
         switch (this.$vuetify.breakpoint.name) {
           case 'xs': return 99

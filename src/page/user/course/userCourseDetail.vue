@@ -4,7 +4,7 @@
       <v-img
         class="rounded-lg mb-3"
         max-height="30vw"
-        src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+        :src="course_data.course_img"
       ></v-img>
       <v-row dense
         ><v-col class="text-lg font-bold">
@@ -17,7 +17,7 @@
           <v-col cols="auto">
             <v-icon color="#ff6b81">mdi-currency-usd</v-icon>
           </v-col>
-          <v-col class="font-bold">{{course_data.price_course}} บาท/คน</v-col>
+          <v-col class="font-bold">{{parseFloat(course_data.price_course).toLocaleString()}} บาท/คน</v-col>
         </v-row>
       </template>
       <!-- GENERAL COURSE -->
@@ -49,20 +49,16 @@
           </v-expansion-panel-header>
           <v-expansion-panel-content class="border-t pt-3">
             <v-row dense>
-           
               <v-col cols="auto">วันรับสมัคร:</v-col>
-              <v-col> {{ new Date(course_data.course_register_end_date).toLocaleDateString("th-TH",date_options)}}    {{course_data}}</v-col>
+              <v-col> {{ new Date(course_data.course_register_start_date).toLocaleDateString("th-TH",date_options)}}-{{ new Date(course_data.course_register_end_date).toLocaleDateString("th-TH",date_options)}}</v-col>
             </v-row>
             <v-row dense>
               <v-col cols="auto">วันเรียน:</v-col>
-              <v-col>13-15 มี.ค. 2566 (13.00-14.30 น.)</v-col>
+              <v-col>{{ new Date(course_data.course_study_start_date).toLocaleDateString("th-TH",date_options)}} - {{ new Date(course_data.course_study_end_date).toLocaleDateString("th-TH",date_options)}} ({{course_data.course_period_start_date}}-{{ course_data.course_period_end_date }} น.)</v-col>
             </v-row>
             <v-row dense>
               <v-col cols="12" class="text-[#999999]">
-                หลักสูตรนี้เน้นการฝึกเล่นเปียโน ประกอบการร้องเพลง
-                ทั้งบรรเลงเดี่ยวและรวมวง เน้นความสนุกสนานเพลิดเพลิน
-                โดยผู้เรียนสามารถเลือกเพลงได้ตามความสนใจ ทั้งเพลงไทยและสากล
-                ทั้งแนว Rock , Pop ฯลฯ</v-col
+                {{ course_data.detail  }}</v-col
               >
             </v-row>
           </v-expansion-panel-content>

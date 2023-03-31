@@ -32,7 +32,6 @@ router.beforeEach((to, from, next ) => {
         }else{
           next({name : 'UserKingdom'})
         }
-       
       }else if(to.matched[0].name === "Admin"){
         console.log("user_detail",user_detail)
         if(user_detail?.roles.includes("R_2") || user_detail?.roles.includes("R_1")){

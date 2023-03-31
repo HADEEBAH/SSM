@@ -29,57 +29,6 @@ const orderModules = {
             students: [],
 
         },
-        //students :[ {
-        //         account_id : "",
-        //         username: "",
-        //         firstname: "",
-        //         lastname: "",
-        //         tel: "",
-        //         is_other: false,
-        //         parents: [{
-        //             account_id : "",
-        //             username: "",
-        //             firstname: "",
-        //             lastname: "",
-        //                 tel: "",
-        //         }
-        //     },{
-        //         account_id : '',
-        //         username: "",
-        //         firstname: "",
-        //         lastname: "",
-        //         tel: "",
-        //         is_other: true,
-        //         parents: [{
-        //             account_id : "",
-        //             username: "",
-        //             firstname: "",
-        //             lastname: "",
-        //                 tel: "",
-        //         }]
-        // เขียนใน API
-        // courses:[{
-        //     course_id : "",
-        //     course_type_id : "",
-        //     category_id : "",
-        //     category_name : "",
-        //     option_id : "",
-        //     option_name : "",
-        //     package_id:"",
-        //     package_name : "",
-        //     day_of_weer_id : "",
-        //     day_of_weer : "",
-        //     time_id : "",
-        //     time : "",
-        //     start_date : "",
-        //     remark : "",
-        //     price : "",
-        //     coahc : {
-        //         account_id : " ",
-        //     },
-        //     students:[],
-        //     }],
-        // }]
         order: {
             order_step : 0,
             order_number: "",
@@ -216,7 +165,7 @@ const orderModules = {
                         "student": students
                     }
                     let price = course.option.net_price ? course.option.net_price : course.price
-                    total_price =  total_price + price
+                    total_price = total_price + (price * course.students.lenght )
                 })
                 payload.totalPrice = total_price
                 let config = {
