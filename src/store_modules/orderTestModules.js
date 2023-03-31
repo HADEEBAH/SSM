@@ -132,66 +132,7 @@ const orderModules = {
             }
         ],
 
-        cart_list: [
-            {
-                orders_tmp_id: "",
-                kingdom: "",
-                course_type: "",
-                day_of_week_id: "",
-                time_id: null,
-                course_type_id: "",
-                category_id: "",
-                package: "",
-                package_data: {
-                    package_id: "",
-                    package: "",
-                    students: "",
-                    options: []
-                },
-                option: {
-                    course_package_option_id: "",
-                    discount: false,
-                    total_price: "",
-                    net_price: "",
-                    net_price_unit: ""
-                },
-                option_data: "",
-                period: "",
-                times_in_class: "",
-                day: {
-                    course_coach_id: "",
-                    day: []
-                },
-                course_package_option_id: "",
-                coach: "",
-                start_day: "",
-                detail: "",
-                selected: true,
-                parents: [],
-                students: [
-                    {
-                        account_id: "",
-                        parents: [
-                            {
-                                account_id: null,
-                                firstname_th: null,
-                                lastname_th: null,
-                                firstname_en: null,
-                                lastname_en: null,
-                                tel: null
-                            }
-                        ],
-                        is_account: false,
-                        is_other: ""
-                    }
-                ],
-                course_id: "",
-                course_name_th: "",
-                course_name_en: "",
-                time_count: "",
-                coach_name: ""
-            }
-        ],
+        cart_list: [],
 
 
 

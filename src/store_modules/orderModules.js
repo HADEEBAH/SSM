@@ -255,8 +255,11 @@ const orderModules = {
                         },
                         "student": students
                     })
-                    let price = course.option.net_price ? course.option.net_price : course.price
-                    total_price =  total_price + (price * course.students.lenght )
+                    console.log("course.students.lenght ",course.students )
+                    console.log("course.price ",course.price )
+                    let price = course.option?.net_price ? course.option.net_price : course.price
+                    console.log("price ",price )
+                    total_price =  total_price + (price * course.students.length )
                 })
                 payload.totalPrice = total_price
                 console.log("saveOrder",payload)

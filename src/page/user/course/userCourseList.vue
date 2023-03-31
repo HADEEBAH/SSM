@@ -19,7 +19,6 @@
                 </v-card>
             </v-col>
         </v-row>
-        {{ courses }}
         <v-row dense>
             <template v-if="!courses_is_loading">
                 <v-col cols="6" sm="4" v-for="(course, course_index) in courses" :key="course_index">
