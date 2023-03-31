@@ -21,7 +21,7 @@ router.beforeEach((to, from, next ) => {
       let order =  JSON.parse(localStorage.getItem("Order"))
       let user_detail = JSON.parse(localStorage.getItem("userDetail"))
       console.log(from.name)
-      if(to.name == "userCourseDetail_courseId" || to.name == "userCoursePackage_courseId" || to.name == "userCoursePayment"){
+      if(to.name == "userCourseDetail_courseId" || to.name == "userCoursePackage_courseId" ){
         console.log("order",order)
         if(order){
           if(from.name === "Login" && order.course_id && order.category_id){
@@ -32,7 +32,6 @@ router.beforeEach((to, from, next ) => {
         }else{
           next({name : 'UserKingdom'})
         }
-       
       }else if(to.matched[0].name === "Admin"){
         console.log("user_detail",user_detail)
         if(user_detail?.roles.includes("R_2") || user_detail?.roles.includes("R_1")){

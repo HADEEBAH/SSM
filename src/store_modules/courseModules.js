@@ -259,7 +259,6 @@ const CourseModules = {
     // COURSE :: LIST 
     async GetCoursesList(context,){
       try{
-        
         let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/list?limit=10&page=1`)
         let courses = []
         let category = {}
@@ -297,7 +296,7 @@ const CourseModules = {
             type:  data.data.courseTypeName,
             course_name_th: data.data.courseNameTh,
             course_name_en:  data.data.courseNameEn,
-            course_img : data.data.courseImg,
+            course_img : `${process.env.VUE_APP_URL}/api/v1/files/${data.data.courseImg}`,
             category_id :  data.data.categoryId,
             category_name_th: data.data.categoryNameTh,
             course_open_date: data.data.courseOpenDate,

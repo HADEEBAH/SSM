@@ -19,6 +19,7 @@
                 </v-card>
             </v-col>
         </v-row>
+        {{ courses }}
         <v-row dense>
             <template v-if="!courses_is_loading">
                 <v-col cols="6" sm="4" v-for="(course, course_index) in courses" :key="course_index">
@@ -74,9 +75,13 @@ import { mapGetters, mapActions } from 'vuex';
         mounted() {
             this.GetCategory(this.$route.params.category_id)
             this.$store.dispatch("NavberUserModules/changeTitleNavber","คอร์สเรียน")
-            this.type_selected = this.course_types[0].course_type_id
+            if(this.course_types.length > 0){
+                this.type_selected = this.course_types[0].course_type_id
+            }
         },
-        watch: {},
+        watch: {
+            
+        },
         computed: {
             ...mapGetters({
                 courses_is_loading : "CourseModules/getCoursesIsLoading",
@@ -85,6 +90,7 @@ import { mapGetters, mapActions } from 'vuex';
                 category : "CategoryModules/getCategory",
                 course_types : "CourseModules/getCourseTypes"
             })
+            
         },
         methods: {
             ...mapActions({

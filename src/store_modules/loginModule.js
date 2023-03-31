@@ -40,6 +40,7 @@ const loginModules = {
     },
     actions: {
         async checkUsernameOneid(context,{username,status,type}){
+            context.commit("SetIsLoading",true)
             try{
                 if(status){
                     status = 'Active'
@@ -67,8 +68,10 @@ const loginModules = {
                             }
                         })
                     }
+                    context.commit("SetIsLoading",false)
                 }
             }catch(error){
+                context.commit("SetIsLoading",false)
                 Swal.fire({
                     icon: "error",
                     title: error.message
