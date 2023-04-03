@@ -42,7 +42,7 @@
           <label>คอร์สเรียนของฉัน</label>
         </v-col>
         <v-col cols="3" sm="4" align="right" class="mt-1">
-          <label class="pink--text">4 คอร์ส</label>
+          <label class="pink--text">คอร์ส</label>
         </v-col>
         <v-col cols="2" sm="1" align="right" class="mt2">
           <span class="mdi mdi-chevron-right"></span>
@@ -267,6 +267,7 @@
     // this.getStudentData(this.$route.params.order_item_id)
         // this.GetStudentData(this.$route.params.order_item_id)
         this.user_login = JSON.parse(localStorage.getItem("userDetail"))
+        this.GetStudentData(this.user_login.account_id);
     // console.log("userDetail", this.user_login);
     //this.$store.dispatch('GetStudentData', this.$route.params.order_item_id)
   },
@@ -277,6 +278,7 @@
     methods: {
       ...mapActions({
         loginOneId: "loginModules/loginOneId",
+        GetStudentData: "MyCourseModules/GetStudentData",
         // GetStudentData: "OrderTestModules/GetStudentData"
       }),
 
@@ -316,6 +318,7 @@
     computed: {
       ...mapGetters({
         user_one_id: "loginModules/getUserOneId",
+        student_data: "MyCourseModules/getStudentData",
         // student_data: "OrderTestModules/getStudentData"
       }),
 

@@ -92,13 +92,12 @@
 </template>
  
 <script>
-import headerPage from "@/components/header/headerPage.vue";
+// import headerPage from "@/components/header/headerPage.vue";
 import { mapActions, mapGetters } from "vuex";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 export default {
   components: {
     loadingOverlay,
-    headerPage,
   },
   data: () => ({
     imgurl: "categoryImg",

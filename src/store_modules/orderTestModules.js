@@ -172,9 +172,6 @@ const orderModules = {
                 students: [],
             }
         },
-        SetStudentData(state, payload) {
-            state.student_data = payload
-        },
         SetCartList(state, payload) {
             state.cart_list = payload
         }
@@ -389,41 +386,6 @@ const orderModules = {
                 console.log(error)
             }
         },
-        // STUDENT :: DETAIL
-        // async GetStudentData(context, {user_data} ) {
-        //     try {
-        //         console.log("order_item_id =>", user_data);
-        //         let { data } = await axios.get(`${process.env.VUE_APP_URL}api/v1/order/item/student/${user_data}`)
-        //         const student_data = data.data
-        //         console.log("Getstudenet", data.data)
-        //         console.log("order_item_id =>", user_data);
-
-        //         console.log("order_item_id 2 =>", user_data);
-        //         if(data.statusCode === 200){
-        //             console.log("success", data);
-        //         }
-        //         context.commit("SetStudentData",student_data)
-        //       }catch(error){
-        //         console.log(error)
-        //       }
-        // },
-
-        async GetStudentData(context, account_id) {
-            console.log("account_id =>", account_id);
-            try {
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`)
-                console.log(data)
-                if (data.statusCode === 200) {
-                    context.commit("SetStudentData", data.data)
-                    console.log("SetStudentData", data.data);
-                } else {
-                    throw { error: data }
-                }
-            } catch (error) {
-                console.log(error)
-            }
-        },
-
         async GetCartList(context, account_id) {
             console.log("account_id", account_id);
             try {
@@ -471,9 +433,6 @@ const orderModules = {
         },
         getOrders(state) {
             return state.orders
-        },
-        getStudentData(state) {
-            return state.student_data
         },
         getCartList(state) {
             return state.cart_list

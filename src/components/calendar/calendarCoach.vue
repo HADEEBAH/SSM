@@ -50,7 +50,7 @@
         <v-date-picker
             v-model="focus"
             v-else-if="type === 'month'"
-            class="w-full"
+            
             no-title
             :event-color="(date) => (date[9] % 2 ? 'red' : 'yellow')"
             :events="functionEvents"
@@ -221,6 +221,7 @@ export default {
         },
         functionEvents(date) {
             let events_data = [];
+            
             this.events.forEach((event) => {
                 let [date_event] = event.start.split(" ");
                 let [year, month, day] = date_event.split("-");
