@@ -1,6 +1,7 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import router from "@/router";
+import VueCookie from "vue-cookie"
 const orderModules = {
     namespaced: true,
     state: {
@@ -89,6 +90,49 @@ const orderModules = {
         },
         orders: [],
         order_detail: {},
+        student_data: [
+            {
+                courseId: "",
+                courseNameTh: "",
+                courseNameEng: "",
+                courseOpenDate: "",
+                courseLocation: "",
+                courseDescription: "",
+                courseMusicPerformance: null,
+                courseStatus: "",
+                courseCertification: "",
+                courseImg: "",
+                coursePerTime: "",
+                courseRegisterStartDate: null,
+                courseRegisterEndDate: null,
+                courseStudyStartDate: null,
+                courseStudyEndDate: null,
+                coursePeriodEndDate: null,
+                coursePeriodStartDate: null,
+                coursePrice: "",
+                courseStudentRecived: "",
+                courseStudentTotal: null,
+                totalAmount: "",
+                successCount: "",
+                pendingCount: "",
+                dates: [],
+                orderId: "",
+                orderItemId: "",
+                cpoId: "",
+                dayOfWeekId: "",
+                timeId: "",
+                coachId: "",
+                coachName: "",
+                orderStudentId: "",
+                studentId: "",
+                coursePackageOptionId: "",
+                courseNameEn: "",
+                start: "",
+                end: "",
+                dayOfWeekName: []
+            }
+        ],
+
         cart_list: [],
 
 
@@ -345,7 +389,14 @@ const orderModules = {
         async GetCartList(context, account_id) {
             console.log("account_id", account_id);
             try {
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/cart/account/${account_id}`)
+                let config = {
+                    headers:{
+                        "Access-Control-Allow-Origin" : "*",
+                        "Content-type": "Application/json",
+                        'Authorization' : `Bearer ${VueCookie.get("token")}`
+                    }
+                  }
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/cart/account/${account_id}`,config)
                 console.log(data)
                 if (data.statusCode === 200) {
                     for (const item of data.data) {

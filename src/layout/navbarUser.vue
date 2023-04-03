@@ -7,12 +7,8 @@
         <v-app-bar-title class="font-bold">{{ titel_navber }}</v-app-bar-title>
         <v-spacer></v-spacer>
         <template v-if="user_detail">
-          <v-badge class="mr-3" overlap color="#F03D3E" >
-            <v-icon dark>mdi-bell-outline</v-icon>
-          </v-badge>
-          <v-badge class="mr-5" overlap color="#F03D3E" >
-            <v-icon dark  @click="$router.push({name: 'CartList'})">mdi-cart</v-icon>
-          </v-badge>
+          <v-icon class="mr-5" dark>mdi-bell-outline</v-icon>
+          <v-icon class="mr-5" dark  @click="$router.push({name: 'CartList'})">mdi-cart</v-icon>
           <div v-if="!$vuetify.breakpoint.smAndDown">
             <v-avatar class="mx-2" size="24">
               <v-img src="https://cdn.vuetifyjs.com/images/lists/4.jpg" size="24" />
@@ -132,7 +128,7 @@ export default {
       { icon: "mdi-account-circle", title : "โปรไฟล์", to:"UserProfile", roles:[]},
       { icon: "mdi-calendar-month", title : "ตารางเรียน", to:"", roles:[]},
       { icon: "mdi-book-cog-outline", title : "การจัดการ", to:"menageCourse", roles:["R_1","R_2","R_3"]},
-      { icon: "mdi-history", title : "ประวัติการสั่งซื้อ", to:"", roles:[]},
+      { icon: "mdi-history", title : "ประวัติการสั่งซื้อ", to:"orderHistory", roles:[]},
       { icon: "mdi-swap-horizontal-bold", title : "หน้าผู้ดูแลระบบ", to:"Admin", roles: ["R_1","R_2"]},
       { icon: "mdi-logout", title : "ออกจากระบบ", to:"logOut", roles:[]},
       
@@ -144,10 +140,7 @@ export default {
     this.active_menu = this.$route.name
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
   },
-  mounted() {
-  
-   
-  },
+  mounted() {},
   watch: {},
   computed: {
     ...mapGetters({

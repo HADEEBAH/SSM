@@ -39,6 +39,9 @@ import ProfileRules from '@/page/user/profile/profileRules.vue'
 import StudentsSchedule from '@/page/user/studentsCourse/studentsSchedule.vue'
 import StudentCourse from '@/page/user/studentsCourse/studentCourse.vue'
 import StudentBookedDetail from '@/page/user/studentsCourse/studentBookedDetail.vue'
+//order
+import orderHistory from '@/page/user/order/orderHistory.vue'
+
 
 //auth
 // import UserLoginPage from '@/page/auth/userLoginPage'
@@ -260,7 +263,11 @@ const routes = [
         name: 'StudentBookedDetail',
         component: StudentBookedDetail,
       },
-    
+      {
+        path: 'order/history',  
+        name: 'orderHistory',
+        component: orderHistory,
+      },
       
     ]
   },

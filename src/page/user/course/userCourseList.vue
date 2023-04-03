@@ -61,6 +61,7 @@
   <script>
 import { mapGetters, mapActions } from 'vuex';
     export default {
+  components: {},
         name:"userCourseList",  
         data: () => ({
             loading : true,
@@ -74,9 +75,13 @@ import { mapGetters, mapActions } from 'vuex';
         mounted() {
             this.GetCategory(this.$route.params.category_id)
             this.$store.dispatch("NavberUserModules/changeTitleNavber","คอร์สเรียน")
-            this.type_selected = this.course_types[0].course_type_id
+            if(this.course_types.length > 0){
+                this.type_selected = this.course_types[0].course_type_id
+            }
         },
-        watch: {},
+        watch: {
+            
+        },
         computed: {
             ...mapGetters({
                 courses_is_loading : "CourseModules/getCoursesIsLoading",
@@ -85,6 +90,7 @@ import { mapGetters, mapActions } from 'vuex';
                 category : "CategoryModules/getCategory",
                 course_types : "CourseModules/getCourseTypes"
             })
+            
         },
         methods: {
             ...mapActions({

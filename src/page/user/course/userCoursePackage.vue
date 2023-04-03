@@ -5,7 +5,7 @@
             <template v-slot:img>
                 <v-row dense class="d-flex align-center h-full">
                     <v-col>
-                        <v-img class="rounded-lg" src="https://cdn.vuetifyjs.com/images/cards/cooking.png" max-height="122" max-width="122"></v-img>
+                        <v-img class="rounded-lg" :src="course_data.course_img" max-height="122" max-width="122"></v-img>
                     </v-col>
                 </v-row>
             </template>

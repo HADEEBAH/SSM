@@ -29,57 +29,6 @@ const orderModules = {
             students: [],
 
         },
-        //students :[ {
-        //         account_id : "",
-        //         username: "",
-        //         firstname: "",
-        //         lastname: "",
-        //         tel: "",
-        //         is_other: false,
-        //         parents: [{
-        //             account_id : "",
-        //             username: "",
-        //             firstname: "",
-        //             lastname: "",
-        //                 tel: "",
-        //         }
-        //     },{
-        //         account_id : '',
-        //         username: "",
-        //         firstname: "",
-        //         lastname: "",
-        //         tel: "",
-        //         is_other: true,
-        //         parents: [{
-        //             account_id : "",
-        //             username: "",
-        //             firstname: "",
-        //             lastname: "",
-        //                 tel: "",
-        //         }]
-        // เขียนใน API
-        // courses:[{
-        //     course_id : "",
-        //     course_type_id : "",
-        //     category_id : "",
-        //     category_name : "",
-        //     option_id : "",
-        //     option_name : "",
-        //     package_id:"",
-        //     package_name : "",
-        //     day_of_weer_id : "",
-        //     day_of_weer : "",
-        //     time_id : "",
-        //     time : "",
-        //     start_date : "",
-        //     remark : "",
-        //     price : "",
-        //     coahc : {
-        //         account_id : " ",
-        //     },
-        //     students:[],
-        //     }],
-        // }]
         order: {
             order_step : 0,
             order_number: "",
@@ -91,8 +40,16 @@ const orderModules = {
         },
         orders : [],
         order_detail : {},
+        order_is_loading : false,
+        orders_is_loading : false,
     },
     mutations: {
+        SetOrderIsLoading(state, value){
+            state.order_is_loading = value
+        },
+        SetOrdersIsLoading(state, value){
+            state.orders_is_loading = value
+        },
         SetOrder(state, payload) {
             state.order = payload
         },
@@ -159,7 +116,7 @@ const orderModules = {
                 console.log(order)
                 let payload = {
                     order_id : "",
-                    courses : [],
+                    courses : {},
                     created_by : "",
                     paymentStatus: "pending",
                     paymentType: "",
@@ -199,7 +156,7 @@ const orderModules = {
                             })
                         }
                     })
-                    payload.courses.push({
+                    payload.courses = {
                         "courseId" :  course.course_id,
                         "courseName" : course.course_name,
                         "coursePackageOptionId": course.option.course_package_option_id ? course.option.course_package_option_id : "",
@@ -214,9 +171,9 @@ const orderModules = {
                             "fullName": course.coach_name,
                         },
                         "student": students
-                    })
+                    }
                     let price = course.option.net_price ? course.option.net_price : course.price
-                    total_price =  total_price + price
+                    total_price = total_price + (price * course.students.lenght )
                 })
                 payload.totalPrice = total_price
                 let config = {
@@ -232,13 +189,14 @@ const orderModules = {
                     localStorage.removeItem("Order")
                     context.commit("SetResetCourseData")
                     context.commit("SetOrder",{
-                    order_step : 0,
-                    order_number: "",
-                    courses:[],
-                    created_by : "",
-                    payment_status: "",
-                    payment_type: "",
-                    total_price: 0, })
+                        order_step : 0,
+                        order_number: "",
+                        courses:[],
+                        created_by : "",
+                        payment_status: "",
+                        payment_type: "",
+                        total_price: 0,
+                    })
                     router.replace({ name: "UserKingdom" });
                 }
             }catch(error){
@@ -246,6 +204,7 @@ const orderModules = {
             }
         },
         async saveOrder(context) {
+            context.commit("SetOrderIsLoading", true)
             try{
                 let order = context.state.order
                 console.log(order)
@@ -261,7 +220,6 @@ const orderModules = {
                 await order.courses.forEach((course)=>{
                     let students = []
                     course.students.forEach((student)=>{
-                        console.log("student",student.parents[0])
                         if(student.parents[0]){   
                             students.push({
                                 "accountId": student.account_id ? student.account_id : "",
@@ -306,8 +264,11 @@ const orderModules = {
                         },
                         "student": students
                     })
-                    let price = course.option.net_price ? course.option.net_price : course.price
-                    total_price =  total_price + price
+                    console.log("course.students.lenght ",course.students )
+                    console.log("course.price ",course.price )
+                    let price = course.option?.net_price ? course.option.net_price : course.price
+                    console.log("price ",price )
+                    total_price =  total_price + (price * course.students.length )
                 })
                 payload.totalPrice = total_price
                 console.log("saveOrder",payload)
@@ -339,9 +300,11 @@ const orderModules = {
                             total_price: 0,
                         })
                         window.location.href = payment.data.data
+                        context.commit("SetOrderIsLoading", false)
                     }
                 }
             }catch(error){
+                context.commit("SetOrderIsLoading", false)
                 console.log(error)
             }
         },
@@ -355,7 +318,13 @@ const orderModules = {
         },
         getOrders(state){
             return state.orders
-        }
+        },
+        getOrderIsLoading(state){
+            return state.order_is_loading
+        },
+        getOrdersIsLoading(state){
+            return state.orders_is_loading
+        },
 
     },
 };
