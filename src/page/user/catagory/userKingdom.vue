@@ -58,8 +58,8 @@
         </v-carousel>
       </template>
     </v-card>
-      <headerPage title="อาณาจักร" class="ml-5"></headerPage>
-
+      <!-- <headerPage title="อาณาจักร" class="ml-5"></headerPage> -->
+      <div class="text-2xl font-bold my-10 mx-10">อาณาจักร</div>
       <v-container fluid grid-list-md>
         <v-row>
           <v-col
@@ -158,11 +158,11 @@
 </template>
  
 <script>
-import headerPage from "@/components/header/headerPage.vue";
+// import headerPage from "@/components/header/headerPage.vue";
 import { mapActions, mapGetters } from "vuex";
 export default {
   components: {
-    headerPage,
+    // headerPage,
   },
   data: () => ({
     imgurl: "categoryImg",

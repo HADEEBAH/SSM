@@ -11,6 +11,7 @@ import UserManageModules from '@/store_modules/userManageModules'
 import CategoryModules from './store_modules/categoryModules'
 import ProfileModules from '@/store_modules/profileModules'
 import OrderTestModules from '@/store_modules/orderTestModules'
+import MyCourseModules from '@/store_modules/myCourseModules'
 
 
 
@@ -28,7 +29,9 @@ const store = new Vuex.Store({
     UserManageModules: UserManageModules,
     CategoryModules: CategoryModules,
     ProfileModules: ProfileModules,
-    OrderTestModules: OrderTestModules
+    OrderTestModules: OrderTestModules,
+    MyCourseModules:MyCourseModules
+
 
 
   }

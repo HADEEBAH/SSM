@@ -89,109 +89,7 @@ const orderModules = {
         },
         orders: [],
         order_detail: {},
-        student_data: [
-            {
-                courseId: "",
-                courseNameTh: "",
-                courseNameEng: "",
-                courseOpenDate: "",
-                courseLocation: "",
-                courseDescription: "",
-                courseMusicPerformance: null,
-                courseStatus: "",
-                courseCertification: "",
-                courseImg: "",
-                coursePerTime: "",
-                courseRegisterStartDate: null,
-                courseRegisterEndDate: null,
-                courseStudyStartDate: null,
-                courseStudyEndDate: null,
-                coursePeriodEndDate: null,
-                coursePeriodStartDate: null,
-                coursePrice: "",
-                courseStudentRecived: "",
-                courseStudentTotal: null,
-                totalAmount: "",
-                successCount: "",
-                pendingCount: "",
-                dates: [],
-                orderId: "",
-                orderItemId: "",
-                cpoId: "",
-                dayOfWeekId: "",
-                timeId: "",
-                coachId: "",
-                coachName: "",
-                orderStudentId: "",
-                studentId: "",
-                coursePackageOptionId: "",
-                courseNameEn: "",
-                start: "",
-                end: "",
-                dayOfWeekName: []
-            }
-        ],
-
-        cart_list: [
-            {
-                orders_tmp_id: "",
-                kingdom: "",
-                course_type: "",
-                day_of_week_id: "",
-                time_id: null,
-                course_type_id: "",
-                category_id: "",
-                package: "",
-                package_data: {
-                    package_id: "",
-                    package: "",
-                    students: "",
-                    options: []
-                },
-                option: {
-                    course_package_option_id: "",
-                    discount: false,
-                    total_price: "",
-                    net_price: "",
-                    net_price_unit: ""
-                },
-                option_data: "",
-                period: "",
-                times_in_class: "",
-                day: {
-                    course_coach_id: "",
-                    day: []
-                },
-                course_package_option_id: "",
-                coach: "",
-                start_day: "",
-                detail: "",
-                selected: true,
-                parents: [],
-                students: [
-                    {
-                        account_id: "",
-                        parents: [
-                            {
-                                account_id: null,
-                                firstname_th: null,
-                                lastname_th: null,
-                                firstname_en: null,
-                                lastname_en: null,
-                                tel: null
-                            }
-                        ],
-                        is_account: false,
-                        is_other: ""
-                    }
-                ],
-                course_id: "",
-                course_name_th: "",
-                course_name_en: "",
-                time_count: "",
-                coach_name: ""
-            }
-        ],
+        cart_list: [],
 
 
 
@@ -229,9 +127,6 @@ const orderModules = {
                 parents: [],
                 students: [],
             }
-        },
-        SetStudentData(state, payload) {
-            state.student_data = payload
         },
         SetCartList(state, payload) {
             state.cart_list = payload
@@ -447,41 +342,6 @@ const orderModules = {
                 console.log(error)
             }
         },
-        // STUDENT :: DETAIL
-        // async GetStudentData(context, {user_data} ) {
-        //     try {
-        //         console.log("order_item_id =>", user_data);
-        //         let { data } = await axios.get(`${process.env.VUE_APP_URL}api/v1/order/item/student/${user_data}`)
-        //         const student_data = data.data
-        //         console.log("Getstudenet", data.data)
-        //         console.log("order_item_id =>", user_data);
-
-        //         console.log("order_item_id 2 =>", user_data);
-        //         if(data.statusCode === 200){
-        //             console.log("success", data);
-        //         }
-        //         context.commit("SetStudentData",student_data)
-        //       }catch(error){
-        //         console.log(error)
-        //       }
-        // },
-
-        async GetStudentData(context, account_id) {
-            console.log("account_id =>", account_id);
-            try {
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`)
-                console.log(data)
-                if (data.statusCode === 200) {
-                    context.commit("SetStudentData", data.data)
-                    console.log("SetStudentData", data.data);
-                } else {
-                    throw { error: data }
-                }
-            } catch (error) {
-                console.log(error)
-            }
-        },
-
         async GetCartList(context, account_id) {
             console.log("account_id", account_id);
             try {
@@ -522,9 +382,6 @@ const orderModules = {
         },
         getOrders(state) {
             return state.orders
-        },
-        getStudentData(state) {
-            return state.student_data
         },
         getCartList(state) {
             return state.cart_list

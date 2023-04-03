@@ -2,7 +2,8 @@
   <v-container>
     <div class="mx-10 my-5">
       <label class="text-xl font-bold">ข้อมูลตารางเรียน</label>
-      <!-- <pre>{{ student_data }}</pre> -->
+      <pre>{{ student_data.courseId }}</pre>
+      <!-- <pre>{{ SetcourseSchedule }}</pre> -->
       <!-- <pre>{{ courseData }}</pre> -->
       <v-row dense class="my-3">
         <v-col
@@ -34,36 +35,45 @@
       <!-- PAGE 1 -->
       <v-expand-x-transition transition="scale-transition">
         <div v-if="type_selected == 'students_course'">
-          <v-card>
+          <v-card
+            v-for="(item, index) in student_data"
+            :key="index"
+            @click="$router.push({ name: 'StudentCourse', params:{course_id: item.courseId }})"
+            class="my-10 drop-shadow-lg"
+          >
             <v-row dense>
               <!-- img -->
               <v-col cols="12" sm="2">
                 <v-col
-                  style="
-                    display: block;
+                  style=" 
+                    display: block; 
                     margin-left: auto;
                     margin-right: auto;
-                    width: 50%;
+                    width: 100%;
+                    margin-top: 10%;
                   "
                 >
-                  <img src="../../../assets/student_course/download.png" />
-                  <!-- {{ item.orderStudentId }} -->
+                  <!-- <img src="../../../assets/student_course/download.png" /> -->
+                  {{ student_data.courseImg }}
                 </v-col>
               </v-col>
               <!-- detail -->
               <v-col cols="12" sm="6">
                 <v-col class="text-lg font-bold">
-                  <!-- {{ item.courseNameTh }} -->
+                  {{ item.courseNameTh }}
                 </v-col>
                 <v-col class="text-slate-400">
-                  <!-- {{ item.courseNameEn }} -->
+                  {{ item.courseNameEn }}
                 </v-col>
                 <v-col class="text-slate-400">
-                  <!-- <span class="mdi mdi-account"></span> {{ item.courseNameTh }} -->
+                  <span class="mdi mdi-account">โค้ช :</span>
+                  {{ item.coachName }}
                 </v-col>
                 <v-col>
-                  <v-card color="yellow" class="rounded-lg w-48 text-center">
-                    วันจันทร์ 16:00 - 17:00 น.
+                  <!-- v-for="(day, index_day) in dayOfWeekName" :key="index_day" -->
+                  <v-card color="yellow" class="rounded-lg text-center">
+                    {{ dayOfWeekName(item.dayOfWeekName, "th") }}
+                    {{ item.start }} - {{ item.end }} น.
                   </v-card>
                   <!-- {{ item.courseNameEn }} -->
                 </v-col>
@@ -77,10 +87,10 @@
                     :rotate="-90"
                     :size="90"
                     :width="10"
-                    :value="value"
-                    color="primary"
+                    :value="(item.successCount / item.totalAmount) * 100"
+                    color="#ff6b81"
                   >
-                    {{ value }}
+                    {{ item.successCount }} / {{ item.totalAmount }} <br />ครั้ง
                   </v-progress-circular>
                 </v-col>
               </v-col>
@@ -117,12 +127,16 @@
               </v-card>
             </v-col>
           </v-row>
-          <template >
-            <calendarStudent
-              :events="tasks"
-              :type="time_frame"
-            ></calendarStudent>
-          </template>
+          <diV>
+            <!-- v-for="(item, index_item) in student_data" :key="index_item" -->
+
+            <template>
+              <calendarStudent
+                :events="itemTime.dates"
+                :type="time_frame"
+              ></calendarStudent>
+            </template>
+          </diV>
         </div>
       </v-expand-x-transition>
 
@@ -139,11 +153,12 @@
                 <!-- img -->
                 <v-col cols="12" sm="2">
                   <v-col
-                    style="
-                      display: block;
+                    style=" 
+                      display: block; 
                       margin-left: auto;
                       margin-right: auto;
-                      width: 50%;
+                      width: 100%;
+                      margin-top: 10%;
                     "
                   >
                     <img src="../../../assets/student_course/download.png" />
@@ -162,7 +177,7 @@
                     <!-- <span class="mdi mdi-account"></span> {{ item.courseNameTh }} -->
                   </v-col>
                   <v-col>
-                    <v-card color="yellow" class="rounded-lg w-48 text-center">
+                    <v-card color="yellow" class="rounded-lg text-center">
                       วันจันทร์ 16:00 - 17:00 น.
                     </v-card>
                     <!-- {{ item.courseNameEn }} -->
@@ -203,7 +218,7 @@ export default {
   data: () => ({
     activePage: 1,
     booked: "จองแล้ว",
-    value: "test",
+    value: "",
     loading: true,
     course_type: [
       { name: "คอร์สของฉัน", value: "students_course" },
@@ -215,92 +230,16 @@ export default {
       { label: "รายสัปดาห์", value: "week" },
       { label: "รายเดือน", value: "month" },
     ],
-    tasks: [
-      {
-        name: "เปียโนป๊อปเบื้องต้น",
-        subtitle: "Popular Piano",
-        coach: "นายสมชาย ศรีชาตรี",
-        start: "2023-04-1 10:00",
-        end: "2023-03-18 12:00",
-      },
-      {
-        name: "เปียโนป๊อปเบื้องต้น",
-        subtitle: "Popular Piano",
-        coach: "นายสมชาย ศรีชาตรี",
-        start: "2023-03-23 10:00",
-        end: "2023-03-23 13:00",
-      },
-      {
-        name: "เปียโนป๊อปเบื้องต้น",
-        subtitle: "Popular Piano",
-        coach: "นายสมชาย ศรีชาตรี",
-        start: "2023-03-23 13:00",
-        end: "2023-03-23 14:00",
-      },
-      {
-        name: "เปียโนป๊อปเบื้องต้น",
-        subtitle: "Popular Piano",
-        coach: "นายสมชาย ศรีชาตรี",
-        start: "2023-03-25 15:00",
-        end: "2023-03-25 16:00",
-      },
-    ],
-    courses: [
-      {
-        course_name: "เปียโนป๊อปเบื้องต้น (Popular Piano ) ",
-        coach_name: "นายสมชาย ศรีชาตรี",
-        category_name: "อาณาจักรดนตรี",
-        time: "10:00 - 11:00",
-        course_hours: "1",
-        package: "Family",
-      },
-      {
-        course_name: "เปียโนป๊อปเบื้องต้น (Popular Piano ) ",
-        coach_name: "นายสมชาย ศรีชาตรี",
-        category_name: "อาณาจักรดนตรี",
-        time: "10:00 - 11:00",
-        course_hours: "1",
-        package: "Family",
-      },
-      {
-        course_name: "เปียโนป๊อปเบื้องต้น (Popular Piano ) ",
-        coach_name: "นายสมชาย ศรีชาตรี",
-        category_name: "อาณาจักรดนตรี",
-        time: "10:00 - 11:00",
-        course_hours: "1",
-        package: "Family",
-      },
-      {
-        course_name: "เปียโนป๊อปเบื้องต้น (Popular Piano ) ",
-        coach_name: "นายสมชาย ศรีชาตรี",
-        category_name: "อาณาจักรดนตรี",
-        time: "10:00 - 11:00",
-        course_hours: "1",
-        package: "Family",
-      },
-      {
-        course_name: "เปียโนป๊อปเบื้องต้น (Popular Piano ) ",
-        coach_name: "นายสมชาย ศรีชาตรี",
-        category_name: "อาณาจักรดนตรี",
-        time: "10:00 - 11:00",
-        course_hours: "1",
-        package: "Family",
-      },
-      {
-        course_name: "เปียโนป๊อปเบื้องต้น (Popular Piano ) ",
-        coach_name: "นายสมชาย ศรีชาตรี",
-        category_name: "อาณาจักรดนตรี",
-        time: "10:00 - 11:00",
-        course_hours: "1",
-        package: "Family",
-      },
-    ],
+    tasks: [],
     type_selected: "students_course",
     time_frame: "month",
+    a_test: "",
+    b_test: "",
+    item: {},
   }),
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    // this.GetStudentData(this.user_detail.account_id);
+    this.GetStudentData(this.user_detail.account_id);
   },
 
   mounted() {
@@ -308,7 +247,6 @@ export default {
       "NavberUserModules/changeTitleNavber",
       "ข้อมูลตารางเรียน"
     );
-    console.log("user_detail", this.user_detail.account_id);
   },
 
   watch: {
@@ -318,10 +256,11 @@ export default {
         this.loading = false;
       }, 200);
     },
+
   },
   methods: {
     ...mapActions({
-      GetStudentData: "OrderTestModules/GetStudentData",
+      GetStudentData: "MyCourseModules/GetStudentData",
     }),
     prev() {
       this.$refs.calendar.prev();
@@ -330,21 +269,60 @@ export default {
     next() {
       this.$refs.calendar.next();
     },
-    // getCouse(courseId) {
-    //   console.log("course_id", courseId);
-    //   this.GetCourse(courseId);
-    // },
+
+    dayOfWeekName(day_numbers, language) {
+      let day_names = [];
+      for (let i = 0; i < day_numbers.length; i++) {
+        let day_number = +day_numbers[i];
+        if (language === "th") {
+          switch (day_number) {
+            case 0:
+              day_names.push("อาทิตย์");
+              break;
+            case 1:
+              day_names.push("จันทร์");
+              break;
+            case 2:
+              day_names.push("อังคาร");
+              break;
+            case 3:
+              day_names.push("พุธ");
+              break;
+            case 4:
+              day_names.push("พฤหัสบดี");
+              break;
+            case 5:
+              day_names.push("ศุกร์");
+              break;
+            case 6:
+              day_names.push("เสาร์");
+              break;
+            default:
+              day_names.push(null);
+          }
+        } else {
+          day_names.push(null);
+        }
+      }
+      day_names.sort(function (a, b) {
+        return b.localeCompare(a, "th", { numeric: true });
+      });
+
+      return day_names.join(", ");
+    },
   },
 
   computed: {
     ...mapGetters({
-      student_data: "OrderTestModules/getStudentData",
+      student_data: "MyCourseModules/getStudentData",
+      itemTime: "MyCourseModules/getcourseSchedule",
     }),
     studentData: {
       get() {
         return this.student_data;
       },
     },
+ 
     cal() {
       return this.ready ? this.$refs.calendar : null;
     },

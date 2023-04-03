@@ -250,7 +250,8 @@ const routes = [
         component: StudentsSchedule,
       },
       {
-        path: 'studentCourse',  
+        
+        path: 'studentCourse/:course_id',  
         name: 'StudentCourse',
         component: StudentCourse,
       },

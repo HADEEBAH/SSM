@@ -2,38 +2,71 @@
   <v-container>
     <v-card class="my-5">
       <div>
-        <v-row dense>
-          <v-col cols="4" sm="6">
-            <v-col>
-              <!-- {{ item}} -->
-              <!-- {{ item.orderStudentId }} -->
-            </v-col>
-          </v-col>
-          <v-col cols="4">
-            <v-col sm="6" class="text-lg font-bold">
-              <!-- {{ item.courseNameTh }} -->
-            </v-col>
-            <v-col sm="6" class="text-slate-400">
-              <!-- {{ item.courseNameEn }} -->
-            </v-col>
-            <v-col sm="6" class="text-slate-400">
-              <!-- <span class="mdi mdi-account"></span> {{ item.courseNameTh }} -->
-            </v-col>
-            <v-col>
-              <v-card color="yellow" class="rounded-xl text-center">
-                วันจันทร์ 16:00 - 17:00 น.
-              </v-card>
-              <!-- {{ item.courseNameEn }} -->
-            </v-col>
-          </v-col>
+        <!-- <pre>{{ student_data }}</pre> -->
+        <!-- <div v-if="type_selected == 'students_course'"> -->
+          <!-- @click="$router.push({ name: 'StudentCourse', params:{course_id: item.courseId }})" -->
 
-          <v-col cols="4" sm="6">
-            <v-col>
-              <!-- {{ item.courseNameEn }} -->
-            </v-col>
-          </v-col>
-        </v-row>
-      </div>
+          <v-card
+         
+            class="my-10 drop-shadow-lg"
+          >
+            <v-row dense>
+              <!-- img -->
+              <v-col cols="12" sm="2">
+                <v-col 
+                  style="  
+                    display: block; 
+                    margin-left: auto;
+                    margin-right: auto;
+                    width: 100%;
+                    margin-top: 10%;
+                  "
+                >
+                  <!-- <img src="../../../assets/student_course/download.png" /> -->
+                  {{ student_data.courseImg }}
+                </v-col>
+              </v-col>
+              <!-- detail -->
+              <v-col cols="12" sm="6">
+                <v-col class="text-lg font-bold">
+                  {{ student_data.courseNameTh }}
+                </v-col>
+                <v-col class="text-slate-400">
+                  {{ student_data.courseNameEn }}
+                </v-col>
+                <v-col class="text-slate-400">
+                  <span class="mdi mdi-account">โค้ช :</span>
+                  {{ student_data.coachName }}
+                </v-col>
+                <v-col>
+                  <!-- v-for="(day, index_day) in dayOfWeekName" :key="index_day" -->
+                  <v-card color="yellow" class="rounded-lg text-center">
+                    {{ dayOfWeekName(student_data.dayOfWeekName, "th") }}
+                    {{ student_data.start }} - {{ student_data.end }} น.
+                  </v-card>
+                  <!-- {{ item.courseNameEn }} -->
+                </v-col>
+              </v-col>
+
+              <!-- circle -->
+              <v-col cols="12" sm="4" class="pt-6" align="center">
+                <v-col>
+                  <!-- {{ item.courseNameEn }} -->
+                  <v-progress-circular
+                    :rotate="-90"
+                    :size="90"
+                    :width="10"
+                    :value="(student_data.successCount / student_data.totalAmount) * 100"
+                    color="#ff6b81"
+                  >
+                    {{ student_data.successCount }} / {{ student_data.totalAmount }} <br />ครั้ง
+                  </v-progress-circular>
+                </v-col>
+              </v-col>
+            </v-row>
+          </v-card>
+        </div>
+      <!-- </div> -->
     </v-card>
 
     <label-custom text="ข้อมูลการเรียน"></label-custom>
@@ -216,6 +249,10 @@ export default {
       },
     ],
   }),
+  created() {
+    this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+    this.GetStudentData(this.user_detail.account_id); 
+  },
   mounted() {
     this.$store.dispatch(
       "NavberUserModules/changeTitleNavber",
@@ -223,7 +260,8 @@ export default {
     );
   },
   methods: {
-    ...mapActions({}),
+      
+    ...mapActions({GetStudentData: "MyCourseModules/GetStudentData"}),
       download() {
         console.log("open");
        this.checked = true 
@@ -231,9 +269,51 @@ export default {
     closedownload() {
       this.checked = false 
     },
+
+    dayOfWeekName(day_numbers, language) {
+      let day_names = [];
+      for (let i = 0; i < day_numbers; i++) {
+        let day_number = +day_numbers[i];
+        if (language === "th") {
+          switch (day_number) {
+            case 0:
+              day_names.push("อาทิตย์");
+              break;
+            case 1:
+              day_names.push("จันทร์");
+              break;
+            case 2:
+              day_names.push("อังคาร");
+              break;
+            case 3:
+              day_names.push("พุธ");
+              break;
+            case 4:
+              day_names.push("พฤหัสบดี");
+              break;
+            case 5:
+              day_names.push("ศุกร์");
+              break;
+            case 6:
+              day_names.push("เสาร์");
+              break;
+            default:
+              day_names.push(null);
+          }
+        } else {
+          day_names.push(null);
+        }
+      }
+      day_names.sort(function (a, b) {
+        return b.localeCompare(a, "th", { numeric: true });
+      });
+
+      return day_names.join(", ");
+    },
+
   },
   computed: {
-    ...mapGetters({}),
+    ...mapGetters({ student_data: "MyCourseModules/getStudentData"}),
   },
 
 
