@@ -5,9 +5,9 @@
       src="../../../assets/navbar_user/kingdomBg.png"
       class="rounded-none bottomimg"
     >
-
-
-      <div class="text-2xl ml-5 mt-10 font-bold text-white">Hello {{dataStorage ? dataStorage.first_name_en : ''}}</div>
+      <div class="text-2xl ml-5 mt-10 font-bold text-white">
+        Hello {{ dataStorage ? dataStorage.first_name_en : "" }}
+      </div>
       <v-autocomplete
         :class="
           MobileSize
@@ -33,31 +33,22 @@
           : ''
       "
     >
-    <v-card  class="mx-auto block rounded-xl drop-shadow-lg mt-3 ml-3 mr-3" max-width="">
-      <template >
-        <!-- max-width: 97%;
-            max-height: 100%; -->
-            <!-- style=" 
-            
-            margin-left: 20px;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            border-radius: 0.75rem;
-          " -->
-        <v-carousel
-          cycle
-          hide-delimiter-background 
-        >
-          <v-carousel-item
-          height="300px"
-            v-for="(slide, i) in slides"
-            :key="i"
-            :src="slide.src"
-            cover
-          ></v-carousel-item>
-        </v-carousel>
-      </template>
-    </v-card>
+      <v-card
+        class="mx-auto block rounded-xl drop-shadow-lg mt-3 ml-3 mr-3"
+        max-width=""
+      >
+        <template>
+          <v-carousel cycle hide-delimiter-background>
+            <v-carousel-item
+              height="300px"
+              v-for="(slide, i) in slides"
+              :key="i"
+              :src="slide.src"
+              cover
+            ></v-carousel-item>
+          </v-carousel>
+        </template>
+      </v-card>
       <headerPage title="อาณาจักร" class="ml-5"></headerPage>
 
       <v-container fluid grid-list-md>
@@ -69,89 +60,32 @@
             v-for="item in categorys"
             :key="item.id"
           >
-            <!-- <v-card class="rounded-xl" style="width: ;" @click="selectedCategory(item)">
-              <v-img class=""
-                style="
-                  display: block;
-                  margin-left: auto;
-                  margin-right: auto;
-                  border-top-left-radius: 0.75rem;
-                  border-top-right-radius: 0.75rem;
-                  /* max-width: 100%;
-                  height: auto; */
-                "
+            <v-card
+              class="mx-auto block rounded-xl drop-shadow-lg"
+              max-width="344"
+              @click="selectedCategory(item)"
+            >
+              <v-img
                 :src="
                   item.categoryImg ? showImg(item.categoryImg) : defaultImageUrl
                 "
-                cover
-              >
-              </v-img>
+                height="300px"
+              ></v-img>
 
-              <v-card-title>{{ item.categoryNameTh }}</v-card-title>
-              <v-card-subtitle class="pt-4">{{
-                item.taughtBy
-              }}</v-card-subtitle>
+              <v-card-title>
+                {{ item.categoryNameTh }}
+              </v-card-title>
 
-              <v-card-text>
+              <v-card-subtitle>
                 <div>
                   {{ item.categoryNameEng }}
                   <span class="text-red-500 cursor-pointer">อ่านต่อ...</span>
                 </div>
-              </v-card-text>
-            </v-card> -->
-            <v-card
-    class="mx-auto block rounded-xl drop-shadow-lg"
-    max-width="344"
-    @click="selectedCategory(item)"
-  >
-    <v-img
-    :src="
-                  item.categoryImg ? showImg(item.categoryImg) : defaultImageUrl
-                "
-      height="300px"
-    ></v-img>
-
-    <v-card-title>
-      {{ item.categoryNameTh }}
-    </v-card-title>
-
-    <v-card-subtitle>
-      <div>
-                  {{ item.categoryNameEng }}
-                  <span class="text-red-500 cursor-pointer">อ่านต่อ...</span>
-      </div>
-    </v-card-subtitle>
-
-    <!-- <v-card-actions>
-      <v-btn
-        color="orange lighten-2"
-        text
-      >
-        Explore
-      </v-btn>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        icon
-        @click="show = !show"
-      >
-        <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-      </v-btn>
-    </v-card-actions> -->
-
-    <!-- <v-expand-transition>
-      <div v-show="show">
-        <v-divider></v-divider>
-
-        <v-card-text>
-          I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
-        </v-card-text>
-      </div>
-    </v-expand-transition> -->
-  </v-card>
+              </v-card-subtitle>
+            </v-card>
           </v-col>
         </v-row>
+        <loading-overlay :loading="categorys_is_loading"></loading-overlay>
       </v-container>
     </v-card>
   </v-app>
@@ -160,8 +94,10 @@
 <script>
 import headerPage from "@/components/header/headerPage.vue";
 import { mapActions, mapGetters } from "vuex";
+import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 export default {
   components: {
+    loadingOverlay,
     headerPage,
   },
   data: () => ({
@@ -169,9 +105,9 @@ export default {
     defaultImageUrl:
       "https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg",
     search: "",
-    first_name_en:"",
+    first_name_en: "",
     drawer: true,
-    user_detail : null,
+    user_detail: null,
     items: [
       { id: 1, itemName: "อาณาจักรศิลปะสมัยใหม่" },
       { id: 2, itemName: "อาณาจักรศิลปะสมัยใหม่" },
@@ -195,7 +131,7 @@ export default {
       },
     ],
     dataStorage: {},
-    userDetail: false
+    userDetail: false,
   }),
   created() {
     this.dataStorage = JSON.parse(localStorage.getItem("userDetail"));
@@ -219,22 +155,26 @@ export default {
     }),
 
     selectedCategory(category) {
-      console.log("category",category)
+      console.log("category", category);
       this.course_order.kingdom = category.categoryNameTh;
       this.course_order.category_id = category.categoryId;
       this.changeCourseOrderData(this.course_order);
-      localStorage.setItem("Order", JSON.stringify(this.course_order))
-      this.$router.push({ name: "userCourseList_categoryId",params:{ category_id : category.categoryId } });
+      localStorage.setItem("Order", JSON.stringify(this.course_order));
+      this.$router.push({
+        name: "userCourseList_categoryId",
+        params: { category_id: category.categoryId },
+      });
     },
     showImg(item) {
-      return `${process.env.VUE_APP_URL}/api/v1/files/${item}`
-    }
+      return `${process.env.VUE_APP_URL}/api/v1/files/${item}`;
+    },
   },
 
   computed: {
     ...mapGetters({
-      course_order : "OrderModules/getCourseOrder",
+      course_order: "OrderModules/getCourseOrder",
       categorys: "CategoryModules/getCategorys",
+      categorys_is_loading : "CategoryModules/getCategorysIsLoading",
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
@@ -275,12 +215,11 @@ export default {
 }
 
 .item {
-    width: 300px;
-    min-height: 120px;
-    /* max-height: auto;
+  width: 300px;
+  min-height: 120px;
+  /* max-height: auto;
     float: left; */
-    /* margin: 3px;
+  /* margin: 3px;
     padding: 3px; */
 }
-
 </style>

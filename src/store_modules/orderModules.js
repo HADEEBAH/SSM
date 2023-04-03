@@ -40,8 +40,16 @@ const orderModules = {
         },
         orders : [],
         order_detail : {},
+        order_is_loading : false,
+        orders_is_loading : false,
     },
     mutations: {
+        SetOrderIsLoading(state, value){
+            state.order_is_loading = value
+        },
+        SetOrdersIsLoading(state, value){
+            state.orders_is_loading = value
+        },
         SetOrder(state, payload) {
             state.order = payload
         },
@@ -196,6 +204,7 @@ const orderModules = {
             }
         },
         async saveOrder(context) {
+            context.commit("SetOrderIsLoading", true)
             try{
                 let order = context.state.order
                 console.log(order)
@@ -291,9 +300,11 @@ const orderModules = {
                             total_price: 0,
                         })
                         window.location.href = payment.data.data
+                        context.commit("SetOrderIsLoading", false)
                     }
                 }
             }catch(error){
+                context.commit("SetOrderIsLoading", false)
                 console.log(error)
             }
         },
@@ -307,7 +318,13 @@ const orderModules = {
         },
         getOrders(state){
             return state.orders
-        }
+        },
+        getOrderIsLoading(state){
+            return state.order_is_loading
+        },
+        getOrdersIsLoading(state){
+            return state.orders_is_loading
+        },
 
     },
 };

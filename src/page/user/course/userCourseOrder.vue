@@ -245,6 +245,8 @@
             </v-col>
         </v-row>
       </v-container>
+      <!-- LOADING -->
+      <loading-overlay :loading="order_is_loading"></loading-overlay>
       <!-- DIALOG :: ADD PARENT-->
       <v-dialog v-model="dialog_parent">
         <v-card class="pa-2">
@@ -324,11 +326,12 @@ import headerCard from '@/components/header/headerCard.vue';
 import labelCustom from '@/components/label/labelCustom.vue';
 import registerDialogForm from '@/components/user_menage/registerDialogForm.vue';
 import dialogCard from '@/components/dialog/dialogCard.vue';
+import loadingOverlay from '../../../components/loading/loadingOverlay.vue';
 import { mapActions, mapGetters } from 'vuex';
 import router from '../../../router';
   export default {
     name:"userCourseOrder",
-    components: {ImgCard, rowData, headerCard, labelCustom, registerDialogForm, dialogCard },
+    components: {ImgCard, rowData, headerCard, labelCustom, registerDialogForm, dialogCard, loadingOverlay},
     data: () => ({
         coachs:[
             {name : 'โค้ชหนุ่ม',coach_id : "00001" },
@@ -415,7 +418,8 @@ import router from '../../../router';
             show_dialog_register_one_id : "RegisterModules/getShowDialogRegisterOneId",
             user_data : "loginModules/getUserData",
             user_student_data : "loginModules/getUserStudentData",
-            is_loading : "loginModules/getIsLoading"
+            is_loading : "loginModules/getIsLoading",
+            order_is_loading : "OrderModules/getOrderIsLoading"
         }),
     },
     methods: {
@@ -427,7 +431,8 @@ import router from '../../../router';
             changeDialogRegisterOneId : 'RegisterModules/changeDialogRegisterOneId',
             saveOrder : "OrderModules/saveOrder",
             saveCart : "OrderModules/saveCart",
-            checkUsernameOneid : "loginModules/checkUsernameOneid"
+            checkUsernameOneid : "loginModules/checkUsernameOneid",
+           
         }),
         dayOfWeekArray(day) {
             const daysOfWeek = ["วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"];

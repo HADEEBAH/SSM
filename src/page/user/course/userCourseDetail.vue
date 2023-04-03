@@ -153,16 +153,18 @@
             </v-card>
         </v-dialog>
     </v-container>
+    <loading-overlay :loading="course_is_loading"></loading-overlay>
   </v-app>
 </template>
   
   <script>
   import dialogCard from "@/components/dialog/dialogCard.vue";
 import rowData from "@/components/label/rowData.vue";
+import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "userCourseDetail",
-  components: { rowData, dialogCard },
+  components: { rowData, dialogCard, loadingOverlay },
   data: () => ({
     show_dialog: false,
     date_options: {
@@ -183,6 +185,7 @@ export default {
       course_data : "CourseModules/getCourseData",
       course_order: "OrderModules/getCourseOrder",
       order: "OrderModules/getOrder",
+      course_is_loading : "CourseModules/getCourseIsLoading"
     }),
   },
   methods: {

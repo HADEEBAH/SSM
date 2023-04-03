@@ -8,6 +8,7 @@ const CourseModules = {
   state: {
     course_types : [],
     courses_is_loading : false,
+    course_is_loading : false,
     course_data: {
       course_id : "",
       type: "general_course",
@@ -110,8 +111,11 @@ const CourseModules = {
     SetCourseData(state, payload){
       state.course_data = payload
     },
-    SetCoursesIsLoading(state, payload){
-      state.courses_is_loading = payload
+    SetCourseIsLoading(state, value){
+      state.course_is_loading = value
+    },
+    SetCoursesIsLoading(state, value){
+      state.courses_is_loading = value
     },
     SetCourseTypes(state, payload){
       state.course_types = payload
@@ -286,7 +290,7 @@ const CourseModules = {
     },
     // COURSE :: DETAIL
     async GetCourse(context,course_id){
-      console.log("GetCourse")
+      context.commit("SetCourseIsLoading",true)
       try{
           let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
           console.log("GetCourse",data.data)
@@ -437,17 +441,18 @@ const CourseModules = {
                   },
                 )
               })
-           
             }
-            console.log(payload)
             context.commit("SetCourseData",payload)
+            context.commit("SetCourseIsLoading",false)
           }
       }catch(error){
+        context.commit("SetCourseIsLoading",false)
         console.log(error)
       }
     },
     // COURSE :: CREATE
     async CreateCourse(context){
+      context.commit("SetCourseIsLoading",true)
       try{
         let course = context.state.course_data
         let payload = {
@@ -534,6 +539,7 @@ const CourseModules = {
         let {data} = await axios.post(process.env.VUE_APP_URL+"/api/v1/course/create", data_payload, config)
         if(data.statusCode === 201){
           console.log(data)
+          context.commit("SetCourseIsLoading",false)
           Swal.fire({
             icon: "success",
             title: "สร้างคอร์สสำเร็จ"
@@ -542,10 +548,13 @@ const CourseModules = {
               router.replace({name: "CourseList"})
             }
           })
+          
         }else{
+          context.commit("SetCourseIsLoading",false)
           throw {message : data}
         }
       }catch(error){
+        context.commit("SetCourseIsLoading",false)
         console.log(error)
       }
     },
@@ -631,6 +640,9 @@ const CourseModules = {
     },
     getCoursesIsLoading(state){
       return state.courses_is_loading
+    },
+    getCourseIsLoading(state){
+      return state.course_is_loading
     }
   },
 };
