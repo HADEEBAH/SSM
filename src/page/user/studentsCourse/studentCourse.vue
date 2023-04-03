@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <v-card class="my-5">
-      <div>
+    <!-- <v-card class="my-5">
+      <div> -->
         <!-- <pre>{{ student_data }}</pre> -->
         <!-- <div v-if="type_selected == 'students_course'"> -->
           <!-- @click="$router.push({ name: 'StudentCourse', params:{course_id: item.courseId }})" -->
@@ -65,9 +65,9 @@
               </v-col>
             </v-row>
           </v-card>
-        </div>
+        <!-- </div> -->
       <!-- </div> -->
-    </v-card>
+    <!-- </v-card> -->
 
     <label-custom text="ข้อมูลการเรียน"></label-custom>
 
