@@ -61,6 +61,7 @@
   <script>
 import { mapGetters, mapActions } from 'vuex';
     export default {
+  components: {},
         name:"userCourseList",  
         data: () => ({
             loading : true,
