@@ -7,7 +7,7 @@
         <v-row v-if="preview_url">
           <v-col align="center"  class="rounded-lg pa-0">
             <v-img  :src="preview_url" style="max-width: 200px" align="right">
-              <v-btn icon class="bg-[#f00]" dark><v-icon>mdi-close</v-icon></v-btn>
+              <v-btn v-if="!disable" icon class="bg-[#f00]" dark @click="removeFile"><v-icon>mdi-close</v-icon></v-btn>
             </v-img>
           </v-col>
         </v-row>
@@ -52,9 +52,11 @@
             <label-custom required text="ชื่อคอร์ส(ภาษาไทย)"></label-custom>
             <v-text-field
               dense
+              :disabled="disable"
+              :outlined="!disable"
+              :filled="disable"
               @keypress="inputName($event, 'th')"
               :rules="rules.course_name_th"
-              outlined
               @change="ChangeCourseData(course_data)"
               @focus="$event.target.select()"
               v-model="course_data.course_name_th"
@@ -65,7 +67,9 @@
             <label-custom required text="ชื่อคอร์ส(ภาษาอังกฤษ)"></label-custom>
             <v-text-field
               dense
-              outlined
+              :disabled="disable"
+              :outlined="!disable"
+              :filled="disable"
               @focus="$event.target.select()"
               @keypress="inputName($event, 'en')"
               :rules="rules.course_name_en"
@@ -78,7 +82,6 @@
         <v-row dense>
           <v-col cols="12" sm="6">
             <label-custom required text="ชื่ออาณาจักร"></label-custom>
-
             <v-autocomplete
               dense
               :rules="rules.kingdom"
@@ -88,7 +91,9 @@
               item-text="categoryNameTh"
               item-value="categoryId"
               item-color="pink"
-              outlined
+              :disabled="disable"
+              :outlined="!disable"
+              :filled="disable"
               @change="ChangeCourseData(course_data)"
               placeholder="ระบุชื่ออาณาจักร"
             >
@@ -113,9 +118,10 @@
               </template>
             </v-autocomplete>
           </v-col>
-          <v-col cols="12" sm="6" v-if="course_data.type === 'general_course'">
+          <v-col cols="12" sm="6" v-if="course_data.course_type_id === 'CT_1'">
             <label-custom required text="วันเปิดคอร์ส"></label-custom>
             <v-menu
+              :disabled="disable"
               v-model="course_data.menu_course_open_date"
               :close-on-content-click="false"
               transition="scale-transition"
@@ -125,7 +131,9 @@
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
                   dense
-                  outlined
+                  :disabled="disable"
+                  :outlined="!disable"
+                  :filled="disable"
                   v-model="course_data.course_open_date_str"
                   readonly
                   :rules="rules.course_open_date"
@@ -160,7 +168,9 @@
               dense
               @focus="$event.target.select()"
               type="number"
-              outlined
+              :disabled="disable"
+              :outlined="!disable"
+              :filled="disable"
               @change="ChangeCourseData(course_data)"
               :rules="rules.course_hours"
               v-model.number="course_data.course_hours"
@@ -171,18 +181,22 @@
             <label-custom required text="สถานที่เรียน"></label-custom>
             <v-text-field
               dense
-              outlined
+              :disabled="disable"
+              :outlined="!disable"
+              :filled="disable"
               @focus="$event.target.select()"
               :rules="rules.location"
               v-model="course_data.location"
               placeholder="ระบุสถานที่เรียน"
             ></v-text-field>
           </v-col>
-          <v-col cols="12" sm="6" v-if="course_data.type === 'short_course'">
+          <v-col cols="12" sm="6" v-if="course_data.course_type_id === 'CT_2'">
             <label-custom required text="จำนวนนักเรียนที่รับได้/ครั้ง"></label-custom>
             <v-text-field
               dense
-              outlined
+              :disabled="disable"
+              :outlined="!disable"
+              :filled="disable"
               type="number"
               @focus="$event.target.select()"
               v-model="course_data.student_recived"
@@ -191,13 +205,15 @@
           </v-col>
         </v-row>
         <!-- Course Type  :: general course -->
-        <template v-if="course_data.type === 'general_course'">
+        <template v-if="course_data.course_type_id === 'CT_1'">
           <v-row dense>
             <v-col cols="12">
               <label-custom text="รายละเอียดคอร์ส"></label-custom>
               <v-textarea
                 v-model="course_data.detail"
-                outlined
+                :disabled="disable"
+                :outlined="!disable"
+                :filled="disable"
                 @change="ChangeCourseData(course_data)"
                 placeholder="กรอกรายละเอียด..."
               ></v-textarea>
@@ -208,7 +224,9 @@
               <label-custom text="music performance"></label-custom>
               <v-textarea
                 v-model="course_data.music_performance"
-                outlined
+                :disabled="disable"
+                :outlined="!disable"
+                :filled="disable"
                 @change="ChangeCourseData(course_data)"
                 placeholder="กรอกรายละเอียด..."
               ></v-textarea>
@@ -219,7 +237,9 @@
               <label-custom text="catification"></label-custom>
               <v-textarea
                 v-model="course_data.catification"
-                outlined
+                :disabled="disable"
+                :outlined="!disable"
+                :filled="disable"
                 @change="ChangeCourseData(course_data)"
                 placeholder="กรอกรายละเอียด..."
               ></v-textarea>
@@ -227,7 +247,7 @@
           </v-row>
         </template>
         <!-- Course Type  :: short course -->
-        <template v-else>
+        <template v-if="course_data.course_type_id === 'CT_2'">
           <v-row dense>
             <v-col cols="12" sm="6">
               <label-custom required text="โค้ช"></label-custom>
@@ -240,7 +260,9 @@
                 item-value="accountId"
                 item-text="fullNameTh"
                 item-color="pink"
-                outlined
+                :disabled="disable"
+                :outlined="!disable"
+                :filled="disable"
                 placeholder="ระบุโค้ช"
                 @change="ChangeCourseData(course_data)"
               >
@@ -275,7 +297,9 @@
               <v-text-field
                 placeholder="ระบุราคา"
                 dense
-                outlined
+                :disabled="disable"
+                :outlined="!disable"
+                :filled="disable"
                 @focus="$event.target.select()"
                 class="input-text-right"
                 type="number"
@@ -288,7 +312,7 @@
         </template>
       </v-card-text>
       <!-- Course Type  :: short course -->
-      <template v-if="course_data.type === 'short_course'">
+      <template v-if="course_data.course_type_id === 'CT_2'">
         <headerCard title="วันและเวลา"></headerCard>
         <v-card-text class="py-0">
           <v-divider class="mb-3"></v-divider>
@@ -298,6 +322,7 @@
               <v-row>
                 <v-col>
                   <v-menu
+                    :disabled="disable"
                     v-model=" course_data.coachs[0].register_date_range.menu_start_date"
                     :close-on-content-click="false"
                     transition="scale-transition"
@@ -307,7 +332,9 @@
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
                         dense
-                        outlined
+                        :disabled="disable"
+                        :outlined="!disable"
+                        :filled="disable"
                         :rules="rules.start_date"
                         v-model="register_date_range_str.start_date"
                         readonly
@@ -336,6 +363,7 @@
                 >
                 <v-col>
                   <v-menu
+                    :disabled="disable"
                     v-model="course_data.coachs[0].register_date_range.menu_end_date"
                     :close-on-content-click="false"
                     transition="scale-transition"
@@ -345,7 +373,9 @@
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
                         dense
-                        outlined
+                        :disabled="disable"
+                        :outlined="!disable"
+                        :filled="disable"
                         @change="ChangeCourseData(course_data)"
                         :rules="rules.end_date"
                         placeholder="เลือกวันที่สิ้นสุด"
@@ -412,6 +442,7 @@
               <v-row>
                 <v-col>
                   <v-menu
+                    :disabled="disable"
                     v-model="
                       course_data.coachs[0].class_date_range.menu_start_date
                     "
@@ -424,7 +455,9 @@
                       <v-text-field
                         dense
                         @change="ChangeCourseData(course_data)"
-                        outlined
+                        :disabled="disable"
+                        :outlined="!disable"
+                        :filled="disable"
                         :rules="rules.start_date"
                         placeholder="เลือกวันที่เริ่ม"
                         v-model="class_date_range_str.start_date"
@@ -455,6 +488,7 @@
                     v-model="
                       course_data.coachs[0].class_date_range.menu_end_date
                     "
+                    :disabled="disable"
                     :close-on-content-click="false"
                     transition="scale-transition"
                     offset-y
@@ -463,7 +497,9 @@
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
                         dense
-                        outlined
+                        :disabled="disable"
+                        :outlined="!disable"
+                        :filled="disable"
                         @change="ChangeCourseData(course_data)"
                         :rules="rules.end_date"
                         v-model="class_date_range_str.end_date"
@@ -494,7 +530,9 @@
               <v-row>
                 <v-col>
                   <v-text-field  
-                    outlined
+                    :disabled="disable"
+                    :outlined="!disable"
+                    :filled="disable"
                     dense
                     style="position: absolute; display: block; z-index:0; "
                     :style="`width:${width()}px;`"
@@ -503,6 +541,7 @@
                     v-model="course_data.coachs[0].period.start_time">
                   </v-text-field>
                   <TimePicker
+                      :disabled="disable"
                       :minuteStep="60"
                       format="HH:mm"
                       style="z-index: 2"
@@ -518,7 +557,7 @@
                 >
                 <v-col>
                   <v-text-field  
-                    outlined
+                    :disabled="disable"
                     dense
                     style="position: absolute; display: block; z-index:0;"
                     :style="`width:${width()}px;`"
@@ -551,7 +590,9 @@
               <label-custom text="รายละเอียดคอร์ส"></label-custom>
               <v-textarea
                 v-model="course_data.detail"
-                outlined
+                :disabled="disable"
+                :outlined="!disable"
+                :filled="disable"
                 @change="ChangeCourseData(course_data)"
                 placeholder="กรอกรายละเอียด..."
               ></v-textarea>
@@ -562,7 +603,9 @@
               <label-custom text="catification"></label-custom>
               <v-textarea
                 v-model="course_data.catification"
-                outlined
+                :disabled="disable"
+                :outlined="!disable"
+                :filled="disable"
                 @change="ChangeCourseData(course_data)"
                 placeholder="กรอกรายละเอียด..."
               ></v-textarea>
@@ -586,8 +629,8 @@ export default {
   name: "courseCard",
   props:{
     categorys : {type : Array},
-    coachs : {type : Array},
-    disable : {type : Boolean , default: false}
+    disable : {type : Boolean , default: false},
+    edited : {type : Boolean,}
   },
   components: {
     LabelCustom,
@@ -645,10 +688,18 @@ export default {
   created() {
   },
   mounted() {
-   
+    if(this.edited){
+      this.preview_url = this.course_data.course_img
+    }
   },
   watch: {
-
+    "disable":function () {
+      if(this.edited){
+        if(this.disable){
+          this.preview_url = this.course_data.course_img
+        }
+      }
+    }
   },
   computed: {
     ...mapGetters({
@@ -688,7 +739,7 @@ export default {
       this.ChangeCourseData(this.course_data)
     },
     removeFile(){
-      this.preview_url = ""
+      this.preview_url = null
     },
     inputName(e, lang) {
       inputValidation(e, lang);

@@ -303,7 +303,8 @@ const CourseModules = {
             course_img : `${process.env.VUE_APP_URL}/api/v1/files/${data.data.courseImg}`,
             category_id :  data.data.categoryId,
             category_name_th: data.data.categoryNameTh,
-            course_open_date: data.data.courseOpenDate,
+            course_open_date: moment(data.data.courseOpenDate).format("YYYY-MM-DD"),
+            course_open_date_str : new Date(data.data.courseOpenDate).toLocaleDateString('th-TH',{ year: 'numeric', month: 'short', day: 'numeric',}),
             menu_course_open_date : false,
             course_hours: data.data.coursePerTime,
             location: data.data.courseLocation,
@@ -349,12 +350,25 @@ const CourseModules = {
                       }
                     }
                   })
+                  let class_dates = []
+                  for(const time of coach_date.times){
+                    class_dates.push( {
+                      class_date_range: {
+                        start_time: moment(time.start,"HH:mm"),
+                        menu_start_time: false,
+                        end_time: moment(time.end, "HH:mm" ),
+                        menu_end_time: false,
+                      },
+                      students: time.maximumStudent,
+                    },)
+                  }
+                  
                   // TEACH DAY
                   teach_day_data.push( {
                     class_open: coach_date.status === 'Active' ? true : false,
-                    teach_day: [coach_date.dayOfWeekName],
+                    teach_day: coach_date.dayOfWeekName.map( v => parseInt(v)),
                     course_coach_id : coach_date.courseCoachId,
-                    class_date: coach_date.times,
+                    class_date: class_dates ,
                   })
                 })
                 payload.coachs.push(
@@ -362,6 +376,7 @@ const CourseModules = {
                     coach_id : coach.accountId,
                     course_coach_id : coach.courseCoachId,
                     coach_name: `${coach.coachFirstNameTh} ${coach.coachLastNameTh}`,
+                    teach_days_used : [],
                     teach_day_data: [],
                     class_date_range: {
                       start_date: data.data.courseStudyStartDate,
@@ -399,10 +414,11 @@ const CourseModules = {
                   course_package_option_id: package_data.coursePackageOptionId,
                   package_id : package_data.packageId, 
                   option_id : package_data.optionId,
-                  period_package: package_data.optionName,
+                  option_name: package_data.optionName,
+                  period_package : package_data.optionId,
                   amount: package_data.hourPerTime,
                   price_unit: package_data.pricePerPerson,
-                  discount: package_data.discountStatus == '0' ? true : false,
+                  discount: package_data.discountStatus == '1' ? true : false,
                   discount_price: package_data.discountPrice ? package_data.discountPrice : 0,
                   privilege: package_data.optionDescription,
                   total_price :  package_data.pricePerPerson,
@@ -513,7 +529,7 @@ const CourseModules = {
           course.packages.forEach((package_course)=>{
             package_course.options.forEach((option)=>{
               payload.coursePackages.push({
-                "packageId": package_course.package,
+                "packageId": package_course.package_id,
                 "optionId": option.period_package,
                 "hourPerTime": option.amount,
                 "optionDescription":option.privilege,
@@ -570,7 +586,10 @@ const CourseModules = {
         }
         let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/filter?category_id=${category_id}&status=${status}&course_type_id=${course_type_id}`)
         if(data.statusCode === 200){
-          console.log(data)
+          console.log("data" ,data )
+          for( const course of data.data){
+            course.course_url = `${process.env.VUE_APP_URL}/api/v1/files/${course.course_img}`
+          }
           context.commit("SetCoursesIsLoading", false)
           context.commit("SetCourses",data.data)
         }else{
@@ -612,7 +631,6 @@ const CourseModules = {
     },
     ResetCourseData(context){
       context.commit("ResetCourse")
-      console.state.course_data
     }
   },
   getters: {

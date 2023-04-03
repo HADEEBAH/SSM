@@ -207,7 +207,11 @@ export default {
     }
   }),
   created() {
-    this.ResetCourseData()
+    if(this.course_data){
+      this.ResetCourseData()
+    }
+    this.$store.dispatch("CategoryModules/GetCategorys")
+    this.$store.dispatch("CourseModules/GetCoachs");
   },
   mounted() {
     this.$store.dispatch("CategoryModules/GetCategorys")

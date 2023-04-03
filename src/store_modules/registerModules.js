@@ -95,15 +95,14 @@ const RegisterModules = {
                   console.log("UserKingdom")
                   context.commit("SetIsLoading", false)
                   router.replace({ name: "UserKingdom" });
+                  context.commit("ResetUserOneID")
               }
             })
-              context.commit("ResetUserOneID")
             }
           })
         }
       }catch({response}){
         context.commit("SetIsLoading", false)
-        console.log(response)
         if(response?.data.statusCode === 400){
           let text = ""
           switch (response.data.message.message){

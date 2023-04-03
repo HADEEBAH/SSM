@@ -22,7 +22,7 @@
                     :disabled="disable"
                     :outlined="!disable"
                     :filled="disable"
-                    v-model="package_data.package"
+                    v-model="package_data.package_id"
                     color="#FF6B81"
                     :rules="rules.packages"
                     :items="packageList(index)"
@@ -53,7 +53,7 @@
                 <v-text-field
                   suffix="คน"
                   type="number"
-                  :disabled="package_data.package !== 'PACK_3' ? true : disable "
+                  :disabled="package_data.package_id !== 'PACK_3' ? true : disable "
                   :outlined="!disable"
                   :filled="disable"
                   :rules="rules.packages_student"
@@ -182,10 +182,10 @@
                       type="number"
                       class="input-text-right"
                       @focus="$event.target.select()"
-                      :disabled="!option.discount"
+                      :disabled="!option.discount || disable"
                       placeholder="ระบุส่วนลด/บาท"
-                      :outlined="option.discount"
-                      :filled="!option.discount"
+                      :outlined="option.discount|| disable"
+                      :filled="!option.discount || disable"
                       v-model.number="option.discount_price"
                       @change="calNetPrice(option)"
                     ></v-text-field>
@@ -247,13 +247,6 @@ export default {
     packages_selected: [],
     options_selected: [],
     minimum_students: 0,
-    // rules: {  
-    //   packages: [val => (val || '').length > 0 || 'โปรดเลือกแพ็คเกจ'],
-    //   packages_student: [val => (val || '') > this.minimum_students ? this.minimum_students : 0 || 'โปรดระบุจำนวนนักเรียน'],
-    //   options : [val => (val || '').length > 0 || 'โปรดเลือกระยะเวลา'],
-    //   options_amount : [val => (val || '') > 0 || 'โปรดระบุจำนวนครั้ง/คน'],
-    //   price_unit : [val => (val || '') > 0 || 'โปรดระบุราคาต่อ/คน'],
-    // },
   }),
   created() {
      
