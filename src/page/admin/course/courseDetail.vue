@@ -11,7 +11,7 @@
                     </template>
                 </img-card>
             </v-col>    
-            <v-col cols="12" sm="3" @click="tab='time and coach'">
+            <v-col v-if="course_data.course_type_id === 'CT_1'" cols="12" sm="3" @click="tab='time and coach'">
                 <img-card vertical class="cursor-pointer" :class="tab === 'time and coach' ? 'img-card-active':''">
                     <template v-slot:img>
                         <v-img max-height="72" max-width="72" src="../../../assets/course/time_and_coach.png"></v-img>
@@ -19,7 +19,7 @@
                     </template>
                 </img-card>
             </v-col>
-            <v-col cols="12" sm="3"  @click="tab='package'">
+            <v-col v-if="course_data.course_type_id === 'CT_1'" cols="12" sm="3"  @click="tab='package'">
                 <img-card vertical class="cursor-pointer" :class="tab === 'package' ? 'img-card-active':''">
                     <template v-slot:img>
                         <v-img max-height="72" max-width="72" src="../../../assets/course/package.png"></v-img>
@@ -42,81 +42,29 @@
                 <v-tabs-items v-model="tab">
                     <!-- COURSE -->
                     <v-tab-item value="course">
-                        <courseCard v-if="course_edit"></courseCard>
-                        <template v-else>
-                            <v-card flat>
-                                <v-card-text class="border border-2 border-[#ff6b81] border-600 rounded-lg" align="center"> 
-                                    <v-img 
-                                        :src="courseImg ? courseImg : '../../../assets/course/student_list.png'" 
-                                        max-height="299"
-                                        max-width="365">
-                                    </v-img>
-                                </v-card-text>
-                            </v-card>
-                            <v-card flat>
-                                <header-card title="รายละเอียด"></header-card>
-                                <v-card-text class="py-0">
-                                    <v-divider class="mb-3"></v-divider>
-                                    <v-row>
-                                        <v-col>
-                                            <rowData title="ชื่อคอร์ส (ภาษาไทย)" vertical>
-                                                {{  course_data.courseNameTh  }}
-                                                เวิร์คช้อปไวโอลินพื้นฐาน
-                                            </rowData>
-                                        </v-col>
-                                        <v-col>
-                                            <rowData title="ชื่อคอร์ส (ภาษาอังกฤษ)" vertical>
-                                                {{course_data.courseNameEn}}
-                                            </rowData>
-                                        </v-col>
-                                    </v-row>
-                                    <v-row>
-                                        <v-col>
-                                            <rowData title="ชื่ออาณาจักร" vertical>
-                                               {{ course_data.categoryNameTh }}
-                                            </rowData>
-                                        </v-col>
-                                        <v-col>
-                                            <rowData title="วันเปิดคอร์ส" vertical>
-                                                {{ course_data.courseOpenDate }}
-                                            </rowData>
-                                        </v-col>
-                                    </v-row>
-                                    <v-row>
-                                        <v-col>
-                                            <rowData title="จำนวนชั่วโมงการเรียน /ครั้ง" vertical>
-                                                {{ course_data.coursePerTime }}นาที
-                                            </rowData>
-                                        </v-col>
-                                        <v-col>
-                                            <rowData title="สถานที่เรียน" vertical>
-                                                {{ course_data.courseLocation }}
-                                            </rowData>
-                                        </v-col>
-                                    </v-row>
-                                    <rowData title="โค้ช" vertical>
-                                        โค้ชพอล
-                                    </rowData>
-                                    <rowData title="รายละเอียดคอร์ส" vertical>
-                                        {{ course_data.courseDescription }}
-                                    </rowData>
-                                    <rowData title="Music performance" vertical>
-                                        {{ course_data.courseMusicPerformance }}
-                                    </rowData>
-                                    <rowData title="Certification" vertical>
-                                        {{ course_data.courseCertification }}
-                                    </rowData>
-                                </v-card-text>
-                            </v-card>
-                        </template>
+                        <course-card :disable="!course_edit" edited :categorys="categorys" :coachs="coachs"></course-card>
                     </v-tab-item>
                     <!-- COACH AND TIME -->
                     <v-tab-item value="time and coach"> 
-                        <coachs-card disable ></coachs-card>
+                        <v-card flat>
+                            <headerCard title="รายละเอียดเวลาและโค้ช">
+                                <template v-slot:actions>
+                                <v-btn outlined :disabled="!course_edit" color="#FF6B81" @click="addCoach">
+                                    <v-icon>mdi-plus-circle-outline</v-icon>
+                                    เพิ่มโค้ช
+                                </v-btn>
+                                </template>
+                            </headerCard>
+                            <v-card-text class="pt-0">
+                                <v-divider class="mb-3"></v-divider>
+                                <!-- COACH -->
+                                <coachs-card :disable="!course_edit" :coachs="coachs"></coachs-card>
+                            </v-card-text>
+                        </v-card>
                     </v-tab-item>
                     <!-- PACKAGE -->
                     <v-tab-item value="package">
-                        <package-card disable></package-card>
+                        <package-card :disable="!course_edit"></package-card>
                     </v-tab-item>
                     <!-- STUDENT LIST -->
                     <v-tab-item value="student list">
@@ -312,7 +260,7 @@
                                 color="#FF6B81"
                                 class="btn-size-lg"
                                 outlined
-                                @click="course_edit = false"
+                                @click="cancelEdit()"
                             >ยกเลิก
                             </v-btn>
                         </v-col>
@@ -339,11 +287,11 @@ import coachsCard from '@/components/course/coachsCard.vue';
 import HeaderPage from '@/components/header/headerPage.vue';
 import headerCard from '@/components/header/headerCard.vue';
 import ImgCard from '@/components/course/imgCard.vue';
-import rowData from '@/components/label/rowData.vue';
-import { mapGetters } from 'vuex';
+// import rowData from '@/components/label/rowData.vue';
+import { mapGetters, mapActions } from 'vuex';
     export default {
         name:"coureDetail",
-        components: {HeaderPage, ImgCard, courseCard, headerCard ,rowData, coachsCard, packageCard},
+        components: {HeaderPage, ImgCard, courseCard, coachsCard, packageCard, headerCard},
         data: () => ({ 
             column:[
                 {text: 'ชื่อ - นามสกุล',align: 'start',sortable: false, value: 'fullname'},
@@ -363,7 +311,7 @@ import { mapGetters } from 'vuex';
                 {text:"จัดการคอร์สทั้งหมด",to:"CourseList"},
                 {text:"รายละเอียดคอร์สเรียน",to:""}
             ],
-            tab : "student list",
+            tab : "course",
             student_tab : null,
             course_edit : false,
             student_courses : [
@@ -505,6 +453,8 @@ import { mapGetters } from 'vuex';
         }),
         created() {
             this.$store.dispatch("CourseModules/GetCourse",this.$route.params.course_id)
+            this.$store.dispatch("CategoryModules/GetCategorys")
+            this.$store.dispatch("CourseModules/GetCoachs");
         },
         mounted() {},
         watch: {
@@ -514,10 +464,65 @@ import { mapGetters } from 'vuex';
         },
         computed: {
             ...mapGetters({
+                coachs: "CourseModules/getCoachs",
+                categorys : "CategoryModules/getCategorys",
                 course_data : "CourseModules/getCourseData"
             })
         },
         methods: {
+            ...mapActions({
+                GetCourse : "CourseModules/GetCourse",
+                ChangeCourseData: "CourseModules/ChangeCourseData",
+            }),
+            addCoach() {
+                this.course_data.coachs.push({
+                    coach_id : "",
+                    coach_name: "",
+                    teach_days_used : [],
+                    teach_day_data: [
+                    {
+                        class_open: false,
+                        teach_day: [],
+                        class_date: [
+                        {
+                            class_date_range: {
+                            start_time: "",
+                            menu_start_time: false,
+                            end_time: "",
+                            menu_end_time: false,
+                            },
+                            students: 0,
+                        },
+                        ],
+                    },
+                    ],
+                    class_date_range: {
+                    start_date: "",
+                    menu_start_date: false,
+                    end_date: "",
+                    menu_end_date: false,
+                    },
+                    register_date_range: {
+                    start_date: "",
+                    menu_start_date: false,
+                    end_date: "",
+                    menu_end_date: false,
+                    },
+                    period: {
+                    start_time: "",
+                    end_time: "",
+                    },
+                });
+                this.ChangeCourseData(this.course_data);
+            },
+            removeCoach(data, index) {
+                data.splice(index, 1);
+                this.ChangeCourseData(this.course_data);
+            },
+            cancelEdit(){
+                this.course_edit = false
+                this.GetCourse(this.$route.params.course_id)
+            },
             selectCoach(coach){
                 if(this.selected_coach !== coach){
                     this.selected_coach = coach

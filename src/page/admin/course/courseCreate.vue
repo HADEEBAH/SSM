@@ -7,10 +7,10 @@
     ></v-img>
     <v-container>
       <headerPage title="สร้างคอร์สเรียน"></headerPage>
-      <v-radio-group v-model="course_data.type">
+      <v-radio-group v-model="course_data.course_type_id">
         <v-row dense>
           <v-col cols="12" sm="3">
-            <v-radio color="green" value="general_course">
+            <v-radio color="green" value="CT_1">
               <template v-slot:label>
                 <v-row dense>
                   <v-col cols="4" sm="12">
@@ -29,7 +29,7 @@
             </v-radio>
           </v-col>
           <v-col cols="12" sm="3">
-            <v-radio color="green" value="short_course">
+            <v-radio color="green" value="CT_2">
               <template v-slot:label>
                 <v-row dense>
                   <v-col cols="4" sm="12">
@@ -51,7 +51,7 @@
       </v-radio-group>
       <v-stepper alt-labels v-model="step">
         <v-stepper-header
-          v-if="course_data.type === 'general_course'"
+          v-if="course_data.course_type_id === 'CT_1'"
           style="box-shadow: none !important"
         >
           <template v-for="(header, index) in step_header_data">
@@ -115,7 +115,7 @@
         </v-stepper-content>
         <v-card flat>
           <v-card-text>
-            <v-row dense v-if="course_data.type === 'general_course'">
+            <v-row dense v-if="course_data.course_type_id === 'CT_1'">
               <v-col cols="12" sm align="right">
                 <v-btn
                   v-if="step > 1"
@@ -207,7 +207,11 @@ export default {
     }
   }),
   created() {
-    this.ResetCourseData()
+    if(this.course_data){
+      this.ResetCourseData()
+    }
+    this.$store.dispatch("CategoryModules/GetCategorys")
+    this.$store.dispatch("CourseModules/GetCoachs");
   },
   mounted() {
     this.$store.dispatch("CategoryModules/GetCategorys")
@@ -264,8 +268,8 @@ export default {
       this.$refs.fileInput.click();
     },
     submitStep(index){
-      console.log(this.course_data.type)
-      if(this.course_data.type === "general_course"){
+      console.log(this.course_data.course_type_id)
+      if(this.course_data.course_type_id === "CT_1"){
         if(index === 0){
           this.$refs.course_form.validate()
           if(this.steps[index]){
@@ -282,7 +286,7 @@ export default {
             this.save()
           }
         }
-      }else if(this.course_data.type === "short_course"){
+      }else if(this.course_data.course_type_id === "CT_2"){
         this.$refs.course_form.validate()
           if(this.steps[index]){
             this.save()

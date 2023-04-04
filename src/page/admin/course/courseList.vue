@@ -15,14 +15,14 @@
                     </template>
                     <template v-slot:detail>
                         <v-row class="d-flex align-end">
-                            <v-col align="center" class="text-3xl font-bold">10</v-col>
+                            <v-col align="center" class="text-3xl font-bold">{{ courses.length }}</v-col>
                             <v-col class="text-sm">รายการ</v-col>
                         </v-row>
                     </template>
                 </img-card>
             </v-col>
-            <v-col cols="12" sm="4" @click="tab = 'general'">
-                <img-card  class="cursor-pointer" :class="tab === 'general' ? 'img-card-active':''">
+            <v-col cols="12" sm="4" @click="tab = 'CT_1'">
+                <img-card  class="cursor-pointer" :class="tab === 'CT_1' ? 'img-card-active':''">
                     <template v-slot:img> 
                         <v-img  max-height="90" max-width="70" src="../../../assets/course/general_course.png"></v-img>
                     </template>
@@ -31,14 +31,14 @@
                     </template>
                     <template v-slot:detail>
                         <v-row class="d-flex align-end">
-                            <v-col align="center" class="text-3xl font-bold">5</v-col>
+                            <v-col align="center" class="text-3xl font-bold">{{ courses.filter(v => v.course_type_id === 'CT_1').length }}</v-col>
                             <v-col class="text-sm">รายการ</v-col>
                         </v-row>
                     </template>
                 </img-card>
             </v-col>
-            <v-col cols="12" sm="4" @click="tab = 'short'"> 
-                <img-card  class="cursor-pointer" :class="tab === 'short' ? 'img-card-active':''">
+            <v-col cols="12" sm="4" @click="tab = 'CT_2'"> 
+                <img-card  class="cursor-pointer" :class="tab === 'CT_2' ? 'img-card-active':''">
                     <template v-slot:img> 
                         <v-img  max-height="90" max-width="70" src="../../../assets/course/short_course.png"></v-img>
                     </template>
@@ -47,7 +47,7 @@
                     </template>
                     <template v-slot:detail>
                         <v-row class="d-flex align-end">
-                            <v-col align="center" class="text-3xl font-bold">5</v-col>
+                            <v-col align="center" class="text-3xl font-bold">{{ courses.filter(v => v.course_type_id === 'CT_2').length }}</v-col>
                             <v-col class="text-sm">รายการ</v-col>
                         </v-row>
                     </template>
@@ -57,7 +57,7 @@
         <v-data-table 
             class="elevation-1 header-table"
             :headers="column"
-            :items="courses"
+            :items="tab === 'all' ? courses : courses.filter(v => v.course_type_id === tab)"
             :loading="LoadingTable"
         >
         <template v-slot:[`item.status`]="{ item }">

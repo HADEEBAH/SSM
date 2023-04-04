@@ -92,6 +92,7 @@
                   :input-value="selected"
                   close
                   small
+                  :disabled="disable"
                   color="#ffeeee"
                   text-color="#ff6b81"
                   @click:close="removeChip(item, teach_day.teach_day)"
@@ -129,17 +130,18 @@
           <template
             v-for="(class_date, class_date_index) in teach_day.class_date"
           >
-            <v-row
-              v-if="coach.teach_days_used"
+          <v-row
               dense
-              :key="`${class_date_index}-date`"
+              :key="`${class_date_index}-class-date`"
             >
               <v-col cols="12" sm="6">
                 <label-custom required text="ช่วงเวลา"></label-custom>
                 <v-row dense class="mb-3">
                   <v-col class="px-2" cols="12" sm="6">
                     <v-text-field  
-                      outlined
+                      :disabled="disable"
+                      :outlined="!disable"
+                      :filled="disable"
                       dense
                       style="position: absolute; display: block; z-index:0;"
                       :style="`width:${width()}px;`"
@@ -147,6 +149,7 @@
                       v-model="class_date.class_date_range.start_time">
                     </v-text-field>
                     <TimePicker
+                      :disabled="disable"
                       v-if="coach.disabled_hours"
                       style=" z-index: 2"
                       :style="`width:${width()-4}px !important; `"
@@ -162,6 +165,7 @@
                     ></TimePicker>
                     <TimePicker
                       v-else
+                      :disabled="disable"
                       style="z-index: 2"
                       :style="`width:${width()-4}px !important; `"
                       class="w-full"
@@ -175,7 +179,9 @@
                   </v-col>
                   <v-col class="px-2" cols="12" sm="6">
                     <v-text-field  
-                      outlined
+                      :disabled="disable"
+                      :outlined="!disable"
+                      :filled="disable"
                       dense
                       style="position: absolute; display: block; z-index:0;"
                       :style="`width:${width()}px;`"

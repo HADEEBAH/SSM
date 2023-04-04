@@ -25,7 +25,7 @@
                     <v-card @click="selectedCourse(course)">
                         <v-img
                             height="109"
-                            src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+                            :src="course.course_url ? course.course_url : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'"
                         >
                         <v-row>
                             <v-col class="pa-4" align="right"> <v-chip  color="#F9B320" text-color="white">{{ `${course.period}ชั่วโมง`  }}</v-chip></v-col>

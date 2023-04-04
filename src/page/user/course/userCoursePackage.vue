@@ -48,7 +48,7 @@
             </v-col>
         </v-row>
         <v-row>
-            <v-col>{{ `${selected_package.package} ${selected_package.students}:${selected_package.students}` }}</v-col>
+            <v-col>{{ `${selected_package.package} 1 :${selected_package.students}` }}</v-col>
         </v-row>
         <v-slide-group
             center-active
@@ -63,7 +63,7 @@
                     <v-card-text align="center">
                     
                         <v-row dense>
-                            <v-col  class="text-lg font-bold">{{ `${option.period_package}(${option.amount}ครั้ง)`}} </v-col>
+                            <v-col  class="text-lg font-bold">{{ `${option.option_name}(${option.amount}ครั้ง)`}} </v-col>
                         </v-row>
                         <v-row dense>
                             <v-col ><div class="line-card-package"></div></v-col>
