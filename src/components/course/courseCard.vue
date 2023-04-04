@@ -1,6 +1,5 @@
 <template>
   <div>
-    
     <!-- Upload file -->
     <v-card class="mx-3" flat>
       <v-card-text class="border-dashed border-2 border-blue-600 rounded-lg">
@@ -200,7 +199,7 @@
               type="number"
               @focus="$event.target.select()"
               v-model="course_data.student_recived"
-              placeholder="ระบุสถานที่เรียน"
+              placeholder="ระบุจำนวนนักเรียนที่รับได้"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -418,7 +417,7 @@
                 item-text="label"
                 item-value="value"
                 placeholder="โปรดเลือกวันสอน"
-                v-model="course_data.coachs[0].teach_day_data.teach_day"
+                v-model="course_data.coachs[0].teach_day_data[0].teach_day"
               >
               <template v-slot:selection="{ attrs, item, selected }">
                 <v-chip
@@ -428,7 +427,7 @@
                   small
                   color="#ffeeee"
                   text-color="#ff6b81"
-                  @click:close="removeChip(item, course_data.coachs[0].teach_day_data.teach_day)"
+                  @click:close="removeChip(item, course_data.coachs[0].teach_day_data[0].teach_day)"
                 >
                   <strong>{{ item.label }}</strong>
                 </v-chip>
@@ -437,7 +436,7 @@
             </v-col>
           </v-row>
           <v-row dense>
-            <v-col cols="12" sm="6">
+            <v-col cols="12" sm="6" class="pr-2">
               <label-custom required text="วันที่เรียน"></label-custom>
               <v-row>
                 <v-col>
@@ -525,10 +524,10 @@
                 </v-col>
               </v-row>
             </v-col>
-            <v-col cols="12" sm="6">
+            <v-col cols="12" sm="6" class="px-0">
               <label-custom required text="เวลาเรียน"></label-custom>
               <v-row>
-                <v-col>
+                <v-col cols="auto">
                   <v-text-field  
                     :disabled="disable"
                     :outlined="!disable"
@@ -558,6 +557,8 @@
                 <v-col>
                   <v-text-field  
                     :disabled="disable"
+                    :outlined="!disable"
+                    :filled="disable"
                     dense
                     style="position: absolute; display: block; z-index:0;"
                     :style="`width:${width()}px;`"
@@ -628,6 +629,7 @@ import moment from 'moment';
 export default {
   name: "courseCard",
   props:{
+    coachs : {type: Array},
     categorys : {type : Array},
     disable : {type : Boolean , default: false},
     edited : {type : Boolean,}
@@ -686,10 +688,30 @@ export default {
     },
   }),
   created() {
+    if(this.edited){
+      this.preview_url = this.course_data.course_img
+      this.class_date_range_str = {
+        start_date : this.course_data.coachs[0].class_date_range_str.start_date,
+        end_date : this.course_data.coachs[0].class_date_range_str.end_date,
+      }
+      this.register_date_range_str = {
+        start_date : this.course_data.coachs[0].register_date_range_str.start_date,
+        end_date : this.course_data.coachs[0].register_date_range_str.end_date,
+      }
+    }
+    
   },
   mounted() {
     if(this.edited){
       this.preview_url = this.course_data.course_img
+      this.class_date_range_str = {
+        start_date : this.course_data.coachs[0].class_date_range_str.start_date,
+        end_date : this.course_data.coachs[0].class_date_range_str.end_date,
+      }
+      this.register_date_range_str = {
+        start_date : this.course_data.coachs[0].register_date_range_str.start_date,
+        end_date : this.course_data.coachs[0].register_date_range_str.end_date,
+      }
     }
   },
   watch: {

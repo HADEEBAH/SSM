@@ -11,13 +11,14 @@ const CourseModules = {
     course_is_loading : false,
     course_data: {
       course_id : "",
-      type: "general_course",
+      course_type_id: "CT_1",
       course_name_th: "",
       course_name_en: "",
       course_img : "",
       category_id : "",
       kingdom_name: "",
       course_open_date: "",
+      course_open_date_str: "",
       menu_course_open_date : false,
       course_hours: 1,
       location: "",
@@ -123,7 +124,7 @@ const CourseModules = {
     ResetCourse(state){
       state.course_data = {
         course_id : "",
-        type: "general_course",
+        course_type_id: "CT_1",
         course_name_th: "",
         course_name_en: "",
         course_img : "",
@@ -268,12 +269,12 @@ const CourseModules = {
         let category = {}
         await data.data.forEach(async (course)=>{
           category = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category/${course.c_category_id}`)
-          console.log("category : ", category.data)
+          console.log("category : ", category.data.data)
           if(category.data.statusCode === 200){
             courses.push({
               course_id : course.c_course_id,
               category_id : course.c_category_id,
-              category : category.data.categoryNameTh ? category.data.categoryNameTh : "-",
+              category : category.data.data.categoryNameTh ? category.data.data.categoryNameTh : "-",
               course_type : course.c_course_type_id === "CT_1" ? "คอร์สทั่วไป" : "คอร์สระยะสั้น",
               course_type_id : course.c_course_type_id,
               course : `${course.c_course_name_th}(${course.c_course_name_en})`,
@@ -312,12 +313,12 @@ const CourseModules = {
             music_performance: data.data.courseMusicPerformance,
             catification: data.data.courseCertification,
             price_course : data.data.coursePrice,
-            course_register_start_date : data.data.courseRegisterStartDate,
-            course_register_end_date : data.data.courseRegisterEndDate,
-            course_period_start_date : data.data.coursePeriodStartDate,
-            course_period_end_date : data.data.coursePeriodEndDate,
+            course_register_start_date : moment(data.data.courseRegisterStartDate).format("YYYY-MM-DD"),
+            course_register_end_date : moment(data.data.courseRegisterEndDate).format("YYYY-MM-DD"),
+            course_period_start_date : moment(data.data.coursePeriodStartDate,"HH:mm"),
+            course_period_end_date : moment(data.data.coursePeriodEndDate,"HH:mm"),
             course_per_time : data.data.coursePerTime,
-            course_student_recived : data.data.courseStudentRecived,
+            student_recived : data.data.courseStudentRecived,
             course_study_end_date : data.data.courseStudyEndDate,
             course_study_start_date : data.data.courseStudyStartDate,
             coachs: [],
@@ -381,7 +382,7 @@ const CourseModules = {
                     class_date_range: {
                       start_date: data.data.courseStudyStartDate,
                       menu_start_date: false,
-                      end_date:  data.data.courseStudyEndDate,
+                      end_date: data.data.courseStudyEndDate,
                       menu_end_date: false,
                     },
                     register_date_range: {
@@ -391,8 +392,8 @@ const CourseModules = {
                       menu_end_date: false,
                     },
                     period: {
-                      start_time:  data.data.coursePeriodEndDate,
-                      end_time:  data.data.coursePeriodStartDate,
+                      start_time: data.data.coursePeriodEndDate,
+                      end_time: data.data.coursePeriodStartDate,
                     },
                   },
                 )
@@ -439,20 +440,28 @@ const CourseModules = {
                     coach_name: `${coach.coachFirstNameTh} ${coach.coachLastNameTh}`,
                     teach_day_data: [],
                     class_date_range: {
-                      start_date: data.data.courseStudyStartDate,
+                      start_date: moment(data.data.courseStudyStartDate).format("YYYY-MM-DD"),
                       menu_start_date: false,
-                      end_date:  data.data.courseStudyEndDate,
+                      end_date:  moment(data.data.courseStudyEndDate).format("YYYY-MM-DD"),
                       menu_end_date: false,
+                    },
+                    class_date_range_str:{
+                      start_date:new Date(data.data.courseStudyStartDate).toLocaleDateString('th-TH',{ year: 'numeric', month: 'short', day: 'numeric',}),
+                      end_date: new Date(data.data.courseStudyEndDate).toLocaleDateString('th-TH',{ year: 'numeric', month: 'short', day: 'numeric',}),
                     },
                     register_date_range: {
-                      start_date:  data.data.courseRegisterStartDate,
+                      start_date:  moment(data.data.courseRegisterStartDate).format("YYYY-MM-DD"),
                       menu_start_date: false,
-                      end_date:  data.data.courseRegisterEndDate,
+                      end_date:  moment(data.data.courseRegisterEndDate).format("YYYY-MM-DD"),
                       menu_end_date: false,
                     },
+                    register_date_range_str:{
+                      start_date:new Date(data.data.courseRegisterStartDate).toLocaleDateString('th-TH',{ year: 'numeric', month: 'short', day: 'numeric',}),
+                      end_date: new Date(data.data.courseRegisterEndDate).toLocaleDateString('th-TH',{ year: 'numeric', month: 'short', day: 'numeric',}),
+                    },
                     period: {
-                      start_time:  data.data.coursePeriodEndDate,
-                      end_time:  data.data.coursePeriodStartDate,
+                      start_time:  moment(data.data.coursePeriodEndDate,"HH:mm"),
+                      end_time: moment(data.data.coursePeriodStartDate,"HH:mm"),
                     },
                   },
                 )
@@ -471,9 +480,10 @@ const CourseModules = {
       context.commit("SetCourseIsLoading",true)
       try{
         let course = context.state.course_data
+        console.log("course =>",course)
         let payload = {
             "categoryId": course.category_id,
-            "courseTypeId": course.type === 'general_course' ? 'CT_1' : 'CT_2',
+            "courseTypeId": course.course_type_id,
             "courseImg": "",
             "courseNameTh": course.course_name_th,
             "courseNameEn": course.course_name_en,
@@ -505,27 +515,34 @@ const CourseModules = {
                   "coursePeriodStartDate":coach.period.start_time ? moment(coach.period.start_time).format('HH:mm') : '',
                   "coursePeriodEndDate":coach.period.end_time ? moment(coach.period.end_time).format('HH:mm') : '',              }
             })
-            if(course.type === "general_course"){
-              // Day Of Week
-              coach.teach_day_data.forEach((teach_day)=>{
-                let times = []
-                teach_day.class_date.forEach((date) => {
+            // Day Of Week
+            coach.teach_day_data.forEach((teach_day)=>{
+              let times = []
+              teach_day.class_date.forEach((date) => {
+                if(course.course_type_id === "CT_1"){
                   times.push({
-                      "start": moment(date.class_date_range.start_time).format('HH:mm'),
-                      "end":  moment(date.class_date_range.end_time).format('HH:mm'),
-                      "maximumStudent": date.students
+                    "start": moment(date.class_date_range.start_time).format('HH:mm'),
+                    "end":  moment(date.class_date_range.end_time).format('HH:mm'),
+                    "maximumStudent": date.students
+                })
+                }else{
+                  times.push({
+                      "start": moment(coach.period.start_time).format('HH:mm'),
+                      "end":  moment(coach.period.end_time).format('HH:mm'),
+                      "maximumStudent": course.student_recived
                   })
-                })
-                payload.dayOfweek.push( {
-                  "accountId":  coach.coach_id,
-                  "status": teach_day.class_open ? 'Active': 'InActive',
-                  "day": teach_day.teach_day,
-                  "times": times
-                })
+                }
+              
               })
-            } 
+              payload.dayOfweek.push( {
+                "accountId":  coach.coach_id,
+                "status": teach_day.class_open ? 'Active': 'InActive',
+                "day": teach_day.teach_day,
+                "times": times
+              })
+            })
         })
-        if(course.type === "general_course"){
+        if(course.course_type_id === "CT_1"){
           course.packages.forEach((package_course)=>{
             package_course.options.forEach((option)=>{
               payload.coursePackages.push({

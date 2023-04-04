@@ -11,7 +11,7 @@
                     </template>
                 </img-card>
             </v-col>    
-            <v-col cols="12" sm="3" @click="tab='time and coach'">
+            <v-col v-if="course_data.course_type_id === 'CT_1'" cols="12" sm="3" @click="tab='time and coach'">
                 <img-card vertical class="cursor-pointer" :class="tab === 'time and coach' ? 'img-card-active':''">
                     <template v-slot:img>
                         <v-img max-height="72" max-width="72" src="../../../assets/course/time_and_coach.png"></v-img>
@@ -19,7 +19,7 @@
                     </template>
                 </img-card>
             </v-col>
-            <v-col cols="12" sm="3"  @click="tab='package'">
+            <v-col v-if="course_data.course_type_id === 'CT_1'" cols="12" sm="3"  @click="tab='package'">
                 <img-card vertical class="cursor-pointer" :class="tab === 'package' ? 'img-card-active':''">
                     <template v-slot:img>
                         <v-img max-height="72" max-width="72" src="../../../assets/course/package.png"></v-img>
@@ -49,7 +49,7 @@
                         <v-card flat>
                             <headerCard title="รายละเอียดเวลาและโค้ช">
                                 <template v-slot:actions>
-                                <v-btn outlined color="#FF6B81" @click="addCoach">
+                                <v-btn outlined :disabled="!course_edit" color="#FF6B81" @click="addCoach">
                                     <v-icon>mdi-plus-circle-outline</v-icon>
                                     เพิ่มโค้ช
                                 </v-btn>
@@ -311,7 +311,7 @@ import { mapGetters, mapActions } from 'vuex';
                 {text:"จัดการคอร์สทั้งหมด",to:"CourseList"},
                 {text:"รายละเอียดคอร์สเรียน",to:""}
             ],
-            tab : "package",
+            tab : "course",
             student_tab : null,
             course_edit : false,
             student_courses : [
