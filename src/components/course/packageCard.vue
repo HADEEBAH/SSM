@@ -22,14 +22,14 @@
                     :disabled="disable"
                     :outlined="!disable"
                     :filled="disable"
-                    v-model="package_data.package"
+                    v-model="package_data.package_id"
                     color="#FF6B81"
                     :rules="rules.packages"
                     :items="packageList(index)"
                     item-value="packageId"
                     item-text="packageName"
                     item-color="pink"
-                    @change="checkPackage(package_data.package, package_data)"
+                    @change="checkPackage(package_data.package_id, package_data)"
                 >
                     <template v-slot:no-data>
                     <v-list-item>
@@ -53,7 +53,7 @@
                 <v-text-field
                   suffix="คน"
                   type="number"
-                  :disabled="package_data.package !== 'PACK_3' ? true : disable "
+                  :disabled="package_data.package_id !== 'PACK_3' ? true : disable "
                   :outlined="!disable"
                   :filled="disable"
                   :rules="rules.packages_student"
@@ -182,10 +182,10 @@
                       type="number"
                       class="input-text-right"
                       @focus="$event.target.select()"
-                      :disabled="!option.discount"
+                      :disabled="!option.discount || disable"
                       placeholder="ระบุส่วนลด/บาท"
-                      :outlined="option.discount"
-                      :filled="!option.discount"
+                      :outlined="option.discount|| disable"
+                      :filled="!option.discount || disable"
                       v-model.number="option.discount_price"
                       @change="calNetPrice(option)"
                     ></v-text-field>
@@ -247,13 +247,6 @@ export default {
     packages_selected: [],
     options_selected: [],
     minimum_students: 0,
-    // rules: {  
-    //   packages: [val => (val || '').length > 0 || 'โปรดเลือกแพ็คเกจ'],
-    //   packages_student: [val => (val || '') > this.minimum_students ? this.minimum_students : 0 || 'โปรดระบุจำนวนนักเรียน'],
-    //   options : [val => (val || '').length > 0 || 'โปรดเลือกระยะเวลา'],
-    //   options_amount : [val => (val || '') > 0 || 'โปรดระบุจำนวนครั้ง/คน'],
-    //   price_unit : [val => (val || '') > 0 || 'โปรดระบุราคาต่อ/คน'],
-    // },
   }),
   created() {
      
@@ -297,10 +290,10 @@ export default {
     }),
     packageList(package_index){
       let used_package = []
-      let current_package = this.course_data.packages[package_index].package
+      let current_package = this.course_data.packages[package_index].package_id
       for(const package_data of  this.course_data.packages){
-        if (package_data.package !== current_package) {
-          used_package.push(package_data.package);
+        if (package_data.package_id !== current_package) {
+          used_package.push(package_data.package_id);
         }
       }
       return this.packages_data.filter(v => !used_package.includes(v.packageId))
@@ -333,6 +326,7 @@ export default {
       } 
     },
     checkPackage(package_data, packages){
+      console.log(package_data)
       let minimum_students_data = this.minimum_students
       if(package_data === "PACK_1"){
         packages.students = 1

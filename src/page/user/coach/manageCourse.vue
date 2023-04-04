@@ -110,6 +110,7 @@ import calendarCoach from "@/components/calendar/calendarCoach.vue";
 import headerPage from '../../../components/header/headerPage.vue';
 import rowData from '../../../components/label/rowData.vue';
 import courseCardList from "../../../components/course/courseCardList.vue";
+import { mapActions } from "vuex";
 export default {
   name: "menageCourse",
   components: { calendarCoach, headerPage, courseCardList, rowData },
@@ -211,7 +212,9 @@ export default {
     ],
   }),
   created() {
+   
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
+    this.GetCoach({coach_id : this.user_detail.account_id})
   },
   mounted() {
 
@@ -222,7 +225,9 @@ export default {
     
   },
   methods: {
-
+    ...mapActions({
+      GetCoach : "CoachModules/GetCoach"
+    })
   },
 };
 </script>

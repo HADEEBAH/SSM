@@ -12,13 +12,14 @@ import CategoryModules from './store_modules/categoryModules'
 import ProfileModules from '@/store_modules/profileModules'
 import OrderTestModules from '@/store_modules/orderTestModules'
 import MyCourseModules from '@/store_modules/myCourseModules'
-
+import CoachModules from '@/store_modules/coachModules'
 
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   modules: {
+    CoachModules :CoachModules,
     RegisterModules: RegisterModules,
     CourseModules: CourseModules,
     FinanceModules: FinanceModules,
