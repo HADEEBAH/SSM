@@ -1,4 +1,5 @@
 import axios from "axios";
+import VueCookie from "vue-cookie"
 const profileModules = {
     namespaced: true,
     state: {
@@ -91,7 +92,14 @@ const profileModules = {
     async GetParentData(context, student_id) {
       console.log("student_id", student_id);
       try {
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${student_id}`)
+        let config = {
+          headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-type": "Application/json",
+              'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+      }
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${student_id}`,config)
         console.log(data)
         if (data.statusCode === 200) {
             context.commit("SetParentData", data.data)

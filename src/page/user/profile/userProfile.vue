@@ -1,5 +1,6 @@
 <template>
     <v-container>
+      <loading-overlay :loading="categorys_is_loading"></loading-overlay>
       <div class="profileCard my-5 center">
         <v-img
           src="@/assets/userManagePage/imgcardafterupload.png"
@@ -66,8 +67,7 @@
     </div>
 
  
-  <div v-if="data_local.roles.includes('R_2')">
-  ADMIN</div>
+  <div v-if="data_local.roles.includes('R_2')"></div>
   <!-- ROLE STUDENT ข้อมูลผู้ปกครอง -->
      <div v-if="data_local.roles.includes('R_5')">
       <div class="mt-8">
@@ -123,7 +123,7 @@
         </v-col>
       </v-row>
       <!-- translate -->
-      <v-row dense class="mt-3">
+      <v-row dense class="mt-3"  @click="$router.push({name:'ProfileLanguages'})">
         <v-col cols="2" sm="1">
           <img src="@/assets/profile/langueges.png" />
         </v-col>
@@ -206,6 +206,7 @@
           <v-btn
         outlined
         color="pink"
+        @click="logOut"
       >
       ออกจากระบบ
       </v-btn>
@@ -216,8 +217,12 @@
   <script>
   import { mapActions, mapGetters } from "vuex";
   import labelCustom from "@/components/label/labelCustom.vue";
+  import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
   export default {
-    components: { labelCustom },
+    components: {
+      labelCustom,
+    loadingOverlay
+  },
     data: () => ({
       data_local: JSON.parse(localStorage.getItem("userDetail")),
       items: [
@@ -279,6 +284,7 @@
       ...mapActions({
         loginOneId: "loginModules/loginOneId",
         GetStudentData: "MyCourseModules/GetStudentData",
+        logOut : "loginModules/logOut"
         // GetStudentData: "OrderTestModules/GetStudentData"
       }),
 
@@ -319,6 +325,8 @@
       ...mapGetters({
         user_one_id: "loginModules/getUserOneId",
         student_data: "MyCourseModules/getStudentData",
+        categorys_is_loading : "CategoryModules/getCategorysIsLoading",
+
         // student_data: "OrderTestModules/getStudentData"
       }),
 
