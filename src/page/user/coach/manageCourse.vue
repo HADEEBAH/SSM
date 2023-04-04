@@ -32,6 +32,7 @@
             </v-card>
           </v-col>
         </v-row>
+        <pre>{{ my_courses }}</pre>
         <!-- รายวัน -->
         <template v-if="time_frame === 'day'">
           <!-- COURSE LIST -->
@@ -47,7 +48,7 @@
         <template v-else>
           <!-- COURSE LIST -->
           <calendarCoach
-            :events="tasks"
+            :events="my_coursesd"
             :type="time_frame"
           ></calendarCoach>
         </template>
@@ -110,7 +111,7 @@ import calendarCoach from "@/components/calendar/calendarCoach.vue";
 import headerPage from '../../../components/header/headerPage.vue';
 import rowData from '../../../components/label/rowData.vue';
 import courseCardList from "../../../components/course/courseCardList.vue";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "menageCourse",
   components: { calendarCoach, headerPage, courseCardList, rowData },
@@ -214,7 +215,7 @@ export default {
   created() {
    
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
-    this.GetCoach({coach_id : this.user_detail.account_id})
+    this.GetMyCourses({coach_id : this.user_detail.account_id})
   },
   mounted() {
 
@@ -222,11 +223,13 @@ export default {
   },
   watch: {},
   computed: {
-    
+    ...mapGetters({
+      my_courses : "CoachModules/getMyCourses"
+    })
   },
   methods: {
     ...mapActions({
-      GetCoach : "CoachModules/GetCoach"
+      GetMyCourses : "CoachModules/GetMyCourses"
     })
   },
 };

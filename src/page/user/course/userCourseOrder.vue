@@ -135,10 +135,10 @@
                         <v-row dense class="d-flex align-center">
                             <v-col  cols="12" sm="6">
                                 <labelCustom text="Username (ถ้ามี)"></labelCustom>
-                                <v-text-field :disabled="user_data.length > 0" @change="checkUsername(parent.username)" @keyup.enter="checkUsername(parent.username)" dense outlined v-model="parent.username"  placeholder="Username" ></v-text-field>
+                                <v-text-field :disabled="!edit_parent" @blur="checkUsername(parent.username)" @keyup.enter="checkUsername(parent.username)" dense outlined v-model="parent.username"  placeholder="Username" ></v-text-field>
                             </v-col>
                             <v-col  cols="12" sm="6">
-                                <v-btn dense outlined color="#ff6b81" @click="dialog_parent = true"><v-icon>mdi-account-edit-outline</v-icon>เพิ่มข้อมูลผู้ปกครอง</v-btn>
+                                <v-btn dense outlined color="#ff6b81" @click="edit_parent = true"><v-icon>mdi-account-edit-outline</v-icon>แก้ไขข้อมูลผู้ปกครอง</v-btn>
                             </v-col>
                         </v-row>
                         <v-row dense>
@@ -333,6 +333,7 @@ import router from '../../../router';
     name:"userCourseOrder",
     components: {ImgCard, rowData, headerCard, labelCustom, registerDialogForm, dialogCard, loadingOverlay},
     data: () => ({
+        edit_parent: false,
         coachs:[
             {name : 'โค้ชหนุ่ม',coach_id : "00001" },
             {name : 'โค้ชพอล',coach_id : "00002" },
@@ -596,7 +597,7 @@ import router from '../../../router';
             this.saveOrder()
         },
         checkUsername(username, type, index){
-            console.log(username)
+            console.log("TSET",username)
             if(username){
                 this.checkUsernameOneid({username : username, status : "", type : type}).then(()=>{
                     if(type === 'student'){
@@ -619,12 +620,14 @@ import router from '../../../router';
                         }
                         
                     }else{
+                        console.log("user_data =>", this.user_data)
                         if(this.user_data.length > 0){
-                            this.parent.firstname_en = this.user_data[0].firstNameEng
-                            this.parent.lastname_en = this.user_data[0].lastNameEng
-                            this.parent.tel = this.user_data[0].mobileNo
-                            this.parent.account_id = this.user_data[0].userOneId
-                            this.parent.username = username 
+                            let parents =  this.course_order.students.filter(v => v.is_other === false)[0].parents
+                            parents[0].firstname_en = this.user_data[0].firstNameEng
+                            parents[0].lastname_en = this.user_data[0].lastNameEng
+                            parents[0].tel = this.user_data[0].mobileNo
+                            parents[0].account_id = this.user_data[0].userOneId
+                            parents[0].username = username 
                         }
                     }
                 })

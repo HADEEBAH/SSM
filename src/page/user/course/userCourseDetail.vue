@@ -54,7 +54,7 @@
             </v-row>
             <v-row dense>
               <v-col cols="auto">วันเรียน:</v-col>
-              <v-col>{{ new Date(course_data.course_study_start_date).toLocaleDateString("th-TH",date_options)}} - {{ new Date(course_data.course_study_end_date).toLocaleDateString("th-TH",date_options)}} ({{course_data.course_period_start_date}}-{{ course_data.course_period_end_date }} น.)</v-col>
+              <v-col>{{ new Date(course_data.course_study_start_date).toLocaleDateString("th-TH",date_options)}} - {{ new Date(course_data.course_study_end_date).toLocaleDateString("th-TH",date_options)}} ({{ getTime(course_data.course_period_start_date) }}-{{ getTime(course_data.course_period_end_date) }} น.)</v-col>
             </v-row>
             <v-row dense>
               <v-col cols="12" class="text-[#999999]">
@@ -162,6 +162,7 @@
 import rowData from "@/components/label/rowData.vue";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 import { mapActions, mapGetters } from "vuex";
+import moment from 'moment';
 export default {
   name: "userCourseDetail",
   components: { rowData, dialogCard, loadingOverlay },
@@ -194,6 +195,9 @@ export default {
       changeCourseOrderData: "OrderModules/changeCourseOrderData",
       changeOrderData: "OrderModules/changeOrderData",
     }),
+    getTime(time){
+      return moment(time).format("HH:mm")
+    },
     registerCourse(){
       this.order.order_step = 1
       console.log(this.course_data.price_course)
