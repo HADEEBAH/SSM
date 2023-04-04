@@ -265,6 +265,7 @@ const CourseModules = {
     async GetCoursesList(context,){
       try{
         let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/list?limit=10&page=1`)
+        console.log(data)
         let courses = []
         let category = {}
         await data.data.forEach(async (course)=>{
@@ -279,7 +280,7 @@ const CourseModules = {
               course_type_id : course.c_course_type_id,
               course : `${course.c_course_name_th}(${course.c_course_name_en})`,
               status : course.c_course_status,
-              course_open : course.c_course_open_date ? new Date(course.c_course_open_date).toLocaleDateString('th-TH',{ year: 'numeric', month: 'short', day: 'numeric',}) : "-"
+              course_open : course.c_course_open_date ? new Date(course.c_course_open_date).toLocaleDateString('th-TH',{ year: 'numeric', month: 'short', day: 'numeric',}) : `${new Date(course.c_course_register_start_date).toLocaleDateString('th-TH',{ year: 'numeric', month: 'short', day: 'numeric',})} - ${new Date(course.c_course_register_end_date).toLocaleDateString('th-TH',{ year: 'numeric', month: 'short', day: 'numeric',})}`
             })
           }
         })

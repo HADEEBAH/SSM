@@ -29,7 +29,7 @@
                     item-value="packageId"
                     item-text="packageName"
                     item-color="pink"
-                    @change="checkPackage(package_data.package, package_data)"
+                    @change="checkPackage(package_data.package_id, package_data)"
                 >
                     <template v-slot:no-data>
                     <v-list-item>
@@ -290,10 +290,10 @@ export default {
     }),
     packageList(package_index){
       let used_package = []
-      let current_package = this.course_data.packages[package_index].package
+      let current_package = this.course_data.packages[package_index].package_id
       for(const package_data of  this.course_data.packages){
-        if (package_data.package !== current_package) {
-          used_package.push(package_data.package);
+        if (package_data.package_id !== current_package) {
+          used_package.push(package_data.package_id);
         }
       }
       return this.packages_data.filter(v => !used_package.includes(v.packageId))
@@ -326,6 +326,7 @@ export default {
       } 
     },
     checkPackage(package_data, packages){
+      console.log(package_data)
       let minimum_students_data = this.minimum_students
       if(package_data === "PACK_1"){
         packages.students = 1
