@@ -3,7 +3,7 @@
       <v-container>
         <v-row dense>
             <v-col cols="12">
-                <v-text-field  outlined hide-details dense prepend-inner-icon="mdi-magnify" placeholder="ค้นหาอาณาจัดรการเรียนรู้ที่คุณสนใจได้ที่นี่"></v-text-field>
+                <v-text-field  outlined hide-details dense prepend-inner-icon="mdi-magnify" placeholder="ค้นหาอาณาจัดรการเรียนรู้ที่คุณสนใจได้ที่นี่sss"></v-text-field>
             </v-col>
         </v-row>
         <v-row dense>

@@ -1,37 +1,18 @@
 
 <template>
-  <v-app class="overflow-x-hidden overflow-y-hidden">
-    <v-img
-      src="../../../assets/navbar_user/kingdomBg.png"
-      class="rounded-none bottomimg"
-    >
-      <div class="text-2xl ml-5 mt-10 font-bold text-white">
-        Hello {{ dataStorage ? dataStorage.first_name_en : "" }}
-      </div>
-      <v-autocomplete
-        :class="
-          MobileSize
-            ? 'mt-14 ml-5 mr-5 bg-white rounded-xl'
-            : 'text_field_pc ml-5 mr-5 bg-white rounded-xl'
-        "
-        hide-details
-        dense
-        outlined
-        label="ค้นหาอณาจักการเรียนรู้ที่คุณสนใจได้ที่นี้"
-        suffix="All"
-        prepend-inner-icon="mdi-magnify"
-        :items="[1, 2, 3, 4]"
-      />
-      <div></div>
-    </v-img>
+  <v-app class="overflow-x-hidden overflow-y-hidden bg-kingdom" :style="MobileSize ? `background-size: contain;` : `background-size: cover;`">
+    <v-container fluid class="my-5">
+      <v-row class="row">
+        <v-col cols="12">
+          <div class="text-2xl font-bold text-white">
+            สวัสดี, {{ dataStorage ? dataStorage.first_name_en : "" }}
+          </div>
+        </v-col>
+      </v-row>
+    </v-container>
+    
     <v-card
-      :style="
-        MobileSize
-          ? 'margin-top: -20%; border-radius:  0.75rem;'
-          : 'margin-top: -60%; border-radius:  0.75rem;' || IpadSize
-          ? 'margin-top: -50%; border-radius:  0.75rem;'
-          : ''
-      "
+    class="rounded-xl"
     >
       <v-card
         class="mx-auto block rounded-xl drop-shadow-lg mt-3 ml-3 mr-3"
@@ -40,7 +21,6 @@
         <template>
           <v-carousel cycle hide-delimiter-background>
             <v-carousel-item
-              height="300px"
               v-for="(slide, i) in slides"
               :key="i"
               :src="slide.src"
@@ -49,15 +29,31 @@
           </v-carousel>
         </template>
       </v-card>
-      <headerPage title="อาณาจักร" class="ml-5"></headerPage>
 
-      <v-container fluid grid-list-md>
+      <v-container fluid>
+        <v-row>
+          <v-col cols="12" sm="2" class="text-2xl align-self-center font-weight-bold">
+            อาณาจักร
+          </v-col>
+          <v-col cols="12" sm="10" style="text-align: -webkit-right">
+            <v-text-field
+              @keyup="searchKingdom()"
+              v-model="search_kingdom"
+              :class="`bg-white rounded-xl ${!MobileSize ? 'w-2/5' : 'w-full'} `"
+              hide-details
+              dense
+              outlined
+              label="ค้นหาอาณาจักรการเรียนรู้ที่คุณสนใจได้ที่นี้"
+              prepend-inner-icon="mdi-magnify"
+            />
+          </v-col>
+        </v-row>
         <v-row>
           <v-col
             cols="12"
             md="4"
             sm="6"
-            v-for="item in categorys"
+            v-for="item in (search_kingdom !== '' ? data_search_kingdom : categorys)"
             :key="item.id"
           >
             <v-card
@@ -131,6 +127,8 @@ export default {
     ],
     dataStorage: {},
     userDetail: false,
+    search_kingdom: "",
+    data_search_kingdom: [],
   }),
   created() {
     this.dataStorage = JSON.parse(localStorage.getItem("userDetail"));
@@ -167,6 +165,13 @@ export default {
     showImg(item) {
       return `${process.env.VUE_APP_URL}/api/v1/files/${item}`;
     },
+    searchKingdom() {
+      this.data_search_kingdom = this.categorys.filter((val)=>{
+        if (val.categoryNameTh.indexOf(this.search_kingdom) !== -1 || val.categoryNameEng.toLowerCase().indexOf(this.search_kingdom.toLowerCase()) !== -1 ) {
+          return val
+        }
+      })
+    }
   },
 
   computed: {
@@ -220,5 +225,12 @@ export default {
     float: left; */
   /* margin: 3px;
     padding: 3px; */
+}
+
+.bg-kingdom {
+  background-image: url("@/assets/kingdom_bg_img.svg");
+  background-position: top;
+  background-repeat: no-repeat;
+  /* background-size: contain; */
 }
 </style>
