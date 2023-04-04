@@ -1,10 +1,6 @@
 
 <template>
   <v-app class="overflow-x-hidden overflow-y-hidden bg-kingdom" :style="MobileSize ? `background-size: contain;` : `background-size: cover;`">
-    <!-- <v-img
-      src="@/assets/kingdom_bg_img.svg"
-      class="rounded-none bottomimg"
-    > -->
     <v-container fluid class="my-5">
       <v-row class="row">
         <v-col cols="12">
@@ -15,18 +11,6 @@
       </v-row>
     </v-container>
     
-      
-      
-    <!-- </v-img> -->
-    <!-- <v-card
-      :style="
-        MobileSize
-          ? 'margin-top: -20%; border-radius:  0.75rem;'
-          : 'margin-top: -60%; border-radius:  0.75rem;' || IpadSize
-          ? 'margin-top: -50%; border-radius:  0.75rem;'
-          : ''
-      "
-    > -->
     <v-card
     class="rounded-xl"
     >
@@ -45,14 +29,13 @@
           </v-carousel>
         </template>
       </v-card>
-      <headerPage title="อาณาจักร" class="ml-5"></headerPage>
 
       <v-container fluid>
         <v-row>
-          <v-col cols="12" md="2" class="text-2xl align-self-center font-weight-bold">
+          <v-col cols="12" sm="2" class="text-2xl align-self-center font-weight-bold">
             อาณาจักร
           </v-col>
-          <v-col cols="12" md="10" style="text-align: -webkit-right">
+          <v-col cols="12" sm="10" style="text-align: -webkit-right">
             <v-text-field
               @keyup="searchKingdom()"
               v-model="search_kingdom"
@@ -60,18 +43,17 @@
               hide-details
               dense
               outlined
-              label="ค้นหาอาณาจักการเรียนรู้ที่คุณสนใจได้ที่นี้"
+              label="ค้นหาอาณาจักรการเรียนรู้ที่คุณสนใจได้ที่นี้"
               prepend-inner-icon="mdi-magnify"
             />
           </v-col>
         </v-row>
-        {{ categorys }}
         <v-row>
           <v-col
             cols="12"
             md="4"
             sm="6"
-            v-for="item in ( search_kingdom !== '' ? data_search_kingdom : categorys)"
+            v-for="item in (search_kingdom !== '' ? data_search_kingdom : categorys)"
             :key="item.id"
           >
             <v-card
@@ -184,15 +166,11 @@ export default {
       return `${process.env.VUE_APP_URL}/api/v1/files/${item}`;
     },
     searchKingdom() {
-      console.log("e", this.search_kingdom)
       this.data_search_kingdom = this.categorys.filter((val)=>{
-        // console.log(console.log("val", val.categoryNameTh))
-        if (val.categoryNameTh.indexOf(this.search_kingdom) !== -1 || val.categoryNameEng.indexOf(this.search_kingdom) !== -1 ) {
+        if (val.categoryNameTh.indexOf(this.search_kingdom) !== -1 || val.categoryNameEng.toLowerCase().indexOf(this.search_kingdom.toLowerCase()) !== -1 ) {
           return val
         }
-        
       })
-
     }
   },
 
