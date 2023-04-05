@@ -90,7 +90,7 @@ const RegisterModules = {
                       roles : roles_data,  
                       tel : res.data.data.tel,
                   }
-                  VueCookie.set("token", res.data.data.token)
+                  VueCookie.set("token", res.data.data.token,1)
                   localStorage.setItem("userDetail",JSON.stringify(payload))
                   console.log("UserKingdom")
                   context.commit("SetIsLoading", false)

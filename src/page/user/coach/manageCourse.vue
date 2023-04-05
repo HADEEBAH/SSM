@@ -33,21 +33,32 @@
           </v-col>
         </v-row>
         <!-- รายวัน -->
+        <pre>{{  }}</pre>  
         <template v-if="time_frame === 'day'">
           <!-- COURSE LIST -->
-          <div v-for="(course, course_index) in courses" :key="course_index">
-            <course-card-list class="mb-2" bg_color="#fff" :title="course.course_name" :course_name="course.category_name" :package_name="`แพ็คเกจ :${course.package}`" :course_per_time="`เวลาสอน :${course.course_hours}`" :period="course.time">
+          <div v-for="(course, course_index) in my_courses.filter(v => v.statr_date === today)" :key="course_index">
+            {{ new Date(course.start) }}
+            <course-card-list class="mb-2" bg_color="#fff" :title="course.name" :course_per_time="`เวลาสอน :${course.course_per_time}`" :period="`${course.start_time}-${course.end_time}`">
               <template #img>
-                <v-img class="rounded-lg" src="https://cdn.vuetifyjs.com/images/cards/cooking.png" max-height="120" max-width="120"></v-img>
+                <v-img class="rounded-lg" :src="course.course_img ? course.course_img :'https://cdn.vuetifyjs.com/images/cards/cooking.png'" max-height="120" max-width="120"></v-img>
               </template>
             </course-card-list>
+          </div>
+          <div>
+            <v-card flat>
+              <v-card-text class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg">
+                 <span class="text-lg font-bold"> 
+                   <v-icon color="#ff6b81">mdi-alert-outline</v-icon> ไม่พบข้อมูลการสอน
+                 </span>              
+              </v-card-text>
+            </v-card>
           </div>
         </template>
         <!-- รายสัปดาห์ -->
         <template v-else>
           <!-- COURSE LIST -->
           <calendarCoach
-            :events="tasks"
+            :events="my_courses"
             :type="time_frame"
           ></calendarCoach>
         </template>
@@ -64,31 +75,31 @@
         <v-row dense>
           <v-col>
               <span class="font-bold">เลือกคอร์ส</span>
-              <v-select outlined dense></v-select>
+              <v-autocomplete v-model="filter_course" item-text="name" item-value="course_id" :items="my_courses"  outlined dense></v-autocomplete>
           </v-col>
         </v-row>
-        <v-card dense elevation="0" flat >
+        <v-card dense class="mb-3" elevation="0" flat  v-for="(course, course_index) in my_courses.filter(v => v.course_id === filter_course)" :key="`${course_index}-course`">
           <v-card-text class="bg-[#FBF3F5]">
-            <v-row>
+            <v-row dense>
               <v-col cols="4">
-                
+                <v-img class="rounded-lg" height="160" :src="course.course_img ? course.course_img :'https://cdn.vuetifyjs.com/images/cards/cooking.png'" />
               </v-col>
               <v-col>
                 <v-row>
-                  <v-col class="font-bold text-md">วันจันทร์ที่ 25 กรกฎาคม 2565</v-col>
+                  <v-col class="font-bold text-md">{{ course.start_date_str }}</v-col>
                 </v-row>
                 <v-row dense>
                   <v-col cols="12">
                     <rowData mini  icon="mdi-account">อาณาจักร : ศิลปะสมัยใหม่</rowData>
                   </v-col>
                   <v-col cols="12">
-                    <rowData mini  icon="mdi-bookshelf">คอร์สเรียน : เปียโนป๊อป</rowData>
+                    <rowData mini  icon="mdi-bookshelf">คอร์สเรียน : {{ `${course.name}(${course.subtitle})` }}</rowData>
                   </v-col>
                   <v-col cols="12">
-                    <rowData mini  icon="mdi-clock-time-four-outline">เวลาสอน 1 ชั่วโมง</rowData>
+                    <rowData mini  icon="mdi-clock-time-four-outline">เวลาสอน {{ course.course_per_time }} ชั่วโมง</rowData>
                   </v-col>
                   <v-col cols="12">
-                    <v-chip small color="#F9B320" dark>16:00-17:00น.</v-chip>
+                    <v-chip small color="#F9B320" dark>{{ `${course.start_time} - ${course.end_time}` }}น.</v-chip>
                   </v-col>
                 </v-row>
               </v-col>
@@ -110,11 +121,13 @@ import calendarCoach from "@/components/calendar/calendarCoach.vue";
 import headerPage from '../../../components/header/headerPage.vue';
 import rowData from '../../../components/label/rowData.vue';
 import courseCardList from "../../../components/course/courseCardList.vue";
-import { mapActions } from "vuex";
+import moment from 'moment';
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "menageCourse",
   components: { calendarCoach, headerPage, courseCardList, rowData },
   data: () => ({
+    filter_course: "",
     user_detail : "",
     tab: "teaching list",
     tabs : [
@@ -214,7 +227,7 @@ export default {
   created() {
    
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
-    this.GetCoach({coach_id : this.user_detail.account_id})
+    this.GetMyCourses({coach_id : this.user_detail.account_id})
   },
   mounted() {
 
@@ -222,11 +235,16 @@ export default {
   },
   watch: {},
   computed: {
-    
+    ...mapGetters({
+      my_courses : "CoachModules/getMyCourses"
+    }),
+    today(){
+      return moment(new Date()).format("YYYY-MM-DD")
+    }
   },
   methods: {
     ...mapActions({
-      GetCoach : "CoachModules/GetCoach"
+      GetMyCourses : "CoachModules/GetMyCourses"
     })
   },
 };
