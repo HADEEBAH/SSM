@@ -1,5 +1,6 @@
 
 <template>
+  
   <v-app class="overflow-x-hidden overflow-y-hidden bg-kingdom" :style="MobileSize ? `background-size: contain;` : `background-size: cover;`">
     <v-container fluid class="my-5">
       <v-row class="row">
@@ -48,15 +49,16 @@
             />
           </v-col>
         </v-row>
-        <v-row>
+
+        <v-row >
           <v-col
             cols="12"
             md="4"
             sm="6"
-            v-for="item in (search_kingdom !== '' ? data_search_kingdom : categorys)"
+            v-for="item in (search_kingdom !== '' ? data_search_kingdom : categorys )"
             :key="item.id"
           >
-            <v-card
+            <v-card  
               class="mx-auto block rounded-xl drop-shadow-lg"
               max-width="344"
               @click="selectedCategory(item)"
@@ -80,15 +82,17 @@
               </v-card-subtitle>
             </v-card>
           </v-col>
+          <v-col cols="12" v-if="search_kingdom !== '' && data_search_kingdom.length === 0 || categorys.length === 0" class="font-weight-bold text-center text-xl">
+            ไม่พบอาณาจักร
+          </v-col>
         </v-row>
-        <loading-overlay :loading="categorys_is_loading"></loading-overlay>
+    <loading-overlay :loading="categorys_is_loading"></loading-overlay>
       </v-container>
     </v-card>
   </v-app>
 </template>
  
 <script>
-// import headerPage from "@/components/header/headerPage.vue";
 import { mapActions, mapGetters } from "vuex";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 export default {
@@ -100,6 +104,7 @@ export default {
     defaultImageUrl:
       "https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg",
     search: "",
+    showData: false,
     first_name_en: "",
     drawer: true,
     user_detail: null,

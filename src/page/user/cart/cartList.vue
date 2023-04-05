@@ -1,6 +1,7 @@
 <template>
   <v-app class="overflow-x-hidden overflow-y-hidden">
     <v-container>
+      <loading-overlay :loading="categorys_is_loading"></loading-overlay>
       <v-row v-if="cart_list.length == 0">
         <v-col cols="12">
           <v-img src="../../../assets/cart/noCart.png"> </v-img>
@@ -158,7 +159,11 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 export default {
+  components: {
+    loadingOverlay,
+  },
   data: () => ({
     search: "",
     drawer: true,
@@ -287,6 +292,7 @@ export default {
     ...mapGetters({
       cart_list: "OrderTestModules/getCartList",
       course_order: "OrderModules/getCourseOrder",
+      categorys_is_loading : "CategoryModules/getCategorysIsLoading",
 
       order: "OrderModules/getOrder",
     }),
