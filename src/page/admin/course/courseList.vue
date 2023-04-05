@@ -118,7 +118,6 @@ import { mapGetters } from 'vuex';
             courses : "CourseModules/getCourses"
         }),
         LoadingTable(){
-            console.log(this.courses)
             return !this.courses
         } 
     },

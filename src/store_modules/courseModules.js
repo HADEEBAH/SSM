@@ -262,9 +262,18 @@ const CourseModules = {
       context.commit("SetCourseData",course_data)
     },
     // COURSE :: UPDATE
-    UpdateCourse(context,{course_data}){
+    async UpdateCourse(context,{course_data}){
       try{
         console.log(course_data)
+        let config = {
+          headers:{
+              "Access-Control-Allow-Origin" : "*",
+              "Content-type": "Application/json",
+              'Authorization' : `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        let {data} = await axios.post(process.env.VUE_APP_URL+"/api/v1/course/aaa", course_data, config)
+        console.log(data)
       }catch(error){
         console.log(error)
       }
@@ -273,12 +282,10 @@ const CourseModules = {
     async GetCoursesList(context,){
       try{
         let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/list?limit=10&page=1`)
-        console.log(data)
         let courses = []
         let category = {}
         await data.data.forEach(async (course)=>{
           category = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category/${course.c_category_id}`)
-          console.log("category : ", category.data.data)
           if(category.data.statusCode === 200){
             courses.push({
               course_id : course.c_course_id,
@@ -292,7 +299,6 @@ const CourseModules = {
             })
           }
         })
-        console.log("courses :",courses)
         context.commit("SetCourses",courses)
       }catch(error){
         console.log(error)
@@ -303,7 +309,6 @@ const CourseModules = {
       context.commit("SetCourseIsLoading",true)
       try{
           let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
-          console.log("GetCourse",data.data)
           let payload = {
             course_id : data.data.courseId,
             course_type_id : data.data.courseTypeId,
@@ -413,32 +418,6 @@ const CourseModules = {
                     },
                   },
                 )
-                  // payload.coachs.push(
-                  //   { 
-                  //     coach_id : coach.accountId,
-                  //     course_coach_id : coach.courseCoachId,
-                  //     coach_name: `${coach.coachFirstNameTh} ${coach.coachLastNameTh}`,
-                  //     teach_days_used : [],
-                  //     teach_day_data: [],
-                  //     class_date_range: {
-                  //       start_date: data.data.courseStudyStartDate,
-                  //       menu_start_date: false,
-                  //       end_date: data.data.courseStudyEndDate,
-                  //       menu_end_date: false,
-                  //     },
-                  //     register_date_range: {
-                  //       start_date:  data.data.courseRegisterStartDate,
-                  //       menu_start_date: false,
-                  //       end_date:  data.data.courseRegisterEndDate,
-                  //       menu_end_date: false,
-                  //     },
-                  //     period: {
-                  //       start_time: data.data.coursePeriodEndDate,
-                  //       end_time: data.data.coursePeriodStartDate,
-                  //     },
-                  //   },
-                  // )
-                
               })
               payload.coachs.forEach((coach)=>{
                 coach.teach_day_data = teach_day_data.filter(v => v.course_coach_id === coach.course_coach_id)
@@ -474,43 +453,6 @@ const CourseModules = {
                   package_data.options = options.filter(v=>v.package_id === package_data.package_id)
                 })
               }
-            // if(data.data.courseTypeId === "CT_2"){
-            //   data.data.coachs.forEach((coach)=>{
-            //     payload.coachs.push(
-            //       { 
-            //         coach_id : coach.accountId,
-            //         course_coach_id : coach.courseCoachId,
-            //         coach_name: `${coach.coachFirstNameTh} ${coach.coachLastNameTh}`,
-            //         teach_day_data: [],
-            //         teach_days_used : [],
-            //         class_date_range: {
-            //           start_date: moment(data.data.courseStudyStartDate).format("YYYY-MM-DD"),
-            //           menu_start_date: false,
-            //           end_date:  moment(data.data.courseStudyEndDate).format("YYYY-MM-DD"),
-            //           menu_end_date: false,
-            //         },
-            //         class_date_range_str:{
-            //           start_date: new Date(data.data.courseStudyStartDate).toLocaleDateString('th-TH',{ year: 'numeric', month: 'short', day: 'numeric',}),
-            //           end_date: new Date(data.data.courseStudyEndDate).toLocaleDateString('th-TH',{ year: 'numeric', month: 'short', day: 'numeric',}),
-            //         },
-            //         register_date_range: {
-            //           start_date:  moment(data.data.courseRegisterStartDate).format("YYYY-MM-DD"),
-            //           menu_start_date: false,
-            //           end_date:  moment(data.data.courseRegisterEndDate).format("YYYY-MM-DD"),
-            //           menu_end_date: false,
-            //         },
-            //         register_date_range_str:{
-            //           start_date:new Date(data.data.courseRegisterStartDate).toLocaleDateString('th-TH',{ year: 'numeric', month: 'short', day: 'numeric',}),
-            //           end_date: new Date(data.data.courseRegisterEndDate).toLocaleDateString('th-TH',{ year: 'numeric', month: 'short', day: 'numeric',}),
-            //         },
-            //         period: {
-            //           start_time:  moment(data.data.coursePeriodEndDate,"HH:mm"),
-            //           end_time: moment(data.data.coursePeriodStartDate,"HH:mm"),
-            //         },
-            //       },
-            //     )
-            //   })
-            // }
             console.log("payload : ",payload)
             context.commit("SetCourseData",payload)
             context.commit("SetCourseIsLoading",false)
@@ -606,7 +548,6 @@ const CourseModules = {
         const data_payload = new FormData()
         data_payload.append("payload",JSON.stringify(payload))
         data_payload.append("img_url",course.course_img)
-        console.log(data_payload.getAll("payload"))
         let config = {
           headers:{
               "Access-Control-Allow-Origin" : "*",
@@ -616,7 +557,6 @@ const CourseModules = {
         }
         let {data} = await axios.post(process.env.VUE_APP_URL+"/api/v1/course/create", data_payload, config)
         if(data.statusCode === 201){
-          console.log(data)
           context.commit("SetCourseIsLoading",false)
           Swal.fire({
             icon: "success",
@@ -648,7 +588,6 @@ const CourseModules = {
         }
         let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/filter?category_id=${category_id}&status=${status}&course_type_id=${course_type_id}`)
         if(data.statusCode === 200){
-          console.log("data" ,data )
           for( const course of data.data){
             course.course_url = `${process.env.VUE_APP_URL}/api/v1/files/${course.course_img}`
           }
@@ -668,7 +607,6 @@ const CourseModules = {
       try{
 
         let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/package`)
-        console.log("Package :",data.data)
         if(data.statusCode === 200){
           context.commit("SetPackages",data.data)
         }else{
@@ -681,7 +619,6 @@ const CourseModules = {
     async GetOptions(context){
       try{
         let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/option`)
-        console.log("options :",data.data)
         if(data.statusCode === 200){
           context.commit("SetOptions",data.data)
         }else{
@@ -715,7 +652,6 @@ const CourseModules = {
       return state.teach_days
     },
     getCourses(state){
-      console.log(state.course_data)
       return state.courses
     },
     getCoursesIsLoading(state){

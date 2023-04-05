@@ -614,6 +614,7 @@
           </v-row>
         </v-card-text>
       </template>
+
     </v-card>
   </div>
 
@@ -688,32 +689,20 @@ export default {
     },
   }),
   created() {
-    // if(this.edited){
-    //   console.log(this.course_data.coachs[0])
-    //   this.preview_url = this.course_data.course_img
-    //   this.class_date_range_str = {
-    //     start_date : this.course_data.coachs[0].class_date_range_str.start_date,
-    //     end_date : this.course_data.coachs[0].class_date_range_str.end_date,
-    //   }
-    //   this.register_date_range_str = {
-    //     start_date : this.course_data.coachs[0].register_date_range_str.start_date,
-    //     end_date : this.course_data.coachs[0].register_date_range_str.end_date,
-    //   }
-    // }
-    
+      if(this.edited){
+        this.preview_url = this.course_data?.course_img
+        this.class_date_range_str = {
+          start_date : this.course_data?.coachs[0].class_date_range_str.start_date,
+          end_date : this.course_data?.coachs[0].class_date_range_str.end_date,
+        }
+        this.register_date_range_str = {
+          start_date : this.course_data?.coachs[0].register_date_range_str.start_date,
+          end_date : this.course_data?.coachs[0].register_date_range_str.end_date,
+        }
+      }
   },
   mounted() {
-    if(this.edited){
-      this.preview_url = this.course_data.course_img
-      this.class_date_range_str = {
-        start_date : this.course_data.coachs[0].class_date_range_str.start_date,
-        end_date : this.course_data.coachs[0].class_date_range_str.end_date,
-      }
-      this.register_date_range_str = {
-        start_date : this.course_data.coachs[0].register_date_range_str.start_date,
-        end_date : this.course_data.coachs[0].register_date_range_str.end_date,
-      }
-    }
+   
   },
   watch: {
     "disable":function () {
@@ -727,6 +716,7 @@ export default {
   computed: {
     ...mapGetters({
       course_data: "CourseModules/getCourseData",
+
     }),
   },
   methods: {
@@ -736,6 +726,7 @@ export default {
     removeChip (item, value) {
       value.splice(value.indexOf(item), 1)
     },
+
     width () {
         switch (this.$vuetify.breakpoint.name) {
           case 'xs': return 99
