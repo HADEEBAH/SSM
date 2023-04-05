@@ -688,17 +688,18 @@ export default {
     },
   }),
   created() {
-    if(this.edited){
-      this.preview_url = this.course_data.course_img
-      this.class_date_range_str = {
-        start_date : this.course_data.coachs[0].class_date_range_str.start_date,
-        end_date : this.course_data.coachs[0].class_date_range_str.end_date,
-      }
-      this.register_date_range_str = {
-        start_date : this.course_data.coachs[0].register_date_range_str.start_date,
-        end_date : this.course_data.coachs[0].register_date_range_str.end_date,
-      }
-    }
+    // if(this.edited){
+    //   console.log(this.course_data.coachs[0])
+    //   this.preview_url = this.course_data.course_img
+    //   this.class_date_range_str = {
+    //     start_date : this.course_data.coachs[0].class_date_range_str.start_date,
+    //     end_date : this.course_data.coachs[0].class_date_range_str.end_date,
+    //   }
+    //   this.register_date_range_str = {
+    //     start_date : this.course_data.coachs[0].register_date_range_str.start_date,
+    //     end_date : this.course_data.coachs[0].register_date_range_str.end_date,
+    //   }
+    // }
     
   },
   mounted() {

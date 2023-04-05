@@ -105,7 +105,7 @@ const loginModules = {
                         roles: roles,
                         tel: data.data.tel,
                     }
-                    VueCookie.set("token", data.data.token)
+                    VueCookie.set("token", data.data.token, 1)
                     localStorage.setItem("userDetail", JSON.stringify(payload))
                     let order = JSON.parse(localStorage.getItem("Order"))
                     context.commit("SetIsLoading", false)

@@ -568,6 +568,13 @@ import router from '../../../router';
             this.$router.push({name : "UserKingdom"})
         },
         addToCart(){
+            console.log(this.course_data)
+            let days_of_class = this.course_data.days_of_class[0]
+            this.course_order.time = days_of_class.times[0]
+            this.course_order.coach = this.course_data.coachs[0].coach_id
+            this.course_order.coach_id = this.course_data.coachs[0].coach_id
+            this.course_order.coach_name = this.course_data.coachs[0].coach_name,
+            console.log(" course_order :",this.course_order)
             this.order.courses.push(
                 {...this.course_order}
             )
@@ -577,7 +584,7 @@ import router from '../../../router';
             this.saveCart({cart_data : this.order})
             this.resetCourseData()
             this.show_dialog_cart = true
-            this.$router.push({name : "UserKingdom"})
+            // this.$router.push({name : "UserKingdom"})
         },
         removeStudent(student){ 
             this.course_order.students.splice(this.course_order.students.findIndex(v => v.username === student.username),1 )

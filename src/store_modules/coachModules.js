@@ -28,6 +28,7 @@ const coachModules = {
         async GetMyCourses(context, {coach_id}){
             context.commit("SetMyCoursesIsLoading", true)
             try{
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', era: 'long', calendar: 'buddhist' };
                 let config = {
                     headers:{
                         "Access-Control-Allow-Origin" : "*",
@@ -35,8 +36,7 @@ const coachModules = {
                         'Authorization' : `Bearer ${VueCookie.get("token")}`
                     }
                   }
-                let endPoint = `${process.env.VUE_APP_URL}/api/v1/mycourse/coach/${coach_id}`
-                console.log(endPoint)
+                let user_detail = localStorage.getItem("userDetail")
                 let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/coach/${coach_id}`,config)
                 if(data.statusCode === 200){
                     console.log(data.data)
@@ -44,27 +44,32 @@ const coachModules = {
                     for(const course  of data.data){
                         console.log(course)
                         for(const dates of course.dates){
-                            const [start_hours, start_minutes] = course.start.split(":");
-                            const [end_hours, end_minutes] = course.end.split(":");
-                           
+                            let start_time = course?.start ? course?.start : course.coursePeriodStartDate 
+                            let end_time =  course?.end ? course?.end :course.coursePeriodEndDate
+                            const [start_hours, start_minutes] = start_time.split(":");
+                            const [end_hours, end_minutes] = end_time.split(":");
                             const startDate = new Date(dates);
                             startDate.setHours(start_hours);
                             startDate.setMinutes(start_minutes);
-                            
                             const endDate = new Date(dates);
                             endDate.setHours(end_hours);
                             endDate.setMinutes(end_minutes);
-                            
                             console.log(startDate.toISOString(), endDate.toISOString());
                             courses_task.push({
                                 name: course.courseNameTh,
                                 subtitle : course.courseNameEn,
-                                coach : "นายสมชาย ศรีชาตรี",
+                                course_id : course.courseId, 
+                                coach : `${user_detail.first_name_th} ${user_detail.last_name_th}`,
+                                start_date: moment(startDate).format("YYYY-MM-DD"),
+                                start_date_str : startDate.toLocaleDateString('th-TH',options),
                                 start: moment(startDate).format("YYYY-MM-DD HH:mm") ,
                                 end: moment(endDate).format("YYYY-MM-DD HH:mm"),
+                                start_time: start_time,
+                                end_time: end_time,
+                                course_img : course.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${course.courseImg}` : "",
+                                course_per_time: course.coursePerTime
                             })
                         } 
-                        
                     }
                     context.commit("SetMyCourses",courses_task)
                     context.commit("SetMyCoursesIsLoading", false)
