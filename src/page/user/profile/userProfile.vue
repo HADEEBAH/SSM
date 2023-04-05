@@ -1,5 +1,6 @@
 <template>
     <v-container>
+      <loading-overlay :loading="categorys_is_loading"></loading-overlay>
       <div class="profileCard my-5 center">
         <v-img
           src="@/assets/userManagePage/imgcardafterupload.png"
@@ -66,8 +67,7 @@
     </div>
 
  
-  <div v-if="data_local.roles.includes('R_2')">
-  ADMIN</div>
+  <div v-if="data_local.roles.includes('R_2')"></div>
   <!-- ROLE STUDENT ข้อมูลผู้ปกครอง -->
      <div v-if="data_local.roles.includes('R_5')">
       <div class="mt-8">
@@ -103,8 +103,8 @@
       </v-card>
      </div>
 
-<!-- ROLE ALL ทั่วไป -->
-<div >
+  <!-- ROLE ALL ทั่วไป -->
+    <div >
       <div class="mt-8">
         <label-custom text="ทั่วไป"></label-custom>
       </div>
@@ -123,7 +123,7 @@
         </v-col>
       </v-row>
       <!-- translate -->
-      <v-row dense class="mt-3">
+      <v-row dense class="mt-3"  @click="$router.push({name:'ProfileLanguages'})">
         <v-col cols="2" sm="1">
           <img src="@/assets/profile/langueges.png" />
         </v-col>
@@ -176,7 +176,6 @@
       </div>
       <v-divider class=""></v-divider>
       <!-- policy -->
-      
       <v-row dense class="mt-3" @click="show_policy()">
         <v-col cols="2" sm="1">
           <img src="@/assets/profile/policy.png" />
@@ -206,6 +205,7 @@
           <v-btn
         outlined
         color="pink"
+        @click="logOut"
       >
       ออกจากระบบ
       </v-btn>
@@ -216,8 +216,14 @@
   <script>
   import { mapActions, mapGetters } from "vuex";
   import labelCustom from "@/components/label/labelCustom.vue";
+  import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+  // import axios from "axios";
+  // import VueCookie from "vue-cookie"
   export default {
-    components: { labelCustom },
+    components: {
+      labelCustom,
+    loadingOverlay
+  },
     data: () => ({
       data_local: JSON.parse(localStorage.getItem("userDetail")),
       items: [
@@ -273,13 +279,17 @@
   },
     mounted() {
       this.$store.dispatch("NavberUserModules/changeTitleNavber", "บัญชีผู้ใช้");
+      
     },
   
     methods: {
       ...mapActions({
         loginOneId: "loginModules/loginOneId",
         GetStudentData: "MyCourseModules/GetStudentData",
-        // GetStudentData: "OrderTestModules/GetStudentData"
+        logOut: "loginModules/logOut",
+        GetProfileStudentData:"Profilemodules/GetProfileStudentData",
+        GetProfileParentData: "Profilemodules/GetProfileParentData",
+        
       }),
 
       async getStudentData(order_item_id) {
@@ -294,10 +304,14 @@
       },
         show_relations() {
           // role parent
-          if (this.data_local.roles.includes('parent')) {
-            this.$router.push({ name: "ProfileRelations",params:{action: "Roleparent_view", profile_id : this.data_local.account_id} });
+          if (this.data_local.roles.includes('R_4')) {
+              this.$router.push({ name: "ProfileRelations", params: { action: "Roleparent_view", profile_id: this.data_local.account_id } });
+              
           } else {
-            this.$router.push({ name: "ProfileRelations",params:{action: "Rolestudent_view", profile_id : this.data_local.account_id} });
+              this.$router.push({ name: "ProfileRelations", params: { action: "Rolestudent_view", profile_id: this.data_local.account_id } });
+              // this.ParentData({student_id: this.data_local.student_id})
+              // this.GetProfileStudentData(this.data_local.account_id)
+              // this.$store.dispatch(this.GetProfileParentData(this.data_local.account_id))
           }
         
       },
@@ -314,11 +328,16 @@
           this.$router.push({name: 'ProfileRules'})
       },
 
+
+
     },
     computed: {
       ...mapGetters({
         user_one_id: "loginModules/getUserOneId",
         student_data: "MyCourseModules/getStudentData",
+        categorys_is_loading : "CategoryModules/getCategorysIsLoading",
+        profile_student_data: "Profilemodules/getProfileStudentData",
+        profile_parent_data: "Profilemodules/getProfileParentData"
         // student_data: "OrderTestModules/getStudentData"
       }),
 

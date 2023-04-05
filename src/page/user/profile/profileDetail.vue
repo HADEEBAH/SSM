@@ -222,7 +222,7 @@ export default {
     ...mapActions({
       loginOneId: "loginModules/loginOneId",
       GetUserData: "ProfileModules/GetUserData",
-      GetParentData: "ProfileModules/GetParentData",
+      // GetParentData: "ProfileModules/GetParentData",
     }),
     edit() {
       this.isDisabled = false;
@@ -250,7 +250,7 @@ export default {
     ...mapGetters({
       user_one_id: "loginModules/getUserOneId",
       user_data: "ProfileModules/getUserData",
-      parent_data: "ProfileModules/getParentData",
+      // parent_data: "ProfileModules/getParentData",
     }),
   },
 };

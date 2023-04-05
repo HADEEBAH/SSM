@@ -1,5 +1,6 @@
 <template>
     <v-container>
+      <loading-overlay :loading="categorys_is_loading"></loading-overlay>
       <v-row>
         <v-col align="center">
           <img src="../../../assets/profile/policyAndrule.png" class="my-10" />
@@ -35,7 +36,11 @@
     
     <script>
   import { mapActions, mapGetters } from "vuex";
-  export default {
+import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+    export default {
+      components: {
+    loadingOverlay,
+  },
     data: () => ({}),
     mounted() {
       this.$store.dispatch("NavberUserModules/changeTitleNavber", "ข้อกำหนด");
@@ -44,7 +49,7 @@
       ...mapActions({}),
     },
     computed: {
-      ...mapGetters({}),
+      ...mapGetters({categorys_is_loading : "CategoryModules/getCategorysIsLoading"}),
     },
   };
   </script>
