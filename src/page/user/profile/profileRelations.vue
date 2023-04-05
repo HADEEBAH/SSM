@@ -1,6 +1,8 @@
 <template>
   <v-container>
     <!-- {{ $route.params.action }} -->
+
+    <!-- Roleparent_view // จะออกข้อมูลของ นักเรียน -->
     <div v-if="$route.params.action == 'Roleparent_view'" class="mb-5">
       <div class="profileCard my-5 center">
         <v-img
@@ -20,20 +22,20 @@
           </div>
         </div>
       </div>
-      {{ parent_data }}
+     
       <v-row dense>
         <!--TH NAME -->
         <v-col cols="12" sm="6">
           <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
           <div v-if="!isEnabled">
-            {{ parent_data.fname_th }}
+            {{ profile_student_data.firstNameTh }}
           </div>
           <div v-else>
             <v-text-field
               v-bind:disabled="isDisabled"
               @keypress="validate($event, 'th')"
               placeholder=""
-              v-model="parent_data.fname_th"
+              v-model="profile_student_data.firstNameTh"
               outlined
               dense
             >
@@ -44,14 +46,14 @@
         <v-col cols="12" sm="6">
           <label-custom text="นามสกุล (ภาษาไทย)"></label-custom>
           <div v-if="!isEnabled">
-            {{ parent_data.lname_th }}
+            {{ profile_student_data.lastNameTh }}
           </div>
           <div v-else>
             <v-text-field
               v-bind:disabled="isDisabled"
               @keypress="validate($event, 'th')"
               placeholder=""
-              v-model="parent_data.lname_th"
+              v-model="profile_student_data.lastNameTh"
               outlined
               dense
             >
@@ -62,14 +64,14 @@
         <v-col cols="12" sm="6">
           <label-custom text="สัญชาติ"></label-custom>
           <div v-if="!isEnabled">
-            {{ parent_data.nationality }}
+            {{ profile_student_data.nationality }}
           </div>
           <div v-else>
             <v-text-field
               v-bind:disabled="isDisabled"
               @keypress="validate($event, 'th')"
               placeholder=""
-              v-model="parent_data.nationality"
+              v-model="profile_student_data.nationality"
               outlined
               dense
             >
@@ -80,13 +82,13 @@
         <v-col cols="12" sm="6">
           <label-custom text="เลขบัตรประชาชน"></label-custom>
           <div v-if="!isEnabled">
-            {{ parent_data.id_card }}
+            {{ profile_student_data.id_card }}
           </div>
           <div v-else>
             <v-text-field
               v-bind:disabled="!isDisabled"
               @keypress="validate($event, 'th')"
-              v-model="parent_data.id_card"
+              v-model="profile_student_data.id_card"
               outlined
               dense
             >
@@ -97,14 +99,14 @@
         <v-col cols="12" sm="6">
           <label-custom text="วันเกิด"></label-custom>
           <div v-if="!isEnabled">
-            {{ parent_data.date_of_birth }}
+            {{ profile_student_data.date_of_birth }}
           </div>
           <div v-else>
             <v-text-field
               v-bind:disabled="isDisabled"
               @keypress="validate($event, 'th')"
               placeholder=""
-              v-model="parent_data.date_of_birth"
+              v-model="profile_student_data.date_of_birth"
               outlined
               dense
             >
@@ -118,7 +120,7 @@
         <v-col cols="12" sm="6">
           <label-custom text="เบอร์โทรศัพท์"></label-custom>
           <div v-if="!isEnabled">
-            {{ parent_data.tel }}
+            {{ profile_student_data.tel }}
           </div>
           <div v-else>
             <v-text-field
@@ -128,7 +130,7 @@
               maxlength="12"
               required
               placeholder=""
-              v-model="parent_data.tel"
+              v-model="profile_student_data.tel"
               outlined
               dense
             >
@@ -139,13 +141,13 @@
         <v-col cols="12" sm="6">
           <label-custom text="อีเมล"></label-custom>
           <div v-if="!isEnabled">
-            {{ parent_data.email }}
+            {{ profile_student_data.email }}
           </div>
           <div v-else>
             <v-text-field
               v-bind:disabled="!isDisabled"
               placeholder=""
-              v-model="parent_data.email"
+              v-model="profile_student_data.email"
               outlined
               dense
               :rules="rules.email"
@@ -188,6 +190,7 @@
       </v-row>
     </div>
 
+    <!-- Rolestudent_view // จะออกข้อมูลของ ผู้ปกครอง-->
     <div v-if="$route.params.action == 'Rolestudent_view'" class="mb-5">
       <div class="profileCard my-5 center">
         <v-img
@@ -212,14 +215,14 @@
         <v-col cols="12" sm="6">
           <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
           <div v-if="!isEnabled">
-            {{ parent_data.fname_th }}
+            {{ profile_parent_data.fname_th }}
           </div>
           <div v-else>
             <v-text-field
               v-bind:disabled="isDisabled"
               @keypress="validate($event, 'th')"
               placeholder=""
-              v-model="parent_data.fname_th"
+              v-model="profile_parent_data.fname_th"
               outlined
               dense
             >
@@ -230,14 +233,14 @@
         <v-col cols="12" sm="6">
           <label-custom text="นามสกุล (ภาษาไทย)"></label-custom>
           <div v-if="!isEnabled">
-            {{ parent_data.lname_th }}
+            {{ profile_parent_data.lname_th }}
           </div>
           <div v-else>
             <v-text-field
               v-bind:disabled="isDisabled"
               @keypress="validate($event, 'th')"
               placeholder=""
-              v-model="parent_data.lname_th"
+              v-model="profile_parent_data.lname_th"
               outlined
               dense
             >
@@ -248,14 +251,14 @@
         <v-col cols="12" sm="6">
           <label-custom text="สัญชาติ"></label-custom>
           <div v-if="!isEnabled">
-            {{ parent_data.nationality }}
+            {{ profile_parent_data.nationality }}
           </div>
           <div v-else>
             <v-text-field
               v-bind:disabled="isDisabled"
               @keypress="validate($event, 'th')"
               placeholder=""
-              v-model="parent_data.nationality"
+              v-model="profile_parent_data.nationality"
               outlined
               dense
             >
@@ -266,13 +269,13 @@
         <v-col cols="12" sm="6">
           <label-custom text="เลขบัตรประชาชน"></label-custom>
           <div v-if="!isEnabled">
-            {{ parent_data.id_card }}
+            {{ profile_parent_data.id_card }}
           </div>
           <div v-else>
             <v-text-field
               v-bind:disabled="!isDisabled"
               @keypress="validate($event, 'th')"
-              v-model="parent_data.id_card"
+              v-model="profile_parent_data.id_card"
               outlined
               dense
             >
@@ -283,14 +286,14 @@
         <v-col cols="12" sm="6">
           <label-custom text="วันเกิด"></label-custom>
           <div v-if="!isEnabled">
-            {{ parent_data.date_of_birth }}
+            {{ profile_parent_data.date_of_birth }}
           </div>
           <div v-else>
             <v-text-field
               v-bind:disabled="isDisabled"
               @keypress="validate($event, 'th')"
               placeholder=""
-              v-model="parent_data.date_of_birth"
+              v-model="profile_parent_data.date_of_birth"
               outlined
               dense
             >
@@ -304,7 +307,7 @@
         <v-col cols="12" sm="6">
           <label-custom text="เบอร์โทรศัพท์"></label-custom>
           <div v-if="!isEnabled">
-            {{ parent_data.tel }}
+            {{ profile_parent_data.tel }}
           </div>
           <div v-else>
             <v-text-field
@@ -314,7 +317,7 @@
               maxlength="12"
               required
               placeholder=""
-              v-model="parent_data.tel"
+              v-model="profile_parent_data.tel"
               outlined
               dense
             >
@@ -325,13 +328,13 @@
         <v-col cols="12" sm="6">
           <label-custom text="อีเมล"></label-custom>
           <div v-if="!isEnabled">
-            {{ parent_data.email }}
+            {{ profile_parent_data.email }}
           </div>
           <div v-else>
             <v-text-field
               v-bind:disabled="!isDisabled"
               placeholder=""
-              v-model="parent_data.email"
+              v-model="profile_parent_data.email"
               outlined
               dense
               :rules="rules.email"
@@ -341,6 +344,7 @@
         </v-col>
       </v-row>
     </div>
+    
   </v-container>
 </template>
 
@@ -379,13 +383,19 @@ export default {
       );
 
     this.user_login = JSON.parse(localStorage.getItem("userDetail"))
-    this.GetParentData(this.user_login.account_id)
+    this.GetAll(this.user_login.account_id)
+    // this.GetProfileStudentData(this.user_login.account_id)
+    // this.GetProfileParentData(this.user_login.account_id)
+    // this.GetParentData(this.user_login.account_id)
+    // this.GetroleParentData({student_id: this.user_login.account_id})
   },
 
   methods: {
     ...mapActions({
       loginOneId: "loginModules/loginOneId",
-      GetParentData: "ProfileModules/GetParentData",
+      GetAll: "ProfileModules/GetAll",
+      // GetProfileStudentData: "ProfileModules/GetProfileStudentData",
+      // GetProfileParentData: "ProfileModules/GetProfileParentData"
     }),
     edit() {
       this.isDisabled = false;
@@ -411,14 +421,15 @@ export default {
     show_policy() {
         this.$router.push({name: 'ProfilePolicy'})
       },
-        show_rules() {
+    show_rules() {
           this.$router.push({name: 'ProfileRules'})
       },
   },
   computed: {
     ...mapGetters({
       user_one_id: "loginModules/getUserOneId",
-      parent_data: "ProfileModules/getParentData",
+      profile_student_data: "ProfileModules/getProfileStudentData",
+      profile_parent_data: "ProfileModules/getProfileParentData",
     }),
   },
 };

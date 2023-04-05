@@ -103,8 +103,8 @@
       </v-card>
      </div>
 
-<!-- ROLE ALL ทั่วไป -->
-<div >
+  <!-- ROLE ALL ทั่วไป -->
+    <div >
       <div class="mt-8">
         <label-custom text="ทั่วไป"></label-custom>
       </div>
@@ -176,7 +176,6 @@
       </div>
       <v-divider class=""></v-divider>
       <!-- policy -->
-      
       <v-row dense class="mt-3" @click="show_policy()">
         <v-col cols="2" sm="1">
           <img src="@/assets/profile/policy.png" />
@@ -218,6 +217,8 @@
   import { mapActions, mapGetters } from "vuex";
   import labelCustom from "@/components/label/labelCustom.vue";
   import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+  // import axios from "axios";
+  // import VueCookie from "vue-cookie"
   export default {
     components: {
       labelCustom,
@@ -278,14 +279,17 @@
   },
     mounted() {
       this.$store.dispatch("NavberUserModules/changeTitleNavber", "บัญชีผู้ใช้");
+      
     },
   
     methods: {
       ...mapActions({
         loginOneId: "loginModules/loginOneId",
         GetStudentData: "MyCourseModules/GetStudentData",
-        logOut : "loginModules/logOut"
-        // GetStudentData: "OrderTestModules/GetStudentData"
+        logOut: "loginModules/logOut",
+        GetProfileStudentData:"Profilemodules/GetProfileStudentData",
+        GetProfileParentData: "Profilemodules/GetProfileParentData",
+        
       }),
 
       async getStudentData(order_item_id) {
@@ -300,10 +304,14 @@
       },
         show_relations() {
           // role parent
-          if (this.data_local.roles.includes('parent')) {
-            this.$router.push({ name: "ProfileRelations",params:{action: "Roleparent_view", profile_id : this.data_local.account_id} });
+          if (this.data_local.roles.includes('R_4')) {
+              this.$router.push({ name: "ProfileRelations", params: { action: "Roleparent_view", profile_id: this.data_local.account_id } });
+              
           } else {
-            this.$router.push({ name: "ProfileRelations",params:{action: "Rolestudent_view", profile_id : this.data_local.account_id} });
+              this.$router.push({ name: "ProfileRelations", params: { action: "Rolestudent_view", profile_id: this.data_local.account_id } });
+              // this.ParentData({student_id: this.data_local.student_id})
+              // this.GetProfileStudentData(this.data_local.account_id)
+              // this.$store.dispatch(this.GetProfileParentData(this.data_local.account_id))
           }
         
       },
@@ -320,13 +328,16 @@
           this.$router.push({name: 'ProfileRules'})
       },
 
+
+
     },
     computed: {
       ...mapGetters({
         user_one_id: "loginModules/getUserOneId",
         student_data: "MyCourseModules/getStudentData",
         categorys_is_loading : "CategoryModules/getCategorysIsLoading",
-
+        profile_student_data: "Profilemodules/getProfileStudentData",
+        profile_parent_data: "Profilemodules/getProfileParentData"
         // student_data: "OrderTestModules/getStudentData"
       }),
 
