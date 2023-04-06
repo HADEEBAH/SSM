@@ -27,7 +27,7 @@
                       <v-col cols="auto">
                         <v-img
                           class="align-end text-white rounded-xl mt-5"
-                          src="@/assets/cart/cart.png"
+                          :src="item.course_img"
                           cover
                           max-width="104"
                           max-height="111"
@@ -61,49 +61,54 @@
                         </v-row>
                         <v-row dense>
                           <v-col>
-                            ศูนย์รวมครูสอนกีต้าร์แห่งประเทศไทยสอนโดยคุณครู
-                            ฝีมือดี หลักสูตรทันสมัย หลักสูตรที่ออกแบบเพื่อนัก
-                            เรียนทุกเพศ
+                            {{ item.detail }}
                           </v-col>
                         </v-row>
                       </v-col>
                     </v-row>
                   </v-col>
-
+                  </v-row>
                   <!-- <v-col cols="6">เวลาที่ทำรายการ</v-col>
                   <v-col cols="6" class="text-md font-semibold">
                     {{}}</v-col> -->
-
-                  <v-col cols="6"> ราคา</v-col>
-                  <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
-                    {{ item.option.price_unit * item.students.length }}
-                    บาท</v-col
-                  >
-                  <v-col cols="6"> จำนวนครั้งที่เรียน</v-col>
-                  <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
+                  <!-- <v-row  v-if="item.course_type_id === 'CT_1'">
+                    <v-col cols="6"> ราคา</v-col>
+                    <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
+                      {{ item.option.price_unit * item.students.length }}
+                      บาท</v-col
+                    >
+                  </v-row> -->
+                  <v-row v-if="item.course_type_id === 'CT_1'">
+                    <v-col cols="6"> จำนวนครั้งที่เรียน</v-col>
+                    <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
                     {{ item.option.amount }} ครั้ง</v-col
-                  >
+                    >
+                  </v-row>
+                  
 
                   <!-- <v-col cols="6"> ราคา/ครั้ง</v-col>
                   <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
                     {{ item.option.net_price_unit }}</v-col
                   > -->
-
-                  <v-col cols="6"> จำนวนนักเรียน</v-col>
-                  <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
-                    {{ item.students.length }} คน</v-col
-                  >
-
-                  <v-col cols="6"> ส่วนลด</v-col>
-                  <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
-                    {{ item.option.discount_price }} บาท</v-col
-                  >
-
-                  <v-col cols="6"> ราคาชำระ</v-col>
-                  <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
-                    {{ item.option.net_price }} บาท</v-col
-                  >
-                </v-row>
+                  <v-row>
+                    <v-col cols="6"> จำนวนนักเรียน</v-col>
+                    <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
+                      {{ item.students.length }} คน</v-col
+                    >
+                  </v-row>
+                  
+                  <v-row v-if="item.course_type_id === 'CT_1'">
+                    <v-col cols="6"> ส่วนลด</v-col>
+                    <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
+                      {{ item.option.discount_price }} บาท</v-col
+                    >
+                  </v-row>
+                  <v-row>
+                    <v-col cols="6"> ราคาชำระ</v-col>
+                    <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
+                      {{ item.course_type_id==="CT_1" ? item.option.net_price : item.net_price }} บาท</v-col
+                    >
+                  </v-row>
               </v-card-text>
             </v-card>
           </v-col>
@@ -218,17 +223,17 @@ export default {
       this.count_selected_cart = this.cart_list.filter((v) => v.checked).length;
       this.cart_list.forEach((course) => {
         if (course.checked) {
-          this.total_price = this.total_price + course.option.net_price;
+          if(course.course_type_id === "CT_1"){
+            this.total_price = this.total_price + course.option.net_price;
+          }else{
+            this.total_price = this.total_price + course.net_price;
+          }
         }
       });
     },
 
     selectOne(bool, key) {
-      // console.log("bool", bool);
-      // console.log("key", key);
-
       let result = this.cart_list.map((element, index) => {
-        // console.log("element", element);
         console.log("index", index);
 
         if (element.category_id == key) {
@@ -244,19 +249,9 @@ export default {
           return element;
         }
       });
-
-      // console.log("resultAll", resultAll);
-
       if (resultAll.length == 0) {
         this.selected_all = true;
       }
-
-      // if (!this.oneSelect.includes(courseId)) {
-      //   this.oneSelect.push(courseId);
-      //   console.log("cheekOne", this.oneSelect);
-      // } else {
-      //   this.oneSelect.splice(this.index_item, 1);
-      // }
       this.sumtotal();
     },
 
