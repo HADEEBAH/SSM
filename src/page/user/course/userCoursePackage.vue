@@ -113,24 +113,24 @@
             </v-slide-item>
         </v-slide-group>
          <!-- DIALOG :: PRIVILEGE -->
-         <v-dialog width="70vw" v-model="show_dialog_privilege" persistent >
+         <v-dialog v-model="show_dialog_privilege" persistent >
             <v-card>
                 <v-card-title>
                     <v-row>
-                        <v-col class="font-bold">สิทธิพิเศษ</v-col>
+                        <v-col class="font-bold w-3">สิทธิพิเศษ</v-col>
                         <v-col cols="auto" align="right">
                             <v-btn icon @click="show_dialog_privilege = false"><v-icon color="#ff6b81">mdi-close</v-icon></v-btn>
                         </v-col>
                     </v-row>
                 </v-card-title>
                 <v-card-text>
-                    <v-img src="@/assets/course/privilege.png"></v-img>
+                    <v-img sizes="100%" src="@/assets/course/privilege.svg"></v-img>
                 </v-card-text>
-                <v-card-actions>
+                <!-- <v-card-actions>
                     <v-row dense>
                         <v-col align="center"><v-btn @click="show_dialog_privilege = false" class="btn-size-lg" dark depressed color="#ff6b81">Close</v-btn></v-col>
                     </v-row>
-                </v-card-actions>
+                </v-card-actions> -->
             </v-card>
         </v-dialog>
       </v-container>
