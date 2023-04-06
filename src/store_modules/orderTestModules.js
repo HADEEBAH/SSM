@@ -397,7 +397,7 @@ const orderModules = {
                     }
                 }
                 let endpoint = "http://localhost:3002"
-                let { data } = await axios.get(`${endpoint}/api/v1/order/cart/${account_id}`,config)
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/cart/${account_id}`,config)
                 console.log(data)
                 if (data.statusCode === 200) {
                     for (const item of data.data) {
