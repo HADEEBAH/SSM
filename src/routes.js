@@ -203,7 +203,7 @@ const routes = [
         component: CartList,
       },
       {
-        path: 'profileRelations/:action/:profile_id',  
+        path: 'profileRelations/:action',  
         name: 'ProfileRelations',
         component: ProfileRelations,
       },
