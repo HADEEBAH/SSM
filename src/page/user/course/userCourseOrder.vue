@@ -635,6 +635,13 @@ import router from '../../../router';
                             parents[0].tel = this.user_data[0].mobileNo
                             parents[0].account_id = this.user_data[0].userOneId
                             parents[0].username = username 
+                            this.parent ={
+                                account_id : this.user_data[0].userOneId,
+                                username: username,
+                                firstname_en:this.user_data[0].firstNameEng,
+                                lastname_en:  this.user_data[0].lastNameEng,
+                                tel: this.user_data[0].mobileNo,
+                            }
                         }
                     }
                 })
