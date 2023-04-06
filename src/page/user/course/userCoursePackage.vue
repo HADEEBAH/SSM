@@ -68,7 +68,7 @@
                         <v-row dense>
                             <v-col ><div class="line-card-package"></div></v-col>
                         </v-row>  
-                        <v-row dense v-if="option.discount">
+                        <v-row dense v-if="!option.discount">
                             <v-col class="text-lg font-bold">
                                <span class="text-5xl font-black">{{  option.total_price.toLocaleString() }}</span>
                                บาท 
