@@ -12,8 +12,11 @@ const router = new VueRouter({
 })
 router.beforeEach((to, from, next ) => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
+  if(!VueCookie.get("token")){
+    localStorage.removeItem("userDetail")
+  }
   if(to.name !== "Login" && to.name !== "Register"){
-    if(to.matched[0].name !== "NavBarUser" && !VueCookie.get("token")){
+    if(to.matched[0].name !== "NavBarUser" && !VueCookie.get("token")){     
       next({name : 'Login'})
     }else if(to.name === 'userCourseOrder' && !VueCookie.get("token")){
       next({name : 'Login'})

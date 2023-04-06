@@ -1,7 +1,8 @@
 <template>
     <v-app>
-      <v-container>
+      <v-container >
         <header-page :breadcrumbs="breadcrumbs"></header-page>
+        
         <v-row class="mb-3" >
             <v-col cols="12" sm="3" @click="tab='course'">
                 <img-card vertical class="cursor-pointer" :class="tab === 'course' ? 'img-card-active':''">
@@ -37,7 +38,8 @@
             </v-col>
         </v-row>
         <!-- BODY -->
-        <v-card>
+        <loading-overlay :loading="course_is_loading"></loading-overlay>
+        <v-card v-if="!course_is_loading">
             <v-card-text>
                 <v-tabs-items v-model="tab">
                     <!-- COURSE -->
@@ -269,6 +271,7 @@
                                 color="#FF6B81"
                                 class="white--text btn-size-lg"
                                 depressed
+                                @click="updateCourse()"
                             >บันทึก
                             </v-btn>
                         </v-col>
@@ -276,6 +279,7 @@
                 </template>
             </v-card-text>
         </v-card>
+      
       </v-container>
     </v-app>
 </template>
@@ -287,11 +291,12 @@ import coachsCard from '@/components/course/coachsCard.vue';
 import HeaderPage from '@/components/header/headerPage.vue';
 import headerCard from '@/components/header/headerCard.vue';
 import ImgCard from '@/components/course/imgCard.vue';
+import loadingOverlay from '../../../components/loading/loadingOverlay.vue';
 // import rowData from '@/components/label/rowData.vue';
 import { mapGetters, mapActions } from 'vuex';
     export default {
         name:"coureDetail",
-        components: {HeaderPage, ImgCard, courseCard, coachsCard, packageCard, headerCard},
+        components: {HeaderPage, ImgCard, courseCard, coachsCard, packageCard, headerCard, loadingOverlay},
         data: () => ({ 
             column:[
                 {text: 'ชื่อ - นามสกุล',align: 'start',sortable: false, value: 'fullname'},
@@ -466,14 +471,20 @@ import { mapGetters, mapActions } from 'vuex';
             ...mapGetters({
                 coachs: "CourseModules/getCoachs",
                 categorys : "CategoryModules/getCategorys",
-                course_data : "CourseModules/getCourseData"
+                course_data : "CourseModules/getCourseData",
+                course_is_loading : "CourseModules/getCourseIsLoading"
             })
         },
         methods: {
             ...mapActions({
                 GetCourse : "CourseModules/GetCourse",
                 ChangeCourseData: "CourseModules/ChangeCourseData",
+                UpdateCourse : "CourseModules/UpdateCourse",
             }),
+            updateCourse(){
+                this.ChangeCourseData(this.course_data);
+                this.UpdateCourse({course_data : this.course_data})
+            },
             addCoach() {
                 this.course_data.coachs.push({
                     coach_id : "",

@@ -1,11 +1,11 @@
 <template>
     <div>
         <template v-if="type === 'week'">
-            <v-row dense>
+            <!-- <v-row dense>
                 <v-col>
                {{ start_of_week }} -  {{ end_of_week }}
                 </v-col>
-            </v-row>
+            </v-row> -->
             <v-row dense>
                 <v-col>
                     <v-btn text class="underline" color="#ff6b81" @click="goToday">คลิกเพื่อไปคอร์สที่ต้องสอนล่าสุด</v-btn>

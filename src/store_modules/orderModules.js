@@ -110,7 +110,6 @@ const orderModules = {
             }
         },
         async saveCart(context, {cart_data}) {
-            console.log(cart_data)
             try{
                 let order = cart_data
                 console.log(order)
@@ -125,6 +124,7 @@ const orderModules = {
                 let total_price = 0
                 await order.courses.forEach((course)=>{
                     let students = []
+                    console.log("course",course)
                     course.students.forEach((student)=>{
                         console.log("student",student.parents[0])
                         if(student.parents[0]){   
@@ -172,8 +172,9 @@ const orderModules = {
                         },
                         "student": students
                     }
-                    let price = course.option.net_price ? course.option.net_price : course.price
-                    total_price = total_price + (price * course.students.lenght )
+                    let price = course.option?.net_price ? course.option.net_price : course.price
+                    console.log(price, course.students.length)
+                    total_price = total_price + (price * course.students.length )
                 })
                 payload.totalPrice = total_price
                 let config = {
@@ -183,6 +184,7 @@ const orderModules = {
                       'Authorization' : `Bearer ${VueCookie.get("token")}`
                   }
                 }
+                console.log(payload)
                 // let {data} = await axios.post(`http://localhost:3002/api/v1/order/cart`,payload, config)
                 let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/cart`,payload, config)
                 if(data.statusCode === 201){
