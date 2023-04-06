@@ -45,7 +45,7 @@
               <!-- img -->
               <v-col cols="12" sm="2">
                 <v-col
-                  style=" 
+                  style="  
                     display: block; 
                     margin-left: auto;
                     margin-right: auto;
@@ -307,9 +307,12 @@ export default {
       day_names.sort(function (a, b) {
         return b.localeCompare(a, "th", { numeric: true });
       });
-
+      day_names.reverse();
       return day_names.join(", ");
     },
+
+
+  
   },
 
   computed: {
