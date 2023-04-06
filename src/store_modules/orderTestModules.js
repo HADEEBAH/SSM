@@ -395,23 +395,28 @@ const orderModules = {
                         "Content-type": "Application/json",
                         'Authorization' : `Bearer ${VueCookie.get("token")}`
                     }
-                  }
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/cart/account/${account_id}`,config)
+                }
+                let endpoint = "http://localhost:3002"
+                let { data } = await axios.get(`${endpoint}/api/v1/order/cart/${account_id}`,config)
                 console.log(data)
                 if (data.statusCode === 200) {
                     for (const item of data.data) {
-                        let discount = item.option.discount ? item.option.discount_price : 0
-                        // console.log("discount", discount)
-                        // ราคา/ครั้ง
-                        item.option.net_price_unit = item.option.price_unit / item.option.amount 
-                        // console.log("net_price_unit", item.option.net_price_unit)
-                        // ราคา
-                        item.option.net_price = item.option.price_unit - discount
-                        
+                        item.course_img = `${process.env.VUE_APP_URL}/api/v1/files/${item.course_img}`
+                        if(item.course_type_id === "CT_1"){
+                            let discount = item.option.discount ? item.option.discount_price : 0
+                            // console.log("discount", discount)
+                            // ราคา/ครั้ง
+                            item.option.net_price_unit = item.option.price_unit / item.option.amount 
+                            // console.log("net_price_unit", item.option.net_price_unit)
+                            // ราคา
+                            item.option.net_price = item.option.price_unit - discount
+                        }else{
+                            item.net_price = item.price * item.students.length 
+                        }
                     }
 
                     context.commit("SetCartList", data.data)
-                    // console.log("SetCartList", data.data);
+                    console.log("SetCartList", data.data);
                 } else {
                     throw { error: data }
                 }
