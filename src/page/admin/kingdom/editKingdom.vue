@@ -111,7 +111,6 @@
         color="#ff6b81"></v-progress-circular>
       </div>
       </v-card-text>
-    
     </v-card>
 
     <br />

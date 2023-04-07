@@ -364,7 +364,7 @@ import router from '../../../router';
         console.log("order_data : ",this.order_data)
         if(this.order_data){
             this.GetCourse( this.order_data.course_id)
-            this.course_order = this.order_data
+            // this.course_order = this.order_data
         }
     },
     watch: {
