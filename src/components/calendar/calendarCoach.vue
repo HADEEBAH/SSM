@@ -35,7 +35,7 @@
                 :first-interval="9"
                 :interval-count="12"
                 :event-overlap-threshold="30"
-                @click:event="$router.push({name : 'menageCourseDetail'})"
+                @click:event="selectedDate($event)"
             >
             <template v-if="type === 'week'" v-slot:day-body="{ date, week }">
                 <div
@@ -151,6 +151,10 @@ export default {
         this.colorOfDay()
     },
     methods: {
+        selectedDate(data){
+            console.log(data.event)
+            this.$router.push({name : 'menageCourseDetail', params:{ courseId : data.event.course_id, timeId : data.event.time_id, dayOfWeekId: data.event.day_of_week_id, date : data.event.start_date }})
+        },
         selectDate(date){
             this.event_date = []
             this.showModal = true
