@@ -34,7 +34,6 @@
           </v-col>
         </v-row>
         <!-- รายวัน -->
-        <pre>{{  }}</pre>  
         <template v-if="time_frame === 'day'">
           <!-- COURSE LIST -->
           <div v-for="(course, course_index) in my_courses.filter(v => v.statr_date === today)" :key="course_index">
@@ -64,6 +63,7 @@
           ></calendarCoach>
         </template>
       </div>
+      
       <div v-if="tab === 'my teaching'">
         <v-row>
           <v-col cols="auto">
@@ -79,7 +79,7 @@
               <v-autocomplete v-model="filter_course" item-text="name" item-value="course_id" :items="my_courses"  outlined dense></v-autocomplete>
           </v-col>
         </v-row>
-        <v-card dense class="mb-3" elevation="0" flat  v-for="(course, course_index) in my_courses.filter(v => v.course_id === filter_course)" :key="`${course_index}-course`">
+        <v-card  dense class=" mb-3" elevation="0" flat  v-for="(course, course_index) in filterMycourse()" :key="`${course_index}-course`">
           <v-card-text class="bg-[#FBF3F5]">
             <v-row dense>
               <v-col cols="4">
@@ -91,7 +91,7 @@
                 </v-row>
                 <v-row dense>
                   <v-col cols="12">
-                    <rowData mini  icon="mdi-account">อาณาจักร : ศิลปะสมัยใหม่</rowData>
+                    <rowData mini  icon="mdi-account">อาณาจักร : {{ course.category_name }}</rowData>
                   </v-col>
                   <v-col cols="12">
                     <rowData mini  icon="mdi-bookshelf">คอร์สเรียน : {{ `${course.name}(${course.subtitle})` }}</rowData>
@@ -105,11 +105,11 @@
                 </v-row>
               </v-col>
             </v-row>
-            <v-row dense>
+            <!-- <v-row dense>
               <v-col>ประเมินนักเรียน</v-col>
               <v-col>ประเมินศักยภาพ</v-col>
               <v-col>ประเมินภาพรวม</v-col>
-            </v-row>
+            </v-row> -->
           </v-card-text>
         </v-card>
       </div>
@@ -269,36 +269,6 @@ export default {
     time_frame: "day",
     menu: false,
     select_date : `${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()}`,
-    tasks: [
-      {
-        name: "เปียโนป๊อปเบื้องต้น",
-        subtitle : "Popular Piano",
-        coach : "นายสมชาย ศรีชาตรี",
-        start: "2023-02-18 10:00",
-        end: "2023-02-18 11:00",
-      },
-      {
-        name: "เปียโนป๊อปเบื้องต้น",
-        subtitle : "Popular Piano",
-        coach : "นายสมชาย ศรีชาตรี",
-        start: "2023-02-23 10:00",
-        end: "2023-02-23 11:00",
-      },
-      {
-        name: "เปียโนป๊อปเบื้องต้น",
-        subtitle : "Popular Piano",
-        coach : "นายสมชาย ศรีชาตรี",
-        start: "2023-02-23 13:00",
-        end: "2023-02-23 14:00",
-      },
-      {
-        name: "เปียโนป๊อปเบื้องต้น",
-        subtitle : "Popular Piano",
-        coach : "นายสมชาย ศรีชาตรี",
-        start: "2023-02-25 15:00",
-        end: "2023-02-25 16:00",
-      },
-    ],
     leave_tasks:[
       {
         id:1,
@@ -440,6 +410,14 @@ export default {
     showDialogDetail(leave_id){
       this.show_detail = true
       console.log(leave_id)
+    },
+    filterMycourse(){
+      if(this.filter_course){
+        return this.my_courses.filter(v => v.course_id === this.filter_course)
+      }else{
+        return this.my_courses
+      }
+      
     }
   },
 };

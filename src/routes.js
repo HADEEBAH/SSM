@@ -168,7 +168,7 @@ const routes = [
         component: userMenageCourse,
       },
       {
-        path: 'menage-course/detail',  
+        path: 'menage-course/detail/:courseId/:timeId/:dayOfWeekId/:date',  
         name: 'menageCourseDetail',
         component: userMenageCourseDetail,
       },
