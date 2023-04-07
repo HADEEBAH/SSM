@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <v-container>
+        <!-- <pre>{{ student_check_in }}</pre> -->
         <v-card flat>
             <v-card-text class="bg-[#FBF3F5] border">
                 <v-row>
@@ -10,17 +11,17 @@
                     <v-col>
                         <v-row>
                             <v-col>
-                                <div class="text-md font-bold"> อาณาจักรดนตรี </div>
+                                <div class="text-md font-bold"> {{course_data.category_name_th}} </div>
                             </v-col>
                         </v-row>
                         <v-row dense>
                             <v-col cols="12" sm="4" class="pa-0">
-                                <rowData mini  icon="mdi-bookshelf">คอร์สเรียน : เปียโนป๊อป</rowData>
+                                <rowData mini  icon="mdi-bookshelf">คอร์สเรียน : {{ course_data.course_name_th  }}</rowData>
                             </v-col>
-                            <v-col cols="12" sm="4"  class="pa-0"> 
+                            <!-- <v-col cols="12" sm="4"  class="pa-0"> 
                                 <rowData mini  icon=" mdi-account-box-multiple">แพ็คเกจ : Family</rowData>
-                            </v-col>
-                            <v-col cols="12" sm="4" class="pa-0"><rowData mini  icon="mdi-clock-outline">เวลาสอน 1 ชั่วโมง</rowData></v-col>
+                            </v-col> -->
+                            <v-col cols="12" sm="4" class="pa-0"><rowData mini  icon="mdi-clock-outline">เวลาสอน {{course_data.course_hours}} ชั่วโมง</rowData></v-col>
                         </v-row>
                     </v-col>
                 </v-row>
@@ -33,30 +34,30 @@
         </v-row>
         <v-row dense class="mb-3">
             <v-col align="center">
-               <v-btn @click="check_in = true" depressed dense :color="check_in ? '#E6E6E6' :  '#ff6b81' " 
+               <v-btn @click="checkIn()" depressed dense :color="student_check_in.length > 0 ? '#E6E6E6' :  '#ff6b81' " 
                class="w-full rounded-lg"
-               :class="check_in ? 'green--text' :  'white--text'"
+               :class="student_check_in.length > 0 ? 'green--text' :  'white--text'"
                >
-                    <template v-if="check_in">
+                    <template v-if="student_check_in.length > 0">
                         <v-icon class="mr-2">mdi-check-circle</v-icon> เข้าสอน
                     </template>
                     <template v-else>
-                        <v-icon class="mr-2">mdi-clock-edit-outline</v-icon> กดเพื่อลงเวลาเข้าสอน
+                        <v-icon  class="mr-2">mdi-clock-edit-outline</v-icon> กดเพื่อลงเวลาเข้าสอน
                     </template>
                </v-btn>
             </v-col>
         </v-row>    
         <v-tabs class="mb-3" v-model="tab" color="#ff6b81" grow>
             <v-tab class="border-b-2" href="#check in"> เช็คชื่อ </v-tab>
-            <v-tab class="border-b-2" href="#assess students"> ประเมินนักเรียน </v-tab>
-            <v-tab class="border-b-2" href="#teaching summary"> บันทึกสรุปการสอน </v-tab>
+            <v-tab :disabled="student_check_in.length == 0" class="border-b-2" href="#assess students"> ประเมินนักเรียน </v-tab>
+            <v-tab disabled class="border-b-2" href="#teaching summary"> บันทึกสรุปการสอน </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab">
             <v-tab-item value="check in">
                 <v-card elevation="1" class="mb-2">
                     <v-data-table
                         class="header-table border"
-                        :items="students" 
+                        :items="student_check_in" 
                         item-key="no"
                         :expanded.sync="expanded_index"
                         :headers="headers">
@@ -81,8 +82,9 @@
                             </template>
                             </v-select>
                         </template>
-                        <template v-slot:[`item.class_time`] ="{item}">
-                            {{ `${item.count}/${item.max_count}` }}
+                        <template v-slot:[`item.class_time`] ="{}">
+                            <!-- {{ `${item.count}/${item.max_count}` }} -->
+                            -
                         </template>
                         <template v-slot:expanded-item ="{ headers, item }">
                             <td class="pa-2" :colspan="headers.length" align="center" >
@@ -102,7 +104,7 @@
                                                 hide-details
                                                 v-model="item.compensation_date_str"
                                                 readonly
-                                                placeholder="เลือกวันที่เริ่ม"
+                                                placeholder="เลือกวันที่ชดเชย"
                                                 v-bind="attrs"
                                                 v-on="on"
                                             >
@@ -150,7 +152,7 @@
                 </v-card>
                 <v-row>
                     <v-col>
-                        <v-btn dense outlined class="w-full" color="#ff6b81">บันทึก</v-btn>
+                        <v-btn v-if="student_check_in.length > 0" dense outlined class="w-full"  @click="CheckInStudents"  color="#ff6b81">บันทึก</v-btn>
                     </v-col>
                 </v-row>
             </v-tab-item>
@@ -165,7 +167,7 @@
                                 </v-btn>
                             </v-col>
                             <v-col cols="6" class="pa-1">
-                                <v-btn depressed class="w-full" :class="tab_evaluate === 'learners_potential' ? 'white--text' : ''"  :color="tab_evaluate === 'learners_potential' ? '#ff6b81' : '' " @click="tab_evaluate='learners_potential'">
+                                <v-btn depressed disabled class="w-full" :class="tab_evaluate === 'learners_potential' ? 'white--text' : ''"  :color="tab_evaluate === 'learners_potential' ? '#ff6b81' : '' " @click="tab_evaluate='learners_potential'">
                                     ประเมินศักยภาพผู้เรียน
                                 </v-btn>
                             </v-col>
@@ -174,15 +176,15 @@
                 </v-card>
                   <!-- DETAIL -->
                 <div v-if="tab_evaluate === 'evaluate_students'">
-                    <v-card class="mb-2 " flat style="border: 1px solid #999" v-for="(student, index_student) in students" :key="`${index_student}-student`">
+                    <v-card class="mb-2 " flat style="border: 1px solid #999" v-for="(student, index_student) in student_check_in" :key="`${index_student}-student`">
                         <v-card-text >
                             <v-row class="d-flex align-center">
                                 <v-col cols="5" class="text-lg font-bold">
                                     {{ student.no }} {{ student.fullname }}
                                 </v-col>
-                                <v-col cols="4" class="text-lg font-bold">
+                                <!-- <v-col cols="4" class="text-lg font-bold">
                                     {{ student.nickname }}
-                                </v-col>
+                                </v-col> -->
                                 <v-col cols="3" class="pa-1 text-md text-[#999999]">
                                     <v-row>
                                         <v-col> การเข้าเรียน: </v-col>
@@ -195,14 +197,14 @@
                             <v-row class="d-flex align-center">
                                 <v-col cols="5">
                                     <labelCustom text="พัฒนาการ"></labelCustom>
-                                    <v-select outlined dense></v-select>
+                                    <v-select outlined dense :items="evolution_options" item-text="label" item-value="value" v-model="student.evolution"></v-select>
                                 </v-col>
                                 <v-col cols="4">
                                     <labelCustom text="ความสนใจ"></labelCustom>
-                                    <v-select outlined dense></v-select>
+                                    <v-select outlined dense :items="interest_options" item-text="label" item-value="value" v-model="student.interest"></v-select>
                                 </v-col>
                                 <v-col cols="3">
-                                    <v-btn outlined class="text-sm" color="#ff6b81" @click="selectStudentComment()">
+                                    <v-btn outlined class="text-sm" color="#ff6b81" @click="selectStudentComment(index_student)">
                                         แสดงความคิดเห็น
                                     </v-btn>
                                 </v-col>
@@ -211,10 +213,10 @@
                     </v-card>
                     <v-row>
                         <v-col cols="12" sm="6">
-                            <v-btn color="#ff6b81" outlined dense class="w-full" > ล้างข้อ </v-btn>
+                            <v-btn color="#ff6b81"  @click="clearAssessment()" outlined dense class="w-full" > ล้างข้อ </v-btn>
                         </v-col>
                         <v-col cols="12" sm="6">
-                            <v-btn color="#ff6b81" dark depressed dense class="w-full"> ส่งข้อมูล </v-btn>
+                            <v-btn color="#ff6b81"  @click="saveAssessmentStudent()" dark depressed dense class="w-full"> ส่งข้อมูล </v-btn>
                         </v-col>
                     </v-row>
                 </div>
@@ -240,11 +242,11 @@
                             <v-row class="d-flex align-center">
                                 <v-col cols="5">
                                     <labelCustom text="พัฒนาการ"></labelCustom>
-                                    <v-select outlined dense></v-select>
+                                    <v-select outlined dense :items="evolution_options" item-text="label" item-value="value" v-model="student.evolution"></v-select>
                                 </v-col>
                                 <v-col cols="4">
                                     <labelCustom text="ความสนใจ"></labelCustom>
-                                    <v-select outlined dense></v-select>
+                                    <v-select outlined dense :items="interest_options" item-text="label" item-value="value" v-model="student.interest"></v-select>
                                 </v-col>
                                 <v-col cols="3">
                                     <v-btn outlined class="text-sm" color="#ff6b81" @click="selectStudentComment()">
@@ -324,7 +326,7 @@
                 </v-row>
             </v-tab-item>
         </v-tabs-items>
-        <v-dialog v-model="show_comment_dialog">
+        <v-dialog v-model="show_comment_dialog" v-if="show_comment_dialog">
             <v-card>
                 <v-row dense>
                     <v-col cols="12" align="right">
@@ -340,9 +342,21 @@
                     <v-row>
                         <v-col>
                             <labelCustom text="เพิ่มความคิดเห็น"></labelCustom>
-                            <v-textarea></v-textarea>
+                            <v-textarea outlined v-model="student_check_in[selected_student].remark"></v-textarea>
                         </v-col>
                     </v-row>
+                    <v-row dense>
+                    <v-col cols="12" sm="6">
+                        <v-btn  class="w-full" @click="student_check_in[selected_student].remark = ''" text color="#ff6b81">
+                            ล้างข้อมูล
+                        </v-btn>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                        <v-btn class="w-full" @click="closeStudentComment" depressed color="#ff6b81" dark >
+                            บันทึก
+                        </v-btn>
+                    </v-col>
+                </v-row>
                 </v-card-text>
             </v-card>
         </v-dialog>
@@ -354,6 +368,7 @@ import { dateFormatter } from '@/functions/functions';
 import rowData from '@/components/label/rowData.vue';
 import { Input, TimePicker } from 'ant-design-vue';
 import labelCustom from '../../../components/label/labelCustom.vue';
+import { mapActions, mapGetters } from 'vuex';
 export default {
   name:"menageCourseDetail",
   components: { rowData  , TimePicker, labelCustom},
@@ -361,7 +376,9 @@ export default {
     'ant-input': Input,
   },
   data: () => ({
-    tab:"assess students",
+    tab:"check in",
+    evolution_options : [{label : "ดีมาก" , value : "very good"},{label : "ดี" , value : "good"}, {label : "ปรับปรุง" , value : "adjust"}],
+    interest_options : [{label : "ดีมาก" , value : "very good"},{label : "ดี" , value : "good"}, {label : "ปรับปรุง" , value : "adjust"}],
     expanded_index: [],
     check_in : false,
     previewUrl: null,
@@ -371,14 +388,13 @@ export default {
         {label : "ตรงเวลา", value : "punctual", color: "#58A144", bg_color : "#F0F9EE"},
         {label : "สาย", value : "late", color: "#FCC419", bg_color : "#FFF9E8"},
         {label : "ลา", value : "leave", color: "#43A4F5", bg_color : "#CFE2F3"},
-        {label : "ลาฉุกเฉิน", value : "special case", color: "#43A4F5", bg_color : "#CFE2F3"}, 
-        {label : "ขาด", value : "miss", color: "#F03D3E", bg_color : "#F4CCCC"},
+        {label : "ลาฉุกเฉิน", value : " emergency leave", color: "#43A4F5", bg_color : "#CFE2F3"}, 
+        {label : "ขาด", value : "absent", color: "#F03D3E", bg_color : "#F4CCCC"},
         
     ],
     headers: [
         { text: 'ลำดับ', align: 'center', sortable: false, value: 'no', },
         { text: 'ชื่อ-สกุล', align: 'center', sortable: false, value: 'fullname' },
-        { text: 'ชื่อเล่น', align: 'center',  sortable: false, value: 'nickname' },
         { text: 'จำนวนครั้ง', align: 'center',  sortable: false, value: 'class_time' },
         { text: 'การเข้าเรียน', align: 'center', width:'200',  sortable: false, value: 'actions' },
     ],
@@ -389,14 +405,42 @@ export default {
         {no:"3", fullname : "น่านฟ้า ทะเลไกล", nickname : "น้ำฟ้า", check_in_status: "", compensation_date : "", compensation_date_str : "", time : "", start_time : "" , end_time : "", menu_compensation_date : false, menu_time : false, count: 2, max_count : 4},
         {no:"4", fullname : "วรวุฒิ สารวงศ์", nickname : "อ้วน", check_in_status: "", compensation_date : "", compensation_date_str : "", time : "", start_time : "" , end_time : "", menu_compensation_date : false, menu_time : false, count: 1, max_count : 4},
         {no:"5", fullname : "วรวุฒิ สารวงศ์", nickname : "อ้วน", check_in_status: "", compensation_date : "", compensation_date_str : "", time : "", start_time : "" , end_time : "", menu_compensation_date : false, menu_time : false, count: 7, max_count : 15},
-    ]
+    ],
+    selected_student : null,
   }),
-  created() {},
+  created() {
+    this.GetCourse(this.$route.params.courseId)
+    this.GetStudentByTimeId({course_id :this.$route.params.courseId, date : this.$route.params.date, time_id: this.$route.params.timeId})
+  },
   mounted() {},
   watch: {},
-  computed: {},
+  computed: {
+    ...mapGetters({
+        course_data : "CourseModules/getCourseData",
+        coach_check_in : "CoachModules/getCoachCheckIn",
+        student_check_in : "CoachModules/getStudentCheckIn"
+    })
+  },
   methods: {
-    selectStudentComment(){
+    ...mapActions({
+        GetCourse : "CourseModules/GetCourse",
+        CheckInCoach :"CoachModules/CheckInCoach",
+        GetStudentByTimeId : "CoachModules/GetStudentByTimeId",
+        UpdateCheckInStudent : "CoachModules/UpdateCheckInStudent",
+        AssessmentStudent : "CoachModules/AssessmentStudent",
+    }),
+    saveAssessmentStudent(){
+        this.AssessmentStudent({students : this.student_check_in})
+    },
+    CheckInStudents(){
+        this.UpdateCheckInStudent({students : this.student_check_in}) 
+    },
+    checkIn(){
+        this.check_in = true
+        this.CheckInCoach({course_id :this.course_data.course_id, date : this.$route.params.date, time_id: this.$route.params.timeId})
+    },
+    selectStudentComment(index){
+        this.selected_student = index
         this.show_comment_dialog = true
     },
     closeStudentComment(){
@@ -416,10 +460,18 @@ export default {
         }
     },
     inputDate(e, item) {
-        this.students.filter(v => v.no === item.no)[0].compensation_date_str = dateFormatter(e,"DD MT YYYYT")
+        this.student_check_in.filter(v => v.no === item.no)[0].compensation_date_str = dateFormatter(e,"DD MT YYYYT")
     },
     openFileSelector() {
       this.$refs.fileInput.click();
+    },
+    clearAssessment(){
+        for (const student of this.student_check_in) {
+            student.evolution = ""
+            student.interest = ""
+            student.remark = ""
+        }
+       
     },
     // uploadFile() {
     //   this.file = this.$refs.fileInput.files[0];
