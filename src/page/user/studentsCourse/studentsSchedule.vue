@@ -2,7 +2,7 @@
   <v-container>
     <div class="mx-10 my-5">
       <label class="text-xl font-bold">ข้อมูลตารางเรียน</label>
-      <pre>{{ student_data.courseId }}</pre>
+      <!-- <pre>{{ student_data.courseId }}</pre> -->
       <!-- <pre>{{ SetcourseSchedule }}</pre> -->
       <!-- <pre>{{ courseData }}</pre> -->
       <v-row dense class="my-3">
@@ -45,16 +45,15 @@
               <!-- img -->
               <v-col cols="12" sm="2">
                 <v-col
-                  style=" 
-                    display: block; 
-                    margin-left: auto;
-                    margin-right: auto;
+                  style="   
+                    display: block;  
+                    margin-left: auto; 
+                    margin-right: auto; 
                     width: 100%;
                     margin-top: 10%;
                   "
                 >
-                  <!-- <img src="../../../assets/student_course/download.png" /> -->
-                  {{ student_data.courseImg }}
+                <v-img :src="showImg(item.courseImg)"></v-img>
                 </v-col>
               </v-col>
               <!-- detail -->
@@ -72,8 +71,8 @@
                 <v-col>
                   <!-- v-for="(day, index_day) in dayOfWeekName" :key="index_day" -->
                   <v-card color="yellow" class="rounded-lg text-center">
-                    {{ dayOfWeekName(item.dayOfWeekName, "th") }}
-                    {{ item.start }} - {{ item.end }} น.
+                    {{ dayOfWeekName(item.dayOfWeekName) }}
+                    {{ item.coursePeriodStartDate }} - {{ item.coursePeriodEndDate }} น.
                   </v-card>
                   <!-- {{ item.courseNameEn }} -->
                 </v-col>
@@ -128,8 +127,6 @@
             </v-col>
           </v-row>
           <diV>
-            <!-- v-for="(item, index_item) in student_data" :key="index_item" -->
-
             <template>
               <calendarStudent
                 :events="itemTime.dates"
@@ -154,8 +151,8 @@
                 <v-col cols="12" sm="2">
                   <v-col
                     style=" 
-                      display: block; 
-                      margin-left: auto;
+                      display: block;  
+                      margin-left: auto; 
                       margin-right: auto;
                       width: 100%;
                       margin-top: 10%;
@@ -270,46 +267,65 @@ export default {
       this.$refs.calendar.next();
     },
 
-    dayOfWeekName(day_numbers, language) {
-      let day_names = [];
-      for (let i = 0; i < day_numbers.length; i++) {
-        let day_number = +day_numbers[i];
-        if (language === "th") {
-          switch (day_number) {
-            case 0:
-              day_names.push("อาทิตย์");
-              break;
-            case 1:
-              day_names.push("จันทร์");
-              break;
-            case 2:
-              day_names.push("อังคาร");
-              break;
-            case 3:
-              day_names.push("พุธ");
-              break;
-            case 4:
-              day_names.push("พฤหัสบดี");
-              break;
-            case 5:
-              day_names.push("ศุกร์");
-              break;
-            case 6:
-              day_names.push("เสาร์");
-              break;
-            default:
-              day_names.push(null);
-          }
-        } else {
-          day_names.push(null);
-        }
-      }
-      day_names.sort(function (a, b) {
-        return b.localeCompare(a, "th", { numeric: true });
-      });
+    // dayOfWeekName(day_numbers, language) {
+    //   let day_names = [];
+    //   for (let i = 0; i < day_numbers.length; i++) {
+    //     let day_number = +day_numbers[i];
+    //     if (language === "th") {
+    //       switch (day_number) {
+    //         case 0:
+    //           day_names.push("อาทิตย์");
+    //           break;
+    //         case 1:
+    //           day_names.push("จันทร์");
+    //           break;
+    //         case 2:
+    //           day_names.push("อังคาร");
+    //           break;
+    //         case 3:
+    //           day_names.push("พุธ");
+    //           break;
+    //         case 4:
+    //           day_names.push("พฤหัสบดี");
+    //           break;
+    //         case 5:
+    //           day_names.push("ศุกร์");
+    //           break;
+    //         case 6:
+    //           day_names.push("เสาร์");
+    //           break;
+    //         default:
+    //           day_names.push(null);
+    //       }
+    //     } else {
+    //       day_names.push(null);
+    //     }
+    //   }
+    //   day_names.sort(function (a, b) {
+    //     return b.localeCompare(a, "th", { numeric: true });
+    //   });
+    //   // day_names.reverse >= day_names.reverse();
+    //   return day_names.join(", ");
+    // },
 
-      return day_names.join(", ");
+     dayOfWeekName(days) {
+  const daysOfWeek = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"];
+  const dayNames = [];
+
+  for (let i = 0; i < days.length; i++) {
+    const dayIndex = days[i];
+    const dayName = daysOfWeek[dayIndex];
+    dayNames.push(dayName);
+  }
+
+  return dayNames.reverse().join(' - ');
+  },
+
+    showImg(item) {
+      return `${process.env.VUE_APP_URL}/api/v1/files/${item}`;
     },
+
+  
   },
 
   computed: {

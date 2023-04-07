@@ -1,23 +1,24 @@
 <template>
   <v-container>
+    <!-- {{ profile_user }} -->
+
     <div class="profileCard my-5 center">
-      <v-img
-        src="@/assets/userManagePage/imgcardafterupload.png"
-        class="iconInCard drop-shadow-md"
-      >
-      </v-img>
-      <div style="position: absolute">
-        <div>
-          <v-img
-            src="@/assets/logo.png"
-            max-height="30"
-            max-width="30"
-            class="mx-15"
-          >
-          </v-img>
+        <v-img
+          src="@/assets/userManagePage/imgcardafterupload.png"
+          class="iconInCard drop-shadow-md"
+        >
+        </v-img>
+        <div style="position: absolute">
+       
+          <div>
+            <v-img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU"
+              class="image-cropper "
+            >
+            </v-img>
+          </div>
         </div>
       </div>
-    </div>
     <!-- Button -->
     <div v-if="!isEnabled">
       <v-row>
@@ -90,7 +91,7 @@
         </div>
       </v-col>
       <!-- id_card -->
-      <v-col cols="12" sm="6">
+      <!-- <v-col cols="12" sm="6">
         <label-custom text="เลขบัตรประชาชน"></label-custom>
         <div v-if="!isEnabled">
           {{ user_data.id_card }}
@@ -105,9 +106,9 @@
           >
           </v-text-field>
         </div>
-      </v-col>
+      </v-col> -->
       <!-- date_of_birth -->
-      <v-col cols="12" sm="6">
+      <!-- <v-col cols="12" sm="6">
         <label-custom text="วันเกิด"></label-custom>
         <div v-if="!isEnabled">
           {{ user_data.date_of_birth }}
@@ -126,7 +127,7 @@
             </template>
           </v-text-field>
         </div>
-      </v-col>
+      </v-col> -->
       <!-- tel -->
       <v-col cols="12" sm="6">
         <label-custom text="เบอร์โทรศัพท์"></label-custom>
@@ -186,6 +187,9 @@
 import { mapActions, mapGetters } from "vuex";
 import { inputValidation } from "@/functions/functions";
 import LabelCustom from "@/components/label/labelCustom.vue";
+// import VueCookie from "vue-cookie"
+// import Swal from "sweetalert2";
+// import axios from "axios";
 export default {
   components: {
     LabelCustom,
@@ -209,7 +213,9 @@ export default {
 
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
-    console.log("userDetail", this.user_detail);
+    this.GetAll(this.user_detail.account_id)
+
+    // console.log("userDetail", this.user_detail);
   },
   mounted() {
     this.$store.dispatch(
@@ -222,6 +228,7 @@ export default {
     ...mapActions({
       loginOneId: "loginModules/loginOneId",
       GetUserData: "ProfileModules/GetUserData",
+      GetAll: "ProfileModules/GetAll"
       // GetParentData: "ProfileModules/GetParentData",
     }),
     edit() {
@@ -229,11 +236,64 @@ export default {
       this.isEnabled = true;
       this.buttonName = "บันทึก";
     },
-    submitEdit() {
-      this.isDisabled = true;
-      this.isEnabled = false;
-      this.buttonName = "แก้ไข";
-    },
+
+    // submitEdit(account_id) {
+    //   Swal.fire({
+    //     icon: "question",
+    //     title: "คุณต้องการแก้ไขอาณาข้อมูลส่วนตัวหรือไม่",
+    //     showDenyButton: false,
+    //     showCancelButton: true,
+    //     confirmButtonText: "ตกลง",
+    //     cancelButtonText: "ยกเลิก",
+    //   }).then(async (result) => {
+    //     if (result.isConfirmed) {
+    //       try {
+    //         // console.log("preview_url", this.file);
+    //         let bodyFormData = new FormData();
+    //         // bodyFormData.append("categoryImg", this.file ?  this.file : null);
+    //         bodyFormData.append("parent_firstname_th",this.profile_user.parent_firstname_th );
+    //         bodyFormData.append("parent_lastname_th", this.profile_user.parent_lastname_th);
+    //         bodyFormData.append("nation", this.profile_user.nation);
+    //         bodyFormData.append( "tel", this.profile_user.tel);
+    //         bodyFormData.append("email", this.profile_user.email);
+
+
+    //         let config = {
+    //                 headers:{
+    //                     "Access-Control-Allow-Origin" : "*",
+    //                     "Content-type": "Application/json",
+    //                     'Authorization' : `Bearer ${VueCookie.get("token")}`
+    //                 }
+    //             }
+    //             let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/relations/user?student_id${account_id}`,config)
+    //         if (data.statusCode === 200) {
+    //           this.dialog_show = true;
+    //           this.isDisabled = true;
+    //           this.isEnabled = false;
+    //           this.buttonName = "แก้ไข";
+    //         } else {
+    //           throw { message: data.message };
+    //         }
+    //       } catch (error) {
+    //         console.log(error);
+    //         Swal.fire({
+    //           icon: "error",
+    //           title: error.message,
+    //         });
+    //       }
+    //     } else {
+    //       Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
+    //     }
+    //   });
+    // },
+
+      submitEdit() { 
+        this.isDisabled = true;
+        this.isEnabled = false;
+        this.buttonName = "แก้ไข";
+      },
+
+
     validate(e, type) {
       inputValidation(e, type);
     },
@@ -250,6 +310,7 @@ export default {
     ...mapGetters({
       user_one_id: "loginModules/getUserOneId",
       user_data: "ProfileModules/getUserData",
+      profile_user: "ProfileModules/getProfileUser",
       // parent_data: "ProfileModules/getParentData",
     }),
   },
@@ -283,4 +344,13 @@ export default {
   margin-left: auto;
   margin-right: auto;
 }
+.image-cropper {
+  width: 180px;
+  height: 180px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 100%;
+  margin-top: -2%;
+}
+
 </style>

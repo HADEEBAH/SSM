@@ -14,65 +14,33 @@ const profileModules = {
   
       },
   
-      profile_student_data: [
+      profile_user: [
         {
-          relation_id: "",
-          student_id: "",
-          parent_id: "",
-          parent_firstname_th: "",
-          parent_firstname_en: "",
-          parent_lastname_th: "",
-          parent_lastname_en: "",
-          parent_tel: "",
+          relationId: "",
+          studentId: "",
+          parentId: "",
           student: {
-            accountId: "",
-            email: "",
-            firstNameTh: "",
-            lastNameTh: "",
-            nation: null,
-            tel: ""
+            studentId: "",
+            studenEmail: "",
+            studenFirstNameTh: "",
+            studenLastNameTh: "",
+            studenFirstNameEn: "",
+            studenLastNameEn: "",
+            studenNation: "",
+            studenTel: ""
           },
-          user_parent: {
-            accountId: "",
-            email: "",
-            firstNameTh: "",
-            lastNameTh: "",
-            nation: null,
-            tel: ""
+          parent: {
+            parentId: "",
+            parentFirstnameTh: "",
+            parentFirstnameEn: "",
+            parentLastnameTh: "",
+            parentLastnameEn: "",
+            parentTel: ""
           }
-  
         }
+      
       ],
-  
-      profile_parent_data: [
-        {
-          relation_id: "",
-          student_id: "",
-          parent_id: "",
-          parent_firstname_th: "",
-          parent_firstname_en: "",
-          parent_lastname_th: "",
-          parent_lastname_en: "",
-          parent_tel: "",
-          student: {
-            accountId: "",
-            email: "",
-            firstNameTh: "",
-            lastNameTh: "",
-            nation: null,
-            tel: ""
-          },
-          user_parent: {
-            accountId: "",
-            email: "",
-            firstNameTh: "",
-            lastNameTh: "",
-            nation: null,
-            tel: ""
-          }
-  
-        }
-      ],
+ 
   
       certificate_data: [
         {
@@ -108,12 +76,8 @@ const profileModules = {
       state.user_data = payload
     },
     
-    SetProfileStudentData(state, payload) {
-      state.student_data = payload
-    },
-
-    SetProfileParentData(state, payload) {
-      state.parent_data = payload
+    SetProfileUser(state, payload) {
+      state.profile_user = payload
     },
 
     SetCertificateData(state, payload) {
@@ -131,53 +95,8 @@ const profileModules = {
       console.log("SetUserData", UserData);
     },
 
-    // async GetProfileStudentData(context, account_id) {
-    //   console.log("GetProfileStudentData", account_id);
-    //   try {
-    //     let config = {
-    //       headers: {
-    //           "Access-Control-Allow-Origin": "*",
-    //           "Content-type": "Application/json",
-    //           'Authorization': `Bearer ${VueCookie.get("token")}`
-    //       }
-    //   }
-    //     let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user?parent_id${account_id}`,config)
-    //     console.log("data_student",data)
-    //     if (data.statusCode === 200) {
-    //         context.commit("SetProfileStudentData", data.data)
-    //         console.log("SetProfileStudentData", data.data);
-    //     } else {
-    //         throw { error: data }
-    //     }
-    // } catch (error) {
-    //     console.log(error)
-    // }
-    // },
-
-    // async GetProfileParentData(context, account_id) {
-    //   console.log("GetProfileParentData", account_id);
-    //   try {
-    //     let config = {
-    //       headers: {
-    //           "Access-Control-Allow-Origin": "*",
-    //           "Content-type": "Application/json",
-    //           'Authorization': `Bearer ${VueCookie.get("token")}`
-    //       }
-    //   }
-    //     let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user?student_id${account_id}`,config)
-    //     console.log("data_parent",data)
-    //     if (data.statusCode === 200) {
-    //         context.commit("SetProfileParentData", data.data)
-    //         console.log("SetProfileParentData", data.data);
-    //     } else {
-    //         throw { error: data }
-    //     }
-    // } catch (error) {
-    //     console.log(error)
-    // }
-    // },
-
     async GetAll(context, account_id) {
+      console.log("account_id", account_id);
       try {
         let config = {
           headers: {
@@ -188,20 +107,18 @@ const profileModules = {
         }
        let data_local = JSON.parse(localStorage.getItem("userDetail"))
         if (data_local.roles.includes('R_5')) {
-          let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user?student_id${account_id}`,config)
+          let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?student_id=${account_id}`,config)
           console.log("data_parent",data)
           if (data.statusCode === 200) {
-              context.commit("SetProfileParentData", data.data)
-              console.log("SetProfileParentData", data.data);
+              context.commit("SetProfileUser", data.data)
           } else {
               throw { error: data }
           }
          }else{
-          let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user?parent_id${account_id}`,config)
+          let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?parent_id=${account_id}`,config)
         console.log("data_student",data)
         if (data.statusCode === 200) {
-            context.commit("SetProfileStudentData", data.data)
-            console.log("SetProfileStudentData", data.data);
+            context.commit("SetProfileUser", data.data)
         } else {
             throw { error: data }
         }
@@ -211,6 +128,8 @@ const profileModules = {
     }
       
     },
+
+  
 
     ChangeCertificateData(context, certificateData) {
       context.commit("SetCertificateData", certificateData)
@@ -225,11 +144,8 @@ const profileModules = {
     getUserData(state) {
       return state.user_data
     },
-    getProfileStudentData(state) {
-      return state.profile_student_data
-    },
-    getProfileParentData(state) {
-      return state.profile_parent_data
+    getProfileUser(state) {
+      return state.profile_user
     },
     getCertificateData(state) {
       return state.certificate_data
