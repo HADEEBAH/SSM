@@ -396,10 +396,7 @@ const orderModules = {
                         'Authorization' : `Bearer ${VueCookie.get("token")}`
                     }
                 }
-<<<<<<< HEAD
-=======
                 // let endpoint = "http://localhost:3002"
->>>>>>> develop
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/cart/${account_id}`,config)
                 console.log(data)
                 if (data.statusCode === 200) {
