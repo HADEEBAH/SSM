@@ -7,6 +7,8 @@ const orderModules = {
     namespaced: true,
     state: {
         course_order: {
+            apply_for_yourself : false,
+            apply_for_others : false,
             kingdom: {},
             course_type: "",
             course_type_id : "CT_1",
@@ -62,9 +64,12 @@ const orderModules = {
         },
         SetResetCourseData(state) {
             state.course_order = {
+                apply_for_yourself : false,
+                apply_for_others : false,
                 kingdom: {},
                 course_type: "",
                 course_type_id : "CT_1",
+                category_id: "",
                 package: "",
                 package_data : {},
                 option : "",

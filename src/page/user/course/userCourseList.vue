@@ -3,7 +3,7 @@
       <v-container>
         <v-row dense>
             <v-col cols="12">
-                <v-text-field  outlined hide-details dense prepend-inner-icon="mdi-magnify" placeholder="ค้นหาอาณาจัดรการเรียนรู้ที่คุณสนใจได้ที่นี่sss"></v-text-field>
+                <v-text-field  outlined hide-details dense prepend-inner-icon="mdi-magnify" placeholder="ค้นหาคอร์สการเรียนรู้ที่คุณสนใจได้ที่นี่"></v-text-field>
             </v-col>
         </v-row>
         <v-row dense>
@@ -23,13 +23,10 @@
             <template v-if="!courses_is_loading">
                 <v-col cols="6" sm="4" v-for="(course, course_index) in courses" :key="course_index">
                     <v-card @click="selectedCourse(course)">
-                        <v-img
-                            height="109"
-                            :src="course.course_url ? course.course_url : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'"
-                        >
-                        <v-row>
-                            <v-col class="pa-4" align="right"> <v-chip  color="#F9B320" text-color="white">{{ `${course.period}ชั่วโมง`  }}</v-chip></v-col>
-                        </v-row>
+                        <v-img height="240" :src="course.course_url ? course.course_url : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'">
+                          <v-row>
+                              <v-col class="pa-4" align="right"> <v-chip  color="#F9B320" text-color="white">{{ `${course.period}ชั่วโมง`  }}</v-chip></v-col>
+                          </v-row>
                         </v-img>
                         <v-card-title class="  font-bold text-sm pa-2">
                         <v-row dense class="d-flex align-center">
@@ -66,24 +63,25 @@ import { mapGetters, mapActions } from 'vuex';
         data: () => ({
             loading : true,
             course_type : [{course_type_id : "CT_1", name : "คอร์สทั่วไป", amount : "8", value:"general_course"},{course_type_id : "CT_2",name : "คอร์สระยะสั้น", amount : "2", value:'short_course'}],
-            type_selected :"",
+            type_selected :"CT_1",
         }),
         created() {
             this.GetCourseTypes({category_id : this.$route.params.category_id})
-            this.$store.dispatch("CourseModules/GetCoursesFilter",{ category_id : this.$route.params.category_id, status : "Active", })  
+            this.$store.dispatch("CourseModules/GetCoursesFilter",{ category_id : this.$route.params.category_id, status : "Active", })
+            if(this.course_types.length > 0){
+              this.type_selected = this.course_types[0].course_type_id
+            }
         },
         mounted() {
             this.GetCategory(this.$route.params.category_id)
             this.$store.dispatch("NavberUserModules/changeTitleNavber","คอร์สเรียน")
-            if(this.course_types.length > 0){
-                this.type_selected = this.course_types[0].course_type_id
-            }
         },
         watch: {
             
         },
         computed: {
             ...mapGetters({
+                courses_type_is_loading : "CourseModules/getCourseTypeIsLoading",
                 courses_is_loading : "CourseModules/getCoursesIsLoading",
                 courses : "CourseModules/getCourses",
                 course_order : "OrderModules/getCourseOrder",

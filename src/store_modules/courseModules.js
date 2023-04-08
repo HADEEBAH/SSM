@@ -102,10 +102,14 @@ const CourseModules = {
     teach_days: [],
     update_status_course: [],
     sendUpdate: [],
+    course_type_is_loading : false,
   },
   mutations: {
     SetTeachDays(state, payload) {
       state.teach_days = payload
+    },
+    SetCourseTypeIsLoading(state, value){
+      state.course_type_is_loading = value
     },
     SetCoachs(state, payload) {
       state.coachs = payload
@@ -291,13 +295,13 @@ const CourseModules = {
       //     context.commit("SetCourseIsLoading", true)
       try {
         console.log("course_data", course_data)
-        let config = {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Content-type": "Application/json",
-            'Authorization': `Bearer ${VueCookie.get("token")}`
-          }
-        }
+        // let config = {
+        //   headers: {
+        //     "Access-Control-Allow-Origin": "*",
+        //     "Content-type": "Application/json",
+        //     'Authorization': `Bearer ${VueCookie.get("token")}`
+        //   }
+        // }
         course_data = snakeToCamel(course_data)
         course_data.coachs.forEach((coach, index) => {
           console.log("coach=>", coach, index);
@@ -325,7 +329,7 @@ const CourseModules = {
           })
         })
 
-        console.log(course_data.packages)
+        console.log(course_data)
         const data_payload = new FormData()
         data_payload.append("payload", JSON.stringify(course_data))
         console.log(typeof course_data.courseImg);
@@ -334,25 +338,25 @@ const CourseModules = {
         }
 
         // console.log("endpoint :", `${process.env.VUE_APP_URL}/api/v1/manage/update/${course_data.courseId}`)
-        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update/${course_data.courseId}`, data_payload, config);
-        if (data.statusCode === 200) {
-
-          // context.commit("ChangeDataUpdate")
-          context.commit("SetCourseIsLoading", false)
-          Swal.fire({
-            icon: "success",
-            title: "แก้ไขคอร์สสำเร็จ",
-            showDenyButton: false,
-            showCancelButton: false,
-            confirmButtonText: "ตกลง",
-          }).then(async (result) => {
-            if (result.isConfirmed) {
-              router.push({ name: "CourseList" })
-            }
-          })
-
-        }
-        console.log(data)
+        // let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update/${course_data.courseId}`, data_payload, config);
+        // if (data.statusCode === 200) {
+        //
+        //   // context.commit("ChangeDataUpdate")
+        //   context.commit("SetCourseIsLoading", false)
+        //   Swal.fire({
+        //     icon: "success",
+        //     title: "แก้ไขคอร์สสำเร็จ",
+        //     showDenyButton: false,
+        //     showCancelButton: false,
+        //     confirmButtonText: "ตกลง",
+        //   }).then(async (result) => {
+        //     if (result.isConfirmed) {
+        //       router.push({ name: "CourseList" })
+        //     }
+        //   })
+        //
+        // }
+        // console.log(data)
       } catch (error) {
         console.log(error)
       }
@@ -369,7 +373,7 @@ const CourseModules = {
     // COURSE :: LIST 
     async GetCoursesList(context,) {
       try {
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/list?limit=10&page=1`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/list?limit=1000&page=1`)
         let courses = []
         let category = {}
         await data.data.forEach(async (course) => {
@@ -403,7 +407,7 @@ const CourseModules = {
           type: data.data.courseTypeName,
           course_name_th: data.data.courseNameTh,
           course_name_en: data.data.courseNameEn,
-          course_img: `${process.env.VUE_APP_URL}/api/v1/files/${data.data.courseImg}`,
+          course_img: data.data.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.courseImg}` : "",
           category_id: data.data.categoryId,
           category_name_th: data.data.categoryNameTh,
           course_open_date: data.data.courseOpenDate ? moment(data.data.courseOpenDate).format("YYYY-MM-DD") : "",
@@ -678,7 +682,7 @@ const CourseModules = {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/filter?category_id=${category_id}&status=${status}&course_type_id=${course_type_id}`)
         if (data.statusCode === 200) {
           for (const course of data.data) {
-            course.course_url = `${process.env.VUE_APP_URL}/api/v1/files/${course.course_img}`
+            course.course_url = course.course_img ? `${process.env.VUE_APP_URL}/api/v1/files/${course.course_img}` : ""
           }
           context.commit("SetCoursesIsLoading", false)
           context.commit("SetCourses", data.data)
@@ -775,7 +779,9 @@ const CourseModules = {
     },
     getStatusCourse(state) {
       return state.update_status_course
-
+    },
+    getCourseTypeIsLoading(state){
+      return state.course_type_is_loading
     }
   },
 };
