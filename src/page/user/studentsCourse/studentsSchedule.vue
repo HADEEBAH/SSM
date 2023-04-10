@@ -35,9 +35,10 @@
       <!-- PAGE 1 -->
       <v-expand-x-transition transition="scale-transition">
         <div v-if="type_selected == 'students_course'">
+
+          <div v-for="(item, index) in student_data" :key="index">
           <v-card
-            v-for="(item, index) in student_data"
-            :key="index"
+          v-if="student_data.length != '0'"
             @click="$router.push({ name: 'StudentCourse', params:{course_id: item.courseId }})"
             class="my-10 drop-shadow-lg"
           >
@@ -45,34 +46,35 @@
               <!-- img -->
               <v-col cols="12" sm="2">
                 <v-col
-                  style="   
-                    display: block;  
-                    margin-left: auto; 
+                  style="     
+                    display: block;      
+                    margin-left: auto;    
                     margin-right: auto; 
-                    width: 100%;
+                    width: 100%; 
                     margin-top: 10%;
                   "
                 >
-                <v-img :src="showImg(item.courseImg)"></v-img>
-                </v-col>
+                <v-img :src="item.courseImg?  showImg(item.courseImg) : defaultImageUrl"></v-img>
+           
+              </v-col>
               </v-col>
               <!-- detail -->
               <v-col cols="12" sm="6">
                 <v-col class="text-lg font-bold">
-                  {{ item.courseNameTh }}
+                  {{ item.courseNameTh == ''? '-' : item.courseNameTh }}
                 </v-col>
                 <v-col class="text-slate-400">
-                  {{ item.courseNameEn }}
+                  {{ item.courseNameEn  == ''? '-' : item.courseNameEn }}
                 </v-col>
                 <v-col class="text-slate-400">
                   <span class="mdi mdi-account">โค้ช :</span>
-                  {{ item.coachName }}
+                  {{ item.coachName  == ''? '-' : item.coachName}}
                 </v-col>
                 <v-col>
                   <!-- v-for="(day, index_day) in dayOfWeekName" :key="index_day" -->
                   <v-card color="yellow" class="rounded-lg text-center">
-                    {{ dayOfWeekName(item.dayOfWeekName) }}
-                    {{ item.coursePeriodStartDate }} - {{ item.coursePeriodEndDate }} น.
+                    <!-- {{ dayOfWeekName(item.dayOfWeekName)  == ''? '-' : dayOfWeekName(item.dayOfWeekName) }} -->
+                    {{ item.start }} - {{ item.end }} น.
                   </v-card>
                   <!-- {{ item.courseNameEn }} -->
                 </v-col>
@@ -95,6 +97,12 @@
               </v-col>
             </v-row>
           </v-card>
+          </div>
+
+          <v-card v-if="student_data.length == '0'" class="border-solid mt-8 pa-5 text-center text-xl">
+            <span class="mdi mdi-alert-outline" style="color: #ff6b81;"></span>  ไม่พบข้อมูลตารางเรียน
+            </v-card>
+         
         </div>
       </v-expand-x-transition>
 
@@ -139,22 +147,20 @@
 
       <!-- PAGE 3 -->
       <v-expand-x-transition transition="scale-transition">
-        <div v-if="type_selected == 'students_bookedcourse'">
-          <v-card
-            v-for="(item, item_index) in student_data"
-            :key="item_index"
-            class="my-5"
-          >
+        <div v-if="type_selected == 'students_bookedcourse' ">
+           
+          <div v-for="(item, index) in test_list" :key="index">
+            <v-card @click="showCard(index)" class="my-5">
             <div>
               <v-row dense>
                 <!-- img -->
                 <v-col cols="12" sm="2">
                   <v-col
-                    style=" 
-                      display: block;  
-                      margin-left: auto; 
-                      margin-right: auto;
-                      width: 100%;
+                    style="  
+                      display: block;     
+                      margin-left: auto;  
+                      margin-right: auto; 
+                      width: 100%; 
                       margin-top: 10%;
                     "
                   >
@@ -165,9 +171,11 @@
                 <!-- detail -->
                 <v-col cols="12" sm="6">
                   <v-col class="text-lg font-bold">
+                    {{ item.id }}
                     <!-- {{ item.courseNameTh }} -->
                   </v-col>
                   <v-col class="text-slate-400">
+                    {{ item.value }}
                     <!-- {{ item.courseNameEn }} -->
                   </v-col>
                   <v-col class="text-slate-400">
@@ -198,7 +206,63 @@
                 </v-col>
               </v-row>
             </div>
-          </v-card>
+            <div  v-if="activeCard === index">
+              <v-card>
+              <v-row dense class="pa-3">
+                <v-col cols="12" md="12" sm="12"  class="text-lg font-bold ">
+                  เปียโนป๊อปเบื้องต้น (Popular Piano ) 
+                </v-col> 
+
+                <v-col cols="12" md="12" sm="12" class="text-lg ">
+                  โดย ศูนย์ดนตรี Manila Tamarind
+                </v-col>
+
+                 <v-col cols="12" md="12" sm="12">
+                  <span class="mdi mdi-calendar-today" style="color: #ff6b81;"></span> วันเสาร์ - อาทิตย์ 
+                </v-col> 
+
+                <v-col cols="12" md="12" sm="12">
+                  <span class="mdi mdi-clock-outline" style="color: #ff6b81;"></span> 1 ชม. / ครั้ง 
+                </v-col>
+
+                <v-col cols="12" md="12" sm="12" class="text-lg ">
+                  หลักสูตรนี้เน้นการฝึกเล่นเปียโน ประกอบการร้องเพลง ทั้งบรรเลงเดี่ยวและรวมวง เน้นความสนุกสนานเพลิดเพลิน โดยผู้เรียนสามารถเลือกเพลงได้ตามความสนใจ ทั้งเพลงไทย
+                </v-col>
+
+                <v-col cols="12" md="12" sm="12">
+                  <div class="mt-8">
+                    <label-custom text="Music performance"></label-custom>
+                  </div>
+                  <v-divider class=""></v-divider>
+                  <span class="pa-2">
+                      A    สุนทรียะด้านการฟังและเล่นดนตรี <br/>
+                      K    ทฤษฎีดนตรีสากล <br/>
+                      S 1  ทักษะการอ่านโน้ตดนตรีสากล<br/>
+                      S2  ทักษะการฟังเสียง Ear training<br/>
+                      S3  ทักษะการบรรเลงเดี่ยว Solo<br/>
+                      S4  ทักษะการบรรเลงรวมวง
+                  </span>
+                </v-col>
+
+                <v-col cols="12" md="12" sm="12">
+                  <div class="mt-8">
+                    <label-custom text="Certification"></label-custom>
+                  </div>
+                  <v-divider class=""></v-divider>
+                  <span class="pa-2">
+                    สู่การสอบเทียบมาตรฐาน Trinity และ ABRSM
+                  </span>
+                </v-col>
+              </v-row>
+            </v-card>
+          </div>
+          </v-card> 
+    </div>
+
+
+          <v-card v-if="student_data.length == '0'" class="border-solid mt-8 pa-5 text-center text-xl">
+            <span class="mdi mdi-alert-outline" style="color: #ff6b81;"></span>  ไม่พบข้อมูลการจอง
+            </v-card>
         </div>
       </v-expand-x-transition>
     </div>
@@ -208,15 +272,22 @@
   <script>
 import { mapActions, mapGetters } from "vuex";
 import calendarStudent from "../../../components/calendar/calendarStudent.vue";
+import labelCustom from "@/components/label/labelCustom.vue";
+
 export default {
   components: {
     calendarStudent,
+    labelCustom
   },
   data: () => ({
     activePage: 1,
     booked: "จองแล้ว",
     value: "",
+    defaultImageUrl:
+      "https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg",
     loading: true,
+    show_detail: false,
+    activeCard: null,
     course_type: [
       { name: "คอร์สของฉัน", value: "students_course" },
       { name: "ตารางเรียน", value: "students_schedule" },
@@ -227,12 +298,19 @@ export default {
       { label: "รายสัปดาห์", value: "week" },
       { label: "รายเดือน", value: "month" },
     ],
+    test_list: [
+      { id: "BK-001", value: "day" },
+      { id: "BK-002", value: "week" },
+      { id: "BK-003", value: "month" },
+    ],
     tasks: [],
     type_selected: "students_course",
     time_frame: "month",
     a_test: "",
     b_test: "",
     item: {},
+   
+
   }),
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
@@ -267,6 +345,9 @@ export default {
       this.$refs.calendar.next();
     },
 
+    showCard(index) {
+      this.activeCard = index; // set activeCard to the clicked index
+    },
     // dayOfWeekName(day_numbers, language) {
     //   let day_names = [];
     //   for (let i = 0; i < day_numbers.length; i++) {
@@ -325,6 +406,11 @@ export default {
       return `${process.env.VUE_APP_URL}/api/v1/files/${item}`;
     },
 
+      showData() {
+      this.show_detail = true
+    },
+
+ 
   
   },
 
@@ -350,4 +436,6 @@ export default {
 .v-progress-circular {
   margin: 1rem;
 }
+
+
 </style>
