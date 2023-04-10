@@ -382,6 +382,14 @@ const orderModules = {
             }
 
         },
+        async DeleteCart(context, {cart_id}){
+            try{
+                // let {} = await axios.delete("")
+                console.log(context,cart_id)
+            }catch(error){
+                console.log(error)
+            }
+        },
     },
     getters: {
         getOrder(state) {
