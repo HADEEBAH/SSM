@@ -26,11 +26,11 @@ const categoryModules = {
         async GetCategorys(context) {
             context.commit("SetCategorysIsLoading", true)
             try {
-                console.log(process.env.VUE_APP_URL)
+                // console.log(process.env.VUE_APP_URL)
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category`)
                 // console.log("data", data);
                 if (data.statusCode === 200) {
-                    console.log("data", data.data);
+                    // console.log("data", data.data);
                     context.commit("SetCategorys", data.data)
                     context.commit("SetCategorysIsLoading", false)
                 }
@@ -42,7 +42,7 @@ const categoryModules = {
         async GetCategoryCourse(context) {
             context.commit("SetCategorysIsLoading", true)
             try {
-                console.log(process.env.VUE_APP_URL)
+                // console.log(process.env.VUE_APP_URL)
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category/course`)
                 if (data.statusCode === 200) {
                     context.commit("SetCategorys", data.data)
@@ -50,7 +50,7 @@ const categoryModules = {
                 }
             } catch (error) {
                 context.commit("SetCategorysIsLoading", false)
-                console.log("error :", error)
+                // console.log("error :", error)
             }
         },
         async GetCategory(context, category_id){
@@ -59,7 +59,7 @@ const categoryModules = {
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category/${category_id}`)
                 if(data.statusCode === 200){
                     context.commit("SetCategory", data.data)
-                    console.log("SetCategory", data.data);
+                    // console.log("SetCategory", data.data);
                 }
                 context.commit("SetCategoryIsLoading", false)
             }catch(error){
@@ -73,7 +73,7 @@ const categoryModules = {
             return state.categorys
         },
         getCategory(state) {
-            console.log("abc");
+            // console.log("abc");
             return state.category   
         },
         getCategoryIsLoading(state){

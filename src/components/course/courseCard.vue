@@ -540,16 +540,16 @@
                     v-model="course_data.coachs[0].period.start_time">
                   </v-text-field>
                   <TimePicker
-                      :disabled="disable"
-                      :minuteStep="60"
-                      format="HH:mm"
-                      style="z-index: 2"
-                      :style="`width:${width()-4}px !important;`"
-                      :class="course_data.coachs[0].period.start_time ? 'active' : ''"
-                      placeholder="เวลาเริ่มต้น"
-                      @change="genStartTimeEndTime($event)"
-                      v-model="course_data.coachs[0].period.start_time"
-                      ></TimePicker>
+                    :disabled="disable"
+                    :minuteStep="15"
+                    format="HH:mm"
+                    style="z-index: 2"
+                    :style="`width:${width()-4}px !important;`"
+                    :class="course_data.coachs[0].period.start_time ? 'active' : ''"
+                    placeholder="เวลาเริ่มต้น"
+                    @change="genStartTimeEndTime($event)"
+                    v-model="course_data.coachs[0].period.start_time"
+                    ></TimePicker>
                 </v-col>
                 <v-col cols="auto" class="mt-2 px-0"
                   ><v-icon>mdi-minus</v-icon></v-col
@@ -568,7 +568,7 @@
                   </v-text-field>
                   <TimePicker
                     disabled
-                    :minuteStep="60"
+                    :minuteStep="15"
                     format="HH:mm"
                     :rules="rules.end_time"
                     style="z-index: 2"

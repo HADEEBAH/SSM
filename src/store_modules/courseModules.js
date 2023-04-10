@@ -226,10 +226,10 @@ const CourseModules = {
     // COURSE TYPES
     async GetCourseTypes(context, { category_id }) {
       try {
-        console.log("category_id :", category_id)
+        // console.log("category_id :", category_id)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/type?category_id=${category_id}`)
         if (data.statusCode === 200) {
-          console.log("SetCourseTypes", data.data)
+          // console.log("SetCourseTypes", data.data)
           context.commit("SetCourseTypes", data.data)
         }
       } catch (error) {
@@ -241,7 +241,7 @@ const CourseModules = {
       try {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/coach/${coach_data.coach_id}`)
         if (data.statusCode === 200) {
-          console.log(data)
+          // console.log(data)
           context.commit("SetTeachDays", data.data)
         } else {
           throw { message: data.message }
@@ -259,18 +259,18 @@ const CourseModules = {
             coach.fullNameTh = `${coach.firstNameTh} ${coach.lastNameTh}`
             coach.fullNameEh = `${coach.firstNameEng} ${coach.lastNameEng}`
           })
-          console.log(data)
+          // console.log(data)
           context.commit("SetCoachs", data.data)
         } else {
-          console.log(data)
-          //throw {message : data.message}
+          // console.log(data)
+          throw {error : data}
         }
       } catch (error) {
         console.log(error)
       }
     },
     ChangeCourseData(context, course_data) {
-      console.log("CourseData : ", course_data)
+      // console.log("CourseData : ", course_data)
       context.commit("SetCourseData", course_data)
     },
     // COURSE :: UPDATE
@@ -330,40 +330,39 @@ const CourseModules = {
             })
           })
         })
-        course_data.coachs.forEach((coach, index)=>{
-          console.log(coach.register_date_range)
+        course_data.coachs.filter(v => v.teach_day_data.length > 0).forEach((coach, index)=>{          
           payload.coachs.push({
             "coachId": coach.coach_id,
             "courseCoachId": coach.course_coach_id ?  coach.course_coach_id  : null,
             "coachName": coach.coach_name,
             "teachDayData" : [],
             "classDateRange": {
-              "startDate": coach.class_date_range.start_date ? moment(coach.class_date_range.start_date).format("YYYY-MM-DD") : "",
-              "endDate":  coach.class_date_range.end_date ? moment(coach.class_date_range.end_date).format("YYYY-MM-DD") : "" ,
+              "startDate": coach.class_date_range.start_date ? moment(coach.class_date_range.start_date).format("YYYY-MM-DD") : null,
+              "endDate":  coach.class_date_range.end_date ? moment(coach.class_date_range.end_date).format("YYYY-MM-DD") : null ,
             },
             "registerDateRange": {
-              "startDate": coach.register_date_range.start_date ? moment(coach.register_date_range.start_date).format("YYYY-MM-DD") : "",
-              "endDate": coach.register_date_range.end_date ? moment(coach.register_date_range.end_date).format("YYYY-MM-DD") : "",
+              "startDate": coach.register_date_range.start_date && coach.register_date_range.start_date !== "-" ?  moment(coach.register_date_range.start_date).format("YYYY-MM-DD") : null,
+              "endDate": coach.register_date_range.end_date && coach.register_date_range.end_date !== "-" ? moment(coach.register_date_range.end_date).format("YYYY-MM-DD") : null,
             },
             "period": {
-              "startTime":  coach.period.start_time ?  moment(coach.period.start_time).format('HH:mm') : "",
-              "endTime":  coach.period.end_time ?  moment(coach.period.end_time).format('HH:mm') : ""
+              "startTime":  coach.period.start_time ?  moment(coach.period.start_time).format('HH:mm') : null,
+              "endTime":  coach.period.end_time ?  moment(coach.period.end_time).format('HH:mm') :null
             }
           })
           let teach_day_data = []
           coach.teach_day_data.forEach((date, date_index)=>{
             let class_date = []
             let time_id = ""
-            console.log("days_of_class :", course_data.days_of_class)
-            console.log("course_coach_id", date.course_coach_id)
-            console.log("days_of_class_filter :", course_data.days_of_class.filter((v)=> v.course_coach_id[0] === date.course_coach_id))
+            // console.log("days_of_class :", course_data.days_of_class)
+            // console.log("course_coach_id", date.course_coach_id)
+            // console.log("days_of_class_filter :", course_data.days_of_class.filter((v)=> v.course_coach_id[0] === date.course_coach_id))  
             if( course_data.days_of_class.filter((v)=> v.course_coach_id[0] === date.course_coach_id).length > 0){
               course_data.days_of_class.filter((v)=> v.course_coach_id[0] === date.course_coach_id).forEach((day)=>{
-                if(teach_day_data.filter((v)=> v.dayOfWeekId === day.dayOfWeekId && v.courseCoachId === date.course_coach_id).length === 0){
+                if(teach_day_data.filter((v)=> v.dayOfWeekId === day.times[0].dayOfWeekId && v.courseCoachId === date.course_coach_id).length === 0){
                   time_id = day.times[0].timeId
                   teach_day_data.push({
                     "dayOfWeekId": day.times[0].dayOfWeekId,
-                    "classOpen": date.classOpen === true ? "Action" : "InAction" ,
+                    "classOpen": date.classOpen === true ? 'Active' : 'InActive',
                     "teachDay": date.teach_day,
                     "courseCoachId": date.course_coach_id,
                     "classDate": []
@@ -373,19 +372,18 @@ const CourseModules = {
             }else{
                 teach_day_data.push({
                   "dayOfWeekId": null,
-                  "classOpen": date.classOpen === true ? "Active" : "InActive" ,
+                  "classOpen": date.classOpen === true ? 'Active' : 'InActive',
                   "teachDay": date.teach_day,
                   "courseCoachId": date.course_coach_id ? date.course_coach_id : null,
                   "classDate": []
                 })
             }
             date.class_date.forEach((class_date_data)=>{
-              // console.log(moment(class_date_data).format('HH:mm'))
               class_date.push({
                 "timeId": time_id,
                 "classDateRange": {
-                  "startTime": class_date_data.class_date_range.start_time ? moment(class_date_data.class_date_range.start_time).format('HH:mm') : "",
-                  "endTime": class_date_data.class_date_range.end_time ? moment(class_date_data.class_date_range.end_time).format('HH:mm') : "",
+                  "startTime": class_date_data.class_date_range.start_time ? moment(class_date_data.class_date_range.start_time).format('HH:mm') : null,
+                  "endTime": class_date_data.class_date_range.end_time ? moment(class_date_data.class_date_range.end_time).format('HH:mm') : null,
                 },
                 "students": class_date_data.students
               })
@@ -394,7 +392,7 @@ const CourseModules = {
           })
           payload.coachs[index].teachDayData = teach_day_data
         })
-        console.log("payload : ",payload)
+        // console.log("payload : ",payload)
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -410,7 +408,7 @@ const CourseModules = {
           data_payload.append("img_url", course_data.courseImg)
         }
 
-        console.log("endpoint :", `${process.env.VUE_APP_URL}/api/v1/manage/update/${payload.courseId}`)
+        // console.log("endpoint :", `${process.env.VUE_APP_URL}/api/v1/manage/update/${payload.courseId}`)
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/aaaa/${payload.courseId}`, data_payload, config);
         if (data.statusCode === 200) {
 
@@ -469,6 +467,13 @@ const CourseModules = {
         console.log(error)
       }
     },
+    async GetCourseStudent(context, {course_id}){
+      try{
+        console.log(course_id)
+      }catch(error){
+        console.log(error)
+      }
+    },
     // COURSE :: DETAIL
     async GetCourse(context, course_id) {
       context.commit("SetCourseIsLoading", true)
@@ -506,7 +511,7 @@ const CourseModules = {
         }
         if (data.statusCode === 200) {
           let teach_day_data = []
-          console.log(data.data)
+          // console.log(data.data)
           data.data.coachs.forEach((coach) => {
             data.data.dayOfWeek.filter(v => v.courseCoachId === coach.courseCoachId).forEach((coach_date) => {
               // DAY OF CLASS
@@ -585,7 +590,7 @@ const CourseModules = {
                 },
             )
           })
-          console.log("teach_day_data",teach_day_data)
+          // console.log("teach_day_data",teach_day_data)
           payload.coachs.forEach((coach) => {
             coach.teach_day_data = teach_day_data.filter(v => v.course_coach_id === coach.course_coach_id)
           })
@@ -620,13 +625,13 @@ const CourseModules = {
               package_data.options = options.filter(v => v.package_id === package_data.package_id)
             })
           }
-          console.log("payload : ", payload)
+          // console.log("payload : ", payload)
           context.commit("SetCourseData", payload)
           context.commit("SetCourseIsLoading", false)
         }
       } catch (error) {
         context.commit("SetCourseIsLoading", false)
-        console.log(error)
+        // console.log(error)
       }
     },
     // COURSE :: CREATE
@@ -634,7 +639,7 @@ const CourseModules = {
       context.commit("SetCourseIsLoading", true)
       try {
         let course = context.state.course_data
-        console.log("course =>", course)
+        // console.log("course =>", course)
         let payload = {
           "categoryId": course.category_id,
           "courseTypeId": course.course_type_id,
@@ -813,7 +818,7 @@ const CourseModules = {
 
         if (data.statusCode === 200) {
           context.commit("SetStatusCourse", data.data)
-          console.log("SetStatusCourse", data.data);
+          // console.log("SetStatusCourse", data.data);
 
         } else {
           throw { error: data };
