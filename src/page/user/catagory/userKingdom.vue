@@ -64,9 +64,7 @@
               @click="selectedCategory(item)"
             >
               <v-img
-                :src="
-                  item.categoryImg ? showImg(item.categoryImg) : defaultImageUrl
-                "
+                :src="item.categoryImg && item.categoryImg !== null ? showImg(item.categoryImg) : defaultImageUrl"
                 height="300px"
               ></v-img>
 

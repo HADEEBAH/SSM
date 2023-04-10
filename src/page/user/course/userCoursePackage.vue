@@ -83,17 +83,7 @@
                         </v-row>  
                         <v-row dense>
                             <v-col class="text-sm">
-                                ร่วมแข่งขันเวทีการประกวดชั้นนำ    
-                            </v-col>
-                        </v-row>  
-                        <v-row dense>
-                            <v-col class="text-sm">
-                                อาหารว่าง Snack Box
-                            </v-col>
-                        </v-row>  
-                        <v-row dense>
-                            <v-col class="text-sm">
-                                Digital Portfolio ใช้ยื่นเพื่อการศึกษาต่อ
+                               {{ option.privilege }}
                             </v-col>
                         </v-row>  
                         <v-row dense>
@@ -180,6 +170,19 @@ import { mapGetters,mapActions } from 'vuex';
             this.course_order.time_count = option.amount
             this.course_order.package = this.selected_package.package
             this.course_order.package_data = this.selected_package
+            this.course_order.apply_for_yourself = false,
+            this.course_order.apply_for_others = false,
+            this.course_order.times_in_class = 0
+            this.course_order.day =  ""
+            this.course_order.time = "",
+            this.course_order.coach = "",
+            this.course_order.start_day = "",
+            this.course_order.price = 0,
+            this.course_order.detail = "",
+            this.course_order.remark = "",
+            this.course_order.selected = true,
+            this.course_order.parents = [],
+            this.course_order.students = [],
             this.order.order_step = 1
             this.changeCourseOrderData(this.course_order)
             this.changeOrderData(this.order)

@@ -12,6 +12,7 @@
       </v-row>
 
       <div v-else>
+        {{ cart_list.length }}
         <v-row class="mb-16">
           <v-col
             cols="12"
@@ -19,122 +20,88 @@
             :key="`${index_item}-cart`"
           >
             <!-- <pre>{{item}}</pre> -->
-            <v-card class="rounded-xl mt-5">
-              <v-card-text>
-                <v-row dense>
-                  <v-col cols="12">
+            <v-card class="rounded-lg mt-5">
+              <v-row dense>
+                <v-col cols="3">
+                  <v-img
+                    :src="item.course_img"
+                    cover
+                    height="270"
+                    class="w-full h-full rounded-l-lg"
+                  />
+                </v-col>
+                <v-col>
+                  <v-card-text>
                     <v-row dense>
-                      <v-col cols="auto">
-                        <v-img
-                          class="align-end text-white rounded-xl mt-5"
-                          :src="item.course_img"
-                          cover
-                          max-width="104"
-                          max-height="111"
-                        >
-                        </v-img>
-                      </v-col>
-                      <v-col>
-                        <v-row dense>
-                          <v-col class="text-lg font-bold">
-                            {{ item.course_name_th }}({{ item.course_name_en }})
-                          </v-col>
-                          <v-col cols="auto">
-                            <v-checkbox
-                              class="card_checkbox"
-                              color="error"
-                              hide-details
-                              @change="selectOne($event, item.course_id)"
-                              v-model="item.checked"
-                            >
-                            </v-checkbox>
-                            <!-- {{ item.checked }} -->
-                          </v-col>
-                        </v-row>
-                        <v-row dense>
-                          <v-col cols="12" sm="6" class="text-md font-semibold">
-                            โค้ช : {{ item.coach_name }}
-                          </v-col>
-                          <v-col cols="12" sm="6" class="text-md font-semibold">
-                            <!-- เวลา : {{ item.time.start }}-{{ item.time.end }} -->
-                          </v-col>
-                        </v-row>
+                      <v-col cols="12">
                         <v-row dense>
                           <v-col>
-                            {{ item.detail }}
+                            <v-row dense>
+                              <v-col class="text-lg font-bold">
+                                {{ item.course_name_th }}({{ item.course_name_en }})
+                              </v-col>
+                              <v-col cols="auto">
+                                <v-checkbox
+                                  class="card_checkbox"
+                                  color="error"
+                                  hide-details
+                                  @change="selectOne($event, item.course_id)"
+                                  v-model="item.checked"
+                                >
+                                </v-checkbox>
+                                <!-- {{ item.checked }} -->
+                              </v-col>
+                            </v-row>
+                            <v-row dense>
+                              <v-col cols="12" sm="6" class="text-md font-semibold">
+                                โค้ช : {{ item.coach_name }}
+                              </v-col>
+                              <v-col cols="12" sm="6" class="text-md font-semibold">
+                                <!-- เวลา : {{ item.time.start }}-{{ item.time.end }} -->
+                              </v-col>
+                            </v-row>
+                            <v-row dense>
+                              <v-col>
+                                {{ item.detail }}
+                              </v-col>
+                            </v-row>
                           </v-col>
                         </v-row>
                       </v-col>
                     </v-row>
-                  </v-col>
-                  </v-row>
-                  <!-- <v-col cols="6">เวลาที่ทำรายการ</v-col>
-                  <v-col cols="6" class="text-md font-semibold">
-                    {{}}</v-col> -->
-                  <!-- <v-row  v-if="item.course_type_id === 'CT_1'">
-                    <v-col cols="6"> ราคา</v-col>
-                    <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
-                      {{ item.option.price_unit * item.students.length }}
-                      บาท</v-col
-                    >
-                  </v-row> -->
-                  <v-row v-if="item.course_type_id === 'CT_1'">
-                    <v-col cols="6"> จำนวนครั้งที่เรียน</v-col>
-                    <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
-                    {{ item.option.amount }} ครั้ง</v-col
-                    >
-                  </v-row>
-                  
-
-                  <!-- <v-col cols="6"> ราคา/ครั้ง</v-col>
-                  <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
-                    {{ item.option.net_price_unit }}</v-col
-                  > -->
-                  <v-row>
-                    <v-col cols="6"> จำนวนนักเรียน</v-col>
-                    <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
-                      {{ item.students.length }} คน</v-col
-                    >
-                  </v-row>
-                  
-                  <v-row v-if="item.course_type_id === 'CT_1'">
-                    <v-col cols="6"> ส่วนลด</v-col>
-                    <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
-                      {{ item.option.discount_price }} บาท</v-col
-                    >
-                  </v-row>
-                  <v-row>
-                    <v-col cols="6"> ราคาชำระ</v-col>
-                    <v-col cols="6" class="text-md font-semibold text-[#FF6B81]">
-                      {{ item.course_type_id==="CT_1" ? item.option.net_price : item.net_price }} บาท</v-col
-                    >
-                  </v-row>
-              </v-card-text>
+                    <v-row  dense v-if="item.course_type_id === 'CT_1'">
+                        <v-col align="right" cols="8"> จำนวนครั้งที่เรียน</v-col>
+                        <v-col align="right" cols="4" class="text-md font-semibold text-[#FF6B81]">
+                        {{ item.option.amount }} ครั้ง</v-col
+                        >
+                    </v-row>
+                    <v-row dense>
+                        <v-col align="right" cols="8"> จำนวนนักเรียน</v-col>
+                        <v-col align="right" cols="4" class="text-md font-semibold text-[#FF6B81]">
+                          {{ item.students.length }} คน</v-col
+                        >
+                    </v-row>
+                    <v-row dense v-if="item.course_type_id === 'CT_1'">
+                      <v-col align="right" cols="8"> ส่วนลด</v-col>
+                      <v-col align="right" cols="4" class="text-md font-semibold text-[#FF6B81]">
+                        {{ item.option.discount_price }} บาท</v-col
+                      >
+                    </v-row>
+                    <v-row dense class="mb-3">
+                      <v-col align="right" cols="8"> ราคาชำระ</v-col>
+                      <v-col align="right" cols="4" class="text-md font-semibold text-[#FF6B81]">
+                        {{ item.course_type_id==="CT_1" ? item.option.net_price : item.net_price }} บาท</v-col
+                      >
+                    </v-row>
+                    <div align="right">
+                      <v-btn outlined color="red"><v-icon> mdi-delete</v-icon> ลบสินค้า</v-btn>
+                    </div>
+                  </v-card-text>
+                </v-col>
+              </v-row>
             </v-card>
           </v-col>
         </v-row>
-
-        <!-- <div class="grid grid-cols-12 card-total pa-2">
-          <div class="mt-2 col-span-3">
-            <v-checkbox
-              class="card_checkbox"
-              color="error"
-              hide-details
-              label="ทั้งหมด"
-              @change="selectAll($event)"
-              v-model="selected_all"
-            ></v-checkbox>
-          </div>
-          <div :class="MobileSize ? 'mt-2 col-span-5' : 'mt-2 col-span-5 ml-40 '">
-            รวมทั้งหมด<b class="text-[#ff6b81] ml-1"
-              >{{ cart_list.total_price }} บาท</b
-            >
-          </div>
-          <div :class="MobileSize ? 'mt-2 ' : 'mt-2 ml-56 '">
-            <v-btn depressed dark color="#ff6b81" @click="savePaymen"> ชำระเงิน ({{ count_selected_cart }}) </v-btn>
-          </div>      
-        </div> -->
-
         <v-row dense>
           <v-col cols="12" sm="4">
             <v-checkbox
@@ -213,7 +180,7 @@ export default {
     //   }
     // },
     ...mapActions({
-      GetCartList: "OrderTestModules/GetCartList",
+      GetCartList: "OrderModules/GetCartList",
       saveOrder: "OrderModules/saveOrder",
       changeOrderData: "OrderModules/changeOrderData",
     }),
@@ -285,7 +252,7 @@ export default {
 
   computed: {
     ...mapGetters({
-      cart_list: "OrderTestModules/getCartList",
+      cart_list: "OrderModules/getCartList",
       course_order: "OrderModules/getCourseOrder",
       categorys_is_loading : "CategoryModules/getCategorysIsLoading",
 

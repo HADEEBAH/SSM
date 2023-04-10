@@ -1,8 +1,6 @@
 import axios from "axios";
 // import Swal from "sweetalert2";
-import router from "@/router";
 import VueCookie from "vue-cookie"
-
 const orderModules = {
     namespaced: true,
     state: {
@@ -44,7 +42,8 @@ const orderModules = {
         order_detail : {},
         order_is_loading : false,
         orders_is_loading : false,
-        relations:{},
+        relations:[],
+        cart_list :[]
     },
     mutations: {
         SetOrderIsLoading(state, value){
@@ -61,6 +60,9 @@ const orderModules = {
         },
         SetOrders(state, payload){
             state.orders = payload
+        },
+        SetCartList(state, payload) {
+            state.cart_list = payload
         },
         SetOrderDetail(){},
         SetOrderCourse(state, payload) {
@@ -98,12 +100,12 @@ const orderModules = {
             context.commit("SetResetCourseData")
         },
         changeCourseOrderData(context, courseData) {
-            console.log("changeCourseOrderData :",courseData)
+            // console.log("changeCourseOrderData :",courseData)
             context.commit("SetOrderCourse", courseData)
         },
         changeOrderData(context, orderData) {
             context.commit("SetOrder", orderData)
-            console.log(orderData)
+            // console.log(orderData)
         },
         async GetRelations(context,{student_id,}){
             try{
@@ -115,9 +117,11 @@ const orderModules = {
                     }
                 }
                 let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user?student_id=${student_id}`,config)
-                console.log("Relation :",data.data)
-                if(data.stutsCode === 200){
-                    context.commit("SetRelation",data.data )
+                console.log(data)
+                if(data.statusCode === 200){
+                    if( data.data && !data.data.message){
+                        context.commit("SetRelation",data.data )
+                    }
                 }else{
                     throw {error : data}
                 }
@@ -228,7 +232,6 @@ const orderModules = {
                         payment_type: "",
                         total_price: 0,
                     })
-                    router.replace({ name: "UserKingdom" });
                 }
             }catch(error){
                 console.log(error)
@@ -249,6 +252,7 @@ const orderModules = {
                 }
                 let total_price = 0
                 await order.courses.forEach((course)=>{
+                    console.log(course)
                     let students = []
                     course.students.forEach((student)=>{
                         if(student.parents[0]){   
@@ -319,6 +323,7 @@ const orderModules = {
                     console.log("payment",payment)
                     console.log("payment statusCode",payment.data.statusCode)
                     if(payment.data.statusCode === 201){
+                        window.location.href = payment.data.data
                         localStorage.removeItem("Order")
                         context.commit("SetResetCourseData")
                         context.commit("SetOrder",{
@@ -330,7 +335,6 @@ const orderModules = {
                             payment_type: "",
                             total_price: 0,
                         })
-                        window.location.href = payment.data.data
                         context.commit("SetOrderIsLoading", false)
                     }
                 }
@@ -338,6 +342,45 @@ const orderModules = {
                 context.commit("SetOrderIsLoading", false)
                 console.log(error)
             }
+        },
+        async GetCartList(context, account_id) {
+            console.log("account_id", account_id);
+            try {
+                let config = {
+                    headers:{
+                        "Access-Control-Allow-Origin" : "*",
+                        "Content-type": "Application/json",
+                        'Authorization' : `Bearer ${VueCookie.get("token")}`
+                    }
+                }
+                // let endpoint = "http://localhost:3002"
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/cart/${account_id}`,config)
+                console.log(data)
+                if (data.statusCode === 200) {
+                    for (const item of data.data) {
+                        item.course_img = `${process.env.VUE_APP_URL}/api/v1/files/${item.course_img}`
+                        if(item.course_type_id === "CT_1"){
+                            let discount = item.option.discount ? item.option.discount_price : 0
+                            // console.log("discount", discount)
+                            // ราคา/ครั้ง
+                            item.option.net_price_unit = item.option.price_unit / item.option.amount 
+                            // console.log("net_price_unit", item.option.net_price_unit)
+                            // ราคา
+                            item.option.net_price = item.option.price_unit - discount
+                        }else{
+                            item.net_price = item.price * item.students.length 
+                        }
+                    }
+
+                    context.commit("SetCartList", data.data)
+                    console.log("SetCartList", data.data);
+                } else {
+                    throw { error: data }
+                }
+            } catch (error) {
+                console.log(error)
+            }
+
         },
     },
     getters: {
@@ -358,7 +401,10 @@ const orderModules = {
         },
         getRelations(state){
             return state.relations
-        }
+        },
+        getCartList(state) {
+            return state.cart_list
+        },
     },
 };
 

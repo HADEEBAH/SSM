@@ -168,21 +168,20 @@ export default {
     created() {
         this.active_menu = this.$route.name
         this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
-        this.GetCartList(this.user_login.account_id);
     },
     mounted() {
-
+        this.GetCartList(this.user_detail.account_id);
     },
     watch: {},
     computed: {
         ...mapGetters({
-            cart_list: "OrderTestModules/getCartList",
+            cart_list: "OrderModules/getCartList",
             titel_navber: "NavberUserModules/getTitleNavber"
         })
     },
     methods: {
         ...mapActions({
-            GetCartList: "OrderTestModules/GetCartList",
+            GetCartList: "OrderModules/GetCartList",
             logOut: "loginModules/logOut"
         }),
         selectMenu(type, to, head) {
