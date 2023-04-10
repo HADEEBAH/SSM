@@ -412,6 +412,7 @@ const CourseModules = {
         }
 
         console.log("endpoint :", `${process.env.VUE_APP_URL}/api/v1/manage/update/${payload.courseId}`)
+        // let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update/${payload.courseId}`, data_payload, config);
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/aaaa/${payload.courseId}`, data_payload, config);
         if (data.statusCode === 200) {
 
