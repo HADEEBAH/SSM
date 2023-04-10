@@ -409,12 +409,8 @@ const CourseModules = {
           // data_payload.append("img_url", null)
         }
 
-<<<<<<< HEAD
-        // console.log("endpoint :", `${process.env.VUE_APP_URL}/api/v1/manage/update/${payload.courseId}`)
-=======
         console.log("endpoint :", `${process.env.VUE_APP_URL}/api/v1/manage/update/${payload.courseId}`)
         // let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update/${payload.courseId}`, data_payload, config);
->>>>>>> develop
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/aaaa/${payload.courseId}`, data_payload, config);
         if (data.statusCode === 200) {
 
