@@ -419,7 +419,7 @@
                         <v-row class="px-4" v-if="!course_edit">
                             <v-col align="right">
                                 <v-btn
-                                    disabled
+                                    
                                     color="#FF6B81"
                                     class="white--text btn-size-lg"
                                     depressed
@@ -443,7 +443,7 @@
                                 <!-- <loading-overlay :loading="course_is_loading"></loading-overlay> -->
 
                                 <v-btn
-                                    disabled
+                                    
                                     color="#FF6B81"
                                     class="white--text btn-size-lg"
                                     depressed

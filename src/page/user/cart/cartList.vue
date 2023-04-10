@@ -12,7 +12,6 @@
       </v-row>
 
       <div v-else>
-        {{ cart_list.length }}
         <v-row class="mb-16">
           <v-col
             cols="12"
@@ -118,7 +117,7 @@
             <b class="text-[#ff6b81]">{{ total_price }} บาท</b>
           </v-col>
           <v-col cols="6" sm="4" align="end">
-            <v-btn depressed dark color="#ff6b81" @click="savePaymen">
+            <v-btn depressed dark color="#ff6b81" @click="savePayment">
               ชำระเงิน ({{ count_selected_cart }})
             </v-btn>
           </v-col>
@@ -183,6 +182,7 @@ export default {
       GetCartList: "OrderModules/GetCartList",
       saveOrder: "OrderModules/saveOrder",
       changeOrderData: "OrderModules/changeOrderData",
+      DeleteCart : "OrderModules/DeleteCart",
     }),
 
     sumtotal() {
@@ -237,15 +237,17 @@ export default {
       // this.cart_list = result;
     },
 
-    savePaymen() {
-      console.log(this.order);
-      console.log(this.cart_list);
+    savePayment() {
       this.order.courses = this.cart_list;
       this.order.total_price = this.total_price;
       this.order.payment_status = "pending";
       this.order.created_by = this.user_login.account_id;
       this.changeOrderData(this.order);
-      this.saveOrder();
+      // this.saveOrder();
+      for (const cart of this.cart_list) {
+        console.log(cart.orders_tmp_id);
+        this.DeleteCart({cart_id : cart.orders_tmp_id})
+      }
       console.log("saveOrder");
     },
   },

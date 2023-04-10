@@ -276,7 +276,7 @@ const CourseModules = {
     // COURSE :: UPDATE
     async UpdateCourse(context, { course_data }) {
       try {
-        console.log("course_data", course_data)
+        console.log("course_data", course_data.course_register_start_date)
         let payload = {
           "courseId": course_data.course_id,
           "courseTypeId": course_data.course_type_id,
@@ -294,7 +294,7 @@ const CourseModules = {
           "courseMusicPerformance":  course_data.music_performance,
           "courseCertification": course_data.catification,
           "priceCourse": parseInt(course_data.price_course),
-          "courseRegisterStartDate": course_data.course_register_start_date,
+          "courseRegisterStartDate": course_data.course_register_start_date && course_data.course_register_start_date !== "Invalid date" ?  course_data.course_register_start_date : null,
           "courseRegisterEndDate": moment(course_data.course_register_end_date),
           "coursePeriodStartDate": moment(course_data.course_period_start_date),
           "coursePeriodEndDate": course_data.course_period_end_date,
@@ -469,13 +469,21 @@ const CourseModules = {
         console.log(error)
       }
     },
-    async GetCourseStudent(context, {course_id}){
-      try{
-        console.log(course_id)
-      }catch(error){
-        console.log(error)
-      }
-    },
+    // async GetCourseStudent(context, {course_id}){
+    //   try{
+    //     let config = {
+    //       headers: {
+    //         "Access-Control-Allow-Origin": "*",
+    //         "Content-type": "Application/json",
+    //         'Authorization': `Bearer ${VueCookie.get("token")}`
+    //       }
+    //     }
+    //     let {data} = await axios.get("",)
+    //     console.log(course_id)
+    //   }catch(error){
+    //     console.log(error)
+    //   }
+    // },
     // COURSE :: DETAIL
     async GetCourse(context, course_id) {
       context.commit("SetCourseIsLoading", true)
@@ -494,10 +502,10 @@ const CourseModules = {
           course_open_date_str: data.data.courseOpenDate ? new Date(data.data.courseOpenDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : "",
           menu_course_open_date: false,
           course_hours: data.data.coursePerTime,
-          course_location: data.data.courseLocation,
-          course_description: data.data.courseDescription,
-          course_music_performance: data.data.courseMusicPerformance,
-          course_catification: data.data.courseCertification,
+          location: data.data.courseLocation,
+          detail: data.data.courseDescription,
+          music_performance: data.data.courseMusicPerformance,
+          catification: data.data.courseCertification,
           price_course: data.data.coursePrice,
           course_register_start_date: moment(data.data.courseRegisterStartDate).format("YYYY-MM-DD"),
           course_register_end_date: moment(data.data.courseRegisterEndDate).format("YYYY-MM-DD"),
