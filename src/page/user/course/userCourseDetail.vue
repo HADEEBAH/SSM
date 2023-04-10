@@ -4,7 +4,7 @@
       <v-img
         class="rounded-lg mb-3"
         max-height="30vw"
-        :src="course_data.course_img"
+        :src="course_data.course_img ? course_data.course_img : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'"
       ></v-img>
       <v-row dense
         ><v-col class="text-lg font-bold">

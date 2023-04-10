@@ -143,6 +143,8 @@ export default {
     } else {
       //console.log("false");
     }
+    localStorage.removeItem("Order")
+    localStorage.setItem("Order", JSON.stringify(this.course_order))
   },
 
   mounted() {

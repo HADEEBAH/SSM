@@ -4,6 +4,7 @@
     v-model="valid"
     lazy-validation
   >
+    {{ state }}
     <v-card :flat="crad_flat" :class="$vuetify.breakpoint.mdAndUp ? dialog ? '':'card-padding' : 'py-2'">
       <v-card-title >
         <v-row dense v-if="dialog" >
@@ -113,7 +114,8 @@ export default {
   props:{
     title:{type : String},
     dialog : {type : Boolean, default: false},
-    crad_flat : {type : Boolean, default:false}
+    crad_flat : {type : Boolean, default:false},
+    state : {type : String},
   },
   data: () => ({
     valid: true,
@@ -136,7 +138,8 @@ export default {
     ...mapActions({
       changeDialogRegisterOneId : "RegisterModules/changeDialogRegisterOneId",
       changeUserOneId : "RegisterModules/changeUserOneId",
-      registerUserOneId : 'RegisterModules/registerUserOneId'
+      registerUserOneId : 'RegisterModules/registerUserOneId',
+      registerParent : "RegisterModules/registerParent"
     }),
     checkPhoneNumber() {
       let x = this.user_one_id.phone_number.replace(/\D/g, '')
@@ -144,10 +147,15 @@ export default {
       this.user_one_id.phone_number = !x[2] ? x[1] :   x  [1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
     },
     save(){
-     if(this.$refs.form.validate()){
-        this.registerUserOneId()
-     }
-     
+      if(this.state === "parent" || this.state === "student"){
+        if(this.$refs.form.validate()){
+          console.log(this.registerParent({type : this.state}))
+        }
+      }else{
+        if(this.$refs.form.validate()){
+          this.registerUserOneId()
+        }
+      }
     },
     Validation(e, lang){
       inputValidation(e, lang)
@@ -157,7 +165,8 @@ export default {
     ...mapGetters({
       is_loading : "RegisterModules/getIsLoading",
       show_dialog_register_one_id : "RegisterModules/getShowDialogRegisterOneId",
-      user_one_id : "RegisterModules/getUserOneId"
+      user_one_id : "RegisterModules/getUserOneId",
+      course_data : "CourseModules/getCourseData",
     })
   },
   watch: {},

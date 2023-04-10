@@ -7,6 +7,8 @@ const orderModules = {
     namespaced: true,
     state: {
         course_order: {
+            apply_for_yourself : false,
+            apply_for_others : false,
             kingdom: {},
             course_type: "",
             course_type_id : "CT_1",
@@ -42,6 +44,7 @@ const orderModules = {
         order_detail : {},
         order_is_loading : false,
         orders_is_loading : false,
+        relations:{},
     },
     mutations: {
         SetOrderIsLoading(state, value){
@@ -49,6 +52,9 @@ const orderModules = {
         },
         SetOrdersIsLoading(state, value){
             state.orders_is_loading = value
+        },
+        SetRelation(state, payload){
+            state.relations = payload
         },
         SetOrder(state, payload) {
             state.order = payload
@@ -62,9 +68,12 @@ const orderModules = {
         },
         SetResetCourseData(state) {
             state.course_order = {
+                apply_for_yourself : false,
+                apply_for_others : false,
                 kingdom: {},
                 course_type: "",
                 course_type_id : "CT_1",
+                category_id: "",
                 package: "",
                 package_data : {},
                 option : "",
@@ -95,6 +104,26 @@ const orderModules = {
         changeOrderData(context, orderData) {
             context.commit("SetOrder", orderData)
             console.log(orderData)
+        },
+        async GetRelations(context,{student_id,}){
+            try{
+                let config = {
+                    headers:{
+                        "Access-Control-Allow-Origin" : "*",
+                        "Content-type": "Application/json",
+                        'Authorization' : `Bearer ${VueCookie.get("token")}`
+                    }
+                }
+                let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user?student_id=${student_id}`,config)
+                console.log("Relation :",data.data)
+                if(data.stutsCode === 200){
+                    context.commit("SetRelation",data.data )
+                }else{
+                    throw {error : data}
+                }
+            }catch(error){
+                console.log(error)
+            }
         },
         async GetOrders(context){
             try{
@@ -327,7 +356,9 @@ const orderModules = {
         getOrdersIsLoading(state){
             return state.orders_is_loading
         },
-
+        getRelations(state){
+            return state.relations
+        }
     },
 };
 

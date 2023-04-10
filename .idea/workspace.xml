@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="b449b56a-ccda-456e-b909-e84f61c0a1e9" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/components/course/coachsCard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/course/coachsCard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layout/navbarUser.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/navbarUser.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/admin/course/courseDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/admin/course/courseDetail.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/course/userCourseOrder.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/course/userCourseOrder.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store_modules/courseModules.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store_modules/courseModules.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store_modules/orderModules.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store_modules/orderModules.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="bug/update-course" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="ProjectId" id="2O8MONOKLPagtv2rX7ucZHh4nyk" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="yarn" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.tools" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b449b56a-ccda-456e-b909-e84f61c0a1e9" name="Changes" comment="" />
+      <created>1680937723017</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1680937723017</updated>
+      <workItem from="1680937725933" duration="22781000" />
+      <workItem from="1681023811516" duration="7811000" />
+      <workItem from="1681033365710" duration="14513000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="bug/course" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
