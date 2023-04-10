@@ -279,16 +279,16 @@ const CourseModules = {
     },
     // COURSE :: UPDATE
     async UpdateCourse(context, { course_data }) {
-      // Swal.fire({
-      //   icon: "question",
-      //   title: "คุณต้องการแก้ไขคอร์สหรือไม่",
-      //   showDenyButton: false,
-      //   showCancelButton: true,
-      //   confirmButtonText: "ตกลง",
-      //   cancelButtonText: "ยกเลิก",
-      // }).then(async (result) => {
-      //   if (result.isConfirmed) {
-      //     context.commit("SetCourseIsLoading", true)
+      Swal.fire({
+        icon: "question",
+        title: "คุณต้องการแก้ไขคอร์สหรือไม่",
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: "ตกลง",
+        cancelButtonText: "ยกเลิก",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          context.commit("SetCourseIsLoading", true)
       try {
         console.log("course_data", course_data)
         let config = {
@@ -326,11 +326,13 @@ const CourseModules = {
         })
 
         console.log(course_data.packages)
+        console.log(course_data)
         const data_payload = new FormData()
         data_payload.append("payload", JSON.stringify(course_data))
         console.log(typeof course_data.courseImg);
         if (typeof course_data.courseImg == Object) {
           data_payload.append("img_url", course_data.courseImg)
+          // data_payload.append("img_url", null)
         }
 
         // console.log("endpoint :", `${process.env.VUE_APP_URL}/api/v1/manage/update/${course_data.courseId}`)
@@ -357,13 +359,13 @@ const CourseModules = {
         console.log(error)
       }
 
-      // router.push({ name: "CourseList" })
+      router.push({ name: "CourseList" })
 
 
-      //   } else if (result.isDenied) {
-      //     Swal.fire('Changes are not saved', '', 'info')
-      //   }
-      // })
+        } else if (result.isDenied) {
+          Swal.fire('Changes are not saved', '', 'info')
+        }
+      })
 
     },
     // COURSE :: LIST 
@@ -400,7 +402,7 @@ const CourseModules = {
         let payload = {
           course_id: data.data.courseId,
           course_type_id: data.data.courseTypeId,
-          type: data.data.courseTypeName,
+          course_type: data.data.courseTypeName,
           course_name_th: data.data.courseNameTh,
           course_name_en: data.data.courseNameEn,
           course_img: `${process.env.VUE_APP_URL}/api/v1/files/${data.data.courseImg}`,
@@ -410,10 +412,10 @@ const CourseModules = {
           course_open_date_str: data.data.courseOpenDate ? new Date(data.data.courseOpenDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : "",
           menu_course_open_date: false,
           course_hours: data.data.coursePerTime,
-          location: data.data.courseLocation,
-          detail: data.data.courseDescription,
-          music_performance: data.data.courseMusicPerformance,
-          catification: data.data.courseCertification,
+          course_location: data.data.courseLocation,
+          course_description: data.data.courseDescription,
+          course_music_performance: data.data.courseMusicPerformance,
+          course_catification: data.data.courseCertification,
           price_course: data.data.coursePrice,
           course_register_start_date: moment(data.data.courseRegisterStartDate).format("YYYY-MM-DD"),
           course_register_end_date: moment(data.data.courseRegisterEndDate).format("YYYY-MM-DD"),

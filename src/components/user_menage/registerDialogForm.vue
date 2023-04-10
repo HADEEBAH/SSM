@@ -124,7 +124,7 @@ export default {
       name_th: [val => (val || '').length > 0 || 'โปรดระบุชื่อ-นามสกุล(ภาษาไทย)'],
       name_en: [val => (val || '').length > 0 || 'โปรดระบุชื่อ-นามสกุล(ภาษาอังกฤษ)'],
       phone_number: [val => (val || '').length > 0 && val.length === 12 || 'โปรดระบุเบอร์โทร'],
-      username : [val => (val || '').length > 6 || 'โปรดระบุชื่อผู้ใช้ความยาวอย่างน้อย 6 ตัวอักษร'],
+      username : [val => (val || '').length > 5 || 'โปรดระบุชื่อผู้ใช้ความยาวอย่างน้อย 6 ตัวอักษร'],
       password : [val =>(val && val.length > 7) || 'โปรดระบุรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร'],
       confirm_password : val =>(val && val.length > 7) || 'โปรดระบุรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร',
       match: password => value => value === password || 'รหัสผ่านไม่ตรงกัน'

@@ -126,7 +126,7 @@ export default {
     },
     menu_drawer_list:[
       { icon: "mdi-account-circle", title : "โปรไฟล์", to:"UserProfile", roles:[]},
-      { icon: "mdi-calendar-month", title : "ตารางเรียน", to:"", roles:[]},
+      { icon: "mdi-calendar-month", title : "ตารางเรียน", to:"StudentsSchedule", roles:["R_5"]},
       { icon: "mdi-book-cog-outline", title : "การจัดการ", to:"menageCourse", roles:["R_1","R_2","R_3"]},
       { icon: "mdi-history", title : "ประวัติการสั่งซื้อ", to:"orderHistory", roles:[]},
       { icon: "mdi-swap-horizontal-bold", title : "หน้าผู้ดูแลระบบ", to:"Admin", roles: ["R_1","R_2"]},
