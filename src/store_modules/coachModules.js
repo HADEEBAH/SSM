@@ -87,6 +87,85 @@ const coachModules = {
         console.log(error)
       }
     },
+    async CreateTeachingNotes(context,{check_in_coach_id, check_in_coach_data}){
+      try{
+        let config = {
+          headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-type": "Application/json",
+              Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        let payload = {
+          summary : check_in_coach_data.summary,
+          homework :check_in_coach_data.homework,
+          files :null
+        }
+        let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/summary/${check_in_coach_id}`, payload, config)
+        if(data.statusCode === 201){
+          Swal.fire({
+            icon: "success",
+            title: "บันทึกสำเร้จ",
+            showDenyButton: false,
+            showCancelButton: false,
+            cancelButtonText :"ยกเลิก",
+            confirmButtonText: "ตกลง",
+          })
+        }
+      }catch(error){
+        console.log(error)
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
+          showDenyButton: false,
+          showCancelButton: false,
+          cancelButtonText :"ยกเลิก",
+          confirmButtonText: "ตกลง",
+        })
+      }
+    },
+    async GetCoachCheckIn(context,{course_id, date }){
+      try{
+        let payload = {
+          checkInCoachId : null,
+          summary :null,
+          homework :null,
+          files : null
+        }
+        let config = {
+          headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-type": "Application/json",
+              Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        let user_detail =  JSON.parse(localStorage.getItem("userDetail"));
+        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}/date/${date}`,config)
+        if(data.statusCode === 200){
+          data.data.forEach((check_in)=>{
+            payload = {
+              checkInCoachId : check_in.ch_check_in_coach_id,
+              summary :check_in.ch_summary,
+              homework :check_in.ch_homework,
+              files : check_in.ch_files
+            }
+          })
+          context.commit("SetCoachCheckIn",payload)
+        }else{
+          throw {error : data}
+        }
+      }catch(error){
+        console.log(error)
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
+          showDenyButton: false,
+          showCancelButton: false,
+          cancelButtonText :"ยกเลิก",
+          confirmButtonText: "ตกลง",
+      })
+      }
+    },
     async UpdateCheckInStudent(context, {students}){
       
       try{
