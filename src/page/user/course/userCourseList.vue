@@ -25,15 +25,15 @@
                     <v-card @click="selectedCourse(course)">
                         <v-img height="240" :src="course.course_url ? course.course_url : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'">
                           <v-row>
-                              <v-col class="pa-4" align="right"> <v-chip  color="#F9B320" text-color="white">{{ `${course.period}ชั่วโมง`  }}</v-chip></v-col>
+                              <v-col class="pa-4" align="right"> <v-chip  color="#F9B320" text-color="white">{{ `${course.period}  ชั่วโมง`  }}</v-chip></v-col>
                           </v-row>
                         </v-img>
                         <v-card-title class="  font-bold text-sm pa-2">
                         <v-row dense class="d-flex align-center">
                             <v-col>{{ `${course.course_name_th} (${course.course_name_en})` }}</v-col>
                             <v-col class="d-flex align-center text-[#ff6b81]" cols="auto">
-                                <v-icon color="#ff6b81" size="18">mdi-account-group-outline</v-icon>
-                                {{ `${course.course_studant_amount ? course.course_studant_amount : 0 }/${course.course_student_recived}` }}</v-col>
+                                <v-icon color="#ff6b81" size="18" class="mr-2">mdi-account-group-outline</v-icon>
+                                {{ `${course.course_studant_amount ? course.course_studant_amount : 0 }/ ${ course.course_type_id === 'CT_2' ? course.course_student_recived : course.maximum_student }` }}</v-col>
                         </v-row>  
                         </v-card-title>
                         <v-card-text class="text-xs pa-2">

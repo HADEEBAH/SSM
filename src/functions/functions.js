@@ -8,7 +8,6 @@ export const inputValidation = (e, type)=>{
             break;
         case "en":
             if((/^[ก-๏\s]+$/u).test(e.key)){
-                console.log(e.key)
                 if(e.key !== " "){
                     e.preventDefault()
                 }

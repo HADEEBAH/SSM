@@ -95,8 +95,12 @@ const CourseModules = {
     update_status_course: [],
     sendUpdate: [],
     course_type_is_loading : false,
+    course_student:[]
   },
   mutations: {
+    SetCourseStudent(state, payload){
+      state.course_student = payload
+    },
     SetTeachDays(state, payload) {
       state.teach_days = payload
     },
@@ -469,21 +473,30 @@ const CourseModules = {
         console.log(error)
       }
     },
-    // async GetCourseStudent(context, {course_id}){
-    //   try{
-    //     let config = {
-    //       headers: {
-    //         "Access-Control-Allow-Origin": "*",
-    //         "Content-type": "Application/json",
-    //         'Authorization': `Bearer ${VueCookie.get("token")}`
-    //       }
-    //     }
-    //     let {data} = await axios.get("",)
-    //     console.log(course_id)
-    //   }catch(error){
-    //     console.log(error)
-    //   }
-    // },
+    // COURSE :: STUDENT
+    async GetCourseStudent(context, {course_id, cpo_id}){
+      try{
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        if(cpo_id){
+          let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/count/student?courseId=${course_id}&cpoId=${cpo_id}`,config)
+          console.log("GetCourseStudent => ",data)
+          context.commit("SetCourseStudent",data.data)
+        }else{
+          let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/count/student?courseId=${course_id}`,config)
+          console.log("GetCourseStudent => ",data)
+          context.commit("SetCourseStudent",data.data)
+        }
+        
+      }catch(error){
+        console.log(error)
+      }
+    },
     // COURSE :: DETAIL
     async GetCourse(context, course_id) {
       context.commit("SetCourseIsLoading", true)
@@ -525,26 +538,35 @@ const CourseModules = {
           data.data.coachs.forEach((coach) => {
             data.data.dayOfWeek.filter(v => v.courseCoachId === coach.courseCoachId).forEach((coach_date) => {
               // DAY OF CLASS
-              coach_date.dayOfWeekName.forEach(day => {
-                if (coach_date.status === 'Active') {
-                  if (payload.days_of_class.filter(v => v.day === day).length > 0) {
-                    coach_date.times.forEach(time => {
-                      if (payload.days_of_class.filter(v => v.day === day)[0].times.filter(v => v.timeId === time.timeId).length === 0) {
-                        payload.days_of_class.filter(v => v.day === day)[0].times.push(time)
-                      }
-                      if (payload.days_of_class.filter(v => v.day === day)[0].course_coach_id.filter(v => v === coach.courseCoachId).length === 0) {
-                        payload.days_of_class.filter(v => v.day === day)[0].course_coach_id.push(coach_date.courseCoachId)
-                      }
-                    })
-                  } else {
-                    payload.days_of_class.push({
-                      course_coach_id: [coach_date.courseCoachId],
-                      day: day,
-                      times: coach_date.times,
-                    })
-                  }
-                }
-              })
+              if(payload.days_of_class.filter(v => v.day_of_week_id === coach_date.times[0].dayOfWeekId).length === 0){
+                payload.days_of_class.push({
+                  day_of_week_id :coach_date.times[0].dayOfWeekId,  
+                  course_coach_id: [coach_date.courseCoachId],
+                  day: coach_date.dayOfWeekName,
+                  times: coach_date.times,
+                })
+              }
+             
+              // coach_date.dayOfWeekName.forEach(day => {
+              //   if (coach_date.status === 'Active') {
+              //     if (payload.days_of_class.filter(v => v.day === day).length > 0) {
+              //       coach_date.times.forEach(time => {
+              //         if (payload.days_of_class.filter(v => v.day === day)[0].times.filter(v => v.timeId === time.timeId).length === 0) {
+              //           payload.days_of_class.filter(v => v.day === day)[0].times.push(time)
+              //         }
+              //         if (payload.days_of_class.filter(v => v.day === day)[0].course_coach_id.filter(v => v === coach.courseCoachId).length === 0) {
+              //           payload.days_of_class.filter(v => v.day === day)[0].course_coach_id.push(coach_date.courseCoachId)
+              //         }
+              //       })
+              //     } else {
+              //       payload.days_of_class.push({
+              //         course_coach_id: [coach_date.courseCoachId],
+              //         day: day,
+              //         times: coach_date.times,
+              //       })
+              //     }
+              //   }
+              // })
               let class_dates = []
               for (const time of coach_date.times) {
                 class_dates.push({
@@ -635,9 +657,31 @@ const CourseModules = {
               package_data.options = options.filter(v => v.package_id === package_data.package_id)
             })
           }
-          // console.log("payload : ", payload)
-          context.commit("SetCourseData", payload)
-          context.commit("SetCourseIsLoading", false)
+          let config = {
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-type": "Application/json",
+              'Authorization': `Bearer ${VueCookie.get("token")}`
+            }
+          }
+          if(payload.course_type_id === "CT_1"){
+            console.log("payload :",payload)
+            // let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coursestudent?courseId=${course_id}&cpoId=${cpo_id}`,config)
+            //   console.log("GetCourseStudent => ",data)
+            await context.commit("SetCourseData", payload)
+          }else{
+            console.log("payload :",payload)
+            let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/count/student?courseId=${course_id}`,config)
+              console.log("GetCourseStudent => ",data)
+              if(data.statusCode === 200){
+                for(const student_data of data.data){
+                  payload.course_studant_amount = parseInt(student_data.sum_student)
+                  payload.student_course_data = student_data
+                }
+              }
+              await context.commit("SetCourseData", payload)
+          }
+          await context.commit("SetCourseIsLoading", false)
         }
       } catch (error) {
         context.commit("SetCourseIsLoading", false)
@@ -772,7 +816,18 @@ const CourseModules = {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/filter?category_id=${category_id}&status=${status}&course_type_id=${course_type_id}`)
         if (data.statusCode === 200) {
           for (const course of data.data) {
+            let course_studant_amount = 0
+            course.student_course_data = []
             course.course_url = course.course_img ? `${process.env.VUE_APP_URL}/api/v1/files/${course.course_img}` : ""
+            let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/count/student?courseId=${course.course_id}`)
+            if(data.statusCode === 200){
+              for(const student_data of data.data){
+                // console.log("GetCourseStudent => ",student_data)
+                course_studant_amount = course_studant_amount + parseInt(student_data.sum_student)
+                course.student_course_data.push({student_data})
+              }
+            }
+            course.course_studant_amount = course_studant_amount
           }
           context.commit("SetCoursesIsLoading", false)
           context.commit("SetCourses", data.data)
@@ -840,6 +895,10 @@ const CourseModules = {
     }
   },
   getters: {
+    
+    getCourseStudent(state){
+      return state.course_student
+    },
     getCourseTypes(state) {
       return state.course_types
     },

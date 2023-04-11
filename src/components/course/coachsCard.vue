@@ -23,7 +23,7 @@
                             ></v-switch>
                         </v-col>
                         <v-col cols="auto" v-if="course_data.coachs.length > 1">
-                            <v-btn icon small color="red" v-if="!disable" @click="removeCoach(course_data.coachs, teach_day_index)"><v-icon>mdi-close</v-icon></v-btn>
+                            <v-btn icon small color="red" v-if="!disable" @click="removeCoach(course_data.coachs, coach_index)"><v-icon>mdi-close</v-icon></v-btn>
                         </v-col>
                     </v-row>
                     <v-row dense class="flex align-center justify-end">

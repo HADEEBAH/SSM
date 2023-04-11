@@ -93,7 +93,7 @@
                       >
                     </v-row>
                     <div align="right">
-                      <v-btn outlined color="red"><v-icon> mdi-delete</v-icon> ลบสินค้า</v-btn>
+                      <v-btn outlined color="red" @click="removeCart(item.orders_tmp_id)"><v-icon> mdi-delete</v-icon> ลบรายการ</v-btn>
                     </div>
                   </v-card-text>
                 </v-col>
@@ -184,7 +184,13 @@ export default {
       changeOrderData: "OrderModules/changeOrderData",
       DeleteCart : "OrderModules/DeleteCart",
     }),
-
+    removeCart(cart_id){
+      let ids = cart_id.split(",")
+      console.log(ids)
+      for (const id of ids) {
+        this.DeleteCart({cart_id: id})
+      }
+    },
     sumtotal() {
       this.total_price = 0;
       this.count_selected_cart = this.cart_list.filter((v) => v.checked).length;
@@ -243,12 +249,15 @@ export default {
       this.order.payment_status = "pending";
       this.order.created_by = this.user_login.account_id;
       this.changeOrderData(this.order);
-      // this.saveOrder();
+      this.saveOrder();
       for (const cart of this.cart_list) {
-        console.log(cart.orders_tmp_id);
-        this.DeleteCart({cart_id : cart.orders_tmp_id})
+        // console.log(cart.orders_tmp_id);
+        let ids = cart.orders_tmp_id.split(",")
+        for (const id of ids) {
+          this.DeleteCart({cart_id : id})
+        }
       }
-      console.log("saveOrder");
+      // console.log("saveOrder");
     },
   },
 
