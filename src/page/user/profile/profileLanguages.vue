@@ -39,7 +39,7 @@
         </v-col>
       </v-row>
     </v-card>
-    <div>Selected option: {{ selectedOption }}</div>
+    <!-- <div>Selected option: {{ selectedOption }}</div> -->
   </v-container>
 </template>
 
