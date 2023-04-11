@@ -618,12 +618,28 @@ export default {
         },
         dayOfWeekArray(day) {
             const daysOfWeek = ["วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"];
-            if (day >= 0 && day <= 6) {
-                return daysOfWeek[day];
+            
+            const validDays = day.filter(d => d >= 0 && d <= 6);
+            
+            if (validDays) {
+                const firstThreeDays = validDays.map(d => daysOfWeek[d]);
+                return `${firstThreeDays.join(" , ")}`;
             } else {
-                return "Invalid day";
+                return "Invalid days";
             }
         },
+        // dayOfWeekArray(day) {
+        //     const daysOfWeek = ["วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"];
+            
+        //     day.forEach((dayData)=>{
+        //         if (day >= 0 && day <= 6) {
+        //         return daysOfWeek[day];
+        //     } else {
+        //         return "Invalid day";
+        //     }
+        //     })
+          
+        // },
         checkMaximumStudent(){
             let max = false
             if(this.course_order.course_type_id === 'CT_1'){
