@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <v-container>
+      <!-- {{ course_data }} -->
       <v-img
         class="rounded-lg mb-3"
         max-height="30vw"
@@ -20,7 +21,7 @@
           <v-col class="font-bold">{{parseFloat(course_data.price_course).toLocaleString()}} บาท/คน</v-col>
         </v-row>
         <rowData col_detail="5" mini icon="mdi-account-group-outline"
-          > {{ course_data.course_studant_amount  }} / {{course_data.student_recived}} ที่นั่ง</rowData
+          > {{ course_data.course_studant_amount ?   course_data.course_studant_amount : 0 }} / {{course_data.student_recived}} ที่นั่ง</rowData
         >
       </template>
       <!-- GENERAL COURSE -->
@@ -110,7 +111,7 @@
           class="flex justify-center"
         >
           <v-btn
-            v-if="course_data.course_studant_amount < course_data.student_recived"
+            v-if=" course_data.course_studant_amount ? course_data.course_studant_amount < course_data.student_recived : 0 < course_data.student_recived"
             depressed
             class="w-full font-bold white--text"
             @click="registerCourse"
@@ -231,7 +232,7 @@ export default {
         if (result.isConfirmed) {
           if( this.course_data.course_type_id === "CT_2" ){
             this.course_order.price = parseFloat(this.course_data.price_course)
-            this.CreateReserveCourse({course_data : this.course_data})
+            this.CreateReserveCourse({course_data : this.course_order})
           }
         }
       })

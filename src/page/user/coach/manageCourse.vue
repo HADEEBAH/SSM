@@ -37,7 +37,7 @@
         <template v-if="time_frame === 'day'">
           <!-- COURSE LIST -->
           <div v-for="(course, course_index) in my_courses.filter(v => v.statr_date === today)" :key="course_index">
-            {{ new Date(course.start) }}
+            <!-- {{ new Date(course.start) }} -->
             <course-card-list class="mb-2" bg_color="#fff" :title="course.name" :course_per_time="`เวลาสอน :${course.course_per_time}`" :period="`${course.start_time}-${course.end_time}`">
               <template #img>
                 <v-img class="rounded-lg" :src="course.course_img ? course.course_img :'https://cdn.vuetifyjs.com/images/cards/cooking.png'" max-height="120" max-width="120"></v-img>
@@ -386,7 +386,6 @@ export default {
     show_detail : false,
   }),
   created() {
-   
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
     this.GetMyCourses({coach_id : this.user_detail.account_id})
   },

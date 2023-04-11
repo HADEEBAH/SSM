@@ -806,8 +806,8 @@ const CourseModules = {
         }
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/filter?category_id=${category_id}&status=${status}&course_type_id=${course_type_id}`)
         if (data.statusCode === 200) {
-          let course_studant_amount = 0
           for (const course of data.data) {
+            let course_studant_amount = 0
             course.student_course_data = []
             course.course_url = course.course_img ? `${process.env.VUE_APP_URL}/api/v1/files/${course.course_img}` : ""
             let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/count/student?courseId=${course.course_id}`)

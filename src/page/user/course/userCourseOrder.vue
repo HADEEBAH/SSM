@@ -1,6 +1,8 @@
 <template>
     <v-app>
+        <!-- <loadingOverlay :loading="course_is_loading"></loadingOverlay> -->
         <!-- <pre>{{ course_order }}</pre> -->
+        <!-- <pre>{{ course_data.days_of_class[0].times[0] }}</pre> -->
         <v-container>
             <ImgCard color="#FEFBFC" outlined class="mb-3">
                 <template v-slot:img>
@@ -35,7 +37,7 @@
                 </v-row>
                 <v-radio-group
                     v-model="course_order.day"
-                    @change="validateButton"
+                    @change="resetTime"
                 >
                     <v-row>
                         <v-col cols="6" v-for="(date , date_index) in course_data.days_of_class" :key="date_index">
@@ -64,12 +66,12 @@
                                         :value="time"
                                         >
                                             <template v-slot:label>
-                                                {{`${time.start}-${time.end} (${GenReserve(time)})`}}
+                                                {{`${time.start}-${time.end} (${time.maximumStudent - GenReserve(time)})`}}
                                             </template>
                                         </v-radio>
                                     </v-col>
                                     <v-col v-if="GenReserve(time) >= time.maximumStudent">
-                                        <v-btn text class="underline" color="#ff6b81">จอง</v-btn>
+                                        <v-btn @click="CreateReserve(time)" text class="underline" color="#ff6b81">จอง</v-btn>
                                     </v-col>
                                 </v-row>
                             </v-col>
@@ -80,16 +82,17 @@
                     <v-row>
                         <v-col class="text-lg font-bold">เลือกโค้ช</v-col>
                     </v-row>
+                    <!-- {{course_data.coachs.filter(v => course_order.day.course_coach_id.includes(v.course_coach_id))}} -->
                     <v-autocomplete
                         dense
                         v-model="course_order.coach_id"
                         color="#FF6B81"
                         :items="course_data.coachs.filter(v => course_order.day.course_coach_id.includes(v.course_coach_id))"
                         item-text="coach_name"
-                        item-value="course_coach_id"
+                        item-value="coach_id"
                         item-color="pink"
                         outlined
-                        @change="validateButton"
+                     
                         placeholder="เลือกโค้ช"
                     >
                         <template v-slot:no-data>
@@ -122,7 +125,7 @@
             </v-row>
             <v-row dense class="d-flex align-center">
                 <v-col >
-                    <v-checkbox :disabled="course_order.apply_for_yourself ? false : checkMaximumStudent() || checkApplyForYourselfRole()" @change="validateButton" v-model="course_order.apply_for_yourself" color="#ff6B81" label="สมัครเรียนให้ตัวเอง"></v-checkbox>
+                    <v-checkbox :disabled="course_order.apply_for_yourself ? false : checkMaximumStudent() || checkApplyForYourselfRole()"  v-model="course_order.apply_for_yourself" color="#ff6B81" label="สมัครเรียนให้ตัวเอง"></v-checkbox>
                 </v-col>
                 <v-col cols="auto" v-if="course_order.apply_for_yourself">
                     <v-btn :disabled="course_order.students.filter(v => v.is_other === false)[0].parents.length > 0" dense outlined color="#ff6b81" @click="openDialogParent"><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มข้อมูลผู้ปกครอง</v-btn>
@@ -130,7 +133,7 @@
             </v-row>
             <v-row dense>
                 <v-col cols="12" sm="6">
-                    <v-checkbox :disabled="course_order.apply_for_others ? false : checkMaximumStudent()" @change="validateButton" v-model="course_order.apply_for_others" color="#ff6B81" label="สมัครเรียนให้ผู้อื่น"></v-checkbox>
+                    <v-checkbox :disabled="course_order.apply_for_others ? false : checkMaximumStudent()" v-model="course_order.apply_for_others" color="#ff6B81" label="สมัครเรียนให้ผู้อื่น"></v-checkbox>
                 </v-col>
             </v-row>
             <!-- PARENT -->
@@ -188,15 +191,15 @@
                             <v-row dense>
                                 <v-col cols="12" sm="4">
                                     <labelCustom required text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
-                                    <v-text-field :disabled="user_data.length > 0" dense outlined v-model="parent.firstname_en" placeholder="ชื่อภาษาอังกฤษ"></v-text-field>
+                                    <v-text-field :disabled="user_data.length > 0 || !edit_parent" dense outlined v-model="parent.firstname_en" placeholder="ชื่อภาษาอังกฤษ"></v-text-field>
                                 </v-col>
                                 <v-col  cols="12" sm="4">
                                     <labelCustom required text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
-                                    <v-text-field :disabled="user_data.length > 0" dense outlined v-model="parent.lastname_en" placeholder="นามสกุลภาษาอังกฤษ"></v-text-field>
+                                    <v-text-field :disabled="user_data.length > 0 || !edit_parent" dense outlined v-model="parent.lastname_en" placeholder="นามสกุลภาษาอังกฤษ"></v-text-field>
                                 </v-col>
                                 <v-col  cols="12" sm="4">
                                     <labelCustom required text="เบอร์โทรศัพท์"></labelCustom>
-                                    <v-text-field :disabled="user_data.length > 0" dense outlined v-model="parent.tel"  placeholder="เบอร์โทรศัพท์"></v-text-field>
+                                    <v-text-field :disabled="user_data.length > 0 || !edit_parent" dense outlined v-model="parent.tel"  placeholder="เบอร์โทรศัพท์"></v-text-field>
                                 </v-col>
                             </v-row>
                         </v-card-text>
@@ -404,6 +407,7 @@ import labelCustom from '@/components/label/labelCustom.vue';
 import registerDialogForm from '@/components/user_menage/registerDialogForm.vue';
 import dialogCard from '@/components/dialog/dialogCard.vue';
 import loadingOverlay from '../../../components/loading/loadingOverlay.vue';
+import Swal from "sweetalert2";
 import {mapActions, mapGetters} from 'vuex';
 export default {
     name:"userCourseOrder",
@@ -426,35 +430,27 @@ export default {
         disable_checkout : false,
     }),
     created() {
+        this.checkMaximumStudent()
         this.order_data = JSON.parse(localStorage.getItem("Order"))
         this.user_login = JSON.parse(localStorage.getItem("userDetail"))
-        this.course_order.apply_for_yourself = this.order_data.apply_for_yourself
-        this.course_order.apply_for_others = this.order_data.apply_for_others
-        this.GetRelations({student_id : this.user_login.account_id, parent_id : ""})
-        console.log(this.course_order)
+        setTimeout(() => {
+            if(this.order_data){
+                if(this.order_data.course_type_id === "CT_1"){
+                    this.GetCourseStudent({course_id: this.order_data.course_id,cpo_id: this.order_data.option.course_package_option_id})
+                }
+                this.GetRelations({student_id : this.user_login.account_id, parent_id : ""})
+                this.GetCourse( this.order_data.course_id)
+            }
+            // this.course_order = this.order_data
+        }, 200);
     },
     mounted() {
         this.checkMaximumStudent()
         this.checkApplyForYourselfRole()
         this.$store.dispatch("NavberUserModules/changeTitleNavber","สมัครเรียน")
-        if(this.order_data.course_type_id === "CT_1"){
-            this.GetCourseStudent({course_id: this.order_data.course_id,cpo_id: this.order_data.option.course_package_option_id})
-        }
-       
-        if(this.order_data){
-            this.GetCourse( this.order_data.course_id)
-            this.course_order.apply_for_yourself = this.order_data.apply_for_yourself
-            this.course_order.apply_for_others = this.order_data.apply_for_others
-            // this.course_order = this.order_data
-        }
+      
     },
     watch: {
-        "course_order.coach_id" :function(){
-            if(this.course_order.coach_id){
-                // console.log(this.course_data.coachs.filter(v => this.course_order.day.course_coach_id.includes(v.course_coach_id)))
-                this.course_order.coach_name = this.course_data.coachs.filter(v => this.course_order.day.course_coach_id.includes(v.course_coach_id))[0].coach_name
-            }
-        },
         "course_order.apply_for_yourself" : function(){
             if(this.course_order.apply_for_yourself){
                 this.course_order.students.push({
@@ -561,8 +557,10 @@ export default {
             order_is_loading : "OrderModules/getOrderIsLoading",
             last_user_registered:"RegisterModules/getLastUserRegistered",
             relations : "OrderModules/getRelations",
-            course_student : "CourseModules/getCourseStudent"
+            course_student : "CourseModules/getCourseStudent",
+            course_is_loading : 'CourseModules/getCourseIsLoading'
         }),
+       
     },
     methods: {
         ...mapActions({
@@ -576,16 +574,35 @@ export default {
             saveOrder : "OrderModules/saveOrder",
             saveCart : "OrderModules/saveCart",
             checkUsernameOneid : "loginModules/checkUsernameOneid",
+            CreateReserveCourse : "OrderModules/CreateReserveCourse",
         }),
+        resetTime(){
+            this.course_order.time = null
+        },
         GenReserve(time_data){
             let studentNum = 0
             let course_student_filter  = this.course_student.filter((v)=> v.courseId == this.course_order.course_id   && v.coursePackageOptionId == this.course_order.option.course_package_option_id && v.dayOfWeekId === time_data.dayOfWeekId && v.timeId == time_data.timeId)
-            console.log("course_student_filters :",course_student_filter)
+            // console.log("course_student_filters :",course_student_filter)
             for(const student  of course_student_filter){
                 studentNum = studentNum + parseInt(student.sum_student)
             }
             return studentNum
         },
+        CreateReserve(time){
+            this.course_order.time_reserve = time
+            Swal.fire({
+                icon: "question",
+                title: "ต้องการจองคอร์สนี้ใช่หรือไม่",
+                showDenyButton: false,
+                showCancelButton: false,
+                confirmButtonText: "ตกลง",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    this.CreateReserveCourse({course_data : this.course_order})
+                }
+            })
+        },
+       
         checkApplyForYourselfRole(){
             let roles = ["R_1", "R_2", "R_3", "R_4"]
             let is_equal = false
@@ -617,9 +634,6 @@ export default {
                 max = false
             }
             return max
-        },
-        validateButton(){
-
         },
         registerStudent(){
             this.register_type = "student"
@@ -674,8 +688,11 @@ export default {
             this.$router.push({name : "UserKingdom"})
         },
         addToCart(){
-            let days_of_class = this.course_data.days_of_class[0]
-            this.course_order.time = days_of_class.times[0]
+            if(this.course_order.course_type_id == "CT_2"){
+                let days_of_class = this.course_data.days_of_class[0]
+                this.course_order.time = days_of_class.times[0]
+            }
+            this.course_order.coach_name = this.course_data.coachs.filter(v => this.course_order.day.course_coach_id.includes(v.course_coach_id))[0].coach_name
             this.course_order.coach = this.course_data.coachs[0].coach_id
             this.course_order.coach_id = this.course_data.coachs[0].coach_id
             this.course_order.coach_name = this.course_data.coachs[0].coach_name,
@@ -699,7 +716,14 @@ export default {
             this.dialog_parent = false
         },
         checkOut(){
-            console.log(this.course_order)
+            if(this.course_order.course_type_id == "CT_1"){
+                this.course_order.coach_name = this.course_data.coachs.filter(v => this.course_order.day.course_coach_id.includes(v.course_coach_id))[0].coach_name
+            }else{
+                this.course_order.time = this.course_data.days_of_class[0].times[0] 
+                this.course_order.coach_name = this.course_data.coachs[0].coach_name
+            }
+            this.course_order.coach = this.course_data.coachs[0].coach_id
+            this.course_order.coach_id = this.course_data.coachs[0].coach_id
             if(this.order.courses.filter(v => v.course_id === this.course_order.course_id).length === 0){
                 this.order.courses.push(
                     {...this.course_order}
@@ -707,7 +731,19 @@ export default {
             }
             this.order.created_by = this.user_login.account_id
             this.changeOrderData(this.order)
-            this.saveOrder()
+            if(this.course_order.course_type_id == "CT_1"){
+                if(this.course_order.day && this.course_order.time){
+                    this.saveOrder()
+                }else{
+                    Swal.fire({
+                        icon :"error",
+                        text : `ข้อมูลไม่ถูกต้อง ${this.course_order.day} : ${this.course_order.time}`
+                    })
+                }
+            }else{
+                this.saveOrder()
+            }
+           
         },
         checkUsername(username, type){
             if(username){

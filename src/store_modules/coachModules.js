@@ -1,6 +1,8 @@
 import axios from "axios";
 import VueCookie from "vue-cookie";
 import moment from "moment";
+import Swal from "sweetalert2";
+import { dateFormatter } from '@/functions/functions';
 const coachModules = {
   namespaced: true,
   state: {
@@ -57,21 +59,30 @@ const coachModules = {
             "remarkFiles": "-" ,
           }
           if(!student.assessmentStudentsId){
+            console.log("post")
             let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`,payload,config)
-            if(data.statusCode == 200){
-              console.log(data)
+            if(data.statusCode == 201){
+              console.log("post",data)
             }else{
               throw {error : data}
             }
           }else{
             let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`,payload,config)
             if(data.statusCode == 200){
-              console.log(data)
+              console.log("patch",data)
             }else{
               throw {error : data}
             }
           }
         }
+        Swal.fire({
+          icon: "success",
+          title: "บันทึกสำเร้จ",
+          showDenyButton: false,
+          showCancelButton: false,
+          cancelButtonText :"ยกเลิก",
+          confirmButtonText: "ตกลง",
+        })
       }catch(error){
         console.log(error)
       }
@@ -101,7 +112,14 @@ const coachModules = {
           let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/checkin/student/${student.check_in_student_id}`,payload,config)
           console.log(data)
           if(data.statusCode === 200 ){
-            console.log(data)
+            Swal.fire({
+                icon: "success",
+                title: "บันทึกสำเร้จ",
+                showDenyButton: false,
+                showCancelButton: false,
+                cancelButtonText :"ยกเลิก",
+                confirmButtonText: "ตกลง",
+            })
           }else{
             throw { error :data }
           }
@@ -109,6 +127,14 @@ const coachModules = {
         
       }catch(error){
         console.log(error)
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
+          showDenyButton: false,
+          showCancelButton: false,
+          cancelButtonText :"ยกเลิก",
+          confirmButtonText: "ตกลง",
+      })
       }
     },
     async GetStudentByTimeId(context, {course_id, time_id, date}){
@@ -130,7 +156,9 @@ const coachModules = {
             student.fullname = `${student.firstNameTh} ${student.lastNameTh}`
             student.check_in_student_id = student.checkInStudentId,
             student.menu_compensation_date = false,
-            student.compensation_date_str = ""
+            student.compensation_date_str = dateFormatter(new Date(student.compensationDate),"DD MT YYYYT")
+            student.start_time = moment(student.compensationStartTime,"HH:mm")
+            student.end_time = moment(student.compensationEndTime,"HH:mm")
             student.class_time = "-"
             student.check_in_status = student.status,
             student.remark = ""
