@@ -19,6 +19,9 @@
           </v-col>
           <v-col class="font-bold">{{parseFloat(course_data.price_course).toLocaleString()}} บาท/คน</v-col>
         </v-row>
+        <rowData col_detail="5" mini icon="mdi-account-group-outline"
+          > {{ course_data.course_studant_amount  }} / {{course_data.student_recived}} ที่นั่ง</rowData
+        >
       </template>
       <!-- GENERAL COURSE -->
       <template v-if="course_data.course_type_id === 'CT_1'">
@@ -29,7 +32,7 @@
           >{{ course_data.course_hours  }} ชม. / ครั้ง</rowData
         >
         <!-- <rowData col_detail="5" mini icon="mdi-account-group-outline"
-          >9 / 10 ที่นั่ง</rowData
+          > 9 / 10 ที่นั่ง</rowData
         > -->
         <v-row>
           <v-col class="text-xs text-[#999999]">
@@ -41,7 +44,6 @@
       <v-expansion-panels flat>
         <v-expansion-panel  v-if="course_data.course_type_id === 'CT_2'">
           <v-expansion-panel-header class="px-0 font-bold">
-           
             วันและเวลา
             <template v-slot:actions>
               <v-icon color="#ff6b81"> $expand </v-icon>
@@ -86,6 +88,7 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
+      
       <v-row>
         <v-col
           v-if="course_order.course_type_id === 'CT_1'"
@@ -107,12 +110,22 @@
           class="flex justify-center"
         >
           <v-btn
+            v-if="course_data.course_studant_amount < course_data.student_recived"
             depressed
             class="w-full font-bold white--text"
             @click="registerCourse"
             color="#ff6b81"
           >
             สมัคร
+          </v-btn>
+          <v-btn
+            v-else
+            depressed
+            class="w-full font-bold white--text"
+            @click="reserveCourse"
+            color="#ff6b81"
+          >
+            จองคอร์สเรียน
           </v-btn>
         </v-col>
         <!-- <v-col
@@ -158,9 +171,10 @@
 </template>
   
   <script>
-  import dialogCard from "@/components/dialog/dialogCard.vue";
+import dialogCard from "@/components/dialog/dialogCard.vue";
 import rowData from "@/components/label/rowData.vue";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+import Swal from "sweetalert2";
 import { mapActions, mapGetters } from "vuex";
 import moment from 'moment';
 export default {
@@ -175,7 +189,13 @@ export default {
       locale: 'th-TH'
     }
   }),
-  created() {},
+  created() {
+    this.GetCourse(this.$route.params.course_id)
+    this.order_data = JSON.parse(localStorage.getItem("Order"))
+    if(this.order_data.course_type_id === "CT_2"){
+      this.GetCourseStudent({course_id: this.order_data.course_id,cpo_id: null})
+    }
+  },
   mounted() {
     this.GetCourse(this.$route.params.course_id)
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "คอร์สเรียน");
@@ -194,9 +214,28 @@ export default {
       GetCourse : "CourseModules/GetCourse",
       changeCourseOrderData: "OrderModules/changeCourseOrderData",
       changeOrderData: "OrderModules/changeOrderData",
+      GetCourseStudent: "CourseModules/GetCourseStudent",
+      CreateReserveCourse : "OrderModules/CreateReserveCourse",
     }),
     getTime(time){
       return moment(time).format("HH:mm")
+    },
+    reserveCourse(){
+      Swal.fire({
+        icon: "question",
+        title: "ต้องการจองคอร์สนี้ใช่หรือไม่",
+        showDenyButton: false,
+        showCancelButton: false,
+        confirmButtonText: "ตกลง",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          if( this.course_data.course_type_id === "CT_2" ){
+            this.course_order.price = parseFloat(this.course_data.price_course)
+            this.CreateReserveCourse({course_data : this.course_data})
+          }
+        }
+      })
+     
     },
     registerCourse(){
       this.order.order_step = 1

@@ -10,9 +10,10 @@
                 <v-spacer></v-spacer>
                 <template v-if="user_detail">
                     <v-icon class="mr-5" dark>mdi-bell-outline</v-icon>
-                    <v-badge class="mr-5" color="red" :content="cart_list.length">
+                    <v-badge v-if="cart_list.length > 0" class="mr-5" color="red" :content="cart_list.length">
                         <v-icon dark @click="$router.push({name: 'CartList'})">mdi-cart</v-icon>
                     </v-badge>
+                    <v-icon v-else class="mr-5" dark @click="$router.push({name: 'CartList'})">mdi-cart</v-icon>
                     <div v-if="!$vuetify.breakpoint.smAndDown">
                         <v-avatar class="mx-2" size="24">
                             <v-img src="https://cdn.vuetifyjs.com/images/lists/4.jpg" size="24"/>
