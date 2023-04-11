@@ -9,7 +9,11 @@
         :icon="'mdi-card-account-details-outline'"
         :icon_color="'#FF6B81'"
         :title="`แพ็คเกจที่ ${index + 1}`"
-      ></headerCard>
+      >
+        <template slot="actions">
+          <v-btn icon color="red" @click="removePackage(index)"><v-icon>mdi-close</v-icon></v-btn>
+        </template> 
+     </headerCard>
       <v-card-text class="pt-0">
         <v-divider class="mb-3"></v-divider>
         <v-card class="bg-grey-card mb-3">
@@ -297,6 +301,9 @@ export default {
         }
       }
       return this.packages_data.filter(v => !used_package.includes(v.packageId))
+    },
+    removePackage(index){
+      this.course_data.packages.splice(index, 1)
     },
     optionsList(package_index, options_index){
       let used_options = []

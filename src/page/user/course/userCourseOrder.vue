@@ -113,10 +113,10 @@
             </v-row>
             <v-row dense class="d-flex align-center">
                 <v-col >
-                    <v-checkbox :disabled="course_order.apply_for_yourself ? false : checkMaximumStudent()" @change="validateButton" v-model="course_order.apply_for_yourself" color="#ff6B81" label="สมัครเรียนให้ตัวเอง"></v-checkbox>
+                    <v-checkbox :disabled="course_order.apply_for_yourself ? false : checkMaximumStudent() || checkApplyForYourselfRole()" @change="validateButton" v-model="course_order.apply_for_yourself" color="#ff6B81" label="สมัครเรียนให้ตัวเอง"></v-checkbox>
                 </v-col>
                 <v-col cols="auto" v-if="course_order.apply_for_yourself">
-                    <v-btn :disabled="course_order.students.filter(v => v.is_other === false)[0].parents.length > 0" dense outlined color="#ff6b81" @click="dialog_parent = true"><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มข้อมูลผู้ปกครอง</v-btn>
+                    <v-btn :disabled="course_order.students.filter(v => v.is_other === false)[0].parents.length > 0" dense outlined color="#ff6b81" @click="openDialogParent"><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มข้อมูลผู้ปกครอง</v-btn>
                 </v-col>
             </v-row>
             <v-row dense>
@@ -396,7 +396,6 @@ import registerDialogForm from '@/components/user_menage/registerDialogForm.vue'
 import dialogCard from '@/components/dialog/dialogCard.vue';
 import loadingOverlay from '../../../components/loading/loadingOverlay.vue';
 import {mapActions, mapGetters} from 'vuex';
-import router from '../../../router';
 export default {
     name:"userCourseOrder",
     components: {ImgCard, rowData, headerCard, labelCustom, registerDialogForm, dialogCard, loadingOverlay},
@@ -425,6 +424,8 @@ export default {
         this.GetRelations({student_id : this.user_login.account_id, parent_id : ""})
     },
     mounted() {
+        this.checkMaximumStudent()
+        this.checkApplyForYourselfRole()
         this.$store.dispatch("NavberUserModules/changeTitleNavber","สมัครเรียน")
         if(this.order_data){
             this.GetCourse( this.order_data.course_id)
@@ -453,8 +454,8 @@ export default {
                             account_id : this.relations[0].parent.parentId,
                             firstname_en : this.relations[0].parent.parentFirstnameEn,
                             lastname_en :  this.relations[0].parent.parentLastnameEn,
-                            username : "",
-                            tel : ""
+                            username : this.relations[0].parent.parentUsername,
+                            tel : this.relations[0].parent.parentTel
                         }
                     )
 
@@ -554,6 +555,19 @@ export default {
             saveCart : "OrderModules/saveCart",
             checkUsernameOneid : "loginModules/checkUsernameOneid",
         }),
+        checkApplyForYourselfRole(){
+            let roles = ["R_1", "R_2", "R_3", "R_4"]
+            let is_equal = false
+            if(is_equal === false){
+                for(const role of this.user_login.roles ){
+                    is_equal = roles.includes(role)
+                    if(is_equal){
+                        return is_equal
+                    }
+                }
+            }
+            return is_equal
+        },
         dayOfWeekArray(day) {
             const daysOfWeek = ["วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"];
             if (day >= 0 && day <= 6) {
@@ -566,11 +580,8 @@ export default {
             let max = false
             if(this.course_order.course_type_id === 'CT_1'){
                 if(this.course_order.package_data.students){
-                    max = this.course_order.package_data.students < this.course_order.students.length
-                }else{
-                    router.push({name: "UserKingdom"})
+                    max = this.course_order.package_data.students <= this.course_order.students.length
                 }
-
             }else if(this.course_order.course_type_id === 'CT_2'){
                 max = false
             }
@@ -588,6 +599,16 @@ export default {
             this.register_type = "parent"
             this.changeCourseOrderData(this.course_order)
             this.changeDialogRegisterOneId(true)
+        },
+        openDialogParent(){
+            this.parent = {
+                account_id : "",
+                firstname_en : "",
+                lastname_en : "",
+                username : "",
+                tel : ""
+            }
+            this.dialog_parent = true
         },
         addParent(){
             this.course_order.students.filter(v => v.is_other === false)[0].parents.push({
@@ -633,10 +654,10 @@ export default {
             this.order.created_by = this.user_login.account_id
             this.changeOrderData(this.order)
             localStorage.setItem(this.user_login.account_id, JSON.stringify(this.order))
+            
             this.saveCart({cart_data : this.order})
             this.resetCourseData()
             this.show_dialog_cart = true
-            // this.$router.push({name : "UserKingdom"})
         },
         removeParent(student){
             this.course_order.students.filter(v => v.username === student.username)[0].parents.splice(0 ,1 )

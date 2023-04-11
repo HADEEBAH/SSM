@@ -170,7 +170,8 @@ const profileModules = {
               'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-       let data_local = JSON.parse(localStorage.getItem("userDetail"))
+        let data_local = JSON.parse(localStorage.getItem("userDetail"))
+        console.log("data_local.account_id",data_local.account_id);
         if (data_local.roles.includes('R_5')) {
           let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?student_id=${account_id}`,config)
           console.log("data_parent",data)

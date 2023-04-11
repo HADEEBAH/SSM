@@ -7,7 +7,7 @@ const userModules = {
        user_list: [
             {
                  accountId: "",
-                 email: "t",
+                 email: "",
                  firstNameTh: "",
                  lastNameTh: "",
                  firstNameEn: "",

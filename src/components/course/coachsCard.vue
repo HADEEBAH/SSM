@@ -13,7 +13,7 @@
                         :key="teach_day_index"
                     ></v-divider>
                     <v-row dense>
-                        <v-col cols="12" class="flex align-center justify-end">
+                        <v-col cols class="d-flex align-center justify-end">
                             <v-switch
                                 :disabled="disable"
                                 v-model="teach_day.class_open"
@@ -21,6 +21,9 @@
                                 hide-details
                                 label="เปิดสอน"
                             ></v-switch>
+                        </v-col>
+                        <v-col cols="auto" v-if="course_data.coachs.length > 1">
+                            <v-btn icon small color="red" v-if="!disable" @click="removeCoach(course_data.coachs, teach_day_index)"><v-icon>mdi-close</v-icon></v-btn>
                         </v-col>
                     </v-row>
                     <v-row dense class="flex align-center justify-end">
@@ -51,9 +54,7 @@
                                     <v-list-item-content>
                                         <v-list-item-title
                                         ><span
-                                            :class="
-                          coach.coach_id === item.accountId ? 'font-bold' : ''
-                        "
+                                            :class="coach.coach_id === item.accountId ? 'font-bold' : ''"
                                         >{{ item.fullNameTh }}</span
                                         ></v-list-item-title
                                         >
@@ -130,10 +131,7 @@
                     <template
                         v-for="(class_date, class_date_index) in teach_day.class_date"
                     >
-                        <v-row
-                            dense
-                            :key="`${class_date_index}-class-date`"
-                        >
+                        <v-row dense :key="`${class_date_index}-class-date`" >
                             <v-col cols="12" sm="6">
                                 <label-custom required text="ช่วงเวลา"></label-custom>
                                 <v-row dense class="mb-3">
@@ -249,7 +247,6 @@
         </v-card>
     </div>
 </template>
-
 <script>
 import LabelCustom from "../label/labelCustom.vue";
 import { mapGetters, mapActions } from "vuex";
@@ -313,6 +310,10 @@ export default {
                 case 'lg': return 251.5
                 case 'xl': return 401.75
             }
+        },
+        removeCoach(coach, index){
+            console.log(coach,index)
+            coach.splice(index, 1)
         },
         coachsOptions(coach_selected){
 

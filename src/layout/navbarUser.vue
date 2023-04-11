@@ -143,27 +143,27 @@
 import {mapActions, mapGetters} from 'vuex';
 
 export default {
-    name: "navbarUser",
-    data: () => ({
-        menu: false,
-        drawer: true,
-        active_menu: "",
-        active_menu_child: "",
-        user: {
-            full_name: "John Doe",
-            email: "john.doe@doe.com",
-        },
-        menu_drawer_list: [
-            {icon: "mdi-account-circle", title: "โปรไฟล์", to: "UserProfile", roles: []},
-            {icon: "mdi-calendar-month", title: "ตารางเรียน", to: "", roles: []},
-            {icon: "mdi-book-cog-outline", title: "การจัดการ", to: "menageCourse", roles: ["R_1", "R_2", "R_3"]},
-            {icon: "mdi-history", title: "ประวัติการสั่งซื้อ", to: "orderHistory", roles: []},
-            {icon: "mdi-swap-horizontal-bold", title: "หน้าผู้ดูแลระบบ", to: "Admin", roles: ["R_1", "R_2"]},
-            {icon: "mdi-logout", title: "ออกจากระบบ", to: "logOut", roles: []},
-
-        ],
-        user_detail: null
-    }),
+  name: "navbarUser",
+  data: () => ({
+    menu : false,
+    drawer : true,
+    active_menu : "",
+    active_menu_child : "",
+    user: {
+      full_name: "John Doe",
+      email: "john.doe@doe.com",
+    },
+    menu_drawer_list:[
+      { icon: "mdi-account-circle", title : "โปรไฟล์", to:"UserProfile", roles:[]},
+      { icon: "mdi-calendar-month", title : "ตารางเรียน", to:"StudentsSchedule", roles:["R_5"]},
+      { icon: "mdi-book-cog-outline", title : "การจัดการ", to:"menageCourse", roles:["R_1","R_2","R_3"]},
+      { icon: "mdi-history", title : "ประวัติการสั่งซื้อ", to:"orderHistory", roles:[]},
+      { icon: "mdi-swap-horizontal-bold", title : "หน้าผู้ดูแลระบบ", to:"Admin", roles: ["R_1","R_2"]},
+      { icon: "mdi-logout", title : "ออกจากระบบ", to:"logOut", roles:[]},
+      
+    ],
+    user_detail : null
+  }),
 
     created() {
         this.active_menu = this.$route.name
@@ -171,18 +171,18 @@ export default {
         this.GetCartList(this.user_detail.account_id);
     },
     mounted() {
-
+        this.GetCartList(this.user_detail.account_id);
     },
     watch: {},
     computed: {
         ...mapGetters({
-            cart_list: "OrderTestModules/getCartList",
+            cart_list: "OrderModules/getCartList",
             titel_navber: "NavberUserModules/getTitleNavber"
         })
     },
     methods: {
         ...mapActions({
-            GetCartList: "OrderTestModules/GetCartList",
+            GetCartList: "OrderModules/GetCartList",
             logOut: "loginModules/logOut"
         }),
         selectMenu(type, to, head) {
