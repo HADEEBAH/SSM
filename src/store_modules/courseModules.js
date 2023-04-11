@@ -538,11 +538,15 @@ const CourseModules = {
           data.data.coachs.forEach((coach) => {
             data.data.dayOfWeek.filter(v => v.courseCoachId === coach.courseCoachId).forEach((coach_date) => {
               // DAY OF CLASS
-              payload.days_of_class.push({
-                course_coach_id: [coach_date.courseCoachId],
-                day: coach_date.dayOfWeekName,
-                times: coach_date.times,
-              })
+              if(payload.days_of_class.filter(v => v.day_of_week_id === coach_date.times[0].dayOfWeekId).length === 0){
+                payload.days_of_class.push({
+                  day_of_week_id :coach_date.times[0].dayOfWeekId,  
+                  course_coach_id: [coach_date.courseCoachId],
+                  day: coach_date.dayOfWeekName,
+                  times: coach_date.times,
+                })
+              }
+             
               // coach_date.dayOfWeekName.forEach(day => {
               //   if (coach_date.status === 'Active') {
               //     if (payload.days_of_class.filter(v => v.day === day).length > 0) {

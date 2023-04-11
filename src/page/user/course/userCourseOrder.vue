@@ -30,6 +30,7 @@
             </ImgCard>
             <!-- SELECT CLASS DATE -->
             <template v-if="course_order.course_type_id == 'CT_1'">
+                <!-- <pre>{{  course_data.days_of_class  }}</pre> -->
                 <v-row dense>
                     <v-col class="text-lg font-bold">
                         เลือกช่วงวันเรียน
