@@ -102,7 +102,7 @@ const coachModules = {
           files :null
         }
         let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/summary/${check_in_coach_id}`, payload, config)
-        if(data.statusCode === 201){
+        if(data.statusCode === 200){
           Swal.fire({
             icon: "success",
             title: "บันทึกสำเร้จ",
