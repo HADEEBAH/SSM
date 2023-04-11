@@ -64,12 +64,12 @@
                                         :value="time"
                                         >
                                             <template v-slot:label>
-                                                {{`${time.start}-${time.end} (${GenReserve(time)})`}}
+                                                {{`${time.start}-${time.end} (${time.maximumStudent - GenReserve(time)})`}}
                                             </template>
                                         </v-radio>
                                     </v-col>
                                     <v-col v-if="GenReserve(time) >= time.maximumStudent">
-                                        <v-btn text class="underline" color="#ff6b81">จอง</v-btn>
+                                        <v-btn @click="CreateReserve()" text class="underline" color="#ff6b81">จอง</v-btn>
                                     </v-col>
                                 </v-row>
                             </v-col>
@@ -404,6 +404,7 @@ import labelCustom from '@/components/label/labelCustom.vue';
 import registerDialogForm from '@/components/user_menage/registerDialogForm.vue';
 import dialogCard from '@/components/dialog/dialogCard.vue';
 import loadingOverlay from '../../../components/loading/loadingOverlay.vue';
+import Swal from "sweetalert2";
 import {mapActions, mapGetters} from 'vuex';
 export default {
     name:"userCourseOrder",
@@ -449,6 +450,9 @@ export default {
         }
     },
     watch: {
+        "course_order.day" : function(){
+            this.course_order.time = null
+        },
         "course_order.coach_id" :function(){
             if(this.course_order.coach_id){
                 // console.log(this.course_data.coachs.filter(v => this.course_order.day.course_coach_id.includes(v.course_coach_id)))
@@ -576,11 +580,25 @@ export default {
             saveOrder : "OrderModules/saveOrder",
             saveCart : "OrderModules/saveCart",
             checkUsernameOneid : "loginModules/checkUsernameOneid",
+            CreateReserveCourse : "OrderModules/CreateReserveCourse",
         }),
+        CreateReserve(){
+            Swal.fine({
+                icon: "question",
+                title: "ต้องการจองคอร์สนี้ใช่หรือไม่",
+                showDenyButton: false,
+                showCancelButton: false,
+                confirmButtonText: "ตกลง",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    this.CreateReserveCourse({course_data : this.course_order})
+                }
+            })
+        },
         GenReserve(time_data){
             let studentNum = 0
             let course_student_filter  = this.course_student.filter((v)=> v.courseId == this.course_order.course_id   && v.coursePackageOptionId == this.course_order.option.course_package_option_id && v.dayOfWeekId === time_data.dayOfWeekId && v.timeId == time_data.timeId)
-            console.log("course_student_filters :",course_student_filter)
+            // console.log("course_student_filters :",course_student_filter)
             for(const student  of course_student_filter){
                 studentNum = studentNum + parseInt(student.sum_student)
             }

@@ -231,7 +231,7 @@ export default {
         if (result.isConfirmed) {
           if( this.course_data.course_type_id === "CT_2" ){
             this.course_order.price = parseFloat(this.course_data.price_course)
-            this.CreateReserveCourse({course_data : this.course_data})
+            this.CreateReserveCourse({course_data : this.course_order})
           }
         }
       })
