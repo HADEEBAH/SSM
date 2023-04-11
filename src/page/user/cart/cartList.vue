@@ -1,5 +1,5 @@
 <template>
-  <v-app class="overflow-x-hidden overflow-y-hidden">
+  <v-app class="overflow-x-hidden overflaow-y-hidden">
     <v-container>
       <loading-overlay :loading="categorys_is_loading"></loading-overlay>
       <v-row v-if="cart_list.length == 0">
@@ -213,7 +213,7 @@ export default {
     //   }
     // },
     ...mapActions({
-      GetCartList: "OrderTestModules/GetCartList",
+      GetCartList: "OrderModules/GetCartList",
       saveOrder: "OrderModules/saveOrder",
       changeOrderData: "OrderModules/changeOrderData",
     }),
@@ -285,7 +285,7 @@ export default {
 
   computed: {
     ...mapGetters({
-      cart_list: "OrderTestModules/getCartList",
+      cart_list: "OrderModules/getCartList",
       course_order: "OrderModules/getCourseOrder",
       categorys_is_loading : "CategoryModules/getCategorysIsLoading",
 

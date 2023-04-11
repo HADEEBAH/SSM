@@ -13,6 +13,7 @@ import ProfileModules from '@/store_modules/profileModules'
 import OrderTestModules from '@/store_modules/orderTestModules'
 import MyCourseModules from '@/store_modules/myCourseModules'
 import CoachModules from '@/store_modules/coachModules'
+import UserModules from '@/store_modules/userModules'
 
 
 Vue.use(Vuex)
@@ -31,7 +32,8 @@ const store = new Vuex.Store({
     CategoryModules: CategoryModules,
     ProfileModules: ProfileModules,
     OrderTestModules: OrderTestModules,
-    MyCourseModules:MyCourseModules
+    MyCourseModules: MyCourseModules,
+    UserModules: UserModules
 
 
 

@@ -101,12 +101,18 @@
           </v-row>
         </v-card-text>
       </v-card>
+      <!-- <div  v-for="(item, index_item) in user_list"
+            :key="`${index_item}-cart`">
+            <pre>{{ item.accountId }}</pre>
 
+      </div> -->
       <!-- table -->
+      <div >
       <template>
         <v-data-table
+        
           :headers="headers"
-          :items="datausers"
+          :items="user_list"
           :search="search"
           :page.sync="page"
           :items-per-page="itemsPerPage"
@@ -114,8 +120,10 @@
           @page-count="pageCount = $event"
           class="elevation-1 header-table"
         >
-          <template v-slot:[`item.actions`]="{ item }">
-            <v-icon small color="#FF6B81" @click="viewUserDetail">
+        <!-- <div v-for="(item_data, index_item) in user_list"
+            :key="`${index_item}-cart`"> -->
+          <template v-slot:[`item.actions`]="{ item }" >
+            <v-icon small color="#FF6B81" @click="$router.push({name:'UserDetail', params:{action: 'view',account_id : item.accountId}})">
               mdi-eye-outline
             </v-icon>
             <v-icon small class="ml-5" color="#FF6B81" @click="editUserDetail">
@@ -129,23 +137,39 @@
             >
               mdi-delete
             </v-icon>
+         
           </template>
+        <!-- </div> -->
         </v-data-table>
-        <!-- <v-pagination
-          class="mt-5 pb-10 page"
-          v-model="page"
-          color="#FF6B81"
-          :length="pageCount"
-        ></v-pagination> -->
-      </template>
+      </template> 
+    </div>
+
+      
+<!-- :loading="LoadingTable"  -->
+
+      <!-- <v-data-table
+      
+        class="elevation-1 header-table"
+        :headers="headers"
+        :items="user_list"
+      >
+        <template v-slot:[`item.actions`]="{ item }">
+          <v-btn text color="#FF6B81" @click="$router.push({name:'EditKingdom', params:{category_id : item.categoryId}})">
+            <v-icon>mdi-text-box-search-outline</v-icon>
+            ดูรายละเอียด
+          </v-btn>
+        </template>
+      </v-data-table> -->
+
     </v-container>
-  </v-app>
+  </v-app> 
 </template>
 
 
 <script>
 import headerPage from "@/components/header/headerPage.vue";
 import LabelCustom from "@/components/label/labelCustom.vue";
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "manageUsers",
   components: {
@@ -167,13 +191,13 @@ export default {
         users: "",
       },
       headers: [
-        { text: "ชื่อ", value: "name", sortable: false },
-        { text: "นามสกุล", value: "lastname", sortable: false },
-        { text: "อีเมล", value: "email", sortable: false },
-        { text: "ผู้ใช้", value: "username", sortable: false },
-        { text: "One ID", value: "oneid", sortable: false },
-        { text: "บทบาท", value: "role", sortable: false },
-        { text: "", value: "actions", sortable: false },
+        { text: "ชื่อ", value: "firstNameTh", sortable: false, align: "start" },
+        { text: "นามสกุล", value: "lastNameTh", sortable: false, align: "start" },
+        { text: "อีเมล", value: "email", sortable: false, align: "start" },
+        { text: "ผู้ใช้", value: "userName", sortable: false, align: "start" },
+        // { text: "One ID", value: "oneid", sortable: false },
+        // { text: "บทบาท", value: "role", sortable: false },
+        { text: "", value: "actions", sortable: false, align: "start" },
       ],
       editedIndex: -1,
       editedItem: {
@@ -194,14 +218,7 @@ export default {
       },
     };
   },
-  computed: {
-    formTitle() {
-      return this.editedIndex === -1 ? "Edit" : "Edit";
-    },
-    filteredKeys() {
-      return this.keys.filter((key) => key !== "Name");
-    },
-  },
+
   watch: {
     dialog(val) {
       val || this.close();
@@ -211,60 +228,82 @@ export default {
     },
   },
 
+  mounted() {
+    // this.GetUserList()
+    this.$store.dispatch("UserModules/GetUserList");
+    this.local_data = JSON.parse(localStorage.getItem("userDetail"));
+    this.GetShowById(this.local_data.account_id);
+
+
+    
+  },
   created() {
+    this.GetUserList()
     this.initialize();
   },
 
   methods: {
+
+    ...mapActions({
+      GetUserList : "UserModules/GetUserList",
+      GetShowById : "UserModules/GetShowById",
+    }),
+
     initialize() {
-      this.datausers = [
-        {
-          number: 1,
-          name: "arm",
-          lastname: "arm",
-          email: "arm",
-          username: "arm",
-          oneid: "arm",
-          role: "Admin",
-        },
-        {
-          number: 2,
-          name: "mie",
-          lastname: "mie",
-          email: "mie",
-          username: "mie",
-          oneid: "mie",
-          role: "นักเรียน",
-        },
-        {
-          number: 3,
-          name: "racha",
-          lastname: "kolo",
-          email: "aaaa",
-          username: "armmie",
-          oneid: "3310",
-          role: "โค้ช",
-        },
-        {
-          number: 4,
-          name: "robert",
-          lastname: "gogo",
-          email: "vbbbbb",
-          username: "nuunam",
-          oneid: "mie",
-          role: "นักเรียน",
-        },
-        {
-          number: 5,
-          name: "koko",
-          lastname: "arrr",
-          email: "dodm@hotmail.com",
-          username: "summer",
-          oneid: "hukio",
-          role: "บัญชี",
-        },
-      ];
+      for (const data in this.GetUserList) {
+        console.log("data",data);
+        
+      }
     },
+    // initialize() {
+    //   this.datausers = [
+    //     {
+    //       number: 1,
+    //       name: "arm",
+    //       lastname: "arm",
+    //       email: "arm",
+    //       username: "arm",
+    //       oneid: "arm",
+    //       role: "Admin",
+    //     },
+    //     {
+    //       number: 2,
+    //       name: "mie",
+    //       lastname: "mie",
+    //       email: "mie",
+    //       username: "mie",
+    //       oneid: "mie",
+    //       role: "นักเรียน",
+    //     },
+    //     {
+    //       number: 3,
+    //       name: "racha",
+    //       lastname: "kolo",
+    //       email: "aaaa",
+    //       username: "armmie",
+    //       oneid: "3310",
+    //       role: "โค้ช",
+    //     },
+    //     {
+    //       number: 4,
+    //       name: "robert",
+    //       lastname: "gogo",
+    //       email: "vbbbbb",
+    //       username: "nuunam",
+    //       oneid: "mie",
+    //       role: "นักเรียน",
+    //     },
+    //     {
+    //       number: 5,
+    //       name: "koko",
+    //       lastname: "arrr",
+    //       email: "dodm@hotmail.com",
+    //       username: "summer",
+    //       oneid: "hukio",
+    //       role: "บัญชี",
+    //     },
+    //   ];
+    // },
 
     editItem(item) {
       this.editedIndex = this.datausers.indexOf(item);
@@ -308,12 +347,31 @@ export default {
       this.close();
     },
 
-    viewUserDetail() {
-      this.$router.push({ name: "UserDetail",params:{action: "view", account_id: "0001"} });
-    },
+    // viewUserDetail() {
+    // this.local_data = JSON.parse(localStorage.getItem("userDetail"));
+
+    //   this.$router.push({ name: "UserDetail",params:{action: "view", account_id: this.user_list.accountId} });
+    //   this.GetShowById(this.account_id)
+    // },
     editUserDetail() {
       this.$router.push({ name: "UserDetail",params:{action: "edit", account_id: "0001"} });
     },
+  },
+
+  computed: {
+
+    ...mapGetters({ 
+      user_list: "UserModules/getUserList",
+      show_by_id: "UserModules/getShowById",
+    }),
+
+    formTitle() {
+      return this.editedIndex === -1 ? "Edit" : "Edit";
+    },
+    filteredKeys() {
+      return this.keys.filter((key) => key !== "Name");
+    },
+
   },
 };
 </script>

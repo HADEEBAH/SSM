@@ -40,6 +40,67 @@ const profileModules = {
         }
       
       ],
+
+      profile_detail: {
+              createdBy: null,
+              createdDate: "",
+              updatedBy: null,
+              updatedDate: "",
+              deletedBy: null,
+              deletedDate: null,
+              userOneId: "",
+              accountTitleTh: null,
+              firstNameTh: "",
+              lastNameTh: "",
+              accountTitleEng: null,
+              firstNameEng: "",
+              lastNameEng: "",
+              email: "",
+              mobileNo: "",
+              status: "",
+              nation: null,
+              userName: "",
+              passWord: "",
+              userRoles: [],
+              mystudents: [
+                  {
+                      accountId: "",
+                      firstNameTh: "",
+                      lastNameTh: ""
+                  }
+              ],
+              myparents: [
+                {
+                  accountId: "",
+                  firstNameTh: "",
+                  lastNameTh: ""
+              }
+              ]
+        
+              // accountTitleEng: "",
+              // accountTitleTh: "",
+              // createdBy:  null,
+              // createdDate: "",
+              // deletedBy:  null,
+              // deletedDate: null,
+              // email: "",
+              // firstNameEng: "",
+              // firstNameTh : "",
+              // lastNameEng: "",
+              // lastNameTh: "",
+              // mobileNo:  "",
+              // myparents:  [],
+              // mystudents: [{ accountId: "", firstNameTh: "", lastNameTh: "" }],
+              // nation : null,
+              // passWord: "",
+              // status:  "",
+              // updatedBy:  null,
+              // updatedDate:  "",
+              // userName: "",
+              // userOneId: "",
+              // userRoles: [{roleNameEng: "", roleNameTh: "", roleId: ""}]
+    },
+   
  
   
       certificate_data: [
@@ -85,6 +146,10 @@ const profileModules = {
     },
     SetPassword(state, payload) {
       state.password = payload
+    },
+    SetProfileDetail(state, payload) {
+      state.profile_detail = payload
+      
     }
 
     },
@@ -110,7 +175,11 @@ const profileModules = {
           let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?student_id=${account_id}`,config)
           console.log("data_parent",data)
           if (data.statusCode === 200) {
-              context.commit("SetProfileUser", data.data)
+            context.commit("SetProfileUser", data.data)  
+            if (data.message == "relation not found.") {
+              "relation not found."
+              context.commit("SetProfileUser", data.data)  
+            }
           } else {
               throw { error: data }
           }
@@ -118,8 +187,13 @@ const profileModules = {
           let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?parent_id=${account_id}`,config)
         console.log("data_student",data)
         if (data.statusCode === 200) {
-            context.commit("SetProfileUser", data.data)
-        } else {
+          context.commit("SetProfileUser", data.data)  
+
+          if (data.message == "relation not found.") {
+            "relation not found."
+            context.commit("SetProfileUser", data.data)  
+          }
+        }else {
             throw { error: data }
         }
          }
@@ -129,6 +203,28 @@ const profileModules = {
       
     },
 
+    async GetProfileDetail(context, account_id) {
+      console.log("account_id5555", account_id);
+      try {
+        let config = {
+          headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-type": "Application/json",
+              'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/profile/${account_id}`,config)
+        console.log("data_parent",data)
+        if (data.statusCode === 200) {
+            context.commit("SetProfileDetail", data.data)
+            console.log("SetProfileDetail", data.data)
+        } else {
+            throw { error: data }
+        }
+      } catch (error) {
+        console.log("err", error);
+      }
+    },
   
 
     ChangeCertificateData(context, certificateData) {
@@ -152,7 +248,10 @@ const profileModules = {
     },
     getPassword(state) {
       return state.password
-    }
+    },
+    getProfileDetail(state) {
+      return state.profile_detail
+    },
     },
   };
   

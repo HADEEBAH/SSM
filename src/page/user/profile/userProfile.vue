@@ -79,10 +79,24 @@
       </div>
       <v-divider class=""></v-divider>
       <!-- card parent -->
+      <div  
+      v-for="(profile, index) in profile_user"
+      :key="`${index}-profile`">
+
+      <!-- <v-card class="mt-8 pa-5 text-center text-xl font-bold" v-if="profile.parent.parentFirstnameTh == '' && profile.parent.parentTel == ''"> 
+        <span class="mdi mdi-alert-outline" style="color: #ff6b81;"></span> ไม่พบข้อมูลของผู้ปกครอง
+      </v-card>  -->
+
+      <v-card flat v-if="profile.parent.parentFirstnameTh == '' && profile.parent.parentLastnameTh == '' && profile.parent.parentTel == ''  ">
+              <v-card-text class="mt-8 pa-5 text-center border-2 border-[#ff6b81] rounded-lg">
+                 <span class="text-lg font-bold"> 
+                   <v-icon color="#ff6b81">mdi-alert-outline</v-icon> ไม่พบข้อมูลการสอน
+                 </span>              
+              </v-card-text>
+            </v-card>
       <v-card
+      v-else
         class="mt-8"
-        v-for="(profile, index) in profile_user"
-        :key="`${index}-profile`"
         @click="openDialogParent(profile.parent)"
       >
         <v-row dense class="my-5">
@@ -99,7 +113,8 @@
           <v-col cols="12" sm="10">
             <v-row dense>
               <v-col>
-                <v-col cols="12">{{ profile.parent.parentFirstnameTh == ''? '-' : profile.parent.parentFirstnameTh}} </v-col>
+                <v-col cols="6" sm="6">{{ profile.parent.parentFirstnameTh == ''? '-' : profile.parent.parentFirstnameTh}} </v-col>
+                <v-col cols="6" sm="6"> {{ profile.parent.parentLastnameTh == ''? '-' : profile.parent.parentLastnameTh}}</v-col>  
                 <v-col cols="12" class="text-slate-400">{{ profile.parent.parentTel == ''? '-' : profile.parent.parentTel}}</v-col>
               </v-col>
               <!-- col arrow -->
@@ -110,6 +125,7 @@
           </v-col>
         </v-row>
       </v-card>
+    </div>
     </div>
 
     <!-- ROLE ALL ทั่วไป -->
@@ -156,10 +172,22 @@
       </div>
       <v-divider class=""></v-divider>
       <!-- card Students -->
+      <div  v-for="(profile, index) in profile_user"
+        :key="`${index}-profile`">
+    
+        <!-- <v-card class="mt-8 pa-5 text-center text-xl font-bold" v-if="profile.student.studenFirstNameTh == '' && profile.student.studenLastNameTh == '' && student_data.length == ''"> 
+          <span class="mdi mdi-alert-outline" style="color: #ff6b81;"></span> ไม่พบข้อมูลของนักเรียน
+      </v-card>  -->
+      <v-card flat v-if="profile.student.studentFirstnameTh == '' && profile.student.studentLastnameTh == '' && student_data.length == ''">
+              <v-card-text class="mt-8 pa-5 text-center border-2 border-[#ff6b81] rounded-lg">
+                 <span class="text-lg font-bold"> 
+                   <v-icon color="#ff6b81">mdi-alert-outline</v-icon> ไม่พบข้อมูลของนักเรียน
+                 </span>              
+              </v-card-text>
+            </v-card>
       <v-card
         class="mt-8"
-        v-for="(profile, index) in profile_user"
-        :key="`${index}-profile`"
+       
         @click="openDialogStudent(profile.student)"
       >
         <v-row dense class="my-5">
@@ -177,7 +205,7 @@
             <v-row dense>
               <v-col>
                 <v-col cols="12"
-                  >{{ profile.student.studenFirstNameTh }} {{ profile.student.studenLastNameTh }}</v-col
+                  >{{ profile.student.studentFirstnameTh }} {{ profile.student.studentLastnameTh }}</v-col
                 >
                 <v-col cols="12" class="pink--text">
                   {{ student_data.length }} คอร์ส</v-col
@@ -192,7 +220,7 @@
         </v-row>
       </v-card>
     </div>
-
+</div>
     <!-- ROLE ALL -->
     <div class="mt-8">
       <label-custom text="นโยบาย"></label-custom>
@@ -460,15 +488,22 @@ export default {
     dialogGetStudentData: {},
   }),
   created() {
+    // this.user_login = JSON.parse(localStorage.getItem("userDetail"));
+    // this.GetAll(this.user_login.account_id);
+    // this.GetStudentData(this.user_login.account_id);
+    // for (const item_data of this.profile_user) {
+    //   this.GetStudentData(item_data.student_id);
+    // }
+  },
+  mounted() {
+    this.$store.dispatch("NavberUserModules/changeTitleNavber", "บัญชีผู้ใช้");
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
     this.GetAll(this.user_login.account_id);
     this.GetStudentData(this.user_login.account_id);
     for (const item_data of this.profile_user) {
       this.GetStudentData(item_data.student_id);
     }
-  },
-  mounted() {
-    this.$store.dispatch("NavberUserModules/changeTitleNavber", "บัญชีผู้ใช้");
+    
   },
 
   methods: {
