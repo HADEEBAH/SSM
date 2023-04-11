@@ -46,7 +46,7 @@
                         <v-btn @click="$router.push({name : 'UserKingdom'})" v-if="payload.responseMessage === 'Success'" class="w-full" outlined color="#ff6b81">กลับสู่หน้าหลัก</v-btn>
                     </v-col>
                     <v-col cols="12">
-                        <v-btn class="w-full" dark color="#ff6b81" depressed>ไปหน้าคอร์สเรียนของฉัน</v-btn>
+                        <v-btn class="w-full" dark color="#ff6b81" @click="$router.push({name : 'StudentsSchedule'})" depressed>ไปหน้าคอร์สเรียนของฉัน</v-btn>
                     </v-col>
                 </v-row>
             </div>

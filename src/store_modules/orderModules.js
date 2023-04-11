@@ -1,5 +1,5 @@
 import axios from "axios";
-// import Swal from "sweetalert2";
+import Swal from "sweetalert2";
 import router from "@/router";
 import VueCookie from "vue-cookie"
 const orderModules = {
@@ -252,7 +252,7 @@ const orderModules = {
                 }
                 let total_price = 0
                 await order.courses.forEach((course)=>{
-                    // console.log(course)
+                    console.log("course = >",course)
                     let students = []
                     course.students.forEach((student)=>{
                         if(student.parents[0]){   
@@ -408,11 +408,17 @@ const orderModules = {
                     "coursePackageOptionId": null,
                     "dayOfWeekId": null,
                     "timeId": null,
-                    "courseId": course_data.course_id,
+                    "courseId": course_data.course_id,  
                     "parentId": null,
                     "coachId": null,
                     "orderTmpId": null,
+                }          
+                if(course_data.course_type_id === "CT_1"){
+                    payload.dayOfWeekId =  course_data.time_reserve.dayOfWeekId
+                    payload.coursePackageOptionId = course_data.option.course_package_option_id
+                    payload.timeId = course_data.time_reserve.timeId
                 }
+                // console.log(course_data)
                 let config = {
                     headers:{
                         "Access-Control-Allow-Origin" : "*",
@@ -421,9 +427,19 @@ const orderModules = {
                     }
                   }
                 let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,payload, config)
-                console.log(data.data)
-                if(data.statusCode === 200){
-                    router.replace({name : "userKingdom"})
+                console.log(data)
+                if(data.statusCode === 201){
+                    Swal.fire({
+                        icon:"success",
+                        text: "จองคอร็สสำเร็จ เจ้าหน้าที่จะติดต่อกลับภายหลัง",
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        confirmButtonText: "ตกลง",
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            router.replace({name : "UserKingdom"})
+                        }
+                    })
                 }else{
                     throw {error : data.data} 
                 }

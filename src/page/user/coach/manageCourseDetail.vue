@@ -6,7 +6,7 @@
             <v-card-text class="bg-[#FBF3F5] border">
                 <v-row>
                     <v-col cols="auto">
-                        <v-img class="rounded-lg" src="https://cdn.vuetifyjs.com/images/cards/cooking.png" max-height="120" max-width="120"></v-img>
+                        <v-img class="rounded-lg" :src="course_data.course_img ? course_data.course_img : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'" max-height="120" max-width="120"></v-img>
                     </v-col>
                     <v-col>
                         <v-row>
@@ -36,6 +36,7 @@
             <v-col align="center">
                <v-btn @click="checkIn()" depressed dense :color="student_check_in.length > 0 ? '#E6E6E6' :  '#ff6b81' " 
                class="w-full rounded-lg"
+               :loading="coach_check_in_is_loading"
                :class="student_check_in.length > 0 ? 'green--text' :  'white--text'"
                >
                     <template v-if="student_check_in.length > 0">
@@ -369,6 +370,7 @@ import rowData from '@/components/label/rowData.vue';
 import { Input, TimePicker } from 'ant-design-vue';
 import labelCustom from '../../../components/label/labelCustom.vue';
 import { mapActions, mapGetters } from 'vuex';
+import Swal from "sweetalert2";
 export default {
   name:"menageCourseDetail",
   components: { rowData  , TimePicker, labelCustom},
@@ -412,13 +414,22 @@ export default {
     this.GetCourse(this.$route.params.courseId)
     this.GetStudentByTimeId({course_id :this.$route.params.courseId, date : this.$route.params.date, time_id: this.$route.params.timeId})
   },
-  mounted() {},
+  mounted() {
+    this.student_check_in.forEach((check_in_data)=>{
+        if(check_in_data.status === "leave" || check_in_data.status === "special case"){
+            this.selectCheckInStatus(check_in_data,check_in_data.status)
+        }
+       
+    })
+    
+  },
   watch: {},
   computed: {
     ...mapGetters({
         course_data : "CourseModules/getCourseData",
         coach_check_in : "CoachModules/getCoachCheckIn",
-        student_check_in : "CoachModules/getStudentCheckIn"
+        student_check_in : "CoachModules/getStudentCheckIn",
+        coach_check_in_is_loading : "CoachModules/getCoachCheckInIsLoading"
     })
   },
   methods: {
@@ -433,11 +444,33 @@ export default {
         this.AssessmentStudent({students : this.student_check_in})
     },
     CheckInStudents(){
-        this.UpdateCheckInStudent({students : this.student_check_in}) 
+        Swal.fire({
+            icon: "question",
+            title: "ต้องการบันทึกใช่หรือไม่ ?",
+            showDenyButton: false,
+            showCancelButton: true,
+            cancelButtonText :"ยกเลิก",
+            confirmButtonText: "ตกลง",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                this.UpdateCheckInStudent({students : this.student_check_in}) 
+            }
+        })  
     },
     checkIn(){
-        this.check_in = true
-        this.CheckInCoach({course_id :this.course_data.course_id, date : this.$route.params.date, time_id: this.$route.params.timeId})
+        Swal.fire({
+            icon: "question",
+            title: "ต้องการลงเวลาเข้าสอนใช่หรือไม่",
+            showDenyButton: false,
+            showCancelButton: false,
+            confirmButtonText: "ตกลง",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                this.check_in = true
+                this.CheckInCoach({course_id :this.course_data.course_id, date : this.$route.params.date, time_id: this.$route.params.timeId})
+            }
+        })
+       
     },
     selectStudentComment(index){
         this.selected_student = index
