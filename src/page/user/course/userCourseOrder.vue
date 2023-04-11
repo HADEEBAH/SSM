@@ -1,5 +1,6 @@
 <template>
     <v-app>
+        <!-- <pre>{{ course_order }}</pre> -->
         <v-container>
             <ImgCard color="#FEFBFC" outlined class="mb-3">
                 <template v-slot:img>
@@ -55,14 +56,22 @@
                     >
                         <v-row>
                             <v-col cols="6" v-for="(time , time_index) in course_order.day.times" :key="time_index">
-                                <v-radio
-                                    color="#ff6B81"
-                                    :value="time"
-                                >
-                                    <template v-slot:label>
-                                        {{`${time.start}-${time.end}`}}
-                                    </template>
-                                </v-radio>
+                                <v-row dense >
+                                    <v-col cols="auto" class="d-flex aling-center">
+                                        <v-radio
+                                        :disabled = "GenReserve(time) >= time.maximumStudent"
+                                        color="#ff6B81"
+                                        :value="time"
+                                        >
+                                            <template v-slot:label>
+                                                {{`${time.start}-${time.end} (${GenReserve(time)})`}}
+                                            </template>
+                                        </v-radio>
+                                    </v-col>
+                                    <v-col v-if="GenReserve(time) >= time.maximumStudent">
+                                        <v-btn text class="underline" color="#ff6b81">จอง</v-btn>
+                                    </v-col>
+                                </v-row>
                             </v-col>
                         </v-row>
                     </v-radio-group>
@@ -73,7 +82,7 @@
                     </v-row>
                     <v-autocomplete
                         dense
-                        v-model="course_order.coach"
+                        v-model="course_order.coach_id"
                         color="#FF6B81"
                         :items="course_data.coachs.filter(v => course_order.day.course_coach_id.includes(v.course_coach_id))"
                         item-text="coach_name"
@@ -422,11 +431,16 @@ export default {
         this.course_order.apply_for_yourself = this.order_data.apply_for_yourself
         this.course_order.apply_for_others = this.order_data.apply_for_others
         this.GetRelations({student_id : this.user_login.account_id, parent_id : ""})
+        console.log(this.course_order)
     },
     mounted() {
         this.checkMaximumStudent()
         this.checkApplyForYourselfRole()
         this.$store.dispatch("NavberUserModules/changeTitleNavber","สมัครเรียน")
+        if(this.order_data.course_type_id === "CT_1"){
+            this.GetCourseStudent({course_id: this.order_data.course_id,cpo_id: this.order_data.option.course_package_option_id})
+        }
+       
         if(this.order_data){
             this.GetCourse( this.order_data.course_id)
             this.course_order.apply_for_yourself = this.order_data.apply_for_yourself
@@ -435,6 +449,12 @@ export default {
         }
     },
     watch: {
+        "course_order.coach_id" :function(){
+            if(this.course_order.coach_id){
+                // console.log(this.course_data.coachs.filter(v => this.course_order.day.course_coach_id.includes(v.course_coach_id)))
+                this.course_order.coach_name = this.course_data.coachs.filter(v => this.course_order.day.course_coach_id.includes(v.course_coach_id))[0].coach_name
+            }
+        },
         "course_order.apply_for_yourself" : function(){
             if(this.course_order.apply_for_yourself){
                 this.course_order.students.push({
@@ -540,11 +560,13 @@ export default {
             is_loading : "loginModules/getIsLoading",
             order_is_loading : "OrderModules/getOrderIsLoading",
             last_user_registered:"RegisterModules/getLastUserRegistered",
-            relations : "OrderModules/getRelations"
+            relations : "OrderModules/getRelations",
+            course_student : "CourseModules/getCourseStudent"
         }),
     },
     methods: {
         ...mapActions({
+            GetCourseStudent : "CourseModules/GetCourseStudent",
             GetRelations : "OrderModules/GetRelations",
             GetCourse : "CourseModules/GetCourse",
             changeCourseOrderData : "OrderModules/changeCourseOrderData",
@@ -555,6 +577,15 @@ export default {
             saveCart : "OrderModules/saveCart",
             checkUsernameOneid : "loginModules/checkUsernameOneid",
         }),
+        GenReserve(time_data){
+            let studentNum = 0
+            let course_student_filter  = this.course_student.filter((v)=> v.courseId == this.course_order.course_id   && v.coursePackageOptionId == this.course_order.option.course_package_option_id && v.dayOfWeekId === time_data.dayOfWeekId && v.timeId == time_data.timeId)
+            console.log("course_student_filters :",course_student_filter)
+            for(const student  of course_student_filter){
+                studentNum = studentNum + parseInt(student.sum_student)
+            }
+            return studentNum
+        },
         checkApplyForYourselfRole(){
             let roles = ["R_1", "R_2", "R_3", "R_4"]
             let is_equal = false
@@ -654,7 +685,6 @@ export default {
             this.order.created_by = this.user_login.account_id
             this.changeOrderData(this.order)
             localStorage.setItem(this.user_login.account_id, JSON.stringify(this.order))
-            
             this.saveCart({cart_data : this.order})
             this.resetCourseData()
             this.show_dialog_cart = true
@@ -669,6 +699,7 @@ export default {
             this.dialog_parent = false
         },
         checkOut(){
+            console.log(this.course_order)
             if(this.order.courses.filter(v => v.course_id === this.course_order.course_id).length === 0){
                 this.order.courses.push(
                     {...this.course_order}

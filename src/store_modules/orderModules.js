@@ -1,5 +1,6 @@
 import axios from "axios";
 // import Swal from "sweetalert2";
+import router from "@/router";
 import VueCookie from "vue-cookie"
 const orderModules = {
     namespaced: true,
@@ -217,7 +218,7 @@ const orderModules = {
                       'Authorization' : `Bearer ${VueCookie.get("token")}`
                   }
                 }
-                console.log(payload)
+                // console.log(payload)
                 // let {data} = await axios.post(`http://localhost:3002/api/v1/order/cart`,payload, config)
                 let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/cart`,payload, config)
                 if(data.statusCode === 201){
@@ -241,7 +242,6 @@ const orderModules = {
             context.commit("SetOrderIsLoading", true)
             try{
                 let order = context.state.order
-                console.log(order)
                 let payload = {
                     order_id : "",
                     courses : [],
@@ -252,7 +252,7 @@ const orderModules = {
                 }
                 let total_price = 0
                 await order.courses.forEach((course)=>{
-                    console.log(course)
+                    // console.log(course)
                     let students = []
                     course.students.forEach((student)=>{
                         if(student.parents[0]){   
@@ -284,8 +284,9 @@ const orderModules = {
                             })
                         }
                     })
+                    
                     payload.courses.push({
-                        "courseId" :  course.course_id,
+                        "courseId" :  course.course_id ,
                         "coursePackageOptionId": course.option.course_package_option_id,
                         "dayOfWeekId": course?.time ? course.time.dayOfWeekId : course.dayOfWeekId,
                         "timeId":  course?.time ? course.time.timeId : course.timeId,
@@ -294,23 +295,21 @@ const orderModules = {
                         "remark": "",
                         "price": course.option.net_price,
                         "coach": {
-                            "accountId": course.coach_id,
+                            "accountId": course.coach_id ? course.coach_id : course.coach,
                             "fullName": course.coach_name,
                         },
                         "student": students
                     })
-                    console.log("course.students.lenght ",course.students )
-                    console.log("course.price ",course.price )
+                    // console.log("course.students.lenght ",course.students )
+                    // console.log("course.price ",course.price )
                     let price = course.option?.net_price ? course.option.net_price : course.price
-                    console.log("price ",price )
+                    // console.log("price ",price )
                     total_price =  total_price + (price * course.students.length )
                 })
                 payload.totalPrice = total_price
-                console.log("saveOrder",payload)
                 let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/regis/course`,payload)
                 console.log(data)
                 if(data.statusCode === 201){
-                    console.log("data.statusCode === 201")
                     let payment_payload = {
                         "orderId": data.data.orderNumber,
                         "total": data.data.totalPrice,
@@ -337,7 +336,7 @@ const orderModules = {
                         })
                         context.commit("SetOrderIsLoading", false)
                     }
-                }
+                }    
             }catch(error){
                 context.commit("SetOrderIsLoading", false)
                 console.log(error)
@@ -384,8 +383,50 @@ const orderModules = {
         },
         async DeleteCart(context, {cart_id}){
             try{
-                // let {} = await axios.delete("")
-                console.log(context,cart_id)
+                let config = {
+                    headers:{
+                        "Access-Control-Allow-Origin" : "*",
+                        "Content-type": "Application/json",
+                        'Authorization' : `Bearer ${VueCookie.get("token")}`
+                    }
+                }
+                cart_id = cart_id.replaceAll(" ","")
+                let {data} = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/order/cart/${cart_id}`,config)
+                if(data.statusCode === 200){
+                    console.log(data)
+                }
+            }catch(error){
+                console.log(error)
+            }
+        },
+        // RESERVE COURSE
+        async CreateReserveCourse(context,{ course_data }){
+            try{
+                console.log(course_data)
+                let payload = {
+                    "studentId": null,
+                    "coursePackageOptionId": null,
+                    "dayOfWeekId": null,
+                    "timeId": null,
+                    "courseId": course_data.course_id,
+                    "parentId": null,
+                    "coachId": null,
+                    "orderTmpId": null,
+                }
+                let config = {
+                    headers:{
+                        "Access-Control-Allow-Origin" : "*",
+                        "Content-type": "Application/json",
+                        'Authorization' : `Bearer ${VueCookie.get("token")}`
+                    }
+                  }
+                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,payload, config)
+                console.log(data.data)
+                if(data.statusCode === 200){
+                    router.replace({name : "userKingdom"})
+                }else{
+                    throw {error : data.data} 
+                }
             }catch(error){
                 console.log(error)
             }
