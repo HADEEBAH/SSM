@@ -36,6 +36,7 @@
 
       <!-- PAGE 1 -->
       <v-expand-x-transition transition="scale-transition">
+        
         <div v-if="type_selected == 'students_course'">
 
           <div v-for="(item, index) in student_data" :key="index">
@@ -49,7 +50,7 @@
               <v-col cols="12" sm="2">
                 <v-col
                   style="     
-                    display: block;      
+                    display: block;        
                     margin-left: auto;      
                     margin-right: auto; 
                     width: 100%; 
@@ -93,10 +94,10 @@
                     :rotate="-90"
                     :size="90"
                     :width="10"
-                    :value="(item.successCount / item.dates.totalDay) * 100"
+                    :value="(item.dates.count / item.dates.totalDay) * 100"
                     color="#ff6b81"
                   >
-                    {{ item.dates.totalDay }} / {{ item.dates.totalDay }} <br />ครั้ง
+                    {{ item.dates.count }} / {{ item.dates.totalDay }} <br />ครั้ง
                   </v-progress-circular>
                 </v-col>
               </v-col>

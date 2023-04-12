@@ -16,7 +16,7 @@
                     <v-icon v-else class="mr-5" dark @click="$router.push({name: 'CartList'})">mdi-cart</v-icon>
                     <div v-if="!$vuetify.breakpoint.smAndDown">
                         <v-avatar class="mx-2" size="24">
-                            <v-img src="https://cdn.vuetifyjs.com/images/lists/4.jpg" size="24"/>
+                            <v-img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU" size="24"/>
                         </v-avatar>
                         <span class="text-white mx-2">{{
                                 `${user_detail.first_name_en} ${user_detail.last_name_en}`
@@ -49,7 +49,7 @@
             >
                 <v-row class="pt-8 pb-6">
                     <v-col class="flex align-center justify-center ">
-                        <img class="img-profile" src="@/assets/navbar/drawer_img.png"/>
+                        <img class="img-profile" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU"/>
                     </v-col>
                 </v-row>
                 <v-row dense>
@@ -156,7 +156,7 @@ export default {
     },
     menu_drawer_list:[
       { icon: "mdi-account-circle", title : "โปรไฟล์", to:"UserProfile", roles:[]},
-      { icon: "mdi-calendar-month", title : "ตารางเรียน", to:"StudentsSchedule", roles:["R_5"]},
+      { icon: "mdi-calendar-month", title: "ตารางเรียน", to: "StudentsSchedule", roles: ["R_5"] },
       { icon: "mdi-book-cog-outline", title : "การจัดการ", to:"menageCourse", roles:["R_1","R_2","R_3"]},
       { icon: "mdi-history", title : "ประวัติการสั่งซื้อ", to:"orderHistory", roles:[]},
       { icon: "mdi-swap-horizontal-bold", title : "หน้าผู้ดูแลระบบ", to:"Admin", roles: ["R_1","R_2"]},

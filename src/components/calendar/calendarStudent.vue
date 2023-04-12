@@ -41,6 +41,8 @@
         :first-interval="9"
         :interval-count="12"
         :event-overlap-threshold="30"
+        @click:event="selectedDate($event)"
+
       >
         <template v-if="type === 'week'" v-slot:day-body="{ week }">
           <div
@@ -98,9 +100,9 @@
                       <v-row dense>
                         <v-col class="text-sm">
                           โค้ช: {{ event.subtitle }} <br />
-                          <!-- <v-btn
+                          <v-btn
                             @click="
-                              $router.push({ name: 'menageCourseDetail' })
+                              $router.push({ name: 'StudentCourse' })
                             "
                             small
                             text
@@ -108,7 +110,7 @@
                             color="#ff6b81"
                           >
                             ดูรายละเอียดคอร์สเรียน
-                          </v-btn> -->
+                          </v-btn>
                         </v-col>
                       </v-row>
                     </v-col>
@@ -201,6 +203,11 @@ export default {
     this.colorOfDay();
   },
   methods: {
+    selectedDate(data){
+      console.log(data.event) 
+      // this.$router.push({ name: 'StudentsSchedule' })
+      this.$router.push({ name: 'StudentCourse' })
+        },
     selectDate(date) {
       this.event_date = [];
       this.showModal = true;
