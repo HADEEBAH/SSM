@@ -621,7 +621,6 @@ export default {
             const daysOfWeek = ["วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"];
             
             const validDays = day.filter(d => d >= 0 && d <= 6);
-            
             if (validDays) {
                 const firstThreeDays = validDays.map(d => daysOfWeek[d]);
                 return `${firstThreeDays.join(" , ")}`;
@@ -631,7 +630,6 @@ export default {
         },
         // dayOfWeekArray(day) {
         //     const daysOfWeek = ["วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"];
-            
         //     day.forEach((dayData)=>{
         //         if (day >= 0 && day <= 6) {
         //         return daysOfWeek[day];
@@ -639,7 +637,6 @@ export default {
         //         return "Invalid day";
         //     }
         //     })
-          
         // },
         checkMaximumStudent(){
             let max = false
