@@ -191,6 +191,8 @@ const RegisterModules = {
                                     let payload = {
                                         account_id: res.data.data.account_id,
                                         email: res.data.data.email,
+                                        username : context.state.user_one_id.username,
+                                        password :  context.state.user_one_id.password,
                                         first_name_en: res.data.data.first_name_en,
                                         first_name_th: res.data.data.first_name_th,
                                         last_name_en: res.data.data.last_name_en,

@@ -318,6 +318,34 @@ const orderModules = {
                         "vatRate": 0,
                         "orderDesc": ""
                     }
+                    let user_data = JSON.parse(localStorage.getItem("userDetail"))
+                    const userLogin = await axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login`, {
+                        "username": user_data.username,
+                        "password": user_data.password,
+                    })
+                    if(userLogin.data.statusCode === 200){
+                        let roles = []
+                        if (userLogin.data.data.roles.length > 0) {
+                            userLogin.data.data.roles.forEach((role) => {
+                                roles.push(role.roleId)
+                            });
+                         }
+                        let payload = {
+                            account_id: userLogin.data.data.account_id,
+                            email: userLogin.data.data.email,
+                            username : user_data.username,
+                            password :  user_data.password,
+                            first_name_en: userLogin.data.data.first_name_en,
+                            first_name_th: userLogin.data.data.first_name_th,
+                            last_name_en: userLogin.data.data.last_name_en,
+                            last_name_th: userLogin.data.data.last_name_th,
+                            role: userLogin.data.data.roles,
+                            roles: roles,
+                            tel: userLogin.data.data.tel,
+                        }
+                        // VueCookie.set("token", userLogin.data.data.token, 1)
+                        localStorage.setItem("userDetail", JSON.stringify(payload))
+                    }
                     let payment = await axios.post(`${process.env.VUE_APP_URL}/api/v1/payment/code`,payment_payload)
                     console.log("payment",payment)
                     console.log("payment statusCode",payment.data.statusCode)
