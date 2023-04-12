@@ -5,50 +5,51 @@
             :key="item_index"
             class="my-5"
           >
-            <div>
-              <v-row dense>
-                <!-- img -->
-                <v-col cols="4" sm="2">
-                  <v-col>
-                    <img src="../../../assets/student_course/download.png" />
-                    <!-- {{ item.orderStudentId }} -->
-                  </v-col>
-                </v-col>
-                <!-- detail -->
-                <v-col cols="4" sm="8">
-                  <v-col class="text-lg font-bold">
-                    <!-- {{ item.courseNameTh }} -->
-                  </v-col>
-                  <v-col class="text-slate-400">
-                    <!-- {{ item.courseNameEn }} -->
-                  </v-col>
-                  <v-col class="text-slate-400">
-                    <!-- <span class="mdi mdi-account"></span> {{ item.courseNameTh }} -->
-                  </v-col>
-                  <v-col>
-                    <v-card color="yellow" class="rounded-lg w-48 text-center">
-                      วันจันทร์ 16:00 - 17:00 น.
-                    </v-card>
-                    <!-- {{ item.courseNameEn }} -->
-                  </v-col>
-                </v-col>
+          <v-card-text>
+             <v-row dense>
+               <!-- img -->
+               <v-col cols="4" sm="2">
+                 <v-col>
+                   <img src="../../../assets/student_course/download.png" />
+                   <!-- {{ item.orderStudentId }} -->
+                 </v-col>
+               </v-col>
+               <!-- detail -->
+               <v-col cols="4" sm="8">
+                 <v-col class="text-lg font-bold">
+                   <!-- {{ item.courseNameTh }} -->
+                 </v-col>
+                 <v-col class="text-slate-400">
+                   <!-- {{ item.courseNameEn }} -->
+                 </v-col>
+                 <v-col class="text-slate-400">
+                   <!-- <span class="mdi mdi-account"></span> {{ item.courseNameTh }} -->
+                 </v-col>
+                 <v-col>
+                   <v-card color="yellow" class="rounded-lg w-48 text-center">
+                     วันจันทร์ 16:00 - 17:00 น.
+                   </v-card>
+                   <!-- {{ item.courseNameEn }} -->
+                 </v-col>
+               </v-col>
 
-                <!-- circle -->
-                <v-col cols="4" sm="2" class="pt-8">
-                  <v-col>
-                    <!-- {{ item.courseNameEn }} -->
-                    <v-progress-circular
-                      :size="90"
-                      :width="15"
-                      value="booked"
-                      color="#DBDBDB"
-                      ><span class="text-pink-500">
-                        {{booked }}</span></v-progress-circular
-                    >
-                  </v-col>
-                </v-col>
-              </v-row>
-            </div>
+               <!-- circle -->
+               <v-col cols="4" sm="2" class="pt-8">
+                 <v-col>
+                   <!-- {{ item.courseNameEn }} -->
+                   <v-progress-circular
+                     :size="90"
+                     :width="15"
+                     value="booked"
+                     color="#DBDBDB"
+                     ><span class="text-pink-500">
+                       {{booked }}</span></v-progress-circular
+                   >
+                 </v-col>
+               </v-col>
+             </v-row>
+          </v-card-text>
+           
           </v-card>
           <!-- DETAIL -->
           <!-- Music performance  -->
@@ -95,10 +96,19 @@
     );
        },
       methods: {
-          ...mapActions({ GetStudentData: "OrderTestModules/GetStudentData", }),
+          ...mapActions({ 
+            GetStudentData: "OrderTestModules/GetStudentData", 
+            GetCourse : "CourseModules/GetCourse",
+          }),
+          selectCourse(course){
+            this.GetCourse(course)
+          }
       },
       computed: {
-            ...mapGetters({  student_data: "OrderTestModules/getStudentData", }),
+            ...mapGetters({  
+              student_data: "OrderTestModules/getStudentData", 
+              course_data : "CourseModules/getCourseData",
+            }),
       },
   }
   </script>

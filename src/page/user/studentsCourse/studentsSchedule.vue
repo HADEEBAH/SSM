@@ -161,112 +161,93 @@
         <div v-if="type_selected == 'students_bookedcourse' ">
            
         <div v-for="(item_booked, index_booked) in profile_booked" :key="index_booked">
-     
-            <v-card v-if="profile_booked.length != '0'" @click="showCard(index)" class="my-5">
-            <div>
-              <v-row dense>
-                <!-- img -->
-                <v-col cols="12" sm="2">
-                  <v-col
-                    style="  
-                      display: block;       
-                      margin-left: auto;    
-                      margin-right: auto; 
-                      width: 100%; 
-                      margin-top: 10%; 
-                    "
-                  >
-                    <img src="../../../assets/student_course/download.png" />
-                    <!-- {{ item.orderStudentId }} -->
-                  </v-col>
-                </v-col>
-                <!-- detail -->
-                <v-col cols="12" sm="6">
-                  <v-col class="text-lg font-bold">
-                    <!-- {{ item.id }} -->
-                    {{ item_booked.courseName }}
-                  </v-col>
-                  <v-col class="text-slate-400">
-                    <!-- {{ item.value }} -->
-                    <!-- {{ item.courseNameEn }} -->
-                  </v-col>
-                  <v-col class="text-slate-400">
-                    <!-- <span class="mdi mdi-account"></span> {{ item.courseNameTh }} -->
-                  </v-col>
-                  <!-- <v-card color="yellow" class="rounded-lg text-center" >
-                    {{ dayOfWeekName(item_booked.dates.day)  == ''? '-' : dayOfWeekName(item_booked.dates.day) }}
-                    {{ item.period.start }} - {{ item.period.end }} น.
+            <v-card v-if="profile_booked.length != '0'" @click="showCard(index, item_booked)" class="my-5">
+              <v-card-text>
+                <div >
+                  <v-row dense>
+                    <!-- img -->
+                    <v-col cols="12" sm="2">
+                        <img :src="item_booked.courseImg ? item_booked.courseImg :`../../../assets/student_course/download.png`" />
+                    </v-col>
+                    <!-- detail -->
+                    <v-col cols="12" sm="6" class="text-lg font-bold " >
+                      <v-row dense>
+                        <v-col>
+                          {{ item_booked.courseName }}
+                        </v-col>
+                      </v-row>
+                      <v-row dense>
+                        <v-col cols="auto">
+                          <v-card outlined >
+                            <v-card-text class="py-0"> 
+                              {{` ${dayOfWeekName(item_booked.dayOfWeekName.split(","))} ${item_booked.start}-${item_booked.end}น.` }} 
+                            </v-card-text>
+                          </v-card>
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                    <!-- circle -->
+                    <v-col cols="12" sm="4" class="d-flex align-center" align="center">
+                      <v-row>
+                        <v-col>
+                          <v-chip color="#d9ead3" text-color="green" >
+                            <span>{{ item_booked.status === 'waiting' ? "รอการติดต่อ" : item_booked.status }}</span>
+                          </v-chip>
+                        <!-- <v-progress-circular
+                          :size="90"
+                          :width="15"
+                          value="booked"
+                          color="#DBDBDB"
+                          ><span class="text-pink-500">
+                            {{ item_booked.status === 'waiting' ? "รอการติดต่อ" : item_booked.status }}</span
+                          ></v-progress-circular> -->
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                  </v-row>
+                </div>
+                <div  v-if="activeCard === index && !course_is_loading" class="mt-3">
                   
-                  </v-card> -->
-                </v-col>
+                  <v-card>
+                    <v-row dense class="pa-3">
+                      <v-col cols="12" md="12" sm="12"  class="text-lg font-bold ">
+                         {{ `${course_data.course_name_th} (${course_data.course_name_en})` }}
+                      </v-col> 
+                      <v-col cols="12" md="12" sm="12">
+                        <span class="mdi mdi-calendar-today" style="color: #ff6b81;"></span> {{dayOfWeekName(item_booked.dayOfWeekName.split(","))}}
+                      </v-col> 
 
-                <!-- circle -->
-                <v-col cols="12" sm="4" class="pt-6" align="center">
-                  <v-col>
-                    <!-- {{ item.courseNameEn }} -->
-                    <v-progress-circular
-                      :size="90"
-                      :width="15"
-                      value="booked"
-                      color="#DBDBDB"
-                      ><span class="text-pink-500">
-                        {{ booked }}</span
-                      ></v-progress-circular
-                    >
-                  </v-col>
-                </v-col>
-              </v-row>
-            </div>
-            <div  v-if="activeCard === index">
-              <v-card>
-              <v-row dense class="pa-3">
-                <v-col cols="12" md="12" sm="12"  class="text-lg font-bold ">
-                  เปียโนป๊อปเบื้องต้น (Popular Piano ) 
-                </v-col> 
+                      <v-col cols="12" md="12" sm="12">
+                        <span class="mdi mdi-clock-outline" style="color: #ff6b81;"></span> {{course_data.course_hours}} ชม. / ครั้ง 
+                      </v-col>
 
-                <v-col cols="12" md="12" sm="12" class="text-lg ">
-                  โดย ศูนย์ดนตรี Manila Tamarind
-                </v-col>
+                      <v-col cols="12" md="12" sm="12" class="text-lg ">
+                        {{course_data.detail}}
+                      </v-col>
+                      <v-col cols="12" md="12" sm="12">
+                        <div class="mt-8">
+                          <label-custom text="Music performance"></label-custom>
+                        </div>
+                        <v-divider class=""></v-divider>
+                        <span class="pa-2">
+                          {{course_data.music_performance}}
+                        </span>
+                      </v-col>
 
-                 <v-col cols="12" md="12" sm="12">
-                  <span class="mdi mdi-calendar-today" style="color: #ff6b81;"></span> วันเสาร์ - อาทิตย์ 
-                </v-col> 
-
-                <v-col cols="12" md="12" sm="12">
-                  <span class="mdi mdi-clock-outline" style="color: #ff6b81;"></span> 1 ชม. / ครั้ง 
-                </v-col>
-
-                <v-col cols="12" md="12" sm="12" class="text-lg ">
-                  หลักสูตรนี้เน้นการฝึกเล่นเปียโน ประกอบการร้องเพลง ทั้งบรรเลงเดี่ยวและรวมวง เน้นความสนุกสนานเพลิดเพลิน โดยผู้เรียนสามารถเลือกเพลงได้ตามความสนใจ ทั้งเพลงไทย
-                </v-col>
-
-                <v-col cols="12" md="12" sm="12">
-                  <div class="mt-8">
-                    <label-custom text="Music performance"></label-custom>
-                  </div>
-                  <v-divider class=""></v-divider>
-                  <span class="pa-2">
-                      A    สุนทรียะด้านการฟังและเล่นดนตรี <br/>
-                      K    ทฤษฎีดนตรีสากล <br/>
-                      S 1  ทักษะการอ่านโน้ตดนตรีสากล<br/>
-                      S2  ทักษะการฟังเสียง Ear training<br/>
-                      S3  ทักษะการบรรเลงเดี่ยว Solo<br/>
-                      S4  ทักษะการบรรเลงรวมวง
-                  </span>
-                </v-col>
-
-                <v-col cols="12" md="12" sm="12">
-                  <div class="mt-8">
-                    <label-custom text="Certification"></label-custom>
-                  </div>
-                  <v-divider class=""></v-divider>
-                  <span class="pa-2">
-                    สู่การสอบเทียบมาตรฐาน Trinity และ ABRSM
-                  </span>
-                </v-col>
-              </v-row>
-            </v-card>
-          </div>
+                      <v-col cols="12" md="12" sm="12">
+                        <div class="mt-8">
+                          <label-custom text="Certification"></label-custom>
+                        </div>
+                        <v-divider class=""></v-divider>
+                        <span class="pa-2">
+                          {{course_data.music_performance}}
+                        </span>
+                      </v-col>
+                    </v-row>
+                </v-card>
+              </div>
+              </v-card-text>
+              
             </v-card> 
 
           </div>
@@ -354,6 +335,8 @@ export default {
     ...mapActions({
       GetStudentData: "MyCourseModules/GetStudentData",
       GetProfileBooked: "MyCourseModules/GetProfileBooked",
+      //COURSE
+      GetCourse : "CourseModules/GetCourse",
     }),
     prev() {
       this.$refs.calendar.prev();
@@ -363,8 +346,14 @@ export default {
       this.$refs.calendar.next();
     },
 
-    showCard(index) {
-      this.activeCard = index; // set activeCard to the clicked index
+    showCard(index, course) {
+      this.GetCourse(course.courseId)
+      if( this.activeCard !== index ){
+        this.activeCard = index; 
+      }else{
+        this.activeCard = null
+      }
+     // set activeCard to the clicked index
     },
     // dayOfWeekName(day_numbers, language) {
     //   let day_names = [];
@@ -407,18 +396,15 @@ export default {
     //   return day_names.join(", ");
     // },
 
-      dayOfWeekName(days) {
-  const daysOfWeek = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"];
-  const dayNames = [];
-
-  for (let i = 0; i < days.length; i++) {
-    const dayIndex = days[i];
-    // const dayName = daysOfWeek[dayIndex];
-    dayNames.push(daysOfWeek[dayIndex]);
-
-  }
-
-  return dayNames.join(' - ');
+  dayOfWeekName(days) {
+    
+    const daysOfWeek = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"];
+    const dayNames = [];
+    for (let i = 0; i < days.length; i++) {
+      const dayIndex = days[i];
+      dayNames.push(daysOfWeek[dayIndex]);
+    }
+    return dayNames.join(' - ');
   },
 
     showImg(item) {
@@ -438,6 +424,8 @@ export default {
       student_data: "MyCourseModules/getStudentData",
       itemTime: "MyCourseModules/getcourseSchedule",
       profile_booked: "MyCourseModules/getProfileBooked",
+      course_data : "CourseModules/getCourseData",
+      course_is_loading : "CourseModules/getCourseIsLoading"
     }),
     studentData: {
       get() {
