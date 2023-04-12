@@ -5,6 +5,9 @@
                 <v-app-bar-nav-icon v-if="$route.name !== 'UserKingdom'" @click="$router.back()">
                     <v-icon>mdi-chevron-left</v-icon>
                 </v-app-bar-nav-icon>
+                <v-app-bar-nav-icon v-if="$route.name !== 'UserKingdom'" @click="$router.push({name : 'UserKingdom'})">
+                    <v-icon>mdi-home</v-icon>
+                </v-app-bar-nav-icon>
                 <v-spacer></v-spacer>
                 <v-app-bar-title class="font-bold">{{ titel_navber }}</v-app-bar-title>
                 <v-spacer></v-spacer>
