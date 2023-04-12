@@ -52,23 +52,22 @@
 
         <v-row >
           <v-col
-            cols="12"
+            cols="6"
             md="4"
             sm="6"
+            class="px-2"
             v-for="item in (search_kingdom !== '' ? data_search_kingdom : categorys )"
             :key="item.id"
           >
             <v-card  
-              class="mx-auto block rounded-xl drop-shadow-lg"
-              max-width="344"
+              class="h-full block drop-shadow-lg"
               @click="selectedCategory(item)"
             >
               <v-img
                 :src="item.categoryImg && item.categoryImg !== null ? showImg(item.categoryImg) : defaultImageUrl"
-                height="300px"
+                height="180px"
               ></v-img>
-
-              <v-card-title>
+              <v-card-title :class="$vuetify.breakpoint.smAndUp ? 'text-md' : 'text-sm'" class="font-bold">
                 {{ item.categoryNameTh }}
               </v-card-title>
 
