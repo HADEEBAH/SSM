@@ -169,6 +169,7 @@ export default {
     created() {
         this.active_menu = this.$route.name
         this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
+        this.GetCartList(this.user_detail.account_id);
     },
     mounted() {
         this.GetCartList(this.user_detail.account_id);

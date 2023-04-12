@@ -33,7 +33,7 @@ const store = new Vuex.Store({
     ProfileModules: ProfileModules,
     OrderTestModules: OrderTestModules,
     MyCourseModules: MyCourseModules,
-    UserModules:UserModules
+    UserModules: UserModules
 
 
 

@@ -1,7 +1,6 @@
 <template>
   <v-container>
     <!-- {{ profile_user }} -->
-
     <div class="profileCard my-5 center">
         <v-img
           src="@/assets/userManagePage/imgcardafterupload.png"
@@ -40,14 +39,14 @@
       <v-col cols="12" sm="6">
         <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
         <div v-if="!isEnabled">
-          {{ user_detail.first_name_th }}
+          {{ profile_detail.firstNameTh == ''? '-' : profile_detail.firstNameTh}}
         </div>
         <div v-else>
           <v-text-field
             v-bind:disabled="isDisabled"
             @keypress="validate($event, 'th')"
             placeholder=""
-            v-model="user_detail.first_name_th"
+            v-model="profile_detail.firstNameTh"
             outlined
             dense
           >
@@ -58,14 +57,14 @@
       <v-col cols="12" sm="6">
         <label-custom text="นามสกุล (ภาษาไทย)"></label-custom>
         <div v-if="!isEnabled">
-          {{ user_detail.last_name_th }}
+          {{ profile_detail.lastNameTh == ''? '-' : profile_detail.lastNameTh }}
         </div>
         <div v-else>
           <v-text-field
             v-bind:disabled="isDisabled"
             @keypress="validate($event, 'th')"
             placeholder=""
-            v-model="user_detail.last_name_th"
+            v-model="profile_detail.lastNameTh"
             outlined
             dense
           >
@@ -76,14 +75,14 @@
       <v-col cols="12" sm="6">
         <label-custom text="สัญชาติ"></label-custom>
         <div v-if="!isEnabled">
-          {{ user_data.nationality }}
+          {{ profile_detail.nation == null ? '-' : profile_detail.nation }}
         </div>
         <div v-else>
           <v-text-field
             v-bind:disabled="isDisabled"
-            @keypress="validate($event, 'th')"
+            @keypress="validate($event, 'th' || 'en')"
             placeholder=""
-            v-model="user_data.nationality"
+            v-model="profile_detail.nation"
             outlined
             dense
           >
@@ -132,7 +131,7 @@
       <v-col cols="12" sm="6">
         <label-custom text="เบอร์โทรศัพท์"></label-custom>
         <div v-if="!isEnabled">
-          {{ user_detail.tel }}
+          {{ profile_detail.mobileNo == ''? '-' : profile_detail.mobileNo }}
         </div>
         <div v-else>
           <v-text-field
@@ -142,7 +141,7 @@
             maxlength="12"
             required
             placeholder=""
-            v-model="user_detail.tel"
+            v-model="profile_detail.mobileNo"
             outlined
             dense
           >
@@ -153,13 +152,13 @@
       <v-col cols="12" sm="6">
         <label-custom text="อีเมล"></label-custom>
         <div v-if="!isEnabled">
-          {{ user_detail.email }}
+          {{ profile_detail.email == ''? '-' : profile_detail.email}}
         </div>
         <div v-else>
           <v-text-field
             v-bind:disabled="!isDisabled"
             placeholder=""
-            v-model="user_detail.email"
+            v-model="profile_detail.email"
             outlined
             dense
             :rules="rules.email"
@@ -187,9 +186,9 @@
 import { mapActions, mapGetters } from "vuex";
 import { inputValidation } from "@/functions/functions";
 import LabelCustom from "@/components/label/labelCustom.vue";
-// import VueCookie from "vue-cookie"
-// import Swal from "sweetalert2";
-// import axios from "axios";
+import VueCookie from "vue-cookie"
+import Swal from "sweetalert2";
+import axios from "axios";
 export default {
   components: {
     LabelCustom,
@@ -214,6 +213,8 @@ export default {
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
     this.GetAll(this.user_detail.account_id)
+    
+    this.GetProfileDetail(this.$route.params.profile_id)
 
     // console.log("userDetail", this.user_detail);
   },
@@ -228,7 +229,8 @@ export default {
     ...mapActions({
       loginOneId: "loginModules/loginOneId",
       GetUserData: "ProfileModules/GetUserData",
-      GetAll: "ProfileModules/GetAll"
+      GetAll: "ProfileModules/GetAll",
+      GetProfileDetail: "ProfileModules/GetProfileDetail"
       // GetParentData: "ProfileModules/GetParentData",
     }),
     edit() {
@@ -237,61 +239,73 @@ export default {
       this.buttonName = "บันทึก";
     },
 
-    // submitEdit(account_id) {
-    //   Swal.fire({
-    //     icon: "question",
-    //     title: "คุณต้องการแก้ไขอาณาข้อมูลส่วนตัวหรือไม่",
-    //     showDenyButton: false,
-    //     showCancelButton: true,
-    //     confirmButtonText: "ตกลง",
-    //     cancelButtonText: "ยกเลิก",
-    //   }).then(async (result) => {
-    //     if (result.isConfirmed) {
-    //       try {
-    //         // console.log("preview_url", this.file);
-    //         let bodyFormData = new FormData();
-    //         // bodyFormData.append("categoryImg", this.file ?  this.file : null);
-    //         bodyFormData.append("parent_firstname_th",this.profile_user.parent_firstname_th );
-    //         bodyFormData.append("parent_lastname_th", this.profile_user.parent_lastname_th);
-    //         bodyFormData.append("nation", this.profile_user.nation);
-    //         bodyFormData.append( "tel", this.profile_user.tel);
-    //         bodyFormData.append("email", this.profile_user.email);
+    submitEdit(account_id) {
+      Swal.fire({
+        icon: "question",
+        title: "คุณต้องการแก้ไขอาณาข้อมูลส่วนตัวหรือไม่",
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: "ตกลง",
+        cancelButtonText: "ยกเลิก",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            let config = {
+                    headers:{
+                        "Access-Control-Allow-Origin" : "*",
+                        "Content-type": "Application/json",
+                        'Authorization' : `Bearer ${VueCookie.get("token")}`
+                    }
+              }
 
+              let payload =
+                {
+                firstNameTh : this.profile_detail.firstNameTh,
+                lastNameTh : this.profile_detail.lastNameTh,
+                nation : this.profile_detail.nation,
+                mobileNo : this.profile_detail.mobileNo,
+                email : this.profile_detail.email,
+              }
+            // console.log("preview_url", this.file);
+            // let bodyFormData = new FormData();
+            // bodyFormData.append("categoryImg", this.file ?  this.file : null);
+            // bodyFormData.append("firstNameTh",this.profile_detail.firstNameTh );
+            // bodyFormData.append("lastNameTh", this.profile_detail.lastNameTh);
+            // bodyFormData.append("nation", this.profile_detail.nation);
+            // bodyFormData.append( "mobileNo", this.profile_detail.mobileNo);
+            // bodyFormData.append("email", this.profile_detail.email);
 
-    //         let config = {
-    //                 headers:{
-    //                     "Access-Control-Allow-Origin" : "*",
-    //                     "Content-type": "Application/json",
-    //                     'Authorization' : `Bearer ${VueCookie.get("token")}`
-    //                 }
-    //             }
-    //             let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/relations/user?student_id${account_id}`,config)
-    //         if (data.statusCode === 200) {
-    //           this.dialog_show = true;
-    //           this.isDisabled = true;
-    //           this.isEnabled = false;
-    //           this.buttonName = "แก้ไข";
-    //         } else {
-    //           throw { message: data.message };
-    //         }
-    //       } catch (error) {
-    //         console.log(error);
-    //         Swal.fire({
-    //           icon: "error",
-    //           title: error.message,
-    //         });
-    //       }
-    //     } else {
-    //       Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
-    //     }
-    //   });
-    // },
+              console.log("payload :", payload)
+              this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
+              let user_account_id = this.user_detail.account_id
+              let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/profile/${user_account_id}`,payload,config)
+                console.log("acc Font",account_id);
+            if (data.statusCode === 200) {
+              this.dialog_show = true;
+              this.isDisabled = true;
+              this.isEnabled = false;
+              this.buttonName = "แก้ไข";
+            } else {
+              throw { message: data.message };
+            }
+          } catch (error) {
+            console.log(error);
+            Swal.fire({
+              icon: "error",
+              title: error.message,
+            });
+          }
+        } else {
+          Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
+        }
+      });
+    },
 
-      submitEdit() { 
-        this.isDisabled = true;
-        this.isEnabled = false;
-        this.buttonName = "แก้ไข";
-      },
+      // submitEdit() { 
+      //   this.isDisabled = true;
+      //   this.isEnabled = false;
+      //   this.buttonName = "แก้ไข";
+      // },
 
 
     validate(e, type) {
@@ -311,6 +325,7 @@ export default {
       user_one_id: "loginModules/getUserOneId",
       user_data: "ProfileModules/getUserData",
       profile_user: "ProfileModules/getProfileUser",
+      profile_detail: "ProfileModules/getProfileDetail"
       // parent_data: "ProfileModules/getParentData",
     }),
   },

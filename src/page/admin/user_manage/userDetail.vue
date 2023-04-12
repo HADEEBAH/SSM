@@ -887,6 +887,11 @@ export default {
   }),
   created() {},
   mounted() {
+    // this.local_data = JSON.parse(localStorage.getItem("userDetail"));
+    // this.GetShowById(this.local_data.account_id);
+    this.GetShowById(this.$route.params.account_id)
+
+
     if (this.user_data.privilege.includes("นักเรียน")) {
       if (this.user_data.selectedbox == true) {
         this.user_data.isCardOpen = true;
@@ -922,8 +927,9 @@ export default {
       changeStudentsData: "UserManageModules/changeStudentsData",
       changeUserData: "UserManageModules/changeUserData",
       changeParentData: "UserManageModules/changeParentData",
-      changeStudentsCertificate:
-        "ChangeStudentsCertificate/ChangeStudentsCertificate",
+      changeStudentsCertificate: "ChangeStudentsCertificate/ChangeStudentsCertificate",
+      GetShowById : "UserModules/GetShowById",
+      
     }),
 
     openFileSelector() {
@@ -1126,6 +1132,8 @@ export default {
       user_data: "UserManageModules/getUserData",
       parents: "UserManageModules/getParent",
       certificates: "UserManageModules/getCertificate",
+      show_by_id: "UserModules/getShowById",
+
     }),
   },
   watch: {},

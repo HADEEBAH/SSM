@@ -3,8 +3,10 @@
     <div class="mx-10 my-5">
       <label class="text-xl font-bold">ข้อมูลตารางเรียน</label>
       <!-- <pre>{{ student_data.courseId }}</pre> -->
+      <!-- <pre>{{ student_data }}</pre> -->
       <!-- <pre>{{ SetcourseSchedule }}</pre> -->
       <!-- <pre>{{ courseData }}</pre> -->
+      <!-- <pre>{{ profile_booked }}</pre> -->
       <v-row dense class="my-3">
         <v-col
           cols="4"
@@ -48,10 +50,10 @@
                 <v-col
                   style="     
                     display: block;      
-                    margin-left: auto;    
+                    margin-left: auto;      
                     margin-right: auto; 
                     width: 100%; 
-                    margin-top: 10%;
+                    margin-top: 10%; 
                   "
                 >
                 <v-img :src="item.courseImg?  showImg(item.courseImg) : defaultImageUrl"></v-img>
@@ -62,19 +64,22 @@
               <v-col cols="12" sm="6">
                 <v-col class="text-lg font-bold">
                   {{ item.courseNameTh == ''? '-' : item.courseNameTh }}
+                  ({{ item.courseNameEng  == ''? '-' : item.courseNameEng }})
+                  
                 </v-col>
-                <v-col class="text-slate-400">
-                  {{ item.courseNameEn  == ''? '-' : item.courseNameEn }}
-                </v-col>
+                <!-- <v-col class="text-slate-400">
+                  {{ item.courseNameEng  == ''? '-' : item.courseNameEng }}
+                </v-col> -->
                 <v-col class="text-slate-400">
                   <span class="mdi mdi-account">โค้ช :</span>
-                  {{ item.coachName  == ''? '-' : item.coachName}}
+                  {{ item.coachName  == null ? '-' : item.coachName}}
                 </v-col>
-                <v-col>
+                <v-col >
+                 
                   <!-- v-for="(day, index_day) in dayOfWeekName" :key="index_day" -->
-                  <v-card color="yellow" class="rounded-lg text-center">
-                    <!-- {{ dayOfWeekName(item.dayOfWeekName)  == ''? '-' : dayOfWeekName(item.dayOfWeekName) }} -->
-                    {{ item.start }} - {{ item.end }} น.
+                  <v-card color="yellow" class="rounded-lg text-center" >
+                    {{ dayOfWeekName(item.dates.day)  == ''? '-' : dayOfWeekName(item.dates.day) }}
+                    {{ item.period.start }} - {{ item.period.end }} น.
                   </v-card>
                   <!-- {{ item.courseNameEn }} -->
                 </v-col>
@@ -88,21 +93,27 @@
                     :rotate="-90"
                     :size="90"
                     :width="10"
-                    :value="(item.successCount / item.totalAmount) * 100"
+                    :value="(item.successCount / item.dates.totalDay) * 100"
                     color="#ff6b81"
                   >
-                    {{ item.successCount }} / {{ item.totalAmount }} <br />ครั้ง
+                    {{ item.dates.totalDay }} / {{ item.dates.totalDay }} <br />ครั้ง
                   </v-progress-circular>
                 </v-col>
               </v-col>
             </v-row>
           </v-card>
           </div>
-
-          <v-card v-if="student_data.length == '0'" class="border-solid mt-8 pa-5 text-center text-xl">
-            <span class="mdi mdi-alert-outline" style="color: #ff6b81;"></span>  ไม่พบข้อมูลตารางเรียน
-            </v-card>
          
+            <v-card-text 
+          class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
+          v-if="student_data.length == '0'"
+          >
+            <span class="text-lg font-bold">
+              <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+              ไม่พบข้อมูลคอร์สเรียน
+            </span>
+          </v-card-text>
+
         </div>
       </v-expand-x-transition>
 
@@ -149,19 +160,20 @@
       <v-expand-x-transition transition="scale-transition">
         <div v-if="type_selected == 'students_bookedcourse' ">
            
-          <div v-for="(item, index) in test_list" :key="index">
-            <v-card @click="showCard(index)" class="my-5">
+        <div v-for="(item_booked, index_booked) in profile_booked" :key="index_booked">
+     
+            <v-card v-if="profile_booked.length != '0'" @click="showCard(index)" class="my-5">
             <div>
               <v-row dense>
                 <!-- img -->
                 <v-col cols="12" sm="2">
                   <v-col
                     style="  
-                      display: block;     
-                      margin-left: auto;  
+                      display: block;       
+                      margin-left: auto;    
                       margin-right: auto; 
                       width: 100%; 
-                      margin-top: 10%;
+                      margin-top: 10%; 
                     "
                   >
                     <img src="../../../assets/student_course/download.png" />
@@ -171,22 +183,21 @@
                 <!-- detail -->
                 <v-col cols="12" sm="6">
                   <v-col class="text-lg font-bold">
-                    {{ item.id }}
-                    <!-- {{ item.courseNameTh }} -->
+                    <!-- {{ item.id }} -->
+                    {{ item_booked.courseName }}
                   </v-col>
                   <v-col class="text-slate-400">
-                    {{ item.value }}
+                    <!-- {{ item.value }} -->
                     <!-- {{ item.courseNameEn }} -->
                   </v-col>
                   <v-col class="text-slate-400">
                     <!-- <span class="mdi mdi-account"></span> {{ item.courseNameTh }} -->
                   </v-col>
-                  <v-col>
-                    <v-card color="yellow" class="rounded-lg text-center">
-                      วันจันทร์ 16:00 - 17:00 น.
-                    </v-card>
-                    <!-- {{ item.courseNameEn }} -->
-                  </v-col>
+                  <!-- <v-card color="yellow" class="rounded-lg text-center" >
+                    {{ dayOfWeekName(item_booked.dates.day)  == ''? '-' : dayOfWeekName(item_booked.dates.day) }}
+                    {{ item.period.start }} - {{ item.period.end }} น.
+                  
+                  </v-card> -->
                 </v-col>
 
                 <!-- circle -->
@@ -256,13 +267,23 @@
               </v-row>
             </v-card>
           </div>
-          </v-card> 
-    </div>
+            </v-card> 
 
-
-          <v-card v-if="student_data.length == '0'" class="border-solid mt-8 pa-5 text-center text-xl">
+          </div>
+          <!-- <v-card v-if="profile_booked.length == '0'" class="border-solid mt-8 pa-5 text-center text-xl">
             <span class="mdi mdi-alert-outline" style="color: #ff6b81;"></span>  ไม่พบข้อมูลการจอง
-            </v-card>
+          </v-card> -->
+          <v-card-text 
+          class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
+          v-if="profile_booked.length == '0'"
+          >
+            <span class="text-lg font-bold">
+              <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+              ไม่พบข้อมูลการจอง
+            </span>
+          </v-card-text>
+
+          
         </div>
       </v-expand-x-transition>
     </div>
@@ -298,11 +319,6 @@ export default {
       { label: "รายสัปดาห์", value: "week" },
       { label: "รายเดือน", value: "month" },
     ],
-    test_list: [
-      { id: "BK-001", value: "day" },
-      { id: "BK-002", value: "week" },
-      { id: "BK-003", value: "month" },
-    ],
     tasks: [],
     type_selected: "students_course",
     time_frame: "month",
@@ -315,6 +331,7 @@ export default {
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     this.GetStudentData(this.user_detail.account_id);
+    this.GetProfileBooked(this.user_detail.account_id);
   },
 
   mounted() {
@@ -336,6 +353,7 @@ export default {
   methods: {
     ...mapActions({
       GetStudentData: "MyCourseModules/GetStudentData",
+      GetProfileBooked: "MyCourseModules/GetProfileBooked",
     }),
     prev() {
       this.$refs.calendar.prev();
@@ -389,17 +407,18 @@ export default {
     //   return day_names.join(", ");
     // },
 
-     dayOfWeekName(days) {
+      dayOfWeekName(days) {
   const daysOfWeek = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"];
   const dayNames = [];
 
   for (let i = 0; i < days.length; i++) {
     const dayIndex = days[i];
-    const dayName = daysOfWeek[dayIndex];
-    dayNames.push(dayName);
+    // const dayName = daysOfWeek[dayIndex];
+    dayNames.push(daysOfWeek[dayIndex]);
+
   }
 
-  return dayNames.reverse().join(' - ');
+  return dayNames.join(' - ');
   },
 
     showImg(item) {
@@ -418,6 +437,7 @@ export default {
     ...mapGetters({
       student_data: "MyCourseModules/getStudentData",
       itemTime: "MyCourseModules/getcourseSchedule",
+      profile_booked: "MyCourseModules/getProfileBooked",
     }),
     studentData: {
       get() {

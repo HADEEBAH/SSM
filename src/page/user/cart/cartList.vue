@@ -1,5 +1,5 @@
 <template>
-  <v-app class="overflow-x-hidden overflow-y-hidden">
+  <v-app class="overflow-x-hidden overflaow-y-hidden">
     <v-container>
       <loading-overlay :loading="categorys_is_loading"></loading-overlay>
       <v-row v-if="cart_list.length == 0">
