@@ -11,9 +11,8 @@
         </v-col>
       </v-row>
     </v-container>
-    
     <v-card
-    class="rounded-xl"
+      class="rounded-xl"
     >
       <v-card
         class="mx-auto block rounded-xl drop-shadow-lg mt-3 ml-3 mr-3"
@@ -55,7 +54,7 @@
             cols="6"
             md="4"
             sm="6"
-            class="px-2"
+            class="pa-2"
             v-for="item in (search_kingdom !== '' ? data_search_kingdom : categorys )"
             :key="item.id"
           >
