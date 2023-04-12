@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-container>
-        <!-- <pre>{{ student_check_in }}</pre> -->
+        <!-- <pre>{{ coach_check_in }}</pre> -->
         <v-card flat>
             <v-card-text class="bg-[#FBF3F5] border">
                 <v-row>
@@ -36,6 +36,7 @@
             <v-col align="center">
                <v-btn @click="checkIn()" depressed dense :color="student_check_in.length > 0 ? '#E6E6E6' :  '#ff6b81' " 
                class="w-full rounded-lg"
+               
                :loading="coach_check_in_is_loading"
                :class="student_check_in.length > 0 ? 'green--text' :  'white--text'"
                >
@@ -51,7 +52,7 @@
         <v-tabs class="mb-3" v-model="tab" color="#ff6b81" grow>
             <v-tab class="border-b-2" href="#check in"> เช็คชื่อ </v-tab>
             <v-tab :disabled="student_check_in.length == 0" class="border-b-2" href="#assess students"> ประเมินนักเรียน </v-tab>
-            <v-tab disabled class="border-b-2" href="#teaching summary"> บันทึกสรุปการสอน </v-tab>
+            <v-tab :disabled="student_check_in.length == 0" class="border-b-2" href="#teaching summary"> บันทึกสรุปการสอน </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab">
             <v-tab-item value="check in">
@@ -271,13 +272,13 @@
                 <v-row dense>
                     <v-col>
                         <labelCustom text="บันทึกการสอน"></labelCustom>
-                        <v-textarea outlined placeholder="ระบุความคิดเห็น..."></v-textarea>
+                        <v-textarea outlined placeholder="ระบุความคิดเห็น..." v-model="coach_check_in.summary"></v-textarea>
                     </v-col>
                 </v-row>
                 <v-row dense>
                     <v-col>
                         <labelCustom text="พัฒนาการ / การบ้าน"></labelCustom>
-                        <v-textarea outlined placeholder="ระบุความคิดเห็น..."></v-textarea>
+                        <v-textarea outlined placeholder="ระบุความคิดเห็น..." v-model="coach_check_in.homework"></v-textarea>
                     </v-col>
                 </v-row>
                 <!-- Upload file -->
@@ -297,7 +298,7 @@
                             ></v-img>
                         </v-col>
                         <v-col cols="12" class="flex align-center justify-center text-h5">
-                            แนบไฟล์รูปภาพหรือวิดีโอ
+                            แนบไฟล์รูปภาพหรือวิดีโอ (ส่วนนี้ยังอัพโหลดไม่ได้)
                         </v-col>
                         <v-col cols="12" class="flex align-center justify-center">
                             <v-btn text class="underline" color="#ff6b81" @click="openFileSelector"
@@ -315,12 +316,12 @@
                 </v-card>
                 <v-row dense>
                     <v-col cols="12" sm="6">
-                        <v-btn  class="w-full" text color="#ff6b81">
+                        <v-btn  class="w-full" text color="#ff6b81" @click="clearTeachingNote">
                             ล้างข้อมูล
                         </v-btn>
                     </v-col>
                     <v-col cols="12" sm="6">
-                        <v-btn class="w-full" depressed color="#ff6b81" dark >
+                        <v-btn class="w-full" depressed color="#ff6b81" dark @click="saveCreateTeachingNotes" >
                             บันทึก
                         </v-btn>
                     </v-col>
@@ -412,9 +413,11 @@ export default {
   }),
   created() {
     this.GetCourse(this.$route.params.courseId)
+    this.GetCoachCheckIn({course_id :this.$route.params.courseId, date : this.$route.params.date})
     this.GetStudentByTimeId({course_id :this.$route.params.courseId, date : this.$route.params.date, time_id: this.$route.params.timeId})
   },
   mounted() {
+    this.GetCoachCheckIn({course_id :this.$route.params.courseId, date : this.$route.params.date})
     this.student_check_in.forEach((check_in_data)=>{
         if(check_in_data.status === "leave" || check_in_data.status === "special case"){
             this.selectCheckInStatus(check_in_data,check_in_data.status)
@@ -434,14 +437,47 @@ export default {
   },
   methods: {
     ...mapActions({
+        GetCoachCheckIn : "CoachModules/GetCoachCheckIn",
         GetCourse : "CourseModules/GetCourse",
         CheckInCoach :"CoachModules/CheckInCoach",
         GetStudentByTimeId : "CoachModules/GetStudentByTimeId",
         UpdateCheckInStudent : "CoachModules/UpdateCheckInStudent",
         AssessmentStudent : "CoachModules/AssessmentStudent",
+        CreateTeachingNotes : "CoachModules/CreateTeachingNotes"
     }),
+    clearTeachingNote(){
+        this.coach_check_in.summary = null
+        this.coach_check_in.homework = null
+        this.coach_check_in.files = null
+    },
+    saveCreateTeachingNotes(){
+        Swal.fire({
+            icon: "question",
+            title: "ต้องการบันทึกใช่หรือไม่ ?",
+            showDenyButton: false,
+            showCancelButton: true,
+            cancelButtonText :"ยกเลิก",
+            confirmButtonText: "ตกลง",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                this.CreateTeachingNotes({check_in_coach_id : this.coach_check_in.checkInCoachId, check_in_coach_data : this.coach_check_in})  
+            }
+        })
+    },
     saveAssessmentStudent(){
-        this.AssessmentStudent({students : this.student_check_in})
+        Swal.fire({
+            icon: "question",
+            title: "ต้องการบันทึกใช่หรือไม่ ?",
+            showDenyButton: false,
+            showCancelButton: true,
+            cancelButtonText :"ยกเลิก",
+            confirmButtonText: "ตกลง",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                this.AssessmentStudent({students : this.student_check_in})
+            }
+        })
+        
     },
     CheckInStudents(){
         Swal.fire({
@@ -458,19 +494,20 @@ export default {
         })  
     },
     checkIn(){
-        Swal.fire({
+        if(this.student_check_in.length === 0){
+            Swal.fire({
             icon: "question",
             title: "ต้องการลงเวลาเข้าสอนใช่หรือไม่",
             showDenyButton: false,
             showCancelButton: false,
             confirmButtonText: "ตกลง",
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                this.check_in = true
-                this.CheckInCoach({course_id :this.course_data.course_id, date : this.$route.params.date, time_id: this.$route.params.timeId})
-            }
-        })
-       
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    this.check_in = true
+                    this.CheckInCoach({course_id :this.course_data.course_id, date : this.$route.params.date, time_id: this.$route.params.timeId})
+                }
+            })
+        }
     },
     selectStudentComment(index){
         this.selected_student = index
@@ -519,6 +556,7 @@ export default {
     uploadFile() {
       this.file = this.$refs.fileInput.files[0];
       console.log("file=>",this.file);
+    //   this.coach_check_in.file = this.file
       if (!this.file) return;
       const reader = new FileReader();
       reader.onload = (e) => {
