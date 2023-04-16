@@ -665,14 +665,14 @@ const CourseModules = {
             }
           }
           if(payload.course_type_id === "CT_1"){
-            console.log("payload :",payload)
-            // let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coursestudent?courseId=${course_id}&cpoId=${cpo_id}`,config)
-            //   console.log("GetCourseStudent => ",data)
+            // console.log("payload :",payload)
+            // let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coursestudent?courseId=${course_id}&cpoId=${package_data.coursePackageOptionId}`,config)
+            // console.log("GetCourseStudent => ",data)
             await context.commit("SetCourseData", payload)
           }else{
-            console.log("payload :",payload)
+            // console.log("payload :",payload)
             let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/count/student?courseId=${course_id}`,config)
-              console.log("GetCourseStudent => ",data)
+              // console.log("GetCourseStudent => ",data)
               if(data.statusCode === 200){
                 for(const student_data of data.data){
                   payload.course_studant_amount = parseInt(student_data.sum_student)
