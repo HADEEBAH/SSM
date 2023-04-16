@@ -3,11 +3,7 @@
       <v-container>
         <ImgCard color="#FEFBFC" outlined class="mb-3">
             <template v-slot:img>
-                <v-row dense class="d-flex align-center h-full">
-                    <v-col>
-                        <v-img class="rounded-lg" :src="course_data.course_img ? course_data.course_img : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'" max-height="122" max-width="122"></v-img>
-                    </v-col>
-                </v-row>
+                <v-img contain class="rounded-lg" :src="course_data.course_img ? course_data.course_img : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'" max-height="140" max-width="140"></v-img>
             </template>
             <template v-slot:header>
                 <div class="text-md font-bold">{{ `${course_data.course_name_th}(${course_data.course_name_en})`}} </div>
@@ -16,7 +12,7 @@
             <template v-slot:detail>
                 <v-row dense>
                     <v-col cols="12" sm="6" class="pa-0">
-                        <rowData mini col_detail="5" icon="mdi-clock-outline"> {{ course_data.course_hours  }} ชม. / ครั้ง</rowData>
+                        <rowData mini col_detail="8" icon="mdi-clock-outline"> {{ course_data.course_hours  }} ชม. / ครั้ง</rowData>
                     </v-col>
                     <!-- <v-col cols="12" sm="6"  class="pa-0"> 
                         <rowData mini col_detail="5" icon="mdi-account-group-outline">9 / 15 ที่นั่ง</rowData> 
@@ -28,8 +24,8 @@
             <v-col cols="12" class="text-lg font-bold">เลือกแพ็คเกจ</v-col> 
         </v-row>
         <v-row dense class="d-flex align-center">
-            <v-col cols="12" sm class="text-sm text-[#ff6b81]">*มีสิทธิพิเศษสำหรับการสมัครรายเดือน / รายเทอม / รายปี</v-col>
-            <v-col cols="12" sm="auto">
+            <v-col cols="8" sm class="text-sm text-[#ff6b81]">*มีสิทธิพิเศษสำหรับการสมัครรายเดือน / รายเทอม / รายปี</v-col>
+            <v-col cols="auto" sm="auto">
                 <v-btn color="#F9B320" @click="show_dialog_privilege = true" class="white--text rounded-xl" depressed>ดูสิทธิพิเศษ</v-btn>
             </v-col>
         </v-row>
@@ -170,19 +166,19 @@ import { mapGetters,mapActions } from 'vuex';
             this.course_order.time_count = option.amount
             this.course_order.package = this.selected_package.package
             this.course_order.package_data = this.selected_package
-            this.course_order.apply_for_yourself = false,
-            this.course_order.apply_for_others = false,
+            this.course_order.apply_for_yourself = false
+            this.course_order.apply_for_others = false
             this.course_order.times_in_class = 0
             this.course_order.day =  ""
-            this.course_order.time = "",
-            this.course_order.coach = "",
-            this.course_order.start_day = "",
-            this.course_order.price = 0,
-            this.course_order.detail = "",
-            this.course_order.remark = "",
-            this.course_order.selected = true,
-            this.course_order.parents = [],
-            this.course_order.students = [],
+            this.course_order.time = ""
+            this.course_order.coach = ""
+            this.course_order.start_day = ""
+            this.course_order.price = 0
+            this.course_order.detail = ""
+            this.course_order.remark = ""
+            this.course_order.selected = true
+            this.course_order.parents = []
+            this.course_order.students = []
             this.order.order_step = 1
             this.changeCourseOrderData(this.course_order)
             this.changeOrderData(this.order)

@@ -3,8 +3,9 @@
     <v-container>
       <!-- {{ course_data }} -->
       <v-img
+        contain
         class="rounded-lg mb-3"
-        max-height="30vw"
+        max-height="180"
         :src="course_data.course_img ? course_data.course_img : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'"
       ></v-img>
       <v-row dense
@@ -16,7 +17,7 @@
       <template v-if="course_data.course_type_id === 'CT_2'">
         <v-row dense>
           <v-col cols="auto">
-            <v-icon color="#ff6b81">mdi-currency-usd</v-icon>
+            <v-icon  class="mr-2" color="#ff6b81">mdi-currency-usd</v-icon>
           </v-col>
           <v-col class="font-bold">{{parseFloat(course_data.price_course).toLocaleString()}} บาท/คน</v-col>
         </v-row>
@@ -35,13 +36,12 @@
         <!-- <rowData col_detail="5" mini icon="mdi-account-group-outline"
           > 9 / 10 ที่นั่ง</rowData
         > -->
-        <v-row>
-          <v-col class="text-xs text-[#999999]">
-            {{ course_data.detail  }}
-          </v-col>
-        </v-row>
       </template>
-     
+      <v-row dense>
+        <v-col cols="12" class="text-[#999999]">
+          {{ course_data.detail  }}</v-col
+        >
+      </v-row>
       <v-expansion-panels flat>
         <v-expansion-panel  v-if="course_data.course_type_id === 'CT_2'">
           <v-expansion-panel-header class="px-0 font-bold">
@@ -59,11 +59,7 @@
               <v-col cols="auto">วันเรียน:</v-col>
               <v-col>{{ new Date(course_data.course_study_start_date).toLocaleDateString("th-TH",date_options)}} - {{ new Date(course_data.course_study_end_date).toLocaleDateString("th-TH",date_options)}} ({{ getTime(course_data.course_period_start_date) }}-{{ getTime(course_data.course_period_end_date) }} น.)</v-col>
             </v-row>
-            <v-row dense>
-              <v-col cols="12" class="text-[#999999]">
-                {{ course_data.detail  }}</v-col
-              >
-            </v-row>
+           
           </v-expansion-panel-content>
         </v-expansion-panel>
         <v-expansion-panel>
@@ -129,20 +125,6 @@
             จองคอร์สเรียน
           </v-btn>
         </v-col>
-        <!-- <v-col
-          v-if="course_order.course_type_id === 'CT_2'"
-          cols="12"
-          class="flex justify-center"
-        >
-          <v-btn
-            depressed
-            class="w-full font-bold white--text"
-            @click="show_dialog = true"
-            color="#ff6b81"
-          >
-            สมัคร (เต็ม)
-          </v-btn>
-        </v-col> -->
       </v-row>
         <!-- DIALOG :: COURSE FULL -->
         <v-dialog width="60vw" v-model="show_dialog" persistent >
@@ -241,6 +223,21 @@ export default {
     registerCourse(){
       this.order.order_step = 1
       console.log(this.course_data.price_course)
+      if(this.course_order.students.length > 0){
+        this.course_order.apply_for_yourself = false,
+        this.course_order.apply_for_others = false,
+        this.course_order.times_in_class = 0
+        this.course_order.day =  ""
+        this.course_order.time = ""
+        this.course_order.coach = ""
+        this.course_order.start_day = ""
+        this.course_order.price = 0
+        this.course_order.detail = ""
+        this.course_order.remark = ""
+        this.course_order.selected = true
+        this.course_order.parents = []
+        this.course_order.students = []
+      }
       if( this.course_data.course_type_id === "CT_2" ){
         this.course_order.price = parseFloat(this.course_data.price_course)
         this.changeCourseOrderData(this.course_order)

@@ -63,8 +63,9 @@
               @click="selectedCategory(item)"
             >
               <v-img
+                contain
                 :src="item.categoryImg && item.categoryImg !== null ? showImg(item.categoryImg) : defaultImageUrl"
-                height="180px"
+                height="180"
               ></v-img>
               <v-card-title :class="$vuetify.breakpoint.smAndUp ? 'text-md' : 'text-sm'" class="font-bold">
                 {{ item.categoryNameTh }}

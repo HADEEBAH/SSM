@@ -21,9 +21,9 @@
         </v-row>
         <v-row dense>
             <template v-if="!courses_is_loading">
-                <v-col cols="6" sm="4" v-for="(course, course_index) in courses" :key="course_index">
+                <v-col cols="6"  v-for="(course, course_index) in courses" :key="course_index">
                     <v-card @click="selectedCourse(course)">
-                        <v-img height="240" :src="course.course_url ? course.course_url : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'">
+                        <v-img height="180" contain :src="course.course_url ? course.course_url : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'">
                           <v-row>
                               <v-col class="pa-4" align="right"> <v-chip  color="#F9B320" text-color="white">{{ `${course.period}  ชั่วโมง`  }}</v-chip></v-col>
                           </v-row>
