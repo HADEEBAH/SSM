@@ -307,7 +307,15 @@ const orderModules = {
                     total_price =  total_price + (price * course.students.length )
                 })
                 payload.totalPrice = total_price
-                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/regis/course`,payload)
+                let config = {
+                    headers:{
+                        "Access-Control-Allow-Origin" : "*",
+                        "Content-type": "Application/json",
+                        'Authorization' : `Bearer ${VueCookie.get("token")}`
+                    }
+                }
+                // let localhost = "http://localhost:3002"
+                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/regis/course`,payload , config)
                 console.log(data)
                 if(data.statusCode === 201){
                     let payment_payload = {
@@ -367,6 +375,31 @@ const orderModules = {
                 console.log(error)
             }
         },
+        async savePayment(context, {paymnet_data}){
+            try{
+                let payment_payload = {
+                    "orderId": paymnet_data.orderNumber,
+                    "total":paymnet_data.totalPrice,
+                    "subtotal": 0.00,
+                    "vat": 0,
+                    "vatRate": 0,
+                    "orderDesc": ""
+                }
+                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/payment/code`,payment_payload)
+                if(data.statusCode === 201){
+                    window.location.href = data.data
+                }
+            }catch(error){
+                console.log(error)
+                Swal.fire({
+                    icon:"error",
+                    text: `เกิดข้อผิดพลาด ${error.message}`,
+                    showDenyButton: false,
+                    showCancelButton: false,
+                    confirmButtonText: "ตกลง",
+                })
+            }
+        },
         async GetCartList(context, account_id) {
             console.log("account_id", account_id);
             try {
@@ -422,6 +455,7 @@ const orderModules = {
                 }
             }catch(error){
                 console.log(error)
+                
             }
         },
         // RESERVE COURSE
