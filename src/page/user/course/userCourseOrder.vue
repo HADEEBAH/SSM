@@ -62,7 +62,7 @@
                                 <v-row dense >
                                     <v-col cols="auto" class="d-flex aling-center">
                                         <v-radio
-                                        :disabled = "GenReserve(time) >= time.maximumStudent"
+                                        
                                         color="#ff6B81"
                                         :value="time"
                                         >
@@ -71,9 +71,9 @@
                                             </template>
                                         </v-radio>
                                     </v-col>
-                                    <v-col v-if="GenReserve(time) >= time.maximumStudent">
+                                    <!-- <v-col v-if="GenReserve() >= time.maximumStudent">
                                         <v-btn @click="CreateReserve(time)" text class="underline" color="#ff6b81">จอง</v-btn>
-                                    </v-col>
+                                    </v-col> -->
                                 </v-row>
                             </v-col>
                         </v-row>
@@ -280,17 +280,27 @@
             </div>
             <v-row dense>
                 <v-col cols="12" sm="6">
-                    <v-btn class="w-full" :disabled="disable_add_to_cart" outlined dense color="#ff6b81"  @click="addToCart">เพิ่มรถเข็น</v-btn>
+                    <v-btn class="w-full" :disabled="validateButton" outlined dense color="#ff6b81"  @click="addToCart">เพิ่มรถเข็น</v-btn>
                 </v-col>
                 <v-col cols="12" sm="6">
                     <v-btn
+                        v-if="course_order.time ? GenReserve() >= course_order.time.maximumStudent : false"
                         class="w-full white--text"
-                        :disabled="false"
+                        :disabled="validateButton"
+                        elevation="0"
+                        dense
+                        @click="checkOut"
+                        :color="disable_checkout ?  '#C4C4C4': '#ff6b81'">จอง</v-btn>
+                    <v-btn
+                        v-else
+                        class="w-full white--text"
+                        :disabled="validateButton"
                         elevation="0"
                         dense
                         @click="checkOut"
                         :color="disable_checkout ?  '#C4C4C4': '#ff6b81'">ชำระเงิน</v-btn>
                 </v-col>
+                
             </v-row>
         </v-container>
         <!-- LOADING -->
@@ -561,7 +571,14 @@ export default {
             course_student : "CourseModules/getCourseStudent",
             course_is_loading : 'CourseModules/getCourseIsLoading'
         }),
-       
+        validateButton(){
+            let time = this.course_order.time ? true : false
+            let day =  this.course_order.day ? true : false
+            let coach =  this.course_order.coach_id ? true : false
+            let student =  this.course_order.students.length > 0 ? this.course_order.students[0].account_id ? true : false : false
+            console.log(time &&  day  && coach && student)
+            return !(time &&  day  && coach && student)
+        },
     },
     methods: {
         ...mapActions({
@@ -579,15 +596,25 @@ export default {
         }),
         resetTime(){
             this.course_order.time = null
+            this.course_order.coach_id = null
         },
         GenReserve(time_data){
-            let studentNum = 0
-            let course_student_filter  = this.course_student.filter((v)=> v.courseId == this.course_order.course_id   && v.coursePackageOptionId == this.course_order.option.course_package_option_id && v.dayOfWeekId === time_data.dayOfWeekId && v.timeId == time_data.timeId)
-            // console.log("course_student_filters :",course_student_filter)
-            for(const student  of course_student_filter){
-                studentNum = studentNum + parseInt(student.sum_student)
+            if( !time_data ){
+                time_data = this.course_order.time
+                let studentNum = 0
+                let course_student_filter  = this.course_student.filter((v)=> v.courseId == this.course_order.course_id   && v.coursePackageOptionId == this.course_order.option.course_package_option_id && v.dayOfWeekId === time_data.dayOfWeekId && v.timeId == time_data.timeId)
+                for(const student  of course_student_filter){
+                    studentNum = studentNum + parseInt(student.sum_student)
+                }
+                return studentNum
+            } else{
+                let studentNum = 0
+                let course_student_filter  = this.course_student.filter((v)=> v.courseId == this.course_order.course_id   && v.coursePackageOptionId == this.course_order.option.course_package_option_id && v.dayOfWeekId === time_data.dayOfWeekId && v.timeId == time_data.timeId)
+                for(const student  of course_student_filter){
+                    studentNum = studentNum + parseInt(student.sum_student)
+                }
+                return studentNum
             }
-            return studentNum
         },
         CreateReserve(time){
             this.course_order.time_reserve = time
@@ -603,7 +630,7 @@ export default {
                 }
             })
         },
-       
+        
         checkApplyForYourselfRole(){
             let roles = ["R_1", "R_2", "R_3", "R_4"]
             let is_equal = false
@@ -621,7 +648,6 @@ export default {
             const daysOfWeek = ["วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"];
             
             const validDays = day.filter(d => d >= 0 && d <= 6);
-            
             if (validDays) {
                 const firstThreeDays = validDays.map(d => daysOfWeek[d]);
                 return `${firstThreeDays.join(" , ")}`;
@@ -629,18 +655,6 @@ export default {
                 return "Invalid days";
             }
         },
-        // dayOfWeekArray(day) {
-        //     const daysOfWeek = ["วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"];
-            
-        //     day.forEach((dayData)=>{
-        //         if (day >= 0 && day <= 6) {
-        //         return daysOfWeek[day];
-        //     } else {
-        //         return "Invalid day";
-        //     }
-        //     })
-          
-        // },
         checkMaximumStudent(){
             let max = false
             if(this.course_order.course_type_id === 'CT_1'){
