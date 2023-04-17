@@ -457,7 +457,7 @@ export default {
     },
     mounted() {
         this.checkMaximumStudent()
-        this.checkApplyForYourselfRole()
+        // this.checkApplyForYourselfRole()
         this.$store.dispatch("NavberUserModules/changeTitleNavber","สมัครเรียน")
       
     },
@@ -572,12 +572,18 @@ export default {
             course_is_loading : 'CourseModules/getCourseIsLoading'
         }),
         validateButton(){
-            let time = this.course_order.time ? true : false
-            let day =  this.course_order.day ? true : false
-            let coach =  this.course_order.coach_id ? true : false
-            let student =  this.course_order.students.length > 0 ? this.course_order.students[0].account_id ? true : false : false
-            console.log(time &&  day  && coach && student)
-            return !(time &&  day  && coach && student)
+            if(this.course_order.course_type_id === "CT_1"){
+                let time = this.course_order.time ? true : false
+                let day =  this.course_order.day ? true : false
+                let coach =  this.course_order.coach_id ? true : false
+                let student =  this.course_order.students.length > 0 ? this.course_order.students[0].account_id ? true : false : false
+                // console.log(time &&  day  && coach && student)
+                return !(time &&  day  && coach && student)
+            }else{
+                let student =  this.course_order.students.length > 0 ? this.course_order.students[0].account_id ? true : false : false
+                return !student
+            }
+          
         },
     },
     methods: {
@@ -719,23 +725,34 @@ export default {
             this.$router.push({name : "UserKingdom"})
         },
         addToCart(){
-            if(this.course_order.course_type_id == "CT_2"){
-                let days_of_class = this.course_data.days_of_class[0]
-                this.course_order.time = days_of_class.times[0]
-            }
-            this.course_order.coach_name = this.course_data.coachs.filter(v => this.course_order.day.course_coach_id.includes(v.course_coach_id))[0].coach_name
-            this.course_order.coach = this.course_data.coachs[0].coach_id
-            this.course_order.coach_id = this.course_data.coachs[0].coach_id
-            this.course_order.coach_name = this.course_data.coachs[0].coach_name,
-                this.order.courses.push(
-                    {...this.course_order}
-                )
-            this.order.created_by = this.user_login.account_id
-            this.changeOrderData(this.order)
-            localStorage.setItem(this.user_login.account_id, JSON.stringify(this.order))
-            this.saveCart({cart_data : this.order})
-            this.resetCourseData()
-            this.show_dialog_cart = true
+            Swal.fire({
+                icon: "question",
+                title: "ต้องการเพิ่มเข้าตะกร้าใช่หรือไม่ ?",
+                showDenyButton: false,
+                showCancelButton: true,
+                cancelButtonText: "ยกเลิก",
+                confirmButtonText: "ตกลง",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    if(this.course_order.course_type_id == "CT_2"){
+                        let days_of_class = this.course_data.days_of_class[0]
+                        this.course_order.time = days_of_class.times[0]
+                    }
+                    this.course_order.coach_name = this.course_data.coachs.filter(v => this.course_order.day.course_coach_id.includes(v.course_coach_id))[0].coach_name
+                    this.course_order.coach = this.course_data.coachs[0].coach_id
+                    this.course_order.coach_id = this.course_data.coachs[0].coach_id
+                    this.course_order.coach_name = this.course_data.coachs[0].coach_name,
+                        this.order.courses.push(
+                            {...this.course_order}
+                        )
+                    this.order.created_by = this.user_login.account_id
+                    this.changeOrderData(this.order)
+                    localStorage.setItem(this.user_login.account_id, JSON.stringify(this.order))
+                    this.saveCart({cart_data : this.order})
+                    this.resetCourseData()
+                    this.show_dialog_cart = true
+                }
+            })
         },
         removeParent(student){
             this.course_order.students.filter(v => v.username === student.username)[0].parents.splice(0 ,1 )
@@ -747,34 +764,44 @@ export default {
             this.dialog_parent = false
         },
         checkOut(){
-            if(this.course_order.course_type_id == "CT_1"){
-                this.course_order.coach_name = this.course_data.coachs.filter(v => this.course_order.day.course_coach_id.includes(v.course_coach_id))[0].coach_name
-            }else{
-                this.course_order.time = this.course_data.days_of_class[0].times[0] 
-                this.course_order.coach_name = this.course_data.coachs[0].coach_name
-            }
-            this.course_order.coach = this.course_data.coachs[0].coach_id
-            this.course_order.coach_id = this.course_data.coachs[0].coach_id
-            if(this.order.courses.filter(v => v.course_id === this.course_order.course_id).length === 0){
-                this.order.courses.push(
-                    {...this.course_order}
-                )
-            }
-            this.order.created_by = this.user_login.account_id
-            this.changeOrderData(this.order)
-            if(this.course_order.course_type_id == "CT_1"){
-                if(this.course_order.day && this.course_order.time){
-                    this.saveOrder()
-                }else{
-                    Swal.fire({
-                        icon :"error",
-                        text : `ข้อมูลไม่ถูกต้อง ${this.course_order.day} : ${this.course_order.time}`
-                    })
+            Swal.fire({
+                icon: "question",
+                title: "ดำเนินการชำระเงินใช่หรือไม่ ?",
+                showDenyButton: false,
+                showCancelButton: true,
+                cancelButtonText: "ยกเลิก",
+                confirmButtonText: "ตกลง",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    if(this.course_order.course_type_id == "CT_1"){
+                        this.course_order.coach_name = this.course_data.coachs.filter(v => this.course_order.day.course_coach_id.includes(v.course_coach_id))[0].coach_name
+                    }else{
+                        this.course_order.time = this.course_data.days_of_class[0].times[0] 
+                        this.course_order.coach_name = this.course_data.coachs[0].coach_name
+                    }
+                    this.course_order.coach = this.course_data.coachs[0].coach_id
+                    this.course_order.coach_id = this.course_data.coachs[0].coach_id
+                    if(this.order.courses.filter(v => v.course_id === this.course_order.course_id).length === 0){
+                        this.order.courses.push(
+                            {...this.course_order}
+                        )
+                    }
+                    this.order.created_by = this.user_login.account_id
+                    this.changeOrderData(this.order)
+                    if(this.course_order.course_type_id == "CT_1"){
+                        if(this.course_order.day && this.course_order.time){
+                            this.saveOrder()
+                        }else{
+                            Swal.fire({
+                                icon :"error",
+                                text : `ข้อมูลไม่ถูกต้อง ${this.course_order.day} : ${this.course_order.time}`
+                            })
+                        }
+                    }else{
+                        this.saveOrder()
+                    }
                 }
-            }else{
-                this.saveOrder()
-            }
-           
+            })
         },
         checkUsername(username, type){
             if(username){
