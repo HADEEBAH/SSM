@@ -85,6 +85,14 @@
                                 </v-col>
                             </v-row>
                             <v-row dense>
+                                <v-col class="font-bold" align="right">
+                                    ทำรายการโดย:
+                                </v-col>
+                                <v-col cols="5" align="right">
+                                {{`${order.createdByData.firstNameTh}  ${order.createdByData.lastNameTh}` }} 
+                                </v-col>
+                            </v-row>
+                            <v-row dense>
                                 <v-col class="font-bold"  align="right">
                                     ราคาชำระ:
                                 </v-col>
@@ -191,7 +199,7 @@
                 'Authorization' : `Bearer ${VueCookie.get("token")}`
             }
             }
-            // let localhost = "http://localhost:3002"
+            //  let localhost = "http://localhost:3002"
             const {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/history`,config)
             console.log("data", data)
             // const mapHistory = await data.data.map(async(val)=>{

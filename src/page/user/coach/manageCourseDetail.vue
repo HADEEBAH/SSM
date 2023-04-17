@@ -181,31 +181,32 @@
                     <v-card class="mb-2 " flat style="border: 1px solid #999" v-for="(student, index_student) in student_check_in" :key="`${index_student}-student`">
                         <v-card-text >
                             <v-row class="d-flex align-center">
-                                <v-col cols="5" class="text-lg font-bold">
+                                <v-col cols="12" sm class="text-lg font-bold">
                                     {{ student.no }} {{ student.fullname }}
                                 </v-col>
                                 <!-- <v-col cols="4" class="text-lg font-bold">
                                     {{ student.nickname }}
                                 </v-col> -->
-                                <v-col cols="3" class="pa-1 text-md text-[#999999]">
-                                    <v-row>
-                                        <v-col> การเข้าเรียน: </v-col>
-                                        <v-col>
+                                <v-col cols="12" sm="5" class="pa-1 text-md text-[#999999]">
+                                    <v-row dense class="d-flex aling-center">
+                                        <v-col  align="right"> การเข้าเรียน: </v-col>
+                                        <v-col cols="auto">
                                             <v-chip class="font-bold" :color="check_in_status_options.filter(v => v.value === student.check_in_status)[0].bg_color" :style="`color:${check_in_status_options.filter(v => v.value === student.check_in_status)[0].color}`" v-if="check_in_status_options.filter(v => v.value === student.check_in_status).length > 0" >{{ check_in_status_options.filter(v => v.value === student.check_in_status)[0].label }} </v-chip>
                                         </v-col>
                                     </v-row>
                                 </v-col>    
                             </v-row>
                             <v-row class="d-flex align-center">
-                                <v-col cols="5">
+                                <v-col cols="12" sm="5" class="">
                                     <labelCustom text="พัฒนาการ"></labelCustom>
-                                    <v-select outlined dense :items="evolution_options" item-text="label" item-value="value" v-model="student.evolution"></v-select>
+                                    <v-select outlined dense hide-details :items="evolution_options" item-text="label" item-value="value" v-model="student.evolution"></v-select>
                                 </v-col>
-                                <v-col cols="4">
+                                <v-col cols="12" sm="4">
                                     <labelCustom text="ความสนใจ"></labelCustom>
-                                    <v-select outlined dense :items="interest_options" item-text="label" item-value="value" v-model="student.interest"></v-select>
+                                    <v-select outlined dense hide-details :items="interest_options" item-text="label" item-value="value" v-model="student.interest"></v-select>
                                 </v-col>
-                                <v-col cols="3">
+                                <v-col cols="12" sm="3">
+                                    <br>
                                     <v-btn outlined class="text-sm" color="#ff6b81" @click="selectStudentComment(index_student)">
                                         แสดงความคิดเห็น
                                     </v-btn>
@@ -242,15 +243,15 @@
                                 </v-col>    
                             </v-row>
                             <v-row class="d-flex align-center">
-                                <v-col cols="5">
+                                <v-col cols="12" sm="5">
                                     <labelCustom text="พัฒนาการ"></labelCustom>
                                     <v-select outlined dense :items="evolution_options" item-text="label" item-value="value" v-model="student.evolution"></v-select>
                                 </v-col>
-                                <v-col cols="4">
+                                <v-col cols="12" sm="4">
                                     <labelCustom text="ความสนใจ"></labelCustom>
                                     <v-select outlined dense :items="interest_options" item-text="label" item-value="value" v-model="student.interest"></v-select>
                                 </v-col>
-                                <v-col cols="3">
+                                <v-col cols="12" sm="3">
                                     <v-btn outlined class="text-sm" color="#ff6b81" @click="selectStudentComment()">
                                         แสดงความคิดเห็น
                                     </v-btn>
@@ -328,16 +329,16 @@
                 </v-row>
             </v-tab-item>
         </v-tabs-items>
-        <v-dialog v-model="show_comment_dialog" v-if="show_comment_dialog">
-            <v-card>
+        <v-dialog :width="$vuetify.breakpoint.smAndUp ? '40vw' : ''"  v-model="show_comment_dialog" v-if="show_comment_dialog">
+            <v-card  class="pa-1">
                 <v-row dense>
-                    <v-col cols="12" align="right">
+                    <v-col class="pa-0" cols="12" align="right">
                         <v-btn icon @click="closeStudentComment">
                             <v-icon color="#ff6b81">mdi-close</v-icon>
                         </v-btn>
                     </v-col>
                 </v-row>
-                <v-card-title>
+                <v-card-title class="py-1">
                     ความคิดเห็นเพิ่มเติม
                 </v-card-title>
                 <v-card-text>
