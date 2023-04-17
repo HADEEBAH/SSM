@@ -180,6 +180,7 @@ const profileModules = {
           if (data.statusCode === 200) {
             if (data.data && data.data.message !== "relation not found.") {
               context.commit("SetProfileUser", data.data)
+              // localStorage.setItem("relations", JSON.stringify(data.data)) // Set data in localStorage
             } else {
               throw { error: data }
             }
@@ -192,6 +193,7 @@ const profileModules = {
           if (data.statusCode === 200) {
             if (data.data && data.data.message !== "relation not found.") {
               context.commit("SetProfileUser", data.data)
+              // localStorage.setItem("relations", JSON.stringify(data.data))
             } else {
               throw { error: data }
             }
