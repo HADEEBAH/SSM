@@ -137,6 +137,24 @@
                     <v-checkbox :disabled="course_order.apply_for_others ? false : checkMaximumStudent()" v-model="course_order.apply_for_others" color="#ff6B81" label="สมัครเรียนให้ผู้อื่น"></v-checkbox>
                 </v-col>
             </v-row>
+            <!-- PARENT RELATION -->
+            <template v-if="relations.length > 0 && course_order.apply_for_yourself">
+                <v-row dense >
+                    <v-col cols="auto"><v-icon color="#ff6b81">mdi-card-account-details-outline</v-icon></v-col>
+                    <v-col class="text-lg font-bold">{{ `รายชื่อผู้ปกครอง` }}</v-col>
+                </v-row>
+                <v-divider class="my-2"></v-divider>
+                <v-row>
+                    <v-col cols="12" sm="4" v-for="(relation, index) in relations" :key="`${index}-relation`">
+                        <v-card flat class="mb-3">
+                            <v-card-text class="border border-2 border-[#ff6b81] rounded-lg">
+                                <div>ชื่อ-สกุล</div>
+                                <div class="pl-2 font-semibold">{{ `${relation.parent.parentFirstnameTh} ${relation.parent.parentLastnameTh}` }}</div>
+                            </v-card-text>
+                        </v-card>
+                    </v-col>
+                </v-row>
+            </template>
             <!-- PARENT -->
             <template v-if="course_order.students.filter(v => v.is_other === false).length > 0">
                 <div class="mb-3" v-for="(parent, index_parent) in course_order.students.filter(v => v.is_other === false)[0].parents" :key="`${index_parent}-perent`">
@@ -289,7 +307,7 @@
                         :disabled="validateButton"
                         elevation="0"
                         dense
-                        @click="checkOut"
+                        @click="CreateReserve"
                         :color="disable_checkout ?  '#C4C4C4': '#ff6b81'">จอง</v-btn>
                     <v-btn
                         v-else
@@ -475,18 +493,18 @@ export default {
                     is_account : false,
                     is_other : false,
                 })
-                if(this.relations.length > 0){
-                    this.course_order.students[this.course_order.students.length -1].parents.push(
-                        {
-                            account_id : this.relations[0].parent.parentId,
-                            firstname_en : this.relations[0].parent.parentFirstnameEn,
-                            lastname_en :  this.relations[0].parent.parentLastnameEn,
-                            username : this.relations[0].parent.parentUsername,
-                            tel : this.relations[0].parent.parentTel
-                        }
-                    )
+                // if(this.relations.length > 0){
+                //     this.course_order.students[this.course_order.students.length -1].parents.push(
+                //         {
+                //             account_id : this.relations[0].parent.parentId,
+                //             firstname_en : this.relations[0].parent.parentFirstnameEn,
+                //             lastname_en :  this.relations[0].parent.parentLastnameEn,
+                //             username : this.relations[0].parent.parentUsername,
+                //             tel : this.relations[0].parent.parentTel
+                //         }
+                //     )
 
-                }
+                // }
             }else{
                 this.course_order.students.forEach((student, index)=>{
                     if(student.is_other === false){
@@ -577,7 +595,7 @@ export default {
                 let day =  this.course_order.day ? true : false
                 let coach =  this.course_order.coach_id ? true : false
                 let student =  this.course_order.students.length > 0 ? this.course_order.students[0].account_id ? true : false : false
-                // console.log(time &&  day  && coach && student)
+                console.log(time &&  day  && coach && student)
                 return !(time &&  day  && coach && student)
             }else{
                 let student =  this.course_order.students.length > 0 ? this.course_order.students[0].account_id ? true : false : false
@@ -622,16 +640,32 @@ export default {
                 return studentNum
             }
         },
-        CreateReserve(time){
-            this.course_order.time_reserve = time
+        CreateReserve(){
             Swal.fire({
                 icon: "question",
                 title: "ต้องการจองคอร์สนี้ใช่หรือไม่",
                 showDenyButton: false,
-                showCancelButton: false,
+                showCancelButton: true,
                 confirmButtonText: "ตกลง",
+                cancelButtonText: "ยกเลิก",
             }).then(async (result) => {
                 if (result.isConfirmed) {
+                    if(this.course_order.course_type_id == "CT_1"){
+                        this.course_order.coach_name = this.course_data.coachs.filter(v => this.course_order.day.course_coach_id.includes(v.course_coach_id))[0].coach_name
+                    }else{
+                        this.course_order.time = this.course_data.days_of_class[0].times[0] 
+                        this.course_order.coach_name = this.course_data.coachs[0].coach_name
+                    }
+                    this.course_order.coach = this.course_data.coachs[0].coach_id
+                    this.course_order.coach_id = this.course_data.coachs[0].coach_id
+                    if(this.order.courses.filter(v => v.course_id === this.course_order.course_id).length === 0){
+                        this.order.courses.push(
+                            {...this.course_order}
+                        )
+                    }
+                    this.order.created_by = this.user_login.account_id
+                    this.changeOrderData(this.order)
+                    console.log( this.course_order)
                     this.CreateReserveCourse({course_data : this.course_order})
                 }
             })
