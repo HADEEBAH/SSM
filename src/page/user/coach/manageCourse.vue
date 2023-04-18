@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{SetFunctionsComputed}}
     <v-container>
       <header-page  title="เลือกข้อมูลการสอน" ></header-page>
       <v-row dense class="mb-3">
@@ -129,7 +130,7 @@
               </template>
               <template v-slot:detail>
                   <v-row class="d-flex align-end">
-                      <v-col align="end" class="text-3xl font-bold">{{ courses.length }}</v-col>
+                      <v-col align="end" class="text-3xl font-bold">{{ coach_leaves.length }}</v-col>
                       <v-col class="text-sm">รายการ</v-col>
                   </v-row>
               </template>
@@ -145,7 +146,7 @@
               </template>
               <template v-slot:detail>
                   <v-row class="d-flex align-end">
-                      <v-col align="end" class="text-3xl font-bold text-[#57A363]">{{ courses.length }}</v-col>
+                      <v-col align="end" class="text-3xl font-bold text-[#57A363]">{{ coach_leaves.filter(v => v.status === 'approved').length }}</v-col>
                       <v-col class="text-sm ">รายการ</v-col>
                   </v-row>
               </template>
@@ -163,7 +164,7 @@
               </template>
               <template v-slot:detail>
                   <v-row class="d-flex align-end">
-                      <v-col align="end" class="text-3xl font-bold  text-[#FCC419]">{{ courses.length }}</v-col>
+                      <v-col align="end" class="text-3xl font-bold  text-[#FCC419]">{{ coach_leaves.filter(v => v.status === 'pending').length}}</v-col>
                       <v-col class="text-sm">รายการ</v-col>
                   </v-row>
               </template>
@@ -179,7 +180,7 @@
               </template>
               <template v-slot:detail>
                   <v-row class="d-flex align-end">
-                      <v-col align="end" class="text-3xl font-bold  text-[#F03D3E]">{{ courses.length }}</v-col>
+                      <v-col align="end" class="text-3xl font-bold  text-[#F03D3E]">{{ coach_leaves.filter(v => v.status === 'disapproved').length }}</v-col>
                       <v-col class="text-sm">รายการ</v-col>
                   </v-row>
               </template>
@@ -195,7 +196,7 @@
               </template>
               <template v-slot:detail>
                   <v-row class="d-flex align-end">
-                      <v-col align="end" class="text-3xl font-bold text-[#999999]">{{ courses.length }}</v-col>
+                      <v-col align="end" class="text-3xl font-bold text-[#999999]">{{ coach_leaves.filter(v => v.status === 'cancel').length }}</v-col>
                       <v-col class="text-sm">รายการ</v-col>
                   </v-row>
               </template>
@@ -210,11 +211,14 @@
               :items="coach_leaves"
               :single-expand="singleExpand"
               :expanded.sync="expanded"
-              item-key="id"
+              item-key="coachLeaveId"
               show-expand
             >
+            <template v-slot:[`item.date`]="{ item }">
+                {{ item.startDate === item.endDate ? genDate(item.startDate) : `${genDate(item.startDate)} - ${genDate(item.endDate)}`  }}
+            </template>
             <template v-slot:[`item.leaveType`]="{ item }">
-                {{ item.leaveType === "business" ? "ลากิจ" :item.leaveType === "sick" ? "ลาป่วย" : "ลาพักร้อน" }}
+                {{ item.leaveType === "personal" ? "ลากิจ" :item.leaveType === "sick" ? "ลาป่วย" : "ลาพักร้อน" }}
             </template>
             <template v-slot:[`item.status`]="{ item }">
               <div class="d-flex align-center pa-1 rounded-lg" 
@@ -222,17 +226,14 @@
                 <span class="w-full text-center">{{ item.status == 'pending' ? 'รออนุมัติ' : item.status === "approved" ? "อนุมัติ":  item.status === "cancel" ? "ยกเลิก":"ไม่อนุมัติ"   }}</span>
               </div>
             </template>
-            <template v-slot:[`item.detail`]="{ item }">
-                <v-btn icon color="#ff6b81" @click="showDialogDetail(item)"><v-icon>mdi-eye-outline</v-icon> </v-btn>
-            </template>
             <template v-slot:[`item.action`]="{ item }">
+                <v-btn class="mr-3" icon color="#ff6b81" @click="showDialogDetail(item)"><v-icon>mdi-eye-outline</v-icon> </v-btn>
                 <v-btn icon color="#ff6b81" @click="cancelCoachLeave(item)"><v-icon>mdi-file-cancel-outline</v-icon> </v-btn>
             </template>
             <template v-slot:expanded-item="{ headers, item }">
               <td :colspan="headers.length" class="py-3">
                 <v-row>
                   <v-col cols="12">ผู้สอนแทน: {{ `${item.substituteCoachFirstNameTh} ${item.substituteCoachLastNameTh}` }}</v-col>
-                  <v-col cols="12">หมายเหตุ: {{ item.remark }}</v-col>
                 </v-row>
               </td>
             </template>
@@ -240,7 +241,8 @@
           </v-card-text>
         </v-card>
       </div>
-      <v-dialog :width="$vuetify.breakpoint.smAndUp ? '60vw' : ''" v-model="show_leave_form" v-if="show_leave_form">
+      <!-- CREATE :: LEAVE -->
+      <v-dialog persistent :width="$vuetify.breakpoint.smAndUp ? '60vw' : ''" v-model="show_leave_form" v-if="show_leave_form">
         <v-card class="pa-1">
           <v-row dense>
               <v-col class="pa-0" align="right">
@@ -398,12 +400,7 @@
             </v-row>
             <v-card flat class="mb-3">
                 <v-card-text class="border-dashed border-2 border-pink-600 rounded-lg">
-                    <v-row v-if="previewUrl">
-                    <v-col>
-                        <img :src="previewUrl" style="max-height: 200px" />
-                    </v-col>
-                    </v-row>
-                    <v-row v-if="!previewUrl">
+                  <v-row dense>
                     <v-col cols="12" class="flex align-center justify-center">
                         <v-img
                         src="../../../assets/manage_coach/upload_file.png"
@@ -412,7 +409,7 @@
                         ></v-img>
                     </v-col>
                     <v-col cols="12" class="flex align-center justify-center text-lg">
-                        แนบไฟล์รูปภาพหรือวิดีโอ (ส่วนนี้ยังอัพโหลดไม่ได้)
+                        แนบไฟล์
                     </v-col>
                     <v-col cols="12" class="flex align-center justify-center">
                         <v-btn text class="underline" color="#ff6b81" @click="openFileSelector"
@@ -421,6 +418,7 @@
                         <input
                         ref="fileInput"
                         type="file"
+                        multiple 
                         @change="uploadFile"
                         style="display: none"
                         />
@@ -428,6 +426,31 @@
                   </v-row>
                 </v-card-text>
             </v-card>
+            <div v-if="selected_files.length > 0" class="mb-3">
+              <v-row dense>
+                <v-col class="font-bold text-lg ">
+                  ไฟล์แนบ
+                </v-col>
+              </v-row>
+              <v-divider class="my-2"></v-divider>
+              <v-card flat class="mb-3" v-for="(file, index) of selected_files" :key="`${index}-file`">
+                <v-card-text class="border border-2 border-[#ff6b81] rounded-lg">
+                  <v-row>
+                    <v-col cols="auto" class="pr-2">
+                      <v-img height="35" width="26" src="../../../assets/coachLeave/file-pdf.png"/>
+                    </v-col>
+                    <v-col  class="px-2">
+                        <span class="font-bold">{{ file.name }}</span><br>
+                        <span class="text-caption">ขนาดไฟล์ : {{ (file.size / 1000000).toFixed(2) }} MB</span>
+                    </v-col>
+                    <v-col cols="auto" class="pl-2">
+                      <v-btn @click="removeFile(index)" icon color="#ff6b81"><v-icon>mdi-close</v-icon></v-btn>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </div>
+            
             <v-row>
               <v-col cols="12" sm align="right">
                 <v-btn text color="#ff6b81" @click="closeDialogLeaveForm()">ยกเลิก</v-btn>
@@ -439,7 +462,109 @@
           </v-card-text>
         </v-card>
       </v-dialog>
-      <!-- <pre>{{ coachs }}</pre> -->
+      <!-- DETAIL :: LEAVE -->
+      <v-dialog persistent :width="$vuetify.breakpoint.smAndUp ? '60vw' : ''" v-model="show_leave_detail" v-if="show_leave_detail">
+        <v-card class="pa-1 mb-3" >
+          <v-row dense>
+            <v-col align="right">
+              <v-btn icon color="#ff6b81" @click="closeDialogLeaveDetail()"><v-icon>mdi-close</v-icon></v-btn>
+            </v-col>
+          </v-row>
+          <v-card-title class="d-flex justify-center">
+            แบบฟอร์มขอลา
+          </v-card-title>
+          <v-card-text>
+            <v-row dense class="mb-3">
+              <v-col align="right">
+                สภานะ :
+              </v-col>
+              <v-col cols="auto">
+                <div  class="btn-size-lg d-flex align-center pa-1 rounded-xl" 
+                  :class="edited_coach_leave_data.status === 'pending' ? 'bg-[#FFF9E8] text-[#FCC419]' : edited_coach_leave_data.status === 'approved' ? 'bg-[#F0F9EE] text-[#58A144]' : edited_coach_leave_data.status === 'cancel' ? 'bg-[#e8e8e8] text-[#636363]':'bg-[#ffeeee] text-[#f00808]'">
+                  <span class="w-full text-center">{{ edited_coach_leave_data.status == 'pending' ? 'รออนุมัติ' : edited_coach_leave_data.status === "approved" ? "อนุมัติ":  edited_coach_leave_data.status === "cancel" ? "ยกเลิก":"ไม่อนุมัติ"   }}</span>
+                </div>
+              </v-col>
+            </v-row>
+             <v-card flat class="mb-3">
+              <v-card-text class="border border-1 rounded-lg">
+                <v-row>
+                  <v-col>
+                    <div>วันที่ลา</div>
+                    <div class="font-semibold pl-2">{{`${genDate(edited_coach_leave_data.startDate)} - ${genDate(edited_coach_leave_data.endDate)}`}}</div>
+                  </v-col>
+                  <v-col>
+                    <div>ช่วงเวลา</div>
+                    <div class="font-semibold pl-2">{{ edited_coach_leave_data.period === "full" ? 'ลาเต็มวัน' : edited_coach_leave_data.period === "morning" ? "ลาช่วงเช้า" : "ลาช่วงบ่าย"  }}</div>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <div>ประเภทการลา</div>
+                    <div class="font-semibold pl-2">{{ edited_coach_leave_data.leaveType === "sick" ? 'ลาป่วย' : edited_coach_leave_data.leaveType === "personal" ? 'ลากิจ' : 'ลาพักร้อน' }}</div>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <div>สาเหตุการลา</div>
+                    <div class="font-semibold pl-2">{{ edited_coach_leave_data.remark }}</div>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+             </v-card>
+             <template v-if="edited_coach_leave_data.courses.length > 0"  >
+              <div class="mb-3" v-for=" (course, index_course) in edited_coach_leave_data.courses" :key="`${index_course}-course`">
+                <v-row dense>
+                  <v-col cols="auto">
+                    <v-icon color="#ff6b81">mdi-card-account-details-outline</v-icon>
+                  </v-col>
+                  <v-col class="font-bold text-lg ">
+                    คอร์ส
+                  </v-col>
+                </v-row>
+                <v-divider class="my-2"></v-divider>
+                <v-card flat>
+                  <v-card-text class="border border-1 rounded-lg">
+                    <v-row dense>
+                      <v-col>
+                        <div>ชื่อคอร์ส</div>
+                        <div class="font-semibold pl-2">{{ `${course.courseNameTh} ${course.startTime}-${course.endTime}` }}</div>
+                      </v-col>
+                    </v-row>
+                    <v-row dense>
+                      <v-col>
+                        <div>ผู้สอนแทน</div>
+                        <div class="font-semibold pl-2">{{ `${course.substituteCoachFirstNameTh} ${course.substituteCoachLastNameTh}` }}</div>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </div>
+              <v-row dense>
+                <v-col class="font-bold text-lg ">
+                  ไฟล์แนบ
+                </v-col>
+              </v-row>
+              <v-divider class="my-2"></v-divider>
+              <v-card @click="dowloadFile(file)" flat class="mb-3" v-for="(file, index) of attachment_leave" :key="`${index}-file`">
+                <v-card-text class="border border-2 border-[#ff6b81] rounded-lg">
+                  <v-row>
+                    <v-col cols="auto" class="pr-2">
+                      <v-img height="35" width="26" src="../../../assets/coachLeave/file-pdf.png"/>
+                    </v-col>
+                    <v-col  class="px-2">
+                        <span class="font-bold">{{ file.fileName }}</span><br>
+                        <span class="text-caption">ขนาดไฟล์ : {{ (file.size / 1000000).toFixed(2) }} MB</span>
+                    </v-col>
+                    <!-- <v-col cols="auto" class="pl-2">
+                      <v-btn @click="removeFile(index)" icon color="#ff6b81"><v-icon>mdi-close</v-icon></v-btn>
+                    </v-col> -->
+                  </v-row>
+                </v-card-text>
+              </v-card>
+             </template>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
     </v-container>
   </div>
 </template>
@@ -534,11 +659,10 @@ export default {
       }
     ],
     column:[
-        {text: 'วันที่',align: 'start',sortable: false, value: 'date'},
-        {text: 'ประเภทการลา',align: 'start',sortable: false, value: 'leaveType'},
+        {text: 'วันที่',align: 'center',sortable: false, value: 'date'},
+        {text: 'ประเภทการลา',align: 'center',sortable: false, value: 'leaveType'},
         {text: 'สถานะ',align: 'center',sortable: false, value: 'status'},
-        {text: '',align: 'center',sortable: false, value: 'detail'},
-        {text: '',align: 'center',sortable: false, value: 'action'},
+        {text: '',align: 'right',sortable: false, value: 'action'},
     ],
     courses: [
       {
@@ -598,7 +722,7 @@ export default {
     ],
     leaveTypes : [
       {label : 'ลาป่วย', value : 'sick'},
-      {label : 'ลากิจ', value : "business"},
+      {label : 'ลากิจ', value : "personal"},
       {label : 'ลาพักร้อน', value :"take annual leave"},
     ],
     coach_leave_data : {
@@ -623,14 +747,17 @@ export default {
         }
       ]
     },
+    edited_coach_leave_data : {},
+    selected_files : [],
     show_detail : false,
     show_leave_form : false,
+    show_leave_detail : false
   }),
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
-    this.GetMyCourses({coach_id : this.user_detail.account_id})
-    this.GetLeavesByAccountId({account_id : this.user_detail.account_id})
-    this.GetCoachs()
+    
+    // this.GetLeavesByAccountId({account_id : this.user_detail.account_id})
+    
   },
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "จัดการ");
@@ -641,7 +768,14 @@ export default {
       my_courses : "CoachModules/getMyCourses",
       coachs : "CourseModules/getCoachs",
       coach_leaves : "CoachModules/getCoachLeaves",
+      attachment_leave: "CoachModules/getAttachmentLeave" 
     }),
+    SetFunctionsComputed(){
+      this.GetMyCourses({coach_id : this.user_detail.account_id})
+      this.GetLeavesByAccountId({account_id : this.user_detail.account_id})
+      this.GetCoachs()
+      return ''
+    },
     genToday(){
       return moment(new Date()).format("YYYY-MM-DD")
     },
@@ -661,10 +795,12 @@ export default {
       GetCoachs : "CourseModules/GetCoachs",
       SaveCoachLeave : "CoachModules/SaveCoachLeave",
       GetLeavesByAccountId : "CoachModules/GetLeavesByAccountId",
-      updateStatusCoachLeave : "CoachModules/updateStatusCoachLeave"
+      updateStatusCoachLeave : "CoachModules/updateStatusCoachLeave",
+      GetAttachmentLeave : "CoachModules/GetAttachmentLeave",
     }),
-    openFileSelector() {
-      this.$refs.fileInput.click();
+    genDate(date){
+      console.log(date)
+      return dateFormatter(new Date(date), "DD MT YYYYT")
     },
     cancelCoachLeave(data){    
       Swal.fire({
@@ -680,6 +816,32 @@ export default {
         }
       })
       
+    },
+    dowloadFile(file){
+      let parts = file.attachmentFile.split("/")
+      console.log(parts)
+      let endpoint = `${process.env.VUE_APP_URL}/api/v1/files/`
+      parts.forEach((part, index)=>{
+        if((parts.length - 1) !== index){
+          endpoint = endpoint+`${part}/`
+        }else{
+          endpoint = endpoint+encodeURIComponent(part)
+        }
+      })
+      // const https = require('https');
+      // const fs = require('fs');
+      // console.log(endpoint)
+      // let filename =  file.fileName
+      // window.open(endpoint, '_self');
+      // https.get(endpoint, (response) => {
+      //   const fileStream = fs.createWriteStream(filename);
+      //   response.pipe(fileStream);
+      //   fileStream.on('finish', () => {
+      //     console.log(`File ${filename} downloaded successfully.`);
+      //   });
+      // }).on('error', (err) => {
+      //   console.error(`Error downloading file: ${err.message}`);
+      // });
     },
     saveCoachLeave(){
       Swal.fire({
@@ -698,7 +860,8 @@ export default {
             course.time_id  = my_course_id_part[2]
           })
           this.coach_leave_data.coach_id = this.user_detail.account_id
-          this.SaveCoachLeave({coach_leave_data : this.coach_leave_data})
+          this.SaveCoachLeave({coach_leave_data : this.coach_leave_data,files : this.selected_files})
+          this.closeDialogLeaveForm()
         }
       })
    
@@ -762,20 +925,32 @@ export default {
         ]
       }
     },
-    showDialogDetail(leave_id){
-      this.show_detail = true
-      console.log(leave_id)
+    showDialogDetail(leave_data){
+      console.log(leave_data)
+      this.show_leave_detail = true
+      this.edited_coach_leave_data = leave_data
+      this.GetAttachmentLeave({coach_leave_id : leave_data.coachLeaveId})
+     
+    },
+    closeDialogLeaveDetail(){
+      this.show_leave_detail = false
+      this.edited_coach_leave_data = {}
+      this.attachment_leave = []
+    },
+    openFileSelector() {
+      this.$refs.fileInput.click();
+    },
+    removeFile(index){
+      this.selected_files.splice(index, 1)
     },
     uploadFile() {
-      this.file = this.$refs.fileInput.files[0];
-      console.log("file=>",this.file);
-    //   this.coach_check_in.file = this.file
-      if (!this.file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.previewUrl = e.target.result;
-      };
-      reader.readAsDataURL(this.file);
+      const files = this.$refs.fileInput.files
+      console.log(files)
+      if(files.length > 0){
+        for (let i = 0; i < files.length; i++) {
+          this.selected_files.push(files[i])
+        }
+      }
     },
     filterMycourse(){
       if(this.filter_course){
