@@ -15,7 +15,7 @@
       class="rounded-xl"
     >
       <v-card
-        class="mx-auto block rounded-xl drop-shadow-lg mt-3 ml-3 mr-3"
+        class="mx-auto block rounded-xl drop-shadow-lg mt-3 ml-3 mr-3 banner-container"
         max-width=""
       >
         <template>
@@ -247,5 +247,21 @@ export default {
   background-position: top;
   background-repeat: no-repeat;
   /* background-size: contain; */
+}
+
+.banner-container {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+}
+
+.banner-container img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-height: 100%;
+  min-width: 100%;
+  transform: translate(-50%, -50%);
 }
 </style>

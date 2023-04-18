@@ -3,6 +3,7 @@ import VueCookie from "vue-cookie"
 const profileModules = {
   namespaced: true,
   state: {
+    students: [],
     user_data: {
       fname_th: "dieb",
       lname_th: "dieb",
@@ -75,7 +76,8 @@ const profileModules = {
           firstNameTh: "",
           lastNameTh: ""
         }
-      ]
+      ],
+
 
       // accountTitleEng: "",
       // accountTitleTh: "",
@@ -152,7 +154,12 @@ const profileModules = {
     SetProfileDetail(state, payload) {
       state.profile_detail = payload
 
-    }
+    },
+    SetStudents(state, payload) {
+      state.students = payload
+
+    },
+   
 
   },
   actions: {
@@ -178,11 +185,18 @@ const profileModules = {
           let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?student_id=${account_id}`, config)
           console.log("data_parent", data)
           if (data.statusCode === 200) {
+            console.log(data.data);
+            localStorage.setItem("relations", JSON.stringify(data.data))
             if (data.data && data.data.message !== "relation not found.") {
+              console.log("11111100000")
               context.commit("SetProfileUser", data.data)
-              // localStorage.setItem("relations", JSON.stringify(data.data)) // Set data in localStorage
             } else {
-              throw { error: data }
+              console.log("1111110000022222");
+              data.data = []
+              console.log(data);
+              context.commit("SetProfileUser", data.data)
+              localStorage.setItem("relations", JSON.stringify(data.data));
+              throw { error: data };
             }
           } else {
             throw { error: data }
@@ -192,10 +206,23 @@ const profileModules = {
           console.log("data_student", data)
           if (data.statusCode === 200) {
             if (data.data && data.data.message !== "relation not found.") {
+              console.log("111111");
+              let students = []
+              for await (const student of data.data) {
+                if (student.parentId == account_id) {
+                  students.push(student.student)
+                }
+              }
+              console.log(account_id);
+              console.log("students : ", students)
               context.commit("SetProfileUser", data.data)
-              // localStorage.setItem("relations", JSON.stringify(data.data))
+              context.commit("SetStudents", students)
+              localStorage.setItem("relations", JSON.stringify(data.data))
             } else {
-              throw { error: data }
+              console.log("22222222");
+              // localStorage.removeItem("relations"); // clear existing data in local storage
+              localStorage.setItem("relations", JSON.stringify(data.data));
+              throw { error: data };
             }
           } else {
             throw { error: data }
@@ -256,6 +283,11 @@ const profileModules = {
     getProfileDetail(state) {
       return state.profile_detail
     },
+    getStudents(state) {
+      return state.students
+    },
+  
+
   },
 };
 

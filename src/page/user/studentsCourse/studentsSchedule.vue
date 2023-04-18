@@ -1,13 +1,10 @@
 <template>
   <v-container>
-    <!-- <div v-for="(test,index) in profile_user" :key="index">
-    <pre>{{ test.student.studentId  }}</pre>
-    </div> -->
+    <!-- {{ students }} -->
+    {{ my_course }}
     <div class="mx-10 my-5">
       <label class="text-xl font-bold">ข้อมูลตารางเรียน</label>
-   
-    
- 
+
       <v-row dense class="my-3">
         <v-col
           cols="4"
@@ -37,175 +34,197 @@
 
       <!-- PAGE 1 -->
       <v-expand-x-transition transition="scale-transition">
-        
         <div v-if="type_selected == 'students_course'">
-
-    <v-row v-if="data_local.roles.includes('R_4')" class="my-5">
-        <v-col cols="12" sm="10">
-            <v-text-field
-              @keyup="searchStudentCourse()"
-              v-model="search_course"
-              :class="`bg-white rounded-xl ${!MobileSize ? 'w-4/5' : 'w-full'} `"
-              hide-details
-              dense
-              outlined
-              label="ค้นหาคอร์สเรียนของนักเรียนได้ที่นี้"
-              prepend-inner-icon="mdi-magnify"
-            />
-          </v-col>
-
-          <v-card 
-          @click="$router.push({ name: 'StudentCourse', params:{course_id: item.courseId }})"
-           v-for="item in (search_course !== '' ? data_search_course : student_data )" :key="item.id">
-
-            <v-row dense >
-              <!-- img -->
-              <v-col cols="12" sm="2">
-                <v-col
-                  style="     
-                    display: block;         
-                    margin-left: auto;        
-                    margin-right: auto;  
-                    width: 100%; 
-                    margin-top: 10%; 
-                  "
-                >
-                <v-img :src="item.courseImg?  showImg(item.courseImg) : defaultImageUrl"></v-img>
-           
-              </v-col>
-              </v-col>
-              <!-- detail -->
-              <v-col cols="12" sm="6">
-                <v-col class="text-lg font-bold">
-                  {{ item.courseNameTh == ''? '-' : item.courseNameTh }}
-                  ({{ item.courseNameEng  == ''? '-' : item.courseNameEng }})
-                  
-                </v-col>
-                <!-- <v-col class="text-slate-400">
-                  {{ item.courseNameEng  == ''? '-' : item.courseNameEng }}
-                </v-col> -->
-                <v-col class="text-slate-400">
-                  <span class="mdi mdi-account">โค้ช :</span>
-                  {{ item.coachName  == null ? '-' : item.coachName}}
-                </v-col>
-                <v-col >
-                 
-                  <!-- v-for="(day, index_day) in dayOfWeekName" :key="index_day" -->
-                  <v-card color="yellow" class="rounded-lg text-center" >
-                    <!-- {{ dayOfWeekName(item.dates.day)  == ''? '-' : dayOfWeekName(item.dates.day) }} -->
-                    {{ item.period.start }} - {{ item.period.end }} น.
-                  </v-card>
-                  <!-- {{ item.courseNameEn }} -->
-                </v-col>
-              </v-col>
-
-              <!-- circle -->
-              <v-col cols="12" sm="4" class="pt-6" align="center">
-                <v-col>
-                  <!-- {{ item.courseNameEn }} -->
-                  <v-progress-circular
-                    :rotate="-90"
-                    :size="90"
-                    :width="10"
-                    :value="(item.dates.count / item.dates.totalDay) * 100"
-                    color="#ff6b81"
-                  >
-                    {{ item.dates.count }} / {{ item.dates.totalDay }} <br />ครั้ง
-                  </v-progress-circular>
-                </v-col>
+          <div v-if="data_local.roles.includes('R_4')">
+            <v-row class="my-5">
+              <v-col cols="12">
+                <v-autocomplete
+                  v-model="search_course"
+                  :items="students"
+                  item-text="studentFirstnameTh"
+                  item-value="studentId"
+                  dense
+                  filled
+                  label="ค้นหาคอร์สเรียนของนักเรียนได้ที่นี้"
+                  @change="searchStudentCourse(search_course)"
+                ></v-autocomplete>
               </v-col>
             </v-row>
 
-          </v-card>
+            <v-card-text
+              class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
+              v-if="my_course.length == 0"
+            >
+              <span class="text-lg font-bold">
+                <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                ไม่พบข้อมูลคอร์สเรียน
+              </span>
+            </v-card-text>
 
-    <v-col cols="12" v-if="search_course !== '' && data_search_course.length === 0 || student_data.length === 0" class="font-weight-bold text-center text-xl">
-            ไม่พบคอร์สเรียน
-          </v-col>
-
-
-      </v-row>
-
-       
-    <div v-if="data_local.roles.includes('R_5')" >
-      <div v-for="(item, index) in student_data" :key="index">
-          <v-card
-         
-            @click="$router.push({ name: 'StudentCourse', params:{course_id: item.courseId }})"
-            class="my-10 drop-shadow-lg"
-          >
-            <v-row dense >
-              <!-- img -->
-              <v-col cols="12" sm="2">
-                <v-col
-                  style="     
-                    display: block;         
-                    margin-left: auto;        
-                    margin-right: auto; 
-                    width: 100%; 
-                    margin-top: 10%; 
-                  "
-                >
-                <v-img :src="item.courseImg?  showImg(item.courseImg) : defaultImageUrl"></v-img>
-           
+            <div v-for="item in my_course" :key="item.id">
+              <v-col
+                cols="12"
+                v-if="my_course.length == 0"
+                class="font-weight-bold text-center text-xl"
+              >
+                ไม่พบคอร์สเรียน
               </v-col>
-              </v-col>
-              <!-- detail -->
-              <v-col cols="12" sm="6">
-                <v-col class="text-lg font-bold">
-                  {{ item.courseNameTh == ''? '-' : item.courseNameTh }}
-                  ({{ item.courseNameEng  == ''? '-' : item.courseNameEng }})
-                  
-                </v-col>
-                <!-- <v-col class="text-slate-400">
+
+              <v-card 
+              :loading="student_is_loading"
+                @click="
+                  $router.push({
+                    name: 'StudentCourse',
+                    params: { course_id: item.courseId },
+                  })
+                "
+                class="my-10 drop-shadow-lg"
+              >
+                <v-row dense>
+                  <!-- img -->
+                  <v-col cols="12" sm="2">
+                    <v-col
+                      style="
+                        display: block;
+                        margin-left: auto;
+                        margin-right: auto;  
+                        width: 100%; 
+                        margin-top: 10%;
+                      "
+                    >
+                      <v-img
+                        :src="
+                          item.courseImg
+                            ? showImg(item.courseImg)
+                            : defaultImageUrl
+                        "
+                      ></v-img>
+                    </v-col>
+                  </v-col>
+                  <!-- detail -->
+                  <v-col cols="12" sm="6">
+                    <v-col class="text-lg font-bold">
+                      {{ item.courseNameTh == "" ? "-" : item.courseNameTh }}
+                      ({{
+                        item.courseNameEng == "" ? "-" : item.courseNameEng
+                      }})
+                    </v-col>
+                    <!-- <v-col class="text-slate-400">
                   {{ item.courseNameEng  == ''? '-' : item.courseNameEng }}
                 </v-col> -->
-                <v-col class="text-slate-400">
-                  <span class="mdi mdi-account">โค้ช :</span>
-                  {{ item.coachName  == null ? '-' : item.coachName}}
-                </v-col>
-                <v-col >
-                 
-                  <!-- v-for="(day, index_day) in dayOfWeekName" :key="index_day" -->
-                  <v-card color="yellow" class="rounded-lg text-center" >
-                    <!-- {{ dayOfWeekName(item.dates.day)  == ''? '-' : dayOfWeekName(item.dates.day) }} -->
-                    {{ item.period.start }} - {{ item.period.end }} น.
-                  </v-card>
-                  <!-- {{ item.courseNameEn }} -->
-                </v-col>
-              </v-col>
+                    <v-col class="text-slate-400">
+                      <span class="mdi mdi-account">โค้ช :</span>
+                      {{ item.coachName == null ? "-" : item.coachName }}
+                    </v-col>
+                    <v-col>
+                      <!-- v-for="(day, index_day) in dayOfWeekName" :key="index_day" -->
+                      <v-card color="yellow" class="rounded-lg text-center">
+                        <!-- {{ dayOfWeekName(item.dates.day)  == ''? '-' : dayOfWeekName(item.dates.day) }} -->
+                        {{ item.period.start }} - {{ item.period.end }} น.
+                      </v-card>
+                      <!-- {{ item.courseNameEn }} -->
+                    </v-col>
+                  </v-col>
 
-              <!-- circle -->
-              <v-col cols="12" sm="4" class="pt-6" align="center">
-                <v-col>
-                  <!-- {{ item.courseNameEn }} -->
-                  <v-progress-circular
-                    :rotate="-90"
-                    :size="90"
-                    :width="10"
-                    :value="(item.dates.count / item.dates.totalDay) * 100"
-                    color="#ff6b81"
-                  >
-                    {{ item.dates.count }} / {{ item.dates.totalDay }} <br />ครั้ง
-                  </v-progress-circular>
-                </v-col>
-              </v-col>
-            </v-row>
-          </v-card>
-      </div>
-    </div>
-          
-         
-            <v-card-text 
-          class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
-          
-          v-if="student_data.length == '0' " 
-          >
-            <span class="text-lg font-bold">
-              <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-              ไม่พบข้อมูลคอร์สเรียน
-            </span>
-          </v-card-text>
+                  <!-- circle -->
+                  <v-col cols="12" sm="4" class="pt-6" align="center">
+                    <v-col>
+                      <!-- {{ item.courseNameEn }} -->
+                      <v-progress-circular
+                        :rotate="-90"
+                        :size="90"
+                        :width="10"
+                        :value="(item.dates.count / item.dates.totalDay) * 100"
+                        color="#ff6b81"
+                      >
+                        {{ item.dates.count }} / {{ item.dates.totalDay }}
+                        <br />ครั้ง
+                      </v-progress-circular>
+                    </v-col>
+                  </v-col>
+                </v-row>
+              </v-card>
+           
+            </div> 
+          </div>
 
+          <div v-if="data_local.roles.includes('R_5')">
+            <div v-for="(item, index) in my_course" :key="index">
+              <v-card
+                @click="
+                  $router.push({
+                    name: 'StudentCourse',
+                    params: { course_id: item.courseId },
+                  })
+                "
+                class="my-10 drop-shadow-lg"
+              >
+                <v-row dense>
+                  <!-- img -->
+                  <v-col cols="12" sm="2">
+                    <v-col
+                      style="
+                        display: block;
+                        margin-left: auto;
+                        margin-right: auto;
+                        width: 100%;
+                        margin-top: 10%;
+                      "
+                    >
+                      <v-img
+                        :src="
+                          item.courseImg
+                            ? showImg(item.courseImg)
+                            : defaultImageUrl
+                        "
+                      ></v-img>
+                    </v-col>
+                  </v-col>
+                  <!-- detail -->
+                  <v-col cols="12" sm="6">
+                    <v-col class="text-lg font-bold">
+                      {{ item.courseNameTh == "" ? "-" : item.courseNameTh }}
+                      ({{
+                        item.courseNameEng == "" ? "-" : item.courseNameEng
+                      }})
+                    </v-col>
+                    <!-- <v-col class="text-slate-400">
+                  {{ item.courseNameEng  == ''? '-' : item.courseNameEng }}
+                </v-col> -->
+                    <v-col class="text-slate-400">
+                      <span class="mdi mdi-account">โค้ช :</span>
+                      {{ item.coachName == null ? "-" : item.coachName }}
+                    </v-col>
+                    <v-col>
+                      <!-- v-for="(day, index_day) in dayOfWeekName" :key="index_day" -->
+                      <v-card color="yellow" class="rounded-lg text-center">
+                        <!-- {{ dayOfWeekName(item.dates.day)  == ''? '-' : dayOfWeekName(item.dates.day) }} -->
+                        {{ item.period.start }} - {{ item.period.end }} น.
+                      </v-card>
+                      <!-- {{ item.courseNameEn }} -->
+                    </v-col>
+                  </v-col>
+
+                  <!-- circle -->
+                  <v-col cols="12" sm="4" class="pt-6" align="center">
+                    <v-col>
+                      <!-- {{ item.courseNameEn }} -->
+                      <v-progress-circular
+                        :rotate="-90"
+                        :size="90"
+                        :width="10"
+                        :value="(item.dates.count / item.dates.totalDay) * 100"
+                        color="#ff6b81"
+                      >
+                        {{ item.dates.count }} / {{ item.dates.totalDay }}
+                        <br />ครั้ง
+                      </v-progress-circular>
+                    </v-col>
+                  </v-col>
+                </v-row>
+              </v-card>
+            </div>
+          </div>
         </div>
       </v-expand-x-transition>
 
@@ -250,19 +269,31 @@
 
       <!-- PAGE 3 -->
       <v-expand-x-transition transition="scale-transition">
-        <div v-if="type_selected == 'students_bookedcourse' ">
-           
-        <div v-for="(item_booked, index_booked) in profile_booked" :key="index_booked">
-            <v-card v-if="profile_booked.length != '0'" @click="showCard(index, item_booked)" class="my-5">
+        <div v-if="type_selected == 'students_bookedcourse'">
+          <div
+            v-for="(item_booked, index_booked) in profile_booked"
+            :key="index_booked"
+          >
+            <v-card
+              v-if="profile_booked.length != '0'"
+              @click="showCard(index, item_booked)"
+              class="my-5"
+            >
               <v-card-text>
                 <div>
                   <v-row dense>
                     <!-- img -->
                     <v-col cols="12" sm="2">
-                        <img :src="item_booked.courseImg ? item_booked.courseImg :`../../../assets/student_course/download.png`" />
+                      <img
+                        :src="
+                          item_booked.courseImg
+                            ? item_booked.courseImg
+                            : `../../../assets/student_course/download.png`
+                        "
+                      />
                     </v-col>
                     <!-- detail -->
-                    <v-col cols="12" sm="6" class="text-lg font-bold " >
+                    <v-col cols="12" sm="6" class="text-lg font-bold">
                       <v-row dense>
                         <v-col>
                           {{ item_booked.courseName }}
@@ -270,8 +301,8 @@
                       </v-row>
                       <v-row dense>
                         <v-col cols="auto">
-                          <v-card outlined >
-                            <v-card-text class="py-0"> 
+                          <v-card outlined>
+                            <v-card-text class="py-0">
                               <!-- {{` ${dayOfWeekName(item_booked.dayOfWeekName.split(","))} ${item_booked.start}-${item_booked.end}น.` }}  -->
                             </v-card-text>
                           </v-card>
@@ -279,13 +310,22 @@
                       </v-row>
                     </v-col>
                     <!-- circle -->
-                    <v-col cols="12" sm="4" class="d-flex align-center" align="center">
+                    <v-col
+                      cols="12"
+                      sm="4"
+                      class="d-flex align-center"
+                      align="center"
+                    >
                       <v-row>
                         <v-col>
-                          <v-chip color="#d9ead3" text-color="green" >
-                            <span>{{ item_booked.status === 'waiting' ? "รอการติดต่อ" : item_booked.status }}</span>
+                          <v-chip color="#d9ead3" text-color="green">
+                            <span>{{
+                              item_booked.status === "waiting"
+                                ? "รอการติดต่อ"
+                                : item_booked.status
+                            }}</span>
                           </v-chip>
-                        <!-- <v-progress-circular
+                          <!-- <v-progress-circular
                           :size="90"
                           :width="15"
                           value="booked"
@@ -298,24 +338,43 @@
                     </v-col>
                   </v-row>
                 </div>
-                <div  v-if="activeCard === index && !course_is_loading" class="mt-3">
-                  
+                <div
+                  v-if="activeCard === index && !course_is_loading"
+                  class="mt-3"
+                >
+             
                   <v-card>
                     <v-row dense class="pa-3">
-                      <v-col cols="12" md="12" sm="12"  class="text-lg font-bold ">
-                         {{ `${course_data.course_name_th} (${course_data.course_name_en})` }}
-                      </v-col> 
+                      <v-col
+                        cols="12"
+                        md="12"
+                        sm="12"
+                        class="text-lg font-bold"
+                      >
+                        {{
+                          `${course_data.course_name_th} (${course_data.course_name_en})`
+                        }}
+                      </v-col>
                       <v-col cols="12" md="12" sm="12">
-                        <span class="mdi mdi-calendar-today" style="color: #ff6b81;"></span> 
-                        {{dayOfWeekName(item_booked.dayOfWeekName.split(","))}}
-                      </v-col> 
-
-                      <v-col cols="12" md="12" sm="12">
-                        <span class="mdi mdi-clock-outline" style="color: #ff6b81;"></span> {{course_data.course_hours}} ชม. / ครั้ง 
+                        <span
+                          class="mdi mdi-calendar-today"
+                          style="color: #ff6b81"
+                        ></span>
+                        {{
+                          dayOfWeekName(item_booked.dayOfWeekName.split(","))
+                        }}
                       </v-col>
 
-                      <v-col cols="12" md="12" sm="12" class="text-lg ">
-                        {{course_data.detail}}
+                      <v-col cols="12" md="12" sm="12">
+                        <span
+                          class="mdi mdi-clock-outline"
+                          style="color: #ff6b81"
+                        ></span>
+                        {{ course_data.course_hours }} ชม. / ครั้ง
+                      </v-col>
+
+                      <v-col cols="12" md="12" sm="12" class="text-lg">
+                        {{ course_data.detail }}
                       </v-col>
                       <v-col cols="12" md="12" sm="12">
                         <div class="mt-8">
@@ -323,7 +382,7 @@
                         </div>
                         <v-divider class=""></v-divider>
                         <span class="pa-2">
-                          {{course_data.music_performance}}
+                          {{ course_data.music_performance }}
                         </span>
                       </v-col>
 
@@ -333,31 +392,27 @@
                         </div>
                         <v-divider class=""></v-divider>
                         <span class="pa-2">
-                          {{course_data.music_performance}}
+                          {{ course_data.music_performance }}
                         </span>
                       </v-col>
                     </v-row>
-                </v-card>
-              </div>
+                  </v-card>
+                </div>
               </v-card-text>
-              
-            </v-card> 
-
+            </v-card>
           </div>
           <!-- <v-card v-if="profile_booked.length == '0'" class="border-solid mt-8 pa-5 text-center text-xl">
             <span class="mdi mdi-alert-outline" style="color: #ff6b81;"></span>  ไม่พบข้อมูลการจอง
           </v-card> -->
-          <v-card-text 
-          class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
-          v-if="profile_booked.length == '0'"
+          <v-card-text
+            class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
+            v-if="profile_booked.length == '0'"
           >
             <span class="text-lg font-bold">
               <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
               ไม่พบข้อมูลการจอง
             </span>
           </v-card-text>
-
-          
         </div>
       </v-expand-x-transition>
     </div>
@@ -372,7 +427,7 @@ import labelCustom from "@/components/label/labelCustom.vue";
 export default {
   components: {
     calendarStudent,
-    labelCustom
+    labelCustom,
   },
   data: () => ({
     activePage: 1,
@@ -395,26 +450,28 @@ export default {
       { label: "รายเดือน", value: "month" },
     ],
     tasks: [],
-      data_search_course: [],
-      search_course: "",
+    data_search_course: [],
+    search_course: "",
     type_selected: "students_course",
     time_frame: "month",
     a_test: "",
     b_test: "",
     item: {},
     item_data: "",
-   
-
   }),
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+    console.log("test", this.user_relation.student.studentId);
     this.GetProfileBooked(this.user_detail.account_id);
     this.GetAll(this.user_detail.account_id);
-    
-    for (const item_data of this.profile_user) {
-      this.GetStudentData(item_data.student.studentId); 
-    }
-
+    // console.log("my_course_student_id", this.$store.state.my_course_student_id);
+    // console.log("object", );
+    // for (const item of JSON.parse(localStorage.getItem("relations"))) {
+    //   this.GetStudentData(item.student.studentId);
+    // }
+    // for (const item_data of this.profile_user) {
+    //   this.GetStudentData(item_data.student.studentId);
+    // }
   },
 
   mounted() {
@@ -423,13 +480,24 @@ export default {
       "ข้อมูลตารางเรียน"
     );
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    // this.GetStudentData(this.user_detail.account_id);
+    console.log(this.user_relation);
     this.GetProfileBooked(this.user_detail.account_id);
     this.GetAll(this.user_detail.account_id);
-    
-    for (const item_data of this.profile_user) {
-      this.GetStudentData(item_data.student.studentId); 
-    }
+    // this.GetStudentData(this.user_relation.student.studentId);
+    this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty")
+   
+  
+      if (this.$store.state.MyCourseModules.my_course_student_id !== '') {
+          //  this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty")
+
+          this.GetStudentData(this.$store.state.MyCourseModules.my_course_student_id);
+      } else {
+        for (const item of JSON.parse(localStorage.getItem("relations"))) {
+                this.GetStudentData(item.student.studentId);
+          }
+      }
+          
+    console.log("my_course_student_id", this.$store.state.MyCourseModules.my_course);
 
   },
 
@@ -440,7 +508,6 @@ export default {
         this.loading = false;
       }, 200);
     },
-
   },
   methods: {
     ...mapActions({
@@ -449,7 +516,7 @@ export default {
       GetAll: "ProfileModules/GetAll",
 
       //COURSE
-      GetCourse : "CourseModules/GetCourse",
+      GetCourse: "CourseModules/GetCourse",
     }),
     prev() {
       this.$refs.calendar.prev();
@@ -460,42 +527,60 @@ export default {
     },
 
     showCard(index, course) {
-      this.GetCourse(course.courseId)
-      if( this.activeCard !== index ){
-        this.activeCard = index; 
-      }else{
-        this.activeCard = null
+      this.GetCourse(course.courseId);
+      if (this.activeCard !== index) {
+        this.activeCard = index;
+      } else {
+        this.activeCard = null;
       }
-     // set activeCard to the clicked index
+      // set activeCard to the clicked index
     },
 
-    searchStudentCourse() {
-      this.data_search_course = this.student_data.filter((val)=>{
-        if (val.courseNameTh.indexOf(this.search_course) !== -1 || val.courseNameEng.toLowerCase().indexOf(this.search_course.toLowerCase()) !== -1 ) {
-          return val
-        }
-      })
+    async searchStudentCourse(studentId) {
+      this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty")
+
+      console.log("item", studentId);
+      await this.GetStudentData(studentId);
+      console.log("mycourse", this.student_data);
+      // for (const item of JSON.parse(localStorage.getItem("relations"))) {
+
+      // }
+      // this.data_search_course = this.student_data.filter((val) => {
+      //   if (
+      //     val.courseNameTh.indexOf(this.search_course) !== -1 ||
+      //     val.courseNameEng
+      //       .toLowerCase()
+      //       .indexOf(this.search_course.toLowerCase()) !== -1
+      //   ) {
+      //     return val;
+      //   }
+      // });
     },
-  dayOfWeekName(days) {
-    const daysOfWeek = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"];
-    const dayNames = [];
-    for (let i = 0; i < days.length; i++) {
-      const dayIndex = days[i];
-      dayNames.push(daysOfWeek[dayIndex]);
-    }
-    return dayNames.join(' - ');
-  },
+    dayOfWeekName(days) {
+      const daysOfWeek = [
+        "อาทิตย์",
+        "จันทร์",
+        "อังคาร",
+        "พุธ",
+        "พฤหัสบดี",
+        "ศุกร์",
+        "เสาร์",
+      ];
+      const dayNames = [];
+      for (let i = 0; i < days.length; i++) {
+        const dayIndex = days[i];
+        dayNames.push(daysOfWeek[dayIndex]);
+      }
+      return dayNames.join(" - ");
+    },
 
     showImg(item) {
       return `${process.env.VUE_APP_URL}/api/v1/files/${item}`;
     },
 
-      showData() {
-      this.show_detail = true
+    showData() {
+      this.show_detail = true;
     },
-
- 
-  
   },
 
   computed: {
@@ -503,16 +588,19 @@ export default {
       student_data: "MyCourseModules/getStudentData",
       itemTime: "MyCourseModules/getcourseSchedule",
       profile_booked: "MyCourseModules/getProfileBooked",
-      course_data : "CourseModules/getCourseData",
+      course_data: "CourseModules/getCourseData",
       course_is_loading: "CourseModules/getCourseIsLoading",
       profile_user: "ProfileModules/getProfileUser",
+      students: "ProfileModules/getStudents",
+      student_is_loading: "ProfileModules/getStudentsLoading",
+      my_course: "MyCourseModules/getMyCourse",
 
     }),
-    studentData: {
-      get() {
-        return this.student_data;
-      },
-    },
+    // studentData: {
+    //   get() {
+    //     return this.student_data;
+    //   },
+    // },
 
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
@@ -522,7 +610,7 @@ export default {
       const { sm } = this.$vuetify.breakpoint;
       return !!sm;
     },
- 
+
     cal() {
       return this.ready ? this.$refs.calendar : null;
     },
@@ -534,6 +622,4 @@ export default {
 .v-progress-circular {
   margin: 1rem;
 }
-
-
 </style>

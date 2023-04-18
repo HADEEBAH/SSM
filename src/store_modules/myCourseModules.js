@@ -95,10 +95,16 @@ const myCourseModules = {
             ]
         },
 
+        my_course_student_id:'',
+
+        student_is_loading: false,
+
+        my_course:[],
+
     },
     mutations: {
         SetStudentData(state, payload) {
-            state.student_data = payload
+            state.student_data = payload;
         },
         SetcourseSchedule(state, payload) {
             state.itemTime = payload;
@@ -109,13 +115,27 @@ const myCourseModules = {
         SetMyCourseDetail(state, payload) {
             state.my_course_detail = payload;
         },
+        SetStudentsLoading(state, payload) {
+            state.student_is_loading = payload
+        },
+        SetMyCourseStudentId(state, payload) {
+            state.my_course_student_id = payload
+        },
+        SetMyCourse(state, payload) {
+            // state.my_course = ''
+            state.my_course.push(payload)
+        },
+        SetCourseArrayEmpty(state) {
+            // state.my_course = ''
+            state.my_course= []
+        },
     },
     actions: {
         courseSchedule(context) {
             context.commit("SetcourseSchedule");
         },
         async GetStudentData(context, account_id) {
-            console.log("object", account_id);
+            context.commit("student_is_loading", true);
             try {
                 let config = {
                     headers: {
@@ -146,8 +166,16 @@ const myCourseModules = {
                         }
 
                     }
+                    context.commit("student_is_loading", true);
                     context.commit("SetcourseSchedule", dataCourseSchedule);
-                    context.commit("SetStudentData", data.data)
+                    for (const item of data.data) {
+                        context.commit("student_is_loading", true);
+                        context.commit("SetMyCourse", item)
+                    }
+                    context.commit("student_is_loading", true);
+                    context.commit("SetMyCourseStudentId", '')
+                    context.commit("student_is_loading", false);
+
 
                 } else {
                     throw { error: data };
@@ -183,8 +211,6 @@ const myCourseModules = {
             }
         },
         async GetMyCourseDetail(context, { account_id, course_id }) {
-            console.log("account_id4444444", account_id);
-            console.log("course_id5555555555555", course_id);
             try {
                 let config = {
                     headers: {
@@ -195,8 +221,6 @@ const myCourseModules = {
                 }
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/checkin/student/${account_id}/course/${course_id}`, config);
 
-                console.log("account_id4444444", account_id);
-                console.log("course_id5555555555555", course_id);
                 if (data.statusCode === 200) {
                     context.commit("SetMyCourseDetail".data.data)
                     console.log("SetMyCourseDetail".data.data);
@@ -205,6 +229,15 @@ const myCourseModules = {
                 console.log("GetMyCourseDetail_err", error);
             }
         },
+        async GetMyCourseStudentId(context ,account_id) {
+            context.commit("SetMyCourseStudentId", account_id);   
+        },
+        async GetMyCourseArrayEmpty(context) {
+            context.commit("student_is_loading", true);
+            context.commit("SetCourseArrayEmpty"); 
+            context.commit("student_is_loading", false);
+            
+        }
     },
     getters: {
         getStudentData(state) {
@@ -219,6 +252,17 @@ const myCourseModules = {
         getMyCourseDetail(state) {
             return state.my_course_detail; 
         },
+        getStudentsLoading(state) {
+            return state.student_is_loading
+        },
+        getMyCourseStudent(state) {
+            return state.my_course_student_id
+        },
+        getMyCourse(state) {
+            return state.my_course
+        },
+        
+
 
     },
 };
