@@ -15,8 +15,12 @@ const coachModules = {
     coach_check_in_is_loading : false,
     coach_leaves : [],
     coach_leaves_is_loading : false,
+    attachment_leave : []
   },
   mutations: {
+    SetAttachmentLeave(state, payload){
+      state.attachment_leave = payload
+    },
     SetCoachLeaves(state, payload){
       state.coach_leaves = payload
     },
@@ -85,7 +89,7 @@ const coachModules = {
         }
         Swal.fire({
           icon: "success",
-          title: "บันทึกสำเร้จ",
+          title: "บันทึกสำเร็จ",
           showDenyButton: false,
           showCancelButton: false,
           cancelButtonText :"ยกเลิก",
@@ -113,7 +117,7 @@ const coachModules = {
         if(data.statusCode === 200){
           Swal.fire({
             icon: "success",
-            title: "บันทึกสำเร้จ",
+            title: "บันทึกสำเร็จ",
             showDenyButton: false,
             showCancelButton: false,
             cancelButtonText :"ยกเลิก",
@@ -201,7 +205,7 @@ const coachModules = {
           if(data.statusCode === 200 ){
             Swal.fire({
                 icon: "success",
-                title: "บันทึกสำเร้จ",
+                title: "บันทึกสำเร็จ",
                 showDenyButton: false,
                 showCancelButton: false,
                 cancelButtonText :"ยกเลิก",
@@ -410,8 +414,27 @@ const coachModules = {
         console.log(error);
       }
     },
-    async SaveCoachLeave(context, {coach_leave_data}){
+    async GetAttachmentLeave(context, {coach_leave_id}){
       try{
+        let config = {
+          headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-type": "Application/json",
+              Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/attachment/${coach_leave_id}`,config)
+        if(data.statusCode === 200){
+          context.commit("SetAttachmentLeave",data.data)
+        }
+      }catch(error){
+        console.log(error)
+      }
+    },
+    async SaveCoachLeave(context, {coach_leave_data, files}){
+      try{
+        let user_detail = JSON.parse(localStorage.getItem("userDetail"))
         let config = {
           headers: {
               "Access-Control-Allow-Origin": "*",
@@ -438,19 +461,33 @@ const coachModules = {
           })
         })
         // let localhost = "http://localhost:3000"
-        let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coach/leave`, payload ,config)
-        console.log(data)
+        let payloadData = new FormData()
+        payloadData.append("payload",JSON.stringify(payload))
+        for(const [index,file] of files.entries()){
+          payloadData.append(`file${index}`, file, encodeURIComponent(file.name));
+        }
+        let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coach/leave`, payloadData ,config)
         if(data.statusCode === 201){
           Swal.fire({
             icon: "success",
-            title: "บันทึกสำเร้จ",
+            title: "บันทึกสำเร็จ",
             showDenyButton: false,
             showCancelButton: false,
             cancelButtonText :"ยกเลิก",
             confirmButtonText: "ตกลง",
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              let getLeaves = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${user_detail.account_id}`,config) 
+              console.log(getLeaves)
+              if(getLeaves.data.statusCode === 200){
+                context.commit("SetCoachLeaves",getLeaves.data.data)
+              } else{
+                throw {error : getLeaves }
+              }
+            }
           })
+         
         }
-       
       }catch(error){
         console.log(error)
       }
@@ -532,6 +569,9 @@ const coachModules = {
     },
     getStudentCheckIn(state){
       return state.student_check_in
+    },
+    getAttachmentLeave(state){
+      return state.attachment_leave
     }
   },
 };
