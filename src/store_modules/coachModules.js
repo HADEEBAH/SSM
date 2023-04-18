@@ -423,8 +423,8 @@ const coachModules = {
               Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let localhost = "http://localhost:3000"
-        let {data} = await axios.get(`${localhost}/api/v1/coach/leave/attachment/${coach_leave_id}`,config)
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/attachment/${coach_leave_id}`,config)
         if(data.statusCode === 200){
           context.commit("SetAttachmentLeave",data.data)
         }
@@ -460,13 +460,13 @@ const coachModules = {
             timeId: course.time_id
           })
         })
-        let localhost = "http://localhost:3000"
+        // let localhost = "http://localhost:3000"
         let payloadData = new FormData()
         payloadData.append("payload",JSON.stringify(payload))
         for(const [index,file] of files.entries()){
           payloadData.append(`file${index}`, file, encodeURIComponent(file.name));
         }
-        let {data} = await axios.post(`${localhost}/api/v1/coach/leave`, payloadData ,config)
+        let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coach/leave`, payloadData ,config)
         if(data.statusCode === 201){
           Swal.fire({
             icon: "success",
@@ -477,7 +477,7 @@ const coachModules = {
             confirmButtonText: "ตกลง",
           }).then(async (result) => {
             if (result.isConfirmed) {
-              let getLeaves = await axios.get(`${localhost}/api/v1/coach/leave/${user_detail.account_id}`,config) 
+              let getLeaves = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${user_detail.account_id}`,config) 
               console.log(getLeaves)
               if(getLeaves.data.statusCode === 200){
                 context.commit("SetCoachLeaves",getLeaves.data.data)
@@ -501,8 +501,8 @@ const coachModules = {
               Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let localhost = "http://localhost:3000"
-        let {data} = await axios.get(`${localhost}/api/v1/coach/leave/${account_id}`,config) 
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${account_id}`,config) 
         if(data.statusCode === 200){
           console.log(data.data)
           context.commit("SetCoachLeaves",data.data)
@@ -520,11 +520,11 @@ const coachModules = {
               Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let localhost = "http://localhost:3000"
-        let {data} = await axios.patch(`${localhost}/api/v1/coach/leave/${coach_leave_id}`,{ status : status },config) 
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${coach_leave_id}`,{ status : status },config) 
         if(data.statusCode === 200){
           // let localhost = "http://localhost:3000"
-          let getLeaves = await axios.get(`${localhost}/api/v1/coach/leave/${account_id}`,config) 
+          let getLeaves = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${account_id}`,config) 
           if(data.statusCode === 200){
             context.commit("SetCoachLeaves",getLeaves.data.data)
             Swal.fire({
