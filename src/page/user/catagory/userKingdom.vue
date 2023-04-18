@@ -15,7 +15,7 @@
       class="rounded-xl"
     >
       <v-card
-        class="mx-auto block rounded-xl drop-shadow-lg mt-3 ml-3 mr-3"
+        class="mx-auto block rounded-xl drop-shadow-lg mt-3 ml-3 mr-3 banner-container"
         max-width=""
       >
         <template>
@@ -131,6 +131,7 @@ export default {
     userDetail: false,
     search_kingdom: "",
     data_search_kingdom: [],
+    item_data: ""
   }),
   created() {
     this.dataStorage = JSON.parse(localStorage.getItem("userDetail"));
@@ -140,6 +141,12 @@ export default {
     } else {
       //console.log("false");
     }
+    this.GetAll(this.dataStorage.account_id);
+    for (const item_data of this.profile_user) {
+      console.log("itm", item_data);
+    }
+    this.GetStudentData(this.item_data.student.studentId); 
+
     localStorage.removeItem("Order")
     localStorage.setItem("Order", JSON.stringify(this.course_order))
   },
@@ -153,6 +160,8 @@ export default {
     ...mapActions({
       changeCourseOrderData: "OrderModules/changeCourseOrderData",
       createKingdom: "OrderModules/createKingdom",
+      GetAll: "ProfileModules/GetAll",
+
     }),
 
     selectedCategory(category) {
@@ -182,7 +191,9 @@ export default {
     ...mapGetters({
       course_order: "OrderModules/getCourseOrder",
       categorys: "CategoryModules/getCategorys",
-      categorys_is_loading : "CategoryModules/getCategorysIsLoading",
+      categorys_is_loading: "CategoryModules/getCategorysIsLoading",
+      profile_user: "ProfileModules/getProfileUser",
+      
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
@@ -236,5 +247,21 @@ export default {
   background-position: top;
   background-repeat: no-repeat;
   /* background-size: contain; */
+}
+
+.banner-container {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+}
+
+.banner-container img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-height: 100%;
+  min-width: 100%;
+  transform: translate(-50%, -50%);
 }
 </style>

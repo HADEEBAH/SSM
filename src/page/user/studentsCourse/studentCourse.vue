@@ -1,15 +1,18 @@
 <template>
   <v-container>
+    <!-- <div v-for="(item, index) in profile_user" :key="index">
+<pre>{{ item.student.studentId }}</pre>
+
+    </div> -->
+<!-- <pre>{{ profile_user }}</pre> -->
+    <!-- <pre>{{ my_course_detail }}</pre> -->
     <!-- <v-card class="my-5">
       <div> -->
         <!-- <pre>{{ student_data }}</pre> -->
         <!-- <div v-if="type_selected == 'students_course'"> -->
           <!-- @click="$router.push({ name: 'StudentCourse', params:{course_id: item.courseId }})" -->
 
-          <v-card
-         
-            class="my-10 drop-shadow-lg"
-          >
+          <v-card class="my-10 drop-shadow-lg">
             <v-row dense>
               <!-- img -->
               <v-col cols="12" sm="2">
@@ -17,32 +20,32 @@
                   style="  
                     display: block; 
                     margin-left: auto;
-                    margin-right: auto;
+                    margin-right: auto;  
                     width: 100%;
                     margin-top: 10%;
                   "
                 >
                   <!-- <img src="../../../assets/student_course/download.png" /> -->
-                  {{ student_data.courseImg }}
+                  <!-- {{ student_data.courseImg }} -->
                 </v-col>
               </v-col>
               <!-- detail -->
               <v-col cols="12" sm="6">
                 <v-col class="text-lg font-bold">
-                  {{ student_data.courseNameTh }}
+                  <!-- {{ student_data.courseNameTh }} -->
                 </v-col>
                 <v-col class="text-slate-400">
-                  {{ student_data.courseNameEn }}
+                  <!-- {{ student_data.courseNameEn }} -->
                 </v-col>
                 <v-col class="text-slate-400">
                   <span class="mdi mdi-account">โค้ช :</span>
-                  {{ student_data.coachName }}
+                  <!-- {{ student_data.coachName }} -->
                 </v-col>
                 <v-col>
                   <!-- v-for="(day, index_day) in dayOfWeekName" :key="index_day" -->
                   <v-card color="yellow" class="rounded-lg text-center">
-                    {{ dayOfWeekName(student_data.dayOfWeekName, "th") }}
-                    {{ student_data.start }} - {{ student_data.end }} น.
+                    <!-- {{ dayOfWeekName(student_data.dayOfWeekName, "th") }}
+                    {{ student_data.start }} - {{ student_data.end }} น. -->
                   </v-card>
                   <!-- {{ item.courseNameEn }} -->
                 </v-col>
@@ -56,10 +59,11 @@
                     :rotate="-90"
                     :size="90"
                     :width="10"
-                    :value="(student_data.successCount / student_data.totalAmount) * 100"
                     color="#ff6b81"
                   >
-                    {{ student_data.successCount }} / {{ student_data.totalAmount }} <br />ครั้ง
+                  <!-- :value="(student_data.successCount / student_data.totalAmount) * 100" -->
+
+                    <!-- {{ student_data.successCount }} / {{ student_data.totalAmount }} <br />ครั้ง -->
                   </v-progress-circular>
                 </v-col>
               </v-col>
@@ -69,11 +73,11 @@
       <!-- </div> -->
     <!-- </v-card> -->
 
-    <label-custom text="ข้อมูลการเรียน"></label-custom>
+    <!-- <label-custom text="ข้อมูลการเรียน"></label-custom>
 
     <v-card class="pa-2">
-        <!-- v-if="finishStudy == true" -->
-        <v-row>
+       
+        <v-row v-if="finishStudy == true">
             <v-col cols="2" sm="1">
                 <img src="../../../assets/student_course/certificates.png"/>
             </v-col>
@@ -102,9 +106,9 @@
             </v-col>
           </v-row>
 </v-card>
-    </v-card>
+    </v-card> -->
 
-    <template>
+    <!-- <template>
       <v-card class="my-5 drop-shadow-lg rounded-xl" v-for="(data, index) in items" :key="index">
         <v-card-text>
           <v-row class="" dense>
@@ -160,10 +164,10 @@
         </v-card-text>
 
         <v-card-text class="center pa-2"> </v-card-text>
-      </v-card> </template
-  >
+      </v-card> 
+      </template> -->
      <!-- DIALOG -->
-     <v-dialog class="pa-2" width="50vw" v-model="dialog_show" persistent>
+     <!-- <v-dialog class="pa-2" width="50vw" v-model="dialog_show" persistent>
       <v-card>
         <v-card-title>
           <v-row>
@@ -180,9 +184,9 @@
             ตกลง
         </v-btn>
       </v-card>
-    </v-dialog>
+    </v-dialog> -->
 
-<v-row v-if="checked == true">
+<!-- <v-row v-if="checked == true">
     <v-col cols="12" class="text-center" >
         <v-btn  class="pink--text w-full" @click="closedownload()">
             ยกเลิก
@@ -193,15 +197,15 @@
             ดาวน์โหลด
         </v-btn>
     </v-col>
-</v-row>
+</v-row> -->
 
-<v-row v-else>
+<!-- <v-row v-else>
     <v-col cols="12" class="text-center" >
         <v-btn color="#FF6B81" class="white--text w-full" @click="download()">
             ดาวน์โหลดผลการประเมิน
         </v-btn>
     </v-col>
-</v-row>
+</v-row> -->
 
 </v-container>
 
@@ -216,15 +220,16 @@
   
 <script>
 import { mapActions, mapGetters } from "vuex";
-import labelCustom from "../../../components/label/labelCustom.vue";
+// import labelCustom from "../../../components/label/labelCustom.vue";
 export default {
   components: {
-    labelCustom,
+    // labelCustom,
   },
   data: () => ({
     show: false,
     checked: false,
     dialog_show: false,
+    show_id: '',
     check: [],
     items: [
       {
@@ -248,10 +253,25 @@ export default {
         imageUrl: "https://picsum.photos/id/3/200/200",
       },
     ],
+    item_data:''
   }),
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    this.GetStudentData(this.user_detail.account_id); 
+    this.show_id = this.$route.params.course_id
+    console.log("show_id", this.show_id);
+    this.GetAll(this.user_detail.account_id);
+    for (const item_data of this.profile_user) {
+      // this.GetStudentData(item_data.student.studentId); 
+      console.log("itm", item_data.student.studentId);
+    this.GetMyCourseDetail({account_id : item_data.student.studentId, course_id: this.$route.params.course_id}); 
+
+    }
+    this.GetStudentData(this.item_data.student.studentId); 
+
+    // this.GetMyCourseDetail({account_id : this.item_data.student.studentId, course_id: this.$route.params.course_id}); 
+    // this.GetMyCourseDetail(this.show_id); 
+
+  
   },
   mounted() {
     this.$store.dispatch(
@@ -261,7 +281,11 @@ export default {
   },
   methods: {
       
-    ...mapActions({GetStudentData: "MyCourseModules/GetStudentData"}),
+    ...mapActions({
+      GetMyCourseDetail: "MyCourseModules/GetMyCourseDetail",
+      GetAll: "ProfileModules/GetAll",
+
+    }),
       download() {
         console.log("open");
        this.checked = true 
@@ -313,7 +337,11 @@ export default {
 
   },
   computed: {
-    ...mapGetters({ student_data: "MyCourseModules/getStudentData"}),
+    ...mapGetters({
+      my_course_detail: "MyCourseModules/getMyCourseDetail",
+      profile_user: "ProfileModules/getProfileUser",
+
+    }),
   },
 
 
