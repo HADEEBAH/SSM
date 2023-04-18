@@ -1,12 +1,5 @@
 <template>
   <v-container>
-    <!-- <div v-for="(test, index) in student_data" :key="index">
-      <pre>{{ test }}</pre>
-    </div> -->
-
-    <pre>{{ profile_user }}</pre>
-    <pre>{{ student_data }}</pre>
-
     <loading-overlay :loading="categorys_is_loading"></loading-overlay>
 
     <div class="profileCard my-5 center">
