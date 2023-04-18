@@ -1,25 +1,24 @@
 <template>
   <v-container>
     <!-- {{ profile_user }} -->
-    <div class="profileCard my-5 center">
-        <v-img
-          src="@/assets/userManagePage/imgcardafterupload.png"
-          class="iconInCard drop-shadow-md"
-        >
-        </v-img>
-        <div style="position: absolute">
-       
-          <div>
-            <v-img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU"
-              class="image-cropper "
-            >
-            </v-img>
-          </div>
+    <!-- <div class="profileCard my-5 center">
+      <v-img
+        src="@/assets/userManagePage/imgcardafterupload.png"
+        class="iconInCard drop-shadow-md"
+      >
+      </v-img>
+      <div style="position: absolute">
+        <div>
+          <v-img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU"
+            class="image-cropper"
+          >
+          </v-img>
         </div>
       </div>
+    </div> -->
     <!-- Button -->
-    <div v-if="!isEnabled">
+    <!-- <div v-if="!isEnabled">
       <v-row>
         <v-col class="my-3 text-center">
           <v-btn
@@ -32,161 +31,171 @@
           </v-btn>
         </v-col>
       </v-row>
-    </div>
+    </div> -->
     <!-- <div class="text-center font-bold">{{ data_local.first_name_en }}</div> -->
     <v-row dense>
+      <v-col class="my-5 " style="text-align: -webkit-center" cols="12">
+        <!-- <v-btn class="absolute" icon>
+            <v-icon color="#ff6b81" @click="preview_file = ''"
+              >mdi-close-circle</v-icon
+            >
+          </v-btn> -->
+          <!-- {{ profile_detail.image }} -->
+        <div class="cicle">
+          <v-img class="image-cropper items-end" :src="preview_file !== '' ? preview_file : (profile_detail.image ? profile_detail.image : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU`) ">
+            <v-btn v-if="isEnabled && preview_file === ''" color="#ff6b81" @click="openFileSelector" class="w-full white--text">เปลี่ยนรูป</v-btn>
+            <v-btn v-if="preview_file !== ''" color="#ff6b81" @click="removeImg" class="w-full white--text">
+              <span class="mdi mdi-close">ยกเลิก</span>
+            </v-btn>
+          </v-img>
+        </div>
+        <input
+            id="fileInput"
+            ref="fileInput"
+            type="file"
+            @change="uploadFile"
+            accept="image/*"
+            hidden
+           />
+      </v-col>
       <!--TH NAME -->
       <v-col cols="12" sm="6">
         <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
-        <div v-if="!isEnabled">
+        <!-- <div v-if="!isEnabled">
           {{ profile_detail.firstNameTh == ''? '-' : profile_detail.firstNameTh}}
-        </div>
-        <div v-else>
-          <v-text-field
-            v-bind:disabled="isDisabled"
-            @keypress="validate($event, 'th')"
-            placeholder=""
-            v-model="profile_detail.firstNameTh"
-            outlined
-            dense
-          >
-          </v-text-field>
-        </div>
+        </div> -->
+        <!-- <div v-else> -->
+        <v-text-field
+          @keypress="validate($event, 'th')"
+          placeholder="-"
+          v-model="profile_detail.firstNameTh"
+          outlined
+          dense
+          :disabled="!isEnabled"
+        >
+        </v-text-field>
+        <!-- </div> -->
       </v-col>
       <!-- TH LNAME -->
       <v-col cols="12" sm="6">
         <label-custom text="นามสกุล (ภาษาไทย)"></label-custom>
-        <div v-if="!isEnabled">
+        <!-- <div v-if="!isEnabled">
           {{ profile_detail.lastNameTh == ''? '-' : profile_detail.lastNameTh }}
-        </div>
-        <div v-else>
-          <v-text-field
-            v-bind:disabled="isDisabled"
-            @keypress="validate($event, 'th')"
-            placeholder=""
-            v-model="profile_detail.lastNameTh"
-            outlined
-            dense
-          >
-          </v-text-field>
-        </div>
+        </div> -->
+        <!-- <div v-else> -->
+        <v-text-field
+          @keypress="validate($event, 'th')"
+          placeholder="-"
+          v-model="profile_detail.lastNameTh"
+          outlined
+          dense
+          :disabled="!isEnabled"
+        >
+        </v-text-field>
+        <!-- </div> -->
       </v-col>
       <!-- nationality -->
       <v-col cols="12" sm="6">
         <label-custom text="สัญชาติ"></label-custom>
-        <div v-if="!isEnabled">
+        <!-- <div v-if="!isEnabled">
           {{ profile_detail.nation == null ? '-' : profile_detail.nation }}
         </div>
-        <div v-else>
-          <v-text-field
-            v-bind:disabled="isDisabled"
-            @keypress="validate($event, 'th' || 'en')"
-            placeholder=""
-            v-model="profile_detail.nation"
-            outlined
-            dense
-          >
-          </v-text-field>
-        </div>
+        <div v-else> -->
+        <v-text-field
+          @keypress="validate($event, 'th' || 'en')"
+          placeholder="-"
+          v-model="profile_detail.nation"
+          outlined
+          dense
+          :disabled="!isEnabled"
+        >
+        </v-text-field>
+        <!-- </div> -->
       </v-col>
-      <!-- id_card -->
-      <!-- <v-col cols="12" sm="6">
-        <label-custom text="เลขบัตรประชาชน"></label-custom>
-        <div v-if="!isEnabled">
-          {{ user_data.id_card }}
-        </div>
-        <div v-else>
-          <v-text-field
-            v-bind:disabled="!isDisabled"
-            @keypress="validate($event, 'th')"
-            v-model="user_data.id_card"
-            outlined
-            dense
-          >
-          </v-text-field>
-        </div>
-      </v-col> -->
-      <!-- date_of_birth -->
-      <!-- <v-col cols="12" sm="6">
-        <label-custom text="วันเกิด"></label-custom>
-        <div v-if="!isEnabled">
-          {{ user_data.date_of_birth }}
-        </div>
-        <div v-else>
-          <v-text-field
-            v-bind:disabled="isDisabled"
-            @keypress="validate($event, 'th')"
-            placeholder=""
-            v-model="user_data.date_of_birth"
-            outlined
-            dense
-          >
-            <template v-slot:append>
-              <v-icon color="#FF6B81">mdi-calendar</v-icon>
-            </template>
-          </v-text-field>
-        </div>
-      </v-col> -->
-      <!-- tel -->
       <v-col cols="12" sm="6">
         <label-custom text="เบอร์โทรศัพท์"></label-custom>
-        <div v-if="!isEnabled">
+        <!-- <div v-if="!isEnabled">
           {{ profile_detail.mobileNo == ''? '-' : profile_detail.mobileNo }}
         </div>
-        <div v-else>
-          <v-text-field
-            v-bind:disabled="!isDisabled"
-            @keypress="validate($event, 'th')"
-            @input="checkPhoneNumber"
-            maxlength="12"
-            required
-            placeholder=""
-            v-model="profile_detail.mobileNo"
-            outlined
-            dense
-          >
-          </v-text-field>
-        </div>
+        <div v-else> -->
+        <v-text-field
+          @keypress="validate($event, 'th')"
+          @input="checkPhoneNumber"
+          maxlength="12"
+          required
+          placeholder="-"
+          v-model="profile_detail.mobileNo"
+          outlined
+          dense
+          disabled
+        >
+        </v-text-field>
+        <!-- </div> -->
       </v-col>
       <!-- email -->
       <v-col cols="12" sm="6">
         <label-custom text="อีเมล"></label-custom>
-        <div v-if="!isEnabled">
+        <!-- <div v-if="!isEnabled">
           {{ profile_detail.email == ''? '-' : profile_detail.email}}
-        </div>
-        <div v-else>
-          <v-text-field
-            v-bind:disabled="!isDisabled"
-            placeholder=""
-            v-model="profile_detail.email"
-            outlined
-            dense
-            :rules="rules.email"
-          >
-          </v-text-field>
-        </div>
+        </div> -->
+        <!-- <div v-else> -->
+        <v-text-field
+          placeholder="-"
+          v-model="profile_detail.email"
+          outlined
+          dense
+          :rules="rules.email"
+          disabled
+        >
+        </v-text-field>
+        <!-- </div> -->
       </v-col>
       <!-- BTN -->
-
-      <v-col cols="12" sm="12" v-if="isEnabled">
+    </v-row>
+    <v-row justify="center">
+      <v-col cols="6" class="my-3 text-center" v-if="!isEnabled">
         <v-btn
+          class="white--text mb-5 w-full"
+          depressed
+          color="#ff6b81"
+          @click="edit()"
+        >
+          <span class="mdi mdi-pencil-outline">แก้ไข</span>
+        </v-btn>
+      </v-col>
+      <v-col cols="6" v-if="isEnabled">
+        <v-btn
+          :disabled="is_loading"
+          outlined
+          class="my-5 w-full"
+          depressed
+          color="#ff6b81"
+          @click="cancel()"
+        >
+          <span class="mdi mdi-close">ยกเลิก</span>
+        </v-btn>
+      </v-col>
+      <v-col cols="6" v-if="isEnabled">
+        <v-btn
+          :loading="is_loading"
+          :disabled="is_loading"
           class="white--text my-5 w-full"
           depressed
           color="#ff6b81"
           @click="submitEdit()"
         >
-          บันทึก
+          <span class="mdi mdi-check">บันทึก</span>
         </v-btn>
       </v-col>
     </v-row>
   </v-container>
 </template>
-  
-  <script>
+
+<script>
 import { mapActions, mapGetters } from "vuex";
 import { inputValidation } from "@/functions/functions";
 import LabelCustom from "@/components/label/labelCustom.vue";
-import VueCookie from "vue-cookie"
+import VueCookie from "vue-cookie";
 import Swal from "sweetalert2";
 import axios from "axios";
 export default {
@@ -207,16 +216,16 @@ export default {
       ],
     },
 
-    user_detail:{}
+    is_loading: false,
+    user_detail: {},
+    image_profile: {},
+    preview_file: ""
   }),
 
   created() {
-    this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
-    this.GetAll(this.user_detail.account_id)
-    
-    this.GetProfileDetail(this.$route.params.profile_id)
-
-    // console.log("userDetail", this.user_detail);
+    this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+    this.GetAll(this.user_detail.account_id);
+    this.GetProfileDetail(this.$route.params.profile_id);
   },
   mounted() {
     this.$store.dispatch(
@@ -230,7 +239,7 @@ export default {
       loginOneId: "loginModules/loginOneId",
       GetUserData: "ProfileModules/GetUserData",
       GetAll: "ProfileModules/GetAll",
-      GetProfileDetail: "ProfileModules/GetProfileDetail"
+      GetProfileDetail: "ProfileModules/GetProfileDetail",
       // GetParentData: "ProfileModules/GetParentData",
     }),
     edit() {
@@ -238,11 +247,15 @@ export default {
       this.isEnabled = true;
       this.buttonName = "บันทึก";
     },
+    cancel() {
+      this.isDisabled = true;
+      this.isEnabled = false;
+    },
 
     submitEdit(account_id) {
       Swal.fire({
         icon: "question",
-        title: "คุณต้องการแก้ไขอาณาข้อมูลส่วนตัวหรือไม่",
+        title: "คุณต้องการแก้ไขข้อมูลโปรไฟล์หรือไม่",
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: "ตกลง",
@@ -250,41 +263,50 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
+            this.is_loading = true
             let config = {
-                    headers:{
-                        "Access-Control-Allow-Origin" : "*",
-                        "Content-type": "Application/json",
-                        'Authorization' : `Bearer ${VueCookie.get("token")}`
-                    }
-              }
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-type": "Application/json",
+                Authorization: `Bearer ${VueCookie.get("token")}`,
+              },
+            };
 
-              let payload =
-                {
-                firstNameTh : this.profile_detail.firstNameTh,
-                lastNameTh : this.profile_detail.lastNameTh,
-                nation : this.profile_detail.nation,
-                mobileNo : this.profile_detail.mobileNo,
-                email : this.profile_detail.email,
-              }
-            // console.log("preview_url", this.file);
-            // let bodyFormData = new FormData();
-            // bodyFormData.append("categoryImg", this.file ?  this.file : null);
-            // bodyFormData.append("firstNameTh",this.profile_detail.firstNameTh );
-            // bodyFormData.append("lastNameTh", this.profile_detail.lastNameTh);
-            // bodyFormData.append("nation", this.profile_detail.nation);
-            // bodyFormData.append( "mobileNo", this.profile_detail.mobileNo);
-            // bodyFormData.append("email", this.profile_detail.email);
+            let payload = {
+              firstNameTh: this.profile_detail.firstNameTh,
+              lastNameTh: this.profile_detail.lastNameTh,
+              nation: this.profile_detail.nation,
+              mobileNo: this.profile_detail.mobileNo,
+              email: this.profile_detail.email,
+            };
 
-              console.log("payload :", payload)
-              this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
-              let user_account_id = this.user_detail.account_id
-              let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/profile/${user_account_id}`,payload,config)
-                console.log("acc Font",account_id);
+            this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+            let user_account_id = this.user_detail.account_id;
+
+            let payloadData = new FormData()
+            payloadData.append("payload",JSON.stringify(payload))
+            payloadData.append("imageProfile",this.image_profile)
+            
+
+            let { data } = await axios.patch(
+              `${process.env.VUE_APP_URL}/api/v1/profile/${user_account_id}`,
+              payloadData,
+              config
+            );
+            console.log("acc Font", account_id);
             if (data.statusCode === 200) {
+              Swal.fire({
+                icon: "success",
+                title: "แก้ไขโปรไฟล์สำเร็จ",
+                timer: 3000
+              })
+              this.is_loading = false
+              this.preview_file = ""
               this.dialog_show = true;
               this.isDisabled = true;
               this.isEnabled = false;
               this.buttonName = "แก้ไข";
+              document.getElementById('fileInput').value = "";
             } else {
               throw { message: data.message };
             }
@@ -295,18 +317,48 @@ export default {
               title: error.message,
             });
           }
-        } else {
-          Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
         }
       });
     },
 
-      // submitEdit() { 
-      //   this.isDisabled = true;
-      //   this.isEnabled = false;
-      //   this.buttonName = "แก้ไข";
-      // },
+    openFileSelector() {
+      this.$refs.fileInput.click();
+    },
 
+    uploadFile() {
+      let allowedExtension = ['image/jpeg', 'image/jpg', 'image/png','image/gif','image/bmp'];
+      let files = this.$refs.fileInput.files[0]
+
+      if (files.size > 10240 * 1024) {
+        Swal.fire({
+          icon: "warning",
+          title: "ขนาดไฟล์ใหญ่เกินไป",
+          text: "( กำหนดขนาดไม่เกิน 10MB )"
+        })
+        document.getElementById('fileInput').value = "";
+      } else if (allowedExtension.indexOf(files.type) === -1) {
+        Swal.fire({
+          icon: "warning",
+          title: "รูปแบบไฟล์ไม่ถูกต้อง",
+          text: "( กรุณาอัปโหลดไฟล์รูปภาพ )"
+        })
+        document.getElementById('fileInput').value = "";
+      } else {
+        this.preview_file = URL.createObjectURL(files)
+        this.image_profile = files;
+      }
+    },
+
+    removeImg() {
+      document.getElementById('fileInput').value = "";
+      this.preview_file = ""
+    },
+
+    // submitEdit() {
+    //   this.isDisabled = true;
+    //   this.isEnabled = false;
+    //   this.buttonName = "แก้ไข";
+    // },
 
     validate(e, type) {
       inputValidation(e, type);
@@ -325,14 +377,14 @@ export default {
       user_one_id: "loginModules/getUserOneId",
       user_data: "ProfileModules/getUserData",
       profile_user: "ProfileModules/getProfileUser",
-      profile_detail: "ProfileModules/getProfileDetail"
+      profile_detail: "ProfileModules/getProfileDetail",
       // parent_data: "ProfileModules/getParentData",
     }),
   },
 };
 </script>
-  
-  <style script>
+
+<style script>
 .profileCard {
   min-height: 200px;
   min-width: 200px;
@@ -365,7 +417,25 @@ export default {
   position: relative;
   overflow: hidden;
   border-radius: 100%;
-  margin-top: -2%;
+  margin: -1%;
 }
-
+.cicle {
+  /* margin: 25px 0; */
+  /* padding: 1px; */
+  width: 200px;
+  height: 200px;
+  border-radius: 100%;
+  border: 12px solid transparent;
+  /* background-size: 100% 100%, 50% 50%, 50% 50%, 50% 50%, 50% 50%; */
+  background-repeat: no-repeat;
+  background-image: linear-gradient(white, white),
+                    linear-gradient(30deg, #ff6b81 36%, #ff6b81 30%),
+                    linear-gradient(120deg, #ff6b81 36%, #ff6b81 30%),
+                    linear-gradient(300deg, #ff6b81 36%, #ff6b81 30%),
+                    linear-gradient(210deg, #ff6b81 36%, #ff6b81 30%);
+  background-position: center center, left top, right top, left bottom, right bottom;
+  background-origin: content-box, border-box, border-box, border-box, border-box;
+  background-clip: content-box, border-box, border-box, border-box, border-box;
+  /* transform: rotate(30deg); */
+}
 </style>
