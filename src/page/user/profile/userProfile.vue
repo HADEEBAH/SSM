@@ -1,6 +1,8 @@
 <template>
   <v-container>
-    {{ my_course }}
+    <!-- {{ my_course }} -->
+    {{ profile_user }}
+
     <loading-overlay :loading="categorys_is_loading"></loading-overlay>
 
     <div class="profileCard my-5 center">
@@ -227,8 +229,9 @@
                       : profile.student.studentLastnameTh
                   }}
                 </v-col>
+
                 <v-col class="pink--text">
-                  {{ countMyCourse(profile.studentId) }} คอร์ส
+                  {{  my_course.filter((val)=>val.studentId === profile.studentId).length }} คอร์ส
                 </v-col>
 
                 <!-- col arrow -->
@@ -239,7 +242,6 @@
             </v-col>
           </v-row>
         </v-card>
-        <!-- {{ countMyCourse(profile_user.student.studentId) }} คอร์ส -->
       </div>
       <div v-else>
         <v-card>
@@ -527,7 +529,7 @@
               <label>คอร์สเรียนของนักเรียน</label>
             </v-col>
             <v-col cols="3" sm="4" align="right" class="mt-1">
-              <label class="pink--text">{{ student_data.length }} คอร์ส</label>
+              <label class="pink--text">{{  my_course.filter((val)=>val.studentId === dialogGetStudentData.studentId).length }} คอร์ส</label>
             </v-col>
             <v-col cols="2" sm="1" align="right" class="mt2">
               <span class="mdi mdi-chevron-right"></span>
@@ -687,8 +689,8 @@
     </v-dialog>
   </v-container>
 </template>
-  
-  <script>
+
+<script>
 import { mapActions, mapGetters } from "vuex";
 import labelCustom from "@/components/label/labelCustom.vue";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
@@ -727,7 +729,7 @@ export default {
     register_type: "parent",
     getParentData: {},
     dialogGetStudentData: {},
-    list_my_course: [],
+    list_course_count: 0
   }),
   created() {
     this.GetRelations({
@@ -746,16 +748,11 @@ export default {
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
     this.user_relation = JSON.parse(localStorage.getItem("relations"));
     this.GetAll(this.user_login.account_id);
-    // for (const item of JSON.parse(localStorage.getItem("relations"))) {
-    //   this.GetStudentData(item.student.studentId);
-    // }
     if (this.order_data) {
       this.GetCourse(this.order_data.course_id);
     }
     this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
     if (this.$store.state.MyCourseModules.my_course_student_id !== "") {
-      //  this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty")
-
       this.GetStudentData(
         this.$store.state.MyCourseModules.my_course_student_id
       );
@@ -1152,36 +1149,7 @@ export default {
     myCourseStudent(item) {
       this.$store.dispatch("MyCourseModules/GetMyCourseStudentId", item);
       this.$router.push({ name: "StudentsSchedule" });
-    },
-    countMyCourse(id) {
-      console.log("id ----->", id);
-      let bool = false;
-      let key = "";
-      console.log("my_course --->", this.my_course);
-
-      this.my_course.forEach((course, index) => {
-        bool = false;
-        if (this.list_my_course.length === 0) {
-          this.list_my_course.push(course);
-        } else {
-          bool = true;
-          key = index;
-        }
-      });
-
-      if (bool) {
-        this.list_my_course.forEach((list) => {
-          if (list.orderItemId !== this.my_course[key].orderItemId) {
-            this.list_my_course.push(this.my_course[key]);
-            console.log("list", list);
-          }
-        });
-      }
-      // return id
-
-      // console.log("my_course --->", this.my_course);
-      // console.log("my_course ----->", this.list_my_course);
-    },
+    }
   },
   computed: {
     ...mapGetters({
@@ -1206,8 +1174,8 @@ export default {
   },
 };
 </script>
-  
-  <style scoped>
+
+<style scoped>
 .profileCard {
   min-height: 200px;
   min-width: 200px;
