@@ -1,6 +1,5 @@
 <template>
   <v-container>
-
     <div class="mx-10 my-5">
       <label class="text-xl font-bold">ข้อมูลตารางเรียน</label>
 
@@ -149,8 +148,23 @@
           </div>
            <!-- Role Student -->
           <div v-if="data_local.roles.includes('R_5')">
-            <div v-for="(item, index) in student_data" :key="index">
+
+            <v-card-text
+              class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
+              v-if="student_data.length == 0"
+            >
+              <span class="text-lg font-bold">
+                <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                ไม่พบข้อมูลคอร์สเรียน
+              </span>
+            </v-card-text>
+
+            <div v-else v-for="(item, index) in student_data" :key="index" >
+              
+              
+
               <v-card
+              
                 @click="
                   $router.push({
                     name: 'StudentCourse',
@@ -488,12 +502,23 @@ export default {
 
           this.GetStudentData(this.$store.state.MyCourseModules.my_course_student_id);
       } else {
-        for (const item of JSON.parse(localStorage.getItem("relations"))) {
+        if (JSON.parse(localStorage.getItem("relations"))?.length != 0) {
+          for (const item of JSON.parse(localStorage.getItem("relations"))) {
                 this.GetStudentData(item.student.studentId);
           }
+        } else {
+          if (!this.user_detail.roles.includes('R_4')) {
+          this.GetStudentData(this.user_detail.account_id);
+          } else {
+            this.GetStudentData(null);
+          }
+          
+        }
+        
       }
           
     console.log("my_course_student_id", this.$store.state.MyCourseModules.my_course);
+
 
   },
 

@@ -169,7 +169,7 @@ const myCourseModules = {
                         }
 
                     }
-                    context.commit("student_is_loading", true);
+                    // context.commit("student_is_loading", true);
                     if (data_local.roles.includes('R_4')) {
                         for (const item of data.data) {
                             context.commit("SetMyCourse", item)
@@ -180,8 +180,7 @@ const myCourseModules = {
                     }
                     
                     context.commit("SetcourseSchedule", dataCourseSchedule);
-                   
-                    context.commit("student_is_loading", false);
+                    // context.commit("student_is_loading", false);
 
 
                 } else {
@@ -273,3 +272,4 @@ const myCourseModules = {
 };
 
 export default myCourseModules;
+// mycourse module 

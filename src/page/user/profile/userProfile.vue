@@ -1,5 +1,8 @@
 <template>
   <v-container>
+    <!-- {{ my_course }} -->
+    {{ profile_user }}
+
     <loading-overlay :loading="categorys_is_loading"></loading-overlay>
 
     <div class="profileCard my-5 center">
@@ -87,7 +90,7 @@
       <v-divider class="mb-3"></v-divider>
 
       <!-- card parent -->
-      <div v-if="profile_user.length >= 1" >
+      <div v-if="profile_user.length >= 1">
         <v-card
           v-for="(profile, index) in profile_user"
           :key="`${index}-profile`"
@@ -192,13 +195,14 @@
         </v-col>
       </v-row>
       <v-divider class="mb-3"></v-divider>
-
       <div v-if="profile_user.length >= 1">
         <v-card
           v-for="(profile, index) in profile_user"
           :key="`${index}-profile`"
           class="mb-5 cursor-pointer"
         >
+          <pre>{{ profile }}</pre>
+
           <v-row dense class="my-5" @click="openDialogStudent(profile.student)">
             <!-- col avatar -->
             <v-col cols="auto">
@@ -225,8 +229,9 @@
                       : profile.student.studentLastnameTh
                   }}
                 </v-col>
+
                 <v-col class="pink--text">
-                  {{ student_data.length }} คอร์ส
+                  {{  my_course.filter((val)=>val.studentId === profile.studentId).length }} คอร์ส
                 </v-col>
 
                 <!-- col arrow -->
@@ -524,7 +529,7 @@
               <label>คอร์สเรียนของนักเรียน</label>
             </v-col>
             <v-col cols="3" sm="4" align="right" class="mt-1">
-              <label class="pink--text">{{ student_data.length }} คอร์ส</label>
+              <label class="pink--text">{{  my_course.filter((val)=>val.studentId === dialogGetStudentData.studentId).length }} คอร์ส</label>
             </v-col>
             <v-col cols="2" sm="1" align="right" class="mt2">
               <span class="mdi mdi-chevron-right"></span>
@@ -684,8 +689,8 @@
     </v-dialog>
   </v-container>
 </template>
-  
-  <script>
+
+<script>
 import { mapActions, mapGetters } from "vuex";
 import labelCustom from "@/components/label/labelCustom.vue";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
@@ -724,6 +729,7 @@ export default {
     register_type: "parent",
     getParentData: {},
     dialogGetStudentData: {},
+    list_course_count: 0
   }),
   created() {
     this.GetRelations({
@@ -742,11 +748,26 @@ export default {
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
     this.user_relation = JSON.parse(localStorage.getItem("relations"));
     this.GetAll(this.user_login.account_id);
-    for (const item of JSON.parse(localStorage.getItem("relations"))) {
-      this.GetStudentData(item.student.studentId);
-    }
     if (this.order_data) {
       this.GetCourse(this.order_data.course_id);
+    }
+    this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
+    if (this.$store.state.MyCourseModules.my_course_student_id !== "") {
+      this.GetStudentData(
+        this.$store.state.MyCourseModules.my_course_student_id
+      );
+    } else {
+      if (JSON.parse(localStorage.getItem("relations"))?.length != 0) {
+        for (const item of JSON.parse(localStorage.getItem("relations"))) {
+          this.GetStudentData(item.student.studentId);
+        }
+      } else {
+        if (!this.user_detail.roles.includes("R_4")) {
+          this.GetStudentData(this.user_detail.account_id);
+        } else {
+          this.GetStudentData(null);
+        }
+      }
     }
   },
 
@@ -1128,7 +1149,7 @@ export default {
     myCourseStudent(item) {
       this.$store.dispatch("MyCourseModules/GetMyCourseStudentId", item);
       this.$router.push({ name: "StudentsSchedule" });
-    },
+    }
   },
   computed: {
     ...mapGetters({
@@ -1142,6 +1163,7 @@ export default {
       user_data: "loginModules/getUserData",
       is_loading: "loginModules/getIsLoading",
       my_course_student_id: "MyCourseModules/getMyCourseStudent",
+      my_course: "MyCourseModules/getMyCourse",
     }),
 
     // studentData: {
@@ -1152,8 +1174,8 @@ export default {
   },
 };
 </script>
-  
-  <style scoped>
+
+<style scoped>
 .profileCard {
   min-height: 200px;
   min-width: 200px;
