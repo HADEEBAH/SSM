@@ -1,7 +1,6 @@
 <template>
   <v-container>
-    <!-- {{ students }} -->
-    {{ my_course }}
+
     <div class="mx-10 my-5">
       <label class="text-xl font-bold">ข้อมูลตารางเรียน</label>
 
@@ -35,6 +34,7 @@
       <!-- PAGE 1 -->
       <v-expand-x-transition transition="scale-transition">
         <div v-if="type_selected == 'students_course'">
+          <!-- Role Parent -->
           <div v-if="data_local.roles.includes('R_4')">
             <v-row class="my-5">
               <v-col cols="12">
@@ -147,9 +147,9 @@
            
             </div> 
           </div>
-
+           <!-- Role Student -->
           <div v-if="data_local.roles.includes('R_5')">
-            <div v-for="(item, index) in my_course" :key="index">
+            <div v-for="(item, index) in student_data" :key="index">
               <v-card
                 @click="
                   $router.push({
@@ -166,7 +166,7 @@
                       style="
                         display: block;
                         margin-left: auto;
-                        margin-right: auto;
+                        margin-right: auto;  
                         width: 100%;
                         margin-top: 10%;
                       "
