@@ -338,11 +338,7 @@
                     </v-col>
                   </v-row>
                 </div>
-                <div
-                  v-if="activeCard === index && !course_is_loading"
-                  class="mt-3"
-                >
-             
+                <div  v-if="activeCard === index && !course_is_loading" class="mt-3">
                   <v-card>
                     <v-row dense class="pa-3">
                       <v-col

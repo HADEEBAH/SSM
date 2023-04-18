@@ -13,8 +13,16 @@ const coachModules = {
     coach_check_in : {},
     student_check_in : [],
     coach_check_in_is_loading : false,
+    coach_leaves : [],
+    coach_leaves_is_loading : false,
   },
   mutations: {
+    SetCoachLeaves(state, payload){
+      state.coach_leaves = payload
+    },
+    SetCoachLeavesIsLoading(state, value){
+      state.coach_leaves_is_loading = value
+    },
     SetCoach(state, payload) {
       state.coach = payload;
     },
@@ -309,7 +317,6 @@ const coachModules = {
         };
         let user_detail = JSON.parse(localStorage.getItem("userDetail"));
         const {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${coach_id}`,config);
-        console.log(data)
         if(data.statusCode == 200){
             let courses_task = [];
             for (const course of data.data) {
@@ -403,6 +410,100 @@ const coachModules = {
         console.log(error);
       }
     },
+    async SaveCoachLeave(context, {coach_leave_data}){
+      try{
+        let config = {
+          headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-type": "Application/json",
+              Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        let payload = {
+          coachId: coach_leave_data.coach_id,
+          leaveType : coach_leave_data.leave_type,
+          period : coach_leave_data.period,
+          startDate :coach_leave_data.start_date,
+          endDate :coach_leave_data.end_date,
+          remark : coach_leave_data.remark,
+          status: "pending",
+          courses: []
+        }
+        await coach_leave_data.courses.forEach((course)=>{
+          payload.courses.push({
+            courseId: course.course_id,
+            substituteCoachId : course.substitute_coach_id,
+            dayOfWeekId: course.day_of_week_id,
+            timeId: course.time_id
+          })
+        })
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coach/leave`, payload ,config)
+        console.log(data)
+        if(data.statusCode === 201){
+          Swal.fire({
+            icon: "success",
+            title: "บันทึกสำเร้จ",
+            showDenyButton: false,
+            showCancelButton: false,
+            cancelButtonText :"ยกเลิก",
+            confirmButtonText: "ตกลง",
+          })
+        }
+       
+      }catch(error){
+        console.log(error)
+      }
+    },
+    async GetLeavesByAccountId(context, {account_id}){
+      try{
+        let config = {
+          headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-type": "Application/json",
+              Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${account_id}`,config) 
+        if(data.statusCode === 200){
+          console.log(data.data)
+          context.commit("SetCoachLeaves",data.data)
+        }
+      }catch(error){
+        console.log(error)
+      }
+    },
+    async updateStatusCoachLeave(context, {coach_leave_id, status, account_id}){
+      try{
+        let config = {
+          headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-type": "Application/json",
+              Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${coach_leave_id}`,{ status : status },config) 
+        if(data.statusCode === 200){
+          // let localhost = "http://localhost:3000"
+          let getLeaves = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${account_id}`,config) 
+          if(data.statusCode === 200){
+            context.commit("SetCoachLeaves",getLeaves.data.data)
+            Swal.fire({
+              icon: "success",
+              title: "แก้ไขสำเร็จ",
+              showDenyButton: false,
+              showCancelButton: false,
+              cancelButtonText :"ยกเลิก",
+              confirmButtonText: "ตกลง",
+            })
+          } 
+        }
+      }catch(error){
+        console.log(error)
+      }
+    }
   },
   getters: {
     getCoach(state) {
@@ -422,6 +523,12 @@ const coachModules = {
     },
     getCoachCheckInIsLoading(state){
       return state.coach_check_in_is_loading
+    },
+    getCoachLeaves(state){
+      return state.coach_leaves
+    },
+    getCoachLeavesIsLoading(state){
+      return state.coach_leaves_is_loading
     },
     getStudentCheckIn(state){
       return state.student_check_in
