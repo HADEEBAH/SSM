@@ -148,6 +148,7 @@ const loginModules = {
             context.commit("ResetUserData")
             localStorage.removeItem("userDetail")
             localStorage.removeItem("Order")
+            localStorage.removeItem("relations")
             router.push({ name: "Login" });
         }
     },
