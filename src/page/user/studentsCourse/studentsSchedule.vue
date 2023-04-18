@@ -502,7 +502,6 @@ export default {
 
           this.GetStudentData(this.$store.state.MyCourseModules.my_course_student_id);
       } else {
-        
         if (JSON.parse(localStorage.getItem("relations"))?.length != 0) {
           for (const item of JSON.parse(localStorage.getItem("relations"))) {
                 this.GetStudentData(item.student.studentId);
@@ -519,6 +518,7 @@ export default {
       }
           
     console.log("my_course_student_id", this.$store.state.MyCourseModules.my_course);
+
 
   },
 

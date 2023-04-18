@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    {{ my_course }}
     <loading-overlay :loading="categorys_is_loading"></loading-overlay>
 
     <div class="profileCard my-5 center">
@@ -87,7 +88,7 @@
       <v-divider class="mb-3"></v-divider>
 
       <!-- card parent -->
-      <div v-if="profile_user.length >= 1" >
+      <div v-if="profile_user.length >= 1">
         <v-card
           v-for="(profile, index) in profile_user"
           :key="`${index}-profile`"
@@ -192,13 +193,14 @@
         </v-col>
       </v-row>
       <v-divider class="mb-3"></v-divider>
-
       <div v-if="profile_user.length >= 1">
         <v-card
           v-for="(profile, index) in profile_user"
           :key="`${index}-profile`"
           class="mb-5 cursor-pointer"
         >
+          <pre>{{ profile }}</pre>
+
           <v-row dense class="my-5" @click="openDialogStudent(profile.student)">
             <!-- col avatar -->
             <v-col cols="auto">
@@ -226,7 +228,7 @@
                   }}
                 </v-col>
                 <v-col class="pink--text">
-                  {{ student_data.length }} คอร์ส
+                  {{ countMyCourse(profile.studentId) }} คอร์ส
                 </v-col>
 
                 <!-- col arrow -->
@@ -237,6 +239,7 @@
             </v-col>
           </v-row>
         </v-card>
+        <!-- {{ countMyCourse(profile_user.student.studentId) }} คอร์ส -->
       </div>
       <div v-else>
         <v-card>
@@ -724,6 +727,7 @@ export default {
     register_type: "parent",
     getParentData: {},
     dialogGetStudentData: {},
+    list_my_course: [],
   }),
   created() {
     this.GetRelations({
@@ -742,11 +746,31 @@ export default {
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
     this.user_relation = JSON.parse(localStorage.getItem("relations"));
     this.GetAll(this.user_login.account_id);
-    for (const item of JSON.parse(localStorage.getItem("relations"))) {
-      this.GetStudentData(item.student.studentId);
-    }
+    // for (const item of JSON.parse(localStorage.getItem("relations"))) {
+    //   this.GetStudentData(item.student.studentId);
+    // }
     if (this.order_data) {
       this.GetCourse(this.order_data.course_id);
+    }
+    this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
+    if (this.$store.state.MyCourseModules.my_course_student_id !== "") {
+      //  this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty")
+
+      this.GetStudentData(
+        this.$store.state.MyCourseModules.my_course_student_id
+      );
+    } else {
+      if (JSON.parse(localStorage.getItem("relations"))?.length != 0) {
+        for (const item of JSON.parse(localStorage.getItem("relations"))) {
+          this.GetStudentData(item.student.studentId);
+        }
+      } else {
+        if (!this.user_detail.roles.includes("R_4")) {
+          this.GetStudentData(this.user_detail.account_id);
+        } else {
+          this.GetStudentData(null);
+        }
+      }
     }
   },
 
@@ -1129,6 +1153,35 @@ export default {
       this.$store.dispatch("MyCourseModules/GetMyCourseStudentId", item);
       this.$router.push({ name: "StudentsSchedule" });
     },
+    countMyCourse(id) {
+      console.log("id ----->", id);
+      let bool = false;
+      let key = "";
+      console.log("my_course --->", this.my_course);
+
+      this.my_course.forEach((course, index) => {
+        bool = false;
+        if (this.list_my_course.length === 0) {
+          this.list_my_course.push(course);
+        } else {
+          bool = true;
+          key = index;
+        }
+      });
+
+      if (bool) {
+        this.list_my_course.forEach((list) => {
+          if (list.orderItemId !== this.my_course[key].orderItemId) {
+            this.list_my_course.push(this.my_course[key]);
+            console.log("list", list);
+          }
+        });
+      }
+      // return id
+
+      // console.log("my_course --->", this.my_course);
+      // console.log("my_course ----->", this.list_my_course);
+    },
   },
   computed: {
     ...mapGetters({
@@ -1142,6 +1195,7 @@ export default {
       user_data: "loginModules/getUserData",
       is_loading: "loginModules/getIsLoading",
       my_course_student_id: "MyCourseModules/getMyCourseStudent",
+      my_course: "MyCourseModules/getMyCourse",
     }),
 
     // studentData: {

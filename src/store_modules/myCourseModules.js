@@ -126,7 +126,6 @@ const myCourseModules = {
             state.my_course.push(payload)
         },
         SetCourseArrayEmpty(state) {
-            // state.my_course = ''
             state.my_course= []
         },
     },
@@ -134,7 +133,11 @@ const myCourseModules = {
         courseSchedule(context) {
             context.commit("SetcourseSchedule");
         },
+
         async GetStudentData(context, account_id) {
+        let data_local = JSON.parse(localStorage.getItem("userDetail"))
+
+
             context.commit("student_is_loading", true);
             try {
                 let config = {
@@ -166,15 +169,18 @@ const myCourseModules = {
                         }
 
                     }
-                    context.commit("student_is_loading", true);
-                    context.commit("SetcourseSchedule", dataCourseSchedule);
-                    for (const item of data.data) {
-                        context.commit("student_is_loading", true);
-                        context.commit("SetMyCourse", item)
+                    // context.commit("student_is_loading", true);
+                    if (data_local.roles.includes('R_4')) {
+                        for (const item of data.data) {
+                            context.commit("SetMyCourse", item)
+                        }
+                        context.commit("SetMyCourseStudentId", '')
+                    } else {
+                        context.commit("SetStudentData", data.data)
                     }
-                    context.commit("student_is_loading", true);
-                    context.commit("SetMyCourseStudentId", '')
-                    context.commit("student_is_loading", false);
+                    
+                    context.commit("SetcourseSchedule", dataCourseSchedule);
+                    // context.commit("student_is_loading", false);
 
 
                 } else {
@@ -233,9 +239,7 @@ const myCourseModules = {
             context.commit("SetMyCourseStudentId", account_id);   
         },
         async GetMyCourseArrayEmpty(context) {
-            context.commit("student_is_loading", true);
             context.commit("SetCourseArrayEmpty"); 
-            context.commit("student_is_loading", false);
             
         }
     },
@@ -268,3 +272,4 @@ const myCourseModules = {
 };
 
 export default myCourseModules;
+// mycourse module 
