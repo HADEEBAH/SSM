@@ -462,46 +462,48 @@ const orderModules = {
         async CreateReserveCourse(context,{ course_data }){
             try{
                 console.log(course_data)
-                let payload = {
-                    "studentId": null,
-                    "coursePackageOptionId": null,
-                    "dayOfWeekId": null,
-                    "timeId": null,
-                    "courseId": course_data.course_id,  
-                    "parentId": null,
-                    "coachId": null,
-                    "orderTmpId": null,
-                }          
-                if(course_data.course_type_id === "CT_1"){
-                    payload.dayOfWeekId =  course_data.time_reserve.dayOfWeekId
-                    payload.coursePackageOptionId = course_data.option.course_package_option_id
-                    payload.timeId = course_data.time_reserve.timeId
-                }
-                // console.log(course_data)
-                let config = {
-                    headers:{
-                        "Access-Control-Allow-Origin" : "*",
-                        "Content-type": "Application/json",
-                        'Authorization' : `Bearer ${VueCookie.get("token")}`
+                await course_data.students.forEach( async (student)=>{
+                    let payload = {
+                        "studentId": student.account_id,
+                        "coursePackageOptionId": null,
+                        "dayOfWeekId": null,
+                        "timeId": null,
+                        "courseId": course_data.course_id,  
+                        "parentId": null,
+                        "coachId": course_data.coach_id ? course_data.coach_id : null,
+                        "orderTmpId": null,
                     }
-                  }
-                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,payload, config)
-                console.log(data)
-                if(data.statusCode === 201){
-                    Swal.fire({
-                        icon:"success",
-                        text: "จองคอร็สสำเร็จ เจ้าหน้าที่จะติดต่อกลับภายหลัง",
-                        showDenyButton: false,
-                        showCancelButton: false,
-                        confirmButtonText: "ตกลง",
-                    }).then(async (result) => {
-                        if (result.isConfirmed) {
-                            router.replace({name : "UserKingdom"})
+                    if(course_data.course_type_id === "CT_1"){
+                        payload.dayOfWeekId =  course_data.time.dayOfWeekId
+                        payload.coursePackageOptionId = course_data.option.course_package_option_id
+                        payload.timeId = course_data.time.timeId
+                    }
+                    // console.log(course_data)
+                    let config = {
+                        headers:{
+                            "Access-Control-Allow-Origin" : "*",
+                            "Content-type": "Application/json",
+                            'Authorization' : `Bearer ${VueCookie.get("token")}`
                         }
-                    })
-                }else{
-                    throw {error : data.data} 
-                }
+                      }
+                    let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,payload, config)
+                    if(data.statusCode === 201){
+                        console.log(data)
+                    }else{
+                        throw {error : data.data} 
+                    }
+                })
+                await Swal.fire({
+                    icon:"success",
+                    text: "จองคอร็สสำเร็จ เจ้าหน้าที่จะติดต่อกลับภายหลัง",
+                    showDenyButton: false,
+                    showCancelButton: false,
+                    confirmButtonText: "ตกลง",
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        router.replace({name : "UserKingdom"})
+                    }
+                })        
             }catch(error){
                 console.log(error)
             }
