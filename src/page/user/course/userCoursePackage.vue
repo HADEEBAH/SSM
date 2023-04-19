@@ -83,7 +83,7 @@
                         </v-row>  
                     </v-card-text>
                     <v-card-text align="center">
-                        <v-row dense v-if="course_artwork.length > 0" @click="show_dialog_artwork = true">
+                        <v-row dense v-if="course_artwork.length > 0 && course_artwork[0].attachmentUrl" @click="show_dialog_artwork = true">
                             <v-col class="text-sm underline text-[#0076D6]" >
                                 ดูเพิ่มเติม
                             </v-col>
