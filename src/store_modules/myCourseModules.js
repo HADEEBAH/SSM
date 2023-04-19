@@ -64,7 +64,7 @@ const myCourseModules = {
             }
         ],
 
-        my_course_detail:{
+        my_course_detail: {
             courseId: "",
             courseNameTh: "",
             courseNameEng: "",
@@ -72,13 +72,13 @@ const myCourseModules = {
             coachName: "",
             dates: {
                 day: [],
-                date: [ ],
-                count: "",
-                totalDay: "",
+                date: [],
+                count: 0,
+                totalDay: 5,
                 startDate: "",
                 endDate: ""
             },
-            realCount: "",
+            realCount: '',
             time: {
                 start: "",
                 end: ""
@@ -87,19 +87,20 @@ const myCourseModules = {
                 {
                     checkInStudentId: "",
                     orderId: "",
-                    courseId: "1",
+                    courseId: "",
                     studentId: "",
                     status: "",
                     date: ""
-                }
+                },
+
             ]
         },
 
-        my_course_student_id:'',
+        my_course_student_id: '',
 
         student_is_loading: false,
 
-        my_course:[],
+        my_course: [],
 
     },
     mutations: {
@@ -126,7 +127,7 @@ const myCourseModules = {
             state.my_course.push(payload)
         },
         SetCourseArrayEmpty(state) {
-            state.my_course= []
+            state.my_course = []
         },
     },
     actions: {
@@ -135,7 +136,7 @@ const myCourseModules = {
         },
 
         async GetStudentData(context, account_id) {
-        let data_local = JSON.parse(localStorage.getItem("userDetail"))
+            let data_local = JSON.parse(localStorage.getItem("userDetail"))
 
 
             context.commit("student_is_loading", true);
@@ -147,10 +148,10 @@ const myCourseModules = {
                         'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-            //     this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
-            //   let user_account_id = this.user_detail.account_id
+                //     this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
+                //   let user_account_id = this.user_detail.account_id
                 let { data } = await axios.get(
-                    
+
                     `${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config
                 );
 
@@ -161,8 +162,8 @@ const myCourseModules = {
                     for (const course of data.data) {
                         for (const date of course.dates.date) {
                             dataCourseSchedule.dates.push({
-                                start: date.replace(" 00:00:00", "") + ' ' + course.period.start ,
-                                end: date.replace(" 00:00:00", "") + ' ' + course.period.end ,
+                                start: date.replace(" 00:00:00", "") + ' ' + course.period.start,
+                                end: date.replace(" 00:00:00", "") + ' ' + course.period.end,
                                 name: `${course.courseNameTh}(${course.courseNameEng})`,
                                 subtitle: course.coachName
                             })
@@ -178,7 +179,7 @@ const myCourseModules = {
                     } else {
                         context.commit("SetStudentData", data.data)
                     }
-                    
+
                     context.commit("SetcourseSchedule", dataCourseSchedule);
                     // context.commit("student_is_loading", false);
 
@@ -190,8 +191,8 @@ const myCourseModules = {
                 console.log(error);
             }
         },
-        async GetProfileBooked(context, account_id) { 
-            console.log("GetProfileBooked", account_id);  
+        async GetProfileBooked(context, account_id) {
+            console.log("GetProfileBooked", account_id);
             try {
                 let config = {
                     headers: {
@@ -201,17 +202,17 @@ const myCourseModules = {
                     }
                 }
 
-            let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/${account_id}`, config );
-            if (data.statusCode === 200) {
-                for( const booked of data.data){
-                    booked.courseImg = booked.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${booked.courseImg}` : null
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/${account_id}`, config);
+                if (data.statusCode === 200) {
+                    for (const booked of data.data) {
+                        booked.courseImg = booked.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${booked.courseImg}` : null
+                    }
+                    console.log("SetProfileBooked", data.data);
+                    context.commit("SetProfileBooked", data.data)
+                } else {
+                    throw { error: data };
                 }
-                console.log("SetProfileBooked", data.data);
-                context.commit("SetProfileBooked", data.data)
-            } else {
-                throw { error: data };
-            }
-            
+
             } catch (error) {
                 console.log("err", error);
             }
@@ -228,19 +229,26 @@ const myCourseModules = {
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/checkin/student/${account_id}/course/${course_id}`, config);
 
                 if (data.statusCode === 200) {
-                    context.commit("SetMyCourseDetail".data.data)
-                    console.log("SetMyCourseDetail".data.data);
+                    if (data.data && data.statusCode === 200) {
+                        context.commit("SetMyCourseDetail", data.data)
+                        console.log("SetMyCourseDetail ---->", data.data);
+                    }
+                    // else {
+                    //     console.log("5555555555");
+                    // data.data = {}
+                    // }
+                    
                 }
             } catch (error) {
                 console.log("GetMyCourseDetail_err", error);
             }
         },
-        async GetMyCourseStudentId(context ,account_id) {
-            context.commit("SetMyCourseStudentId", account_id);   
+        async GetMyCourseStudentId(context, account_id) {
+            context.commit("SetMyCourseStudentId", account_id);
         },
         async GetMyCourseArrayEmpty(context) {
-            context.commit("SetCourseArrayEmpty"); 
-            
+            context.commit("SetCourseArrayEmpty");
+
         }
     },
     getters: {
@@ -251,10 +259,10 @@ const myCourseModules = {
             return state.itemTime;
         },
         getProfileBooked(state) {
-            return state.profile_booked; 
+            return state.profile_booked;
         },
         getMyCourseDetail(state) {
-            return state.my_course_detail; 
+            return state.my_course_detail;
         },
         getStudentsLoading(state) {
             return state.student_is_loading
@@ -265,7 +273,7 @@ const myCourseModules = {
         getMyCourse(state) {
             return state.my_course
         },
-        
+
 
 
     },
