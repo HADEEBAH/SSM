@@ -95,9 +95,16 @@ const CourseModules = {
     update_status_course: [],
     sendUpdate: [],
     course_type_is_loading : false,
-    course_student:[]
+    course_student:[],
+    course_artwork : [],
   },
   mutations: {
+    SetCourseArtwork(state, payload){
+      state.course_artwork = payload
+    },
+    ResetArtwork(state){
+      state.course_artwork = []
+    },
     SetCourseStudent(state, payload){
       state.course_student = payload
     },
@@ -497,12 +504,33 @@ const CourseModules = {
         console.log(error)
       }
     },
+    //COURSE :: Artwork
+    async GetArtworkByCourse(context,{course_id}){
+      try{
+        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/attcahment/${course_id}`)
+        if(data.statusCode === 200){
+          if(data.data.length > 0){
+            for(const artwork of data.data ){
+              artwork.attachmentUrl = `${process.env.VUE_APP_URL}/api/v1/files/${artwork.attachmentCourse}` 
+            }
+          }
+          context.commit("SetCourseArtwork",data.data)
+          console.log(data)
+        }else{
+          throw {error : data}
+        }
+      }catch(error){
+        console.log(error)
+      }
+    },
     // COURSE :: DETAIL
     async GetCourse(context, course_id) {
       context.commit("SetCourseIsLoading", true)
       try {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
+        // console.log(data.data)
         let payload = {
+          course_img_privilege : data.data.courseImgPrivilege ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.courseImgPrivilege}` : null,
           course_id: data.data.courseId,
           course_type_id: data.data.courseTypeId,
           course_type: data.data.courseTypeName,
@@ -693,7 +721,7 @@ const CourseModules = {
       context.commit("SetCourseIsLoading", true)
       try {
         let course = context.state.course_data
-        // console.log("course =>", course)
+        console.log("course =>", course)
         let payload = {
           "categoryId": course.category_id,
           "courseTypeId": course.course_type_id,
@@ -775,6 +803,11 @@ const CourseModules = {
         const data_payload = new FormData()
         data_payload.append("payload", JSON.stringify(payload))
         data_payload.append("img_url", course.course_img)
+        data_payload.append("img_privilage",course.privilege_file)
+        for(let i = 0;i < course.artwork_file.length; i++){
+          data_payload.append(`artwork_file${i}`, course.artwork_file[i]);
+        }
+       
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -895,7 +928,9 @@ const CourseModules = {
     }
   },
   getters: {
-    
+    getCourseArtwork(state){
+      return state.course_artwork
+    },
     getCourseStudent(state){
       return state.course_student
     },

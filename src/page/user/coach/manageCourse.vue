@@ -450,7 +450,6 @@
                 </v-card-text>
               </v-card>
             </div>
-            
             <v-row>
               <v-col cols="12" sm align="right">
                 <v-btn text color="#ff6b81" @click="closeDialogLeaveForm()">ยกเลิก</v-btn>

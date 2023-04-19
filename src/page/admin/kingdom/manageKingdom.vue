@@ -13,14 +13,17 @@
             <v-icon>mdi-text-box-search-outline</v-icon>
             ดูรายละเอียด
           </v-btn>
+          <v-btn icon color="#ff6b81" @click="categoryDelete(item)">
+              <v-icon>mdi-delete</v-icon>
+          </v-btn>
         </template>
       </v-data-table>
     </div>
   </v-container>
 </template>
-  
   <script>
 import { mapActions, mapGetters } from "vuex";
+import Swal from "sweetalert2";
 export default {
   data: () => ({
     column: [
@@ -46,8 +49,23 @@ export default {
   methods: {
     ...mapActions({
       GetCategorys: "CategoryModules/GetCategorys",
+      DeleteCategory: "CategoryModules/DeleteCategory"
     }),
-
+    categoryDelete(category){
+      Swal.fire({
+          icon: "question",
+          title: `ต้องการลบ ${category.categoryNameTh}`,
+          showDenyButton: false,
+          showCancelButton: true,
+          cancelButtonText :"ยกเลิก",
+          confirmButtonText: "ตกลง",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            this.DeleteCategory({category_id : category.categoryId})
+          }
+        })
+    
+    }
   },
   computed: {
     ...mapGetters({
