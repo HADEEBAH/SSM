@@ -137,7 +137,9 @@ export default {
   }),
   created() {
     this.dataStorage = JSON.parse(localStorage.getItem("userDetail"));
-    //console.log("true", this.dataStorage);
+    if (!this.dataStorage) {
+      this.logOut()
+    }
     if (this.dataStorage) {
       //console.log("true", this.dataStorage.role);
     } else {
@@ -151,11 +153,16 @@ export default {
 
     localStorage.removeItem("Order")
     localStorage.setItem("Order", JSON.stringify(this.course_order))
+    this.GetProfileDetail(this.dataStorage.account_id);
   },
 
   mounted() {
+    if (!this.dataStorage) {
+      this.logOut()
+    }
     this.$store.dispatch("CategoryModules/GetCategoryCourse");
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "อาณาจักร");
+    this.GetProfileDetail(this.dataStorage.account_id);
   },
 
   methods: {
@@ -164,6 +171,7 @@ export default {
       createKingdom: "OrderModules/createKingdom",
       GetAll: "ProfileModules/GetAll",
       GetProfileDetail: "ProfileModules/GetProfileDetail",
+      logOut : "loginModules/logOut"
 
     }),
 
