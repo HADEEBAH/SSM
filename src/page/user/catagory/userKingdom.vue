@@ -6,7 +6,9 @@
       <v-row class="row">
         <v-col cols="12">
           <div class="text-2xl font-bold text-white">
-            สวัสดี, {{ dataStorage ? dataStorage.first_name_en : "" }}
+            <!-- {{ profile_detail }} -->
+            <!-- สวัสดี, {{ dataStorage ? dataStorage.first_name_th : "" }} -->
+            สวัสดี, {{ profile_detail ? profile_detail.firstNameTh : "" }}
           </div>
         </v-col>
       </v-row>
@@ -161,6 +163,7 @@ export default {
       changeCourseOrderData: "OrderModules/changeCourseOrderData",
       createKingdom: "OrderModules/createKingdom",
       GetAll: "ProfileModules/GetAll",
+      GetProfileDetail: "ProfileModules/GetProfileDetail",
 
     }),
 
@@ -193,6 +196,7 @@ export default {
       categorys: "CategoryModules/getCategorys",
       categorys_is_loading: "CategoryModules/getCategorysIsLoading",
       profile_user: "ProfileModules/getProfileUser",
+      profile_detail: "ProfileModules/getProfileDetail",
       
     }),
     MobileSize() {

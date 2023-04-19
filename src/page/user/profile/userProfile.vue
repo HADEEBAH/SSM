@@ -1,11 +1,12 @@
 <template>
   <v-container>
     <!-- {{ my_course }} -->
-    {{ profile_user }}
+    <!-- {{ profile_user }} -->
+          <!-- {{ data_local }} -->
 
     <loading-overlay :loading="categorys_is_loading"></loading-overlay>
 
-    <div class="profileCard my-5 center">
+    <!-- <div class="profileCard my-5 center">
       <v-img
         src="@/assets/userManagePage/imgcardafterupload.png"
         class="iconInCard drop-shadow-md"
@@ -20,8 +21,17 @@
           </v-img>
         </div>
       </div>
-    </div>
-    <div class="text-center font-bold">{{ data_local.first_name_en }}</div>
+    </div> -->
+    <v-row dense>
+      <v-col class="my-5 " style="text-align: -webkit-center" cols="12">
+          <!-- {{ profile_detail.image }} -->
+          <!-- {{ data_local.image }} -->
+        <div class="cicle">
+          <v-img class="image-cropper items-end" :src="data_local.image !== '' ? data_local.image : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU`"/>
+        </div>
+      </v-col>
+    </v-row>
+    <div class="text-center text-xl font-bold">{{ data_local.first_name_th }} {{ data_local.last_name_th }}</div>
     <div class="my-3 text-center">
       <v-btn
         depressed
@@ -100,7 +110,7 @@
             <!-- col avatar -->
             <v-col cols="auto">
               <v-img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgifOpyja9K5DLbn2xldBaslS_Aat6ALgMAA&usqp=CAU"
+                :src="profile.parent.parentImage !== '' ? profile.parent.parentImage : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEpKC_pI1Y_lmnOSDilaMdTDvWbDicz53xGA&usqp=CAU` "
                 alt="Card image"
                 class="rounded-full ml-3 image-cropper"
                 style="max-width: 50px; max-height: 50px"
@@ -169,10 +179,14 @@
         </v-col>
       </v-row>
       <!-- translate -->
-      <v-row
+      <!-- <v-row
         dense
         class="mt-3"
         @click="$router.push({ name: 'ProfileLanguages' })"
+      > -->
+      <v-row
+        dense
+        class="mt-3"
       >
         <v-col cols="2" sm="1">
           <img src="@/assets/profile/langueges.png" />
@@ -201,13 +215,13 @@
           :key="`${index}-profile`"
           class="mb-5 cursor-pointer"
         >
-          <pre>{{ profile }}</pre>
+          <!-- <pre>{{ profile }}</pre> -->
 
           <v-row dense class="my-5" @click="openDialogStudent(profile.student)">
             <!-- col avatar -->
-            <v-col cols="auto">
+            <v-col cols="12" sm="2" class="webkit-center">
               <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEpKC_pI1Y_lmnOSDilaMdTDvWbDicz53xGA&usqp=CAU"
+                :src="profile.student.studentImage !== '' ? profile.student.studentImage : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEpKC_pI1Y_lmnOSDilaMdTDvWbDicz53xGA&usqp=CAU` "
                 alt="Card image"
                 class="rounded-full image-cropper ml-3"
                 style="max-width: 50px; max-height: 50px"
@@ -297,7 +311,7 @@
     <v-dialog
       v-if="dialog_show"
       class="pa-2"
-      width="60vw"
+      :width="!MobileSize ? `60vw` : ``"
       v-model="dialog_show"
       persistent
     >
@@ -412,7 +426,7 @@
     <v-dialog
       v-if="show_student_data"
       class="pa-2"
-      width="60vw"
+      :width="!MobileSize ? `60vw` : ``"
       v-model="show_student_data"
       persistent
     >
@@ -428,7 +442,7 @@
           </v-row>
         </v-card-title>
         <v-card-text>
-          <div class="profileCard my-5 center">
+          <!-- <div class="profileCard my-5 center">
             <v-img
               src="@/assets/userManagePage/imgcardafterupload.png"
               class="iconInCard drop-shadow-md"
@@ -443,7 +457,14 @@
                 </v-img>
               </div>
             </div>
-          </div>
+          </div> -->
+          <v-row style="text-align: -webkit-center" class="justify-center my-5">
+            <!-- {{ dialogGetStudentData }} -->
+            <div class="cicle">
+              <v-img class="image-cropper" :src="dialogGetStudentData.studentImage !== '' ? ialogGetStudentData.studentImage : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEpKC_pI1Y_lmnOSDilaMdTDvWbDicz53xGA&usqp=CAU`"/>
+            </div>
+          </v-row>
+
           <v-row dense>
             <!--TH NAME -->
             <v-col cols="12" sm="6">
@@ -679,7 +700,7 @@
       persistent
       v-if="show_dialog_register_one_id"
       v-model="show_dialog_register_one_id"
-      width="60vw"
+      :width="!MobileSize ? `60vw` : ``"
     >
       <registerDialogForm
         dialog
@@ -936,7 +957,9 @@ export default {
       this.$router.push({ name: "ProfileCertificate" });
     },
     show_password() {
-      this.$router.push({ name: "ProfilePassword" });
+      // this.$router.push({ name: "ProfilePassword" });
+      window.location.href = `https://testoneid.inet.co.th/type_forgot_password?oauth_pass=true`
+
     },
     show_policy() {
       this.$router.push({ name: "ProfilePolicy" });
@@ -1165,6 +1188,10 @@ export default {
       my_course_student_id: "MyCourseModules/getMyCourseStudent",
       my_course: "MyCourseModules/getMyCourse",
     }),
+    MobileSize() {
+      const { xs } = this.$vuetify.breakpoint;
+      return !!xs;
+    },
 
     // studentData: {
     //   get() {
@@ -1214,6 +1241,9 @@ export default {
   position: relative;
   overflow: hidden;
   border-radius: 100%;
-  margin-top: -2%;
+  margin: -1%;
+}
+.webkit-center {
+  text-align: -webkit-center
 }
 </style>

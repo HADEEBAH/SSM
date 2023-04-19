@@ -41,8 +41,8 @@
             >
           </v-btn> -->
           <!-- {{ profile_detail.image }} -->
-        <div class="cicle">
-          <v-img class="image-cropper items-end" :src="preview_file !== '' ? preview_file : (profile_detail.image ? profile_detail.image : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU`) ">
+        <div class="cicle" >
+          <v-img class="image-cropper items-end" :src="preview_file !== '' ? preview_file : (profile_detail.image !== '' ? profile_detail.image : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU`) ">
             <v-btn v-if="isEnabled && preview_file === ''" color="#ff6b81" @click="openFileSelector" class="w-full white--text">เปลี่ยนรูป</v-btn>
             <v-btn v-if="preview_file !== ''" color="#ff6b81" @click="removeImg" class="w-full white--text">
               <span class="mdi mdi-close">ยกเลิก</span>
@@ -285,7 +285,10 @@ export default {
 
             let payloadData = new FormData()
             payloadData.append("payload",JSON.stringify(payload))
-            payloadData.append("imageProfile",this.image_profile)
+            if (this.image_profile.name) {
+              console.log("this.image_profile", this.image_profile);
+              payloadData.append("imageProfile",this.image_profile)
+            }
             
 
             let { data } = await axios.patch(
@@ -300,6 +303,12 @@ export default {
                 title: "แก้ไขโปรไฟล์สำเร็จ",
                 timer: 3000
               })
+
+              let data_storage = JSON.parse(localStorage.getItem('userDetail'));
+              data_storage.image = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}`
+              localStorage.setItem('userDetail', JSON.stringify(data_storage));
+              this.GetProfileDetail(this.$route.params.profile_id);
+              
               this.is_loading = false
               this.preview_file = ""
               this.dialog_show = true;
