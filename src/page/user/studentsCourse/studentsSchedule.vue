@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <pre>{{ my_course }}</pre>
     <div class="mx-10 my-5">
       <label class="text-xl font-bold">ข้อมูลตารางเรียน</label>
 
@@ -86,7 +87,7 @@
                       style="
                         display: block;
                         margin-left: auto;
-                        margin-right: auto;  
+                        margin-right: auto;   
                         width: 100%; 
                         margin-top: 10%;
                       "
@@ -104,6 +105,8 @@
                   <v-col cols="12" sm="6">
                     <v-col class="text-lg font-bold">
                       {{ item.courseNameTh == "" ? "-" : item.courseNameTh }}
+              {{ item.courseId }}
+
                       ({{
                         item.courseNameEng == "" ? "-" : item.courseNameEng
                       }})
@@ -118,7 +121,7 @@
                     <v-col>
                       <!-- v-for="(day, index_day) in dayOfWeekName" :key="index_day" -->
                       <v-card color="yellow" class="rounded-lg text-center">
-                        <!-- {{ dayOfWeekName(item.dates.day)  == ''? '-' : dayOfWeekName(item.dates.day) }} -->
+                        {{ dayOfWeekName(item.dates.day)  == ''? '-' : dayOfWeekName(item.dates.day) }}
                         {{ item.period.start }} - {{ item.period.end }} น.
                       </v-card>
                       <!-- {{ item.courseNameEn }} -->
@@ -179,7 +182,7 @@
                     <v-col
                       style="
                         display: block;
-                        margin-left: auto;
+                        margin-left: auto; 
                         margin-right: auto;  
                         width: 100%;
                         margin-top: 10%;
@@ -198,6 +201,7 @@
                   <v-col cols="12" sm="6">
                     <v-col class="text-lg font-bold">
                       {{ item.courseNameTh == "" ? "-" : item.courseNameTh }}
+                      {{ item.courseId }}
                       ({{
                         item.courseNameEng == "" ? "-" : item.courseNameEng
                       }})
@@ -471,7 +475,7 @@ export default {
   }),
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    console.log("test", this.user_relation.student.studentId);
+    // console.log("test", this.user_relation.student.studentId);
     this.GetProfileBooked(this.user_detail.account_id);
     this.GetAll(this.user_detail.account_id);
     // console.log("my_course_student_id", this.$store.state.my_course_student_id);
