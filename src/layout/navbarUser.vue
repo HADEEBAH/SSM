@@ -19,11 +19,12 @@
                     <v-icon v-else class="mr-5" dark @click="$router.push({name: 'CartList'})">mdi-cart</v-icon>
                     <div v-if="!$vuetify.breakpoint.smAndDown">
                         <v-avatar class="mx-2" size="24">
-                            <v-img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU" size="24"/>
+                            <v-img :src="profile_detail.image !== '' ? profile_detail.image : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU`" size="24"/>
                         </v-avatar>
-                        <span class="text-white mx-2">{{
-                                `${user_detail.first_name_en} ${user_detail.last_name_en}`
-                            }}</span>
+                        <span class="text-white mx-2">
+                                {{ profile_detail.firstNameTh  }} {{ profile_detail.lastNameTh }}
+                                <!-- {{ user_detail.first_name_en }} {{ user_detail.last_name_en }} -->
+                            </span>
                     </div>
                     <v-btn icon @click="drawer =!drawer">
                         <v-icon>{{ drawer ? 'mdi-chevron-right' : "mdi-menu" }}</v-icon>
@@ -50,17 +51,22 @@
                 v-model="drawer"
                 :temporary="$vuetify.breakpoint.smAndDown"
             >
+            <!-- {{ profile_detail }} -->
                 <v-row class="pt-8 pb-6">
                     <v-col class="flex align-center justify-center ">
-                        <img class="img-profile" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU"/>
+                      <div class="cicle" style="text-align: -webkit-center">
+                        <v-img class="image-cropper" :src="profile_detail.image !== '' ? profile_detail.image : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU`" size="24"/>
+                      </div>
+                        <!-- <img class="img-profile" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU"/> -->
                     </v-col>
                 </v-row>
                 <v-row dense>
                     <v-col cols="12" class="flex align-center justify-center font-bold text-lg">
-                        {{ `${user_detail.first_name_en} ${user_detail.last_name_en}` }}
+                        <!-- {{ `${profile_detail.first_name_en} ${profile_detail.last_name_en}` }} -->
+                        {{ profile_detail.firstNameTh  }} {{ profile_detail.lastNameTh }}
                     </v-col>
                     <v-col cols="12" class="flex align-center justify-center text-sm">
-                        {{ user_detail.email }}
+                        {{ profile_detail.email }}
                     </v-col>
                 </v-row>
                 <v-list
@@ -170,24 +176,35 @@ export default {
   }),
 
     created() {
-        this.active_menu = this.$route.name
-        this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
-        this.GetCartList(this.user_detail.account_id);
+      this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
+      console.log("this.user_detail created", this.user_detail);
+      // if (!this.user_detail) {
+      //   this.logOut()
+      // }
+      this.active_menu = this.$route.name
+      this.GetCartList(this.user_detail.account_id);
     },
     mounted() {
-        this.GetCartList(this.user_detail.account_id);
+      console.log("this.user_detail mount", this.user_detail);
+      // if (!this.user_detail) {
+      //   this.logOut()
+      // }
+      // console.log("profile_detail", this.profile_detail);
+      this.GetCartList(this.user_detail.account_id);
     },
     watch: {},
     computed: {
         ...mapGetters({
             cart_list: "OrderModules/getCartList",
-            titel_navber: "NavberUserModules/getTitleNavber"
+            titel_navber: "NavberUserModules/getTitleNavber",
+            profile_detail: "ProfileModules/getProfileDetail",
         })
     },
     methods: {
         ...mapActions({
             GetCartList: "OrderModules/GetCartList",
-            logOut: "loginModules/logOut"
+            logOut: "loginModules/logOut",
+            GetProfileDetail: "ProfileModules/GetProfileDetail",
         }),
         selectMenu(type, to, head) {
             if (type === "child" && head === this.active_menu) {
@@ -207,7 +224,7 @@ export default {
     },
 };
 </script>
-<style>
+<style scoped>
 
 .bg-navbar-user {
     background: linear-gradient(141.48deg, #FF8092 43%, #FDCB6E 85.47%);
@@ -261,9 +278,36 @@ export default {
 }
 
 .img-profile {
-    width: 112px;
-    height: 112px;
-    border-radius: 100%;
-    border: 6px solid #FF6B81;
+  width: 112px;
+  height: 112px;
+  border-radius: 100%;
+  border: 6px solid #FF6B81;
+}
+.image-cropper {
+  width: 125px;
+  height: 125px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 100%;
+  margin: -1%;
+}
+.cicle {
+  /* margin: 25px 0; */
+  /* padding: 1px; */
+  width: 140px;
+  height: 140px;
+  border-radius: 100%;
+  border: 8px solid transparent;
+  /* background-size: 100% 100%, 50% 50%, 50% 50%, 50% 50%, 50% 50%; */
+  background-repeat: no-repeat;
+  background-image: linear-gradient(white, white),
+                    linear-gradient(30deg, #ff6b81 36%, #ff6b81 30%),
+                    linear-gradient(120deg, #ff6b81 36%, #ff6b81 30%),
+                    linear-gradient(300deg, #ff6b81 36%, #ff6b81 30%),
+                    linear-gradient(210deg, #ff6b81 36%, #ff6b81 30%);
+  background-position: center center, left top, right top, left bottom, right bottom;
+  background-origin: content-box, border-box, border-box, border-box, border-box;
+  background-clip: content-box, border-box, border-box, border-box, border-box;
+  /* transform: rotate(30deg); */
 }
 </style>

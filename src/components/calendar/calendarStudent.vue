@@ -100,17 +100,26 @@
                       <v-row dense>
                         <v-col class="text-sm">
                           โค้ช: {{ event.subtitle }} <br />
+                          
+                          <div v-for="(item, index) in student_data" :key="index">
                           <v-btn
-                            @click="
-                              $router.push({ name: 'StudentCourse' })
-                            "
+                          
                             small
                             text
                             class="underline pa-0"
                             color="#ff6b81"
+                            @click="
+                            
+                  $router.push({
+                    name: 'StudentCourse',
+                    params: { course_id: item.courseId},
+                  })
+                "
                           >
-                            ดูรายละเอียดคอร์สเรียน
+                            ดูรายละเอียดคอร์สเรียน 
                           </v-btn>
+                        </div>
+                          <pre>{{ event_date }}</pre>
                         </v-col>
                       </v-row>
                     </v-col>
@@ -134,6 +143,8 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+
 export default {
   name: "calendarCoach",
   props: {
@@ -143,7 +154,7 @@ export default {
   },
   data: () => ({
     showModal: false,
-
+    test_course_id: '',
     focus: "",
     ready: false,
     start_of_week: "",
@@ -163,6 +174,10 @@ export default {
     },
   },
   computed: {
+    ...mapGetters({
+      student_data: "MyCourseModules/getStudentData",
+       
+    }),
     cal() {
       return this.ready ? this.$refs.calendar : null;
     },
@@ -202,11 +217,24 @@ export default {
     this.updateTime();
     this.colorOfDay();
   },
+
   methods: {
+    ...mapActions({
+      GetStudentData: "MyCourseModules/GetStudentData",
+    }),
     selectedDate(data){
       console.log(data.event) 
+      for (const item in this.student_data) {
+        this.test_course_id = item.courseId
+      }
+
+      this.$router.push({
+                    name: 'StudentCourse',
+                    params: { course_id: this.test_course_id },
+                  })
       // this.$router.push({ name: 'StudentsSchedule' })
-      this.$router.push({ name: 'StudentCourse' })
+      // $router.push({ name: 'StudentCourse' })
+     
         },
     selectDate(date) {
       this.event_date = [];
