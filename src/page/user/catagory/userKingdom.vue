@@ -137,9 +137,9 @@ export default {
   }),
   created() {
     this.dataStorage = JSON.parse(localStorage.getItem("userDetail"));
-    if (!this.dataStorage) {
-      this.logOut()
-    }
+    // if (!this.dataStorage) {
+    //   this.logOut()
+    // }
     if (this.dataStorage) {
       //console.log("true", this.dataStorage.role);
     } else {
@@ -157,9 +157,9 @@ export default {
   },
 
   mounted() {
-    if (!this.dataStorage) {
-      this.logOut()
-    }
+    // if (!this.dataStorage) {
+    //   this.logOut()
+    // }
     this.$store.dispatch("CategoryModules/GetCategoryCourse");
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "อาณาจักร");
     this.GetProfileDetail(this.dataStorage.account_id);

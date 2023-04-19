@@ -11,7 +11,7 @@
                 <v-spacer></v-spacer>
                 <v-app-bar-title class="font-bold">{{ titel_navber }}</v-app-bar-title>
                 <v-spacer></v-spacer>
-                <template v-if="profile_detail">
+                <template v-if="user_detail">
                     <v-icon class="mr-5" dark>mdi-bell-outline</v-icon>
                     <v-badge v-if="cart_list.length > 0" class="mr-5" color="red" :content="cart_list.length">
                         <v-icon dark @click="$router.push({name: 'CartList'})">mdi-cart</v-icon>
@@ -44,7 +44,7 @@
                 </template>
             </v-app-bar>
             <v-navigation-drawer
-                v-if="profile_detail"
+                v-if="user_detail"
                 right
                 clipped
                 app
@@ -178,18 +178,18 @@ export default {
     created() {
       this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
       console.log("this.user_detail created", this.user_detail);
-      if (!this.user_detail) {
-        this.logOut()
-      }
+      // if (!this.user_detail) {
+      //   this.logOut()
+      // }
       this.active_menu = this.$route.name
       this.GetCartList(this.user_detail.account_id);
     },
     mounted() {
       console.log("this.user_detail mount", this.user_detail);
-      if (!this.user_detail) {
-        this.logOut()
-      }
-      console.log("profile_detail", this.profile_detail);
+      // if (!this.user_detail) {
+      //   this.logOut()
+      // }
+      // console.log("profile_detail", this.profile_detail);
       this.GetCartList(this.user_detail.account_id);
     },
     watch: {},
