@@ -1,5 +1,6 @@
 <template>
     <v-app>
+        {{ SetFunction }}
       <v-container>
         <ImgCard color="#FEFBFC" outlined class="mb-3">
             <template v-slot:img>
@@ -26,7 +27,7 @@
         <v-row dense class="d-flex align-center">
             <v-col cols="8" sm class="text-sm text-[#ff6b81]">*มีสิทธิพิเศษสำหรับการสมัครรายเดือน / รายเทอม / รายปี</v-col>
             <v-col cols="auto" sm="auto">
-                <v-btn color="#F9B320" @click="show_dialog_privilege = true" class="white--text rounded-xl" depressed>ดูสิทธิพิเศษ</v-btn>
+                <v-btn color="#F9B320" :disabled="!course_data.course_img_privilege" @click="show_dialog_privilege = true" class="white--text rounded-xl" depressed>ดูสิทธิพิเศษ</v-btn>
             </v-col>
         </v-row>
         <!-- BUTTON -->
@@ -54,10 +55,8 @@
                 :key="option_index"
                 v-slot="{ active, toggle }"
             > 
-                
                 <v-card :class="active ? '':''" class="ma-4  card-package-size" @click="toggle">
                     <v-card-text align="center">
-                    
                         <v-row dense>
                             <v-col  class="text-lg font-bold">{{ `${option.option_name}(${option.amount}ครั้ง)`}} </v-col>
                         </v-row>
@@ -82,13 +81,16 @@
                                {{ option.privilege }}
                             </v-col>
                         </v-row>  
-                        <v-row dense>
-                            <v-col class="text-sm underline text-[#0076D6]">
+                    </v-card-text>
+                    <v-card-text align="center">
+                        <v-row dense v-if="course_artwork.length > 0" @click="show_dialog_artwork = true">
+                            <v-col class="text-sm underline text-[#0076D6]" >
                                 ดูเพิ่มเติม
                             </v-col>
-                        </v-row>  
+                        </v-row> 
                     </v-card-text>
                     <v-card-actions class="absolute inset-x-0 bottom-0">
+                       
                         <v-row dense>
                             <v-col cols="12">
                                 <v-btn depressed class="w-full font-bold white--text" color="#ff6b81" @click="selectedPackage(option)">สมัครเรียน</v-btn>
@@ -99,7 +101,7 @@
             </v-slide-item>
         </v-slide-group>
          <!-- DIALOG :: PRIVILEGE -->
-         <v-dialog v-model="show_dialog_privilege" persistent >
+         <v-dialog v-if="show_dialog_privilege" v-model="show_dialog_privilege" persistent width="50vw" >
             <v-card>
                 <v-card-title>
                     <v-row>
@@ -110,13 +112,54 @@
                     </v-row>
                 </v-card-title>
                 <v-card-text>
-                    <v-img sizes="100%" src="@/assets/course/privilege.svg"></v-img>
+                    <v-img contain max-height="600" max-width="800" :src="course_data.course_img_privilege"></v-img>
                 </v-card-text>
                 <!-- <v-card-actions>
                     <v-row dense>
                         <v-col align="center"><v-btn @click="show_dialog_privilege = false" class="btn-size-lg" dark depressed color="#ff6b81">Close</v-btn></v-col>
                     </v-row>
                 </v-card-actions> -->
+            </v-card>
+        </v-dialog>
+        <!-- DIALOG :: ARTWORK -->
+        <v-dialog v-if="show_dialog_artwork" v-model="show_dialog_artwork" persistent  width="90vw">
+            <v-card class="pa-2">
+                <v-row dense>
+                    <v-col cols="12" align="right">
+                        <v-btn icon @click="show_dialog_artwork = false"><v-icon color="#ff6b81">mdi-close</v-icon></v-btn>
+                    </v-col>
+                </v-row>
+                <v-card-title>
+                    <v-row dense>
+                        <v-col cols="12" align="center" class="font-bold w-3">งานศิลปะ</v-col>
+                    </v-row>
+                </v-card-title>
+                <v-card-text>
+                    <v-row>
+                        <v-col cols="12" sm="4" v-for="(artwork, index) in course_artwork" :key="`${index}-artwork`"> 
+                            <v-img
+                                :src="artwork.attachmentUrl"
+                                :lazy-src="artwork.attachmentUrl"
+                                aspect-ratio="1"
+                                contain
+                                class="bg-grey-lighten-2"
+                            >
+                                <template v-slot:placeholder>
+                                <v-row
+                                    class="fill-height ma-0"
+                                    align="center"
+                                    justify="center"
+                                >
+                                    <v-progress-circular
+                                    indeterminate
+                                    color="grey-lighten-5"
+                                    ></v-progress-circular>
+                                </v-row>
+                                </template>
+                            </v-img>
+                        </v-col>
+                    </v-row>
+                </v-card-text>
             </v-card>
         </v-dialog>
       </v-container>
@@ -131,6 +174,7 @@ import { mapGetters,mapActions } from 'vuex';
     name:"userCourseDetail",
     components: {ImgCard, rowData},
     data: () => ({
+        show_dialog_artwork : false,
         show_dialog_privilege : false,
         selected_package: {},
 
@@ -148,14 +192,20 @@ import { mapGetters,mapActions } from 'vuex';
         ...mapGetters({
             course_data : "CourseModules/getCourseData",
             course_order : "OrderModules/getCourseOrder",
-            order : "OrderModules/getOrder"
-        })
+            order : "OrderModules/getOrder",
+            course_artwork : "CourseModules/getCourseArtwork"
+        }),
+        SetFunction(){
+            this.GetArtworkByCourse({course_id : this.$route.params.course_id})
+            return ''
+        }
     },
     methods: {
         ...mapActions({
             GetCourse : "CourseModules/GetCourse",
             changeCourseOrderData : "OrderModules/changeCourseOrderData",
             changeOrderData : "OrderModules/changeOrderData",
+            GetArtworkByCourse : "CourseModules/GetArtworkByCourse"
         }),
        
         selectedPackage(option){

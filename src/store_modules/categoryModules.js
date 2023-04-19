@@ -1,5 +1,6 @@
 import axios from "axios"
-
+import Swal from "sweetalert2";
+import VueCookie from "vue-cookie";
 const categoryModules = {
     namespaced: true,
     state: {
@@ -65,6 +66,49 @@ const categoryModules = {
             }catch(error){
                 context.commit("SetCategoryIsLoading", false)
                 console.log(error)
+            }
+        },
+        async DeleteCategory(context,{category_id}){
+            try{
+                let config = {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-type": "Application/json",
+                        Authorization: `Bearer ${VueCookie.get("token")}`,
+                    },
+                  };
+                let {data} = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/category/${category_id}`,config)
+                console.log(data)
+                if(data.statusCode === 200){
+                    Swal.fire({
+                        icon: "success",
+                        title: "ลบรายการสำเร็จ",
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        cancelButtonText :"ยกเลิก",
+                        confirmButtonText: "ตกลง",
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            let category  = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category`)
+                            if (category.data.statusCode === 200) {
+                                context.commit("SetCategorys",category.data.data)
+                            }
+                        }
+                    })
+                }
+            }catch(error){
+                if(error.response.data.statusCode === 403){
+                    if(error.response.data.message === "Cannot delete this category because of the course"){
+                        Swal.fire({
+                            icon: "error",
+                            title: "ไม่สามารถลบอาณาจักรนี้ได้เนื่องจากมีคอร์สเรียน",
+                            showDenyButton: false,
+                            showCancelButton: false,
+                            cancelButtonText :"ยกเลิก",
+                            confirmButtonText: "ตกลง",
+                        })
+                    }
+                }
             }
         }
     },

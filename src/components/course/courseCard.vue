@@ -34,6 +34,7 @@
             <input
               ref="fileInput"
               type="file"
+              accept="image/png, image/jpeg"
               @change="uploadFile"
               style="display: none"
             />

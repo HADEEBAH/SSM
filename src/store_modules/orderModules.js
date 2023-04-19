@@ -293,7 +293,7 @@ const orderModules = {
                         "time": course.time,
                         "startDate": "",
                         "remark": "",
-                        "price": course.option.net_price,
+                        "price": course.option?.net_price ? course.option.net_price : course.price,
                         "coach": {
                             "accountId": course.coach_id ? course.coach_id : course.coach,
                             "fullName": course.coach_name,
