@@ -411,7 +411,7 @@
               <v-btn
                 class="white--text"
                 color="#FF6B81"
-                @click="removeParentData(index)"
+                @click="removeRelation(getParentData)"
                 v-if="profile_user.length >= 2"
               >
                 ลบข้อมูลผู้ปกครอง
@@ -848,35 +848,43 @@ export default {
       }
     },
     last_user_registered: function () {
+      console.log(this.last_user_registered)
       if (this.last_user_registered.type === "parent") {
-        if (
-          this.course_order.students.filter((v) => v.is_other === false)[0]
-            .parents.length === 0
-        ) {
-          this.course_order.students
-            .filter((v) => v.is_other === false)[0]
-            .parents.push({
-              account_id: this.last_user_registered.account_id,
-              firstname_en: this.last_user_registered.firstname_en,
-              lastname_en: this.last_user_registered.lastname_en,
-              firstname_th: this.last_user_registered.firstname_th,
-              lastname_th: this.last_user_registered.lastname_th,
-              tel: this.last_user_registered.phone_number,
-              username: this.last_user_registered.username,
-            });
-        } else {
-          this.course_order.students
-            .filter((v) => v.is_other === false)[0]
-            .parents.forEach((parent) => {
-              parent.account_id = this.last_user_registered.account_id;
-              parent.firstname_en = this.last_user_registered.firstname_en;
-              parent.lastname_en = this.last_user_registered.lastname_en;
-              parent.firstname_th = this.last_user_registered.firstname_th;
-              parent.lastname_th = this.last_user_registered.lastname_th;
-              parent.phone_number = this.last_user_registered.phone_number;
-              parent.username = this.last_user_registered.username;
-            });
-        }
+        this.AddRelations({ studentId : this.data_local.account_id, parentId : this.last_user_registered.account_id }).then(()=>{
+          this.GetAll(this.user_login.account_id);
+          for (const item of JSON.parse(localStorage.getItem("relations"))) {
+            this.GetStudentData(item.student.studentId);
+          }
+        })
+       
+        // if (
+        //   this.course_order.students.filter((v) => v.is_other === false)[0]
+        //     .parents.length === 0
+        // ) {
+        //   this.course_order.students
+        //     .filter((v) => v.is_other === false)[0]
+        //     .parents.push({
+        //       account_id: this.last_user_registered.account_id,
+        //       firstname_en: this.last_user_registered.firstname_en,
+        //       lastname_en: this.last_user_registered.lastname_en,
+        //       firstname_th: this.last_user_registered.firstname_th,
+        //       lastname_th: this.last_user_registered.lastname_th,
+        //       tel: this.last_user_registered.phone_number,
+        //       username: this.last_user_registered.username,
+        //     });
+        // } else {
+        //   this.course_order.students
+        //     .filter((v) => v.is_other === false)[0]
+        //     .parents.forEach((parent) => {
+        //       parent.account_id = this.last_user_registered.account_id;
+        //       parent.firstname_en = this.last_user_registered.firstname_en;
+        //       parent.lastname_en = this.last_user_registered.lastname_en;
+        //       parent.firstname_th = this.last_user_registered.firstname_th;
+        //       parent.lastname_th = this.last_user_registered.lastname_th;
+        //       parent.phone_number = this.last_user_registered.phone_number;
+        //       parent.username = this.last_user_registered.username;
+        //     });
+        // }
       } else if (this.last_user_registered.type === "student") {
         this.course_order.students[
           this.course_order.students.length - 1
@@ -925,6 +933,8 @@ export default {
       changeDialogRegisterOneId: "RegisterModules/changeDialogRegisterOneId",
       checkUsernameOneid: "loginModules/checkUsernameOneid",
       GetRelations: "OrderModules/GetRelations",
+      AddRelations : "RegisterModules/AddRelations",
+      RemoveRelation : "RegisterModules/RemoveRelation"
     }),
 
     async getStudentData(order_item_id) {
@@ -999,6 +1009,28 @@ export default {
         tel: "",
       };
       this.dialog_parent = true;
+    },
+    removeRelation(relations){
+      console.log(relations)
+      Swal.fire({
+        icon: "question",
+        title: "คุณต้องการลบรายการนี้ใช่หรือไม่ ?",
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: "ตกลง",
+        cancelButtonText: "ยกเลิก",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          this.dialog_show = false
+          this.RemoveRelation({
+            studentId : this.data_local.account_id, 
+            parentId : relations.parentId,
+          }).then(()=>{
+            this.GetAll(this.user_login.account_id);
+          })
+        }
+      })
+    
     },
     checkUsername(username, type) {
       if (username) {

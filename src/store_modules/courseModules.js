@@ -509,9 +509,10 @@ const CourseModules = {
       try{
         let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/attcahment/${course_id}`)
         if(data.statusCode === 200){
+          console.log(data.data)
           if(data.data.length > 0){
             for(const artwork of data.data ){
-              artwork.attachmentUrl = `${process.env.VUE_APP_URL}/api/v1/files/${artwork.attachmentCourse}` 
+              artwork.attachmentUrl = artwork.attachmentCourse ? `${process.env.VUE_APP_URL}/api/v1/files/${artwork.attachmentCourse}` : null
             }
           }
           context.commit("SetCourseArtwork",data.data)
