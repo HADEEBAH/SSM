@@ -59,7 +59,8 @@
         </v-col>
       </v-row>
       <!-- CERTIFICATE -->
-      <v-row dense class="mt-3 mb-3" @click="show_certificate()">
+      <!-- @click="show_certificate() -->
+      <v-row dense class="mt-3 mb-3"  >
         <v-col cols="2" sm="1">
           <img src="../../../assets/profile/certificate.png" />
         </v-col>
