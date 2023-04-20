@@ -4,7 +4,7 @@
 
     <pre>{{ my_course_detail.checkIn }}</pre>
     ----------------------------------
-    <pre>{{ check_in_detail }}</pre>
+    <!-- <pre>{{ check_in_detail }}</pre> -->
     <!-- {{ check_in_detail }} -->
     <!-- <pre>{{ day_list }}</pre> -->
 
@@ -33,7 +33,7 @@
                 margin-left: auto;
                 margin-right: auto;
                 width: 100%;
-                margin-top: 10%;
+                margin-top: 10%; 
               "
             >
               <!-- <img src="../../../assets/student_course/download.png" /> -->
@@ -224,7 +224,8 @@
       </v-card> -->
 
       <template>
-        <div v-for="(day_list, index_day) in check_in_detail" :key="index_day">
+        <div v-for="(day_list, index_day) in my_course_detail.checkIn" :key="index_day">
+        <!-- <div v-for="(day_list, index_day) in check_in_detail" :key="index_day"> -->
           <v-card class="my-5 drop-shadow-lg rounded-xl">
             <v-card-text>
               <v-row class="" dense>
@@ -465,7 +466,7 @@ export default {
     checked: false,
     dialog_show: false,
     show_id: "",
-    check_in_detail: [],
+    // check_in_detail: [],
     defaultImageUrl:
       "https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg",
     check: [],
@@ -531,12 +532,19 @@ export default {
       });
     }
 
-    this.check_in_detail = this.my_course_detail.checkIn;
-    if (this.check_in_detail.length !== 0) {
-      this.check_in_detail.map((val) => {
+    if (this.my_course_detail.checkIn.length !== 0) {
+      this.my_course_detail.checkIn.map((val) => {
         val["show"] = false;
       });
     }
+
+    // this.check_in_detail = this.my_course_detail.checkIn;
+    // if (this.check_in_detail.length !== 0) {
+    //   this.check_in_detail.map((val) => {
+    //     val["show"] = false;
+    //   });
+    // }
+
     // this.GetStudentData(this.item_data.student.studentId);
 
     // this.GetMyCourseDetail({account_id : this.item_data.student.studentId, course_id: this.$route.params.course_id});
@@ -548,9 +556,15 @@ export default {
       "ข้อมูลคอร์สเรียน"
     );
 
-    this.check_in_detail = this.my_course_detail.checkIn;
-    if (this.check_in_detail.length !== 0) {
-      this.check_in_detail.map((val) => {
+    // this.check_in_detail = this.my_course_detail.checkIn;
+    // if (this.check_in_detail.length !== 0) {
+    //   this.check_in_detail.map((val) => {
+    //     val["show"] = false;
+    //   });
+    // }
+
+    if (this.my_course_detail.checkIn.length !== 0) {
+      this.my_course_detail.checkIn.map((val) => {
         val["show"] = false;
       });
     }
@@ -647,7 +661,7 @@ export default {
     },
 
     showAssessment(key) {
-      this.check_in_detail = this.check_in_detail.map((val, index) => {
+      this.my_course_detail.checkIn = this.my_course_detail.checkIn.map((val, index) => {
         if (key === index) {
           val.show = !val.show;
         } else {
