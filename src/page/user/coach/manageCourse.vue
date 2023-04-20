@@ -36,15 +36,42 @@
         <!-- รายวัน -->
         <template v-if="time_frame === 'day'">
           <!-- COURSE LIST -->
-          <div v-for="(course, course_index) in my_courses.filter(v => v.statr_date === genToday)" :key="course_index">
+          <div v-for="(course, course_index) in my_courses.filter(v => v.start_date === genToday)" :key="course_index">
             <!-- {{ new Date(course.start) }} -->
-            <course-card-list class="mb-2" bg_color="#fff" :title="course.name" :course_per_time="`เวลาสอน :${course.course_per_time}`" :period="`${course.start_time}-${course.end_time}`">
+            <v-card outlined class="mb-2" @click="$router.push({name : 'menageCourseDetail', params:{ courseId : course.course_id, timeId : course.time_id, dayOfWeekId: course.day_of_week_id, date : course.start_date }})">
+              <v-card-text class="cursor-pointer ">
+                <v-row dense>
+                  <v-col cols="auto">
+                    <v-img contain class="rounded-lg" :src="course.course_img ? course.course_img :'https://cdn.vuetifyjs.com/images/cards/cooking.png'" max-height="160" max-width="160"></v-img>
+                  </v-col>
+                  <v-col>
+                    <v-row dense>
+                      <v-col class="text-lg font-bold">{{`${course.name}(${course.subtitle})`}}</v-col>
+                    </v-row>
+                    <v-row dense>
+                      <v-col cols="auto"><v-icon  color="#ff6b81">mdi-bookshelf</v-icon></v-col>
+                      <v-col >{{`อาณาจักร :${course.category_name}`}}</v-col>
+                    </v-row>
+                    <v-row dense>
+                      <v-col cols="auto"><v-icon color="#ff6b81">mdi-clock-outline</v-icon></v-col>
+                      <v-col >{{`เวลาสอน :${course.course_per_time} ชั่วโมง`}}</v-col>
+                    </v-row>
+                  </v-col>
+                  <v-col>
+                    <v-chip small color="#F9B320" dark>{{ `${course.start_time}-${course.end_time}` }}น.</v-chip>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+            <!-- <course-card-list  class="mb-2 cursor-pointer " bg_color="#fff" 
+            :title="`${course.name}(${course.subtitle})`" 
+            :course_per_time="`เวลาสอน :${course.course_per_time}`" :period="`${course.start_time}-${course.end_time}`">
               <template #img>
                 <v-img class="rounded-lg" :src="course.course_img ? course.course_img :'https://cdn.vuetifyjs.com/images/cards/cooking.png'" max-height="120" max-width="120"></v-img>
               </template>
-            </course-card-list>
+            </course-card-list> -->
           </div>
-          <div>
+          <div v-if="my_courses.filter(v => v.start_date === genToday).length == 0">
             <v-card flat>
               <v-card-text class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg">
                  <span class="text-lg font-bold"> 
@@ -361,9 +388,10 @@
               </v-col>
             </v-row>
             <v-divider class="my-2"></v-divider>
-            <div class="mb-3">
-              <v-card flat  v-for="(course, index) in coach_leave_data.courses" :key="index">
+            <div >
+              <v-card class="mb-3" flat  v-for="(course, index) in coach_leave_data.courses" :key="index">
                 <v-card-text class="rounded-md border">
+                  <div v-if="coach_leave_data.courses.length > 1" align="right"><v-btn icon color="red" @click="RemoveCourse(index)"><v-icon>mdi-close</v-icon></v-btn></div>
                   <v-row dense>
                     <v-col>
                       ชื่อคอร์ส
@@ -392,6 +420,11 @@
                 </v-card-text>
               </v-card>
             </div>
+            <v-row dense>
+              <v-col align="center">
+                <v-btn outlined color='#FF6b81' @click="AddCourse"><v-icon>mdi-plus</v-icon> เพิ่มคอร์ส </v-btn>
+              </v-col>
+            </v-row>
             <v-row dense>
               <v-col>
                 รายละเอียดการลา
@@ -571,7 +604,6 @@
 import calendarCoach from "@/components/calendar/calendarCoach.vue";
 import headerPage from '../../../components/header/headerPage.vue';
 import rowData from '../../../components/label/rowData.vue';
-import courseCardList from "../../../components/course/courseCardList.vue";
 import imgCard from '../../../components/course/imgCard.vue';
 import moment from 'moment';
 import Swal from "sweetalert2";
@@ -579,7 +611,7 @@ import { dateFormatter } from "@/functions/functions";
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "menageCourse",
-  components: { calendarCoach, headerPage, courseCardList, rowData, imgCard },
+  components: { calendarCoach, headerPage, rowData, imgCard },
   data: () => ({
     singleExpand: false,
     expanded: [],
@@ -798,8 +830,22 @@ export default {
       GetAttachmentLeave : "CoachModules/GetAttachmentLeave",
     }),
     genDate(date){
-      console.log(date)
+      // console.log(date)
       return dateFormatter(new Date(date), "DD MT YYYYT")
+    },
+    RemoveCourse(index){
+      this.coach_leave_data.courses.splice(index, 1)
+    },
+    AddCourse(){
+      this.coach_leave_data.courses.push(
+        {
+          my_course_id : "",
+          course_id : "",
+          substitute_coach_id : "",
+          day_of_week_id: "",
+          time_id : "",
+        }
+      )
     },
     cancelCoachLeave(data){    
       Swal.fire({

@@ -85,7 +85,7 @@
                                         <v-row dense>
                                             <v-col class="text-sm">
                                                 โค้ช: {{ event.coach }} <br>
-                                                <v-btn @click="$router.push({name : 'menageCourseDetail'})" small text class="underline pa-0" color="#ff6b81">
+                                                <v-btn @click="$router.push({name : 'menageCourseDetail', params:{ courseId : data.event.course_id, timeId : data.event.time_id, dayOfWeekId: data.event.day_of_week_id, date : data.event.start_date }})" small text class="underline pa-0" color="#ff6b81">
                                                     ดูรายละเอียดคอร์สเรียน
                                                 </v-btn>
                                             </v-col>

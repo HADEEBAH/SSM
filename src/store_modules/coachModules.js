@@ -50,7 +50,7 @@ const coachModules = {
     },
   },
   actions: {
-    async AssessmentStudent(context, {students, file}){
+    async AssessmentStudent(context, {students}){
       try{
         let config = {
           headers: {
@@ -60,23 +60,27 @@ const coachModules = {
           },
         };
         for (const student of students) {
+          // console.log("student + >",student)
           let payload = {
             status : student.check_in_status, // punctual, late,  leave, emergency leave, absent,
             compensation_date : student.compensation_date,
             compensation_start_time : student.start_time,
             compensation_end_time : student.end_time,
-            "evolution" :student.assessment.evolution ,
-            "interest" : student.assessment.interest ,
-            "remark": student.assessment.remark,
-            "remarkFiles": null ,
+            evolution :student.assessment.evolution ,
+            interest : student.assessment.interest ,
+            remark: student.assessment.remark,
+            assessmentStudentsId : student.assessment.assessmentStudentsId,
           }
           let payloadData = new FormData()
-            payloadData.append("payload",payload)
-            if(file){
-              payloadData.append("files", payload)
+           
+            if(student.files){
+              for(const file of student.files){
+                payloadData.append(`img_url`, file);
+              }
             }
           if(!student.assessment.assessmentStudentsId){
-            console.log("post")
+            console.log("post",payload)
+            payloadData.append("payload",JSON.stringify(payload))
             // let localhost = "http://localhost:3000"
             let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`,payloadData,config)
             if(data.statusCode == 201){
@@ -85,8 +89,10 @@ const coachModules = {
               throw {error : data}
             }
           }else{
+            console.log("patch",payload)
+            payloadData.append("payload",JSON.stringify(payload))
             // let localhost = "http://localhost:3000"
-            let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`,payload,config)
+            let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`,payloadData,config)
             if(data.statusCode == 200){
               console.log("patch",data)
             }else{
@@ -262,7 +268,7 @@ const coachModules = {
         };
         // let user_detail = JSON.parse(localStorage.getItem("userDetail"));
         let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/${course_id}/date/${date}`,config)
-        console.log(data)
+        // console.log(data)
         if(data.statusCode === 200){
           data.data.forEach((student, index) => {
             student.no = index+1
@@ -303,7 +309,7 @@ const coachModules = {
             if(data.statusCode === 201){
               // let localhost = "http://localhost:3000"
               let stadentData = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/${course_id}/date/${date}`,config)
-              console.log(data)
+              // console.log(data)
               if(stadentData.data.statusCode === 200){
                 stadentData.data.data.forEach((student, index) => {
                   student.no = index+1
@@ -470,7 +476,7 @@ const coachModules = {
           }).then(async (result) => {
             if (result.isConfirmed) {
               let user_detail =  JSON.parse(localStorage.getItem("userDetail"));
-              let date = new Date(checkInCoach.date).toISOString.substring(0, 10)
+              let date = new Date(checkInCoach.date).toISOString().substring(0, 10)
               let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${checkInCoach.courseId}/date/${date}`,config)
               if(data.statusCode === 200){
                 console.log( data.data)
@@ -573,7 +579,7 @@ const coachModules = {
               let getLeaves = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${user_detail.account_id}`,config) 
               console.log(getLeaves)
               if(getLeaves.data.statusCode === 200){
-                context.commit("SetCoachLeaves",getLeaves.data.data)
+                context.commit("SetCoachLeaves", getLeaves.data.data)
               } else{
                 throw {error : getLeaves }
               }
