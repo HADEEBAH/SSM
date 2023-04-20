@@ -2,9 +2,7 @@
   <v-container>
     <loading-overlay :loading="course_list_is_loading"></loading-overlay>
 
-    <pre>{{ my_course_detail.checkIn }}</pre>
-    ----------------------------------
-    <!-- <pre>{{ check_in_detail }}</pre> -->
+    <!-- <pre>{{ my_course_detail }}</pre> -->
     <!-- {{ check_in_detail }} -->
     <!-- <pre>{{ day_list }}</pre> -->
 
@@ -33,7 +31,7 @@
                 margin-left: auto;
                 margin-right: auto;
                 width: 100%;
-                margin-top: 10%; 
+                margin-top: 10%;
               "
             >
               <!-- <img src="../../../assets/student_course/download.png" /> -->
@@ -72,16 +70,7 @@
 
             <v-col class="text-slate-400">
               <span class="mdi mdi-account">ผู้เรียน :</span>
-              <!-- {{
-                !my_course_detail.student.firstNameTh
-                  ? "-"
-                  : my_course_detail.student.firstNameTh
-              }}
-              {{
-                !my_course_detail.student.lastNameTh
-                  ? "-"
-                  : my_course_detail.student.lastNameTh
-              }} -->
+
               {{
                 !my_course_detail.student
                   ? "-"
@@ -96,17 +85,7 @@
 
             <v-col class="text-slate-400">
               <span class="mdi mdi-account">ทำรายการโดย :</span>
-              <!-- {{ my_course_detail.createdBy.lastNameTh}} -->
-              <!-- {{
-                !my_course_detail.createdBy.firstNameTh
-                  ? "-"
-                  : my_course_detail.createdBy.firstNameTh
-              }}
-              {{
-                !my_course_detail.createdBy.lastNameTh
-                  ? "-"
-                  : my_course_detail.createdBy.lastNameTh
-              }} -->
+
               {{
                 !my_course_detail.createdBy
                   ? "-"
@@ -140,7 +119,6 @@
           <!-- circle -->
           <v-col cols="12" sm="4" class="pt-6" align="center">
             <v-col>
-              <!-- {{ item.courseNameEn }} -->
               <v-progress-circular
                 :rotate="-90"
                 :size="90"
@@ -163,8 +141,6 @@
       <!-- </div> -->
       <!-- </v-card> -->
 
-      <!-- <div class="text-lg font-bold">ข้อมูลการเรียน</div> -->
-
       <v-row>
         <v-col cols="6" align="start">
           <div class="text-lg font-bold">ข้อมูลการเรียน</div>
@@ -174,58 +150,154 @@
         </v-col> -->
       </v-row>
 
-      <!-- v-if=" my_course_detail.checkIn == my_course_detail.dates.totalDay" -->
-      <!-- <v-card
-        class="pa-2"
-        v-if="my_course_detail.checkIn == my_course_detail.dates.totalDay"
-      >
-        <v-row>
-          <v-col cols="2" sm="1">
-            <img src="../../../assets/student_course/certificates.png" />
-          </v-col>
-          <v-col class="text-lg font-bold" cols="8">ผลประเมินศักยาภาพ</v-col>
-          <v-col cols="2">
-            <v-card
-              class="rounded-xl text-center"
-              style="color: #58a144; background-color: #f0f9ee"
-            >
-              ตรงเวลา
-            </v-card>
-          </v-col>
-        </v-row>
-        <v-card color="#FBF3F5" class="my-2 mx-5">
-          <v-card-title>
-            พัฒนาการ: <span class="text-rose-400">ดี</span>
-            <span class="ml-2">ความสนใจ: </span>
-            <span class="text-rose-400">ความสนใจดี</span>
-          </v-card-title>
-          <v-card-text>
-            ความคิดเห็นจากโค้ช:<span class="text-black ml-1"
-              >มีความพยายามอ่านโน๊ตและมีการทำการบ้านมาเป็นอย่างดีมี
-              ทักษะเฉพาะตัวคิดไวทำไวมีวินัยใส่ใจในการเรียนปฦิบัติตามคำสอนของโค้ชอย่างเคร่ง
-              ครัดมาเรียนตรงเวลา มีมารยาทในการพูดจา</span
-            >
-          </v-card-text>
+      <!-- TODO -->
+
+      <!-- <div v-for="(item_data, index) in my_course_detail.checkIn" :key="index">
+        <div
+          v-for="(data, index) in item_data.assessment.attachment"
+          :key="index"
+        >
+          {{ data.attId }}
+        </div>
+        {{ item_data.assessment.evolution }}
+        <v-card class="pa-2" v-if="(item_data.type = 'potential')">
           <v-row>
-            <v-col sm="4">
-              <img
-                src="../../../assets/profile/thaiFlag.png"
-                class="my-5 mx-5"
-              />
+            <v-col cols="2" sm="1">
+              <img src="../../../assets/student_course/certificates.png" />
             </v-col>
-            <v-col sm="4">
-              <img
-                src="../../../assets/profile/thaiFlag.png"
-                class="my-5 mx-5"
-              />
+            <v-col class="text-lg font-bold" cols="8">ผลประเมินศักยาภาพ</v-col>
+            <v-col cols="2">
+              <v-card flat align="end">
+                <v-card-text
+                  class="pa-1 rounded-xl text-center"
+                  :class="`text-[${
+                    check_in_status_options.filter(
+                      (v) => v.value === item_data.status
+                    )[0].color
+                  }] bg-[${
+                    check_in_status_options.filter(
+                      (v) => v.value === item_data.status
+                    )[0].bg_color
+                  }]`"
+                >
+                  <span
+                    :class="`text-[${
+                      check_in_status_options.filter(
+                        (v) => v.value === item_data.status
+                      )[0].color
+                    }]`"
+                  >
+                    {{
+                      check_in_status_options.filter(
+                        (v) => v.value === item_data.status
+                      ).length > 0
+                        ? check_in_status_options.filter(
+                            (v) => v.value === item_data.status
+                          )[0].label
+                        : "-"
+                    }}
+                  </span>
+                </v-card-text>
+              </v-card>
             </v-col>
           </v-row>
+
+          <v-card color="#FBF3F5" class="my-2 mx-5">
+            <v-col cols="6" sm="6" align="start">
+              <v-card-text
+                :class="`text-[${
+                  evolution_options.filter(
+                    (v) => v.value === item_data.assessment.evolution
+                  )[0]
+                }]`"
+              >
+                พัฒนาการ:
+                <span
+                  :class="`text-[${
+                    evolution_options.filter(
+                      (v) => v.value === item_data.assessment.evolution
+                    )[0]
+                  }]`"
+                >
+                  {{
+                    evolution_options.filter(
+                      (v) => v.value === item_data.assessment.evolution
+                    ).length > 0
+                      ? evolution_options.filter(
+                          (v) => v.value === item_data.assessment.evolution
+                        )[0].label
+                      : "-"
+                  }}
+                </span>
+              </v-card-text>
+            </v-col>
+            <v-col cols="6" sm="6" align="start">
+              <v-card-text
+                :class="`text-[${
+                  interest_options.filter(
+                    (v) => v.value === item_data.assessment.interest
+                  )[0]
+                }]`"
+              >
+                ความสนใจ:
+                <span
+                  :class="`text-[${
+                    interest_options.filter(
+                      (v) => v.value === item_data.assessment.interest
+                    )[0]
+                  }]`"
+                >
+                  {{
+                    interest_options.filter(
+                      (v) => v.value === item_data.assessment.interest
+                    ).length > 0
+                      ? interest_options.filter(
+                          (v) => v.value === item_data.assessment.interest
+                        )[0].label
+                      : "-"
+                  }}
+                </span>
+              </v-card-text>
+            </v-col>
+            <v-col align="start">
+              <v-card-text
+                :class="`text-[${
+                  interest_options.filter(
+                    (v) => v.value === item_data.assessment.remark
+                  )[0]
+                }]`"
+              >
+                ความคิดเห็นจากโค้ช:
+                {{ item_data.assessment.remark }}
+              </v-card-text>
+            </v-col>
+            <v-col cols="6" sm="6" align="start" >
+              <v-img
+                :src="
+                  item_data.assessment.remarkFiles
+                    ? showImg(item_data.assessment.remarkFiles)
+                    : defaultImageUrl
+                "
+              ></v-img>
+
+            </v-col>
+          </v-card>
         </v-card>
-      </v-card> -->
+      </div> -->
 
       <template>
-        <div v-for="(day_list, index_day) in my_course_detail.checkIn" :key="index_day">
-        <!-- <div v-for="(day_list, index_day) in check_in_detail" :key="index_day"> -->
+        <div
+          v-for="(day_list, index_day) in my_course_detail.checkIn"
+          :key="index_day"
+        >
+          <!-- <pre>{{
+            !day_list.assessment.evolution
+              ? "n000"
+              : day_list.assessment.evolution
+          }}</pre>
+          <pre>{{ day_list.assessment.attachment }}</pre> -->
+
+          <!-- <div v-for="(day_list, index_day) in check_in_detail" :key="index_day"> -->
           <v-card class="my-5 drop-shadow-lg rounded-xl">
             <v-card-text>
               <v-row class="" dense>
@@ -243,6 +315,7 @@
                   {{ genDate(day_list.date) }}
                 </v-col>
 
+                <!-- ตรงเวลา -->
                 <v-col cols="4">
                   <v-card flat>
                     <v-card-text
@@ -293,7 +366,10 @@
                   น.
                 </v-col>
               </v-row>
+              <!-- v-for="(reaction, index_day) in day_list.assessment.attachment"
+                :key="index_day" -->
               <v-row dense>
+                <!-- พัฒนาการ -->
                 <v-col cols="6" sm="6" align="start">
                   <v-card flat>
                     <v-card-text
@@ -324,6 +400,7 @@
                     </v-card-text>
                   </v-card>
                 </v-col>
+                <!-- ความสนใจ -->
                 <v-col cols="6" sm="6" align="start">
                   <v-card flat>
                     <v-card-text
@@ -379,13 +456,15 @@
                         }}
                       </v-card-text>
 
-                      <v-card-text class="text-start">
+                      <!-- TO DO -->
+
+                      <!-- <v-card-text class="text-start">
                         {{
                           !day_list.assessment.remarkFiles
                             ? "ไม่มีไฟล์ความคิดเห็น"
                             : day_list.assessment.remarkFiles
                         }}
-                      </v-card-text>
+                      </v-card-text> -->
                     </div>
                   </v-expand-transition></v-col
                 >
@@ -661,14 +740,16 @@ export default {
     },
 
     showAssessment(key) {
-      this.my_course_detail.checkIn = this.my_course_detail.checkIn.map((val, index) => {
-        if (key === index) {
-          val.show = !val.show;
-        } else {
-          val.show = false;
+      this.my_course_detail.checkIn = this.my_course_detail.checkIn.map(
+        (val, index) => {
+          if (key === index) {
+            val.show = !val.show;
+          } else {
+            val.show = false;
+          }
+          return val;
         }
-        return val;
-      });
+      );
       console.log("key", key);
     },
   },

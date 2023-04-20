@@ -219,10 +219,8 @@ const myCourseModules = {
 
                     for await (const item of data.data) {
                         item.createdByData = item.createdBy ? await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${item.createdBy}`, config) : null
-                        // console.log("createdByData", item.createdByData);
                         item.StudentData = item.studentId ? await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${item.studentId}`, config) : null
-                        console.log("StudentData", item.StudentData);
-
+                        item.coachData = item.coachId ? await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${item.coachId}`, config) : null
                     }
 
                     for (const booked of data.data) {

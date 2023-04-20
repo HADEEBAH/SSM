@@ -307,7 +307,7 @@
       <!-- PAGE 3 -->
       <v-expand-x-transition transition="scale-transition">
         <div v-if="type_selected == 'students_bookedcourse'">
-          <pre>{{ profile_booked }}</pre>
+          <!-- <pre>{{ profile_booked }}</pre> -->
           <div
             v-for="(item_booked, index_booked) in profile_booked"
             :key="index_booked"
@@ -340,14 +340,16 @@
 
                       <v-col class="text-lg font-bold">
                         {{
-                          item_booked.courseName == ""
+                          item_booked.courseNameTh == ""
                             ? "-"
-                            : item_booked.courseName
+                            : item_booked.courseNameTh
                         }}
 
-                        <!-- ({{
-                        item.courseNameEng == "" ? "-" : item.courseNameEng
-                      }}) -->
+                        ({{
+                          item_booked.courseNameEn == ""
+                            ? "-"
+                            : item_booked.courseNameEn
+                        }})
                       </v-col>
 
                       <v-col class="text-slate-400">
