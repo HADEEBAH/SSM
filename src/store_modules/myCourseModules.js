@@ -204,6 +204,7 @@ const myCourseModules = {
 
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/${account_id}`, config);
                 if (data.statusCode === 200) {
+                    console.log(data.data)
                     for (const booked of data.data) {
                         booked.courseImg = booked.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${booked.courseImg}` : null
                     }
