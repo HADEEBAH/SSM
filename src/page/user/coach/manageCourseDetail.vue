@@ -382,7 +382,7 @@
                                 </v-col>
                                 <v-col  class="px-2">
                                     <span class="font-bold">{{ file.attId }}</span><br>
-                                    <span class="text-caption">ขนาดไฟล์ : {{ (0 / 1000000).toFixed(2) }} MB</span>
+                                    <!-- <span class="text-caption">ขนาดไฟล์ : {{ (0 / 1000000).toFixed(2) }} MB</span> -->
                                 </v-col>
                                 <!-- <v-col cols="auto" class="pl-2">
                                 <v-btn @click="removePotentialFile(index)" icon color="#ff6b81"><v-icon>mdi-close</v-icon></v-btn>
