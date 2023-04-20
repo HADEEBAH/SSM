@@ -71,7 +71,7 @@
               </template>
             </course-card-list> -->
           </div>
-          <div>
+          <div v-if="my_courses.filter(v => v.start_date === genToday).length == 0">
             <v-card flat>
               <v-card-text class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg">
                  <span class="text-lg font-bold"> 
