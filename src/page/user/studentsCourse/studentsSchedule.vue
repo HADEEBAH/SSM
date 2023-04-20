@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <pre>{{ my_course }}</pre>
+    <loading-overlay :loading="student_is_loading"></loading-overlay>
     <div class="mx-10 my-5">
       <label class="text-xl font-bold">ข้อมูลตารางเรียน</label>
 
@@ -45,33 +45,13 @@
                   item-value="studentId"
                   dense
                   filled
-                  label="ค้นหาคอร์สเรียนของนักเรียนได้ที่นี้"
+                  label="เลือกนักเรียนของได้ที่นี้"
                   @change="searchStudentCourse(search_course)"
                 ></v-autocomplete>
               </v-col>
             </v-row>
-
-            <v-card-text
-              class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
-              v-if="my_course.length == 0"
-            >
-              <span class="text-lg font-bold">
-                <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                ไม่พบข้อมูลคอร์สเรียน
-              </span>
-            </v-card-text>
-
-            <div v-for="item in my_course" :key="item.id">
-              <v-col
-                cols="12"
-                v-if="my_course.length == 0"
-                class="font-weight-bold text-center text-xl"
-              >
-                ไม่พบคอร์สเรียน
-              </v-col>
-
-              <v-card 
-              :loading="student_is_loading"
+            <div v-for="(item, index) in my_course" :key="index">
+              <v-card
                 @click="
                   $router.push({
                     name: 'StudentCourse',
@@ -87,8 +67,8 @@
                       style="
                         display: block;
                         margin-left: auto;
-                        margin-right: auto;   
-                        width: 100%; 
+                        margin-right: auto;
+                        width: 100%;
                         margin-top: 10%;
                       "
                     >
@@ -105,23 +85,45 @@
                   <v-col cols="12" sm="6">
                     <v-col class="text-lg font-bold">
                       {{ item.courseNameTh == "" ? "-" : item.courseNameTh }}
-              {{ item.courseId }}
 
                       ({{
                         item.courseNameEng == "" ? "-" : item.courseNameEng
                       }})
                     </v-col>
-                    <!-- <v-col class="text-slate-400">
-                  {{ item.courseNameEng  == ''? '-' : item.courseNameEng }}
-                </v-col> -->
+
                     <v-col class="text-slate-400">
                       <span class="mdi mdi-account">โค้ช :</span>
                       {{ item.coachName == null ? "-" : item.coachName }}
                     </v-col>
+                    <v-col class="text-slate-400">
+                      <span class="mdi mdi-account">ผู้เรียน :</span>
+                      {{
+                        !item.student.firstNameTh
+                          ? "-"
+                          : item.student.firstNameTh
+                      }}
+                      {{
+                        !item.student.lastNameTh ? "-" : item.student.lastNameTh
+                      }}
+                      <!-- {{ item.student.firstNameTh }} -->
+                      <!-- {{ !my_course_detail.coachName? '-' :  my_course_detail.coachName}} -->
+                    </v-col>
+
+                    <v-col class="text-slate-400">
+                      <span class="mdi mdi-account">ทำรายการโดย :</span>
+                      <!-- {{ !item.createdBy.firstNameTh? "-" : item.createdBy.firstNameTh }}  {{ !item.createdBy.lastNameTh? "-" : item.createdBy.lastNameTh }}  -->
+                      {{ !item.createdBy ? "-" : item.createdBy.firstNameTh }}
+                      {{ !item.createdBy ? "-" : item.createdBy.lastNameTh }}
+                    </v-col>
+
                     <v-col>
                       <!-- v-for="(day, index_day) in dayOfWeekName" :key="index_day" -->
                       <v-card color="yellow" class="rounded-lg text-center">
-                        {{ dayOfWeekName(item.dates.day)  == ''? '-' : dayOfWeekName(item.dates.day) }}
+                        {{
+                          dayOfWeekName(item.dates.day) == ""
+                            ? "-"
+                            : dayOfWeekName(item.dates.day)
+                        }}
                         {{ item.period.start }} - {{ item.period.end }} น.
                       </v-card>
                       <!-- {{ item.courseNameEn }} -->
@@ -146,12 +148,10 @@
                   </v-col>
                 </v-row>
               </v-card>
-           
-            </div> 
+            </div>
           </div>
-           <!-- Role Student -->
+          <!-- Role Student -->
           <div v-if="data_local.roles.includes('R_5')">
-
             <v-card-text
               class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
               v-if="student_data.length == 0"
@@ -162,12 +162,8 @@
               </span>
             </v-card-text>
 
-            <div v-else v-for="(item, index) in student_data" :key="index" >
-              
-              
-
+            <div v-else v-for="(item, index) in student_data" :key="index">
               <v-card
-              
                 @click="
                   $router.push({
                     name: 'StudentCourse',
@@ -182,8 +178,8 @@
                     <v-col
                       style="
                         display: block;
-                        margin-left: auto; 
-                        margin-right: auto;  
+                        margin-left: auto;
+                        margin-right: auto;
                         width: 100%;
                         margin-top: 10%;
                       "
@@ -201,7 +197,7 @@
                   <v-col cols="12" sm="6">
                     <v-col class="text-lg font-bold">
                       {{ item.courseNameTh == "" ? "-" : item.courseNameTh }}
-                      {{ item.courseId }}
+
                       ({{
                         item.courseNameEng == "" ? "-" : item.courseNameEng
                       }})
@@ -213,10 +209,33 @@
                       <span class="mdi mdi-account">โค้ช :</span>
                       {{ item.coachName == null ? "-" : item.coachName }}
                     </v-col>
+                    <v-col class="text-slate-400">
+                      <span class="mdi mdi-account">ผู้เรียน :</span>
+
+                      {{
+                        !item.student.firstNameTh
+                          ? "-"
+                          : item.student.firstNameTh
+                      }}
+                      {{
+                        !item.student.lastNameTh ? "-" : item.student.lastNameTh
+                      }}
+                    </v-col>
+
+                    <v-col class="text-slate-400">
+                      <span class="mdi mdi-account">ทำรายการโดย :</span>
+
+                      {{ !item.createdBy ? "-" : item.createdBy.firstNameTh }}
+                      {{ !item.createdBy ? "-" : item.createdBy.lastNameTh }}
+                    </v-col>
                     <v-col>
                       <!-- v-for="(day, index_day) in dayOfWeekName" :key="index_day" -->
                       <v-card color="yellow" class="rounded-lg text-center">
-                        <!-- {{ dayOfWeekName(item.dates.day)  == ''? '-' : dayOfWeekName(item.dates.day) }} -->
+                        {{
+                          dayOfWeekName(item.dates.day) == ""
+                            ? "-"
+                            : dayOfWeekName(item.dates.day)
+                        }}
                         {{ item.period.start }} - {{ item.period.end }} น.
                       </v-card>
                       <!-- {{ item.courseNameEn }} -->
@@ -288,6 +307,7 @@
       <!-- PAGE 3 -->
       <v-expand-x-transition transition="scale-transition">
         <div v-if="type_selected == 'students_bookedcourse'">
+          <pre>{{ profile_booked }}</pre>
           <div
             v-for="(item_booked, index_booked) in profile_booked"
             :key="index_booked"
@@ -295,7 +315,7 @@
             <v-card
               v-if="profile_booked.length != '0'"
               @click="showCard(index, item_booked)"
-              class="my-5"
+              class="my-5 cursor-pointer"
             >
               <v-card-text>
                 <div>
@@ -311,12 +331,82 @@
                       />
                     </v-col>
                     <!-- detail -->
-                    <v-col cols="12" sm="6" class="text-lg font-bold">
-                      <v-row dense>
+                    <v-col cols="12" sm="6">
+                      <!-- <v-row dense>
                         <v-col>
                           {{ item_booked.courseName }}
                         </v-col>
-                      </v-row>
+                      </v-row> -->
+
+                      <v-col class="text-lg font-bold">
+                        {{
+                          item_booked.courseName == ""
+                            ? "-"
+                            : item_booked.courseName
+                        }}
+
+                        <!-- ({{
+                        item.courseNameEng == "" ? "-" : item.courseNameEng
+                      }}) -->
+                      </v-col>
+
+                      <v-col class="text-slate-400">
+                        <span class="mdi mdi-account">โค้ช :</span>
+                        <!-- {{
+                          !item_booked.coachName ? "-" : item_booked.coachName
+                        }} -->
+                        {{
+                          !item_booked.coachData.data.data.firstNameTh
+                            ? "-"
+                            : item_booked.coachData.data.data.firstNameTh
+                        }}
+                        {{
+                          !item_booked.coachData.data.data.lastNameTh
+                            ? "-"
+                            : item_booked.coachData.data.data.lastNameTh
+                        }}
+                      </v-col>
+
+                      <v-col class="text-slate-400">
+                        <span class="mdi mdi-account">ผู้เรียน :</span>
+                        {{
+                          !item_booked.StudentData.data.data.firstNameTh
+                            ? "-"
+                            : item_booked.StudentData.data.data.firstNameTh
+                        }}
+                        {{
+                          !item_booked.StudentData.data.data.lastNameTh
+                            ? "-"
+                            : item_booked.StudentData.data.data.lastNameTh
+                        }}
+                      </v-col>
+
+                      <v-col class="text-slate-400">
+                        <span class="mdi mdi-account">ทำรายการโดย :</span>
+
+                        {{
+                          !item_booked.createdByData.data.data.firstNameTh
+                            ? "-"
+                            : item_booked.createdByData.data.data.firstNameTh
+                        }}
+                        {{
+                          !item_booked.createdByData.data.data.lastNameTh
+                            ? "-"
+                            : item_booked.createdByData.data.data.lastNameTh
+                        }}
+                      </v-col>
+
+                      <v-col>
+                        <!-- v-for="(day, index_day) in dayOfWeekName" :key="index_day" -->
+                        <v-card color="yellow" class="rounded-lg text-center">
+                          {{
+                            dayOfWeekName(item_booked.dayOfWeekName.split(","))
+                          }}
+                          {{ item_booked.start }} - {{ item_booked.end }} น.
+                        </v-card>
+                        <!-- {{ item.courseNameEn }} -->
+                      </v-col>
+
                       <v-row dense>
                         <v-col cols="auto">
                           <v-card outlined>
@@ -356,7 +446,10 @@
                     </v-col>
                   </v-row>
                 </div>
-                <div  v-if="activeCard === index && !course_is_loading" class="mt-3">
+                <div
+                  v-if="activeCard === index && !course_is_loading"
+                  class="mt-3"
+                >
                   <v-card>
                     <v-row dense class="pa-3">
                       <v-col
@@ -437,11 +530,13 @@
 import { mapActions, mapGetters } from "vuex";
 import calendarStudent from "../../../components/calendar/calendarStudent.vue";
 import labelCustom from "@/components/label/labelCustom.vue";
+import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 
 export default {
   components: {
     calendarStudent,
     labelCustom,
+    loadingOverlay,
   },
   data: () => ({
     activePage: 1,
@@ -498,32 +593,32 @@ export default {
     this.GetProfileBooked(this.user_detail.account_id);
     this.GetAll(this.user_detail.account_id);
     // this.GetStudentData(this.user_relation.student.studentId);
-    this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty")
-   
-  
-      if (this.$store.state.MyCourseModules.my_course_student_id !== '') {
-          //  this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty")
+    this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
 
-          this.GetStudentData(this.$store.state.MyCourseModules.my_course_student_id);
-      } else {
-        if (JSON.parse(localStorage.getItem("relations"))?.length != 0) {
-          for (const item of JSON.parse(localStorage.getItem("relations"))) {
-                this.GetStudentData(item.student.studentId);
-          }
-        } else {
-          if (!this.user_detail.roles.includes('R_4')) {
-          this.GetStudentData(this.user_detail.account_id);
-          } else {
-            this.GetStudentData(null);
-          }
-          
+    if (this.$store.state.MyCourseModules.my_course_student_id !== "") {
+      //  this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty")
+
+      this.GetStudentData(
+        this.$store.state.MyCourseModules.my_course_student_id
+      );
+    } else {
+      if (JSON.parse(localStorage.getItem("relations"))?.length != 0) {
+        for (const item of JSON.parse(localStorage.getItem("relations"))) {
+          this.GetStudentData(item.student.studentId);
         }
-        
+      } else {
+        if (!this.user_detail.roles.includes("R_4")) {
+          this.GetStudentData(this.user_detail.account_id);
+        } else {
+          this.GetStudentData(null);
+        }
       }
-          
-    console.log("my_course_student_id", this.$store.state.MyCourseModules.my_course);
+    }
 
-
+    console.log(
+      "my_course_student_id",
+      this.$store.state.MyCourseModules.my_course
+    );
   },
 
   watch: {
@@ -562,7 +657,7 @@ export default {
     },
 
     async searchStudentCourse(studentId) {
-      this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty")
+      this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
 
       console.log("item", studentId);
       await this.GetStudentData(studentId);
@@ -617,9 +712,8 @@ export default {
       course_is_loading: "CourseModules/getCourseIsLoading",
       profile_user: "ProfileModules/getProfileUser",
       students: "ProfileModules/getStudents",
-      student_is_loading: "ProfileModules/getStudentsLoading",
+      student_is_loading: "MyCourseModules/getStudentsLoading",
       my_course: "MyCourseModules/getMyCourse",
-
     }),
     // studentData: {
     //   get() {

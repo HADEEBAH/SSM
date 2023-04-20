@@ -327,7 +327,7 @@ const coachModules = {
               const course_data = await axios.get( `${process.env.VUE_APP_URL}/api/v1/course/detail/${course.courseId}` );
               console.log(course_data.data.data);
               if (course_data.data.statusCode === 200) {
-                for (const dates of course.dates.dates) {
+                for (const dates of course.dates.date) {
                   let start_time = course.period.start;
                   let end_time = course.period.end;
                   const [start_hours, start_minutes] = start_time.split(":");

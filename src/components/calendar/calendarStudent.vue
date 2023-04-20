@@ -42,7 +42,6 @@
         :interval-count="12"
         :event-overlap-threshold="30"
         @click:event="selectedDate($event)"
-
       >
         <template v-if="type === 'week'" v-slot:day-body="{ week }">
           <div
@@ -100,33 +99,28 @@
                       <v-row dense>
                         <v-col class="text-sm">
                           โค้ช: {{ event.subtitle }} <br />
-                          
-                          <div v-for="(item, index) in student_data" :key="index">
-                          <v-btn
-                          
-                            small
-                            text
-                            class="underline pa-0"
-                            color="#ff6b81"
-                            @click="
-                            
-                  $router.push({
-                    name: 'StudentCourse',
-                    params: { course_id: item.courseId},
-                  })
-                "
-                          >
-                            ดูรายละเอียดคอร์สเรียน 
-                          </v-btn>
-                        </div>
-                          <pre>{{ event_date }}</pre>
+
+                          <div>
+                            <v-btn
+                              small
+                              text
+                              class="underline pa-0"
+                              color="#ff6b81"
+                              @click="ToStudentCourse(event)"
+                            >
+                              ดูรายละเอียดคอร์สเรียน
+                            </v-btn>
+                          </div>
                         </v-col>
                       </v-row>
                     </v-col>
                   </v-row>
                 </v-card-text>
               </v-card>
-              <v-divider v-if="event_date.length !== event_index + 1" class="my-2"></v-divider>
+              <v-divider
+                v-if="event_date.length !== event_index + 1"
+                class="my-2"
+              ></v-divider>
             </div>
           </template>
         </div>
@@ -148,13 +142,13 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   name: "calendarCoach",
   props: {
-      type: { type: String, default: "month" },
+    type: { type: String, default: "month" },
     // , default: () => []
     events: { type: Array },
   },
   data: () => ({
     showModal: false,
-    test_course_id: '',
+    test_course_id: "",
     focus: "",
     ready: false,
     start_of_week: "",
@@ -169,14 +163,13 @@ export default {
   }),
   watch: {
     events(val) {
-          console.log("val ->>>", val);
-      this.event_date.push(val)
+      console.log("val ->>>", val);
+      this.event_date.push(val);
     },
   },
   computed: {
     ...mapGetters({
       student_data: "MyCourseModules/getStudentData",
-       
     }),
     cal() {
       return this.ready ? this.$refs.calendar : null;
@@ -222,20 +215,19 @@ export default {
     ...mapActions({
       GetStudentData: "MyCourseModules/GetStudentData",
     }),
-    selectedDate(data){
-      console.log(data.event) 
+    selectedDate(data) {
+      console.log(data.event);
       for (const item in this.student_data) {
-        this.test_course_id = item.courseId
+        this.test_course_id = item.courseId;
       }
 
       this.$router.push({
-                    name: 'StudentCourse',
-                    params: { course_id: this.test_course_id },
-                  })
+        name: "StudentCourse",
+        params: { course_id: data.event.courseId },
+      });
       // this.$router.push({ name: 'StudentsSchedule' })
       // $router.push({ name: 'StudentCourse' })
-     
-        },
+    },
     selectDate(date) {
       this.event_date = [];
       this.showModal = true;
@@ -244,14 +236,20 @@ export default {
         let [end, end_time] = event.end.split(" ");
         if (start === end && start === date) {
           this.event_date.push({
-            name : event.name,
-            subtitle : event.subtitle,
-            coach : event.coach,
-            start_time : start_time,
-            end_time : end_time,
-            color : event.color,
+            name: event.name,
+            subtitle: event.subtitle,
+            coach: event.coach,
+            start_time: start_time,
+            end_time: end_time,
+            timed: event.timed,
+            color: event.color,
+            courseId: event.courseId,
           });
           console.log("-->", this.event_date);
+          //   this.$router.push({
+          //             name: 'StudentCourse',
+          //             params: { course_id: event.courseId},
+          //  })
         }
       });
     },
@@ -309,13 +307,13 @@ export default {
       let events_data = [];
       this.events.forEach((event) => {
         let [date_event] = event.start.split(" ");
-          let [year, month, day] = date_event.split("-");
+        let [year, month, day] = date_event.split("-");
         events_data.push({
           year: year,
           month: month,
-            day: day,
+          day: day,
         });
-        console.log(this.events_data, '<----')
+        console.log(this.events_data, "<----");
       });
 
       let color = "";
@@ -386,6 +384,14 @@ export default {
           break;
       }
       return color ? color : false;
+    },
+    ToStudentCourse(data) {
+      console.log(data);
+
+      this.$router.push({
+        name: "StudentCourse",
+        params: { course_id: data.courseId },
+      });
     },
   },
 };
