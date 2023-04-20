@@ -99,6 +99,7 @@ const myCourseModules = {
         my_course_student_id: '',
 
         student_is_loading: false,
+        course_list_is_loading: false,
 
         my_course: [],
 
@@ -119,6 +120,9 @@ const myCourseModules = {
         SetStudentsLoading(state, payload) {
             state.student_is_loading = payload
         },
+        SetCourseListIsLoading(state, payload) {
+            state.course_list_is_loading = payload
+        },
         SetMyCourseStudentId(state, payload) {
             state.my_course_student_id = payload
         },
@@ -136,10 +140,8 @@ const myCourseModules = {
         },
 
         async GetStudentData(context, account_id) {
+            context.commit("SetStudentsLoading", true)
             let data_local = JSON.parse(localStorage.getItem("userDetail"))
-
-
-            context.commit("student_is_loading", true);
             try {
                 let config = {
                     headers: {
@@ -156,38 +158,48 @@ const myCourseModules = {
                 );
 
                 if (data.statusCode === 200) {
+                    context.commit("SetStudentsLoading", false)
+
                     const dataCourseSchedule = {
+
                         dates: []
+
                     };
+
                     for (const course of data.data) {
                         for (const date of course.dates.date) {
                             dataCourseSchedule.dates.push({
                                 start: date.replace(" 00:00:00", "") + ' ' + course.period.start,
                                 end: date.replace(" 00:00:00", "") + ' ' + course.period.end,
                                 name: `${course.courseNameTh}(${course.courseNameEng})`,
-                                subtitle: course.coachName
+                                subtitle: course.coachName,
+                                courseId: course.courseId
                             })
                         }
 
                     }
-                    // context.commit("student_is_loading", true);
                     if (data_local.roles.includes('R_4')) {
                         for (const item of data.data) {
                             context.commit("SetMyCourse", item)
+
                         }
                         context.commit("SetMyCourseStudentId", '')
+
                     } else {
                         context.commit("SetStudentData", data.data)
+
                     }
 
                     context.commit("SetcourseSchedule", dataCourseSchedule);
-                    // context.commit("student_is_loading", false);
-
+                    context.commit("SetStudentsLoading", false)
 
                 } else {
+                    context.commit("SetStudentsLoading", false)
                     throw { error: data };
+
                 }
             } catch (error) {
+                context.commit("SetStudentsLoading", false)
                 console.log(error);
             }
         },
@@ -202,9 +214,19 @@ const myCourseModules = {
                     }
                 }
 
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/${account_id}`, config);
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/by/${account_id}`, config);
                 if (data.statusCode === 200) {
+<<<<<<< HEAD
+
+                    for await (const item of data.data) {
+                        item.createdByData = item.createdBy ? await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${item.createdBy}`, config) : null
+                        item.StudentData = item.studentId ? await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${item.studentId}`, config) : null
+                        item.coachData = item.coachId ? await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${item.coachId}`, config) : null
+                    }
+
+=======
                     console.log(data.data)
+>>>>>>> develop
                     for (const booked of data.data) {
                         booked.courseImg = booked.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${booked.courseImg}` : null
                     }
@@ -219,6 +241,7 @@ const myCourseModules = {
             }
         },
         async GetMyCourseDetail(context, { account_id, course_id }) {
+            context.commit("SetCourseListIsLoading", true)
             try {
                 let config = {
                     headers: {
@@ -230,25 +253,35 @@ const myCourseModules = {
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/checkin/student/${account_id}/course/${course_id}`, config);
 
                 if (data.statusCode === 200) {
+
                     if (data.data && data.statusCode === 200) {
                         context.commit("SetMyCourseDetail", data.data)
                         console.log("SetMyCourseDetail ---->", data.data);
+                        context.commit("SetCourseListIsLoading", false)
                     }
-                    // else {
-                    //     console.log("5555555555");
-                    // data.data = {}
-                    // }
-                    
+                    else {
+                        context.commit("SetCourseListIsLoading", false)
+                        data.data = {}
+                    }
+
                 }
+                context.commit("SetCourseListIsLoading", false)
+
             } catch (error) {
+                context.commit("SetCourseListIsLoading", false)
                 console.log("GetMyCourseDetail_err", error);
             }
         },
         async GetMyCourseStudentId(context, account_id) {
             context.commit("SetMyCourseStudentId", account_id);
+            context.commit("SetStudentsLoading", false)
+
         },
         async GetMyCourseArrayEmpty(context) {
+
             context.commit("SetCourseArrayEmpty");
+            context.commit("SetStudentsLoading", false)
+
 
         }
     },
@@ -267,6 +300,9 @@ const myCourseModules = {
         },
         getStudentsLoading(state) {
             return state.student_is_loading
+        },
+        getCourseListIsLoading(state) {
+            return state.course_list_is_loading
         },
         getMyCourseStudent(state) {
             return state.my_course_student_id
