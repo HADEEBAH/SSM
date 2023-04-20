@@ -50,7 +50,7 @@ const coachModules = {
     },
   },
   actions: {
-    async AssessmentStudent(context, {students}){
+    async AssessmentStudent(context, {students, file}){
       try{
         let config = {
           headers: {
@@ -65,20 +65,27 @@ const coachModules = {
             compensation_date : student.compensation_date,
             compensation_start_time : student.start_time,
             compensation_end_time : student.end_time,
-            "evolution" :student.evolution ,
-            "interest" : student.interest ,
-            "remark": student.remark,
-            "remarkFiles": "-" ,
+            "evolution" :student.assessment.evolution ,
+            "interest" : student.assessment.interest ,
+            "remark": student.assessment.remark,
+            "remarkFiles": null ,
           }
-          if(!student.assessmentStudentsId){
+          let payloadData = new FormData()
+            payloadData.append("payload",payload)
+            if(file){
+              payloadData.append("files", payload)
+            }
+          if(!student.assessment.assessmentStudentsId){
             console.log("post")
-            let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`,payload,config)
+            // let localhost = "http://localhost:3000"
+            let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`,payloadData,config)
             if(data.statusCode == 201){
               console.log("post",data)
             }else{
               throw {error : data}
             }
           }else{
+            // let localhost = "http://localhost:3000"
             let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`,payload,config)
             if(data.statusCode == 200){
               console.log("patch",data)
@@ -154,12 +161,27 @@ const coachModules = {
         let user_detail =  JSON.parse(localStorage.getItem("userDetail"));
         let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}/date/${date}`,config)
         if(data.statusCode === 200){
+          console.log( data.data)
           data.data.forEach((check_in)=>{
+            let img_url = []
+            if(check_in.attachment.length > 0){
+              for(const img of check_in.attachment ){
+                img_url.push({
+                  sumAttId : img.sumAttId,
+                  checkInCoachId: img.checkInCoachId,
+                  attFiles: img.attFiles,
+                  attFilesUrl : `${process.env.VUE_APP_URL}/api/v1/files/${img.attFiles}`,
+
+                })
+              }
+            }
             payload = {
-              checkInCoachId : check_in.ch_check_in_coach_id,
-              summary :check_in.ch_summary,
-              homework :check_in.ch_homework,
-              files : check_in.ch_files
+              checkInCoachId : check_in.checkInCoachId,
+              courseId : check_in.courseId,
+              date: check_in.date,
+              summary :check_in.summary,
+              homework :check_in.homework,
+              attachment : img_url
             }
           })
           context.commit("SetCoachCheckIn",payload)
@@ -272,12 +294,14 @@ const coachModules = {
                     Authorization: `Bearer ${VueCookie.get("token")}`,
                 },
             };
+            // let localhost = "http://localhost:3000"
             let user_detail =  JSON.parse(localStorage.getItem("userDetail"));
             const {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}`,{
                 "date": date,
                 "timeId": time_id
             },config)
             if(data.statusCode === 201){
+              // let localhost = "http://localhost:3000"
               let stadentData = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/${course_id}/date/${date}`,config)
               console.log(data)
               if(stadentData.data.statusCode === 200){
@@ -297,9 +321,11 @@ const coachModules = {
                 throw {error : data}
               }
             }else{
+              context.commit("SetCoachCheckInIsLoading", false)
               throw { error : data }
             }
         }catch(error){
+          context.commit("SetCoachCheckInIsLoading", false)
             console.log(error)
         }
     },
@@ -325,7 +351,7 @@ const coachModules = {
             let courses_task = [];
             for (const course of data.data) {
               const course_data = await axios.get( `${process.env.VUE_APP_URL}/api/v1/course/detail/${course.courseId}` );
-              console.log(course_data.data.data);
+              // console.log(course_data.data.data);
               if (course_data.data.statusCode === 200) {
                 for (const dates of course.dates.date) {
                   let start_time = course.period.start;
@@ -414,6 +440,72 @@ const coachModules = {
         console.log(error);
       }
     },
+    async UploadFileSummary(context, { checkInCoach, files }){
+      try{
+        console.log(checkInCoach)
+        console.log(files)
+        let config = {
+          headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-type": "Application/json",
+              Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        let payloadData = new FormData()
+        payloadData.append("summary",checkInCoach.summary)
+        payloadData.append("homework",checkInCoach.homework)
+        for(const file of files){
+          payloadData.append(`img_url`, file);
+        }
+        let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/summary/${checkInCoach.checkInCoachId}`,payloadData , config)
+        console.log(data)
+        if(data.statusCode == 200){
+          Swal.fire({
+            icon: "success",
+            title: "บันทึกสำเร็จ",
+            showDenyButton: false,
+            showCancelButton: false,
+            cancelButtonText :"ยกเลิก",
+            confirmButtonText: "ตกลง",
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              let user_detail =  JSON.parse(localStorage.getItem("userDetail"));
+              let date = new Date(checkInCoach.date).toISOString.substring(0, 10)
+              let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${checkInCoach.courseId}/date/${date}`,config)
+              if(data.statusCode === 200){
+                console.log( data.data)
+                let payload = {}
+                data.data.forEach((check_in)=>{
+                  let img_url = []
+                  if(check_in.attachment.length > 0){
+                    for(const img of check_in.attachment ){
+                      img_url.push({
+                        sumAttId : img.sumAttId,
+                        checkInCoachId: img.checkInCoachId,
+                        attFiles: img.attFiles,
+                        attFilesUrl : `${process.env.VUE_APP_URL}/api/v1/files/${img.attFiles}`,
+
+                      })
+                    }
+                  }
+                  payload = {
+                    checkInCoachId : check_in.checkInCoachId,
+                    courseId : check_in.courseId,
+                    date: check_in.date,
+                    summary :check_in.summary,
+                    homework :check_in.homework,
+                    attachment : img_url
+                  }
+                })
+                context.commit("SetCoachCheckIn",payload)
+              }
+            }
+          })
+        }
+      }catch(error){
+        console.log(error)
+      }
+    },
     async GetAttachmentLeave(context, {coach_leave_id}){
       try{
         let config = {
@@ -426,6 +518,7 @@ const coachModules = {
         // let localhost = "http://localhost:3000"
         let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/attachment/${coach_leave_id}`,config)
         if(data.statusCode === 200){
+         
           context.commit("SetAttachmentLeave",data.data)
         }
       }catch(error){

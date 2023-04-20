@@ -71,6 +71,47 @@ const RegisterModules = {
         }
     },
     actions: {
+        async RemoveRelation(context,{studentId, parentId}){
+            try{
+                let config = {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-type": "Application/json",
+                        Authorization: `Bearer ${VueCookie.get("token")}`,
+                    },
+                };
+                let {data} = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/relations/delete-user-role/?student_id=${studentId}&parent_id=${parentId}`,config)
+                if(data.statusCode === 201){
+                    Swal.fire({
+                        icon: 'success',
+                        title: "ลบรายการสำเร็จ",
+                    })
+                }
+            }catch(error){
+                console.log(error)
+            }
+        },
+        async AddRelations(context,{studentId, parentId}){
+            try{
+                let config = {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-type": "Application/json",
+                        Authorization: `Bearer ${VueCookie.get("token")}`,
+                    },
+                };
+                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/relations/user`,{studentId: studentId, parentId: parentId},config)
+                console.log(data)
+                if(data.statusCode === 201){
+                    let role = await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/user`,{userId :parentId , roleId : 'R_4' },config)
+                    if(role.data.statusCode === 201){
+                        console.log(role)
+                    }
+                }
+            }catch(error){
+                console.log(error)
+            }
+        },
         ResetLastUserRegistered(context) {
             context.commit("ResetLastUserRegistered")
         },

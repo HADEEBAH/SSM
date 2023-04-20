@@ -107,10 +107,100 @@
                   outlined
                   color="#FF6B81"
                   @click="addPackage(course_data.packages)"
-                  ><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มแพ็คเกจ</v-btn
-                >
+                  ><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มแพ็คเกจ</v-btn>
               </v-col>
             </v-row>
+          </v-form>
+        </v-stepper-content>
+        <!-- STEP 4 -->
+        <v-stepper-content step="4" class="pa-2">
+          <v-form ref="privilege_form" v-model="steps[step-1]">
+            <v-card class="mx-3" flat>
+              <headerCard title="สิทธิพิเศษ"></headerCard>
+              <v-card-text class="border-dashed border-2 border-blue-600 rounded-lg">
+                <v-row v-if="preview_privilege_url">
+                  <v-col align="center"  class="rounded-lg pa-0">
+                    <v-img  :src="preview_privilege_url" contain style="max-width: 200px" align="right">
+                      <v-btn icon class="bg-[#f00]" dark @click="removePrivilegeFile"><v-icon>mdi-close</v-icon></v-btn>
+                    </v-img>
+                  </v-col>
+                </v-row>
+                <v-row v-if="!preview_privilege_url">
+                  <v-col cols="12" class="flex align-center justify-center">
+                    <v-img
+                      src="../../../assets/course/upload_file.png"
+                      max-height="105"
+                      max-width="122"
+                    ></v-img>
+                  </v-col>
+                  <v-col cols="12" class="flex align-center justify-center text-h5">
+                    อัพโหลดภาพสิทธิพิเศษ
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    class="flex align-center justify-center text-caption"
+                  >
+                    ( ขนาดไฟล์งานไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG )
+                  </v-col>
+                  <v-col cols="12" class="flex align-center justify-center">
+                    <v-btn outlined color="blue" @click="openFilePrivilegeSelector"
+                      >เลือกไฟล์</v-btn
+                    >
+                    <input
+                      ref="fileInputPrivilege"
+                      type="file"
+                      @change="uploadPrivilegeFile"
+                      accept="image/png, image/jpeg"
+                      style="display: none"
+                    />
+                  </v-col>
+                </v-row>
+              </v-card-text>
+              <headerCard title="งานศิลปะ"></headerCard>
+              <v-card-text class="border-dashed border-2 border-blue-600 rounded-lg">
+                <v-row v-if="preview_artwork_files && preview_artwork_files.length > 0">
+                  <v-col cols="3" align="center" class="rounded-lg pa-2" v-for="(file, index) in preview_artwork_files" :key="index">
+                    <v-img :src="file" contain  
+                      max-height="200"
+                      max-width="200"  align="right">
+                      <v-btn icon class="bg-[#f00]" dark @click="removeArtworkFile(index)"><v-icon>mdi-close</v-icon></v-btn>
+                    </v-img>
+                  </v-col>
+                </v-row>
+                <v-row v-if="!preview_artwork_files || preview_artwork_files.length == 0">
+                  <v-col cols="12" class="flex align-center justify-center">
+                    <v-img
+                      src="../../../assets/course/upload_file.png"
+                      max-height="105"
+                      max-width="122"
+                    ></v-img>
+                  </v-col>
+                  <v-col cols="12" class="flex align-center justify-center text-h5">
+                    อัพโหลดภาพงานศิลปะ
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    class="flex align-center justify-center text-caption"
+                  >
+                    ( ขนาดไฟล์งานไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG )
+                  </v-col>
+                  <v-col cols="12" class="flex align-center justify-center">
+                    <v-btn outlined color="blue" @click="openFileArtworSelector"
+                      >เลือกไฟล์</v-btn
+                    >
+                    <input
+                      ref="fileInputArtwork"
+                      type="file"
+                      @change="previewArtWorkFile"
+                      accept="image/png, image/jpeg"
+                      multiple
+                      style="display: none"
+                    />
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+            
           </v-form>
         </v-stepper-content>
         <v-card flat>
@@ -120,13 +210,13 @@
                 <v-btn
                   v-if="step > 1"
                   color="#FF6B81"
-                  :class="$vuetify.breakpoint.smAndDown ? 'w-full' : ''"
+                  :class="$vuetify.breakpoint.smAndDown ? 'w-full' : 'btn-size-lg'"
                   text
                   @click="step = step - 1"
                   >ย้อนกลับ</v-btn
                 >
               </v-col>
-              <v-col cols="12" sm="auto" v-if="step < 3">
+              <v-col cols="12" sm="auto" v-if="step < 4">
                 <v-btn
                   dark
                   color="#FF6B81"
@@ -148,7 +238,7 @@
               </v-col>
             </v-row>
             <v-row dense v-else>
-              <v-col cols="12" align="right">
+              <v-col cols="12" sm="auto" align="right">
                 <v-btn
                   color="#FF6B81"
                   class="white--text"
@@ -184,7 +274,7 @@ export default {
   data: () => ({
     menu: false,
     step: 1,
-    steps:[false, false, false],
+    steps:[false, false, false, false],
     file: null,
     dragOver: false,
     previewUrl: null,
@@ -193,7 +283,7 @@ export default {
       option: "",
       package: "",
     },
-    step_header_data: ["คอร์สเรียน", "ช่วงเวลาและโค้ช", "แพ็คเกจ"],
+    step_header_data: ["คอร์สเรียน", "ช่วงเวลาและโค้ช", "แพ็คเกจ", "สิทธิพิเศษ"],
     courses: ["โค้ชหนุ่ม", "โค้ชพอล"],
     kingdoms: ["อาณาจักรศิลปะสมัยใหม่", "อาณาจักร P.E."],
     course_open_date_str : "",
@@ -204,7 +294,11 @@ export default {
     class_date_range_str : {
       start_date : "",
       end_date : "",
-    }
+    },
+    privilege_file: null,
+    preview_privilege_url : null,
+    artwork_files : [],
+    preview_artwork_files : [],
   }),
   created() {
     if(this.course_data){
@@ -264,11 +358,14 @@ export default {
           break;
       }
     },
-    openFileSelector() {
-      this.$refs.fileInput.click();
+    openFilePrivilegeSelector() {
+      this.$refs.fileInputPrivilege.click();
+    },
+    openFileArtworSelector(){
+      this.$refs.fileInputArtwork.click()
     },
     submitStep(index){
-      console.log(this.course_data.course_type_id)
+      console.log(index)
       if(this.course_data.course_type_id === "CT_1"){
         if(index === 0){
           this.$refs.course_form.validate()
@@ -283,8 +380,11 @@ export default {
         }else if(index === 2){
           this.$refs.package_form.validate()
           if(this.steps[index]){
-            this.save()
+            // this.save()
+            this.step += 1;
           }
+        }else if(index === 3){
+          this.save()
         }
       }else if(this.course_data.course_type_id === "CT_2"){
         this.$refs.course_form.validate()
@@ -292,18 +392,7 @@ export default {
             this.save()
           }
       } 
-    },
-    // uploadFile() {
-    //   this.file = this.$refs.fileInput.files[0];
-    //   console.log("file=>",this.file);
-    //   if (!this.file) return;
-    //   const reader = new FileReader();
-    //   reader.onload = (e) => {
-    //     this.preview_url = e.target.result;
-    //   };
-    //   reader.readAsDataURL(this.file);
-    // },
-    
+    },  
     addCoach() {
       this.course_data.coachs.push({
         coach_id : "",
@@ -368,6 +457,50 @@ export default {
       });
       this.ChangeCourseData(this.course_data);
     },
+    // UPDATE FILE
+    uploadPrivilegeFile() {
+      this.privilege_file = this.$refs.fileInputPrivilege.files[0];
+      const allowedTypes = ["image/png", "image/jpeg"];
+      this.course_data.privilege_file = this.$refs.fileInputPrivilege.files[0];
+      this.ChangeCourseData(this.course_data);
+      if (this.privilege_file && allowedTypes.includes(this.privilege_file.type)) {
+        if (!this.privilege_file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.preview_privilege_url = e.target.result;
+        };
+        reader.readAsDataURL(this.privilege_file);
+      }
+    },
+    previewArtWorkFile(event) {
+      const selectedFiles = event.target.files;
+      this.course_data.artwork_file = selectedFiles;
+      this.ChangeCourseData(this.course_data);
+      const allowedTypes = ["image/png", "image/jpeg"];
+      const fileUrls = [];
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        if (allowedTypes.includes(file.type)) {
+          const reader = new FileReader();
+          reader.onload = () => {
+            fileUrls.push(reader.result);
+            if (fileUrls.length == selectedFiles.length) {
+              this.preview_artwork_files = [...this.preview_artwork_files, ...fileUrls];
+            }
+          };
+          reader.readAsDataURL(file);
+        } else {
+          // Display error message or handle invalid file type
+        }
+      }
+    },
+    // REMOVE 
+    removeArtworkFile(index){
+      this.preview_artwork_files.splice(index, 1)
+    },
+    removePrivilegeFile(){
+      this.privilege_file = null
+    }
   },
 };
 </script>

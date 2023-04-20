@@ -106,7 +106,8 @@ const loginModules = {
                         role: data.data.roles,
                         roles: roles,
                         tel: data.data.tel,
-                    }
+                        image: data.data.image !== "" ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}` : ""
+            }
                     VueCookie.set("token", data.data.token, 1)
                     localStorage.setItem("userDetail", JSON.stringify(payload))
                     let order = JSON.parse(localStorage.getItem("Order"))
