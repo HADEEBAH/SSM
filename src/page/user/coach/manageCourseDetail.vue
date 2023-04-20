@@ -48,8 +48,9 @@
                     </template>
                </v-btn>
             </v-col>
-        </v-row>    
+        </v-row>   
         <v-tabs class="mb-3" v-model="tab" color="#ff6b81" grow>
+
             <v-tab class="border-b-2" href="#check in"> เช็คชื่อ </v-tab>
             <v-tab :disabled="student_check_in.length == 0" class="border-b-2" href="#assess students"> ประเมินนักเรียน </v-tab>
             <v-tab :disabled="student_check_in.length == 0" class="border-b-2" href="#teaching summary"> บันทึกสรุปการสอน </v-tab>
@@ -391,7 +392,7 @@
                             </v-card-text>
                         </v-card>
                     </div>
-                    <v-card flat class="mb-3">
+                    <v-card flat class="mb-3" v-if="student_check_in[selected_student].type === 'potential'">
                         <v-card-text class="border-dashed border-2 border-pink-600 rounded-lg">
                             <v-row>
                             <v-col cols="12" class="flex align-center justify-center">
