@@ -60,25 +60,27 @@ const coachModules = {
           },
         };
         for (const student of students) {
-          console.log("student + >",student)
+          // console.log("student + >",student)
           let payload = {
             status : student.check_in_status, // punctual, late,  leave, emergency leave, absent,
             compensation_date : student.compensation_date,
             compensation_start_time : student.start_time,
             compensation_end_time : student.end_time,
-            "evolution" :student.assessment.evolution ,
-            "interest" : student.assessment.interest ,
-            "remark": student.assessment.remark,
+            evolution :student.assessment.evolution ,
+            interest : student.assessment.interest ,
+            remark: student.assessment.remark,
+            assessmentStudentsId : student.assessment.assessmentStudentsId,
           }
           let payloadData = new FormData()
-            payloadData.append("assessmentDetail",payload)
+           
             if(student.files){
               for(const file of student.files){
                 payloadData.append(`img_url`, file);
               }
             }
           if(!student.assessment.assessmentStudentsId){
-            console.log("post")
+            console.log("post",payload)
+            payloadData.append("payload",JSON.stringify(payload))
             // let localhost = "http://localhost:3000"
             let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`,payloadData,config)
             if(data.statusCode == 201){
@@ -87,6 +89,8 @@ const coachModules = {
               throw {error : data}
             }
           }else{
+            console.log("patch",payload)
+            payloadData.append("payload",JSON.stringify(payload))
             // let localhost = "http://localhost:3000"
             let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`,payloadData,config)
             if(data.statusCode == 200){
@@ -264,7 +268,7 @@ const coachModules = {
         };
         // let user_detail = JSON.parse(localStorage.getItem("userDetail"));
         let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/${course_id}/date/${date}`,config)
-        console.log(data)
+        // console.log(data)
         if(data.statusCode === 200){
           data.data.forEach((student, index) => {
             student.no = index+1
@@ -305,7 +309,7 @@ const coachModules = {
             if(data.statusCode === 201){
               // let localhost = "http://localhost:3000"
               let stadentData = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/${course_id}/date/${date}`,config)
-              console.log(data)
+              // console.log(data)
               if(stadentData.data.statusCode === 200){
                 stadentData.data.data.forEach((student, index) => {
                   student.no = index+1
