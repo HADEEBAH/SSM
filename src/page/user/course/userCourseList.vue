@@ -22,14 +22,17 @@
         <v-row dense>
             <template v-if="!courses_is_loading">
                 <v-col cols="6"  v-for="(course, course_index) in courses" :key="course_index">
-                    <v-card @click="selectedCourse(course)">
-                        <v-img height="180" contain :src="course.course_url ? course.course_url : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'">
+                    <v-card>
+                        <v-img @click="selectedCourse(course)" 
+                            contain
+                            :height="180"
+                            :src="course.course_url ? course.course_url : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'">
                           <v-row>
                               <v-col class="pa-4" align="right"> <v-chip  color="#F9B320" text-color="white">{{ `${course.period}  ชั่วโมง`  }}</v-chip></v-col>
                           </v-row>
                         </v-img>
-                        <v-card-title class="  font-bold text-sm pa-2">
-                        <v-row dense class="d-flex align-center">
+                        <v-card-title  @click="selectedCourse(course)" class="  font-bold text-sm pa-2">
+                        <v-row  @click="selectedCourse(course)" dense class="d-flex align-center">
                             <v-col>{{ `${course.course_name_th} (${course.course_name_en})` }}</v-col>
                             <v-col class="d-flex align-center text-[#ff6b81]" cols="auto">
                                 <v-icon color="#ff6b81" size="18" class="mr-2">mdi-account-group-outline</v-icon>
@@ -37,7 +40,7 @@
                         </v-row>  
                         </v-card-title>
                         <v-card-text class="text-xs pa-2">
-                            {{  course.course_detail  }}
+                            {{  course.course_detail.slice(0, 300) + '...' }}
                         </v-card-text>
                     </v-card>
                 </v-col>
@@ -87,8 +90,8 @@ import { mapGetters, mapActions } from 'vuex';
                 course_order : "OrderModules/getCourseOrder",
                 category : "CategoryModules/getCategory",
                 course_types : "CourseModules/getCourseTypes"
-            })
-            
+            }),
+           
         },
         methods: {
             ...mapActions({
@@ -97,6 +100,9 @@ import { mapGetters, mapActions } from 'vuex';
                 changeCourseOrderData : "OrderModules/changeCourseOrderData",
                 GetCoursesFilter : 'CourseModules/GetCoursesFilter'
             }),
+            CutWold(course){
+                return course.course_detail.slice(0, 122) + '...' 
+            },
             selectCourseType(course_type){
                 this.type_selected = course_type.course_type_id
                 this.GetCoursesFilter({

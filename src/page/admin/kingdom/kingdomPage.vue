@@ -10,7 +10,6 @@
             <v-card-text
               class="border-dashed border-2 border-blue-600 rounded-lg"
             >
-            
                 <v-img
                   v-if="!enabled"
                   style="
@@ -49,7 +48,7 @@
                   <v-row v-if="!preview_url">
                     <v-col cols="12" class="flex align-center justify-center">
                       <v-img
-                        src="../../assets/course/upload_file.png"
+                        src="../../../assets/course/upload_file.png"
                         max-height="105"
                         max-width="122"
                       ></v-img>
@@ -64,7 +63,7 @@
                       cols="12"
                       class="flex align-center justify-center text-caption"
                     >
-                      ( ขนาดไฟล์งานไม่เกิน 500 Mb ต้องเป็นไฟล์ JPG, PNG )
+                      ( ขนาดไฟล์งานไม่เกิน 1 Mb ต้องเป็นไฟล์ JPG, PNG )
                     </v-col>
                     <v-col cols="12" class="flex align-center justify-center">
                       <v-btn outlined color="blue" @click="openFileSelector"
@@ -73,6 +72,7 @@
                       <input
                         ref="fileInput"
                         type="file"
+                        accept="image/png, image/jpeg"
                         @change="uploadFile"
                         style="display: none"
                       />
@@ -206,9 +206,9 @@
 
 <script>
 import headerPage from "@/components/header/headerPage.vue";
-import LabelCustom from "../label/labelCustom.vue";
+import LabelCustom from "../../../components/label/labelCustom.vue";
 import dialogCard from "@/components/dialog/dialogCard.vue";
-import { inputValidation } from "@/functions/functions";
+import { inputValidation, CheckFileSize } from "@/functions/functions";
 import Swal from "sweetalert2";
 import axios from "axios";
 import VueCookie from "vue-cookie"
@@ -328,29 +328,17 @@ export default {
         }
       });
     },
-
-
-
     uploadFile() {
       this.file = this.$refs.fileInput.files[0];
-      console.log("file=>", this.file);
       if (!this.file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.preview_url = e.target.result;
-      };
-      reader.readAsDataURL(this.file);
+      if(CheckFileSize(this.file) === true){
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.preview_url = e.target.result;
+        };
+        reader.readAsDataURL(this.file);
+      }
     },
-
-    //    uploadFile() {
-    //   this.file = this.$refs.fileInput.files[0];
-    //   if (!this.file) return;
-    //   const reader = new FileReader();
-    //   reader.onload = (e) => {
-    //     this.previewUrl = e.target.result;
-    //   };
-    //   reader.readAsDataURL(this.file);
-    // },
     validate(e, type) {
       inputValidation(e, type);
     },

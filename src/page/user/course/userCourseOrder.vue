@@ -62,7 +62,6 @@
                                 <v-row dense >
                                     <v-col cols="auto" class="d-flex aling-center">
                                         <v-radio
-                                        
                                         color="#ff6B81"
                                         :value="time"
                                         >
@@ -88,12 +87,12 @@
                         dense
                         v-model="course_order.coach_id"
                         color="#FF6B81"
+                        @change="coachSelected($event)"
                         :items="course_data.coachs.filter(v => course_order.day.course_coach_id.includes(v.course_coach_id))"
                         item-text="coach_name"
                         item-value="coach_id"
                         item-color="pink"
                         outlined
-                     
                         placeholder="เลือกโค้ช"
                     >
                         <template v-slot:no-data>
@@ -293,9 +292,9 @@
                 </v-row>
             </div>
             <!-- <pre>{{ course_order.students.filter(v => v.is_other === true) }}</pre> -->
-            <div v-if="checkMaximumStudent()" class="text-[#F03D3E] mb-3">
+            <!-- <div v-if="checkMaximumStudent()" class="text-[#F03D3E] mb-3">
                 ผู้เรียนครบจำนวนที่คลาสจะรับได้แล้ว
-            </div>
+            </div> -->
             <v-row dense>
                 <v-col cols="12" sm="6">
                     <v-btn class="w-full" :disabled="validateButton" outlined dense color="#ff6b81"  @click="addToCart">เพิ่มรถเข็น</v-btn>
@@ -457,6 +456,7 @@ export default {
         register_type : "parent",
         disable_add_to_cart : false,
         disable_checkout : false,
+        coachSelect : false,
     }),
     created() {
         this.checkMaximumStudent()
@@ -480,6 +480,9 @@ export default {
       
     },
     watch: {
+        "course_order.time" :function(){
+            this.course_order.coach_id = null
+        },
         "course_order.apply_for_yourself" : function(){
             if(this.course_order.apply_for_yourself){
                 this.course_order.students.push({
@@ -493,18 +496,6 @@ export default {
                     is_account : false,
                     is_other : false,
                 })
-                // if(this.relations.length > 0){
-                //     this.course_order.students[this.course_order.students.length -1].parents.push(
-                //         {
-                //             account_id : this.relations[0].parent.parentId,
-                //             firstname_en : this.relations[0].parent.parentFirstnameEn,
-                //             lastname_en :  this.relations[0].parent.parentLastnameEn,
-                //             username : this.relations[0].parent.parentUsername,
-                //             tel : this.relations[0].parent.parentTel
-                //         }
-                //     )
-
-                // }
             }else{
                 this.course_order.students.forEach((student, index)=>{
                     if(student.is_other === false){
@@ -573,6 +564,9 @@ export default {
             }
             this.dialog_parent = false
         },
+        "course_order.coach_id": function(){
+            console.log("course_order.coach_id :",this.course_order.coach_id)
+        }
     },
     computed: {
         ...mapGetters({
@@ -589,11 +583,13 @@ export default {
             course_student : "CourseModules/getCourseStudent",
             course_is_loading : 'CourseModules/getCourseIsLoading'
         }),
+      
         validateButton(){
+            console.log(this.course_order.coach_id)
             if(this.course_order.course_type_id === "CT_1"){
                 let time = this.course_order.time ? true : false
                 let day =  this.course_order.day ? true : false
-                let coach =  this.course_order.coach_id ? true : false
+                let coach = this.coachSelect || this.course_order.coach_id ? true : false
                 let student =  this.course_order.students.length > 0 ? this.course_order.students[0].account_id ? true : false : false
                 console.log(time &&  day  && coach && student)
                 return !(time &&  day  && coach && student)
@@ -618,6 +614,11 @@ export default {
             checkUsernameOneid : "loginModules/checkUsernameOneid",
             CreateReserveCourse : "OrderModules/CreateReserveCourse",
         }),
+        coachSelected(coach_id){
+            this.coachSelect = true
+            this.course_order.coach_id = coach_id
+            // this.validateButton
+        },
         resetTime(){
             this.course_order.time = null
             this.course_order.coach_id = null

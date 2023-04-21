@@ -10,7 +10,7 @@ import UserDetail from '@/page/admin/user_manage/userDetail.vue'
 import UserList from '@/page/admin/user_manage/userList.vue'
 
 // kingdom
-import Kingdom from '@/components/admin/kingdomPage.vue'
+import Kingdom from '@/page/admin/kingdom/kingdomPage.vue'
 import ManageKingdom from '@/page/admin/kingdom/manageKingdom.vue';
 import EditKingdom from '@/page/admin/kingdom/editKingdom.vue';
 // Course 

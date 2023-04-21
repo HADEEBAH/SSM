@@ -81,6 +81,7 @@
             </v-card>
           </div>
         </template>
+        
         <!-- รายสัปดาห์ -->
         <template v-else>
           <!-- COURSE LIST -->

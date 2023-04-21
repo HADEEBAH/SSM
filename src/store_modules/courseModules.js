@@ -471,6 +471,7 @@ const CourseModules = {
               course_type_id: course.c_course_type_id,
               course: `${course.c_course_name_th}(${course.c_course_name_en})`,
               status: course.c_course_status,
+              isTruncated : true,
               course_open: course.c_course_open_date ? new Date(course.c_course_open_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : `${new Date(course.c_course_register_start_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', })} - ${new Date(course.c_course_register_end_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', })}`
             })
           }
@@ -805,10 +806,11 @@ const CourseModules = {
         data_payload.append("payload", JSON.stringify(payload))
         data_payload.append("img_url", course.course_img)
         data_payload.append("img_privilage",course.privilege_file)
-        for(let i = 0;i < course.artwork_file.length; i++){
-          data_payload.append(`artwork_file${i}`, course.artwork_file[i]);
-        }
-       
+        if(course.artwork_file){
+          for(let i = 0;i < course.artwork_file.length; i++){
+            data_payload.append(`artwork_file${i}`, course.artwork_file[i]);
+          }         
+        }      
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
