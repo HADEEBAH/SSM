@@ -154,8 +154,8 @@
                     </v-data-table>
                 </v-card>
                 <v-row>
-                    <v-col>
-                        <v-btn v-if="student_check_in.length > 0" dense outlined class="w-full"  @click="CheckInStudents"  color="#ff6b81">บันทึก</v-btn>
+                    <v-col align="right">
+                        <v-btn  :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'" v-if="student_check_in.length > 0" dense outlined   @click="CheckInStudents"  color="#ff6b81">บันทึก</v-btn>
                     </v-col>
                 </v-row>
             </v-tab-item>
@@ -185,15 +185,12 @@
                   <!-- DETAIL -->
                 <div v-if="tab_evaluate === 'evaluate_students'">
                     <template  v-if="student_check_in.filter(v => v.type === 'general').length > 0">
-                        <v-card class="mb-2 " flat style="border: 1px solid #999" v-for="(student, index_student) in student_check_in.filter(v => v.type === 'general')" :key="`${index_student}-student`">
+                        <v-card class="mb-2 " flat style="border: 1px solid #999" v-for="(student, index_student) in student_check_in.filter(v => v.type === 'general' && (v.status == 'punctual' || v.status == 'late'))" :key="`${index_student}-student`">
                             <v-card-text >
                                 <v-row class="d-flex align-center">
                                     <v-col cols="12" sm class="text-lg font-bold">
                                         {{ student.no }} {{ student.fullname }}
                                     </v-col>
-                                    <!-- <v-col cols="4" class="text-lg font-bold">
-                                        {{ student.nickname }}
-                                    </v-col> -->
                                     <v-col cols="12" sm="5" class="pa-1 text-md text-[#999999]">
                                         <v-row dense class="d-flex aling-center">
                                             <v-col  align="right"> การเข้าเรียน: </v-col>
@@ -228,11 +225,11 @@
                         </v-card-text>
                     </v-card>
                     <v-row>
-                        <v-col cols="12" sm="6">
-                            <v-btn color="#ff6b81"  @click="clearAssessment()" outlined dense class="w-full" > ล้างข้อ </v-btn>
+                        <v-col cols="12" sm align="right">
+                            <v-btn color="#ff6b81"  @click="clearAssessment()" outlined dense :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'" > ล้างข้อ </v-btn>
                         </v-col>
-                        <v-col cols="12" sm="6">
-                            <v-btn color="#ff6b81"  @click="saveAssessmentStudent()" dark depressed dense class="w-full"> ส่งข้อมูล </v-btn>
+                        <v-col cols="12" sm="auto">
+                            <v-btn color="#ff6b81"  @click="saveAssessmentStudent()" dark depressed dense:class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"> ส่งข้อมูล </v-btn>
                         </v-col>
                     </v-row>
                 </div>
@@ -461,7 +458,7 @@
   </v-app>
 </template>
 <script>
-import { dateFormatter } from '@/functions/functions';
+import { dateFormatter, CheckFileSize } from '@/functions/functions';
 import rowData from '@/components/label/rowData.vue';
 import { Input, TimePicker } from 'ant-design-vue';
 import labelCustom from '../../../components/label/labelCustom.vue';
@@ -521,15 +518,7 @@ export default {
     //         this.selectCheckInStatus(check_in_data,check_in_data.status)
     //     }
        
-    // })
-   
-    this.student_check_in.forEach((check_in_data)=>{
-        if(check_in_data.status === "leave" || check_in_data.status === "special case"){
-            this.selectCheckInStatus(check_in_data,check_in_data.status)
-        }
-    })
-    
-    
+    // }) 
   },
   watch: {
     "coach_check_in":function(){
@@ -541,6 +530,14 @@ export default {
                 }
             }
         }
+    },
+    "student_check_in":function(){
+        this.student_check_in.forEach((check_in_data)=>{
+            if(check_in_data.status === "leave" || check_in_data.status === "special case"){
+                this.selectCheckInStatus(check_in_data,check_in_data.status)
+                this.expanded_index.push(check_in_data)
+            }
+        })
     }
   },
   computed: {
@@ -701,29 +698,34 @@ export default {
     // },
     uploadPotentialFile(selected_student) {
       const files = this.$refs.potentialfileInput.files
-      this.student_check_in[selected_student].files = files
+      this.student_check_in[selected_student].files = []
       if(files.length > 0){
         for (let i = 0; i < files.length; i++) {
-          this.selected_files.push(files[i])
+            if(CheckFileSize(files[i])===true){
+                this.selected_files.push(files[i])
+                this.student_check_in[selected_student].files.push(files[i])
+            }
         }
       }
     },
 
     previewSummaryFile(event) {
       const selectedFiles = event.target.files;
-      console.log(selectedFiles)
-      this.coach_check_in.summary_files = selectedFiles
+      this.coach_check_in.summary_files =[]
       const fileUrls = [];
       for (let i = 0; i < selectedFiles.length; i++) {
-        const file = selectedFiles[i];
-        const reader = new FileReader();
-          reader.onload = () => {
-            fileUrls.push(reader.result);
-            if (fileUrls.length == selectedFiles.length) {
-              this.preview_summary_files = [...this.preview_summary_files, ...fileUrls];
-            }
-          };
-          reader.readAsDataURL(file);
+        if(CheckFileSize(selectedFiles[i])===true){
+            this.coach_check_in.summary_files.push(selectedFiles[i])
+            const file = selectedFiles[i];
+            const reader = new FileReader();
+            reader.onload = () => {
+                fileUrls.push(reader.result);
+                if (fileUrls.length == selectedFiles.length) {
+                this.preview_summary_files = [...this.preview_summary_files, ...fileUrls];
+                }
+            };
+            reader.readAsDataURL(file);
+        }
       }
     },
     removeSummaryFile(index){

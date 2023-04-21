@@ -10,46 +10,10 @@
         </v-badge>
         <div v-if="!$vuetify.breakpoint.smAndDown">
           <v-avatar class="mr-2" size="24">
-            <v-img src="https://cdn.vuetifyjs.com/images/lists/4.jpg" size="24" />
+            <v-img :src="user_detail.image !== '' ? user_detail.image : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU`" size="24"/>
           </v-avatar>
           <span class="text-white">{{ `${user_detail.first_name_en} ${user_detail.last_name_en}` }}</span>
         </div>
-        <v-menu 
-          v-model="menu"
-          :close-on-content-click="false"
-          bottom 
-          min-width="200px" 
-          rounded 
-          offset-y>
-          <template v-slot:activator="{ on }">
-            <v-btn  icon x-large v-on="on" dark>
-              <v-icon>{{$vuetify.breakpoint.smAndDown? "mdi-dots-vertical" : menu ? "mdi-chevron-up":"mdi-chevron-down" }}</v-icon>
-            </v-btn>
-          </template>
-          <v-card>
-            <v-list-item-content class="justify-center">
-              <div class="mx-auto text-center">
-                <v-avatar color="brown">
-                  <v-img src="https://cdn.vuetifyjs.com/images/lists/4.jpg" size="24" />
-                </v-avatar>
-                <h3>{{ `${user_detail.first_name_en} ${user_detail.last_name_en}` }}</h3>
-                <p class="text-caption mt-1">
-                  {{ user_detail.email }}
-                </p>
-                <v-divider class="my-3"></v-divider>
-                <v-btn depressed rounded text @click="$router.push({name: 'UserProfile'})">
-                  <v-icon color="#ff6b81" >mdi-account-edit-outline</v-icon>
-                  Edit Profile 
-                </v-btn>
-                <v-divider class="my-3"></v-divider>  
-                <v-btn depressed rounded text @click="logOut"> 
-                  <v-icon color="#ff6b81">mdi-logout</v-icon>
-                  Logout
-                </v-btn>
-              </div>
-            </v-list-item-content>
-          </v-card>
-        </v-menu>
       </v-app-bar>
       <v-navigation-drawer 
         clipped
@@ -144,8 +108,8 @@ export default {
       { title : "จัดการผู้ใช้งาน", to:"", child :[ 
         {title : "จัดการผู้ใช้งาน", to:"UserList"},
       ]},
-      { title: "หน้าผู้ใช้งาน", to: "UserKingdom", child: [] },
       { title : "การอนุมัติลา", to:"LeaveList", child :[]},
+      { title: "หน้าผู้ใช้งาน", to: "UserKingdom", child: [] },
     ]
   }),
 
