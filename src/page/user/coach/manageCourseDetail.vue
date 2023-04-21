@@ -483,7 +483,7 @@ export default {
         {label : "ตรงเวลา", value : "punctual", color: "#58A144", bg_color : "#F0F9EE"},
         {label : "สาย", value : "late", color: "#FCC419", bg_color : "#FFF9E8"},
         {label : "ลา", value : "leave", color: "#43A4F5", bg_color : "#CFE2F3"},
-        {label : "ลาฉุกเฉิน", value : " emergency leave", color: "#43A4F5", bg_color : "#CFE2F3"}, 
+        {label : "ลาฉุกเฉิน", value : "emergency leave", color: "#43A4F5", bg_color : "#CFE2F3"}, 
         {label : "ขาด", value : "absent", color: "#F03D3E", bg_color : "#F4CCCC"},
         
     ],
