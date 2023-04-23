@@ -216,7 +216,6 @@ const myCourseModules = {
 
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/by/${account_id}`, config);
                 if (data.statusCode === 200) {
-<<<<<<< HEAD
 
                     for await (const item of data.data) {
                         item.createdByData = item.createdBy ? await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${item.createdBy}`, config) : null
@@ -224,9 +223,6 @@ const myCourseModules = {
                         item.coachData = item.coachId ? await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${item.coachId}`, config) : null
                     }
 
-=======
-                    console.log(data.data)
->>>>>>> develop
                     for (const booked of data.data) {
                         booked.courseImg = booked.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${booked.courseImg}` : null
                     }

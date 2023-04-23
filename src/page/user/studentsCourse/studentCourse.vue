@@ -152,15 +152,8 @@
 
       <!-- TODO -->
 
-      <!-- <div v-for="(item_data, index) in my_course_detail.checkIn" :key="index">
-        <div
-          v-for="(data, index) in item_data.assessment.attachment"
-          :key="index"
-        >
-          {{ data.attId }}
-        </div>
-        {{ item_data.assessment.evolution }}
-        <v-card class="pa-2" v-if="(item_data.type = 'potential')">
+      <div v-for="(item_data, index) in my_course_detail.checkIn" :key="index">
+        <v-card class="pa-2" v-if="item_data.type == 'potential'">
           <v-row>
             <v-col cols="2" sm="1">
               <img src="../../../assets/student_course/certificates.png" />
@@ -271,19 +264,24 @@
                 {{ item_data.assessment.remark }}
               </v-card-text>
             </v-col>
-            <v-col cols="6" sm="6" align="start" >
-              <v-img
-                :src="
-                  item_data.assessment.remarkFiles
-                    ? showImg(item_data.assessment.remarkFiles)
-                    : defaultImageUrl
-                "
-              ></v-img>
-
+            <v-col cols="6" sm="6" align="start">
+              <div
+                v-for="(data, index) in item_data.assessment.attachment"
+                :key="index"
+              >
+                <v-img
+                  style="width: 500px"
+                  :src="
+                    !data.attFiles
+                      ? 'ไม่มีรูปภาพเพิ่มเติม'
+                      : showImg(data.attFiles)
+                  "
+                ></v-img>
+              </div>
             </v-col>
           </v-card>
         </v-card>
-      </div> -->
+      </div>
 
       <template>
         <div
@@ -458,13 +456,31 @@
 
                       <!-- TO DO -->
 
-                      <!-- <v-card-text class="text-start">
-                        {{
+                      <v-card-text class="text-start">
+                        <!-- <div
+                          v-for="(item_data, index) in my_course_detail.checkIn"
+                          :key="index"
+                        > -->
+                        <div
+                          v-for="(data, index) in day_list.assessment
+                            .attachment"
+                          :key="index"
+                        >
+                          <v-img
+                            style="width: 500px"
+                            :src="
+                              !data.attFiles
+                                ? 'ไม่มีรูปภาพเพิ่มเติม'
+                                : showImg(data.attFiles)
+                            "
+                          ></v-img>
+                        </div>
+                        <!-- {{
                           !day_list.assessment.remarkFiles
                             ? "ไม่มีไฟล์ความคิดเห็น"
                             : day_list.assessment.remarkFiles
-                        }}
-                      </v-card-text> -->
+                        }} -->
+                      </v-card-text>
                     </div>
                   </v-expand-transition></v-col
                 >

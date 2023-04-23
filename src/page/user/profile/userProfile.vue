@@ -2,7 +2,7 @@
   <v-container>
     <!-- {{ my_course }} -->
     <!-- {{ profile_user }} -->
-          <!-- {{ data_local }} -->
+    <!-- {{ data_local }} -->
 
     <loading-overlay :loading="categorys_is_loading"></loading-overlay>
 
@@ -23,15 +23,24 @@
       </div>
     </div> -->
     <v-row dense>
-      <v-col class="my-5 " style="text-align: -webkit-center" cols="12">
-          <!-- {{ profile_detail.image }} -->
-          <!-- {{ data_local.image }} -->
+      <v-col class="my-5" style="text-align: -webkit-center" cols="12">
+        <!-- {{ profile_detail.image }} -->
+        <!-- {{ data_local.image }} -->
         <div class="cicle">
-          <v-img class="image-cropper items-end" :src="data_local.image !== '' ? data_local.image : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU`"/>
+          <v-img
+            class="image-cropper items-end"
+            :src="
+              data_local.image !== ''
+                ? data_local.image
+                : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU`
+            "
+          />
         </div>
       </v-col>
     </v-row>
-    <div class="text-center text-xl font-bold">{{ data_local.first_name_th }} {{ data_local.last_name_th }}</div>
+    <div class="text-center text-xl font-bold">
+      {{ data_local.first_name_th }} {{ data_local.last_name_th }}
+    </div>
     <div class="my-3 text-center">
       <v-btn
         depressed
@@ -70,7 +79,7 @@
       </v-row>
       <!-- CERTIFICATE -->
       <!-- @click="show_certificate() -->
-      <v-row dense class="mt-3 mb-3"  >
+      <v-row dense class="mt-3 mb-3">
         <v-col cols="2" sm="1">
           <img src="../../../assets/profile/certificate.png" />
         </v-col>
@@ -111,7 +120,11 @@
             <!-- col avatar -->
             <v-col cols="auto">
               <v-img
-                :src="profile.parent.parentImage !== '' ? profile.parent.parentImage : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEpKC_pI1Y_lmnOSDilaMdTDvWbDicz53xGA&usqp=CAU` "
+                :src="
+                  profile.parent.parentImage !== ''
+                    ? profile.parent.parentImage
+                    : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEpKC_pI1Y_lmnOSDilaMdTDvWbDicz53xGA&usqp=CAU`
+                "
                 alt="Card image"
                 class="rounded-full ml-3 image-cropper"
                 style="max-width: 50px; max-height: 50px"
@@ -185,10 +198,7 @@
         class="mt-3"
         @click="$router.push({ name: 'ProfileLanguages' })"
       > -->
-      <v-row
-        dense
-        class="mt-3"
-      >
+      <v-row dense class="mt-3">
         <v-col cols="2" sm="1">
           <img src="@/assets/profile/langueges.png" />
         </v-col>
@@ -222,7 +232,11 @@
             <!-- col avatar -->
             <v-col cols="12" sm="2" class="webkit-center">
               <img
-                :src="profile.student.studentImage !== '' ? profile.student.studentImage : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEpKC_pI1Y_lmnOSDilaMdTDvWbDicz53xGA&usqp=CAU` "
+                :src="
+                  profile.student.studentImage !== ''
+                    ? profile.student.studentImage
+                    : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEpKC_pI1Y_lmnOSDilaMdTDvWbDicz53xGA&usqp=CAU`
+                "
                 alt="Card image"
                 class="rounded-full image-cropper ml-3"
                 style="max-width: 50px; max-height: 50px"
@@ -246,7 +260,12 @@
                 </v-col>
 
                 <v-col class="pink--text">
-                  {{  my_course.filter((val)=>val.studentId === profile.studentId).length }} คอร์ส
+                  {{
+                    my_course.filter(
+                      (val) => val.studentId === profile.studentId
+                    ).length
+                  }}
+                  คอร์ส
                 </v-col>
 
                 <!-- col arrow -->
@@ -400,19 +419,11 @@
           </v-row>
           <v-row dense>
             <v-col align="center">
-              <!-- <v-icon
-                    larg
-                    color="#FF6B81"
-                    @click="removeParentData(index)"
-                    v-if="profile_user.length >= 2"
-                  >
-                    mdi-delete
-                  </v-icon> -->
               <v-btn
                 class="white--text"
                 color="#FF6B81"
                 @click="removeRelation(getParentData)"
-                v-if="profile_user.length >= 2"
+                v-if="profile_user.length >= 1"
               >
                 ลบข้อมูลผู้ปกครอง
               </v-btn>
@@ -462,7 +473,14 @@
           <v-row style="text-align: -webkit-center" class="justify-center my-5">
             <!-- {{ dialogGetStudentData }} -->
             <div class="cicle">
-              <v-img class="image-cropper" :src="dialogGetStudentData.studentImage !== '' ? ialogGetStudentData.studentImage : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEpKC_pI1Y_lmnOSDilaMdTDvWbDicz53xGA&usqp=CAU`"/>
+              <v-img
+                class="image-cropper"
+                :src="
+                  dialogGetStudentData.studentImage !== ''
+                    ? ialogGetStudentData.studentImage
+                    : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEpKC_pI1Y_lmnOSDilaMdTDvWbDicz53xGA&usqp=CAU`
+                "
+              />
             </div>
           </v-row>
 
@@ -551,7 +569,14 @@
               <label>คอร์สเรียนของนักเรียน</label>
             </v-col>
             <v-col cols="3" sm="4" align="right" class="mt-1">
-              <label class="pink--text">{{  my_course.filter((val)=>val.studentId === dialogGetStudentData.studentId).length }} คอร์ส</label>
+              <label class="pink--text"
+                >{{
+                  my_course.filter(
+                    (val) => val.studentId === dialogGetStudentData.studentId
+                  ).length
+                }}
+                คอร์ส</label
+              >
             </v-col>
             <v-col cols="2" sm="1" align="right" class="mt2">
               <span class="mdi mdi-chevron-right"></span>
@@ -751,7 +776,7 @@ export default {
     register_type: "parent",
     getParentData: {},
     dialogGetStudentData: {},
-    list_course_count: 0
+    list_course_count: 0,
   }),
   created() {
     this.GetRelations({
@@ -848,15 +873,18 @@ export default {
       }
     },
     last_user_registered: function () {
-      console.log(this.last_user_registered)
+      console.log(this.last_user_registered);
       if (this.last_user_registered.type === "parent") {
-        this.AddRelations({ studentId : this.data_local.account_id, parentId : this.last_user_registered.account_id }).then(()=>{
+        this.AddRelations({
+          studentId: this.data_local.account_id,
+          parentId: this.last_user_registered.account_id,
+        }).then(() => {
           this.GetAll(this.user_login.account_id);
           for (const item of JSON.parse(localStorage.getItem("relations"))) {
             this.GetStudentData(item.student.studentId);
           }
-        })
-       
+        });
+
         // if (
         //   this.course_order.students.filter((v) => v.is_other === false)[0]
         //     .parents.length === 0
@@ -933,8 +961,8 @@ export default {
       changeDialogRegisterOneId: "RegisterModules/changeDialogRegisterOneId",
       checkUsernameOneid: "loginModules/checkUsernameOneid",
       GetRelations: "OrderModules/GetRelations",
-      AddRelations : "RegisterModules/AddRelations",
-      RemoveRelation : "RegisterModules/RemoveRelation"
+      AddRelations: "RegisterModules/AddRelations",
+      RemoveRelation: "RegisterModules/RemoveRelation",
     }),
 
     async getStudentData(order_item_id) {
@@ -969,8 +997,7 @@ export default {
     },
     show_password() {
       // this.$router.push({ name: "ProfilePassword" });
-      window.location.href = `https://testoneid.inet.co.th/type_forgot_password?oauth_pass=true`
-
+      window.location.href = `https://testoneid.inet.co.th/type_forgot_password?oauth_pass=true`;
     },
     show_policy() {
       this.$router.push({ name: "ProfilePolicy" });
@@ -1010,8 +1037,8 @@ export default {
       };
       this.dialog_parent = true;
     },
-    removeRelation(relations){
-      console.log(relations)
+    removeRelation(relations) {
+      console.log(relations);
       Swal.fire({
         icon: "question",
         title: "คุณต้องการลบรายการนี้ใช่หรือไม่ ?",
@@ -1021,16 +1048,15 @@ export default {
         cancelButtonText: "ยกเลิก",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          this.dialog_show = false
+          this.dialog_show = false;
           this.RemoveRelation({
-            studentId : this.data_local.account_id, 
-            parentId : relations.parentId,
-          }).then(()=>{
+            studentId: this.data_local.account_id,
+            parentId: relations.parentId,
+          }).then(() => {
             this.GetAll(this.user_login.account_id);
-          })
+          });
         }
-      })
-    
+      });
     },
     checkUsername(username, type) {
       if (username) {
@@ -1205,7 +1231,7 @@ export default {
     myCourseStudent(item) {
       this.$store.dispatch("MyCourseModules/GetMyCourseStudentId", item);
       this.$router.push({ name: "StudentsSchedule" });
-    }
+    },
   },
   computed: {
     ...mapGetters({
@@ -1277,6 +1303,6 @@ export default {
   margin: -1%;
 }
 .webkit-center {
-  text-align: -webkit-center
+  text-align: -webkit-center;
 }
 </style>
