@@ -221,7 +221,7 @@
                   </span>              
                 </v-card-text>
               </v-card>
-              <v-card v-else>
+              <v-card outlined v-else>
                 <v-card-text> 
                   <v-row>
                     <v-col> บันทึกการสอน : <span class="font-semibold">{{coach_check_in.summary}}</span></v-col>
