@@ -2,7 +2,7 @@
   <v-container>
     <loading-overlay :loading="course_list_is_loading"></loading-overlay>
 
-    <!-- <pre>{{ my_course_detail }}</pre> -->
+    <pre>{{ my_course_detail }}</pre>
     <!-- {{ check_in_detail }} -->
     <!-- <pre>{{ day_list }}</pre> -->
 
@@ -620,9 +620,54 @@ export default {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     this.show_id = this.$route.params.course_id;
     // this.GetAll(this.user_detail.account_id);
-    for (const item_data of JSON.parse(localStorage.getItem("relations"))) {
+    // for (const item_data of JSON.parse(localStorage.getItem("relations"))) {
+
+    //   this.GetMyCourseDetail({
+    //     account_id: item_data.student.studentId,
+    //     course_id: this.$route.params.course_id,
+    //   });
+    // }
+
+    // this.relations = JSON.parse(localStorage.getItem("relations"));
+    // if (
+    //   this.data_local.roles.includes("R_4") &
+    //   this.data_local.roles.includes("R_5")
+    // ) {
+    //   this.GetMyCourseDetail({
+    //     account_id: this.user_detail.account_id,
+    //     course_id: this.$route.params.course_id,
+    //   });
+    // } else if (this.data_local.roles.includes("R_4")) {
+    //   this.GetMyCourseDetail({
+    //     account_id: this.user_detail.account_id,
+    //     course_id: this.$route.params.course_id,
+    //   });
+    // } else {
+    //   if (this.relations.length > 0) {
+    //     for (const item_data of this.relations) {
+    //       this.GetMyCourseDetail({
+    //         account_id: item_data.student.studentId,
+    //         course_id: this.$route.params.course_id,
+    //       });
+    //     }
+    //   } else {
+    //     this.GetMyCourseDetail({
+    //       account_id: this.user_detail.account_id,
+    //       course_id: this.$route.params.course_id,
+    //     });
+    //   }
+    // }
+
+    if (this.relations.length > 0) {
+      for (const item_data of this.relations) {
+        this.GetMyCourseDetail({
+          account_id: item_data.student.studentId,
+          course_id: this.$route.params.course_id,
+        });
+      }
+    } else {
       this.GetMyCourseDetail({
-        account_id: item_data.student.studentId,
+        account_id: this.user_detail.account_id,
         course_id: this.$route.params.course_id,
       });
     }
@@ -651,6 +696,35 @@ export default {
       "ข้อมูลคอร์สเรียน"
     );
 
+    //   this.relations = JSON.parse(localStorage.getItem("relations"));
+    // if (
+    //   this.data_local.roles.includes("R_4") &
+    //   this.data_local.roles.includes("R_5")
+    // ) {
+    //   this.GetMyCourseDetail({
+    //     account_id: this.user_detail.account_id,
+    //     course_id: this.$route.params.course_id,
+    //   });
+    // } else if (this.data_local.roles.includes("R_4")) {
+    //   this.GetMyCourseDetail({
+    //     account_id: this.user_detail.account_id,
+    //     course_id: this.$route.params.course_id,
+    //   });
+    // } else {
+    //   if (this.relations.length > 0) {
+    //     for (const item_data of this.relations) {
+    //       this.GetMyCourseDetail({
+    //         account_id: item_data.student.studentId,
+    //         course_id: this.$route.params.course_id,
+    //       });
+    //     }
+    //   } else {
+    //     this.GetMyCourseDetail({
+    //       account_id: this.user_detail.account_id,
+    //       course_id: this.$route.params.course_id,
+    //     });
+    //   }
+    // }
     // this.check_in_detail = this.my_course_detail.checkIn;
     // if (this.check_in_detail.length !== 0) {
     //   this.check_in_detail.map((val) => {

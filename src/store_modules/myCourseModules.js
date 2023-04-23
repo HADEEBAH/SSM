@@ -171,9 +171,11 @@ const myCourseModules = {
                             dataCourseSchedule.dates.push({
                                 start: date.replace(" 00:00:00", "") + ' ' + course.period.start,
                                 end: date.replace(" 00:00:00", "") + ' ' + course.period.end,
-                                name: `${course.courseNameTh}(${course.courseNameEng})`,
+                                timed: `${course.courseNameTh}(${course.courseNameEng})`,
+                                name: course.student.firstNameTh,
                                 subtitle: course.coachName,
-                                courseId: course.courseId
+                                courseId: course.courseId,
+
                             })
                         }
 

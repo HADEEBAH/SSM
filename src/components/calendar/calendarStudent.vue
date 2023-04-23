@@ -89,12 +89,10 @@
                     </v-col>
                     <v-col>
                       <v-row dense>
-                        <v-col>
-                          <label class="font-bold">{{ event.name }}</label>
-                          <!-- <span class="text-xs text-[#999999]">
-                            {{ event.timed }}</span
-                          > -->
-                        </v-col>
+                        <v-col> เรียนโดย: {{ event.name }} </v-col>
+                      </v-row>
+                      <v-row dense>
+                        <label class="font-bold">{{ event.timed }} </label>
                       </v-row>
                       <v-row dense>
                         <v-col class="text-sm">
@@ -246,10 +244,6 @@ export default {
             courseId: event.courseId,
           });
           console.log("-->", this.event_date);
-          //   this.$router.push({
-          //             name: 'StudentCourse',
-          //             params: { course_id: event.courseId},
-          //  })
         }
       });
     },
