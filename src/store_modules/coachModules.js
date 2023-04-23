@@ -425,7 +425,7 @@ const coachModules = {
                   const endDate = new Date(dates);
                   endDate.setHours(end_hours);
                   endDate.setMinutes(end_minutes);
-                  //if(courses_task.filter(v => v.course_id === course.courseId && v.time_id === course.timeId && v.day_of_week_id === course.dayOfWeekId && v.start_date ===  moment(startDate).format("YYYY-MM-DD") ).length === 0){
+                  if(courses_task.filter(v => v.course_id === course.courseId && v.time_id === course.timeId && v.day_of_week_id === course.dayOfWeekId && v.start_date ===  moment(startDate).format("YYYY-MM-DD") ).length === 0){
                     courses_task.push({
                       name: course_data.data.data.courseNameTh,
                       subtitle: course_data.data.data.courseNameEn,
@@ -448,7 +448,7 @@ const coachModules = {
                       show_assessment : false,
                       show_assessment_pantential : false,
                     });
-                  //}
+                  }
                 }
               }
             }
