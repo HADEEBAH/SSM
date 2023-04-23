@@ -177,18 +177,16 @@ export default {
 
     created() {
       this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
-      console.log("this.user_detail created", this.user_detail);
-      // if (!this.user_detail) {
-      //   this.logOut()
-      // }
+      if (this.user_detail.account_id) {
+        this.GetProfileDetail(this.user_detail.account_id)
+      }
       this.active_menu = this.$route.name
       this.GetCartList(this.user_detail.account_id);
     },
     mounted() {
-      console.log("this.user_detail mount", this.user_detail);
-      // if (!this.user_detail) {
-      //   this.logOut()
-      // }
+      if (this.user_detail.account_id) {
+        this.GetProfileDetail(this.user_detail.account_id)
+      }
       // console.log("profile_detail", this.profile_detail);
       this.GetCartList(this.user_detail.account_id);
     },
