@@ -81,9 +81,9 @@
             </v-card>
           </div>
         </template>
-        
         <!-- รายสัปดาห์ -->
         <template v-else>
+          <!-- <pre>{{ my_courses }}</pre> -->
           <!-- COURSE LIST -->
           <calendarCoach
             :events="my_courses"
@@ -133,13 +133,114 @@
                 </v-row>
               </v-col>
             </v-row>
-            <!-- <v-row dense>
-              <v-col>ประเมินนักเรียน</v-col>
-              <v-col>ประเมินศักยภาพ</v-col>
-              <v-col>ประเมินภาพรวม</v-col>
-            </v-row> -->
+            <v-row dense>
+              <v-col align="center" @click="OpenAssessment(course)" class="cursor-pointer">ประเมินนักเรียน <v-icon color="#ff6b81">{{course.show_assessment ? 'mdi-chevron-up' : 'mdi-chevron-down'}}</v-icon></v-col>
+              <v-col align="center" @click="OpenAssessmentPotential(course)" class="cursor-pointer">ประเมินศักยภาพ <v-icon color="#ff6b81">{{course.show_assessment_pantential ? 'mdi-chevron-up' : 'mdi-chevron-down'}}</v-icon></v-col>
+              <v-col align="center" @click="OpenSummary(course)" class="cursor-pointer">ประเมินภาพรวม <v-icon color="#ff6b81">{{course.show_summary ? 'mdi-chevron-up' : 'mdi-chevron-down'}}</v-icon></v-col>
+            </v-row>
           </v-card-text>
+          <v-expand-transition>
+            <template v-if="course.show_assessment"> 
+              <v-card-text>
+                <v-card flat  v-if="student_check_in.filter(v => v.type === 'general' && (v.status == 'punctual' || v.status == 'late')).length === 0">
+                  <v-card-text class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg">
+                    <span class="text-lg font-bold"> 
+                      <v-icon color="#ff6b81">mdi-alert-outline</v-icon> ไม่พบข้อมูลการสอน
+                    </span>              
+                  </v-card-text>
+                </v-card>
+                <v-card outlined class="mb-3" v-for="(student, index) in student_check_in.filter(v => v.type === 'general' && (v.status == 'punctual' || v.status == 'late'))" :key="`${index}-checkin`">
+                  <v-card-text>
+                      <v-row>
+                        <v-col class="text-lg font-bold"> {{ index+1 }} . {{ student.fullname }}</v-col>
+                        <v-col align="center"> 
+                          <v-row dense class="d-flex aling-center">
+                              <v-col align="right"> การเข้าเรียน: </v-col>
+                              <v-col cols="auto">
+                                  <v-chip class="font-bold" :color="check_in_status_options.filter(v => v.value === student.status)[0].bg_color" :style="`color:${check_in_status_options.filter(v => v.value === student.status)[0].color}`" v-if="check_in_status_options.filter(v => v.value === student.status).length > 0" >{{ check_in_status_options.filter(v => v.value === student.status)[0].label }} </v-chip>
+                              </v-col>
+                            </v-row>
+                          </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col align="left" class="font-semibold">พัฒนาการ : <span class="text-[#ff6b81]" >{{student.assessment.evolution === "very good" ? "ดีมาก" : student.assessment.evolution === "good" ? "ดี" : student.assessment.evolution === "adjust" ? "ปรับปรุง" : "-" }}</span></v-col>
+                        <v-col align="center" class="font-semibold">ความสนใจ : <span class="text-[#ff6b81]" >{{student.assessment.interest === "very good" ? "ดีมาก" : student.assessment.interest === "good" ? "ดี" :  student.assessment.evolution === "adjust" ? "ปรับปรุง" :"-" }}</span></v-col>
+                        <v-col align="center">
+                          <v-btn outlined @click="showComment(student)" color="#ff6b81"><v-icon>mdi-message-text-outline</v-icon>ดูความคิดเห็น</v-btn>
+                        </v-col>
+                      </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-card-text>
+            </template>
+          </v-expand-transition>
+          <v-expand-transition>
+            <template v-if="course.show_assessment_pantential"> 
+              <v-card-text>
+                <v-card-text>
+                <v-card flat  v-if="student_check_in.filter(v => v.potential).length === 0">
+                  <v-card-text class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg">
+                    <span class="text-lg font-bold"> 
+                      <v-icon color="#ff6b81">mdi-alert-outline</v-icon> ไม่พบข้อมูลการสอน
+                    </span>              
+                  </v-card-text>
+                </v-card>
+                <v-card outlined class="mb-3" v-for="(student, index) in student_check_in.filter(v => v.potential)" :key="`${index}-checkin`">
+                  <v-card-text>
+                      <v-row>
+                        <v-col class="text-lg font-bold"> {{ index+1 }} . {{ student.fullname }}</v-col>
+                        <v-col align="center"> 
+                          <v-row dense class="d-flex aling-center">
+                              <v-col align="right"> การเข้าเรียน: </v-col>
+                              <v-col cols="auto">
+                                  <v-chip class="font-bold" :color="check_in_status_options.filter(v => v.value === student.status)[0].bg_color" :style="`color:${check_in_status_options.filter(v => v.value === student.status)[0].color}`" v-if="check_in_status_options.filter(v => v.value === student.status).length > 0" >{{ check_in_status_options.filter(v => v.value === student.status)[0].label }} </v-chip>
+                              </v-col>
+                            </v-row>
+                          </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col align="left" class="font-semibold">พัฒนาการ : <span class="text-[#ff6b81]" >{{student.assessment.evolution === "very good" ? "ดีมาก" : student.assessment.evolution === "good" ? "ดี" : student.assessment.evolution === "adjust" ? "ปรับปรุง" : "-" }}</span></v-col>
+                        <v-col align="center" class="font-semibold">ความสนใจ : <span class="text-[#ff6b81]" >{{student.assessment.interest === "very good" ? "ดีมาก" : student.assessment.interest === "good" ? "ดี" :  student.assessment.evolution === "adjust" ? "ปรับปรุง" :"-" }}</span></v-col>
+                        <v-col align="center">
+                          <v-btn outlined @click="showComment(student)" color="#ff6b81"><v-icon>mdi-message-text-outline</v-icon>ดูความคิดเห็น</v-btn>
+                        </v-col>
+                      </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-card-text>
+              </v-card-text>
+            </template>
+          </v-expand-transition>
+          <v-expand-transition>
+            <template v-if="course.show_summary"> 
+            <v-card-text >
+              <v-card flat v-if="!coach_check_in.summary &&  !coach_check_in.homework && !coach_check_in.attachment">
+                <v-card-text class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg">
+                  <span class="text-lg font-bold"> 
+                    <v-icon color="#ff6b81">mdi-alert-outline</v-icon> ไม่พบข้อมูลการสอน
+                  </span>              
+                </v-card-text>
+              </v-card>
+              <v-card outlined v-else>
+                <v-card-text> 
+                  <v-row>
+                    <v-col> บันทึกการสอน : <span class="font-semibold">{{coach_check_in.summary}}</span></v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col> พัฒนาการ / การบ้าน :  <span class="font-semibold">{{coach_check_in.homework}}</span> </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col>ไฟล์แนบ : 
+                      <a class="text-[#ff6b81]" :href="att.attFiles" v-for="(att, index_att) in coach_check_in.attachment" :key="`${index_att}-att`"> ไฟล์ {{ index_att+1 }} </a>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </v-card-text>
+          </template>
+        </v-expand-transition>
         </v-card>
+      
       </div>
       <div v-if="tab === 'request leave'">
         <v-row>
@@ -598,6 +699,52 @@
           </v-card-text>
         </v-card>
       </v-dialog>
+      <!-- COMMENT -->
+      <v-dialog persistent :width="$vuetify.breakpoint.smAndUp ? '60vw' : ''" v-model="show_comment" v-if="show_comment">
+        <v-card  class="pa-1">
+                <v-row dense>
+                    <v-col class="pa-0" cols="12" align="right">
+                        <v-btn icon @click="closeComment">
+                            <v-icon color="#ff6b81">mdi-close</v-icon>
+                        </v-btn>
+                    </v-col>
+                </v-row>
+                <v-card-text>
+                  <v-row dense>
+                    <v-col align="center" class="text-lg font-bold">ความคิดเห็นเพิ่มเติม</v-col>
+                  </v-row>
+                  <v-row dense>
+                      <v-col>
+                          <labelCustom text="เพิ่มความคิดเห็น"></labelCustom>
+                          <div>{{show_comment_data.assessment.remark}}</div>
+                      </v-col>
+                  </v-row>
+                  <div v-if="show_comment_data.assessment.attachment.length > 0">
+                      <v-row dense>
+                          <v-col class="font-bold text-lg ">
+                          ไฟล์แนบ
+                          </v-col>
+                      </v-row>
+                      <v-card flat class="mb-3" v-for="(file, index) of show_comment_data.assessment.attachment" :key="`${index}-fileattachment`">
+                          <v-card-text class="border border-2 border-[#ff6b81] rounded-lg">
+                          <v-row>
+                              <v-col cols="auto" class="pr-2">
+                              <v-img height="35" width="26" src="../../../assets/coachLeave/file-pdf.png"/>
+                              </v-col>
+                              <v-col  class="px-2">
+                                  <span class="font-bold">{{ file.attId }}</span><br>
+                                  <!-- <span class="text-caption">ขนาดไฟล์ : {{ (0 / 1000000).toFixed(2) }} MB</span> -->
+                              </v-col>
+                              <!-- <v-col cols="auto" class="pl-2">
+                              <v-btn @click="removePotentialFile(index)" icon color="#ff6b81"><v-icon>mdi-close</v-icon></v-btn>
+                              </v-col> -->
+                          </v-row>
+                          </v-card-text>
+                      </v-card>
+                  </div>
+                </v-card-text>
+            </v-card>
+      </v-dialog>
     </v-container>
   </div>
 </template>
@@ -607,12 +754,13 @@ import headerPage from '../../../components/header/headerPage.vue';
 import rowData from '../../../components/label/rowData.vue';
 import imgCard from '../../../components/course/imgCard.vue';
 import moment from 'moment';
+import labelCustom from '../../../components/label/labelCustom.vue';
 import Swal from "sweetalert2";
 import { dateFormatter } from "@/functions/functions";
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "menageCourse",
-  components: { calendarCoach, headerPage, rowData, imgCard },
+  components: { calendarCoach, headerPage, rowData, imgCard,labelCustom },
   data: () => ({
     singleExpand: false,
     expanded: [],
@@ -632,119 +780,19 @@ export default {
     ],
     time_frame: "day",
     menu: false,
-    select_date : `${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()}`,
-    leave_tasks:[
-      {
-        id:1,
-        date: "จ. 25 / 07 /65",
-        leave_type : "ลาพักร้อน",
-        status : "อนุมัติ",
-        teacher : {
-          teacher_name : "",
-          teacher_id : "",
-        },
-        remark : ""
-      },
-      {
-        id: 2,
-        date: "จ. 25 / 07 /65",
-        leave_type : "ลากิจ",
-        status : "รออนุมัติ",
-        teacher : {
-          teacher_name : "",
-          teacher_id : "",
-        },
-        remark : ""
-      },
-      {
-        id: 3,
-        date: "จ. 25 / 07 /65",
-        leave_type : "ลาป่วย",
-        status : "รออนุมัติ",
-        teacher : {
-          teacher_name : "",
-          teacher_id : "",
-        },
-        remark : ""
-      },
-      {
-        id: 4,
-        date: "จ. 25 / 07 /65",
-        leave_type : "ลาป่วย",
-        status : "ไม่อนุมัติ",
-        teacher : {
-          teacher_name : "นางอรวรรณ ศรีสองเมืองไทย",
-          teacher_id : "",
-        },
-        remark : "ไม่ได้แจ้งลาก่อนวันกำหนด"
-      },
-      { 
-        id: 5,
-        date: "จ. 25 / 07 /65",
-        leave_type : "ลาพักร้อน",
-        status : "อนุมัติ",
-        teacher : {
-          teacher_name : "นางอรวรรณ ศรีสองเมืองไทย",
-          teacher_id : "",
-        },
-        remark : "ไม่ได้แจ้งลาก่อนวันกำหนด"
-      }
+    check_in_status_options :[
+        {label : "ตรงเวลา", value : "punctual", color: "#58A144", bg_color : "#F0F9EE"},
+        {label : "สาย", value : "late", color: "#FCC419", bg_color : "#FFF9E8"},
+        {label : "ลา", value : "leave", color: "#43A4F5", bg_color : "#CFE2F3"},
+        {label : "ลาฉุกเฉิน", value : "emergency leave", color: "#43A4F5", bg_color : "#CFE2F3"}, 
+        {label : "ขาด", value : "absent", color: "#F03D3E", bg_color : "#F4CCCC"},
     ],
+    select_date : `${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()}`,
     column:[
         {text: 'วันที่',align: 'center',sortable: false, value: 'date'},
         {text: 'ประเภทการลา',align: 'center',sortable: false, value: 'leaveType'},
         {text: 'สถานะ',align: 'center',sortable: false, value: 'status'},
         {text: '',align: 'right',sortable: false, value: 'action'},
-    ],
-    courses: [
-      {
-        course_name: "เปียโนป๊อปเบื้องต้น (Popular Piano ) ",
-        coach_name: "นายสมชาย ศรีชาตรี",
-        category_name : "อาณาจักรดนตรี",
-        time: "10:00 - 11:00",
-        course_hours: "1",
-        package : "Family"
-      },
-      {
-        course_name: "เปียโนป๊อปเบื้องต้น (Popular Piano ) ",
-        coach_name: "นายสมชาย ศรีชาตรี",
-        category_name : "อาณาจักรดนตรี",
-        time: "10:00 - 11:00",
-        course_hours: "1",
-        package : "Family"
-      },
-      {
-        course_name: "เปียโนป๊อปเบื้องต้น (Popular Piano ) ",
-        coach_name: "นายสมชาย ศรีชาตรี",
-        category_name : "อาณาจักรดนตรี",
-        time: "10:00 - 11:00",
-        course_hours: "1",
-        package : "Family"
-      },
-      {
-        course_name: "เปียโนป๊อปเบื้องต้น (Popular Piano ) ",
-        coach_name: "นายสมชาย ศรีชาตรี",
-        category_name : "อาณาจักรดนตรี",
-        time: "10:00 - 11:00",
-        course_hours: "1",
-        package : "Family"
-      },
-      {
-        course_name: "เปียโนป๊อปเบื้องต้น (Popular Piano ) ",
-        coach_name: "นายสมชาย ศรีชาตรี",
-        category_name : "อาณาจักรดนตรี",
-        time: "10:00 - 11:00",
-        course_hours: "1",
-        package : "Family"
-      },
-      {
-        course_name: "เปียโนป๊อปเบื้องต้น (Popular Piano ) ",
-        coach_name: "นายสมชาย ศรีชาตรี",
-        category_name : "อาณาจักรดนตรี",
-        time: "10:00 - 11:00",
-        course_hours: "1",
-        package : "Family"
-      },
     ],
     previewUrl : null,
     periods :[
@@ -783,7 +831,9 @@ export default {
     selected_files : [],
     show_detail : false,
     show_leave_form : false,
-    show_leave_detail : false
+    show_leave_detail : false,
+    show_comment : false,
+    show_comment_data : {}
   }),
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
@@ -800,7 +850,9 @@ export default {
       my_courses : "CoachModules/getMyCourses",
       coachs : "CourseModules/getCoachs",
       coach_leaves : "CoachModules/getCoachLeaves",
-      attachment_leave: "CoachModules/getAttachmentLeave" 
+      attachment_leave: "CoachModules/getAttachmentLeave",
+      student_check_in : "CoachModules/getStudentCheckIn",
+      coach_check_in : "CoachModules/getCoachCheckIn"
     }),
     SetFunctionsComputed(){
       this.GetMyCourses({coach_id : this.user_detail.account_id})
@@ -829,7 +881,47 @@ export default {
       GetLeavesByAccountId : "CoachModules/GetLeavesByAccountId",
       updateStatusCoachLeave : "CoachModules/updateStatusCoachLeave",
       GetAttachmentLeave : "CoachModules/GetAttachmentLeave",
+      GetStudentByTimeId : "CoachModules/GetStudentByTimeId",
+      GetCoachCheckIn : "CoachModules/GetCoachCheckIn"
     }),
+    showComment(course){
+      this.show_comment = true
+      this.show_comment_data = course
+    },
+    closeComment(){
+      this.show_comment = false
+      this.show_comment_data = {}
+    },
+    OpenSummary(course){
+      this.GetCoachCheckIn({course_id :course.course_id, date : course.start_date})
+      if(course.show_summary){
+        course.show_summary = false
+      }else{
+        course.show_summary = true
+      }
+      course.show_assessment = false
+      course.show_assessment_pantential = false
+    },
+    OpenAssessment(course){
+      this.GetStudentByTimeId({course_id :course.course_id, date : course.start_date, time_id: course.time_id})
+      course.show_summary = false
+      if(course.show_assessment){
+        course.show_assessment = false
+      }else{
+        course.show_assessment = true
+      }
+      course.show_assessment_pantential = false
+    },
+    OpenAssessmentPotential(course){
+      this.GetStudentByTimeId({course_id :course.course_id, date : course.start_date, time_id: course.time_id})
+      course.show_summary = false
+      course.show_assessment = false
+      if(course.show_assessment_pantential){
+        course.show_assessment_pantential = false
+      }else{
+        course.show_assessment_pantential = true
+      }
+    },
     genDate(date){
       // console.log(date)
       return dateFormatter(new Date(date), "DD MT YYYYT")
