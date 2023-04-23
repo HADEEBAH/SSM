@@ -1,6 +1,13 @@
 <template>
     <v-app>
       <v-container>
+        <div v-if="!history || history.length == 0">
+            <v-crad class="my-3" flat>
+                <v-card-text class="rounded-lg border-2 border-[#ff6b81] text-lg font-bold" align="center">
+                    ไม่พบข้อมูล
+                </v-card-text>
+            </v-crad>
+        </div>
         <div v-for="(order, index) in history" :key="index">
             <v-card class="mb-3">
                 <v-row>

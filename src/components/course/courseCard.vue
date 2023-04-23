@@ -25,7 +25,7 @@
             cols="12"
             class="flex align-center justify-center text-caption"
           >
-            ( ขนาดไฟล์งานไม่เกิน 500 Mb ต้องเป็นไฟล์ JPG, PNG )
+            ( ขนาดไฟล์งานไม่เกิน 1 Mb ต้องเป็นไฟล์ JPG, PNG )
           </v-col>
           <v-col cols="12" class="flex align-center justify-center">
             <v-btn outlined color="blue" @click="openFileSelector"
@@ -626,7 +626,7 @@ import LabelCustom from "@/components/label/labelCustom.vue";
 import headerCard from "@/components/header/headerCard.vue";
 import { mapGetters, mapActions } from "vuex";
 import { Input, TimePicker } from 'ant-design-vue';
-import { inputValidation, dateFormatter } from "@/functions/functions";
+import { inputValidation, dateFormatter, CheckFileSize } from "@/functions/functions";
 import moment from 'moment';
 export default {
   name: "courseCard",
@@ -712,6 +712,9 @@ export default {
           this.preview_url = this.course_data.course_img
         }
       }
+    },
+    "course_data.course_type_id": function (){
+      this.removeFile()
     }
   },
   computed: {
@@ -793,15 +796,17 @@ export default {
 
     uploadFile() {
       this.file = this.$refs.fileInput.files[0];
-      this.course_data.course_img = this.file
-      this.ChangeCourseData(this.course_data)
-      console.log("file=>",this.file);
       if (!this.file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.preview_url = e.target.result;
-      };
-      reader.readAsDataURL(this.file);
+      console.log( CheckFileSize(this.file) )
+      if(CheckFileSize(this.file) === true ){
+        this.course_data.course_img = this.file
+        this.ChangeCourseData(this.course_data)
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.preview_url = e.target.result;
+        };
+        reader.readAsDataURL(this.file);
+      }
     },
   },
 };

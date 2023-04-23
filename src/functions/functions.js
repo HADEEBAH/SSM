@@ -1,4 +1,4 @@
-
+import Swal from 'sweetalert2';
 export const inputValidation = (e, type) => {
     switch (type) {
         case "th":
@@ -38,4 +38,18 @@ export const dateFormatter = (date, formatter) => {
     }
     return date_string
 
+}
+
+export const CheckFileSize = (file) => {
+    const fileSizeInBytes = file.size;
+    const fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+    if (fileSizeInMB > 1) {
+      Swal.fire({
+        icon : "error",
+        text  : "ขนาดไฟล์ต้องน้อยกว่า 1 MB",
+        confirmButtonText : "ตกลง"
+      })
+      return false
+    }
+    return true
 }

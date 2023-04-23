@@ -222,28 +222,22 @@ const coachModules = {
             compensationDate : student.compensation_date,
             compensationStartTime : moment(student.start_time).format("HH:mm"),
             compensationEndTime : moment(student.end_time).format("HH:mm"),
-            // "evolution" :student.evolution ,
-            // "interest" : student.interest ,
-            // "remark": student.remark,
-            // "remarkFiles": "-" ,
           }
           console.log("payload :",payload)
           let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/checkin/student/${student.check_in_student_id}`,payload,config)
           console.log(data)
-          if(data.statusCode === 200 ){
-            Swal.fire({
-                icon: "success",
-                title: "บันทึกสำเร็จ",
-                showDenyButton: false,
-                showCancelButton: false,
-                cancelButtonText :"ยกเลิก",
-                confirmButtonText: "ตกลง",
-            })
-          }else{
+          if(data.statusCode !== 200 ){
             throw { error :data }
           }
         }
-        
+      Swal.fire({
+        icon: "success",
+        title: "บันทึกสำเร็จ",
+        showDenyButton: false,
+        showCancelButton: false,
+        cancelButtonText :"ยกเลิก",
+        confirmButtonText: "ตกลง",
+      })
       }catch(error){
         console.log(error)
         Swal.fire({
@@ -271,13 +265,14 @@ const coachModules = {
         // console.log(data)
         if(data.statusCode === 200){
           data.data.forEach((student, index) => {
+            console.log("compensationStartTime : ",student.compensationStartTime )
             student.no = index+1
             student.fullname = `${student.firstNameTh} ${student.lastNameTh}`
             student.check_in_student_id = student.checkInStudentId,
             student.menu_compensation_date = false,
-            student.compensation_date_str = dateFormatter(new Date(student.compensationDate),"DD MT YYYYT")
-            student.start_time = moment(student.compensationStartTime,"HH:mm")
-            student.end_time = moment(student.compensationEndTime,"HH:mm")
+            student.compensation_date_str = student.compensationDate ? student.compensationDate !== "Invalid date" ?  dateFormatter(new Date(student.compensationDate),"DD MT YYYYT") : null : null
+            student.start_time = student.compensationStartTime ? student.compensationStartTime !== "Invalid date" ? moment(student.compensationStartTime,"HH:mm") : null : null;
+            student.end_time = student.compensationEndTime ? student.compensationStartTime !== "Invalid date" ?  moment(student.compensationEndTime,"HH:mm"): null : null
             student.class_time = "-"
             student.check_in_status = student.status,
             student.remark = ""

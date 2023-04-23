@@ -140,7 +140,7 @@
                     cols="12"
                     class="flex align-center justify-center text-caption"
                   >
-                    ( ขนาดไฟล์งานไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG )
+                    ( ขนาดไฟล์งานไม่เกิน 1 Mb ต้องเป็นไฟล์ JPG, PNG )
                   </v-col>
                   <v-col cols="12" class="flex align-center justify-center">
                     <v-btn outlined color="blue" @click="openFilePrivilegeSelector"
@@ -182,12 +182,11 @@
                     cols="12"
                     class="flex align-center justify-center text-caption"
                   >
-                    ( ขนาดไฟล์งานไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG )
+                    ( ขนาดไฟล์งานไม่เกิน 1 Mb ต้องเป็นไฟล์ JPG, PNG )
                   </v-col>
-                  <v-col cols="12" class="flex align-center justify-center">
-                    <v-btn outlined color="blue" @click="openFileArtworSelector"
-                      >เลือกไฟล์</v-btn
-                    >
+                </v-row>
+                <v-row dense>
+                  <v-col align="center">
                     <input
                       ref="fileInputArtwork"
                       type="file"
@@ -196,6 +195,7 @@
                       multiple
                       style="display: none"
                     />
+                    <v-btn outlined color="blue" @click="openFileArtworSelector">เลือกไฟล์</v-btn>
                   </v-col>
                 </v-row>
               </v-card-text>
@@ -238,7 +238,7 @@
               </v-col>
             </v-row>
             <v-row dense v-else>
-              <v-col cols="12" sm="auto" align="right">
+              <v-col cols="12" sm align="right">
                 <v-btn
                   color="#FF6B81"
                   class="white--text"
@@ -260,7 +260,7 @@ import headerCard from "@/components/header/headerCard.vue";
 import CoachsCard from "@/components/course/coachsCard.vue";
 import PackageCard from "@/components/course/packageCard.vue";
 import CourseCard from '@/components/course/courseCard.vue';
-import {inputValidation, dateFormatter} from "@/functions/functions" 
+import {inputValidation, dateFormatter, CheckFileSize} from "@/functions/functions" 
 import { mapGetters, mapActions } from "vuex";
 export default {
   name: "CourseCreate",
@@ -312,9 +312,15 @@ export default {
     this.$store.dispatch("CourseModules/GetCoachs");
   },
   watch: {
-    "course_data.type"(newQuestion) {
+    "course_data.course_type_id"(newQuestion) {
       if (newQuestion) {
+        this.ResetCourseData()
         this.step = 1;
+        this.course_data.course_type_id = newQuestion
+        this.privilege_file =  null
+        this.preview_privilege_url = null
+        this.artwork_files = []
+        this.preview_artwork_files = []
       }
     },
   },
@@ -461,45 +467,50 @@ export default {
     uploadPrivilegeFile() {
       this.privilege_file = this.$refs.fileInputPrivilege.files[0];
       const allowedTypes = ["image/png", "image/jpeg"];
-      this.course_data.privilege_file = this.$refs.fileInputPrivilege.files[0];
-      this.ChangeCourseData(this.course_data);
-      if (this.privilege_file && allowedTypes.includes(this.privilege_file.type)) {
-        if (!this.privilege_file) return;
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.preview_privilege_url = e.target.result;
-        };
-        reader.readAsDataURL(this.privilege_file);
+      if(CheckFileSize(this.privilege_file) === true){
+        this.course_data.privilege_file = this.$refs.fileInputPrivilege.files[0];
+        this.ChangeCourseData(this.course_data);
+        if (this.privilege_file && allowedTypes.includes(this.privilege_file.type)) {
+          if (!this.privilege_file) return;
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            this.preview_privilege_url = e.target.result;
+          };
+          reader.readAsDataURL(this.privilege_file);
+        }
       }
     },
     previewArtWorkFile(event) {
       const selectedFiles = event.target.files;
-      this.course_data.artwork_file = selectedFiles;
-      this.ChangeCourseData(this.course_data);
       const allowedTypes = ["image/png", "image/jpeg"];
       const fileUrls = [];
+      this.course_data.artwork_file = []
       for (let i = 0; i < selectedFiles.length; i++) {
         const file = selectedFiles[i];
-        if (allowedTypes.includes(file.type)) {
-          const reader = new FileReader();
-          reader.onload = () => {
-            fileUrls.push(reader.result);
-            if (fileUrls.length == selectedFiles.length) {
-              this.preview_artwork_files = [...this.preview_artwork_files, ...fileUrls];
-            }
-          };
-          reader.readAsDataURL(file);
-        } else {
-          // Display error message or handle invalid file type
-        }
+        if(CheckFileSize(file) === true){
+          if (allowedTypes.includes(file.type)) {
+            this.course_data.artwork_file.push(file)
+            const reader = new FileReader();
+            reader.onload = () => {
+              fileUrls.push(reader.result);
+              if (fileUrls.length == selectedFiles.length) {
+                this.preview_artwork_files = [...this.preview_artwork_files, ...fileUrls];
+              }
+            };
+            reader.readAsDataURL(file);
+          } else {
+            // Display error message or handle invalid file type
+          }
+        } 
       }
+      this.ChangeCourseData(this.course_data);
     },
     // REMOVE 
     removeArtworkFile(index){
       this.preview_artwork_files.splice(index, 1)
     },
     removePrivilegeFile(){
-      this.privilege_file = null
+      this.preview_privilege_url = null
     }
   },
 };
