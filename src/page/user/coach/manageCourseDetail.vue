@@ -10,10 +10,10 @@
                     </v-col>
                     <v-col>
                         <v-row>
-                            <v-col>
+                            <v-col cols="12" sm>
                                 <div class="text-md font-bold"> {{course_data.category_name_th}} </div>
                             </v-col>
-                            <v-col>
+                            <v-col cols="12" sm>
                                 <div class="text-md font-bold"> {{ GenDate($route.params.date) }} </div>
                             </v-col>
                         </v-row>
@@ -52,18 +52,23 @@
                </v-btn>
             </v-col>
         </v-row>   
+        <!-- <pre>{{student_check_in}}</pre> -->
         <v-tabs class="mb-3" v-model="tab" color="#ff6b81" grow>
-
             <v-tab class="border-b-2" href="#check in"> เช็คชื่อ </v-tab>
             <v-tab :disabled="student_check_in.length == 0" class="border-b-2" href="#assess students"> ประเมินนักเรียน </v-tab>
             <v-tab :disabled="student_check_in.length == 0" class="border-b-2" href="#teaching summary"> บันทึกสรุปการสอน </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab">
             <v-tab-item value="check in">
+                <v-row class="mb-3" dense v-if="cpo_options.length > 1">
+                    <v-col cols="12" sm="4" v-for="(cpo,index_cpo) in cpo_options" :key="`${index_cpo}-cpo`">
+                        <v-btn class="w-full" :dark="package_name_filter === cpo" :color="package_name_filter === cpo ? '#ff6b81' : '' " dense depressed @click="filterPackage(cpo)">{{ cpo }}</v-btn>
+                    </v-col>
+                </v-row>
                 <v-card elevation="1" class="mb-2">
                     <v-data-table
                         class="header-table border"
-                        :items="student_check_in" 
+                        :items="student_check_in.filter(v => v.cpo.packageName === package_name_filter)" 
                         item-key="no"
                         :expanded.sync="expanded_index"
                         :headers="headers">
@@ -75,7 +80,7 @@
                                 item-text="label"
                                 item-value="value"
                                 hide-details
-                                v-model="item.check_in_status"
+                                v-model="item.status"
                                 @change="selectCheckInStatus(item, $event)"
                             >
                             <template #item="{ item }">
@@ -88,11 +93,14 @@
                             </template>
                             </v-select>
                         </template>
-                        <template v-slot:[`item.class_time`] ="{}">
-                            <!-- {{ `${item.count}/${item.max_count}` }} -->
-                            -
+                        <template v-slot:[`item.package`] ="{item}">
+                           <span class="font-semibold"> {{ `${item.cpo.packageName}` }}</span>
+                        </template>
+                        <template v-slot:[`item.class_time`] ="{item}">
+                            {{ `${item.countCheckIn}/${item.totalDay}` }}
                         </template>
                         <template v-slot:expanded-item ="{ headers, item }">
+                            <!-- <pre>{{ item }}</pre> -->
                             <td class="pa-2" :colspan="headers.length" align="center" >
                                 <v-row dense class="d-flex align-center">
                                     <v-col  cols="12" sm="2">วันเรียนชดเชย</v-col>
@@ -115,14 +123,14 @@
                                                 v-on="on"
                                             >
                                                 <template v-slot:append>
-                                                    <v-icon :color="item.compensation_date? '#FF6B81': ''">mdi-calendar</v-icon>
+                                                    <v-icon :color="item.compensationDate? '#FF6B81': ''">mdi-calendar</v-icon>
                                                 </template>
                                             </v-text-field>
                                             </template>
                                             <v-date-picker
                                                 :min="new Date($route.params.date).toISOString()"
                                                 @input="inputDate($event,item )"
-                                                v-model="item.compensation_date"
+                                                v-model="item.compensationDate"
                                             ></v-date-picker>
                                         </v-menu>
                                     </v-col>
@@ -134,7 +142,7 @@
                                                     :class="item.start_time ? 'active' : ''"
                                                     placeholder="เวลาเริ่มต้น"
                                                     format="HH:mm"
-                                                    v-model="item.start_time"
+                                                    v-model="item.compensationStartTime"
                                                     @change="onChange"
                                                 >
                                                 </TimePicker>
@@ -145,7 +153,7 @@
                                                     format="HH:mm"
                                                     :class="item.end_time ? 'active' : ''"
                                                     placeholder="เวลาสิ้นสุด"
-                                                    v-model="item.end_time"
+                                                    v-model="item.compensationEndTime"
                                                     @change="onChange"
                                                     ></TimePicker>
                                             </v-col>
@@ -178,7 +186,7 @@
                                         ประเมินศักยภาพผู้เรียน
                                     </v-btn>
                                 </v-badge>
-                                <v-btn v-else depressed :disabled="!student_check_in.filter(v => v.type === 'potential').length > 0" class="w-full" :class="tab_evaluate === 'learners_potential' ? 'white--text' : ''"  :color="tab_evaluate === 'learners_potential' ? '#ff6b81' : '' " @click="tab_evaluate='learners_potential'">
+                                <v-btn v-else depressed :disabled="!student_check_in.filter(v => v.potential).length > 0" class="w-full" :class="tab_evaluate === 'learners_potential' ? 'white--text' : ''"  :color="tab_evaluate === 'learners_potential' ? '#ff6b81' : '' " @click="tab_evaluate='learners_potential'">
                                     ประเมินศักยภาพผู้เรียน
                                 </v-btn>
                             </v-col>
@@ -186,9 +194,11 @@
                     </v-card-text>
                 </v-card>
                   <!-- DETAIL -->
+                 
                 <div v-if="tab_evaluate === 'evaluate_students'">
-                    <template  v-if="student_check_in.filter(v => v.type === 'general').length > 0">
+                    <template  v-if="student_check_in.filter(v => v.type === 'general'&& (v.status == 'punctual' || v.status == 'late')).length > 0">
                         <v-card class="mb-2 " flat style="border: 1px solid #999" v-for="(student, index_student) in student_check_in.filter(v => v.type === 'general' && (v.status == 'punctual' || v.status == 'late'))" :key="`${index_student}-student`">
+                            <!-- <pre>{{ student }}</pre> -->
                             <v-card-text >
                                 <v-row class="d-flex align-center">
                                     <v-col cols="12" sm class="text-lg font-bold">
@@ -198,7 +208,7 @@
                                         <v-row dense class="d-flex aling-center">
                                             <v-col  align="right"> การเข้าเรียน: </v-col>
                                             <v-col cols="auto">
-                                                <v-chip class="font-bold" :color="check_in_status_options.filter(v => v.value === student.check_in_status)[0].bg_color" :style="`color:${check_in_status_options.filter(v => v.value === student.check_in_status)[0].color}`" v-if="check_in_status_options.filter(v => v.value === student.check_in_status).length > 0" >{{ check_in_status_options.filter(v => v.value === student.check_in_status)[0].label }} </v-chip>
+                                                <v-chip class="font-bold" :color="check_in_status_options.filter(v => v.value === student.status)[0].bg_color" :style="`color:${check_in_status_options.filter(v => v.value === student.status)[0].color}`" v-if="check_in_status_options.filter(v => v.value === student.status).length > 0" >{{ check_in_status_options.filter(v => v.value === student.status)[0].label }} </v-chip>
                                             </v-col>
                                         </v-row>
                                     </v-col>    
@@ -214,7 +224,7 @@
                                     </v-col>
                                     <v-col cols="12" sm="3">
                                         <br>
-                                        <v-btn outlined class="text-sm" color="#ff6b81" @click="selectStudentComment(index_student)">
+                                        <v-btn outlined class="text-sm" color="#ff6b81" @click="selectStudentComment(student.checkInStudentId)">
                                             แสดงความคิดเห็น
                                         </v-btn>
                                     </v-col>
@@ -232,25 +242,23 @@
                             <v-btn color="#ff6b81"  @click="clearAssessment()" outlined dense :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'" > ล้างข้อ </v-btn>
                         </v-col>
                         <v-col cols="12" sm="auto">
-                            <v-btn color="#ff6b81"  @click="saveAssessmentStudent()" dark depressed dense:class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"> ส่งข้อมูล </v-btn>
+                            <v-btn color="#ff6b81"  @click="saveAssessmentStudent()" dark depressed dense :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"> ส่งข้อมูล </v-btn>
                         </v-col>
                     </v-row>
                 </div>
                 <div v-else>
-                    <v-card class="mb-2 " flat style="border: 1px solid #999" v-for="(student, index_student) in student_check_in.filter(v => v.type === 'potential')" :key="`${index_student}-student`">
+                    <v-card class="mb-2 " flat style="border: 1px solid #999" v-for="(student, index_student) in student_check_in.filter(v => v.potential)" :key="`${index_student}-student`">
                         <v-card-text >
+                            <!-- <pre>{{ student }}</pre> -->
                             <v-row class="d-flex align-center">
                                 <v-col cols="12" sm class="text-lg font-bold">
                                     {{ student.no }} {{ student.fullname }}
                                 </v-col>
-                                <!-- <v-col cols="4" class="text-lg font-bold">
-                                    {{ student.nickname }}
-                                </v-col> -->
                                 <v-col cols="12" sm="5" class="pa-1 text-md text-[#999999]">
                                     <v-row dense class="d-flex aling-center">
                                         <v-col  align="right"> การเข้าเรียน: </v-col>
                                         <v-col cols="auto">
-                                            <v-chip class="font-bold" :color="check_in_status_options.filter(v => v.value === student.check_in_status)[0].bg_color" :style="`color:${check_in_status_options.filter(v => v.value === student.check_in_status)[0].color}`" v-if="check_in_status_options.filter(v => v.value === student.check_in_status).length > 0" >{{ check_in_status_options.filter(v => v.value === student.check_in_status)[0].label }} </v-chip>
+                                            <v-chip class="font-bold" :color="check_in_status_options.filter(v => v.value === student.status)[0].bg_color" :style="`color:${check_in_status_options.filter(v => v.value === student.status)[0].color}`" v-if="check_in_status_options.filter(v => v.value === student.status).length > 0" >{{ check_in_status_options.filter(v => v.value === student.status)[0].label }} </v-chip>
                                         </v-col>
                                     </v-row>
                                 </v-col>    
@@ -258,15 +266,15 @@
                             <v-row class="d-flex align-center">
                                 <v-col cols="12" sm="5" class="">
                                     <labelCustom text="พัฒนาการ"></labelCustom>
-                                    <v-select outlined dense hide-details :items="evolution_options" item-text="label" item-value="value" v-model="student.assessment.evolution"></v-select>
+                                    <v-select outlined dense hide-details :items="evolution_options" item-text="label" item-value="value" v-model="student.potential.evolution"></v-select>
                                 </v-col>
                                 <v-col cols="12" sm="4">
                                     <labelCustom text="ความสนใจ"></labelCustom>
-                                    <v-select outlined dense hide-details :items="interest_options" item-text="label" item-value="value" v-model="student.assessment.interest"></v-select>
+                                    <v-select outlined dense hide-details :items="interest_options" item-text="label" item-value="value" v-model="student.potential.interest"></v-select>
                                 </v-col>
                                 <v-col cols="12" sm="3">
                                     <br>
-                                    <v-btn outlined class="text-sm" color="#ff6b81" @click="selectStudentComment(index_student)">
+                                    <v-btn outlined class="text-sm" color="#ff6b81" @click="showDialogPotential(student.checkInStudentId)">
                                         แสดงความคิดเห็น
                                     </v-btn>
                                 </v-col>
@@ -274,11 +282,11 @@
                         </v-card-text>
                     </v-card>
                     <v-row>
-                        <v-col cols="12" sm="6">
-                            <v-btn color="#ff6b81"  @click="clearAssessment()" outlined dense class="w-full" > ล้างข้อ </v-btn>
+                        <v-col cols="12" sm align="right">
+                            <v-btn color="#ff6b81"  @click="clearAssessment()" outlined dense :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'" > ล้างข้อ </v-btn>
                         </v-col>
-                        <v-col cols="12" sm="6">
-                            <v-btn color="#ff6b81"  @click="saveAssessmentStudent()" dark depressed dense class="w-full"> ส่งข้อมูล </v-btn>
+                        <v-col cols="12" sm="auto">
+                            <v-btn color="#ff6b81"  @click="saveUpdateAssessmentPotential()" dark depressed dense :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"> ส่งข้อมูล </v-btn>
                         </v-col>
                     </v-row>
                 </div>
@@ -299,7 +307,7 @@
                 <!-- Upload file -->
                 <v-card flat class="mb-3">
                     <v-card-text class="border-dashed border-2 border-pink-600 rounded-lg">
-                        <v-row v-if="preview_summary_files && preview_summary_files.length > 0">
+                        <v-row v-if="preview_summary_files && preview_summary_files?.length > 0">
                             <v-col cols="3" align="center" class="rounded-lg pa-2" v-for="(file, index) in preview_summary_files" :key="index">
                                 <v-img :src="file" contain  
                                 max-height="200"
@@ -308,7 +316,7 @@
                                 </v-img>
                             </v-col>
                         </v-row>
-                        <v-row v-if="preview_summary_files && preview_summary_files.length == 0">
+                        <v-row v-if="preview_summary_files && preview_summary_files?.length == 0">
                         <v-col cols="12" class="flex align-center justify-center">
                             <v-img
                             src="../../../assets/manage_coach/upload_file.png"
@@ -350,6 +358,7 @@
             </v-tab-item>
         </v-tabs-items>
         <v-dialog :width="$vuetify.breakpoint.smAndUp ? '60vw' : ''"  v-model="show_comment_dialog" v-if="show_comment_dialog">
+            <!-- <pre>{{student_check_in[selected_student]}}</pre> -->
             <v-card  class="pa-1">
                 <v-row dense>
                     <v-col class="pa-0" cols="12" align="right">
@@ -404,6 +413,116 @@
                                 ></v-img>
                             </v-col>
                             <v-col cols="12" class="flex align-center justify-center">
+                                <v-btn text class="underline" color="#ff6b81" @click="openGeneralfileInputSelector"
+                                >อัพโหลดไฟล์แนบ</v-btn
+                                >
+                                <input
+                                    ref="generalfileInput"
+                                    type="file"
+                                    multiple
+                                    @change="uploadGeneralFile(selected_student)"
+                                    style="display: none"
+                                />
+                            </v-col>
+                            </v-row>
+                        </v-card-text>
+                    </v-card> 
+                    
+                    <div v-if= "student_check_in[selected_student].files.length > 0" class="mb-3">
+                        <v-row dense>
+                            <v-col class="font-bold text-lg ">
+                            ไฟล์แนบ
+                            </v-col>
+                        </v-row>
+                        <v-divider class="my-2"></v-divider>
+                        <v-card flat class="mb-3" v-for="(file, index) of student_check_in[selected_student].files" :key="`${index}-file`">
+                            <v-card-text class="border border-2 border-[#ff6b81] rounded-lg">
+                            <v-row>
+                                <v-col cols="auto" class="pr-2">
+                                <v-img height="35" width="26" src="../../../assets/coachLeave/file-pdf.png"/>
+                                </v-col>
+                                <v-col  class="px-2">
+                                    <span class="font-bold">{{ file.name }}</span><br>
+                                    <span class="text-caption">ขนาดไฟล์ : {{ (file.size / 1000000).toFixed(2) }} MB</span>
+                                </v-col>
+                                <v-col cols="auto" class="pl-2">
+                                <v-btn @click="removePotentialFile(selected_student,index)" icon color="#ff6b81"><v-icon>mdi-close</v-icon></v-btn>
+                                </v-col>
+                            </v-row>
+                            </v-card-text>
+                        </v-card>
+                    </div>
+                    <v-row dense>
+                    <v-col cols="12" sm="6">
+                        <v-btn  class="w-full" @click="student_check_in[selected_student].assessment.remark = ''" text color="#ff6b81">
+                            ล้างข้อมูล
+                        </v-btn>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                        <v-btn class="w-full" @click="closeStudentComment" depressed color="#ff6b81" dark >
+                            ตกลง
+                        </v-btn>
+                    </v-col>
+                </v-row>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
+        <v-dialog :width="$vuetify.breakpoint.smAndUp ? '60vw' : ''"  v-model="show_comment_potential_dialog" v-if="show_comment_potential_dialog">
+            <v-card  class="pa-1">
+                <!-- <pre>{{student_check_in[selected_student]}}</pre> -->
+                <v-row dense>
+                    <v-col class="pa-0" cols="12" align="right">
+                        <v-btn icon @click="claseDialogPotential">
+                            <v-icon color="#ff6b81">mdi-close</v-icon>
+                        </v-btn>
+                    </v-col>
+                </v-row>
+                <v-card-text>
+                    <v-row dense>
+                        <v-col align="center" class="text-lg font-bold">
+                            ความคิดเห็นเพิ่มเติม
+                        </v-col>
+                    </v-row>
+                    <v-row dense>
+                        <v-col>
+                            <labelCustom text="เพิ่มความคิดเห็น"></labelCustom>
+                            <v-textarea outlined v-model="student_check_in[selected_student].potential.remark"></v-textarea>
+                        </v-col>
+                    </v-row>
+                    <div v-if="student_check_in[selected_student].potential.attachmentPotential.length > 0">
+                        <v-row dense>
+                            <v-col class="font-bold text-lg ">
+                            ไฟล์แนบ
+                            </v-col>
+                        </v-row>
+                        <v-card flat class="mb-3" v-for="(file, index) of student_check_in[selected_student].potential.attachmentPotential" :key="`${index}-fileattachment`">
+                            <v-card-text class="border border-2 border-[#ff6b81] rounded-lg">
+                            <v-row>
+                                <v-col cols="auto" class="pr-2">
+                                <v-img height="35" width="26" src="../../../assets/coachLeave/file-pdf.png"/>
+                                </v-col>
+                                <v-col  class="px-2">
+                                    <span class="font-bold">{{ file.attId }}</span><br>
+                                    <!-- <span class="text-caption">ขนาดไฟล์ : {{ (0 / 1000000).toFixed(2) }} MB</span> -->
+                                </v-col>
+                                <!-- <v-col cols="auto" class="pl-2">
+                                <v-btn @click="removePotentialFile(index)" icon color="#ff6b81"><v-icon>mdi-close</v-icon></v-btn>
+                                </v-col> -->
+                            </v-row>
+                            </v-card-text>
+                        </v-card>
+                    </div>
+                    <v-card flat class="mb-3" v-if="student_check_in[selected_student].potential.type === 'potential'">
+                        <v-card-text class="border-dashed border-2 border-pink-600 rounded-lg">
+                            <v-row>
+                            <v-col cols="12" class="flex align-center justify-center">
+                                <v-img
+                                    src="../../../assets/manage_coach/upload_file.png"
+                                    max-height="105"
+                                    max-width="122"
+                                ></v-img>
+                            </v-col>
+                            <v-col cols="12" class="flex align-center justify-center">
                                 <v-btn text class="underline" color="#ff6b81" @click="openPotentialfileInputSelector"
                                 >อัพโหลดไฟล์แนบ</v-btn
                                 >
@@ -419,14 +538,14 @@
                         </v-card-text>
                     </v-card> 
                     
-                    <div v-if="selected_files.length > 0" class="mb-3">
+                    <div v-if="student_check_in[selected_student].potentialfiles.length > 0" class="mb-3">
                         <v-row dense>
                             <v-col class="font-bold text-lg ">
                             ไฟล์แนบ
                             </v-col>
                         </v-row>
                         <v-divider class="my-2"></v-divider>
-                        <v-card flat class="mb-3" v-for="(file, index) of selected_files" :key="`${index}-file`">
+                        <v-card flat class="mb-3" v-for="(file, index) of student_check_in[selected_student].potentialfiles" :key="`${index}-file`">
                             <v-card-text class="border border-2 border-[#ff6b81] rounded-lg">
                             <v-row>
                                 <v-col cols="auto" class="pr-2">
@@ -445,12 +564,12 @@
                     </div>
                     <v-row dense>
                     <v-col cols="12" sm="6">
-                        <v-btn  class="w-full" @click="student_check_in[selected_student].assessment.remark = ''" text color="#ff6b81">
+                        <v-btn  class="w-full" @click="student_check_in[selected_student].potential.remark = ''" text color="#ff6b81">
                             ล้างข้อมูล
                         </v-btn>
                     </v-col>
                     <v-col cols="12" sm="6">
-                        <v-btn class="w-full" @click="closeStudentComment" depressed color="#ff6b81" dark >
+                        <v-btn class="w-full" @click="claseDialogPotential" depressed color="#ff6b81" dark >
                             ตกลง
                         </v-btn>
                     </v-col>
@@ -494,6 +613,7 @@ export default {
     headers: [
         { text: 'ลำดับ', align: 'center', sortable: false, value: 'no', },
         { text: 'ชื่อ-สกุล', align: 'center', sortable: false, value: 'fullname' },
+        { text: 'แพ็คเกจ', align: 'center',  sortable: false, value: 'package' },
         { text: 'จำนวนครั้ง', align: 'center',  sortable: false, value: 'class_time' },
         { text: 'การเข้าเรียน', align: 'center', width:'200',  sortable: false, value: 'actions' },
     ],
@@ -508,6 +628,9 @@ export default {
     selected_student : null,
     preview_summary_files : [],
     selected_files :[],
+    cpo_options : [],
+    show_comment_potential_dialog : false,
+    package_name_filter : null
   }),
   created() { 
     // this.GetCourse(this.$route.params.courseId)
@@ -537,6 +660,12 @@ export default {
     },
     "student_check_in":function(){
         this.student_check_in.forEach((check_in_data)=>{
+            if(!this.package_name_filter){
+                this.package_name_filter = check_in_data.cpo.packageName
+            }
+            if(!this.cpo_options.includes(check_in_data.cpo.packageName) ){
+                this.cpo_options.push(check_in_data.cpo.packageName)
+            }
             if(check_in_data.status === "leave" || check_in_data.status === "special case"){
                 this.selectCheckInStatus(check_in_data,check_in_data.status)
                 this.expanded_index.push(check_in_data)
@@ -569,14 +698,30 @@ export default {
         AssessmentStudent : "CoachModules/AssessmentStudent",
         CreateTeachingNotes : "CoachModules/CreateTeachingNotes",
         UploadFileSummary : "CoachModules/UploadFileSummary",
+        UpdateAssessmentPotential : "CoachModules/UpdateAssessmentPotential"
     }),
     clearTeachingNote(){
         this.coach_check_in.summary = null
         this.coach_check_in.homework = null
         this.coach_check_in.files = null
     },
+    filterPackage(packageName){
+        this.package_name_filter = packageName
+    },
     GenUrlFile(part){
         return  `${process.env.VUE_APP_URL}/api/v1/files/${part}`
+    },
+    showDialogPotential(id){
+        for (let i = 0; i < this.student_check_in.length; i++) {
+            if (this.student_check_in[i].checkInStudentId === id) {
+                this.selected_student = i
+            }
+        }
+        this.show_comment_potential_dialog = true
+    },
+    claseDialogPotential(){
+        this.selected_files = []
+        this.show_comment_potential_dialog = false
     },
     GenDate(data){
         return new Date(data).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })
@@ -592,6 +737,22 @@ export default {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 this.UploadFileSummary({checkInCoach : this.coach_check_in , files : this.coach_check_in.summary_files })
+            }
+        })
+       
+    },
+    saveUpdateAssessmentPotential(){
+        console.log(this.student_check_in)
+        Swal.fire({
+            icon: "question",
+            title: "ต้องการบันทึกใช่หรือไม่ ?",
+            showDenyButton: false,
+            showCancelButton: true,
+            cancelButtonText :"ยกเลิก",
+            confirmButtonText: "ตกลง",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                this.UpdateAssessmentPotential({students : this.student_check_in})
             }
         })
     },
@@ -635,6 +796,9 @@ export default {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 this.UpdateCheckInStudent({students : this.student_check_in}) 
+                setTimeout(()=>{
+                    this.GetStudentByTimeId({course_id :this.$route.params.courseId, date : this.$route.params.date, time_id: this.$route.params.timeId})
+                },1000)
             }
         })  
     },
@@ -654,11 +818,16 @@ export default {
             })
         }
     },
-    selectStudentComment(index){
-        this.selected_student = index
+    selectStudentComment(id){
+        for (let i = 0; i < this.student_check_in.length; i++) {
+            if (this.student_check_in[i].checkInStudentId === id) {
+                this.selected_student = i
+            }
+        }
         this.show_comment_dialog = true
     },
     closeStudentComment(){
+        this.selected_files = []
         this.show_comment_dialog = false
     },
     onChange(date, dateString) {
@@ -672,6 +841,15 @@ export default {
         if(status === "leave" || status === "special case"){
             // const index = this.students.filter((d) => d.no === item.no)
             this.expanded_index.push(item)
+        }else{
+            this.expanded_index.forEach((expanded, index)=>{
+                if(expanded.checkInStudentId === item.checkInStudentId){
+                    this.expanded_index.splice(index, 1)
+                }
+            })
+            item.compensationDate = null
+            item.compensationStartTime = null
+            item.compensationEndTime = null
         }
     },
     inputDate(e, item) {
@@ -680,11 +858,17 @@ export default {
     openFileSelector() {
         this.$refs.fileInput.click();
     },
+    openGeneralfileInputSelector() {
+        this.$refs.generalfileInput.click();
+    },
     openPotentialfileInputSelector() {
         this.$refs.potentialfileInput.click();
     },
-    removePotentialFile(index){
-        this.selected_files.splice(index, 1)
+    removeGeneralFile(selected_student,index){
+        this.student_check_in[selected_student].files.splice(index, 1)
+    },
+    removePotentialFile(selected_student,index){
+        this.student_check_in[selected_student].potentialfiles.splice(index, 1)
     },
     clearAssessment(){
         for (const student of this.student_check_in) {
@@ -703,14 +887,24 @@ export default {
     //   };
     //   reader.readAsDataURL(this.file);
     // },
-    uploadPotentialFile(selected_student) {
-      const files = this.$refs.potentialfileInput.files
-      this.student_check_in[selected_student].files = []
+    uploadGeneralFile(selected_student) {
+      const files = this.$refs.generalfileInput.files
       if(files.length > 0){
         for (let i = 0; i < files.length; i++) {
             if(CheckFileSize(files[i])===true){
                 this.selected_files.push(files[i])
                 this.student_check_in[selected_student].files.push(files[i])
+            }
+        }
+      }
+    },
+    uploadPotentialFile(selected_student) {
+      const files = this.$refs.potentialfileInput.files
+      if(files.length > 0){
+        for (let i = 0; i < files.length; i++) {
+            if(CheckFileSize(files[i])===true){
+                this.selected_files.push(files[i])
+                this.student_check_in[selected_student].potentialfiles.push(files[i])
             }
         }
       }

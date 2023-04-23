@@ -81,9 +81,9 @@
             </v-card>
           </div>
         </template>
-        
         <!-- รายสัปดาห์ -->
         <template v-else>
+          <!-- <pre>{{ my_courses }}</pre> -->
           <!-- COURSE LIST -->
           <calendarCoach
             :events="my_courses"
@@ -142,29 +142,29 @@
           <v-expand-transition>
             <template v-if="course.show_assessment"> 
               <v-card-text>
-                <v-card flat  v-if="student_check_in.length === 0">
+                <v-card flat  v-if="student_check_in.filter(v => v.type === 'general' && (v.status == 'punctual' || v.status == 'late')).length === 0">
                   <v-card-text class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg">
                     <span class="text-lg font-bold"> 
                       <v-icon color="#ff6b81">mdi-alert-outline</v-icon> ไม่พบข้อมูลการสอน
                     </span>              
                   </v-card-text>
                 </v-card>
-                <v-card outlined class="mb-3" v-for="(student, index) in student_check_in" :key="`${index}-checkin`">
+                <v-card outlined class="mb-3" v-for="(student, index) in student_check_in.filter(v => v.type === 'general' && (v.status == 'punctual' || v.status == 'late'))" :key="`${index}-checkin`">
                   <v-card-text>
                       <v-row>
-                        <v-col class="text-lg font-bold"> {{ student.no }} . {{ student.fullname }}</v-col>
+                        <v-col class="text-lg font-bold"> {{ index+1 }} . {{ student.fullname }}</v-col>
                         <v-col align="center"> 
                           <v-row dense class="d-flex aling-center">
                               <v-col align="right"> การเข้าเรียน: </v-col>
                               <v-col cols="auto">
-                                  <v-chip class="font-bold" :color="check_in_status_options.filter(v => v.value === student.check_in_status)[0].bg_color" :style="`color:${check_in_status_options.filter(v => v.value === student.check_in_status)[0].color}`" v-if="check_in_status_options.filter(v => v.value === student.check_in_status).length > 0" >{{ check_in_status_options.filter(v => v.value === student.check_in_status)[0].label }} </v-chip>
+                                  <v-chip class="font-bold" :color="check_in_status_options.filter(v => v.value === student.status)[0].bg_color" :style="`color:${check_in_status_options.filter(v => v.value === student.status)[0].color}`" v-if="check_in_status_options.filter(v => v.value === student.status).length > 0" >{{ check_in_status_options.filter(v => v.value === student.status)[0].label }} </v-chip>
                               </v-col>
                             </v-row>
                           </v-col>
                       </v-row>
                       <v-row>
-                        <v-col align="left" class="font-semibold">พัฒนาการ : <span class="text-[#ff6b81]" >{{student.assessment.evolution === "very good" ? "ดีมาก" : student.assessment.evolution === "good" ? "ดี" : "ปรับปรุง" }}</span></v-col>
-                        <v-col align="center" class="font-semibold">ความสนใจ : <span class="text-[#ff6b81]" >{{student.assessment.interest === "very good" ? "ดีมาก" : student.assessment.interest === "good" ? "ดี" : "ปรับปรุง"}}</span></v-col>
+                        <v-col align="left" class="font-semibold">พัฒนาการ : <span class="text-[#ff6b81]" >{{student.assessment.evolution === "very good" ? "ดีมาก" : student.assessment.evolution === "good" ? "ดี" : student.assessment.evolution === "adjust" ? "ปรับปรุง" : "-" }}</span></v-col>
+                        <v-col align="center" class="font-semibold">ความสนใจ : <span class="text-[#ff6b81]" >{{student.assessment.interest === "very good" ? "ดีมาก" : student.assessment.interest === "good" ? "ดี" :  student.assessment.evolution === "adjust" ? "ปรับปรุง" :"-" }}</span></v-col>
                         <v-col align="center">
                           <v-btn outlined @click="showComment(student)" color="#ff6b81"><v-icon>mdi-message-text-outline</v-icon>ดูความคิดเห็น</v-btn>
                         </v-col>
@@ -177,7 +177,37 @@
           <v-expand-transition>
             <template v-if="course.show_assessment_pantential"> 
               <v-card-text>
-                <v-card></v-card>
+                <v-card-text>
+                <v-card flat  v-if="student_check_in.filter(v => v.potential).length === 0">
+                  <v-card-text class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg">
+                    <span class="text-lg font-bold"> 
+                      <v-icon color="#ff6b81">mdi-alert-outline</v-icon> ไม่พบข้อมูลการสอน
+                    </span>              
+                  </v-card-text>
+                </v-card>
+                <v-card outlined class="mb-3" v-for="(student, index) in student_check_in.filter(v => v.potential)" :key="`${index}-checkin`">
+                  <v-card-text>
+                      <v-row>
+                        <v-col class="text-lg font-bold"> {{ index+1 }} . {{ student.fullname }}</v-col>
+                        <v-col align="center"> 
+                          <v-row dense class="d-flex aling-center">
+                              <v-col align="right"> การเข้าเรียน: </v-col>
+                              <v-col cols="auto">
+                                  <v-chip class="font-bold" :color="check_in_status_options.filter(v => v.value === student.status)[0].bg_color" :style="`color:${check_in_status_options.filter(v => v.value === student.status)[0].color}`" v-if="check_in_status_options.filter(v => v.value === student.status).length > 0" >{{ check_in_status_options.filter(v => v.value === student.status)[0].label }} </v-chip>
+                              </v-col>
+                            </v-row>
+                          </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col align="left" class="font-semibold">พัฒนาการ : <span class="text-[#ff6b81]" >{{student.assessment.evolution === "very good" ? "ดีมาก" : student.assessment.evolution === "good" ? "ดี" : student.assessment.evolution === "adjust" ? "ปรับปรุง" : "-" }}</span></v-col>
+                        <v-col align="center" class="font-semibold">ความสนใจ : <span class="text-[#ff6b81]" >{{student.assessment.interest === "very good" ? "ดีมาก" : student.assessment.interest === "good" ? "ดี" :  student.assessment.evolution === "adjust" ? "ปรับปรุง" :"-" }}</span></v-col>
+                        <v-col align="center">
+                          <v-btn outlined @click="showComment(student)" color="#ff6b81"><v-icon>mdi-message-text-outline</v-icon>ดูความคิดเห็น</v-btn>
+                        </v-col>
+                      </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-card-text>
               </v-card-text>
             </template>
           </v-expand-transition>
@@ -864,22 +894,33 @@ export default {
     },
     OpenSummary(course){
       this.GetCoachCheckIn({course_id :course.course_id, date : course.start_date})
-      course.show_summary = !course.show_summary
+      if(course.show_summary){
+        course.show_summary = false
+      }else{
+        course.show_summary = true
+      }
       course.show_assessment = false
       course.show_assessment_pantential = false
     },
     OpenAssessment(course){
       this.GetStudentByTimeId({course_id :course.course_id, date : course.start_date, time_id: course.time_id})
       course.show_summary = false
-      course.show_assessment = !course.show_assessmen
+      if(course.show_assessment){
+        course.show_assessment = false
+      }else{
+        course.show_assessment = true
+      }
       course.show_assessment_pantential = false
     },
     OpenAssessmentPotential(course){
-      console.log(course)
       this.GetStudentByTimeId({course_id :course.course_id, date : course.start_date, time_id: course.time_id})
       course.show_summary = false
       course.show_assessment = false
-      course.show_assessment_pantential = !course.show_assessment_pantential
+      if(course.show_assessment_pantential){
+        course.show_assessment_pantential = false
+      }else{
+        course.show_assessment_pantential = true
+      }
     },
     genDate(date){
       // console.log(date)

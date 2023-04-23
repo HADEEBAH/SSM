@@ -10,7 +10,7 @@
             <v-col class="text-lg font-bold">{{ category.categoryNameTh }}</v-col>
         </v-row>
         <v-row dense>
-            <v-col cols="5" v-for="(type, type_index) in course_types" :key="type_index">
+            <v-col cols="6" v-for="(type, type_index) in course_types" :key="type_index">
                 <v-card flat @click="selectCourseType(type)" class="rounded-lg">
                     <v-card-text :class="type_selected === type.course_type_id ? 'bg-[#FF6B81]' : 'bg-[#F5F5F5]'" class="rounded-lg flex justify-center align-center pa-2">
                         <label :class="type_selected === type.course_type_id ? 'text-white' : ' text-[#B3B3B3]' " class="font-bold mr-2">{{type.course_type_name_th}}</label>
@@ -22,7 +22,7 @@
         <v-row dense>
             <template v-if="!courses_is_loading">
                 <v-col cols="6"  v-for="(course, course_index) in courses" :key="course_index">
-                    <v-card>
+                    <v-card :height="$vuetify.breakpoint.smAndUp ? '275' : '325.5'" class="overflow-hidden">
                         <v-img @click="selectedCourse(course)" 
                             contain
                             :height="180"
@@ -40,7 +40,7 @@
                         </v-row>  
                         </v-card-title>
                         <v-card-text class="text-xs pa-2">
-                            {{  course.course_detail.slice(0, 300) + '...' }}
+                            {{ course.course_detail.length > 150 ? course.course_detail.slice(0, 150) + '...' :  course.course_detail.length === 0 ? "-" : course.course_detail }}
                         </v-card-text>
                     </v-card>
                 </v-col>

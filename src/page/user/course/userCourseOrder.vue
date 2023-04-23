@@ -303,7 +303,7 @@
                 </v-col>
                 <v-col cols="12" sm="6">
                     <v-btn
-                        v-if="course_order.time ? GenReserve() >= course_order.time.maximumStudent || GenMonitors() === 'Close' : false"
+                        v-if="course_order.time ? GenReserve() > course_order.time.maximumStudent || GenMonitors() === 'Close' : false"
                         class="w-full white--text"
                         :disabled="validateButton"
                         elevation="0"
@@ -311,6 +311,14 @@
                         @click="CreateReserve"
                         :color="disable_checkout ?  '#C4C4C4': '#ff6b81'">จอง</v-btn>
                         <!-- v-if="course_order.time ? GenReserve() < course_order.time.maximumStudent && GenMonitors() === 'Open' : false" -->
+                    <v-btn
+                        v-else-if="course_order.time ? GenReserve() <= course_order.time.maximumStudent && GenMonitors() === 'Open' : false"
+                        class="w-full white--text"
+                        :disabled="validateButton"
+                        elevation="0"
+                        dense
+                        @click="checkOut"
+                        :color="disable_checkout ?  '#C4C4C4': '#ff6b81'">ชำระเงิน</v-btn>
                     <v-btn
                         v-else
                         class="w-full white--text"
@@ -593,10 +601,10 @@ export default {
             this.checkMaximumStudent()
             if(this.order_data){
                 if(this.order_data.course_type_id === "CT_1"){
-                    this.GetCourseStudent({course_id: this.order_data.course_id,cpo_id: this.order_data.option.course_package_option_id})
-                    this.GetGeneralCourseMonitor({course_id: this.order_data.course_id, cpo_id: this.order_data.option.course_package_option_id})
+                    this.GetCourseStudent({course_id: this.course_order.course_id,cpo_id: this.course_order.option.course_package_option_id})
+                    this.GetGeneralCourseMonitor({course_id: this.course_order.course_id, cpo_id: this.course_order.option.course_package_option_id})
                 }else{
-                    this.GetShortCourseMonitor({course_id :  this.order_data.course_id})
+                    this.GetShortCourseMonitor({course_id :  this.course_order.course_id})
                 }
                 this.GetRelations({student_id : this.user_login.account_id, parent_id : ""})
                 this.GetCourse( this.order_data.course_id)
@@ -645,7 +653,7 @@ export default {
                 if(this.course_order.time){
                     if(this.course_order.course_type_id === "CT_1"){
                         let course_monitors_filter = this.course_monitors.filter((v)=> v.m_course_id == this.course_order.course_id   && v.m_course_package_options_id == this.course_order.option.course_package_option_id && v.m_day_of_week_id === time_data.dayOfWeekId && v.m_time_id == time_data.timeId)
-                        console.log("course_monitors_filter + >",course_monitors_filter)
+                        //console.log("course_monitors_filter + >",course_monitors_filter)
                         if(course_monitors_filter.length > 0){
                             if((this.course_order.students.length + course_monitors_filter[0].m_current_student) <= course_monitors_filter[0].m_maximum_student){
                                 return course_monitors_filter[0]?.m_status
@@ -843,7 +851,9 @@ export default {
         },
         removeStudent(student){
             this.course_order.students.splice(this.course_order.students.findIndex(v => v.username === student.username),1 )
-            this.course_order.apply_for_others = false
+            if(this.course_order.students.filter(v => v.is_other === true).length === 0){
+                this.course_order.apply_for_others = false
+            }
         },
         closeDialogParent(){
             this.dialog_parent = false
