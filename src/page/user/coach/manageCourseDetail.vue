@@ -13,15 +13,18 @@
                             <v-col>
                                 <div class="text-md font-bold"> {{course_data.category_name_th}} </div>
                             </v-col>
+                            <v-col>
+                                <div class="text-md font-bold"> {{ GenDate($route.params.date) }} </div>
+                            </v-col>
                         </v-row>
                         <v-row dense>
-                            <v-col cols="12" sm="4" class="pa-0">
+                            <v-col cols="12" sm class="pa-0">
                                 <rowData mini  icon="mdi-bookshelf">คอร์สเรียน : {{ course_data.course_name_th  }}</rowData>
                             </v-col>
                             <!-- <v-col cols="12" sm="4"  class="pa-0"> 
                                 <rowData mini  icon=" mdi-account-box-multiple">แพ็คเกจ : Family</rowData>
                             </v-col> -->
-                            <v-col cols="12" sm="4" class="pa-0"><rowData mini  icon="mdi-clock-outline">เวลาสอน {{course_data.course_hours}} ชั่วโมง</rowData></v-col>
+                            <v-col cols="12" sm class="pa-0"><rowData mini  icon="mdi-clock-outline">เวลาสอน {{course_data.course_hours}} ชั่วโมง</rowData></v-col>
                         </v-row>
                     </v-col>
                 </v-row>
@@ -117,7 +120,7 @@
                                             </v-text-field>
                                             </template>
                                             <v-date-picker
-                                                :min="new Date().toISOString()"
+                                                :min="new Date($route.params.date).toISOString()"
                                                 @input="inputDate($event,item )"
                                                 v-model="item.compensation_date"
                                             ></v-date-picker>
@@ -355,12 +358,13 @@
                         </v-btn>
                     </v-col>
                 </v-row>
-                <v-card-title class="py-1">
-                    ความคิดเห็นเพิ่มเติม
-                </v-card-title>
-
                 <v-card-text>
-                    <v-row>
+                    <v-row dense>
+                        <v-col align="center" class="text-lg font-bold">
+                            ความคิดเห็นเพิ่มเติม
+                        </v-col>
+                    </v-row>
+                    <v-row dense>
                         <v-col>
                             <labelCustom text="เพิ่มความคิดเห็น"></labelCustom>
                             <v-textarea outlined v-model="student_check_in[selected_student].assessment.remark"></v-textarea>
@@ -389,7 +393,7 @@
                             </v-card-text>
                         </v-card>
                     </div>
-                    <v-card flat class="mb-3" v-if="student_check_in[selected_student].type === 'potential'">
+                    <v-card flat class="mb-3" v-if="student_check_in[selected_student].type === 'general'">
                         <v-card-text class="border-dashed border-2 border-pink-600 rounded-lg">
                             <v-row>
                             <v-col cols="12" class="flex align-center justify-center">
@@ -447,7 +451,7 @@
                     </v-col>
                     <v-col cols="12" sm="6">
                         <v-btn class="w-full" @click="closeStudentComment" depressed color="#ff6b81" dark >
-                            บันทึก
+                            ตกลง
                         </v-btn>
                     </v-col>
                 </v-row>
@@ -573,6 +577,9 @@ export default {
     },
     GenUrlFile(part){
         return  `${process.env.VUE_APP_URL}/api/v1/files/${part}`
+    },
+    GenDate(data){
+        return new Date(data).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })
     },
     saveSummary(){
         Swal.fire({

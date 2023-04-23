@@ -383,6 +383,9 @@ const coachModules = {
                       ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}`
                       : "",
                     course_per_time: course_data.data.data.coursePerTime,
+                    show_summary : false,
+                    show_assessment : false,
+                    show_assessment_pantential : false,
                   });
                 }
               }

@@ -1,9 +1,7 @@
 <template>
     <v-app>
-        <!-- <loadingOverlay :loading="course_is_loading"></loadingOverlay> -->
-        <!-- <pre>{{ course_order }}</pre> -->
-        <!-- <pre>{{ course_data.days_of_class[0].times[0] }}</pre> -->
         <v-container>
+            {{setFunctions}}
             <ImgCard color="#FEFBFC" outlined class="mb-3">
                 <template v-slot:img>
                     <v-row dense class="d-flex align-center h-full">
@@ -21,6 +19,9 @@
                     <v-row dense>
                         <v-col cols="12" sm="6" class="pa-0">
                             <rowData mini col_detail="5" icon="mdi-clock-outline"> {{ course_data.course_hours  }} ชม. / ครั้ง</rowData>
+                        </v-col>
+                        <v-col cols="12" sm="6" class="pa-0">
+                            <rowData mini col_detail="5" icon="mdi-book-multiple-outline"> {{ course_order.package }}</rowData>
                         </v-col>
                         <!-- <v-col cols="12" sm="6"  class="pa-0">
                             <rowData mini col_detail="5" icon="mdi-account-group-outline">9 / 15 ที่นั่ง</rowData>
@@ -229,7 +230,8 @@
                 <v-row dense >
                     <v-col cols="auto"><v-icon color="#ff6b81">mdi-card-account-details-outline</v-icon></v-col>
                     <v-col class="text-lg font-bold">{{ `ผู้เรียน ${index_student+1}` }}</v-col>
-                    <v-col cols="auto" v-if="course_order.students.filter(v => v.is_other === true).length > 1">
+                    <!--  v-if="course_order.students.filter(v => v.is_other === true).length > 1" -->
+                    <v-col cols="auto">
                         <v-btn @click="removeStudent(student)"  small icon color="red" dark><v-icon>mdi-close</v-icon></v-btn>
                     </v-col>
                 </v-row>
@@ -301,13 +303,14 @@
                 </v-col>
                 <v-col cols="12" sm="6">
                     <v-btn
-                        v-if="course_order.time ? GenReserve() >= course_order.time.maximumStudent : false"
+                        v-if="course_order.time ? GenReserve() >= course_order.time.maximumStudent || GenMonitors() === 'Close' : false"
                         class="w-full white--text"
                         :disabled="validateButton"
                         elevation="0"
                         dense
                         @click="CreateReserve"
                         :color="disable_checkout ?  '#C4C4C4': '#ff6b81'">จอง</v-btn>
+                        <!-- v-if="course_order.time ? GenReserve() < course_order.time.maximumStudent && GenMonitors() === 'Open' : false" -->
                     <v-btn
                         v-else
                         class="w-full white--text"
@@ -459,22 +462,24 @@ export default {
         coachSelect : false,
     }),
     created() {
-        this.checkMaximumStudent()
         this.order_data = JSON.parse(localStorage.getItem("Order"))
         this.user_login = JSON.parse(localStorage.getItem("userDetail"))
-        setTimeout(() => {
-            if(this.order_data){
-                if(this.order_data.course_type_id === "CT_1"){
-                    this.GetCourseStudent({course_id: this.order_data.course_id,cpo_id: this.order_data.option.course_package_option_id})
-                }
-                this.GetRelations({student_id : this.user_login.account_id, parent_id : ""})
-                this.GetCourse( this.order_data.course_id)
-            }
-            // this.course_order = this.order_data
-        }, 200);
+        // this.checkMaximumStudent()
+        // this.order_data = JSON.parse(localStorage.getItem("Order"))
+        // this.user_login = JSON.parse(localStorage.getItem("userDetail"))
+        // setTimeout(() => {
+        //     if(this.order_data){
+        //         if(this.order_data.course_type_id === "CT_1"){
+        //             this.GetCourseStudent({course_id: this.order_data.course_id,cpo_id: this.order_data.option.course_package_option_id})
+        //         }
+        //         this.GetRelations({student_id : this.user_login.account_id, parent_id : ""})
+        //         this.GetCourse( this.order_data.course_id)
+        //     }
+        //     // this.course_order = this.order_data
+        // }, 200);
     },
     mounted() {
-        this.checkMaximumStudent()
+        //this.checkMaximumStudent()
         // this.checkApplyForYourselfRole()
         this.$store.dispatch("NavberUserModules/changeTitleNavber","สมัครเรียน")
       
@@ -581,10 +586,27 @@ export default {
             last_user_registered:"RegisterModules/getLastUserRegistered",
             relations : "OrderModules/getRelations",
             course_student : "CourseModules/getCourseStudent",
-            course_is_loading : 'CourseModules/getCourseIsLoading'
+            course_is_loading : 'CourseModules/getCourseIsLoading',
+            course_monitors : "CourseMonitorModules/getCourseMonitor"
         }),
-      
+        setFunctions(){
+            this.checkMaximumStudent()
+            if(this.order_data){
+                if(this.order_data.course_type_id === "CT_1"){
+                    this.GetCourseStudent({course_id: this.order_data.course_id,cpo_id: this.order_data.option.course_package_option_id})
+                    this.GetGeneralCourseMonitor({course_id: this.order_data.course_id, cpo_id: this.order_data.option.course_package_option_id})
+                }else{
+                    this.GetShortCourseMonitor({course_id :  this.order_data.course_id})
+                }
+                this.GetRelations({student_id : this.user_login.account_id, parent_id : ""})
+                this.GetCourse( this.order_data.course_id)
+            }
+            // this.course_order = this.order_data
+            return ''
+        },
+        
         validateButton(){
+            this.GenMonitors()
             console.log(this.course_order.coach_id)
             if(this.course_order.course_type_id === "CT_1"){
                 let time = this.course_order.time ? true : false
@@ -613,7 +635,34 @@ export default {
             saveCart : "OrderModules/saveCart",
             checkUsernameOneid : "loginModules/checkUsernameOneid",
             CreateReserveCourse : "OrderModules/CreateReserveCourse",
+            // monitor
+            GetGeneralCourseMonitor : "CourseMonitorModules/GetGeneralCourseMonitor",
+            GetShortCourseMonitor : "CourseMonitorModules/GetShortCourseMonitor"
         }),
+        GenMonitors(){
+            if(this.course_monitors){
+                let time_data =  this.course_order.time
+                if(this.course_order.time){
+                    if(this.course_order.course_type_id === "CT_1"){
+                        let course_monitors_filter = this.course_monitors.filter((v)=> v.m_course_id == this.course_order.course_id   && v.m_course_package_options_id == this.course_order.option.course_package_option_id && v.m_day_of_week_id === time_data.dayOfWeekId && v.m_time_id == time_data.timeId)
+                        console.log("course_monitors_filter + >",course_monitors_filter)
+                        if(course_monitors_filter.length > 0){
+                            if((this.course_order.students.length + course_monitors_filter[0].m_current_student) <= course_monitors_filter[0].m_maximum_student){
+                                return course_monitors_filter[0]?.m_status
+                            }else{
+                                return "Close"
+                            }
+                            
+                        }else{
+                            return "Open"
+                        }
+                    }
+                }
+            }else{
+                return "Open"
+            }
+           
+        },
         coachSelected(coach_id){
             this.coachSelect = true
             this.course_order.coach_id = coach_id
@@ -794,6 +843,7 @@ export default {
         },
         removeStudent(student){
             this.course_order.students.splice(this.course_order.students.findIndex(v => v.username === student.username),1 )
+            this.course_order.apply_for_others = false
         },
         closeDialogParent(){
             this.dialog_parent = false
