@@ -63,22 +63,19 @@ const coachModules = {
           setTimeout(async()=>{
             let payload = {
               status : student.check_in_status, // punctual, late,  leave, emergency leave, absent,
-              compensation_date : student.compensation_date,
-              compensation_start_time : student.start_time,
-              compensation_end_time : student.end_time,
-              evolution :student.potential.evolution ,
-              interest : student.potential.interest ,
-              remark: student.potential.remark,
+              evolution :student.potential.evolution ? student.potential.evolution : '' ,
+              interest : student.potential.interest ? student.potential.interest : '' ,
+              remark: student.potential.remark ? student.potential.remark : '' ,
             }
             let payloadData = new FormData()
-             
             if(student.potentialfiles){
               for(const file of student.potentialfiles){
                 payloadData.append(`img_url`, file);
               }
             }
+            console.log(payload)
             payloadData.append("payload",JSON.stringify(payload))
-            let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/potential/${student.check_in_student_id}`,payloadData ,config)
+            let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/potential/${student.potential.checkInPotentialId}`,payloadData ,config)
             if(data.statusCode == 200){
               console.log("patch",data)
             }else{
@@ -115,9 +112,9 @@ const coachModules = {
               compensation_date : student.compensation_date,
               compensation_start_time : student.start_time,
               compensation_end_time : student.end_time,
-              evolution :student.assessment.evolution ,
-              interest : student.assessment.interest ,
-              remark: student.assessment.remark,
+              evolution :student.assessment.evolution  ?  student.assessment.evolution : '',
+              interest : student.assessment.interest ?  student.assessment.interest : '' ,
+              remark: student.assessment.remark ?  student.assessment.remark : '',
               assessmentStudentsId : student.assessment.assessmentStudentsId,
             }
             let payloadData = new FormData()
