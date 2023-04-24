@@ -17,7 +17,7 @@
             <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
               <v-card-text class="mt-3">
                 <v-row align="center">
-                  <v-col>
+                  <!-- <v-col>
                     <label-custom text="Username(English)"></label-custom>
                     <div v-if="!isEnabled">
                       {{ user_data.username_en }}
@@ -40,7 +40,45 @@
                         </template>
                       </v-text-field>
                     </div>
+                  </v-col> -->
+                  <v-col>
+                    <labelCustom text="Username"></labelCustom>
+                    <v-text-field
+                      :hide-details="!parent.account_id"
+                      dense
+                      outlined
+                      v-model="parent.username"
+                      @change="checkUsername(parent.username)"
+                      @keyup.enter="checkUsername(parent.username)"
+                      @blur="checkUsername(parent.username)"
+                      placeholder="Username"
+                    >
+                      <template v-slot:append>
+                        <v-icon v-if="parent.account_id" color="green">
+                          mdi-checkbox-marked-circle-outline</v-icon
+                        >
+                      </template>
+                    </v-text-field>
+                    <template v-if="!parent.account_id">
+                      <label> หากยังไม่มีบัญชีผู้ใช้กรุณา </label>
+                      <label
+                        class="text-[#ff6b81] underline cursor-pointer mt-5"
+                        @click="registerParent"
+                        >สมัคร One ID</label
+                      >
+                    </template>
                   </v-col>
+                  <v-col cols="auto">
+                    <br />
+                    <v-btn
+                      color="#ff6b81"
+                      @click="checkUsername(parent.username)"
+                      depressed
+                      dark
+                      >ตกลง</v-btn
+                    >
+                  </v-col>
+
                   <v-col sm="auto">
                     <v-img
                       class="img-one mb-2"
@@ -51,6 +89,188 @@
               </v-card-text>
             </v-card>
             <br />
+
+            <!-- Role admin || Role coach -->
+            <div
+              v-if="
+                this.data_local.roles.includes('R_3') ||
+                this.data_local.roles.includes('R_4')
+              "
+            >
+              <pre>{{ show_by_id }}</pre>
+              <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
+                <v-card-text class="mt-3">
+                  <v-row>
+                    <v-col cols="12" sm="3">
+                      <div class="profileCard">
+                        <v-img
+                          src="@/assets/userManagePage/imgcard.png"
+                          class="imageInCard drop-shadow-md"
+                        >
+                        </v-img>
+                        <div style="position: absolute">
+                          <v-card-text class="upload-photo pa-3">
+                            <!-- <img
+                                  :src="user_data.previewUrl"
+                                  class="rounded-full"
+                                  style="height: 100%; width: 100%"
+                                /> -->
+                            <v-img
+                              src="@/assets/userManagePage/uploadPhoto.png"
+                              max-height="30"
+                              max-width="30"
+                            >
+                            </v-img>
+                          </v-card-text>
+                        </div>
+                      </div>
+                    </v-col>
+                    <v-col class="ml-5">
+                      <v-row>
+                        <v-col cols="12" sm="6">
+                          <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
+                          <div v-if="!isEnabled">
+                            {{ show_by_id.firstNameTh }}
+                          </div>
+                          <div v-else>
+                            <v-text-field
+                              v-bind:disabled="isDisabled"
+                              @keypress="validate($event, 'th')"
+                              placeholder=""
+                              v-model="user_data.firstNameTh"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </div>
+                        </v-col>
+
+                        <v-col cols="12" sm="6">
+                          <label-custom text="นามสกุล (ภาษาไทย)"></label-custom>
+                          <div v-if="!isEnabled">
+                            {{ show_by_id.lastNameTh }}
+                          </div>
+                          <div v-else>
+                            <v-text-field
+                              v-bind:disabled="isDisabled"
+                              @keypress="validate($event, 'th')"
+                              placeholder=""
+                              v-model="show_by_id.lastNameTh"
+                              :rules="rules.name"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </div>
+                        </v-col>
+                      </v-row>
+
+                      <v-row>
+                        <v-col cols="12" sm="6">
+                          <label-custom
+                            text="First Name (English)"
+                          ></label-custom>
+                          <div v-if="!isEnabled">
+                            {{ show_by_id.firstNameEng }}
+                          </div>
+                          <div v-else>
+                            <v-text-field
+                              v-bind:disabled="isDisabled"
+                              @keypress="validate($event, 'en')"
+                              placeholder=""
+                              v-model="show_by_id.firstNameEng"
+                              :rules="rules.name"
+                              outlined
+                              dense
+                            ></v-text-field>
+                          </div>
+                        </v-col>
+                        <v-col cols="12" sm="6">
+                          <label-custom
+                            text="Last Name (English)"
+                          ></label-custom>
+
+                          <div v-if="!isEnabled">
+                            {{ show_by_id.lastNameEng }}
+                          </div>
+                          <div v-else>
+                            <v-text-field
+                              v-bind:disabled="isDisabled"
+                              @keypress="validate($event, 'en')"
+                              placeholder=""
+                              v-model="show_by_id.lastNameEng"
+                              :rules="rules.name"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </div>
+                        </v-col>
+                      </v-row>
+
+                      <v-row>
+                        <v-col cols="12" sm="6">
+                          <label-custom text="อีเมล"></label-custom>
+                          <div v-if="!isEnabled">{{ show_by_id.email }}</div>
+                          <div v-else>
+                            <v-text-field
+                              v-bind:disabled="isDisabled"
+                              @keypress="validate($event, 'en', 'number')"
+                              placeholder=""
+                              v-model="show_by_id.email"
+                              :rules="rules.email"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </div>
+                        </v-col>
+                        <v-col cols="12" sm="6">
+                          <label-custom text="เบอร์โทรศัพท์"></label-custom>
+                          <div v-if="!isEnabled">
+                            {{ show_by_id.mobileNo }}
+                          </div>
+                          <div v-else>
+                            <v-text-field
+                              v-bind:disabled="isDisabled"
+                              @keypress="validate($event, 'en', 'number')"
+                              placeholder=""
+                              v-model="show_by_id.mobileNo"
+                              :rules="rules.email"
+                              outlined
+                              dense
+                              required
+                              @input="checkPhoneNumber"
+                              maxlength="12"
+                            >
+                            </v-text-field>
+                          </div>
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+
+              <!-- การจัดการสิทธิ์ -->
+              <headerCard
+                class="ml-6 mt-8"
+                :icon="'mdi-card-account-details-outline'"
+                :icon_color="'#FF6B81'"
+                :title="title2"
+              ></headerCard>
+              <v-divider class="mx-10"></v-divider>
+              <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
+                <v-card-text class="mt-3">
+                  <v-row class="mr-3 ml-3">
+                    <v-col cols="12" sm="6">
+                      <label-custom text="บทบาทผู้ใช้งาน"></label-custom>
+                      <div>{{ user_data.privilege }}</div>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </div>
 
             <div>
               <v-tabs
@@ -545,8 +765,6 @@
                       outlined
                       color="pink"
                     ></v-text-field>
-                 
-                  
                   </v-col>
 
                   <v-col cols="12" sm="6" align="right">
@@ -563,67 +781,76 @@
                 <v-card
                   class="mb-5"
                   v-for="(item, index) in students.certificates"
-                  :key=index
+                  :key="index"
                 >
-                <div class="mx-5 my-5">
-                  <v-row>
-                    <v-col cols="12" sm="6" class="ml-5 front-bold">{{ item.name_certificate }}</v-col>
-                    <v-col cols="12" sm="">วันที่แข่ง:{{ item.certificate_date }}</v-col>
-                  </v-row>
+                  <div class="mx-5 my-5">
+                    <v-row>
+                      <v-col cols="12" sm="6" class="ml-5 front-bold">{{
+                        item.name_certificate
+                      }}</v-col>
+                      <v-col cols="12" sm=""
+                        >วันที่แข่ง:{{ item.certificate_date }}</v-col
+                      >
+                    </v-row>
 
-                  <v-row>
-                    <v-col cols="8">
-                      <v-row>
-                        <v-col cols="1">
-                          <v-img
-                            src="@/assets/userManagePage/certificate .png"
-                            width="50px"
-                            height="50px"
-                            contain
-                          ></v-img>
-                        </v-col>
-                        <v-col cols="" align-self="center"><span class="pink--text underline underline-offset-2">{{item.fileName }}</span></v-col>
-                      </v-row>
-                    </v-col>
+                    <v-row>
+                      <v-col cols="8">
+                        <v-row>
+                          <v-col cols="1">
+                            <v-img
+                              src="@/assets/userManagePage/certificate .png"
+                              width="50px"
+                              height="50px"
+                              contain
+                            ></v-img>
+                          </v-col>
+                          <v-col cols="" align-self="center"
+                            ><span
+                              class="pink--text underline underline-offset-2"
+                              >{{ item.fileName }}</span
+                            ></v-col
+                          >
+                        </v-row>
+                      </v-col>
 
-                    <v-col cols="4" align="end">
-                      <v-row>
-                        <v-col cols="10" align="end">
-                          <v-btn
-                            v-if="!item.previewUrl"
-                            depressed
-                            class="white--text"
-                            color="#ff6b81"
-                            @click="editCertificateDialog(item, index)"
-                          >
-                            <span class="mdi mdi-plus"></span> เพิ่มหนังสือรับรอง
-                          </v-btn>
-                          <v-btn
-                            v-else
-                            depressed
-                            class="white--text"
-                            color="#ff6b81"
-                            @click="detailCertificateDialog(item, index)"
-                          >
-                            แสดงหนังสือรับรอง
-                          </v-btn>
-                        </v-col>
+                      <v-col cols="4" align="end">
+                        <v-row>
+                          <v-col cols="10" align="end">
+                            <v-btn
+                              v-if="!item.previewUrl"
+                              depressed
+                              class="white--text"
+                              color="#ff6b81"
+                              @click="editCertificateDialog(item, index)"
+                            >
+                              <span class="mdi mdi-plus"></span>
+                              เพิ่มหนังสือรับรอง
+                            </v-btn>
+                            <v-btn
+                              v-else
+                              depressed
+                              class="white--text"
+                              color="#ff6b81"
+                              @click="detailCertificateDialog(item, index)"
+                            >
+                              แสดงหนังสือรับรอง
+                            </v-btn>
+                          </v-col>
 
-                        <v-col cols="2" align="end">
-                          <v-icon
-                            larg
-                            color="#FF6B81"
-                            @click="removeCertificate(index)"
-                            v-if="students.certificates.length >= 2"
-                          >
-                            mdi-delete
-                          </v-icon>
-                        </v-col>
-                      </v-row>
-                    </v-col>
-                  </v-row>
-                </div>
-                  
+                          <v-col cols="2" align="end">
+                            <v-icon
+                              larg
+                              color="#FF6B81"
+                              @click="removeCertificate(index)"
+                              v-if="students.certificates.length >= 2"
+                            >
+                              mdi-delete
+                            </v-icon>
+                          </v-col>
+                        </v-row>
+                      </v-col>
+                    </v-row>
+                  </div>
                 </v-card>
 
                 <!-- DIALOG -->
@@ -727,16 +954,26 @@
                     <v-card v-if="fileName !== ''" class="pa-4 ma-4">
                       <v-row>
                         <v-col cols="2">
-                          <v-img src="../../../assets/userManagePage/pdfIcon.png" width="30px" height="30px"></v-img>
+                          <v-img
+                            src="../../../assets/userManagePage/pdfIcon.png"
+                            width="30px"
+                            height="30px"
+                          ></v-img>
                         </v-col>
-                        <v-col cols="8"><span>{{ fileName }}</span></v-col>
-                        <v-col cols="2" align="end"><v-icon @click="removeFile()">mdi-close</v-icon></v-col>
+                        <v-col cols="8"
+                          ><span>{{ fileName }}</span></v-col
+                        >
+                        <v-col cols="2" align="end"
+                          ><v-icon @click="removeFile()"
+                            >mdi-close</v-icon
+                          ></v-col
+                        >
                       </v-row>
                     </v-card>
 
                     <div class="text-center mx-5 mb-5">
                       <v-btn
-                      v-if="status === 'create'"
+                        v-if="status === 'create'"
                         depressed
                         class="white--text"
                         color="#ff6b81"
@@ -745,7 +982,7 @@
                         บันทึก
                       </v-btn>
                       <v-btn
-                      v-else-if="status === 'edit'"
+                        v-else-if="status === 'edit'"
                         depressed
                         class="white--text"
                         color="#ff6b81"
@@ -754,7 +991,7 @@
                         บันทึก
                       </v-btn>
                       <v-btn
-                      v-else
+                        v-else
                         depressed
                         class="white--text"
                         color="#ff6b81"
@@ -794,6 +1031,19 @@
     <div v-else>
       <userManageForm></userManageForm>
     </div>
+    <!-- DIALOG::REGISTER -->
+    <v-dialog
+      persistent
+      v-if="show_dialog_register_one_id"
+      v-model="show_dialog_register_one_id"
+      :width="!MobileSize ? `60vw` : ``"
+    >
+      <registerDialogForm
+        dialog
+        title="สมัคร One ID"
+        :state="register_type"
+      ></registerDialogForm>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -804,6 +1054,10 @@ import LabelCustom from "@/components/label/labelCustom.vue";
 import headerPage from "@/components/header/headerPage.vue";
 import headerCard from "@/components/header/headerCard.vue";
 import userManageForm from "@/components/user_menage/userManageForm.vue";
+import registerDialogForm from "@/components/user_menage/registerDialogForm.vue";
+import axios from "axios";
+import VueCookie from "vue-cookie";
+
 import { mapActions, mapGetters } from "vuex";
 export default {
   components: {
@@ -811,8 +1065,10 @@ export default {
     headerCard,
     userManageForm,
     LabelCustom,
+    registerDialogForm,
   },
   data: () => ({
+    data_local: JSON.parse(localStorage.getItem("userDetail")),
     tab: null,
     items: ["ข้อมูลทั่วไป", "คอร์สเรียน", "การแข่งขันและเกียรติบัตร"],
     // text: "Lorem ipsum dolor",
@@ -871,6 +1127,13 @@ export default {
     title3: "คอร์สเรียน",
     addStudentData: "เพิ่มข้อมูลผู้ใช้นักเรียน",
     addParentData: "เพิ่มข้อมูลผู้ใช้ของผู้ปกครอง",
+    parent: {
+      account_id: "",
+      firstname_en: "",
+      lastname_en: "",
+      username: "",
+      tel: "",
+    },
     selectRoles: [],
     cart_certificate: [],
     isMatch: false,
@@ -879,18 +1142,16 @@ export default {
     certificate_show: false,
     addCertificate_dialog_show: false,
     certificate_dialog_show: false,
-    fileName: '',
+    fileName: "",
     previewUrl: null,
-    status: 'create',
-    selectedIndex: ''
-
+    status: "create",
+    selectedIndex: "",
   }),
   created() {},
   mounted() {
     // this.local_data = JSON.parse(localStorage.getItem("userDetail"));
     // this.GetShowById(this.local_data.account_id);
-    this.GetShowById(this.$route.params.account_id)
-
+    this.GetShowById(this.$route.params.account_id);
 
     if (this.user_data.privilege.includes("นักเรียน")) {
       if (this.user_data.selectedbox == true) {
@@ -927,9 +1188,11 @@ export default {
       changeStudentsData: "UserManageModules/changeStudentsData",
       changeUserData: "UserManageModules/changeUserData",
       changeParentData: "UserManageModules/changeParentData",
-      changeStudentsCertificate: "ChangeStudentsCertificate/ChangeStudentsCertificate",
-      GetShowById : "UserModules/GetShowById",
-      
+      changeStudentsCertificate:
+        "ChangeStudentsCertificate/ChangeStudentsCertificate",
+      checkUsernameOneid: "loginModules/checkUsernameOneid",
+      GetShowById: "UserModules/GetShowById",
+      is_loading: "loginModules/getIsLoading",
     }),
 
     openFileSelector() {
@@ -1037,7 +1300,7 @@ export default {
     // },
     uploadFile() {
       this.file = this.$refs.fileInput.files[0];
-      console.log("file=>",this.file);
+      console.log("file=>", this.file);
       if (!this.file) return;
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -1046,14 +1309,13 @@ export default {
       reader.readAsDataURL(this.file);
     },
     removeFile() {
-      this.fileName = ''
+      this.fileName = "";
     },
     addCertificateCard() {
       this.students.certificates.push({
         name_certificate: "",
         certificate_date: "",
         previewUrl: null,
-        
       });
     },
     showCertificate() {
@@ -1061,37 +1323,36 @@ export default {
     },
 
     addCertificateDialog(type) {
-      this.status = 'create'
-      this.name_certificate = ''
-      this.certificate_date = ''
-      this.file = ''
-      this.fileName = ''
-      this.previewUrl = null
-      this.certificate_dialog_show = true
-      this.certificateType = type
+      this.status = "create";
+      this.name_certificate = "";
+      this.certificate_date = "";
+      this.file = "";
+      this.fileName = "";
+      this.previewUrl = null;
+      this.certificate_dialog_show = true;
+      this.certificateType = type;
     },
     editCertificateDialog(item, index) {
-      this.status = 'edit'
-      this.selectedIndex = index
-      this.name_certificate = item.name_certificate
-      this.certificate_date = item.certificate_date
-      this.previewUrl = item.previewUrl
-      this.certificate_dialog_show = true
+      this.status = "edit";
+      this.selectedIndex = index;
+      this.name_certificate = item.name_certificate;
+      this.certificate_date = item.certificate_date;
+      this.previewUrl = item.previewUrl;
+      this.certificate_dialog_show = true;
     },
     detailCertificateDialog(item, index) {
-      this.status = 'detail'
-      this.selectedIndex = index
-      this.name_certificate = item.name_certificate
-      this.certificate_date = item.certificate_date
-      this.previewUrl = item.previewUrl
-      this.certificate_dialog_show = true
+      this.status = "detail";
+      this.selectedIndex = index;
+      this.name_certificate = item.name_certificate;
+      this.certificate_date = item.certificate_date;
+      this.previewUrl = item.previewUrl;
+      this.certificate_dialog_show = true;
     },
     saveDialog() {
       console.log("create success", {
         name_certificate: this.name_certificate,
         certificate_date: this.certificate_date,
         previewUrl: this.previewUrl,
-
       });
 
       if (this.status == "create") {
@@ -1099,7 +1360,7 @@ export default {
           name_certificate: this.name_certificate,
           certificate_date: this.certificate_date,
           previewUrl: this.previewUrl,
-          fileName: this.fileName
+          fileName: this.fileName,
         });
       }
       this.certificate_dialog_show = false;
@@ -1112,9 +1373,11 @@ export default {
       });
 
       if (this.status !== "create") {
-        console.log('edit select array', this.students.certificates[index]);
-        this.students.certificates[index].name_certificate = this.name_certificate;
-        this.students.certificates[index].certificate_date = this.certificate_date;
+        console.log("edit select array", this.students.certificates[index]);
+        this.students.certificates[index].name_certificate =
+          this.name_certificate;
+        this.students.certificates[index].certificate_date =
+          this.certificate_date;
         this.students.certificates[index].previewUrl = this.previewUrl;
         this.students.certificates[index].fileName = this.fileName;
       }
@@ -1122,8 +1385,165 @@ export default {
     },
     removeCertificate(index) {
       this.students.certificates.splice(index, 1);
-    }
+    },
 
+    checkUsername(username, type) {
+      if (username) {
+        this.checkUsernameOneid({
+          username: username,
+          status: "",
+          type: type,
+        }).then(() => {
+          if (type === "student") {
+            console.log("user_student_data", this.course_order.students.filter);
+            if (this.user_student_data.length > 0) {
+              this.course_order.students.filter(
+                (v) => v.username === username
+              )[0].firstname_en = this.user_student_data[0].firstNameEng;
+              this.course_order.students.filter(
+                (v) => v.username === username
+              )[0].lastname_en = this.user_student_data[0].lastNameEng;
+              this.course_order.students.filter(
+                (v) => v.username === username
+              )[0].firstname_th = this.user_student_data[0].firstNameTh;
+              this.course_order.students.filter(
+                (v) => v.username === username
+              )[0].lastname_th = this.user_student_data[0].lastNameTh;
+              this.course_order.students.filter(
+                (v) => v.username === username
+              )[0].student_name = `${this.user_student_data[0].firstNameEng} ${this.user_student_data[0].lastNameEng} `;
+              this.course_order.students.filter(
+                (v) => v.username === username
+              )[0].tel = this.user_student_data[0].mobileNo;
+              this.course_order.students.filter(
+                (v) => v.username === username
+              )[0].username = username;
+              this.course_order.students.filter(
+                (v) => v.username === username
+              )[0].account_id = this.user_student_data[0].userOneId;
+            } else {
+              this.course_order.students.filter(
+                (v) => v.username === username
+              )[0].firstname_en = "";
+              this.course_order.students.filter(
+                (v) => v.username === username
+              )[0].lastname_en = "";
+              this.course_order.students.filter(
+                (v) => v.username === username
+              )[0].student_name = "";
+              this.course_order.students.filter(
+                (v) => v.username === username
+              )[0].tel = "";
+              this.course_order.students.filter(
+                (v) => v.username === username
+              )[0].username = username;
+              this.course_order.students.filter(
+                (v) => v.username === username
+              )[0].account_id = "";
+            }
+          } else {
+            if (this.user_data.length > 0) {
+              if (this.edit_parent) {
+                this.edit_parent = false;
+              }
+              this.parent = {
+                account_id: this.user_data[0].userOneId,
+                username: username,
+                firstname_en: this.user_data[0].firstNameEng,
+                lastname_en: this.user_data[0].lastNameEng,
+                tel: this.user_data[0].mobileNo,
+              };
+              console.log("course_order", this.course_order);
+
+              if (
+                this.course_order.students.filter(
+                  (v) => v.is_other === false
+                )[0].parents.length > 0
+              ) {
+                let parents = this.course_order.students.filter(
+                  (v) => v.is_other === false
+                )[0].parents;
+                parents[0].firstname_en = this.user_data[0].firstNameEng;
+                parents[0].lastname_en = this.user_data[0].lastNameEng;
+                parents[0].tel = this.user_data[0].mobileNo;
+                parents[0].account_id = this.user_data[0].userOneId;
+                parents[0].username = username;
+              }
+            }
+          }
+        });
+      } else {
+        this.user_data = [];
+      }
+    },
+    registerParent() {
+      this.register_type = "parent";
+      // this.changeCourseOrderData(this.course_order)
+      this.changeDialogRegisterOneId(true);
+    },
+    addParent() {
+      Swal.fire({
+        icon: "question",
+        title: "คุณต้องการเพิ่มผู้ปกครองหรือไม่",
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: "ตกลง",
+        cancelButtonText: "ยกเลิก",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            let config = {
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-type": "Application/json",
+                Authorization: `Bearer ${VueCookie.get("token")}`,
+              },
+            };
+            this.user_login = JSON.parse(localStorage.getItem("userDetail"));
+
+            console.log("object", this.user_data);
+            for (const data of this.user_data) {
+              console.log("data", data);
+              this.set_parent_id = data.userOneId;
+              console.log("userOneId", this.set_parent_id);
+            }
+            let payload = {
+              studentId: this.user_login.account_id,
+              parentId: this.set_parent_id,
+            };
+            console.log("payload :", payload);
+            let { data } = await axios.post(
+              `${process.env.VUE_APP_URL}/api/v1/relations/user`,
+              payload,
+              config
+            );
+
+            if (data.statusCode === 201) {
+              if (data.data && data.data.message !== "Duplicate relation.") {
+                console.log("succes");
+                this.add_parent = false;
+                this.user_login = JSON.parse(
+                  localStorage.getItem("userDetail")
+                );
+                this.GetAll(this.user_login.account_id);
+              } else {
+                throw { error: data };
+              }
+            } else {
+              throw { message: data.message };
+            }
+          } catch (error) {
+            console.log(error);
+            Swal.fire({
+              icon: "error",
+              title: "Duplicate relation",
+            });
+          }
+        } else {
+          Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
+        }
+      });
+    },
   },
   computed: {
     ...mapGetters({
@@ -1132,8 +1552,8 @@ export default {
       user_data: "UserManageModules/getUserData",
       parents: "UserManageModules/getParent",
       certificates: "UserManageModules/getCertificate",
+      user_one_id: "loginModules/getUserOneId",
       show_by_id: "UserModules/getShowById",
-
     }),
   },
   watch: {},

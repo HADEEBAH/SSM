@@ -4,20 +4,20 @@ import VueCookie from "vue-cookie"
 const userModules = {
     namespaced: true,
     state: {
-       user_list: [
+        user_list: [
             {
-                 accountId: "",
-                 email: "",
-                 firstNameTh: "",
-                 lastNameTh: "",
-                 firstNameEn: "",
-                 lastNameEN: "",
-                 userName: "",
-                 tel: ""
-             }
+                accountId: "",
+                email: "",
+                firstNameTh: "",
+                lastNameTh: "",
+                firstNameEn: "",
+                lastNameEN: "",
+                userName: "",
+                tel: ""
+            }
         ],
-        
-        show_by_id:[
+
+        show_by_id: [
             {
                 roleNameEng: "",
                 roleNameTh: "",
@@ -45,11 +45,11 @@ const userModules = {
                         studentId: "",
                         parentId: ""
                     }
-                    
+
                 ]
             }
         ]
-     },
+    },
     mutations: {
         SetUserList(state, payload) {
             state.user_list = payload
@@ -69,7 +69,7 @@ const userModules = {
                     }
                 }
                 // config
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/usermanagement`,config)
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/usermanagement`, config)
                 if (data.statusCode === 200) {
                     context.commit("SetUserList", data.data)
                 } else {
@@ -90,7 +90,7 @@ const userModules = {
                         'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/usermanagement/${account_id}`,config)
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/usermanagement/${account_id}`, config)
                 if (data.statusCode === 200) {
                     context.commit("SetShowById", data.data)
                     console.log("SetShowById", data.data)
@@ -112,7 +112,6 @@ const userModules = {
             return state.show_by_id
         },
     },
-  };
-  
-  export default userModules;
-  
+};
+
+export default userModules;

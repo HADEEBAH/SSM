@@ -825,20 +825,12 @@ export default {
     b_test: "",
     item: {},
     item_data: "",
+    user_detail: {},
   }),
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    // console.log("test", this.user_relation.student.studentId);
     this.GetProfileBooked(this.user_detail.account_id);
     this.GetAll(this.user_detail.account_id);
-    // console.log("my_course_student_id", this.$store.state.my_course_student_id);
-    // console.log("object", );
-    // for (const item of JSON.parse(localStorage.getItem("relations"))) {
-    //   this.GetStudentData(item.student.studentId);
-    // }
-    // for (const item_data of this.profile_user) {
-    //   this.GetStudentData(item_data.student.studentId);
-    // }
   },
 
   mounted() {
@@ -850,36 +842,18 @@ export default {
     console.log(this.user_relation);
     this.GetProfileBooked(this.user_detail.account_id);
     this.GetAll(this.user_detail.account_id);
-    // this.GetStudentData(this.user_relation.student.studentId);
     this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
 
-    if (this.$store.state.MyCourseModules.my_course_student_id !== "") {
-      //  this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty")
-
-      this.GetStudentData(
-        this.$store.state.MyCourseModules.my_course_student_id
-      );
-    } else {
-      if (JSON.parse(localStorage.getItem("relations"))?.length != 0) {
-        for (const item of JSON.parse(localStorage.getItem("relations"))) {
-          this.GetStudentData(item.student.studentId);
-          console.log("student");
-        }
-      } else {
-        if (
-          !this.user_detail.roles.includes("R_4") &&
-          !this.user_detail.roles.includes("R_5")
-        ) {
-          this.GetStudentData(this.user_detail.account_id);
-          console.log("parent && student");
-        } else if (!this.user_detail.roles.includes("R_4")) {
-          this.GetStudentData(this.user_detail.account_id);
-          console.log("parent");
-        } else {
-          this.GetStudentData(null);
-          console.log("null");
-        }
+    if (this.user_detail.roles.includes("R_4")) {
+      this.GetStudentData(this.user_detail.account_id);
+      for (const item of JSON.parse(localStorage.getItem("relations"))) {
+        this.GetStudentData(item.student.studentId);
+        console.log("student");
       }
+    } else if (this.user_detail.roles.includes("R_5")) {
+      this.GetStudentData(this.user_detail.account_id);
+    } else {
+      this.GetStudentData(null);
     }
 
     console.log(
@@ -890,8 +864,24 @@ export default {
 
   watch: {
     type_selected: function () {
+      console.log("type_selected", this.type_selected);
       this.loading = true;
-      setTimeout(() => {
+      setTimeout(async () => {
+        this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
+        if (this.type_selected == "students_course") {
+          if (this.user_detail.roles.includes("R_4")) {
+            this.GetStudentData(this.user_detail.account_id);
+            for (const item of JSON.parse(localStorage.getItem("relations"))) {
+              this.GetStudentData(item.student.studentId);
+              console.log("student");
+            }
+          } else if (this.user_detail.roles.includes("R_5")) {
+            this.GetStudentData(this.user_detail.account_id);
+          } else {
+            this.GetStudentData(null);
+          }
+        }
+
         this.loading = false;
       }, 200);
     },
@@ -932,6 +922,8 @@ export default {
     },
 
     async searchStudentSchadule(studentId) {
+      this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
+
       console.log("item", studentId);
       await this.GetStudentData(studentId);
     },
