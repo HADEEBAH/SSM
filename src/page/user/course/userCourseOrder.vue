@@ -67,7 +67,7 @@
                                         :value="time"
                                         >
                                             <template v-slot:label>
-                                                {{`${time.start}-${time.end} (${time.maximumStudent - GenReserve(time)})`}}
+                                                {{`${time.start}-${time.end} (${GenReserve(time)})`}}
                                             </template>
                                         </v-radio>
                                     </v-col>
@@ -170,10 +170,14 @@
                             <v-row dense class="d-flex align-center" v-if="!edit_parent">
                                 <v-col  cols="12" sm="6">
                                     <labelCustom text="Username (ถ้ามี)"></labelCustom>
-                                    <v-text-field :disabled="!edit_parent" @blur="checkUsername(parent.username)" @keyup.enter="checkUsername(parent.username)" dense outlined v-model="parent.username"  placeholder="Username" ></v-text-field>
+                                    <v-text-field 
+                                    :disabled="!edit_parent" 
+                                    @blur="parent.username > 3 ? checkUsername(parent.username) : ''" 
+                                    @keyup.enter="parent.username > 3 ? checkUsername(parent.username) : ''" dense outlined 
+                                    v-model="parent.username"  placeholder="Username" ></v-text-field>
                                 </v-col>
                                 <v-col  cols="12" sm="6">
-                                    <v-btn dense outlined color="#ff6b81" @click="edit_parent = true"><v-icon>mdi-account-edit-outline</v-icon>แก้ไขข้อมูลผู้ปกครอง</v-btn>
+                                    <v-btn :disabled="parent.username < 3" dense outlined color="#ff6b81" @click="edit_parent = true"><v-icon>mdi-account-edit-outline</v-icon>แก้ไขข้อมูลผู้ปกครอง</v-btn>
                                 </v-col>
                             </v-row>
                             <v-row dense v-if="edit_parent">
@@ -184,9 +188,9 @@
                                         dense
                                         outlined
                                         v-model="parent.username"
-                                        @change="checkUsername(parent.username)"
-                                        @keyup.enter="checkUsername(parent.username)"
-                                        @blur="checkUsername(parent.username)"
+                                        @change="parent.username > 3 ? checkUsername(parent.username): ''"
+                                        @keyup.enter="parent.username > 3 ?checkUsername(parent.username) : ''"
+                                        @blur="parent.username > 3 ?checkUsername(parent.username) : ''"
                                         placeholder="Username">
                                         <template v-slot:append>
                                             <v-icon v-if="parent.account_id" color="green">mdi-checkbox-marked-circle-outline</v-icon>
@@ -204,7 +208,7 @@
                                 </v-col>
                                 <v-col cols="auto" >
                                     <br>
-                                    <v-btn :loading="is_loading" color="#ff6b81" @click="checkUsername(parent.username)" depressed dark>ตกลง</v-btn>
+                                    <v-btn :dark="!parent.username < 3 " :disabled="parent.username < 3 " :loading="is_loading" color="#ff6b81" @click="checkUsername(parent.username)" depressed >ตกลง</v-btn>
                                 </v-col>
                             </v-row>
                             <v-row dense>
@@ -245,9 +249,9 @@
                                     dense
                                     outlined
                                     v-model="student.username"
-                                    @change="checkUsername(student.username, 'student', index_student)"
-                                    @keyup.enter="checkUsername(student.username, 'student', index_student)"
-                                    @blur="checkUsername(student.username, 'student', index_student)"
+                                    @change="student.username.length > 3 ? checkUsername(student.username, 'student', index_student) : ''"
+                                    @keyup.enter="student.username.length > 3 ?checkUsername(student.username, 'student', index_student) : ''"
+                                    @blur="student.username.length > 3 ?checkUsername(student.username, 'student', index_student): ''"
                                     placeholder="Username">
                                     <template v-slot:append>
                                         <v-icon v-if="student.account_id" color="green">mdi-checkbox-marked-circle-outline</v-icon>
@@ -264,7 +268,7 @@
                                 </template>
                             </v-col>
                             <v-col cols="auto" class="mb-2">
-                                <v-btn :loading="is_loading" color="#ff6b81" @click="checkUsername(student.username, 'student', index_student)" depressed dark>ตกลง</v-btn>
+                                <v-btn :loading="is_loading" :dark="!student.username.length < 3" :disabled="student.username.length < 3" color="#ff6b81" @click="checkUsername(student.username, 'student', index_student)" depressed >ตกลง</v-btn>
                             </v-col>
                         </v-row>
                         <template v-if="student.account_id">
@@ -299,7 +303,10 @@
             </div> -->
             <v-row dense>
                 <v-col cols="12" sm="6">
-                    <v-btn class="w-full" :disabled="validateButton" outlined dense color="#ff6b81"  @click="addToCart">เพิ่มรถเข็น</v-btn>
+                    <v-btn
+                    v-if="course_order.time ? GenReserve() <= course_order.time.maximumStudent && GenMonitors() === 'Open' : false"
+                    class="w-full" :disabled="validateButton" outlined dense color="#ff6b81"  @click="addToCart">เพิ่มรถเข็น</v-btn>
+                    <v-btn v-else class="w-full" disabled outlined dense color="#ff6b81"  @click="addToCart">เพิ่มรถเข็น</v-btn>
                 </v-col>
                 <v-col cols="12" sm="6">
                     <v-btn
@@ -350,9 +357,9 @@
                                 dense
                                 outlined
                                 v-model="parent.username"
-                                @change="checkUsername(parent.username)"
-                                @keyup.enter="checkUsername(parent.username)"
-                                @blur="checkUsername(parent.username)"
+                                @change="parent.username.length > 3 ? checkUsername(parent.username) : ''"
+                                @keyup.enter="parent.username.length > 3 ?checkUsername(parent.username):''"
+                                @blur="parent.username.length > 3 ?checkUsername(parent.username):''"
                                 placeholder="Username">
                                 <template v-slot:append>
                                     <v-icon v-if="parent.account_id" color="green">mdi-checkbox-marked-circle-outline</v-icon>
@@ -370,7 +377,7 @@
                         </v-col>
                         <v-col cols="auto" >
                             <br>
-                            <v-btn :loading="is_loading" color="#ff6b81" @click="checkUsername(parent.username)" depressed dark>ตกลง</v-btn>
+                            <v-btn :loading="is_loading" :dark="!parent.username.length < 3" :disabled="parent.username.length < 3" color="#ff6b81" @click="checkUsername(parent.username)" depressed >ตกลง</v-btn>
                         </v-col>
                     </v-row>
                     <template>
@@ -472,6 +479,10 @@ export default {
     created() {
         this.order_data = JSON.parse(localStorage.getItem("Order"))
         this.user_login = JSON.parse(localStorage.getItem("userDetail"))
+        console.log("course_order =>",this.course_order)
+        if(!this.course_order.course_id){
+            this.$router.replace({ name: 'UserKingdom' })
+        }
         // this.checkMaximumStudent()
         // this.order_data = JSON.parse(localStorage.getItem("Order"))
         // this.user_login = JSON.parse(localStorage.getItem("userDetail"))
@@ -490,7 +501,7 @@ export default {
         //this.checkMaximumStudent()
         // this.checkApplyForYourselfRole()
         this.$store.dispatch("NavberUserModules/changeTitleNavber","สมัครเรียน")
-      
+        
     },
     watch: {
         "course_order.time" :function(){
@@ -684,18 +695,54 @@ export default {
             if( !time_data ){
                 time_data = this.course_order.time
                 let studentNum = 0
-                let course_student_filter  = this.course_student.filter((v)=> v.courseId == this.course_order.course_id   && v.coursePackageOptionId == this.course_order.option.course_package_option_id && v.dayOfWeekId === time_data.dayOfWeekId && v.timeId == time_data.timeId)
-                for(const student  of course_student_filter){
-                    studentNum = studentNum + parseInt(student.sum_student)
+                let course_monitors_filter = this.course_monitors.filter((v)=> v.m_course_id == this.course_order.course_id   && v.m_course_package_options_id == this.course_order.option.course_package_option_id && v.m_day_of_week_id === time_data.dayOfWeekId && v.m_time_id == time_data.timeId)
+                console.log(course_monitors_filter)
+                if(course_monitors_filter.length > 0){
+                    for(const monitor  of course_monitors_filter){
+                        if(monitor.m_status === "Close"){
+                            console.log(monitor.m_status)
+                            return 0
+                        }else{
+                            let course_student_filter  = this.course_student.filter((v)=> v.courseId == this.course_order.course_id   && v.coursePackageOptionId == this.course_order.option.course_package_option_id && v.dayOfWeekId === time_data.dayOfWeekId && v.timeId == time_data.timeId)
+                            for(const student  of course_student_filter){
+                                studentNum = studentNum + parseInt(student.sum_student)
+                            }
+                            return time_data.maximumStudent - studentNum
+                        }
+                    }
+                }else{
+                    let course_student_filter  = this.course_student.filter((v)=> v.courseId == this.course_order.course_id   && v.coursePackageOptionId == this.course_order.option.course_package_option_id && v.dayOfWeekId === time_data.dayOfWeekId && v.timeId == time_data.timeId)
+                    for(const student  of course_student_filter){
+                        studentNum = studentNum + parseInt(student.sum_student)
+                    }
+                    return time_data.maximumStudent - studentNum
                 }
-                return studentNum
+                
             } else{
                 let studentNum = 0
-                let course_student_filter  = this.course_student.filter((v)=> v.courseId == this.course_order.course_id   && v.coursePackageOptionId == this.course_order.option.course_package_option_id && v.dayOfWeekId === time_data.dayOfWeekId && v.timeId == time_data.timeId)
-                for(const student  of course_student_filter){
-                    studentNum = studentNum + parseInt(student.sum_student)
+                let course_monitors_filter = this.course_monitors.filter((v)=> v.m_course_id == this.course_order.course_id   && v.m_course_package_options_id == this.course_order.option.course_package_option_id && v.m_day_of_week_id === time_data.dayOfWeekId && v.m_time_id == time_data.timeId)
+                console.log(course_monitors_filter)
+                if(course_monitors_filter.length > 0){
+                    for(const monitor  of course_monitors_filter){
+                        if(monitor.m_status === "Close"){
+                            console.log(monitor.m_status)
+                            return 0
+                        }else{
+                            let course_student_filter  = this.course_student.filter((v)=> v.courseId == this.course_order.course_id   && v.coursePackageOptionId == this.course_order.option.course_package_option_id && v.dayOfWeekId === time_data.dayOfWeekId && v.timeId == time_data.timeId)
+                            for(const student  of course_student_filter){
+                                studentNum = studentNum + parseInt(student.sum_student)
+                            }
+                            return time_data.maximumStudent - studentNum
+                        }
+                    }
+                }else{
+                    let course_student_filter  = this.course_student.filter((v)=> v.courseId == this.course_order.course_id   && v.coursePackageOptionId == this.course_order.option.course_package_option_id && v.dayOfWeekId === time_data.dayOfWeekId && v.timeId == time_data.timeId)
+                    for(const student  of course_student_filter){
+                        studentNum = studentNum + parseInt(student.sum_student)
+                    }
+                    return time_data.maximumStudent - studentNum
                 }
-                return studentNum
+               
             }
         },
         CreateReserve(){
