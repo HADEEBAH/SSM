@@ -50,6 +50,54 @@ const coachModules = {
     },
   },
   actions: {
+    async UpdateAssessmentPotential(context,{students}){
+      try{
+        let config = {
+          headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-type": "Application/json",
+              Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        for await (const student of students) {
+          setTimeout(async()=>{
+            let payload = {
+              status : student.check_in_status, // punctual, late,  leave, emergency leave, absent,
+              compensation_date : student.compensation_date,
+              compensation_start_time : student.start_time,
+              compensation_end_time : student.end_time,
+              evolution :student.potential.evolution ,
+              interest : student.potential.interest ,
+              remark: student.potential.remark,
+            }
+            let payloadData = new FormData()
+             
+            if(student.potentialfiles){
+              for(const file of student.potentialfiles){
+                payloadData.append(`img_url`, file);
+              }
+            }
+            payloadData.append("payload",JSON.stringify(payload))
+            let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/potential/${student.check_in_student_id}`,payloadData ,config)
+            if(data.statusCode == 200){
+              console.log("patch",data)
+            }else{
+              throw {error : data}
+            }
+          },500)
+        }
+        Swal.fire({
+          icon: "success",
+          title: "บันทึกสำเร็จ",
+          showDenyButton: false,
+          showCancelButton: false,
+          cancelButtonText :"ยกเลิก",
+          confirmButtonText: "ตกลง",
+        })
+      }catch(error){
+        console.log(error)
+      }
+    },
     async AssessmentStudent(context, {students}){
       try{
         let config = {
@@ -59,46 +107,47 @@ const coachModules = {
               Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        for (const student of students) {
-          // console.log("student + >",student)
-          let payload = {
-            status : student.check_in_status, // punctual, late,  leave, emergency leave, absent,
-            compensation_date : student.compensation_date,
-            compensation_start_time : student.start_time,
-            compensation_end_time : student.end_time,
-            evolution :student.assessment.evolution ,
-            interest : student.assessment.interest ,
-            remark: student.assessment.remark,
-            assessmentStudentsId : student.assessment.assessmentStudentsId,
-          }
-          let payloadData = new FormData()
-           
-            if(student.files){
-              for(const file of student.files){
-                payloadData.append(`img_url`, file);
+        for await (const student of students) {
+          console.log("student + >",student)
+          setTimeout(async()=>{
+            let payload = {
+              status : student.check_in_status, // punctual, late,  leave, emergency leave, absent,
+              compensation_date : student.compensation_date,
+              compensation_start_time : student.start_time,
+              compensation_end_time : student.end_time,
+              evolution :student.assessment.evolution ,
+              interest : student.assessment.interest ,
+              remark: student.assessment.remark,
+              assessmentStudentsId : student.assessment.assessmentStudentsId,
+            }
+            let payloadData = new FormData()
+              if(student.files){
+                for(const file of student.files){
+                  payloadData.append(`img_url`, file);
+                }
+              }
+            if(!student.assessment.assessmentStudentsId){
+              console.log("post",payload)
+              payloadData.append("payload",JSON.stringify(payload))
+              // let localhost = "http://localhost:3000"
+              let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`,payloadData,config)
+              if(data.statusCode == 201){
+                console.log("post",data)
+              }else{
+                throw {error : data}
+              }
+            }else{
+              console.log("patch",payload)
+              payloadData.append("payload",JSON.stringify(payload))
+              // let localhost = "http://localhost:3000"
+              let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`,payloadData,config)
+              if(data.statusCode == 200){
+                console.log("patch",data)
+              }else{
+                throw {error : data}
               }
             }
-          if(!student.assessment.assessmentStudentsId){
-            console.log("post",payload)
-            payloadData.append("payload",JSON.stringify(payload))
-            // let localhost = "http://localhost:3000"
-            let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`,payloadData,config)
-            if(data.statusCode == 201){
-              console.log("post",data)
-            }else{
-              throw {error : data}
-            }
-          }else{
-            console.log("patch",payload)
-            payloadData.append("payload",JSON.stringify(payload))
-            // let localhost = "http://localhost:3000"
-            let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`,payloadData,config)
-            if(data.statusCode == 200){
-              console.log("patch",data)
-            }else{
-              throw {error : data}
-            }
-          }
+          },500)
         }
         Swal.fire({
           icon: "success",
@@ -216,19 +265,28 @@ const coachModules = {
               Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        for (const student of students) {
-          let payload = {
-            status : student.check_in_status, // punctual, late,  leave, emergency leave, absent,
-            compensationDate : student.compensation_date,
-            compensationStartTime : moment(student.start_time).format("HH:mm"),
-            compensationEndTime : moment(student.end_time).format("HH:mm"),
-          }
-          console.log("payload :",payload)
-          let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/checkin/student/${student.check_in_student_id}`,payload,config)
-          console.log(data)
-          if(data.statusCode !== 200 ){
-            throw { error :data }
-          }
+        for await (const student of students) {
+          setTimeout(async ()=>{
+            const now = new Date(student.compensationDate);
+            const utcOffset = 7 * 60; // UTC+7 is 7 hours ahead of UTC
+            const localOffset = now.getTimezoneOffset();
+            const targetOffset = utcOffset + localOffset;
+            const targetTime = now.getTime() + targetOffset * 60 * 1000;
+            const utcPlus7Date = new Date(targetTime);
+            console.log(moment(utcPlus7Date).format("YYYY-MM-DD HH:mm"))
+            let payload = {
+              status : student.status, // punctual, late,  leave, emergency leave, absent,
+              compensationDate : student.compensationDate ? moment(utcPlus7Date).format("YYYY-MM-DD HH:mm") : '',
+              compensationStartTime : student.compensationStartTime ? moment(student.compensationStartTime).format("HH:mm") : '',
+              compensationEndTime : student.compensationEndTime ? moment(student.compensationEndTime).format("HH:mm") : '',
+            }
+            console.log("payload :",payload)
+            let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/checkin/student/${student.check_in_student_id}`,payload,config)
+            console.log(data)
+            if(data.statusCode !== 200 ){
+              throw { error :data }
+            }
+          },500)          
         }
       Swal.fire({
         icon: "success",
@@ -261,6 +319,7 @@ const coachModules = {
             },
         };
         // let user_detail = JSON.parse(localStorage.getItem("userDetail"));
+        // let localhost = "http://localhost:3000"
         let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/${course_id}/date/${date}`,config)
         // console.log(data)
         if(data.statusCode === 200){
@@ -270,12 +329,12 @@ const coachModules = {
             student.fullname = `${student.firstNameTh} ${student.lastNameTh}`
             student.check_in_student_id = student.checkInStudentId,
             student.menu_compensation_date = false,
+            student.compensationDate = student.compensationDate ? student.compensationDate !== "Invalid date" ? moment(new Date(student.compensationDate)).format("YYYY-MM-DD") : null : null
             student.compensation_date_str = student.compensationDate ? student.compensationDate !== "Invalid date" ?  dateFormatter(new Date(student.compensationDate),"DD MT YYYYT") : null : null
-            student.start_time = student.compensationStartTime ? student.compensationStartTime !== "Invalid date" ? moment(student.compensationStartTime,"HH:mm") : null : null;
-            student.end_time = student.compensationEndTime ? student.compensationStartTime !== "Invalid date" ?  moment(student.compensationEndTime,"HH:mm"): null : null
-            student.class_time = "-"
-            student.check_in_status = student.status,
-            student.remark = ""
+            student.compensationStartTime = student.compensationStartTime ? student.compensationStartTime !== "Invalid date" ? moment(student.compensationStartTime,"HH:mm") : null : null
+            student.compensationEndTime = student.compensationEndTime ? student.compensationStartTime !== "Invalid date" ?  moment(student.compensationEndTime,"HH:mm"): null : null
+            student.files = []
+            student.potentialfiles = []
           });
 
           context.commit("SetStudentCheckIn",data.data)
@@ -347,6 +406,7 @@ const coachModules = {
           },
         };
         let user_detail = JSON.parse(localStorage.getItem("userDetail"));
+        //let localhost = "http://localhost:3000"
         const {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${coach_id}`,config);
         if(data.statusCode == 200){
             let courses_task = [];
@@ -359,31 +419,36 @@ const coachModules = {
                   let end_time = course.period.end;
                   const [start_hours, start_minutes] = start_time.split(":");
                   const [end_hours, end_minutes] = end_time.split(":");
-                  const startDate = new Date(dates);
+                  const startDate = new Date(dates); 
                   startDate.setHours(start_hours);
                   startDate.setMinutes(start_minutes);
                   const endDate = new Date(dates);
                   endDate.setHours(end_hours);
                   endDate.setMinutes(end_minutes);
-                  courses_task.push({
-                    name: course_data.data.data.courseNameTh,
-                    subtitle: course_data.data.data.courseNameEn,
-                    course_id: course.courseId,
-                    time_id : course.timeId,
-                    day_of_week_id: course.dayOfWeekId,
-                    coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
-                    start_date: moment(startDate).format("YYYY-MM-DD"),
-                    start_date_str: startDate.toLocaleDateString("th-TH", options),
-                    start: moment(startDate).format("YYYY-MM-DD HH:mm"),
-                    end: moment(endDate).format("YYYY-MM-DD HH:mm"),
-                    start_time: start_time,
-                    end_time: end_time,
-                    category_name : course_data.data.data.categoryNameTh,
-                    course_img: course_data.data.data.courseImg
-                      ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}`
-                      : "",
-                    course_per_time: course_data.data.data.coursePerTime,
-                  });
+                  if(courses_task.filter(v => v.course_id === course.courseId && v.time_id === course.timeId && v.day_of_week_id === course.dayOfWeekId && v.start_date ===  moment(startDate).format("YYYY-MM-DD") ).length === 0){
+                    courses_task.push({
+                      name: course_data.data.data.courseNameTh,
+                      subtitle: course_data.data.data.courseNameEn,
+                      course_id: course.courseId,
+                      time_id : course.timeId,
+                      day_of_week_id: course.dayOfWeekId,
+                      coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
+                      start_date: moment(startDate).format("YYYY-MM-DD"),
+                      start_date_str: startDate.toLocaleDateString("th-TH", options),
+                      start: moment(startDate).format("YYYY-MM-DD HH:mm"),
+                      end: moment(endDate).format("YYYY-MM-DD HH:mm"),
+                      start_time: start_time,
+                      end_time: end_time,
+                      category_name : course_data.data.data.categoryNameTh,
+                      course_img: course_data.data.data.courseImg
+                        ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}`
+                        : "",
+                      course_per_time: course_data.data.data.coursePerTime,
+                      show_summary : false,
+                      show_assessment : false,
+                      show_assessment_pantential : false,
+                    });
+                  }
                 }
               }
             }

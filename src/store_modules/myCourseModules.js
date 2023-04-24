@@ -239,6 +239,7 @@ const myCourseModules = {
             }
         },
         async GetMyCourseDetail(context, { account_id, course_id }) {
+            console.log("GetMyCourseDetail")
             context.commit("SetCourseListIsLoading", true)
             try {
                 let config = {
@@ -248,7 +249,8 @@ const myCourseModules = {
                         'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/checkin/student/${account_id}/course/${course_id}`, config);
+                let localhost = "http://localhost:3000"
+                let { data } = await axios.get(`${localhost}/api/v1/mycourse/checkin/student/${account_id}/course/${course_id}`, config);
 
                 if (data.statusCode === 200) {
 

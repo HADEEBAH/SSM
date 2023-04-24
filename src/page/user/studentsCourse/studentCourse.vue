@@ -597,14 +597,24 @@ export default {
       { label: "ดี", value: "good", color: "#58A144" },
       { label: "ปรับปรุง", value: "adjust", color: "#FCC419" },
     ],
+    relations: [],
   }),
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     this.show_id = this.$route.params.course_id;
     // this.GetAll(this.user_detail.account_id);
-    for (const item_data of JSON.parse(localStorage.getItem("relations"))) {
+    // console.log(this.user_detail)
+    this.relations = JSON.parse(localStorage.getItem("relations"));
+    if (this.relations.length > 0) {
+      for (const item_data of this.relations) {
+        this.GetMyCourseDetail({
+          account_id: item_data.student.studentId,
+          course_id: this.$route.params.course_id,
+        });
+      }
+    } else {
       this.GetMyCourseDetail({
-        account_id: item_data.student.studentId,
+        account_id: this.user_detail.account_id,
         course_id: this.$route.params.course_id,
       });
     }
@@ -658,6 +668,12 @@ export default {
     //     val["show"] = false;
     //   });
     // }
+
+    if (this.my_course_detail.checkIn.length !== 0) {
+      this.my_course_detail.checkIn.map((val) => {
+        val["show"] = false;
+      });
+    }
 
     // this.check_in_detail = this.my_course_detail.checkIn;
     // if (this.check_in_detail.length !== 0) {

@@ -67,6 +67,7 @@
                 <template  v-if="event_date.length > 0">
                     <div v-for="(event, event_index) in event_date" :key="event_index">
                         <v-card flat>
+                            {{ event }}
                             <v-card-text class="border-2 border-[#ff6b81] " >
                                 <v-row dense>
                                     <v-col cols="auto" class="text-sm text-[#999999]">
@@ -85,7 +86,7 @@
                                         <v-row dense>
                                             <v-col class="text-sm">
                                                 โค้ช: {{ event.coach }} <br>
-                                                <v-btn @click="$router.push({name : 'menageCourseDetail', params:{ courseId : data.event.course_id, timeId : data.event.time_id, dayOfWeekId: data.event.day_of_week_id, date : data.event.start_date }})" small text class="underline pa-0" color="#ff6b81">
+                                                <v-btn @click="$router.push({name : 'menageCourseDetail', params:{ courseId : event.course_id, timeId : event.time_id, dayOfWeekId: event.day_of_week_id, date : event.start_date }})" small text class="underline pa-0" color="#ff6b81">
                                                     ดูรายละเอียดคอร์สเรียน
                                                 </v-btn>
                                             </v-col>
@@ -169,7 +170,12 @@ export default {
                         start_time : start_time,
                         end_time : end_time,
                         color : event.color,
+                        course_id :event.course_id,
+                        time_id :event.time_id,
+                        day_of_week_id :event.day_of_week_id,
+                        start_date : event.start_date
                     })
+                    
                 }
             })
         },
