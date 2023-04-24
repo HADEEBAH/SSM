@@ -102,6 +102,7 @@ const myCourseModules = {
         course_list_is_loading: false,
 
         my_course: [],
+        my_schadule: [],
 
     },
     mutations: {
@@ -127,11 +128,16 @@ const myCourseModules = {
             state.my_course_student_id = payload
         },
         SetMyCourse(state, payload) {
-            // state.my_course = ''
             state.my_course.push(payload)
         },
         SetCourseArrayEmpty(state) {
             state.my_course = []
+        },
+        SetMyschadule(state, payload) {
+            state.my_schadule.push(payload)
+        },
+        SetschaduleArrayEmpty(state) {
+            state.my_schadule = []
         },
     },
     actions: {
@@ -280,6 +286,7 @@ const myCourseModules = {
         async GetMyCourseArrayEmpty(context) {
 
             context.commit("SetCourseArrayEmpty");
+            context.commit("SetschaduleArrayEmpty");
             context.commit("SetStudentsLoading", false)
 
 
