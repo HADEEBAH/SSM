@@ -20,7 +20,7 @@
       </v-card-text>
     </div>
 
-    <div v-else>
+    <div v-if="my_course_detail.countCheckIn >= 1">
       <v-card class="my-10 drop-shadow-lg">
         <v-row dense>
           <!-- img -->
@@ -125,12 +125,12 @@
                 :width="10"
                 color="#ff6b81"
                 :value="
-                  (my_course_detail.dates.count /
+                  (my_course_detail.countCheckIn /
                     my_course_detail.dates.totalDay) *
                   100
                 "
               >
-                {{ my_course_detail.dates.count }} /
+                {{ my_course_detail.countCheckIn }} /
                 {{ my_course_detail.dates.totalDay }} <br />ครั้ง
               </v-progress-circular>
             </v-col>
@@ -149,8 +149,6 @@
           <div class="text-lg pink--text">เลือกทั้งหมด</div>
         </v-col> -->
       </v-row>
-
-      <!-- TODO -->
 
       <div v-for="(item_data, index) in my_course_detail.checkIn" :key="index">
         <v-card class="pa-2" v-if="item_data.type == 'potential'">
@@ -288,14 +286,7 @@
           v-for="(day_list, index_day) in my_course_detail.checkIn"
           :key="index_day"
         >
-          <!-- <pre>{{
-            !day_list.assessment.evolution
-              ? "n000"
-              : day_list.assessment.evolution
-          }}</pre>
-          <pre>{{ day_list.assessment.attachment }}</pre> -->
-
-          <!-- <div v-for="(day_list, index_day) in check_in_detail" :key="index_day"> -->
+          <pre>{{ day_list.status }}</pre>
           <v-card class="my-5 drop-shadow-lg rounded-xl">
             <v-card-text>
               <v-row class="" dense>
@@ -314,6 +305,7 @@
                 </v-col>
 
                 <!-- ตรงเวลา -->
+
                 <v-col cols="4">
                   <v-card flat>
                     <v-card-text
@@ -321,18 +313,14 @@
                       :class="`text-[${
                         check_in_status_options.filter(
                           (v) => v.value === day_list.status
-                        )[0].color
-                      }] bg-[${
-                        check_in_status_options.filter(
-                          (v) => v.value === day_list.status
-                        )[0].bg_color
-                      }]`"
+                        )[0]
+                      }] `"
                     >
                       <span
                         :class="`text-[${
                           check_in_status_options.filter(
                             (v) => v.value === day_list.status
-                          )[0].color
+                          )[0]
                         }]`"
                       >
                         {{
@@ -475,15 +463,9 @@
                             "
                           ></v-img>
                         </div>
-                        <!-- {{
-                          !day_list.assessment.remarkFiles
-                            ? "ไม่มีไฟล์ความคิดเห็น"
-                            : day_list.assessment.remarkFiles
-                        }} -->
                       </v-card-text>
-                    </div>
-                  </v-expand-transition></v-col
-                >
+                    </div> </v-expand-transition
+                ></v-col>
               </v-row>
             </v-card-text>
 
@@ -620,13 +602,12 @@ export default {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     this.show_id = this.$route.params.course_id;
     // this.GetAll(this.user_detail.account_id);
-    // for (const item_data of JSON.parse(localStorage.getItem("relations"))) {
-
-    //   this.GetMyCourseDetail({
-    //     account_id: item_data.student.studentId,
-    //     course_id: this.$route.params.course_id,
-    //   });
-    // }
+    for (const item_data of JSON.parse(localStorage.getItem("relations"))) {
+      this.GetMyCourseDetail({
+        account_id: item_data.student.studentId,
+        course_id: this.$route.params.course_id,
+      });
+    }
 
     // this.relations = JSON.parse(localStorage.getItem("relations"));
     // if (
@@ -658,25 +639,25 @@ export default {
     //   }
     // }
 
-    if (this.relations.length > 0) {
-      for (const item_data of this.relations) {
-        this.GetMyCourseDetail({
-          account_id: item_data.student.studentId,
-          course_id: this.$route.params.course_id,
-        });
-      }
-    } else {
-      this.GetMyCourseDetail({
-        account_id: this.user_detail.account_id,
-        course_id: this.$route.params.course_id,
-      });
-    }
+    // if (this.relations.length > 0) {
+    //   for (const item_data of this.relations) {
+    //     this.GetMyCourseDetail({
+    //       account_id: item_data.student.studentId,
+    //       course_id: this.$route.params.course_id,
+    //     });
+    //   }
+    // } else {
+    //   this.GetMyCourseDetail({
+    //     account_id: this.user_detail.account_id,
+    //     course_id: this.$route.params.course_id,
+    //   });
+    // }
 
-    if (this.my_course_detail.checkIn.length !== 0) {
-      this.my_course_detail.checkIn.map((val) => {
-        val["show"] = false;
-      });
-    }
+    // if (this.my_course_detail.checkIn.length !== 0) {
+    //   this.my_course_detail.checkIn.map((val) => {
+    //     val["show"] = false;
+    //   });
+    // }
 
     // this.check_in_detail = this.my_course_detail.checkIn;
     // if (this.check_in_detail.length !== 0) {
@@ -689,6 +670,42 @@ export default {
 
     // this.GetMyCourseDetail({account_id : this.item_data.student.studentId, course_id: this.$route.params.course_id});
     // this.GetMyCourseDetail(this.show_id);
+
+    this.relations = JSON.parse(localStorage.getItem("relations"));
+    // if (this.relations.length > 0) {
+    //   for (const item_data of this.relations) {
+    //     this.GetMyCourseDetail({
+    //       account_id: item_data.student.studentId,
+    //       course_id: this.$route.params.course_id,
+    //     });
+    //   }
+    // } else {
+    //   this.GetMyCourseDetail({
+    //     account_id: this.user_detail.account_id,
+    //     course_id: this.$route.params.course_id,
+    //   });
+    // }
+
+    // if (this.user_detail.roles.includes("R_4")) {
+    //   this.GetMyCourseDetail({
+    //     account_id: this.user_detail.account_id,
+    //     course_id: this.$route.params.course_id,
+    //   });
+    // } else if (this.user_detail.roles.includes("R_5")) {
+    //   if (this.relations.length > 0) {
+    //     for (const item_data of this.relations) {
+    //       this.GetMyCourseDetail({
+    //         account_id: item_data.student.studentId,
+    //         course_id: this.$route.params.course_id,
+    //       });
+    //     }
+    //   }
+    // } else {
+    //   this.GetMyCourseDetail({
+    //     account_id: this.user_detail.account_id,
+    //     course_id: this.$route.params.course_id,
+    //   });
+    // }
   },
   mounted() {
     this.$store.dispatch(
