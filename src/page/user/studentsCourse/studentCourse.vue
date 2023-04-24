@@ -1,14 +1,6 @@
 <template>
   <v-container>
     <loading-overlay :loading="course_list_is_loading"></loading-overlay>
-
-    <pre>{{ my_course_detail }}</pre>
-    <!-- {{ check_in_detail }} -->
-    <!-- <pre>{{ day_list }}</pre> -->
-
-    <!-- <div v-if="type_selected == 'students_course'"> -->
-    <!-- @click="$router.push({ name: 'StudentCourse', params:{course_id: item.courseId }})" -->
-
     <div v-if="my_course_detail.countCheckIn == 0">
       <v-card-text
         class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"

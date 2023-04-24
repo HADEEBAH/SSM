@@ -31,34 +31,34 @@
         </v-row>
       </v-card-title>
       <!-- <v-sheet height="400"> -->
-        <v-calendar
-          ref="calendar"
-          color="#ff6b81"
-          :type="type"
-          v-model="focus"
-          :events="events"
-          event-text-color="#000000"
-          event-overlap-mode="column"
-          :first-interval="7"
-          :interval-count="12"
-          :event-overlap-threshold="30"
-          @click:event="selectedDate($event)"
-        >
-          <template v-if="type === 'week'" v-slot:day-body="{ week }">
-            <div
-              class="v-current-time"
-              :class="{ first: week[0] }"
-              :style="{ top: nowY }"
-            ></div>
-          </template>
-          <!-- <template v-else v-slot:day-header="{ present }">
+      <v-calendar
+        ref="calendar"
+        color="#ff6b81"
+        :type="type"
+        v-model="focus"
+        :events="events"
+        event-text-color="#000000"
+        event-overlap-mode="column"
+        :first-interval="1"
+        :interval-count="24"
+        :event-overlap-threshold="30"
+        @click:event="selectedDate($event)"
+      >
+        <template v-if="type === 'week'" v-slot:day-body="{ week }">
+          <div
+            class="v-current-time"
+            :class="{ first: week[0] }"
+            :style="{ top: nowY }"
+          ></div>
+        </template>
+        <!-- <template v-else v-slot:day-header="{ present }">
               <template
                 v-if="present"
               >
                 Today
               </template>
             </template> -->
-        </v-calendar>
+      </v-calendar>
       <!-- </v-sheet> -->
     </v-card>
     <!-- MONTH -->

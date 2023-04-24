@@ -249,8 +249,8 @@ const myCourseModules = {
                         'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                let localhost = "http://localhost:3000"
-                let { data } = await axios.get(`${localhost}/api/v1/mycourse/checkin/student/${account_id}/course/${course_id}`, config);
+
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/checkin/student/${account_id}/course/${course_id}`, config);
 
                 if (data.statusCode === 200) {
 

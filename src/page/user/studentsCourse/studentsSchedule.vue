@@ -3,8 +3,6 @@
     <loading-overlay :loading="student_is_loading"></loading-overlay>
     <div class="mx-10 my-5">
       <label class="text-xl font-bold">ข้อมูลตารางเรียน</label>
-      {{ my_course }}
-      {{ student_data }}
       <v-row dense class="my-3">
         <v-col
           cols="4"
