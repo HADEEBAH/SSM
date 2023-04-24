@@ -231,7 +231,9 @@
                   </v-row>
                   <v-row>
                     <v-col>ไฟล์แนบ : 
-                      <a class="text-[#ff6b81]" :href="att.attFiles" v-for="(att, index_att) in coach_check_in.attachment" :key="`${index_att}-att`"> ไฟล์ {{ index_att+1 }} </a>
+                      <a class="text-[#ff6b81]" 
+                       v-for="(att, index_att) in coach_check_in.attachment" 
+                       :key="`${index_att}-att`"> ไฟล์ {{ index_att+1 }} </a>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -732,7 +734,7 @@
                               <v-img height="35" width="26" src="../../../assets/coachLeave/file-pdf.png"/>
                               </v-col>
                               <v-col  class="px-2">
-                                  <span class="font-bold">{{ file.attId }}</span><br>
+                                  <span class="font-bold">{{ `ไฟล์ ${index+1}`}}</span><br>
                                   <!-- <span class="text-caption">ขนาดไฟล์ : {{ (0 / 1000000).toFixed(2) }} MB</span> -->
                               </v-col>
                               <!-- <v-col cols="auto" class="pl-2">
