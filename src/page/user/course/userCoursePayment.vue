@@ -56,39 +56,46 @@
 </template>
 
 <script>
-  const Buffer = require('buffer').Buffer;
-  export default {
-    name: "userCoursePayment",
-    components: {},
-    data: () => ({
-      payload : "",
-      paymentStatus : ""
-    }),
-    created() {
-      const base64Str =  this.$route.query.payload
-      const objStr = Buffer.from(base64Str, 'base64').toString('utf-8');
-      this.payload = JSON.parse(objStr);
-      console.log(this.payload)
-    },
-    mounted() {
-      this.paymentStatus = this.payload.responseMessage === 'Success' ? "ชำระเงินสำเร็จ" : this.payload.responseMessage === 'Cancel' ?  "รอการชำระ" : "ชำระเงินไม่สำเร็จ"
-    },
-    watch: {},
-    computed: {},
-    methods: {
-      formatDate(date_str) {
-          const year = date_str.substring(0, 4);
-          const month = date_str.substring(4, 6);
-          const day = date_str.substring(6, 8);
-          return `${day}/${month}/${year}`;
-      },
-      formatTime(time_str) {
-          const hour = time_str.substring(0, 2);
-          const minute = time_str.substring(2, 4);
-          const second = time_str.substring(4, 6);
-          return `${hour}:${minute}:${second}`;
-      }
-    },
-  };
+    const Buffer = require('buffer').Buffer;
+    export default {
+        name: "userCoursePayment",
+        components: {},
+        data: () => ({
+        payload : "",
+        paymentStatus : ""
+        }),
+        created() {
+        const base64Str =  this.$route.query.payload
+        const objStr = Buffer.from(base64Str, 'base64').toString('utf-8');
+        this.payload = JSON.parse(objStr);
+        console.log(this.payload)
+        },
+        beforeDestroy() {
+            window.removeEventListener('beforeunload',this.preventNavigation);
+        },
+        mounted() {
+            window.addEventListener('beforeunload',this.preventNavigation);
+            this.paymentStatus = this.payload.responseMessage === 'Success' ? "ชำระเงินสำเร็จ" : this.payload.responseMessage === 'Cancel' ?  "รอการชำระ" : "ชำระเงินไม่สำเร็จ"
+        },
+        watch: {},
+        computed: {},
+        methods: {
+        preventNavigation() {
+            this.$router.replace({ name: 'UserKingdom' });
+        },
+        formatDate(date_str) {
+            const year = date_str.substring(0, 4);
+            const month = date_str.substring(4, 6);
+            const day = date_str.substring(6, 8);
+            return `${day}/${month}/${year}`;
+        },
+        formatTime(time_str) {
+            const hour = time_str.substring(0, 2);
+            const minute = time_str.substring(2, 4);
+            const second = time_str.substring(4, 6);
+            return `${hour}:${minute}:${second}`;
+        }
+        },
+    };
 </script>
   
