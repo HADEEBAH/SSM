@@ -63,22 +63,19 @@ const coachModules = {
           setTimeout(async()=>{
             let payload = {
               status : student.check_in_status, // punctual, late,  leave, emergency leave, absent,
-              compensation_date : student.compensation_date,
-              compensation_start_time : student.start_time,
-              compensation_end_time : student.end_time,
-              evolution :student.potential.evolution ,
-              interest : student.potential.interest ,
-              remark: student.potential.remark,
+              evolution :student.potential.evolution ? student.potential.evolution : '' ,
+              interest : student.potential.interest ? student.potential.interest : '' ,
+              remark: student.potential.remark ? student.potential.remark : '' ,
             }
             let payloadData = new FormData()
-             
             if(student.potentialfiles){
               for(const file of student.potentialfiles){
                 payloadData.append(`img_url`, file);
               }
             }
+            console.log(payload)
             payloadData.append("payload",JSON.stringify(payload))
-            let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/potential/${student.check_in_student_id}`,payloadData ,config)
+            let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/potential/${student.potential.checkInPotentialId}`,payloadData ,config)
             if(data.statusCode == 200){
               console.log("patch",data)
             }else{
@@ -115,9 +112,9 @@ const coachModules = {
               compensation_date : student.compensation_date,
               compensation_start_time : student.start_time,
               compensation_end_time : student.end_time,
-              evolution :student.assessment.evolution ,
-              interest : student.assessment.interest ,
-              remark: student.assessment.remark,
+              evolution :student.assessment.evolution  ?  student.assessment.evolution : '',
+              interest : student.assessment.interest ?  student.assessment.interest : '' ,
+              remark: student.assessment.remark ?  student.assessment.remark : '',
               assessmentStudentsId : student.assessment.assessmentStudentsId,
             }
             let payloadData = new FormData()
@@ -414,42 +411,45 @@ const coachModules = {
               const course_data = await axios.get( `${process.env.VUE_APP_URL}/api/v1/course/detail/${course.courseId}` );
               // console.log(course_data.data.data);
               if (course_data.data.statusCode === 200) {
-                for (const dates of course.dates.date) {
-                  let start_time = course.period.start;
-                  let end_time = course.period.end;
-                  const [start_hours, start_minutes] = start_time.split(":");
-                  const [end_hours, end_minutes] = end_time.split(":");
-                  const startDate = new Date(dates); 
-                  startDate.setHours(start_hours);
-                  startDate.setMinutes(start_minutes);
-                  const endDate = new Date(dates);
-                  endDate.setHours(end_hours);
-                  endDate.setMinutes(end_minutes);
-                  if(courses_task.filter(v => v.course_id === course.courseId && v.time_id === course.timeId && v.day_of_week_id === course.dayOfWeekId && v.start_date ===  moment(startDate).format("YYYY-MM-DD") ).length === 0){
-                    courses_task.push({
-                      name: course_data.data.data.courseNameTh,
-                      subtitle: course_data.data.data.courseNameEn,
-                      course_id: course.courseId,
-                      time_id : course.timeId,
-                      day_of_week_id: course.dayOfWeekId,
-                      coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
-                      start_date: moment(startDate).format("YYYY-MM-DD"),
-                      start_date_str: startDate.toLocaleDateString("th-TH", options),
-                      start: moment(startDate).format("YYYY-MM-DD HH:mm"),
-                      end: moment(endDate).format("YYYY-MM-DD HH:mm"),
-                      start_time: start_time,
-                      end_time: end_time,
-                      category_name : course_data.data.data.categoryNameTh,
-                      course_img: course_data.data.data.courseImg
-                        ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}`
-                        : "",
-                      course_per_time: course_data.data.data.coursePerTime,
-                      show_summary : false,
-                      show_assessment : false,
-                      show_assessment_pantential : false,
-                    });
+                if(course.dates.date){
+                  for (const dates of course.dates.date) {
+                    let start_time = course.period.start;
+                    let end_time = course.period.end;
+                    const [start_hours, start_minutes] = start_time.split(":");
+                    const [end_hours, end_minutes] = end_time.split(":");
+                    const startDate = new Date(dates); 
+                    startDate.setHours(start_hours);
+                    startDate.setMinutes(start_minutes);
+                    const endDate = new Date(dates);
+                    endDate.setHours(end_hours);
+                    endDate.setMinutes(end_minutes);
+                    if(courses_task.filter(v => v.course_id === course.courseId && v.time_id === course.timeId && v.day_of_week_id === course.dayOfWeekId && v.start_date ===  moment(startDate).format("YYYY-MM-DD") ).length === 0){
+                      courses_task.push({
+                        name: course_data.data.data.courseNameTh,
+                        subtitle: course_data.data.data.courseNameEn,
+                        course_id: course.courseId,
+                        time_id : course.timeId,
+                        day_of_week_id: course.dayOfWeekId,
+                        coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
+                        start_date: moment(startDate).format("YYYY-MM-DD"),
+                        start_date_str: startDate.toLocaleDateString("th-TH", options),
+                        start: moment(startDate).format("YYYY-MM-DD HH:mm"),
+                        end: moment(endDate).format("YYYY-MM-DD HH:mm"),
+                        start_time: start_time,
+                        end_time: end_time,
+                        category_name : course_data.data.data.categoryNameTh,
+                        course_img: course_data.data.data.courseImg
+                          ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}`
+                          : "",
+                        course_per_time: course_data.data.data.coursePerTime,
+                        show_summary : false,
+                        show_assessment : false,
+                        show_assessment_pantential : false,
+                      });
+                    }
                   }
                 }
+              
               }
             }
             context.commit("SetMyCourses", courses_task);
