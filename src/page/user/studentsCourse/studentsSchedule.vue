@@ -3,7 +3,6 @@
     <loading-overlay :loading="student_is_loading"></loading-overlay>
     <div class="mx-10 my-5">
       <label class="text-xl font-bold">ข้อมูลตารางเรียน</label>
-
       <v-row dense class="my-3">
         <v-col
           cols="4"
@@ -45,7 +44,7 @@
                   item-value="studentId"
                   dense
                   filled
-                  label="เลือกนักเรียนของได้ที่นี้"
+                  label="เลือกนักเรียนของคุณได้ที่นี้"
                   @change="searchStudentCourse(search_course)"
                 ></v-autocomplete>
               </v-col>
@@ -268,39 +267,97 @@
       <!-- PAGE 2 -->
       <v-expand-x-transition transition="scale-transition">
         <div v-if="type_selected == 'students_schedule'">
-          <v-row class="mb-2">
-            <v-col cols="12" align="center">
-              <v-card flat width="340px">
-                <v-card-text class="pa-2 border-2 border-[#ff6b81] rounded-lg">
-                  <v-row dense class="d-flex justify-center">
-                    <v-col
-                      cols="auto"
-                      v-for="(time, time_index) in time_frame_list"
-                      :key="`${time_index}-time`"
-                    >
-                      <v-btn
-                        @click="time_frame = time.value"
-                        depressed
-                        :dark="time_frame === time.value"
-                        :color="
-                          time_frame === time.value ? '#ff6b81' : '#F5F5F5'
-                        "
-                        >{{ time.label }}</v-btn
+          <!-- Role parent -->
+          <div v-if="data_local.roles.includes('R_4')">
+            <v-row class="my-5">
+              <v-col cols="12">
+                <v-autocomplete
+                  v-model="search_schadule"
+                  :items="students"
+                  item-text="studentFirstnameTh"
+                  item-value="studentId"
+                  dense
+                  filled
+                  label="เลือกนักเรียนของคุณได้ที่นี้"
+                  @change="searchStudentSchadule(search_schadule)"
+                ></v-autocomplete>
+              </v-col>
+            </v-row>
+
+            <v-row class="mb-2">
+              <v-col cols="12" align="center">
+                <v-card flat width="340px">
+                  <v-card-text
+                    class="pa-2 border-2 border-[#ff6b81] rounded-lg"
+                  >
+                    <v-row dense class="d-flex justify-center">
+                      <v-col
+                        cols="auto"
+                        v-for="(time, time_index) in time_frame_list"
+                        :key="`${time_index}-time`"
                       >
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-card>
-            </v-col>
-          </v-row>
-          <diV>
-            <template>
-              <calendarStudent
-                :events="itemTime.dates"
-                :type="time_frame"
-              ></calendarStudent>
-            </template>
-          </diV>
+                        <v-btn
+                          @click="time_frame = time.value"
+                          depressed
+                          :dark="time_frame === time.value"
+                          :color="
+                            time_frame === time.value ? '#ff6b81' : '#F5F5F5'
+                          "
+                          >{{ time.label }}</v-btn
+                        >
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+            <diV>
+              <template>
+                <calendarStudent
+                  :events="itemTime.dates"
+                  :type="time_frame"
+                ></calendarStudent>
+              </template>
+            </diV>
+          </div>
+          <!-- Role Student -->
+          <div v-if="data_local.roles.includes('R_5')">
+            <v-row class="mb-2">
+              <v-col cols="12" align="center">
+                <v-card flat width="340px">
+                  <v-card-text
+                    class="pa-2 border-2 border-[#ff6b81] rounded-lg"
+                  >
+                    <v-row dense class="d-flex justify-center">
+                      <v-col
+                        cols="auto"
+                        v-for="(time, time_index) in time_frame_list"
+                        :key="`${time_index}-time`"
+                      >
+                        <v-btn
+                          @click="time_frame = time.value"
+                          depressed
+                          :dark="time_frame === time.value"
+                          :color="
+                            time_frame === time.value ? '#ff6b81' : '#F5F5F5'
+                          "
+                          >{{ time.label }}</v-btn
+                        >
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+            <diV>
+              <template>
+                <calendarStudent
+                  :events="itemTime.dates"
+                  :type="time_frame"
+                ></calendarStudent>
+              </template>
+            </diV>
+          </div>
         </div>
       </v-expand-x-transition>
 
@@ -308,220 +365,417 @@
       <v-expand-x-transition transition="scale-transition">
         <div v-if="type_selected == 'students_bookedcourse'">
           <!-- <pre>{{ profile_booked }}</pre> -->
-          <div
-            v-for="(item_booked, index_booked) in profile_booked"
-            :key="index_booked"
-          >
-            <v-card
-              v-if="profile_booked.length != '0'"
-              @click="showCard(index, item_booked)"
-              class="my-5 cursor-pointer"
+
+          <!-- Role Parent -->
+          <div v-if="data_local.roles.includes('R_4')">
+            <v-row class="my-5">
+              <v-col cols="12">
+                <v-autocomplete
+                  v-model="search_booked"
+                  :items="students"
+                  item-text="studentFirstnameTh"
+                  item-value="studentId"
+                  dense
+                  filled
+                  label="เลือกนักเรียนของคุณได้ที่นี้"
+                  @change="searchStudentBooked(search_booked)"
+                ></v-autocomplete>
+              </v-col>
+            </v-row>
+            <div
+              v-for="(item_booked, index_booked) in profile_booked"
+              :key="index_booked"
             >
-              <v-card-text>
-                <div>
-                  <v-row dense>
-                    <!-- img -->
-                    <v-col cols="12" sm="2">
-                      <img
-                        :src="
-                          item_booked.courseImg
-                            ? item_booked.courseImg
-                            : `../../../assets/student_course/download.png`
-                        "
-                      />
-                    </v-col>
-                    <!-- detail -->
-                    <v-col cols="12" sm="6">
-                      <!-- <v-row dense>
-                        <v-col>
-                          {{ item_booked.courseName }}
+              <v-card
+                v-if="profile_booked.length != '0'"
+                @click="showCard(index, item_booked)"
+                class="my-5 cursor-pointer"
+              >
+                <v-card-text>
+                  <div>
+                    <v-row dense>
+                      <!-- img -->
+                      <v-col cols="12" sm="2">
+                        <img
+                          :src="
+                            item_booked.courseImg
+                              ? item_booked.courseImg
+                              : `../../../assets/student_course/download.png`
+                          "
+                        />
+                      </v-col>
+                      <!-- detail -->
+                      <v-col cols="12" sm="6">
+                        <v-col class="text-lg font-bold">
+                          {{
+                            item_booked.courseNameTh == ""
+                              ? "-"
+                              : item_booked.courseNameTh
+                          }}
+
+                          ({{
+                            item_booked.courseNameEn == ""
+                              ? "-"
+                              : item_booked.courseNameEn
+                          }})
                         </v-col>
-                      </v-row> -->
 
-                      <v-col class="text-lg font-bold">
-                        {{
-                          item_booked.courseNameTh == ""
-                            ? "-"
-                            : item_booked.courseNameTh
-                        }}
+                        <v-col class="text-slate-400">
+                          <span class="mdi mdi-account">โค้ช :</span>
 
-                        ({{
-                          item_booked.courseNameEn == ""
-                            ? "-"
-                            : item_booked.courseNameEn
-                        }})
+                          {{
+                            !item_booked.coachData.data.data.firstNameTh
+                              ? "-"
+                              : item_booked.coachData.data.data.firstNameTh
+                          }}
+                          {{
+                            !item_booked.coachData.data.data.lastNameTh
+                              ? "-"
+                              : item_booked.coachData.data.data.lastNameTh
+                          }}
+                        </v-col>
+
+                        <v-col class="text-slate-400">
+                          <span class="mdi mdi-account">ผู้เรียน :</span>
+                          {{
+                            !item_booked.StudentData.data.data.firstNameTh
+                              ? "-"
+                              : item_booked.StudentData.data.data.firstNameTh
+                          }}
+                          {{
+                            !item_booked.StudentData.data.data.lastNameTh
+                              ? "-"
+                              : item_booked.StudentData.data.data.lastNameTh
+                          }}
+                        </v-col>
+
+                        <v-col class="text-slate-400">
+                          <span class="mdi mdi-account">ทำรายการโดย :</span>
+
+                          {{
+                            !item_booked.createdByData.data.data.firstNameTh
+                              ? "-"
+                              : item_booked.createdByData.data.data.firstNameTh
+                          }}
+                          {{
+                            !item_booked.createdByData.data.data.lastNameTh
+                              ? "-"
+                              : item_booked.createdByData.data.data.lastNameTh
+                          }}
+                        </v-col>
+
+                        <v-col>
+                          <v-card color="yellow" class="rounded-lg text-center">
+                            {{
+                              dayOfWeekName(
+                                item_booked.dayOfWeekName.split(",")
+                              )
+                            }}
+                            {{ item_booked.start }} - {{ item_booked.end }} น.
+                          </v-card>
+                        </v-col>
+
+                        <v-row dense>
+                          <v-col cols="auto">
+                            <v-card outlined>
+                              <v-card-text class="py-0"> </v-card-text>
+                            </v-card>
+                          </v-col>
+                        </v-row>
                       </v-col>
-
-                      <v-col class="text-slate-400">
-                        <span class="mdi mdi-account">โค้ช :</span>
-                        <!-- {{
-                          !item_booked.coachName ? "-" : item_booked.coachName
-                        }} -->
-                        {{
-                          !item_booked.coachData.data.data.firstNameTh
-                            ? "-"
-                            : item_booked.coachData.data.data.firstNameTh
-                        }}
-                        {{
-                          !item_booked.coachData.data.data.lastNameTh
-                            ? "-"
-                            : item_booked.coachData.data.data.lastNameTh
-                        }}
+                      <!-- circle -->
+                      <v-col
+                        cols="12"
+                        sm="4"
+                        class="d-flex align-center"
+                        align="center"
+                      >
+                        <v-row>
+                          <v-col>
+                            <v-chip color="#d9ead3" text-color="green">
+                              <span>{{
+                                item_booked.status === "waiting"
+                                  ? "รอการติดต่อ"
+                                  : item_booked.status
+                              }}</span>
+                            </v-chip>
+                          </v-col>
+                        </v-row>
                       </v-col>
-
-                      <v-col class="text-slate-400">
-                        <span class="mdi mdi-account">ผู้เรียน :</span>
-                        {{
-                          !item_booked.StudentData.data.data.firstNameTh
-                            ? "-"
-                            : item_booked.StudentData.data.data.firstNameTh
-                        }}
-                        {{
-                          !item_booked.StudentData.data.data.lastNameTh
-                            ? "-"
-                            : item_booked.StudentData.data.data.lastNameTh
-                        }}
-                      </v-col>
-
-                      <v-col class="text-slate-400">
-                        <span class="mdi mdi-account">ทำรายการโดย :</span>
-
-                        {{
-                          !item_booked.createdByData.data.data.firstNameTh
-                            ? "-"
-                            : item_booked.createdByData.data.data.firstNameTh
-                        }}
-                        {{
-                          !item_booked.createdByData.data.data.lastNameTh
-                            ? "-"
-                            : item_booked.createdByData.data.data.lastNameTh
-                        }}
-                      </v-col>
-
-                      <v-col>
-                        <!-- v-for="(day, index_day) in dayOfWeekName" :key="index_day" -->
-                        <v-card color="yellow" class="rounded-lg text-center">
+                    </v-row>
+                  </div>
+                  <div
+                    v-if="activeCard === index && !course_is_loading"
+                    class="mt-3"
+                  >
+                    <v-card>
+                      <v-row dense class="pa-3">
+                        <v-col
+                          cols="12"
+                          md="12"
+                          sm="12"
+                          class="text-lg font-bold"
+                        >
+                          {{
+                            `${course_data.course_name_th} (${course_data.course_name_en})`
+                          }}
+                        </v-col>
+                        <v-col cols="12" md="12" sm="12">
+                          <span
+                            class="mdi mdi-calendar-today"
+                            style="color: #ff6b81"
+                          ></span>
                           {{
                             dayOfWeekName(item_booked.dayOfWeekName.split(","))
                           }}
-                          {{ item_booked.start }} - {{ item_booked.end }} น.
-                        </v-card>
-                        <!-- {{ item.courseNameEn }} -->
-                      </v-col>
+                        </v-col>
 
-                      <v-row dense>
-                        <v-col cols="auto">
-                          <v-card outlined>
-                            <v-card-text class="py-0">
-                              <!-- {{` ${dayOfWeekName(item_booked.dayOfWeekName.split(","))} ${item_booked.start}-${item_booked.end}น.` }}  -->
-                            </v-card-text>
+                        <v-col cols="12" md="12" sm="12">
+                          <span
+                            class="mdi mdi-clock-outline"
+                            style="color: #ff6b81"
+                          ></span>
+                          {{ course_data.course_hours }} ชม. / ครั้ง
+                        </v-col>
+
+                        <v-col cols="12" md="12" sm="12" class="text-lg">
+                          {{ course_data.detail }}
+                        </v-col>
+                        <v-col cols="12" md="12" sm="12">
+                          <div class="mt-8">
+                            <label-custom
+                              text="Music performance"
+                            ></label-custom>
+                          </div>
+                          <v-divider class=""></v-divider>
+                          <span class="pa-2">
+                            {{ course_data.music_performance }}
+                          </span>
+                        </v-col>
+
+                        <v-col cols="12" md="12" sm="12">
+                          <div class="mt-8">
+                            <label-custom text="Certification"></label-custom>
+                          </div>
+                          <v-divider class=""></v-divider>
+                          <span class="pa-2">
+                            {{ course_data.music_performance }}
+                          </span>
+                        </v-col>
+                      </v-row>
+                    </v-card>
+                  </div>
+                </v-card-text>
+              </v-card>
+            </div>
+            <v-card-text
+              class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
+              v-if="profile_booked.length == '0'"
+            >
+              <span class="text-lg font-bold">
+                <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                ไม่พบข้อมูลการจอง
+              </span>
+            </v-card-text>
+          </div>
+          <!-- Role student -->
+          <div v-if="data_local.roles.includes('R_5')">
+            <div
+              v-for="(item_booked, index_booked) in profile_booked"
+              :key="index_booked"
+            >
+              <v-card
+                v-if="profile_booked.length != '0'"
+                @click="showCard(index, item_booked)"
+                class="my-5 cursor-pointer"
+              >
+                <v-card-text>
+                  <div>
+                    <v-row dense>
+                      <!-- img -->
+                      <v-col cols="12" sm="2">
+                        <img
+                          :src="
+                            item_booked.courseImg
+                              ? item_booked.courseImg
+                              : `../../../assets/student_course/download.png`
+                          "
+                        />
+                      </v-col>
+                      <!-- detail -->
+                      <v-col cols="12" sm="6">
+                        <v-col class="text-lg font-bold">
+                          {{
+                            item_booked.courseNameTh == ""
+                              ? "-"
+                              : item_booked.courseNameTh
+                          }}
+
+                          ({{
+                            item_booked.courseNameEn == ""
+                              ? "-"
+                              : item_booked.courseNameEn
+                          }})
+                        </v-col>
+
+                        <v-col class="text-slate-400">
+                          <span class="mdi mdi-account">โค้ช :</span>
+
+                          {{
+                            !item_booked.coachData.data.data.firstNameTh
+                              ? "-"
+                              : item_booked.coachData.data.data.firstNameTh
+                          }}
+                          {{
+                            !item_booked.coachData.data.data.lastNameTh
+                              ? "-"
+                              : item_booked.coachData.data.data.lastNameTh
+                          }}
+                        </v-col>
+
+                        <v-col class="text-slate-400">
+                          <span class="mdi mdi-account">ผู้เรียน :</span>
+                          {{
+                            !item_booked.StudentData.data.data.firstNameTh
+                              ? "-"
+                              : item_booked.StudentData.data.data.firstNameTh
+                          }}
+                          {{
+                            !item_booked.StudentData.data.data.lastNameTh
+                              ? "-"
+                              : item_booked.StudentData.data.data.lastNameTh
+                          }}
+                        </v-col>
+
+                        <v-col class="text-slate-400">
+                          <span class="mdi mdi-account">ทำรายการโดย :</span>
+
+                          {{
+                            !item_booked.createdByData.data.data.firstNameTh
+                              ? "-"
+                              : item_booked.createdByData.data.data.firstNameTh
+                          }}
+                          {{
+                            !item_booked.createdByData.data.data.lastNameTh
+                              ? "-"
+                              : item_booked.createdByData.data.data.lastNameTh
+                          }}
+                        </v-col>
+
+                        <v-col>
+                          <v-card color="yellow" class="rounded-lg text-center">
+                            {{
+                              dayOfWeekName(
+                                item_booked.dayOfWeekName.split(",")
+                              )
+                            }}
+                            {{ item_booked.start }} - {{ item_booked.end }} น.
                           </v-card>
                         </v-col>
-                      </v-row>
-                    </v-col>
-                    <!-- circle -->
-                    <v-col
-                      cols="12"
-                      sm="4"
-                      class="d-flex align-center"
-                      align="center"
-                    >
-                      <v-row>
-                        <v-col>
-                          <v-chip color="#d9ead3" text-color="green">
-                            <span>{{
-                              item_booked.status === "waiting"
-                                ? "รอการติดต่อ"
-                                : item_booked.status
-                            }}</span>
-                          </v-chip>
-                          <!-- <v-progress-circular
-                          :size="90"
-                          :width="15"
-                          value="booked"
-                          color="#DBDBDB"
-                          ><span class="text-pink-500">
-                            {{ item_booked.status === 'waiting' ? "รอการติดต่อ" : item_booked.status }}</span
-                          ></v-progress-circular> -->
-                        </v-col>
-                      </v-row>
-                    </v-col>
-                  </v-row>
-                </div>
-                <div
-                  v-if="activeCard === index && !course_is_loading"
-                  class="mt-3"
-                >
-                  <v-card>
-                    <v-row dense class="pa-3">
+
+                        <v-row dense>
+                          <v-col cols="auto">
+                            <v-card outlined>
+                              <v-card-text class="py-0"> </v-card-text>
+                            </v-card>
+                          </v-col>
+                        </v-row>
+                      </v-col>
+                      <!-- circle -->
                       <v-col
                         cols="12"
-                        md="12"
-                        sm="12"
-                        class="text-lg font-bold"
+                        sm="4"
+                        class="d-flex align-center"
+                        align="center"
                       >
-                        {{
-                          `${course_data.course_name_th} (${course_data.course_name_en})`
-                        }}
-                      </v-col>
-                      <v-col cols="12" md="12" sm="12">
-                        <span
-                          class="mdi mdi-calendar-today"
-                          style="color: #ff6b81"
-                        ></span>
-                        {{
-                          dayOfWeekName(item_booked.dayOfWeekName.split(","))
-                        }}
-                      </v-col>
-
-                      <v-col cols="12" md="12" sm="12">
-                        <span
-                          class="mdi mdi-clock-outline"
-                          style="color: #ff6b81"
-                        ></span>
-                        {{ course_data.course_hours }} ชม. / ครั้ง
-                      </v-col>
-
-                      <v-col cols="12" md="12" sm="12" class="text-lg">
-                        {{ course_data.detail }}
-                      </v-col>
-                      <v-col cols="12" md="12" sm="12">
-                        <div class="mt-8">
-                          <label-custom text="Music performance"></label-custom>
-                        </div>
-                        <v-divider class=""></v-divider>
-                        <span class="pa-2">
-                          {{ course_data.music_performance }}
-                        </span>
-                      </v-col>
-
-                      <v-col cols="12" md="12" sm="12">
-                        <div class="mt-8">
-                          <label-custom text="Certification"></label-custom>
-                        </div>
-                        <v-divider class=""></v-divider>
-                        <span class="pa-2">
-                          {{ course_data.music_performance }}
-                        </span>
+                        <v-row>
+                          <v-col>
+                            <v-chip color="#d9ead3" text-color="green">
+                              <span>{{
+                                item_booked.status === "waiting"
+                                  ? "รอการติดต่อ"
+                                  : item_booked.status
+                              }}</span>
+                            </v-chip>
+                          </v-col>
+                        </v-row>
                       </v-col>
                     </v-row>
-                  </v-card>
-                </div>
-              </v-card-text>
-            </v-card>
+                  </div>
+                  <div
+                    v-if="activeCard === index && !course_is_loading"
+                    class="mt-3"
+                  >
+                    <v-card>
+                      <v-row dense class="pa-3">
+                        <v-col
+                          cols="12"
+                          md="12"
+                          sm="12"
+                          class="text-lg font-bold"
+                        >
+                          {{
+                            `${course_data.course_name_th} (${course_data.course_name_en})`
+                          }}
+                        </v-col>
+                        <v-col cols="12" md="12" sm="12">
+                          <span
+                            class="mdi mdi-calendar-today"
+                            style="color: #ff6b81"
+                          ></span>
+                          {{
+                            dayOfWeekName(item_booked.dayOfWeekName.split(","))
+                          }}
+                        </v-col>
+
+                        <v-col cols="12" md="12" sm="12">
+                          <span
+                            class="mdi mdi-clock-outline"
+                            style="color: #ff6b81"
+                          ></span>
+                          {{ course_data.course_hours }} ชม. / ครั้ง
+                        </v-col>
+
+                        <v-col cols="12" md="12" sm="12" class="text-lg">
+                          {{ course_data.detail }}
+                        </v-col>
+                        <v-col cols="12" md="12" sm="12">
+                          <div class="mt-8">
+                            <label-custom
+                              text="Music performance"
+                            ></label-custom>
+                          </div>
+                          <v-divider class=""></v-divider>
+                          <span class="pa-2">
+                            {{ course_data.music_performance }}
+                          </span>
+                        </v-col>
+
+                        <v-col cols="12" md="12" sm="12">
+                          <div class="mt-8">
+                            <label-custom text="Certification"></label-custom>
+                          </div>
+                          <v-divider class=""></v-divider>
+                          <span class="pa-2">
+                            {{ course_data.music_performance }}
+                          </span>
+                        </v-col>
+                      </v-row>
+                    </v-card>
+                  </div>
+                </v-card-text>
+              </v-card>
+            </div>
+            <v-card-text
+              class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
+              v-if="profile_booked.length == '0'"
+            >
+              <span class="text-lg font-bold">
+                <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                ไม่พบข้อมูลการจอง
+              </span>
+            </v-card-text>
           </div>
-          <!-- <v-card v-if="profile_booked.length == '0'" class="border-solid mt-8 pa-5 text-center text-xl">
-            <span class="mdi mdi-alert-outline" style="color: #ff6b81;"></span>  ไม่พบข้อมูลการจอง
-          </v-card> -->
-          <v-card-text
-            class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
-            v-if="profile_booked.length == '0'"
-          >
-            <span class="text-lg font-bold">
-              <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-              ไม่พบข้อมูลการจอง
-            </span>
-          </v-card-text>
         </div>
       </v-expand-x-transition>
     </div>
@@ -563,6 +817,8 @@ export default {
     tasks: [],
     data_search_course: [],
     search_course: "",
+    search_schadule: "",
+    search_booked: "",
     type_selected: "students_course",
     time_frame: "month",
     a_test: "",
@@ -607,12 +863,21 @@ export default {
       if (JSON.parse(localStorage.getItem("relations"))?.length != 0) {
         for (const item of JSON.parse(localStorage.getItem("relations"))) {
           this.GetStudentData(item.student.studentId);
+          console.log("student");
         }
       } else {
-        if (!this.user_detail.roles.includes("R_4")) {
+        if (
+          !this.user_detail.roles.includes("R_4") &&
+          !this.user_detail.roles.includes("R_5")
+        ) {
           this.GetStudentData(this.user_detail.account_id);
+          console.log("parent && student");
+        } else if (!this.user_detail.roles.includes("R_4")) {
+          this.GetStudentData(this.user_detail.account_id);
+          console.log("parent");
         } else {
           this.GetStudentData(null);
+          console.log("null");
         }
       }
     }
@@ -664,20 +929,18 @@ export default {
       console.log("item", studentId);
       await this.GetStudentData(studentId);
       console.log("mycourse", this.student_data);
-      // for (const item of JSON.parse(localStorage.getItem("relations"))) {
-
-      // }
-      // this.data_search_course = this.student_data.filter((val) => {
-      //   if (
-      //     val.courseNameTh.indexOf(this.search_course) !== -1 ||
-      //     val.courseNameEng
-      //       .toLowerCase()
-      //       .indexOf(this.search_course.toLowerCase()) !== -1
-      //   ) {
-      //     return val;
-      //   }
-      // });
     },
+
+    async searchStudentSchadule(studentId) {
+      console.log("item", studentId);
+      await this.GetStudentData(studentId);
+    },
+
+    async searchStudentBooked(studentId) {
+      console.log("item", studentId);
+      await this.GetProfileBooked(studentId);
+    },
+
     dayOfWeekName(days) {
       const daysOfWeek = [
         "อาทิตย์",

@@ -30,6 +30,7 @@
           </v-col>
         </v-row>
       </v-card-title>
+      <!-- <v-sheet height="400"> -->
       <v-calendar
         ref="calendar"
         color="#ff6b81"
@@ -38,8 +39,8 @@
         :events="events"
         event-text-color="#000000"
         event-overlap-mode="column"
-        :first-interval="9"
-        :interval-count="12"
+        :first-interval="1"
+        :interval-count="24"
         :event-overlap-threshold="30"
         @click:event="selectedDate($event)"
       >
@@ -50,7 +51,15 @@
             :style="{ top: nowY }"
           ></div>
         </template>
+        <!-- <template v-else v-slot:day-header="{ present }">
+              <template
+                v-if="present"
+              >
+                Today
+              </template>
+            </template> -->
       </v-calendar>
+      <!-- </v-sheet> -->
     </v-card>
     <!-- MONTH -->
     <v-date-picker
@@ -89,12 +98,10 @@
                     </v-col>
                     <v-col>
                       <v-row dense>
-                        <v-col>
-                          <label class="font-bold">{{ event.name }}</label>
-                          <!-- <span class="text-xs text-[#999999]">
-                            {{ event.timed }}</span
-                          > -->
-                        </v-col>
+                        <v-col> เรียนโดย: {{ event.name }} </v-col>
+                      </v-row>
+                      <v-row dense>
+                        <label class="font-bold">{{ event.timed }} </label>
                       </v-row>
                       <v-row dense>
                         <v-col class="text-sm">
@@ -246,10 +253,6 @@ export default {
             courseId: event.courseId,
           });
           console.log("-->", this.event_date);
-          //   this.$router.push({
-          //             name: 'StudentCourse',
-          //             params: { course_id: event.courseId},
-          //  })
         }
       });
     },
