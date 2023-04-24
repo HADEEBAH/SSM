@@ -42,7 +42,7 @@
                     @change="resetTime"
                 >
                     <v-row>
-                        <v-col cols="6" v-for="(date , date_index) in course_data.days_of_class" :key="date_index">
+                        <v-col cols="6" v-for="(date , date_index) in groupDate(course_data.days_of_class)" :key="date_index">
                             <v-radio
                                 :label="dayOfWeekArray(date.day)"
                                 color="#ff6B81"
@@ -483,23 +483,8 @@ export default {
         if(!this.course_order.course_id){
             this.$router.replace({ name: 'UserKingdom' })
         }
-        // this.checkMaximumStudent()
-        // this.order_data = JSON.parse(localStorage.getItem("Order"))
-        // this.user_login = JSON.parse(localStorage.getItem("userDetail"))
-        // setTimeout(() => {
-        //     if(this.order_data){
-        //         if(this.order_data.course_type_id === "CT_1"){
-        //             this.GetCourseStudent({course_id: this.order_data.course_id,cpo_id: this.order_data.option.course_package_option_id})
-        //         }
-        //         this.GetRelations({student_id : this.user_login.account_id, parent_id : ""})
-        //         this.GetCourse( this.order_data.course_id)
-        //     }
-        //     // this.course_order = this.order_data
-        // }, 200);
     },
     mounted() {
-        //this.checkMaximumStudent()
-        // this.checkApplyForYourselfRole()
         this.$store.dispatch("NavberUserModules/changeTitleNavber","สมัครเรียน")
         
     },
@@ -717,7 +702,6 @@ export default {
                     }
                     return time_data.maximumStudent - studentNum
                 }
-                
             } else{
                 let studentNum = 0
                 let course_monitors_filter = this.course_monitors.filter((v)=> v.m_course_id == this.course_order.course_id   && v.m_course_package_options_id == this.course_order.option.course_package_option_id && v.m_day_of_week_id === time_data.dayOfWeekId && v.m_time_id == time_data.timeId)
@@ -744,6 +728,33 @@ export default {
                 }
                
             }
+        },
+        groupDate(day_of_class){
+            const groupedData = [];
+            // Group data by course_coach_id first
+            const groupedByCoach = day_of_class.reduce((acc, obj) => {
+            const key = obj.course_coach_id[0];
+            (acc[key] || (acc[key] = [])).push(obj);
+            return acc;
+            }, {});
+
+            // Group data by day if day length = 1 and course_coach_id is the same
+            for (const key in groupedByCoach) {
+            const group = groupedByCoach[key];
+            const dayGroups = group.reduce((acc, obj) => {
+                if (obj.day.length === 1) {
+                const dayKey = obj.day[0];
+                (acc[dayKey] || (acc[dayKey] = [])).push(obj);
+                } else {
+                acc.push(obj);
+                }
+                return acc;
+            }, []);
+            groupedData.push(...Object.values(dayGroups));
+            }
+
+            console.log(groupedData);
+            return day_of_class
         },
         CreateReserve(){
             Swal.fire({
@@ -775,7 +786,6 @@ export default {
                 }
             })
         },
-        
         checkApplyForYourselfRole(){
             let roles = ["R_1", "R_2", "R_3", "R_4"]
             let is_equal = false
@@ -790,6 +800,7 @@ export default {
             return is_equal
         },
         dayOfWeekArray(day) {
+            // let day_arr = day.split(",")
             const daysOfWeek = ["วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"];
             
             const validDays = day.filter(d => d >= 0 && d <= 6);
@@ -932,7 +943,8 @@ export default {
                     this.changeOrderData(this.order)
                     if(this.course_order.course_type_id == "CT_1"){
                         if(this.course_order.day && this.course_order.time){
-                            this.saveOrder()
+                            this.saveOrder()    
+                            
                         }else{
                             Swal.fire({
                                 icon :"error",
