@@ -866,7 +866,7 @@ const CourseModules = {
                   course_studant_amount = course_studant_amount + parseInt(student_data.sum_student)
                   course.student_course_data.push({student_data})
                 }
-              let endpoint = `http://localhost:3000`
+              let endpoint = process.env.VUE_APP_URL
               let potential =await axios.get(`${endpoint}/api/v1/coachmanagement/course/potential/${course.course_id}`)
               if(potential.data.statusCode === 200){
                 if(potential.data.data?.course_id){
@@ -895,7 +895,8 @@ const CourseModules = {
     // COURSE :: POTENTIAL
     async GetPotential(context, {course_id}){
       try{
-       let endpoint = `http://localhost:3000/api/v1/coachmanagement/course/potential/${course_id}`
+       let endpoint = `${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/potential/${course_id}`
+      //  let endpoint = `http://localhost:3000/api/v1/coachmanagement/course/potential/${course_id}`
        let {data} =await axios.get(endpoint)
        if(data.statusCode === 200){
         context.commit("SetCoursePotential",data.data)
