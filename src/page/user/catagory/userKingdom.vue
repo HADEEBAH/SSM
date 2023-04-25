@@ -137,7 +137,10 @@ export default {
   }),
   created() {
     this.dataStorage = JSON.parse(localStorage.getItem("userDetail"));
-    this.GetAll(this.dataStorage.account_id);
+    if (this.dataStorage) {
+      console.log("this.dataStorage created", this.dataStorage);
+      this.GetAll(this.dataStorage.account_id);
+    }
     localStorage.removeItem("Order")
     localStorage.setItem("Order", JSON.stringify(this.course_order))
   
@@ -191,7 +194,10 @@ export default {
     }),
     setFunctions(){
       this.$store.dispatch("CategoryModules/GetCategoryCourse");
+    if (this.dataStorage) {
+      console.log("this.dataStorage compute", this.dataStorage);
       this.GetProfileDetail(this.dataStorage.account_id);
+    }
       
       return ''
     },
