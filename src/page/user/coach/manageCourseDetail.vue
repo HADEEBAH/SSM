@@ -325,19 +325,19 @@
                             ></v-img>
                         </v-col>
                         <v-col cols="12" class="flex align-center justify-center text-h5">
-                            แนบไฟล์รูปภาพหรือวิดีโอ (ส่วนนี้ยังอัพโหลดไม่ได้)
+                            แนบไฟล์รูปภาพหรือวิดีโอ
                         </v-col>
                         <v-col cols="12" class="flex align-center justify-center">
                             <v-btn text class="underline" color="#ff6b81" @click="openFileSelector"
                             >อัพโหลดไฟล์แนบ</v-btn
                             >
                             <input
-                            ref="fileInput"
-                            type="file"
-                            accept="image/*"
-                            multiple
-                            @change="previewSummaryFile"
-                            style="display: none"
+                                ref="fileInput"
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                @change="previewSummaryFile"
+                                style="display: none"
                             />
                         </v-col>
                         </v-row>
@@ -650,6 +650,7 @@ export default {
   watch: {
     "coach_check_in":function(){
         console.log(this.coach_check_in)
+        this.preview_summary_files = []
         if(this.coach_check_in.attachment){
             if(this.coach_check_in?.attachment.length > 0){
                 for(const img_url of this.coach_check_in.attachment){
@@ -671,6 +672,9 @@ export default {
                 this.expanded_index.push(check_in_data)
             }
         })
+    },
+    "tab" :function(){
+        this.GetStudentByTimeId({course_id :this.$route.params.courseId, date : this.$route.params.date, time_id: this.$route.params.timeId})
     }
   },
   computed: {
@@ -922,7 +926,7 @@ export default {
             reader.onload = () => {
                 fileUrls.push(reader.result);
                 if (fileUrls.length == selectedFiles.length) {
-                this.preview_summary_files = [...this.preview_summary_files, ...fileUrls];
+                    this.preview_summary_files = [...this.preview_summary_files, ...fileUrls];
                 }
             };
             reader.readAsDataURL(file);
