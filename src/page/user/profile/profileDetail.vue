@@ -1,38 +1,6 @@
 <template>
   <v-container>
-    <!-- {{ profile_user }} -->
-    <!-- <div class="profileCard my-5 center">
-      <v-img
-        src="@/assets/userManagePage/imgcardafterupload.png"
-        class="iconInCard drop-shadow-md"
-      >
-      </v-img>
-      <div style="position: absolute">
-        <div>
-          <v-img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU"
-            class="image-cropper"
-          >
-          </v-img>
-        </div>
-      </div>
-    </div> -->
-    <!-- Button -->
-    <!-- <div v-if="!isEnabled">
-      <v-row>
-        <v-col class="my-3 text-center">
-          <v-btn
-            class="white--text mb-5"
-            depressed
-            color="#ff6b81"
-            @click="edit()"
-          >
-            <span class="mdi mdi-pencil-outline">แก้ไข</span>
-          </v-btn>
-        </v-col>
-      </v-row>
-    </div> -->
-    <!-- <div class="text-center font-bold">{{ data_local.first_name_en }}</div> -->
+    {{ setFunctions }}
     <v-row dense>
       <v-col class="my-5 " style="text-align: -webkit-center" cols="12">
         <!-- <v-btn class="absolute" icon>
@@ -224,8 +192,7 @@ export default {
 
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    this.GetAll(this.user_detail.account_id);
-    this.GetProfileDetail(this.$route.params.profile_id);
+   
   },
   mounted() {
     this.$store.dispatch(
@@ -389,7 +356,12 @@ export default {
       profile_detail: "ProfileModules/getProfileDetail",
       // parent_data: "ProfileModules/getParentData",
     }),
-  },
+    setFunctions(){
+      this.GetAll(this.user_detail.account_id);
+      this.GetProfileDetail(this.$route.params.profile_id);  
+      return ''
+    }
+  }
 };
 </script>
 

@@ -401,7 +401,7 @@ const orderModules = {
             }
         },
         async GetCartList(context, account_id) {
-            console.log("account_id", account_id);
+            // console.log("account_id", account_id);
             try {
                 let config = {
                     headers:{
@@ -410,11 +410,13 @@ const orderModules = {
                         'Authorization' : `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                // let endpoint = "http://localhost:3002"
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/cart/${account_id}`,config)
-                console.log(data)
+                let endpoint = "http://localhost:3002"
+                let { data } = await axios.get(`${endpoint}/api/v1/order/cart/${account_id}`,config)
+   
                 if (data.statusCode === 200) {
+                    console.log("Cart List =>",data.data)
                     for (const item of data.data) {
+                        
                         item.course_img = `${process.env.VUE_APP_URL}/api/v1/files/${item.course_img}`
                         if(item.course_type_id === "CT_1"){
                             let discount = item.option.discount ? item.option.discount_price : 0

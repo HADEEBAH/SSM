@@ -1,6 +1,7 @@
 <template>
     <v-app>
       <v-container>
+        {{ setFunction }}
         <div v-if="!history || history.length == 0">
             <v-crad class="my-3" flat>
                 <v-card-text class="rounded-lg border-2 border-[#ff6b81] text-lg font-bold" align="center">
@@ -168,13 +169,19 @@
         history: []
     }),
     created() {
-        this.$store.dispatch("NavberUserModules/changeTitleNavber","ประวัติการซื้อ")
-        this.getHistory()
+        // this.$store.dispatch("NavberUserModules/changeTitleNavber","ประวัติการซื้อ")
+        // this.getHistory()
     },
-    mounted() {},
+    mounted() {
+        this.$store.dispatch("NavberUserModules/changeTitleNavber","ประวัติการซื้อ")
+    },
     watch: {},
     computed: {
-        ...mapGetters()
+        ...mapGetters(),
+        setFunction(){
+            this.getHistory()
+            return ''
+        }
     },
     methods: {
         ...mapActions({

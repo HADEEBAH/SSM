@@ -2,6 +2,7 @@
   <v-app class="overflow-x-hidden overflaow-y-hidden">
     <v-container>
       <loading-overlay :loading="categorys_is_loading"></loading-overlay>
+      <!-- <pre>{{ cart_list }}</pre> -->
       <v-row v-if="cart_list.length == 0">
         <v-col cols="12">
           <v-img src="../../../assets/cart/noCart.png"> </v-img>
@@ -10,7 +11,6 @@
           ไม่พบข้อมูลในตะกร้า
         </v-col>
       </v-row>
-
       <div v-else>
         <v-row class="mb-16">
           <v-col
@@ -269,17 +269,6 @@ export default {
 
       order: "OrderModules/getOrder",
     }),
-    // sumtotal() {
-    //   let total = this.carts.total_price;
-    //   console.log("total",this.carts.total_price);
-    //   this.cart_list.forEach((course) => {
-    //       total = total + course.price
-    //       console.log(course.price);
-    //   } )
-
-    //   return total;
-    // },
-
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;

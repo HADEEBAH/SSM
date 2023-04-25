@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    {{setFunctions}}
     <loading-overlay :loading="student_is_loading"></loading-overlay>
     <div class="mx-10 my-5">
       <label class="text-xl font-bold">ข้อมูลตารางเรียน</label>
@@ -580,12 +581,19 @@
           </div>
           <!-- Role student -->
           <div v-if="data_local.roles.includes('R_5')">
-            <div
-              v-for="(item_booked, index_booked) in profile_booked"
-              :key="index_booked"
+            <v-card-text
+              class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
+              v-if="ReserveList().length == 0"
             >
+              <span class="text-lg font-bold">
+                <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                ไม่พบข้อมูลการจอง
+              </span>
+            </v-card-text>
+            <div v-else>
               <v-card
-                v-if="profile_booked.length != '0'"
+              v-for="(item_booked, index_booked) in ReserveList()"
+              :key="`${index_booked}-reserve`"
                 @click="showCard(index, item_booked)"
                 class="my-5 cursor-pointer"
               >
@@ -766,15 +774,7 @@
                 </v-card-text>
               </v-card>
             </div>
-            <v-card-text
-              class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
-              v-if="profile_booked.length == '0'"
-            >
-              <span class="text-lg font-bold">
-                <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                ไม่พบข้อมูลการจอง
-              </span>
-            </v-card-text>
+            
           </div>
         </div>
       </v-expand-x-transition>
@@ -829,8 +829,6 @@ export default {
   }),
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    this.GetProfileBooked(this.user_detail.account_id);
-    this.GetAll(this.user_detail.account_id);
   },
 
   mounted() {
@@ -838,12 +836,7 @@ export default {
       "NavberUserModules/changeTitleNavber",
       "ข้อมูลตารางเรียน"
     );
-    this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    console.log(this.user_relation);
-    this.GetProfileBooked(this.user_detail.account_id);
-    this.GetAll(this.user_detail.account_id);
     this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-
     if (this.user_detail.roles.includes("R_4")) {
       this.GetStudentData(this.user_detail.account_id);
       for (const item of JSON.parse(localStorage.getItem("relations"))) {
@@ -855,11 +848,6 @@ export default {
     } else {
       this.GetStudentData(null);
     }
-
-    console.log(
-      "my_course_student_id",
-      this.$store.state.MyCourseModules.my_course
-    );
   },
 
   watch: {
@@ -891,7 +879,7 @@ export default {
       GetStudentData: "MyCourseModules/GetStudentData",
       GetProfileBooked: "MyCourseModules/GetProfileBooked",
       GetAll: "ProfileModules/GetAll",
-
+      GetStudentReserve : "MyCourseModules/GetStudentReserve",
       //COURSE
       GetCourse: "CourseModules/GetCourse",
     }),
@@ -932,7 +920,21 @@ export default {
       console.log("item", studentId);
       await this.GetProfileBooked(studentId);
     },
-
+    ReserveList(){
+      let reserveList = []
+      this.profile_booked.forEach((reserve)=>{
+        if(reserveList.filter(v => v.coachId == reserve.coachId && v.courseId == reserve.courseId && v.dayOfWeekId === reserve.dayOfWeekId && v.timeId === reserve.timeId && v.studentId === reserve.studentId).length === 0){
+          reserveList.push(reserve)
+        }
+      })
+      this.student_reserve.forEach((reserve)=>{
+        if(reserveList.filter(v => v.coachId == reserve.coachId && v.courseId == reserve.courseId && v.dayOfWeekId === reserve.dayOfWeekId && v.timeId === reserve.timeId && v.studentId === reserve.studentId).length === 0){
+          reserveList.push(reserve)
+        }
+      })
+      console.log("student_reserve :",this.student_reserve)
+      return reserveList
+    },
     dayOfWeekName(days) {
       const daysOfWeek = [
         "อาทิตย์",
@@ -965,6 +967,7 @@ export default {
       student_data: "MyCourseModules/getStudentData",
       itemTime: "MyCourseModules/getcourseSchedule",
       profile_booked: "MyCourseModules/getProfileBooked",
+      student_reserve : "MyCourseModules/getStudentReserve",
       course_data: "CourseModules/getCourseData",
       course_is_loading: "CourseModules/getCourseIsLoading",
       profile_user: "ProfileModules/getProfileUser",
@@ -977,7 +980,12 @@ export default {
     //     return this.student_data;
     //   },
     // },
-
+    setFunctions(){
+      this.GetProfileBooked(this.user_detail.account_id);
+      this.GetStudentReserve(this.user_detail.account_id)
+      this.GetAll(this.user_detail.account_id);
+      return ''
+    },
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;
