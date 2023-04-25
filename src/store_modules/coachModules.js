@@ -321,7 +321,7 @@ const coachModules = {
         // console.log(data)
         if(data.statusCode === 200){
           data.data.forEach((student, index) => {
-            console.log("compensationStartTime : ",student.compensationStartTime )
+            //console.log("compensationStartTime : ",student.compensationStartTime )
             student.no = index+1
             student.fullname = `${student.firstNameTh} ${student.lastNameTh}`
             student.check_in_student_id = student.checkInStudentId,

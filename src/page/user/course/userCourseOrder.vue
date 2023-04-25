@@ -67,7 +67,8 @@
                                         :value="time"
                                         >
                                             <template v-slot:label>
-                                                {{`${time.start}-${time.end} (${GenReserve(time)})`}}
+                                                <!-- {{`${time.start}-${time.end} (${GenReserve(time)})`}} -->
+                                                {{ `${time.start}-${time.end}` }}
                                             </template>
                                         </v-radio>
                                     </v-col>
@@ -106,7 +107,7 @@
                                 <v-list-item-title
                                 ><span
                                     :class="course_order.coach === item.course_coach_id ? 'font-bold' : ''"
-                                >{{ item.coach_name }}</span
+                                >{{ item.coach_name }} {{ GenCoachNumberStudent( item.coach_id ) }}</span
                                 ></v-list-item-title>
                             </v-list-item-content>
                             <v-list-item-action>
@@ -643,6 +644,24 @@ export default {
             GetGeneralCourseMonitor : "CourseMonitorModules/GetGeneralCourseMonitor",
             GetShortCourseMonitor : "CourseMonitorModules/GetShortCourseMonitor"
         }),
+        GenCoachNumberStudent(coach_id){
+            let time_data =  this.course_order.time
+            let current_student = 0
+            let maximum_student = 0
+            console.log(coach_id)
+            let course_monitors_filter = this.course_monitors.filter((v)=> v.m_coach_id == coach_id && v.m_course_id == this.course_order.course_id && v.m_course_package_options_id == this.course_order.option.course_package_option_id && v.m_day_of_week_id === time_data.dayOfWeekId && v.m_time_id == time_data.timeId)
+            if(course_monitors_filter.length > 0 ){
+                for(const monitor of course_monitors_filter ){
+                    current_student = monitor.m_current_student
+                    maximum_student = monitor.m_maximum_student
+                }
+            }else{
+                console.log(this.course_order)
+                maximum_student = this.course_order.package_data.students
+            }
+            
+            return `(${current_student}/${maximum_student})`
+        },
         GenMonitors(){
             if(this.course_monitors){
                 let time_data =  this.course_order.time
@@ -681,7 +700,7 @@ export default {
                 time_data = this.course_order.time
                 let studentNum = 0
                 let course_monitors_filter = this.course_monitors.filter((v)=> v.m_course_id == this.course_order.course_id   && v.m_course_package_options_id == this.course_order.option.course_package_option_id && v.m_day_of_week_id === time_data.dayOfWeekId && v.m_time_id == time_data.timeId)
-                console.log(course_monitors_filter)
+                // console.log(course_monitors_filter)
                 if(course_monitors_filter.length > 0){
                     for(const  monitor of course_monitors_filter){
                         if(monitor.m_status === "Close"){
@@ -705,7 +724,7 @@ export default {
             } else{
                 let studentNum = 0
                 let course_monitors_filter = this.course_monitors.filter((v)=> v.m_course_id == this.course_order.course_id   && v.m_course_package_options_id == this.course_order.option.course_package_option_id && v.m_day_of_week_id === time_data.dayOfWeekId && v.m_time_id == time_data.timeId)
-                console.log(course_monitors_filter)
+                // console.log(course_monitors_filter)
                 if(course_monitors_filter.length > 0){
                     for(const monitor  of course_monitors_filter){
                         if(monitor.m_status === "Close"){

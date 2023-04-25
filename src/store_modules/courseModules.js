@@ -866,8 +866,8 @@ const CourseModules = {
                   course_studant_amount = course_studant_amount + parseInt(student_data.sum_student)
                   course.student_course_data.push({student_data})
                 }
-              // let endpoint = `http://localhost:3000`
-              let potential =await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/potential/${course.course_id}`)
+              let endpoint = `http://localhost:3000`
+              let potential =await axios.get(`${endpoint}/api/v1/coachmanagement/course/potential/${course.course_id}`)
               if(potential.data.statusCode === 200){
                 if(potential.data.data?.course_id){
                   course.course_studant_amount = course_studant_amount - potential.data.data.sum_student
