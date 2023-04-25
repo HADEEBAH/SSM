@@ -97,8 +97,12 @@ const CourseModules = {
     course_type_is_loading : false,
     course_student:[],
     course_artwork : [],
+    course_potential : {}
   },
   mutations: {
+    SetCoursePotential(state, paylaod){
+      state.course_potential = paylaod
+    },
     SetCourseArtwork(state, payload){
       state.course_artwork = payload
     },
@@ -859,11 +863,22 @@ const CourseModules = {
             if(data.statusCode === 200){
               for(const student_data of data.data){
                 // console.log("GetCourseStudent => ",student_data)
-                course_studant_amount = course_studant_amount + parseInt(student_data.sum_student)
-                course.student_course_data.push({student_data})
+                  course_studant_amount = course_studant_amount + parseInt(student_data.sum_student)
+                  course.student_course_data.push({student_data})
+                }
+              // let endpoint = `http://localhost:3000`
+              let potential =await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/potential/${course.course_id}`)
+              if(potential.data.statusCode === 200){
+                if(potential.data.data?.course_id){
+                  course.course_studant_amount = course_studant_amount - potential.data.data.sum_student
+                }else{
+                  course.course_studant_amount = course_studant_amount
+                }
+              }else{
+                course.course_studant_amount = course_studant_amount
               }
             }
-            course.course_studant_amount = course_studant_amount
+           
           }
           context.commit("SetCoursesIsLoading", false)
           context.commit("SetCourses", data.data)
@@ -876,6 +891,18 @@ const CourseModules = {
         console.log(error)
       }
 
+    },
+    // COURSE :: POTENTIAL
+    async GetPotential(context, {course_id}){
+      try{
+       let endpoint = `http://localhost:3000/api/v1/coachmanagement/course/potential/${course_id}`
+       let {data} =await axios.get(endpoint)
+       if(data.statusCode === 200){
+        context.commit("SetCoursePotential",data.data)
+       }
+      }catch(error){
+        console.log(error)
+      }
     },
     async GetPackages(context) {
       try {
@@ -970,7 +997,9 @@ const CourseModules = {
     getCourseTypeIsLoading(state){
       return state.course_type_is_loading
     },
-
+    getCoursePotential(state){
+      return state.course_potential
+    }
   },
 };
 

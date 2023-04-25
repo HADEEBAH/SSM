@@ -683,7 +683,7 @@ export default {
                 let course_monitors_filter = this.course_monitors.filter((v)=> v.m_course_id == this.course_order.course_id   && v.m_course_package_options_id == this.course_order.option.course_package_option_id && v.m_day_of_week_id === time_data.dayOfWeekId && v.m_time_id == time_data.timeId)
                 console.log(course_monitors_filter)
                 if(course_monitors_filter.length > 0){
-                    for(const monitor  of course_monitors_filter){
+                    for(const  monitor of course_monitors_filter){
                         if(monitor.m_status === "Close"){
                             console.log(monitor.m_status)
                             return 0
@@ -692,7 +692,7 @@ export default {
                             for(const student  of course_student_filter){
                                 studentNum = studentNum + parseInt(student.sum_student)
                             }
-                            return time_data.maximumStudent - studentNum
+                            return monitor.m_maximum_student - monitor.m_current_student
                         }
                     }
                 }else{
@@ -716,7 +716,7 @@ export default {
                             for(const student  of course_student_filter){
                                 studentNum = studentNum + parseInt(student.sum_student)
                             }
-                            return time_data.maximumStudent - studentNum
+                            return monitor.m_maximum_student - monitor.m_current_student
                         }
                     }
                 }else{
