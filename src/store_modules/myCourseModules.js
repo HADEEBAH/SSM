@@ -103,9 +103,12 @@ const myCourseModules = {
 
         my_course: [],
         my_schadule: [],
-
+        student_reserve : [],
     },
     mutations: {
+        SetStudentReserve(state, payload){
+            state.student_reserve = payload
+        },
         SetStudentData(state, payload) {
             state.student_data = payload;
         },
@@ -211,6 +214,39 @@ const myCourseModules = {
                 console.log(error);
             }
         },
+        async GetStudentReserve(context, account_id){
+            console.log("GetStudentReserve", account_id);
+            try {
+                let config = {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-type": "Application/json",
+                        'Authorization': `Bearer ${VueCookie.get("token")}`
+                    }
+                }
+                let localHost = "http://localhost:3002"
+                let { data } = await axios.get(`${localHost}/api/v1/order/reserve/byStudentId/${account_id}`, config);
+                if (data.statusCode === 200) {
+
+                    for await (const item of data.data) {
+                        item.createdByData = item.createdBy ? await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${item.createdBy}`, config) : null
+                        item.StudentData = item.studentId ? await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${item.studentId}`, config) : null
+                        item.coachData = item.coachId ? await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${item.coachId}`, config) : null
+                    }
+
+                    for (const booked of data.data) {
+                        booked.courseImg = booked.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${booked.courseImg}` : null
+                    }
+                    console.log("SetStudentReserve", data.data);
+                    context.commit("SetStudentReserve", data.data)
+                } else {
+                    throw { error: data };
+                }
+
+            } catch (error) {
+                console.log("err", error);
+            }
+        },
         async GetProfileBooked(context, account_id) {
             console.log("GetProfileBooked", account_id);
             try {
@@ -293,6 +329,9 @@ const myCourseModules = {
         }
     },
     getters: {
+        getStudentReserve(state){
+            return state.student_reserve
+        },
         getStudentData(state) {
             return state.student_data;
         },

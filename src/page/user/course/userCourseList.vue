@@ -34,10 +34,10 @@
                         <v-card-title  @click="selectedCourse(course)" class="  font-bold text-sm pa-2">
                         <v-row  @click="selectedCourse(course)" dense class="d-flex align-center">
                             <v-col>{{ `${course.course_name_th} (${course.course_name_en})` }}</v-col>
-                            <v-col class="d-flex align-center text-[#ff6b81]" cols="auto">
+                            <!-- <v-col class="d-flex align-center text-[#ff6b81]" cols="auto">
                                 <v-icon color="#ff6b81" size="18" class="mr-2">mdi-account-group-outline</v-icon>
                                 {{ sumCouserPotential(course)  }}
-                                {{ `${course.course_studant_amount ? course.course_studant_amount : 0 }/ ${ course.course_type_id === 'CT_2' ? course.course_student_recived : course.maximum_student }` }}</v-col>
+                                {{ `${course.course_studant_amount ? course.course_studant_amount : 0 }/ ${ course.course_type_id === 'CT_2' ? course.course_student_recived : course.maximum_student }` }}</v-col> -->
                         </v-row>  
                         </v-card-title>
                         <v-card-text class="text-xs pa-2">

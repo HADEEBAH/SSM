@@ -5,23 +5,6 @@
     <!-- {{ data_local }} -->
 
     <loading-overlay :loading="categorys_is_loading"></loading-overlay>
-
-    <!-- <div class="profileCard my-5 center">
-      <v-img
-        src="@/assets/userManagePage/imgcardafterupload.png"
-        class="iconInCard drop-shadow-md"
-      >
-      </v-img>
-      <div style="position: absolute">
-        <div>
-          <v-img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU"
-            class="image-cropper"
-          >
-          </v-img>
-        </div>
-      </div>
-    </div> -->
     <v-row dense>
       <v-col class="my-5" style="text-align: -webkit-center" cols="12">
         <!-- {{ profile_detail.image }} -->
@@ -39,7 +22,7 @@
       </v-col>
     </v-row>
     <div class="text-center text-xl font-bold">
-      {{ data_local.first_name_th }} {{ data_local.last_name_th }}
+      {{ profile_detail.firstNameTh }} {{ profile_detail.lastNameTh }}
     </div>
     <div class="my-3 text-center">
       <v-btn
@@ -391,18 +374,6 @@
               ยังไม่มีข้อมูล
               <!-- {{ getParentData.parentNation == null ? '-' : getParentData.parentNation}} -->
             </v-col>
-            <!-- id_card -->
-            <!-- <v-col cols="12" sm="6">
-          <label-custom text="เลขบัตรประชาชน"></label-custom>
-          <br/>
-           {{getParentData.student_id == ''? '-': getParentData.student_id}}
-        </v-col> -->
-            <!-- date_of_birth -->
-            <!-- <v-col cols="12" sm="6">
-          <label-custom text="วันเกิด"></label-custom>
-          <br/>
-            {{ getParentData.parent_firstname_th == ''? '-' : getParentData.parent_firstname_th}}
-        </v-col> -->
             <!-- tel -->
             <v-col cols="12" sm="6">
               <label-custom text="เบอร์โทรศัพท์"></label-custom>
@@ -454,22 +425,6 @@
           </v-row>
         </v-card-title>
         <v-card-text>
-          <!-- <div class="profileCard my-5 center">
-            <v-img
-              src="@/assets/userManagePage/imgcardafterupload.png"
-              class="iconInCard drop-shadow-md"
-            >
-            </v-img>
-            <div style="position: absolute">
-              <div>
-                <v-img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU"
-                  class="image-cropper"
-                >
-                </v-img>
-              </div>
-            </div>
-          </div> -->
           <v-row style="text-align: -webkit-center" class="justify-center my-5">
             <!-- {{ dialogGetStudentData }} -->
             <div class="cicle">
@@ -515,18 +470,6 @@
                   : dialogGetStudentData.studentNation
               }}
             </v-col>
-            <!-- id_card -->
-            <!-- <v-col cols="12" sm="6">
-            <label-custom text="เลขบัตรประชาชน"></label-custom>
-            <br/>
-            {{ dialogGetStudentData.accountId == ''? '-' : dialogGetStudentData.accountId }}
-          </v-col> -->
-            <!-- date_of_birth -->
-            <!-- <v-col cols="12" sm="6">
-            <label-custom text="วันเกิด"></label-custom>
-            <br/>
-            {{ dialogGetStudentData.accountId == ''? '-' : dialogGetStudentData.accountId }}
-          </v-col> -->
             <!-- tel -->
             <v-col cols="12" sm="6">
               <label-custom text="เบอร์โทรศัพท์"></label-custom>
@@ -746,10 +689,6 @@ import headerCard from "@/components/header/headerCard.vue";
 import VueCookie from "vue-cookie";
 import Swal from "sweetalert2";
 import axios from "axios";
-
-// import dialogCard from "@/components/dialog/dialogCard.vue";
-// import axios from "axios";
-// import VueCookie from "vue-cookie"
 export default {
   components: {
     labelCustom,
@@ -759,6 +698,8 @@ export default {
     // dialogCard,
   },
   data: () => ({
+    user_relation : [],
+    user_login : {},
     data_local: JSON.parse(localStorage.getItem("userDetail")),
     dialog_show: false,
     show_student_data: false,
@@ -779,38 +720,36 @@ export default {
     list_course_count: 0,
   }),
   created() {
+    this.user_login = JSON.parse(localStorage.getItem("userDetail"));
     this.GetRelations({
       student_id: this.user_login.account_id,
       parent_id: "",
     });
-    this.user_login = JSON.parse(localStorage.getItem("userDetail"));
-    console.log("testq", this.user_relation);
-    this.GetAll(this.user_login.account_id);
-    for (const item of JSON.parse(localStorage.getItem("relations"))) {
-      this.GetStudentData(item.student.studentId);
-    }
   },
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "บัญชีผู้ใช้");
-    this.user_login = JSON.parse(localStorage.getItem("userDetail"));
     this.user_relation = JSON.parse(localStorage.getItem("relations"));
-    this.GetAll(this.user_login.account_id);
-    if (this.order_data) {
-      this.GetCourse(this.order_data.course_id);
+    console.log(this.user_login)
+    for (const item of this.user_relation) {
+      this.GetStudentData(item.student.studentId);
     }
-    this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
+    
+    // if (this.order_data) {
+    //   this.GetCourse(this.order_data.course_id);
+    // }
+    
     if (this.$store.state.MyCourseModules.my_course_student_id !== "") {
       this.GetStudentData(
         this.$store.state.MyCourseModules.my_course_student_id
       );
     } else {
-      if (JSON.parse(localStorage.getItem("relations"))?.length != 0) {
-        for (const item of JSON.parse(localStorage.getItem("relations"))) {
+      if (this.user_relation?.length != 0) {
+        for (const item of this.user_relation) {
           this.GetStudentData(item.student.studentId);
         }
       } else {
-        if (!this.user_detail.roles.includes("R_4")) {
-          this.GetStudentData(this.user_detail.account_id);
+        if (!this.user_login.roles.includes("R_4")) {
+          this.GetStudentData(this.user_login.account_id);
         } else {
           this.GetStudentData(null);
         }
@@ -884,35 +823,6 @@ export default {
             this.GetStudentData(item.student.studentId);
           }
         });
-
-        // if (
-        //   this.course_order.students.filter((v) => v.is_other === false)[0]
-        //     .parents.length === 0
-        // ) {
-        //   this.course_order.students
-        //     .filter((v) => v.is_other === false)[0]
-        //     .parents.push({
-        //       account_id: this.last_user_registered.account_id,
-        //       firstname_en: this.last_user_registered.firstname_en,
-        //       lastname_en: this.last_user_registered.lastname_en,
-        //       firstname_th: this.last_user_registered.firstname_th,
-        //       lastname_th: this.last_user_registered.lastname_th,
-        //       tel: this.last_user_registered.phone_number,
-        //       username: this.last_user_registered.username,
-        //     });
-        // } else {
-        //   this.course_order.students
-        //     .filter((v) => v.is_other === false)[0]
-        //     .parents.forEach((parent) => {
-        //       parent.account_id = this.last_user_registered.account_id;
-        //       parent.firstname_en = this.last_user_registered.firstname_en;
-        //       parent.lastname_en = this.last_user_registered.lastname_en;
-        //       parent.firstname_th = this.last_user_registered.firstname_th;
-        //       parent.lastname_th = this.last_user_registered.lastname_th;
-        //       parent.phone_number = this.last_user_registered.phone_number;
-        //       parent.username = this.last_user_registered.username;
-        //     });
-        // }
       } else if (this.last_user_registered.type === "student") {
         this.course_order.students[
           this.course_order.students.length - 1
@@ -1246,17 +1156,19 @@ export default {
       is_loading: "loginModules/getIsLoading",
       my_course_student_id: "MyCourseModules/getMyCourseStudent",
       my_course: "MyCourseModules/getMyCourse",
+      profile_detail: "ProfileModules/getProfileDetail",
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;
     },
 
-    // studentData: {
-    //   get() {
-    //     return this.student_data;
-    //   },
-    // },
+    setFunctions(){
+      this.GetAll(this.user_login.account_id);
+      this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
+      this.GetProfileDetail(this.user_login.account_id);  
+      return ''
+    }
   },
 };
 </script>
