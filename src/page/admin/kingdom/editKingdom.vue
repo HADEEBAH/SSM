@@ -319,17 +319,25 @@ export default {
         if (result.isConfirmed) {
           try {
             console.log("preview_url", this.file);
+            const payload = {
+              categoryNameTh:this.category.categoryNameTh,
+              categoryNameEng: this.category.categoryNameEng,
+              taughtBy: this.category.taughtBy,
+              categoryDescription: this.category.categoryDescription
+            }
             let bodyFormData = new FormData();
-            // bodyFormData.append("file", this.file);
-            // bodyFormData.append(
-            //   "payload",
-            //   JSON.stringify(this.category)
-            // );
             bodyFormData.append("categoryImg", this.file ?  this.file : null);
-            bodyFormData.append("categoryNameTh",this.category.categoryNameTh );
-            bodyFormData.append( "categoryNameEng", this.category.categoryNameEng );
-            bodyFormData.append("taughtBy", this.category.taughtBy);
-            bodyFormData.append( "categoryDescription", this.category.categoryDescription  );
+            bodyFormData.append(
+              "payload",
+              JSON.stringify(payload)
+            );
+
+            // bodyFormData.append("categoryImg", this.file ?  this.file : null);
+            // bodyFormData.append("categoryNameTh",this.category.categoryNameTh );
+            // bodyFormData.append( "categoryNameEng", this.category.categoryNameEng );
+            // bodyFormData.append("taughtBy", this.category.taughtBy);
+            // bodyFormData.append("categoryDescription", this.category.categoryDescription  );
+
             let config = {
                     headers:{
                         "Access-Control-Allow-Origin" : "*",
