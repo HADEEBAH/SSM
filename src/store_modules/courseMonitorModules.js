@@ -13,7 +13,7 @@ const courseMonitorModules = {
     async GetShortCourseMonitor(context,{course_id}){
         try{
             let localhost = "http://localhost:3000"
-            let {data} = await axios.get(`${localhost}/api/v1/monitor/short/courseId/${course_id}`)
+            let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/monitor/short/courseId/${course_id}`)
             if(data.statusCode === 200){
                 context.commit("SetCourseMonitors",data.data)
             }
