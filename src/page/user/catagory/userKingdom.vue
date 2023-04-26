@@ -1,8 +1,8 @@
 
 <template>
-  
   <v-app class="overflow-x-hidden overflow-y-hidden bg-kingdom" :style="MobileSize ? `background-size: contain;` : `background-size: cover;`">
     <v-container fluid class="my-5">
+      {{ setFunctions }}
       <v-row class="row">
         <v-col cols="12">
           <div class="text-2xl font-bold text-white">
@@ -137,32 +137,17 @@ export default {
   }),
   created() {
     this.dataStorage = JSON.parse(localStorage.getItem("userDetail"));
-    // if (!this.dataStorage) {
-    //   this.logOut()
-    // }
     if (this.dataStorage) {
-      //console.log("true", this.dataStorage.role);
-    } else {
-      //console.log("false");
+      console.log("this.dataStorage created", this.dataStorage);
+      this.GetAll(this.dataStorage.account_id);
     }
-    this.GetAll(this.dataStorage.account_id);
-    for (const item_data of this.profile_user) {
-      console.log("itm", item_data);
-    }
-    this.GetStudentData(this.item_data.student.studentId); 
-
     localStorage.removeItem("Order")
     localStorage.setItem("Order", JSON.stringify(this.course_order))
-    this.GetProfileDetail(this.dataStorage.account_id);
+  
   },
 
   mounted() {
-    // if (!this.dataStorage) {
-    //   this.logOut()
-    // }
-    this.$store.dispatch("CategoryModules/GetCategoryCourse");
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "อาณาจักร");
-    this.GetProfileDetail(this.dataStorage.account_id);
   },
 
   methods: {
@@ -207,6 +192,15 @@ export default {
       profile_detail: "ProfileModules/getProfileDetail",
       
     }),
+    setFunctions(){
+      this.$store.dispatch("CategoryModules/GetCategoryCourse");
+    if (this.dataStorage) {
+      console.log("this.dataStorage compute", this.dataStorage);
+      this.GetProfileDetail(this.dataStorage.account_id);
+    }
+      
+      return ''
+    },
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;

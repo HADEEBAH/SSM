@@ -401,7 +401,7 @@ const orderModules = {
             }
         },
         async GetCartList(context, account_id) {
-            console.log("account_id", account_id);
+            // console.log("account_id", account_id);
             try {
                 let config = {
                     headers:{
@@ -412,8 +412,9 @@ const orderModules = {
                 }
                 // let endpoint = "http://localhost:3002"
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/cart/${account_id}`,config)
-                console.log(data)
+   
                 if (data.statusCode === 200) {
+                    console.log("Cart List =>",data.data)
                     for (const item of data.data) {
                         item.course_img = `${process.env.VUE_APP_URL}/api/v1/files/${item.course_img}`
                         if(item.course_type_id === "CT_1"){
@@ -439,7 +440,7 @@ const orderModules = {
             }
 
         },
-        async DeleteCart(context, {cart_id}){
+        async DeleteCart(context, {cart_id, account_id}){
             try{
                 let config = {
                     headers:{
@@ -451,7 +452,33 @@ const orderModules = {
                 cart_id = cart_id.replaceAll(" ","")
                 let {data} = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/order/cart/${cart_id}`,config)
                 if(data.statusCode === 200){
-                    console.log(data)
+                    let config = {
+                        headers:{
+                            "Access-Control-Allow-Origin" : "*",
+                            "Content-type": "Application/json",
+                            'Authorization' : `Bearer ${VueCookie.get("token")}`
+                        }
+                    }
+                    // let endpoint = "http://localhost:3002"
+                    let carts = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/cart/${account_id}`,config)
+                    if (carts.data.statusCode === 200) {
+                        for (const item of carts.data.data) {
+                            item.course_img = `${process.env.VUE_APP_URL}/api/v1/files/${item.course_img}`
+                            if(item.course_type_id === "CT_1"){
+                                let discount = item.option.discount ? item.option.discount_price : 0
+                                item.option.net_price_unit = item.option.price_unit / item.option.amount 
+                                item.option.net_price = item.option.price_unit - discount
+                            }else{
+                                item.net_price = item.price * item.students.length 
+                            }
+                        }
+                        context.commit("SetCartList", carts.data.data)
+                        console.log("SetCartList",carts.data.data);
+                    } else {
+                        throw { error: carts }
+                    }
+                }else{
+                   throw {error :data }
                 }
             }catch(error){
                 console.log(error)

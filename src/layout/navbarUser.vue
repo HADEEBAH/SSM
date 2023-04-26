@@ -177,18 +177,22 @@ export default {
 
     created() {
       this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
-      if (this.user_detail.account_id) {
+      if (this.user_detail?.account_id) {
         this.GetProfileDetail(this.user_detail.account_id)
       }
       this.active_menu = this.$route.name
-      this.GetCartList(this.user_detail.account_id);
+      if (this.user_detail?.account_id) {
+        this.GetCartList(this.user_detail.account_id);
+      }
     },
     mounted() {
-      if (this.user_detail.account_id) {
+      if (this.user_detail?.account_id) {
         this.GetProfileDetail(this.user_detail.account_id)
       }
       // console.log("profile_detail", this.profile_detail);
+      if (this.user_detail?.account_id) {
       this.GetCartList(this.user_detail.account_id);
+      }
     },
     watch: {},
     computed: {

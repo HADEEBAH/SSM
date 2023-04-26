@@ -894,7 +894,15 @@ export default {
       this.show_comment = false
       this.show_comment_data = {}
     },
+    CloseOpenSummaryAll(){
+      for(const course of this.my_courses){
+        course.show_summary = false
+        course.show_assessment = false
+        course.show_assessment_pantential = false
+      }
+    },
     OpenSummary(course){
+      this.CloseOpenSummaryAll()
       this.GetCoachCheckIn({course_id :course.course_id, date : course.start_date})
       if(course.show_summary){
         course.show_summary = false
@@ -905,6 +913,7 @@ export default {
       course.show_assessment_pantential = false
     },
     OpenAssessment(course){
+      this.CloseOpenSummaryAll()
       this.GetStudentByTimeId({course_id :course.course_id, date : course.start_date, time_id: course.time_id})
       course.show_summary = false
       if(course.show_assessment){
@@ -915,6 +924,7 @@ export default {
       course.show_assessment_pantential = false
     },
     OpenAssessmentPotential(course){
+      this.CloseOpenSummaryAll()
       this.GetStudentByTimeId({course_id :course.course_id, date : course.start_date, time_id: course.time_id})
       course.show_summary = false
       course.show_assessment = false
