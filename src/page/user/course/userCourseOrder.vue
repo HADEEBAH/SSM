@@ -649,7 +649,7 @@ export default {
             let current_student = 0
             let maximum_student = 0
             console.log(coach_id)
-            let course_monitors_filter = this.course_monitors.filter((v)=> v.m_coach_id == coach_id && v.m_course_id == this.course_order.course_id && v.m_course_package_options_id == this.course_order.option.course_package_option_id && v.m_day_of_week_id === time_data.dayOfWeekId && v.m_time_id == time_data.timeId)
+            let course_monitors_filter = this.course_monitors.filter((v)=> v.m_coach_id == coach_id && v.m_course_id == this.course_order.course_id && v.m_day_of_week_id === time_data.dayOfWeekId && v.m_time_id == time_data.timeId)
             if(course_monitors_filter.length > 0 ){
                 for(const monitor of course_monitors_filter ){
                     current_student = monitor.m_current_student
@@ -667,7 +667,7 @@ export default {
                 let time_data =  this.course_order.time
                 if(this.course_order.time){
                     if(this.course_order.course_type_id === "CT_1"){
-                        let course_monitors_filter = this.course_monitors.filter((v)=> v.m_course_id == this.course_order.course_id   && v.m_course_package_options_id == this.course_order.option.course_package_option_id && v.m_day_of_week_id === time_data.dayOfWeekId && v.m_time_id == time_data.timeId)
+                        let course_monitors_filter = this.course_monitors.filter((v)=> v.m_course_id == this.course_order.course_id   && v.m_day_of_week_id === time_data.dayOfWeekId && v.m_time_id == time_data.timeId)
                         //console.log("course_monitors_filter + >",course_monitors_filter)
                         if(course_monitors_filter.length > 0){
                             if((this.course_order.students.length + course_monitors_filter[0].m_current_student) <= course_monitors_filter[0].m_maximum_student){
@@ -699,7 +699,7 @@ export default {
             if( !time_data ){
                 time_data = this.course_order.time
                 let studentNum = 0
-                let course_monitors_filter = this.course_monitors.filter((v)=> v.m_course_id == this.course_order.course_id   && v.m_course_package_options_id == this.course_order.option.course_package_option_id && v.m_day_of_week_id === time_data.dayOfWeekId && v.m_time_id == time_data.timeId)
+                let course_monitors_filter = this.course_monitors.filter((v)=> v.m_course_id == this.course_order.course_id && v.m_day_of_week_id === time_data.dayOfWeekId && v.m_time_id == time_data.timeId)
                 // console.log(course_monitors_filter)
                 if(course_monitors_filter.length > 0){
                     for(const  monitor of course_monitors_filter){
@@ -723,7 +723,7 @@ export default {
                 }
             } else{
                 let studentNum = 0
-                let course_monitors_filter = this.course_monitors.filter((v)=> v.m_course_id == this.course_order.course_id   && v.m_course_package_options_id == this.course_order.option.course_package_option_id && v.m_day_of_week_id === time_data.dayOfWeekId && v.m_time_id == time_data.timeId)
+                let course_monitors_filter = this.course_monitors.filter((v)=> v.m_course_id == this.course_order.course_id && v.m_day_of_week_id === time_data.dayOfWeekId && v.m_time_id == time_data.timeId)
                 // console.log(course_monitors_filter)
                 if(course_monitors_filter.length > 0){
                     for(const monitor  of course_monitors_filter){
