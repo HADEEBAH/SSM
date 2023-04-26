@@ -85,26 +85,16 @@
                   <v-col cols="12" sm="6">
                     <v-col class="text-lg font-bold">
                       {{ item.courseNameTh == "" ? "-" : item.courseNameTh }}
-
-                      ({{
-                        item.courseNameEng == "" ? "-" : item.courseNameEng
-                      }})
+                      ({{item.courseNameEng == "" ? "-" : item.courseNameEng }})
                     </v-col>
-
                     <v-col class="text-slate-400">
                       <span class="mdi mdi-account">โค้ช :</span>
                       {{ item.coachName == null ? "-" : item.coachName }}
                     </v-col>
                     <v-col class="text-slate-400">
                       <span class="mdi mdi-account">ผู้เรียน :</span>
-                      {{
-                        !item.student.firstNameTh
-                          ? "-"
-                          : item.student.firstNameTh
-                      }}
-                      {{
-                        !item.student.lastNameTh ? "-" : item.student.lastNameTh
-                      }}
+                      {{ !item.student.firstNameTh ? "-" : item.student.firstNameTh }}
+                      {{ !item.student.lastNameTh ? "-" : item.student.lastNameTh }}
                       <!-- {{ item.student.firstNameTh }} -->
                       <!-- {{ !my_course_detail.coachName? '-' :  my_course_detail.coachName}} -->
                     </v-col>
@@ -164,12 +154,7 @@
 
             <div v-else v-for="(item, index) in student_data" :key="index">
               <v-card
-                @click="
-                  $router.push({
-                    name: 'StudentCourse',
-                    params: { course_id: item.courseId },
-                  })
-                "
+                @click=" $router.push({ name: 'StudentCourse', params: { course_id: item.courseId }, }) "
                 class="my-10 drop-shadow-lg"
               >
                 <v-row dense>
@@ -197,10 +182,7 @@
                   <v-col cols="12" sm="6">
                     <v-col class="text-lg font-bold">
                       {{ item.courseNameTh == "" ? "-" : item.courseNameTh }}
-
-                      ({{
-                        item.courseNameEng == "" ? "-" : item.courseNameEng
-                      }})
+                      ({{ item.courseNameEng == "" ? "-" : item.courseNameEng }})
                     </v-col>
                     <!-- <v-col class="text-slate-400">
                   {{ item.courseNameEng  == ''? '-' : item.courseNameEng }}
@@ -211,15 +193,8 @@
                     </v-col>
                     <v-col class="text-slate-400">
                       <span class="mdi mdi-account">ผู้เรียน :</span>
-
-                      {{
-                        !item.student.firstNameTh
-                          ? "-"
-                          : item.student.firstNameTh
-                      }}
-                      {{
-                        !item.student.lastNameTh ? "-" : item.student.lastNameTh
-                      }}
+                      {{ !item.student.firstNameTh ? "-"  : item.student.firstNameTh }}
+                      {{ !item.student.lastNameTh ? "-" : item.student.lastNameTh  }}
                     </v-col>
 
                     <v-col class="text-slate-400">
@@ -366,7 +341,6 @@
       <v-expand-x-transition transition="scale-transition">
         <div v-if="type_selected == 'students_bookedcourse'">
           <!-- <pre>{{ profile_booked }}</pre> -->
-
           <!-- Role Parent -->
           <div v-if="data_local.roles.includes('R_4')">
             <v-row class="my-5">
@@ -594,8 +568,8 @@
               <v-card
               v-for="(item_booked, index_booked) in ReserveList()"
               :key="`${index_booked}-reserve`"
-                @click="showCard(index, item_booked)"
-                class="my-5 cursor-pointer"
+              @click="showCard(index, item_booked)"
+              class="my-5 cursor-pointer"
               >
                 <v-card-text>
                   <div>
@@ -603,56 +577,24 @@
                       <!-- img -->
                       <v-col cols="12" sm="2">
                         <img
-                          :src="
-                            item_booked.courseImg
-                              ? item_booked.courseImg
-                              : `../../../assets/student_course/download.png`
-                          "
+                          :src=" item_booked.courseImg ? item_booked.courseImg : `../../../assets/student_course/download.png` "
                         />
                       </v-col>
                       <!-- detail -->
                       <v-col cols="12" sm="6">
                         <v-col class="text-lg font-bold">
-                          {{
-                            item_booked.courseNameTh == ""
-                              ? "-"
-                              : item_booked.courseNameTh
-                          }}
-
-                          ({{
-                            item_booked.courseNameEn == ""
-                              ? "-"
-                              : item_booked.courseNameEn
-                          }})
+                          {{  item_booked.courseNameTh == "" ? "-": item_booked.courseNameTh }}
+                          ({{ item_booked.courseNameEn == ""  ? "-" : item_booked.courseNameEn }})
                         </v-col>
-
                         <v-col class="text-slate-400">
                           <span class="mdi mdi-account">โค้ช :</span>
-
-                          {{
-                            !item_booked.coachData.data.data.firstNameTh
-                              ? "-"
-                              : item_booked.coachData.data.data.firstNameTh
-                          }}
-                          {{
-                            !item_booked.coachData.data.data.lastNameTh
-                              ? "-"
-                              : item_booked.coachData.data.data.lastNameTh
-                          }}
+                          {{ !item_booked.coachData.data.data.firstNameTh ? "-" : item_booked.coachData.data.data.firstNameTh }}
+                          {{ !item_booked.coachData.data.data.lastNameTh ? "-" : item_booked.coachData.data.data.lastNameTh }}
                         </v-col>
-
                         <v-col class="text-slate-400">
                           <span class="mdi mdi-account">ผู้เรียน :</span>
-                          {{
-                            !item_booked.StudentData.data.data.firstNameTh
-                              ? "-"
-                              : item_booked.StudentData.data.data.firstNameTh
-                          }}
-                          {{
-                            !item_booked.StudentData.data.data.lastNameTh
-                              ? "-"
-                              : item_booked.StudentData.data.data.lastNameTh
-                          }}
+                          {{ !item_booked.StudentData.data.data.firstNameTh ? "-" : item_booked.StudentData.data.data.firstNameTh }}
+                          {{ !item_booked.StudentData.data.data.lastNameTh ? "-" : item_booked.StudentData.data.data.lastNameTh }}
                         </v-col>
 
                         <v-col class="text-slate-400">
