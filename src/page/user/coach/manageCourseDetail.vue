@@ -193,8 +193,7 @@
                         </v-row>
                     </v-card-text>
                 </v-card>
-                  <!-- DETAIL -->
-                 
+                <!-- DETAIL -->
                 <div v-if="tab_evaluate === 'evaluate_students'">
                     <template  v-if="student_check_in.filter(v => v.type === 'general'&& (v.status == 'punctual' || v.status == 'late')).length > 0">
                         <v-card class="mb-2 " flat style="border: 1px solid #999" v-for="(student, index_student) in student_check_in.filter(v => v.type === 'general' && (v.status == 'punctual' || v.status == 'late'))" :key="`${index_student}-student`">
@@ -239,7 +238,7 @@
                     </v-card>
                     <v-row>
                         <v-col cols="12" sm align="right">
-                            <v-btn color="#ff6b81"  @click="clearAssessment()" outlined dense :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'" > ล้างข้อ </v-btn>
+                            <v-btn color="#ff6b81"  @click="clearAssessment()" outlined dense :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'" > ล้างข้อมูล </v-btn>
                         </v-col>
                         <v-col cols="12" sm="auto">
                             <v-btn color="#ff6b81"  @click="saveAssessmentStudent()" dark depressed dense :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"> ส่งข้อมูล </v-btn>
@@ -283,7 +282,7 @@
                     </v-card>
                     <v-row>
                         <v-col cols="12" sm align="right">
-                            <v-btn color="#ff6b81"  @click="clearAssessment()" outlined dense :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'" > ล้างข้อ </v-btn>
+                            <v-btn color="#ff6b81"  @click="clearPotentialAssessment()" outlined dense :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'" > ล้างข้อมูล </v-btn>
                         </v-col>
                         <v-col cols="12" sm="auto">
                             <v-btn color="#ff6b81"  @click="saveUpdateAssessmentPotential()" dark depressed dense :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"> ส่งข้อมูล </v-btn>
@@ -632,21 +631,8 @@ export default {
     show_comment_potential_dialog : false,
     package_name_filter : null
   }),
-  created() { 
-    // this.GetCourse(this.$route.params.courseId)
-    // this.GetCoachCheckIn({course_id :this.$route.params.courseId, date : this.$route.params.date})
-    // this.GetStudentByTimeId({course_id :this.$route.params.courseId, date : this.$route.params.date, time_id: this.$route.params.timeId})
-  },
-  mounted() {
-    
-    // this.GetCoachCheckIn({course_id :this.$route.params.courseId, date : this.$route.params.date})
-    // this.student_check_in.forEach((check_in_data)=>{
-    //     if(check_in_data.status === "leave" || check_in_data.status === "special case"){
-    //         this.selectCheckInStatus(check_in_data,check_in_data.status)
-    //     }
-       
-    // }) 
-  },
+  created() { },
+  mounted() {},
   watch: {
     "coach_check_in":function(){
         console.log(this.coach_check_in)
@@ -674,6 +660,7 @@ export default {
         })
     },
     "tab" :function(){
+        this.GetCoachCheckIn({course_id :this.$route.params.courseId, date : this.$route.params.date})
         this.GetStudentByTimeId({course_id :this.$route.params.courseId, date : this.$route.params.date, time_id: this.$route.params.timeId})
     }
   },
@@ -876,11 +863,19 @@ export default {
     },
     clearAssessment(){
         for (const student of this.student_check_in) {
-            student.evolution = ""
-            student.interest = ""
-            student.remark = ""
+            student.assessment.evolution = ""
+            student.assessment.interest = ""
+            student.assessment.remark = ""
+            student.files = []
         }
-       
+    },
+    clearPotentialAssessment(){
+        for (const student of this.student_check_in) {
+            student.potential.evolution = ""
+            student.potential.interest = ""
+            student.potential.remark = ""
+            student.potentialfiles = []
+        }
     },
     // uploadFile() {
     //   this.file = this.$refs.fileInput.files[0];

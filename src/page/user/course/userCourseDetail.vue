@@ -118,11 +118,11 @@
           <v-btn
             v-else
             depressed
+            disabled
             class="w-full font-bold white--text"
-            @click="reserveCourse"
             color="#ff6b81"
           >
-            จองคอร์สเรียน
+            คอร์สเรียนเต็ม
           </v-btn>
         </v-col>
       </v-row>

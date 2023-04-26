@@ -89,11 +89,12 @@
                     <v-row dense class="mb-3">
                       <v-col align="right" cols="8"> ราคาชำระ</v-col>
                       <v-col align="right" cols="4" class="text-md font-semibold text-[#FF6B81]">
-                        {{ item.course_type_id==="CT_1" ? item.option.net_price : item.net_price }} บาท</v-col
+                        {{ item.course_type_id==="CT_1" ? item.option.net_price.toLocaleString() : item.net_price.toLocaleString() }} บาท</v-col
                       >
                     </v-row>
+                    <!-- <pre>{{ item }}</pre> -->
                     <div align="right">
-                      <v-btn outlined color="red" @click="removeCart(item.orders_tmp_id)"><v-icon> mdi-delete</v-icon> ลบรายการ</v-btn>
+                      <v-btn outlined color="red" @click="removeCart(item.order_tmp_id)"><v-icon> mdi-delete</v-icon> ลบรายการ</v-btn>
                     </div>
                   </v-card-text>
                 </v-col>
@@ -114,7 +115,7 @@
           </v-col>
           <v-col cols="6" sm="4">
             รวมทั้งหมด
-            <b class="text-[#ff6b81]">{{ total_price }} บาท</b>
+            <b class="text-[#ff6b81]">{{ total_price.toLocaleString() }} บาท</b>
           </v-col>
           <v-col cols="6" sm="4" align="end">
             <v-btn depressed dark color="#ff6b81" @click="savePayment">
@@ -129,6 +130,7 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2';
 import { mapActions, mapGetters } from "vuex";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 export default {
@@ -163,33 +165,35 @@ export default {
     this.cart_list.map((val) => {
       val.checked = false;
     });
-    //  this.getCourseOrder()
   },
 
   methods: {
-    // selectAll(e) {
-    //   if (e) {
-    //     this.items.forEach((item) => {
-    //       item.selected = true;
-    //     });
-    //   } else {
-    //     this.items.forEach((item) => {
-    //       item.selected = false;
-    //     });
-    //   }
-    // },
     ...mapActions({
       GetCartList: "OrderModules/GetCartList",
       saveOrder: "OrderModules/saveOrder",
       changeOrderData: "OrderModules/changeOrderData",
       DeleteCart : "OrderModules/DeleteCart",
+      // monitor
+      GetAllCourseMonitor : "CourseMonitorModules/GetAllCourseMonitor"
     }),
     removeCart(cart_id){
-      let ids = cart_id.split(",")
-      console.log(ids)
-      for (const id of ids) {
-        this.DeleteCart({cart_id: id})
-      }
+      console.log(cart_id)
+      Swal.fire({
+        icon: "question",
+        title: "ต้องการลบรายการนี้หรือไม่ ?",
+        showDenyButton: false,
+        showCancelButton: true,
+        cancelButtonText: "ยกเลิก",
+        confirmButtonText: "ตกลง",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          if(cart_id.length > 0){
+            for await(const id of cart_id ){
+              this.DeleteCart({cart_id: id, account_id : this.user_login.account_id})
+            }
+          }
+        }
+      })
     },
     sumtotal() {
       this.total_price = 0;
@@ -244,20 +248,60 @@ export default {
     },
 
     savePayment() {
-      this.order.courses = this.cart_list;
-      this.order.total_price = this.total_price;
-      this.order.payment_status = "pending";
-      this.order.created_by = this.user_login.account_id;
-      this.changeOrderData(this.order);
-      this.saveOrder();
-      for (const cart of this.cart_list) {
-        // console.log(cart.orders_tmp_id);
-        let ids = cart.orders_tmp_id.split(",")
-        for (const id of ids) {
-          this.DeleteCart({cart_id : id})
-        }
+      if(this.cart_list.filter((v) => v.checked === true).length > 0){
+        let isValiDateCourse = []
+        this.order.courses = this.cart_list.filter((v) => v.checked === true);
+        this.order.total_price = this.total_price;
+        this.order.payment_status = "pending";
+        this.order.created_by = this.user_login.account_id;
+        this.changeOrderData(this.order);
+        this.GetAllCourseMonitor().then(()=>{
+          console.log("course_monitors",this.course_monitors)
+          // console.log("courses",this.order.courses)
+          this.order.courses.forEach((course)=>{
+            console.log("courses",course)
+            if(this.course_monitors.filter(v => v.courseMonitorEntity_coach_id === course.coach &&
+              v.courseMonitorEntity_course_id ===  course.course_id && 
+              v.courseMonitorEntity_day_of_week_id === course.day_of_week_id &&
+              v.courseMonitorEntity_time_id === course.time_id).length > 0
+            ){
+              if(this.course_monitors.some(v => v.courseMonitorEntity_coach_id === course.coach &&
+                v.courseMonitorEntity_course_id ===  course.course_id && 
+                v.courseMonitorEntity_day_of_week_id === course.day_of_week_id &&
+                v.courseMonitorEntity_time_id === course.time_id && 
+                (v.courseMonitorEntity_current_student + course.students.length) <= v.courseMonitorEntity_maximum_student &&
+                v.courseMonitorEntity_status === "Open"
+              )){
+                isValiDateCourse.push(true)
+              }else{
+                isValiDateCourse.push(false)
+              }
+            }else{
+              isValiDateCourse.push(true)
+            }
+          
+          })
+          console.log(isValiDateCourse)
+          if(isValiDateCourse.includes(false)){
+            Swal.fire({
+              icon: "error",
+              title: "คอร์สที่เลือกเต็มแล้วไม่สามารถชำระเงินได้",
+              showDenyButton: false,
+              showCancelButton: true,
+              cancelButtonText: "ยกเลิก",
+              confirmButtonText: "ตกลง",
+            })
+          }else{
+            this.saveOrder();
+            for (const cart of this.cart_list) {
+              for (const id of cart.order_tmp_id) {
+                this.DeleteCart({cart_id : id, account_id : this.user_login.account_id})
+              }
+            }
+          }
+          
+        })
       }
-      // console.log("saveOrder");
     },
   },
 
@@ -266,7 +310,7 @@ export default {
       cart_list: "OrderModules/getCartList",
       course_order: "OrderModules/getCourseOrder",
       categorys_is_loading : "CategoryModules/getCategorysIsLoading",
-
+      course_monitors : "CourseMonitorModules/getCourseMonitor",
       order: "OrderModules/getOrder",
     }),
     MobileSize() {

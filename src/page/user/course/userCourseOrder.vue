@@ -304,10 +304,13 @@
             </div> -->
             <v-row dense>
                 <v-col cols="12" sm="6">
-                    <v-btn
-                    v-if="course_order.time ? GenReserve() <= course_order.time.maximumStudent && GenMonitors() === 'Open' : false"
-                    class="w-full" :disabled="validateButton" outlined dense color="#ff6b81"  @click="addToCart">เพิ่มรถเข็น</v-btn>
-                    <v-btn v-else class="w-full" disabled outlined dense color="#ff6b81"  @click="addToCart">เพิ่มรถเข็น</v-btn>
+                    <template v-if="course_order.course_type_id === 'CT_1'">
+                        <v-btn v-if="course_order.time ? GenReserve() <= course_order.time.maximumStudent && GenMonitors() === 'Open' : false" class="w-full" :disabled="validateButton" outlined dense color="#ff6b81"  @click="addToCart">เพิ่มรถเข็น</v-btn>
+                        <v-btn v-else class="w-full" disabled outlined dense color="#ff6b81"  @click="addToCart">เพิ่มรถเข็น</v-btn>
+                    </template>
+                    <template v-else>
+                        <v-btn class="w-full" :disabled="validateButton" outlined dense color="#ff6b81" @click="addToCart">เพิ่มรถเข็น</v-btn>
+                    </template>
                 </v-col>
                 <v-col cols="12" sm="6">
                     <v-btn
@@ -612,7 +615,7 @@ export default {
         
         validateButton(){
             this.GenMonitors()
-            console.log(this.course_order.coach_id)
+            // console.log(this.course_order.coach_id)
             if(this.course_order.course_type_id === "CT_1"){
                 let time = this.course_order.time ? true : false
                 let day =  this.course_order.day ? true : false
@@ -659,7 +662,6 @@ export default {
                 console.log(this.course_order)
                 maximum_student = this.course_order.package_data.students
             }
-            
             return `(${current_student}/${maximum_student})`
         },
         GenMonitors(){
@@ -906,14 +908,13 @@ export default {
                     if(this.course_order.course_type_id == "CT_2"){
                         let days_of_class = this.course_data.days_of_class[0]
                         this.course_order.time = days_of_class.times[0]
+                        this.course_order.coach_name = this.course_data.coachs[0].coach_name
+                        this.course_order.coach_id = this.course_data.coachs[0].coach_id
+                        this.course_order.coach = this.course_data.coachs[0].coach_id
+                    }else{
+                        this.course_order.coach_name = this.course_data.coachs.filter(v => this.course_order.day.course_coach_id.includes(v.course_coach_id))[0].coach_name
                     }
-                    this.course_order.coach_name = this.course_data.coachs.filter(v => this.course_order.day.course_coach_id.includes(v.course_coach_id))[0].coach_name
-                    this.course_order.coach = this.course_data.coachs[0].coach_id
-                    this.course_order.coach_id = this.course_data.coachs[0].coach_id
-                    this.course_order.coach_name = this.course_data.coachs[0].coach_name,
-                        this.order.courses.push(
-                            {...this.course_order}
-                        )
+                    this.order.courses.push({...this.course_order})
                     this.order.created_by = this.user_login.account_id
                     this.changeOrderData(this.order)
                     localStorage.setItem(this.user_login.account_id, JSON.stringify(this.order))
