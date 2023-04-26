@@ -602,14 +602,14 @@ export default {
             if(this.order_data){
                 if(this.order_data.course_type_id === "CT_1"){
                     this.GetCourseStudent({course_id: this.course_order.course_id,cpo_id: this.course_order.option.course_package_option_id})
-                    this.GetGeneralCourseMonitor({course_id: this.course_order.course_id, cpo_id: this.course_order.option.course_package_option_id})
+                    this.GetShortCourseMonitor({course_id :  this.course_order.course_id})
+                    // this.GetGeneralCourseMonitor({course_id: this.course_order.course_id, cpo_id: this.course_order.option.course_package_option_id})
                 }else{
                     this.GetShortCourseMonitor({course_id :  this.course_order.course_id})
                 }
                 this.GetRelations({student_id : this.user_login.account_id, parent_id : ""})
                 this.GetCourse( this.order_data.course_id)
             }
-            // this.course_order = this.order_data
             return ''
         },
         
@@ -670,7 +670,8 @@ export default {
                 if(this.course_order.time){
                     if(this.course_order.course_type_id === "CT_1"){
                         let course_monitors_filter = this.course_monitors.filter((v)=> v.m_course_id == this.course_order.course_id   && v.m_day_of_week_id === time_data.dayOfWeekId && v.m_time_id == time_data.timeId)
-                        //console.log("course_monitors_filter + >",course_monitors_filter)
+                        console.log("course_monitors_filter + >",course_monitors_filter)
+
                         if(course_monitors_filter.length > 0){
                             if((this.course_order.students.length + course_monitors_filter[0].m_current_student) <= course_monitors_filter[0].m_maximum_student){
                                 return course_monitors_filter[0]?.m_status
@@ -709,7 +710,7 @@ export default {
                             console.log(monitor.m_status)
                             return 0
                         }else{
-                            let course_student_filter  = this.course_student.filter((v)=> v.courseId == this.course_order.course_id   && v.coursePackageOptionId == this.course_order.option.course_package_option_id && v.dayOfWeekId === time_data.dayOfWeekId && v.timeId == time_data.timeId)
+                            let course_student_filter  = this.course_student.filter((v)=> v.courseId == this.course_order.course_id   && v.dayOfWeekId === time_data.dayOfWeekId && v.timeId == time_data.timeId)
                             for(const student  of course_student_filter){
                                 studentNum = studentNum + parseInt(student.sum_student)
                             }
@@ -717,7 +718,7 @@ export default {
                         }
                     }
                 }else{
-                    let course_student_filter  = this.course_student.filter((v)=> v.courseId == this.course_order.course_id   && v.coursePackageOptionId == this.course_order.option.course_package_option_id && v.dayOfWeekId === time_data.dayOfWeekId && v.timeId == time_data.timeId)
+                    let course_student_filter  = this.course_student.filter((v)=> v.courseId == this.course_order.course_id  && v.dayOfWeekId === time_data.dayOfWeekId && v.timeId == time_data.timeId)
                     for(const student  of course_student_filter){
                         studentNum = studentNum + parseInt(student.sum_student)
                     }
@@ -733,7 +734,7 @@ export default {
                             console.log(monitor.m_status)
                             return 0
                         }else{
-                            let course_student_filter  = this.course_student.filter((v)=> v.courseId == this.course_order.course_id   && v.coursePackageOptionId == this.course_order.option.course_package_option_id && v.dayOfWeekId === time_data.dayOfWeekId && v.timeId == time_data.timeId)
+                            let course_student_filter  = this.course_student.filter((v)=> v.courseId == this.course_order.course_id   && v.dayOfWeekId === time_data.dayOfWeekId && v.timeId == time_data.timeId)
                             for(const student  of course_student_filter){
                                 studentNum = studentNum + parseInt(student.sum_student)
                             }
@@ -741,7 +742,7 @@ export default {
                         }
                     }
                 }else{
-                    let course_student_filter  = this.course_student.filter((v)=> v.courseId == this.course_order.course_id   && v.coursePackageOptionId == this.course_order.option.course_package_option_id && v.dayOfWeekId === time_data.dayOfWeekId && v.timeId == time_data.timeId)
+                    let course_student_filter  = this.course_student.filter((v)=> v.courseId == this.course_order.course_id   && v.dayOfWeekId === time_data.dayOfWeekId && v.timeId == time_data.timeId)
                     for(const student  of course_student_filter){
                         studentNum = studentNum + parseInt(student.sum_student)
                     }
