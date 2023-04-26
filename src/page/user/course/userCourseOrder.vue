@@ -670,11 +670,16 @@ export default {
                 if(this.course_order.time){
                     if(this.course_order.course_type_id === "CT_1"){
                         let course_monitors_filter = this.course_monitors.filter((v)=> v.m_course_id == this.course_order.course_id   && v.m_day_of_week_id === time_data.dayOfWeekId && v.m_time_id == time_data.timeId)
-                        console.log("course_monitors_filter + >",course_monitors_filter)
+                        // console.log("course_monitors_filter + >",course_monitors_filter)
 
                         if(course_monitors_filter.length > 0){
+                            console.log(course_monitors_filter[0])
                             if((this.course_order.students.length + course_monitors_filter[0].m_current_student) <= course_monitors_filter[0].m_maximum_student){
-                                return course_monitors_filter[0]?.m_status
+                                if(this.course_order.option.course_package_option_id === course_monitors_filter[0].m_course_package_options_id){
+                                    return course_monitors_filter[0]?.m_status
+                                }else{
+                                    return "Close"
+                                }
                             }else{
                                 return "Close"
                             }
