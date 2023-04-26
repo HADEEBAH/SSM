@@ -1,3 +1,5 @@
+import axios from "axios";
+import VueCookie from "vue-cookie"
 const UserManageModules = {
   namespaced: true,
   state: {
@@ -51,7 +53,8 @@ const UserManageModules = {
         lastname: "",
         tel: "",
       },
-    ]
+    ],
+    data_user_relation_management: []
   },
   mutations: {
     SetStudent(state, payload) {
@@ -63,8 +66,11 @@ const UserManageModules = {
     },
 
     SetCertificate(state, payload) {
-      console.log(555,payload);
+      console.log(555, payload);
       state.students.certificates = payload
+    },
+    SetDataUserRelationsManagement(state, payload) {
+      state.data_user_relation_management = payload
     },
 
   },
@@ -91,8 +97,39 @@ const UserManageModules = {
     },
     changeStudentsCertificate(context, students) {
       context.commit("SetCertificate", students)
-      console.log(555,students)
-    }
+      console.log(555, students)
+    },
+
+    async GetDataRelationsManagement(context, data_account) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+
+        if (data_account?.userRoles?.map((val) => { return val.roleId }).includes("R_5")) {
+          let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?student_id=${data_account.userOneId}`, config)
+          if (data.statusCode === 200) {
+            context.commit("SetDataUserRelationsManagement", data.data)
+          } else {
+            throw { error: data }
+          }
+        } else if (data_account?.userRoles?.map((val) => { return val.roleId }).includes("R_4")) {
+          let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?parent_id=${data_account.userOneId}`, config)
+          if (data.statusCode === 200) {
+            context.commit("SetDataUserRelationsManagement", data.data)
+          } else {
+            throw { error: data }
+          }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
   },
 
   getters: {
@@ -108,6 +145,9 @@ const UserManageModules = {
     getCertificate(state) {
       console.log(555);
       return state.students.certificates
+    },
+    getDataRelationsManagement(state) {
+      return state.data_user_relation_management
     },
   },
 };

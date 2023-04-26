@@ -1,8 +1,10 @@
 <template>
   <v-container class="overflow-x-hidden overflow-y-hidden">
+    <!-- {{ setFunc }} -->
+    <!-- <pre>{{ data_user_relation_management }}</pre> -->
+    <!-- <pre>{{ student_data }}</pre> -->
     <div v-if="$route.params.action == 'view'">
       <v-row dense>
-        <!-- {{ $route.params.action }} {{ $route.params.account_id }} -->
         <v-col>
           <headerPage :breadcrumbs="breadcrumbs"></headerPage>
           <v-card class="mx-auto">
@@ -13,683 +15,750 @@
               :title="title"
             ></headerCard>
             <v-divider class="mx-10"></v-divider>
-
-            <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
-              <v-card-text class="mt-3">
-                <v-row align="center">
-                  <!-- <v-col>
-                    <label-custom text="Username(English)"></label-custom>
-                    <div v-if="!isEnabled">
-                      {{ user_data.username_en }}
-                      <v-icon class="ml-5">mdi-check</v-icon>
-                    </div>
-                    <div v-else>
-                      <v-text-field
-                        v-bind:disabled="isDisabled"
-                        placeholder="กรุณาระบุชื่อผู้ใช้งาน(ภาษาอังกฤษ)"
-                        @keypress="validate($event, 'en')"
-                        v-model="user_data.username_en"
-                        hide-details
-                        outlined
-                        dense
-                        @keyup.enter="checkData"
-                        :color="isMatch ? 'pink' : 'blue'"
-                      >
-                        <template #append>
-                          <v-icon v-if="isMatch">mdi-check</v-icon>
-                        </template>
-                      </v-text-field>
-                    </div>
-                  </v-col> -->
-                  <v-col>
-                    <labelCustom text="Username"></labelCustom>
-                    <v-text-field
-                      :hide-details="!parent.account_id"
-                      dense
-                      outlined
-                      v-model="parent.username"
-                      @change="checkUsername(parent.username)"
-                      @keyup.enter="checkUsername(parent.username)"
-                      @blur="checkUsername(parent.username)"
-                      placeholder="Username"
-                    >
-                      <template v-slot:append>
-                        <v-icon v-if="parent.account_id" color="green">
-                          mdi-checkbox-marked-circle-outline</v-icon
-                        >
-                      </template>
-                    </v-text-field>
-                    <template v-if="!parent.account_id">
-                      <label> หากยังไม่มีบัญชีผู้ใช้กรุณา </label>
-                      <label
-                        class="text-[#ff6b81] underline cursor-pointer mt-5"
-                        @click="registerParent"
-                        >สมัคร One ID</label
-                      >
-                    </template>
+            <div>
+              <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
+                <v-row class="pa-2 ml-5 mr-5">
+                  <v-col cols="12"> Username (English) </v-col>
+                  <v-col cols="12">
+                    <!-- username-->
+                    {{ show_by_id.userName }}
                   </v-col>
-                  <v-col cols="auto">
-                    <br />
-                    <v-btn
-                      color="#ff6b81"
-                      @click="checkUsername(parent.username)"
-                      depressed
-                      dark
-                      >ตกลง</v-btn
-                    >
-                  </v-col>
-
-                  <v-col sm="auto">
-                    <v-img
-                      class="img-one mb-2"
-                      align="center"
-                      src="@/assets/manageuser/logo_one platform.svg"
-                  /></v-col>
                 </v-row>
-              </v-card-text>
-            </v-card>
-            <br />
-
-            <!-- Role admin || Role coach -->
-            <div
-              v-if="
-                this.data_local.roles.includes('R_3') ||
-                this.data_local.roles.includes('R_4')
-              "
-            >
-              <pre>{{ show_by_id }}</pre>
-              <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
-                <v-card-text class="mt-3">
-                  <v-row>
-                    <v-col cols="12" sm="3">
-                      <div class="profileCard">
-                        <v-img
-                          src="@/assets/userManagePage/imgcard.png"
-                          class="imageInCard drop-shadow-md"
-                        >
-                        </v-img>
-                        <div style="position: absolute">
-                          <v-card-text class="upload-photo pa-3">
-                            <!-- <img
-                                  :src="user_data.previewUrl"
-                                  class="rounded-full"
-                                  style="height: 100%; width: 100%"
-                                /> -->
-                            <v-img
-                              src="@/assets/userManagePage/uploadPhoto.png"
-                              max-height="30"
-                              max-width="30"
-                            >
-                            </v-img>
-                          </v-card-text>
-                        </div>
-                      </div>
-                    </v-col>
-                    <v-col class="ml-5">
-                      <v-row>
-                        <v-col cols="12" sm="6">
-                          <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
-                          <div v-if="!isEnabled">
-                            {{ show_by_id.firstNameTh }}
-                          </div>
-                          <div v-else>
-                            <v-text-field
-                              v-bind:disabled="isDisabled"
-                              @keypress="validate($event, 'th')"
-                              placeholder=""
-                              v-model="user_data.firstNameTh"
-                              outlined
-                              dense
-                            >
-                            </v-text-field>
-                          </div>
-                        </v-col>
-
-                        <v-col cols="12" sm="6">
-                          <label-custom text="นามสกุล (ภาษาไทย)"></label-custom>
-                          <div v-if="!isEnabled">
-                            {{ show_by_id.lastNameTh }}
-                          </div>
-                          <div v-else>
-                            <v-text-field
-                              v-bind:disabled="isDisabled"
-                              @keypress="validate($event, 'th')"
-                              placeholder=""
-                              v-model="show_by_id.lastNameTh"
-                              :rules="rules.name"
-                              outlined
-                              dense
-                            >
-                            </v-text-field>
-                          </div>
-                        </v-col>
-                      </v-row>
-
-                      <v-row>
-                        <v-col cols="12" sm="6">
-                          <label-custom
-                            text="First Name (English)"
-                          ></label-custom>
-                          <div v-if="!isEnabled">
-                            {{ show_by_id.firstNameEng }}
-                          </div>
-                          <div v-else>
-                            <v-text-field
-                              v-bind:disabled="isDisabled"
-                              @keypress="validate($event, 'en')"
-                              placeholder=""
-                              v-model="show_by_id.firstNameEng"
-                              :rules="rules.name"
-                              outlined
-                              dense
-                            ></v-text-field>
-                          </div>
-                        </v-col>
-                        <v-col cols="12" sm="6">
-                          <label-custom
-                            text="Last Name (English)"
-                          ></label-custom>
-
-                          <div v-if="!isEnabled">
-                            {{ show_by_id.lastNameEng }}
-                          </div>
-                          <div v-else>
-                            <v-text-field
-                              v-bind:disabled="isDisabled"
-                              @keypress="validate($event, 'en')"
-                              placeholder=""
-                              v-model="show_by_id.lastNameEng"
-                              :rules="rules.name"
-                              outlined
-                              dense
-                            >
-                            </v-text-field>
-                          </div>
-                        </v-col>
-                      </v-row>
-
-                      <v-row>
-                        <v-col cols="12" sm="6">
-                          <label-custom text="อีเมล"></label-custom>
-                          <div v-if="!isEnabled">{{ show_by_id.email }}</div>
-                          <div v-else>
-                            <v-text-field
-                              v-bind:disabled="isDisabled"
-                              @keypress="validate($event, 'en', 'number')"
-                              placeholder=""
-                              v-model="show_by_id.email"
-                              :rules="rules.email"
-                              outlined
-                              dense
-                            >
-                            </v-text-field>
-                          </div>
-                        </v-col>
-                        <v-col cols="12" sm="6">
-                          <label-custom text="เบอร์โทรศัพท์"></label-custom>
-                          <div v-if="!isEnabled">
-                            {{ show_by_id.mobileNo }}
-                          </div>
-                          <div v-else>
-                            <v-text-field
-                              v-bind:disabled="isDisabled"
-                              @keypress="validate($event, 'en', 'number')"
-                              placeholder=""
-                              v-model="show_by_id.mobileNo"
-                              :rules="rules.email"
-                              outlined
-                              dense
-                              required
-                              @input="checkPhoneNumber"
-                              maxlength="12"
-                            >
-                            </v-text-field>
-                          </div>
-                        </v-col>
-                      </v-row>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-card>
-
-              <!-- การจัดการสิทธิ์ -->
-              <headerCard
-                class="ml-6 mt-8"
-                :icon="'mdi-card-account-details-outline'"
-                :icon_color="'#FF6B81'"
-                :title="title2"
-              ></headerCard>
-              <v-divider class="mx-10"></v-divider>
-              <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
-                <v-card-text class="mt-3">
-                  <v-row class="mr-3 ml-3">
-                    <v-col cols="12" sm="6">
-                      <label-custom text="บทบาทผู้ใช้งาน"></label-custom>
-                      <div>{{ user_data.privilege }}</div>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
               </v-card>
             </div>
-
-            <div>
-              <v-tabs
-                v-model="tab"
-                background-color="transparent"
-                color="pink"
-                grow
+            <br />
+            <div v-for="(item, index) in show_by_id.userRoles" :key="index">
+              <!-- Role admin || Role coach || Parent -->
+              <div
+                v-if="
+                  item.roleId == 'R_1' ||
+                  item.roleId == 'R_2' ||
+                  item.roleId == 'R_3' ||
+                  item.roleId == 'R_4'
+                "
               >
-                <v-tab v-for="item in items" :key="item">
-                  {{ item }}
-                </v-tab>
-              </v-tabs>
-              <!-- TABS 1 -->
-              <v-expand-x-transition transition="scale-transition">
-                <div v-if="tab === 0">
-                  <!-- ข้อมูลทั้่วไป -->
-
-                  <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
-                    <v-card-text class="mt-3">
-                      <v-row>
-                        <v-col cols="12" sm="3">
-                          <div class="profileCard">
-                            <v-img
-                              src="@/assets/userManagePage/imgcard.png"
-                              class="imageInCard drop-shadow-md"
-                            >
-                            </v-img>
-                            <div style="position: absolute">
-                              <v-card-text class="upload-photo pa-3">
-                                <!-- <img
+                <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
+                  <v-card-text class="mt-3">
+                    <v-row>
+                      <v-col cols="12" sm="3">
+                        <div class="profileCard">
+                          <v-img
+                            src="@/assets/userManagePage/imgcard.png"
+                            class="imageInCard drop-shadow-md"
+                          >
+                          </v-img>
+                          <div style="position: absolute">
+                            <v-card-text class="upload-photo pa-3">
+                              <!-- <img
                                   :src="user_data.previewUrl"
                                   class="rounded-full"
                                   style="height: 100%; width: 100%"
                                 /> -->
-                                <v-img
-                                  src="@/assets/userManagePage/uploadPhoto.png"
-                                  max-height="30"
-                                  max-width="30"
-                                >
-                                </v-img>
-                              </v-card-text>
-                            </div>
+                              <v-img
+                                src="@/assets/userManagePage/uploadPhoto.png"
+                                max-height="30"
+                                max-width="30"
+                              >
+                              </v-img>
+                            </v-card-text>
                           </div>
-                        </v-col>
-                        <v-col class="ml-5">
-                          <v-row>
+                        </div>
+                      </v-col>
+                      <v-col class="ml-5">
+                        <v-row>
+                          <v-col cols="12" sm="6">
+                            <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
+                            <div v-if="!isEnabled">
+                              {{ show_by_id.firstNameTh }}
+                            </div>
+                            <div v-else>
+                              <v-text-field
+                                v-bind:disabled="isDisabled"
+                                @keypress="validate($event, 'th')"
+                                placeholder=""
+                                v-model="show_by_id.firstNameTh"
+                                outlined
+                                dense
+                              >
+                              </v-text-field>
+                            </div>
+                          </v-col>
+
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              text="นามสกุล (ภาษาไทย)"
+                            ></label-custom>
+                            <div v-if="!isEnabled">
+                              {{ show_by_id.lastNameTh }}
+                            </div>
+                            <div v-else>
+                              <v-text-field
+                                v-bind:disabled="isDisabled"
+                                @keypress="validate($event, 'th')"
+                                placeholder=""
+                                v-model="show_by_id.lastNameTh"
+                                :rules="rules.name"
+                                outlined
+                                dense
+                              >
+                              </v-text-field>
+                            </div>
+                          </v-col>
+                        </v-row>
+
+                        <v-row>
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              text="First Name (English)"
+                            ></label-custom>
+                            <div v-if="!isEnabled">
+                              {{ show_by_id.firstNameEng }}
+                            </div>
+                            <div v-else>
+                              <v-text-field
+                                v-bind:disabled="isDisabled"
+                                @keypress="validate($event, 'en')"
+                                placeholder=""
+                                v-model="show_by_id.firstNameEng"
+                                :rules="rules.name"
+                                outlined
+                                dense
+                              ></v-text-field>
+                            </div>
+                          </v-col>
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              text="Last Name (English)"
+                            ></label-custom>
+
+                            <div v-if="!isEnabled">
+                              {{ show_by_id.lastNameEng }}
+                            </div>
+                            <div v-else>
+                              <v-text-field
+                                v-bind:disabled="isDisabled"
+                                @keypress="validate($event, 'en')"
+                                placeholder=""
+                                v-model="show_by_id.lastNameEng"
+                                :rules="rules.name"
+                                outlined
+                                dense
+                              >
+                              </v-text-field>
+                            </div>
+                          </v-col>
+                        </v-row>
+
+                        <v-row>
+                          <v-col cols="12" sm="6">
+                            <label-custom text="อีเมล"></label-custom>
+                            <div v-if="!isEnabled">{{ show_by_id.email }}</div>
+                            <div v-else>
+                              <v-text-field
+                                disabled
+                                @keypress="validate($event, 'en', 'number')"
+                                placeholder=""
+                                v-model="show_by_id.email"
+                                :rules="rules.email"
+                                outlined
+                                dense
+                              >
+                              </v-text-field>
+                            </div>
+                          </v-col>
+                          <v-col cols="12" sm="6">
+                            <label-custom text="เบอร์โทรศัพท์"></label-custom>
+                            <div v-if="!isEnabled">
+                              {{ show_by_id.mobileNo }}
+                            </div>
+                            <div v-else>
+                              <v-text-field
+                                disabled
+                                @keypress="validate($event, 'en', 'number')"
+                                placeholder=""
+                                v-model="show_by_id.mobileNo"
+                                :rules="rules.email"
+                                outlined
+                                dense
+                                required
+                                @input="checkPhoneNumber"
+                                maxlength="12"
+                              >
+                              </v-text-field>
+                            </div>
+                          </v-col>
+                        </v-row>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+
+                <!-- การจัดการสิทธิ์ R1-R4 -->
+                <headerCard
+                  class="ml-6 mt-8"
+                  :icon="'mdi-card-account-details-outline'"
+                  :icon_color="'#FF6B81'"
+                  :title="title2"
+                ></headerCard>
+                <v-divider class="mx-10"></v-divider>
+                <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
+                  <v-card-text class="mt-3">
+                    <v-row class="mr-3 ml-3">
+                      <v-col cols="12" sm="6">
+                        <label-custom text="บทบาทผู้ใช้งาน"></label-custom>
+
+                        <v-card background-color="#FBF3F5" class="pa-2 w-2/4">{{
+                          item.roleNameTh
+                        }}</v-card>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </div>
+              <!-- Role Student -->
+
+              <div v-if="item.roleId == 'R_5'">
+                <v-tabs
+                  v-model="tab"
+                  background-color="transparent"
+                  color="pink"
+                  grow
+                >
+                  <v-tab v-for="item in items" :key="item">
+                    {{ item }}
+                  </v-tab>
+                </v-tabs>
+                <!-- TABS 1 -->
+                <v-expand-x-transition transition="scale-transition">
+                  <div v-if="tab === 0">
+                    <!-- ข้อมูลทั้่วไป -->
+
+                    <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
+                      <v-card-text class="mt-3">
+                        <v-row>
+                          <v-col cols="12" sm="3">
+                            <div class="profileCard">
+                              <v-img
+                                src="@/assets/userManagePage/imgcard.png"
+                                class="imageInCard drop-shadow-md"
+                              >
+                              </v-img>
+                              <div style="position: absolute">
+                                <v-card-text class="upload-photo pa-3">
+                                  <!-- <img
+                                  :src="user_data.previewUrl"
+                                  class="rounded-full"
+                                  style="height: 100%; width: 100%"
+                                /> -->
+                                  <v-img
+                                    src="@/assets/userManagePage/uploadPhoto.png"
+                                    max-height="30"
+                                    max-width="30"
+                                  >
+                                  </v-img>
+                                </v-card-text>
+                              </div>
+                            </div>
+                          </v-col>
+                          <v-col class="ml-5">
+                            <v-row>
+                              <v-col cols="12" sm="6">
+                                <label-custom
+                                  text="ชื่อ (ภาษาไทย)"
+                                ></label-custom>
+                                <div v-if="!isEnabled">
+                                  {{ show_by_id.firstNameTh }}
+                                </div>
+                                <div v-else>
+                                  <v-text-field
+                                    v-bind:disabled="isDisabled"
+                                    @keypress="validate($event, 'th')"
+                                    placeholder=""
+                                    v-model="show_by_id.firstNameTh"
+                                    outlined
+                                    dense
+                                  >
+                                  </v-text-field>
+                                </div>
+                              </v-col>
+
+                              <v-col cols="12" sm="6">
+                                <label-custom
+                                  text="นามสกุล (ภาษาไทย)"
+                                ></label-custom>
+                                <div v-if="!isEnabled">
+                                  {{ show_by_id.lastNameTh }}
+                                </div>
+                                <div v-else>
+                                  <v-text-field
+                                    v-bind:disabled="isDisabled"
+                                    @keypress="validate($event, 'th')"
+                                    placeholder=""
+                                    v-model="show_by_id.lastNameTh"
+                                    :rules="rules.name"
+                                    outlined
+                                    dense
+                                  >
+                                  </v-text-field>
+                                </div>
+                              </v-col>
+                            </v-row>
+
+                            <v-row>
+                              <v-col cols="12" sm="6">
+                                <label-custom
+                                  text="First Name (English)"
+                                ></label-custom>
+                                <div v-if="!isEnabled">
+                                  {{ show_by_id.firstNameEng }}
+                                </div>
+                                <div v-else>
+                                  <v-text-field
+                                    v-bind:disabled="isDisabled"
+                                    @keypress="validate($event, 'en')"
+                                    placeholder=""
+                                    v-model="show_by_id.firstNameEng"
+                                    :rules="rules.name"
+                                    outlined
+                                    dense
+                                  ></v-text-field>
+                                </div>
+                              </v-col>
+                              <v-col cols="12" sm="6">
+                                <label-custom
+                                  text="Last Name (English)"
+                                ></label-custom>
+
+                                <div v-if="!isEnabled">
+                                  {{ show_by_id.lastNameEng }}
+                                </div>
+                                <div v-else>
+                                  <v-text-field
+                                    v-bind:disabled="isDisabled"
+                                    @keypress="validate($event, 'en')"
+                                    placeholder=""
+                                    v-model="show_by_id.lastNameEng"
+                                    :rules="rules.name"
+                                    outlined
+                                    dense
+                                  >
+                                  </v-text-field>
+                                </div>
+                              </v-col>
+                            </v-row>
+
+                            <v-row>
+                              <v-col cols="12" sm="6">
+                                <label-custom text="อีเมล"></label-custom>
+                                <div v-if="!isEnabled">
+                                  {{ show_by_id.email }}
+                                </div>
+                                <div v-else>
+                                  <v-text-field
+                                    disabled
+                                    @keypress="validate($event, 'en', 'number')"
+                                    placeholder=""
+                                    v-model="show_by_id.email"
+                                    :rules="rules.email"
+                                    outlined
+                                    dense
+                                  >
+                                  </v-text-field>
+                                </div>
+                              </v-col>
+                              <v-col cols="12" sm="6">
+                                <label-custom
+                                  text="เบอร์โทรศัพท์"
+                                ></label-custom>
+                                <div v-if="!isEnabled">
+                                  {{ show_by_id.mobileNo }}
+                                </div>
+                                <div v-else>
+                                  <v-text-field
+                                    disabled
+                                    @keypress="validate($event, 'en', 'number')"
+                                    placeholder=""
+                                    v-model="show_by_id.mobileNo"
+                                    :rules="rules.email"
+                                    outlined
+                                    dense
+                                    required
+                                    @input="checkPhoneNumber"
+                                    maxlength="12"
+                                  >
+                                  </v-text-field>
+                                </div>
+                              </v-col>
+                            </v-row>
+                          </v-col>
+                        </v-row>
+                      </v-card-text>
+                    </v-card>
+
+                    <!-- การจัดการสิทธิ์ R5  -->
+                    <headerCard
+                      class="ml-6 mt-8"
+                      :icon="'mdi-card-account-details-outline'"
+                      :icon_color="'#FF6B81'"
+                      :title="title2"
+                    ></headerCard>
+                    <v-divider class="mx-10"></v-divider>
+                    <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
+                      <v-card-text class="mt-3">
+                        <v-row class="mr-3 ml-3">
+                          <v-col cols="12" sm="6">
+                            <label-custom text="บทบาทผู้ใช้งาน"></label-custom>
+
+                            <v-card
+                              background-color="#FBF3F5"
+                              class="pa-2 w-2/4"
+                              >{{ item.roleNameTh }}</v-card
+                            >
+                          </v-col>
+                        </v-row>
+                      </v-card-text>
+                    </v-card>
+
+                    <!-- Parent Detail in Student Role -->
+                    <headerCard
+                      class="ml-6 mt-8"
+                      :icon="'mdi-human-male-boy'"
+                      :icon_color="'#FF6B81'"
+                      :title="title4"
+                    ></headerCard>
+                    <v-divider class="mx-10"></v-divider>
+                    <div v-if="data_user_relation_management.length >= 1">
+                      <v-card
+                        class="mt-10 ml-10 mr-10"
+                        color="#FCFCFC"
+                        v-for="(
+                          relations, index_relations
+                        ) in data_user_relation_management"
+                        :key="index_relations"
+                      >
+                        <v-card-text class="mt-3">
+                          <v-row dense align="center">
                             <v-col cols="12" sm="6">
                               <label-custom
-                                text="ชื่อ (ภาษาไทย)"
+                                text="Parent’s Username (English)"
                               ></label-custom>
-                              <div v-if="!isEnabled">
-                                {{ user_data.fname_th }}
-                              </div>
-                              <div v-else>
-                                <v-text-field
-                                  v-bind:disabled="isDisabled"
-                                  @keypress="validate($event, 'th')"
-                                  placeholder=""
-                                  v-model="user_data.fname_th"
-                                  outlined
-                                  dense
-                                >
-                                </v-text-field>
+                              <div>
+                                {{
+                                  !relations.parent.parentUsername
+                                    ? "-"
+                                    : relations.parent.parentUsername
+                                }}
                               </div>
                             </v-col>
 
-                            <v-col cols="12" sm="6">
-                              <label-custom
-                                text="นามสกุล (ภาษาไทย)"
-                              ></label-custom>
-                              <div v-if="!isEnabled">
-                                {{ user_data.lname_th }}
-                              </div>
-                              <div v-else>
-                                <v-text-field
-                                  v-bind:disabled="isDisabled"
-                                  @keypress="validate($event, 'th')"
-                                  placeholder=""
-                                  v-model="user_data.lname_th"
-                                  :rules="rules.name"
-                                  outlined
-                                  dense
-                                >
-                                </v-text-field>
-                              </div>
-                            </v-col>
-                          </v-row>
-
-                          <v-row>
                             <v-col cols="12" sm="6">
                               <label-custom
                                 text="First Name (English)"
                               ></label-custom>
-                              <div v-if="!isEnabled">
-                                {{ user_data.fname_en }}
-                              </div>
-                              <div v-else>
-                                <v-text-field
-                                  v-bind:disabled="isDisabled"
-                                  @keypress="validate($event, 'en')"
-                                  placeholder=""
-                                  v-model="user_data.fname_en"
-                                  :rules="rules.name"
-                                  outlined
-                                  dense
-                                ></v-text-field>
+                              <div>
+                                {{
+                                  !relations.parent.parentFirstnameEn
+                                    ? "-"
+                                    : relations.parent.parentFirstnameEn
+                                }}
                               </div>
                             </v-col>
                             <v-col cols="12" sm="6">
                               <label-custom
                                 text="Last Name (English)"
                               ></label-custom>
-
-                              <div v-if="!isEnabled">
-                                {{ user_data.lname_en }}
-                              </div>
-                              <div v-else>
-                                <v-text-field
-                                  v-bind:disabled="isDisabled"
-                                  @keypress="validate($event, 'en')"
-                                  placeholder=""
-                                  v-model="user_data.lname_en"
-                                  :rules="rules.name"
-                                  outlined
-                                  dense
-                                >
-                                </v-text-field>
-                              </div>
-                            </v-col>
-                          </v-row>
-
-                          <v-row>
-                            <v-col cols="12" sm="6">
-                              <label-custom text="อีเมล"></label-custom>
-                              <div v-if="!isEnabled">{{ user_data.email }}</div>
-                              <div v-else>
-                                <v-text-field
-                                  v-bind:disabled="isDisabled"
-                                  @keypress="validate($event, 'en', 'number')"
-                                  placeholder=""
-                                  v-model="user_data.email"
-                                  :rules="rules.email"
-                                  outlined
-                                  dense
-                                >
-                                </v-text-field>
+                              <div>
+                                {{
+                                  !relations.parent.parentLastnameEn
+                                    ? "-"
+                                    : relations.parent.parentLastnameEn
+                                }}
                               </div>
                             </v-col>
                             <v-col cols="12" sm="6">
                               <label-custom text="เบอร์โทรศัพท์"></label-custom>
-                              <div v-if="!isEnabled">
-                                {{ user_data.phone_num }}
-                              </div>
-                              <div v-else>
-                                <v-text-field
-                                  v-bind:disabled="isDisabled"
-                                  @keypress="validate($event, 'en', 'number')"
-                                  placeholder=""
-                                  v-model="user_data.email"
-                                  :rules="rules.email"
-                                  outlined
-                                  dense
-                                  required
-                                  @input="checkPhoneNumber"
-                                  maxlength="12"
-                                >
-                                </v-text-field>
+                              <div>
+                                {{
+                                  !relations.parent.parentTel
+                                    ? "-"
+                                    : relations.parent.parentTel
+                                }}
                               </div>
                             </v-col>
                           </v-row>
-                        </v-col>
-                      </v-row>
-                    </v-card-text>
-                  </v-card>
+                        </v-card-text>
+                      </v-card>
+                    </div>
+                    <div v-else>
+                      <v-card>
+                        <v-card-text
+                          class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
+                        >
+                          <span class="text-lg font-bold">
+                            <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                            ไม่พบข้อมูลของผู้ปกครอง
+                          </span>
+                        </v-card-text>
+                      </v-card>
+                    </div>
 
-                  <!-- การจัดการสิทธิ์ -->
-                  <headerCard
-                    class="ml-6 mt-8"
-                    :icon="'mdi-card-account-details-outline'"
-                    :icon_color="'#FF6B81'"
-                    :title="title2"
-                  ></headerCard>
-                  <v-divider class="mx-10"></v-divider>
+                    <!-- check box -->
+                    <v-row>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        class="ml-10"
+                        v-if="user_data.privilege.includes('ผู้ปกครอง')"
+                      >
+                        <v-checkbox
+                          v-model="user_data.selectedbox"
+                          label="ต้องการเพิ่มนักเรียนในการดูแล"
+                          value="Jacob"
+                          color="pink"
+                          item-color="pink"
+                          @change="onCheckboxChange"
+                        ></v-checkbox>
+                      </v-col>
+                    </v-row>
 
-                  <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
-                    <v-card-text class="mt-3">
-                      <v-row class="mr-3 ml-3">
-                        <v-col cols="12" sm="6">
-                          <label-custom text="บทบาทผู้ใช้งาน"></label-custom>
-                          <div>{{ user_data.privilege }}</div>
-                        </v-col>
-                      </v-row>
-                    </v-card-text>
-                  </v-card>
+                    <v-row>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        class="ml-10"
+                        v-if="user_data.privilege.includes('นักเรียน')"
+                      >
+                        <v-checkbox
+                          v-model="user_data.selectedboxParent"
+                          label="ต้องการเพิ่มผู้ปกครอง"
+                          value="parent"
+                          color="pink"
+                          item-color="pink"
+                          @change="onCheckboxChangeParent"
+                        ></v-checkbox>
+                      </v-col>
+                    </v-row>
 
-                  <!-- check box -->
-                  <v-row>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      class="ml-10"
-                      v-if="user_data.privilege.includes('ผู้ปกครอง')"
-                    >
-                      <v-checkbox
-                        v-model="user_data.selectedbox"
-                        label="ต้องการเพิ่มนักเรียนในการดูแล"
-                        value="Jacob"
-                        color="pink"
-                        item-color="pink"
-                        @change="onCheckboxChange"
-                      ></v-checkbox>
-                    </v-col>
-                  </v-row>
+                    <div v-if="user_data.isCardOpen">
+                      <headerCard
+                        class="ml-6 mt-8"
+                        :icon="'mdi-file-plus-outline'"
+                        :icon_color="'#FF6B81'"
+                        :title="addStudentData"
+                      ></headerCard>
+                      <v-divider class="mx-10"></v-divider>
+                      <v-card
+                        class="mt-10 ml-10 mr-10"
+                        color="#FCFCFC"
+                        v-for="(student, student_index) in students"
+                        :key="`${student_index}-student`"
+                      >
+                        <v-card-text class="mt-3">
+                          <v-row dense>
+                            <v-col align="right">
+                              <v-icon
+                                larg
+                                color="#FF6B81"
+                                @click="removeCardStudent(student_index)"
+                                v-if="student.length >= 2"
+                              >
+                                mdi-delete
+                              </v-icon>
+                            </v-col>
+                          </v-row>
+                          <!-- Student Data In R-5 -->
+                          <v-row dense align="center">
+                            <v-col cols="12" sm="6">
+                              <label-custom
+                                text="Student’s Username (English)"
+                              ></label-custom>
+                              <div>
+                                {{
+                                  !profile_user.studenFirstNameTh
+                                    ? "-"
+                                    : profile_user.studenFirstNameTh
+                                }}
+                              </div>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                              <label-custom
+                                text="First Name (English)"
+                              ></label-custom>
+                              <div>
+                                {{
+                                  !profile_user.studenFirstNameTh
+                                    ? "-"
+                                    : profile_user.studenFirstNameTh
+                                }}
+                              </div>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                              <label-custom
+                                text="Last Name (English)"
+                              ></label-custom>
+                              <div>
+                                {{
+                                  !profile_user.studenLastNameTh
+                                    ? "-"
+                                    : profile_user.studenLastNameTh
+                                }}
+                              </div>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                              <label-custom text="เบอร์โทรศัพท์"></label-custom>
+                              <div>
+                                {{
+                                  !profile_user.studenTel
+                                    ? "-"
+                                    : profile_user.studenTel
+                                }}
+                              </div>
+                            </v-col>
+                          </v-row>
+                        </v-card-text>
+                      </v-card>
 
-                  <v-row>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      class="ml-10"
-                      v-if="user_data.privilege.includes('นักเรียน')"
-                    >
-                      <v-checkbox
-                        v-model="user_data.selectedboxParent"
-                        label="ต้องการเพิ่มผู้ปกครอง"
-                        value="parent"
-                        color="pink"
-                        item-color="pink"
-                        @change="onCheckboxChangeParent"
-                      ></v-checkbox>
-                    </v-col>
-                  </v-row>
+                      <!-- Table In R_5 -->
 
-                  <div v-if="user_data.isCardOpen">
-                    <headerCard
-                      class="ml-6 mt-8"
-                      :icon="'mdi-file-plus-outline'"
-                      :icon_color="'#FF6B81'"
-                      :title="addStudentData"
-                    ></headerCard>
-                    <v-divider class="mx-10"></v-divider>
-                    <v-card
-                      class="mt-10 ml-10 mr-10"
-                      color="#FCFCFC"
-                      v-for="(student, student_index) in students"
-                      :key="`${student_index}-student`"
-                    >
-                      <v-card-text class="mt-3">
-                        <v-row dense>
-                          <v-col align="right">
-                            <v-icon
-                              larg
-                              color="#FF6B81"
-                              @click="removeCardStudent(student_index)"
-                              v-if="student.length >= 2"
-                            >
-                              mdi-delete
-                            </v-icon>
-                          </v-col>
-                        </v-row>
-                        <!-- Student Data -->
-                        <v-row dense align="center">
-                          <v-col cols="12" sm="6">
-                            <label-custom
-                              text="Student’s Username (English)"
-                            ></label-custom>
-                            <div>{{ student.username }}</div>
-                          </v-col>
-                          <v-col cols="12" sm="6">
-                            <label-custom
-                              text="First Name (English)"
-                            ></label-custom>
-                            <div>
-                              {{ student.firstname }}
-                            </div>
-                          </v-col>
-                          <v-col cols="12" sm="6">
-                            <label-custom
-                              text="Last Name (English)"
-                            ></label-custom>
-                            <div>{{ student.lastname }}</div>
-                          </v-col>
-                          <v-col cols="12" sm="6">
-                            <label-custom text="เบอร์โทรศัพท์"></label-custom>
-                            <div>{{ student.tel }}</div>
-                          </v-col>
-                        </v-row>
-                      </v-card-text>
-                    </v-card>
-                    <!-- TABLE -->
-                    <!-- :items="datausers"
+                      <!-- TABLE -->
+                      <!-- :items="datausers"
                   :search="search"
                   :page.sync="page"
                   :items-per-page="itemsPerPage"
                   :sort-by="user_data.sortBy" -->
+                      <div class="my-5 mx-10">
+                        <v-data-table
+                          :headers="headers"
+                          @page-count="pageCount = $event"
+                          class="elevation-1 header-table"
+                        >
+                          <template v-slot:[`item.actions`]="{ item }">
+                            <v-icon small color="#FF6B81">
+                              mdi-eye-outline
+                            </v-icon>
+                            <v-icon
+                              small
+                              class="ml-5"
+                              color="#FF6B81"
+                              @click="editItem(item)"
+                            >
+                              mdi-pencil
+                            </v-icon>
+                            <v-icon
+                              class="ml-5"
+                              small
+                              color="#FF6B81"
+                              @click="deleteItem(item)"
+                            >
+                              mdi-delete
+                            </v-icon>
+                          </template>
+                        </v-data-table>
+                      </div>
+                    </div>
+
+                    <!-- Card Add Parent -->
+                    <div v-if="user_data.isCardParentOpen">
+                      <headerCard
+                        class="ml-6 mt-8"
+                        :icon="'mdi-file-plus-outline'"
+                        :icon_color="'#FF6B81'"
+                        :title="addParentData"
+                      ></headerCard>
+                      <v-divider class="mx-10"></v-divider>
+                      <v-card class="mt-10 ml-10 mr-10" color="#FCFCFC">
+                        <v-card-text class="mt-3">
+                          <v-row dense align="center">
+                            <v-col cols="12" sm="6">
+                              <label-custom
+                                text="Parent’s Username (English)"
+                              ></label-custom>
+                              <!-- <div>{{ parents.username }}</div> -->
+                              {{
+                                !profile_user.parentTel
+                                  ? "-"
+                                  : profile_user.parentTel
+                              }}
+                            </v-col>
+
+                            <v-col cols="12" sm="6">
+                              <label-custom
+                                text="First Name (English)"
+                              ></label-custom>
+                              {{
+                                !profile_user.parentFirstnameTh
+                                  ? "-"
+                                  : profile_user.parentFirstnameTh
+                              }}
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                              <label-custom
+                                text="Last Name (English)"
+                              ></label-custom>
+                              {{
+                                !profile_user.parentLastnameTh
+                                  ? "-"
+                                  : profile_user.parentLastnameTh
+                              }}
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                              <label-custom text="เบอร์โทรศัพท์"></label-custom>
+                              {{
+                                !profile_user.parentTel
+                                  ? "-"
+                                  : profile_user.parentTel
+                              }}
+                            </v-col>
+                          </v-row>
+                        </v-card-text>
+                      </v-card>
+                    </div>
+
+                    <!-- ปิดข้อมูลผู้ใช้งาน -->
+                  </div>
+                </v-expand-x-transition>
+                <!-- TabS 2 -->
+                <v-expand-x-transition>
+                  <div v-if="tab === 1" class="ml-6 mt-8">
+                    <headerCard
+                      class="ml-6 mt-8"
+                      :icon="'mdi-calendar-today'"
+                      :icon_color="'#FF6B81'"
+                      :title="title3"
+                    ></headerCard>
+                    <v-divider class="mx-10"></v-divider>
+                    <v-row class="mt-5 ml-6 mt-8">
+                      <v-col cols="12" sm="6">
+                        <v-text-field
+                          v-model="search"
+                          prepend-inner-icon="mdi-magnify"
+                          label="ค้นหา"
+                          single-line
+                          hide-details
+                          dense
+                          outlined
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <!-- Table -->
                     <div class="my-5 mx-10">
+                      <!--
+                  :search="search"
+                  :page.sync="page"
+                  :items-per-page="itemsPerPage"
+                  :sort-by="user_data.sortBy" -->
                       <v-data-table
-                        :headers="headers"
+                        :headers="headersTabs"
                         @page-count="pageCount = $event"
                         class="elevation-1 header-table"
+                        :items="student_data"
                       >
-                        <template v-slot:[`item.actions`]="{ item }">
-                          <v-icon small color="#FF6B81">
-                            mdi-eye-outline
-                          </v-icon>
-                          <v-icon
-                            small
-                            class="ml-5"
-                            color="#FF6B81"
-                            @click="editItem(item)"
-                          >
-                            mdi-pencil
-                          </v-icon>
-                          <v-icon
-                            class="ml-5"
-                            small
-                            color="#FF6B81"
-                            @click="deleteItem(item)"
-                          >
-                            mdi-delete
-                          </v-icon>
-                        </template>
                       </v-data-table>
                     </div>
                   </div>
-
-                  <!-- Card Add Parent -->
-                  <div v-if="user_data.isCardParentOpen">
-                    <headerCard
-                      class="ml-6 mt-8"
-                      :icon="'mdi-file-plus-outline'"
-                      :icon_color="'#FF6B81'"
-                      :title="addParentData"
-                    ></headerCard>
-                    <v-divider class="mx-10"></v-divider>
-                    <v-card class="mt-10 ml-10 mr-10" color="#FCFCFC">
-                      <v-card-text class="mt-3">
-                        <v-row dense align="center">
-                          <v-col cols="12" sm="6">
-                            <label-custom
-                              text="Parent’s Username (English)"
-                            ></label-custom>
-                            <div>{{ parents.username }}</div>
-                          </v-col>
-
-                          <v-col cols="12" sm="6">
-                            <label-custom
-                              text="First Name (English)"
-                            ></label-custom>
-                            <div>{{ parents.firstname }}</div>
-                          </v-col>
-                          <v-col cols="12" sm="6">
-                            <label-custom
-                              text="Last Name (English)"
-                            ></label-custom>
-                            <div>{{ parents.lastname }}</div>
-                          </v-col>
-                          <v-col cols="12" sm="6">
-                            <label-custom text="เบอร์โทรศัพท์"></label-custom>
-                            <div>{{ parents.tel }}</div>
-                          </v-col>
-                        </v-row>
-                      </v-card-text>
-                    </v-card>
-                  </div>
-                  <!-- Button -->
-                  <div v-if="!isEnabled">
-                    <v-row>
-                      <v-col class="text-right mt-5 mr-10">
-                        <v-btn
-                          class="white--text mb-5"
-                          depressed
-                          color="#ff6b81"
-                          @click="edit()"
-                        >
-                          <span class="mdi mdi-pencil-outline">แก้ไข</span>
-                        </v-btn>
-                      </v-col>
-                    </v-row>
-                  </div>
-                  <div v-else class="text-right mt-5 mr-10">
-                    <v-row>
-                      <v-col align="right" sm="" cols="12">
-                        <v-btn
-                          :class="
-                            $vuetify.breakpoint.smAndUp
-                              ? 'btn-size-lg'
-                              : 'w-52 ml-10'
-                          "
-                          class="white--text mb-5"
-                          outlined
-                          color="error"
-                          @click="cancel()"
-                        >
-                          ยกเลิก
-                        </v-btn>
-                      </v-col>
-                      <v-col sm="auto" cols="12">
-                        <v-btn
-                          :class="
-                            $vuetify.breakpoint.smAndUp
-                              ? 'btn-size-lg'
-                              : 'w-52 ml-10'
-                          "
-                          class="white--text mb-5"
-                          depressed
-                          color="#ff6b81"
-                          @click="submitEdit()"
-                        >
-                          บันทึก
-                        </v-btn>
-                      </v-col>
-                    </v-row>
-                  </div>
-                  <!-- ปิดข้อมูลผู้ใช้งาน -->
-                </div>
-              </v-expand-x-transition>
-              <!-- TabS 2 -->
-              <v-expand-x-transition>
-                <div v-if="tab === 1" class="ml-6 mt-8">
+                </v-expand-x-transition>
+                <!-- Tabs 3 -->
+                <div v-if="tab === 2" class="ml-6 mt-8">
                   <headerCard
                     class="ml-6 mt-8"
                     :icon="'mdi-calendar-today'"
@@ -697,314 +766,258 @@
                     :title="title3"
                   ></headerCard>
                   <v-divider class="mx-10"></v-divider>
-                  <v-row class="mt-5 ml-6 mt-8">
+                  <v-row class="mx-5 my-5">
                     <v-col cols="12" sm="6">
                       <v-text-field
                         v-model="search"
                         prepend-inner-icon="mdi-magnify"
                         label="ค้นหา"
-                        single-line
                         hide-details
                         dense
                         outlined
+                        color="pink"
                       ></v-text-field>
                     </v-col>
+
+                    <v-col cols="12" sm="6" align="right">
+                      <label
+                        class="pink--text cursor-pointer mt-5"
+                        @click="addCertificateDialog('add')"
+                        ><span class="mdi mdi-file-plus-outline"></span>
+                        เพิ่มการแข่งขันและเกียรติบัตร
+                      </label>
+                    </v-col>
                   </v-row>
-                  <!-- Table -->
-                  <div class="my-5 mx-10">
-                    <!-- :items="datausers"
-                  :search="search"
-                  :page.sync="page"
-                  :items-per-page="itemsPerPage"
-                  :sort-by="user_data.sortBy" -->
-                    <v-data-table
-                      :headers="headersTabs"
-                      @page-count="pageCount = $event"
-                      class="elevation-1 header-table"
-                    >
-                      <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon small color="#FF6B81"> mdi-eye-outline </v-icon>
-                        <v-icon
-                          small
-                          class="ml-5"
-                          color="#FF6B81"
-                          @click="editItem(item)"
+                  <!-- Card Certificate -->
+
+                  <v-card
+                    class="mb-5"
+                    v-for="(item, index) in students.certificates"
+                    :key="index"
+                  >
+                    <div class="mx-5 my-5">
+                      <v-row>
+                        <v-col cols="12" sm="6" class="ml-5 front-bold">{{
+                          item.name_certificate
+                        }}</v-col>
+                        <v-col cols="12" sm=""
+                          >วันที่แข่ง:{{ item.certificate_date }}</v-col
                         >
-                          mdi-pencil
-                        </v-icon>
-                        <v-icon
-                          class="ml-5"
-                          small
-                          color="#FF6B81"
-                          @click="deleteItem(item)"
-                        >
-                          mdi-delete
-                        </v-icon>
-                      </template>
-                    </v-data-table>
-                  </div>
-                </div>
-              </v-expand-x-transition>
-              <!-- Tabs 3 -->
-              <div v-if="tab === 2" class="ml-6 mt-8">
-                <headerCard
-                  class="ml-6 mt-8"
-                  :icon="'mdi-calendar-today'"
-                  :icon_color="'#FF6B81'"
-                  :title="title3"
-                ></headerCard>
-                <v-divider class="mx-10"></v-divider>
-                <v-row class="mx-5 my-5">
-                  <v-col cols="12" sm="6">
-                    <v-text-field
-                      v-model="search"
-                      prepend-inner-icon="mdi-magnify"
-                      label="ค้นหา"
-                      hide-details
-                      dense
-                      outlined
-                      color="pink"
-                    ></v-text-field>
-                  </v-col>
+                      </v-row>
 
-                  <v-col cols="12" sm="6" align="right">
-                    <label
-                      class="pink--text cursor-pointer mt-5"
-                      @click="addCertificateDialog('add')"
-                      ><span class="mdi mdi-file-plus-outline"></span>
-                      เพิ่มการแข่งขันและเกียรติบัตร
-                    </label>
-                  </v-col>
-                </v-row>
-                <!-- Card Certificate -->
+                      <v-row>
+                        <v-col cols="8">
+                          <v-row>
+                            <v-col cols="1">
+                              <v-img
+                                src="@/assets/userManagePage/certificate .png"
+                                width="50px"
+                                height="50px"
+                                contain
+                              ></v-img>
+                            </v-col>
+                            <v-col cols="" align-self="center"
+                              ><span
+                                class="pink--text underline underline-offset-2"
+                                >{{ item.fileName }}</span
+                              ></v-col
+                            >
+                          </v-row>
+                        </v-col>
 
-                <v-card
-                  class="mb-5"
-                  v-for="(item, index) in students.certificates"
-                  :key="index"
-                >
-                  <div class="mx-5 my-5">
-                    <v-row>
-                      <v-col cols="12" sm="6" class="ml-5 front-bold">{{
-                        item.name_certificate
-                      }}</v-col>
-                      <v-col cols="12" sm=""
-                        >วันที่แข่ง:{{ item.certificate_date }}</v-col
-                      >
-                    </v-row>
+                        <v-col cols="4" align="end">
+                          <v-row>
+                            <v-col cols="10" align="end">
+                              <v-btn
+                                v-if="!item.previewUrl"
+                                depressed
+                                class="white--text"
+                                color="#ff6b81"
+                                @click="editCertificateDialog(item, index)"
+                              >
+                                <span class="mdi mdi-plus"></span>
+                                เพิ่มหนังสือรับรอง
+                              </v-btn>
+                              <v-btn
+                                v-else
+                                depressed
+                                class="white--text"
+                                color="#ff6b81"
+                                @click="detailCertificateDialog(item, index)"
+                              >
+                                แสดงหนังสือรับรอง
+                              </v-btn>
+                            </v-col>
 
-                    <v-row>
-                      <v-col cols="8">
+                            <v-col cols="2" align="end">
+                              <v-icon
+                                larg
+                                color="#FF6B81"
+                                @click="removeCertificate(index)"
+                                v-if="students.certificates.length >= 2"
+                              >
+                                mdi-delete
+                              </v-icon>
+                            </v-col>
+                          </v-row>
+                        </v-col>
+                      </v-row>
+                    </div>
+                  </v-card>
+
+                  <!-- DIALOG -->
+                  <v-dialog
+                    class="pa-2"
+                    width="50vw"
+                    v-model="certificate_dialog_show"
+                    persistent
+                  >
+                    <v-card>
+                      <v-card-title>
+                        {{ selectedIndex }}
                         <v-row>
-                          <v-col cols="1">
+                          <v-col cols="12" align="right">
+                            <v-btn icon @click="closeDialog">
+                              <v-icon color="#ff6b81">mdi-close</v-icon>
+                            </v-btn>
+                          </v-col>
+                        </v-row>
+                      </v-card-title>
+                      <div class="mx-5 text-center mb-5">
+                        <label-custom
+                          text="เพิ่มการแข่งขันและเกียรติบัตร"
+                        ></label-custom>
+                      </div>
+
+                      <v-row dense class="ml-5 mx-5">
+                        <v-col cols="12">
+                          <label>การแข่งขัน</label>
+                          <v-text-field
+                            placeholder="กรุณาระบุชื่อการแข่งขัน"
+                            v-model="name_certificate"
+                            hide-details
+                            outlined
+                          >
+                          </v-text-field>
+                        </v-col>
+                        <v-col cols="12">
+                          <label>วันที่</label>
+                          <v-text-field
+                            placeholder="กรุณาระบุชื่อการแข่งขัน"
+                            v-model="certificate_date"
+                            hide-details
+                            outlined
+                          >
+                            <template #append>
+                              <v-icon>mdi-calendar-today</v-icon>
+                            </template>
+                          </v-text-field>
+                        </v-col>
+                      </v-row>
+                      <!-- Upload file -->
+                      <v-card class="mx-5 my-5" flat>
+                        <v-card-text
+                          class="border-dashed border-2 border-blue-600 rounded-lg"
+                        >
+                          <v-row>
+                            <v-col
+                              cols="12"
+                              class="flex align-center justify-center"
+                            >
+                              <v-img
+                                src="@/assets/course/upload_file.png"
+                                max-height="105"
+                                max-width="122"
+                              ></v-img>
+                            </v-col>
+                            <v-col
+                              cols="12"
+                              class="flex align-center justify-center text-h5"
+                            >
+                              อัพโหลดเกียรติบัตร
+                            </v-col>
+                            <v-col
+                              cols="12"
+                              class="flex align-center justify-center text-caption"
+                            >
+                              ( ขนาดไฟล์งานไม่เกิน 500 Mb ต้องเป็นไฟล์ JPG, PNG
+                              )
+                            </v-col>
+                            <v-col
+                              cols="12"
+                              class="flex align-center justify-center"
+                            >
+                              <v-btn
+                                outlined
+                                color="blue"
+                                @click="openFileSelector"
+                                >เลือกไฟล์</v-btn
+                              >
+                              <input
+                                ref="fileInput"
+                                type="file"
+                                @change="uploadFile"
+                                style="display: none"
+                                accept="image/*"
+                              />
+                            </v-col>
+                          </v-row>
+                        </v-card-text>
+                      </v-card>
+                      <v-card v-if="fileName !== ''" class="pa-4 ma-4">
+                        <v-row>
+                          <v-col cols="2">
                             <v-img
-                              src="@/assets/userManagePage/certificate .png"
-                              width="50px"
-                              height="50px"
-                              contain
+                              src="../../../assets/userManagePage/pdfIcon.png"
+                              width="30px"
+                              height="30px"
                             ></v-img>
                           </v-col>
-                          <v-col cols="" align-self="center"
-                            ><span
-                              class="pink--text underline underline-offset-2"
-                              >{{ item.fileName }}</span
+                          <v-col cols="8"
+                            ><span>{{ fileName }}</span></v-col
+                          >
+                          <v-col cols="2" align="end"
+                            ><v-icon @click="removeFile()"
+                              >mdi-close</v-icon
                             ></v-col
                           >
                         </v-row>
-                      </v-col>
+                      </v-card>
 
-                      <v-col cols="4" align="end">
-                        <v-row>
-                          <v-col cols="10" align="end">
-                            <v-btn
-                              v-if="!item.previewUrl"
-                              depressed
-                              class="white--text"
-                              color="#ff6b81"
-                              @click="editCertificateDialog(item, index)"
-                            >
-                              <span class="mdi mdi-plus"></span>
-                              เพิ่มหนังสือรับรอง
-                            </v-btn>
-                            <v-btn
-                              v-else
-                              depressed
-                              class="white--text"
-                              color="#ff6b81"
-                              @click="detailCertificateDialog(item, index)"
-                            >
-                              แสดงหนังสือรับรอง
-                            </v-btn>
-                          </v-col>
-
-                          <v-col cols="2" align="end">
-                            <v-icon
-                              larg
-                              color="#FF6B81"
-                              @click="removeCertificate(index)"
-                              v-if="students.certificates.length >= 2"
-                            >
-                              mdi-delete
-                            </v-icon>
-                          </v-col>
-                        </v-row>
-                      </v-col>
-                    </v-row>
-                  </div>
-                </v-card>
-
-                <!-- DIALOG -->
-                <v-dialog
-                  class="pa-2"
-                  width="50vw"
-                  v-model="certificate_dialog_show"
-                  persistent
-                >
-                  <v-card>
-                    <v-card-title>
-                      {{ selectedIndex }}
-                      <v-row>
-                        <v-col cols="12" align="right">
-                          <v-btn icon @click="closeDialog">
-                            <v-icon color="#ff6b81">mdi-close</v-icon>
-                          </v-btn>
-                        </v-col>
-                      </v-row>
-                    </v-card-title>
-                    <div class="mx-5 text-center mb-5">
-                      <label-custom
-                        text="เพิ่มการแข่งขันและเกียรติบัตร"
-                      ></label-custom>
-                    </div>
-
-                    <v-row dense class="ml-5 mx-5">
-                      <v-col cols="12">
-                        <label>การแข่งขัน</label>
-                        <v-text-field
-                          placeholder="กรุณาระบุชื่อการแข่งขัน"
-                          v-model="name_certificate"
-                          hide-details
-                          outlined
+                      <div class="text-center mx-5 mb-5">
+                        <v-btn
+                          v-if="status === 'create'"
+                          depressed
+                          class="white--text"
+                          color="#ff6b81"
+                          @click="saveDialog()"
                         >
-                        </v-text-field>
-                      </v-col>
-                      <v-col cols="12">
-                        <label>วันที่</label>
-                        <v-text-field
-                          placeholder="กรุณาระบุชื่อการแข่งขัน"
-                          v-model="certificate_date"
-                          hide-details
-                          outlined
+                          บันทึก
+                        </v-btn>
+                        <v-btn
+                          v-else-if="status === 'edit'"
+                          depressed
+                          class="white--text"
+                          color="#ff6b81"
+                          @click="saveEditDialog(selectedIndex)"
                         >
-                          <template #append>
-                            <v-icon>mdi-calendar-today</v-icon>
-                          </template>
-                        </v-text-field>
-                      </v-col>
-                    </v-row>
-                    <!-- Upload file -->
-                    <v-card class="mx-5 my-5" flat>
-                      <v-card-text
-                        class="border-dashed border-2 border-blue-600 rounded-lg"
-                      >
-                        <v-row>
-                          <v-col
-                            cols="12"
-                            class="flex align-center justify-center"
-                          >
-                            <v-img
-                              src="@/assets/course/upload_file.png"
-                              max-height="105"
-                              max-width="122"
-                            ></v-img>
-                          </v-col>
-                          <v-col
-                            cols="12"
-                            class="flex align-center justify-center text-h5"
-                          >
-                            อัพโหลดเกียรติบัตร
-                          </v-col>
-                          <v-col
-                            cols="12"
-                            class="flex align-center justify-center text-caption"
-                          >
-                            ( ขนาดไฟล์งานไม่เกิน 500 Mb ต้องเป็นไฟล์ JPG, PNG )
-                          </v-col>
-                          <v-col
-                            cols="12"
-                            class="flex align-center justify-center"
-                          >
-                            <v-btn
-                              outlined
-                              color="blue"
-                              @click="openFileSelector"
-                              >เลือกไฟล์</v-btn
-                            >
-                            <input
-                              ref="fileInput"
-                              type="file"
-                              @change="uploadFile"
-                              style="display: none"
-                              accept="image/*"
-                            />
-                          </v-col>
-                        </v-row>
-                      </v-card-text>
+                          บันทึก
+                        </v-btn>
+                        <v-btn
+                          v-else
+                          depressed
+                          class="white--text"
+                          color="#ff6b81"
+                          @click="certificate_dialog_show = false"
+                        >
+                          ปิด
+                        </v-btn>
+                      </div>
                     </v-card>
-                    <v-card v-if="fileName !== ''" class="pa-4 ma-4">
-                      <v-row>
-                        <v-col cols="2">
-                          <v-img
-                            src="../../../assets/userManagePage/pdfIcon.png"
-                            width="30px"
-                            height="30px"
-                          ></v-img>
-                        </v-col>
-                        <v-col cols="8"
-                          ><span>{{ fileName }}</span></v-col
-                        >
-                        <v-col cols="2" align="end"
-                          ><v-icon @click="removeFile()"
-                            >mdi-close</v-icon
-                          ></v-col
-                        >
-                      </v-row>
-                    </v-card>
+                  </v-dialog>
 
-                    <div class="text-center mx-5 mb-5">
-                      <v-btn
-                        v-if="status === 'create'"
-                        depressed
-                        class="white--text"
-                        color="#ff6b81"
-                        @click="saveDialog()"
-                      >
-                        บันทึก
-                      </v-btn>
-                      <v-btn
-                        v-else-if="status === 'edit'"
-                        depressed
-                        class="white--text"
-                        color="#ff6b81"
-                        @click="saveEditDialog(selectedIndex)"
-                      >
-                        บันทึก
-                      </v-btn>
-                      <v-btn
-                        v-else
-                        depressed
-                        class="white--text"
-                        color="#ff6b81"
-                        @click="certificate_dialog_show = false"
-                      >
-                        ปิด
-                      </v-btn>
-                    </div>
-                  </v-card>
-                </v-dialog>
-
-                <!-- DIALOG SHOW CERTIFICATE -->
-                <!-- <v-dialog v-model="certificate_show">
+                  <!-- DIALOG SHOW CERTIFICATE -->
+                  <!-- <v-dialog v-model="certificate_show">
                   <v-row>
                     <v-col cols="12" align="right">
                       <v-btn icon @click="closeDialog">
@@ -1021,7 +1034,202 @@
                     {{ certificate.previewUrl }}
                   </div>
                 </v-dialog> -->
+                </div>
               </div>
+              <!-- CheckBox Role Parent -->
+              <v-row v-if="item.roleId == 'R_4'">
+                <v-col cols="12" sm="6" class="ml-10">
+                  <v-checkbox
+                    v-model="isOpen"
+                    label="ต้องการเพิ่มนักเรียนในการดูแล"
+                    value="Jacob"
+                    color="pink"
+                    item-color="pink"
+                    @change="onCheckboxChange"
+                  ></v-checkbox>
+                </v-col>
+              </v-row>
+
+              <div v-if="isOpen">
+                <headerCard
+                  class="ml-6 mt-8"
+                  :icon="'mdi-file-plus-outline'"
+                  :icon_color="'#FF6B81'"
+                  :title="addStudentData"
+                ></headerCard>
+                <v-divider class="mx-10"></v-divider>
+                <v-card
+                  class="mt-10 ml-10 mr-10"
+                  color="#FCFCFC"
+                  v-for="(data_item, index) in data_user_relation_management"
+                  :key="index"
+                >
+                  <!-- v-for="(student, student_index) in students"
+                  :key="`${student_index}-student`"
+                  @click="removeCardStudent(student_index)" -->
+                  <v-card-text class="mt-3">
+                    <!-- <v-row dense>
+                      <v-col align="right">
+                        <v-icon larg color="#FF6B81" v-if="student.length >= 2">
+                          mdi-delete
+                        </v-icon>
+                      </v-col>
+                    </v-row> -->
+                    <!-- Student Data -->
+
+                    <v-row dense align="center">
+                      <v-col cols="12" sm="6">
+                        <label-custom
+                          text="Student’s Username (English)"
+                        ></label-custom>
+                        <div>
+                          {{
+                            !data_item.student.studentUsername
+                              ? "-"
+                              : data_item.student.studentUsername
+                          }}
+                        </div>
+                      </v-col>
+                      <v-col cols="12" sm="6">
+                        <label-custom
+                          text="First Name (English)"
+                        ></label-custom>
+                        <div>
+                          {{
+                            !data_item.student.studentFirstnameEn
+                              ? "-"
+                              : data_item.student.studentFirstnameEn
+                          }}
+                        </div>
+                      </v-col>
+                      <v-col cols="12" sm="6">
+                        <label-custom text="Last Name (English)"></label-custom>
+                        <div>
+                          {{
+                            !data_item.student.studentLastnameEn
+                              ? "-"
+                              : data_item.student.studentLastnameEn
+                          }}
+                        </div>
+                      </v-col>
+                      <v-col cols="12" sm="6">
+                        <label-custom text="เบอร์โทรศัพท์"></label-custom>
+                        <div>
+                          {{
+                            !data_item.student.studentTel
+                              ? "-"
+                              : data_item.student.studentTel
+                          }}
+                        </div>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+
+                <!-- TABLE In R-4 -->
+                <!-- 
+                  :search="search"
+                  :page.sync="page"
+                  :items-per-page="itemsPerPage"
+                  :sort-by="user_data.sortBy" -->
+                <div class="my-5 mx-10">
+                  <v-data-table
+                    :headers="headers"
+                    @page-count="pageCount = $event"
+                    class="elevation-1 header-table"
+                    :items="student_data"
+                  >
+                    <template v-slot:[`item.days`]>
+                      <div
+                        v-for="(item, index) in student_data.dates"
+                        :key="index"
+                      >
+                        {{ item.day }}
+                      </div>
+                      <!-- {{ student_data.dates.count }} -->
+                      <!-- <div
+                        v-for="(item_data, index) in student_data.dates.day"
+                        :key="index"
+                      >
+                        {{
+                          dayOfWeekName(item_data.dates.day) == ""
+                            ? "-"
+                            : dayOfWeekName(item_data.dates.day)
+                        }}
+                        {{ student_data.period.start }} -
+                        {{ student_data.period.end }} น.
+                      </div> -->
+                    </template>
+
+                    <template v-slot:[`item.actions`]="{ item }">
+                      <v-icon small color="#FF6B81"> mdi-eye-outline </v-icon>
+                      <v-icon
+                        small
+                        class="ml-5"
+                        color="#FF6B81"
+                        @click="editItem(item)"
+                      >
+                        mdi-pencil
+                      </v-icon>
+                      <v-icon
+                        class="ml-5"
+                        small
+                        color="#FF6B81"
+                        @click="deleteItem(item)"
+                      >
+                        mdi-delete
+                      </v-icon>
+                    </template>
+                  </v-data-table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Button -->
+            <div v-if="!isEnabled">
+              <v-row>
+                <v-col class="text-right mt-5 mr-10">
+                  <v-btn
+                    class="white--text mb-5"
+                    depressed
+                    color="#ff6b81"
+                    @click="edit()"
+                    disabled
+                  >
+                    <span class="mdi mdi-pencil-outline">แก้ไข</span>
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </div>
+            <div v-else class="text-right mt-5 mr-10">
+              <v-row>
+                <v-col align="right" sm="" cols="12">
+                  <v-btn
+                    :class="
+                      $vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-52 ml-10'
+                    "
+                    class="white--text mb-5"
+                    outlined
+                    color="error"
+                    @click="cancel()"
+                  >
+                    ยกเลิก
+                  </v-btn>
+                </v-col>
+                <v-col sm="auto" cols="12">
+                  <v-btn
+                    :class="
+                      $vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-52 ml-10'
+                    "
+                    class="white--text mb-5"
+                    depressed
+                    color="#ff6b81"
+                    @click="submitEdit()"
+                  >
+                    บันทึก
+                  </v-btn>
+                </v-col>
+              </v-row>
             </div>
           </v-card>
         </v-col>
@@ -1031,19 +1239,6 @@
     <div v-else>
       <userManageForm></userManageForm>
     </div>
-    <!-- DIALOG::REGISTER -->
-    <v-dialog
-      persistent
-      v-if="show_dialog_register_one_id"
-      v-model="show_dialog_register_one_id"
-      :width="!MobileSize ? `60vw` : ``"
-    >
-      <registerDialogForm
-        dialog
-        title="สมัคร One ID"
-        :state="register_type"
-      ></registerDialogForm>
-    </v-dialog>
   </v-container>
 </template>
 
@@ -1054,18 +1249,18 @@ import LabelCustom from "@/components/label/labelCustom.vue";
 import headerPage from "@/components/header/headerPage.vue";
 import headerCard from "@/components/header/headerCard.vue";
 import userManageForm from "@/components/user_menage/userManageForm.vue";
-import registerDialogForm from "@/components/user_menage/registerDialogForm.vue";
 import axios from "axios";
 import VueCookie from "vue-cookie";
 
 import { mapActions, mapGetters } from "vuex";
+// import LabelCustom from '../../../components/label/labelCustom.vue';
 export default {
   components: {
     headerPage,
     headerCard,
     userManageForm,
     LabelCustom,
-    registerDialogForm,
+    // LabelCustom,
   },
   data: () => ({
     data_local: JSON.parse(localStorage.getItem("userDetail")),
@@ -1079,22 +1274,28 @@ export default {
       { text: "เพิ่มผู้ใช้งาน", to: "" },
     ],
     headers: [
-      { text: "ชื่อ-นามสกุล", value: "name,lastname", sortable: false },
-      { text: "ชื่อคอร์ส", value: "lastname", sortable: false },
+      { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
+      { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
+      { text: "ชื่อคอร์ส", value: "courseNameTh", sortable: false },
       { text: "แพ็คเกจ", value: "email", sortable: false },
-      { text: "โค้ช", value: "username", sortable: false },
+      { text: "โค้ช", value: "coachName", sortable: false },
       { text: "ประเภท", value: "oneid", sortable: false },
       { text: "ระยะเวลา", value: "role", sortable: false },
-      { text: "วัน - เวลา", value: "actions", sortable: false },
+      { text: "วัน", value: "days", sortable: false },
+      { text: "เวลาเริ่ม", value: "period.start", sortable: false },
+      { text: "เวลาสิ้นสุด", value: "period.end", sortable: false },
     ],
     headersTabs: [
-      { text: "ชื่อ-นามสกุล", value: "name,lastname", sortable: false },
-      { text: "ชื่อคอร์ส", value: "lastname", sortable: false },
+      { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
+      { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
+      { text: "ชื่อคอร์ส", value: "courseNameTh", sortable: false },
       { text: "แพ็คเกจ", value: "email", sortable: false },
-      { text: "โค้ช", value: "username", sortable: false },
+      { text: "โค้ช", value: "coachName", sortable: false },
       { text: "ประเภท", value: "oneid", sortable: false },
       { text: "ระยะเวลา", value: "role", sortable: false },
-      { text: "วัน - เวลา", value: "actions", sortable: false },
+      { text: "วัน", value: "days", sortable: false },
+      { text: "เวลาเริ่ม", value: "period.start", sortable: false },
+      { text: "เวลาสิ้นสุด", value: "period.end", sortable: false },
       { text: "ราคา", value: "price", sortable: false },
     ],
 
@@ -1125,6 +1326,7 @@ export default {
     title: "ข้อมูลผู้ใช้งาน",
     title2: "การจัดการสิทธิ์",
     title3: "คอร์สเรียน",
+    title4: "ข้อมูลผู้ปกครอง",
     addStudentData: "เพิ่มข้อมูลผู้ใช้นักเรียน",
     addParentData: "เพิ่มข้อมูลผู้ใช้ของผู้ปกครอง",
     parent: {
@@ -1146,11 +1348,32 @@ export default {
     previewUrl: null,
     status: "create",
     selectedIndex: "",
+    isOpen: false,
+    params: "",
+    relations: [],
   }),
-  created() {},
+  created() {
+    // this.GetAll(this.$route.params.account_id);
+    // for (const item of JSON.parse(localStorage.getItem("relations"))) {
+    //   this.GetStudentData(item.student.studentId);
+    //   console.log("student");
+    // }
+  },
+  beforeMount() {
+    console.log("this.$route.params.account_id", this.$route.params.account_id);
+    this.params = this.$route.params.account_id;
+  },
   mounted() {
+    this.GetUserById(this.params);
+    setTimeout(() => {
+      this.GetDataRelationsManagement(this.data_user_by_id);
+    }, 1000);
+    console.log("object=>", this.profile_user);
+    this.relations = localStorage.getItem("relations");
+    console.log("this.relations", this.relations);
     // this.local_data = JSON.parse(localStorage.getItem("userDetail"));
     // this.GetShowById(this.local_data.account_id);
+
     this.GetShowById(this.$route.params.account_id);
 
     if (this.user_data.privilege.includes("นักเรียน")) {
@@ -1166,20 +1389,13 @@ export default {
       this.user_data.isCardOpen = false;
       this.user_data.isCardParentOpen = false;
     }
-    // if (this.selectedbox == this.user_data.privilege.includes("นักเรียน")) {
-    //   console.log("ผู้ปกครอง");
-    //   console.log("front",this.selectedbox );
-    //   console.log(this.user_data.privilege.includes("นักเรียน"));
-    //   this.isCardOpen = true;
-    // } else if (
-    //   this.selectedbox == this.user_data.privilege.includes("ผู้ปกครอง")
-    // ) {
-    //   console.log("นักเรียน");
-    //   this.isCardParentOpen = true;
-    // } else {
-    //   console.log("outt");
-    //   this.isCardOpen = false;
-    //   this.isCardParentOpen = false;
+    for (const item of JSON.parse(localStorage.getItem("relations"))) {
+      this.GetStudentData(item.student.studentId);
+    }
+    // this.GetAll(this.$route.params.account_id);
+    // for (const item of this.relations) {
+    //   this.GetStudentData(item.student.studentId);
+    //   console.log("student");
     // }
   },
   methods: {
@@ -1193,6 +1409,11 @@ export default {
       checkUsernameOneid: "loginModules/checkUsernameOneid",
       GetShowById: "UserModules/GetShowById",
       is_loading: "loginModules/getIsLoading",
+      GetAll: "ProfileModules/GetAll",
+      GetStudentData: "MyCourseModules/GetStudentData",
+      GetUserById: "UserModules/GetUserById",
+      GetDataRelationsManagement:
+        "UserManageModules/GetDataRelationsManagement",
     }),
 
     openFileSelector() {
@@ -1544,6 +1765,23 @@ export default {
         }
       });
     },
+    dayOfWeekName(days) {
+      const daysOfWeek = [
+        "อาทิตย์",
+        "จันทร์",
+        "อังคาร",
+        "พุธ",
+        "พฤหัสบดี",
+        "ศุกร์",
+        "เสาร์",
+      ];
+      const dayNames = [];
+      for (let i = 0; i < days.length; i++) {
+        const dayIndex = days[i];
+        dayNames.push(daysOfWeek[dayIndex]);
+      }
+      return dayNames.join(" - ");
+    },
   },
   computed: {
     ...mapGetters({
@@ -1554,9 +1792,18 @@ export default {
       certificates: "UserManageModules/getCertificate",
       user_one_id: "loginModules/getUserOneId",
       show_by_id: "UserModules/getShowById",
+      profile_user: "ProfileModules/getProfileUser",
+      student_data: "MyCourseModules/getStudentData",
+      data_user_by_id: "UserModules/getUserById",
+      data_user_relation_management:
+        "UserManageModules/getDataRelationsManagement",
     }),
+    // setFunc() {
+    //   console.log("=>");
+    //   this.GetAll(this.$route.params.account_id);
+    //   return "";
+    // },
   },
-  watch: {},
 };
 </script>
 

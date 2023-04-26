@@ -87,7 +87,7 @@
                 </v-autocomplete>
               </template>
             </v-col>
-
+            <!-- เพิ่มผู้ใช้ -->
             <v-col cols="12" sm="2">
               <v-btn
                 color="#FF6B81"
@@ -107,45 +107,71 @@
 
       </div> -->
       <!-- table -->
-      <div >
-      <template>
-        <v-data-table
-        
-          :headers="headers"
-          :items="user_list"
-          :search="search"
-          :page.sync="page"
-          :items-per-page="itemsPerPage"
-          :sort-by="sortBy"
-          @page-count="pageCount = $event"
-          class="elevation-1 header-table"
-        >
-        <!-- <div v-for="(item_data, index_item) in user_list"
+      <div>
+        <template>
+          <v-data-table
+            :headers="headers"
+            :items="user_list"
+            :search="search"
+            :page.sync="page"
+            :items-per-page="itemsPerPage"
+            :sort-by="sortBy"
+            @page-count="pageCount = $event"
+            class="elevation-1 header-table"
+          >
+            <!-- <div v-for="(item_data, index_item) in user_list"
             :key="`${index_item}-cart`"> -->
-          <template v-slot:[`item.actions`]="{ item }" >
-            <v-icon small color="#FF6B81" @click="$router.push({name:'UserDetail', params:{action: 'view',account_id : item.accountId}})">
-              mdi-eye-outline
-            </v-icon>
-            <v-icon small class="ml-5" color="#FF6B81" @click="editUserDetail">
-              mdi-pencil
-            </v-icon>
-            <v-icon
-              class="ml-5"
-              small
-              color="#FF6B81"
-              @click="deleteItem(item)"
-            >
-              mdi-delete
-            </v-icon>
-         
-          </template>
-        <!-- </div> -->
-        </v-data-table>
-      </template> 
-    </div>
 
-      
-<!-- :loading="LoadingTable"  -->
+            <template v-slot:[`item.roles`]="{ item }">
+              {{
+                item.userRoles
+                  .map((val) => {
+                    return val.roleNameTh;
+                  })
+                  .join()
+              }}
+
+              <!-- <div>
+                {{ user_list.map((val)=>{val}) }}
+              </div> -->
+            </template>
+
+            <template v-slot:[`item.actions`]="{ item }">
+              <v-icon
+                small
+                color="#FF6B81"
+                @click="
+                  $router.push({
+                    name: 'UserDetail',
+                    params: { action: 'view', account_id: item.accountId },
+                  })
+                "
+              >
+                mdi-eye-outline
+              </v-icon>
+              <v-icon
+                small
+                class="ml-5"
+                color="#FF6B81"
+                @click="editUserDetail"
+              >
+                mdi-pencil
+              </v-icon>
+              <v-icon
+                class="ml-5"
+                small
+                color="#FF6B81"
+                @click="deleteItem(item)"
+              >
+                mdi-delete
+              </v-icon>
+            </template>
+            <!-- </div> -->
+          </v-data-table>
+        </template>
+      </div>
+
+      <!-- :loading="LoadingTable"  -->
 
       <!-- <v-data-table
       
@@ -160,9 +186,8 @@
           </v-btn>
         </template>
       </v-data-table> -->
-
     </v-container>
-  </v-app> 
+  </v-app>
 </template>
 
 
@@ -192,11 +217,16 @@ export default {
       },
       headers: [
         { text: "ชื่อ", value: "firstNameTh", sortable: false, align: "start" },
-        { text: "นามสกุล", value: "lastNameTh", sortable: false, align: "start" },
+        {
+          text: "นามสกุล",
+          value: "lastNameTh",
+          sortable: false,
+          align: "start",
+        },
         { text: "อีเมล", value: "email", sortable: false, align: "start" },
         { text: "ผู้ใช้", value: "userName", sortable: false, align: "start" },
         // { text: "One ID", value: "oneid", sortable: false },
-        // { text: "บทบาท", value: "role", sortable: false },
+        { text: "บทบาท", value: "roles", sortable: false },
         { text: "", value: "actions", sortable: false, align: "start" },
       ],
       editedIndex: -1,
@@ -233,26 +263,21 @@ export default {
     this.$store.dispatch("UserModules/GetUserList");
     this.local_data = JSON.parse(localStorage.getItem("userDetail"));
     this.GetShowById(this.local_data.account_id);
-
-
-    
   },
   created() {
-    this.GetUserList()
+    this.GetUserList();
     this.initialize();
   },
 
   methods: {
-
     ...mapActions({
-      GetUserList : "UserModules/GetUserList",
-      GetShowById : "UserModules/GetShowById",
+      GetUserList: "UserModules/GetUserList",
+      GetShowById: "UserModules/GetShowById",
     }),
 
     initialize() {
       for (const data in this.GetUserList) {
-        console.log("data",data);
-        
+        console.log("data", data);
       }
     },
     // initialize() {
@@ -354,13 +379,15 @@ export default {
     //   this.GetShowById(this.account_id)
     // },
     editUserDetail() {
-      this.$router.push({ name: "UserDetail",params:{action: "edit", account_id: "0001"} });
+      this.$router.push({
+        name: "UserDetail",
+        params: { action: "edit", account_id: "0001" },
+      });
     },
   },
 
   computed: {
-
-    ...mapGetters({ 
+    ...mapGetters({
       user_list: "UserModules/getUserList",
       show_by_id: "UserModules/getShowById",
     }),
@@ -371,7 +398,6 @@ export default {
     filteredKeys() {
       return this.keys.filter((key) => key !== "Name");
     },
-
   },
 };
 </script>

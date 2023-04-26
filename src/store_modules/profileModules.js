@@ -181,57 +181,61 @@ const profileModules = {
         }
         let data_local = JSON.parse(localStorage.getItem("userDetail"))
         console.log("data_local.account_id", data_local.account_id);
-        if (data_local.roles.includes('R_5')) {
+        if (data_local?.roles?.includes('R_5')) {
           let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?student_id=${account_id}`, config)
           console.log("data_parent", data)
           if (data.statusCode === 200) {
-            console.log(data.data);
+            console.log("=>>>>>>", data.data);
             localStorage.setItem("relations", JSON.stringify(data.data))
-            if (data.data && data.data.message !== "relation not found.") {
-              console.log(" !== relation not found Stu")
-              context.commit("SetProfileUser", data.data)
-            } else if (data_local.roles.includes('R_4') & data_local.roles.includes('R_5')) {
-              let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?parent_id=${account_id}`, config)
-              console.log("data_student", data)
-              if (data.statusCode === 200) {
-                if (data.data && data.data.message !== "relation not found.") {
-                  console.log("!== relation not found PR 45");
-                  let students = []
-                  for await (const student of data.data) {
-                    if (student.parentId == account_id) {
-                      students.push(student.student)
-                    }
-                  }
-                  console.log(account_id);
-                  console.log("students : ", students)
-                  context.commit("SetProfileUser", data.data)
-                  context.commit("SetStudents", students)
-                  localStorage.setItem("relations", JSON.stringify(data.data))
-                } else {
-                  console.log("== relation not found PR 45");
-                  // localStorage.removeItem("relations"); // clear existing data in local storage
-                  localStorage.setItem("relations", JSON.stringify(data.data));
-                  throw { error: data };
-                }
-              } else {
-                throw { error: data }
-              }
-            } else {
-              console.log("== relation not found Stu");
-              data.data = []
-              console.log(data);
-              context.commit("SetProfileUser", data.data)
-              localStorage.setItem("relations", JSON.stringify(data.data));
-              throw { error: data };
-            }
+            context.commit("SetProfileUser", data.data)
+
+            // if (data?.data?.message !== "relation not found.") {
+            //   console.log(" !== relation not found Stu")
+            //   context.commit("SetProfileUser", data.data)
+            // } else {
+            //   context.commit("SetProfileUser", data.data)
+            // }
+            // else if (data_local.roles.includes('R_4')) {
+            //   let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?parent_id=${account_id}`, config)
+            //   console.log("data_student", data)
+            //   if (data.statusCode === 200) {
+            //     if (data.data && data.data.message !== "relation not found.") {
+            //       console.log("!== relation not found PR 45");
+            //       let students = []
+            //       for await (const student of data.data) {
+            //         if (student.parentId == account_id) {
+            //           students.push(student.student)
+            //         }
+            //       }
+            //       console.log(account_id);
+            //       console.log("students : ", students)
+            //       context.commit("SetProfileUser", data.data)
+            //       context.commit("SetStudents", students)
+            //       localStorage.setItem("relations", JSON.stringify(data.data))
+            //     } else {
+            //       console.log("== relation not found PR 45");
+            //       localStorage.setItem("relations", JSON.stringify(data.data));
+            //       throw { error: data };
+            //     }
+            //   } else {
+            //     throw { error: data }
+            //   }
+            // } else {
+            //   console.log("== relation not found Stu");
+            //   data.data = []
+            //   console.log(data);
+            //   context.commit("SetProfileUser", data.data)
+            //   localStorage.setItem("relations", JSON.stringify(data.data));
+            //   throw { error: data };
+            // }
           } else {
             throw { error: data }
           }
-        } else if (data_local.roles.includes('R_4') & data_local.roles.includes('R_5')) {
+        } else if (data_local?.roles?.includes('R_4')) {
           let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?parent_id=${account_id}`, config)
           console.log("data_student", data)
           if (data.statusCode === 200) {
-            if (data.data && data.data.message !== "relation not found.") {
+            if (data?.data?.message !== "relation not found.") {
               console.log("!== relation not found PR");
               let students = []
               for await (const student of data.data) {
@@ -254,31 +258,32 @@ const profileModules = {
             throw { error: data }
           }
         } else {
-          let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?parent_id=${account_id}`, config)
-          console.log("data_student", data)
-          if (data.statusCode === 200) {
-            if (data.data && data.data.message !== "relation not found.") {
-              console.log("!== relation not found PR");
-              let students = []
-              for await (const student of data.data) {
-                if (student.parentId == account_id) {
-                  students.push(student.student)
-                }
-              }
-              console.log(account_id);
-              console.log("students : ", students)
-              context.commit("SetProfileUser", data.data)
-              context.commit("SetStudents", students)
-              localStorage.setItem("relations", JSON.stringify(data.data))
-            } else {
-              console.log("== relation not found PR");
-              // localStorage.removeItem("relations"); // clear existing data in local storage
-              localStorage.setItem("relations", JSON.stringify(data.data));
-              throw { error: data };
-            }
-          } else {
-            throw { error: data }
-          }
+          localStorage.setItem("relations", []);
+
+          // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?parent_id=${account_id}`, config)
+          // console.log("data_student", data)
+          // if (data.statusCode === 200) {
+          //   if (data.data && data.data.message !== "relation not found.") {
+          //     console.log("!== relation not found PR");
+          //     let students = []
+          //     for await (const student of data.data) {
+          //       if (student.parentId == account_id) {
+          //         students.push(student.student)
+          //       }
+          //     }
+          //     console.log(account_id);
+          //     console.log("students : ", students)
+          //     context.commit("SetProfileUser", data.data)
+          //     context.commit("SetStudents", students)
+          //     localStorage.setItem("relations", JSON.stringify(data.data))
+          //   } else {
+          //     console.log("== relation not found PR");
+          //     localStorage.setItem("relations", JSON.stringify(data.data));
+          //     throw { error: data };
+          //   }
+          // } else {
+          //   throw { error: data }
+          // }
         }
       } catch (error) {
         console.log(error)

@@ -359,7 +359,6 @@
                 color="#FCFCFC"
                 v-for="(student, student_index) in students.students_detail"
                 :key="`${student_index}-student`"
-                
               >
                 <v-card-text class="mt-3">
                   <v-row dense>
@@ -457,7 +456,7 @@
               <v-col cols="12" sm="6" align="right">
                 <v-btn
                   outlined
-                  class="btn3 mt-10 "
+                  class="btn3 mt-10"
                   color="#ff6b81"
                   @click="addStudentsCard"
                 >
@@ -589,9 +588,9 @@
                   </v-row>
                 </v-card-text>
               </v-card>
-            <!-- Table -->
-            <div>
-              <headerCard
+              <!-- Table -->
+              <div>
+                <headerCard
                   class="ml-6 mt-8"
                   :icon="'mdi-school-outline'"
                   :icon_color="'#FF6B81'"
@@ -599,43 +598,39 @@
                 ></headerCard>
                 <v-divider class="mx-10"></v-divider>
                 <div class="my-5 mx-10">
-                    <!-- :items="datausers"
+                  <!-- :items="datausers"
                   :search="search"
                   :page.sync="page"
                   :items-per-page="itemsPerPage"
                   :sort-by="user_data.sortBy" -->
-                    <v-data-table
-                      :headers="headersTabs"
-                      @page-count="pageCount = $event"
-                      class="elevation-1 header-table"
-                    >
-                      <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon small color="#FF6B81"> mdi-eye-outline </v-icon>
-                        <v-icon
-                          small
-                          class="ml-5"
-                          color="#FF6B81"
-                          @click="editItem(item)"
-                        >
-                          mdi-pencil
-                        </v-icon>
-                        <v-icon
-                          class="ml-5"
-                          small
-                          color="#FF6B81"
-                          @click="deleteItem(item)"
-                        >
-                          mdi-delete
-                        </v-icon>
-                      </template>
-                    </v-data-table>
-                  </div>
-
+                  <v-data-table
+                    :headers="headersTabs"
+                    @page-count="pageCount = $event"
+                    class="elevation-1 header-table"
+                  >
+                    <template v-slot:[`item.actions`]="{ item }">
+                      <v-icon small color="#FF6B81"> mdi-eye-outline </v-icon>
+                      <v-icon
+                        small
+                        class="ml-5"
+                        color="#FF6B81"
+                        @click="editItem(item)"
+                      >
+                        mdi-pencil
+                      </v-icon>
+                      <v-icon
+                        class="ml-5"
+                        small
+                        color="#FF6B81"
+                        @click="deleteItem(item)"
+                      >
+                        mdi-delete
+                      </v-icon>
+                    </template>
+                  </v-data-table>
+                </div>
               </div>
-
             </div>
-
-           
           </div>
 
           <!-- Dialog ONE ID -->
@@ -837,13 +832,11 @@ export default {
       ) {
         console.log("นักเรียน");
         this.user_data.isCardOpen = true;
-        }
-        if (
-        this.user_data.selectedbox == false
-          ) {
-            console.log("ปิดนักเรียน");
-            this.user_data.isCardOpen = false;
-          } else if (
+      }
+      if (this.user_data.selectedbox == false) {
+        console.log("ปิดนักเรียน");
+        this.user_data.isCardOpen = false;
+      } else if (
         this.user_data.selectedbox ==
         this.user_data.privilege.includes("ผู้ปกครอง")
       ) {
@@ -871,7 +864,7 @@ export default {
 
     uploadFile() {
       this.file = this.$refs.fileInput.files[0];
-      console.log("file=>",this.file);
+      console.log("file=>", this.file);
       if (!this.file) return;
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -879,12 +872,12 @@ export default {
       };
       reader.readAsDataURL(this.file);
     },
-    
-    checkUsername() {
-      return this.isMatch == false
-        ? "ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบใหม่อีกครั้ง"
-        : "";
-    },
+
+    // checkUsername() {
+    //   return this.isMatch == false
+    //     ? "ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบใหม่อีกครั้ง"
+    //     : "";
+    // },
 
     checkData() {
       if (
@@ -908,7 +901,7 @@ export default {
       changeStudentsData: "UserManageModules/changeStudentsData",
       changeUserData: "UserManageModules/changeUserData",
       changeParentData: "UserManageModules/changeParentData",
-      ChangeCardStudens: "UserManageModules/ChangeCardStudens"
+      ChangeCardStudens: "UserManageModules/ChangeCardStudens",
     }),
     validate(e, type) {
       inputValidation(e, type);
@@ -1074,8 +1067,8 @@ export default {
 }
 
 .camera {
-  position: absolute; 
-  margin-left: 60px; 
+  position: absolute;
+  margin-left: 60px;
 }
 </style>
   
