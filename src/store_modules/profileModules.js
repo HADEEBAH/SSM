@@ -180,12 +180,7 @@ const profileModules = {
           }
         }
         let data_local = JSON.parse(localStorage.getItem("userDetail"))
-<<<<<<< HEAD
-        console.log("data_local.account_id", data_local.account_id);
-        if (data_local?.roles?.includes('R_5')) {
-=======
         if (data_local.roles.includes('R_5')) {
->>>>>>> develop
           let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?student_id=${account_id}`, config)
           console.log("data_parent", data)
           if (data.statusCode === 200) {
