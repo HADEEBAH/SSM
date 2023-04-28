@@ -42,7 +42,7 @@
                     @change="resetTime"
                 >
                     <v-row>
-                        <v-col cols="6" v-for="(date , date_index) in groupDate(course_data.days_of_class)" :key="date_index">
+                        <v-col cols="6" v-for="(date , date_index) in groupByDay(course_data.days_of_class)" :key="date_index">
                             <v-radio
                                 :label="dayOfWeekArray(date.day)"
                                 color="#ff6B81"
@@ -671,7 +671,6 @@ export default {
                     if(this.course_order.course_type_id === "CT_1"){
                         let course_monitors_filter = this.course_monitors.filter((v)=> v.m_course_id == this.course_order.course_id   && v.m_day_of_week_id === time_data.dayOfWeekId && v.m_time_id == time_data.timeId)
                         // console.log("course_monitors_filter + >",course_monitors_filter)
-
                         if(course_monitors_filter.length > 0){
                             console.log(course_monitors_filter[0])
                             if((this.course_order.students.length + course_monitors_filter[0].m_current_student) <= course_monitors_filter[0].m_maximum_student){
@@ -756,32 +755,9 @@ export default {
                
             }
         },
-        groupDate(day_of_class){
-            const groupedData = [];
-            // Group data by course_coach_id first
-            const groupedByCoach = day_of_class.reduce((acc, obj) => {
-            const key = obj.course_coach_id[0];
-            (acc[key] || (acc[key] = [])).push(obj);
-            return acc;
-            }, {});
-
-            // Group data by day if day length = 1 and course_coach_id is the same
-            for (const key in groupedByCoach) {
-            const group = groupedByCoach[key];
-            const dayGroups = group.reduce((acc, obj) => {
-                if (obj.day.length === 1) {
-                const dayKey = obj.day[0];
-                (acc[dayKey] || (acc[dayKey] = [])).push(obj);
-                } else {
-                acc.push(obj);
-                }
-                return acc;
-            }, []);
-            groupedData.push(...Object.values(dayGroups));
-            }
-
-            console.log(groupedData);
-            return day_of_class
+       
+        groupByDay(originalArray) {
+            return originalArray
         },
         CreateReserve(){
             Swal.fire({

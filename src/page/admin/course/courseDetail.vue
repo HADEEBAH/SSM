@@ -1,6 +1,8 @@
 <template>
     <v-app>
         <v-container>
+            {{setFunctions}}
+            <loading-overlay :loading="course_is_loading"></loading-overlay>
             <header-page :breadcrumbs="breadcrumbs"></header-page>
             <v-row class="mb-3">
                 <v-col cols="12" sm="3" @click="tab = 'course'">
@@ -79,8 +81,6 @@
                 </v-col>
             </v-row>
             <!-- BODY -->
-
-            <loading-overlay :loading="course_is_loading"></loading-overlay>
             <v-card v-if="!course_is_loading">
                 <v-card-text>
                     <v-tabs-items v-model="tab">
@@ -92,6 +92,37 @@
                                 :categorys="categorys"
                                 :coachs="coachs"
                             ></course-card>
+                            <!-- ACTION -->
+                            <v-row class="px-4" v-if="!course_edit">
+                                <v-col align="right">
+                                    <v-btn
+                                        color="#FF6B81"
+                                        class="white--text btn-size-lg"
+                                        depressed
+                                        @click="course_edit = true"
+                                    >แก้ไข
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
+                            <v-row class="px-4" v-if="course_edit">
+                                <v-col align="right">
+                                    <v-btn
+                                        color="#FF6B81"
+                                        class="btn-size-lg"
+                                        outlined
+                                        @click="cancelEdit()"
+                                    >ยกเลิก</v-btn>
+                                </v-col>
+                                <v-col cols="auto">
+                                    <v-btn
+                                        color="#FF6B81"
+                                        class="white--text btn-size-lg"
+                                        depressed
+                                        @click="CourseUpdateDetail()"
+                                    >บันทึก
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
                         </v-tab-item>
                         <!-- COACH AND TIME -->
                         <v-tab-item value="time and coach">
@@ -118,10 +149,72 @@
                                     ></coachs-card>
                                 </v-card-text>
                             </v-card>
+                            <!-- ACTION -->
+                            <v-row class="px-4" v-if="!course_edit">
+                                <v-col align="right">
+                                    <v-btn
+                                        color="#FF6B81"
+                                        class="white--text btn-size-lg"
+                                        depressed
+                                        @click="course_edit = true"
+                                    >แก้ไข
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
+                            <v-row class="px-4" v-if="course_edit">
+                                <v-col align="right">
+                                    <v-btn
+                                        color="#FF6B81"
+                                        class="btn-size-lg"
+                                        outlined
+                                        @click="cancelEdit()"
+                                    >ยกเลิก</v-btn>
+                                </v-col>
+                                <v-col cols="auto">
+                                    <v-btn
+                                        color="#FF6B81"
+                                        class="white--text btn-size-lg"
+                                        depressed
+                                        @click="CourseUpdateCoach()"
+                                    >บันทึก
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
                         </v-tab-item>
                         <!-- PACKAGE -->
                         <v-tab-item value="package">
                             <package-card :disable="!course_edit"></package-card>
+                             <!-- ACTION -->
+                             <v-row class="px-4" v-if="!course_edit">
+                                <v-col align="right">
+                                    <v-btn
+                                        color="#FF6B81"
+                                        class="white--text btn-size-lg"
+                                        depressed
+                                        @click="course_edit = true"
+                                    >แก้ไข
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
+                            <v-row class="px-4" v-if="course_edit">
+                                <v-col align="right">
+                                    <v-btn
+                                        color="#FF6B81"
+                                        class="btn-size-lg"
+                                        outlined
+                                        @click="cancelEdit()"
+                                    >ยกเลิก</v-btn>
+                                </v-col>
+                                <v-col cols="auto">
+                                    <v-btn
+                                        color="#FF6B81"
+                                        class="white--text btn-size-lg"
+                                        depressed
+                                        @click="CourseUpdatePackage()"
+                                    >บันทึก
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
                         </v-tab-item>
                         <!-- STUDENT LIST -->
                         <v-tab-item value="student list">
@@ -415,11 +508,10 @@
                         </v-tab-item>
                     </v-tabs-items>
                     <!-- Actions -->
-                    <template v-if="tab !== 'student list'">
+                    <!-- <template v-if="tab !== 'student list'">
                         <v-row class="px-4" v-if="!course_edit">
                             <v-col align="right">
                                 <v-btn
-                                    
                                     color="#FF6B81"
                                     class="white--text btn-size-lg"
                                     depressed
@@ -431,19 +523,14 @@
                         <v-row class="px-4" v-if="course_edit">
                             <v-col align="right">
                                 <v-btn
-                                    disabled
                                     color="#FF6B81"
                                     class="btn-size-lg"
                                     outlined
                                     @click="cancelEdit()"
-                                >ยกเลิก
-                                </v-btn>
+                                >ยกเลิก</v-btn>
                             </v-col>
                             <v-col cols="auto">
-                                <!-- <loading-overlay :loading="course_is_loading"></loading-overlay> -->
-
                                 <v-btn
-                                    
                                     color="#FF6B81"
                                     class="white--text btn-size-lg"
                                     depressed
@@ -452,7 +539,7 @@
                                 </v-btn>
                             </v-col>
                         </v-row>
-                    </template>
+                    </template> -->
                 </v-card-text>
             </v-card>
         </v-container>
@@ -670,15 +757,14 @@ export default {
         ],
     }),
     created() {
-        this.$store.dispatch("CourseModules/GetCourse",  this.$route.params.course_id);
-        this.$store.dispatch("CategoryModules/GetCategorys");
-        this.$store.dispatch("CourseModules/GetCoachs");
+       
     },
     mounted() {
     },
     watch: {
         tab: function () {
             this.course_edit = false;
+            this.$store.dispatch("CourseModules/GetCourse",  this.$route.params.course_id);
         },
     },
     computed: {
@@ -688,13 +774,64 @@ export default {
             course_data: "CourseModules/getCourseData",
             course_is_loading: "CourseModules/getCourseIsLoading",
         }),
+        setFunctions(){
+            this.$store.dispatch("CourseModules/GetCourse",  this.$route.params.course_id);
+            this.$store.dispatch("CategoryModules/GetCategorys");
+            this.$store.dispatch("CourseModules/GetCoachs");
+            return ''
+        }
     },
     methods: {
         ...mapActions({
             GetCourse: "CourseModules/GetCourse",
             ChangeCourseData: "CourseModules/ChangeCourseData",
             UpdateCourse: "CourseModules/UpdateCourse",
+            UpdateCouserDetail: "CourseModules/UpdateCouserDetail",
+            UpdateCouserCoach: "CourseModules/UpdateCouserCoach",
+            UpdateCouserPackage: "CourseModules/UpdateCouserPackage",
         }),
+        CourseUpdateDetail(){
+            Swal.fire({
+                icon: "question",
+                title: "ต้องการแก้ไขคอร์สใช่มั้ย",
+                showDenyButton: false,
+                showCancelButton: true,
+                confirmButtonText: "ตกลง",
+                cancelButtonText: "ยกเลิก",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    this.UpdateCouserDetail({course_id :  this.course_data.course_id ,course_data : this.course_data })
+                }
+            })
+        },
+        CourseUpdateCoach(){
+            Swal.fire({
+                icon: "question",
+                title: "ต้องการแก้ไขคอร์สใช่มั้ย",
+                showDenyButton: false,
+                showCancelButton: true,
+                confirmButtonText: "ตกลง",
+                cancelButtonText: "ยกเลิก",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    this.UpdateCouserCoach({course_id :  this.course_data.course_id ,course_data : this.course_data })
+                }
+            })
+        },
+        CourseUpdatePackage(){
+            Swal.fire({
+                icon: "question",
+                title: "ต้องการแก้ไขคอร์สใช่มั้ย",
+                showDenyButton: false,
+                showCancelButton: true,
+                confirmButtonText: "ตกลง",
+                cancelButtonText: "ยกเลิก",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    this.UpdateCouserPackage({course_id :  this.course_data.course_id ,course_data : this.course_data })
+                }
+            })
+        },
         updateCourse() {
             Swal.fire({
                 icon: "question",

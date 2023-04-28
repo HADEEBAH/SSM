@@ -45,14 +45,14 @@ const loginModules = {
                 if(status){
                     status = 'Active'
                 }
-                let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account?username=${username}&status=active`)
+                let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/username?username=${username}`)
                 console.log(data)
                 if(data.statusCode === 200){
-                    if(data.data.length > 0){
+                    if(data.data.userOneId){
                         if(type === 'student'){
-                            context.commit("SetUserStudentData",data.data)
+                            context.commit("SetUserStudentData",[data.data])
                         }else{
-                            context.commit("SetUserData",data.data)
+                            context.commit("SetUserData",[data.data])
                         }
                     }else{
                         Swal.fire({
