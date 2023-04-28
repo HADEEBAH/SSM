@@ -299,13 +299,17 @@ export default {
                 }
             }
             console.log("preview_url", this.file);
+            const payload = {
+              category_name_th:this.kingdom.kingdom_name_th,
+              category_name_en:this.kingdom.kingdom_name_eng,
+              category_description: this.kingdom.detail,
+              taught_by: this.kingdom.learning_method,
+            }
+
             let bodyFormData = new FormData();
             bodyFormData.append("img_url", this.file);
-            bodyFormData.append("category_name_th",this.kingdom.kingdom_name_th);
-            bodyFormData.append("category_name_en",this.kingdom.kingdom_name_eng);
-            bodyFormData.append("category_description", this.kingdom.detail);
-            bodyFormData.append("taught_by", this.kingdom.learning_method);
-            console.log("header", config);
+            bodyFormData.append("payload", JSON.stringify(payload));
+
             let { data } = await axios.post( `${process.env.VUE_APP_URL}/api/v1/category`, bodyFormData, config);
             if (data.statusCode === 201) {
               this.showImg = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.categoryImg}`;
