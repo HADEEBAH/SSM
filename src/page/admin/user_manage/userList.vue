@@ -2,33 +2,34 @@
   <v-app>
     <v-container>
       <v-row dense>
-        <headerPage title="จัดการผู้ใช้งาน">
-          <v-card outlined>
-            <v-card-text class="pa-2">
-              <v-row dense class="d-flex align-center">
-                <v-col cols="auto">
-                  <v-img
-                    src="@/assets/manageuser/image 78.svg"
-                    height="37px"
-                    width="37px"
-                  ></v-img>
-                </v-col>
-                <v-col cols="auto">
-                  <label-custom text="ผู้ใช้งานทั้งหมด"></label-custom>
-                </v-col>
-                <v-col>
-                  <v-avatar size="40" color="#FBF3F5"
-                    ><div class="pink--text">5</div></v-avatar
-                  >
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </v-card>
-        </headerPage>
+        <headerPage title="จัดการผู้ใช้งาน"></headerPage>
+        <v-card outlined>
+          <v-card-text class="pa-2">
+            <v-row dense class="d-flex align-center">
+              <v-col cols="auto">
+                <v-img
+                  src="@/assets/manageuser/image 78.svg"
+                  height="37px"
+                  width="37px"
+                ></v-img>
+              </v-col>
+              <v-col cols="auto">
+                <label-custom text="ผู้ใช้งานทั้งหมด"></label-custom>
+              </v-col>
+              <v-col>
+                <v-avatar size="40" color="#FBF3F5"
+                  ><div class="pink--text">
+                    {{ user_list.length }}
+                  </div></v-avatar
+                >
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
       </v-row>
 
       <!-- search -->
-      <v-card flat class="mb-3">
+      <v-card flat class="my-5">
         <v-card-text class="border">
           <v-row class="d-flex align-center">
             <v-col>
@@ -44,7 +45,7 @@
             </v-col>
             <label-custom text="บทบาท"></label-custom>
             <v-col cols="12" sm="3">
-              <template v-if="$vuetify.breakpoint.mdAndUp">
+              <!-- <template v-if="$vuetify.breakpoint.mdAndUp">
                 <v-autocomplete
                   dense
                   v-model="sortBy"
@@ -56,18 +57,18 @@
                   color="pink"
                   item-color="pink"
                 >
-                  <!-- <template v-slot:no-data>
+                  <template v-slot:no-data>
                         <v-list-item>
                           <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
                         </v-list-item>
-                      </template> -->
+                      </template>
 
                   <template v-slot:item="{ item }">
                     <v-list-item-content>
                       <v-list-item-title
                         ><span
                           :class="
-                            // check array ว่ามี stringไหม
+                            check array ว่ามี stringไหม
                             sortBy.includes(item) ? 'font-bold' : ''
                           "
                           >{{ item }}</span
@@ -79,13 +80,13 @@
                         {{
                           sortBy.includes(item)
                             ? "mdi-checkbox-marked"
-                            : "mdi-checkbox-blank-outline"
+                            : "mdi-checkbox-blank-circle-outline"
                         }}</v-icon
                       >
                     </v-list-item-action>
                   </template>
                 </v-autocomplete>
-              </template>
+              </template> -->
             </v-col>
             <!-- เพิ่มผู้ใช้ -->
             <v-col cols="12" sm="2">
@@ -153,7 +154,12 @@
                 small
                 class="ml-5"
                 color="#FF6B81"
-                @click="editUserDetail"
+                @click="
+                  $router.push({
+                    name: 'UserDetail',
+                    params: { action: 'edit', account_id: item.accountId },
+                  })
+                "
               >
                 mdi-pencil
               </v-icon>

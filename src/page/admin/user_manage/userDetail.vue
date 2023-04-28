@@ -2,7 +2,7 @@
   <v-container class="overflow-x-hidden overflow-y-hidden">
     <!-- {{ setFunc }} -->
     <!-- <pre>{{ data_user_relation_management }}</pre> -->
-    <!-- <pre>{{ student_data }}</pre> -->
+    <!-- <pre>{{ student_schedule }}</pre> -->
     <div v-if="$route.params.action == 'view'">
       <v-row dense>
         <v-col>
@@ -751,7 +751,7 @@
                         :headers="headersTabs"
                         @page-count="pageCount = $event"
                         class="elevation-1 header-table"
-                        :items="student_data"
+                        :items="student_schedule"
                       >
                       </v-data-table>
                     </div>
@@ -1083,11 +1083,11 @@
                           text="Student’s Username (English)"
                         ></label-custom>
                         <div>
-                          {{
+                          <!-- {{
                             !data_item.student.studentUsername
                               ? "-"
                               : data_item.student.studentUsername
-                          }}
+                          }} -->
                         </div>
                       </v-col>
                       <v-col cols="12" sm="6">
@@ -1137,7 +1137,7 @@
                     :headers="headers"
                     @page-count="pageCount = $event"
                     class="elevation-1 header-table"
-                    :items="student_data"
+                    :items="student_schedule"
                   >
                     <template v-slot:[`item.days`]>
                       <div
@@ -1276,11 +1276,11 @@ export default {
     headers: [
       { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
       { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
-      { text: "ชื่อคอร์ส", value: "courseNameTh", sortable: false },
-      { text: "แพ็คเกจ", value: "email", sortable: false },
+      { text: "ชื่อคอร์ส", value: "cpo.categoryNameTh", sortable: false },
+      { text: "แพ็คเกจ", value: "cpo.packageName", sortable: false },
       { text: "โค้ช", value: "coachName", sortable: false },
       { text: "ประเภท", value: "oneid", sortable: false },
-      { text: "ระยะเวลา", value: "role", sortable: false },
+      { text: "ระยะเวลา", value: "cpo.optionName", sortable: false },
       { text: "วัน", value: "days", sortable: false },
       { text: "เวลาเริ่ม", value: "period.start", sortable: false },
       { text: "เวลาสิ้นสุด", value: "period.end", sortable: false },
@@ -1288,11 +1288,11 @@ export default {
     headersTabs: [
       { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
       { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
-      { text: "ชื่อคอร์ส", value: "courseNameTh", sortable: false },
-      { text: "แพ็คเกจ", value: "email", sortable: false },
+      { text: "ชื่อคอร์ส", value: "cpo.categoryNameTh", sortable: false },
+      { text: "แพ็คเกจ", value: "cpo.packageName", sortable: false },
       { text: "โค้ช", value: "coachName", sortable: false },
       { text: "ประเภท", value: "oneid", sortable: false },
-      { text: "ระยะเวลา", value: "role", sortable: false },
+      { text: "ระยะเวลา", value: "cpo.optionName", sortable: false },
       { text: "วัน", value: "days", sortable: false },
       { text: "เวลาเริ่ม", value: "period.start", sortable: false },
       { text: "เวลาสิ้นสุด", value: "period.end", sortable: false },
@@ -1392,6 +1392,10 @@ export default {
     for (const item of JSON.parse(localStorage.getItem("relations"))) {
       this.GetStudentData(item.student.studentId);
     }
+
+    for (const item of JSON.parse(localStorage.getItem("relations"))) {
+      this.GetStudentSchedule(item.student.studentId);
+    }
     // this.GetAll(this.$route.params.account_id);
     // for (const item of this.relations) {
     //   this.GetStudentData(item.student.studentId);
@@ -1414,6 +1418,7 @@ export default {
       GetUserById: "UserModules/GetUserById",
       GetDataRelationsManagement:
         "UserManageModules/GetDataRelationsManagement",
+      GetStudentSchedule: "UserModules/GetStudentSchedule",
     }),
 
     openFileSelector() {
@@ -1797,6 +1802,7 @@ export default {
       data_user_by_id: "UserModules/getUserById",
       data_user_relation_management:
         "UserManageModules/getDataRelationsManagement",
+      student_schedule: "UserModules/getStudentSchedule",
     }),
     // setFunc() {
     //   console.log("=>");

@@ -113,14 +113,31 @@ const UserManageModules = {
         if (data_account?.userRoles?.map((val) => { return val.roleId }).includes("R_5")) {
           let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?student_id=${data_account.userOneId}`, config)
           if (data.statusCode === 200) {
-            context.commit("SetDataUserRelationsManagement", data.data)
+            if (data?.data?.message !== "relation not found.") {
+
+              context.commit("SetDataUserRelationsManagement", data.data)
+
+            } else {
+              context.commit("SetDataUserRelationsManagement", [])
+
+            }
+
+
           } else {
             throw { error: data }
           }
         } else if (data_account?.userRoles?.map((val) => { return val.roleId }).includes("R_4")) {
           let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?parent_id=${data_account.userOneId}`, config)
           if (data.statusCode === 200) {
-            context.commit("SetDataUserRelationsManagement", data.data)
+            if (data?.data?.message !== "relation not found.") {
+
+              context.commit("SetDataUserRelationsManagement", data.data)
+
+            } else {
+              context.commit("SetDataUserRelationsManagement", [])
+
+            }
+
           } else {
             throw { error: data }
           }

@@ -186,8 +186,13 @@ const profileModules = {
           console.log("data_parent", data)
           if (data.statusCode === 200) {
             console.log("=>>>>>>", data.data);
-            localStorage.setItem("relations", JSON.stringify(data.data))
-            context.commit("SetProfileUser", data.data)
+            if (data?.data?.message !== "relation not found.") {
+              localStorage.setItem("relations", JSON.stringify(data.data))
+              context.commit("SetProfileUser", data.data)
+            } else {
+              localStorage.setItem("relations", [])
+
+            }
 
             // if (data?.data?.message !== "relation not found.") {
             //   console.log(" !== relation not found Stu")
@@ -251,7 +256,7 @@ const profileModules = {
             } else {
               console.log("== relation not found PR");
               // localStorage.removeItem("relations"); // clear existing data in local storage
-              localStorage.setItem("relations", JSON.stringify(data.data));
+              localStorage.setItem("relations", []);
               throw { error: data };
             }
           } else {

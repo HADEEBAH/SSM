@@ -49,7 +49,8 @@ const userModules = {
                 ]
             }
         ],
-        data_user_by_id: []
+        data_user_by_id: [],
+        student_schedule: [],
     },
     mutations: {
         SetUserList(state, payload) {
@@ -58,9 +59,12 @@ const userModules = {
         SetShowById(state, payload) {
             state.show_by_id = payload
         },
-        setUserById(state, payload) {
+        SetUserById(state, payload) {
             state.data_user_by_id = payload
-        }
+        },
+        SetStudentSchedule(state, payload) {
+            state.student_schedule = payload
+        },
     },
     actions: {
         async GetUserList(context) {
@@ -118,15 +122,37 @@ const userModules = {
                 }
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${account_id}`, config)
                 if (data.statusCode === 200) {
-                    console.log("setUserById=>>>>>>>>>", data.data);
-                    context.commit("setUserById", data.data)
+                    console.log("SetUserById=>>>>>>>>>", data.data);
+                    context.commit("SetUserById", data.data)
                 } else {
                     throw { error: data }
                 }
             } catch (error) {
                 console.log("err", error);
             }
-        }
+        },
+
+        async GetStudentSchedule(context, student_id) {
+            console.log("GetStudentSchedule", student_id);
+            try {
+                let config = {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-type": "Application/json",
+                        'Authorization': `Bearer ${VueCookie.get("token")}`
+                    }
+                }
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/usermanagement/student/${student_id}`, config)
+                if (data.statusCode === 200) {
+                    console.log("SetStudentSchedule ----->", data.data);
+                    context.commit("SetStudentSchedule", data.data)
+                } else {
+                    throw { error: data }
+                }
+            } catch (error) {
+                console.log("err", error);
+            }
+        },
 
     },
     getters: {
@@ -138,6 +164,9 @@ const userModules = {
         },
         getUserById(state) {
             return state.data_user_by_id
+        },
+        getStudentSchedule(state) {
+            return state.student_schedule
         },
     },
 };
