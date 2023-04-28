@@ -51,7 +51,7 @@
               </template>
               <v-list-item
                 @click="selectMenu('child',child.to, list.title)"
-                :class="active_menu_child === child.to ? 'active-menu-group-list-child' : 'ml-8 menu-group-list'" 
+                :class="$route.name === child.to ? 'active-menu-group-list-child' : 'ml-8 menu-group-list'" 
                 v-for="(child, index_child) in list.child"
                 :key="index_child"
                 link

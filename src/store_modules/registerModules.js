@@ -80,7 +80,7 @@ const RegisterModules = {
                         Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
                 };
-                let {data} = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/relations/delete-user-role/?student_id=${studentId}&parent_id=${parentId}`,config)
+                let {data} = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/relations/delete-user-role/?studentId=${studentId}&parentId=${parentId}`,config)
                 if(data.statusCode === 201){
                     Swal.fire({
                         icon: 'success',
