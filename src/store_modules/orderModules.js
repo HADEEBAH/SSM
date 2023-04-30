@@ -522,7 +522,7 @@ const orderModules = {
                 })
                 await Swal.fire({
                     icon:"success",
-                    text: "จองคอร็สสำเร็จ เจ้าหน้าที่จะติดต่อกลับภายหลัง",
+                    text: "จองคอร์สสำเร็จ เจ้าหน้าที่จะติดต่อกลับภายหลัง",
                     showDenyButton: false,
                     showCancelButton: false,
                     confirmButtonText: "ตกลง",

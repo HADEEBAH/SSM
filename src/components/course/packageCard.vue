@@ -11,7 +11,7 @@
         :title="`แพ็คเกจที่ ${index + 1}`"
       >
         <template slot="actions">
-          <v-btn icon color="red" @click="removePackage(index)"><v-icon>mdi-close</v-icon></v-btn>
+          <v-btn v-if="!package_data.course_package_option_id" icon color="red" @click="removePackage(index)"><v-icon>mdi-close</v-icon></v-btn>
         </template> 
      </headerCard>
       <v-card-text class="pt-0">
@@ -141,17 +141,20 @@
                 </v-btn>
               </v-col>
               <v-col cols="6" sm="2">
-                <v-btn
-                  :disabled="disable"
-                  v-if="package_data.options.length > 1"
-                  class="w-full"
-                  outlined
-                  color="red"
-                  @click="removeOptions(package_data.options, option_index)"
-                >
+                <template v-if="!option.course_package_option_id">
+                  <v-btn
+                    :disabled="disable"
+                    v-if="package_data.options.length > 1"
+                    class="w-full"
+                    outlined
+                    color="red"
+                    @click="removeOptions(package_data.options, option_index)"
+                  >
                   <v-icon>mdi-delete-empty</v-icon>
                   ลบระยะเวลา
                 </v-btn>
+                </template>
+               
               </v-col>
             </v-row>
             <v-row dense>
@@ -242,6 +245,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   props:{
     disable: {type: Boolean, default: false},
+    edited : {type: Boolean, default: false}
   },
   components: {
     LabelCustom,
