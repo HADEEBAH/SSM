@@ -4,8 +4,9 @@
             {{setFunctions}}
             <loading-overlay :loading="course_is_loading"></loading-overlay>
             <header-page :breadcrumbs="breadcrumbs"></header-page>
+            
             <v-row class="mb-3">
-                <v-col cols="12" sm="3" @click="tab = 'course'">
+                <v-col cols="12" sm @click="tab = 'course'">
                     <img-card
                         vertical
                         class="cursor-pointer"
@@ -24,7 +25,7 @@
                 <v-col
                     v-if="course_data.course_type_id === 'CT_1'"
                     cols="12"
-                    sm="3"
+                    sm
                     @click="tab = 'time and coach'"
                 >
                     <img-card
@@ -45,7 +46,7 @@
                 <v-col
                     v-if="course_data.course_type_id === 'CT_1'"
                     cols="12"
-                    sm="3"
+                    sm
                     @click="tab = 'package'"
                 >
                     <img-card
@@ -63,7 +64,29 @@
                         </template>
                     </img-card>
                 </v-col>
-                <v-col cols="12" sm="3" @click="tab = 'student list'">
+                <v-col
+                    v-if="course_data.course_type_id === 'CT_1'"
+                    cols="12"
+                    sm
+                    @click="tab = 'arkwork'"
+                >
+                    <img-card
+                        vertical
+                        class="cursor-pointer"
+                        :class="tab === 'arkwork' ? 'img-card-active' : ''"
+                    >
+                        <template v-slot:img>
+                            <v-img
+                                max-height="72"
+                                max-width="72"
+                                src="../../../assets/course/package.png"
+                            ></v-img>
+                            <span class="text-lg font-bold"> Arkwork </span>
+                        </template>
+                    </img-card>
+                </v-col>
+                
+                <v-col cols="12" sm @click="tab = 'student list'">
                     <img-card
                         vertical
                         class="cursor-pointer"
@@ -146,6 +169,7 @@
                                     <coachs-card
                                         :disable="!course_edit"
                                         :coachs="coachs"
+                                        edited
                                     ></coachs-card>
                                 </v-card-text>
                             </v-card>
@@ -183,7 +207,52 @@
                         </v-tab-item>
                         <!-- PACKAGE -->
                         <v-tab-item value="package">
-                            <package-card :disable="!course_edit"></package-card>
+                            <package-card :disable="!course_edit" edited></package-card>
+                            <v-row dense>
+                                <v-col align="center">
+                                    <v-btn :disabled="!course_edit" outlined color="#ff6b81" @click="addPackage(course_data.packages)"><v-icon>mdi-plus</v-icon>เพิ่มแพ็คเกจ</v-btn>
+                                </v-col>
+                            </v-row>
+                             <!-- ACTION -->
+                             <v-row class="px-4" v-if="!course_edit">
+                                <v-col align="right">
+                                    <v-btn
+                                        color="#FF6B81"
+                                        class="white--text btn-size-lg"
+                                        depressed
+                                        @click="course_edit = true"
+                                    >แก้ไข
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
+                            <v-row class="px-4" v-if="course_edit">
+                                <v-col align="right">
+                                    <v-btn
+                                        color="#FF6B81"
+                                        class="btn-size-lg"
+                                        outlined
+                                        @click="cancelEdit()"
+                                    >ยกเลิก</v-btn>
+                                </v-col>
+                                <v-col cols="auto">
+                                    <v-btn
+                                        color="#FF6B81"
+                                        class="white--text btn-size-lg"
+                                        depressed
+                                        @click="CourseUpdatePackage()"
+                                    >บันทึก
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
+                        </v-tab-item>
+                         <!-- ARKWORk -->
+                         <v-tab-item value="arkwork">
+                            <package-card :disable="!course_edit" edited></package-card>
+                            <v-row dense>
+                                <v-col align="center">
+                                    <v-btn :disabled="!course_edit" outlined color="#ff6b81" @click="addPackage(course_data.packages)"><v-icon>mdi-plus</v-icon>เพิ่มแพ็คเกจ</v-btn>
+                                </v-col>
+                            </v-row>
                              <!-- ACTION -->
                              <v-row class="px-4" v-if="!course_edit">
                                 <v-col align="right">
@@ -507,39 +576,6 @@
                             </v-tabs-items>
                         </v-tab-item>
                     </v-tabs-items>
-                    <!-- Actions -->
-                    <!-- <template v-if="tab !== 'student list'">
-                        <v-row class="px-4" v-if="!course_edit">
-                            <v-col align="right">
-                                <v-btn
-                                    color="#FF6B81"
-                                    class="white--text btn-size-lg"
-                                    depressed
-                                    @click="course_edit = true"
-                                >แก้ไข
-                                </v-btn>
-                            </v-col>
-                        </v-row>
-                        <v-row class="px-4" v-if="course_edit">
-                            <v-col align="right">
-                                <v-btn
-                                    color="#FF6B81"
-                                    class="btn-size-lg"
-                                    outlined
-                                    @click="cancelEdit()"
-                                >ยกเลิก</v-btn>
-                            </v-col>
-                            <v-col cols="auto">
-                                <v-btn
-                                    color="#FF6B81"
-                                    class="white--text btn-size-lg"
-                                    depressed
-                                    @click="updateCourse()"
-                                >บันทึก
-                                </v-btn>
-                            </v-col>
-                        </v-row>
-                    </template> -->
                 </v-card-text>
             </v-card>
         </v-container>
@@ -570,6 +606,7 @@ export default {
         loadingOverlay,
     },
     data: () => ({
+        slide_group : null,
         column: [
             {
                 text: "ชื่อ - นามสกุล",
@@ -617,6 +654,13 @@ export default {
             {text: "รายละเอียดคอร์สเรียน", to: ""},
         ],
         tab: "course",
+        tab_menu : [
+            {label : "คอร์สเรียน", value : "course", img : "../../../assets/course/course.png"},
+            {label : "ช่วงเวลาและโค้ช", value : "time and coach", img : "../../../assets/course/time_and_coach.png"},
+            {label : "แพ็คเกจ", value : "package", img : "../../../assets/course/package.png"},
+            {label : "งานศิลปะ", value : "arkwork", img : "../../../assets/course/course.png"},
+            {label : "รายชื่อนักเรียน", value : "student list", img : "../../../assets/course/student_list.png"}
+        ],
         student_tab: null,
         course_edit: false,
         student_courses: [
@@ -790,6 +834,25 @@ export default {
             UpdateCouserCoach: "CourseModules/UpdateCouserCoach",
             UpdateCouserPackage: "CourseModules/UpdateCouserPackage",
         }),
+        addPackage(data) {
+            data.push({
+                package: "",
+                students: 0,
+                options: [
+                {
+                    period_package: "",
+                    amount: 0,
+                    price_unit: 0,
+                    discount: false,
+                    discount_price: 0,
+                    privilege: "",
+                    net_price: 0,
+                    net_price_unit: 0,
+                },
+                ],
+            });
+            this.ChangeCourseData(this.course_data);
+        },
         CourseUpdateDetail(){
             Swal.fire({
                 icon: "question",
@@ -805,6 +868,7 @@ export default {
             })
         },
         CourseUpdateCoach(){
+            console.log(this.course_data.coachs)
             Swal.fire({
                 icon: "question",
                 title: "ต้องการแก้ไขคอร์สใช่มั้ย",
