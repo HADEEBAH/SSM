@@ -269,9 +269,11 @@ const CourseModules = {
     // COACH :: LIST
     async GetCoachs(context) {
       try {
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/role/R_3`)
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${localhost}/api/v1/account/role/R_3`)
         if (data.statusCode === 200) {
           data.data.forEach((coach) => {
+            // console.log("coach =>", coach)
             coach.fullNameTh = `${coach.firstNameTh} ${coach.lastNameTh}`
             coach.fullNameEh = `${coach.firstNameEng} ${coach.lastNameEng}`
           })
@@ -491,10 +493,65 @@ const CourseModules = {
         if(data.statusCode === 200){
           Swal.fire({
             icon: "success",
-            title: "สร้างคอร์สสำเร็จ"
+            title: "แก้ไขคอร์สสำเร็จ"
           })
         }
         }catch(error){
+        console.log(error)
+      }
+    },
+    // COURSE :: DELETA ARKWORK ID
+    async RemoveArkworkByArkworkId(context,{artwork_data}){
+      try{
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        let localhost = "http://localhost:3000"
+        console.log("artwork_data :", artwork_data)
+        let {data} = await axios.delete(`${localhost}/api/v1/course/artworkCourse/${artwork_data.artworkCourseId}`,config)
+        console.log(data)
+        if(data.statusCode == 200){
+          Swal.fire({
+            icon: "success",
+            title: "ลบไฟล์สำเร็จ"
+          })
+        }
+      }catch(error){
+        console.log(error)
+      }
+    },
+    // COURSE :: UPDATE ARKWORK
+    async UpdateCourseArkwork(context,{course_id, course_data}){
+      try{
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        let payloadData = new FormData()
+        if(course_data.privilege_file){
+          payloadData.append("img_privilage",course_data.privilege_file)
+        }
+        if(course_data.artwork_file){
+          for(let i = 0;i < course_data.artwork_file.length; i++){
+            payloadData.append(`img_artwork`, course_data.artwork_file[i]);
+          }         
+        }      
+        let localhost = "http://localhost:3000"
+        let {data} = await axios.patch(`${localhost}/api/v1/manage/update-artwork/${course_id}`,payloadData ,config)
+        if(data.statusCode === 200){
+          Swal.fire({
+            icon: "success",
+            title: "แก้ไขคอร์สสำเร็จ"
+          })
+        }
+      }catch(error){
         console.log(error)
       }
     },
@@ -780,7 +837,9 @@ const CourseModules = {
             course_study_start_date: data.data.courseStudyStartDate,
             coachs: [],
             packages: [],
-          days_of_class: []
+            privilege_file: null,
+            artwork_file : [],
+            days_of_class: []
           }
           let teach_day_data = []
           data.data.coachs.forEach((coach) => {
@@ -920,7 +979,7 @@ const CourseModules = {
       }
     },
     // COURSE :: CREATE
-    async CreateCourse(context) {
+    async CreateCourse(context) { 
       context.commit("SetCourseIsLoading", true)
       try {
         let course = context.state.course_data

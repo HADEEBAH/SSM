@@ -484,7 +484,6 @@ export default {
       const selectedFiles = event.target.files;
       const allowedTypes = ["image/png", "image/jpeg"];
       const fileUrls = [];
-      this.course_data.artwork_file = []
       for (let i = 0; i < selectedFiles.length; i++) {
         const file = selectedFiles[i];
         if(CheckFileSize(file) === true){
