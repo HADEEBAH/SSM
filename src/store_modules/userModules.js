@@ -100,6 +100,7 @@ const userModules = {
                 }
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/usermanagement/${account_id}`, config)
                 if (data.statusCode === 200) {
+                    console.log("data+<>", data.data);
                     context.commit("SetShowById", data.data)
                     console.log("SetShowById", data.data)
                 } else {

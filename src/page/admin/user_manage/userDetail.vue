@@ -1,8 +1,9 @@
 <template>
   <v-container class="overflow-x-hidden overflow-y-hidden">
-    <!-- {{ setFunc }} -->
-    <!-- <pre>{{ data_user_relation_management }}</pre> -->
-    <!-- <pre>{{ student_schedule }}</pre> -->
+    <!-- <div v-for="iten in data_user_relation_management" :key="iten.id">
+      <pre> {{ iten }}</pre>
+    </div>
+    <div>{{ data_user_relation_management.length }}</div> -->
     <div v-if="$route.params.action == 'view'">
       <v-row dense>
         <v-col>
@@ -40,31 +41,27 @@
                 <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
                   <v-card-text class="mt-3">
                     <v-row>
-                      <v-col cols="12" sm="3">
-                        <div class="profileCard">
-                          <v-img
-                            src="@/assets/userManagePage/imgcard.png"
-                            class="imageInCard drop-shadow-md"
-                          >
-                          </v-img>
-                          <div style="position: absolute">
-                            <v-card-text class="upload-photo pa-3">
-                              <!-- <img
-                                  :src="user_data.previewUrl"
-                                  class="rounded-full"
-                                  style="height: 100%; width: 100%"
-                                /> -->
-                              <v-img
-                                src="@/assets/userManagePage/uploadPhoto.png"
-                                max-height="30"
-                                max-width="30"
-                              >
-                              </v-img>
-                            </v-card-text>
+                      <v-row>
+                        <v-col cols="12" sm="4" class="ml-5">
+                          <div class="profileCard">
+                            <v-img
+                              v-if="!previewUrl"
+                              src="@/assets/userManagePage/imgcard.png"
+                              class="drop-shadow-md"
+                            >
+                            </v-img>
+
+                            <div style="position: absolute">
+                              <img
+                                :src="showImg(show_by_id.image)"
+                                class="profileInCard"
+                              />
+                            </div>
                           </div>
-                        </div>
-                      </v-col>
-                      <v-col class="ml-5">
+                        </v-col>
+                      </v-row>
+
+                      <v-col cols="12" sm="8">
                         <v-row>
                           <v-col cols="12" sm="6">
                             <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
@@ -236,31 +233,26 @@
                     <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
                       <v-card-text class="mt-3">
                         <v-row>
-                          <v-col cols="12" sm="3">
-                            <div class="profileCard">
-                              <v-img
-                                src="@/assets/userManagePage/imgcard.png"
-                                class="imageInCard drop-shadow-md"
-                              >
-                              </v-img>
-                              <div style="position: absolute">
-                                <v-card-text class="upload-photo pa-3">
-                                  <!-- <img
-                                  :src="user_data.previewUrl"
-                                  class="rounded-full"
-                                  style="height: 100%; width: 100%"
-                                /> -->
-                                  <v-img
-                                    src="@/assets/userManagePage/uploadPhoto.png"
-                                    max-height="30"
-                                    max-width="30"
-                                  >
-                                  </v-img>
-                                </v-card-text>
+                          <v-row>
+                            <v-col cols="12" sm="4" class="ml-5">
+                              <div class="profileCard">
+                                <v-img
+                                  v-if="!previewUrl"
+                                  src="@/assets/userManagePage/imgcard.png"
+                                  class="drop-shadow-md"
+                                >
+                                </v-img>
+
+                                <div style="position: absolute">
+                                  <img
+                                    :src="showImg(show_by_id.image)"
+                                    class="profileInCard"
+                                  />
+                                </div>
                               </div>
-                            </div>
-                          </v-col>
-                          <v-col class="ml-5">
+                            </v-col>
+                          </v-row>
+                          <v-col cols="12" sm="8">
                             <v-row>
                               <v-col cols="12" sm="6">
                                 <label-custom
@@ -429,7 +421,7 @@
                     <v-divider class="mx-10"></v-divider>
                     <div v-if="data_user_relation_management.length >= 1">
                       <v-card
-                        class="mt-10 ml-10 mr-10"
+                        class="my-10 mx-10"
                         color="#FCFCFC"
                         v-for="(
                           relations, index_relations
@@ -490,7 +482,7 @@
                       </v-card>
                     </div>
                     <div v-else>
-                      <v-card>
+                      <v-card class="mx-10 my-10">
                         <v-card-text
                           class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
                         >
@@ -560,7 +552,7 @@
                                 larg
                                 color="#FF6B81"
                                 @click="removeCardStudent(student_index)"
-                                v-if="student.length >= 2"
+                                v-if="student.length >= 1"
                               >
                                 mdi-delete
                               </v-icon>
@@ -626,7 +618,7 @@
                   :page.sync="page"
                   :items-per-page="itemsPerPage"
                   :sort-by="user_data.sortBy" -->
-                      <div class="my-5 mx-10">
+                      <!-- <div class="my-5 mx-10">
                         <v-data-table
                           :headers="headers"
                           @page-count="pageCount = $event"
@@ -654,7 +646,7 @@
                             </v-icon>
                           </template>
                         </v-data-table>
-                      </div>
+                      </div> -->
                     </div>
 
                     <!-- Card Add Parent -->
@@ -1037,7 +1029,7 @@
                 </div>
               </div>
               <!-- CheckBox Role Parent -->
-              <v-row v-if="item.roleId == 'R_4'">
+              <!-- <v-row v-if="item.roleId == 'R_4'">
                 <v-col cols="12" sm="6" class="ml-10">
                   <v-checkbox
                     v-model="isOpen"
@@ -1048,9 +1040,9 @@
                     @change="onCheckboxChange"
                   ></v-checkbox>
                 </v-col>
-              </v-row>
+              </v-row> -->
 
-              <div v-if="isOpen">
+              <div v-if="item.roleId == 'R_4'">
                 <headerCard
                   class="ml-6 mt-8"
                   :icon="'mdi-file-plus-outline'"
@@ -1058,73 +1050,89 @@
                   :title="addStudentData"
                 ></headerCard>
                 <v-divider class="mx-10"></v-divider>
-                <v-card
-                  class="mt-10 ml-10 mr-10"
-                  color="#FCFCFC"
-                  v-for="(data_item, index) in data_user_relation_management"
-                  :key="index"
-                >
-                  <!-- v-for="(student, student_index) in students"
+                <div v-if="data_user_relation_management.length >= 1">
+                  <v-card
+                    class="mt-10 ml-10 mr-10"
+                    color="#FCFCFC"
+                    v-for="(data_item, index) in data_user_relation_management"
+                    :key="index"
+                  >
+                    <!-- v-for="(student, student_index) in students"
                   :key="`${student_index}-student`"
                   @click="removeCardStudent(student_index)" -->
-                  <v-card-text class="mt-3">
-                    <!-- <v-row dense>
+                    <v-card-text class="mt-3">
+                      <!-- <v-row dense>
                       <v-col align="right">
                         <v-icon larg color="#FF6B81" v-if="student.length >= 2">
                           mdi-delete
                         </v-icon>
                       </v-col>
                     </v-row> -->
-                    <!-- Student Data -->
+                      <!-- Student Data -->
 
-                    <v-row dense align="center">
-                      <v-col cols="12" sm="6">
-                        <label-custom
-                          text="Student’s Username (English)"
-                        ></label-custom>
-                        <div>
-                          <!-- {{
+                      <v-row dense align="center">
+                        <v-col cols="12" sm="6">
+                          <label-custom
+                            text="Student’s Username (English)"
+                          ></label-custom>
+                          <div>
+                            <!-- {{
                             !data_item.student.studentUsername
                               ? "-"
                               : data_item.student.studentUsername
                           }} -->
-                        </div>
-                      </v-col>
-                      <v-col cols="12" sm="6">
-                        <label-custom
-                          text="First Name (English)"
-                        ></label-custom>
-                        <div>
-                          {{
-                            !data_item.student.studentFirstnameEn
-                              ? "-"
-                              : data_item.student.studentFirstnameEn
-                          }}
-                        </div>
-                      </v-col>
-                      <v-col cols="12" sm="6">
-                        <label-custom text="Last Name (English)"></label-custom>
-                        <div>
-                          {{
-                            !data_item.student.studentLastnameEn
-                              ? "-"
-                              : data_item.student.studentLastnameEn
-                          }}
-                        </div>
-                      </v-col>
-                      <v-col cols="12" sm="6">
-                        <label-custom text="เบอร์โทรศัพท์"></label-custom>
-                        <div>
-                          {{
-                            !data_item.student.studentTel
-                              ? "-"
-                              : data_item.student.studentTel
-                          }}
-                        </div>
-                      </v-col>
-                    </v-row>
-                  </v-card-text>
-                </v-card>
+                          </div>
+                        </v-col>
+                        <v-col cols="12" sm="6">
+                          <label-custom
+                            text="First Name (English)"
+                          ></label-custom>
+                          <div>
+                            {{
+                              !data_item.student.studentFirstnameEn
+                                ? "-"
+                                : data_item.student.studentFirstnameEn
+                            }}
+                          </div>
+                        </v-col>
+                        <v-col cols="12" sm="6">
+                          <label-custom
+                            text="Last Name (English)"
+                          ></label-custom>
+                          <div>
+                            {{
+                              !data_item.student.studentLastnameEn
+                                ? "-"
+                                : data_item.student.studentLastnameEn
+                            }}
+                          </div>
+                        </v-col>
+                        <v-col cols="12" sm="6">
+                          <label-custom text="เบอร์โทรศัพท์"></label-custom>
+                          <div>
+                            {{
+                              !data_item.student.studentTel
+                                ? "-"
+                                : data_item.student.studentTel
+                            }}
+                          </div>
+                        </v-col>
+                      </v-row>
+                    </v-card-text>
+                  </v-card>
+                </div>
+                <div v-else>
+                  <v-card class="mx-10 my-10">
+                    <v-card-text
+                      class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
+                    >
+                      <span class="text-lg font-bold">
+                        <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                        ไม่พบข้อมูลของนักเรียน
+                      </span>
+                    </v-card-text>
+                  </v-card>
+                </div>
 
                 <!-- TABLE In R-4 -->
                 <!-- 
@@ -1132,22 +1140,22 @@
                   :page.sync="page"
                   :items-per-page="itemsPerPage"
                   :sort-by="user_data.sortBy" -->
-                <div class="my-5 mx-10">
-                  <v-data-table
-                    :headers="headers"
-                    @page-count="pageCount = $event"
-                    class="elevation-1 header-table"
-                    :items="student_schedule"
-                  >
-                    <template v-slot:[`item.days`]>
-                      <div
-                        v-for="(item, index) in student_data.dates"
-                        :key="index"
-                      >
-                        {{ item.day }}
-                      </div>
-                      <!-- {{ student_data.dates.count }} -->
-                      <!-- <div
+              </div>
+            </div>
+
+            <div class="my-5 mx-10">
+              <v-data-table
+                :headers="headers"
+                @page-count="pageCount = $event"
+                class="elevation-1 header-table"
+                :items="student_schedule"
+              >
+                <template v-slot:[`item.days`]>
+                  <div v-for="(item, index) in student_data.dates" :key="index">
+                    {{ item.day }}
+                  </div>
+                  <!-- {{ student_data.dates.count }} -->
+                  <!-- <div
                         v-for="(item_data, index) in student_data.dates.day"
                         :key="index"
                       >
@@ -1159,30 +1167,28 @@
                         {{ student_data.period.start }} -
                         {{ student_data.period.end }} น.
                       </div> -->
-                    </template>
+                </template>
 
-                    <template v-slot:[`item.actions`]="{ item }">
-                      <v-icon small color="#FF6B81"> mdi-eye-outline </v-icon>
-                      <v-icon
-                        small
-                        class="ml-5"
-                        color="#FF6B81"
-                        @click="editItem(item)"
-                      >
-                        mdi-pencil
-                      </v-icon>
-                      <v-icon
-                        class="ml-5"
-                        small
-                        color="#FF6B81"
-                        @click="deleteItem(item)"
-                      >
-                        mdi-delete
-                      </v-icon>
-                    </template>
-                  </v-data-table>
-                </div>
-              </div>
+                <template v-slot:[`item.actions`]="{ item }">
+                  <v-icon small color="#FF6B81"> mdi-eye-outline </v-icon>
+                  <v-icon
+                    small
+                    class="ml-5"
+                    color="#FF6B81"
+                    @click="editItem(item)"
+                  >
+                    mdi-pencil
+                  </v-icon>
+                  <v-icon
+                    class="ml-5"
+                    small
+                    color="#FF6B81"
+                    @click="deleteItem(item)"
+                  >
+                    mdi-delete
+                  </v-icon>
+                </template>
+              </v-data-table>
             </div>
 
             <!-- Button -->
@@ -1193,8 +1199,15 @@
                     class="white--text mb-5"
                     depressed
                     color="#ff6b81"
-                    @click="edit()"
-                    disabled
+                    @click="
+                      $router.push({
+                        name: 'UserDetail',
+                        params: {
+                          action: 'edit',
+                          account_id: '$route.params.account_id',
+                        },
+                      })
+                    "
                   >
                     <span class="mdi mdi-pencil-outline">แก้ไข</span>
                   </v-btn>
@@ -1537,6 +1550,10 @@ export default {
     removeFile() {
       this.fileName = "";
     },
+    showImg(item) {
+      return `${process.env.VUE_APP_URL}/api/v1/files/${item}`;
+    },
+
     addCertificateCard() {
       this.students.certificates.push({
         name_certificate: "",
@@ -1818,6 +1835,16 @@ export default {
   border-color: #ff6b81;
 }
 
+.profileInCard {
+  min-height: 160px;
+  min-width: 160px;
+  max-height: 160px;
+  max-width: 160px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .profileCard {
   min-height: 200px;
   min-width: 200px;
@@ -1827,12 +1854,5 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.imageInCard {
-  min-height: 200px;
-  min-width: 200px;
-  max-height: 200px;
-  max-width: 200px;
 }
 </style>

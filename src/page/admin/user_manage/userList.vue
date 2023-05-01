@@ -33,6 +33,7 @@
         <v-card-text class="border">
           <v-row class="d-flex align-center">
             <v-col>
+              <!-- @input="" -->
               <v-text-field
                 v-model="search"
                 prepend-inner-icon="mdi-magnify"
@@ -41,39 +42,43 @@
                 hide-details
                 dense
                 outlined
+                @input="search_data(search)"
               ></v-text-field>
             </v-col>
             <label-custom text="บทบาท"></label-custom>
             <v-col cols="12" sm="3">
-              <!-- <template v-if="$vuetify.breakpoint.mdAndUp">
+              <!-- v-if="$vuetify.breakpoint.mdAndUp" -->
+              <template>
                 <v-autocomplete
                   dense
-                  v-model="sortBy"
-                  :items="role"
+                  :items="roles"
+                  item-text="role"
+                  item-value="roleNumber"
+                  @input="search_data(searchQuery)"
+                  v-model="searchQuery"
                   placeholder="ทั้งหมด"
                   outlined
                   hide-details
-                  multiple
                   color="pink"
                   item-color="pink"
                 >
-                  <template v-slot:no-data>
-                        <v-list-item>
-                          <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
-                        </v-list-item>
-                      </template>
+                  <!-- <template v-slot:no-data>
+                    <v-list-item>
+                      <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
+                    </v-list-item>
+                  </template>
 
                   <template v-slot:item="{ item }">
                     <v-list-item-content>
-                      <v-list-item-title
-                        ><span
+                      <v-list-item-title>
+                        {{ item }}
+                        <span
                           :class="
-                            check array ว่ามี stringไหม
+                            // check array ว่ามี stringไหม
                             sortBy.includes(item) ? 'font-bold' : ''
                           "
-                          >{{ item }}</span
-                        ></v-list-item-title
-                      >
+                        ></span>
+                      </v-list-item-title>
                     </v-list-item-content>
                     <v-list-item-action>
                       <v-icon>
@@ -84,10 +89,11 @@
                         }}</v-icon
                       >
                     </v-list-item-action>
-                  </template>
+                  </template> -->
                 </v-autocomplete>
-              </template> -->
+              </template>
             </v-col>
+
             <!-- เพิ่มผู้ใช้ -->
             <v-col cols="12" sm="2">
               <v-btn
@@ -97,8 +103,8 @@
               >
                 <v-icon left> mdi-plus </v-icon>
                 เพิ่มผู้ใช้
-              </v-btn>
-            </v-col>
+              </v-btn> </v-col
+            >roles
           </v-row>
         </v-card-text>
       </v-card>
@@ -201,6 +207,9 @@
 import headerPage from "@/components/header/headerPage.vue";
 import LabelCustom from "@/components/label/labelCustom.vue";
 import { mapActions, mapGetters } from "vuex";
+import axios from "axios";
+import VueCookie from "vue-cookie";
+
 export default {
   name: "manageUsers",
   components: {
@@ -216,8 +225,15 @@ export default {
       itemsPerPage: 10,
       pageCount: 0,
       filter: {},
-      sortBy: ["ทั้งหมด"],
-      role: ["ทั้งหมด", "นักเรียน", "ผู้ปกครอง", "โค้ช", "บัญชี", "Admin"],
+      searchQuery: "ทั้งหมด",
+
+      roles: [
+        { role: "Super Admin", privilege: "superAdmin", roleNumber: "R_1" },
+        { role: "Admin", privilege: "admin", roleNumber: "R_2" },
+        { role: "โค้ช", privilege: "โค้ช", roleNumber: "R_3" },
+        { role: "ผู้ปกครอง", privilege: "ผู้ปกครอง", roleNumber: "R_4" },
+        { role: "นักเรียน", privilege: "นักเรียน", roleNumber: "R_5" },
+      ],
       user_data: {
         users: "",
       },
@@ -286,56 +302,6 @@ export default {
         console.log("data", data);
       }
     },
-    // initialize() {
-    //   this.datausers = [
-    //     {
-    //       number: 1,
-    //       name: "arm",
-    //       lastname: "arm",
-    //       email: "arm",
-    //       username: "arm",
-    //       oneid: "arm",
-    //       role: "Admin",
-    //     },
-    //     {
-    //       number: 2,
-    //       name: "mie",
-    //       lastname: "mie",
-    //       email: "mie",
-    //       username: "mie",
-    //       oneid: "mie",
-    //       role: "นักเรียน",
-    //     },
-    //     {
-    //       number: 3,
-    //       name: "racha",
-    //       lastname: "kolo",
-    //       email: "aaaa",
-    //       username: "armmie",
-    //       oneid: "3310",
-    //       role: "โค้ช",
-    //     },
-    //     {
-    //       number: 4,
-    //       name: "robert",
-    //       lastname: "gogo",
-    //       email: "vbbbbb",
-    //       username: "nuunam",
-    //       oneid: "mie",
-    //       role: "นักเรียน",
-    //     },
-    //     {
-    //       number: 5,
-    //       name: "koko",
-    //       lastname: "arrr",
-    //       email: "dodm@hotmail.com",
-    //       username: "summer",
-    //       oneid: "hukio",
-    //       role: "บัญชี",
-    //     },
-    //   ];
-    // },
-
     editItem(item) {
       this.editedIndex = this.datausers.indexOf(item);
       this.editedItem = Object.assign({}, item);
@@ -377,6 +343,53 @@ export default {
       }
       this.close();
     },
+
+    async search_data(name, value) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        await axios.get(
+          `${process.env.VUE_APP_URL}/api/v1/usermanagement/search?name=${name}&role=${value}`,
+          config
+        );
+        // if (data.statusCode === 200) {
+        //   console.log("log", data.data);
+        // } else {
+        //   throw { error: data };
+        // }
+      } catch (error) {
+        console.log("err", error);
+      }
+    },
+
+    // async search_role(value) {
+    //   console.log("search_role", value);
+    //   try {
+    //     let config = {
+    //       headers: {
+    //         "Access-Control-Allow-Origin": "*",
+    //         "Content-type": "Application/json",
+    //         Authorization: `Bearer ${VueCookie.get("token")}`,
+    //       },
+    //     };
+    //     await axios.get(
+    //       `${process.env.VUE_APP_URL}/api/v1/usermanagement/search?role=${value}`,
+    //       config
+    //     );
+    //     // if (data.statusCode === 200) {
+    //     //   console.log("log", data.data);
+    //     // } else {
+    //     //   throw { error: data };
+    //     // }
+    //   } catch (error) {
+    //     console.log("err", error);
+    //   }
+    // },
 
     // viewUserDetail() {
     // this.local_data = JSON.parse(localStorage.getItem("userDetail"));
