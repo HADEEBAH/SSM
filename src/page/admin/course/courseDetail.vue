@@ -4,8 +4,9 @@
             {{setFunctions}}
             <loading-overlay :loading="course_is_loading"></loading-overlay>
             <header-page :breadcrumbs="breadcrumbs"></header-page>
+            
             <v-row class="mb-3">
-                <v-col cols="12" sm="3" @click="tab = 'course'">
+                <v-col cols="12" sm @click="tab = 'course'">
                     <img-card
                         vertical
                         class="cursor-pointer"
@@ -13,8 +14,8 @@
                     >
                         <template v-slot:img>
                             <v-img
-                                max-height="72"
-                                max-width="72"
+                                height="72"
+                                width="72"
                                 src="../../../assets/course/course.png"
                             ></v-img>
                             <span class="text-lg font-bold"> คอร์สเรียน </span>
@@ -24,7 +25,7 @@
                 <v-col
                     v-if="course_data.course_type_id === 'CT_1'"
                     cols="12"
-                    sm="3"
+                    sm
                     @click="tab = 'time and coach'"
                 >
                     <img-card
@@ -34,8 +35,8 @@
                     >
                         <template v-slot:img>
                             <v-img
-                                max-height="72"
-                                max-width="72"
+                                height="72"
+                                width="72"
                                 src="../../../assets/course/time_and_coach.png"
                             ></v-img>
                             <span class="text-lg font-bold"> ช่วงเวลาและโค้ช </span>
@@ -45,7 +46,7 @@
                 <v-col
                     v-if="course_data.course_type_id === 'CT_1'"
                     cols="12"
-                    sm="3"
+                    sm
                     @click="tab = 'package'"
                 >
                     <img-card
@@ -55,15 +56,37 @@
                     >
                         <template v-slot:img>
                             <v-img
-                                max-height="72"
-                                max-width="72"
+                                height="72"
+                                width="72"
                                 src="../../../assets/course/package.png"
                             ></v-img>
                             <span class="text-lg font-bold"> แพ็คเกจ </span>
                         </template>
                     </img-card>
                 </v-col>
-                <v-col cols="12" sm="3" @click="tab = 'student list'">
+                <v-col
+                    v-if="course_data.course_type_id === 'CT_1'"
+                    cols="12"
+                    sm
+                    @click="tab = 'arkwork'"
+                >
+                    <img-card
+                        vertical
+                        class="cursor-pointer"
+                        :class="tab === 'arkwork' ? 'img-card-active' : ''"
+                    >
+                        <template v-slot:img>
+                            <v-img
+                                height="72"
+                                width="72"
+                                src="../../../assets/course/upload_file.png"
+                            ></v-img>
+                            <span class="text-lg font-bold"> งานศิลปะ </span>
+                        </template>
+                    </img-card>
+                </v-col>
+                
+                <v-col cols="12" sm @click="tab = 'student list'">
                     <img-card
                         vertical
                         class="cursor-pointer"
@@ -71,8 +94,8 @@
                     >
                         <template v-slot:img>
                             <v-img
-                                max-height="72"
-                                max-width="72"
+                                height="72"
+                                width="72"
                                 src="../../../assets/course/student_list.png"
                             ></v-img>
                             <span class="text-lg font-bold"> รายชื่อนักเรียน </span>
@@ -146,6 +169,7 @@
                                     <coachs-card
                                         :disable="!course_edit"
                                         :coachs="coachs"
+                                        edited
                                     ></coachs-card>
                                 </v-card-text>
                             </v-card>
@@ -183,7 +207,12 @@
                         </v-tab-item>
                         <!-- PACKAGE -->
                         <v-tab-item value="package">
-                            <package-card :disable="!course_edit"></package-card>
+                            <package-card :disable="!course_edit" edited></package-card>
+                            <v-row dense>
+                                <v-col align="center">
+                                    <v-btn :disabled="!course_edit" outlined color="#ff6b81" @click="addPackage(course_data.packages)"><v-icon>mdi-plus</v-icon>เพิ่มแพ็คเกจ</v-btn>
+                                </v-col>
+                            </v-row>
                              <!-- ACTION -->
                              <v-row class="px-4" v-if="!course_edit">
                                 <v-col align="right">
@@ -211,6 +240,136 @@
                                         class="white--text btn-size-lg"
                                         depressed
                                         @click="CourseUpdatePackage()"
+                                    >บันทึก
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
+                        </v-tab-item>
+                         <!-- ARKWORk -->
+                         <v-tab-item value="arkwork">
+                            <v-card class="mx-3 mb-3" flat>
+                                <headerCard title="สิทธิพิเศษ"></headerCard>
+                                <v-card-text class="border-dashed border-2 border-blue-600 rounded-lg">
+                                    <v-row v-if="preview_privilege_url">
+                                    <v-col align="center"  class="rounded-lg pa-0">
+                                        <v-img  :src="preview_privilege_url" contain style="max-width: 200px" align="right">
+                                        <v-btn v-if="course_edit" icon class="bg-[#f00]" dark @click="removePrivilegeFile"><v-icon>mdi-close</v-icon></v-btn>
+                                        </v-img>
+                                    </v-col>
+                                    </v-row>
+                                    <v-row v-if="!preview_privilege_url">
+                                    <v-col cols="12" class="flex align-center justify-center">
+                                        <v-img
+                                        src="../../../assets/course/upload_file.png"
+                                        max-height="105"
+                                        max-width="122"
+                                        ></v-img>
+                                    </v-col>
+                                    <v-col cols="12" class="flex align-center justify-center text-h5">
+                                        อัพโหลดภาพสิทธิพิเศษ
+                                    </v-col>
+                                    <v-col
+                                        cols="12"
+                                        class="flex align-center justify-center text-caption"
+                                    >
+                                        ( ขนาดไฟล์งานไม่เกิน 1 Mb ต้องเป็นไฟล์ JPG, PNG )
+                                    </v-col>
+                                    <v-col cols="12" class="flex align-center justify-center">
+                                        <v-btn outlined color="blue" :disabled="!course_edit" @click="openFilePrivilegeSelector"
+                                        >เลือกไฟล์</v-btn
+                                        >
+                                        <input
+                                        ref="fileInputPrivilege"
+                                        type="file"
+                                        @change="uploadPrivilegeFile"
+                                        accept="image/png, image/jpeg"
+                                        style="display: none"
+                                        />
+                                    </v-col>
+                                    </v-row>
+                                </v-card-text>
+                                <headerCard title="งานศิลปะ"></headerCard>
+                                <v-card-text class="border-dashed border-2 border-blue-600 rounded-lg">
+                                    <v-row v-if="preview_artwork_files && preview_artwork_files.length > 0">
+                                    <v-col cols="3" align="center" class="rounded-lg pa-2" v-for="(file, index) in preview_artwork_files" :key="index">
+                                        <v-img 
+                                        v-if="file?.artworkCourseId" 
+                                        :src="file.attachmentUrl" 
+                                        contain
+                                        max-height="200"
+                                        max-width="200"  align="right">
+                                        <v-btn v-if="course_edit" icon class="bg-[#f00]" dark @click="removeArtworkFileData(file,index)"><v-icon>mdi-close</v-icon></v-btn>
+                                        </v-img>
+                                        <v-img 
+                                        v-else
+                                        :src="file" 
+                                        contain
+                                        max-height="200"
+                                        max-width="200"  align="right">
+                                        <v-btn  v-if="course_edit" icon class="bg-[#f00]" dark @click="removeArtworkFile(index)"><v-icon>mdi-close</v-icon></v-btn>
+                                        </v-img>
+                                    </v-col>
+                                    </v-row>
+                                    <v-row v-if="!preview_artwork_files || preview_artwork_files.length == 0">
+                                    <v-col cols="12" class="flex align-center justify-center">
+                                        <v-img
+                                        src="../../../assets/course/upload_file.png"
+                                        max-height="105"
+                                        max-width="122"
+                                        ></v-img>
+                                    </v-col>
+                                    <v-col cols="12" class="flex align-center justify-center text-h5">
+                                        อัพโหลดภาพงานศิลปะ
+                                    </v-col>
+                                    <v-col
+                                        cols="12"
+                                        class="flex align-center justify-center text-caption"
+                                    >
+                                        ( ขนาดไฟล์งานไม่เกิน 1 Mb ต้องเป็นไฟล์ JPG, PNG )
+                                    </v-col>
+                                    </v-row>
+                                    <v-row dense>
+                                    <v-col align="center">
+                                        <input
+                                        ref="fileInputArtwork"
+                                        type="file"
+                                        @change="previewArtWorkFile"
+                                        accept="image/png, image/jpeg"
+                                        multiple
+                                        style="display: none"
+                                        />
+                                        <v-btn :disabled="!course_edit" outlined color="blue" @click="openFileArtworSelector">เลือกไฟล์</v-btn>
+                                    </v-col>
+                                    </v-row>
+                                </v-card-text>
+                            </v-card>
+                             <!-- ACTION -->
+                             <v-row class="px-4" v-if="!course_edit">
+                                <v-col align="right">
+                                    <v-btn
+                                        color="#FF6B81"
+                                        class="white--text btn-size-lg"
+                                        depressed
+                                        @click="course_edit = true"
+                                    >แก้ไข
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
+                            <v-row class="px-4" v-if="course_edit">
+                                <v-col align="right">
+                                    <v-btn
+                                        color="#FF6B81"
+                                        class="btn-size-lg"
+                                        outlined
+                                        @click="cancelEdit()"
+                                    >ยกเลิก</v-btn>
+                                </v-col>
+                                <v-col cols="auto">
+                                    <v-btn
+                                        color="#FF6B81"
+                                        class="white--text btn-size-lg"
+                                        depressed
+                                        @click="CourseUpdateArkwork()"
                                     >บันทึก
                                     </v-btn>
                                 </v-col>
@@ -507,39 +666,6 @@
                             </v-tabs-items>
                         </v-tab-item>
                     </v-tabs-items>
-                    <!-- Actions -->
-                    <!-- <template v-if="tab !== 'student list'">
-                        <v-row class="px-4" v-if="!course_edit">
-                            <v-col align="right">
-                                <v-btn
-                                    color="#FF6B81"
-                                    class="white--text btn-size-lg"
-                                    depressed
-                                    @click="course_edit = true"
-                                >แก้ไข
-                                </v-btn>
-                            </v-col>
-                        </v-row>
-                        <v-row class="px-4" v-if="course_edit">
-                            <v-col align="right">
-                                <v-btn
-                                    color="#FF6B81"
-                                    class="btn-size-lg"
-                                    outlined
-                                    @click="cancelEdit()"
-                                >ยกเลิก</v-btn>
-                            </v-col>
-                            <v-col cols="auto">
-                                <v-btn
-                                    color="#FF6B81"
-                                    class="white--text btn-size-lg"
-                                    depressed
-                                    @click="updateCourse()"
-                                >บันทึก
-                                </v-btn>
-                            </v-col>
-                        </v-row>
-                    </template> -->
                 </v-card-text>
             </v-card>
         </v-container>
@@ -555,6 +681,7 @@ import headerCard from "@/components/header/headerCard.vue";
 import ImgCard from "@/components/course/imgCard.vue";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 import Swal from "sweetalert2";
+import {CheckFileSize} from "@/functions/functions" 
 // import rowData from '@/components/label/rowData.vue';
 import {mapGetters, mapActions} from "vuex";
 
@@ -570,6 +697,7 @@ export default {
         loadingOverlay,
     },
     data: () => ({
+        slide_group : null,
         column: [
             {
                 text: "ชื่อ - นามสกุล",
@@ -617,6 +745,13 @@ export default {
             {text: "รายละเอียดคอร์สเรียน", to: ""},
         ],
         tab: "course",
+        tab_menu : [
+            {label : "คอร์สเรียน", value : "course", img : "../../../assets/course/course.png"},
+            {label : "ช่วงเวลาและโค้ช", value : "time and coach", img : "../../../assets/course/time_and_coach.png"},
+            {label : "แพ็คเกจ", value : "package", img : "../../../assets/course/package.png"},
+            {label : "งานศิลปะ", value : "arkwork", img : "../../../assets/course/course.png"},
+            {label : "รายชื่อนักเรียน", value : "student list", img : "../../../assets/course/student_list.png"}
+        ],
         student_tab: null,
         course_edit: false,
         student_courses: [
@@ -755,16 +890,30 @@ export default {
                 ],
             },
         ],
+        privilege_file: null,
+        preview_privilege_url : null,
+        artwork_files : [],
+        preview_artwork_files : [],
     }),
-    created() {
-       
-    },
-    mounted() {
-    },
+    created() {},
+    mounted() {},
     watch: {
+        course_artwork : function(){
+            this.preview_artwork_files = []
+           if(this.course_artwork.length > 0){
+                for(const arkwork of this.course_artwork){
+                    console.log(arkwork)
+                    this.preview_artwork_files.push(arkwork)
+                }
+           } 
+           this.preview_privilege_url = this.course_data.course_img_privilege
+        },
         tab: function () {
+            this.GetArtworkByCourse({course_id : this.$route.params.course_id})
+            this.preview_privilege_url = this.course_data.course_img_privilege
             this.course_edit = false;
             this.$store.dispatch("CourseModules/GetCourse",  this.$route.params.course_id);
+          
         },
     },
     computed: {
@@ -773,11 +922,13 @@ export default {
             categorys: "CategoryModules/getCategorys",
             course_data: "CourseModules/getCourseData",
             course_is_loading: "CourseModules/getCourseIsLoading",
+            course_artwork :"CourseModules/getCourseArtwork"
         }),
         setFunctions(){
             this.$store.dispatch("CourseModules/GetCourse",  this.$route.params.course_id);
             this.$store.dispatch("CategoryModules/GetCategorys");
             this.$store.dispatch("CourseModules/GetCoachs");
+            this.GetArtworkByCourse({course_id : this.$route.params.course_id})
             return ''
         }
     },
@@ -789,7 +940,99 @@ export default {
             UpdateCouserDetail: "CourseModules/UpdateCouserDetail",
             UpdateCouserCoach: "CourseModules/UpdateCouserCoach",
             UpdateCouserPackage: "CourseModules/UpdateCouserPackage",
+            UpdateCourseArkwork : "CourseModules/UpdateCourseArkwork",
+            GetArtworkByCourse : "CourseModules/GetArtworkByCourse",
+            RemoveArkworkByArkworkId : "CourseModules/RemoveArkworkByArkworkId"
         }),
+        openFilePrivilegeSelector() {
+            this.$refs.fileInputPrivilege.click();
+        },
+        openFileArtworSelector(){
+            this.$refs.fileInputArtwork.click()
+        },
+          // UPDATE FILE
+        uploadPrivilegeFile() {
+        this.privilege_file = this.$refs.fileInputPrivilege.files[0];
+        const allowedTypes = ["image/png", "image/jpeg"];
+        if(CheckFileSize(this.privilege_file) === true){
+            this.course_data.privilege_file = this.$refs.fileInputPrivilege.files[0];
+            this.ChangeCourseData(this.course_data);
+            if (this.privilege_file && allowedTypes.includes(this.privilege_file.type)) {
+            if (!this.privilege_file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                this.preview_privilege_url = e.target.result;
+            };
+            reader.readAsDataURL(this.privilege_file);
+            }
+        }
+        },
+        previewArtWorkFile(event) {
+        const selectedFiles = event.target.files;
+        const allowedTypes = ["image/png", "image/jpeg"];
+        const fileUrls = [];
+        for (let i = 0; i < selectedFiles.length; i++) {
+            const file = selectedFiles[i];
+            if(CheckFileSize(file) === true){
+                if (allowedTypes.includes(file.type)) {
+                    this.course_data.artwork_file.push(file)
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                    fileUrls.push(reader.result);
+                    if (fileUrls.length == selectedFiles.length) {
+                        this.preview_artwork_files = [...this.preview_artwork_files, ...fileUrls];
+                    }
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    // Display error message or handle invalid file type
+                }
+            } 
+        }
+        this.ChangeCourseData(this.course_data);
+        },
+        // REMOVE 
+        removeArtworkFile(index){
+            this.preview_artwork_files.splice(index, 1)
+        },
+        removeArtworkFileData(data, index){
+            Swal.fire({
+                icon: "question",
+                title: "ต้องการลบไฟล์นี้ใช่หรือไม่",
+                showDenyButton: false,
+                showCancelButton: true,
+                confirmButtonText: "ตกลง",
+                cancelButtonText: "ยกเลิก",
+            })
+            .then(async (result) => {
+                if (result.isConfirmed) {
+                    this.RemoveArkworkByArkworkId({artwork_data : data})
+                    this.preview_artwork_files.splice(index, 1)
+                }
+            })
+        },
+        removePrivilegeFile(){
+            this.preview_privilege_url = null
+        },
+        addPackage(data) {
+            data.push({
+                package: "",
+                students: 0,
+                options: [
+                {
+                    period_package: "",
+                    amount: 0,
+                    price_unit: 0,
+                    discount: false,
+                    discount_price: 0,
+                    privilege: "",
+                    net_price: 0,
+                    net_price_unit: 0,
+                },
+                ],
+            });
+            this.ChangeCourseData(this.course_data);
+        },
         CourseUpdateDetail(){
             Swal.fire({
                 icon: "question",
@@ -801,10 +1044,16 @@ export default {
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     this.UpdateCouserDetail({course_id :  this.course_data.course_id ,course_data : this.course_data })
+                    .then(()=>{
+                        this.course_edit = false;
+                        this.GetCourse(this.$route.params.course_id);
+                        this.GetArtworkByCourse({course_id : this.$route.params.course_id})
+                    })
                 }
             })
         },
         CourseUpdateCoach(){
+            console.log(this.course_data.coachs)
             Swal.fire({
                 icon: "question",
                 title: "ต้องการแก้ไขคอร์สใช่มั้ย",
@@ -815,6 +1064,11 @@ export default {
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     this.UpdateCouserCoach({course_id :  this.course_data.course_id ,course_data : this.course_data })
+                    .then(()=>{
+                        this.course_edit = false;
+                        this.GetCourse(this.$route.params.course_id);
+                        this.GetArtworkByCourse({course_id : this.$route.params.course_id})
+                    })
                 }
             })
         },
@@ -829,6 +1083,29 @@ export default {
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     this.UpdateCouserPackage({course_id :  this.course_data.course_id ,course_data : this.course_data })
+                    .then(()=>{
+                        this.course_edit = false;
+                        this.GetCourse(this.$route.params.course_id);
+                        this.GetArtworkByCourse({course_id : this.$route.params.course_id})
+                    })
+                }
+            })
+        },
+        CourseUpdateArkwork(){
+            Swal.fire({
+                icon: "question",
+                title: "ต้องการแก้ไขคอร์สใช่มั้ย",
+                showDenyButton: false,
+                showCancelButton: true,
+                confirmButtonText: "ตกลง",
+                cancelButtonText: "ยกเลิก",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    this.UpdateCourseArkwork({course_id :  this.course_data.course_id ,course_data : this.course_data }).then(()=>{
+                        this.course_edit = false;
+                        this.GetCourse(this.$route.params.course_id);
+                        this.GetArtworkByCourse({course_id : this.$route.params.course_id})
+                    })
                 }
             })
         },
@@ -845,7 +1122,6 @@ export default {
                 }
             })
             // this.ChangeCourseData(this.course_data);
-
         },
         addCoach() {
             this.course_data.coachs.push({
