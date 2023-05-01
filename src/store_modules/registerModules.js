@@ -25,8 +25,8 @@ const RegisterModules = {
             lastname_en: "",
             phone_number: "",
             username: "",
-            type : "",
-            account_id : "",
+            type: "",
+            account_id: "",
         },
         is_loading: false,
     },
@@ -65,14 +65,14 @@ const RegisterModules = {
                 lastname_en: "",
                 phone_number: "",
                 username: "",
-                type : "",
-                account_id : "",
+                type: "",
+                account_id: "",
             }
         }
     },
     actions: {
-        async RemoveRelation(context,{studentId, parentId}){
-            try{
+        async RemoveRelation(context, { studentId, parentId }) {
+            try {
                 let config = {
                     headers: {
                         "Access-Control-Allow-Origin": "*",
@@ -80,19 +80,19 @@ const RegisterModules = {
                         Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
                 };
-                let {data} = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/relations/delete-user-role/?studentId=${studentId}&parentId=${parentId}`,config)
-                if(data.statusCode === 201){
+                let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/relations/delete-user-role/?studentId=${studentId}&parentId=${parentId}`, config)
+                if (data.statusCode === 200) {
                     Swal.fire({
                         icon: 'success',
                         title: "ลบรายการสำเร็จ",
                     })
                 }
-            }catch(error){
+            } catch (error) {
                 console.log(error)
             }
         },
-        async AddRelations(context,{studentId, parentId}){
-            try{
+        async AddRelations(context, { studentId, parentId }) {
+            try {
                 let config = {
                     headers: {
                         "Access-Control-Allow-Origin": "*",
@@ -100,27 +100,27 @@ const RegisterModules = {
                         Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
                 };
-                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/relations/user`,{studentId: studentId, parentId: parentId},config)
+                let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/relations/user`, { studentId: studentId, parentId: parentId }, config)
                 console.log(data)
-                if(data.statusCode === 201){
-                    let role = await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/user`,{userId :parentId , roleId : 'R_4' },config)
-                    if(role.data.statusCode === 201){
+                if (data.statusCode === 201) {
+                    let role = await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/user`, { userId: parentId, roleId: 'R_4' }, config)
+                    if (role.data.statusCode === 201) {
                         console.log(role)
                     }
                 }
-            }catch(error){
+            } catch (error) {
                 console.log(error)
             }
         },
         ResetLastUserRegistered(context) {
             context.commit("ResetLastUserRegistered")
         },
-        async registerParent(context,{type}) {
+        async registerParent(context, { type }) {
             context.commit("SetIsLoading", true)
             console.log(type)
             try {
                 let phone_number = context.state.user_one_id.phone_number.replaceAll("-", "")
-                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/register`, {
+                let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/register`, {
                     "accountTitleTh": "",
                     "firstNameTh": context.state.user_one_id.firstname_th,
                     "lastNameTh": context.state.user_one_id.lastname_th,
@@ -143,8 +143,8 @@ const RegisterModules = {
                         if (result.isConfirmed) {
                             console.log(data.data)
                             let user = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account?username=${context.state.user_one_id.username}&status=active`)
-                            if(user.data.statusCode === 200){
-                                console.log("user :",user.data)
+                            if (user.data.statusCode === 200) {
+                                console.log("user :", user.data)
                                 context.commit("SetLastUserRegistered", {
                                     firstname_th: context.state.user_one_id.firstname_th,
                                     lastname_th: context.state.user_one_id.lastname_th,
@@ -152,8 +152,8 @@ const RegisterModules = {
                                     lastname_en: context.state.user_one_id.lastname_en,
                                     phone_number: phone_number,
                                     username: context.state.user_one_id.username,
-                                    account_id : user.data.data[0].userOneId,
-                                    type : type
+                                    account_id: user.data.data[0].userOneId,
+                                    type: type
                                 })
                                 context.commit("ResetUserOneID")
                                 context.commit("ShowDialogRegisterOneId", false)
@@ -161,7 +161,7 @@ const RegisterModules = {
                         }
                     })
                 }
-            } catch ({response}) {
+            } catch ({ response }) {
                 context.commit("SetIsLoading", false)
                 if (response?.data.statusCode === 400) {
                     let text = ""
@@ -199,7 +199,7 @@ const RegisterModules = {
             context.commit("SetIsLoading", true)
             try {
                 let phone_number = context.state.user_one_id.phone_number.replaceAll("-", "")
-                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/register`, {
+                let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/register`, {
                     "accountTitleTh": "",
                     "firstNameTh": context.state.user_one_id.firstname_th,
                     "lastNameTh": context.state.user_one_id.lastname_th,
@@ -232,8 +232,8 @@ const RegisterModules = {
                                     let payload = {
                                         account_id: res.data.data.account_id,
                                         email: res.data.data.email,
-                                        username : context.state.user_one_id.username,
-                                        password :  context.state.user_one_id.password,
+                                        username: context.state.user_one_id.username,
+                                        password: context.state.user_one_id.password,
                                         first_name_en: res.data.data.first_name_en,
                                         first_name_th: res.data.data.first_name_th,
                                         last_name_en: res.data.data.last_name_en,
@@ -246,14 +246,14 @@ const RegisterModules = {
                                     localStorage.setItem("userDetail", JSON.stringify(payload))
                                     console.log("UserKingdom")
                                     context.commit("SetIsLoading", false)
-                                    router.replace({name: "UserKingdom"});
+                                    router.replace({ name: "UserKingdom" });
                                     context.commit("ResetUserOneID")
                                 }
                             })
                         }
                     })
                 }
-            } catch ({response}) {
+            } catch ({ response }) {
                 context.commit("SetIsLoading", false)
                 if (response?.data.statusCode === 400) {
                     let text = ""
@@ -291,7 +291,7 @@ const RegisterModules = {
         async loginOneId(context) {
             context.commit("SetIsLoading", true)
             try {
-                const {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login`, {
+                const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login`, {
                     "username": context.state.user_one_id.username,
                     "password": context.state.user_one_id.password,
                 })
@@ -317,7 +317,7 @@ const RegisterModules = {
                     VueCookie.set("token", data.data.token)
                     localStorage.setItem("userDetail", JSON.stringify(payload))
                     context.commit("SetIsLoading", false)
-                    router.replace({name: "UserKingdom"})
+                    router.replace({ name: "UserKingdom" })
                 }
             } catch (response) {
                 context.commit("SetIsLoading", false)
@@ -369,7 +369,7 @@ const RegisterModules = {
         getUserOneId(state) {
             return state.user_one_id
         },
-        getLastUserRegistered(state){
+        getLastUserRegistered(state) {
             return state.last_user_registered
         }
     }

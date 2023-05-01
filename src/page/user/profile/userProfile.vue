@@ -528,7 +528,7 @@
       </v-card>
     </v-dialog>
 
-    <!-- ADD PARENT DIALOG-->
+    <!-- CHECK USER PARENT DIALOG-->
     <v-dialog v-model="add_parent" width="50vw" class="d-flex align-center">
       <v-card class="pa-2" width="50vw">
         <header-card
