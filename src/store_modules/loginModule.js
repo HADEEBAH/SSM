@@ -10,68 +10,66 @@ const loginModules = {
             password: "",
             token: "",
         },
-        user_data:[],
-        user_student_data:[],
-        is_loading : false,
+        user_data: [],
+        user_student_data: [],
+        is_loading: false,
     },
     mutations: {
         UserOneId(state, payload) {
             state.user_one_id = payload
         },
-        SetUserData(state, payload){
+        SetUserData(state, payload) {
             state.user_data = payload
         },
-        SetIsLoading(state, value){
+        SetIsLoading(state, value) {
             state.is_loading = value
         },
-        SetUserStudentData(state, payload){
+        SetUserStudentData(state, payload) {
             state.user_student_data = payload
         },
-        ResetUserOneId(state){
+        ResetUserOneId(state) {
             state.user_one_id = {
                 username: "",
                 password: "",
                 token: "",
             }
         },
-        ResetUserData(state){
+        ResetUserData(state) {
             state.user_data = []
         }
     },
     actions: {
-        async checkUsernameOneid(context,{username,status,type}){
-            context.commit("SetIsLoading",true)
-            try{
-                if(status){
-                    status = 'Active'
-                }
-                let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/username?username=${username}`)
+        async checkUsernameOneid(context, { username, status, type }) {
+            context.commit("SetIsLoading", true)
+            console.log("status", status);
+            try {
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/username?username=${username}`)
                 console.log(data)
-                if(data.statusCode === 200){
-                    if(data.data.userOneId){
-                        if(type === 'student'){
-                            context.commit("SetUserStudentData",[data.data])
-                        }else{
-                            context.commit("SetUserData",[data.data])
+                if (data.statusCode === 200) {
+                    if (data.data.userOneId) {
+                        if (type === 'student') {
+                            context.commit("SetUserStudentData", [data.data])
+                        } else {
+                            context.commit("SetUserData", [data.data])
                         }
-                    }else{
+                    } else {
                         Swal.fire({
                             icon: "error",
                             title: "ไม่พบผู้ใช้"
-                        }).then((result)=>{
-                            if(result.isConfirmed){
-                                if(type === 'student'){
-                                    context.commit("SetUserStudentData",[])
-                                }else{
-                                    context.commit("SetUserData",[])
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                if (type === 'student') {
+                                    context.commit("SetUserStudentData", [])
+                                } else {
+                                    context.commit("SetUserData", [])
                                 }
                             }
                         })
                     }
-                    context.commit("SetIsLoading",false)
+                    context.commit("SetIsLoading", false)
                 }
-            }catch(error){
-                context.commit("SetIsLoading",false)
+            } catch (error) {
+                context.commit("SetIsLoading", false)
                 Swal.fire({
                     icon: "error",
                     title: error.message
@@ -93,12 +91,12 @@ const loginModules = {
                         data.data.roles.forEach((role) => {
                             roles.push(role.roleId)
                         });
-                     }
+                    }
                     let payload = {
                         account_id: data.data.account_id,
                         email: data.data.email,
-                        username : context.state.user_one_id.username,
-                        password :  context.state.user_one_id.password,
+                        username: context.state.user_one_id.username,
+                        password: context.state.user_one_id.password,
                         first_name_en: data.data.first_name_en,
                         first_name_th: data.data.first_name_th,
                         last_name_en: data.data.last_name_en,
@@ -107,22 +105,22 @@ const loginModules = {
                         roles: roles,
                         tel: data.data.tel,
                         image: data.data.image !== "" ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}` : ""
-            }
+                    }
                     VueCookie.set("token", data.data.token, 1)
                     localStorage.setItem("userDetail", JSON.stringify(payload))
                     let order = JSON.parse(localStorage.getItem("Order"))
                     context.commit("SetIsLoading", false)
 
-                    if(order?.category_id && order?.course_id){
-                        if(order.course_type_id === "CT_1"){
-                            router.replace({ name: "userCoursePackage_courseId", params:{course_id :order.course_id}})
-                        }else{
-                            router.replace({ name: "userCourseDetail_courseId", params:{course_id :order.course_id}})
+                    if (order?.category_id && order?.course_id) {
+                        if (order.course_type_id === "CT_1") {
+                            router.replace({ name: "userCoursePackage_courseId", params: { course_id: order.course_id } })
+                        } else {
+                            router.replace({ name: "userCourseDetail_courseId", params: { course_id: order.course_id } })
                         }
-                    }else{
+                    } else {
                         router.replace({ name: "UserKingdom" })
                     }
-                   
+
                 }
             } catch (response) {
                 console.log(response)
@@ -142,7 +140,7 @@ const loginModules = {
 
         },
 
-       
+
         logOut(context) {
             VueCookie.delete("token")
             context.commit("ResetUserOneId")
@@ -157,13 +155,13 @@ const loginModules = {
         getUserOneId(state) {
             return state.user_one_id
         },
-        getUserData(state){
+        getUserData(state) {
             return state.user_data
         },
-        getUserStudentData(state){
+        getUserStudentData(state) {
             return state.user_student_data
         },
-        getIsLoading(state){
+        getIsLoading(state) {
             return state.is_loading
         }
     },
