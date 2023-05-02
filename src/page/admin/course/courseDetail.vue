@@ -383,6 +383,7 @@
                             </v-tabs>
                             <v-tabs-items v-model="student_tab" class="rounded-lg">
                                 <v-tab-item valus="students in course">
+                                    <pre>{{coach_list}}</pre>
                                     <v-card flat dent class="mb-3 rounded-lg">
                                         <v-card-text class="py-2 bg-[#FCE0E7] rounded-lg">
                                             <v-row dense class="d-flex align-center">
@@ -404,11 +405,11 @@
                                         </v-card-text>
                                     </v-card>
                                     <div
-                                        v-for="(course_data, course_index) in student_courses"
-                                        :key="course_index"
+                                        v-for="(coach, coach_index) in coach_list"
+                                        :key="`${coach_index}-coach_index`"
                                     >
                                         <v-card
-                                            @click="selectCoach(course_index)"
+                                            @click="selectCoach(coach,coach_index)"
                                             outlined
                                             dense
                                             class="rounded-lg cursor-pointer mb-3 bg-[#FCFCFC]"
@@ -419,11 +420,11 @@
                                                         <v-icon color="#ff6b81">mdi-account</v-icon>
                                                     </v-col>
                                                     <v-col class="font-bold">
-                                                        โค้ช: {{ course_data.name }}
+                                                        โค้ช: {{ `${coach.firstNameTh} ${coach.lastNameTh}` }}
                                                     </v-col>
                                                     <v-col cols="auto">
                                                         <v-icon>{{
-                                                                selected_coach === course_index
+                                                                selected_coach === coach_index
                                                                     ? "mdi-chevron-up"
                                                                     : "mdi-chevron-down"
                                                             }}
@@ -434,7 +435,7 @@
                                         </v-card>
                                         <v-expand-transition>
                                             <div
-                                                v-if="selected_coach === course_index"
+                                                v-if="selected_coach === coach_index"
                                                 class="pa-3 bg-[#FCFCFC] rounded-b-lg"
                                             >
                                                 <!-- FILTER -->
@@ -479,7 +480,60 @@
                                                     <v-col cols="3" align="center">แพ็คเกจ</v-col>
                                                     <v-col align="right"></v-col>
                                                 </v-row>
-                                                <div
+                                                <v-card v-if="student_list.length === 0" outlined class="my-3">
+                                                    <v-card-text class="text-lg font-bold" align="center">
+                                                        ไม่พบข้อมูลนักเรียน
+                                                    </v-card-text>
+                                                </v-card>
+                                                <div 
+                                                    v-if="student_list.length > 0"
+                                                >
+                                                    <v-card 
+                                                        v-for="(student, student_index) in student_list"
+                                                        :key="`${student_index}-index`"
+                                                        @click="selectSchedule(student_index)"
+                                                        outlined
+                                                        class="rounded-lg cursor-pointer mb-3"
+                                                        dense
+                                                    >
+                                                        {{ student }}
+                                                        <v-card-text class="pa-2">
+                                                            <v-row dense class="d-flex align-center">
+                                                                <v-col
+                                                                    cols="3"
+                                                                    class="font-bold"
+                                                                    align="center"
+                                                                >{{ student.date }}
+                                                                </v-col
+                                                                >
+                                                                <!-- <v-col
+                                                                    cols="3"
+                                                                    class="font-bold"
+                                                                    align="center"
+                                                                >{{ schedule.time }}
+                                                                </v-col
+                                                                > -->
+                                                                <!-- <v-col cols="3" align="center">
+                                                                    <v-chip
+                                                                        text-color="white"
+                                                                        :color="schedule.package === 'Exclusive Package'? 'primary': 'pink'"
+                                                                    >{{ schedule.package }}
+                                                                    </v-chip
+                                                                    >
+                                                                </v-col> -->
+                                                                <v-col align="right">
+                                                                    <v-icon>{{
+                                                                            selected_schedule === schedule_index
+                                                                                ? "mdi-chevron-up"
+                                                                                : "mdi-chevron-down"
+                                                                        }}
+                                                                    </v-icon>
+                                                                </v-col>
+                                                            </v-row>
+                                                        </v-card-text>
+                                                    </v-card>
+                                                </div>
+                                                <!-- <div
                                                     v-for="(schedule, schedule_index) in course_data.schedule"
                                                     :key="schedule_index"
                                                 >
@@ -640,7 +694,7 @@
                                                             </v-card>
                                                         </div>
                                                     </v-expand-transition>
-                                                </div>
+                                                </div> -->
                                             </div>
                                         </v-expand-transition>
                                     </div>
@@ -902,18 +956,17 @@ export default {
             this.preview_artwork_files = []
            if(this.course_artwork.length > 0){
                 for(const arkwork of this.course_artwork){
-                    console.log(arkwork)
                     this.preview_artwork_files.push(arkwork)
                 }
            } 
            this.preview_privilege_url = this.course_data.course_img_privilege
         },
         tab: function () {
-            this.GetArtworkByCourse({course_id : this.$route.params.course_id})
-            this.preview_privilege_url = this.course_data.course_img_privilege
             this.course_edit = false;
             this.$store.dispatch("CourseModules/GetCourse",  this.$route.params.course_id);
-          
+            this.GetArtworkByCourse({course_id : this.$route.params.course_id})
+            this.preview_privilege_url = this.course_data.course_img_privilege
+            this.GetCoachsByCourse({course_id : this.$route.params.course_id})
         },
     },
     computed: {
@@ -922,13 +975,16 @@ export default {
             categorys: "CategoryModules/getCategorys",
             course_data: "CourseModules/getCourseData",
             course_is_loading: "CourseModules/getCourseIsLoading",
-            course_artwork :"CourseModules/getCourseArtwork"
+            course_artwork :"CourseModules/getCourseArtwork",
+            coach_list : "CourseModules/getCoachList",
+            student_list : "CourseModules/getStudentList"
         }),
         setFunctions(){
             this.$store.dispatch("CourseModules/GetCourse",  this.$route.params.course_id);
             this.$store.dispatch("CategoryModules/GetCategorys");
             this.$store.dispatch("CourseModules/GetCoachs");
             this.GetArtworkByCourse({course_id : this.$route.params.course_id})
+            this.GetCoachsByCourse({course_id : this.$route.params.course_id})
             return ''
         }
     },
@@ -942,7 +998,9 @@ export default {
             UpdateCouserPackage: "CourseModules/UpdateCouserPackage",
             UpdateCourseArkwork : "CourseModules/UpdateCourseArkwork",
             GetArtworkByCourse : "CourseModules/GetArtworkByCourse",
-            RemoveArkworkByArkworkId : "CourseModules/RemoveArkworkByArkworkId"
+            GetCoachsByCourse : "CourseModules/GetCoachsByCourse",
+            RemoveArkworkByArkworkId : "CourseModules/RemoveArkworkByArkworkId",
+            GetStudentByCoach : "CourseModules/GetStudentByCoach"
         }),
         openFilePrivilegeSelector() {
             this.$refs.fileInputPrivilege.click();
@@ -1172,9 +1230,10 @@ export default {
             this.course_edit = false;
             this.GetCourse(this.$route.params.course_id);
         },
-        selectCoach(coach) {
-            if (this.selected_coach !== coach) {
-                this.selected_coach = coach;
+        selectCoach(coach, index) {
+            if (this.selected_coach !== index) {
+                this.selected_coach = index;
+                this.GetStudentByCoach({coach_id : coach.accountId, course_id : this.$route.params.course_id })
             } else {
                 this.selected_coach = "";
             }

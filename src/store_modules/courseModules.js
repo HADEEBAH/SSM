@@ -98,9 +98,17 @@ const CourseModules = {
     course_type_is_loading : false,
     course_student:[],
     course_artwork : [],
-    course_potential : {}
+    course_potential : {},
+    coach_list: [],
+    student_list : [],
   },
   mutations: {
+    SetStudentList(state, payload){
+      state.student_list = payload
+    },
+    SetCoachList(state, payload){
+      state.coach_list = payload
+    },
     SetCoursePotential(state, paylaod){
       state.course_potential = paylaod
     },
@@ -290,6 +298,45 @@ const CourseModules = {
     ChangeCourseData(context, course_data) {
       console.log("CourseData : ", course_data)
       context.commit("SetCourseData", course_data)
+    },
+    // COACH :: LIST BY COURSE
+    async GetCoachsByCourse(context, {course_id}){
+      try{
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        let localhost = "http://localhost:3000"
+        let {data} = await axios.get(`${localhost}/api/v1/manage/course-coach/${course_id}`,config)
+        if(data.statusCode === 200){
+          context.commit("SetCoachList",data.data)
+        }
+      }catch(error){
+        console.log(error)
+      }
+    },
+    // STUDENT :: LIST BY COACH
+    async GetStudentByCoach(context, {coach_id, course_id}){
+      try{
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        let localhost = "http://localhost:3000"
+        let {data} = await axios.get(`${localhost}/api/v1/checkin/students/coach/${coach_id}/course/${course_id}`,config)
+        console.log(data)
+        if(data.statusCode === 200){
+          context.commit("SetStudentList",data.data)
+        }
+      }catch(error){
+        console.log(error)
+      }
     },
     // COURSE :: UPDATE COURSE DETAIL
     async UpdateCouserDetail(context,{course_id, course_data}){
@@ -806,7 +853,7 @@ const CourseModules = {
       try {
         let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${localhost}/api/v1/course/detail/${course_id}`)
-        console.log(data.data)
+        // console.log(data.data)
         if (data.statusCode === 200) {
           let payload = {
             course_img_privilege : data.data.courseImgPrivilege ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.courseImgPrivilege}` : null,
@@ -1215,6 +1262,12 @@ const CourseModules = {
     }
   },
   getters: {
+    getStudentList(state){
+      return state.student_list
+    },
+    getCoachList(state){
+      return state.coach_list
+    },
     getCourseArtwork(state){
       return state.course_artwork
     },
