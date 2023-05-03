@@ -101,8 +101,16 @@ const CourseModules = {
     course_potential : {},
     coach_list: [],
     student_list : [],
+    stident_list_is_loading : false,
+    student_reserve_list : [],
   },
   mutations: {
+    SetStudentReserveList(state, payload){
+      state.student_reserve_list = payload
+    },
+    SetStudentListIsLoadIng(state, value){
+      state.stident_list_is_loading = value
+    },
     SetStudentList(state, payload){
       state.student_list = payload
     },
@@ -310,8 +318,39 @@ const CourseModules = {
           }
         }
         let localhost = "http://localhost:3000"
-        let {data} = await axios.get(`${localhost}/api/v1/manage/course-coach/${course_id}`,config)
+        let {data} = await axios.get(`${localhost}/api/v1/studentlist/course/${course_id}`,config)
         if(data.statusCode === 200){
+          for await (let coach  of data.data){
+            let coach_data = await axios.get(`${localhost}/api/v1/account/${coach.coachId}`)
+            if(coach_data.data.statusCode === 200){
+                console.log(coach_data.data.data)
+                coach.firstNameTh =  coach_data.data.data.firstNameTh
+                coach.firstNameEn =  coach_data.data.data.firstNameEng
+                coach.lastNameTh =  coach_data.data.data.lastNameTh
+                coach.lastNameEn =  coach_data.data.data.lastNameEng
+            }
+            let datesList = []
+            for await (const coachDate of coach.allDates){
+              for await (const date of coachDate.dates.date){
+                if(datesList.filter(v => v.date === date && v.start === coachDate.time.start && v.end === coachDate.time.end && v.cpo.packageName === coachDate.cpo.packageName).length === 0){
+                  datesList.push({
+                    date : date,
+                    timeId : coachDate.time.timeId,
+                    start : coachDate.time.start,
+                    end :  coachDate.time.end,
+                    time : `${coachDate.time.start}น.-${coachDate.time.end}น.`,
+                    cpo : coachDate.cpo,
+                    cpoId : coachDate.cpo.cpoId
+                  })
+                }
+              }
+            }
+            coach.datesList = datesList.sort(function(a, b) {
+              var dateA = new Date(a.date);
+              var dateB = new Date(b.date);
+              return dateA - dateB;
+            });
+          }
           context.commit("SetCoachList",data.data)
         }
       }catch(error){
@@ -319,7 +358,8 @@ const CourseModules = {
       }
     },
     // STUDENT :: LIST BY COACH
-    async GetStudentByCoach(context, {coach_id, course_id}){
+    async GetStudentByDate(context, {course_id,date}){
+      context.commit("SetStudentListIsLoadIng", true)
       try{
         let config = {
           headers: {
@@ -329,10 +369,32 @@ const CourseModules = {
           }
         }
         let localhost = "http://localhost:3000"
-        let {data} = await axios.get(`${localhost}/api/v1/checkin/students/coach/${coach_id}/course/${course_id}`,config)
-        console.log(data)
+        let {data} = await axios.get(`${localhost}/api/v1/studentlist/checkin/course/${course_id}/date/${date}`,config)
         if(data.statusCode === 200){
+          // console.log(data.data)
           context.commit("SetStudentList",data.data)
+          context.commit("SetStudentListIsLoadIng", false)
+        }
+      }catch(error){
+        context.commit("SetStudentListIsLoadIng", false)
+        console.log(error)
+      }
+    },
+    // RESERVE :: STUDENT LIST BY COURSE
+    async GetStudentReserveByCourseId(context, {course_id}){
+      try{
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        let localhost = "http://192.168.74.25:3000"
+        let {data} = await axios.get(`${localhost}/api/v1/manage/reserve/course/${course_id}`,config)
+        if(data.statusCode === 200){
+          console.log(data.data)
+          context.commit("SetStudentReserveList",data.data)
         }
       }catch(error){
         console.log(error)
@@ -1262,6 +1324,12 @@ const CourseModules = {
     }
   },
   getters: {
+    getStudentReserveList(state){
+      return state.student_reserve_list
+    },
+    getStudentListIsLoading(state){
+      return state.stident_list_is_loading
+    },
     getStudentList(state){
       return state.student_list
     },

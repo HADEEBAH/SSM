@@ -383,7 +383,7 @@
                             </v-tabs>
                             <v-tabs-items v-model="student_tab" class="rounded-lg">
                                 <v-tab-item valus="students in course">
-                                    <pre>{{coach_list}}</pre>
+                                    <!-- <pre>{{coach_list}}</pre> -->
                                     <v-card flat dent class="mb-3 rounded-lg">
                                         <v-card-text class="py-2 bg-[#FCE0E7] rounded-lg">
                                             <v-row dense class="d-flex align-center">
@@ -480,221 +480,196 @@
                                                     <v-col cols="3" align="center">แพ็คเกจ</v-col>
                                                     <v-col align="right"></v-col>
                                                 </v-row>
-                                                <v-card v-if="student_list.length === 0" outlined class="my-3">
+                                                <v-card v-if="coach.allDates.length === 0" outlined class="my-3">
                                                     <v-card-text class="text-lg font-bold" align="center">
                                                         ไม่พบข้อมูลนักเรียน
                                                     </v-card-text>
                                                 </v-card>
                                                 <div 
-                                                    v-if="student_list.length > 0"
-                                                >
-                                                    <v-card 
-                                                        v-for="(student, student_index) in student_list"
-                                                        :key="`${student_index}-index`"
-                                                        @click="selectSchedule(student_index)"
-                                                        outlined
-                                                        class="rounded-lg cursor-pointer mb-3"
-                                                        dense
-                                                    >
-                                                        {{ student }}
-                                                        <v-card-text class="pa-2">
-                                                            <v-row dense class="d-flex align-center">
-                                                                <v-col
-                                                                    cols="3"
-                                                                    class="font-bold"
-                                                                    align="center"
-                                                                >{{ student.date }}
-                                                                </v-col
-                                                                >
-                                                                <!-- <v-col
-                                                                    cols="3"
-                                                                    class="font-bold"
-                                                                    align="center"
-                                                                >{{ schedule.time }}
-                                                                </v-col
-                                                                > -->
-                                                                <!-- <v-col cols="3" align="center">
-                                                                    <v-chip
-                                                                        text-color="white"
-                                                                        :color="schedule.package === 'Exclusive Package'? 'primary': 'pink'"
-                                                                    >{{ schedule.package }}
-                                                                    </v-chip
-                                                                    >
-                                                                </v-col> -->
-                                                                <v-col align="right">
-                                                                    <v-icon>{{
-                                                                            selected_schedule === schedule_index
-                                                                                ? "mdi-chevron-up"
-                                                                                : "mdi-chevron-down"
-                                                                        }}
-                                                                    </v-icon>
-                                                                </v-col>
-                                                            </v-row>
-                                                        </v-card-text>
-                                                    </v-card>
-                                                </div>
-                                                <!-- <div
-                                                    v-for="(schedule, schedule_index) in course_data.schedule"
-                                                    :key="schedule_index"
-                                                >
-                                                    <v-card
-                                                        @click="selectSchedule(schedule_index)"
-                                                        outlined
-                                                        class="rounded-lg cursor-pointer mb-3"
-                                                        dense
-                                                    >
-                                                        <v-card-text class="pa-2">
-                                                            <v-row dense class="d-flex align-center">
-                                                                <v-col
-                                                                    cols="3"
-                                                                    class="font-bold"
-                                                                    align="center"
-                                                                >{{ schedule.date }}
-                                                                </v-col
-                                                                >
-                                                                <v-col
-                                                                    cols="3"
-                                                                    class="font-bold"
-                                                                    align="center"
-                                                                >{{ schedule.time }}
-                                                                </v-col
-                                                                >
-                                                                <v-col cols="3" align="center">
-                                                                    <v-chip
-                                                                        text-color="white"
-                                                                        :color="schedule.package === 'Exclusive Package'? 'primary': 'pink'"
-                                                                    >{{ schedule.package }}
-                                                                    </v-chip
-                                                                    >
-                                                                </v-col>
-                                                                <v-col align="right">
-                                                                    <v-icon>{{
-                                                                            selected_schedule === schedule_index
-                                                                                ? "mdi-chevron-up"
-                                                                                : "mdi-chevron-down"
-                                                                        }}
-                                                                    </v-icon>
-                                                                </v-col>
-                                                            </v-row>
-                                                        </v-card-text>
-                                                    </v-card>
-                                                    <v-expand-transition>
-                                                        <div
-                                                            v-if="selected_schedule === schedule_index"
-                                                            class="px-3 mb-3"
+                                                    v-if="coach.datesList.length > 0"
+                                                >   
+                                                {{ coach.allDates}}
+                                                    <div v-for="( date,index_date ) in coach.datesList" :key="`${index_date}-date`">
+                                                        <v-card 
+                                                            @click="selectSchedule(index_date, date)"
+                                                            outlined
+                                                            class="rounded-lg cursor-pointer mb-3"
+                                                            dense
                                                         >
-                                                            <v-row dense class="d-flex align-center mb-2">
-                                                                <v-col>
-                                                                    <v-divider></v-divider>
-                                                                </v-col>
-                                                                <v-col cols="auto">ข้อมูลนักเรียน</v-col>
-                                                                <v-col>
-                                                                    <v-divider></v-divider>
-                                                                </v-col>
-                                                            </v-row>
-                                                            <v-card class="mb-2" flat dense>
-                                                                <v-card-text
-                                                                    class="pa-2 bg-[#FCE0E7] rounded-lg"
-                                                                >
-                                                                    <v-row dense class="text-md font-bold">
-                                                                        <v-col cols="1" align="center">ลำดับ</v-col>
-                                                                        <v-col cols="2" align="center"
-                                                                        >ชื่อ - นามสกุล
-                                                                        </v-col
-                                                                        >
-                                                                        <v-col cols="1" align="center"
-                                                                        >ชื่อเล่น
-                                                                        </v-col
-                                                                        >
-                                                                        <v-col cols="3" align="center"
-                                                                        >วันเริ่ม - วันสิ้นสุด
-                                                                        </v-col
-                                                                        >
-                                                                        <v-col cols="1" align="center"
-                                                                        >ระยะเวลา
-                                                                        </v-col
-                                                                        >
-                                                                        <v-col cols="auto" align="center"
-                                                                        >จำนวนครั้ง
-                                                                        </v-col
-                                                                        >
-                                                                        <v-col></v-col>
-                                                                    </v-row>
-                                                                </v-card-text>
-                                                            </v-card>
-                                                            <v-card
-                                                                class="mb-2"
-                                                                outlined
-                                                                dense
-                                                                v-for="(student, student_index) in schedule.students"
-                                                                :key="student_index"
-                                                            >
-                                                                <v-card-text class="pa-2">
-                                                                    <v-row
-                                                                        dense
-                                                                        class="text-md font-bold flex align-center"
+                                                            <!-- {{ student }} -->
+                                                            <v-card-text class="pa-2" >
+                                                                <v-row dense class="d-flex align-center">
+                                                                    <v-col
+                                                                        cols="3"
+                                                                        class="font-bold"
+                                                                        align="center"
+                                                                    >{{ date.date }}
+                                                                    </v-col
                                                                     >
-                                                                        <v-col cols="1" align="center">{{
-                                                                                student_index + 1
-                                                                            }}
-                                                                        </v-col>
-                                                                        <v-col cols="2" align="center">{{
-                                                                                student.student_name
-                                                                            }}
-                                                                        </v-col>
-                                                                        <v-col cols="1" align="center">{{
-                                                                                student.nick_name
-                                                                            }}
-                                                                        </v-col>
-                                                                        <v-col cols="3" align="center">{{
-                                                                                `${student.start_date} - ${student.end_date}`
-                                                                            }}
-                                                                        </v-col>
-                                                                        <v-col cols="1" align="center">{{
-                                                                                student.period_package
-                                                                            }}
-                                                                        </v-col>
-                                                                        <v-col cols="1" align="center"
-                                                                        >{{ student.amount }}/4
-                                                                        </v-col
+                                                                    <v-col
+                                                                        cols="3"
+                                                                        class="font-bold"
+                                                                        align="center"
+                                                                    >
+                                                                        {{date.time}}
+                                                                    </v-col
+                                                                    >
+                                                                    <v-col cols="3" align="center">
+                                                                        <v-chip
+                                                                            text-color="white"
+                                                                            :color="date.cpo.packageId === 'PACK_1'? 'primary': date.cpo.packageId === 'PACK_2' ? 'pink' : '#ED7D2B'"
+                                                                        > {{ date.cpo.packageName }}
+                                                                        </v-chip
                                                                         >
-                                                                        <v-col cols="auto">
-                                                                            <v-row dense>
-                                                                                <v-col class="pa-0">
-                                                                                    <v-btn
-                                                                                        text
-                                                                                        class="px-1"
-                                                                                        color="#ff6b81"
-                                                                                    >
-                                                                                        <v-icon
-                                                                                        >mdi-check-decagram-outline
-                                                                                        </v-icon
-                                                                                        >
-                                                                                        ดูประเมิน
-                                                                                    </v-btn>
+                                                                    </v-col>
+                                                                    <v-col align="right">
+                                                                        <v-icon>{{
+                                                                                selected_schedule === index_date
+                                                                                    ? "mdi-chevron-up"
+                                                                                    : "mdi-chevron-down"
+                                                                            }}
+                                                                        </v-icon>
+                                                                    </v-col>
+                                                                </v-row>
+                                                            </v-card-text>
+                                                        </v-card>
+                                                        <v-expand-transition>
+                                                            <div v-if="selected_schedule === index_date"
+                                                                class="px-3 mb-3"
+                                                            >
+                                                                <v-row dense v-if="student_list_is_loading">
+                                                                    <v-col align="center">
+                                                                        <v-progress-circular
+                                                                            indeterminate
+                                                                            color="red"
+                                                                        ></v-progress-circular>
+                                                                    </v-col>
+                                                                </v-row>
+                                                                <template v-else>
+                                                                    <div v-if="student_list.filter(v => v.cpo.packageName === date.cpo.packageName).length === 0">
+                                                                        <v-card dense outlined>
+                                                                            <v-card-text>
+                                                                                <v-row>
+                                                                                    <v-col class="font-bold" align="center">
+                                                                                        ไม่พบข้อมูลนักเรียน
+                                                                                    </v-col>
+                                                                                </v-row>
+                                                                            </v-card-text>
+                                                                        </v-card>
+                                                                    </div>
+                                                                    <div v-else >
+                                                                        <v-row dense class="d-flex align-center mb-2">
+                                                                        <v-col>
+                                                                            <v-divider></v-divider>
+                                                                        </v-col>
+                                                                        <v-col cols="auto">ข้อมูลนักเรียน</v-col>
+                                                                        <v-col>
+                                                                            <v-divider></v-divider>
+                                                                        </v-col>
+                                                                    </v-row>
+                                                                    <v-card class="mb-2" flat dense>
+                                                                        <v-card-text
+                                                                            class="pa-2 bg-[#FCE0E7] rounded-lg"
+                                                                        >   
+                                                                            <v-row dense class="text-md font-bold">
+                                                                                <v-col cols="1" align="center">ลำดับ</v-col>
+                                                                                <v-col cols align="center"
+                                                                                >ชื่อ - นามสกุล
+                                                                                </v-col
+                                                                                >
+                                                                                <!-- <v-col cols="1" align="center"
+                                                                                >ชื่อเล่น
+                                                                                </v-col
+                                                                                > -->
+                                                                                <!-- <v-col cols="3" align="center"
+                                                                                >วันเริ่ม - วันสิ้นสุด
+                                                                                </v-col> -->
+                                                                                <v-col cols="2" align="center"
+                                                                                >ระยะเวลา
+                                                                                </v-col
+                                                                                >
+                                                                                <v-col cols="2" align="center"
+                                                                                >จำนวนครั้ง
+                                                                                </v-col
+                                                                                >
+                                                                                <v-col cols="4"></v-col>
+                                                                            </v-row>
+                                                                        </v-card-text>
+                                                                    </v-card>
+                                                                    <v-card
+                                                                        class="mb-2"
+                                                                        outlined
+                                                                        dense
+                                                                        v-for="(student, student_index) in student_list.filter(v => v.cpo.packageName === date.cpo.packageName)"
+                                                                        :key="student_index"
+                                                                    >
+                                                                        <!-- <pre>{{ student }}</pre> -->
+                                                                        <v-card-text class="pa-2">
+                                                                            <v-row
+                                                                                dense
+                                                                                class="text-md font-bold flex align-center"
+                                                                            >
+                                                                                <v-col cols="1" align="center">{{
+                                                                                        student_index + 1
+                                                                                    }}
                                                                                 </v-col>
-                                                                                <v-col class="pa-0">
-                                                                                    <v-btn
-                                                                                        text
-                                                                                        class="px-1"
-                                                                                        color="#ff6b81"
-                                                                                    >
-                                                                                        <v-icon
-                                                                                        >
-                                                                                            mdi-clipboard-text-search-outline
-                                                                                        </v-icon
-                                                                                        >
-                                                                                        ดูโปรไฟล์
-                                                                                    </v-btn>
+                                                                                <v-col cols align="center">{{
+                                                                                        `${student.firstNameTh} ${student.lastNameTh}`
+                                                                                    }}
+                                                                                </v-col>
+                                                                                <!-- <v-col cols="3" align="center">{{
+                                                                                        `${student.start_date} - ${student.end_date}`
+                                                                                    }}
+                                                                                </v-col> -->
+                                                                                <v-col cols="2" align="center">{{
+                                                                                        student.cpo.optionName
+                                                                                    }}
+                                                                                </v-col>
+                                                                                <v-col cols="2" align="center"
+                                                                                >{{ student.countCheckIn }}/{{student.totalDay}}
+                                                                                </v-col
+                                                                                >
+                                                                                <v-col cols="4">
+                                                                                    <v-row dense>
+                                                                                        <v-col class="pa-0">
+                                                                                            <v-btn
+                                                                                                text
+                                                                                                class="px-1"
+                                                                                                color="#ff6b81"
+                                                                                            >
+                                                                                                <v-icon
+                                                                                                >mdi-check-decagram-outline
+                                                                                                </v-icon
+                                                                                                >
+                                                                                                ดูประเมิน
+                                                                                            </v-btn>
+                                                                                        </v-col>
+                                                                                        <v-col class="pa-0">
+                                                                                            <v-btn
+                                                                                                text
+                                                                                                class="px-1"
+                                                                                                color="#ff6b81"
+                                                                                            >
+                                                                                                <v-icon
+                                                                                                >
+                                                                                                    mdi-clipboard-text-search-outline
+                                                                                                </v-icon
+                                                                                                >
+                                                                                                ดูโปรไฟล์
+                                                                                            </v-btn>
+                                                                                        </v-col>
+                                                                                    </v-row>
                                                                                 </v-col>
                                                                             </v-row>
-                                                                        </v-col>
-                                                                    </v-row>
-                                                                </v-card-text>
-                                                            </v-card>
-                                                        </div>
-                                                    </v-expand-transition>
-                                                </div> -->
+                                                                        </v-card-text>
+                                                                    </v-card>
+                                                                    </div>
+                                                                </template>
+                                                               
+                                                            </div>
+                                                        </v-expand-transition>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </v-expand-transition>
                                     </div>
@@ -703,15 +678,30 @@
                                     <v-data-table
                                         class="header-table rounded-lg"
                                         :headers="column"
-                                        :items="students_booking"
+                                        :items="student_reserve_list"
                                     >
+                                        <template v-slot:[`item.fullname`]="{ item }">
+                                                {{ `${item.firstNameTh} ${item.lastNameTh}` }}
+                                        </template>
+                                        <template v-slot:[`item.course_name`]="{ item }">
+                                                {{ `${item.courseNameTh}(${item.courseNameEn})` }}
+                                        </template>
+                                        <template v-slot:[`item.package`]="{ item }">
+                                                {{ `${item.packageName}-${item.optionName}/${dayOfWeekArray(item.dayOfWeekName)}${item.startTime}-${item.endTime}` }}
+                                        </template>
+                                        <template v-slot:[`item.coach`]="{ item }">
+                                            {{  `${item.coachFirstNameTh} ${item.coachLastNameTh}`  }}
+                                        </template>
+                                        <template v-slot:[`item.createdDate`]="{ item }">
+                                            {{ genDate(item.createdDate)  }}
+                                        </template>
                                         <template v-slot:[`item.status`]="{ item }">
                                             <v-chip
                                                 class="w-full flex justify-center"
                                                 label
-                                                :text-color=" item.status === 'ติดต่อนักเรียน'? '#58A144': '#FCC419'"
+                                                :text-color=" item.status === 'waiting'? '#58A144': '#FCC419'"
                                                 :color="item.status === 'ติดต่อนักเรียน'? '#F0F9EE': '#FFF9E8'"
-                                            >{{ item.status }}
+                                            >{{ item.status === 'waiting' ? "ติดต่อนักเรียน" : item.status }}
                                             </v-chip
                                             >
                                         </template>
@@ -735,7 +725,7 @@ import headerCard from "@/components/header/headerCard.vue";
 import ImgCard from "@/components/course/imgCard.vue";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 import Swal from "sweetalert2";
-import {CheckFileSize} from "@/functions/functions" 
+import {CheckFileSize, dateDMY} from "@/functions/functions" 
 // import rowData from '@/components/label/rowData.vue';
 import {mapGetters, mapActions} from "vuex";
 
@@ -755,42 +745,21 @@ export default {
         column: [
             {
                 text: "ชื่อ - นามสกุล",
-                align: "start",
+                align: "center",
                 sortable: false,
                 value: "fullname",
             },
-            {text: "เบอร์โทรศัพท์", align: "start", sortable: false, value: "tel"},
+            {text: "เบอร์โทรศัพท์", align: "center", sortable: false, value: "tel"},
             {
                 text: "ชื่อคอร์ส",
-                align: "start",
+                align: "center",
                 sortable: false,
                 value: "course_name",
             },
-            {text: "แพ็คเกจ", align: "start", sortable: false, value: "package"},
+            {text: "แพ็คเกจ", align: "center", sortable: false, value: "package"},
+            {text: "โค้ช", align: "center", sortable: false, value: "coach"},
+            {text: "วันที่จอง", align: "center", sortable: false, value: "createdDate"},
             {text: "สถานะ", align: "center", sortable: false, value: "status"},
-        ],
-        students_booking: [
-            {
-                fullname: "ยศพัฒน์ โชคชัย",
-                tel: "089-111-1111",
-                course_name: "เปียโนป๊อป",
-                package: "Exclusive - รายเดือน / วันเสาร์ (10.00-11.00)",
-                status: "ติดต่อนักเรียน",
-            },
-            {
-                fullname: "ณภัค ธนสมบัติ",
-                tel: "089-111-1111",
-                course_name: "เปียโนป๊อป",
-                package: "Exclusive - รายเดือน / วันเสาร์ (10.00-11.00)",
-                status: "รอติดต่อ",
-            },
-            {
-                fullname: "พชรี วงศ์ทิพย์",
-                tel: "089-111-1111",
-                course_name: "เปียโนป๊อป",
-                package: "Exclusive - รายเดือน / วันเสาร์ (10.00-11.00)",
-                status: "ติดต่อนักเรียน",
-            },
         ],
         selected_coach: "",
         selected_schedule: "",
@@ -808,142 +777,7 @@ export default {
         ],
         student_tab: null,
         course_edit: false,
-        student_courses: [
-            {
-                name: "องศา วงกลม",
-                schedule: [
-                    {
-                        date: "เสาร์ 12 กรกฏาคม 2566",
-                        time: "10.00น. - 11.00น.",
-                        package: "Exclusive Package",
-                        students: [
-                            {
-                                student_name: "จิตรลดา มาลินี",
-                                nick_name: "แตง",
-                                start_date: "10/07/2022",
-                                end_date: " 17/08/2022",
-                                period_package: "รายวัน",
-                                amount: "4",
-                            },
-                            {
-                                student_name: "จิตรลดา มาลินี",
-                                nick_name: "แตง",
-                                start_date: "10/07/2022",
-                                end_date: " 17/08/2022",
-                                period_package: "รายวัน",
-                                amount: "4",
-                            },
-                            {
-                                student_name: "จิตรลดา มาลินี",
-                                nick_name: "แตง",
-                                start_date: "10/07/2022",
-                                end_date: " 17/08/2022",
-                                period_package: "รายวัน",
-                                amount: "4",
-                            },
-                        ],
-                    },
-                    {
-                        date: "เสาร์ 12 กรกฏาคม 2566",
-                        time: "10.00น. - 11.00น.",
-                        package: "Group Package",
-                        students: [
-                            {
-                                student_name: "จิตรลดา มาลินี",
-                                nick_name: "แตง",
-                                start_date: "10/07/2022",
-                                end_date: " 17/08/2022",
-                                period_package: "รายวัน",
-                                amount: "4",
-                            },
-                            {
-                                student_name: "จิตรลดา มาลินี",
-                                nick_name: "แตง",
-                                start_date: "10/07/2022",
-                                end_date: " 17/08/2022",
-                                period_package: "รายวัน",
-                                amount: "4",
-                            },
-                            {
-                                student_name: "จิตรลดา มาลินี",
-                                nick_name: "แตง",
-                                start_date: "10/07/2022",
-                                end_date: " 17/08/2022",
-                                period_package: "รายวัน",
-                                amount: "4",
-                            },
-                        ],
-                    },
-                ],
-            },
-            {
-                name: "พงศพัศ เดชบุญ",
-                schedule: [
-                    {
-                        date: "เสาร์ 12 กรกฏาคม 2566",
-                        time: "10.00น. - 11.00น.",
-                        package: "Exclusive Package",
-                        students: [
-                            {
-                                student_name: "จิตรลดา มาลินี",
-                                nick_name: "แตง",
-                                start_date: "10/07/2022",
-                                end_date: " 17/08/2022",
-                                period_package: "รายวัน",
-                                amount: "4",
-                            },
-                            {
-                                student_name: "จิตรลดา มาลินี",
-                                nick_name: "แตง",
-                                start_date: "10/07/2022",
-                                end_date: " 17/08/2022",
-                                period_package: "รายวัน",
-                                amount: "4",
-                            },
-                            {
-                                student_name: "จิตรลดา มาลินี",
-                                nick_name: "แตง",
-                                start_date: "10/07/2022",
-                                end_date: " 17/08/2022",
-                                period_package: "รายวัน",
-                                amount: "4",
-                            },
-                        ],
-                    },
-                    {
-                        date: "เสาร์ 12 กรกฏาคม 2566",
-                        time: "10.00น. - 11.00น.",
-                        package: "Group Package",
-                        students: [
-                            {
-                                student_name: "จิตรลดา มาลินี",
-                                nick_name: "แตง",
-                                start_date: "10/07/2022",
-                                end_date: " 17/08/2022",
-                                period_package: "รายวัน",
-                                amount: "4",
-                            },
-                            {
-                                student_name: "จิตรลดา มาลินี",
-                                nick_name: "แตง",
-                                start_date: "10/07/2022",
-                                end_date: " 17/08/2022",
-                                period_package: "รายวัน",
-                                amount: "4",
-                            },
-                            {
-                                student_name: "จิตรลดา มาลินี",
-                                nick_name: "แตง",
-                                start_date: "10/07/2022",
-                                end_date: " 17/08/2022",
-                                period_package: "รายวัน",
-                                amount: "4",
-                            },
-                        ],
-                    },
-                ],
-            },
-        ],
+
         privilege_file: null,
         preview_privilege_url : null,
         artwork_files : [],
@@ -952,6 +786,9 @@ export default {
     created() {},
     mounted() {},
     watch: {
+        student_tab : function(){
+            this.GetStudentReserveByCourseId({course_id: this.$route.params.course_id})
+        },
         course_artwork : function(){
             this.preview_artwork_files = []
            if(this.course_artwork.length > 0){
@@ -977,7 +814,9 @@ export default {
             course_is_loading: "CourseModules/getCourseIsLoading",
             course_artwork :"CourseModules/getCourseArtwork",
             coach_list : "CourseModules/getCoachList",
-            student_list : "CourseModules/getStudentList"
+            student_list : "CourseModules/getStudentList",
+            student_list_is_loading : "CourseModules/getStudentListIsLoading",
+            student_reserve_list :"CourseModules/getStudentReserveList"
         }),
         setFunctions(){
             this.$store.dispatch("CourseModules/GetCourse",  this.$route.params.course_id);
@@ -1000,8 +839,28 @@ export default {
             GetArtworkByCourse : "CourseModules/GetArtworkByCourse",
             GetCoachsByCourse : "CourseModules/GetCoachsByCourse",
             RemoveArkworkByArkworkId : "CourseModules/RemoveArkworkByArkworkId",
-            GetStudentByCoach : "CourseModules/GetStudentByCoach"
+            GetStudentByDate : "CourseModules/GetStudentByDate",
+            GetStudentReserveByCourseId: "CourseModules/GetStudentReserveByCourseId"
         }),
+        genDate(date){
+            return dateDMY(date)
+        },
+        dayOfWeekArray(day) {
+            // console.log(day)
+            const daysOfWeek = ["วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"];
+            if(day.search(",") > -1){
+                let day_arr = day.split(",")
+                const validDays = day_arr.filter(d => d >= 0 && d <= 6);
+                if (validDays) {
+                    const firstThreeDays = validDays.map(d => daysOfWeek[d]);
+                    return `${firstThreeDays.join(" , ")}`;
+                } else {
+                    return "Invalid days";
+                }
+            }else{
+                return daysOfWeek[day]
+            }
+        },
         openFilePrivilegeSelector() {
             this.$refs.fileInputPrivilege.click();
         },
@@ -1233,14 +1092,14 @@ export default {
         selectCoach(coach, index) {
             if (this.selected_coach !== index) {
                 this.selected_coach = index;
-                this.GetStudentByCoach({coach_id : coach.accountId, course_id : this.$route.params.course_id })
             } else {
                 this.selected_coach = "";
             }
         },
-        selectSchedule(schedule) {
-            if (this.selected_schedule !== schedule) {
-                this.selected_schedule = schedule;
+        selectSchedule(index, date) {
+            this.GetStudentByDate({course_id :this.$route.params.course_id , date: date.date})
+            if (this.selected_schedule !== index) {
+                this.selected_schedule = index;
             } else {
                 this.selected_schedule = "";
             }
@@ -1248,4 +1107,7 @@ export default {
     },
 };
 </script>
+<style >
+
+</style>
   

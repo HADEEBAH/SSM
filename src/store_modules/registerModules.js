@@ -199,7 +199,8 @@ const RegisterModules = {
             context.commit("SetIsLoading", true)
             try {
                 let phone_number = context.state.user_one_id.phone_number.replaceAll("-", "")
-                let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/register`, {
+                let localhost = "http://localhost:3000"
+                let { data } = await axios.post(`${localhost}/api/v1/register`, {
                     "accountTitleTh": "",
                     "firstNameTh": context.state.user_one_id.firstname_th,
                     "lastNameTh": context.state.user_one_id.lastname_th,
@@ -255,17 +256,21 @@ const RegisterModules = {
                 }
             } catch ({ response }) {
                 context.commit("SetIsLoading", false)
+                console.log(response)
                 if (response?.data.statusCode === 400) {
                     let text = ""
-                    switch (response.data.message.message) {
+                    switch (response.data.message) {
                         case "The mobile no must be at least 10 characters.":
                             text = 'หมายเลขมือถือต้องมีอย่างน้อย 10 ตัวอักษร'
                             break;
-                        case "username duplicate":
+                        case "Username duplicate":
                             text = 'username นี้ถูกใช้แล้ว'
                             break;
                         case "The password format is invalid.":
                             text = 'รูปแบบรหัสผ่านไม่ถูกต้อง'
+                            break;
+                        case "The first name eng format is invalid.":
+                            text = 'รูปแบบชื่อภาษาอังกฤษไม่ถูกต้อง'
                             break;
                         case "The last name th format is invalid.":
                             text = 'รูปแบบนามสกุลภาษาไทยไม่ถูกต้อง'
@@ -274,10 +279,11 @@ const RegisterModules = {
                             text = 'รูปแบบนามสกุลภาษาอังกฤษไม่ถูกต้อง'
                             break;
                     }
+                    console.log(text)
                     Swal.fire({
                         icon: 'error',
                         title: `กรอกข้อมูลให้ถูกต้อง`,
-                        text: text ? text : response.data.message.message
+                        text: text ? text : response.data.message
                     })
                 } else {
                     Swal.fire({

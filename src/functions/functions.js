@@ -20,6 +20,16 @@ export const inputValidation = (e, type) => {
             break;
     }
 }
+export const dateDMY = (date)=>{
+    const currentDate = new Date(date);
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const year = String(currentDate.getFullYear());
+
+    const formattedDate = `${day}-${month}-${year}`;
+
+    return formattedDate;
+}
 export const dateFormatter = (date, formatter) => {
     date = new Date(date)
     // const months_th = [ "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม", ]
