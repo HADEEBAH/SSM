@@ -380,6 +380,7 @@
                             <v-tabs v-model="student_tab" color="#ff6b81" class="mb-3">
                                 <v-tab value="students in course">นักเรียกในคอร์ส</v-tab>
                                 <v-tab value="student booking">นักเรียกจองคิว</v-tab>
+                                <v-tab value="student booking">นักเรียกที่จบ</v-tab>
                             </v-tabs>
                             <v-tabs-items v-model="student_tab" class="rounded-lg">
                                 <v-tab-item valus="students in course">
@@ -387,10 +388,12 @@
                                     <v-card flat dent class="mb-3 rounded-lg">
                                         <v-card-text class="py-2 bg-[#FCE0E7] rounded-lg">
                                             <v-row dense class="d-flex align-center">
-                                                <v-col class="text-[#ff6b81] font-bold"
-                                                >รายชื่อโค้ช
-                                                </v-col
-                                                >
+                                                <v-col cols="auto">
+                                                    <v-btn icon @click="selectAllCoach()">
+                                                        <v-icon color="#ff6b81" >{{ selected_all_coach ?'mdi-checkbox-marked' : 'mdi-checkbox-blank-outline'}}</v-icon>
+                                                    </v-btn>
+                                                </v-col>
+                                                <v-col class="text-[#ff6b81] font-bold">รายชื่อโค้ช</v-col>
                                                 <v-col cols="auto">
                                                     <v-text-field
                                                         class="bg-white rounded-lg"
@@ -404,275 +407,370 @@
                                             </v-row>
                                         </v-card-text>
                                     </v-card>
-                                    <div
-                                        v-for="(coach, coach_index) in coach_list"
-                                        :key="`${coach_index}-coach_index`"
-                                    >
-                                        <v-card
-                                            @click="selectCoach(coach,coach_index)"
-                                            outlined
-                                            dense
-                                            class="rounded-lg cursor-pointer mb-3 bg-[#FCFCFC]"
-                                        >
-                                            <v-card-text class="pa-2">
-                                                <v-row dense class="d-flex align-center">
-                                                    <v-col cols="auto">
-                                                        <v-icon color="#ff6b81">mdi-account</v-icon>
-                                                    </v-col>
-                                                    <v-col class="font-bold">
-                                                        โค้ช: {{ `${coach.firstNameTh} ${coach.lastNameTh}` }}
-                                                    </v-col>
-                                                    <v-col cols="auto">
-                                                        <v-icon>{{
-                                                                selected_coach === coach_index
-                                                                    ? "mdi-chevron-up"
-                                                                    : "mdi-chevron-down"
-                                                            }}
-                                                        </v-icon>
-                                                    </v-col>
-                                                </v-row>
-                                            </v-card-text>
-                                        </v-card>
-                                        <v-expand-transition>
+                                    <v-row dense v-if="coach_list_is_loading">
+                                        <v-col align="center">
+                                            <v-progress-circular
+                                                indeterminate
+                                                color="red"
+                                            ></v-progress-circular>
+                                        </v-col>
+                                    </v-row>
+                                    <template v-else>
+                                        <div v-if="coach_list.length === 0">
+                                            <v-card dense outlined>
+                                                <v-card-text>
+                                                    <v-row>
+                                                        <v-col class="font-bold" align="center">
+                                                            ไม่พบข้อมูลนักเรียน
+                                                        </v-col>
+                                                    </v-row>
+                                                </v-card-text>
+                                            </v-card>
+                                        </div>
+                                        <template v-else>
                                             <div
-                                                v-if="selected_coach === coach_index"
-                                                class="pa-3 bg-[#FCFCFC] rounded-b-lg"
+                                            v-for="(coach, coach_index) in coach_list"
+                                            :key="`${coach_index}-coach_index`"
                                             >
-                                                <!-- FILTER -->
-                                                <v-row dense class="mb-3">
-                                                    <v-col>
-                                                        <v-autocomplete
-                                                            dense
-                                                            outlined
-                                                            hide-details
-                                                            placeholder="วัน"
-                                                        ></v-autocomplete>
-                                                    </v-col>
-                                                    <v-col>
-                                                        <v-autocomplete
-                                                            dense
-                                                            outlined
-                                                            hide-details
-                                                            placeholder="วันที่"
-                                                        ></v-autocomplete>
-                                                    </v-col>
-                                                    <v-col>
-                                                        <v-autocomplete
-                                                            dense
-                                                            outlined
-                                                            hide-details
-                                                            placeholder="เวลา"
-                                                        ></v-autocomplete>
-                                                    </v-col>
-                                                    <v-col>
-                                                        <v-autocomplete
-                                                            dense
-                                                            outlined
-                                                            hide-details
-                                                            placeholder="package"
-                                                        ></v-autocomplete>
-                                                    </v-col>
-                                                </v-row>
-                                                <!-- Herder -->
-                                                <v-row dense class="mb-3 font-bold">
-                                                    <v-col cols="3" align="center">วันและวันที่</v-col>
-                                                    <v-col cols="3" align="center">เวลาเรียน</v-col>
-                                                    <v-col cols="3" align="center">แพ็คเกจ</v-col>
-                                                    <v-col align="right"></v-col>
-                                                </v-row>
-                                                <v-card v-if="coach.allDates.length === 0" outlined class="my-3">
-                                                    <v-card-text class="text-lg font-bold" align="center">
-                                                        ไม่พบข้อมูลนักเรียน
+                                                <v-card
+                                                    @click="selectCoach(coach,coach_index)"
+                                                    outlined
+                                                    dense
+                                                    class="rounded-lg cursor-pointer mb-3 bg-[#FCFCFC]"
+                                                >
+                                                    <v-card-text class="pa-2">
+                                                        <v-row dense class="d-flex align-center">
+                                                            <v-col cols="auto">
+                                                                <v-icon color="#ff6b81">mdi-account</v-icon>
+                                                            </v-col>
+                                                            <v-col class="font-bold">
+                                                                โค้ช: {{ `${coach.firstNameTh} ${coach.lastNameTh}` }}
+                                                            </v-col>
+                                                            <v-col cols="auto">
+                                                                <v-icon>{{
+                                                                        selected_coach === coach_index
+                                                                            ? "mdi-chevron-up"
+                                                                            : "mdi-chevron-down"
+                                                                    }}
+                                                                </v-icon>
+                                                            </v-col>
+                                                        </v-row>
                                                     </v-card-text>
                                                 </v-card>
-                                                <div 
-                                                    v-if="coach.datesList.length > 0"
-                                                >   
-                                                {{ coach.allDates}}
-                                                    <div v-for="( date,index_date ) in coach.datesList" :key="`${index_date}-date`">
-                                                        <v-card 
-                                                            @click="selectSchedule(index_date, date)"
-                                                            outlined
-                                                            class="rounded-lg cursor-pointer mb-3"
-                                                            dense
-                                                        >
-                                                            <!-- {{ student }} -->
-                                                            <v-card-text class="pa-2" >
-                                                                <v-row dense class="d-flex align-center">
-                                                                    <v-col
-                                                                        cols="3"
-                                                                        class="font-bold"
-                                                                        align="center"
-                                                                    >{{ date.date }}
-                                                                    </v-col
-                                                                    >
-                                                                    <v-col
-                                                                        cols="3"
-                                                                        class="font-bold"
-                                                                        align="center"
-                                                                    >
-                                                                        {{date.time}}
-                                                                    </v-col
-                                                                    >
-                                                                    <v-col cols="3" align="center">
-                                                                        <v-chip
-                                                                            text-color="white"
-                                                                            :color="date.cpo.packageId === 'PACK_1'? 'primary': date.cpo.packageId === 'PACK_2' ? 'pink' : '#ED7D2B'"
-                                                                        > {{ date.cpo.packageName }}
-                                                                        </v-chip
-                                                                        >
-                                                                    </v-col>
-                                                                    <v-col align="right">
-                                                                        <v-icon>{{
-                                                                                selected_schedule === index_date
-                                                                                    ? "mdi-chevron-up"
-                                                                                    : "mdi-chevron-down"
-                                                                            }}
-                                                                        </v-icon>
-                                                                    </v-col>
-                                                                </v-row>
+                                                <v-expand-transition>
+                                                    <div
+                                                        v-if="selected_coach === coach_index"
+                                                        class="pa-3 bg-[#FCFCFC] rounded-b-lg"
+                                                    >
+                                                        <!-- FILTER -->
+                                                        <v-row dense class="mb-3">
+                                                            <v-col>
+                                                                <v-autocomplete
+                                                                    dense
+                                                                    outlined
+                                                                    hide-details
+                                                                    placeholder="วัน"
+                                                                ></v-autocomplete>
+                                                            </v-col>
+                                                            <v-col>
+                                                                <v-autocomplete
+                                                                    dense
+                                                                    outlined
+                                                                    hide-details
+                                                                    placeholder="วันที่"
+                                                                ></v-autocomplete>
+                                                            </v-col>
+                                                            <v-col>
+                                                                <v-autocomplete
+                                                                    dense
+                                                                    outlined
+                                                                    hide-details
+                                                                    placeholder="เวลา"
+                                                                ></v-autocomplete>
+                                                            </v-col>
+                                                            <v-col>
+                                                                <v-autocomplete
+                                                                    dense
+                                                                    outlined
+                                                                    hide-details
+                                                                    placeholder="package"
+                                                                ></v-autocomplete>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <!-- Herder -->
+                                                        <v-row dense class="mb-3 font-bold">
+                                                            <v-col cols="3" align="center">วันและวันที่</v-col>
+                                                            <v-col cols="3" align="center">เวลาเรียน</v-col>
+                                                            <v-col cols="3" align="center">แพ็คเกจ</v-col>
+                                                            <v-col align="right"></v-col>
+                                                        </v-row>
+                                                        <v-card v-if="coach.datesList.length === 0" outlined class="my-3">
+                                                            <v-card-text class="text-lg font-bold" align="center">
+                                                                ไม่พบข้อมูลนักเรียน
                                                             </v-card-text>
                                                         </v-card>
-                                                        <v-expand-transition>
-                                                            <div v-if="selected_schedule === index_date"
-                                                                class="px-3 mb-3"
-                                                            >
-                                                                <v-row dense v-if="student_list_is_loading">
-                                                                    <v-col align="center">
-                                                                        <v-progress-circular
-                                                                            indeterminate
-                                                                            color="red"
-                                                                        ></v-progress-circular>
-                                                                    </v-col>
-                                                                </v-row>
-                                                                <template v-else>
-                                                                    <div v-if="student_list.filter(v => v.cpo.packageName === date.cpo.packageName).length === 0">
-                                                                        <v-card dense outlined>
-                                                                            <v-card-text>
-                                                                                <v-row>
-                                                                                    <v-col class="font-bold" align="center">
-                                                                                        ไม่พบข้อมูลนักเรียน
-                                                                                    </v-col>
-                                                                                </v-row>
-                                                                            </v-card-text>
-                                                                        </v-card>
-                                                                    </div>
-                                                                    <div v-else >
-                                                                        <v-row dense class="d-flex align-center mb-2">
-                                                                        <v-col>
-                                                                            <v-divider></v-divider>
-                                                                        </v-col>
-                                                                        <v-col cols="auto">ข้อมูลนักเรียน</v-col>
-                                                                        <v-col>
-                                                                            <v-divider></v-divider>
-                                                                        </v-col>
-                                                                    </v-row>
-                                                                    <v-card class="mb-2" flat dense>
-                                                                        <v-card-text
-                                                                            class="pa-2 bg-[#FCE0E7] rounded-lg"
-                                                                        >   
-                                                                            <v-row dense class="text-md font-bold">
-                                                                                <v-col cols="1" align="center">ลำดับ</v-col>
-                                                                                <v-col cols align="center"
-                                                                                >ชื่อ - นามสกุล
-                                                                                </v-col
-                                                                                >
-                                                                                <!-- <v-col cols="1" align="center"
-                                                                                >ชื่อเล่น
-                                                                                </v-col
-                                                                                > -->
-                                                                                <!-- <v-col cols="3" align="center"
-                                                                                >วันเริ่ม - วันสิ้นสุด
-                                                                                </v-col> -->
-                                                                                <v-col cols="2" align="center"
-                                                                                >ระยะเวลา
-                                                                                </v-col
-                                                                                >
-                                                                                <v-col cols="2" align="center"
-                                                                                >จำนวนครั้ง
-                                                                                </v-col
-                                                                                >
-                                                                                <v-col cols="4"></v-col>
-                                                                            </v-row>
-                                                                        </v-card-text>
-                                                                    </v-card>
-                                                                    <v-card
-                                                                        class="mb-2"
-                                                                        outlined
-                                                                        dense
-                                                                        v-for="(student, student_index) in student_list.filter(v => v.cpo.packageName === date.cpo.packageName)"
-                                                                        :key="student_index"
-                                                                    >
-                                                                        <!-- <pre>{{ student }}</pre> -->
-                                                                        <v-card-text class="pa-2">
-                                                                            <v-row
-                                                                                dense
-                                                                                class="text-md font-bold flex align-center"
+                                                        <div 
+                                                            v-if="coach.datesList.length > 0"
+                                                        >   
+                                                            <div v-for="( date,index_date ) in coach.datesList" :key="`${index_date}-date`">
+                                                                <v-card 
+                                                                    @click="selectSchedule(index_date, date)"
+                                                                    outlined
+                                                                    class="rounded-lg cursor-pointer mb-3"
+                                                                    dense
+                                                                >
+                                                                    <!-- {{ student }} -->
+                                                                    <v-card-text class="pa-2" >
+                                                                        <v-row dense class="d-flex align-center">
+                                                                            <v-col
+                                                                                cols="3"
+                                                                                class="font-bold"
+                                                                                align="center"
+                                                                            >{{ getDateFormattor(date.date, "DW DD MMT YYYYT") }}
+                                                                            </v-col
                                                                             >
-                                                                                <v-col cols="1" align="center">{{
-                                                                                        student_index + 1
-                                                                                    }}
-                                                                                </v-col>
-                                                                                <v-col cols align="center">{{
-                                                                                        `${student.firstNameTh} ${student.lastNameTh}`
-                                                                                    }}
-                                                                                </v-col>
-                                                                                <!-- <v-col cols="3" align="center">{{
-                                                                                        `${student.start_date} - ${student.end_date}`
-                                                                                    }}
-                                                                                </v-col> -->
-                                                                                <v-col cols="2" align="center">{{
-                                                                                        student.cpo.optionName
-                                                                                    }}
-                                                                                </v-col>
-                                                                                <v-col cols="2" align="center"
-                                                                                >{{ student.countCheckIn }}/{{student.totalDay}}
-                                                                                </v-col
+                                                                            <v-col
+                                                                                cols="3"
+                                                                                class="font-bold"
+                                                                                align="center"
+                                                                            >
+                                                                                {{date.time}}
+                                                                            </v-col
+                                                                            >
+                                                                            <v-col cols="3" align="center">
+                                                                                <v-chip
+                                                                                    text-color="white"
+                                                                                    :color="date.cpo.packageId === 'PACK_1'? 'primary': date.cpo.packageId === 'PACK_2' ? 'pink' : '#ED7D2B'"
+                                                                                > {{ date.cpo.packageName }}
+                                                                                </v-chip
                                                                                 >
-                                                                                <v-col cols="4">
-                                                                                    <v-row dense>
-                                                                                        <v-col class="pa-0">
-                                                                                            <v-btn
-                                                                                                text
-                                                                                                class="px-1"
-                                                                                                color="#ff6b81"
-                                                                                            >
-                                                                                                <v-icon
-                                                                                                >mdi-check-decagram-outline
-                                                                                                </v-icon
-                                                                                                >
-                                                                                                ดูประเมิน
-                                                                                            </v-btn>
-                                                                                        </v-col>
-                                                                                        <v-col class="pa-0">
-                                                                                            <v-btn
-                                                                                                text
-                                                                                                class="px-1"
-                                                                                                color="#ff6b81"
-                                                                                            >
-                                                                                                <v-icon
-                                                                                                >
-                                                                                                    mdi-clipboard-text-search-outline
-                                                                                                </v-icon
-                                                                                                >
-                                                                                                ดูโปรไฟล์
-                                                                                            </v-btn>
-                                                                                        </v-col>
-                                                                                    </v-row>
+                                                                            </v-col>
+                                                                            <v-col align="right">
+                                                                                <v-icon>{{
+                                                                                        selected_schedule === index_date
+                                                                                            ? "mdi-chevron-up"
+                                                                                            : "mdi-chevron-down"
+                                                                                    }}
+                                                                                </v-icon>
+                                                                            </v-col>
+                                                                        </v-row>
+                                                                    </v-card-text>
+                                                                </v-card>
+                                                                <v-expand-transition>
+                                                                    <div v-if="selected_schedule === index_date"
+                                                                        class="px-3 mb-3"
+                                                                    >
+                                                                        <v-row dense v-if="student_list_is_loading">
+                                                                            <v-col align="center">
+                                                                                <v-progress-circular
+                                                                                    indeterminate
+                                                                                    color="red"
+                                                                                ></v-progress-circular>
+                                                                            </v-col>
+                                                                        </v-row>
+                                                                        <template v-else>
+                                                                            <div v-if="student_list.filter(v => v.cpo.packageName === date.cpo.packageName).length === 0 && date.students.length === 0">
+                                                                                <v-card dense outlined>
+                                                                                    <v-card-text>
+                                                                                        <v-row>
+                                                                                            <v-col class="font-bold" align="center">
+                                                                                                ไม่พบข้อมูลนักเรียน
+                                                                                            </v-col>
+                                                                                        </v-row>
+                                                                                    </v-card-text>
+                                                                                </v-card>
+                                                                            </div>
+                                                                            <div v-else >
+                                                                                <v-row dense class="d-flex align-center mb-2">
+                                                                                <v-col>
+                                                                                    <v-divider></v-divider>
                                                                                 </v-col>
-                                                                            </v-row>
-                                                                        </v-card-text>
-                                                                    </v-card>
+                                                                                <v-col cols="auto">ข้อมูลนักเรียน</v-col>
+                                                                                <v-col>
+                                                                                    <v-divider></v-divider>
+                                                                                </v-col>
+                                                                                </v-row>
+                                                                                    <v-card class="mb-2" flat dense>
+                                                                                    <v-card-text
+                                                                                        class="pa-2 bg-[#FCE0E7] rounded-lg"
+                                                                                    >   
+                                                                                        <v-row dense class="text-md font-bold">
+                                                                                            <v-col cols="1" align="center">ลำดับ</v-col>
+                                                                                            <v-col cols align="center"
+                                                                                            >ชื่อ - นามสกุล
+                                                                                            </v-col
+                                                                                            >
+                                                                                            <!-- <v-col cols="1" align="center"
+                                                                                            >ชื่อเล่น
+                                                                                            </v-col
+                                                                                            > -->
+                                                                                            <!-- <v-col cols="3" align="center"
+                                                                                            >วันเริ่ม - วันสิ้นสุด
+                                                                                            </v-col> -->
+                                                                                            <v-col cols="2" align="center"
+                                                                                            >ระยะเวลา
+                                                                                            </v-col
+                                                                                            >
+                                                                                            <v-col cols="2" align="center"
+                                                                                            >จำนวนครั้ง
+                                                                                            </v-col
+                                                                                            >
+                                                                                            <v-col cols="4"></v-col>
+                                                                                        </v-row>
+                                                                                    </v-card-text>
+                                                                                </v-card>
+                                                                                <div v-if="student_list.filter(v => v.cpo.packageName === date.cpo.packageName).length > 0">
+                                                                                    <v-card
+                                                                                        class="mb-2"
+                                                                                        outlined
+                                                                                        dense
+                                                                                        v-for="(student, student_index) in student_list.filter(v => v.cpo.packageName === date.cpo.packageName)"
+                                                                                        :key="student_index"
+                                                                                    >
+                                                                                        <!-- <pre>{{ student }}</pre> -->
+                                                                                        <v-card-text class="pa-2">
+                                                                                            <v-row
+                                                                                                dense
+                                                                                                class="text-md font-bold flex align-center"
+                                                                                            >
+                                                                                                <v-col cols="1" align="center">{{
+                                                                                                        student_index + 1
+                                                                                                    }}
+                                                                                                </v-col>
+                                                                                                <v-col cols align="center">{{
+                                                                                                        `${student.firstNameTh} ${student.lastNameTh}`
+                                                                                                    }}
+                                                                                                </v-col>
+                                                                                                <!-- <v-col cols="3" align="center">{{
+                                                                                                        `${student.start_date} - ${student.end_date}`
+                                                                                                    }}
+                                                                                                </v-col> -->
+                                                                                                <v-col cols="2" align="center">{{
+                                                                                                        student.cpo.optionName
+                                                                                                    }}
+                                                                                                </v-col>
+                                                                                                <v-col cols="2" align="center"
+                                                                                                >{{ student.countCheckIn }}/{{student.totalDay}}
+                                                                                                </v-col
+                                                                                                >
+                                                                                                <v-col cols="4">
+                                                                                                    <v-row dense>
+                                                                                                        <v-col class="pa-0">
+                                                                                                            <v-btn
+                                                                                                                text
+                                                                                                                class="px-1"
+                                                                                                                color="#ff6b81"
+                                                                                                                @click="showDialogAssessment(student, date)"
+                                                                                                            >
+                                                                                                                <v-icon
+                                                                                                                >mdi-check-decagram-outline
+                                                                                                                </v-icon
+                                                                                                                >
+                                                                                                                ดูประเมิน
+                                                                                                            </v-btn>
+                                                                                                        </v-col>
+                                                                                                        <v-col class="pa-0">
+                                                                                                            <v-btn
+                                                                                                                text
+                                                                                                                class="px-1"
+                                                                                                                color="#ff6b81"
+                                                                                                            >
+                                                                                                                <v-icon
+                                                                                                                >
+                                                                                                                    mdi-clipboard-text-search-outline
+                                                                                                                </v-icon
+                                                                                                                >
+                                                                                                                ดูโปรไฟล์
+                                                                                                            </v-btn>
+                                                                                                        </v-col>
+                                                                                                    </v-row>
+                                                                                                </v-col>
+                                                                                            </v-row>
+                                                                                        </v-card-text>
+                                                                                    </v-card>
+                                                                                </div>   
+                                                                                <div v-else>
+                                                                                    <v-card
+                                                                                        class="mb-2"
+                                                                                        outlined
+                                                                                        dense
+                                                                                        v-for="(student, student_index) in date.students"
+                                                                                        :key="`${student_index}-index`"
+                                                                                    >
+                                                                                        <!-- <pre>{{ student }}</pre> -->
+                                                                                        <v-card-text class="pa-2">
+                                                                                            <v-row
+                                                                                                dense
+                                                                                                class="text-md font-bold flex align-center"
+                                                                                            >
+                                                                                                <v-col cols="1" align="center">{{
+                                                                                                        student_index + 1
+                                                                                                    }}
+                                                                                                </v-col>
+                                                                                                <v-col cols align="center">{{
+                                                                                                        `${student.firstNameTh} ${student.lastNameTh}`
+                                                                                                    }}
+                                                                                                </v-col>
+                                                                                                <!-- <v-col cols="3" align="center">{{
+                                                                                                        `${student.start_date} - ${student.end_date}`
+                                                                                                    }}
+                                                                                                </v-col> -->
+                                                                                                <v-col cols="2" align="center">{{
+                                                                                                        date.cpo.optionName
+                                                                                                    }}
+                                                                                                </v-col>
+                                                                                                <v-col cols="2" align="center"
+                                                                                                >
+                                                                                                -
+                                                                                                </v-col
+                                                                                                >
+                                                                                                <v-col cols="4">
+                                                                                                    <v-row dense>
+                                                                                                        <v-col class="pa-0">
+                                                                                                            <v-btn
+                                                                                                                text
+                                                                                                                class="px-1"
+                                                                                                                color="#ff6b81"
+                                                                                                                disabled
+                                                                                                            >
+                                                                                                                <v-icon
+                                                                                                                >mdi-check-decagram-outline
+                                                                                                                </v-icon
+                                                                                                                >
+                                                                                                                ดูประเมิน
+                                                                                                            </v-btn>
+                                                                                                        </v-col>
+                                                                                                        <v-col class="pa-0">
+                                                                                                            <v-btn
+                                                                                                                text
+                                                                                                                class="px-1"
+                                                                                                                color="#ff6b81"
+                                                                                                            >
+                                                                                                                <v-icon
+                                                                                                                >
+                                                                                                                    mdi-clipboard-text-search-outline
+                                                                                                                </v-icon
+                                                                                                                >
+                                                                                                                ดูโปรไฟล์
+                                                                                                            </v-btn>
+                                                                                                        </v-col>
+                                                                                                    </v-row>
+                                                                                                </v-col>
+                                                                                            </v-row>
+                                                                                        </v-card-text>
+                                                                                    </v-card>
+                                                                                </div>    
+                                                                            </div>
+                                                                        </template>
                                                                     </div>
-                                                                </template>
-                                                               
+                                                                </v-expand-transition>
                                                             </div>
-                                                        </v-expand-transition>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                </v-expand-transition>
                                             </div>
-                                        </v-expand-transition>
-                                    </div>
+                                        </template>
+                                    </template>  
                                 </v-tab-item>
                                 <v-tab-item valus="student booking">
                                     <v-data-table
@@ -707,11 +805,193 @@
                                         </template>
                                     </v-data-table>
                                 </v-tab-item>
+                                <v-tab-item valus="students potential">
+                                    <v-card flat dent class="mb-3 rounded-lg">
+                                        <v-card-text class="py-2 bg-[#FCE0E7] rounded-lg">
+                                            <v-row dense class="d-flex align-center">
+                                                <v-col cols="auto">
+                                                    <v-btn icon @click="selectAllCoach()">
+                                                        <v-icon color="#ff6b81" >{{ selected_all_coach ?'mdi-checkbox-marked' : 'mdi-checkbox-blank-outline'}}</v-icon>
+                                                    </v-btn>
+                                                </v-col>
+                                                <v-col class="text-[#ff6b81] font-bold">รายชื่อโค้ช</v-col>
+                                                <v-col cols="auto">
+                                                    <v-text-field
+                                                        class="bg-white rounded-lg"
+                                                        dense
+                                                        outlined
+                                                        hide-details
+                                                        placeholder="ค้นหาชื่อนักเรียน, ชื่อโค้ช"
+                                                        prepend-inner-icon="mdi-magnify"
+                                                    ></v-text-field>
+                                                </v-col>
+                                            </v-row>
+                                        </v-card-text>
+                                    </v-card>
+                                    <v-row dense v-if="coach_list_is_loading">
+                                        <v-col align="center">
+                                            <v-progress-circular
+                                                indeterminate
+                                                color="red"
+                                            ></v-progress-circular>
+                                        </v-col>
+                                    </v-row>
+                                    <template v-else>
+                                        <div v-if="coach_list.length === 0">
+                                            <v-card dense outlined>
+                                                <v-card-text>
+                                                    <v-row>
+                                                        <v-col class="font-bold" align="center">
+                                                            ไม่พบข้อมูลนักเรียน
+                                                        </v-col>
+                                                    </v-row>
+                                                </v-card-text>
+                                            </v-card>
+                                        </div>
+                                        <template v-else>
+                                            <div
+                                            v-for="(coach, coach_index) in coach_list"
+                                            :key="`${coach_index}-potential_index`"
+                                            >
+                                                <v-card
+                                                    @click="seletedCoachPotential(coach, index)"
+                                                    outlined
+                                                    dense
+                                                    class="rounded-lg cursor-pointer mb-3 bg-[#FCFCFC]"
+                                                >
+                                                    <v-card-text class="pa-2">
+                                                        <v-row dense class="d-flex align-center">
+                                                            <v-col cols="auto">
+                                                                <v-icon color="#ff6b81">mdi-account</v-icon>
+                                                            </v-col>
+                                                            <v-col class="font-bold">
+                                                                โค้ช: {{ `${coach.firstNameTh} ${coach.lastNameTh}` }}
+                                                            </v-col>
+                                                            <v-col cols="auto">
+                                                                <v-icon>{{
+                                                                        selected_coach === coach_index
+                                                                            ? "mdi-chevron-up"
+                                                                            : "mdi-chevron-down"
+                                                                    }}
+                                                                </v-icon>
+                                                            </v-col>
+                                                        </v-row>
+                                                    </v-card-text>
+                                                </v-card>
+                                                <v-expand-transition>
+                                                    <div
+                                                        v-if="selected_coach_potential === coach_index"
+                                                        class="pa-3 bg-[#FCFCFC] rounded-b-lg"
+                                                    ></div>
+                                                </v-expand-transition>
+                                            </div>
+                                        </template>
+                                    </template> 
+                                </v-tab-item>
                             </v-tabs-items>
                         </v-tab-item>
                     </v-tabs-items>
                 </v-card-text>
             </v-card>
+            <v-dialog  width="60vw" v-if="show_dialog_assessmet" v-model="show_dialog_assessmet">
+                <v-card>
+                    <v-card-text  class="pa-2">
+                        <v-row dense>
+                            <v-col></v-col>
+                            <v-col class="pa-0" cols="auto">
+                                <v-btn icon color="red" @click="closeDialogAssessment()" ><v-icon>mdi-close</v-icon></v-btn>
+                            </v-col>
+                        </v-row>
+                        <v-row dense class="mb-3">
+                          <v-col align="center" class="font-bold text-lg">
+                            การประเมิน
+                          </v-col>
+                        </v-row>
+                        <v-card v-if="student_data_assessment?.potential" class="mb-3">
+                            <v-card-text>
+                                <v-row>
+                                    <v-col cols="auto"> 
+                                        <v-img width="40" height="40" src="../../../assets/course/potential.png"></v-img>
+                                    </v-col>
+                                    <v-col cols class="font-bold text-lg"> 
+                                        ประเมินภาพรวม
+                                    </v-col>
+                                    <v-col cols="auto"> 
+                                        <v-chip class="font-bold" :color="check_in_status_options.filter(v => v.value === student_data_assessment.status)[0].bg_color" :style="`color:${check_in_status_options.filter(v => v.value === student_data_assessment.status)[0].color}`" v-if="check_in_status_options.filter(v => v.value === student_data_assessment.status).length > 0" >{{ check_in_status_options.filter(v => v.value === student_data_assessment.status)[0].label }} </v-chip>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col>
+                                        <v-card flat>
+                                            <v-card-text class="bg-[#FBF3F5]">
+                                                <v-row dense>
+                                                    <v-col>
+                                                        {{ student_data_assessment.potential.remark ? student_data_assessment.potential.remark : "-"}}
+                                                    </v-col>
+                                                </v-row>
+                                                <v-row dense>
+                                                    <v-col> 
+                                                        พัฒนาการ: <span class="text-[#ff6b81] font-bold">{{student_data_assessment.potential.evolution ? student_data_assessment.potential.evolution === "very good" ? "ดีมาก" : student_data_assessment.potential.evolution === "good" ? "ดี" : "ปรับปรุง" : "-"}}
+                                                        </span>  ความสนใจ: <span class="font-bold text-[#ff6b81]">{{student_data_assessment.potential.interest ? student_data_assessment.potential.interest === "very good" ? "ดีมาก" : student_data_assessment.potential.interest === "good" ? "ดี" : "ปรับปรุง" : '-'}}</span>
+                                                    </v-col>
+                                                </v-row>
+                                                <v-row dense>
+                                                    <v-col v-for="(file ,index) in student_data_assessment.potential.attachmentPotential" :key="`${index}-attachment`" > 
+                                                        <v-img width="89" height="89" :src="readFile(file.attFiles)"></v-img>
+                                                    </v-col>
+                                                </v-row>
+                                            </v-card-text>
+                                        </v-card>
+                                    </v-col>
+                                </v-row>
+                            </v-card-text>
+                            
+                        </v-card>
+                        <v-card class="mb-3" v-if="student_data_assessment?.assessment?.assessmentStudentsId">
+                            <v-card-text>
+                                <v-row dense>
+                                    <v-col cols="auto"> 
+                                        <v-icon color="#ff6b81">mdi-calendar-month</v-icon>
+                                    </v-col>
+                                    <v-col class="font-bold"> 
+                                        {{student_data_assessment.str_date }}
+                                    </v-col>
+                                    <v-col cols="auto"> 
+                                        <v-chip class="font-bold" :color="check_in_status_options.filter(v => v.value === student_data_assessment.status)[0].bg_color" :style="`color:${check_in_status_options.filter(v => v.value === student_data_assessment.status)[0].color}`" v-if="check_in_status_options.filter(v => v.value === student_data_assessment.status).length > 0" >{{ check_in_status_options.filter(v => v.value === student_data_assessment.status)[0].label }} </v-chip>
+                                    </v-col>
+                                </v-row>
+                                <v-row dense>
+                                    <v-col cols="auto"> 
+                                        เวลาเรียน : {{  student_data_assessment.time  }}
+                                    </v-col>
+                                </v-row>
+                                <v-row dense>
+                                    <v-col> 
+                                       พัฒนาการ: <span class="text-[#ff6b81] font-bold">{{student_data_assessment.assessment.evolution ? student_data_assessment.assessment.evolution === "very good" ? "ดีมาก" : student_data_assessment.assessment.evolution === "good" ? "ดี" : "ปรับปรุง" : "-"}}
+                                    </span>  ความสนใจ: <span class="font-bold text-[#ff6b81]">{{student_data_assessment.assessment.interest ?student_data_assessment.assessment.interest === "very good" ? "ดีมาก" : student_data_assessment.assessment.interest === "good" ? "ดี" : "ปรับปรุง": "-"}}</span>
+                                    </v-col>
+                                </v-row>
+                                <v-row dense>
+                                    <v-col> 
+                                       <span class="text-[#999999]"> ความคิดเห็น: </span>{{ student_data_assessment.assessment.remark}}
+                                    </v-col>
+                                </v-row>
+                                <v-row dense>
+                                    <v-col v-for="(file ,index) in student_data_assessment.assessment.attachment" :key="`${index}-attachment`" > 
+                                        <v-img width="89" height="89" :src="readFile(file.attFiles)"></v-img>
+                                    </v-col>
+                                </v-row>
+                               
+                            </v-card-text>
+                        </v-card>
+                        <v-row dense>
+                            <v-col align="center">
+                                <v-btn color="#ff6b81" @click="closeDialogAssessment()" depressed dark class="btn-size-lg">ตกลง</v-btn>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                </v-card>
+            </v-dialog>
         </v-container>
     </v-app>
 </template>
@@ -725,7 +1005,7 @@ import headerCard from "@/components/header/headerCard.vue";
 import ImgCard from "@/components/course/imgCard.vue";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 import Swal from "sweetalert2";
-import {CheckFileSize, dateDMY} from "@/functions/functions" 
+import {CheckFileSize, dateDMY, dateFormatter} from "@/functions/functions" 
 // import rowData from '@/components/label/rowData.vue';
 import {mapGetters, mapActions} from "vuex";
 
@@ -742,6 +1022,7 @@ export default {
     },
     data: () => ({
         slide_group : null,
+        show_dialog_assessmet: false,
         column: [
             {
                 text: "ชื่อ - นามสกุล",
@@ -777,11 +1058,21 @@ export default {
         ],
         student_tab: null,
         course_edit: false,
-
         privilege_file: null,
         preview_privilege_url : null,
         artwork_files : [],
         preview_artwork_files : [],
+        student_data_assessment: {},
+        check_in_status_options :[
+            {label : "ตรงเวลา", value : "punctual", color: "#58A144", bg_color : "#F0F9EE"},
+            {label : "สาย", value : "late", color: "#FCC419", bg_color : "#FFF9E8"},
+            {label : "ลา", value : "leave", color: "#43A4F5", bg_color : "#CFE2F3"},
+            {label : "ลาฉุกเฉิน", value : "emergency leave", color: "#43A4F5", bg_color : "#CFE2F3"}, 
+            {label : "ขาด", value : "absent", color: "#F03D3E", bg_color : "#F4CCCC"},
+            
+        ],
+        selected_all_coach : false,
+        selected_coach_potential : null
     }),
     created() {},
     mounted() {},
@@ -814,6 +1105,7 @@ export default {
             course_is_loading: "CourseModules/getCourseIsLoading",
             course_artwork :"CourseModules/getCourseArtwork",
             coach_list : "CourseModules/getCoachList",
+            coach_list_is_loading : "CourseModules/getCoachListIsLoading",
             student_list : "CourseModules/getStudentList",
             student_list_is_loading : "CourseModules/getStudentListIsLoading",
             student_reserve_list :"CourseModules/getStudentReserveList"
@@ -842,8 +1134,22 @@ export default {
             GetStudentByDate : "CourseModules/GetStudentByDate",
             GetStudentReserveByCourseId: "CourseModules/GetStudentReserveByCourseId"
         }),
+        readFile(file){
+            return `${process.env.VUE_APP_URL}/api/v1/files/${file}`
+        },
+        seletedCoachPotential(coach_id,index){
+            this.selected_coach_potential = index
+            this.GetStudentPotentialByCoach({course_id : this.$route.params.course_id ,coach_id: coach_id})
+        },
+        getDateFormattor(date, format){
+            // console.log(date, format)
+            return dateFormatter(date,format)
+        },
         genDate(date){
             return dateDMY(date)
+        },
+        selectAllCoach(){
+            this.selected_all_coach = !this.selected_all_coach
         },
         dayOfWeekArray(day) {
             // console.log(day)
@@ -869,20 +1175,30 @@ export default {
         },
           // UPDATE FILE
         uploadPrivilegeFile() {
-        this.privilege_file = this.$refs.fileInputPrivilege.files[0];
-        const allowedTypes = ["image/png", "image/jpeg"];
-        if(CheckFileSize(this.privilege_file) === true){
-            this.course_data.privilege_file = this.$refs.fileInputPrivilege.files[0];
-            this.ChangeCourseData(this.course_data);
-            if (this.privilege_file && allowedTypes.includes(this.privilege_file.type)) {
-            if (!this.privilege_file) return;
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                this.preview_privilege_url = e.target.result;
-            };
-            reader.readAsDataURL(this.privilege_file);
+            this.privilege_file = this.$refs.fileInputPrivilege.files[0];
+            const allowedTypes = ["image/png", "image/jpeg"];
+            if(CheckFileSize(this.privilege_file) === true){
+                this.course_data.privilege_file = this.$refs.fileInputPrivilege.files[0];
+                this.ChangeCourseData(this.course_data);
+                if (this.privilege_file && allowedTypes.includes(this.privilege_file.type)) {
+                if (!this.privilege_file) return;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.preview_privilege_url = e.target.result;
+                };
+                reader.readAsDataURL(this.privilege_file);
+                }
             }
-        }
+        },
+        showDialogAssessment(student_data, date){
+            this.show_dialog_assessmet = true
+            this.student_data_assessment = student_data
+            this.student_data_assessment.time = date.time
+            this.student_data_assessment.str_date = dateFormatter(this.student_data_assessment.date,"DW DD MMT YYYYT")
+        },
+        closeDialogAssessment(){
+            this.show_dialog_assessmet = false
+            this.student_data_assessment = {}
         },
         previewArtWorkFile(event) {
         const selectedFiles = event.target.files;

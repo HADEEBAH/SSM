@@ -100,6 +100,7 @@ const CourseModules = {
     course_artwork : [],
     course_potential : {},
     coach_list: [],
+    coach_list_is_loading : false,
     student_list : [],
     stident_list_is_loading : false,
     student_reserve_list : [],
@@ -116,6 +117,9 @@ const CourseModules = {
     },
     SetCoachList(state, payload){
       state.coach_list = payload
+    },
+    SetCoachListIsLoading(state, payload){
+      state.coach_list_is_loading = payload
     },
     SetCoursePotential(state, paylaod){
       state.course_potential = paylaod
@@ -309,6 +313,7 @@ const CourseModules = {
     },
     // COACH :: LIST BY COURSE
     async GetCoachsByCourse(context, {course_id}){
+      context.commit("SetCoachListIsLoading", true)
       try{
         let config = {
           headers: {
@@ -317,8 +322,9 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let localhost = "http://localhost:3000"
+        let localhost = "http://192.168.74.25:3000"
         let {data} = await axios.get(`${localhost}/api/v1/studentlist/course/${course_id}`,config)
+        // console.log(data.data)
         if(data.statusCode === 200){
           for await (let coach  of data.data){
             let coach_data = await axios.get(`${localhost}/api/v1/account/${coach.coachId}`)
@@ -331,6 +337,7 @@ const CourseModules = {
             }
             let datesList = []
             for await (const coachDate of coach.allDates){
+              // console.log(coachDate)
               for await (const date of coachDate.dates.date){
                 if(datesList.filter(v => v.date === date && v.start === coachDate.time.start && v.end === coachDate.time.end && v.cpo.packageName === coachDate.cpo.packageName).length === 0){
                   datesList.push({
@@ -340,7 +347,8 @@ const CourseModules = {
                     end :  coachDate.time.end,
                     time : `${coachDate.time.start}น.-${coachDate.time.end}น.`,
                     cpo : coachDate.cpo,
-                    cpoId : coachDate.cpo.cpoId
+                    cpoId : coachDate.cpo.cpoId,
+                    students : coachDate.studentArr
                   })
                 }
               }
@@ -351,9 +359,12 @@ const CourseModules = {
               return dateA - dateB;
             });
           }
+          // console.log(data.data)
+          context.commit("SetCoachListIsLoading", false)
           context.commit("SetCoachList",data.data)
         }
       }catch(error){
+        context.commit("SetCoachListIsLoading", false)
         console.log(error)
       }
     },
@@ -380,6 +391,27 @@ const CourseModules = {
         console.log(error)
       }
     },
+    // STUDENT :: LIST POTENTIAL BY COACH
+    async GetStudentPotentialByCoach(context,{course_id, coach_id}){
+      try{
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        let localhost = "http://192.168.74.25:3000"
+        let {data} = await axios.get(`${localhost}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach_id}`,config)
+
+        if(data.statusCode === 200){
+          console.log(data.data)
+        }
+      }catch(error){
+        console.log(error)
+      }
+
+    },
     // RESERVE :: STUDENT LIST BY COURSE
     async GetStudentReserveByCourseId(context, {course_id}){
       try{
@@ -393,7 +425,7 @@ const CourseModules = {
         let localhost = "http://192.168.74.25:3000"
         let {data} = await axios.get(`${localhost}/api/v1/manage/reserve/course/${course_id}`,config)
         if(data.statusCode === 200){
-          console.log(data.data)
+          // console.log(data.data)
           context.commit("SetStudentReserveList",data.data)
         }
       }catch(error){
@@ -1335,6 +1367,9 @@ const CourseModules = {
     },
     getCoachList(state){
       return state.coach_list
+    },
+    getCoachListIsLoading(state){
+      return state.coach_list_is_loading
     },
     getCourseArtwork(state){
       return state.course_artwork
