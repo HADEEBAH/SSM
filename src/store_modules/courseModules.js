@@ -3,6 +3,7 @@ import moment from "moment";
 import Swal from "sweetalert2";
 import router from "@/router";
 import VueCookie from "vue-cookie"
+import {dateDMY} from "../functions/functions"
 
 const CourseModules = {
   namespaced: true,
@@ -104,8 +105,17 @@ const CourseModules = {
     student_list : [],
     stident_list_is_loading : false,
     student_reserve_list : [],
+    student_potential_list : [],
+    student_potential_list_is_loading : false,
+
   },
   mutations: {
+    SetStudentPotentialListIsLoading(state, value){
+      state.student_potential_list_is_loading = value
+    },
+    SetStudentPotentialList(state, payload) {
+      state.student_potential_list = payload 
+    },
     SetStudentReserveList(state, payload){
       state.student_reserve_list = payload
     },
@@ -322,7 +332,7 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let localhost = "http://192.168.74.25:3000"
+        let localhost = "http://localhost:3000"
         let {data} = await axios.get(`${localhost}/api/v1/studentlist/course/${course_id}`,config)
         // console.log(data.data)
         if(data.statusCode === 200){
@@ -334,22 +344,44 @@ const CourseModules = {
                 coach.firstNameEn =  coach_data.data.data.firstNameEng
                 coach.lastNameTh =  coach_data.data.data.lastNameTh
                 coach.lastNameEn =  coach_data.data.data.lastNameEng
+                coach.checked = false
             }
             let datesList = []
             for await (const coachDate of coach.allDates){
-              // console.log(coachDate)
-              for await (const date of coachDate.dates.date){
-                if(datesList.filter(v => v.date === date && v.start === coachDate.time.start && v.end === coachDate.time.end && v.cpo.packageName === coachDate.cpo.packageName).length === 0){
-                  datesList.push({
-                    date : date,
-                    timeId : coachDate.time.timeId,
-                    start : coachDate.time.start,
-                    end :  coachDate.time.end,
-                    time : `${coachDate.time.start}น.-${coachDate.time.end}น.`,
-                    cpo : coachDate.cpo,
-                    cpoId : coachDate.cpo.cpoId,
-                    students : coachDate.studentArr
-                  })
+              console.log(coachDate)
+              if (coachDate.cpo){
+                for await (const date of coachDate.dates.dates){
+                  if(datesList.filter(v => v.date === date).length === 0){
+                    datesList.push({
+                      date : date,
+                      timeId : coachDate.time.timeId,
+                      start : coachDate.time.start,
+                      end :  coachDate.time.end,
+                      startDate : dateDMY(coachDate.dates.startDate),
+                      endDate :   dateDMY(coachDate.dates.endDate),
+                      time : `${coachDate.time.start}น.-${coachDate.time.end}น.`,
+                      cpo : coachDate.cpo ? coachDate.cpo : null,
+                      cpoId : coachDate.cpo.cpoId ? coachDate.cpo.cpoId  : null,
+                      students : coachDate.studentArr,
+                      checked : false,
+                    })
+                  }
+                }
+              }else{
+                for await (const date of coachDate.dates.date){
+                  if(datesList.filter(v => v.date === date && v.start === coachDate.time.start && v.end === coachDate.time.end && v.cpo.packageName === coachDate.cpo.packageName).length === 0){
+                    datesList.push({
+                      date : date,
+                      timeId : coachDate.time.timeId,
+                      start : coachDate.time.start,
+                      end :  coachDate.time.end,
+                      time : `${coachDate.time.start}น.-${coachDate.time.end}น.`,
+                      cpo : coachDate.cpo ? coachDate.cpo : null,
+                      cpoId : coachDate.cpo.cpoId ? coachDate.cpo.cpoId  : null,
+                      students : coachDate.studentArr,
+                      checked : false,
+                    })
+                  }
                 }
               }
             }
@@ -393,6 +425,7 @@ const CourseModules = {
     },
     // STUDENT :: LIST POTENTIAL BY COACH
     async GetStudentPotentialByCoach(context,{course_id, coach_id}){
+      context.commit("SetStudentPotentialListIsLoading",true)
       try{
         let config = {
           headers: {
@@ -401,13 +434,15 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let localhost = "http://192.168.74.25:3000"
+        let localhost = "http://localhost:3000"
         let {data} = await axios.get(`${localhost}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach_id}`,config)
-
         if(data.statusCode === 200){
           console.log(data.data)
+          context.commit("SetStudentPotentialList",data.data)
+          context.commit("SetStudentPotentialListIsLoading",false)
         }
       }catch(error){
+        context.commit("SetStudentPotentialListIsLoading",false)
         console.log(error)
       }
 
@@ -422,7 +457,7 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let localhost = "http://192.168.74.25:3000"
+        let localhost = "http://localhost:3000"
         let {data} = await axios.get(`${localhost}/api/v1/manage/reserve/course/${course_id}`,config)
         if(data.statusCode === 200){
           // console.log(data.data)
@@ -1356,6 +1391,12 @@ const CourseModules = {
     }
   },
   getters: {
+    getStudentPotentialListIsLoading(state){
+      return state.student_potential_list_is_loading 
+    },
+    getStudentPotentialList(state){
+      return state.student_potential_list 
+    },
     getStudentReserveList(state){
       return state.student_reserve_list
     },

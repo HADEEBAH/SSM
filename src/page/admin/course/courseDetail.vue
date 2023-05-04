@@ -380,7 +380,7 @@
                             <v-tabs v-model="student_tab" color="#ff6b81" class="mb-3">
                                 <v-tab value="students in course">นักเรียกในคอร์ส</v-tab>
                                 <v-tab value="student booking">นักเรียกจองคิว</v-tab>
-                                <v-tab value="student booking">นักเรียกที่จบ</v-tab>
+                                <v-tab value="student potential">นักเรียกที่จบ</v-tab>
                             </v-tabs>
                             <v-tabs-items v-model="student_tab" class="rounded-lg">
                                 <v-tab-item valus="students in course">
@@ -433,7 +433,6 @@
                                             :key="`${coach_index}-coach_index`"
                                             >
                                                 <v-card
-                                                    @click="selectCoach(coach,coach_index)"
                                                     outlined
                                                     dense
                                                     class="rounded-lg cursor-pointer mb-3 bg-[#FCFCFC]"
@@ -441,12 +440,17 @@
                                                     <v-card-text class="pa-2">
                                                         <v-row dense class="d-flex align-center">
                                                             <v-col cols="auto">
+                                                                <v-btn icon @click="selectCoachChecked(coach)">
+                                                                    <v-icon color="#ff6b81" >{{ coach.checked ?'mdi-checkbox-marked' : 'mdi-checkbox-blank-outline'}}</v-icon>
+                                                                </v-btn>
+                                                            </v-col>
+                                                            <v-col cols="auto"  @click="selectCoach(coach,coach_index)">
                                                                 <v-icon color="#ff6b81">mdi-account</v-icon>
                                                             </v-col>
-                                                            <v-col class="font-bold">
+                                                            <v-col  @click="selectCoach(coach,coach_index)" class="font-bold">
                                                                 โค้ช: {{ `${coach.firstNameTh} ${coach.lastNameTh}` }}
                                                             </v-col>
-                                                            <v-col cols="auto">
+                                                            <v-col cols="auto" @click="selectCoach(coach,coach_index)">
                                                                 <v-icon>{{
                                                                         selected_coach === coach_index
                                                                             ? "mdi-chevron-up"
@@ -493,15 +497,18 @@
                                                                     dense
                                                                     outlined
                                                                     hide-details
-                                                                    placeholder="package"
+                                                                    placeholder="แพ็คเกจ"
                                                                 ></v-autocomplete>
                                                             </v-col>
                                                         </v-row>
                                                         <!-- Herder -->
                                                         <v-row dense class="mb-3 font-bold">
+                                                            <v-col cols="auto">
+                                                                <div style="width:44px"></div>
+                                                            </v-col>
                                                             <v-col cols="3" align="center">วันและวันที่</v-col>
                                                             <v-col cols="3" align="center">เวลาเรียน</v-col>
-                                                            <v-col cols="3" align="center">แพ็คเกจ</v-col>
+                                                            <v-col cols="3" align="center" v-if="course_data.course_type_id==='CT_1'">แพ็คเกจ</v-col>
                                                             <v-col align="right"></v-col>
                                                         </v-row>
                                                         <v-card v-if="coach.datesList.length === 0" outlined class="my-3">
@@ -522,28 +529,32 @@
                                                                     <!-- {{ student }} -->
                                                                     <v-card-text class="pa-2" >
                                                                         <v-row dense class="d-flex align-center">
+                                                                            <v-col cols="auto">
+                                                                                <v-btn icon @click="selectDateChecked(date)">
+                                                                                    <v-icon color="#ff6b81" >{{ date.checked ?'mdi-checkbox-marked' : 'mdi-checkbox-blank-outline'}}</v-icon>
+                                                                                </v-btn>
+                                                                            </v-col>
                                                                             <v-col
                                                                                 cols="3"
                                                                                 class="font-bold"
                                                                                 align="center"
                                                                             >{{ getDateFormattor(date.date, "DW DD MMT YYYYT") }}
-                                                                            </v-col
-                                                                            >
+                                                                            </v-col>
                                                                             <v-col
                                                                                 cols="3"
                                                                                 class="font-bold"
                                                                                 align="center"
                                                                             >
                                                                                 {{date.time}}
-                                                                            </v-col
-                                                                            >
-                                                                            <v-col cols="3" align="center">
+                                                                            </v-col>
+                                                                            <v-col cols="3" align="center" v-if="course_data.course_type_id==='CT_1'">
                                                                                 <v-chip
                                                                                     text-color="white"
                                                                                     :color="date.cpo.packageId === 'PACK_1'? 'primary': date.cpo.packageId === 'PACK_2' ? 'pink' : '#ED7D2B'"
                                                                                 > {{ date.cpo.packageName }}
                                                                                 </v-chip
                                                                                 >
+                                                                                
                                                                             </v-col>
                                                                             <v-col align="right">
                                                                                 <v-icon>{{
@@ -582,39 +593,32 @@
                                                                             </div>
                                                                             <div v-else >
                                                                                 <v-row dense class="d-flex align-center mb-2">
-                                                                                <v-col>
-                                                                                    <v-divider></v-divider>
-                                                                                </v-col>
-                                                                                <v-col cols="auto">ข้อมูลนักเรียน</v-col>
-                                                                                <v-col>
-                                                                                    <v-divider></v-divider>
-                                                                                </v-col>
+                                                                                    <v-col>
+                                                                                        <v-divider></v-divider>
+                                                                                    </v-col>
+                                                                                    <v-col cols="auto">ข้อมูลนักเรียน</v-col>
+                                                                                    <v-col>
+                                                                                        <v-divider></v-divider>
+                                                                                    </v-col>
                                                                                 </v-row>
-                                                                                    <v-card class="mb-2" flat dense>
+                                                                                <v-card class="mb-2" flat dense>
                                                                                     <v-card-text
                                                                                         class="pa-2 bg-[#FCE0E7] rounded-lg"
                                                                                     >   
                                                                                         <v-row dense class="text-md font-bold">
                                                                                             <v-col cols="1" align="center">ลำดับ</v-col>
-                                                                                            <v-col cols align="center"
-                                                                                            >ชื่อ - นามสกุล
-                                                                                            </v-col
-                                                                                            >
-                                                                                            <!-- <v-col cols="1" align="center"
-                                                                                            >ชื่อเล่น
-                                                                                            </v-col
-                                                                                            > -->
-                                                                                            <!-- <v-col cols="3" align="center"
-                                                                                            >วันเริ่ม - วันสิ้นสุด
-                                                                                            </v-col> -->
-                                                                                            <v-col cols="2" align="center"
-                                                                                            >ระยะเวลา
-                                                                                            </v-col
-                                                                                            >
-                                                                                            <v-col cols="2" align="center"
-                                                                                            >จำนวนครั้ง
-                                                                                            </v-col
-                                                                                            >
+                                                                                            <v-col cols align="center">
+                                                                                                ชื่อ - นามสกุล
+                                                                                            </v-col>
+                                                                                            <v-col cols="2" align="center"  v-if="course_data.course_type === 'CT_1'">   
+                                                                                                ระยะเวลา
+                                                                                            </v-col>
+                                                                                            <v-col cols="2" align="center"  v-if="course_data.course_type === 'CT_1'">
+                                                                                                จำนวนครั้ง
+                                                                                            </v-col>
+                                                                                            <v-col cols="4" align="center" v-else>
+                                                                                                วันเริ่ม - วันสิ้นสุด
+                                                                                            </v-col>
                                                                                             <v-col cols="4"></v-col>
                                                                                         </v-row>
                                                                                     </v-card-text>
@@ -711,19 +715,16 @@
                                                                                                         `${student.firstNameTh} ${student.lastNameTh}`
                                                                                                     }}
                                                                                                 </v-col>
-                                                                                                <!-- <v-col cols="3" align="center">{{
-                                                                                                        `${student.start_date} - ${student.end_date}`
-                                                                                                    }}
-                                                                                                </v-col> -->
-                                                                                                <v-col cols="2" align="center">{{
-                                                                                                        date.cpo.optionName
-                                                                                                    }}
+                                                                                               
+                                                                                                <v-col cols="2" align="center" v-if="course_data.course_type_id === 'CT_1'">
+                                                                                                    {{  date.cpo.optionName }}
                                                                                                 </v-col>
-                                                                                                <v-col cols="2" align="center"
-                                                                                                >
-                                                                                                -
-                                                                                                </v-col
-                                                                                                >
+                                                                                                <v-col cols="2" align="center" v-if="course_data.course_type_id === 'CT_1'">
+                                                                                                    -
+                                                                                                </v-col>
+                                                                                                <v-col cols="4" align="center" v-else>  
+                                                                                                    <span class="font-bold">{{`${date.startDate} - ${date.endDate}`}}</span>  
+                                                                                                </v-col>
                                                                                                 <v-col cols="4">
                                                                                                     <v-row dense>
                                                                                                         <v-col class="pa-0">
@@ -854,7 +855,7 @@
                                             :key="`${coach_index}-potential_index`"
                                             >
                                                 <v-card
-                                                    @click="seletedCoachPotential(coach, index)"
+                                                    @click="seletedCoachPotential(coach, coach_index)"
                                                     outlined
                                                     dense
                                                     class="rounded-lg cursor-pointer mb-3 bg-[#FCFCFC]"
@@ -869,7 +870,7 @@
                                                             </v-col>
                                                             <v-col cols="auto">
                                                                 <v-icon>{{
-                                                                        selected_coach === coach_index
+                                                                        selected_coach_potential === coach_index
                                                                             ? "mdi-chevron-up"
                                                                             : "mdi-chevron-down"
                                                                     }}
@@ -882,7 +883,140 @@
                                                     <div
                                                         v-if="selected_coach_potential === coach_index"
                                                         class="pa-3 bg-[#FCFCFC] rounded-b-lg"
-                                                    ></div>
+                                                    >
+                                                        <v-row dense v-if="student_potential_list_is_loading">
+                                                            <v-col align="center">
+                                                                <v-progress-circular
+                                                                    indeterminate
+                                                                    color="red"
+                                                                ></v-progress-circular>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <div v-else>
+                                                            <div v-if="student_potential_list.length === 0">
+                                                                <v-card dense outlined>
+                                                                    <v-card-text>
+                                                                        <v-row>
+                                                                            <v-col class="font-bold" align="center">
+                                                                                ไม่พบข้อมูลนักเรียน
+                                                                            </v-col>
+                                                                        </v-row>
+                                                                    </v-card-text>
+                                                                </v-card>
+                                                            </div>
+                                                            <div v-if="student_potential_list.length > 0">
+                                                                <v-row dense class="d-flex align-center mb-2">
+                                                                    <v-col>
+                                                                        <v-divider></v-divider>
+                                                                    </v-col>
+                                                                    <v-col cols="auto">ข้อมูลนักเรียน</v-col>
+                                                                    <v-col>
+                                                                        <v-divider></v-divider>
+                                                                    </v-col>
+                                                                </v-row>
+                                                                <v-card class="mb-2" flat dense>
+                                                                    <v-card-text
+                                                                        class="pa-2 bg-[#FCE0E7] rounded-lg"
+                                                                    >   
+                                                                        <v-row dense class="text-md font-bold">
+                                                                            <v-col cols="1" align="center">ลำดับ</v-col>
+                                                                            <v-col cols align="center"
+                                                                            >ชื่อ - นามสกุล
+                                                                            </v-col
+                                                                            >
+                                                                            <!-- <v-col cols="1" align="center"
+                                                                            >ชื่อเล่น
+                                                                            </v-col
+                                                                            > -->
+                                                                            <!-- <v-col cols="3" align="center"
+                                                                            >วันเริ่ม - วันสิ้นสุด
+                                                                            </v-col> -->
+                                                                            <v-col cols="2" align="center"
+                                                                            >ระยะเวลา
+                                                                            </v-col
+                                                                            >
+                                                                            <v-col cols="2" align="center"
+                                                                            >จำนวนครั้ง
+                                                                            </v-col
+                                                                            >
+                                                                            <v-col cols="4"></v-col>
+                                                                        </v-row>
+                                                                    </v-card-text>
+                                                                </v-card>
+                                                                <div v-if="student_potential_list.length > 0">
+                                                                    <v-card
+                                                                        class="mb-2"
+                                                                        outlined
+                                                                        dense
+                                                                        v-for="(potential, potential_index) in student_potential_list"
+                                                                        :key="`${potential_index}-potential`"
+                                                                    >
+                                                                        <!-- <pre>{{ potential }}</pre> -->
+                                                                        <v-card-text class="pa-2">
+                                                                            <v-row
+                                                                                dense
+                                                                                class="text-md font-bold flex align-center"
+                                                                            >
+                                                                                <v-col cols="1" align="center">{{
+                                                                                        potential_index + 1
+                                                                                    }}
+                                                                                </v-col>
+                                                                                <v-col cols align="center">{{
+                                                                                        `${potential.firstNameTh} ${potential.lastNameTh}`
+                                                                                    }}
+                                                                                </v-col>
+                                                                                <!-- <v-col cols="3" align="center">{{
+                                                                                        `${student.start_date} - ${student.end_date}`
+                                                                                    }}
+                                                                                </v-col> -->
+                                                                                <v-col cols="2" align="center">{{
+                                                                                        potential.cpo.optionName
+                                                                                    }}
+                                                                                </v-col>
+                                                                                <v-col cols="2" align="center"
+                                                                                >
+                                                                                    {{ potential.countCheckIn }}/{{potential.totalDay}}
+                                                                                </v-col
+                                                                                >
+                                                                                <v-col cols="4">
+                                                                                    <v-row dense>
+                                                                                        <v-col class="pa-0">
+                                                                                            <v-btn
+                                                                                                text
+                                                                                                class="px-1"
+                                                                                                color="#ff6b81"
+                                                                                               
+                                                                                            >
+                                                                                                <v-icon
+                                                                                                >mdi-check-decagram-outline
+                                                                                                </v-icon
+                                                                                                >
+                                                                                                ดูประเมิน
+                                                                                            </v-btn>
+                                                                                        </v-col>
+                                                                                        <v-col class="pa-0">
+                                                                                            <v-btn
+                                                                                                text
+                                                                                                class="px-1"
+                                                                                                color="#ff6b81"
+                                                                                            >
+                                                                                                <v-icon
+                                                                                                >
+                                                                                                    mdi-clipboard-text-search-outline
+                                                                                                </v-icon
+                                                                                                >
+                                                                                                ดูโปรไฟล์
+                                                                                            </v-btn>
+                                                                                        </v-col>
+                                                                                    </v-row>
+                                                                                </v-col>
+                                                                            </v-row>
+                                                                        </v-card-text>
+                                                                    </v-card>
+                                                                </div>  
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </v-expand-transition>
                                             </div>
                                         </template>
@@ -1056,6 +1190,15 @@ export default {
             {label : "งานศิลปะ", value : "arkwork", img : "../../../assets/course/course.png"},
             {label : "รายชื่อนักเรียน", value : "student list", img : "../../../assets/course/student_list.png"}
         ],
+        day_option : [
+            {label : "วันอาทิตย์", value : 0},
+            {label : "วันจันทร์", value : 0},
+            {label : "วันอังคาร", value : 0},
+            {label : "วันพุธ", value : 0},
+            {label : "วันพฤหัสบดี", value : 0},
+            {label : "วันศุกร์", value : 0},
+            {label : "วันเสาร์", value : 0},
+        ],
         student_tab: null,
         course_edit: false,
         privilege_file: null,
@@ -1108,7 +1251,9 @@ export default {
             coach_list_is_loading : "CourseModules/getCoachListIsLoading",
             student_list : "CourseModules/getStudentList",
             student_list_is_loading : "CourseModules/getStudentListIsLoading",
-            student_reserve_list :"CourseModules/getStudentReserveList"
+            student_reserve_list :"CourseModules/getStudentReserveList",
+            student_potential_list : "CourseModules/getStudentPotentialList",
+            student_potential_list_is_loading :"CourseModules/getStudentPotentialListIsLoading",
         }),
         setFunctions(){
             this.$store.dispatch("CourseModules/GetCourse",  this.$route.params.course_id);
@@ -1132,14 +1277,16 @@ export default {
             GetCoachsByCourse : "CourseModules/GetCoachsByCourse",
             RemoveArkworkByArkworkId : "CourseModules/RemoveArkworkByArkworkId",
             GetStudentByDate : "CourseModules/GetStudentByDate",
-            GetStudentReserveByCourseId: "CourseModules/GetStudentReserveByCourseId"
+            GetStudentReserveByCourseId: "CourseModules/GetStudentReserveByCourseId",
+            GetStudentPotentialByCoach: "CourseModules/GetStudentPotentialByCoach"
         }),
         readFile(file){
             return `${process.env.VUE_APP_URL}/api/v1/files/${file}`
         },
-        seletedCoachPotential(coach_id,index){
+        seletedCoachPotential(coach,index){
             this.selected_coach_potential = index
-            this.GetStudentPotentialByCoach({course_id : this.$route.params.course_id ,coach_id: coach_id})
+            console.log(coach)
+            this.GetStudentPotentialByCoach({course_id : this.$route.params.course_id ,coach_id: coach.coachId})
         },
         getDateFormattor(date, format){
             // console.log(date, format)
@@ -1148,8 +1295,18 @@ export default {
         genDate(date){
             return dateDMY(date)
         },
+        // SELECT CHECK BOX COACH
         selectAllCoach(){
+            this.coach_list.map(v => v.checked = !this.selected_all_coach) 
+            this.coach_list.map(v => v.datesList.map(date => date.checked = !this.selected_all_coach))
             this.selected_all_coach = !this.selected_all_coach
+        },
+        selectCoachChecked(coach){
+            coach.datesList.map(v => v.checked = !coach.checked) 
+            coach.checked = !coach.checked
+        }, 
+        selectDateChecked(data){
+            data.checked = !data.checked
         },
         dayOfWeekArray(day) {
             // console.log(day)

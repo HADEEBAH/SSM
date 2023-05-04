@@ -414,7 +414,7 @@ const orderModules = {
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/cart/${account_id}`,config)
    
                 if (data.statusCode === 200) {
-                    console.log("Cart List =>",data.data)
+                    // console.log("Cart List =>",data.data)
                     for (const item of data.data) {
                         item.course_img = `${process.env.VUE_APP_URL}/api/v1/files/${item.course_img}`
                         if(item.course_type_id === "CT_1"){
@@ -431,7 +431,7 @@ const orderModules = {
                     }
 
                     context.commit("SetCartList", data.data)
-                    console.log("SetCartList", data.data);
+                    // console.log("SetCartList", data.data);
                 } else {
                     throw { error: data }
                 }
