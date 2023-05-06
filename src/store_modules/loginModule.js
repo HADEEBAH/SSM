@@ -144,11 +144,11 @@ const loginModules = {
         logOut(context) {
             Swal.fire({
                 icon: "question",
-                title: "คุณต้องการออกจากระบบหรือไม่",
+                title: "ต้องการออกจากระบบใช่หรือไม่ ?",
                 showDenyButton: false,
                 showCancelButton: true,
+                cancelButtonText :"ยกเลิก",
                 confirmButtonText: "ตกลง",
-                cancelButtonText: "ยกเลิก",
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     VueCookie.delete("token")
@@ -160,8 +160,12 @@ const loginModules = {
                     router.push({ name: "Login" });
                 }
             })
+<<<<<<< HEAD
+           
+=======
 
 
+>>>>>>> develop
         }
     },
     getters: {

@@ -50,6 +50,32 @@ const coachModules = {
     },
   },
   actions: {
+    async DeleteAssessmentPotentialFile(context,{att_assessment_id}){
+      try{
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/potential/${att_assessment_id}`)
+        console.log(data)
+      }catch(error){
+        console.log(error)
+      }
+    },
+    async DeleteAssessmentFile(context,{att_assessment_id}){
+      try{
+        let {data} = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${att_assessment_id}`)
+        console.log(data)
+      }catch(error){
+        console.log(error)
+      }
+    },
+    async DeleteSummaryFile(context,{att_assessment_id}){
+      try{
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/summary/${att_assessment_id}`)
+        console.log(data)
+      }catch(error){
+        console.log(error)
+      }
+    },
     async UpdateAssessmentPotential(context,{students}){
       try{
         let config = {
@@ -60,7 +86,7 @@ const coachModules = {
           },
         };
         for await (const student of students) {
-          setTimeout(async()=>{
+          setTimeout(async ()=>{
             let payload = {
               status : student.check_in_status, // punctual, late,  leave, emergency leave, absent,
               evolution :student.potential.evolution ? student.potential.evolution : '' ,
@@ -75,6 +101,7 @@ const coachModules = {
             }
             console.log(payload)
             payloadData.append("payload",JSON.stringify(payload))
+            // let localhost = "http://localhost:3000"
             let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/potential/${student.potential.checkInPotentialId}`,payloadData ,config)
             if(data.statusCode == 200){
               console.log("patch",data)
@@ -83,7 +110,7 @@ const coachModules = {
             }
           },500)
         }
-        Swal.fire({
+        await Swal.fire({
           icon: "success",
           title: "บันทึกสำเร็จ",
           showDenyButton: false,
@@ -106,7 +133,7 @@ const coachModules = {
         };
         for await (const student of students) {
           console.log("student + >",student)
-          setTimeout(async()=>{
+          setTimeout(async ()=>{
             let payload = {
               status : student.check_in_status, // punctual, late,  leave, emergency leave, absent,
               compensation_date : student.compensation_date,
@@ -144,9 +171,9 @@ const coachModules = {
                 throw {error : data}
               }
             }
-          },500)
+          },1000)
         }
-        Swal.fire({
+        await Swal.fire({
           icon: "success",
           title: "บันทึกสำเร็จ",
           showDenyButton: false,
@@ -518,55 +545,58 @@ const coachModules = {
           },
         };
         let payloadData = new FormData()
-        payloadData.append("summary",checkInCoach.summary)
-        payloadData.append("homework",checkInCoach.homework)
-        for(const file of files){
-          payloadData.append(`img_url`, file);
+        payloadData.append("summary",checkInCoach.summary ? checkInCoach.summary : "")
+        payloadData.append("homework",checkInCoach.homework ? checkInCoach.homework: "")
+        if(files){
+          for await (const file of files){
+            payloadData.append(`img_url`, file);
+          }
         }
         let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/summary/${checkInCoach.checkInCoachId}`,payloadData , config)
         console.log(data)
         if(data.statusCode == 200){
-          Swal.fire({
+          await Swal.fire({
             icon: "success",
             title: "บันทึกสำเร็จ",
             showDenyButton: false,
             showCancelButton: false,
             cancelButtonText :"ยกเลิก",
             confirmButtonText: "ตกลง",
-          }).then(async (result) => {
-            if (result.isConfirmed) {
-              let user_detail =  JSON.parse(localStorage.getItem("userDetail"));
-              let date = new Date(checkInCoach.date).toISOString().substring(0, 10)
-              let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${checkInCoach.courseId}/date/${date}`,config)
-              if(data.statusCode === 200){
-                console.log( data.data)
-                let payload = {}
-                data.data.forEach((check_in)=>{
-                  let img_url = []
-                  if(check_in.attachment.length > 0){
-                    for(const img of check_in.attachment ){
-                      img_url.push({
-                        sumAttId : img.sumAttId,
-                        checkInCoachId: img.checkInCoachId,
-                        attFiles: img.attFiles,
-                        attFilesUrl : `${process.env.VUE_APP_URL}/api/v1/files/${img.attFiles}`,
-
-                      })
-                    }
-                  }
-                  payload = {
-                    checkInCoachId : check_in.checkInCoachId,
-                    courseId : check_in.courseId,
-                    date: check_in.date,
-                    summary :check_in.summary,
-                    homework :check_in.homework,
-                    attachment : img_url
-                  }
-                })
-                context.commit("SetCoachCheckIn",payload)
-              }
-            }
           })
+          // .then(async (result) => {
+          //   if (result.isConfirmed) {
+          //     let user_detail =  JSON.parse(localStorage.getItem("userDetail"));
+          //     let date = new Date(checkInCoach.date).toISOString().substring(0, 10)
+          //     let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${checkInCoach.courseId}/date/${date}`,config)
+          //     if(data.statusCode === 200){
+          //       console.log( data.data)
+          //       let payload = {}
+          //       data.data.forEach((check_in)=>{
+          //         let img_url = []
+          //         if(check_in.attachment.length > 0){
+          //           for(const img of check_in.attachment ){
+          //             img_url.push({
+          //               sumAttId : img.sumAttId,
+          //               checkInCoachId: img.checkInCoachId,
+          //               attFiles: img.attFiles,
+          //               attFilesUrl : `${process.env.VUE_APP_URL}/api/v1/files/${img.attFiles}`,
+
+          //             })
+          //           }
+          //         }
+          //         payload = {
+          //           checkInCoachId : check_in.checkInCoachId,
+          //           courseId : check_in.courseId,
+          //           date: check_in.date,
+          //           summary :check_in.summary,
+          //           homework :check_in.homework,
+          //           attachment : img_url
+          //         }
+          //       })
+          //       context.commit("SetCoachCheckIn",payload)
+          //     }
+          //   }
+          // })
         }
       }catch(error){
         console.log(error)

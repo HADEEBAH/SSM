@@ -3,6 +3,7 @@ import moment from "moment";
 import Swal from "sweetalert2";
 import router from "@/router";
 import VueCookie from "vue-cookie"
+import {dateDMY} from "../functions/functions"
 
 const CourseModules = {
   namespaced: true,
@@ -98,9 +99,38 @@ const CourseModules = {
     course_type_is_loading : false,
     course_student:[],
     course_artwork : [],
-    course_potential : {}
+    course_potential : {},
+    coach_list: [],
+    coach_list_is_loading : false,
+    student_list : [],
+    stident_list_is_loading : false,
+    student_reserve_list : [],
+    student_potential_list : [],
+    student_potential_list_is_loading : false,
+
   },
   mutations: {
+    SetStudentPotentialListIsLoading(state, value){
+      state.student_potential_list_is_loading = value
+    },
+    SetStudentPotentialList(state, payload) {
+      state.student_potential_list = payload 
+    },
+    SetStudentReserveList(state, payload){
+      state.student_reserve_list = payload
+    },
+    SetStudentListIsLoadIng(state, value){
+      state.stident_list_is_loading = value
+    },
+    SetStudentList(state, payload){
+      state.student_list = payload
+    },
+    SetCoachList(state, payload){
+      state.coach_list = payload
+    },
+    SetCoachListIsLoading(state, payload){
+      state.coach_list_is_loading = payload
+    },
     SetCoursePotential(state, paylaod){
       state.course_potential = paylaod
     },
@@ -269,8 +299,8 @@ const CourseModules = {
     // COACH :: LIST
     async GetCoachs(context) {
       try {
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/account/role/R_3`)
+        // let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/role/R_3`)
         if (data.statusCode === 200) {
           data.data.forEach((coach) => {
             // console.log("coach =>", coach)
@@ -291,11 +321,157 @@ const CourseModules = {
       console.log("CourseData : ", course_data)
       context.commit("SetCourseData", course_data)
     },
+    // COACH :: LIST BY COURSE
+    async GetCoachsByCourse(context, {course_id}){
+      context.commit("SetCoachListIsLoading", true)
+      try{
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/course/${course_id}`,config)
+        // console.log(data.data)
+        if(data.statusCode === 200){
+          for await (let coach  of data.data){
+            let coach_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${coach.coachId}`)
+            if(coach_data.data.statusCode === 200){
+                console.log(coach_data.data.data)
+                coach.firstNameTh =  coach_data.data.data.firstNameTh
+                coach.firstNameEn =  coach_data.data.data.firstNameEng
+                coach.lastNameTh =  coach_data.data.data.lastNameTh
+                coach.lastNameEn =  coach_data.data.data.lastNameEng
+                coach.checked = false
+            }
+            let datesList = []
+            for await (const coachDate of coach.allDates){
+              console.log(coachDate)
+              if (coachDate.cpo){
+                for await (const date of coachDate.dates.dates){
+                  if(datesList.filter(v => v.date === date).length === 0){
+                    datesList.push({
+                      date : date,
+                      timeId : coachDate.time.timeId,
+                      start : coachDate.time.start,
+                      end :  coachDate.time.end,
+                      startDate : dateDMY(coachDate.dates.startDate),
+                      endDate :   dateDMY(coachDate.dates.endDate),
+                      time : `${coachDate.time.start}น.-${coachDate.time.end}น.`,
+                      cpo : coachDate.cpo ? coachDate.cpo : null,
+                      cpoId : coachDate.cpo.cpoId ? coachDate.cpo.cpoId  : null,
+                      students : coachDate.studentArr,
+                      checked : false,
+                    })
+                  }
+                }
+              }else{
+                for await (const date of coachDate.dates.date){
+                  if(datesList.filter(v => v.date === date && v.start === coachDate.time.start && v.end === coachDate.time.end && v.cpo.packageName === coachDate.cpo.packageName).length === 0){
+                    datesList.push({
+                      date : date,
+                      timeId : coachDate.time.timeId,
+                      start : coachDate.time.start,
+                      end :  coachDate.time.end,
+                      time : `${coachDate.time.start}น.-${coachDate.time.end}น.`,
+                      cpo : coachDate.cpo ? coachDate.cpo : null,
+                      cpoId : coachDate.cpo.cpoId ? coachDate.cpo.cpoId  : null,
+                      students : coachDate.studentArr,
+                      checked : false,
+                    })
+                  }
+                }
+              }
+            }
+            coach.datesList = datesList.sort(function(a, b) {
+              var dateA = new Date(a.date);
+              var dateB = new Date(b.date);
+              return dateA - dateB;
+            });
+          }
+          // console.log(data.data)
+          context.commit("SetCoachListIsLoading", false)
+          context.commit("SetCoachList",data.data)
+        }
+      }catch(error){
+        context.commit("SetCoachListIsLoading", false)
+        console.log(error)
+      }
+    },
+    // STUDENT :: LIST BY COACH
+    async GetStudentByDate(context, {course_id,date}){
+      context.commit("SetStudentListIsLoadIng", true)
+      try{
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/date/${date}`,config)
+        if(data.statusCode === 200){
+          // console.log(data.data)
+          context.commit("SetStudentList",data.data)
+          context.commit("SetStudentListIsLoadIng", false)
+        }
+      }catch(error){
+        context.commit("SetStudentListIsLoadIng", false)
+        console.log(error)
+      }
+    },
+    // STUDENT :: LIST POTENTIAL BY COACH
+    async GetStudentPotentialByCoach(context,{course_id, coach_id}){
+      context.commit("SetStudentPotentialListIsLoading",true)
+      try{
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach_id}`,config)
+        if(data.statusCode === 200){
+          console.log(data.data)
+          context.commit("SetStudentPotentialList",data.data)
+          context.commit("SetStudentPotentialListIsLoading",false)
+        }
+      }catch(error){
+        context.commit("SetStudentPotentialListIsLoading",false)
+        console.log(error)
+      }
+
+    },
+    // RESERVE :: STUDENT LIST BY COURSE
+    async GetStudentReserveByCourseId(context, {course_id}){
+      try{
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/manage/reserve/course/${course_id}`,config)
+        if(data.statusCode === 200){
+          // console.log(data.data)
+          context.commit("SetStudentReserveList",data.data)
+        }
+      }catch(error){
+        console.log(error)
+      }
+    },
     // COURSE :: UPDATE COURSE DETAIL
     async UpdateCouserDetail(context,{course_id, course_data}){
       try{
         console.log(typeof course_data.course_img == "object")
-        let localhost = "http://localhost:3000"
+        // let localhost = "http://localhost:3000"
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -333,7 +509,7 @@ const CourseModules = {
         if (typeof course_data.course_img == "object") {
           payloadData.append("img_url", course_data.course_img)
         }
-        let {data} = await axios.patch(`${localhost}/api/v1/manage/update-course/${course_id}`, payloadData, config)
+        let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-course/${course_id}`, payloadData, config)
         // console.log(data)
         if(data.statusCode === 200){
           Swal.fire({
@@ -431,8 +607,8 @@ const CourseModules = {
         console.log("payload",payload)
         let payloadData = new FormData()
         payloadData.append("payload",JSON.stringify(payload))
-        let localhost = "http://localhost:3000"
-        let {data} = await axios.patch(`${localhost}/api/v1/manage/update-coach/${course_id}`, payloadData, config)
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-coach/${course_id}`, payloadData, config)
         if(data.statusCode === 200){
           Swal.fire({
             icon: "success",
@@ -488,8 +664,8 @@ const CourseModules = {
         console.log("payload => ",payload)
         let payloadData = new FormData()
         payloadData.append("payload",JSON.stringify(payload))
-        let localhost = "http://localhost:3000"
-        let {data} = await axios.patch(`${localhost}/api/v1/manage/update-cpo/${course_id}`, payloadData, config)
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-cpo/${course_id}`, payloadData, config)
         if(data.statusCode === 200){
           Swal.fire({
             icon: "success",
@@ -510,9 +686,9 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let localhost = "http://localhost:3000"
+        // let localhost = "http://localhost:3000"
         console.log("artwork_data :", artwork_data)
-        let {data} = await axios.delete(`${localhost}/api/v1/course/artworkCourse/${artwork_data.artworkCourseId}`,config)
+        let {data} = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/course/artworkCourse/${artwork_data.artworkCourseId}`,config)
         console.log(data)
         if(data.statusCode == 200){
           Swal.fire({
@@ -543,8 +719,8 @@ const CourseModules = {
             payloadData.append(`img_artwork`, course_data.artwork_file[i]);
           }         
         }      
-        let localhost = "http://localhost:3000"
-        let {data} = await axios.patch(`${localhost}/api/v1/manage/update-artwork/${course_id}`,payloadData ,config)
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-artwork/${course_id}`,payloadData ,config)
         if(data.statusCode === 200){
           Swal.fire({
             icon: "success",
@@ -804,9 +980,9 @@ const CourseModules = {
     async GetCourse(context, course_id) {
       context.commit("SetCourseIsLoading", true)
       try {
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/course/detail/${course_id}`)
-        console.log(data.data)
+        // let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
+        // console.log(data.data)
         if (data.statusCode === 200) {
           let payload = {
             course_img_privilege : data.data.courseImgPrivilege ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.courseImgPrivilege}` : null,
@@ -1215,6 +1391,27 @@ const CourseModules = {
     }
   },
   getters: {
+    getStudentPotentialListIsLoading(state){
+      return state.student_potential_list_is_loading 
+    },
+    getStudentPotentialList(state){
+      return state.student_potential_list 
+    },
+    getStudentReserveList(state){
+      return state.student_reserve_list
+    },
+    getStudentListIsLoading(state){
+      return state.stident_list_is_loading
+    },
+    getStudentList(state){
+      return state.student_list
+    },
+    getCoachList(state){
+      return state.coach_list
+    },
+    getCoachListIsLoading(state){
+      return state.coach_list_is_loading
+    },
     getCourseArtwork(state){
       return state.course_artwork
     },

@@ -66,6 +66,7 @@
                     </v-col>
                 </v-row>
                 <v-card elevation="1" class="mb-2">
+                    <pre></pre>
                     <v-data-table
                         class="header-table border"
                         :items="student_check_in.filter(v => v.cpo.packageName === package_name_filter)" 
@@ -74,7 +75,7 @@
                         :headers="headers">
                         <template v-slot:[`item.actions`] ="{item}">
                             <v-select
-                                :items="check_in_status_options"
+                                :items="FilterStatusCheckIn(item)"
                                 outlined
                                 dense
                                 item-text="label"
@@ -308,10 +309,15 @@
                     <v-card-text class="border-dashed border-2 border-pink-600 rounded-lg">
                         <v-row v-if="preview_summary_files && preview_summary_files?.length > 0">
                             <v-col cols="3" align="center" class="rounded-lg pa-2" v-for="(file, index) in preview_summary_files" :key="index">
-                                <v-img :src="file" contain  
+                                <v-img v-if="file.attId" :src="file.url" contain  
                                 max-height="200"
                                 max-width="200"  align="right">
-                                <v-btn v-if="coach_check_in.attachment.length == 0" icon class="bg-[#f00]" dark @click="removeSummaryFile(index)"><v-icon>mdi-close</v-icon></v-btn>
+                                     <v-btn icon class="bg-[#f00]" dark @click="removeSummaryFileInbase(file, index)"><v-icon>mdi-close</v-icon></v-btn>
+                                </v-img>
+                                <v-img v-else :src="file" contain  
+                                max-height="200"
+                                max-width="200"  align="right">
+                                    <v-btn v-if="coach_check_in.attachment.length == 0" icon class="bg-[#f00]" dark @click="removeSummaryFile(index)"><v-icon>mdi-close</v-icon></v-btn>
                                 </v-img>
                             </v-col>
                         </v-row>
@@ -321,7 +327,8 @@
                             src="../../../assets/manage_coach/upload_file.png"
                             max-height="105"
                             max-width="122"
-                            ></v-img>
+                            >
+                            </v-img>
                         </v-col>
                         <v-col cols="12" class="flex align-center justify-center text-h5">
                             แนบไฟล์รูปภาพหรือวิดีโอ
@@ -384,19 +391,19 @@
                             ไฟล์แนบ
                             </v-col>
                         </v-row>
-                        <v-card flat class="mb-3" v-for="(file, index) of student_check_in[selected_student].assessment.attachment" :key="`${index}-fileattachment`">
+                        <v-card  flat class="mb-3" v-for="(file, index) of student_check_in[selected_student].assessment.attachment" :key="`${index}-fileattachment`">
                             <v-card-text class="border border-2 border-[#ff6b81] rounded-lg">
                             <v-row>
                                 <v-col cols="auto" class="pr-2">
                                 <v-img height="35" width="26" src="../../../assets/coachLeave/file-pdf.png"/>
                                 </v-col>
-                                <v-col  class="px-2">
-                                    <span class="font-bold">{{ file.attId }}</span><br>
+                                <v-col @click="openFile(file)" class="px-2 cursor-pointer">
+                                    <span class="font-bold">ไฟล์แนบ {{ index+1  }}</span><br>
                                     <!-- <span class="text-caption">ขนาดไฟล์ : {{ (0 / 1000000).toFixed(2) }} MB</span> -->
                                 </v-col>
-                                <!-- <v-col cols="auto" class="pl-2">
-                                <v-btn @click="removePotentialFile(index)" icon color="#ff6b81"><v-icon>mdi-close</v-icon></v-btn>
-                                </v-col> -->
+                                <v-col cols="auto" class="pl-2">
+                                    <v-btn @click="removeAccessmentFileInBase(file,selected_student)" icon color="#ff6b81"><v-icon>mdi-close</v-icon></v-btn>
+                                </v-col>
                             </v-row>
                             </v-card-text>
                         </v-card>
@@ -434,7 +441,7 @@
                             </v-col>
                         </v-row>
                         <v-divider class="my-2"></v-divider>
-                        <v-card flat class="mb-3" v-for="(file, index) of student_check_in[selected_student].files" :key="`${index}-file`">
+                        <v-card @click="openFile(file)" flat class="mb-3" v-for="(file, index) of student_check_in[selected_student].files" :key="`${index}-file`">
                             <v-card-text class="border border-2 border-[#ff6b81] rounded-lg">
                             <v-row>
                                 <v-col cols="auto" class="pr-2">
@@ -445,7 +452,7 @@
                                     <span class="text-caption">ขนาดไฟล์ : {{ (file.size / 1000000).toFixed(2) }} MB</span>
                                 </v-col>
                                 <v-col cols="auto" class="pl-2">
-                                <v-btn @click="removePotentialFile(selected_student,index)" icon color="#ff6b81"><v-icon>mdi-close</v-icon></v-btn>
+                                <v-btn @click="removeAccessmentFile(selected_student,index)" icon color="#ff6b81"><v-icon>mdi-close</v-icon></v-btn>
                                 </v-col>
                             </v-row>
                             </v-card-text>
@@ -494,19 +501,19 @@
                             ไฟล์แนบ
                             </v-col>
                         </v-row>
-                        <v-card flat class="mb-3" v-for="(file, index) of student_check_in[selected_student].potential.attachmentPotential" :key="`${index}-fileattachment`">
+                        <v-card  flat class="mb-3" v-for="(file, index) of student_check_in[selected_student].potential.attachmentPotential" :key="`${index}-fileattachment`">
                             <v-card-text class="border border-2 border-[#ff6b81] rounded-lg">
                             <v-row>
                                 <v-col cols="auto" class="pr-2">
                                 <v-img height="35" width="26" src="../../../assets/coachLeave/file-pdf.png"/>
                                 </v-col>
-                                <v-col  class="px-2">
-                                    <span class="font-bold">{{ file.attId }}</span><br>
+                                <v-col @click="openFile(file)" class="px-2 cursor-pointer">
+                                    <span class="font-bold"> ไฟล์แนบ {{ index + 1 }}</span><br>
                                     <!-- <span class="text-caption">ขนาดไฟล์ : {{ (0 / 1000000).toFixed(2) }} MB</span> -->
                                 </v-col>
-                                <!-- <v-col cols="auto" class="pl-2">
-                                <v-btn @click="removePotentialFile(index)" icon color="#ff6b81"><v-icon>mdi-close</v-icon></v-btn>
-                                </v-col> -->
+                                <v-col cols="auto" class="pl-2">
+                                    <v-btn @click="removePotentialFileInBase(file, selected_student)" icon color="#ff6b81"><v-icon>mdi-close</v-icon></v-btn>
+                                </v-col>
                             </v-row>
                             </v-card-text>
                         </v-card>
@@ -640,7 +647,7 @@ export default {
         if(this.coach_check_in.attachment){
             if(this.coach_check_in?.attachment.length > 0){
                 for(const img_url of this.coach_check_in.attachment){
-                    this.preview_summary_files.push(img_url.attFilesUrl)
+                    this.preview_summary_files.push({url : img_url.attFilesUrl, attId : img_url.sumAttId })
                 }
             }
         }
@@ -689,8 +696,24 @@ export default {
         AssessmentStudent : "CoachModules/AssessmentStudent",
         CreateTeachingNotes : "CoachModules/CreateTeachingNotes",
         UploadFileSummary : "CoachModules/UploadFileSummary",
-        UpdateAssessmentPotential : "CoachModules/UpdateAssessmentPotential"
+        UpdateAssessmentPotential : "CoachModules/UpdateAssessmentPotential",
+        DeleteAssessmentFile : "CoachModules/DeleteAssessmentFile",
+        DeleteSummaryFile : "CoachModules/DeleteSummaryFile",
+        DeleteAssessmentPotentialFile : "CoachModules/DeleteAssessmentPotentialFile"
     }),
+    FilterStatusCheckIn(selected_data){
+        console.log(`Total :${ parseInt(selected_data.totalDay/4) } count : ${selected_data.countCheckInleave}`)
+        if( parseInt(selected_data.totalDay/4) > selected_data.countCheckInleave ){
+            return this.check_in_status_options
+        }else{
+            if(selected_data.status === 'leave'){
+                return this.check_in_status_options
+            }else{
+                return this.check_in_status_options.filter(v => v.value !== 'leave')
+            }
+            
+        }
+    },
     clearTeachingNote(){
         this.coach_check_in.summary = null
         this.coach_check_in.homework = null
@@ -701,6 +724,16 @@ export default {
     },
     GenUrlFile(part){
         return  `${process.env.VUE_APP_URL}/api/v1/files/${part}`
+    },
+    openFile(file){
+        console.log(file)
+        if(file.attId){
+            let url = `${process.env.VUE_APP_URL}/api/v1/files/${file.attFiles}`
+            window.open(url, '_blank');
+        }else if(file.attachmentPotentialId){
+            let url = `${process.env.VUE_APP_URL}/api/v1/files/${file.attachmentFiles}`
+            window.open(url, '_blank');
+        }
     },
     showDialogPotential(id){
         for (let i = 0; i < this.student_check_in.length; i++) {
@@ -717,7 +750,7 @@ export default {
     GenDate(data){
         return new Date(data).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })
     },
-    saveSummary(){
+    async saveSummary(){
         Swal.fire({
             icon: "question",
             title: "ต้องการบันทึกใช่หรือไม่ ?",
@@ -727,13 +760,15 @@ export default {
             confirmButtonText: "ตกลง",
         }).then(async (result) => {
             if (result.isConfirmed) {
-                this.UploadFileSummary({checkInCoach : this.coach_check_in , files : this.coach_check_in.summary_files })
+                await this.UploadFileSummary({checkInCoach : this.coach_check_in , files : this.coach_check_in.summary_files }).then(async ()=>{
+                    await this.GetCoachCheckIn({course_id :this.$route.params.courseId, date : this.$route.params.date})
+                })
             }
         })
        
     },
-    saveUpdateAssessmentPotential(){
-        console.log(this.student_check_in)
+    async saveUpdateAssessmentPotential(){
+        // console.log(this.student_check_in)
         Swal.fire({
             icon: "question",
             title: "ต้องการบันทึกใช่หรือไม่ ?",
@@ -743,7 +778,9 @@ export default {
             confirmButtonText: "ตกลง",
         }).then(async (result) => {
             if (result.isConfirmed) {
-                this.UpdateAssessmentPotential({students : this.student_check_in})
+                await this.UpdateAssessmentPotential({students : this.student_check_in}).then(async ()=>{
+                    await this.GetStudentByTimeId({course_id :this.$route.params.courseId, date : this.$route.params.date, time_id: this.$route.params.timeId})
+                })
             }
         })
     },
@@ -761,7 +798,7 @@ export default {
             }
         })
     },
-    saveAssessmentStudent(){
+    async saveAssessmentStudent(){
         Swal.fire({
             icon: "question",
             title: "ต้องการบันทึกใช่หรือไม่ ?",
@@ -771,7 +808,9 @@ export default {
             confirmButtonText: "ตกลง",
         }).then(async (result) => {
             if (result.isConfirmed) {
-                this.AssessmentStudent({students : this.student_check_in})
+                await this.AssessmentStudent({students : this.student_check_in}).then(async ()=>{
+                    await this.GetStudentByTimeId({course_id :this.$route.params.courseId, date : this.$route.params.date, time_id: this.$route.params.timeId})
+                })
             }
         })
         
@@ -799,8 +838,9 @@ export default {
             icon: "question",
             title: "ต้องการลงเวลาเข้าสอนใช่หรือไม่",
             showDenyButton: false,
-            showCancelButton: false,
+            showCancelButton: true,
             confirmButtonText: "ตกลง",
+            cancelButtonText: "ยกเลิก",
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     this.check_in = true
@@ -855,8 +895,51 @@ export default {
     openPotentialfileInputSelector() {
         this.$refs.potentialfileInput.click();
     },
-    removeGeneralFile(selected_student,index){
+    removeAccessmentFile(selected_student,index){
         this.student_check_in[selected_student].files.splice(index, 1)
+    },
+    removePotentialFileInBase(file,selected_student){
+        console.log(file)
+        Swal.fire({
+            icon: "question",
+            title: "ไฟล์นี้ใช่หรือไม่",
+            showDenyButton: false,
+            showCancelButton: false,
+            confirmButtonText: "ตกลง",
+            cancelButtonText: "ยกเลิก",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    this.DeleteAssessmentPotentialFile({att_assessment_id : file.attachmentPotentialId}).then(()=>{
+                        this.student_check_in[selected_student].potential.attachmentPotential.forEach((att ,index)=>{
+                            if(file.attachmentPotentialId === att.attachmentPotentialId){
+                                this.student_check_in[selected_student].potential.attachmentPotential.splice(index, 1)
+                            }
+                        })
+                    })
+                }
+            })
+    },
+    removeAccessmentFileInBase(file,selected_student){
+        console.log(file)
+        Swal.fire({
+            icon: "question",
+            title: "ไฟล์นี้ใช่หรือไม่",
+            showDenyButton: false,
+            showCancelButton: false,
+            confirmButtonText: "ตกลง",
+            cancelButtonText: "ยกเลิก",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    this.DeleteAssessmentFile({att_assessment_id : file.attId}).then(()=>{
+                        this.student_check_in[selected_student].assessment.attachment.forEach((att ,index)=>{
+                            if(file.attId === att.attId){
+                                this.student_check_in[selected_student].assessment.attachment.splice(index, 1)
+                            }
+                        })
+                    })
+                }
+            })
+       
     },
     removePotentialFile(selected_student,index){
         this.student_check_in[selected_student].potentialfiles.splice(index, 1)
@@ -930,6 +1013,27 @@ export default {
     },
     removeSummaryFile(index){
         this.preview_summary_files.splice(index, 1)
+        this.coach_check_in.summary_files.splice(index, 1)
+    },
+    removeSummaryFileInbase(file, index){
+        console.log(this.coach_check_in)
+        Swal.fire({
+            icon: "question",
+            title: "ไฟล์นี้ใช่หรือไม่",
+            showDenyButton: false,
+            showCancelButton: false,
+            confirmButtonText: "ตกลง",
+            cancelButtonText: "ยกเลิก",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    await this.DeleteSummaryFile({att_assessment_id : file.attId}).then(()=>{
+                        this.preview_summary_files.splice(index, 1)
+                        this.coach_check_in.attachment.splice(index, 1)
+                    })
+                }
+            })
+        //this.coach_check_in.summary_files.splice(index, 1)
+        //
     }
   },
 };
