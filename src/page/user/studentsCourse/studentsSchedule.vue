@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    {{setFunctions}}
+    {{ setFunctions }}
     <loading-overlay :loading="student_is_loading"></loading-overlay>
     <div class="mx-10 my-5">
       <label class="text-xl font-bold">ข้อมูลตารางเรียน</label>
@@ -85,7 +85,9 @@
                   <v-col cols="12" sm="6">
                     <v-col class="text-lg font-bold">
                       {{ item.courseNameTh == "" ? "-" : item.courseNameTh }}
-                      ({{item.courseNameEng == "" ? "-" : item.courseNameEng }})
+                      ({{
+                        item.courseNameEng == "" ? "-" : item.courseNameEng
+                      }})
                     </v-col>
                     <v-col class="text-slate-400">
                       <span class="mdi mdi-account">โค้ช :</span>
@@ -93,8 +95,14 @@
                     </v-col>
                     <v-col class="text-slate-400">
                       <span class="mdi mdi-account">ผู้เรียน :</span>
-                      {{ !item.student.firstNameTh ? "-" : item.student.firstNameTh }}
-                      {{ !item.student.lastNameTh ? "-" : item.student.lastNameTh }}
+                      {{
+                        !item.student.firstNameTh
+                          ? "-"
+                          : item.student.firstNameTh
+                      }}
+                      {{
+                        !item.student.lastNameTh ? "-" : item.student.lastNameTh
+                      }}
                       <!-- {{ item.student.firstNameTh }} -->
                       <!-- {{ !my_course_detail.coachName? '-' :  my_course_detail.coachName}} -->
                     </v-col>
@@ -154,7 +162,12 @@
 
             <div v-else v-for="(item, index) in student_data" :key="index">
               <v-card
-                @click=" $router.push({ name: 'StudentCourse', params: { course_id: item.courseId }, }) "
+                @click="
+                  $router.push({
+                    name: 'StudentCourse',
+                    params: { course_id: item.courseId },
+                  })
+                "
                 class="my-10 drop-shadow-lg"
               >
                 <v-row dense>
@@ -182,7 +195,9 @@
                   <v-col cols="12" sm="6">
                     <v-col class="text-lg font-bold">
                       {{ item.courseNameTh == "" ? "-" : item.courseNameTh }}
-                      ({{ item.courseNameEng == "" ? "-" : item.courseNameEng }})
+                      ({{
+                        item.courseNameEng == "" ? "-" : item.courseNameEng
+                      }})
                     </v-col>
                     <!-- <v-col class="text-slate-400">
                   {{ item.courseNameEng  == ''? '-' : item.courseNameEng }}
@@ -193,8 +208,14 @@
                     </v-col>
                     <v-col class="text-slate-400">
                       <span class="mdi mdi-account">ผู้เรียน :</span>
-                      {{ !item.student.firstNameTh ? "-"  : item.student.firstNameTh }}
-                      {{ !item.student.lastNameTh ? "-" : item.student.lastNameTh  }}
+                      {{
+                        !item.student.firstNameTh
+                          ? "-"
+                          : item.student.firstNameTh
+                      }}
+                      {{
+                        !item.student.lastNameTh ? "-" : item.student.lastNameTh
+                      }}
                     </v-col>
 
                     <v-col class="text-slate-400">
@@ -357,12 +378,19 @@
                 ></v-autocomplete>
               </v-col>
             </v-row>
-            <div
-              v-for="(item_booked, index_booked) in profile_booked"
-              :key="index_booked"
+            <v-card-text
+              class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
+              v-if="ReserveList().length == 0"
             >
+              <span class="text-lg font-bold">
+                <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                ไม่พบข้อมูลการจอง
+              </span>
+            </v-card-text>
+            <div v-else>
               <v-card
-                v-if="profile_booked.length != '0'"
+                v-for="(item_booked, index_booked) in ReserveList()"
+                :key="`${index_booked}-reserve`"
                 @click="showCard(index, item_booked)"
                 class="my-5 cursor-pointer"
               >
@@ -387,17 +415,14 @@
                               ? "-"
                               : item_booked.courseNameTh
                           }}
-
                           ({{
                             item_booked.courseNameEn == ""
                               ? "-"
                               : item_booked.courseNameEn
                           }})
                         </v-col>
-
                         <v-col class="text-slate-400">
                           <span class="mdi mdi-account">โค้ช :</span>
-
                           {{
                             !item_booked.coachData.data.data.firstNameTh
                               ? "-"
@@ -409,7 +434,6 @@
                               : item_booked.coachData.data.data.lastNameTh
                           }}
                         </v-col>
-
                         <v-col class="text-slate-400">
                           <span class="mdi mdi-account">ผู้เรียน :</span>
                           {{
@@ -543,15 +567,6 @@
                 </v-card-text>
               </v-card>
             </div>
-            <v-card-text
-              class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
-              v-if="profile_booked.length == '0'"
-            >
-              <span class="text-lg font-bold">
-                <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                ไม่พบข้อมูลการจอง
-              </span>
-            </v-card-text>
           </div>
           <!-- Role student -->
           <div v-if="data_local.roles.includes('R_5')">
@@ -566,10 +581,10 @@
             </v-card-text>
             <div v-else>
               <v-card
-              v-for="(item_booked, index_booked) in ReserveList()"
-              :key="`${index_booked}-reserve`"
-              @click="showCard(index, item_booked)"
-              class="my-5 cursor-pointer"
+                v-for="(item_booked, index_booked) in ReserveList()"
+                :key="`${index_booked}-reserve`"
+                @click="showCard(index, item_booked)"
+                class="my-5 cursor-pointer"
               >
                 <v-card-text>
                   <div>
@@ -577,24 +592,52 @@
                       <!-- img -->
                       <v-col cols="12" sm="2">
                         <img
-                          :src=" item_booked.courseImg ? item_booked.courseImg : `../../../assets/student_course/download.png` "
+                          :src="
+                            item_booked.courseImg
+                              ? item_booked.courseImg
+                              : `../../../assets/student_course/download.png`
+                          "
                         />
                       </v-col>
                       <!-- detail -->
                       <v-col cols="12" sm="6">
                         <v-col class="text-lg font-bold">
-                          {{  item_booked.courseNameTh == "" ? "-": item_booked.courseNameTh }}
-                          ({{ item_booked.courseNameEn == ""  ? "-" : item_booked.courseNameEn }})
+                          {{
+                            item_booked.courseNameTh == ""
+                              ? "-"
+                              : item_booked.courseNameTh
+                          }}
+                          ({{
+                            item_booked.courseNameEn == ""
+                              ? "-"
+                              : item_booked.courseNameEn
+                          }})
                         </v-col>
                         <v-col class="text-slate-400">
                           <span class="mdi mdi-account">โค้ช :</span>
-                          {{ !item_booked.coachData.data.data.firstNameTh ? "-" : item_booked.coachData.data.data.firstNameTh }}
-                          {{ !item_booked.coachData.data.data.lastNameTh ? "-" : item_booked.coachData.data.data.lastNameTh }}
+                          {{
+                            !item_booked.coachData.data.data.firstNameTh
+                              ? "-"
+                              : item_booked.coachData.data.data.firstNameTh
+                          }}
+                          {{
+                            !item_booked.coachData.data.data.lastNameTh
+                              ? "-"
+                              : item_booked.coachData.data.data.lastNameTh
+                          }}
                         </v-col>
                         <v-col class="text-slate-400">
                           <span class="mdi mdi-account">ผู้เรียน :</span>
-                          {{ !item_booked.StudentData.data.data.firstNameTh ? "-" : item_booked.StudentData.data.data.firstNameTh }}
-                          {{ !item_booked.StudentData.data.data.lastNameTh ? "-" : item_booked.StudentData.data.data.lastNameTh }}
+                          {{
+                            !item_booked.StudentData.data.data.firstNameTh
+                              ? "-"
+                              : item_booked.StudentData.data.data.firstNameTh
+                          }}
+                          {{
+                            !item_booked.StudentData.data.data.lastNameTh
+                              ? "-"
+                              : item_booked.StudentData.data.data.lastNameTh
+                          }}
                         </v-col>
 
                         <v-col class="text-slate-400">
@@ -716,7 +759,6 @@
                 </v-card-text>
               </v-card>
             </div>
-            
           </div>
         </div>
       </v-expand-x-transition>
@@ -821,7 +863,7 @@ export default {
       GetStudentData: "MyCourseModules/GetStudentData",
       GetProfileBooked: "MyCourseModules/GetProfileBooked",
       GetAll: "ProfileModules/GetAll",
-      GetStudentReserve : "MyCourseModules/GetStudentReserve",
+      GetStudentReserve: "MyCourseModules/GetStudentReserve",
       //COURSE
       GetCourse: "CourseModules/GetCourse",
     }),
@@ -862,20 +904,38 @@ export default {
       console.log("item", studentId);
       await this.GetProfileBooked(studentId);
     },
-    ReserveList(){
-      let reserveList = []
-      this.profile_booked.forEach((reserve)=>{
-        if(reserveList.filter(v => v.coachId == reserve.coachId && v.courseId == reserve.courseId && v.dayOfWeekId === reserve.dayOfWeekId && v.timeId === reserve.timeId && v.studentId === reserve.studentId).length === 0){
-          reserveList.push(reserve)
+    ReserveList() {
+      let reserveList = [];
+      this.profile_booked.forEach((reserve) => {
+        if (
+          reserveList.filter(
+            (v) =>
+              v.coachId == reserve.coachId &&
+              v.courseId == reserve.courseId &&
+              v.dayOfWeekId === reserve.dayOfWeekId &&
+              v.timeId === reserve.timeId &&
+              v.studentId === reserve.studentId
+          ).length === 0
+        ) {
+          reserveList.push(reserve);
         }
-      })
-      this.student_reserve.forEach((reserve)=>{
-        if(reserveList.filter(v => v.coachId == reserve.coachId && v.courseId == reserve.courseId && v.dayOfWeekId === reserve.dayOfWeekId && v.timeId === reserve.timeId && v.studentId === reserve.studentId).length === 0){
-          reserveList.push(reserve)
+      });
+      this.student_reserve.forEach((reserve) => {
+        if (
+          reserveList.filter(
+            (v) =>
+              v.coachId == reserve.coachId &&
+              v.courseId == reserve.courseId &&
+              v.dayOfWeekId === reserve.dayOfWeekId &&
+              v.timeId === reserve.timeId &&
+              v.studentId === reserve.studentId
+          ).length === 0
+        ) {
+          reserveList.push(reserve);
         }
-      })
-      console.log("student_reserve :",this.student_reserve)
-      return reserveList
+      });
+      console.log("student_reserve :", this.student_reserve);
+      return reserveList;
     },
     dayOfWeekName(days) {
       const daysOfWeek = [
@@ -909,7 +969,7 @@ export default {
       student_data: "MyCourseModules/getStudentData",
       itemTime: "MyCourseModules/getcourseSchedule",
       profile_booked: "MyCourseModules/getProfileBooked",
-      student_reserve : "MyCourseModules/getStudentReserve",
+      student_reserve: "MyCourseModules/getStudentReserve",
       course_data: "CourseModules/getCourseData",
       course_is_loading: "CourseModules/getCourseIsLoading",
       profile_user: "ProfileModules/getProfileUser",
@@ -922,11 +982,11 @@ export default {
     //     return this.student_data;
     //   },
     // },
-    setFunctions(){
+    setFunctions() {
       this.GetProfileBooked(this.user_detail.account_id);
-      this.GetStudentReserve(this.user_detail.account_id)
+      this.GetStudentReserve(this.user_detail.account_id);
       this.GetAll(this.user_detail.account_id);
-      return ''
+      return "";
     },
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;

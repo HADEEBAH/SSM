@@ -160,7 +160,12 @@ const loginModules = {
                     router.push({ name: "Login" });
                 }
             })
+<<<<<<< HEAD
            
+=======
+
+
+>>>>>>> develop
         }
     },
     getters: {

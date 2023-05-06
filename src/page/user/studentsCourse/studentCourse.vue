@@ -278,7 +278,6 @@
           v-for="(day_list, index_day) in my_course_detail.checkIn"
           :key="index_day"
         >
-          <pre>{{ day_list.status }}</pre>
           <v-card class="my-5 drop-shadow-lg rounded-xl">
             <v-card-text>
               <v-row class="" dense>
