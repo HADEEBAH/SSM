@@ -1,16 +1,10 @@
 <template>
   <v-container class="overflow-x-hidden overflow-y-hidden">
-    <!-- <pre>{{ show_by_id }}</pre>
-    -----------------------------------------------
-
-    <pre>{{ student_schedule }}</pre> -->
-    <pre>{{ data_user_relation_management }}</pre>
-    -----------------------------------------------
-
     <v-row dense>
       <v-col cols="12">
         <headerPage :breadcrumbs="breadcrumbs"></headerPage>
         <v-card class="mx-auto">
+          <!-- USER DETAIL -->
           <v-container grid-list-xs>
             <!-- Check User Name ด้านบนสุด -->
             <v-row dense>
@@ -50,79 +44,61 @@
                   </v-card-text>
                 </v-card>
               </v-col>
-
+              <!--DETAIL -->
               <v-col cols="12">
                 <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
                   <v-card-text class="mt-3">
                     <v-row>
-                      <v-col cols="12" sm="4">
-                        <div class="profileCard" @click="openFileSelector">
+                      <!-- IMG DETAIL -->
+                      <v-col
+                        class="webkit-center"
+                        cols="12"
+                        sm="5"
+                        align-self="center"
+                      >
+                        <div class="cicle">
                           <v-img
-                            v-if="!previewUrl"
-                            src="@/assets/userManagePage/imgcard.png"
-                            class="iconInCard drop-shadow-md"
+                            class="image-cropper items-end"
+                            :src="
+                              preview_img != ''
+                                ? preview_img
+                                : show_by_id != ''
+                                ? show_by_id.image
+                                : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU`
+                            "
                           >
+                            <v-btn
+                              v-if="
+                                preview_img == '' && show_by_id.image !== ''
+                              "
+                              color="#ff6b81"
+                              @click="openFileSelector"
+                              class="w-full white--text"
+                              >เปลี่ยนรูป</v-btn
+                            >
+                            <v-btn
+                              v-if="
+                                show_by_id.image == '' || preview_img !== ''
+                              "
+                              color="#ff6b81"
+                              @click="removeImg"
+                              class="w-full white--text"
+                            >
+                              <span class="mdi mdi-close">ยกเลิก</span>
+                            </v-btn>
                           </v-img>
-
-                          <v-img
-                            v-else
-                            src="@/assets/userManagePage/imgcardafterupload.png"
-                            class="iconInCard drop-shadow-md"
-                            style="position: relative"
-                          >
-                          </v-img>
-
-                          <div style="position: absolute">
-                            <div v-if="previewUrl !== null">
-                              <img
-                                :src="previewUrl"
-                                v-if="previewUrl"
-                                class="profileInCard"
-                              />
-
-                              <v-img
-                                src="@/assets/userManagePage/camera.png"
-                                max-height="30"
-                                max-width="30"
-                                class="camera"
-                              >
-                              </v-img>
-                            </div>
-
-                            <div v-if="!previewUrl">
-                              <v-img
-                                src="@/assets/userManagePage/uploadPhoto.png"
-                                max-height="30"
-                                max-width="30"
-                                class="mx-15"
-                              >
-                              </v-img>
-                              <v-spacer class="text-center"
-                                >Upload Photo</v-spacer
-                              >
-                              <v-spacer class="text-center"
-                                >ต้องเป็นไฟล์ภาพ</v-spacer
-                              >
-                              <v-spacer class="text-center"
-                                >( PNG JPG ) เท่านั้น</v-spacer
-                              >
-                              <v-spacer class="text-center"
-                                >ขนาดภาพไม่เกิน 500 Mb</v-spacer
-                              >
-                            </div>
-                            <input
-                              ref="fileInput"
-                              type="file"
-                              @change="uploadFile"
-                              style="display: none"
-                              class="rounded-full"
-                              accept="image/*"
-                            />
-                          </div>
                         </div>
+                        <input
+                          id="fileInput"
+                          ref="fileInput"
+                          type="file"
+                          @change="uploadFile"
+                          accept="image/*"
+                          hidden
+                        />
                       </v-col>
-
-                      <v-col>
+                      <!-- NAME DETAIL -->
+                      <v-col cols="12" sm="7">
                         <v-row>
                           <v-col cols="12" sm="6">
                             <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
@@ -222,18 +198,106 @@
             </v-row>
           </v-container>
 
-          <!-- การจัดการสิทธิ์ -->
-          <v-row dense>
-            <v-col cols="12">
-              <headerCard
-                class="ml-6 mt-8"
-                :icon="'mdi-card-account-details-outline'"
-                :icon_color="'#FF6B81'"
-                :title="titlePermissionManage"
-              ></headerCard>
-              <v-divider class="mx-10"></v-divider>
-              <div v-for="(item, index) in show_by_id.userRoles" :key="index">
+          <!-- การจัดการสิทธิ์ WhitOut Role-->
+          <div v-if="show_by_id.userRoles.length <= 0">
+            <headerCard
+              class="ml-6 mt-8"
+              :icon="'mdi-card-account-details-outline'"
+              :icon_color="'#FF6B81'"
+              :title="titlePermissionManage"
+            ></headerCard>
+            <v-divider class="mx-10"></v-divider>
+            <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
+              <v-card-text class="mt-3">
+                <v-row class="mr-3 ml-3">
+                  <v-col cols="12" sm="5">
+                    <label-custom text="บทบาทผู้ใช้งาน"></label-custom>
+                    <v-autocomplete
+                      dense
+                      v-model="seledtedRole"
+                      :items="roles"
+                      item-text="role"
+                      item-value="roleNumber"
+                      label="กรุณาเลือกบทบาทผู้ใช้งาน"
+                      single-line
+                      outlined
+                      chips
+                      item-color="#ff6b81"
+                      color="#ff6b81"
+                      @change="selectRole(seledtedRole)"
+                    >
+                      <template v-slot:item="{ item }">
+                        <v-list-item-content>
+                          {{ item.role }}
+                        </v-list-item-content>
+                        <v-list-item-action>
+                          <v-icon color="#FF6B81">
+                            {{
+                              selectRoles.includes(item.role)
+                                ? "mdi-checkbox-marked"
+                                : "mdi-checkbox-blank-circle-outline"
+                            }}</v-icon
+                          >
+                        </v-list-item-action>
+                      </template>
+                    </v-autocomplete>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </div>
+
+          <div v-for="(item, index) in show_by_id.userRoles" :key="index">
+            <!-- การจัดการสิทธิ์ -->
+            <v-row dense>
+              <v-col cols="12">
+                <headerCard
+                  class="ml-6 mt-8"
+                  :icon="'mdi-card-account-details-outline'"
+                  :icon_color="'#FF6B81'"
+                  :title="titlePermissionManage"
+                ></headerCard>
+                <v-divider class="mx-10"></v-divider>
                 <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
+                  <v-card-text class="mt-3">
+                    <v-row class="mr-3 ml-3">
+                      <v-col cols="12" sm="5">
+                        <label-custom text="บทบาทผู้ใช้งาน"></label-custom>
+                        <v-autocomplete
+                          dense
+                          v-model="seledtedRole"
+                          :items="roles"
+                          item-text="role"
+                          item-value="roleNumber"
+                          label="กรุณาเลือกบทบาทผู้ใช้งาน"
+                          single-line
+                          outlined
+                          chips
+                          item-color="#ff6b81"
+                          color="#ff6b81"
+                          @change="selectRole(seledtedRole)"
+                        >
+                          <template v-slot:item="{ item }">
+                            <v-list-item-content>
+                              {{ item.role }}
+                            </v-list-item-content>
+                            <v-list-item-action>
+                              <v-icon color="#FF6B81">
+                                {{
+                                  selectRoles.includes(item.role)
+                                    ? "mdi-checkbox-marked"
+                                    : "mdi-checkbox-blank-circle-outline"
+                                }}</v-icon
+                              >
+                            </v-list-item-action>
+                          </template>
+                        </v-autocomplete>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+
+                <!-- <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
                   <v-card-text class="mt-3">
                     <v-row class="mr-3 ml-3">
                       <v-col cols="12" sm="5">
@@ -295,9 +359,12 @@
                       <v-col cols="12" sm="4"></v-col>
                     </v-row>
                   </v-card-text>
-                </v-card>
+                </v-card> -->
 
-                <v-container grid-list-xs>
+                <v-container
+                  grid-list-xs
+                  v-if="seledtedRole === 'R_4' || seledtedRole === 'R_5'"
+                >
                   <v-row>
                     <v-col cols="12">
                       <headerCard
@@ -523,9 +590,9 @@
                     </template>
                   </v-data-table>
                 </div>
-              </div>
-            </v-col>
-          </v-row>
+              </v-col>
+            </v-row>
+          </div>
 
           <v-col class="text-right mt-5">
             <v-btn
@@ -770,29 +837,7 @@ export default {
     add_student: false,
     add_relations: false,
     show_sucsess: false,
-    // username_en: "",
-    // fname_th: "",
-    // lname_th: "",
-    // fname_en: "",
-    // lname_en: "",
-    // email: "",
-    // phone_num: "",
-    // students: [
-    //   {
-    //     username: "",
-    //     firstname: "",
-    //     lastname: "",
-    //     tel: "",
-    //   },changeUserData
-    // ],
-    // parents: [
-    //   {
-    //     username: "",
-    //     firstname: "",
-    //     lastname: "",
-    //     tel: "",
-    //   },
-    // ],
+    seledtedRole: "",
     dataArray: ["apple", "banana", "orange"],
     dialog_show: false,
     show_dialog: false,
@@ -812,11 +857,11 @@ export default {
     },
 
     roles: [
-      { role: "Super Admin", privilege: "superAdmin" },
-      { role: "Admin", privilege: "admin" },
-      { role: "โค้ช", privilege: "โค้ช" },
-      { role: "ผู้ปกครอง", privilege: "ผู้ปกครอง" },
-      { role: "นักเรียน", privilege: "นักเรียน" },
+      { role: "Super Admin", privilege: "superAdmin", roleNumber: "R_1" },
+      { role: "Admin", privilege: "admin", roleNumber: "R_2" },
+      { role: "โค้ช", privilege: "โค้ช", roleNumber: "R_3" },
+      { role: "ผู้ปกครอง", privilege: "ผู้ปกครอง", roleNumber: "R_4" },
+      { role: "นักเรียน", privilege: "นักเรียน", roleNumber: "R_5" },
     ],
     people: [
       { id: 1, name: "John Doe", email: "johndoe@example.com", age: 30 },
@@ -885,9 +930,18 @@ export default {
     global_username: "",
     global_role_id: "",
     global_data_relation: [],
+    preview_img: "",
+    send_image_profile: null,
   }),
   // bef
-  created() {},
+  created() {
+    // if (this.show_by_id.userRoles.length > 0) {
+    //   for (const items of this.show_by_id.userRoles) {
+    //     console.log("items=>", items);
+    //     this.seledtedRole = items.roleId;
+    //   }
+    // }
+  },
 
   beforeMount() {
     this.params = this.$route.params.account_id;
@@ -895,6 +949,16 @@ export default {
       console.log("test", item_relation.studentId);
       this.student_id = item_relation.studentId;
     }
+
+    console.log("show_by_id=>", this.show_by_id);
+    if (this.show_by_id.userRoles.length > 0) {
+      for (const items of this.show_by_id.userRoles) {
+        console.log("items=>", items);
+        this.seledtedRole = items.roleId;
+      }
+    }
+
+    this.GetDataRelationsManagement(this.data_user_by_id);
   },
 
   mounted() {
@@ -917,6 +981,33 @@ export default {
         this.user_data.isCardParentOpen = true;
       }
     }
+
+    this.GetDataRelationsManagement(this.data_user_by_id);
+
+    // for (const show_data of this.show_by_id.userRoles) {
+    //   console.log("show_data", show_data);
+    //   if (show_data.roleId == "R_4") {
+    //     if (this.data_user_relation_management.length > 0) {
+    //       this.isOpenParent = true;
+    //       for (const item_relation of this.data_user_relation_management) {
+    //         this.GetStudentSchedule(item_relation.studentId);
+    //       }
+    //     } else {
+    //       this.data_user_relation_management = [];
+    //     }
+    //   } else if (show_data.roleId == "R_5") {
+    //     if (this.data_user_relation_management.length > 0) {
+    //       this.isOpenStudent = true;
+    //       for (const item_relation of this.data_user_relation_management) {
+    //         this.GetStudentSchedule(item_relation.studentId);
+    //       }
+    //     } else {
+    //       this.data_user_relation_management = [];
+    //     }
+    //   } else {
+    //     console.log("show_data", show_data.roleId);
+    //   }
+    // }
   },
   methods: {
     ...mapActions({
@@ -936,8 +1027,14 @@ export default {
     openFileSelector() {
       this.$refs.fileInput.click();
     },
-    selectRole() {
+    selectRole(roles) {
       this.selectRoles;
+      console.log("roles", roles);
+      console.log("selectRoles", this.selectRoles);
+    },
+
+    showImg(item) {
+      return `${process.env.VUE_APP_URL}/api/v1/files/${item}`;
     },
 
     // uploadFile() {
@@ -950,15 +1047,50 @@ export default {
     //   reader.readAsDataURL(this.file);
     // },
 
+    // uploadFile() {
+    //   this.file = this.$refs.fileInput.files[0];
+    //   console.log("file=>", this.file);
+    //   if (!this.file) return;
+    //   const reader = new FileReader();
+    //   reader.onload = (e) => {
+    //     this.previewUrl = e.target.result;
+    //   };
+    //   reader.readAsDataURL(this.file);
+    // },
+
     uploadFile() {
-      this.file = this.$refs.fileInput.files[0];
-      console.log("file=>", this.file);
-      if (!this.file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.preview_url = e.target.result;
-      };
-      reader.readAsDataURL(this.file);
+      let allowedExtension = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/gif",
+        "image/bmp",
+      ];
+      let files = this.$refs.fileInput.files[0];
+
+      if (files.size > 10240 * 1024) {
+        Swal.fire({
+          icon: "warning",
+          title: "ขนาดไฟล์ใหญ่เกินไป",
+          text: "( กำหนดขนาดไม่เกิน 10MB )",
+        });
+        document.getElementById("fileInput").value = "";
+      } else if (allowedExtension.indexOf(files.type) === -1) {
+        Swal.fire({
+          icon: "warning",
+          title: "รูปแบบไฟล์ไม่ถูกต้อง",
+          text: "( กรุณาอัปโหลดไฟล์รูปภาพ )",
+        });
+        document.getElementById("fileInput").value = "";
+      } else {
+        this.preview_img = URL.createObjectURL(files);
+        this.send_image_profile = files;
+      }
+    },
+
+    removeImg() {
+      document.getElementById("fileInput").value = "";
+      this.preview_img = "";
     },
 
     checkData() {
@@ -1219,16 +1351,23 @@ export default {
 
             if (data.statusCode === 201) {
               if (data.data && data.data.message !== "Duplicate relation.") {
-                console.log("succes");
-                this.add_relations = false;
-                this.relation = {
-                  account_id: "",
-                  firstname_en: "",
-                  lastname_en: "",
-                  username: "",
-                  tel: "",
-                };
-                this.GetDataRelationsManagement(this.data_user_by_id);
+                Swal.fire({
+                  icon: "success",
+                  title: "บันทึกสำเร็จ",
+                }).then(async (result) => {
+                  if (result.isConfirmed) {
+                    this.add_relations = false;
+                    this.relation = {
+                      account_id: "",
+                      firstname_en: "",
+                      lastname_en: "",
+                      username: "",
+                      tel: "",
+                    };
+                    this.GetDataRelationsManagement(this.data_user_by_id);
+                    console.log("tset", this.data_user_relation_management);
+                  }
+                });
               } else {
                 throw { error: data };
               }
@@ -1371,6 +1510,7 @@ export default {
 
     updateData(account_id) {
       console.log("user_account_id", account_id);
+
       Swal.fire({
         icon: "question",
         title: "คุณต้องการแก้ไขข้อมูลหรือไม่",
@@ -1396,31 +1536,63 @@ export default {
               lastNameEng: this.show_by_id.lastNameEng,
               email: this.show_by_id.email,
               mobileNo: this.show_by_id.mobileNo,
-              role: [],
+              roles:
+                this.seledtedRole != "" ? [{ roleId: this.seledtedRole }] : [],
             };
+            console.log("payload", payload);
+            let bodyFormData = new FormData();
+            bodyFormData.append(
+              "image",
+              this.send_image_profile
+              // "image",
+              // this.send_image_profile?.length != 0
+              //   ? this.send_image_profile
+              //   : null
+            );
+            bodyFormData.append("payload", JSON.stringify(payload));
+            console.log("bodyFormData", bodyFormData);
 
             let { data } = await axios.patch(
-              `${process.env.VUE_APP_URL}/api/v1/usermanagement/update/${account_id}`,
-              payload,
+              `http://localhost:3000/api/v1/usermanagement/update/${account_id}`,
+              // `${process.env.VUE_APP_URL}/api/v1/usermanagement/update/${account_id}`,
+              bodyFormData,
               config
             );
             if (data.statusCode === 200) {
-              console.log("okey");
+              // if (data.data && data.data !== "Relation Already exits") {
               Swal.fire({
                 icon: "success",
-                title: "เปลี่ยนข้อมูลสำเร็จ",
+                title: "บันทึกสำเร็จ",
+              }).then(async (result) => {
+                if (result.isConfirmed) {
+                  // this.$router.push({ name: "UserList" });
+                  // this.$router.push({
+                  //   name: "UserDetail",
+                  //   params: {
+                  //     action: "view",
+                  //     account_id: this.$route.params.account_id,
+                  //   },
+                  // });
+                }
               });
               this.GetShowById(this.$route.params.account_id);
-
-              // this.dialog_show = true;
+              // } else if (data.data && data.data == "Relation Already exits") {
+              //   Swal.fire({
+              //     icon: "error",
+              //     title: "ผู้ใช้มีบทบาทแล้ว",
+              //   });
+              //   console.log("else");
+              //   throw { error: data };
+              // }
             } else {
-              throw { error: data };
+              throw { message: data.data };
             }
           } catch (error) {
-            console.log(error);
+            console.log("catch");
+
             Swal.fire({
               icon: "error",
-              title: error.message,
+              title: error.data.data,
             });
           }
         } else {
@@ -1498,12 +1670,9 @@ export default {
       }
       this.dialog_parent = false;
     },
-    "data_user_relation_management.length": function () {
-      // for (const item_relation of this.data_user_relation_management) {
-      //   this.GetStudentSchedule(item_relation.studentId);
-      //   console.log("test", item_relation.studentId);
-      // }
 
+    "data_user_relation_management.length": function () {
+      this.GetDataRelationsManagement(this.data_user_by_id);
       for (const show_data of this.show_by_id.userRoles) {
         console.log("show_data", show_data);
         if (show_data.roleId == "R_4") {
@@ -1526,6 +1695,15 @@ export default {
           }
         } else {
           console.log("show_data", show_data.roleId);
+        }
+      }
+    },
+
+    "show_by_id.userRoles.length": function () {
+      if (this.show_by_id.userRoles.length > 0) {
+        for (const items of this.show_by_id.userRoles) {
+          console.log("items=>", items);
+          this.seledtedRole = items?.roleId ? items.roleId : "abc";
         }
       }
     },
@@ -1578,6 +1756,38 @@ export default {
 .camera {
   position: absolute;
   margin-left: 60px;
+}
+.webkit-center {
+  text-align: -webkit-center;
+}
+.image-cropper {
+  width: 180px;
+  height: 180px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 100%;
+  margin: -1%;
+}
+
+.cicle {
+  /* margin: 25px 0; */
+  /* padding: 1px; */
+  width: 200px;
+  height: 200px;
+  border-radius: 100%;
+  border: 12px solid transparent;
+  /* background-size: 100% 100%, 50% 50%, 50% 50%, 50% 50%, 50% 50%; */
+  background-repeat: no-repeat;
+  background-image: linear-gradient(white, white),
+    linear-gradient(30deg, #ff6b81 36%, #ff6b81 30%),
+    linear-gradient(120deg, #ff6b81 36%, #ff6b81 30%),
+    linear-gradient(300deg, #ff6b81 36%, #ff6b81 30%),
+    linear-gradient(210deg, #ff6b81 36%, #ff6b81 30%);
+  background-position: center center, left top, right top, left bottom,
+    right bottom;
+  background-origin: content-box, border-box, border-box, border-box, border-box;
+  background-clip: content-box, border-box, border-box, border-box, border-box;
+  /* transform: rotate(30deg); */
 }
 </style>
   

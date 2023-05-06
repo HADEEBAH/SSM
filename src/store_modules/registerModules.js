@@ -82,10 +82,7 @@ const RegisterModules = {
                 };
                 let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/relations/delete-user-role/?studentId=${studentId}&parentId=${parentId}`, config)
                 if (data.statusCode === 200) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: "ลบรายการสำเร็จ",
-                    })
+                    console.log("200 success");
                 }
             } catch (error) {
                 console.log(error)

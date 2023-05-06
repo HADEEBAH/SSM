@@ -1,9 +1,6 @@
 <template>
   <v-container class="overflow-x-hidden overflow-y-hidden">
-    <!-- <div v-for="iten in data_user_relation_management" :key="iten.id">
-      <pre> {{ iten }}</pre>
-    </div>
-    <div>{{ data_user_relation_management.length }}</div> -->
+    <!-- <pre>{{ show_by_id }}</pre> -->
     <div v-if="$route.params.action == 'view'">
       <v-row dense>
         <v-col>
@@ -28,6 +25,191 @@
               </v-card>
             </div>
             <br />
+
+            <div v-if="show_by_id.userRoles <= 0">
+              <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
+                <v-card-text class="mt-3">
+                  <v-row>
+                    <v-row>
+                      <v-col cols="12" sm="4" class="ml-5">
+                        <div class="profileCard">
+                          <v-img
+                            v-if="!previewUrl"
+                            src="@/assets/userManagePage/imgcard.png"
+                            class="drop-shadow-md"
+                          >
+                          </v-img>
+                          <!-- :src="showImg(show_by_id.image)" -->
+
+                          <div style="position: absolute">
+                            <img
+                              :src="show_by_id.image"
+                              class="profileInCard"
+                            />
+                          </div>
+                        </div>
+                      </v-col>
+                    </v-row>
+
+                    <v-col cols="12" sm="8">
+                      <v-row>
+                        <v-col cols="12" sm="6">
+                          <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
+                          <div v-if="!isEnabled">
+                            {{ show_by_id.firstNameTh }}
+                          </div>
+                          <div v-else>
+                            <v-text-field
+                              v-bind:disabled="isDisabled"
+                              @keypress="validate($event, 'th')"
+                              placeholder=""
+                              v-model="show_by_id.firstNameTh"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </div>
+                        </v-col>
+
+                        <v-col cols="12" sm="6">
+                          <label-custom text="นามสกุล (ภาษาไทย)"></label-custom>
+                          <div v-if="!isEnabled">
+                            {{ show_by_id.lastNameTh }}
+                          </div>
+                          <div v-else>
+                            <v-text-field
+                              v-bind:disabled="isDisabled"
+                              @keypress="validate($event, 'th')"
+                              placeholder=""
+                              v-model="show_by_id.lastNameTh"
+                              :rules="rules.name"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </div>
+                        </v-col>
+                      </v-row>
+
+                      <v-row>
+                        <v-col cols="12" sm="6">
+                          <label-custom
+                            text="First Name (English)"
+                          ></label-custom>
+                          <div v-if="!isEnabled">
+                            {{ show_by_id.firstNameEng }}
+                          </div>
+                          <div v-else>
+                            <v-text-field
+                              v-bind:disabled="isDisabled"
+                              @keypress="validate($event, 'en')"
+                              placeholder=""
+                              v-model="show_by_id.firstNameEng"
+                              :rules="rules.name"
+                              outlined
+                              dense
+                            ></v-text-field>
+                          </div>
+                        </v-col>
+                        <v-col cols="12" sm="6">
+                          <label-custom
+                            text="Last Name (English)"
+                          ></label-custom>
+
+                          <div v-if="!isEnabled">
+                            {{ show_by_id.lastNameEng }}
+                          </div>
+                          <div v-else>
+                            <v-text-field
+                              v-bind:disabled="isDisabled"
+                              @keypress="validate($event, 'en')"
+                              placeholder=""
+                              v-model="show_by_id.lastNameEng"
+                              :rules="rules.name"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </div>
+                        </v-col>
+                      </v-row>
+
+                      <v-row>
+                        <v-col cols="12" sm="6">
+                          <label-custom text="อีเมล"></label-custom>
+                          <div v-if="!isEnabled">{{ show_by_id.email }}</div>
+                          <div v-else>
+                            <v-text-field
+                              disabled
+                              @keypress="validate($event, 'en', 'number')"
+                              placeholder=""
+                              v-model="show_by_id.email"
+                              :rules="rules.email"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </div>
+                        </v-col>
+                        <v-col cols="12" sm="6">
+                          <label-custom text="เบอร์โทรศัพท์"></label-custom>
+                          <div v-if="!isEnabled">
+                            {{ show_by_id.mobileNo }}
+                          </div>
+                          <div v-else>
+                            <v-text-field
+                              disabled
+                              @keypress="validate($event, 'en', 'number')"
+                              placeholder=""
+                              v-model="show_by_id.mobileNo"
+                              :rules="rules.email"
+                              outlined
+                              dense
+                              required
+                              @input="checkPhoneNumber"
+                              maxlength="12"
+                            >
+                            </v-text-field>
+                          </div>
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+
+              <div
+                v-for="(user_id, index_user) in show_by_id.userRoles"
+                :key="index_user"
+              >
+                <!-- การจัดการสิทธิ์ -->
+                <headerCard
+                  class="ml-6 mt-8"
+                  :icon="'mdi-card-account-details-outline'"
+                  :icon_color="'#FF6B81'"
+                  :title="title2"
+                ></headerCard>
+                <v-divider class="mx-10"></v-divider>
+                <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
+                  <v-card-text class="mt-3">
+                    <v-row class="mr-3 ml-3">
+                      <v-col cols="12" sm="6">
+                        <label-custom text="บทบาทผู้ใช้งาน"></label-custom>
+
+                        <v-card background-color="#FBF3F5" class="pa-2 w-2/4">
+                          {{
+                            user_id
+                              ? user_id.roleNameTh
+                              : "ยังไม่มีบทบาทผู้ใช้งาน"
+                          }}
+                        </v-card>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </div>
+            </div>
+
             <div v-for="(item, index) in show_by_id.userRoles" :key="index">
               <!-- Role admin || Role coach || Parent -->
               <div
@@ -53,7 +235,7 @@
 
                             <div style="position: absolute">
                               <img
-                                :src="showImg(show_by_id.image)"
+                                :src="show_by_id.image"
                                 class="profileInCard"
                               />
                             </div>
@@ -245,7 +427,7 @@
 
                                 <div style="position: absolute">
                                   <img
-                                    :src="showImg(show_by_id.image)"
+                                    :src="show_by_id.image"
                                     class="profileInCard"
                                   />
                                 </div>
@@ -1384,8 +1566,6 @@ export default {
     console.log("object=>", this.profile_user);
     this.relations = localStorage.getItem("relations");
     console.log("this.relations", this.relations);
-    // this.local_data = JSON.parse(localStorage.getItem("userDetail"));
-    // this.GetShowById(this.local_data.account_id);
 
     this.GetShowById(this.$route.params.account_id);
 

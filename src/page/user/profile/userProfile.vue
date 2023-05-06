@@ -3,7 +3,7 @@
     <!-- {{ my_course }} -->
     <!-- {{ profile_user }} -->
     <!-- {{ data_local }} -->
-    {{setFunctions}}
+    <!-- {{ setFunctions }} -->
     <loading-overlay :loading="categorys_is_loading"></loading-overlay>
     <v-row dense>
       <v-col class="my-5" style="text-align: -webkit-center" cols="12">
@@ -92,7 +92,19 @@
       </v-row>
       <v-divider class="mb-3"></v-divider>
       <!-- card parent -->
-      <div v-if="profile_user.length >= 1">
+      <div v-if="profile_user.length <= 0">
+        <v-card>
+          <v-card-text
+            class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
+          >
+            <span class="text-lg font-bold">
+              <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+              ไม่พบข้อมูลของผู้ปกครอง
+            </span>
+          </v-card-text>
+        </v-card>
+      </div>
+      <div v-else>
         <v-card
           v-for="(profile, index) in profile_user"
           :key="`${index}-profile`"
@@ -140,18 +152,6 @@
               </v-row>
             </v-col>
           </v-row>
-        </v-card>
-      </div>
-      <div v-else>
-        <v-card>
-          <v-card-text
-            class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
-          >
-            <span class="text-lg font-bold">
-              <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-              ไม่พบข้อมูลของผู้ปกครอง
-            </span>
-          </v-card-text>
         </v-card>
       </div>
     </div>
@@ -228,13 +228,26 @@
             <v-col cols="12" sm="10" class="d-flex align-center pa-3">
               <v-row dense>
                 <v-col cols="4">
-                  {{ !profile.student.studentFirstnameTh ? "-" : profile.student.studentFirstnameTh}}
+                  {{
+                    !profile.student.studentFirstnameTh
+                      ? "-"
+                      : profile.student.studentFirstnameTh
+                  }}
                 </v-col>
                 <v-col cols="4">
-                  {{ !profile.student.studentLastnameTh ? "-": profile.student.studentLastnameTh }}
+                  {{
+                    !profile.student.studentLastnameTh
+                      ? "-"
+                      : profile.student.studentLastnameTh
+                  }}
                 </v-col>
                 <v-col class="pink--text">
-                  {{my_course.filter((val) => val.studentId === profile.studentId).length}} คอร์ส
+                  {{
+                    my_course.filter(
+                      (val) => val.studentId === profile.studentId
+                    ).length
+                  }}
+                  คอร์ส
                 </v-col>
 
                 <!-- col arrow -->
@@ -324,7 +337,9 @@
             <div style="position: absolute">
               <div>
                 <v-img
-                  :src="getParentData.parentImage ? getParentData.parentImage : ''"
+                  :src="
+                    getParentData.parentImage ? getParentData.parentImage : ''
+                  "
                   class="image-cropper"
                 >
                 </v-img>
@@ -374,12 +389,13 @@
             </v-col>
           </v-row>
           <v-row dense>
+            <!-- v-if="profile_user.length >= 1" -->
+
             <v-col align="center">
               <v-btn
                 class="white--text"
                 color="#FF6B81"
                 @click="removeRelation(getParentData)"
-                v-if="profile_user.length >= 1"
               >
                 ลบข้อมูลผู้ปกครอง
               </v-btn>
@@ -498,7 +514,11 @@
             </v-col>
             <v-col cols="3" sm="4" align="right" class="mt-1">
               <label class="pink--text"
-                >{{ my_course.filter((val) => val.studentId === dialogGetStudentData.studentId).length }}
+                >{{
+                  my_course.filter(
+                    (val) => val.studentId === dialogGetStudentData.studentId
+                  ).length
+                }}
                 คอร์ส</label
               >
             </v-col>
@@ -679,8 +699,8 @@ export default {
     // dialogCard,
   },
   data: () => ({
-    user_relation : [],
-    user_login : {},
+    user_relation: [],
+    user_login: {},
     data_local: JSON.parse(localStorage.getItem("userDetail")),
     dialog_show: false,
     show_student_data: false,
@@ -703,87 +723,34 @@ export default {
   created() {
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
     this.user_relation = JSON.parse(localStorage.getItem("relations"));
-  
   },
   mounted() {
     this.user_relation = JSON.parse(localStorage.getItem("relations"));
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "บัญชีผู้ใช้");
     for (const item of this.user_relation) {
-        this.GetStudentData(item.student.studentId);
-      }    
-      if (this.$store.state.MyCourseModules.my_course_student_id !== "") {
-        this.GetStudentData(
-          this.$store.state.MyCourseModules.my_course_student_id
-        );
-      }else{
-        if (this.user_relation?.length != 0) {
-          for (const item of this.user_relation) {
-            this.GetStudentData(item.student.studentId);
-          }
+      this.GetStudentData(item.student.studentId);
+    }
+    if (this.$store.state.MyCourseModules.my_course_student_id !== "") {
+      this.GetStudentData(
+        this.$store.state.MyCourseModules.my_course_student_id
+      );
+    } else {
+      if (this.user_relation?.length != 0) {
+        for (const item of this.user_relation) {
+          this.GetStudentData(item.student.studentId);
+        }
+      } else {
+        if (!this.user_login.roles.includes("R_4")) {
+          this.GetStudentData(this.user_login.account_id);
         } else {
-          if (!this.user_login.roles.includes("R_4")) {
-            this.GetStudentData(this.user_login.account_id);
-          } else {
-            this.GetStudentData(null);
-          }
+          this.GetStudentData(null);
         }
       }
+    }
+    this.GetAll(this.user_login.account_id);
   },
 
   watch: {
-    "course_order.apply_for_yourself": function () {
-      if (this.course_order.apply_for_yourself) {
-        this.course_order.students.push({
-          account_id: this.user_login.account_id,
-          student_name: `${this.user_login.first_name_th} ${this.user_login.last_name_th}`,
-          username: "surahet",
-          firstname_en: this.user_login.first_name_th,
-          lastname_en: this.user_login.last_name_th,
-          tel: this.user_login.tel,
-          parents: [],
-          is_account: false,
-          is_other: false,
-        });
-        if (this.relations.length > 0) {
-          this.course_order.students[
-            this.course_order.students.length - 1
-          ].parents.push({
-            account_id: this.relations[0].parent.parentId,
-            firstname_en: this.relations[0].parent.parentFirstnameEn,
-            lastname_en: this.relations[0].parent.parentLastnameEn,
-            username: this.relations[0].parent.parentUsername,
-            tel: this.relations[0].parent.parentTel,
-          });
-        }
-      } else {
-        this.course_order.students.forEach((student, index) => {
-          if (student.is_other === false) {
-            this.course_order.students.splice(index, 1);
-          }
-        });
-      }
-    },
-    "course_order.apply_for_others": function () {
-      if (this.course_order.apply_for_others) {
-        this.course_order.students.push({
-          student_name: "",
-          account_id: "",
-          username: "",
-          firstname_en: "",
-          lastname_en: "",
-          tel: "",
-          parents: [],
-          is_account: false,
-          is_other: true,
-        });
-      } else {
-        this.course_order.students.forEach((student, index) => {
-          if (student.is_other === true) {
-            this.course_order.students.splice(index, 1);
-          }
-        });
-      }
-    },
     last_user_registered: function () {
       console.log(this.last_user_registered);
       if (this.last_user_registered.type === "parent") {
@@ -830,7 +797,7 @@ export default {
           this.course_order.students.length - 1
         ].parents = [];
       }
-      this.dialog_parent = false;
+      this.add_parent = false;
     },
   },
 
@@ -846,11 +813,9 @@ export default {
       GetRelations: "OrderModules/GetRelations",
       AddRelations: "RegisterModules/AddRelations",
       RemoveRelation: "RegisterModules/RemoveRelation",
-      GetProfileDetail: "ProfileModules/GetProfileDetail"
+      GetProfileDetail: "ProfileModules/GetProfileDetail",
     }),
-    getWhat(){
-      
-    },
+    getWhat() {},
     async getStudentData(order_item_id) {
       await this.$store.dispatch("getStudentData", order_item_id);
       // Access the data in your component
@@ -895,7 +860,6 @@ export default {
       this.dialog_show = false;
       this.show_student_data = false;
       this.add_parent = false;
-      this.add_parent = false;
     },
     openParentDialog(item) {
       this.getParentData = item;
@@ -907,6 +871,13 @@ export default {
     },
     openAddParentDialog() {
       this.add_parent = true;
+      this.parent = {
+        account_id: "",
+        firstname_en: "",
+        lastname_en: "",
+        username: "",
+        tel: "",
+      };
     },
     registerParent() {
       this.register_type = "parent";
@@ -939,6 +910,11 @@ export default {
             studentId: this.data_local.account_id,
             parentId: relations.parentId,
           }).then(() => {
+            if (relations.length <= 0) {
+              console.log("nonono");
+            } else {
+              this.relations;
+            }
             this.GetAll(this.user_login.account_id);
           });
         }
@@ -1139,17 +1115,17 @@ export default {
       return !!xs;
     },
 
-    setFunctions(){
+    setFunctions() {
       this.GetAll(this.user_login.account_id);
       this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-      this.GetProfileDetail(this.user_login.account_id);  
+      this.GetProfileDetail(this.user_login.account_id);
       this.GetRelations({
         student_id: this.user_login.account_id,
         parent_id: "",
       });
-      
-      return ''
-    }
+
+      return "";
+    },
   },
 };
 </script>

@@ -33,7 +33,6 @@
         <v-card-text class="border">
           <v-row class="d-flex align-center">
             <v-col>
-              <!-- @input="" -->
               <v-text-field
                 v-model="search"
                 prepend-inner-icon="mdi-magnify"
@@ -47,14 +46,13 @@
             </v-col>
             <label-custom text="บทบาท"></label-custom>
             <v-col cols="12" sm="3">
-              <!-- v-if="$vuetify.breakpoint.mdAndUp" -->
               <template>
                 <v-autocomplete
                   dense
                   :items="roles"
                   item-text="role"
                   item-value="roleNumber"
-                  @input="search_data(searchQuery)"
+                  @input="search_Role(searchQuery)"
                   v-model="searchQuery"
                   placeholder="ทั้งหมด"
                   outlined
@@ -103,16 +101,12 @@
               >
                 <v-icon left> mdi-plus </v-icon>
                 เพิ่มผู้ใช้
-              </v-btn> </v-col
-            >roles
+              </v-btn>
+            </v-col>
           </v-row>
         </v-card-text>
       </v-card>
-      <!-- <div  v-for="(item, index_item) in user_list"
-            :key="`${index_item}-cart`">
-            <pre>{{ item.accountId }}</pre>
 
-      </div> -->
       <!-- table -->
       <div>
         <template>
@@ -173,8 +167,9 @@
                 class="ml-5"
                 small
                 color="#FF6B81"
-                @click="deleteItem(item)"
+                @click="deleteAccount(item.accountId)"
               >
+                <!-- @click="deleteItem(item)" -->
                 mdi-delete
               </v-icon>
             </template>
@@ -207,6 +202,7 @@
 import headerPage from "@/components/header/headerPage.vue";
 import LabelCustom from "@/components/label/labelCustom.vue";
 import { mapActions, mapGetters } from "vuex";
+import Swal from "sweetalert2";
 import axios from "axios";
 import VueCookie from "vue-cookie";
 
@@ -284,7 +280,7 @@ export default {
     // this.GetUserList()
     this.$store.dispatch("UserModules/GetUserList");
     this.local_data = JSON.parse(localStorage.getItem("userDetail"));
-    this.GetShowById(this.local_data.account_id);
+    // this.GetShowById(this.local_data.account_id);
   },
   created() {
     this.GetUserList();
@@ -344,7 +340,7 @@ export default {
       this.close();
     },
 
-    async search_data(name, value) {
+    async search_data(name) {
       try {
         let config = {
           headers: {
@@ -354,53 +350,80 @@ export default {
           },
         };
         await axios.get(
-          `${process.env.VUE_APP_URL}/api/v1/usermanagement/search?name=${name}&role=${value}`,
+          `${process.env.VUE_APP_URL}/api/v1/usermanagement/search?name=${name}`,
           config
         );
-        // if (data.statusCode === 200) {
-        //   console.log("log", data.data);
-        // } else {
-        //   throw { error: data };
-        // }
       } catch (error) {
         console.log("err", error);
       }
     },
 
-    // async search_role(value) {
-    //   console.log("search_role", value);
-    //   try {
-    //     let config = {
-    //       headers: {
-    //         "Access-Control-Allow-Origin": "*",
-    //         "Content-type": "Application/json",
-    //         Authorization: `Bearer ${VueCookie.get("token")}`,
-    //       },
-    //     };
-    //     await axios.get(
-    //       `${process.env.VUE_APP_URL}/api/v1/usermanagement/search?role=${value}`,
-    //       config
-    //     );
-    //     // if (data.statusCode === 200) {
-    //     //   console.log("log", data.data);
-    //     // } else {
-    //     //   throw { error: data };
-    //     // }
-    //   } catch (error) {
-    //     console.log("err", error);
-    //   }
-    // },
+    async search_Role(role) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        await axios.get(
+          `${process.env.VUE_APP_URL}/api/v1/usermanagement/search?role=${role}`,
+          config
+        );
+      } catch (error) {
+        console.log("err", error);
+      }
+    },
 
-    // viewUserDetail() {
-    // this.local_data = JSON.parse(localStorage.getItem("userDetail"));
+    deleteAccount(account_id) {
+      console.log("accountId", account_id);
+      Swal.fire({
+        icon: "question",
+        title: "คุณต้องลบข้อมูลหรือไม่",
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: "ตกลง",
+        cancelButtonText: "ยกเลิก",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            let config = {
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-type": "Application/json",
+                Authorization: `Bearer ${VueCookie.get("token")}`,
+              },
+            };
 
-    //   this.$router.push({ name: "UserDetail",params:{action: "view", account_id: this.user_list.accountId} });
-    //   this.GetShowById(this.account_id)
-    // },
-    editUserDetail() {
-      this.$router.push({
-        name: "UserDetail",
-        params: { action: "edit", account_id: "0001" },
+            let { data } = await axios.delete(
+              // `${process.env.VUE_APP_URL}/api/v1/usermanagement/${account_id}`,
+              `http://localhost:3000/api/v1/usermanagement/${account_id}`,
+              config
+            );
+
+            if (data.statusCode === 200) {
+              Swal.fire({
+                icon: "success",
+                title: "ลบข้อมูลสำเร็จ",
+              }).then(async (result) => {
+                if (result.isConfirmed) {
+                  this.$store.dispatch("UserModules/GetUserList");
+                }
+              });
+            } else {
+              throw { message: data.message };
+            }
+          } catch (error) {
+            console.log(error);
+            Swal.fire({
+              icon: "error",
+              title: "ลบข้อมูลไม่สำเร็จ",
+            });
+          }
+        } else {
+          Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
+        }
       });
     },
   },
