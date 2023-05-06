@@ -299,8 +299,8 @@ const CourseModules = {
     // COACH :: LIST
     async GetCoachs(context) {
       try {
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/account/role/R_3`)
+        // let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/role/R_3`)
         if (data.statusCode === 200) {
           data.data.forEach((coach) => {
             // console.log("coach =>", coach)
@@ -332,12 +332,12 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let localhost = "http://localhost:3000"
-        let {data} = await axios.get(`${localhost}/api/v1/studentlist/course/${course_id}`,config)
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/course/${course_id}`,config)
         // console.log(data.data)
         if(data.statusCode === 200){
           for await (let coach  of data.data){
-            let coach_data = await axios.get(`${localhost}/api/v1/account/${coach.coachId}`)
+            let coach_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${coach.coachId}`)
             if(coach_data.data.statusCode === 200){
                 console.log(coach_data.data.data)
                 coach.firstNameTh =  coach_data.data.data.firstNameTh
@@ -411,8 +411,8 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let localhost = "http://localhost:3000"
-        let {data} = await axios.get(`${localhost}/api/v1/studentlist/checkin/course/${course_id}/date/${date}`,config)
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/date/${date}`,config)
         if(data.statusCode === 200){
           // console.log(data.data)
           context.commit("SetStudentList",data.data)
@@ -434,8 +434,8 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let localhost = "http://localhost:3000"
-        let {data} = await axios.get(`${localhost}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach_id}`,config)
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach_id}`,config)
         if(data.statusCode === 200){
           console.log(data.data)
           context.commit("SetStudentPotentialList",data.data)
@@ -457,8 +457,8 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let localhost = "http://localhost:3000"
-        let {data} = await axios.get(`${localhost}/api/v1/manage/reserve/course/${course_id}`,config)
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/manage/reserve/course/${course_id}`,config)
         if(data.statusCode === 200){
           // console.log(data.data)
           context.commit("SetStudentReserveList",data.data)
@@ -471,7 +471,7 @@ const CourseModules = {
     async UpdateCouserDetail(context,{course_id, course_data}){
       try{
         console.log(typeof course_data.course_img == "object")
-        let localhost = "http://localhost:3000"
+        // let localhost = "http://localhost:3000"
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -509,7 +509,7 @@ const CourseModules = {
         if (typeof course_data.course_img == "object") {
           payloadData.append("img_url", course_data.course_img)
         }
-        let {data} = await axios.patch(`${localhost}/api/v1/manage/update-course/${course_id}`, payloadData, config)
+        let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-course/${course_id}`, payloadData, config)
         // console.log(data)
         if(data.statusCode === 200){
           Swal.fire({
@@ -607,8 +607,8 @@ const CourseModules = {
         console.log("payload",payload)
         let payloadData = new FormData()
         payloadData.append("payload",JSON.stringify(payload))
-        let localhost = "http://localhost:3000"
-        let {data} = await axios.patch(`${localhost}/api/v1/manage/update-coach/${course_id}`, payloadData, config)
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-coach/${course_id}`, payloadData, config)
         if(data.statusCode === 200){
           Swal.fire({
             icon: "success",
@@ -664,8 +664,8 @@ const CourseModules = {
         console.log("payload => ",payload)
         let payloadData = new FormData()
         payloadData.append("payload",JSON.stringify(payload))
-        let localhost = "http://localhost:3000"
-        let {data} = await axios.patch(`${localhost}/api/v1/manage/update-cpo/${course_id}`, payloadData, config)
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-cpo/${course_id}`, payloadData, config)
         if(data.statusCode === 200){
           Swal.fire({
             icon: "success",
@@ -686,9 +686,9 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let localhost = "http://localhost:3000"
+        // let localhost = "http://localhost:3000"
         console.log("artwork_data :", artwork_data)
-        let {data} = await axios.delete(`${localhost}/api/v1/course/artworkCourse/${artwork_data.artworkCourseId}`,config)
+        let {data} = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/course/artworkCourse/${artwork_data.artworkCourseId}`,config)
         console.log(data)
         if(data.statusCode == 200){
           Swal.fire({
@@ -719,8 +719,8 @@ const CourseModules = {
             payloadData.append(`img_artwork`, course_data.artwork_file[i]);
           }         
         }      
-        let localhost = "http://localhost:3000"
-        let {data} = await axios.patch(`${localhost}/api/v1/manage/update-artwork/${course_id}`,payloadData ,config)
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-artwork/${course_id}`,payloadData ,config)
         if(data.statusCode === 200){
           Swal.fire({
             icon: "success",
@@ -980,8 +980,8 @@ const CourseModules = {
     async GetCourse(context, course_id) {
       context.commit("SetCourseIsLoading", true)
       try {
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/course/detail/${course_id}`)
+        // let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
         // console.log(data.data)
         if (data.statusCode === 200) {
           let payload = {
