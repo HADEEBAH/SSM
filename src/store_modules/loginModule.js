@@ -142,13 +142,26 @@ const loginModules = {
 
 
         logOut(context) {
-            VueCookie.delete("token")
-            context.commit("ResetUserOneId")
-            context.commit("ResetUserData")
-            localStorage.removeItem("userDetail")
-            localStorage.removeItem("Order")
-            localStorage.removeItem("relations")
-            router.push({ name: "Login" });
+            Swal.fire({
+                icon: "question",
+                title: "คุณต้องการออกจากระบบหรือไม่",
+                showDenyButton: false,
+                showCancelButton: true,
+                confirmButtonText: "ตกลง",
+                cancelButtonText: "ยกเลิก",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    VueCookie.delete("token")
+                    context.commit("ResetUserOneId")
+                    context.commit("ResetUserData")
+                    localStorage.removeItem("userDetail")
+                    localStorage.removeItem("Order")
+                    localStorage.removeItem("relations")
+                    router.push({ name: "Login" });
+                }
+            })
+
+
         }
     },
     getters: {
