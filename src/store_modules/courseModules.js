@@ -1162,6 +1162,7 @@ const CourseModules = {
           "courseNameEn": course.course_name_en,
           "courseOpenDate": course.course_open_date,
           "coursePerTime": course.course_hours,
+          "startDate" : course.start_date,
           "courseStudentRecived": course.student_recived,
           "courseLocation": course.location,
           "courseDescription": course.detail,

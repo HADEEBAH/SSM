@@ -1394,6 +1394,12 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           if (this.course_order.course_type_id == "CT_1") {
+            console.log(new Date(this.course_data.course_open_date) > new Date())
+            if(new Date(this.course_data.course_open_date) > new Date()){
+              this.course_order.start_date = this.course_data.course_open_date
+            }else{
+              this.course_order.start_date = ""
+            }
             this.course_order.coach_name = this.course_data.coachs.filter((v) =>
               this.course_order.day.course_coach_id.includes(v.course_coach_id)
             )[0].coach_name;
