@@ -153,8 +153,8 @@ const coachModules = {
             if(!student.assessment.assessmentStudentsId){
               console.log("post",payload)
               payloadData.append("payload",JSON.stringify(payload))
-              // let localhost = "http://localhost:3000"
-              let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`,payloadData,config)
+              let localhost = "http://192.168.74.25:3000"
+              let {data} = await axios.post(`${localhost}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`,payloadData,config)
               if(data.statusCode == 201){
                 console.log("post",data)
               }else{
@@ -163,8 +163,8 @@ const coachModules = {
             }else{
               console.log("patch",payload)
               payloadData.append("payload",JSON.stringify(payload))
-              // let localhost = "http://localhost:3000"
-              let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`,payloadData,config)
+              let localhost = "http://192.168.74.25:3000"
+              let {data} = await axios.patch(`${localhost}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`,payloadData,config)
               if(data.statusCode == 200){
                 console.log("patch",data)
               }else{
@@ -343,8 +343,8 @@ const coachModules = {
             },
         };
         // let user_detail = JSON.parse(localStorage.getItem("userDetail"));
-        // let localhost = "http://localhost:3000"
-        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/${course_id}/date/${date}`,config)
+        let localhost ="http://192.168.74.25:3000"
+        let {data} = await axios.get(`${localhost}/api/v1/coachmanagement/course/${course_id}/date/${date}`,config)
         // console.log(data)
         if(data.statusCode === 200){
           data.data.forEach((student, index) => {
@@ -432,6 +432,7 @@ const coachModules = {
         let user_detail = JSON.parse(localStorage.getItem("userDetail"));
         //let localhost = "http://localhost:3000"
         const {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${coach_id}`,config);
+        console.log("GetMyCourses",data.data)
         if(data.statusCode == 200){
             let courses_task = [];
             for (const course of data.data) {
@@ -475,8 +476,44 @@ const coachModules = {
                       });
                     }
                   }
+                }else if(course.dates.dates){
+                  for (const dates of course.dates.dates) {
+                    let start_time = course.period.start;
+                    let end_time = course.period.end;
+                    const [start_hours, start_minutes] = start_time.split(":");
+                    const [end_hours, end_minutes] = end_time.split(":");
+                    const startDate = new Date(dates); 
+                    startDate.setHours(start_hours);
+                    startDate.setMinutes(start_minutes);
+                    const endDate = new Date(dates);
+                    endDate.setHours(end_hours);
+                    endDate.setMinutes(end_minutes);
+                    if(courses_task.filter(v => v.course_id === course.courseId && v.time_id === course.timeId && v.day_of_week_id === course.dayOfWeekId && v.start_date ===  moment(startDate).format("YYYY-MM-DD") ).length === 0){
+                      courses_task.push({
+                        name: course_data.data.data.courseNameTh,
+                        subtitle: course_data.data.data.courseNameEn,
+                        course_id: course.courseId,
+                        time_id : course.timeId,
+                        day_of_week_id: course.dayOfWeekId,
+                        coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
+                        start_date: moment(startDate).format("YYYY-MM-DD"),
+                        start_date_str: startDate.toLocaleDateString("th-TH", options),
+                        start: moment(startDate).format("YYYY-MM-DD HH:mm"),
+                        end: moment(endDate).format("YYYY-MM-DD HH:mm"),
+                        start_time: start_time,
+                        end_time: end_time,
+                        category_name : course_data.data.data.categoryNameTh,
+                        course_img: course_data.data.data.courseImg
+                          ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}`
+                          : "",
+                        course_per_time: course_data.data.data.coursePerTime,
+                        show_summary : false,
+                        show_assessment : false,
+                        show_assessment_pantential : false,
+                      });
+                    }
+                  }
                 }
-              
               }
             }
             context.commit("SetMyCourses", courses_task);
