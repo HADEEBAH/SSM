@@ -305,13 +305,12 @@ export default {
             let bodyFormData = new FormData();
             bodyFormData.append("img_url", this.file);
             bodyFormData.append("payload", JSON.stringify(payload));
-
+            // let localhost = "http://localhost:3000"
             let { data } = await axios.post(
-              `http://localhost:3000/api/v1/category`,
+              `${process.env.VUE_APP_URL}/api/v1/category`,
               bodyFormData,
               config
             );
-            // let { data } = await axios.post( `${process.env.VUE_APP_URL}/api/v1/category`, bodyFormData, config);
             if (data.statusCode === 201) {
               this.showImg = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.categoryImg}`;
               this.dialog_show = true;

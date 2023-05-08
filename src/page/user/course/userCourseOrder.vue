@@ -32,7 +32,7 @@
                 {{ course_data.course_hours }} ชม. / ครั้ง</rowData
               >
             </v-col>
-            <v-col cols="12" sm="6" class="pa-0">
+            <v-col cols="12" sm="6" class="pa-0" v-if="course_data.course_type_id === 'CT_1'">
               <rowData mini col_detail="5" icon="mdi-book-multiple-outline">
                 {{ course_order.package }}</rowData
               >
@@ -1188,6 +1188,7 @@ export default {
     },
 
     groupByDay(originalArray) {
+      console.log(originalArray)
       return originalArray;
     },
     CreateReserve() {
