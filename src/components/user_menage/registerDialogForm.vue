@@ -47,7 +47,7 @@
           <v-col>
             <!-- <label>ผู้ใช้งาน/OneID(ภาษาอังกฤษ)</label> -->
             <label>Username</label>
-            <v-text-field dense ref="username_rig" :rules="rules.username_rig" required v-model="user_one_id.username" placeholder="ระบุชื่อผู้ใช้งาน" @keypress="Validation($event,'en')" @change="changeUserOneId(user_one_id)" outlined></v-text-field>
+            <v-text-field autocomplete="off-autofill" dense ref="username_rig" :rules="rules.username_rig" required v-model="user_one_id.username" placeholder="ระบุชื่อผู้ใช้งาน" @keypress="Validation($event,'en')" @change="changeUserOneId(user_one_id)" outlined></v-text-field>
           </v-col>
         </v-row>
         <v-row dense>
@@ -55,6 +55,7 @@
             <label>รหัสผ่าน</label>
             <v-text-field 
               dense
+              autocomplete="off-autofill"
               ref="password_rig" 
               :type="show_password ? 'text' : 'password' "
               :rules="rules.password_rig" 
@@ -123,8 +124,8 @@ export default {
     show_confirm_password: false,
     phone_number : "",
     rules: {
-      name_th: [val => (val || '').length > 0 || 'โปรดระบุชื่อ-นามสกุล(ภาษาไทย)'],
-      name_en: [val => (val || '').length > 0 || 'โปรดระบุชื่อ-นามสกุล(ภาษาอังกฤษ)'],
+      name_th: [val => (val || '').length > 2 || 'โปรดระบุชื่อ (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร'],
+      name_en: [val => (val || '').length > 2 || 'โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร'],
       phone_number: [val => (val || '').length > 0 && val.length === 12 || 'โปรดระบุเบอร์โทร'],
       username_rig : [val => (val || '').length > 5 || 'โปรดระบุชื่อผู้ใช้ความยาวอย่างน้อย 6 ตัวอักษร'],
       password_rig : [val =>(val && val.length > 7) || 'โปรดระบุรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร'],
