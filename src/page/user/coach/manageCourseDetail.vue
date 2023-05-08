@@ -60,7 +60,7 @@
         </v-tabs>
         <v-tabs-items v-model="tab">
             <v-tab-item value="check in">
-                <v-row class="mb-3" dense v-if="cpo_options.length > 1">
+                <v-row  class="mb-3" dense v-if="cpo_options.length > 1">
                     <v-col cols="12" sm="4" v-for="(cpo,index_cpo) in cpo_options" :key="`${index_cpo}-cpo`">
                         <v-btn class="w-full" :dark="package_name_filter === cpo" :color="package_name_filter === cpo ? '#ff6b81' : '' " dense depressed @click="filterPackage(cpo)">{{ cpo }}</v-btn>
                     </v-col>
@@ -69,7 +69,7 @@
                     <pre></pre>
                     <v-data-table
                         class="header-table border"
-                        :items="student_check_in.filter(v => v.cpo.packageName === package_name_filter)" 
+                        :items="student_check_in.filter(v => v.cpo?.packageName ? v.cpo.packageName === package_name_filter : true)" 
                         item-key="no"
                         :expanded.sync="expanded_index"
                         :headers="headers">
@@ -94,8 +94,9 @@
                             </template>
                             </v-select>
                         </template>
-                        <template v-slot:[`item.package`] ="{item}">
-                           <span class="font-semibold"> {{ `${item.cpo.packageName}` }}</span>
+                        <template  v-slot:[`item.package`] ="{item}">
+                           <span class="font-semibold" v-if="item?.cpo?.packageName"> {{ `${item.cpo.packageName}` }}</span>
+                           <span class="font-semibold" v-else> - </span>
                         </template>
                         <template v-slot:[`item.class_time`] ="{item}">
                             {{ `${item.countCheckIn}/${item.totalDay}` }}
@@ -364,11 +365,11 @@
             </v-tab-item>
         </v-tabs-items>
         <v-dialog :width="$vuetify.breakpoint.smAndUp ? '60vw' : ''"  v-model="show_comment_dialog" v-if="show_comment_dialog">
-            <!-- <pre>{{student_check_in[selected_student]}}</pre> -->
+            <pre>{{student_check_in[selected_student]}}</pre>
             <v-card  class="pa-1">
                 <v-row dense>
                     <v-col class="pa-0" cols="12" align="right">
-                        <v-btn icon @click="closeStudentComment">
+                        <v-btn icon @click="closeStudentComment(selected_student)">
                             <v-icon color="#ff6b81">mdi-close</v-icon>
                         </v-btn>
                     </v-col>
@@ -398,8 +399,8 @@
                                 <v-img height="35" width="26" src="../../../assets/coachLeave/file-pdf.png"/>
                                 </v-col>
                                 <v-col @click="openFile(file)" class="px-2 cursor-pointer">
-                                    <span class="font-bold">ไฟล์แนบ {{ index+1  }}</span><br>
-                                    <!-- <span class="text-caption">ขนาดไฟล์ : {{ (0 / 1000000).toFixed(2) }} MB</span> -->
+                                    <span class="font-bold"> {{ file.originalFilesName }} </span><br>
+                                    <span class="text-caption">ขนาดไฟล์ : {{ (file.filesSize / 1000000).toFixed(2) }} MB</span>
                                 </v-col>
                                 <v-col cols="auto" class="pl-2">
                                     <v-btn @click="removeAccessmentFileInBase(file,selected_student)" icon color="#ff6b81"><v-icon>mdi-close</v-icon></v-btn>
@@ -460,12 +461,12 @@
                     </div>
                     <v-row dense>
                     <v-col cols="12" sm="6">
-                        <v-btn  class="w-full" @click="student_check_in[selected_student].assessment.remark = ''" text color="#ff6b81">
+                        <v-btn :disabled="student_check_in[selected_student].assessment.assessmentStudentsId" class="w-full" @click="clearStudentComment(selected_student)" text color="#ff6b81">
                             ล้างข้อมูล
                         </v-btn>
                     </v-col>
                     <v-col cols="12" sm="6">
-                        <v-btn class="w-full" @click="closeStudentComment" depressed color="#ff6b81" dark >
+                        <v-btn class="w-full" @click="confirmStudentComment" depressed color="#ff6b81" dark >
                             ตกลง
                         </v-btn>
                     </v-col>
@@ -478,7 +479,7 @@
                 <!-- <pre>{{student_check_in[selected_student]}}</pre> -->
                 <v-row dense>
                     <v-col class="pa-0" cols="12" align="right">
-                        <v-btn icon @click="claseDialogPotential">
+                        <v-btn icon @click="claseDialogPotential(selected_student)">
                             <v-icon color="#ff6b81">mdi-close</v-icon>
                         </v-btn>
                     </v-col>
@@ -575,7 +576,7 @@
                         </v-btn>
                     </v-col>
                     <v-col cols="12" sm="6">
-                        <v-btn class="w-full" @click="claseDialogPotential" depressed color="#ff6b81" dark >
+                        <v-btn class="w-full" @click="confirmDialogPotential" depressed color="#ff6b81" dark >
                             ตกลง
                         </v-btn>
                     </v-col>
@@ -654,11 +655,14 @@ export default {
     },
     "student_check_in":function(){
         this.student_check_in.forEach((check_in_data)=>{
-            if(!this.package_name_filter){
-                this.package_name_filter = check_in_data.cpo.packageName
-            }
-            if(!this.cpo_options.includes(check_in_data.cpo.packageName) ){
-                this.cpo_options.push(check_in_data.cpo.packageName)
+            console.log(check_in_data)
+            if(check_in_data?.cpo?.packageName){
+                if(!this.package_name_filter){
+                    this.package_name_filter = check_in_data?.cpo?.packageName
+                }
+                if(!this.cpo_options.includes(check_in_data.cpo.packageName) ){
+                    this.cpo_options.push(check_in_data.cpo.packageName)
+                }
             }
             if(check_in_data.status === "leave" || check_in_data.status === "special case"){
                 this.selectCheckInStatus(check_in_data,check_in_data.status)
@@ -702,16 +706,20 @@ export default {
         DeleteAssessmentPotentialFile : "CoachModules/DeleteAssessmentPotentialFile"
     }),
     FilterStatusCheckIn(selected_data){
-        console.log(`Total :${ parseInt(selected_data.totalDay/4) } count : ${selected_data.countCheckInleave}`)
-        if( parseInt(selected_data.totalDay/4) > selected_data.countCheckInleave ){
-            return this.check_in_status_options
-        }else{
-            if(selected_data.status === 'leave'){
+        if(this.course_data.course_type_id === 'CT_1'){
+            console.log(`Total :${ parseInt(selected_data.totalDay/4) } count : ${selected_data.countCheckInleave}`)
+            if( parseInt(selected_data.totalDay/4) > selected_data.countCheckInleave ){
                 return this.check_in_status_options
             }else{
-                return this.check_in_status_options.filter(v => v.value !== 'leave')
+                if(selected_data.status === 'leave'){
+                    return this.check_in_status_options
+                }else{
+                    return this.check_in_status_options.filter(v => v.value !== 'leave')
+                }
+                
             }
-            
+        }else{
+            return this.check_in_status_options
         }
     },
     clearTeachingNote(){
@@ -735,15 +743,29 @@ export default {
             window.open(url, '_blank');
         }
     },
+    confirmDialogPotential(){
+        this.selected_files = []
+        this.show_comment_potential_dialog = false
+    },
     showDialogPotential(id){
         for (let i = 0; i < this.student_check_in.length; i++) {
             if (this.student_check_in[i].checkInStudentId === id) {
                 this.selected_student = i
             }
         }
+        if(this.student_check_in[this.selected_student].potential.checkInPotentialId){
+            this.student_check_in[this.selected_student].potential.remark_old = this.student_check_in[this.selected_student].potential.remark
+        }
         this.show_comment_potential_dialog = true
     },
-    claseDialogPotential(){
+    claseDialogPotential(selected_student){
+        if(this.student_check_in[selected_student].potential.remark_old){
+            this.student_check_in[selected_student].potential.remark = this.student_check_in[selected_student].potential.remark_old
+            this.student_check_in[selected_student].potentialfiles = []
+        }else{
+            this.student_check_in[selected_student].potential.remark = ""
+            this.student_check_in[selected_student].potentialfiles = []
+        }
         this.selected_files = []
         this.show_comment_potential_dialog = false
     },
@@ -855,9 +877,31 @@ export default {
                 this.selected_student = i
             }
         }
+        if(!this.student_check_in[this.selected_student].assessment.assessmentStudentsId){
+            this.student_check_in[this.selected_student].assessment.oldremark = this.student_check_in[this.selected_student].assessment.remark
+        }
+       
         this.show_comment_dialog = true
     },
-    closeStudentComment(){
+    confirmStudentComment(){
+        this.selected_files = []
+        this.show_comment_dialog = false
+    },
+    clearStudentComment(selected_student){
+        if(!this.student_check_in[selected_student].assessment.assessmentStudentsId){
+            this.student_check_in[selected_student].assessment.remark = []
+            this.student_check_in[selected_student].files = []
+        }
+    },
+    closeStudentComment(selected_student){
+        console.log(selected_student)
+        if(!this.student_check_in[selected_student].assessment.assessmentStudentsId){
+            this.student_check_in[selected_student].assessment.remark = []
+           
+        }else{
+            this.student_check_in[selected_student].files = []
+        }
+       
         this.selected_files = []
         this.show_comment_dialog = false
     },
@@ -904,7 +948,7 @@ export default {
             icon: "question",
             title: "ไฟล์นี้ใช่หรือไม่",
             showDenyButton: false,
-            showCancelButton: false,
+            showCancelButton: true,
             confirmButtonText: "ตกลง",
             cancelButtonText: "ยกเลิก",
             }).then(async (result) => {
@@ -925,7 +969,7 @@ export default {
             icon: "question",
             title: "ไฟล์นี้ใช่หรือไม่",
             showDenyButton: false,
-            showCancelButton: false,
+            showCancelButton: true,
             confirmButtonText: "ตกลง",
             cancelButtonText: "ยกเลิก",
             }).then(async (result) => {
