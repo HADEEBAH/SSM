@@ -1323,21 +1323,27 @@
                   :items-per-page="itemsPerPage"
                   :sort-by="user_data.sortBy" -->
               </div>
-            </div>
 
-            <div class="my-5 mx-10">
-              <v-data-table
-                :headers="headers"
-                @page-count="pageCount = $event"
-                class="elevation-1 header-table"
-                :items="student_schedule"
+              <!-- TABLE -->
+              <div
+                class="my-5 mx-10"
+                v-if="item.roleId == 'R_4' || item.roleId == 'R_5'"
               >
-                <template v-slot:[`item.days`]>
-                  <div v-for="(item, index) in student_data.dates" :key="index">
-                    {{ item.day }}
-                  </div>
-                  <!-- {{ student_data.dates.count }} -->
-                  <!-- <div
+                <v-data-table
+                  :headers="headers"
+                  @page-count="pageCount = $event"
+                  class="elevation-1 header-table"
+                  :items="student_schedule"
+                >
+                  <template v-slot:[`item.days`]>
+                    <div
+                      v-for="(item, index) in student_data.dates"
+                      :key="index"
+                    >
+                      {{ item.day }}
+                    </div>
+                    <!-- {{ student_data.dates.count }} -->
+                    <!-- <div
                         v-for="(item_data, index) in student_data.dates.day"
                         :key="index"
                       >
@@ -1349,28 +1355,29 @@
                         {{ student_data.period.start }} -
                         {{ student_data.period.end }} น.
                       </div> -->
-                </template>
+                  </template>
 
-                <template v-slot:[`item.actions`]="{ item }">
-                  <v-icon small color="#FF6B81"> mdi-eye-outline </v-icon>
-                  <v-icon
-                    small
-                    class="ml-5"
-                    color="#FF6B81"
-                    @click="editItem(item)"
-                  >
-                    mdi-pencil
-                  </v-icon>
-                  <v-icon
-                    class="ml-5"
-                    small
-                    color="#FF6B81"
-                    @click="deleteItem(item)"
-                  >
-                    mdi-delete
-                  </v-icon>
-                </template>
-              </v-data-table>
+                  <template v-slot:[`item.actions`]="{ item }">
+                    <v-icon small color="#FF6B81"> mdi-eye-outline </v-icon>
+                    <v-icon
+                      small
+                      class="ml-5"
+                      color="#FF6B81"
+                      @click="editItem(item)"
+                    >
+                      mdi-pencil
+                    </v-icon>
+                    <v-icon
+                      class="ml-5"
+                      small
+                      color="#FF6B81"
+                      @click="deleteItem(item)"
+                    >
+                      mdi-delete
+                    </v-icon>
+                  </template>
+                </v-data-table>
+              </div>
             </div>
 
             <!-- Button -->
@@ -1546,6 +1553,8 @@ export default {
     isOpen: false,
     params: "",
     relations: [],
+    default_img_update_profile:
+      "@/assets/userManagePage/default_img_update_profile.svg",
   }),
   created() {
     // this.GetAll(this.$route.params.account_id);
