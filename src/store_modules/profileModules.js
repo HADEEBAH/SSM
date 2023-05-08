@@ -241,7 +241,8 @@ const profileModules = {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/profile/${account_id}`, config)
         // console.log("data_parent", data)
         if (data.statusCode === 200) {
-          data.data.image = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}`
+          data.data.image = data.data.image && data.data.image != "" ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}` : ""
+          // data.data.image = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}`
           context.commit("SetProfileDetail", data.data)
           console.log("SetProfileDetail", data.data)
         } else {

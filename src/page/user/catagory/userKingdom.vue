@@ -1,6 +1,11 @@
 
 <template>
-  <v-app class="overflow-x-hidden overflow-y-hidden bg-kingdom" :style="MobileSize ? `background-size: contain;` : `background-size: cover;`">
+  <v-app
+    class="overflow-x-hidden overflow-y-hidden bg-kingdom"
+    :style="
+      MobileSize ? `background-size: contain;` : `background-size: cover;`
+    "
+  >
     <v-container fluid class="my-5">
       {{ setFunctions }}
       <v-row class="row">
@@ -13,9 +18,7 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-card
-      class="rounded-xl"
-    >
+    <v-card class="rounded-xl">
       <v-card
         class="mx-auto block rounded-xl drop-shadow-lg mt-3 ml-3 mr-3 banner-container"
         max-width=""
@@ -34,14 +37,20 @@
 
       <v-container fluid>
         <v-row>
-          <v-col cols="12" sm="2" class="text-2xl align-self-center font-weight-bold">
+          <v-col
+            cols="12"
+            sm="2"
+            class="text-2xl align-self-center font-weight-bold"
+          >
             อาณาจักร
           </v-col>
           <v-col cols="12" sm="10" style="text-align: -webkit-right">
             <v-text-field
               @keyup="searchKingdom()"
               v-model="search_kingdom"
-              :class="`bg-white rounded-xl ${!MobileSize ? 'w-2/5' : 'w-full'} `"
+              :class="`bg-white rounded-xl ${
+                !MobileSize ? 'w-2/5' : 'w-full'
+              } `"
               hide-details
               dense
               outlined
@@ -51,25 +60,39 @@
           </v-col>
         </v-row>
 
-        <v-row >
+        <v-row>
           <v-col
             cols="6"
             md="4"
             sm="6"
             class="pa-2"
-            v-for="item in (search_kingdom !== '' ? data_search_kingdom : categorys )"
+            v-for="item in search_kingdom !== ''
+              ? data_search_kingdom
+              : categorys"
             :key="item.id"
           >
-            <v-card  
+            <v-card
               class="h-full block drop-shadow-lg"
               @click="selectedCategory(item)"
             >
+              <!-- :src="item.categoryImg && item.categoryImg !== null ? showImg(item.categoryImg) : defaultImageUrl" -->
+
               <v-img
+                v-if="item.categoryImg && item.categoryImg !== null"
                 contain
-                :src="item.categoryImg && item.categoryImg !== null ? showImg(item.categoryImg) : defaultImageUrl"
+                height="180"
+                :src="showImg(item.categoryImg)"
+              ></v-img>
+              <v-img
+                v-else
+                contain
+                src="../../../assets/userKingdom/category_img.svg"
                 height="180"
               ></v-img>
-              <v-card-title :class="$vuetify.breakpoint.smAndUp ? 'text-md' : 'text-sm'" class="font-bold">
+              <v-card-title
+                :class="$vuetify.breakpoint.smAndUp ? 'text-md' : 'text-sm'"
+                class="font-bold"
+              >
                 {{ item.categoryNameTh }}
               </v-card-title>
 
@@ -81,11 +104,18 @@
               </v-card-subtitle>
             </v-card>
           </v-col>
-          <v-col cols="12" v-if="search_kingdom !== '' && data_search_kingdom.length === 0 || categorys.length === 0" class="font-weight-bold text-center text-xl">
+          <v-col
+            cols="12"
+            v-if="
+              (search_kingdom !== '' && data_search_kingdom.length === 0) ||
+              categorys.length === 0
+            "
+            class="font-weight-bold text-center text-xl"
+          >
             ไม่พบอาณาจักร
           </v-col>
         </v-row>
-    <loading-overlay :loading="categorys_is_loading"></loading-overlay>
+        <loading-overlay :loading="categorys_is_loading"></loading-overlay>
       </v-container>
     </v-card>
   </v-app>
@@ -133,7 +163,7 @@ export default {
     userDetail: false,
     search_kingdom: "",
     data_search_kingdom: [],
-    item_data: ""
+    item_data: "",
   }),
   created() {
     this.dataStorage = JSON.parse(localStorage.getItem("userDetail"));
@@ -141,9 +171,8 @@ export default {
       console.log("this.dataStorage created", this.dataStorage);
       this.GetAll(this.dataStorage.account_id);
     }
-    localStorage.removeItem("Order")
-    localStorage.setItem("Order", JSON.stringify(this.course_order))
-  
+    localStorage.removeItem("Order");
+    localStorage.setItem("Order", JSON.stringify(this.course_order));
   },
 
   mounted() {
@@ -156,8 +185,7 @@ export default {
       createKingdom: "OrderModules/createKingdom",
       GetAll: "ProfileModules/GetAll",
       GetProfileDetail: "ProfileModules/GetProfileDetail",
-      logOut : "loginModules/logOut"
-
+      logOut: "loginModules/logOut",
     }),
 
     selectedCategory(category) {
@@ -175,12 +203,17 @@ export default {
       return `${process.env.VUE_APP_URL}/api/v1/files/${item}`;
     },
     searchKingdom() {
-      this.data_search_kingdom = this.categorys.filter((val)=>{
-        if (val.categoryNameTh.indexOf(this.search_kingdom) !== -1 || val.categoryNameEng.toLowerCase().indexOf(this.search_kingdom.toLowerCase()) !== -1 ) {
-          return val
+      this.data_search_kingdom = this.categorys.filter((val) => {
+        if (
+          val.categoryNameTh.indexOf(this.search_kingdom) !== -1 ||
+          val.categoryNameEng
+            .toLowerCase()
+            .indexOf(this.search_kingdom.toLowerCase()) !== -1
+        ) {
+          return val;
         }
-      })
-    }
+      });
+    },
   },
 
   computed: {
@@ -190,16 +223,15 @@ export default {
       categorys_is_loading: "CategoryModules/getCategorysIsLoading",
       profile_user: "ProfileModules/getProfileUser",
       profile_detail: "ProfileModules/getProfileDetail",
-      
     }),
-    setFunctions(){
+    setFunctions() {
       this.$store.dispatch("CategoryModules/GetCategoryCourse");
-    if (this.dataStorage) {
-      console.log("this.dataStorage compute", this.dataStorage);
-      this.GetProfileDetail(this.dataStorage.account_id);
-    }
-      
-      return ''
+      if (this.dataStorage) {
+        console.log("this.dataStorage compute", this.dataStorage);
+        this.GetProfileDetail(this.dataStorage.account_id);
+      }
+
+      return "";
     },
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
@@ -249,7 +281,7 @@ export default {
 }
 
 .bg-kingdom {
-  background-image: url("@/assets/kingdom_bg_img.svg");
+  background-image: url("../../../assets/userKingdom/kingdom_bg_img.svg");
   background-position: top;
   background-repeat: no-repeat;
   /* background-size: contain; */

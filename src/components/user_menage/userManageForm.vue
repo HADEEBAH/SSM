@@ -64,7 +64,7 @@
                                 ? preview_img
                                 : show_by_id != ''
                                 ? show_by_id.image
-                                : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU`
+                                : '../../assets/userManagePage/default_img_update_profile.svg'
                             "
                           >
                             <v-btn
@@ -88,6 +88,7 @@
                             </v-btn>
                           </v-img>
                         </div>
+
                         <input
                           id="fileInput"
                           ref="fileInput"
