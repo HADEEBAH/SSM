@@ -41,9 +41,19 @@
                           </v-img>
                           <!-- :src="showImg(show_by_id.image)" -->
 
-                          <div style="position: absolute">
+                          <div
+                            style="position: absolute"
+                            v-if="show_by_id.image !== ''"
+                          >
                             <img
                               :src="show_by_id.image"
+                              class="profileInCard"
+                            />
+                          </div>
+
+                          <div style="position: absolute" v-else>
+                            <img
+                              src="../../../assets/userManagePage/default_img_update_profile.svg"
                               class="profileInCard"
                             />
                           </div>

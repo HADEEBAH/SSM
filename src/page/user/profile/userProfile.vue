@@ -9,14 +9,13 @@
       <v-col class="my-5" style="text-align: -webkit-center" cols="12">
         <!-- {{ profile_detail.image }} -->
         <!-- {{ data_local.image }} -->
-        <div class="cicle">
+        <div class="cicle" v-if="data_local.image !== ''">
+          <v-img class="image-cropper items-end" :src="data_local.image" />
+        </div>
+        <div class="cicle" v-else>
           <v-img
             class="image-cropper items-end"
-            :src="
-              data_local.image !== ''
-                ? data_local.image
-                : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU`
-            "
+            src="../../../assets/userKingdom/default_image_profile.svg"
           />
         </div>
       </v-col>
@@ -113,13 +112,17 @@
         >
           <v-row dense class="my-5">
             <!-- col avatar -->
-            <v-col cols="auto">
+            <v-col cols="auto" v-if="profile.parent.parentImage !== ''">
               <v-img
-                :src="
-                  profile.parent.parentImage !== ''
-                    ? profile.parent.parentImage
-                    : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEpKC_pI1Y_lmnOSDilaMdTDvWbDicz53xGA&usqp=CAU`
-                "
+                :src="profile.parent.parentImage"
+                alt="Card image"
+                class="rounded-full ml-3 image-cropper"
+                style="max-width: 50px; max-height: 50px"
+              />
+            </v-col>
+            <v-col cols="auto" v-else>
+              <v-img
+                src="../../../assets/userKingdom/default_image_profile.svg"
                 alt="Card image"
                 class="rounded-full ml-3 image-cropper"
                 style="max-width: 50px; max-height: 50px"
@@ -214,17 +217,24 @@
           <v-row dense class="my-5">
             <!-- col avatar -->
             <v-col cols="12" sm="2" class="webkit-center">
-              <img
-                :src="
-                  profile.student.studentImage !== ''
-                    ? profile.student.studentImage
-                    : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEpKC_pI1Y_lmnOSDilaMdTDvWbDicz53xGA&usqp=CAU`
-                "
-                alt="Card image"
-                class="rounded-full image-cropper ml-3"
-                style="max-width: 50px; max-height: 50px"
-              />
+              <div v-if="profile.student.studentImage !== ''">
+                <img
+                  :src="profile.student.studentImage"
+                  alt="Card image"
+                  class="rounded-full image-cropper ml-3"
+                  style="max-width: 50px; max-height: 50px"
+                />
+              </div>
+              <div v-else>
+                <img
+                  src="../../../assets/userKingdom/default_image_profile.svg"
+                  alt="Card image"
+                  class="rounded-full image-cropper ml-3"
+                  style="max-width: 50px; max-height: 50px"
+                />
+              </div>
             </v-col>
+
             <v-col cols="12" sm="10" class="d-flex align-center pa-3">
               <v-row dense>
                 <v-col cols="4">
@@ -335,12 +345,15 @@
             >
             </v-img>
             <div style="position: absolute">
-              <div>
+              <div v-if="getParentData.parentImage != ''">
+                <v-img :src="getParentData.parentImage" class="image-cropper">
+                </v-img>
+              </div>
+              <div v-else>
                 <v-img
-                  :src="
-                    getParentData.parentImage ? getParentData.parentImage : ''
-                  "
+                  src="../../../assets/userKingdom/default_image_profile.svg"
                   class="image-cropper"
+                  style="width: 190px; height: 190px"
                 >
                 </v-img>
               </div>
@@ -1155,8 +1168,8 @@ export default {
 .profileInCard {
   min-height: 160px;
   min-width: 160px;
-  max-height: 160px;
-  max-width: 160px;
+  max-height: 200px;
+  max-width: 200px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
