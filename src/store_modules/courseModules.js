@@ -1075,8 +1075,8 @@ const CourseModules = {
                     end_date: data.data.courseRegisterEndDate ? new Date(data.data.courseRegisterEndDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : "",
                   },
                   period: {
-                    start_time: data.data.coursePeriodEndDate ? moment(data.data.coursePeriodEndDate, "HH:mm") : null,
-                    end_time: data.data.coursePeriodEndDate ? moment(data.data.coursePeriodStartDate, "HH:mm") : null,
+                    start_time: data.data.coursePeriodStartDate ? moment(data.data.coursePeriodStartDate, "HH:mm") : null,
+                    end_time: data.data.coursePeriodEndDate ? moment(data.data.coursePeriodEndDate, "HH:mm") : null,
                   },
                 },
             )
@@ -1162,6 +1162,7 @@ const CourseModules = {
           "courseNameEn": course.course_name_en,
           "courseOpenDate": course.course_open_date,
           "coursePerTime": course.course_hours,
+          "startDate" : course.start_date,
           "courseStudentRecived": course.student_recived,
           "courseLocation": course.location,
           "courseDescription": course.detail,

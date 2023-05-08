@@ -136,7 +136,7 @@
             <v-row dense>
               <v-col align="center" @click="OpenAssessment(course)" class="cursor-pointer">ประเมินนักเรียน <v-icon color="#ff6b81">{{course.show_assessment ? 'mdi-chevron-up' : 'mdi-chevron-down'}}</v-icon></v-col>
               <v-col align="center" @click="OpenAssessmentPotential(course)" class="cursor-pointer">ประเมินศักยภาพ <v-icon color="#ff6b81">{{course.show_assessment_pantential ? 'mdi-chevron-up' : 'mdi-chevron-down'}}</v-icon></v-col>
-              <v-col align="center" @click="OpenSummary(course)" class="cursor-pointer">ประเมินภาพรวม <v-icon color="#ff6b81">{{course.show_summary ? 'mdi-chevron-up' : 'mdi-chevron-down'}}</v-icon></v-col>
+              <v-col align="center" @click="OpenSummary(course)" class="cursor-pointer">บันทึกสรุปการสอน <v-icon color="#ff6b81">{{course.show_summary ? 'mdi-chevron-up' : 'mdi-chevron-down'}}</v-icon></v-col>
             </v-row>
           </v-card-text>
           <v-expand-transition>
@@ -145,7 +145,7 @@
                 <v-card flat  v-if="student_check_in.filter(v => v.type === 'general' && (v.status == 'punctual' || v.status == 'late')).length === 0">
                   <v-card-text class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg">
                     <span class="text-lg font-bold"> 
-                      <v-icon color="#ff6b81">mdi-alert-outline</v-icon> ไม่พบข้อมูลการสอน
+                      <v-icon color="#ff6b81">mdi-alert-outline</v-icon> ไม่พบข้อมูลการประเมินนักเรียน
                     </span>              
                   </v-card-text>
                 </v-card>
@@ -181,7 +181,7 @@
                 <v-card flat  v-if="student_check_in.filter(v => v.potential).length === 0">
                   <v-card-text class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg">
                     <span class="text-lg font-bold"> 
-                      <v-icon color="#ff6b81">mdi-alert-outline</v-icon> ไม่พบข้อมูลการสอน
+                      <v-icon color="#ff6b81">mdi-alert-outline</v-icon> ไม่พบข้อมูลการประเมินศักยภาพ
                     </span>              
                   </v-card-text>
                 </v-card>
@@ -217,7 +217,7 @@
               <v-card flat v-if="!coach_check_in.summary &&  !coach_check_in.homework && !coach_check_in.attachment">
                 <v-card-text class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg">
                   <span class="text-lg font-bold"> 
-                    <v-icon color="#ff6b81">mdi-alert-outline</v-icon> ไม่พบข้อมูลการสอน
+                    <v-icon color="#ff6b81">mdi-alert-outline</v-icon> ไม่พบข้อมูลบันทึกสรุปการสอน
                   </span>              
                 </v-card-text>
               </v-card>
