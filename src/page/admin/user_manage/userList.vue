@@ -34,14 +34,14 @@
           <v-row class="d-flex align-center">
             <v-col>
               <v-text-field
-                v-model="search"
-                prepend-inner-icon="mdi-magnify"
-                label="ค้นหา"
-                single-line
-                hide-details
                 dense
                 outlined
+                label="ค้นหา"
+                color="pink"
+                hide-details
+                v-model="search"
                 @input="search_data(search)"
+                prepend-inner-icon="mdi-magnify"
               ></v-text-field>
             </v-col>
             <label-custom text="บทบาท"></label-custom>
@@ -60,34 +60,6 @@
                   color="pink"
                   item-color="pink"
                 >
-                  <!-- <template v-slot:no-data>
-                    <v-list-item>
-                      <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
-                    </v-list-item>
-                  </template>
-
-                  <template v-slot:item="{ item }">
-                    <v-list-item-content>
-                      <v-list-item-title>
-                        {{ item }}
-                        <span
-                          :class="
-                            // check array ว่ามี stringไหม
-                            sortBy.includes(item) ? 'font-bold' : ''
-                          "
-                        ></span>
-                      </v-list-item-title>
-                    </v-list-item-content>
-                    <v-list-item-action>
-                      <v-icon>
-                        {{
-                          sortBy.includes(item)
-                            ? "mdi-checkbox-marked"
-                            : "mdi-checkbox-blank-circle-outline"
-                        }}</v-icon
-                      >
-                    </v-list-item-action>
-                  </template> -->
                 </v-autocomplete>
               </template>
             </v-col>
@@ -397,8 +369,8 @@ export default {
             };
 
             let { data } = await axios.delete(
-              // `${process.env.VUE_APP_URL}/api/v1/usermanagement/${account_id}`,
-              `http://localhost:3000/api/v1/usermanagement/${account_id}`,
+              `${process.env.VUE_APP_URL}/api/v1/usermanagement/${account_id}`,
+              // `http://localhost:3000/api/v1/usermanagement/${account_id}`,
               config
             );
 

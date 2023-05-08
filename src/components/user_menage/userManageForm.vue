@@ -555,40 +555,42 @@
                 <!-- ----------------------------------------------- -->
 
                 <!-- TABLE COURSE PARENT -->
-                <headerCard
-                  class="ml-6 mt-8"
-                  :icon="'mdi-school-outline'"
-                  :icon_color="'#FF6B81'"
-                  :title="titleCourseDetail"
-                ></headerCard>
-                <v-divider class="mx-10"></v-divider>
-                <div class="my-5 mx-10">
-                  <v-data-table
-                    :headers="headersTabs"
-                    @page-count="pageCount = $event"
-                    class="elevation-1 header-table"
-                    :items="student_schedule"
-                  >
-                    <template v-slot:[`item.actions`]="{ item }">
-                      <v-icon small color="#FF6B81"> mdi-eye-outline </v-icon>
-                      <v-icon
-                        small
-                        class="ml-5"
-                        color="#FF6B81"
-                        @click="editItem(item)"
-                      >
-                        mdi-pencil
-                      </v-icon>
-                      <v-icon
-                        class="ml-5"
-                        small
-                        color="#FF6B81"
-                        @click="deleteItem(item)"
-                      >
-                        mdi-delete
-                      </v-icon>
-                    </template>
-                  </v-data-table>
+                <div v-if="item.roleId === 'R_4' || item.roleId === 'R_5'">
+                  <headerCard
+                    class="ml-6 mt-8"
+                    :icon="'mdi-school-outline'"
+                    :icon_color="'#FF6B81'"
+                    :title="titleCourseDetail"
+                  ></headerCard>
+                  <v-divider class="mx-10"></v-divider>
+                  <div class="my-5 mx-10">
+                    <v-data-table
+                      :headers="headersTabs"
+                      @page-count="pageCount = $event"
+                      class="elevation-1 header-table"
+                      :items="student_schedule"
+                    >
+                      <template v-slot:[`item.actions`]="{ item }">
+                        <v-icon small color="#FF6B81"> mdi-eye-outline </v-icon>
+                        <v-icon
+                          small
+                          class="ml-5"
+                          color="#FF6B81"
+                          @click="editItem(item)"
+                        >
+                          mdi-pencil
+                        </v-icon>
+                        <v-icon
+                          class="ml-5"
+                          small
+                          color="#FF6B81"
+                          @click="deleteItem(item)"
+                        >
+                          mdi-delete
+                        </v-icon>
+                      </template>
+                    </v-data-table>
+                  </div>
                 </div>
               </v-col>
             </v-row>
@@ -1566,13 +1568,13 @@ export default {
               }).then(async (result) => {
                 if (result.isConfirmed) {
                   // this.$router.push({ name: "UserList" });
-                  // this.$router.push({
-                  //   name: "UserDetail",
-                  //   params: {
-                  //     action: "view",
-                  //     account_id: this.$route.params.account_id,
-                  //   },
-                  // });
+                  this.$router.push({
+                    name: "UserDetail",
+                    params: {
+                      action: "view",
+                      account_id: this.$route.params.account_id,
+                    },
+                  });
                 }
               });
               this.GetShowById(this.$route.params.account_id);

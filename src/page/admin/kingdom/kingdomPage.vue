@@ -10,75 +10,75 @@
             <v-card-text
               class="border-dashed border-2 border-blue-600 rounded-lg"
             >
-                <v-img
-                  v-if="!enabled"
-                  style="
-                    max-height: 105px;
-                    max-width: 122px;
-                    margin-left: auto;
-                    margin-right: auto;
-                  "
-                  :src="showImg"
-                >
-                </v-img>
+              <v-img
+                v-if="!enabled"
+                style="
+                  max-height: 105px;
+                  max-width: 122px;
+                  margin-left: auto;
+                  margin-right: auto;
+                "
+                :src="showImg"
+              >
+              </v-img>
 
-                <div v-else>
-                  <v-row v-if="preview_url">
-                    <v-col class="flex align-center justify-center">
-                      <v-img
-                        :src="preview_url"
-                        style="max-width: 150px"
-                        class="text-right"
-                      >
-                        <v-btn icon>
-                          <v-icon color="#ff6b81" @click="closeImage()"
-                            >mdi-close-circle</v-icon
-                          >
-                        </v-btn>
-                      </v-img>
-                    </v-col>
+              <div v-else>
+                <v-row v-if="preview_url">
+                  <v-col class="flex align-center justify-center">
+                    <v-img
+                      :src="preview_url"
+                      style="max-width: 150px"
+                      class="text-right"
+                    >
+                      <v-btn icon>
+                        <v-icon color="#ff6b81" @click="closeImage()"
+                          >mdi-close-circle</v-icon
+                        >
+                      </v-btn>
+                    </v-img>
+                  </v-col>
+                  <input
+                    ref="fileInput"
+                    type="file"
+                    @change="uploadFile"
+                    style="display: none"
+                  />
+                </v-row>
+
+                <v-row v-if="!preview_url">
+                  <v-col cols="12" class="flex align-center justify-center">
+                    <v-img
+                      src="../../../assets/course/upload_file.png"
+                      max-height="105"
+                      max-width="122"
+                    ></v-img>
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    class="flex align-center justify-center text-h5"
+                  >
+                    อัพโหลดภาพหน้าปกคอร์สเรียน
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    class="flex align-center justify-center text-caption"
+                  >
+                    ( ขนาดไฟล์งานไม่เกิน 1 Mb ต้องเป็นไฟล์ JPG, PNG )
+                  </v-col>
+                  <v-col cols="12" class="flex align-center justify-center">
+                    <v-btn outlined color="blue" @click="openFileSelector"
+                      >เลือกไฟล์</v-btn
+                    >
                     <input
                       ref="fileInput"
                       type="file"
+                      accept="image/png, image/jpeg"
                       @change="uploadFile"
                       style="display: none"
                     />
-                  </v-row>
-
-                  <v-row v-if="!preview_url">
-                    <v-col cols="12" class="flex align-center justify-center">
-                      <v-img
-                        src="../../../assets/course/upload_file.png"
-                        max-height="105"
-                        max-width="122"
-                      ></v-img>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      class="flex align-center justify-center text-h5"
-                    >
-                      อัพโหลดภาพหน้าปกคอร์สเรียน
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      class="flex align-center justify-center text-caption"
-                    >
-                      ( ขนาดไฟล์งานไม่เกิน 1 Mb ต้องเป็นไฟล์ JPG, PNG )
-                    </v-col>
-                    <v-col cols="12" class="flex align-center justify-center">
-                      <v-btn outlined color="blue" @click="openFileSelector"
-                        >เลือกไฟล์</v-btn
-                      >
-                      <input
-                        ref="fileInput"
-                        type="file"
-                        accept="image/png, image/jpeg"
-                        @change="uploadFile"
-                        style="display: none"
-                      />
-                    </v-col>
-                  </v-row>
-                </div>
+                  </v-col>
+                </v-row>
+              </div>
             </v-card-text>
           </v-card>
         </v-col>
@@ -93,25 +93,24 @@
         <v-col cols="12" sm="6">
           <label-custom text="ชื่ออาณาจักร(ภาษาไทย)"></label-custom>
 
-            <v-text-field
-              dense
-              placeholder="กรอกชื่ออาณาจักร"
-              outlined
-              v-model="kingdom.kingdom_name_th"
-              @keypress="validate($event, 'th')"
-            ></v-text-field>
+          <v-text-field
+            dense
+            placeholder="กรอกชื่ออาณาจักร"
+            outlined
+            v-model="kingdom.kingdom_name_th"
+            @keypress="validate($event, 'th')"
+          ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
           <label-custom text="ชื่ออาณาจักร(ภาษาอังกฤษ)"></label-custom>
 
-            <v-text-field
-              dense
-              placeholder="กรอกชื่ออาณาจักร"
-              outlined
-              v-model="kingdom.kingdom_name_eng"
-              @keypress="validate($event, 'en')"
-            ></v-text-field>
-         
+          <v-text-field
+            dense
+            placeholder="กรอกชื่ออาณาจักร"
+            outlined
+            v-model="kingdom.kingdom_name_eng"
+            @keypress="validate($event, 'en')"
+          ></v-text-field>
         </v-col>
       </v-row>
 
@@ -119,12 +118,12 @@
         <v-col cols="12" sm="6">
           <label-custom text="จัดสอนโดย"></label-custom>
 
-            <v-text-field
-              dense
-              placeholder="ระบุสถาบันผู้จัดสอน เช่น ศูนย์ดนตรี Manila Tamarind"
-              outlined
-              v-model="kingdom.learning_method"
-            ></v-text-field>
+          <v-text-field
+            dense
+            placeholder="ระบุสถาบันผู้จัดสอน เช่น ศูนย์ดนตรี Manila Tamarind"
+            outlined
+            v-model="kingdom.learning_method"
+          ></v-text-field>
         </v-col>
       </v-row>
 
@@ -132,55 +131,53 @@
         <v-col cols="12">
           <label-custom text="รายละเอียด"></label-custom>
 
-            <v-textarea
-              dense
-              class="form2"
-              placeholder="กรอกรายละเอียด..."
-              auto-grow
-              outlined
-              v-model="kingdom.detail"
-            ></v-textarea>
-         
+          <v-textarea
+            dense
+            class="form2"
+            placeholder="กรอกรายละเอียด..."
+            auto-grow
+            outlined
+            v-model="kingdom.detail"
+          ></v-textarea>
         </v-col>
       </v-row>
 
-   
-        <v-row dense v-if="enabled">
-          <v-col align="right" sm="" cols="12">
-            <v-btn
-              outlined
-              :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
-              color="#ff6b81"
-              @click="cancleText()"
-            >
-              ยกเลิก
-            </v-btn>
-          </v-col>
-
-          <v-col sm="auto" cols="12">
-            <v-btn
-              class="white--text mb-5"
-              depressed
-              :disabled="!isInputValid"
-              :color="isInputValid ? '#ff6b81' : ''"
-              :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
-              @click="openDialog()"
-              >บันทึก
-            </v-btn>
-          </v-col>
-        </v-row>
-        <v-col cols="12" sm="12" v-if="!enabled" align="right">
+      <v-row dense v-if="enabled">
+        <v-col align="right" sm="" cols="12">
           <v-btn
-            class="white--text my-5 w-full"
+            outlined
+            :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
+            color="#ff6b81"
+            @click="cancleText()"
+          >
+            ยกเลิก
+          </v-btn>
+        </v-col>
+
+        <v-col sm="auto" cols="12">
+          <v-btn
+            class="white--text mb-5"
             depressed
             :disabled="!isInputValid"
             :color="isInputValid ? '#ff6b81' : ''"
             :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
-            @click="showBtn()"
-          >
-            <span class="mdi mdi-pencil-outline">แก้ไข</span>
+            @click="openDialog()"
+            >บันทึก
           </v-btn>
         </v-col>
+      </v-row>
+      <v-col cols="12" sm="12" v-if="!enabled" align="right">
+        <v-btn
+          class="white--text my-5 w-full"
+          depressed
+          :disabled="!isInputValid"
+          :color="isInputValid ? '#ff6b81' : ''"
+          :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
+          @click="showBtn()"
+        >
+          <span class="mdi mdi-pencil-outline">แก้ไข</span>
+        </v-btn>
+      </v-col>
       <v-dialog class="pa-2" width="50vw" v-model="dialog_show" persistent>
         <v-card>
           <v-card-title>
@@ -194,10 +191,10 @@
           </v-card-title>
           <dialogCard text="สร้างอาณาจักรเรียบร้อย"></dialogCard>
           <div class="my-5 text-center">
-          <v-btn color="#ff6b81"  @click="goToManageKingdomPage()" >
-            ตกลง
-        </v-btn>
-      </div>
+            <v-btn color="#ff6b81" @click="goToManageKingdomPage()">
+              ตกลง
+            </v-btn>
+          </div>
         </v-card>
       </v-dialog>
     </v-container>
@@ -211,7 +208,7 @@ import dialogCard from "@/components/dialog/dialogCard.vue";
 import { inputValidation, CheckFileSize } from "@/functions/functions";
 import Swal from "sweetalert2";
 import axios from "axios";
-import VueCookie from "vue-cookie"
+import VueCookie from "vue-cookie";
 export default {
   name: "kingdomPage",
   components: {
@@ -270,7 +267,7 @@ export default {
       this.$router.push({ name: "Finance" });
     },
     goToManageKingdomPage() {
-      this.$router.push({ name: "ManageKingdom" })
+      this.$router.push({ name: "ManageKingdom" });
     },
     cancleText() {
       this.kingdom.kingdom_name_th = "";
@@ -290,27 +287,30 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-
             let config = {
-                headers:{
-                    "Access-Control-Allow-Origin" : "*",
-                    "Content-type": "Application/json",
-                    'Authorization' : `Bearer ${VueCookie.get("token")}`
-                }
-            }
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-type": "Application/json",
+                Authorization: `Bearer ${VueCookie.get("token")}`,
+              },
+            };
             console.log("preview_url", this.file);
             const payload = {
-              category_name_th:this.kingdom.kingdom_name_th,
-              category_name_en:this.kingdom.kingdom_name_eng,
+              category_name_th: this.kingdom.kingdom_name_th,
+              category_name_en: this.kingdom.kingdom_name_eng,
               category_description: this.kingdom.detail,
               taught_by: this.kingdom.learning_method,
-            }
+            };
 
             let bodyFormData = new FormData();
             bodyFormData.append("img_url", this.file);
             bodyFormData.append("payload", JSON.stringify(payload));
             // let localhost = "http://localhost:3000"
-            let { data } = await axios.post( `${process.env.VUE_APP_URL}/api/v1/category`, bodyFormData, config);
+            let { data } = await axios.post(
+              `${process.env.VUE_APP_URL}/api/v1/category`,
+              bodyFormData,
+              config
+            );
             if (data.statusCode === 201) {
               this.showImg = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.categoryImg}`;
               this.dialog_show = true;
@@ -335,7 +335,7 @@ export default {
     uploadFile() {
       this.file = this.$refs.fileInput.files[0];
       if (!this.file) return;
-      if(CheckFileSize(this.file) === true){
+      if (CheckFileSize(this.file) === true) {
         const reader = new FileReader();
         reader.onload = (e) => {
           this.preview_url = e.target.result;
