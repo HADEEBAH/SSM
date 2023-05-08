@@ -283,7 +283,6 @@ const coachModules = {
       }
     },
     async UpdateCheckInStudent(context, {students}){
-      
       try{
         let config = {
           headers: {
