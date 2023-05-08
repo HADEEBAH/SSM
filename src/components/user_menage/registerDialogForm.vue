@@ -47,7 +47,7 @@
           <v-col>
             <!-- <label>ผู้ใช้งาน/OneID(ภาษาอังกฤษ)</label> -->
             <label>Username</label>
-            <v-text-field dense ref="username_rig" :rules="rules.username" required v-model="user_one_id.username" placeholder="ระบุชื่อผู้ใช้งาน" @keypress="Validation($event,'en')" @change="changeUserOneId(user_one_id)" outlined></v-text-field>
+            <v-text-field dense ref="username_rig" :rules="rules.username_rig" required v-model="user_one_id.username" placeholder="ระบุชื่อผู้ใช้งาน" @keypress="Validation($event,'en')" @change="changeUserOneId(user_one_id)" outlined></v-text-field>
           </v-col>
         </v-row>
         <v-row dense>
@@ -57,7 +57,7 @@
               dense
               ref="password_rig" 
               :type="show_password ? 'text' : 'password' "
-              :rules="rules.password" 
+              :rules="rules.password_rig" 
               required 
               v-model="user_one_id.password" 
               :append-icon="show_password ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"
