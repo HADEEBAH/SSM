@@ -29,6 +29,7 @@ const CourseModules = {
       catification: "",
       price_course: 0,
       student_recived: 0,
+      artwork_file : [],
       coachs: [
         {
           coach_id: "",
@@ -174,7 +175,7 @@ const CourseModules = {
       state.course_types = payload
     },
     ResetCourse(state) {
-      state.course_data = {
+      state.course_data =  {
         course_id: "",
         course_type_id: "CT_1",
         course_name_th: "",
@@ -183,6 +184,7 @@ const CourseModules = {
         category_id: "",
         kingdom_name: "",
         course_open_date: "",
+        course_open_date_str: "",
         menu_course_open_date: false,
         course_hours: 1,
         location: "",
@@ -191,20 +193,12 @@ const CourseModules = {
         catification: "",
         price_course: 0,
         student_recived: 0,
+        artwork_file : [],
         coachs: [
           {
             coach_id: "",
             coach_name: "",
             teach_days_used: [],
-            days: [
-              { label: "วันอาทิตย์", value: 0 },
-              { label: "วันจันทร์", value: 1 },
-              { label: "วันอังคาร", value: 2 },
-              { label: "วันพุท", value: 3 },
-              { label: "วันพฤหัสบดี", value: 4 },
-              { label: "วันศุกร์", value: 5 },
-              { label: "วันเสาร์", value: 6 },
-            ],
             teach_day_data: [
               {
                 class_open: true,
@@ -982,7 +976,7 @@ const CourseModules = {
       try {
         // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
-        // console.log(data.data)
+        console.log("GetCourse => ",data.data)
         if (data.statusCode === 200) {
           let payload = {
             course_img_privilege : data.data.courseImgPrivilege ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.courseImgPrivilege}` : null,
@@ -1131,7 +1125,7 @@ const CourseModules = {
             }
           }
           if(payload.course_type_id === "CT_1"){
-            // console.log("payload :",payload)
+            console.log("payload :",payload)
             // let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coursestudent?courseId=${course_id}&cpoId=${package_data.coursePackageOptionId}`,config)
             // console.log("GetCourseStudent => ",data)
             await context.commit("SetCourseData", payload)
