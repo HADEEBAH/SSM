@@ -62,7 +62,7 @@
            
           </v-expansion-panel-content>
         </v-expansion-panel>
-        <v-expansion-panel>
+        <v-expansion-panel  v-if="course_data.course_type_id === 'CT_1'">
           <v-expansion-panel-header class="px-0 font-bold">
             Music performance
             <template v-slot:actions>

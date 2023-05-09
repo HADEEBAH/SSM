@@ -271,6 +271,8 @@
                       parent.username > 3 ? checkUsername(parent.username) : ''
                     "
                     dense
+                    :rules="usernameRules"
+                    @keypress="Validation($event,'en')"
                     outlined
                     v-model="parent.username"
                     placeholder="Username"
@@ -295,6 +297,8 @@
                     :hide-details="!parent.account_id"
                     dense
                     outlined
+                    :rules="usernameRules"
+                    @keypress="Validation($event,'en')"
                     v-model="parent.username"
                     @change="
                       parent.username > 3 ? checkUsername(parent.username) : ''
@@ -403,6 +407,8 @@
                   :hide-details="!student.account_id"
                   dense
                   outlined
+                  :rules="usernameRules"
+                  @keypress="Validation($event,'en')"
                   v-model="student.username"
                   @change="
                     student.username.length > 3
@@ -637,6 +643,7 @@
                 dense
                 outlined
                 v-model="parent.username"
+                @keypress="Validation($event,'en')"
                 @change="
                   parent.username.length > 3
                     ? checkUsername(parent.username)
@@ -1027,12 +1034,15 @@ export default {
     },
 
     usernameRules() {
-      const specialCharsRegex = /[&*/#@!]/g;
+      const specialCharsRegex = /[&*/#@! ]/g;
       const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
       return [
         (val) =>
           (val || "").length > 5 ||
           "Username must be at least 6 characters long",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
         (val) =>
           !specialCharsRegex.test(val) ||
           "Username cannot contain special characters",

@@ -131,9 +131,9 @@ const coachModules = {
               Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
+        let count = 0
+        console.log(students.length)
         for await (const student of students) {
-          console.log("student + >",student)
-          setTimeout(async ()=>{
             let payload = {
               status : student.check_in_status, // punctual, late,  leave, emergency leave, absent,
               compensation_date : student.compensation_date,
@@ -153,8 +153,8 @@ const coachModules = {
             if(!student.assessment.assessmentStudentsId){
               console.log("post",payload)
               payloadData.append("payload",JSON.stringify(payload))
-              let localhost = "http://localhost:3000"
-              let {data} = await axios.post(`${localhost}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`,payloadData,config)
+              // let localhost = "http://localhost:3000"
+              let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`,payloadData,config)
               if(data.statusCode == 201){
                 console.log("post",data)
               }else{
@@ -163,24 +163,26 @@ const coachModules = {
             }else{
               console.log("patch",payload)
               payloadData.append("payload",JSON.stringify(payload))
-              let localhost = "http://localhost:3000"
-              let {data} = await axios.patch(`${localhost}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`,payloadData,config)
+              // let localhost = "http://localhost:3000"
+              let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`,payloadData,config)
               if(data.statusCode == 200){
                 console.log("patch",data)
               }else{
                 throw {error : data}
               }
             }
-          },1000)
+            count = count+1
         }
-        await Swal.fire({
-          icon: "success",
-          title: "บันทึกสำเร็จ",
-          showDenyButton: false,
-          showCancelButton: false,
-          cancelButtonText :"ยกเลิก",
-          confirmButtonText: "ตกลง",
-        })
+        if(count === students.length){
+          await Swal.fire({
+            icon: "success",
+            title: "บันทึกสำเร็จ",
+            showDenyButton: false,
+            showCancelButton: false,
+            cancelButtonText :"ยกเลิก",
+            confirmButtonText: "ตกลง",
+          })
+        }
       }catch(error){
         console.log(error)
       }
@@ -199,8 +201,8 @@ const coachModules = {
           homework :check_in_coach_data.homework,
           files :null
         }
-        let localhost = "http://localhost:3000"
-        let {data} = await axios.patch(`${localhost}/api/v1/coachmanagement/summary/${check_in_coach_id}`, payload, config)
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/summary/${check_in_coach_id}`, payload, config)
         if(data.statusCode === 200){
           Swal.fire({
             icon: "success",
@@ -239,8 +241,8 @@ const coachModules = {
           },
         };
         let user_detail =  JSON.parse(localStorage.getItem("userDetail"));
-        let localhost ="http://localhost:3000"
-        let {data} = await axios.get(`${localhost}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}/date/${date}`,config)
+        // let localhost ="http://localhost:3000"
+        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}/date/${date}`,config)
         if(data.statusCode === 200){
           console.log( data.data)
           data.data.forEach((check_in)=>{
@@ -283,7 +285,6 @@ const coachModules = {
       }
     },
     async UpdateCheckInStudent(context, {students}){
-      
       try{
         let config = {
           headers: {
@@ -346,8 +347,8 @@ const coachModules = {
             },
         };
         // let user_detail = JSON.parse(localStorage.getItem("userDetail"));
-        let localhost ="http://localhost:3000"
-        let {data} = await axios.get(`${localhost}/api/v1/coachmanagement/course/${course_id}/date/${date}`,config)
+        // let localhost ="http://localhost:3000"
+        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/${course_id}/date/${date}`,config)
         // console.log(data)
         if(data.statusCode === 200){
           data.data.forEach((student, index) => {
@@ -592,8 +593,8 @@ const coachModules = {
             payloadData.append(`img_url`, file);
           }
         }
-        let localhost = "http://localhost:3000"
-        let {data} = await axios.patch(`${localhost}/api/v1/coachmanagement/summary/${checkInCoach.checkInCoachId}`,payloadData , config)
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/summary/${checkInCoach.checkInCoachId}`,payloadData , config)
         console.log(data)
         if(data.statusCode == 200){
           await Swal.fire({
