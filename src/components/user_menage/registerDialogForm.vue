@@ -26,7 +26,7 @@
             <v-text-field
               dense
               ref="firstname_th"
-              :rules="rules.name_th"
+              :rules="firstNameThRules"
               required
               v-model="user_one_id.firstname_th"
               placeholder="ระบุชื่อ(ภาษาไทย)"
@@ -40,7 +40,7 @@
             <v-text-field
               dense
               ref="lastname_th"
-              :rules="rules.name_th"
+              :rules="lastNameThRules"
               required
               v-model="user_one_id.lastname_th"
               placeholder="ระบุนามสกุล(ภาษาไทย)"
@@ -56,7 +56,7 @@
             <v-text-field
               dense
               ref="firstname_en"
-              :rules="rules.name_en"
+              :rules="firstNameEhRules"
               required
               v-model="user_one_id.firstname_en"
               placeholder="ระบุชื่อ(ภาษาอังกฤษ)"
@@ -70,7 +70,7 @@
             <v-text-field
               dense
               ref="lastname_en"
-              :rules="rules.name_en"
+              :rules="lastNameEnRules"
               required
               v-model="user_one_id.lastname_en"
               placeholder="ระบุนามสกุล(ภาษาอังกฤษ)"
@@ -106,7 +106,7 @@
               autocomplete="off-autofill"
               dense
               ref="username_rig"
-              :rules="rules.username_rig"
+              :rules="usernameRules"
               required
               v-model="user_one_id.username"
               placeholder="ระบุชื่อผู้ใช้งาน"
@@ -123,8 +123,9 @@
               dense
               autocomplete="off-autofill"
               ref="password_rig"
+              @keypress="Validation($event, 'en')"
               :type="show_password ? 'text' : 'password'"
-              :rules="rules.password_rig"
+              :rules="passwordRules"
               required
               v-model="user_one_id.password"
               :append-icon="
@@ -221,18 +222,7 @@ export default {
     show_password: false,
     show_confirm_password: false,
     phone_number: "",
-
     rules: {
-      name_th: [
-        (val) =>
-          (val || "").length > 2 ||
-          "โปรดระบุชื่อ (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
-      ],
-      name_en: [
-        (val) =>
-          (val || "").length > 2 ||
-          "โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
-      ],
       phone_number: [
         (val) =>
           ((val || "").length > 0 && val.length === 12) ||
@@ -292,6 +282,99 @@ export default {
       user_one_id: "RegisterModules/getUserOneId",
       course_data: "CourseModules/getCourseData",
     }),
+    firstNameThRules() {
+      const specialCharsRegex = /[&*/#@! 0-9๐-๙]/g;
+      const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
+      return [
+        (val) =>
+          (val || "").length > 5 ||
+          "โปรดระบุชื่อ (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุชื่อ (ภาษาไทย) ความยาวไม่เกิน 20 ตัวอักษร",
+        (val) =>
+          !specialCharsRegex.test(val) ||
+          "กรุณากรอกชื่อภาษาไทย",
+        (val) => !emojiRegex.test(val) || "กรุณากรอกชื่อภาษาไทย",
+      ];
+    },
+    firstNameEhRules() {
+      const specialCharsRegex = /[&*/#@! 0-9๐-๙]/g;
+      const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
+      return [
+      (val) =>
+          (val || "").length > 5 ||
+          "โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
+        (val) =>
+          !specialCharsRegex.test(val) ||
+          "กรุณากรอกชื่อภาษาอังกฤษ",
+        (val) => !emojiRegex.test(val) || "กรุณากรอกชื่อภาษาอังกฤษ",
+      ];
+    },
+    lastNameThRules() {
+      const specialCharsRegex = /[&*/#@! 0-9๐-๙]/g;
+      const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
+      return [
+      (val) =>
+          (val || "").length > 5 ||
+          "โปรดระบุนามสกุล (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุนามสกุล (ภาษาไทย) ความยาวไม่เกิน 20 ตัวอักษร",
+        (val) =>
+          !specialCharsRegex.test(val) ||
+          "กรุณากรอกนามสกุลภาษาไทย",
+        (val) => !emojiRegex.test(val) || "กรุณากรอกสกุลภาษาไทย",
+      ];
+    },
+    lastNameEnRules() {
+      const specialCharsRegex = /[&*/#@! 0-9๐-๙]/g;
+      const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
+      return [
+      (val) =>
+          (val || "").length > 5 ||
+          "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
+        (val) =>
+          !specialCharsRegex.test(val) ||
+          "กรุณากรอกนามสกุลภาษาอังกฤษ",
+        (val) => !emojiRegex.test(val) || "กรุณากรอกสกุลภาษาอังกฤษ",
+      ];
+    },
+    usernameRules() {
+      const specialCharsRegex = /[&*/#@! ]/g;
+      const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
+      return [
+        (val) =>
+          (val || "").length > 5 ||
+          "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
+        (val) =>
+          !specialCharsRegex.test(val) ||
+          "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+        (val) => !emojiRegex.test(val) || "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
+      ];
+    },passwordRules() {
+      const specialCharsRegex = /[ ]/g;
+      return [
+        (val) =>
+          (val || "").length > 7 ||
+          "โปรดระบุรหัสผ่านความยาวไม่น้อยกว่า 8 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
+        (val) =>
+          !specialCharsRegex.test(val) ||
+          "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+      ];
+    },
   },
   watch: {},
 };

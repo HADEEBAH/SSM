@@ -134,27 +134,33 @@ export default {
     },
 
     usernameRules() {
-      const specialCharsRegex = /[&*/#@!]/g;
+      const specialCharsRegex = /[&*/#@! ]/g;
       const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
       return [
         (val) =>
           (val || "").length > 5 ||
-          "Username must be at least 6 characters long",
+          "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
         (val) =>
           !specialCharsRegex.test(val) ||
-          "Username cannot contain special characters",
-        (val) => !emojiRegex.test(val) || "Username cannot contain emojis",
+          "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+        (val) => !emojiRegex.test(val) || "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
       ];
     },
     passwordRules() {
-      const specialCharsRegex = /[&*/#@!]/g;
+      // const specialCharsRegex = /[ ]/g;
       return [
         (val) =>
           (val || "").length > 7 ||
-          "Password must be at least 8 characters long",
+          "โปรดระบุรหัสผ่านความยาวไม่น้อยกว่า 8 ตัวอักษร",
         (val) =>
-          !specialCharsRegex.test(val) ||
-          "Password cannot contain special characters",
+          (val || "").length < 20 ||
+          "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
+        // (val) =>
+        //   !specialCharsRegex.test(val) ||
+        // "Password cannot contain special characters",
       ];
     },
   },
