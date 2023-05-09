@@ -21,7 +21,6 @@
     <v-card class="rounded-xl">
       <v-card
         class="mx-auto block rounded-xl drop-shadow-lg mt-3 ml-3 mr-3 banner-container"
-        max-width=""
       >
         <template>
           <v-carousel cycle hide-delimiter-background>
@@ -59,8 +58,7 @@
             />
           </v-col>
         </v-row>
-        <pre>{{ search_kingdom }}</pre>
-        <pre>{{ categorys }}</pre>
+        <!-- <pre>{{ categorys }}</pre> -->
         <v-row>
           <v-col
             cols="6"
@@ -72,20 +70,19 @@
               : categorys"
             :key="item.id"
           >
-            <v-card
-              class="h-full block drop-shadow-lg"
-              @click="selectedCategory(item)"
-            >
+            <v-card class="h-full block drop-shadow-lg">
               <!-- :src="item.categoryImg && item.categoryImg !== null ? showImg(item.categoryImg) : defaultImageUrl" -->
 
               <v-img
                 v-if="item.categoryImg && item.categoryImg !== null"
+                @click="selectedCategory(item)"
                 contain
                 height="180"
                 :src="showImg(item.categoryImg)"
               ></v-img>
               <v-img
                 v-else
+                @click="selectedCategory(item)"
                 contain
                 src="../../../assets/userKingdom/category_img.svg"
                 height="180"
@@ -96,20 +93,23 @@
               >
                 {{ item.categoryNameTh }}
               </v-card-title>
-              <p>
-                This is a short text. <a href="#" id="read-more">Read More</a>
-              </p>
-              <div id="long-text" style="display: none">
-                <p>This is the longer text.</p>
-              </div>
+
               <v-card-subtitle>
                 <div class="my-5">
                   โดย {{ item.taughtBy }}
                   <!-- <span class="text-red-500 cursor-pointer">อ่านต่อ...</span> -->
                 </div>
-                <div>
+                <!-- <div>
                   {{ item.categoryDescription }}
-                </div>
+                </div> -->
+
+                <!-- <div v-for="(item, index) in items" :key="index">
+  <h2>{{ item.title }}</h2>
+  <p>{{ showFullContent[index] ? item.content : item.content.slice(0, 100) }}</p>
+  <button @click="showFullContent[index] = !showFullContent[index]">
+    {{ showFullContent[index] ? 'Read less' : 'Read more' }}
+  </button>
+</div> -->
               </v-card-subtitle>
             </v-card>
           </v-col>
@@ -173,6 +173,7 @@ export default {
     search_kingdom: "",
     data_search_kingdom: [],
     item_data: "",
+    showingFullText: false,
   }),
   created() {
     this.dataStorage = JSON.parse(localStorage.getItem("userDetail"));
@@ -226,6 +227,15 @@ export default {
         }
       });
     },
+    shortenedText(detail) {
+      console.log("detail", detail);
+      // for (const item_data of this.categorys) {
+      //   console.log("item_data", item_data);
+      //   console.log("category", item_data.categoryDescription);
+      // }
+
+      return this.detail.slice(0, 10);
+    },
   },
 
   computed: {
@@ -253,6 +263,17 @@ export default {
       const { sm } = this.$vuetify.breakpoint;
       return !!sm;
     },
+
+    // categoryDescription() {
+    //   for (const iterator of this.categorys) {
+    //     console.log("object", iterator);
+    //   }
+    //   if (this.showingFullText) {
+    //     return this.body;
+    //   }
+
+    //   return `${this.body.slice(0, 20).trim()}...`;
+    // },
   },
 };
 </script>
@@ -301,7 +322,7 @@ export default {
 
 .banner-container {
   position: relative;
-  width: 100%;
+  width: auto;
   height: 500px;
   overflow: hidden;
 }
