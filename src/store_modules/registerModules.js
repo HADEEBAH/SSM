@@ -187,7 +187,7 @@ const RegisterModules = {
                 } else {
                     Swal.fire({
                         icon: 'error',
-                        title: `เกิคข้อผิดพลาด`,
+                        title: `เกิดข้อผิดพลาด`,
                     })
                 }
             }
@@ -196,8 +196,8 @@ const RegisterModules = {
             context.commit("SetIsLoading", true)
             try {
                 let phone_number = context.state.user_one_id.phone_number.replaceAll("-", "")
-                let localhost = "http://localhost:3000"
-                let { data } = await axios.post(`${localhost}/api/v1/register`, {
+                // let localhost = "http://localhost:3000"
+                let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/register`, {
                     "accountTitleTh": "",
                     "firstNameTh": context.state.user_one_id.firstname_th,
                     "lastNameTh": context.state.user_one_id.lastname_th,
@@ -285,7 +285,7 @@ const RegisterModules = {
                 } else {
                     Swal.fire({
                         icon: 'error',
-                        title: `เกิคข้อผิดพลาด`,
+                        title: `เกิดข้อผิดพลาด`,
                     })
                 }
             }

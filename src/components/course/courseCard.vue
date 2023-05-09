@@ -234,7 +234,7 @@
           </v-row>
           <v-row dense>
             <v-col cols="12">
-              <label-custom text="catification"></label-custom>
+              <label-custom text="certification"></label-custom>
               <v-textarea
                 v-model="course_data.catification"
                 :disabled="disable"
@@ -651,7 +651,7 @@ export default {
       { label: "วันอาทิตย์", value: 0 },
       { label: "วันจันทร์", value: 1 },
       { label: "วันอังคาร", value:2 },
-      { label: "วันพุทธ", value: 3 },
+      { label: "วันพุธ", value: 3 },
       { label: "วันพฤหัสบดี", value:4 },
       { label: "วันศุกร์", value: 5 },
       { label: "วันเสาร์", value: 6 },
@@ -793,7 +793,6 @@ export default {
     openFileSelector() {
       this.$refs.fileInput.click();
     },
-
     uploadFile() {
       this.file = this.$refs.fileInput.files[0];
       if (!this.file) return;
