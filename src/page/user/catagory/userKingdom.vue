@@ -59,7 +59,8 @@
             />
           </v-col>
         </v-row>
-
+        <pre>{{ search_kingdom }}</pre>
+        <pre>{{ categorys }}</pre>
         <v-row>
           <v-col
             cols="6"
@@ -95,11 +96,19 @@
               >
                 {{ item.categoryNameTh }}
               </v-card-title>
-
+              <p>
+                This is a short text. <a href="#" id="read-more">Read More</a>
+              </p>
+              <div id="long-text" style="display: none">
+                <p>This is the longer text.</p>
+              </div>
               <v-card-subtitle>
+                <div class="my-5">
+                  โดย {{ item.taughtBy }}
+                  <!-- <span class="text-red-500 cursor-pointer">อ่านต่อ...</span> -->
+                </div>
                 <div>
-                  {{ item.categoryNameEng }}
-                  <span class="text-red-500 cursor-pointer">อ่านต่อ...</span>
+                  {{ item.categoryDescription }}
                 </div>
               </v-card-subtitle>
             </v-card>
@@ -177,6 +186,9 @@ export default {
 
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "อาณาจักร");
+    document.getElementById("read-more").addEventListener("click", function () {
+      document.getElementById("long-text").style.display = "block";
+    });
   },
 
   methods: {
