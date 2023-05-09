@@ -1,7 +1,7 @@
 
 <!-- snacbar สำหรับ popup -->
 <template>
-  <div :style=" MobileSize? 'width: 90%; ':'width: 50%;' ">
+  <div :style="MobileSize ? 'width: 90%; ' : 'width: 50%;'">
     <v-form ref="form">
       <v-card
         :class="
@@ -25,11 +25,11 @@
           <v-row dense>
             <v-col cols="12" class="pa-0 text-bold text-black">
               <label>ชื่อผู้ใช้งาน / OneID</label>
+              <!-- :rules="rules.username" -->
               <v-text-field
                 @keypress="validate($event, 'en')"
                 dense
-                ref="username"
-                :rules="rules.username"
+                :rules="usernameRules"
                 required
                 v-model="user_one_id.username"
                 placeholder="ระบุชื่อผู้ใช้งาน"
@@ -38,12 +38,13 @@
             </v-col>
             <v-col cols="12" class="pa-0 text-bold text-black">
               <label>รหัสผ่าน</label>
+              <!-- :rules="rules.password" -->
               <v-text-field
                 @keypress="validate($event, 'en')"
                 dense
                 ref="password"
                 :type="show_password ? 'text' : 'password'"
-                :rules="rules.password"
+                :rules="passwordRules"
                 required
                 :append-icon="
                   show_password ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
@@ -121,7 +122,7 @@ export default {
   computed: {
     ...mapGetters({
       user_one_id: "loginModules/getUserOneId",
-      is_loading : "loginModules/getIsLoading"
+      is_loading: "loginModules/getIsLoading",
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
@@ -130,6 +131,31 @@ export default {
     IpadSize() {
       const { sm } = this.$vuetify.breakpoint;
       return !!sm;
+    },
+
+    usernameRules() {
+      const specialCharsRegex = /[&*/#@!]/g;
+      const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
+      return [
+        (val) =>
+          (val || "").length > 5 ||
+          "Username must be at least 6 characters long",
+        (val) =>
+          !specialCharsRegex.test(val) ||
+          "Username cannot contain special characters",
+        (val) => !emojiRegex.test(val) || "Username cannot contain emojis",
+      ];
+    },
+    passwordRules() {
+      const specialCharsRegex = /[&*/#@!]/g;
+      return [
+        (val) =>
+          (val || "").length > 7 ||
+          "Password must be at least 8 characters long",
+        (val) =>
+          !specialCharsRegex.test(val) ||
+          "Password cannot contain special characters",
+      ];
     },
   },
 
@@ -140,11 +166,11 @@ export default {
 
     login() {
       if (this.$refs.form.validate()) {
-        this.loginOneId()
+        this.loginOneId();
       }
     },
     toRegisterPage() {
-      console.log("Register")
+      console.log("Register");
       this.$router.replace({ name: "Register" });
     },
     validate(e, type) {
@@ -158,7 +184,5 @@ export default {
 .text_bottom {
   color: #ff6b81;
 }
-
-
 </style>
   

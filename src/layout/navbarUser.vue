@@ -43,22 +43,44 @@
             @click="$router.push({ name: 'CartList' })"
             >mdi-cart</v-icon
           >
-          <div v-if="!$vuetify.breakpoint.smAndDown">
-            <v-avatar class="mx-2" size="24">
-              <v-img
-                :src="
-                  profile_detail.image !== ''
-                    ? profile_detail.image
-                    : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU`
-                "
-                size="24"
-              />
-            </v-avatar>
-            <span class="text-white mx-2">
-              {{ profile_detail.firstNameTh }} {{ profile_detail.lastNameTh }}
-              <!-- {{ user_detail.first_name_en }} {{ user_detail.last_name_en }} -->
-            </span>
+          <div v-if="profile_detail.image !== ''">
+            <div v-if="!$vuetify.breakpoint.smAndDown">
+              <v-avatar class="mx-2" size="24">
+                <v-img :src="profile_detail.image" size="24" />
+              </v-avatar>
+
+              <!-- <div v-else>
+              <v-avatar class="mx-2" size="24">
+                <v-img
+                  src="../assets/navbar_user/default_image_profile.svg"
+                  size="24"
+                />
+              </v-avatar>
+            </div> -->
+
+              <span class="text-white mx-2">
+                {{ profile_detail.firstNameTh }} {{ profile_detail.lastNameTh }}
+                <!-- {{ user_detail.first_name_en }} {{ user_detail.last_name_en }} -->
+              </span>
+            </div>
           </div>
+
+          <div v-else>
+            <div v-if="!$vuetify.breakpoint.smAndDown">
+              <v-avatar class="mx-2" size="24">
+                <v-img
+                  src="../assets/navbar_user/default_image_profile.svg"
+                  size="24"
+                />
+              </v-avatar>
+
+              <span class="text-white mx-2">
+                {{ profile_detail.firstNameTh }} {{ profile_detail.lastNameTh }}
+                <!-- {{ user_detail.first_name_en }} {{ user_detail.last_name_en }} -->
+              </span>
+            </div>
+          </div>
+
           <v-btn icon @click="drawer = !drawer">
             <v-icon>{{ drawer ? "mdi-chevron-right" : "mdi-menu" }}</v-icon>
           </v-btn>
