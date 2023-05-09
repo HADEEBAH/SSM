@@ -551,14 +551,13 @@
                             {{ course_data.music_performance }}
                           </span>
                         </v-col>
-
                         <v-col cols="12" md="12" sm="12">
                           <div class="mt-8">
                             <label-custom text="Certification"></label-custom>
                           </div>
                           <v-divider class=""></v-divider>
                           <span class="pa-2">
-                            {{ course_data.music_performance }}
+                            {{ course_data.catification }}
                           </span>
                         </v-col>
                       </v-row>
@@ -750,7 +749,7 @@
                           </div>
                           <v-divider class=""></v-divider>
                           <span class="pa-2">
-                            {{ course_data.music_performance }}
+                            {{ course_data.catification }}
                           </span>
                         </v-col>
                       </v-row>

@@ -20,7 +20,7 @@ export const inputValidation = (e, type) => {
             break;
     }
 }
-export const dateDMY = (date)=>{
+export const dateDMY = (date) => {
     const currentDate = new Date(date);
     const day = String(currentDate.getDate()).padStart(2, '0');
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
@@ -54,12 +54,12 @@ export const CheckFileSize = (file) => {
     const fileSizeInBytes = file.size;
     const fileSizeInMB = fileSizeInBytes / (1024 * 1024);
     if (fileSizeInMB > 1) {
-      Swal.fire({
-        icon : "error",
-        text  : "ขนาดไฟล์ต้องน้อยกว่า 1 MB",
-        confirmButtonText : "ตกลง"
-      })
-      return false
+        Swal.fire({
+            icon: "error",
+            text: "อัพโหลดเฉพาะไฟล์รูปภาพเท่านั้น",
+            confirmButtonText: "ตกลง"
+        })
+        return false
     }
     return true
 }
