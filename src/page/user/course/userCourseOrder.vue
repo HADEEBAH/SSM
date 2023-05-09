@@ -630,6 +630,7 @@
                 dense
                 outlined
                 v-model="parent.username"
+                @keypress="Validation($event,'en')"
                 @change="
                   parent.username.length > 3
                     ? checkUsername(parent.username)

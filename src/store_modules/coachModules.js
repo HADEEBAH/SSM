@@ -131,9 +131,9 @@ const coachModules = {
               Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
+        let count = 0
+        console.log(students.length)
         for await (const student of students) {
-          console.log("student + >",student)
-          setTimeout(async ()=>{
             let payload = {
               status : student.check_in_status, // punctual, late,  leave, emergency leave, absent,
               compensation_date : student.compensation_date,
@@ -171,16 +171,18 @@ const coachModules = {
                 throw {error : data}
               }
             }
-          },1000)
+            count = count+1
         }
-        await Swal.fire({
-          icon: "success",
-          title: "บันทึกสำเร็จ",
-          showDenyButton: false,
-          showCancelButton: false,
-          cancelButtonText :"ยกเลิก",
-          confirmButtonText: "ตกลง",
-        })
+        if(count === students.length){
+          await Swal.fire({
+            icon: "success",
+            title: "บันทึกสำเร็จ",
+            showDenyButton: false,
+            showCancelButton: false,
+            cancelButtonText :"ยกเลิก",
+            confirmButtonText: "ตกลง",
+          })
+        }
       }catch(error){
         console.log(error)
       }
