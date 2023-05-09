@@ -231,9 +231,12 @@
                   </v-row>
                   <v-row>
                     <v-col>ไฟล์แนบ : 
-                      <a class="text-[#ff6b81]" 
-                       v-for="(att, index_att) in coach_check_in.attachment" 
-                       :key="`${index_att}-att`"> ไฟล์ {{ index_att+1 }} </a>
+                      <v-btn class="mr-1" color="#ff6b81" text 
+                        @click="openFileSummary(att)"
+                        v-for="(att, index_att) in coach_check_in.attachment" 
+                        :key="`${index_att}-att`"> 
+                        {{ att.originalFilesName }}
+                      </v-btn>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -715,7 +718,7 @@
                   <v-row dense>
                     <v-col align="center" class="text-lg font-bold">ความคิดเห็นเพิ่มเติม</v-col>
                   </v-row>
-                  <v-row dense>
+                  <v-row class="mb-3" dense>
                       <v-col>
                           <labelCustom text="เพิ่มความคิดเห็น"></labelCustom>
                           <div>{{show_comment_data.assessment.remark}}</div>
@@ -727,15 +730,16 @@
                           ไฟล์แนบ
                           </v-col>
                       </v-row>
-                      <v-card flat class="mb-3" v-for="(file, index) of show_comment_data.assessment.attachment" :key="`${index}-fileattachment`">
+                      <!-- <Pre>{{ file }}</Pre> -->
+                      <v-card @click="openFile(file)" flat class="mb-3" v-for="(file, index) of show_comment_data.assessment.attachment" :key="`${index}-fileattachment`">
                           <v-card-text class="border border-2 border-[#ff6b81] rounded-lg">
                           <v-row>
                               <v-col cols="auto" class="pr-2">
-                              <v-img height="35" width="26" src="../../../assets/coachLeave/file-pdf.png"/>
+                                <v-img height="35" width="26" src="../../../assets/coachLeave/file-pdf.png"/>
                               </v-col>
                               <v-col  class="px-2">
-                                  <span class="font-bold">{{ `ไฟล์ ${index+1}`}}</span><br>
-                                  <!-- <span class="text-caption">ขนาดไฟล์ : {{ (0 / 1000000).toFixed(2) }} MB</span> -->
+                                <span class="font-bold">{{ file.originalFilesName}}</span><br>
+                                <span class="text-caption">ขนาดไฟล์ : {{ (file.filesSize / 1000000).toFixed(2) }} MB</span>
                               </v-col>
                               <!-- <v-col cols="auto" class="pl-2">
                               <v-btn @click="removePotentialFile(index)" icon color="#ff6b81"><v-icon>mdi-close</v-icon></v-btn>
@@ -886,6 +890,16 @@ export default {
       GetStudentByTimeId : "CoachModules/GetStudentByTimeId",
       GetCoachCheckIn : "CoachModules/GetCoachCheckIn"
     }),
+    openFileSummary(file){
+      // console.log(file)
+      window.open(file.attFilesUrl, '_blank');
+    },
+    openFile(file){
+      if(file.attId){
+        let url = `${process.env.VUE_APP_URL}/api/v1/files/${file.attFiles}`
+        window.open(url, '_blank');
+      }
+    },
     showComment(course){
       this.show_comment = true
       this.show_comment_data = course
