@@ -634,8 +634,9 @@
           <v-row dense>
             <v-col cols="9">
               <labelCustom text="Username"></labelCustom>
+              <!-- :hide-details="!relation.account_id" -->
               <v-text-field
-                :hide-details="!relation.account_id"
+                :rules="usernameRules"
                 dense
                 outlined
                 v-model="relation.username"
@@ -696,6 +697,7 @@
               <v-col cols="12">
                 <labelCustom required text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
                 <v-text-field
+                  disabled
                   dense
                   outlined
                   v-model="relation.firstname_en"
@@ -707,6 +709,7 @@
               <v-col cols="12">
                 <labelCustom required text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
                 <v-text-field
+                  disabled
                   dense
                   outlined
                   v-model="relation.lastname_en"
@@ -718,6 +721,7 @@
               <v-col cols="12">
                 <labelCustom required text="เบอร์โทรศัพท์"></labelCustom>
                 <v-text-field
+                  disabled
                   dense
                   outlined
                   v-model="relation.tel"
@@ -1647,6 +1651,20 @@ export default {
     IpadSize() {
       const { sm } = this.$vuetify.breakpoint;
       return !!sm;
+    },
+
+    usernameRules() {
+      const specialCharsRegex = /[&*/#@!]/g;
+      const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
+      return [
+        (val) =>
+          (val || "").length > 5 ||
+          "Username must be at least 6 characters long",
+        (val) =>
+          !specialCharsRegex.test(val) ||
+          "Username cannot contain special characters",
+        (val) => !emojiRegex.test(val) || "Username cannot contain emojis",
+      ];
     },
   },
   watch: {

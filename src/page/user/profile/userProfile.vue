@@ -577,8 +577,10 @@
           <v-row dense>
             <v-col cols="9">
               <labelCustom text="Username"></labelCustom>
+              <!-- :hide-details="!parent.account_id" -->
               <v-text-field
-                :hide-details="!parent.account_id"
+                :rules="usernameRules"
+                ref="username"
                 dense
                 outlined
                 v-model="parent.username"
@@ -617,9 +619,12 @@
           <template>
             <v-row dense>
               <v-col cols="12">
+                <!-- :disabled="user_data.length > 0"
+:disabled="user_data.length > 0"
+:disabled="user_data.length > 0" -->
                 <labelCustom required text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
                 <v-text-field
-                  :disabled="user_data.length > 0"
+                  disabled
                   dense
                   outlined
                   v-model="parent.firstname_en"
@@ -631,7 +636,7 @@
               <v-col cols="12">
                 <labelCustom required text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
                 <v-text-field
-                  :disabled="user_data.length > 0"
+                  disabled
                   dense
                   outlined
                   v-model="parent.lastname_en"
@@ -643,7 +648,7 @@
               <v-col cols="12">
                 <labelCustom required text="เบอร์โทรศัพท์"></labelCustom>
                 <v-text-field
-                  :disabled="user_data.length > 0"
+                  disabled
                   dense
                   outlined
                   v-model="parent.tel"
@@ -732,6 +737,18 @@ export default {
     getParentData: {},
     dialogGetStudentData: {},
     list_course_count: 0,
+    rules: {
+      username: [
+        (val) =>
+          (val || "").length > 5 ||
+          "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
+      ],
+      password: [
+        (val) =>
+          (val || "").length > 7 ||
+          "โปรดระบุรหัสผ่านความยาวไม่น้อยกว่า 8 ตัวอักษร",
+      ],
+    },
   }),
   created() {
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
@@ -1138,6 +1155,20 @@ export default {
       });
 
       return "";
+    },
+
+    usernameRules() {
+      const specialCharsRegex = /[&*/#@!]/g;
+      const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
+      return [
+        (val) =>
+          (val || "").length > 5 ||
+          "Username must be at least 6 characters long",
+        (val) =>
+          !specialCharsRegex.test(val) ||
+          "Username cannot contain special characters",
+        (val) => !emojiRegex.test(val) || "Username cannot contain emojis",
+      ];
     },
   },
 };

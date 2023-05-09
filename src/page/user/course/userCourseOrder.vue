@@ -32,7 +32,12 @@
                 {{ course_data.course_hours }} ชม. / ครั้ง</rowData
               >
             </v-col>
-            <v-col cols="12" sm="6" class="pa-0" v-if="course_data.course_type_id === 'CT_1'">
+            <v-col
+              cols="12"
+              sm="6"
+              class="pa-0"
+              v-if="course_data.course_type_id === 'CT_1'"
+            >
               <rowData mini col_detail="5" icon="mdi-book-multiple-outline">
                 {{ course_order.package }}</rowData
               >
@@ -624,9 +629,11 @@
         <v-card-text class="pb-2">
           <v-row dense>
             <v-col cols="9">
+              <!-- :hide-details="!parent.account_id" -->
+
               <labelCustom text="Username (ถ้ามี)"></labelCustom>
               <v-text-field
-                :hide-details="!parent.account_id"
+                :rules="usernameRules"
                 dense
                 outlined
                 v-model="parent.username"
@@ -678,9 +685,12 @@
           <template>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom required text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
+                <labelCustom required text="ชื่อ(ภาษาอักฤษ)"></labelCustom>\
+                <!-- :disabled="user_data.length > 0"
+:disabled="user_data.length > 0"
+:disabled="user_data.length > 0" -->
                 <v-text-field
-                  :disabled="user_data.length > 0"
+                  disabled
                   dense
                   outlined
                   v-model="parent.firstname_en"
@@ -692,7 +702,7 @@
               <v-col cols="12">
                 <labelCustom required text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
                 <v-text-field
-                  :disabled="user_data.length > 0"
+                  disabled
                   dense
                   outlined
                   v-model="parent.lastname_en"
@@ -704,7 +714,7 @@
               <v-col cols="12">
                 <labelCustom required text="เบอร์โทรศัพท์"></labelCustom>
                 <v-text-field
-                  :disabled="user_data.length > 0"
+                  disabled
                   dense
                   outlined
                   v-model="parent.tel"
@@ -1015,6 +1025,20 @@ export default {
         return !student;
       }
     },
+
+    usernameRules() {
+      const specialCharsRegex = /[&*/#@!]/g;
+      const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
+      return [
+        (val) =>
+          (val || "").length > 5 ||
+          "Username must be at least 6 characters long",
+        (val) =>
+          !specialCharsRegex.test(val) ||
+          "Username cannot contain special characters",
+        (val) => !emojiRegex.test(val) || "Username cannot contain emojis",
+      ];
+    },
   },
   methods: {
     ...mapActions({
@@ -1188,7 +1212,7 @@ export default {
     },
 
     groupByDay(originalArray) {
-      console.log(originalArray)
+      console.log(originalArray);
       return originalArray;
     },
     CreateReserve() {
@@ -1394,11 +1418,13 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           if (this.course_order.course_type_id == "CT_1") {
-            console.log(new Date(this.course_data.course_open_date) > new Date())
-            if(new Date(this.course_data.course_open_date) > new Date()){
-              this.course_order.start_date = this.course_data.course_open_date
-            }else{
-              this.course_order.start_date = ""
+            console.log(
+              new Date(this.course_data.course_open_date) > new Date()
+            );
+            if (new Date(this.course_data.course_open_date) > new Date()) {
+              this.course_order.start_date = this.course_data.course_open_date;
+            } else {
+              this.course_order.start_date = "";
             }
             this.course_order.coach_name = this.course_data.coachs.filter((v) =>
               this.course_order.day.course_coach_id.includes(v.course_coach_id)
