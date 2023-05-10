@@ -60,10 +60,10 @@ export const dateFormatter = (date, formatter) => {
 export const CheckFileSize = (file) => {
     const fileSizeInBytes = file.size;
     const fileSizeInMB = fileSizeInBytes / (1024 * 1024);
-    if (fileSizeInMB > 1) {
+    if (fileSizeInMB > 10) {
         Swal.fire({
             icon: "error",
-            text: "อัพโหลดเฉพาะไฟล์รูปภาพเท่านั้น",
+            text: "ขนาดไฟล์ต้องไม่เกิน 10 MB",
             confirmButtonText: "ตกลง"
         })
         return false
