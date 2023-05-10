@@ -93,7 +93,19 @@ const RegisterModules = {
                 };
                 let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/relations/delete-user-role/?studentId=${studentId}&parentId=${parentId}`, config)
                 if (data.statusCode === 200) {
-                    console.log("200 success");
+                    Swal.fire({
+                        icon: "success",
+                        title: "ลบข้อมูลสำเร็จ",
+                        showDenyButton: false,
+                        showCancelButton: true,
+                        confirmButtonText: "ตกลง",
+                        cancelButtonText: "ยกเลิก",
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            console.log("success");
+                            // this.GetDataRelationsManagement(this.data_user_by_id);
+                        }
+                    })
                 }
             } catch (error) {
                 console.log(error)
@@ -288,14 +300,14 @@ const RegisterModules = {
                             break;
                     }
                     console.log(text)
-                    setTimeout(()=>{
-                         Swal.fire({
+                    setTimeout(() => {
+                        Swal.fire({
                             icon: 'error',
                             title: `กรอกข้อมูลให้ถูกต้อง`,
                             text: text ? text : response.data.message
                         })
-                    },200)
-                   
+                    }, 200)
+
                 } else {
                     Swal.fire({
                         icon: 'error',

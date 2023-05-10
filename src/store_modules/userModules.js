@@ -17,38 +17,7 @@ const userModules = {
             }
         ],
 
-        show_by_id: [
-            {
-                roleNameEng: "",
-                roleNameTh: "",
-                roleId: "",
-                studentDetail: [
-                    {
-                        u_created_by: null,
-                        u_created_date: "",
-                        u_updated_by: null,
-                        u_updated_date: "",
-                        u_deleted_by: null,
-                        u_deleted_date: null,
-                        u_account_id: "",
-                        u_title_name_th: "",
-                        u_first_name_th: "",
-                        u_last_name_th: "",
-                        u_title_name_en: "",
-                        u_first_name_en: "",
-                        u_last_name_en: "",
-                        u_email: "",
-                        u_tel: "",
-                        u_status: "",
-                        u_username: "",
-                        u_password: "",
-                        studentId: "",
-                        parentId: ""
-                    }
-
-                ]
-            }
-        ],
+        show_by_id: [],
         data_user_by_id: [],
         student_schedule: [],
     },
@@ -101,10 +70,11 @@ const userModules = {
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/usermanagement/${account_id}`, config)
                 if (data.statusCode === 200) {
                     data.data.image = data.data.image && data.data.image != "" ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}` : ""
-                    console.log("data+<>", data.data);
+                    context.commit("SetShowById", [])
                     context.commit("SetShowById", data.data)
-                    console.log("SetShowById", data.data)
                 } else {
+                    context.commit("SetShowById", [])
+
                     throw { error: data }
                 }
             } catch (error) {
@@ -147,9 +117,11 @@ const userModules = {
                 // let { data } = await axios.get(`http://localhost:3000/api/v1/usermanagement/student/${student_id}`, config)
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/usermanagement/student/${student_id}`, config)
                 if (data.statusCode === 200) {
-                    console.log("SetStudentSchedule ----->", data.data);
+                    context.commit("SetStudentSchedule", [])
                     context.commit("SetStudentSchedule", data.data)
+
                 } else {
+                    context.commit("SetStudentSchedule", [])
                     throw { error: data }
                 }
             } catch (error) {

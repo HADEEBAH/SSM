@@ -252,6 +252,7 @@ export default {
     // this.GetUserList()
     this.$store.dispatch("UserModules/GetUserList");
     this.local_data = JSON.parse(localStorage.getItem("userDetail"));
+
     // this.GetShowById(this.local_data.account_id);
   },
   created() {
