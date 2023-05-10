@@ -388,7 +388,7 @@ export default {
       return "";
     },
     firstNameThRules() {
-      const specialCharsRegex = /[ก-ฮ]/g;
+      const specialCharsRegex = /[ก-๏\s]/g;
       const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
       return [
         (val) =>
@@ -401,7 +401,7 @@ export default {
         (val) => !emojiRegex.test(val) || "กรุณากรอกชื่อภาษาไทย",
       ];
     },
-    firstNameEhRules() {
+    firstNameEnRules() {
       const specialCharsRegex = /[A-Za-z]/g;
       const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
       return [
@@ -416,7 +416,7 @@ export default {
       ];
     },
     lastNameThRules() {
-      const specialCharsRegex = /[ก-ฮ]/g;
+      const specialCharsRegex = /[ก-๏\s]/g;
       const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
       return [
         (val) =>
@@ -430,7 +430,7 @@ export default {
       ];
     },
     lastNameEnRules() {
-      const specialCharsRegex = /[ก-ฮ]/g;
+      const specialCharsRegex = /[A-Za-z]/g;
       const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
       return [
         (val) =>
@@ -443,8 +443,6 @@ export default {
         (val) => !emojiRegex.test(val) || "กรุณากรอกสกุลภาษาอังกฤษ",
       ];
     },
-    
-    
   },
 };
 </script>

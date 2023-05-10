@@ -7,7 +7,7 @@ export const inputValidation = (e, type) => {
             }
             break;
         case "th-special":
-            if (!(/^[ก-ฮ]+$/).test(e.key)){
+            if (!(/^[ก-๏\s]+$/).test(e.key)){
                 e.preventDefault()
             }
             break;
