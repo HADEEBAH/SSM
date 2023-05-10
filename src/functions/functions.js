@@ -7,15 +7,18 @@ export const inputValidation = (e, type) => {
             }
             break;
         case "th-special":
-            if ((/^[a-zA-Z\s &*/#@!๐-๙0-9[\]]+$/).test(e.key)){
+            if (!(/^[ก-ฮ]+$/).test(e.key)){
                 e.preventDefault()
             }
             break;
         case "en-special":
-            if((/^[ก-๏\s &*/#@!๐-๙[\]]+$/u).test(e.key)){
-                if (e.key !== " ") {
-                    e.preventDefault()
-                }
+            if(!(/^[A-Za-z]+$/u).test(e.key)){
+                e.preventDefault()
+            }
+            break;
+        case "en-number":
+            if(!(/^[A-Za-z0-9]+$/u).test(e.key)){
+                e.preventDefault()
             }
             break;
         case "en":
