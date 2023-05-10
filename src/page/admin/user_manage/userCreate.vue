@@ -26,6 +26,7 @@
                         :rules="usernameRules"
                         dense
                         outlined
+                        @keypress="validate($event, 'en-number')"
                         v-model="checkData.username"
                         @change="checkDataRelation(checkData.username)"
                         @keyup.enter="checkDataRelation(checkData.username)"
@@ -530,6 +531,7 @@
                 dense
                 outlined
                 v-model="relation.username"
+                @keypress="validate($event, 'en-number')"
                 @change="
                   checkUsername(
                     relation.username,
@@ -1049,7 +1051,6 @@ export default {
         }
       });
     },
-
     selectRole(roles) {
       this.selectRoles;
       console.log("roles", roles);
