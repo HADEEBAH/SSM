@@ -6,6 +6,13 @@ export const inputValidation = (e, type) => {
                 e.preventDefault()
             }
             break;
+        case "en-special":
+            if((/^[ก-๏\s &*/#@!๐-๙ ]+$/u).test(e.key)){
+                if (e.key !== " ") {
+                    e.preventDefault()
+                }
+            }
+            break;
         case "en":
             if ((/^[ก-๏\s]+$/u).test(e.key)) {
                 if (e.key !== " ") {

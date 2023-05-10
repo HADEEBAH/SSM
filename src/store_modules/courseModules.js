@@ -328,7 +328,7 @@ const CourseModules = {
         }
         // let localhost = "http://localhost:3000"
         let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/course/${course_id}`,config)
-        // console.log(data.data)
+        // console.log("studentlist",data.data)
         if(data.statusCode === 200){
           for await (let coach  of data.data){
             let coach_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${coach.coachId}`)
@@ -342,8 +342,9 @@ const CourseModules = {
             }
             let datesList = []
             for await (const coachDate of coach.allDates){
-              console.log(coachDate)
-              if (coachDate.cpo){
+              // console.log(coachDate)
+              if (!coachDate.cpo.cpoId){
+                console.log("ระยะสั้น")
                 for await (const date of coachDate.dates.dates){
                   if(datesList.filter(v => v.date === date).length === 0){
                     datesList.push({

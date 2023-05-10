@@ -287,7 +287,7 @@ export default {
       const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
       return [
         (val) =>
-          (val || "").length > 5 ||
+          (val || "").length > 1 ||
           "โปรดระบุชื่อ (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
         (val) =>
           (val || "").length < 20 ||
@@ -303,7 +303,7 @@ export default {
       const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
       return [
       (val) =>
-          (val || "").length > 5 ||
+          (val || "").length > 1 ||
           "โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
         (val) =>
           (val || "").length < 20 ||
@@ -319,7 +319,7 @@ export default {
       const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
       return [
       (val) =>
-          (val || "").length > 5 ||
+          (val || "").length > 1 ||
           "โปรดระบุนามสกุล (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
         (val) =>
           (val || "").length < 20 ||
@@ -335,7 +335,7 @@ export default {
       const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
       return [
       (val) =>
-          (val || "").length > 5 ||
+          (val || "").length > 1 ||
           "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
         (val) =>
           (val || "").length < 20 ||

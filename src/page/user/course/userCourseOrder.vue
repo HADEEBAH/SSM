@@ -272,7 +272,7 @@
                     "
                     dense
                     :rules="usernameRules"
-                    @keypress="Validation($event,'en')"
+                    @keypress="Validation($event,'en-special')"
                     outlined
                     v-model="parent.username"
                     placeholder="Username"
@@ -298,7 +298,7 @@
                     dense
                     outlined
                     :rules="usernameRules"
-                    @keypress="Validation($event,'en')"
+                    @keypress="Validation($event,'en-special')"
                     v-model="parent.username"
                     @change="
                       parent.username > 3 ? checkUsername(parent.username) : ''
@@ -400,43 +400,18 @@
         </v-row>
         <v-card outlined class="mb-3">
           <v-card-text>
-            <v-row dense class="d-flex align-center">
+            <v-row dense class="d-flex align-start">
               <v-col cols="9" sm="5">
                 <labelCustom text="Username (ถ้ามี)"></labelCustom>
                 <v-text-field
-                  :hide-details="!student.account_id"
                   dense
                   outlined
                   :rules="usernameRules"
-                  @keypress="Validation($event,'en')"
+                  @keypress="Validation($event,'en-special')"
                   v-model="student.username"
-                  @change="
-                    student.username.length > 3
-                      ? checkUsername(
-                          student.username,
-                          'student',
-                          index_student
-                        )
-                      : ''
-                  "
-                  @keyup.enter="
-                    student.username.length > 3
-                      ? checkUsername(
-                          student.username,
-                          'student',
-                          index_student
-                        )
-                      : ''
-                  "
-                  @blur="
-                    student.username.length > 3
-                      ? checkUsername(
-                          student.username,
-                          'student',
-                          index_student
-                        )
-                      : ''
-                  "
+                  @change="student.username.length > 3 ? checkUsername( student.username, 'student', index_student) : '' "
+                  @keyup.enter="student.username.length > 3 ? checkUsername( student.username, 'student', index_student ): ''"
+                  @blur="student.username.length > 3? checkUsername(student.username, 'student', index_student ) : ''"
                   placeholder="Username"
                 >
                   <template v-slot:append>
@@ -454,18 +429,16 @@
                   >
                 </template>
               </v-col>
-              <v-col cols="auto" class="mb-2">
+              <v-col cols="auto" class="mb-2" >
+                <br>
                 <v-btn
                   :loading="is_loading"
                   :dark="!student.username.length < 3"
                   :disabled="student.username.length < 3"
                   color="#ff6b81"
-                  @click="
-                    checkUsername(student.username, 'student', index_student)
-                  "
+                  @click="checkUsername(student.username, 'student', index_student)"
                   depressed
-                  >ตกลง</v-btn
-                >
+                  >ตกลง</v-btn>
               </v-col>
             </v-row>
             <template v-if="student.account_id">
@@ -633,7 +606,7 @@
           </template>
         </header-card>
         <v-card-text class="pb-2">
-          <v-row dense>
+          <v-row dense >
             <v-col cols="9">
               <!-- :hide-details="!parent.account_id" -->
 
@@ -643,7 +616,7 @@
                 dense
                 outlined
                 v-model="parent.username"
-                @keypress="Validation($event,'en')"
+                @keypress="Validation($event,'en-special')"
                 @change="
                   parent.username.length > 3
                     ? checkUsername(parent.username)
@@ -692,10 +665,7 @@
           <template>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom required text="ชื่อ(ภาษาอักฤษ)"></labelCustom>\
-                <!-- :disabled="user_data.length > 0"
-:disabled="user_data.length > 0"
-:disabled="user_data.length > 0" -->
+                <labelCustom required text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
                 <v-text-field
                   disabled
                   dense
@@ -808,6 +778,8 @@ import dialogCard from "@/components/dialog/dialogCard.vue";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 import Swal from "sweetalert2";
 import { mapActions, mapGetters } from "vuex";
+import { inputValidation } from "@/functions/functions";
+
 export default {
   name: "userCourseOrder",
   components: {
@@ -1020,33 +992,32 @@ export default {
               ? true
               : false
             : false;
-        console.log(time && day && coach && student);
+        // console.log(time && day && coach && student);
         return !(time && day && coach && student);
       } else {
-        let student =
-          this.course_order.students.length > 0
-            ? this.course_order.students[0].account_id
-              ? true
-              : false
-            : false;
+        let student = true
+        if( this.course_order.students.length > 0){
+          if(this.course_order.students.filter(v => !v.account_id).length > 0){
+            student = false
+          }
+        }
         return !student;
       }
     },
-
     usernameRules() {
       const specialCharsRegex = /[&*/#@! ]/g;
       const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
       return [
         (val) =>
           (val || "").length > 5 ||
-          "Username must be at least 6 characters long",
+          "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
         (val) =>
           (val || "").length < 20 ||
           "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
         (val) =>
           !specialCharsRegex.test(val) ||
-          "Username cannot contain special characters",
-        (val) => !emojiRegex.test(val) || "Username cannot contain emojis",
+          "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+        (val) => !emojiRegex.test(val) || "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
       ];
     },
   },
@@ -1067,6 +1038,9 @@ export default {
       GetGeneralCourseMonitor: "CourseMonitorModules/GetGeneralCourseMonitor",
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
     }),
+    Validation(e, lang) {
+      inputValidation(e, lang);
+    },
     GenCoachNumberStudent(coach_id) {
       let time_data = this.course_order.time;
       let current_student = 0;

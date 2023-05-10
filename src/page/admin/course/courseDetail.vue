@@ -429,8 +429,8 @@
                                         </div>
                                         <template v-else>
                                             <div
-                                            v-for="(coach, coach_index) in coach_list"
-                                            :key="`${coach_index}-coach_index`"
+                                                v-for="(coach, coach_index) in coach_list"
+                                                :key="`${coach_index}-coach_index`"
                                             >
                                                 <v-card
                                                     outlined
@@ -580,7 +580,7 @@
                                                                             </v-col>
                                                                         </v-row>
                                                                         <template v-else>
-                                                                            <div v-if="student_list.filter(v => v.cpo.packageName === date.cpo.packageName).length === 0 && date.students.length === 0">
+                                                                            <div v-if="student_list.filter(v => v.cpo?.packageName === date.cpo?.packageName).length === 0 && date.students.length === 0">
                                                                                 <v-card dense outlined>
                                                                                     <v-card-text>
                                                                                         <v-row>
@@ -623,15 +623,14 @@
                                                                                         </v-row>
                                                                                     </v-card-text>
                                                                                 </v-card>
-                                                                                <div v-if="student_list.filter(v => v.cpo.packageName === date.cpo.packageName).length > 0">
+                                                                                <div v-if="student_list.filter(v => v.cpo?.packageName === date.cpo?.packageName).length > 0">
                                                                                     <v-card
                                                                                         class="mb-2"
                                                                                         outlined
                                                                                         dense
-                                                                                        v-for="(student, student_index) in student_list.filter(v => v.cpo.packageName === date.cpo.packageName)"
+                                                                                        v-for="(student, student_index) in student_list.filter(v => v.cpo?.packageName === date.cpo?.packageName)"
                                                                                         :key="student_index"
                                                                                     >
-                                                                                        <!-- <pre>{{ student }}</pre> -->
                                                                                         <v-card-text class="pa-2">
                                                                                             <v-row
                                                                                                 dense
@@ -645,16 +644,16 @@
                                                                                                         `${student.firstNameTh} ${student.lastNameTh}`
                                                                                                     }}
                                                                                                 </v-col>
-                                                                                                <!-- <v-col cols="3" align="center">{{
-                                                                                                        `${student.start_date} - ${student.end_date}`
-                                                                                                    }}
-                                                                                                </v-col> -->
-                                                                                                <v-col cols="2" align="center">{{
-                                                                                                        student.cpo.optionName
+                                                                                                <v-col cols="4" align="center" v-if="course_data.course_type_id === 'CT_2'">{{
+                                                                                                        `${date.startDate} - ${date.endDate}`
                                                                                                     }}
                                                                                                 </v-col>
-                                                                                                <v-col cols="2" align="center"
-                                                                                                >{{ student.countCheckIn }}/{{student.totalDay}}
+                                                                                                <v-col cols="2" align="center" v-else>{{
+                                                                                                        student.cpo?.optionName
+                                                                                                    }}
+                                                                                                </v-col>
+                                                                                                <v-col cols="2" align="center"  v-if="course_data.course_type_id === 'CT_1'"
+                                                                                                > {{ student.countCheckIn }}/{{student.totalDay}}
                                                                                                 </v-col
                                                                                                 >
                                                                                                 <v-col cols="4">
@@ -717,7 +716,7 @@
                                                                                                 </v-col>
                                                                                                
                                                                                                 <v-col cols="2" align="center" v-if="course_data.course_type_id === 'CT_1'">
-                                                                                                    {{  date.cpo.optionName }}
+                                                                                                    {{  date.cpo?.optionName }}
                                                                                                 </v-col>
                                                                                                 <v-col cols="2" align="center" v-if="course_data.course_type_id === 'CT_1'">
                                                                                                     -
@@ -970,7 +969,7 @@
                                                                                     }}
                                                                                 </v-col> -->
                                                                                 <v-col cols="2" align="center">{{
-                                                                                        potential.cpo.optionName
+                                                                                        potential.cpo?.optionName
                                                                                     }}
                                                                                 </v-col>
                                                                                 <v-col cols="2" align="center"
@@ -1079,7 +1078,6 @@
                                     </v-col>
                                 </v-row>
                             </v-card-text>
-                            
                         </v-card>
                         <v-card class="mb-3" v-if="student_data_assessment?.assessment?.assessmentStudentsId">
                             <v-card-text>
