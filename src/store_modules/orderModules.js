@@ -219,7 +219,6 @@ const orderModules = {
                   }
                 }
                 // console.log(payload)
-                // let {data} = await axios.post(`http://localhost:3002/api/v1/order/cart`,payload, config)
                 let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/cart`,payload, config)
                 if(data.statusCode === 201){
                     localStorage.removeItem("Order")
