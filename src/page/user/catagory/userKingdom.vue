@@ -45,7 +45,6 @@
           </v-col>
           <v-col cols="12" sm="10" style="text-align: -webkit-right">
             <v-text-field
-              @keyup="searchKingdom()"
               v-model="search_kingdom"
               :class="`bg-white rounded-xl ${
                 !MobileSize ? 'w-2/5' : 'w-full'
@@ -58,27 +57,24 @@
             />
           </v-col>
         </v-row>
-        <!-- <pre>{{ categorys }}</pre> -->
         <v-row>
           <v-col
             cols="6"
             md="4"
             sm="6"
             class="pa-2"
-            v-for="item in search_kingdom !== ''
-              ? data_search_kingdom
-              : categorys"
-            :key="item.id"
+            v-for="(item, index_item) in searchKingdom(search_kingdom)"
+            :key="index_item"
           >
             <v-card class="h-full block drop-shadow-lg">
               <!-- :src="item.categoryImg && item.categoryImg !== null ? showImg(item.categoryImg) : defaultImageUrl" -->
-
               <v-img
                 v-if="item.categoryImg && item.categoryImg !== null"
                 @click="selectedCategory(item)"
                 contain
                 height="180"
                 :src="showImg(item.categoryImg)"
+                class="cursor-pointer"
               ></v-img>
               <v-img
                 v-else
@@ -86,39 +82,38 @@
                 contain
                 src="../../../assets/userKingdom/category_img.svg"
                 height="180"
+                class="cursor-pointer"
               ></v-img>
               <v-card-title
                 :class="$vuetify.breakpoint.smAndUp ? 'text-md' : 'text-sm'"
-                class="font-bold"
+                class="font-bold cursor-pointer"
+                @click="selectedCategory(item)"
               >
                 {{ item.categoryNameTh }}
+                ({{ item.categoryNameEng }})
               </v-card-title>
 
               <v-card-subtitle>
-                <div class="my-5">
-                  โดย {{ item.taughtBy }}
-                  <!-- <span class="text-red-500 cursor-pointer">อ่านต่อ...</span> -->
+                <div class="my-5">โดย {{ item.taughtBy }}</div>
+                <div>
+                  {{
+                    item.show
+                      ? `${item.categoryDescription}`
+                      : `${item.categoryDescription.slice(0, 15).trim()}`
+                  }}
+                  <span
+                    v-if="item.categoryDescription.length > 15"
+                    class="text-red-500 cursor-pointer"
+                    @click="item.show = !item.show"
+                    >{{ item.show ? `น้อยลง` : `อ่านต่อ...` }}</span
+                  >
                 </div>
-                <!-- <div>
-                  {{ item.categoryDescription }}
-                </div> -->
-
-                <!-- <div v-for="(item, index) in items" :key="index">
-  <h2>{{ item.title }}</h2>
-  <p>{{ showFullContent[index] ? item.content : item.content.slice(0, 100) }}</p>
-  <button @click="showFullContent[index] = !showFullContent[index]">
-    {{ showFullContent[index] ? 'Read less' : 'Read more' }}
-  </button>
-</div> -->
               </v-card-subtitle>
             </v-card>
           </v-col>
           <v-col
             cols="12"
-            v-if="
-              (search_kingdom !== '' && data_search_kingdom.length === 0) ||
-              categorys.length === 0
-            "
+            v-if="searchKingdom(search_kingdom).length === 0"
             class="font-weight-bold text-center text-xl"
           >
             ไม่พบอาณาจักร
@@ -138,6 +133,7 @@ export default {
     loadingOverlay,
   },
   data: () => ({
+    showCategorys: [],
     imgurl: "categoryImg",
     defaultImageUrl:
       "https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg",
@@ -174,6 +170,7 @@ export default {
     data_search_kingdom: [],
     item_data: "",
     showingFullText: false,
+    body: "I am some text! Instead of being on the data object, though, I would be pulled from the store.",
   }),
   created() {
     this.dataStorage = JSON.parse(localStorage.getItem("userDetail"));
@@ -212,28 +209,22 @@ export default {
         params: { category_id: category.categoryId },
       });
     },
+    searchKingdom(val) {
+      if (val) {
+        return this.categorys.filter(
+          (v) =>
+            v.categoryNameTh.indexOf(val) !== -1 ||
+            v.categoryNameEng.toLowerCase().indexOf(val.toLowerCase()) !== -1
+        );
+      } else {
+        return this.categorys;
+      }
+    },
     showImg(item) {
       return `${process.env.VUE_APP_URL}/api/v1/files/${item}`;
     },
-    searchKingdom() {
-      this.data_search_kingdom = this.categorys.filter((val) => {
-        if (
-          val.categoryNameTh.indexOf(this.search_kingdom) !== -1 ||
-          val.categoryNameEng
-            .toLowerCase()
-            .indexOf(this.search_kingdom.toLowerCase()) !== -1
-        ) {
-          return val;
-        }
-      });
-    },
     shortenedText(detail) {
       console.log("detail", detail);
-      // for (const item_data of this.categorys) {
-      //   console.log("item_data", item_data);
-      //   console.log("category", item_data.categoryDescription);
-      // }
-
       return this.detail.slice(0, 10);
     },
   },
@@ -263,17 +254,6 @@ export default {
       const { sm } = this.$vuetify.breakpoint;
       return !!sm;
     },
-
-    // categoryDescription() {
-    //   for (const iterator of this.categorys) {
-    //     console.log("object", iterator);
-    //   }
-    //   if (this.showingFullText) {
-    //     return this.body;
-    //   }
-
-    //   return `${this.body.slice(0, 20).trim()}...`;
-    // },
   },
 };
 </script>
