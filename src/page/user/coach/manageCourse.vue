@@ -504,7 +504,7 @@
                       <v-col>
                         บันทึกการสอน :
                         <span class="font-semibold">{{
-                          coach_check_in.summary
+                          coach_check_in.summary ? coach_check_in.summary : "-"
                         }}</span></v-col
                       >
                     </v-row>
@@ -512,23 +512,29 @@
                       <v-col>
                         พัฒนาการ / การบ้าน :
                         <span class="font-semibold">{{
-                          coach_check_in.homework
+                          coach_check_in.homework ? coach_check_in.summar : "-"
                         }}</span>
                       </v-col>
                     </v-row>
                     <v-row>
                       <v-col
                         >ไฟล์แนบ :
-                        <v-btn
-                          class="mr-1"
-                          color="#ff6b81"
-                          text
-                          @click="openFileSummary(att)"
-                          v-for="(att, index_att) in coach_check_in.attachment"
-                          :key="`${index_att}-att`"
-                        >
-                          {{ att.originalFilesName }}
-                        </v-btn>
+                        <template v-if="coach_check_in.attachment.length > 0">
+                          <label
+                            class="mr-2 text-[#ff6b81] underline underline-offset-1 cursor-pointer"
+                            text
+                            @click="openFileSummary(att)"
+                            v-for="(
+                              att, index_att
+                            ) in coach_check_in.attachment"
+                            :key="`${index_att}-att`"
+                          >
+                            {{ att.originalFilesName }}
+                          </label>
+                        </template>
+                        <template v-else>
+                          <span> - </span>
+                        </template>
                       </v-col>
                     </v-row>
                   </v-card-text>

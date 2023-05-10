@@ -6,11 +6,19 @@ export const inputValidation = (e, type) => {
                 e.preventDefault()
             }
             break;
+        case "th-special":
+            if (!(/^[ก-ฮ]+$/).test(e.key)){
+                e.preventDefault()
+            }
+            break;
         case "en-special":
-            if((/^[ก-๏\s &*/#@!๐-๙ ]+$/u).test(e.key)){
-                if (e.key !== " ") {
-                    e.preventDefault()
-                }
+            if(!(/^[A-Za-z]+$/u).test(e.key)){
+                e.preventDefault()
+            }
+            break;
+        case "en-number":
+            if(!(/^[A-Za-z0-9]+$/u).test(e.key)){
+                e.preventDefault()
             }
             break;
         case "en":
@@ -60,10 +68,10 @@ export const dateFormatter = (date, formatter) => {
 export const CheckFileSize = (file) => {
     const fileSizeInBytes = file.size;
     const fileSizeInMB = fileSizeInBytes / (1024 * 1024);
-    if (fileSizeInMB > 1) {
+    if (fileSizeInMB > 10) {
         Swal.fire({
             icon: "error",
-            text: "อัพโหลดเฉพาะไฟล์รูปภาพเท่านั้น",
+            text: "ขนาดไฟล์ต้องไม่เกิน 10 MB",
             confirmButtonText: "ตกลง"
         })
         return false

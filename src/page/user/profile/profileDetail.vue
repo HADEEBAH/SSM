@@ -59,8 +59,8 @@
           v-model="profile_detail.firstNameTh"
           outlined
           dense
+          :rules="firstNameThRules"
           :disabled="!isEnabled"
-          :rules="usernameRules"
         >
         </v-text-field>
         <!-- </div> -->
@@ -78,8 +78,8 @@
           v-model="profile_detail.lastNameTh"
           outlined
           dense
+          :rules="lastNameThRules"
           :disabled="!isEnabled"
-          :rules="usernameRules"
         >
         </v-text-field>
         <!-- </div> -->
@@ -98,7 +98,6 @@
           outlined
           dense
           :disabled="!isEnabled"
-          :rules="usernameRules"
         >
         </v-text-field>
         <!-- </div> -->
@@ -388,25 +387,64 @@ export default {
       this.GetProfileDetail(this.$route.params.profile_id);
       return "";
     },
-
-    usernameRules() {
-      const specialCharsRegex = /[&*/#@! ]/g;
+    firstNameThRules() {
+      const specialCharsRegex = /[ก-ฮ]/g;
       const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
-      const english = /^[a-zA-Z]+$/g;
       return [
         (val) =>
-          (val || "").length > 5 ||
-          "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
+          (val || "").length > 1 ||
+          "โปรดระบุชื่อ (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
         (val) =>
           (val || "").length < 20 ||
-          "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
-        (val) =>
-          !specialCharsRegex.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-        (val) => !emojiRegex.test(val) || "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
-        (val) =>
-          !english.test(val) || "Username should contain only English letters",
+          "โปรดระบุชื่อ (ภาษาไทย) ความยาวไม่เกิน 20 ตัวอักษร",
+        (val) => specialCharsRegex.test(val) || "กรุณากรอกชื่อภาษาไทย",
+        (val) => !emojiRegex.test(val) || "กรุณากรอกชื่อภาษาไทย",
       ];
     },
+    firstNameEhRules() {
+      const specialCharsRegex = /[A-Za-z]/g;
+      const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
+      return [
+        (val) =>
+          (val || "").length > 1 ||
+          "โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
+        (val) => specialCharsRegex.test(val) || "กรุณากรอกชื่อภาษาอังกฤษ",
+        (val) => !emojiRegex.test(val) || "กรุณากรอกชื่อภาษาอังกฤษ",
+      ];
+    },
+    lastNameThRules() {
+      const specialCharsRegex = /[ก-ฮ]/g;
+      const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
+      return [
+        (val) =>
+          (val || "").length > 1 ||
+          "โปรดระบุนามสกุล (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุนามสกุล (ภาษาไทย) ความยาวไม่เกิน 20 ตัวอักษร",
+        (val) => specialCharsRegex.test(val) || "กรุณากรอกนามสกุลภาษาไทย",
+        (val) => !emojiRegex.test(val) || "กรุณากรอกสกุลภาษาไทย",
+      ];
+    },
+    lastNameEnRules() {
+      const specialCharsRegex = /[ก-ฮ]/g;
+      const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
+      return [
+        (val) =>
+          (val || "").length > 1 ||
+          "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
+        (val) => specialCharsRegex.test(val) || "กรุณากรอกนามสกุลภาษาอังกฤษ",
+        (val) => !emojiRegex.test(val) || "กรุณากรอกสกุลภาษาอังกฤษ",
+      ];
+    },
+    
+    
   },
 };
 </script>

@@ -27,7 +27,7 @@
               <label>ชื่อผู้ใช้งาน / OneID</label>
               <!-- :rules="rules.username" -->
               <v-text-field
-                @keypress="validate($event, 'en')"
+                @keypress="validate($event, 'en-number')"
                 dense
                 :rules="usernameRules"
                 required
@@ -134,7 +134,7 @@ export default {
     },
 
     usernameRules() {
-      const specialCharsRegex = /[&*/#@! ]/g;
+      const specialCharsRegex = /[A-Za-z0-9 ]/g;
       const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
       return [
         (val) =>
@@ -144,7 +144,7 @@ export default {
           (val || "").length < 20 ||
           "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
         (val) =>
-          !specialCharsRegex.test(val) ||
+          specialCharsRegex.test(val) ||
           "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
         (val) => !emojiRegex.test(val) || "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
       ];

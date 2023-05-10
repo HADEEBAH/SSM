@@ -23,7 +23,7 @@
                         <label-custom text="Username(English)"></label-custom>
                         <v-text-field
                           placeholder="กรุณาระบุชื่อผู้ใช้งาน(ภาษาอังกฤษ)"
-                          @keypress="validate($event, 'en')"
+                          @keypress="validate($event, 'en-number')"
                           v-model="show_by_id.userName"
                           hide-details
                           outlined
@@ -104,7 +104,7 @@
                           <v-col cols="12" sm="6">
                             <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
                             <v-text-field
-                              @keypress="validate($event, 'th')"
+                              @keypress="validate($event, 'th-special')"
                               placeholder=""
                               v-model="show_by_id.firstNameTh"
                               :rules="rules.name"
@@ -118,7 +118,7 @@
                               text="นามสกุล (ภาษาไทย)"
                             ></label-custom>
                             <v-text-field
-                              @keypress="validate($event, 'th')"
+                              @keypress="validate($event, 'th-special')"
                               placeholder=""
                               v-model="show_by_id.lastNameTh"
                               :rules="rules.name"
@@ -136,7 +136,7 @@
                             ></label-custom>
                             <v-text-field
                               v-bind:disabled="isDisabled"
-                              @keypress="validate($event, 'en')"
+                              @keypress="validate($event, 'en-special')"
                               placeholder=""
                               v-model="show_by_id.firstNameEng"
                               :rules="rules.name"
@@ -151,7 +151,7 @@
                             ></label-custom>
                             <v-text-field
                               v-bind:disabled="isDisabled"
-                              @keypress="validate($event, 'en')"
+                              @keypress="validate($event, 'en-special')"
                               placeholder=""
                               v-model="show_by_id.lastNameEng"
                               :rules="rules.name"
@@ -165,15 +165,14 @@
                         <v-row>
                           <v-col cols="12" sm="6">
                             <label-custom text="อีเมล"></label-custom>
-                            <v-text-field
-                              @keypress="validate($event, 'en', 'number')"
+                            <v-text-fiel
                               placeholder=""
                               v-model="show_by_id.email"
                               outlined
                               dense
                               disabled
                             >
-                            </v-text-field>
+                            </v-text-fiel>
                           </v-col>
                           <v-col cols="12" sm="6">
                             <label-custom text="เบอร์โทรศัพท์"></label-custom>
@@ -297,71 +296,6 @@
                     </v-row>
                   </v-card-text>
                 </v-card>
-
-                <!-- <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
-                  <v-card-text class="mt-3">
-                    <v-row class="mr-3 ml-3">
-                      <v-col cols="12" sm="5">
-                        <label-custom text="บทบาทผู้ใช้งาน"></label-custom>
-
-                        <v-autocomplete
-                          :key="index"
-                          dense
-                          v-model="item.roleId"
-                          :items="roles"
-                          item-value="role"
-                          item-text="role"
-                          :label="item.roleNameTh"
-                          placeholder="กรุณาเลือกบทบาทผู้ใช้งาน"
-                          single-line
-                          outlined
-                          chips
-                          deletable-chips
-                          item-color="#ff6b81"
-                          color="#ff6b81"
-                          @change="selectRole"
-                        >
-                          {{ item.roleNameTh }}
-                          <template #selection="{ item }">
-                            <v-chip
-                              color="#FBF3F5"
-                              v-bind="item.attrs"
-                              :input-value="item.role"
-                              @click="item.role"
-                            >
-                              {{ item.role }}
-                            </v-chip>
-                          </template>
-                          <template v-slot:item="{ item }">
-                            <v-list-item-content>
-                              <v-list-item-title
-                                ><span
-                                  :class="
-                                    selectRoles.includes(item.role)
-                                      ? 'font-bold'
-                                      : ''
-                                  "
-                                  >{{ item.role }}</span
-                                ></v-list-item-title
-                              >
-                            </v-list-item-content>
-                            <v-list-item-action>
-                              <v-icon color="#FF6B81">
-                                {{
-                                  selectRoles.includes(item.role)
-                                    ? "mdi-checkbox-marked"
-                                    : "mdi-checkbox-blank-circle-outline"
-                                }}</v-icon
-                              >
-                            </v-list-item-action>
-                          </template>
-                        </v-autocomplete>
-                      </v-col>
-                      <v-col cols="12" sm="4"></v-col>
-                    </v-row>
-                  </v-card-text>
-                </v-card> -->
-
                 <v-container
                   grid-list-xs
                   v-if="seledtedRole === 'R_4' || seledtedRole === 'R_5'"
@@ -647,6 +581,7 @@
                 :rules="usernameRules"
                 dense
                 outlined
+                @keypress="validate($event, 'en-number')"
                 v-model="relation.username"
                 @change="
                   checkUsername(
@@ -1247,86 +1182,6 @@ export default {
           title: "ไม่มี username",
         });
       }
-      //       console.log("user_student_data", this.course_order.students.filter);
-      //       if (this.user_student_data.length > 0) {
-      //         this.course_order.students.filter(
-      //           (v) => v.username === username
-      //         )[0].firstname_en = this.user_student_data[0].firstNameEng;
-      //         this.course_order.students.filter(
-      //           (v) => v.username === username
-      //         )[0].lastname_en = this.user_student_data[0].lastNameEng;
-      //         this.course_order.students.filter(
-      //           (v) => v.username === username
-      //         )[0].firstname_th = this.user_student_data[0].firstNameTh;
-      //         this.course_order.students.filter(
-      //           (v) => v.username === username
-      //         )[0].lastname_th = this.user_student_data[0].lastNameTh;
-      //         this.course_order.students.filter(
-      //           (v) => v.username === username
-      //         )[0].student_name = `${this.user_student_data[0].firstNameEng} ${this.user_student_data[0].lastNameEng} `;
-      //         this.course_order.students.filter(
-      //           (v) => v.username === username
-      //         )[0].tel = this.user_student_data[0].mobileNo;
-      //         this.course_order.students.filter(
-      //           (v) => v.username === username
-      //         )[0].username = username;
-      //         this.course_order.students.filter(
-      //           (v) => v.username === username
-      //         )[0].account_id = this.user_student_data[0].userOneId;
-      //       } else {
-      //         this.course_order.students.filter(
-      //           (v) => v.username === username
-      //         )[0].firstname_en = "";
-      //         this.course_order.students.filter(
-      //           (v) => v.username === username
-      //         )[0].lastname_en = "";
-      //         this.course_order.students.filter(
-      //           (v) => v.username === username
-      //         )[0].student_name = "";
-      //         this.course_order.students.filter(
-      //           (v) => v.username === username
-      //         )[0].tel = "";
-      //         this.course_order.students.filter(
-      //           (v) => v.username === username
-      //         )[0].username = username;
-      //         this.course_order.students.filter(
-      //           (v) => v.username === username
-      //         )[0].account_id = "";
-      //       }
-      //     } else {
-      //       if (this.user_data.length > 0) {
-      //         if (this.edit_parent) {
-      //           this.edit_parent = false;
-      //         }
-      //         this.relation = {
-      //           account_id: this.user_data[0].userOneId,
-      //           username: username,
-      //           firstname_en: this.user_data[0].firstNameEng,
-      //           lastname_en: this.user_data[0].lastNameEng,
-      //           tel: this.user_data[0].mobileNo,
-      //         };
-      //         console.log("course_order", this.course_order);
-
-      //         if (
-      //           this.course_order.students.filter(
-      //             (v) => v.is_other === false
-      //           )[0].parents.length > 0
-      //         ) {
-      //           let parents = this.course_order.students.filter(
-      //             (v) => v.is_other === false
-      //           )[0].parents;
-      //           parents[0].firstname_en = this.user_data[0].firstNameEng;
-      //           parents[0].lastname_en = this.user_data[0].lastNameEng;
-      //           parents[0].tel = this.user_data[0].mobileNo;
-      //           parents[0].account_id = this.user_data[0].userOneId;
-      //           parents[0].username = username;
-      //         }
-      //       }
-      //     }
-      //   });
-      // } else {
-      //   this.user_data = [];
-      // }
     },
 
     addRealions() {
@@ -1457,7 +1312,6 @@ export default {
       // this.changeCourseOrderData(this.course_order)
       this.changeDialogRegisterOneId(true);
     },
-
     updateData(account_id) {
       console.log("user_account_id", account_id);
 
@@ -1593,23 +1447,6 @@ export default {
       last_user_registered: "RegisterModules/getLastUserRegistered",
     }),
 
-    isInputValid() {
-      return console.log("ABC");
-      // this.user_data.username_en.trim().length > 0 &&
-      // this.user_data.fname_th.trim().length > 0 &&
-      // this.user_data.lname_th.trim().length > 0 &&
-      // this.user_data.fname_en.trim().length > 0 &&
-      // this.user_data.lname_en.trim().length > 0 &&
-      // this.user_data.email.trim().length > 0 &&
-      // this.user_data.phone_num.trim().length > 0
-      // this.sortBy.trim().length > 0 &&
-      // this.students.username.trim().length > 0 &&
-      // this.student.firstname.trim().length > 0 &&
-      // this.student.lastname.trim().length > 0 &&
-      // this.selectedbox.trim().length > 0 &&
-      // this.student.tel.detail.trim().length > 0
-    },
-
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;
@@ -1620,16 +1457,18 @@ export default {
     },
 
     usernameRules() {
-      const specialCharsRegex = /[&*/#@!]/g;
+      const specialCharsRegex = /[A-Za-z0-9 ]/g;
       const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
       return [
         (val) =>
           (val || "").length > 5 ||
-          "Username must be at least 6 characters long",
+          "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
         (val) =>
-          !specialCharsRegex.test(val) ||
-          "Username cannot contain special characters",
-        (val) => !emojiRegex.test(val) || "Username cannot contain emojis",
+          (val || "").length < 20 ||
+          "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
+        (val) =>
+          specialCharsRegex.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+        (val) => !emojiRegex.test(val) || "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
       ];
     },
   },

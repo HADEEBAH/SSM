@@ -34,6 +34,17 @@ const RegisterModules = {
     mutations: {
         ShowDialogRegisterOneId(state, value) {
             state.show_dialog_register_one_id = value
+            state.user_one_id = {
+                firstname_th: "",
+                lastname_th: "",
+                firstname_en: "",
+                lastname_en: "",
+                phone_number: "",
+                username: "",
+                password: "",
+                confirm_password: "",
+                accept_terms: false,
+            }
         },
         SetIsLoading(state, value) {
             state.is_loading = value

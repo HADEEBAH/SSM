@@ -364,8 +364,9 @@
                 </v-row>
             </v-tab-item>
         </v-tabs-items>
+        <!-- COMMENT -->
         <v-dialog :width="$vuetify.breakpoint.smAndUp ? '60vw' : ''"  v-model="show_comment_dialog" v-if="show_comment_dialog">
-            <pre>{{student_check_in[selected_student]}}</pre>
+            <!-- <pre>{{student_check_in[selected_student]}}</pre> -->
             <v-card  class="pa-1">
                 <v-row dense>
                     <v-col class="pa-0" cols="12" align="right">
@@ -474,6 +475,7 @@
                 </v-card-text>
             </v-card>
         </v-dialog>
+        <!-- COMMENT PROTENTIAL -->
         <v-dialog :width="$vuetify.breakpoint.smAndUp ? '60vw' : ''"  v-model="show_comment_potential_dialog" v-if="show_comment_potential_dialog">
             <v-card  class="pa-1">
                 <!-- <pre>{{student_check_in[selected_student]}}</pre> -->
@@ -509,8 +511,9 @@
                                 <v-img height="35" width="26" src="../../../assets/coachLeave/file-pdf.png"/>
                                 </v-col>
                                 <v-col @click="openFile(file)" class="px-2 cursor-pointer">
-                                    <span class="font-bold"> ไฟล์แนบ {{ index + 1 }}</span><br>
-                                    <!-- <span class="text-caption">ขนาดไฟล์ : {{ (0 / 1000000).toFixed(2) }} MB</span> -->
+                                    <!-- {{ file }} -->
+                                    <span class="font-bold"> {{file.originalFilesName}}</span><br>
+                                    <span class="text-caption">ขนาดไฟล์ : {{ (file.filesSize / 1000000).toFixed(2) }} MB</span>
                                 </v-col>
                                 <v-col cols="auto" class="pl-2">
                                     <v-btn @click="removePotentialFileInBase(file, selected_student)" icon color="#ff6b81"><v-icon>mdi-close</v-icon></v-btn>
@@ -584,10 +587,12 @@
                 </v-card-text>
             </v-card>
         </v-dialog>
+        <loading-overlay :loading="student_check_in_is_loading"></loading-overlay>
     </v-container>
   </v-app>
 </template>
 <script>
+import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 import { dateFormatter, CheckFileSize } from '@/functions/functions';
 import rowData from '@/components/label/rowData.vue';
 import { Input, TimePicker } from 'ant-design-vue';
@@ -596,7 +601,7 @@ import { mapActions, mapGetters } from 'vuex';
 import Swal from "sweetalert2";
 export default {
   name:"menageCourseDetail",
-  components: { rowData  , TimePicker, labelCustom},
+  components: { rowData  ,loadingOverlay , TimePicker, labelCustom},
   directives: {
     'ant-input': Input,
   },
@@ -680,7 +685,8 @@ export default {
         course_data : "CourseModules/getCourseData",
         coach_check_in : "CoachModules/getCoachCheckIn",
         student_check_in : "CoachModules/getStudentCheckIn",
-        coach_check_in_is_loading : "CoachModules/getCoachCheckInIsLoading"
+        coach_check_in_is_loading : "CoachModules/getCoachCheckInIsLoading",
+        student_check_in_is_loading :"CoachModules/getStudentCheckInIsLoading"
     }),
     setFunctios(){
         this.GetCourse(this.$route.params.courseId)
@@ -946,7 +952,7 @@ export default {
         console.log(file)
         Swal.fire({
             icon: "question",
-            title: "ไฟล์นี้ใช่หรือไม่",
+            title: "ต้องการลบไฟล์นี้ใช่หรือไม่",
             showDenyButton: false,
             showCancelButton: true,
             confirmButtonText: "ตกลง",
@@ -967,7 +973,7 @@ export default {
         console.log(file)
         Swal.fire({
             icon: "question",
-            title: "ไฟล์นี้ใช่หรือไม่",
+            title: "ต้องการลบไฟล์นี้ใช่หรือไม่",
             showDenyButton: false,
             showCancelButton: true,
             confirmButtonText: "ตกลง",
@@ -1063,7 +1069,7 @@ export default {
         console.log(this.coach_check_in)
         Swal.fire({
             icon: "question",
-            title: "ไฟล์นี้ใช่หรือไม่",
+            title: "ต้องการลบไฟล์นี้ใช่หรือไม่",
             showDenyButton: false,
             showCancelButton: false,
             confirmButtonText: "ตกลง",
