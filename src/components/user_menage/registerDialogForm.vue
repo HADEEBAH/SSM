@@ -31,7 +31,7 @@
               v-model="user_one_id.firstname_th"
               placeholder="ระบุชื่อ(ภาษาไทย)"
               @change="changeUserOneId(user_one_id)"
-              @keypress="Validation($event, 'th')"
+              @keypress="Validation($event, 'th-special')"
               outlined
             ></v-text-field>
           </v-col>
@@ -45,7 +45,7 @@
               v-model="user_one_id.lastname_th"
               placeholder="ระบุนามสกุล(ภาษาไทย)"
               @change="changeUserOneId(user_one_id)"
-              @keypress="Validation($event, 'th')"
+              @keypress="Validation($event, 'th-special')"
               outlined
             ></v-text-field>
           </v-col>
@@ -61,7 +61,7 @@
               v-model="user_one_id.firstname_en"
               placeholder="ระบุชื่อ(ภาษาอังกฤษ)"
               @change="changeUserOneId(user_one_id)"
-              @keypress="Validation($event, 'en')"
+              @keypress="Validation($event, 'en-special')"
               outlined
             ></v-text-field>
           </v-col>
@@ -75,7 +75,7 @@
               v-model="user_one_id.lastname_en"
               placeholder="ระบุนามสกุล(ภาษาอังกฤษ)"
               @change="changeUserOneId(user_one_id)"
-              @keypress="Validation($event, 'en')"
+              @keypress="Validation($event, 'en-special')"
               outlined
             ></v-text-field>
           </v-col>
