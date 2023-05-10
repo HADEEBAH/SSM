@@ -7,7 +7,7 @@ export const inputValidation = (e, type) => {
             }
             break;
         case "th-special":
-            if ((/^[a-zA-Z\s &*/#@!๐-๙0-9[\]] +$/).test(e.key)){
+            if ((/^[a-zA-Z\s &*/#@!๐-๙0-9[\]]+$/).test(e.key)){
                 e.preventDefault()
             }
             break;
