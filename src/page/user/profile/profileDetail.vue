@@ -2,29 +2,49 @@
   <v-container>
     {{ setFunctions }}
     <v-row dense>
-      <v-col class="my-5 " style="text-align: -webkit-center" cols="12">
+      <v-col class="my-5" style="text-align: -webkit-center" cols="12">
         <!-- <v-btn class="absolute" icon>
             <v-icon color="#ff6b81" @click="preview_file = ''"
               >mdi-close-circle</v-icon
             >
           </v-btn> -->
-          <!-- {{ profile_detail.image }} -->
-        <div class="cicle" >
-          <v-img class="image-cropper items-end" :src="preview_file !== '' ? preview_file : (profile_detail.image !== '' ? profile_detail.image : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU`) ">
-            <v-btn v-if="isEnabled && preview_file === ''" color="#ff6b81" @click="openFileSelector" class="w-full white--text">เปลี่ยนรูป</v-btn>
-            <v-btn v-if="preview_file !== ''" color="#ff6b81" @click="removeImg" class="w-full white--text">
+        <!-- {{ profile_detail.image }} -->
+        <div class="cicle">
+          <v-img
+            class="image-cropper items-end"
+            :src="
+              preview_file !== ''
+                ? preview_file
+                : profile_detail.image !== ''
+                ? profile_detail.image
+                : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU`
+            "
+          >
+            <v-btn
+              v-if="isEnabled && preview_file === ''"
+              color="#ff6b81"
+              @click="openFileSelector"
+              class="w-full white--text"
+              >เปลี่ยนรูป</v-btn
+            >
+            <v-btn
+              v-if="preview_file !== ''"
+              color="#ff6b81"
+              @click="removeImg"
+              class="w-full white--text"
+            >
               <span class="mdi mdi-close">ยกเลิก</span>
             </v-btn>
           </v-img>
         </div>
         <input
-            id="fileInput"
-            ref="fileInput"
-            type="file"
-            @change="uploadFile"
-            accept="image/*"
-            hidden
-           />
+          id="fileInput"
+          ref="fileInput"
+          type="file"
+          @change="uploadFile"
+          accept="image/*"
+          hidden
+        />
       </v-col>
       <!--TH NAME -->
       <v-col cols="12" sm="6">
@@ -40,6 +60,7 @@
           outlined
           dense
           :disabled="!isEnabled"
+          :rules="usernameRules"
         >
         </v-text-field>
         <!-- </div> -->
@@ -58,6 +79,7 @@
           outlined
           dense
           :disabled="!isEnabled"
+          :rules="usernameRules"
         >
         </v-text-field>
         <!-- </div> -->
@@ -76,6 +98,7 @@
           outlined
           dense
           :disabled="!isEnabled"
+          :rules="usernameRules"
         >
         </v-text-field>
         <!-- </div> -->
@@ -187,12 +210,11 @@ export default {
     is_loading: false,
     user_detail: {},
     image_profile: {},
-    preview_file: ""
+    preview_file: "",
   }),
 
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-   
   },
   mounted() {
     this.$store.dispatch(
@@ -230,7 +252,7 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            this.is_loading = true
+            this.is_loading = true;
             let config = {
               headers: {
                 "Access-Control-Allow-Origin": "*",
@@ -250,13 +272,12 @@ export default {
             this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
             let user_account_id = this.user_detail.account_id;
 
-            let payloadData = new FormData()
-            payloadData.append("payload",JSON.stringify(payload))
+            let payloadData = new FormData();
+            payloadData.append("payload", JSON.stringify(payload));
             if (this.image_profile.name) {
               console.log("this.image_profile", this.image_profile);
-              payloadData.append("imageProfile",this.image_profile)
+              payloadData.append("imageProfile", this.image_profile);
             }
-            
 
             let { data } = await axios.patch(
               `${process.env.VUE_APP_URL}/api/v1/profile/${user_account_id}`,
@@ -268,21 +289,21 @@ export default {
               Swal.fire({
                 icon: "success",
                 title: "แก้ไขโปรไฟล์สำเร็จ",
-                timer: 3000
-              })
+                timer: 3000,
+              });
 
-              let data_storage = JSON.parse(localStorage.getItem('userDetail'));
-              data_storage.image = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}`
-              localStorage.setItem('userDetail', JSON.stringify(data_storage));
+              let data_storage = JSON.parse(localStorage.getItem("userDetail"));
+              data_storage.image = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}`;
+              localStorage.setItem("userDetail", JSON.stringify(data_storage));
               this.GetProfileDetail(this.$route.params.profile_id);
-              
-              this.is_loading = false
-              this.preview_file = ""
+
+              this.is_loading = false;
+              this.preview_file = "";
               this.dialog_show = true;
               this.isDisabled = true;
               this.isEnabled = false;
               this.buttonName = "แก้ไข";
-              document.getElementById('fileInput').value = "";
+              document.getElementById("fileInput").value = "";
             } else {
               throw { message: data.message };
             }
@@ -302,32 +323,38 @@ export default {
     },
 
     uploadFile() {
-      let allowedExtension = ['image/jpeg', 'image/jpg', 'image/png','image/gif','image/bmp'];
-      let files = this.$refs.fileInput.files[0]
+      let allowedExtension = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/gif",
+        "image/bmp",
+      ];
+      let files = this.$refs.fileInput.files[0];
 
       if (files.size > 10240 * 1024) {
         Swal.fire({
           icon: "warning",
           title: "ขนาดไฟล์ใหญ่เกินไป",
-          text: "( กำหนดขนาดไม่เกิน 10MB )"
-        })
-        document.getElementById('fileInput').value = "";
+          text: "( กำหนดขนาดไม่เกิน 10MB )",
+        });
+        document.getElementById("fileInput").value = "";
       } else if (allowedExtension.indexOf(files.type) === -1) {
         Swal.fire({
           icon: "warning",
           title: "รูปแบบไฟล์ไม่ถูกต้อง",
-          text: "( กรุณาอัปโหลดไฟล์รูปภาพ )"
-        })
-        document.getElementById('fileInput').value = "";
+          text: "( กรุณาอัปโหลดไฟล์รูปภาพ )",
+        });
+        document.getElementById("fileInput").value = "";
       } else {
-        this.preview_file = URL.createObjectURL(files)
+        this.preview_file = URL.createObjectURL(files);
         this.image_profile = files;
       }
     },
 
     removeImg() {
-      document.getElementById('fileInput').value = "";
-      this.preview_file = ""
+      document.getElementById("fileInput").value = "";
+      this.preview_file = "";
     },
 
     // submitEdit() {
@@ -356,12 +383,31 @@ export default {
       profile_detail: "ProfileModules/getProfileDetail",
       // parent_data: "ProfileModules/getParentData",
     }),
-    setFunctions(){
+    setFunctions() {
       this.GetAll(this.user_detail.account_id);
-      this.GetProfileDetail(this.$route.params.profile_id);  
-      return ''
-    }
-  }
+      this.GetProfileDetail(this.$route.params.profile_id);
+      return "";
+    },
+
+    usernameRules() {
+      const specialCharsRegex = /[&*/#@! ]/g;
+      const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
+      const english = /^[a-zA-Z]+$/g;
+      return [
+        (val) =>
+          (val || "").length > 5 ||
+          "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
+        (val) =>
+          !specialCharsRegex.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+        (val) => !emojiRegex.test(val) || "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
+        (val) =>
+          !english.test(val) || "Username should contain only English letters",
+      ];
+    },
+  },
 };
 </script>
 
@@ -410,11 +456,12 @@ export default {
   /* background-size: 100% 100%, 50% 50%, 50% 50%, 50% 50%, 50% 50%; */
   background-repeat: no-repeat;
   background-image: linear-gradient(white, white),
-                    linear-gradient(30deg, #ff6b81 36%, #ff6b81 30%),
-                    linear-gradient(120deg, #ff6b81 36%, #ff6b81 30%),
-                    linear-gradient(300deg, #ff6b81 36%, #ff6b81 30%),
-                    linear-gradient(210deg, #ff6b81 36%, #ff6b81 30%);
-  background-position: center center, left top, right top, left bottom, right bottom;
+    linear-gradient(30deg, #ff6b81 36%, #ff6b81 30%),
+    linear-gradient(120deg, #ff6b81 36%, #ff6b81 30%),
+    linear-gradient(300deg, #ff6b81 36%, #ff6b81 30%),
+    linear-gradient(210deg, #ff6b81 36%, #ff6b81 30%);
+  background-position: center center, left top, right top, left bottom,
+    right bottom;
   background-origin: content-box, border-box, border-box, border-box, border-box;
   background-clip: content-box, border-box, border-box, border-box, border-box;
   /* transform: rotate(30deg); */
