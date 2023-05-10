@@ -1071,7 +1071,7 @@ export default {
             icon: "question",
             title: "ต้องการลบไฟล์นี้ใช่หรือไม่",
             showDenyButton: false,
-            showCancelButton: false,
+            showCancelButton: true,
             confirmButtonText: "ตกลง",
             cancelButtonText: "ยกเลิก",
             }).then(async (result) => {
