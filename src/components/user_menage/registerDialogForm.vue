@@ -82,7 +82,7 @@
         </v-row>
         <v-row dense>
           <v-col>
-            <label>เบอร์โทร</label>
+            <label>เบอร์โทรศัพท์</label>
             <v-text-field
               dense
               ref="phone_number"
@@ -92,7 +92,7 @@
               v-model="user_one_id.phone_number"
               @input="checkPhoneNumber"
               @keypress="Validation($event, 'number')"
-              placeholder="ระบุเบอร์โทร"
+              placeholder="ระบุเบอร์โทรศัพท์"
               @change="changeUserOneId(user_one_id)"
               outlined
             ></v-text-field>
@@ -226,7 +226,7 @@ export default {
       phone_number: [
         (val) =>
           ((val || "").length > 0 && val.length === 12) ||
-          "โปรดระบุเบอร์โทร 10 หลัก",
+          "โปรดระบุเบอร์โทรศัพท์ 10 หลัก",
       ],
       username_rig: [
         (val) =>
@@ -292,9 +292,7 @@ export default {
         (val) =>
           (val || "").length < 20 ||
           "โปรดระบุชื่อ (ภาษาไทย) ความยาวไม่เกิน 20 ตัวอักษร",
-        (val) =>
-          !specialCharsRegex.test(val) ||
-          "กรุณากรอกชื่อภาษาไทย",
+        (val) => !specialCharsRegex.test(val) || "กรุณากรอกชื่อภาษาไทย",
         (val) => !emojiRegex.test(val) || "กรุณากรอกชื่อภาษาไทย",
       ];
     },
@@ -302,15 +300,13 @@ export default {
       const specialCharsRegex = /[&*/#@! 0-9๐-๙]/g;
       const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
       return [
-      (val) =>
+        (val) =>
           (val || "").length > 1 ||
           "โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
         (val) =>
           (val || "").length < 20 ||
           "โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
-        (val) =>
-          !specialCharsRegex.test(val) ||
-          "กรุณากรอกชื่อภาษาอังกฤษ",
+        (val) => !specialCharsRegex.test(val) || "กรุณากรอกชื่อภาษาอังกฤษ",
         (val) => !emojiRegex.test(val) || "กรุณากรอกชื่อภาษาอังกฤษ",
       ];
     },
@@ -318,15 +314,13 @@ export default {
       const specialCharsRegex = /[&*/#@! 0-9๐-๙]/g;
       const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
       return [
-      (val) =>
+        (val) =>
           (val || "").length > 1 ||
           "โปรดระบุนามสกุล (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
         (val) =>
           (val || "").length < 20 ||
           "โปรดระบุนามสกุล (ภาษาไทย) ความยาวไม่เกิน 20 ตัวอักษร",
-        (val) =>
-          !specialCharsRegex.test(val) ||
-          "กรุณากรอกนามสกุลภาษาไทย",
+        (val) => !specialCharsRegex.test(val) || "กรุณากรอกนามสกุลภาษาไทย",
         (val) => !emojiRegex.test(val) || "กรุณากรอกสกุลภาษาไทย",
       ];
     },
@@ -334,15 +328,13 @@ export default {
       const specialCharsRegex = /[&*/#@! 0-9๐-๙]/g;
       const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
       return [
-      (val) =>
+        (val) =>
           (val || "").length > 1 ||
           "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
         (val) =>
           (val || "").length < 20 ||
           "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
-        (val) =>
-          !specialCharsRegex.test(val) ||
-          "กรุณากรอกนามสกุลภาษาอังกฤษ",
+        (val) => !specialCharsRegex.test(val) || "กรุณากรอกนามสกุลภาษาอังกฤษ",
         (val) => !emojiRegex.test(val) || "กรุณากรอกสกุลภาษาอังกฤษ",
       ];
     },
@@ -357,11 +349,11 @@ export default {
           (val || "").length < 20 ||
           "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
         (val) =>
-          !specialCharsRegex.test(val) ||
-          "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+          !specialCharsRegex.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
         (val) => !emojiRegex.test(val) || "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
       ];
-    },passwordRules() {
+    },
+    passwordRules() {
       const specialCharsRegex = /[ ]/g;
       return [
         (val) =>
@@ -371,8 +363,7 @@ export default {
           (val || "").length < 20 ||
           "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
         (val) =>
-          !specialCharsRegex.test(val) ||
-          "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+          !specialCharsRegex.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
       ];
     },
   },

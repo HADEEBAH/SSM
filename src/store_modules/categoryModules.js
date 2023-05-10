@@ -5,21 +5,21 @@ const categoryModules = {
     namespaced: true,
     state: {
         categorys: [],
-        category:{},
-        category_is_loading : false,
-        categorys_is_loading : false,
+        category: {},
+        category_is_loading: false,
+        categorys_is_loading: false,
     },
     mutations: {
         SetCategorys(state, payload) {
             state.categorys = payload
         },
-        SetCategory(state,payload){
+        SetCategory(state, payload) {
             state.category = payload
         },
-        SetCategoryIsLoading(state, value){
+        SetCategoryIsLoading(state, value) {
             state.category_is_loading = value
         },
-        SetCategorysIsLoading(state, value){
+        SetCategorysIsLoading(state, value) {
             state.categorys_is_loading = value
         }
     },
@@ -31,7 +31,6 @@ const categoryModules = {
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category`)
                 // console.log("data", data);
                 if (data.statusCode === 200) {
-                    // console.log("data", data.data);
                     context.commit("SetCategorys", data.data)
                     context.commit("SetCategorysIsLoading", false)
                 }
@@ -46,7 +45,12 @@ const categoryModules = {
                 // console.log(process.env.VUE_APP_URL)
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category/course`)
                 if (data.statusCode === 200) {
-                    context.commit("SetCategorys", data.data)
+                    let categorys = data.data
+
+                    for await (let category of categorys) {
+                        category.show = false
+                    }
+                    context.commit("SetCategorys", categorys)
                     context.commit("SetCategorysIsLoading", false)
                 }
             } catch (error) {
@@ -54,57 +58,57 @@ const categoryModules = {
                 // console.log("error :", error)
             }
         },
-        async GetCategory(context, category_id){
+        async GetCategory(context, category_id) {
             context.commit("SetCategoryIsLoading", true)
             try {
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category/${category_id}`)
-                if(data.statusCode === 200){
+                if (data.statusCode === 200) {
                     context.commit("SetCategory", data.data)
                     // console.log("SetCategory", data.data);
                 }
                 context.commit("SetCategoryIsLoading", false)
-            }catch(error){
+            } catch (error) {
                 context.commit("SetCategoryIsLoading", false)
                 console.log(error)
             }
         },
-        async DeleteCategory(context,{category_id}){
-            try{
+        async DeleteCategory(context, { category_id }) {
+            try {
                 let config = {
                     headers: {
                         "Access-Control-Allow-Origin": "*",
                         "Content-type": "Application/json",
                         Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
-                  };
-                let {data} = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/category/${category_id}`,config)
+                };
+                let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/category/${category_id}`, config)
                 console.log(data)
-                if(data.statusCode === 200){
+                if (data.statusCode === 200) {
                     Swal.fire({
                         icon: "success",
                         title: "ลบรายการสำเร็จ",
                         showDenyButton: false,
                         showCancelButton: false,
-                        cancelButtonText :"ยกเลิก",
+                        cancelButtonText: "ยกเลิก",
                         confirmButtonText: "ตกลง",
                     }).then(async (result) => {
                         if (result.isConfirmed) {
-                            let category  = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category`)
+                            let category = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category`)
                             if (category.data.statusCode === 200) {
-                                context.commit("SetCategorys",category.data.data)
+                                context.commit("SetCategorys", category.data.data)
                             }
                         }
                     })
                 }
-            }catch(error){
-                if(error.response.data.statusCode === 403){
-                    if(error.response.data.message === "Cannot delete this category because of the course"){
+            } catch (error) {
+                if (error.response.data.statusCode === 403) {
+                    if (error.response.data.message === "Cannot delete this category because of the course") {
                         Swal.fire({
                             icon: "error",
                             title: "ไม่สามารถลบอาณาจักรนี้ได้เนื่องจากมีคอร์สเรียน",
                             showDenyButton: false,
                             showCancelButton: false,
-                            cancelButtonText :"ยกเลิก",
+                            cancelButtonText: "ยกเลิก",
                             confirmButtonText: "ตกลง",
                         })
                     }
@@ -118,12 +122,12 @@ const categoryModules = {
         },
         getCategory(state) {
             // console.log("abc");
-            return state.category   
+            return state.category
         },
-        getCategoryIsLoading(state){
+        getCategoryIsLoading(state) {
             return state.SetCategoryIsLoading
         },
-        getCategorysIsLoading(state){
+        getCategorysIsLoading(state) {
             return state.categorys_is_loading
         },
     },
