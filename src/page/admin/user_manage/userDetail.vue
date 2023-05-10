@@ -13,21 +13,50 @@
               :title="title"
             ></headerCard>
             <v-divider class="mx-10"></v-divider>
-            <div>
+            <!-- <div>
               <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
                 <v-row class="pa-2 ml-5 mr-5">
                   <v-col cols="12"> Username (English) </v-col>
                   <v-col cols="12">
-                    <!-- username-->
+                    username
                     {{ show_by_id.userName }}
                   </v-col>
                 </v-row>
               </v-card>
-            </div>
+            </div> -->
+            <v-card class="mx-10 my-10" color="#FCFCFC">
+              <v-card-text class="mt-3">
+                <labelCustom text="Username"></labelCustom>
+                <v-row>
+                  <v-col cols="12" sm="6">
+                    <v-text-field
+                      v-model="show_by_id.userName"
+                      dense
+                      outlined
+                      disabled
+                    >
+                      <template v-slot:append>
+                        <v-icon color="green"
+                          >mdi-checkbox-marked-circle-outline</v-icon
+                        >
+                      </template>
+                    </v-text-field>
+                  </v-col>
+                  <v-col sm="2"></v-col>
+                  <v-col cols="12" sm="4" align="end">
+                    <v-img
+                      class="ml-auto mx-10 mb-2"
+                      src="@/assets/manageuser/logo_one platform.svg"
+                    />
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+
             <br />
 
             <div v-if="show_by_id.userRoles <= 0">
-              <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
+              <v-card class="mx-10 my-10" color="#FCFCFC">
                 <v-card-text class="mt-3">
                   <v-row>
                     <v-row>
@@ -200,13 +229,16 @@
                   :title="title2"
                 ></headerCard>
                 <v-divider class="mx-10"></v-divider>
-                <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
+                <v-card class="my-10 mx-10" color="#FCFCFC">
                   <v-card-text class="mt-3">
                     <v-row class="mr-3 ml-3">
                       <v-col cols="12" sm="6">
                         <label-custom text="บทบาทผู้ใช้งาน"></label-custom>
 
-                        <v-card background-color="#FBF3F5" class="pa-2 w-2/4">
+                        <v-card
+                          background-color="#FBF3F5"
+                          class="pa-2 w-1/4 text-center my-2"
+                        >
                           {{
                             user_id
                               ? user_id.roleNameTh
@@ -230,7 +262,7 @@
                   item.roleId == 'R_4'
                 "
               >
-                <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
+                <v-card class="my-10 mx-10" color="#FCFCFC">
                   <v-card-text class="mt-3">
                     <v-row>
                       <v-row>
@@ -390,15 +422,17 @@
                   :title="title2"
                 ></headerCard>
                 <v-divider class="mx-10"></v-divider>
-                <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
+                <v-card class="my-10 mx-10" color="#FCFCFC">
                   <v-card-text class="mt-3">
                     <v-row class="mr-3 ml-3">
                       <v-col cols="12" sm="6">
                         <label-custom text="บทบาทผู้ใช้งาน"></label-custom>
 
-                        <v-card background-color="#FBF3F5" class="pa-2 w-2/4">{{
-                          item.roleNameTh
-                        }}</v-card>
+                        <v-card
+                          background-color="#FBF3F5"
+                          class="pa-2 w-1/4 text-center my-2"
+                          >{{ item.roleNameTh }}</v-card
+                        >
                       </v-col>
                     </v-row>
                   </v-card-text>
@@ -422,7 +456,7 @@
                   <div v-if="tab === 0">
                     <!-- ข้อมูลทั้่วไป -->
 
-                    <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
+                    <v-card class="my-10 mx-10" color="#FCFCFC">
                       <v-card-text class="mt-3">
                         <v-row>
                           <v-row>
@@ -587,7 +621,7 @@
                       :title="title2"
                     ></headerCard>
                     <v-divider class="mx-10"></v-divider>
-                    <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
+                    <v-card class="my-10 mx-10" color="#FCFCFC">
                       <v-card-text class="mt-3">
                         <v-row class="mr-3 ml-3">
                           <v-col cols="12" sm="6">
@@ -595,7 +629,7 @@
 
                             <v-card
                               background-color="#FBF3F5"
-                              class="pa-2 w-2/4"
+                              class="pa-2 w-1/4 text-center my-2"
                               >{{ item.roleNameTh }}</v-card
                             >
                           </v-col>
@@ -608,7 +642,7 @@
                       class="ml-6 mt-8"
                       :icon="'mdi-human-male-boy'"
                       :icon_color="'#FF6B81'"
-                      :title="title4"
+                      :title="parent_detail"
                     ></headerCard>
                     <v-divider class="mx-10"></v-divider>
                     <div v-if="data_user_relation_management.length >= 1">
@@ -739,7 +773,7 @@
                       >
                         <v-card-text class="mt-3">
                           <v-row dense>
-                            <v-col align="right">
+                            <!-- <v-col align="right">
                               <v-icon
                                 larg
                                 color="#FF6B81"
@@ -748,7 +782,7 @@
                               >
                                 mdi-delete
                               </v-icon>
-                            </v-col>
+                            </v-col> -->
                           </v-row>
                           <!-- Student Data In R-5 -->
                           <v-row dense align="center">
@@ -801,44 +835,6 @@
                           </v-row>
                         </v-card-text>
                       </v-card>
-
-                      <!-- Table In R_5 -->
-
-                      <!-- TABLE -->
-                      <!-- :items="datausers"
-                  :search="search"
-                  :page.sync="page"
-                  :items-per-page="itemsPerPage"
-                  :sort-by="user_data.sortBy" -->
-                      <!-- <div class="my-5 mx-10">
-                        <v-data-table
-                          :headers="headers"
-                          @page-count="pageCount = $event"
-                          class="elevation-1 header-table"
-                        >
-                          <template v-slot:[`item.actions`]="{ item }">
-                            <v-icon small color="#FF6B81">
-                              mdi-eye-outline
-                            </v-icon>
-                            <v-icon
-                              small
-                              class="ml-5"
-                              color="#FF6B81"
-                              @click="editItem(item)"
-                            >
-                              mdi-pencil
-                            </v-icon>
-                            <v-icon
-                              class="ml-5"
-                              small
-                              color="#FF6B81"
-                              @click="deleteItem(item)"
-                            >
-                              mdi-delete
-                            </v-icon>
-                          </template>
-                        </v-data-table>
-                      </div> -->
                     </div>
 
                     <!-- Card Add Parent -->
@@ -914,29 +910,34 @@
                     <v-row class="mt-5 ml-6 mt-8">
                       <v-col cols="12" sm="6">
                         <v-text-field
-                          v-model="search"
-                          prepend-inner-icon="mdi-magnify"
-                          label="ค้นหา"
-                          single-line
-                          hide-details
                           dense
                           outlined
+                          label="ค้นหา"
+                          color="pink"
+                          hide-details
+                          v-model="search"
+                          @input="search_data(search)"
+                          prepend-inner-icon="mdi-magnify"
                         ></v-text-field>
                       </v-col>
                     </v-row>
                     <!-- Table -->
+                    <!-- <pre>{{ student_schedule }}</pre> -->
+
                     <div class="my-5 mx-10">
-                      <!--
-                  :search="search"
-                  :page.sync="page"
-                  :items-per-page="itemsPerPage"
-                  :sort-by="user_data.sortBy" -->
                       <v-data-table
-                        :headers="headersTabs"
+                        :headers="roleStudentTable"
                         @page-count="pageCount = $event"
                         class="elevation-1 header-table"
                         :items="student_schedule"
+                        :search="search"
                       >
+                        <template v-slot:[`item.dates`]="{ item }">
+                          {{ dayOfWeekName(item.dates.day) }}
+                          <!-- ({{
+                          getThaiDayOfWeek(item.dates.day)
+                        }}) -->
+                        </template>
                       </v-data-table>
                     </div>
                   </div>
@@ -966,7 +967,7 @@
                     <v-col cols="12" sm="6" align="right">
                       <label
                         class="pink--text cursor-pointer mt-5"
-                        @click="addCertificateDialog('add')"
+                        @click="addCertificateDialog()"
                         ><span class="mdi mdi-file-plus-outline"></span>
                         เพิ่มการแข่งขันและเกียรติบัตร
                       </label>
@@ -1142,7 +1143,6 @@
                                 type="file"
                                 @change="uploadFile"
                                 style="display: none"
-                                accept="image/*"
                               />
                             </v-col>
                           </v-row>
@@ -1239,40 +1239,29 @@
                   class="ml-6 mt-8"
                   :icon="'mdi-file-plus-outline'"
                   :icon_color="'#FF6B81'"
-                  :title="addStudentData"
+                  :title="student_detail"
                 ></headerCard>
                 <v-divider class="mx-10"></v-divider>
                 <div v-if="data_user_relation_management.length >= 1">
                   <v-card
-                    class="mt-10 ml-10 mr-10"
+                    class="mx-10 my-10"
                     color="#FCFCFC"
                     v-for="(data_item, index) in data_user_relation_management"
                     :key="index"
                   >
-                    <!-- v-for="(student, student_index) in students"
-                  :key="`${student_index}-student`"
-                  @click="removeCardStudent(student_index)" -->
                     <v-card-text class="mt-3">
-                      <!-- <v-row dense>
-                      <v-col align="right">
-                        <v-icon larg color="#FF6B81" v-if="student.length >= 2">
-                          mdi-delete
-                        </v-icon>
-                      </v-col>
-                    </v-row> -->
                       <!-- Student Data -->
-
                       <v-row dense align="center">
                         <v-col cols="12" sm="6">
                           <label-custom
                             text="Student’s Username (English)"
                           ></label-custom>
                           <div>
-                            <!-- {{
-                            !data_item.student.studentUsername
-                              ? "-"
-                              : data_item.student.studentUsername
-                          }} -->
+                            {{
+                              !data_item.student.studentUsername
+                                ? "-"
+                                : data_item.student.studentUsername
+                            }}
                           </div>
                         </v-col>
                         <v-col cols="12" sm="6">
@@ -1335,56 +1324,19 @@
               </div>
 
               <!-- TABLE -->
-              <div
-                class="my-5 mx-10"
-                v-if="item.roleId == 'R_4' || item.roleId == 'R_5'"
-              >
+              <div class="my-5 mx-10" v-if="item.roleId == 'R_4'">
                 <v-data-table
-                  :headers="headers"
+                  :headers="roleParentTable"
                   @page-count="pageCount = $event"
                   class="elevation-1 header-table"
                   :items="student_schedule"
+                  :search="search"
                 >
-                  <template v-slot:[`item.days`]>
-                    <div
-                      v-for="(item, index) in student_data.dates"
-                      :key="index"
-                    >
-                      {{ item.day }}
-                    </div>
-                    <!-- {{ student_data.dates.count }} -->
-                    <!-- <div
-                        v-for="(item_data, index) in student_data.dates.day"
-                        :key="index"
-                      >
-                        {{
-                          dayOfWeekName(item_data.dates.day) == ""
-                            ? "-"
-                            : dayOfWeekName(item_data.dates.day)
-                        }}
-                        {{ student_data.period.start }} -
-                        {{ student_data.period.end }} น.
-                      </div> -->
-                  </template>
-
-                  <template v-slot:[`item.actions`]="{ item }">
-                    <v-icon small color="#FF6B81"> mdi-eye-outline </v-icon>
-                    <v-icon
-                      small
-                      class="ml-5"
-                      color="#FF6B81"
-                      @click="editItem(item)"
-                    >
-                      mdi-pencil
-                    </v-icon>
-                    <v-icon
-                      class="ml-5"
-                      small
-                      color="#FF6B81"
-                      @click="deleteItem(item)"
-                    >
-                      mdi-delete
-                    </v-icon>
+                  <template v-slot:[`item.dates`]="{ item }">
+                    {{ dayOfWeekName(item.dates.day) }}
+                    <!-- ({{
+                          getThaiDayOfWeek(item.dates.day)
+                        }}) -->
                   </template>
                 </v-data-table>
               </div>
@@ -1461,6 +1413,7 @@ import LabelCustom from "@/components/label/labelCustom.vue";
 import headerPage from "@/components/header/headerPage.vue";
 import headerCard from "@/components/header/headerCard.vue";
 import userManageForm from "@/components/user_menage/userManageForm.vue";
+import { CheckFileSize } from "@/functions/functions";
 import axios from "axios";
 import VueCookie from "vue-cookie";
 
@@ -1485,29 +1438,29 @@ export default {
       { text: "จัดการผู้ใช้งาน", to: "UserList" },
       { text: "เพิ่มผู้ใช้งาน", to: "" },
     ],
-    headers: [
+    roleParentTable: [
       { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
       { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
       { text: "ชื่อคอร์ส", value: "cpo.categoryNameTh", sortable: false },
       { text: "แพ็คเกจ", value: "cpo.packageName", sortable: false },
       { text: "โค้ช", value: "coachName", sortable: false },
-      { text: "ประเภท", value: "oneid", sortable: false },
+      { text: "ประเภท", value: "cpo.courseTypeNameTh", sortable: false },
       { text: "ระยะเวลา", value: "cpo.optionName", sortable: false },
-      { text: "วัน", value: "days", sortable: false },
-      { text: "เวลาเริ่ม", value: "period.start", sortable: false },
-      { text: "เวลาสิ้นสุด", value: "period.end", sortable: false },
+      { text: "วัน", value: "dates", sortable: false },
+      { text: "เวลาเริ่ม", value: "start", sortable: false },
+      { text: "เวลาสิ้นสุด", value: "end", sortable: false },
     ],
-    headersTabs: [
+    roleStudentTable: [
       { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
       { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
       { text: "ชื่อคอร์ส", value: "cpo.categoryNameTh", sortable: false },
       { text: "แพ็คเกจ", value: "cpo.packageName", sortable: false },
       { text: "โค้ช", value: "coachName", sortable: false },
-      { text: "ประเภท", value: "oneid", sortable: false },
+      { text: "ประเภท", value: "cpo.courseTypeNameTh", sortable: false },
       { text: "ระยะเวลา", value: "cpo.optionName", sortable: false },
-      { text: "วัน", value: "days", sortable: false },
-      { text: "เวลาเริ่ม", value: "period.start", sortable: false },
-      { text: "เวลาสิ้นสุด", value: "period.end", sortable: false },
+      { text: "วัน", value: "dates", sortable: false },
+      { text: "เวลาเริ่ม", value: "start", sortable: false },
+      { text: "เวลาสิ้นสุด", value: "end", sortable: false },
       { text: "ราคา", value: "price", sortable: false },
     ],
 
@@ -1538,7 +1491,8 @@ export default {
     title: "ข้อมูลผู้ใช้งาน",
     title2: "การจัดการสิทธิ์",
     title3: "คอร์สเรียน",
-    title4: "ข้อมูลผู้ปกครอง",
+    parent_detail: "ข้อมูลผู้ปกครอง",
+    student_detail: "ข้อมูลนักเรียน",
     addStudentData: "เพิ่มข้อมูลผู้ใช้นักเรียน",
     addParentData: "เพิ่มข้อมูลผู้ใช้ของผู้ปกครอง",
     parent: {
@@ -1563,8 +1517,6 @@ export default {
     isOpen: false,
     params: "",
     relations: [],
-    default_img_update_profile:
-      "@/assets/userManagePage/default_img_update_profile.svg",
   }),
   created() {
     // this.GetAll(this.$route.params.account_id);
@@ -1633,10 +1585,6 @@ export default {
       GetStudentSchedule: "UserModules/GetStudentSchedule",
     }),
 
-    openFileSelector() {
-      this.$refs.fileInput.click();
-    },
-
     onCheckboxChange() {
       if (this.selectedbox) {
         // Checkbox is selected, open the card
@@ -1645,6 +1593,10 @@ export default {
         // Checkbox is unselected, close the card
         this.user_data.isCardOpen = false;
       }
+    },
+
+    openFileSelector() {
+      this.$refs.fileInput.click();
     },
 
     onCheckboxChangeParent() {
@@ -1724,27 +1676,17 @@ export default {
       this.certificate_show = false;
       this.addCertificate_dialog_show = false;
     },
-    // uploadFile() {
-    //   this.file = this.$refs.fileInput.files[0];
-    //   this.fileName = this.file.name
-    //   console.log(this.file);
-    //   if (!this.file) return;
-    //   const reader = new FileReader();
-    //   reader.onload = (e) => {
-    //     console.log(e);
-    //     this.previewUrl = e.target.result;
-    //   };
-    //   reader.readAsDataURL(this.file);
-    // },
+
     uploadFile() {
       this.file = this.$refs.fileInput.files[0];
-      console.log("file=>", this.file);
       if (!this.file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.preview_url = e.target.result;
-      };
-      reader.readAsDataURL(this.file);
+      if (CheckFileSize(this.file) === true) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.preview_url = e.target.result;
+        };
+        reader.readAsDataURL(this.file);
+      }
     },
     removeFile() {
       this.fileName = "";
@@ -1764,15 +1706,16 @@ export default {
       this.certificate_show = true;
     },
 
-    addCertificateDialog(type) {
+    addCertificateDialog() {
+      // console.log("type", type);
       this.status = "create";
       this.name_certificate = "";
       this.certificate_date = "";
       this.file = "";
       this.fileName = "";
-      this.previewUrl = null;
+      this.preview_url = null;
       this.certificate_dialog_show = true;
-      this.certificateType = type;
+      // this.certificateType = type;
     },
     editCertificateDialog(item, index) {
       this.status = "edit";
@@ -2001,7 +1944,25 @@ export default {
         const dayIndex = days[i];
         dayNames.push(daysOfWeek[dayIndex]);
       }
-      return dayNames.join(" - ");
+      return dayNames.join(" , ");
+    },
+    async search_data(name) {
+      console.log("name", name);
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        await axios.get(
+          `${process.env.VUE_APP_URL}/api/v1/usermanagement/search?name=${name}`,
+          config
+        );
+      } catch (error) {
+        console.log("err", error);
+      }
     },
   },
   computed: {
@@ -2025,6 +1986,36 @@ export default {
     //   this.GetAll(this.$route.params.account_id);
     //   return "";
     // },
+  },
+
+  watch: {
+    "data_user_relation_management.length": function () {
+      this.GetDataRelationsManagement(this.data_user_by_id);
+      for (const show_data of this.show_by_id.userRoles) {
+        console.log("show_data", show_data);
+        if (show_data.roleId == "R_4") {
+          if (this.data_user_relation_management.length > 0) {
+            this.isOpenParent = true;
+            for (const item_relation of this.data_user_relation_management) {
+              this.GetStudentSchedule(item_relation.studentId);
+            }
+          } else {
+            this.data_user_relation_management = [];
+          }
+        } else if (show_data.roleId == "R_5") {
+          if (this.data_user_relation_management.length > 0) {
+            this.isOpenStudent = true;
+            for (const item_relation of this.data_user_relation_management) {
+              this.GetStudentSchedule(item_relation.studentId);
+            }
+          } else {
+            this.data_user_relation_management = [];
+          }
+        } else {
+          console.log("show_data", show_data.roleId);
+        }
+      }
+    },
   },
 };
 </script>

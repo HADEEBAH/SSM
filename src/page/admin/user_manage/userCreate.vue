@@ -1,73 +1,75 @@
 <template>
   <v-container>
     <!-- {{ checkData }} -->
-    <v-row dense>
-      <v-col cols="12">
-        <headerPage :breadcrumbs="breadcrumbs"></headerPage>
-        <v-card class="mx-auto">
-          <!-- <v-container grid-list-xs> -->
-          <v-row dense>
-            <v-col cols="12">
-              <headerCard
-                class="ml-6 mt-8"
-                :icon="'mdi-card-account-details-outline'"
-                :icon_color="'#FF6B81'"
-                :title="title"
-              ></headerCard>
-              <v-divider class="mx-10"></v-divider>
-              <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
-                <v-card-text class="mt-3">
-                  <labelCustom text="Username"></labelCustom>
-                  <v-row>
-                    <!-- :hide-details="!checkData.account_id" -->
+    <!-- <v-row dense>
+      <v-col cols="12"> -->
+    <headerPage :breadcrumbs="breadcrumbs"></headerPage>
+    <v-card class="mx-auto">
+      <v-container>
+        <v-row dense>
+          <v-col cols="12">
+            <headerCard
+              class="ml-6 mt-8"
+              :icon="'mdi-card-account-details-outline'"
+              :icon_color="'#FF6B81'"
+              :title="title"
+            ></headerCard>
+            <v-divider class="mx-10"></v-divider>
+            <v-card class="mx-10 my-10" color="#FCFCFC">
+              <v-card-text class="mt-3">
+                <labelCustom text="Username"></labelCustom>
+                <v-row>
+                  <!-- :hide-details="!checkData.account_id" -->
 
-                    <v-col cols="12" sm="6">
-                      <v-text-field
-                        :rules="usernameRules"
-                        dense
-                        outlined
-                        @keypress="validate($event, 'en-number')"
-                        v-model="checkData.username"
-                        @change="checkDataRelation(checkData.username)"
-                        @keyup.enter="checkDataRelation(checkData.username)"
-                        @blur="checkDataRelation(checkData.username)"
-                        placeholder="Username"
-                      >
-                        <template v-slot:append>
-                          <v-icon v-if="checkData.account_id" color="green"
-                            >mdi-checkbox-marked-circle-outline</v-icon
-                          >
-                        </template>
-                      </v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="2">
-                      <template v-if="!relation.account_id">
-                        <label> หากยังไม่มีบัญชีผู้ใช้กรุณา </label>
-                        <label
-                          class="text-[#ff6b81] underline cursor-pointer mt-5"
-                          @click="registerParent"
-                          >สมัคร One ID</label
+                  <v-col cols="12" sm="6">
+                    <v-text-field
+                      :rules="usernameRules"
+                      dense
+                      outlined
+                      @keypress="validate($event, 'en-number')"
+                      v-model="checkData.username"
+                      @change="checkDataRelation(checkData.username)"
+                      @keyup.enter="checkDataRelation(checkData.username)"
+                      @blur="checkDataRelation(checkData.username)"
+                      placeholder="Username"
+                    >
+                      <template v-slot:append>
+                        <v-icon v-if="checkData.account_id" color="green"
+                          >mdi-checkbox-marked-circle-outline</v-icon
                         >
                       </template>
-                    </v-col>
-                    <v-col cols="12" sm="4" align="end">
-                      <v-img
-                        class="img-one ml-auto mr-10 mb-2"
-                        src="@/assets/manageuser/logo_one platform.svg"
-                      />
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-card>
-            </v-col>
+                    </v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="2">
+                    <template v-if="!relation.account_id">
+                      <label> หากยังไม่มีบัญชีผู้ใช้กรุณา </label>
+                      <label
+                        class="text-[#ff6b81] underline cursor-pointer mt-5"
+                        @click="registerParent"
+                        >สมัคร One ID</label
+                      >
+                    </template>
+                  </v-col>
+                  <v-col cols="12" sm="4" align="end">
+                    <v-img
+                      class="ml-auto mr-10 mb-2"
+                      src="@/assets/manageuser/logo_one platform.svg"
+                    />
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-col>
+
+          <v-col cols="12">
             <div v-if="checkData.account_id">
               <!-- USER DETAIL -->
-
               <v-col cols="12">
-                <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
+                <v-card color="#FCFCFC" class="my-10 mx-10 w 1/5">
                   <v-card-text class="mt-3">
                     <v-row>
                       <!-- IMG DETAIL -->
+
                       <v-col
                         class="webkit-center"
                         cols="12"
@@ -76,6 +78,29 @@
                       >
                         <div class="cicle">
                           <v-img
+                            v-if="preview_img == ''"
+                            class="image-cropper items-end"
+                            src="../../../assets/userManagePage/default_img_update_profile.svg"
+                          >
+                            <v-btn
+                              v-if="preview_img == ''"
+                              color="#ff6b81"
+                              @click="openFileSelector"
+                              class="w-full white--text"
+                              >เพิ่มรูป</v-btn
+                            >
+                            <v-btn
+                              v-if="preview_img !== ''"
+                              color="#ff6b81"
+                              @click="removeImg"
+                              class="w-full white--text"
+                            >
+                              <span class="mdi mdi-close">ยกเลิก</span>
+                            </v-btn>
+                          </v-img>
+
+                          <v-img
+                            v-else
                             class="image-cropper items-end"
                             :src="
                               preview_img != ''
@@ -90,7 +115,7 @@
                               color="#ff6b81"
                               @click="openFileSelector"
                               class="w-full white--text"
-                              >เปลี่ยนรูป</v-btn
+                              >เพิ่มรูปภาพ</v-btn
                             >
                             <v-btn
                               v-if="preview_img !== ''"
@@ -111,7 +136,8 @@
                           hidden
                         />
                       </v-col>
-                      <v-col>
+
+                      <v-col cols="12" sm="6">
                         <v-row>
                           <v-col cols="12" sm="6">
                             <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
@@ -229,7 +255,6 @@
                             item-text="role"
                             item-value="roleNumber"
                             label="กรุณาเลือกบทบาทผู้ใช้งาน"
-                            single-line
                             outlined
                             chips
                             item-color="#ff6b81"
@@ -496,11 +521,12 @@
                 </v-btn>
               </v-col>
             </div>
-          </v-row>
-          <!-- </v-container> -->
-        </v-card>
-      </v-col>
-    </v-row>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-card>
+    <!-- </v-col>
+    </v-row> -->
 
     <!-- CHECK RELATIONs DIALOG-->
     <v-dialog
@@ -1182,6 +1208,10 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.webkit-center {
+  text-align: -webkit-center;
 }
 </style>
 
