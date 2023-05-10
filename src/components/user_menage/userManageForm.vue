@@ -499,6 +499,7 @@
                   ></headerCard>
                   <v-divider class="mx-10"></v-divider>
                   <div class="my-5 mx-10">
+                    <!-- <pre>{{ student_schedule }}</pre> -->
                     <v-data-table
                       :headers="headersTabs"
                       @page-count="pageCount = $event"
@@ -523,6 +524,13 @@
                         >
                           mdi-delete
                         </v-icon>
+                      </template>
+
+                      <template v-slot:[`item.dates`]="{ item }">
+                        {{ dayOfWeekName(item.dates.day) }}
+                        <!-- ({{
+                          getThaiDayOfWeek(item.dates.day)
+                        }}) -->
                       </template>
                     </v-data-table>
                   </div>
@@ -828,11 +836,11 @@ export default {
       { text: "ชื่อคอร์ส", value: "cpo.categoryNameTh", sortable: false },
       { text: "แพ็คเกจ", value: "cpo.packageName", sortable: false },
       { text: "โค้ช", value: "coachName", sortable: false },
-      { text: "ประเภท", value: "oneid", sortable: false },
+      { text: "ประเภท", value: "cpo.courseTypeNameTh", sortable: false },
       { text: "ระยะเวลา", value: "cpo.optionName", sortable: false },
-      { text: "วัน", value: "days", sortable: false },
-      { text: "เวลาเริ่ม", value: "period.start", sortable: false },
-      { text: "เวลาสิ้นสุด", value: "period.end", sortable: false },
+      { text: "วัน", value: "dates", sortable: false },
+      { text: "เวลาเริ่ม", value: "start", sortable: false },
+      { text: "เวลาสิ้นสุด", value: "end", sortable: false },
       { text: "ราคา", value: "price", sortable: false },
     ],
     period: ["admin", "Super admin", "โค้ช", "ผู้ปกครอง"],
@@ -874,6 +882,15 @@ export default {
     global_data_relation: [],
     preview_img: "",
     send_image_profile: null,
+    thaiDaysOfWeek: [
+      "อาทิตย์",
+      "จันทร์",
+      "อังคาร",
+      "พุธ",
+      "พฤหัสบดี",
+      "ศุกร์",
+      "เสาร์",
+    ],
   }),
   // bef
   created() {
@@ -1387,6 +1404,29 @@ export default {
         }
       });
     },
+
+    dayOfWeekName(days) {
+      const daysOfWeek = [
+        "อาทิตย์",
+        "จันทร์",
+        "อังคาร",
+        "พุธ",
+        "พฤหัสบดี",
+        "ศุกร์",
+        "เสาร์",
+      ];
+      const dayNames = [];
+      for (let i = 0; i < days.length; i++) {
+        const dayIndex = days[i];
+        dayNames.push(daysOfWeek[dayIndex]);
+      }
+      return dayNames.join(" - ");
+    },
+
+    // getThaiDayOfWeek(date) {
+    //   const dayIndex = new Date(date).getDay();
+    //   return this.thaiDaysOfWeek[dayIndex];
+    // },
   },
 
   computed: {
@@ -1427,8 +1467,7 @@ export default {
           (val || "").length < 20 ||
           "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
         (val) =>
-          specialCharsRegex.test(val) ||
-          "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+          specialCharsRegex.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
         (val) => !emojiRegex.test(val) || "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
       ];
     },
