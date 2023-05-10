@@ -71,9 +71,9 @@
               <v-img
                 v-if="item.categoryImg && item.categoryImg !== null"
                 @click="selectedCategory(item)"
-                contain
-                height="180"
-                :src="showImg(item.categoryImg)"
+                :aspect-ratio="16/9" 
+                cover   
+                :src="item.categoryImg"
                 class="cursor-pointer"
               ></v-img>
               <v-img
@@ -184,9 +184,6 @@ export default {
 
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "อาณาจักร");
-    document.getElementById("read-more").addEventListener("click", function () {
-      document.getElementById("long-text").style.display = "block";
-    });
   },
 
   methods: {
