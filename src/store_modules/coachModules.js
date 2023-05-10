@@ -97,6 +97,7 @@ const coachModules = {
             let payloadData = new FormData()
             if(student.potentialfiles){
               for(const file of student.potentialfiles){
+                // file.fileName  = encodeURIComponent(file.name);
                 payloadData.append(`img_url`, file);
               }
             }
@@ -112,7 +113,7 @@ const coachModules = {
             count = count + 1
           },500)
         }
-        if(count === students){
+        if(count === students.length){
           await Swal.fire({
             icon: "success",
             title: "บันทึกสำเร็จ",
@@ -152,7 +153,9 @@ const coachModules = {
             let payloadData = new FormData()
               if(student.files){
                 for(const file of student.files){
-                  payloadData.append(`img_url`, file);
+                  // console.log(file)
+                  // file.fileName  = encodeURIComponent(file.name);
+                  payloadData.append(`img_url`, file, file.fileName);
                 }
               }
             if(!student.assessment.assessmentStudentsId){
@@ -161,6 +164,7 @@ const coachModules = {
               // let localhost = "http://localhost:3000"
               let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`,payloadData,config)
               if(data.statusCode == 201){
+                count = count+1
                 console.log("post",data)
               }else{
                 throw {error : data}
@@ -171,12 +175,13 @@ const coachModules = {
               // let localhost = "http://localhost:3000"
               let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`,payloadData,config)
               if(data.statusCode == 200){
+                count = count+1
                 console.log("patch",data)
               }else{
                 throw {error : data}
               }
             }
-            count = count+1
+           
         }
         if(count === students.length ){
           await Swal.fire({
@@ -446,7 +451,7 @@ const coachModules = {
             let courses_task = [];
             for (const course of data.data) {
               const course_data = await axios.get( `${process.env.VUE_APP_URL}/api/v1/course/detail/${course.courseId}` );
-              // console.log(course_data.data.data);
+              console.log(course_data.data.data);
               if (course_data.data.statusCode === 200) {
                 if(course.dates.date){
                   for (const dates of course.dates.date) {
@@ -528,52 +533,6 @@ const coachModules = {
             context.commit("SetMyCourses", courses_task);
             context.commit("SetMyCoursesIsLoading", false);
         }
-       
-      
-        // let { data } = await axios.get(
-        //   `${process.env.VUE_APP_URL}/api/v1/mycourse/coach/${coach_id}`,
-        //   config
-        // );
-        // console.log(data);
-        // if(data.statusCode === 200){
-        //     console.log(data.data)
-
-        //     let courses_task = []
-        //     for(const course  of data.data){
-        //         console.log(course)
-        //         for(const dates of course.dates){
-        //             let start_time = course?.start ? course?.start : course.coursePeriodStartDate
-        //             let end_time =  course?.end ? course?.end :course.coursePeriodEndDate
-        //             const [start_hours, start_minutes] = start_time.split(":");
-        //             const [end_hours, end_minutes] = end_time.split(":");
-        //             const startDate = new Date(dates);
-        //             startDate.setHours(start_hours);
-        //             startDate.setMinutes(start_minutes);
-        //             const endDate = new Date(dates);
-        //             endDate.setHours(end_hours);
-        //             endDate.setMinutes(end_minutes);
-        //             console.log(startDate.toISOString(), endDate.toISOString());
-        //             courses_task.push({
-        //                 name: course.courseNameTh,
-        //                 subtitle : course.courseNameEn,
-        //                 course_id : course.courseId,
-        //                 coach : `${user_detail.first_name_th} ${user_detail.last_name_th}`,
-        //                 start_date: moment(startDate).format("YYYY-MM-DD"),
-        //                 start_date_str : startDate.toLocaleDateString('th-TH',options),
-        //                 start: moment(startDate).format("YYYY-MM-DD HH:mm") ,
-        //                 end: moment(endDate).format("YYYY-MM-DD HH:mm"),
-        //                 start_time: start_time,
-        //                 end_time: end_time,
-        //                 course_img : course.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${course.courseImg}` : "",
-        //                 course_per_time: course.coursePerTime
-        //             })
-        //         }
-        //     }
-        //     context.commit("SetMyCourses",courses_task)
-        //     context.commit("SetMyCoursesIsLoading", false)
-        // }else{
-        //     throw data
-        // }
       } catch (error) {
         context.commit("SetMyCoursesIsLoading", false);
         console.log(error);
