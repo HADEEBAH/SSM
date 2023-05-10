@@ -12,6 +12,7 @@ const coachModules = {
     my_courses_is_loading: false,
     coach_check_in : {},
     student_check_in : [],
+    student_check_in_is_loading : false,
     coach_check_in_is_loading : false,
     coach_leaves : [],
     coach_leaves_is_loading : false,
@@ -41,6 +42,9 @@ const coachModules = {
     },
     SetStudentCheckIn(state, payload){
       state.student_check_in = payload
+    },
+    SetStudentCheckInIsLoading(state, payload){
+      state.student_check_in_is_loading = payload
     },
     SetMyCourses(state, payload) {
       state.my_courses = payload;
@@ -77,6 +81,7 @@ const coachModules = {
       }
     },
     async UpdateAssessmentPotential(context,{students}){
+      context.commit("SetStudentCheckInIsLoading",true)
       try{
         let config = {
           headers: {
@@ -87,7 +92,6 @@ const coachModules = {
         };
         let count = 0
         for await (const student of students) {
-          setTimeout(async ()=>{
             let payload = {
               status : student.check_in_status, // punctual, late,  leave, emergency leave, absent,
               evolution :student.potential.evolution ? student.potential.evolution : '' ,
@@ -106,14 +110,14 @@ const coachModules = {
             // let localhost = "http://localhost:3000"
             let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/potential/${student.potential.checkInPotentialId}`,payloadData ,config)
             if(data.statusCode == 200){
+              count = count + 1
               console.log("patch",data)
             }else{
               throw {error : data}
             }
-            count = count + 1
-          },500)
         }
         if(count === students.length){
+          context.commit("SetStudentCheckInIsLoading",false)
           await Swal.fire({
             icon: "success",
             title: "บันทึกสำเร็จ",
@@ -125,10 +129,12 @@ const coachModules = {
         }
        
       }catch(error){
+        context.commit("SetStudentCheckInIsLoading",false)
         console.log(error)
       }
     },
     async AssessmentStudent(context, {students}){
+      context.commit("SetStudentCheckInIsLoading",true)
       try{
         let config = {
           headers: {
@@ -184,6 +190,7 @@ const coachModules = {
            
         }
         if(count === students.length ){
+          context.commit("SetStudentCheckInIsLoading",false)
           await Swal.fire({
             icon: "success",
             title: "บันทึกสำเร็จ",
@@ -195,6 +202,7 @@ const coachModules = {
         }
       }catch(error){
         console.log(error)
+        context.commit("SetStudentCheckInIsLoading",false)
       }
     },
     async CreateTeachingNotes(context,{check_in_coach_id, check_in_coach_data}){
@@ -738,6 +746,9 @@ const coachModules = {
     }
   },
   getters: {
+    getStudentCheckInIsLoading(state){
+      return state.student_check_in_is_loading
+    },
     getCoach(state) {
       return state.coach;
     },

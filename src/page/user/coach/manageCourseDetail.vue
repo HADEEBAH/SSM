@@ -587,10 +587,12 @@
                 </v-card-text>
             </v-card>
         </v-dialog>
+        <loading-overlay :loading="student_check_in_is_loading"></loading-overlay>
     </v-container>
   </v-app>
 </template>
 <script>
+import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 import { dateFormatter, CheckFileSize } from '@/functions/functions';
 import rowData from '@/components/label/rowData.vue';
 import { Input, TimePicker } from 'ant-design-vue';
@@ -599,7 +601,7 @@ import { mapActions, mapGetters } from 'vuex';
 import Swal from "sweetalert2";
 export default {
   name:"menageCourseDetail",
-  components: { rowData  , TimePicker, labelCustom},
+  components: { rowData  ,loadingOverlay , TimePicker, labelCustom},
   directives: {
     'ant-input': Input,
   },
@@ -683,7 +685,8 @@ export default {
         course_data : "CourseModules/getCourseData",
         coach_check_in : "CoachModules/getCoachCheckIn",
         student_check_in : "CoachModules/getStudentCheckIn",
-        coach_check_in_is_loading : "CoachModules/getCoachCheckInIsLoading"
+        coach_check_in_is_loading : "CoachModules/getCoachCheckInIsLoading",
+        student_check_in_is_loading :"CoachModules/getStudentCheckInIsLoading"
     }),
     setFunctios(){
         this.GetCourse(this.$route.params.courseId)
