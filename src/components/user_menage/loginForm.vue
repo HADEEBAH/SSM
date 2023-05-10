@@ -134,7 +134,7 @@ export default {
     },
 
     usernameRules() {
-      const specialCharsRegex = /[A-Za-z0-9 ]/g;
+      const specialCharsRegex = /[A-Za-z0-9]/g;
       const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
       return [
         (val) =>
