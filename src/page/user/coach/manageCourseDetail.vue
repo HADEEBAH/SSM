@@ -903,7 +903,7 @@ export default {
         console.log(selected_student)
         if(!this.student_check_in[selected_student].assessment.assessmentStudentsId){
             this.student_check_in[selected_student].assessment.remark = []
-           
+            this.student_check_in[selected_student].files = []
         }else{
             this.student_check_in[selected_student].files = []
         }
