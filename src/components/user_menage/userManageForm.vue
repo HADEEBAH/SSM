@@ -565,6 +565,7 @@
                   ></headerCard>
                   <v-divider class="mx-10"></v-divider>
                   <div class="my-5 mx-10">
+                    <!-- <pre>{{ student_schedule }}</pre> -->
                     <v-data-table
                       :headers="headersTabs"
                       @page-count="pageCount = $event"
@@ -589,6 +590,13 @@
                         >
                           mdi-delete
                         </v-icon>
+                      </template>
+
+                      <template v-slot:[`item.dates`]="{ item }">
+                        {{ dayOfWeekName(item.dates.day) }}
+                        <!-- ({{
+                          getThaiDayOfWeek(item.dates.day)
+                        }}) -->
                       </template>
                     </v-data-table>
                   </div>
@@ -893,11 +901,11 @@ export default {
       { text: "ชื่อคอร์ส", value: "cpo.categoryNameTh", sortable: false },
       { text: "แพ็คเกจ", value: "cpo.packageName", sortable: false },
       { text: "โค้ช", value: "coachName", sortable: false },
-      { text: "ประเภท", value: "oneid", sortable: false },
+      { text: "ประเภท", value: "cpo.courseTypeNameTh", sortable: false },
       { text: "ระยะเวลา", value: "cpo.optionName", sortable: false },
-      { text: "วัน", value: "days", sortable: false },
-      { text: "เวลาเริ่ม", value: "period.start", sortable: false },
-      { text: "เวลาสิ้นสุด", value: "period.end", sortable: false },
+      { text: "วัน", value: "dates", sortable: false },
+      { text: "เวลาเริ่ม", value: "start", sortable: false },
+      { text: "เวลาสิ้นสุด", value: "end", sortable: false },
       { text: "ราคา", value: "price", sortable: false },
     ],
     period: ["admin", "Super admin", "โค้ช", "ผู้ปกครอง"],
@@ -939,6 +947,15 @@ export default {
     global_data_relation: [],
     preview_img: "",
     send_image_profile: null,
+    thaiDaysOfWeek: [
+      "อาทิตย์",
+      "จันทร์",
+      "อังคาร",
+      "พุธ",
+      "พฤหัสบดี",
+      "ศุกร์",
+      "เสาร์",
+    ],
   }),
   // bef
   created() {
@@ -1441,80 +1458,6 @@ export default {
       this.changeDialogRegisterOneId(true);
     },
 
-    // addStudent() {
-    //   Swal.fire({
-    //     icon: "question",
-    //     title: "คุณต้องการเพิ่มนักเรียนหรือไม่",
-    //     showDenyButton: false,
-    //     showCancelButton: true,
-    //     confirmButtonText: "ตกลง",
-    //     cancelButtonText: "ยกเลิก",
-    //   }).then(async (result) => {
-    //     if (result.isConfirmed) {
-    //       try {
-    //         let config = {
-    //           headers: {
-    //             "Access-Control-Allow-Origin": "*",
-    //             "Content-type": "Application/json",
-    //             Authorization: `Bearer ${VueCookie.get("token")}`,
-    //           },
-    //         };
-    //         // this.user_login = JSON.parse(localStorage.getItem("userDetail"));
-    //         // console.log("addStudent", this.user_data);
-    //         // for (const data of this.user_data) {
-    //         //   console.log("addStudent_data", data);
-    //         //   this.set_student_id = data.userOneId;
-    //         //   console.log("userOneId", this.set_student_id);
-    //         // }
-    //         let payload = {
-    //           studentId: this.set_student_id,
-    //           parentId: this.$route.params.account_id,
-    //         };
-    //         console.log("payload_addStudent :", payload);
-    //         let { data } = await axios.post(
-    //           `${process.env.VUE_APP_URL}/api/v1/relations/user`,
-    //           payload,
-    //           config
-    //         );
-
-    //         if (data.statusCode === 201) {
-    //           if (data.data && data.data.message !== "Duplicate relation.") {
-    //             console.log("succes");
-    //             this.add_parent = false;
-    //             this.add_student = false;
-    //             // this.user_login = JSON.parse(
-    //             //   localStorage.getItem("userDetail")
-    //             // );
-    //             // this.GetAll(this.user_login.account_id);
-    //             setTimeout(() => {
-    //               this.GetDataRelationsManagement(this.data_user_by_id);
-    //             }, 1000);
-    //             this.student = {
-    //               account_id: "",
-    //               firstname_en: "",
-    //               lastname_en: "",
-    //               username: "",
-    //               tel: "",
-    //             };
-    //           } else {
-    //             throw { error: data };
-    //           }
-    //         } else {
-    //           throw { message: data.message };
-    //         }
-    //       } catch (error) {
-    //         console.log(error);
-    //         Swal.fire({
-    //           icon: "error",
-    //           title: "Duplicate relation",
-    //         });
-    //       }
-    //     } else {
-    //       Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
-    //     }
-    //   });
-    // },
-
     updateData(account_id) {
       console.log("user_account_id", account_id);
 
@@ -1607,6 +1550,29 @@ export default {
         }
       });
     },
+
+    dayOfWeekName(days) {
+      const daysOfWeek = [
+        "อาทิตย์",
+        "จันทร์",
+        "อังคาร",
+        "พุธ",
+        "พฤหัสบดี",
+        "ศุกร์",
+        "เสาร์",
+      ];
+      const dayNames = [];
+      for (let i = 0; i < days.length; i++) {
+        const dayIndex = days[i];
+        dayNames.push(daysOfWeek[dayIndex]);
+      }
+      return dayNames.join(" - ");
+    },
+
+    // getThaiDayOfWeek(date) {
+    //   const dayIndex = new Date(date).getDay();
+    //   return this.thaiDaysOfWeek[dayIndex];
+    // },
   },
 
   computed: {
