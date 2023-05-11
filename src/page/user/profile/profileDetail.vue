@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    {{ setFunctions }}
     <v-row dense>
       <v-col class="my-5" style="text-align: -webkit-center" cols="12">
         <!-- <v-btn class="absolute" icon>
