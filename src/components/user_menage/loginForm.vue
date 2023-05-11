@@ -29,7 +29,7 @@
               <v-text-field
                 @keypress="validate($event, 'en-number')"
                 dense
-                :rules="usernameRules"
+                :rules="rules.usernameRules"
                 required
                 v-model="user_one_id.username"
                 placeholder="ระบุชื่อผู้ใช้งาน"
@@ -44,7 +44,7 @@
                 dense
                 ref="password"
                 :type="show_password ? 'text' : 'password'"
-                :rules="passwordRules"
+                :rules="rules.passwordRules"
                 required
                 :append-icon="
                   show_password ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
@@ -106,15 +106,25 @@ export default {
   data: () => ({
     show_password: false,
     rules: {
-      username: [
+      usernameRules: [
         (val) =>
           (val || "").length > 5 ||
           "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
+        (val) => (/[A-Za-z0-9 ]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+        (val) => !(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
       ],
-      password: [
+      passwordRules: [
         (val) =>
           (val || "").length > 7 ||
-          "โปรดระบุรหัสผ่านความยาวไม่น้อยกว่า 8 ตัวอักษร",
+          "โปรดระบุรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
+        (val) =>
+          !(/[ ]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
       ],
     },
   }),
@@ -131,37 +141,6 @@ export default {
     IpadSize() {
       const { sm } = this.$vuetify.breakpoint;
       return !!sm;
-    },
-
-    usernameRules() {
-      const specialCharsRegex = /[A-Za-z0-9]/g;
-      const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
-      return [
-        (val) =>
-          (val || "").length > 5 ||
-          "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
-        (val) =>
-          specialCharsRegex.test(val) ||
-          "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-        (val) => !emojiRegex.test(val) || "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
-      ];
-    },
-    passwordRules() {
-      // const specialCharsRegex = /[ ]/g;
-      return [
-        (val) =>
-          (val || "").length > 7 ||
-          "โปรดระบุรหัสผ่านความยาวไม่น้อยกว่า 8 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
-        // (val) =>
-        //   !specialCharsRegex.test(val) ||
-        // "Password cannot contain special characters",
-      ];
     },
   },
 
