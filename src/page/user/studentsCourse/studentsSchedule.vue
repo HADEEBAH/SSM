@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    {{ setFunctions }}
     <loading-overlay :loading="student_is_loading"></loading-overlay>
     <div class="mx-10 my-5">
       <label class="text-xl font-bold">ข้อมูลตารางเรียน</label>
@@ -802,7 +801,7 @@ export default {
     search_course: "",
     search_schadule: "",
     search_booked: "",
-    type_selected: "students_course",
+    type_selected: "students_schedule",
     time_frame: "month",
     a_test: "",
     b_test: "",

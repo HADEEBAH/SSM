@@ -103,10 +103,10 @@ const myCourseModules = {
 
         my_course: [],
         my_schadule: [],
-        student_reserve : [],
+        student_reserve: [],
     },
     mutations: {
-        SetStudentReserve(state, payload){
+        SetStudentReserve(state, payload) {
             state.student_reserve = payload
         },
         SetStudentData(state, payload) {
@@ -142,7 +142,7 @@ const myCourseModules = {
         SetschaduleArrayEmpty(state) {
             state.my_schadule = []
         },
-        ResetMycourse(state){
+        ResetMycourse(state) {
             state.my_course = []
         }
     },
@@ -168,7 +168,7 @@ const myCourseModules = {
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
                 if (data.statusCode === 200) {
                     context.commit("SetStudentsLoading", false)
-                    const dataCourseSchedule = {dates: []};
+                    const dataCourseSchedule = { dates: [] };
                     for (const course of data.data) {
                         for (const date of course.dates.date) {
                             dataCourseSchedule.dates.push({
@@ -185,7 +185,7 @@ const myCourseModules = {
                         console.log(data.data)
                         let MyCourse = []
                         for await (const item of data.data) {
-                            if(MyCourse.filter(v=>v.orderItemId === item.orderItemId).length === 0){
+                            if (MyCourse.filter(v => v.orderItemId === item.orderItemId).length === 0) {
                                 MyCourse.push(item)
                             }
                         }
@@ -205,7 +205,7 @@ const myCourseModules = {
                 console.log(error);
             }
         },
-        async GetStudentReserve(context, account_id){
+        async GetStudentReserve(context, account_id) {
             console.log("GetStudentReserve", account_id);
             try {
                 let config = {
@@ -283,7 +283,8 @@ const myCourseModules = {
                     }
                 }
 
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/checkin/student/${account_id}/course/${course_id}`, config);
+                let { data } = await axios.get(`http://localhost:3000/api/v1/mycourse/checkin/student/${account_id}/course/${course_id}`, config);
+                // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/checkin/student/${account_id}/course/${course_id}`, config);
 
                 if (data.statusCode === 200) {
 
@@ -320,7 +321,7 @@ const myCourseModules = {
         }
     },
     getters: {
-        getStudentReserve(state){
+        getStudentReserve(state) {
             return state.student_reserve
         },
         getStudentData(state) {
