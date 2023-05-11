@@ -141,17 +141,17 @@
           <div class="text-lg pink--text">เลือกทั้งหมด</div>
         </v-col> -->
       </v-row>
-
       <div v-for="(item_data, index) in my_course_detail.checkIn" :key="index">
-        <v-card class="pa-2" v-if="item_data.type == 'potential'">
+        <v-card class="pa-2" v-if="item_data.potential !== null">
           <v-row>
             <v-col cols="2" sm="1">
               <img src="../../../assets/student_course/certificates.png" />
             </v-col>
-            <v-col class="text-lg font-bold" cols="8">ผลประเมินศักยาภาพ</v-col>
-            <v-col cols="2">
+            <v-col class="text-lg font-bold" cols="6">ผลประเมินศักยาภาพ</v-col>
+            <v-col cols="auto" align="end">
               <v-card flat align="end">
                 <v-card-text
+                  align="end"
                   class="pa-1 rounded-xl text-center"
                   :class="`text-[${
                     check_in_status_options.filter(
@@ -186,89 +186,92 @@
           </v-row>
 
           <v-card color="#FBF3F5" class="my-2 mx-5">
-            <v-col cols="6" sm="6" align="start">
-              <v-card-text
-                :class="`text-[${
-                  evolution_options.filter(
-                    (v) => v.value === item_data.assessment.evolution
-                  )[0]
-                }]`"
-              >
-                พัฒนาการ:
-                <span
+            <v-row dense>
+              <v-col cols="12" sm="6" align="start">
+                <v-card-text
                   :class="`text-[${
                     evolution_options.filter(
                       (v) => v.value === item_data.assessment.evolution
                     )[0]
                   }]`"
                 >
-                  {{
-                    evolution_options.filter(
-                      (v) => v.value === item_data.assessment.evolution
-                    ).length > 0
-                      ? evolution_options.filter(
-                          (v) => v.value === item_data.assessment.evolution
-                        )[0].label
-                      : "-"
-                  }}
-                </span>
-              </v-card-text>
-            </v-col>
-            <v-col cols="6" sm="6" align="start">
-              <v-card-text
-                :class="`text-[${
-                  interest_options.filter(
-                    (v) => v.value === item_data.assessment.interest
-                  )[0]
-                }]`"
-              >
-                ความสนใจ:
-                <span
+                  พัฒนาการ:
+                  <span
+                    :class="`text-[${
+                      evolution_options.filter(
+                        (v) => v.value === item_data.assessment.evolution
+                      )[0]
+                    }]`"
+                  >
+                    {{
+                      evolution_options.filter(
+                        (v) => v.value === item_data.assessment.evolution
+                      ).length > 0
+                        ? evolution_options.filter(
+                            (v) => v.value === item_data.assessment.evolution
+                          )[0].label
+                        : "-"
+                    }}
+                  </span>
+                </v-card-text>
+              </v-col>
+              <v-col cols="12" sm="6" align="start">
+                <v-card-text
                   :class="`text-[${
                     interest_options.filter(
                       (v) => v.value === item_data.assessment.interest
                     )[0]
                   }]`"
                 >
-                  {{
+                  ความสนใจ:
+                  <span
+                    :class="`text-[${
+                      interest_options.filter(
+                        (v) => v.value === item_data.assessment.interest
+                      )[0]
+                    }]`"
+                  >
+                    {{
+                      interest_options.filter(
+                        (v) => v.value === item_data.assessment.interest
+                      ).length > 0
+                        ? interest_options.filter(
+                            (v) => v.value === item_data.assessment.interest
+                          )[0].label
+                        : "-"
+                    }}
+                  </span>
+                </v-card-text>
+              </v-col>
+              <v-col align="start">
+                <v-card-text
+                  :class="`text-[${
                     interest_options.filter(
-                      (v) => v.value === item_data.assessment.interest
-                    ).length > 0
-                      ? interest_options.filter(
-                          (v) => v.value === item_data.assessment.interest
-                        )[0].label
-                      : "-"
-                  }}
-                </span>
-              </v-card-text>
-            </v-col>
-            <v-col align="start">
-              <v-card-text
-                :class="`text-[${
-                  interest_options.filter(
-                    (v) => v.value === item_data.assessment.remark
-                  )[0]
-                }]`"
-              >
-                ความคิดเห็นจากโค้ช:
-                {{ item_data.assessment.remark }}
-              </v-card-text>
-            </v-col>
-            <v-col cols="6" sm="6" align="start">
-              <div
-                v-for="(data, index) in item_data.assessment.attachment"
-                :key="index"
-              >
-                <v-img
-                  style="width: 500px"
-                  :src="
-                    !data.attFiles
-                      ? 'ไม่มีรูปภาพเพิ่มเติม'
-                      : showImg(data.attFiles)
-                  "
-                ></v-img>
-              </div>
-            </v-col>
+                      (v) => v.value === item_data.assessment.remark
+                    )[0]
+                  }]`"
+                >
+                  ความคิดเห็นจากโค้ช:
+                  {{ item_data.assessment.remark }}
+                </v-card-text>
+              </v-col>
+              <v-col cols="12" sm="6" align="start">
+                <div
+                  v-for="(data, index) in item_data.assessment.attachment"
+                  :key="index"
+                >
+                  <v-img
+                    class="mx-5"
+                    style=""
+                    :src="
+                      !data.attFiles
+                        ? 'ไม่มีรูปภาพเพิ่มเติม'
+                        : showImg(data.attFiles)
+                    "
+                  ></v-img>
+                </div>
+              </v-col>
+            </v-row>
           </v-card>
         </v-card>
       </div>
@@ -278,6 +281,7 @@
           v-for="(day_list, index_day) in my_course_detail.checkIn"
           :key="index_day"
         >
+          <pre>{{ day_list }}</pre>
           <v-card class="my-5 drop-shadow-lg rounded-xl">
             <v-card-text>
               <v-row class="" dense>
@@ -289,7 +293,7 @@
                   ></v-checkbox>
                 </v-col>
                 <v-col cols="2" sm="1">
-                  <v-icon color="#FF6B81">mdi-calendar-plus-outline</v-icon>
+                  <v-icon color="#FF6B81">mdi-calendar-month-outline</v-icon>
                 </v-col>
                 <v-col cols="6">
                   {{ genDate(day_list.date) }}
@@ -304,14 +308,18 @@
                       :class="`text-[${
                         check_in_status_options.filter(
                           (v) => v.value === day_list.status
-                        )[0]
-                      }] `"
+                        )[0].color
+                      }] bg-[${
+                        check_in_status_options.filter(
+                          (v) => v.value === day_list.status
+                        )[0].bg_color
+                      }]`"
                     >
                       <span
                         :class="`text-[${
                           check_in_status_options.filter(
                             (v) => v.value === day_list.status
-                          )[0]
+                          )[0].color
                         }]`"
                       >
                         {{
@@ -433,13 +441,7 @@
                         }}
                       </v-card-text>
 
-                      <!-- TO DO -->
-
                       <v-card-text class="text-start">
-                        <!-- <div
-                          v-for="(item_data, index) in my_course_detail.checkIn"
-                          :key="index"
-                        > -->
                         <div
                           v-for="(data, index) in day_list.assessment
                             .attachment"
@@ -455,8 +457,54 @@
                           ></v-img>
                         </div>
                       </v-card-text>
-                    </div> </v-expand-transition
-                ></v-col>
+
+                      <v-row dense>
+                        <v-col
+                          cols="12"
+                          class="font-bold text-lg"
+                          align="start"
+                        >
+                          ไฟล์แนบ :
+                        </v-col>
+                        <v-col cols="12">
+                          <v-card
+                            @click="openFile(file.attFiles)"
+                            flat
+                            class="mb-3"
+                            v-for="(file, index_file) in day_list.assessment
+                              .attachment"
+                            :key="index_file"
+                          >
+                            <v-card-text
+                              class="border border-2 border-[#ff6b81] rounded-lg"
+                            >
+                              <v-row>
+                                <v-col cols="12" sm="1" align="center">
+                                  <v-img
+                                    height="35"
+                                    width="26"
+                                    src="../../../assets/coachLeave/file-pdf.png"
+                                  />
+                                </v-col>
+                                <v-col cols="12" sm="10" align="start">
+                                  <span class="font-bold">{{
+                                    file.originalFilesName
+                                  }}</span
+                                  ><br />
+                                  <span class="text-caption"
+                                    >ขนาดไฟล์ :
+                                    {{ (file.filesSize / 1000000).toFixed(2) }}
+                                    MB</span
+                                  >
+                                </v-col>
+                              </v-row>
+                            </v-card-text>
+                          </v-card>
+                        </v-col>
+                      </v-row>
+                    </div>
+                  </v-expand-transition></v-col
+                >
               </v-row>
             </v-card-text>
 
@@ -534,6 +582,10 @@ export default {
     checked: false,
     dialog_show: false,
     show_id: "",
+    return: {
+      pdfUrl:
+        "https://example.com/assessment/2a0e9e91-88e7-4ce4-b8cd-1a22d5603d20/2a0e9e91-88e7-4ce4-b8cd-1a22d5603d20.pdf",
+    },
     // check_in_detail: [],
     defaultImageUrl:
       "https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg",
@@ -775,6 +827,11 @@ export default {
       this.checked = false;
     },
 
+    openFile(file) {
+      console.log(file);
+      window.open(`${process.env.VUE_APP_URL}/api/v1/files/${file}`, "_blank");
+    },
+
     // dayOfWeekName(day_numbers, language) {
     //   let day_names = [];
     //   for (let i = 0; i < day_numbers; i++) {
@@ -873,6 +930,11 @@ export default {
       profile_user: "ProfileModules/getProfileUser",
       course_list_is_loading: "MyCourseModules/getCourseListIsLoading",
     }),
+
+    pdfFiles() {
+      return this.attachment.filter((file) => file.attFiles.endsWith(".pdf"));
+    },
+    // for= "(file, index) in day_list.assessment.attachment"
   },
 };
 </script>

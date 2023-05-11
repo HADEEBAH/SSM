@@ -266,7 +266,7 @@
                     "
                     dense
                     :rules="rules.usernameRules"
-                    @keypress="Validation($event,'en-number')"
+                    @keypress="Validation($event, 'en-number')"
                     outlined
                     v-model="parent.username"
                     placeholder="Username"
@@ -292,7 +292,7 @@
                     dense
                     outlined
                     :rules="rules.usernameRules"
-                    @keypress="Validation($event,'en-number')"
+                    @keypress="Validation($event, 'en-number')"
                     v-model="parent.username"
                     @change=" parent.username > 3 ? checkUsername(parent.username) : '' "
                     @keyup.enter=" parent.username > 3 ? checkUsername(parent.username) : '' "
@@ -395,11 +395,35 @@
                   dense
                   outlined
                   :rules="rules.usernameRules"
-                  @keypress="Validation($event,'en-number')"
+                  @keypress="Validation($event, 'en-number')"
                   v-model="student.username"
-                  @change="student.username.length > 3 ? checkUsername( student.username, 'student', index_student) : '' "
-                  @keyup.enter="student.username.length > 3 ? checkUsername( student.username, 'student', index_student ): ''"
-                  @blur="student.username.length > 3? checkUsername(student.username, 'student', index_student ) : ''"
+                  @change="
+                    student.username.length > 3
+                      ? checkUsername(
+                          student.username,
+                          'student',
+                          index_student
+                        )
+                      : ''
+                  "
+                  @keyup.enter="
+                    student.username.length > 3
+                      ? checkUsername(
+                          student.username,
+                          'student',
+                          index_student
+                        )
+                      : ''
+                  "
+                  @blur="
+                    student.username.length > 3
+                      ? checkUsername(
+                          student.username,
+                          'student',
+                          index_student
+                        )
+                      : ''
+                  "
                   placeholder="Username"
                 >
                   <template v-slot:append>
@@ -417,16 +441,19 @@
                   >
                 </template>
               </v-col>
-              <v-col cols="auto" class="mb-2" >
-                <br>
+              <v-col cols="auto" class="mb-2">
+                <br />
                 <v-btn
                   :loading="is_loading"
                   :dark="!student.username.length < 3"
                   :disabled="student.username.length < 3"
                   color="#ff6b81"
-                  @click="checkUsername(student.username, 'student', index_student)"
+                  @click="
+                    checkUsername(student.username, 'student', index_student)
+                  "
                   depressed
-                  >ตกลง</v-btn>
+                  >ตกลง</v-btn
+                >
               </v-col>
             </v-row>
             <template v-if="student.account_id">
@@ -594,7 +621,7 @@
           </template>
         </header-card>
         <v-card-text class="pb-2">
-          <v-row dense >
+          <v-row dense>
             <v-col cols="9">
               <!-- :hide-details="!parent.account_id" -->
 
@@ -604,7 +631,7 @@
                 dense
                 outlined
                 v-model="parent.username"
-                @keypress="Validation($event,'en-number')"
+                @keypress="Validation($event, 'en-number')"
                 @change="
                   parent.username.length > 3
                     ? checkUsername(parent.username)
@@ -639,10 +666,10 @@
             </v-col>
             <v-col cols="auto">
               <br />
+              <!-- :disabled="parent.username.length < 3" -->
               <v-btn
                 :loading="is_loading"
                 :dark="!parent.username.length < 3"
-                :disabled="parent.username.length < 3"
                 color="#ff6b81"
                 @click="checkUsername(parent.username)"
                 depressed
@@ -702,8 +729,8 @@
             </v-col>
             <v-col>
               <v-btn
+                :color="parent.username.length < 1 ? '#CCCCCC' : '#ff6b81'"
                 class="w-full"
-                color="#ff6b81"
                 dark
                 depressed
                 @click="addParent"
@@ -804,8 +831,10 @@ export default {
         (val) =>
           (val || "").length < 20 ||
           "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => (/[A-Za-z0-9 ]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-        (val) => !(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
+        (val) => /[A-Za-z0-9 ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+        (val) =>
+          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+          "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
       ],
       passwordRules: [
         (val) =>
@@ -814,8 +843,7 @@ export default {
         (val) =>
           (val || "").length < 20 ||
           "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
-        (val) =>
-          !(/[ ]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+        (val) => !/[ ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
       ],
     },
   }),
@@ -1007,10 +1035,12 @@ export default {
         // console.log(time && day && coach && student);
         return !(time && day && coach && student);
       } else {
-        let student = true
-        if( this.course_order.students.length > 0){
-          if(this.course_order.students.filter(v => !v.account_id).length > 0){
-            student = false
+        let student = true;
+        if (this.course_order.students.length > 0) {
+          if (
+            this.course_order.students.filter((v) => !v.account_id).length > 0
+          ) {
+            student = false;
           }
         }
         return !student;

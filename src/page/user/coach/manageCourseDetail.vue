@@ -1,27 +1,42 @@
 <template>
   <v-app>
-    {{setFunctios}}
+    {{ setFunctios }}
     <v-container>
-        <v-card flat>
-            <v-card-text class="bg-[#FBF3F5] border">
-                <v-row>
-                    <v-col cols="auto">
-                        <v-img class="rounded-lg" :src="course_data.course_img ? course_data.course_img : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'" max-height="120" max-width="120"></v-img>
-                    </v-col>
-                    <v-col>
-                        <v-row>
-                            <v-col cols="12" sm>
-                                <div class="text-md font-bold"> {{course_data.category_name_th}} </div>
-                            </v-col>
-                            <v-col cols="12" sm>
-                                <div class="text-md font-bold"> {{ GenDate($route.params.date) }} </div>
-                            </v-col>
-                        </v-row>
-                        <v-row dense>
-                            <v-col cols="12" sm class="pa-0">
-                                <rowData mini  icon="mdi-bookshelf">คอร์สเรียน : {{ course_data.course_name_th  }}</rowData>
-                            </v-col>
-                            <!-- <v-col cols="12" sm="4"  class="pa-0"> 
+      <v-card flat>
+        <v-card-text class="bg-[#FBF3F5] border">
+          <v-row>
+            <v-col cols="auto">
+              <v-img
+                class="rounded-lg"
+                :src="
+                  course_data.course_img
+                    ? course_data.course_img
+                    : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'
+                "
+                max-height="120"
+                max-width="120"
+              ></v-img>
+            </v-col>
+            <v-col>
+              <v-row>
+                <v-col cols="12" sm>
+                  <div class="text-md font-bold">
+                    {{ course_data.category_name_th }}
+                  </div>
+                </v-col>
+                <v-col cols="12" sm>
+                  <div class="text-md font-bold">
+                    {{ GenDate($route.params.date) }}
+                  </div>
+                </v-col>
+              </v-row>
+              <v-row dense>
+                <v-col cols="12" sm class="pa-0">
+                  <rowData mini icon="mdi-bookshelf"
+                    >คอร์สเรียน : {{ course_data.course_name_th }}</rowData
+                  >
+                </v-col>
+                <!-- <v-col cols="12" sm="4"  class="pa-0"> 
                                 <rowData mini  icon=" mdi-account-box-multiple">แพ็คเกจ : Family</rowData>
                             </v-col> -->
                             <v-col cols="12" sm class="pa-0"><rowData mini  icon="mdi-clock-outline">เวลาสอน {{course_data.course_hours}} ชั่วโมง</rowData></v-col>
@@ -595,70 +610,176 @@
 </template>
 <script>
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
-import { dateFormatter, CheckFileSize } from '@/functions/functions';
-import rowData from '@/components/label/rowData.vue';
-import { Input, TimePicker } from 'ant-design-vue';
-import labelCustom from '../../../components/label/labelCustom.vue';
-import { mapActions, mapGetters } from 'vuex';
+import { dateFormatter, CheckFileSize } from "@/functions/functions";
+import rowData from "@/components/label/rowData.vue";
+import { Input, TimePicker } from "ant-design-vue";
+import labelCustom from "../../../components/label/labelCustom.vue";
+import { mapActions, mapGetters } from "vuex";
 import Swal from "sweetalert2";
 export default {
-  name:"menageCourseDetail",
-  components: { rowData  ,loadingOverlay , TimePicker, labelCustom},
+  name: "menageCourseDetail",
+  components: { rowData, loadingOverlay, TimePicker, labelCustom },
   directives: {
-    'ant-input': Input,
+    "ant-input": Input,
   },
   data: () => ({
-    tab:"check in",
-    evolution_options : [{label : "ดีมาก" , value : "very good"},{label : "ดี" , value : "good"}, {label : "ปรับปรุง" , value : "adjust"}],
-    interest_options : [{label : "ดีมาก" , value : "very good"},{label : "ดี" , value : "good"}, {label : "ปรับปรุง" , value : "adjust"}],
+    tab: "check in",
+    evolution_options: [
+      { label: "ดีมาก", value: "very good" },
+      { label: "ดี", value: "good" },
+      { label: "ปรับปรุง", value: "adjust" },
+    ],
+    interest_options: [
+      { label: "ดีมาก", value: "very good" },
+      { label: "ดี", value: "good" },
+      { label: "ปรับปรุง", value: "adjust" },
+    ],
     expanded_index: [],
-    check_in : false,
+    check_in: false,
     previewUrl: null,
-    show_comment_dialog : false,
-    tab_evaluate : "evaluate_students", // Evaluate students, Assess the learner's potential
-    check_in_status_options :[
-        {label : "ตรงเวลา", value : "punctual", color: "#58A144", bg_color : "#F0F9EE"},
-        {label : "สาย", value : "late", color: "#FCC419", bg_color : "#FFF9E8"},
-        {label : "ลา", value : "leave", color: "#43A4F5", bg_color : "#CFE2F3"},
-        {label : "ลาฉุกเฉิน", value : "emergency leave", color: "#43A4F5", bg_color : "#CFE2F3"}, 
-        {label : "ขาด", value : "absent", color: "#F03D3E", bg_color : "#F4CCCC"},
-        
+    show_comment_dialog: false,
+    tab_evaluate: "evaluate_students", // Evaluate students, Assess the learner's potential
+    check_in_status_options: [
+      {
+        label: "ตรงเวลา",
+        value: "punctual",
+        color: "#58A144",
+        bg_color: "#F0F9EE",
+      },
+      { label: "สาย", value: "late", color: "#FCC419", bg_color: "#FFF9E8" },
+      { label: "ลา", value: "leave", color: "#43A4F5", bg_color: "#CFE2F3" },
+      {
+        label: "ลาฉุกเฉิน",
+        value: "emergency leave",
+        color: "#43A4F5",
+        bg_color: "#CFE2F3",
+      },
+      { label: "ขาด", value: "absent", color: "#F03D3E", bg_color: "#F4CCCC" },
     ],
     headers: [
-        { text: 'ลำดับ', align: 'center', sortable: false, value: 'no', },
-        { text: 'ชื่อ-สกุล', align: 'center', sortable: false, value: 'fullname' },
-        { text: 'แพ็คเกจ', align: 'center',  sortable: false, value: 'package' },
-        { text: 'จำนวนครั้ง', align: 'center',  sortable: false, value: 'class_time' },
-        { text: 'การเข้าเรียน', align: 'center', width:'200',  sortable: false, value: 'actions' },
+      { text: "ลำดับ", align: "center", sortable: false, value: "no" },
+      {
+        text: "ชื่อ-สกุล",
+        align: "center",
+        sortable: false,
+        value: "fullname",
+      },
+      { text: "แพ็คเกจ", align: "center", sortable: false, value: "package" },
+      {
+        text: "จำนวนครั้ง",
+        align: "center",
+        sortable: false,
+        value: "class_time",
+      },
+      {
+        text: "การเข้าเรียน",
+        align: "center",
+        width: "200",
+        sortable: false,
+        value: "actions",
+      },
     ],
 
     students: [
-        {no:"1", fullname : "กมลรัตน์ สิทธิกรชัย", nickname : "เมย์พิ้ง", check_in_status: "punctual", compensation_date : "", compensation_date_str : "", time : "", start_time : "" , end_time : "", menu_compensation_date : false, menu_time : false, count: 7, max_count : 15},
-        {no:"2", fullname : "ออกัส สิหาคม", nickname : "ออกัส", check_in_status: "punctual", compensation_date : "", compensation_date_str : "",time : "", start_time : "" , end_time : "", menu_compensation_date : false, menu_time : false, count: 2, max_count : 4},
-        {no:"3", fullname : "น่านฟ้า ทะเลไกล", nickname : "น้ำฟ้า", check_in_status: "", compensation_date : "", compensation_date_str : "", time : "", start_time : "" , end_time : "", menu_compensation_date : false, menu_time : false, count: 2, max_count : 4},
-        {no:"4", fullname : "วรวุฒิ สารวงศ์", nickname : "อ้วน", check_in_status: "", compensation_date : "", compensation_date_str : "", time : "", start_time : "" , end_time : "", menu_compensation_date : false, menu_time : false, count: 1, max_count : 4},
-        {no:"5", fullname : "วรวุฒิ สารวงศ์", nickname : "อ้วน", check_in_status: "", compensation_date : "", compensation_date_str : "", time : "", start_time : "" , end_time : "", menu_compensation_date : false, menu_time : false, count: 7, max_count : 15},
+      {
+        no: "1",
+        fullname: "กมลรัตน์ สิทธิกรชัย",
+        nickname: "เมย์พิ้ง",
+        check_in_status: "punctual",
+        compensation_date: "",
+        compensation_date_str: "",
+        time: "",
+        start_time: "",
+        end_time: "",
+        menu_compensation_date: false,
+        menu_time: false,
+        count: 7,
+        max_count: 15,
+      },
+      {
+        no: "2",
+        fullname: "ออกัส สิหาคม",
+        nickname: "ออกัส",
+        check_in_status: "punctual",
+        compensation_date: "",
+        compensation_date_str: "",
+        time: "",
+        start_time: "",
+        end_time: "",
+        menu_compensation_date: false,
+        menu_time: false,
+        count: 2,
+        max_count: 4,
+      },
+      {
+        no: "3",
+        fullname: "น่านฟ้า ทะเลไกล",
+        nickname: "น้ำฟ้า",
+        check_in_status: "",
+        compensation_date: "",
+        compensation_date_str: "",
+        time: "",
+        start_time: "",
+        end_time: "",
+        menu_compensation_date: false,
+        menu_time: false,
+        count: 2,
+        max_count: 4,
+      },
+      {
+        no: "4",
+        fullname: "วรวุฒิ สารวงศ์",
+        nickname: "อ้วน",
+        check_in_status: "",
+        compensation_date: "",
+        compensation_date_str: "",
+        time: "",
+        start_time: "",
+        end_time: "",
+        menu_compensation_date: false,
+        menu_time: false,
+        count: 1,
+        max_count: 4,
+      },
+      {
+        no: "5",
+        fullname: "วรวุฒิ สารวงศ์",
+        nickname: "อ้วน",
+        check_in_status: "",
+        compensation_date: "",
+        compensation_date_str: "",
+        time: "",
+        start_time: "",
+        end_time: "",
+        menu_compensation_date: false,
+        menu_time: false,
+        count: 7,
+        max_count: 15,
+      },
     ],
-    selected_student : null,
-    preview_summary_files : [],
-    selected_files :[],
-    cpo_options : [],
-    show_comment_potential_dialog : false,
-    package_name_filter : null
+    selected_student: null,
+    preview_summary_files: [],
+    selected_files: [],
+    cpo_options: [],
+    show_comment_potential_dialog: false,
+    package_name_filter: null,
   }),
-  created() { },
+  created() {},
   mounted() {},
   watch: {
-    "coach_check_in":function(){
-        console.log(this.coach_check_in)
-        this.preview_summary_files = []
-        if(this.coach_check_in.attachment){
-            if(this.coach_check_in?.attachment.length > 0){
-                for(const img_url of this.coach_check_in.attachment){
-                    this.preview_summary_files.push({url : img_url.attFilesUrl, attId : img_url.sumAttId })
-                }
-            }
+    coach_check_in: function () {
+      console.log(this.coach_check_in);
+      this.preview_summary_files = [];
+      if (this.coach_check_in.attachment) {
+        if (this.coach_check_in?.attachment.length > 0) {
+          for (const img_url of this.coach_check_in.attachment) {
+            this.preview_summary_files.push({
+              url: img_url.attFilesUrl,
+              attId: img_url.sumAttId,
+            });
+          }
         }
+      }
     },
     "student_check_in":function(){
         this.student_check_in.forEach((check_in_data)=>{
@@ -676,41 +797,56 @@ export default {
             }
         })
     },
-    "tab" :function(){
-        this.GetCoachCheckIn({course_id :this.$route.params.courseId, date : this.$route.params.date})
-        this.GetStudentByTimeId({course_id :this.$route.params.courseId, date : this.$route.params.date, time_id: this.$route.params.timeId})
-    }
+    tab: function () {
+      this.GetCoachCheckIn({
+        course_id: this.$route.params.courseId,
+        date: this.$route.params.date,
+      });
+      this.GetStudentByTimeId({
+        course_id: this.$route.params.courseId,
+        date: this.$route.params.date,
+        time_id: this.$route.params.timeId,
+      });
+    },
   },
   computed: {
     ...mapGetters({
-        course_data : "CourseModules/getCourseData",
-        coach_check_in : "CoachModules/getCoachCheckIn",
-        student_check_in : "CoachModules/getStudentCheckIn",
-        coach_check_in_is_loading : "CoachModules/getCoachCheckInIsLoading",
-        student_check_in_is_loading :"CoachModules/getStudentCheckInIsLoading"
+      course_data: "CourseModules/getCourseData",
+      coach_check_in: "CoachModules/getCoachCheckIn",
+      student_check_in: "CoachModules/getStudentCheckIn",
+      coach_check_in_is_loading: "CoachModules/getCoachCheckInIsLoading",
+      student_check_in_is_loading: "CoachModules/getStudentCheckInIsLoading",
     }),
-    setFunctios(){
-        this.GetCourse(this.$route.params.courseId)
-        this.GetCoachCheckIn({course_id :this.$route.params.courseId, date : this.$route.params.date})
-        this.GetStudentByTimeId({course_id :this.$route.params.courseId, date : this.$route.params.date, time_id: this.$route.params.timeId})
-        // this.GetCoachCheckIn({course_id :this.$route.params.courseId, date : this.$route.params.date})
-        return ''
-    }
+    setFunctios() {
+      this.GetCourse(this.$route.params.courseId);
+      this.GetCoachCheckIn({
+        course_id: this.$route.params.courseId,
+        date: this.$route.params.date,
+      });
+      this.GetStudentByTimeId({
+        course_id: this.$route.params.courseId,
+        date: this.$route.params.date,
+        time_id: this.$route.params.timeId,
+      });
+      // this.GetCoachCheckIn({course_id :this.$route.params.courseId, date : this.$route.params.date})
+      return "";
+    },
   },
   methods: {
     ...mapActions({
-        GetCoachCheckIn : "CoachModules/GetCoachCheckIn",
-        GetCourse : "CourseModules/GetCourse",
-        CheckInCoach :"CoachModules/CheckInCoach",
-        GetStudentByTimeId : "CoachModules/GetStudentByTimeId",
-        UpdateCheckInStudent : "CoachModules/UpdateCheckInStudent",
-        AssessmentStudent : "CoachModules/AssessmentStudent",
-        CreateTeachingNotes : "CoachModules/CreateTeachingNotes",
-        UploadFileSummary : "CoachModules/UploadFileSummary",
-        UpdateAssessmentPotential : "CoachModules/UpdateAssessmentPotential",
-        DeleteAssessmentFile : "CoachModules/DeleteAssessmentFile",
-        DeleteSummaryFile : "CoachModules/DeleteSummaryFile",
-        DeleteAssessmentPotentialFile : "CoachModules/DeleteAssessmentPotentialFile"
+      GetCoachCheckIn: "CoachModules/GetCoachCheckIn",
+      GetCourse: "CourseModules/GetCourse",
+      CheckInCoach: "CoachModules/CheckInCoach",
+      GetStudentByTimeId: "CoachModules/GetStudentByTimeId",
+      UpdateCheckInStudent: "CoachModules/UpdateCheckInStudent",
+      AssessmentStudent: "CoachModules/AssessmentStudent",
+      CreateTeachingNotes: "CoachModules/CreateTeachingNotes",
+      UploadFileSummary: "CoachModules/UploadFileSummary",
+      UpdateAssessmentPotential: "CoachModules/UpdateAssessmentPotential",
+      DeleteAssessmentFile: "CoachModules/DeleteAssessmentFile",
+      DeleteSummaryFile: "CoachModules/DeleteSummaryFile",
+      DeleteAssessmentPotentialFile:
+        "CoachModules/DeleteAssessmentPotentialFile",
     }),
     FilterStatusCheckIn(selected_data){
         if(this.course_data.course_type_id === 'CT_1'){
@@ -729,137 +865,170 @@ export default {
             return this.check_in_status_options
         }
     },
-    clearTeachingNote(){
-        this.coach_check_in.summary = null
-        this.coach_check_in.homework = null
-        this.coach_check_in.files = null
+    clearTeachingNote() {
+      this.coach_check_in.summary = null;
+      this.coach_check_in.homework = null;
+      this.coach_check_in.files = null;
     },
-    filterPackage(packageName){
-        this.package_name_filter = packageName
+    filterPackage(packageName) {
+      this.package_name_filter = packageName;
     },
-    GenUrlFile(part){
-        return  `${process.env.VUE_APP_URL}/api/v1/files/${part}`
+    GenUrlFile(part) {
+      return `${process.env.VUE_APP_URL}/api/v1/files/${part}`;
     },
-    openFile(file){
-        console.log(file)
-        if(file.attId){
-            let url = `${process.env.VUE_APP_URL}/api/v1/files/${file.attFiles}`
-            window.open(url, '_blank');
-        }else if(file.attachmentPotentialId){
-            let url = `${process.env.VUE_APP_URL}/api/v1/files/${file.attachmentFiles}`
-            window.open(url, '_blank');
+    openFile(file) {
+      console.log(file);
+      if (file.attId) {
+        let url = `${process.env.VUE_APP_URL}/api/v1/files/${file.attFiles}`;
+        window.open(url, "_blank");
+      } else if (file.attachmentPotentialId) {
+        let url = `${process.env.VUE_APP_URL}/api/v1/files/${file.attachmentFiles}`;
+        window.open(url, "_blank");
+      }
+    },
+    confirmDialogPotential() {
+      this.selected_files = [];
+      this.show_comment_potential_dialog = false;
+    },
+    showDialogPotential(id) {
+      for (let i = 0; i < this.student_check_in.length; i++) {
+        if (this.student_check_in[i].checkInStudentId === id) {
+          this.selected_student = i;
         }
+      }
+      if (
+        this.student_check_in[this.selected_student].potential
+          .checkInPotentialId
+      ) {
+        this.student_check_in[this.selected_student].potential.remark_old =
+          this.student_check_in[this.selected_student].potential.remark;
+      }
+      this.show_comment_potential_dialog = true;
     },
-    confirmDialogPotential(){
-        this.selected_files = []
-        this.show_comment_potential_dialog = false
+    claseDialogPotential(selected_student) {
+      if (this.student_check_in[selected_student].potential.remark_old) {
+        this.student_check_in[selected_student].potential.remark =
+          this.student_check_in[selected_student].potential.remark_old;
+        this.student_check_in[selected_student].potentialfiles = [];
+      } else {
+        this.student_check_in[selected_student].potential.remark = "";
+        this.student_check_in[selected_student].potentialfiles = [];
+      }
+      this.selected_files = [];
+      this.show_comment_potential_dialog = false;
     },
-    showDialogPotential(id){
-        for (let i = 0; i < this.student_check_in.length; i++) {
-            if (this.student_check_in[i].checkInStudentId === id) {
-                this.selected_student = i
-            }
+    GenDate(data) {
+      return new Date(data).toLocaleDateString("th-TH", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        weekday: "long",
+      });
+    },
+    async saveSummary() {
+      Swal.fire({
+        icon: "question",
+        title: "ต้องการบันทึกใช่หรือไม่ ?",
+        showDenyButton: false,
+        showCancelButton: true,
+        cancelButtonText: "ยกเลิก",
+        confirmButtonText: "ตกลง",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await this.UploadFileSummary({
+            checkInCoach: this.coach_check_in,
+            files: this.coach_check_in.summary_files,
+          }).then(async () => {
+            await this.GetCoachCheckIn({
+              course_id: this.$route.params.courseId,
+              date: this.$route.params.date,
+            });
+          });
         }
-        if(this.student_check_in[this.selected_student].potential.checkInPotentialId){
-            this.student_check_in[this.selected_student].potential.remark_old = this.student_check_in[this.selected_student].potential.remark
+      });
+    },
+    async saveUpdateAssessmentPotential() {
+      // console.log(this.student_check_in)
+      Swal.fire({
+        icon: "question",
+        title: "ต้องการบันทึกใช่หรือไม่ ?",
+        showDenyButton: false,
+        showCancelButton: true,
+        cancelButtonText: "ยกเลิก",
+        confirmButtonText: "ตกลง",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await this.UpdateAssessmentPotential({
+            students: this.student_check_in,
+          }).then(async () => {
+            await this.GetStudentByTimeId({
+              course_id: this.$route.params.courseId,
+              date: this.$route.params.date,
+              time_id: this.$route.params.timeId,
+            });
+          });
         }
-        this.show_comment_potential_dialog = true
+      });
     },
-    claseDialogPotential(selected_student){
-        if(this.student_check_in[selected_student].potential.remark_old){
-            this.student_check_in[selected_student].potential.remark = this.student_check_in[selected_student].potential.remark_old
-            this.student_check_in[selected_student].potentialfiles = []
-        }else{
-            this.student_check_in[selected_student].potential.remark = ""
-            this.student_check_in[selected_student].potentialfiles = []
+    saveCreateTeachingNotes() {
+      Swal.fire({
+        icon: "question",
+        title: "ต้องการบันทึกใช่หรือไม่ ?",
+        showDenyButton: false,
+        showCancelButton: true,
+        cancelButtonText: "ยกเลิก",
+        confirmButtonText: "ตกลง",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          this.CreateTeachingNotes({
+            check_in_coach_id: this.coach_check_in.checkInCoachId,
+            check_in_coach_data: this.coach_check_in,
+          });
         }
-        this.selected_files = []
-        this.show_comment_potential_dialog = false
+      });
     },
-    GenDate(data){
-        return new Date(data).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })
+    async saveAssessmentStudent() {
+      Swal.fire({
+        icon: "question",
+        title: "ต้องการบันทึกใช่หรือไม่ ?",
+        showDenyButton: false,
+        showCancelButton: true,
+        cancelButtonText: "ยกเลิก",
+        confirmButtonText: "ตกลง",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await this.AssessmentStudent({
+            students: this.student_check_in,
+          }).then(async () => {
+            await this.GetStudentByTimeId({
+              course_id: this.$route.params.courseId,
+              date: this.$route.params.date,
+              time_id: this.$route.params.timeId,
+            });
+          });
+        }
+      });
     },
-    async saveSummary(){
-        Swal.fire({
-            icon: "question",
-            title: "ต้องการบันทึกใช่หรือไม่ ?",
-            showDenyButton: false,
-            showCancelButton: true,
-            cancelButtonText :"ยกเลิก",
-            confirmButtonText: "ตกลง",
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                await this.UploadFileSummary({checkInCoach : this.coach_check_in , files : this.coach_check_in.summary_files }).then(async ()=>{
-                    await this.GetCoachCheckIn({course_id :this.$route.params.courseId, date : this.$route.params.date})
-                })
-            }
-        })
-       
-    },
-    async saveUpdateAssessmentPotential(){
-        // console.log(this.student_check_in)
-        Swal.fire({
-            icon: "question",
-            title: "ต้องการบันทึกใช่หรือไม่ ?",
-            showDenyButton: false,
-            showCancelButton: true,
-            cancelButtonText :"ยกเลิก",
-            confirmButtonText: "ตกลง",
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                await this.UpdateAssessmentPotential({students : this.student_check_in}).then(async ()=>{
-                    await this.GetStudentByTimeId({course_id :this.$route.params.courseId, date : this.$route.params.date, time_id: this.$route.params.timeId})
-                })
-            }
-        })
-    },
-    saveCreateTeachingNotes(){
-        Swal.fire({
-            icon: "question",
-            title: "ต้องการบันทึกใช่หรือไม่ ?",
-            showDenyButton: false,
-            showCancelButton: true,
-            cancelButtonText :"ยกเลิก",
-            confirmButtonText: "ตกลง",
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                this.CreateTeachingNotes({check_in_coach_id : this.coach_check_in.checkInCoachId, check_in_coach_data : this.coach_check_in})  
-            }
-        })
-    },
-    async saveAssessmentStudent(){
-        Swal.fire({
-            icon: "question",
-            title: "ต้องการบันทึกใช่หรือไม่ ?",
-            showDenyButton: false,
-            showCancelButton: true,
-            cancelButtonText :"ยกเลิก",
-            confirmButtonText: "ตกลง",
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                await this.AssessmentStudent({students : this.student_check_in}).then(async ()=>{
-                    await this.GetStudentByTimeId({course_id :this.$route.params.courseId, date : this.$route.params.date, time_id: this.$route.params.timeId})
-                })
-            }
-        })
-        
-    },
-    CheckInStudents(){
-        Swal.fire({
-            icon: "question",
-            title: "ต้องการบันทึกใช่หรือไม่ ?",
-            showDenyButton: false,
-            showCancelButton: true,
-            cancelButtonText :"ยกเลิก",
-            confirmButtonText: "ตกลง",
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                this.UpdateCheckInStudent({students : this.student_check_in}) 
-                setTimeout(()=>{
-                    this.GetStudentByTimeId({course_id :this.$route.params.courseId, date : this.$route.params.date, time_id: this.$route.params.timeId})
-                },1000)
-            }
-        })  
+    CheckInStudents() {
+      Swal.fire({
+        icon: "question",
+        title: "ต้องการบันทึกใช่หรือไม่ ?",
+        showDenyButton: false,
+        showCancelButton: true,
+        cancelButtonText: "ยกเลิก",
+        confirmButtonText: "ตกลง",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          this.UpdateCheckInStudent({ students: this.student_check_in });
+          setTimeout(() => {
+            this.GetStudentByTimeId({
+              course_id: this.$route.params.courseId,
+              date: this.$route.params.date,
+              time_id: this.$route.params.timeId,
+            });
+          }, 1000);
+        }
+      });
     },
     checkIn(){
         if(this.student_check_in.length === 0){
@@ -891,15 +1060,17 @@ export default {
         }
         this.show_comment_dialog = true
     },
-    confirmStudentComment(){
-        this.selected_files = []
-        this.show_comment_dialog = false
+    confirmStudentComment() {
+      this.selected_files = [];
+      this.show_comment_dialog = false;
     },
-    clearStudentComment(selected_student){
-        if(!this.student_check_in[selected_student].assessment.assessmentStudentsId){
-            this.student_check_in[selected_student].assessment.remark = []
-            this.student_check_in[selected_student].files = []
-        }
+    clearStudentComment(selected_student) {
+      if (
+        !this.student_check_in[selected_student].assessment.assessmentStudentsId
+      ) {
+        this.student_check_in[selected_student].assessment.remark = [];
+        this.student_check_in[selected_student].files = [];
+      }
     },
     closeStudentComment(selected_student){
         console.log(selected_student)
@@ -916,100 +1087,115 @@ export default {
       console.log(date, dateString);
     },
     timeRange(item) {
-        item.time = `${item.start_time || 'Start time'} - ${item.end_time || 'End time'}`
+      item.time = `${item.start_time || "Start time"} - ${
+        item.end_time || "End time"
+      }`;
     },
-    selectCheckInStatus(item, status){
-        console.log(item)
-        if(status === "leave" || status === "special case"){
-            // const index = this.students.filter((d) => d.no === item.no)
-            this.expanded_index.push(item)
-        }else{
-            this.expanded_index.forEach((expanded, index)=>{
-                if(expanded.checkInStudentId === item.checkInStudentId){
-                    this.expanded_index.splice(index, 1)
-                }
-            })
-            item.compensationDate = null
-            item.compensationStartTime = null
-            item.compensationEndTime = null
-        }
+    selectCheckInStatus(item, status) {
+      console.log(item);
+      if (status === "leave" || status === "special case") {
+        // const index = this.students.filter((d) => d.no === item.no)
+        this.expanded_index.push(item);
+      } else {
+        this.expanded_index.forEach((expanded, index) => {
+          if (expanded.checkInStudentId === item.checkInStudentId) {
+            this.expanded_index.splice(index, 1);
+          }
+        });
+        item.compensationDate = null;
+        item.compensationStartTime = null;
+        item.compensationEndTime = null;
+      }
     },
     inputDate(e, item) {
-        this.student_check_in.filter(v => v.no === item.no)[0].compensation_date_str = dateFormatter(e,"DD MT YYYYT")
+      this.student_check_in.filter(
+        (v) => v.no === item.no
+      )[0].compensation_date_str = dateFormatter(e, "DD MT YYYYT");
     },
     openFileSelector() {
-        this.$refs.fileInput.click();
+      this.$refs.fileInput.click();
     },
     openGeneralfileInputSelector() {
-        this.$refs.generalfileInput.click();
+      this.$refs.generalfileInput.click();
     },
     openPotentialfileInputSelector() {
-        this.$refs.potentialfileInput.click();
+      this.$refs.potentialfileInput.click();
     },
-    removeAccessmentFile(selected_student,index){
-        this.student_check_in[selected_student].files.splice(index, 1)
+    removeAccessmentFile(selected_student, index) {
+      this.student_check_in[selected_student].files.splice(index, 1);
     },
-    removePotentialFileInBase(file,selected_student){
-        console.log(file)
-        Swal.fire({
-            icon: "question",
-            title: "ต้องการลบไฟล์นี้ใช่หรือไม่",
-            showDenyButton: false,
-            showCancelButton: true,
-            confirmButtonText: "ตกลง",
-            cancelButtonText: "ยกเลิก",
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    this.DeleteAssessmentPotentialFile({att_assessment_id : file.attachmentPotentialId}).then(()=>{
-                        this.student_check_in[selected_student].potential.attachmentPotential.forEach((att ,index)=>{
-                            if(file.attachmentPotentialId === att.attachmentPotentialId){
-                                this.student_check_in[selected_student].potential.attachmentPotential.splice(index, 1)
-                            }
-                        })
-                    })
-                }
-            })
-    },
-    removeAccessmentFileInBase(file,selected_student){
-        console.log(file)
-        Swal.fire({
-            icon: "question",
-            title: "ต้องการลบไฟล์นี้ใช่หรือไม่",
-            showDenyButton: false,
-            showCancelButton: true,
-            confirmButtonText: "ตกลง",
-            cancelButtonText: "ยกเลิก",
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    this.DeleteAssessmentFile({att_assessment_id : file.attId}).then(()=>{
-                        this.student_check_in[selected_student].assessment.attachment.forEach((att ,index)=>{
-                            if(file.attId === att.attId){
-                                this.student_check_in[selected_student].assessment.attachment.splice(index, 1)
-                            }
-                        })
-                    })
-                }
-            })
-       
-    },
-    removePotentialFile(selected_student,index){
-        this.student_check_in[selected_student].potentialfiles.splice(index, 1)
-    },
-    clearAssessment(){
-        for (const student of this.student_check_in) {
-            student.assessment.evolution = ""
-            student.assessment.interest = ""
-            student.assessment.remark = ""
-            student.files = []
+    removePotentialFileInBase(file, selected_student) {
+      console.log(file);
+      Swal.fire({
+        icon: "question",
+        title: "ต้องการลบใช่หรือไม่",
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: "ตกลง",
+        cancelButtonText: "ยกเลิก",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          this.DeleteAssessmentPotentialFile({
+            att_assessment_id: file.attachmentPotentialId,
+          }).then(() => {
+            this.student_check_in[
+              selected_student
+            ].potential.attachmentPotential.forEach((att, index) => {
+              if (file.attachmentPotentialId === att.attachmentPotentialId) {
+                this.student_check_in[
+                  selected_student
+                ].potential.attachmentPotential.splice(index, 1);
+              }
+            });
+          });
         }
+      });
     },
-    clearPotentialAssessment(){
-        for (const student of this.student_check_in) {
-            student.potential.evolution = ""
-            student.potential.interest = ""
-            student.potential.remark = ""
-            student.potentialfiles = []
+    removeAccessmentFileInBase(file, selected_student) {
+      console.log(file);
+      Swal.fire({
+        icon: "question",
+        title: "ต้องการลบใช่หรือไม่",
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: "ตกลง",
+        cancelButtonText: "ยกเลิก",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          this.DeleteAssessmentFile({ att_assessment_id: file.attId }).then(
+            () => {
+              this.student_check_in[
+                selected_student
+              ].assessment.attachment.forEach((att, index) => {
+                if (file.attId === att.attId) {
+                  this.student_check_in[
+                    selected_student
+                  ].assessment.attachment.splice(index, 1);
+                }
+              });
+            }
+          );
         }
+      });
+    },
+    removePotentialFile(selected_student, index) {
+      this.student_check_in[selected_student].potentialfiles.splice(index, 1);
+    },
+    clearAssessment() {
+      for (const student of this.student_check_in) {
+        student.assessment.evolution = "";
+        student.assessment.interest = "";
+        student.assessment.remark = "";
+        student.files = [];
+      }
+    },
+    clearPotentialAssessment() {
+      for (const student of this.student_check_in) {
+        student.potential.evolution = "";
+        student.potential.interest = "";
+        student.potential.remark = "";
+        student.potentialfiles = [];
+      }
     },
     // uploadFile() {
     //   this.file = this.$refs.fileInput.files[0];
@@ -1021,74 +1207,80 @@ export default {
     //   reader.readAsDataURL(this.file);
     // },
     uploadGeneralFile(selected_student) {
-      const files = this.$refs.generalfileInput.files
-      if(files.length > 0){
+      const files = this.$refs.generalfileInput.files;
+      if (files.length > 0) {
         for (let i = 0; i < files.length; i++) {
-            if(CheckFileSize(files[i])===true){
-                this.selected_files.push(files[i])
-                this.student_check_in[selected_student].files.push(files[i])
-            }
+          if (CheckFileSize(files[i]) === true) {
+            this.selected_files.push(files[i]);
+            this.student_check_in[selected_student].files.push(files[i]);
+          }
         }
       }
     },
     uploadPotentialFile(selected_student) {
-      const files = this.$refs.potentialfileInput.files
-      if(files.length > 0){
+      const files = this.$refs.potentialfileInput.files;
+      if (files.length > 0) {
         for (let i = 0; i < files.length; i++) {
-            if(CheckFileSize(files[i])===true){
-                this.selected_files.push(files[i])
-                this.student_check_in[selected_student].potentialfiles.push(files[i])
-            }
+          if (CheckFileSize(files[i]) === true) {
+            this.selected_files.push(files[i]);
+            this.student_check_in[selected_student].potentialfiles.push(
+              files[i]
+            );
+          }
         }
       }
     },
 
     previewSummaryFile(event) {
       const selectedFiles = event.target.files;
-      this.coach_check_in.summary_files =[]
+      this.coach_check_in.summary_files = [];
       const fileUrls = [];
       for (let i = 0; i < selectedFiles.length; i++) {
-        if(CheckFileSize(selectedFiles[i])===true){
-            this.coach_check_in.summary_files.push(selectedFiles[i])
-            const file = selectedFiles[i];
-            const reader = new FileReader();
-            reader.onload = () => {
-                fileUrls.push(reader.result);
-                if (fileUrls.length == selectedFiles.length) {
-                    this.preview_summary_files = [...this.preview_summary_files, ...fileUrls];
-                }
-            };
-            reader.readAsDataURL(file);
+        if (CheckFileSize(selectedFiles[i]) === true) {
+          this.coach_check_in.summary_files.push(selectedFiles[i]);
+          const file = selectedFiles[i];
+          const reader = new FileReader();
+          reader.onload = () => {
+            fileUrls.push(reader.result);
+            if (fileUrls.length == selectedFiles.length) {
+              this.preview_summary_files = [
+                ...this.preview_summary_files,
+                ...fileUrls,
+              ];
+            }
+          };
+          reader.readAsDataURL(file);
         }
       }
     },
-    removeSummaryFile(index){
-        this.preview_summary_files.splice(index, 1)
-        this.coach_check_in.summary_files.splice(index, 1)
+    removeSummaryFile(index) {
+      this.preview_summary_files.splice(index, 1);
+      this.coach_check_in.summary_files.splice(index, 1);
     },
-    removeSummaryFileInbase(file, index){
-        console.log(this.coach_check_in)
-        Swal.fire({
-            icon: "question",
-            title: "ต้องการลบไฟล์นี้ใช่หรือไม่",
-            showDenyButton: false,
-            showCancelButton: true,
-            confirmButtonText: "ตกลง",
-            cancelButtonText: "ยกเลิก",
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    await this.DeleteSummaryFile({att_assessment_id : file.attId}).then(()=>{
-                        this.preview_summary_files.splice(index, 1)
-                        this.coach_check_in.attachment.splice(index, 1)
-                    })
-                }
-            })
-        //this.coach_check_in.summary_files.splice(index, 1)
-        //
-    }
+    removeSummaryFileInbase(file, index) {
+      console.log(this.coach_check_in);
+      Swal.fire({
+        icon: "question",
+        title: "ต้องการลบใช่หรือไม่",
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: "ตกลง",
+        cancelButtonText: "ยกเลิก",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await this.DeleteSummaryFile({ att_assessment_id: file.attId }).then(
+            () => {
+              this.preview_summary_files.splice(index, 1);
+              this.coach_check_in.attachment.splice(index, 1);
+            }
+          );
+        }
+      });
+      //this.coach_check_in.summary_files.splice(index, 1)
+      //
+    },
   },
 };
 </script>
 <style>
-
 </style>

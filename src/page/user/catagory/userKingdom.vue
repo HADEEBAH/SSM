@@ -18,7 +18,7 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-card class="rounded-xl">
+    <v-card class="rounded-xl" :style="!MobileSize ? {'border-bottom-right-radius': '0px !important', 'border-bottom-left-radius': '0px !important'} : ''">
       <v-card
         class="mx-auto block rounded-xl drop-shadow-lg mt-3 ml-3 mr-3 banner-container"
       >
@@ -66,7 +66,7 @@
             v-for="(item, index_item) in searchKingdom(search_kingdom)"
             :key="index_item"
           >
-            <v-card class="h-full block drop-shadow-lg">
+            <v-card class="h-full block drop-shadow-none rounded-xl box-shadows">
               <!-- :src="item.categoryImg && item.categoryImg !== null ? showImg(item.categoryImg) : defaultImageUrl" -->
               <v-img
                 v-if="item.categoryImg && item.categoryImg !== null"
@@ -311,5 +311,8 @@ export default {
   min-height: 100%;
   min-width: 100%;
   transform: translate(-50%, -50%);
+}
+.box-shadows {
+  box-shadow: 0 1px 1px -2px rgb(90 126 241 / 20%), 0 2px 2px 0 rgb(54 176 255 / 14%), 0 4px 16px 0 rgb(90 102 255 / 12%) !important;
 }
 </style>

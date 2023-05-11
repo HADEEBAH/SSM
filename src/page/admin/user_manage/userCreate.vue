@@ -219,7 +219,6 @@
                               v-model="checkData.tel"
                               outlined
                               dense
-                              required
                               @input="checkPhoneNumber"
                               maxlength="12"
                             >
@@ -613,7 +612,7 @@
           <template>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom required text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
+                <labelCustom text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
                 <v-text-field
                   disabled
                   dense
@@ -625,7 +624,7 @@
             </v-row>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom required text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
+                <labelCustom text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
                 <v-text-field
                   disabled
                   dense
@@ -637,7 +636,7 @@
             </v-row>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom required text="เบอร์โทรศัพท์"></labelCustom>
+                <labelCustom text="เบอร์โทรศัพท์"></labelCustom>
                 <v-text-field
                   disabled
                   dense
@@ -663,7 +662,7 @@
             <v-col>
               <v-btn
                 class="w-full"
-                color="#ff6b81"
+                :color="relation.username.length < 1 ? '#CCCCCC' : '#ff6b81'"
                 dark
                 depressed
                 @click="addRealions"
@@ -723,8 +722,10 @@ export default {
         (val) =>
           (val || "").length < 20 ||
           "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => (/[A-Za-z0-9 ]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-        (val) => !(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
+        (val) => /[A-Za-z0-9 ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+        (val) =>
+          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+          "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
       ],
       passwordRules: [
         (val) =>
@@ -733,8 +734,7 @@ export default {
         (val) =>
           (val || "").length < 20 ||
           "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
-        (val) =>
-          !(/[ ]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+        (val) => !/[ ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
       ],
     },
     title: "ข้อมูลผู้ใช้งาน",
