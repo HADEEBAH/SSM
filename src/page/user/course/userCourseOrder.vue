@@ -1200,9 +1200,28 @@ export default {
         }
       }
     },
-
     groupByDay(originalArray) {
-      console.log(originalArray);
+      // console.log(originalArray);
+      // let days = originalArray.day
+      // const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      // days.sort();
+      // let ranges = [];
+      // let rangeStart = days[0];
+      // let prevDay = rangeStart;
+
+      // for (let i = 1; i < days.length; i++) {
+      //   const day = days[i];
+      //   if (day === prevDay + 1) {
+      //     prevDay = day;
+      //   } else {
+      //     const rangeEnd = prevDay;
+      //     ranges.push({ start: rangeStart, end: rangeEnd });
+      //     rangeStart = day;
+      //     prevDay = day;
+      //   }
+      // }
+      // ranges.push({ start: rangeStart, end: prevDay });
+      // console.log(ranges.map(({ start, end }) => start === end ? weekdays[start] : `${weekdays[start]} - ${weekdays[end]}`).join(', '))
       return originalArray;
     },
     CreateReserve() {
