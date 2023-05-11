@@ -1045,76 +1045,10 @@ const CourseModules = {
             days_of_class: [],
             days : []
           }
-          console.log("payload 1048",payload)
+          console.log("payload 1048", data.data.coachs)
           let teach_day_data = []
-          for(let coach_date of data.data.dayOfWeek){
-            // DAYS
-            let dayName = dayOfWeekArray(coach_date.dayOfWeekName)
-            if(payload.days.filter(v => v.dayName === dayName).length === 0){
-              let times = []
-              for await (let time of coach_date.times){
-                times.push({
-                  start : time.start,
-                  end : time.end,
-                  timeData : []
-                })
-                for await (let t of times){
-                  t.timeData.push({
-                    maximumStudent: time.maximumStudent,
-                    dayOfWeekId: time.dayOfWeekId,
-                    timeId:  time.timeId,
-                    course_coach_ids: coach_date.courseCoachId 
-                  })
-                }
-              }
-              payload.days.push({
-                day: coach_date.dayOfWeekName,
-                dayName : dayName,
-                times: times,
-              }) 
-            }else{
-              console.log(payload.days.filter(v => v.dayName === dayName))
-              for await (let day of payload.days.filter(v => v.dayName === dayName)){
-                console.log("payload 1078",coach_date.times)
-                for (let time of coach_date.times){
-                  console.log("payload 1080", time)
-                  console.log("payload 1081", day.times)
-                  if (day.times.filter(v => v.start == time.start && v.end == time.end).length > 0){
-                    for await (let day_time of day.times.filter(v => v.start == time.start && v.end == time.end)){
-                      day_time.timeData.push(
-                        {
-                          maximumStudent: time.maximumStudent,
-                          dayOfWeekId: time.dayOfWeekId,
-                          timeId:  time.timeId,
-                          course_coach_ids: coach_date.courseCoachId 
-                        }
-                      )
-                    }
-                  }else{
-                    let times = []
-                    for await (let time of coach_date.times){
-                      times.push({
-                        start : time.start,
-                        end : time.end,
-                        timeData : []
-                      })
-                      for await (let t of times){
-                        t.timeData.push({
-                          maximumStudent: time.maximumStudent,
-                          dayOfWeekId: time.dayOfWeekId,
-                          timeId:  time.timeId,
-                          course_coach_ids: coach_date.courseCoachId 
-                        })
-                      }
-                    }
-                    day.times.push(...times)
-                  }
-                }
-              }
-            }
-          }
           for await (let coach of data.data.coachs){
-            console.log("payload 1054",payload)
+            // console.log("payload 1054",payload)
             for await (let coach_date of data.data.dayOfWeek.filter(v => v.courseCoachId === coach.courseCoachId)){
               // DAY OF CLASS
               if(payload.days_of_class.filter(v => v.day_of_week_id === coach_date.times[0].dayOfWeekId).length === 0){
@@ -1183,10 +1117,79 @@ const CourseModules = {
                   },
                 },
             )
-            console.log("payload 1180",payload)
+            // console.log("payload 1180",payload)
           }
-          console.log("payload 1184",payload)
+          // console.log("payload 1184",payload)
           // console.log("teach_day_data",teach_day_data)
+          for(let coach_date of data.data.dayOfWeek){
+            // DAYS
+            let dayName = dayOfWeekArray(coach_date.dayOfWeekName)
+            if(payload.days.filter(v => v.dayName === dayName).length === 0){
+              let times = []
+              for await (let time of coach_date.times){
+                times.push({
+                  start : time.start,
+                  end : time.end,
+                  timeData : []
+                })
+                for await (let t of times){
+                  t.timeData.push({
+                    maximumStudent: time.maximumStudent,
+                    dayOfWeekId: time.dayOfWeekId,
+                    timeId:  time.timeId,
+                    courseCoachId: coach_date.courseCoachId,
+                    coach_name : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachFirstNameTh +" "+data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachLastNameTh,
+                    coach_id : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].accountId
+                 })
+                }
+              }
+              payload.days.push({
+                day: coach_date.dayOfWeekName,
+                dayName : dayName,
+                times: times,
+              }) 
+            }else{
+              console.log(payload.days.filter(v => v.dayName === dayName))
+              for await (let day of payload.days.filter(v => v.dayName === dayName)){
+                // console.log("payload 1078",coach_date.times)
+                for (let time of coach_date.times){
+                  // console.log("payload 1080", time)
+                  // console.log("payload 1081", day.times)
+                  if (day.times.filter(v => v.start == time.start && v.end == time.end).length > 0){
+                    for await (let day_time of day.times.filter(v => v.start == time.start && v.end == time.end)){
+                      day_time.timeData.push(
+                        {
+                          maximumStudent: time.maximumStudent,
+                          dayOfWeekId: time.dayOfWeekId,
+                          timeId:  time.timeId,
+                          coach_name : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachFirstNameTh +" "+data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachLastNameTh,
+                          coach_id : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].accountId
+                        }
+                      )
+                    }
+                  }else{
+                    let times = []
+                    for await (let time of coach_date.times){
+                      times.push({
+                        start : time.start,
+                        end : time.end,
+                        timeData : []
+                      })
+                      for await (let t of times){
+                        t.timeData.push({
+                          maximumStudent: time.maximumStudent,
+                          dayOfWeekId: time.dayOfWeekId,
+                          timeId:  time.timeId,
+                          courseCoachId: coach_date.courseCoachId 
+                        })
+                      }
+                    }
+                    day.times.push(...times)
+                  }
+                }
+              }
+            }
+          }
           for await (let coach of payload.coachs){
             coach.teach_day_data = teach_day_data.filter(v => v.course_coach_id === coach.course_coach_id)
           }
@@ -1230,7 +1233,7 @@ const CourseModules = {
             }
           }
           if(payload.course_type_id === "CT_1"){
-            console.log("payload :",payload)
+            // console.log("payload :",payload)
             await context.commit("SetCourseData", payload)
           }else{
             // console.log("payload :",payload)

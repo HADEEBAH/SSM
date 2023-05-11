@@ -148,7 +148,6 @@
                 </v-card-text>
             </v-card>
         </v-dialog>
-        <pre>{{ course_data }}</pre>
     </v-container>
     <loading-overlay :loading="course_is_loading"></loading-overlay>
   </v-app>
