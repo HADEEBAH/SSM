@@ -1,183 +1,185 @@
 <template>
-  <v-container>
-    <v-row dense>
-      <v-col class="my-5" style="text-align: -webkit-center" cols="12">
-        <!-- <v-btn class="absolute" icon>
+  <v-form ref="form" v-model="valid" lazy-validation>
+    <v-container>
+      <v-row dense>
+        <v-col class="my-5" style="text-align: -webkit-center" cols="12">
+          <!-- <v-btn class="absolute" icon>
             <v-icon color="#ff6b81" @click="preview_file = ''"
               >mdi-close-circle</v-icon
             >
           </v-btn> -->
-        <!-- {{ profile_detail.image }} -->
-        <div class="cicle">
-          <v-img
-            class="image-cropper items-end"
-            :src="
-              preview_file !== ''
-                ? preview_file
-                : profile_detail.image !== ''
-                ? profile_detail.image
-                : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU`
-            "
-          >
-            <v-btn
-              v-if="isEnabled && preview_file === ''"
-              color="#ff6b81"
-              @click="openFileSelector"
-              class="w-full white--text"
-              >เปลี่ยนรูป</v-btn
+          <!-- {{ profile_detail.image }} -->
+          <div class="cicle">
+            <v-img
+              class="image-cropper items-end"
+              :src="
+                preview_file !== ''
+                  ? preview_file
+                  : profile_detail.image !== ''
+                  ? profile_detail.image
+                  : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU`
+              "
             >
-            <v-btn
-              v-if="preview_file !== ''"
-              color="#ff6b81"
-              @click="removeImg"
-              class="w-full white--text"
-            >
-              <span class="mdi mdi-close">ยกเลิก</span>
-            </v-btn>
-          </v-img>
-        </div>
-        <input
-          id="fileInput"
-          ref="fileInput"
-          type="file"
-          @change="uploadFile"
-          accept="image/*"
-          hidden
-        />
-      </v-col>
-      <!--TH NAME -->
-      <v-col cols="12" sm="6">
-        <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
-        <!-- <div v-if="!isEnabled">
+              <v-btn
+                v-if="isEnabled && preview_file === ''"
+                color="#ff6b81"
+                @click="openFileSelector"
+                class="w-full white--text"
+                >เปลี่ยนรูป</v-btn
+              >
+              <v-btn
+                v-if="preview_file !== ''"
+                color="#ff6b81"
+                @click="removeImg"
+                class="w-full white--text"
+              >
+                <span class="mdi mdi-close">ยกเลิก</span>
+              </v-btn>
+            </v-img>
+          </div>
+          <input
+            id="fileInput"
+            ref="fileInput"
+            type="file"
+            @change="uploadFile"
+            accept="image/*"
+            hidden
+          />
+        </v-col>
+        <!--TH NAME -->
+        <v-col cols="12" sm="6">
+          <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
+          <!-- <div v-if="!isEnabled">
           {{ profile_detail.firstNameTh == ''? '-' : profile_detail.firstNameTh}}
         </div> -->
-        <!-- <div v-else> -->
-        <v-text-field
-          @keypress="validate($event, 'th')"
-          placeholder="-"
-          v-model="profile_detail.firstNameTh"
-          outlined
-          dense
-          :rules="firstNameThRules"
-          :disabled="!isEnabled"
-        >
-        </v-text-field>
-        <!-- </div> -->
-      </v-col>
-      <!-- TH LNAME -->
-      <v-col cols="12" sm="6">
-        <label-custom text="นามสกุล (ภาษาไทย)"></label-custom>
-        <!-- <div v-if="!isEnabled">
+          <!-- <div v-else> -->
+          <v-text-field
+            @keypress="validate($event, 'th-special')"
+            placeholder="-"
+            v-model="profile_detail.firstNameTh"
+            outlined
+            dense
+            :rules="rules.firstNameThRules"
+            :disabled="!isEnabled"
+          >
+          </v-text-field>
+          <!-- </div> -->
+        </v-col>
+        <!-- TH LNAME -->
+        <v-col cols="12" sm="6">
+          <label-custom text="นามสกุล (ภาษาไทย)"></label-custom>
+          <!-- <div v-if="!isEnabled">
           {{ profile_detail.lastNameTh == ''? '-' : profile_detail.lastNameTh }}
         </div> -->
-        <!-- <div v-else> -->
-        <v-text-field
-          @keypress="validate($event, 'th')"
-          placeholder="-"
-          v-model="profile_detail.lastNameTh"
-          outlined
-          dense
-          :rules="lastNameThRules"
-          :disabled="!isEnabled"
-        >
-        </v-text-field>
-        <!-- </div> -->
-      </v-col>
-      <!-- nationality -->
-      <v-col cols="12" sm="6">
-        <label-custom text="สัญชาติ"></label-custom>
-        <!-- <div v-if="!isEnabled">
+          <!-- <div v-else> -->
+          <v-text-field
+            @keypress="validate($event, 'th-special')"
+            placeholder="-"
+            v-model="profile_detail.lastNameTh"
+            outlined
+            dense
+            :rules="rules.lastNameThRules"
+            :disabled="!isEnabled"
+          >
+          </v-text-field>
+          <!-- </div> -->
+        </v-col>
+        <!-- nationality -->
+        <v-col cols="12" sm="6">
+          <label-custom text="สัญชาติ"></label-custom>
+          <!-- <div v-if="!isEnabled">
           {{ profile_detail.nation == null ? '-' : profile_detail.nation }}
         </div>
         <div v-else> -->
-        <v-text-field
-          @keypress="validate($event, 'th' || 'en')"
-          placeholder="-"
-          v-model="profile_detail.nation"
-          outlined
-          dense
-          :disabled="!isEnabled"
-        >
-        </v-text-field>
-        <!-- </div> -->
-      </v-col>
-      <v-col cols="12" sm="6">
-        <label-custom text="เบอร์โทรศัพท์"></label-custom>
-        <!-- <div v-if="!isEnabled">
+          <v-text-field
+            @keypress="validate($event, 'th-special')"
+            placeholder="-"
+            v-model="profile_detail.nation"
+            outlined
+            dense
+            :disabled="!isEnabled"
+            :rules="rules.nation"
+          >
+          </v-text-field>
+          <!-- </div> -->
+        </v-col>
+        <v-col cols="12" sm="6">
+          <label-custom text="เบอร์โทรศัพท์"></label-custom>
+          <!-- <div v-if="!isEnabled">
           {{ profile_detail.mobileNo == ''? '-' : profile_detail.mobileNo }}
         </div>
         <div v-else> -->
-        <v-text-field
-          @keypress="validate($event, 'th')"
-          @input="checkPhoneNumber"
-          maxlength="12"
-          required
-          placeholder="-"
-          v-model="profile_detail.mobileNo"
-          outlined
-          dense
-          disabled
-        >
-        </v-text-field>
-        <!-- </div> -->
-      </v-col>
-      <!-- email -->
-      <v-col cols="12" sm="6">
-        <label-custom text="อีเมล"></label-custom>
-        <!-- <div v-if="!isEnabled">
+          <v-text-field
+            @keypress="validate($event, 'th')"
+            @input="checkPhoneNumber"
+            maxlength="12"
+            required
+            placeholder="-"
+            v-model="profile_detail.mobileNo"
+            outlined
+            dense
+            disabled
+          >
+          </v-text-field>
+          <!-- </div> -->
+        </v-col>
+        <!-- email -->
+        <v-col cols="12" sm="6">
+          <label-custom text="อีเมล"></label-custom>
+          <!-- <div v-if="!isEnabled">
           {{ profile_detail.email == ''? '-' : profile_detail.email}}
         </div> -->
-        <!-- <div v-else> -->
-        <v-text-field
-          placeholder="-"
-          v-model="profile_detail.email"
-          outlined
-          dense
-          :rules="rules.email"
-          disabled
-        >
-        </v-text-field>
-        <!-- </div> -->
-      </v-col>
-      <!-- BTN -->
-    </v-row>
-    <v-row justify="center">
-      <v-col cols="6" class="my-3 text-center" v-if="!isEnabled">
-        <v-btn
-          class="white--text mb-5 w-full"
-          depressed
-          color="#ff6b81"
-          @click="edit()"
-        >
-          <span class="mdi mdi-pencil-outline">แก้ไข</span>
-        </v-btn>
-      </v-col>
-      <v-col cols="6" v-if="isEnabled">
-        <v-btn
-          :disabled="is_loading"
-          outlined
-          class="my-5 w-full"
-          depressed
-          color="#ff6b81"
-          @click="cancel()"
-        >
-          <span class="mdi mdi-close">ยกเลิก</span>
-        </v-btn>
-      </v-col>
-      <v-col cols="6" v-if="isEnabled">
-        <v-btn
-          :loading="is_loading"
-          :disabled="is_loading"
-          class="white--text my-5 w-full"
-          depressed
-          color="#ff6b81"
-          @click="submitEdit()"
-        >
-          <span class="mdi mdi-check">บันทึก</span>
-        </v-btn>
-      </v-col>
-    </v-row>
-  </v-container>
+          <!-- <div v-else> -->
+          <v-text-field
+            placeholder="-"
+            v-model="profile_detail.email"
+            outlined
+            dense
+            disabled
+          >
+          </v-text-field>
+          <!-- </div> -->
+        </v-col>
+        <!-- BTN -->
+      </v-row>
+      <v-row justify="center">
+        <v-col cols="6" class="my-3 text-center" v-if="!isEnabled">
+          <v-btn
+            class="white--text mb-5 w-full"
+            depressed
+            color="#ff6b81"
+            @click="edit()"
+          >
+            <span class="mdi mdi-pencil-outline">แก้ไข</span>
+          </v-btn>
+        </v-col>
+        <v-col cols="6" v-if="isEnabled">
+          <v-btn
+            :disabled="is_loading"
+            outlined
+            class="my-5 w-full"
+            depressed
+            color="#ff6b81"
+            @click="cancel()"
+          >
+            <span class="mdi mdi-close">ยกเลิก</span>
+          </v-btn>
+        </v-col>
+        <v-col cols="6" v-if="isEnabled">
+          <v-btn
+            :loading="is_loading"
+            :disabled="!valid"
+            class="white--text my-5 w-full"
+            depressed
+            color="#ff6b81"
+            @click="submitEdit()"
+          >
+            <span class="mdi mdi-check">บันทึก</span>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-form>
 </template>
 
 <script>
@@ -193,6 +195,8 @@ export default {
   },
   data: () => ({
     isEnabled: false,
+    valid: true,
+
     rules: {
       email: [
         (value) => !!value || "Required.",
@@ -203,6 +207,96 @@ export default {
           return pattern.test(value) || "Invalid e-mail.";
         },
       ],
+      phone_number: [
+        (val) =>
+          ((val || "").length > 0 && val.length === 12) ||
+          "โปรดระบุเบอร์โทรศัพท์ 10 หลัก",
+      ],
+      nation: [
+        (val) =>
+          (val || "").length > 1 ||
+          "โปรดระบุสันชาติความยาวไม่น้อยกว่า 2 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุสันชาติความยาวไม่เกิน 20 ตัวอักษร",
+        (val) => /[ก-๏\s]/g.test(val) || "สันชาติต้องไม่มีอักขระพิเศษ",
+        (val) =>
+          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+          "สันชาติต้องไม่มีอิโมจิ",
+      ],
+      usernameRules: [
+        (val) =>
+          (val || "").length > 5 ||
+          "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
+        (val) => /[A-Za-z0-9 ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+        (val) =>
+          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+          "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
+      ],
+      firstNameThRules: [
+        (val) =>
+          (val || "").length > 1 ||
+          "โปรดระบุชื่อ (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุชื่อ (ภาษาไทย) ความยาวไม่เกิน 20 ตัวอักษร",
+        (val) => /[ก-๏\s]/g.test(val) || "กรุณากรอกชื่อภาษาไทย",
+        (val) =>
+          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+          "กรุณากรอกชื่อภาษาไทย",
+      ],
+      firstNameEnRules: [
+        (val) =>
+          (val || "").length > 1 ||
+          "โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
+        (val) => /[A-Za-z]/g.test(val) || "กรุณากรอกชื่อภาษาอังกฤษ",
+        (val) =>
+          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+          "กรุณากรอกชื่อภาษาอังกฤษ",
+      ],
+      lastNameThRules: [
+        (val) =>
+          (val || "").length > 1 ||
+          "โปรดระบุนามสกุล (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุนามสกุล (ภาษาไทย) ความยาวไม่เกิน 20 ตัวอักษร",
+        (val) => /[ก-๏\s]/g.test(val) || "กรุณากรอกนามสกุลภาษาไทย",
+        (val) =>
+          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+          "กรุณากรอกสกุลภาษาไทย",
+      ],
+      lastNameEnRules: [
+        (val) =>
+          (val || "").length > 1 ||
+          "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
+        (val) => /[A-Za-z]/g.test(val) || "กรุณากรอกนามสกุลภาษาอังกฤษ",
+        (val) =>
+          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+          "กรุณากรอกสกุลภาษาอังกฤษ",
+      ],
+      passwordRules: [
+        (val) =>
+          (val || "").length > 7 ||
+          "โปรดระบุรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
+        (val) => !/[ ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+      ],
+      confirm_password: (val) =>
+        (val && val.length > 7) ||
+        "โปรดระบุยืนยันรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
+      match: (password) => (value) => value === password || "รหัสผ่านไม่ตรงกัน",
     },
 
     is_loading: false,
@@ -240,80 +334,87 @@ export default {
     },
 
     submitEdit(account_id) {
-      Swal.fire({
-        icon: "question",
-        title: "คุณต้องการแก้ไขข้อมูลโปรไฟล์หรือไม่",
-        showDenyButton: false,
-        showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            this.is_loading = true;
-            let config = {
-              headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Content-type": "Application/json",
-                Authorization: `Bearer ${VueCookie.get("token")}`,
-              },
-            };
+      if (this.$refs.form.validate()) {
+        Swal.fire({
+          icon: "question",
+          title: "คุณต้องการแก้ไขข้อมูลโปรไฟล์หรือไม่",
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: "ตกลง",
+          cancelButtonText: "ยกเลิก",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+              this.is_loading = true;
+              let config = {
+                headers: {
+                  "Access-Control-Allow-Origin": "*",
+                  "Content-type": "Application/json",
+                  Authorization: `Bearer ${VueCookie.get("token")}`,
+                },
+              };
 
-            let payload = {
-              firstNameTh: this.profile_detail.firstNameTh,
-              lastNameTh: this.profile_detail.lastNameTh,
-              nation: this.profile_detail.nation,
-              mobileNo: this.profile_detail.mobileNo,
-              email: this.profile_detail.email,
-            };
+              let payload = {
+                firstNameTh: this.profile_detail.firstNameTh,
+                lastNameTh: this.profile_detail.lastNameTh,
+                nation: this.profile_detail.nation,
+                mobileNo: this.profile_detail.mobileNo,
+                email: this.profile_detail.email,
+              };
 
-            this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-            let user_account_id = this.user_detail.account_id;
+              this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+              let user_account_id = this.user_detail.account_id;
 
-            let payloadData = new FormData();
-            payloadData.append("payload", JSON.stringify(payload));
-            if (this.image_profile.name) {
-              console.log("this.image_profile", this.image_profile);
-              payloadData.append("imageProfile", this.image_profile);
-            }
+              let payloadData = new FormData();
+              payloadData.append("payload", JSON.stringify(payload));
+              if (this.image_profile.name) {
+                console.log("this.image_profile", this.image_profile);
+                payloadData.append("imageProfile", this.image_profile);
+              }
 
-            let { data } = await axios.patch(
-              `${process.env.VUE_APP_URL}/api/v1/profile/${user_account_id}`,
-              payloadData,
-              config
-            );
-            console.log("acc Font", account_id);
-            if (data.statusCode === 200) {
+              let { data } = await axios.patch(
+                `${process.env.VUE_APP_URL}/api/v1/profile/${user_account_id}`,
+                payloadData,
+                config
+              );
+              console.log("acc Font", account_id);
+              if (data.statusCode === 200) {
+                Swal.fire({
+                  icon: "success",
+                  title: "แก้ไขโปรไฟล์สำเร็จ",
+                  timer: 3000,
+                });
+
+                let data_storage = JSON.parse(
+                  localStorage.getItem("userDetail")
+                );
+                data_storage.image = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}`;
+                localStorage.setItem(
+                  "userDetail",
+                  JSON.stringify(data_storage)
+                );
+                this.GetProfileDetail(this.$route.params.profile_id);
+
+                this.is_loading = false;
+                this.preview_file = "";
+                this.dialog_show = true;
+                this.isDisabled = true;
+                this.isEnabled = false;
+                this.buttonName = "แก้ไข";
+                document.getElementById("fileInput").value = "";
+              } else {
+                throw { message: data.message };
+              }
+            } catch (error) {
+              console.log(error);
               Swal.fire({
-                icon: "success",
-                title: "แก้ไขโปรไฟล์สำเร็จ",
-                timer: 3000,
+                icon: "error",
+                title: error.message,
               });
-
-              let data_storage = JSON.parse(localStorage.getItem("userDetail"));
-              data_storage.image = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}`;
-              localStorage.setItem("userDetail", JSON.stringify(data_storage));
-              this.GetProfileDetail(this.$route.params.profile_id);
-
-              this.is_loading = false;
-              this.preview_file = "";
-              this.dialog_show = true;
-              this.isDisabled = true;
-              this.isEnabled = false;
-              this.buttonName = "แก้ไข";
-              document.getElementById("fileInput").value = "";
-            } else {
-              throw { message: data.message };
             }
-          } catch (error) {
-            console.log(error);
-            Swal.fire({
-              icon: "error",
-              title: error.message,
-            });
           }
-        }
-      });
+        });
+      }
     },
 
     openFileSelector() {
