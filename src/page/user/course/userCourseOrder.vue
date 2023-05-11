@@ -271,7 +271,7 @@
                       parent.username > 3 ? checkUsername(parent.username) : ''
                     "
                     dense
-                    :rules="usernameRules"
+                    :rules="rules.usernameRules"
                     @keypress="Validation($event,'en-number')"
                     outlined
                     v-model="parent.username"
@@ -297,7 +297,7 @@
                     :hide-details="!parent.account_id"
                     dense
                     outlined
-                    :rules="usernameRules"
+                    :rules="rules.usernameRules"
                     @keypress="Validation($event,'en-number')"
                     v-model="parent.username"
                     @change="
@@ -406,7 +406,7 @@
                 <v-text-field
                   dense
                   outlined
-                  :rules="usernameRules"
+                  :rules="rules.usernameRules"
                   @keypress="Validation($event,'en-number')"
                   v-model="student.username"
                   @change="student.username.length > 3 ? checkUsername( student.username, 'student', index_student) : '' "
@@ -612,7 +612,7 @@
 
               <labelCustom text="Username (ถ้ามี)"></labelCustom>
               <v-text-field
-                :rules="usernameRules"
+                :rules="rules.usernameRules"
                 dense
                 outlined
                 v-model="parent.username"
@@ -808,6 +808,28 @@ export default {
     disable_add_to_cart: false,
     disable_checkout: false,
     coachSelect: false,
+    rules: {
+      usernameRules: [
+        (val) =>
+          (val || "").length > 5 ||
+          "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
+        (val) => (/[A-Za-z0-9 ]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+        (val) => !(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
+      ],
+      passwordRules: [
+        (val) =>
+          (val || "").length > 7 ||
+          "โปรดระบุรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
+        (val) =>
+          !(/[ ]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+      ],
+    },
   }),
   created() {
     this.order_data = JSON.parse(localStorage.getItem("Order"));
@@ -1004,22 +1026,6 @@ export default {
         return !student;
       }
     },
-    usernameRules() {
-      const specialCharsRegex = /[A-Za-z0-9]/g;
-      const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
-      return [
-        (val) =>
-          (val || "").length > 5 ||
-          "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
-        (val) =>
-          specialCharsRegex.test(val) ||
-          "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-        (val) => !emojiRegex.test(val) || "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
-      ];
-    },
   },
   methods: {
     ...mapActions({
@@ -1194,9 +1200,28 @@ export default {
         }
       }
     },
-
     groupByDay(originalArray) {
-      console.log(originalArray);
+      // console.log(originalArray);
+      // let days = originalArray.day
+      // const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      // days.sort();
+      // let ranges = [];
+      // let rangeStart = days[0];
+      // let prevDay = rangeStart;
+
+      // for (let i = 1; i < days.length; i++) {
+      //   const day = days[i];
+      //   if (day === prevDay + 1) {
+      //     prevDay = day;
+      //   } else {
+      //     const rangeEnd = prevDay;
+      //     ranges.push({ start: rangeStart, end: rangeEnd });
+      //     rangeStart = day;
+      //     prevDay = day;
+      //   }
+      // }
+      // ranges.push({ start: rangeStart, end: prevDay });
+      // console.log(ranges.map(({ start, end }) => start === end ? weekdays[start] : `${weekdays[start]} - ${weekdays[end]}`).join(', '))
       return originalArray;
     },
     CreateReserve() {

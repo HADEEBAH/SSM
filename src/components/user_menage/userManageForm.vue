@@ -651,7 +651,7 @@
               <labelCustom text="Username"></labelCustom>
               <!-- :hide-details="!relation.account_id" -->
               <v-text-field
-                :rules="usernameRules"
+                :rules="rules.usernameRules"
                 dense
                 outlined
                 @keypress="validate($event, 'en-number')"
@@ -940,6 +940,26 @@ export default {
             /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
           return pattern.test(value) || "Invalid e-mail.";
         },
+      ],
+      usernameRules: [
+        (val) =>
+          (val || "").length > 5 ||
+          "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
+        (val) => (/[A-Za-z0-9 ]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+        (val) => !(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
+      ],
+      passwordRules: [
+        (val) =>
+          (val || "").length > 7 ||
+          "โปรดระบุรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
+        (val) =>
+          !(/[ ]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
       ],
     },
 
@@ -1522,22 +1542,6 @@ export default {
     IpadSize() {
       const { sm } = this.$vuetify.breakpoint;
       return !!sm;
-    },
-
-    usernameRules() {
-      const specialCharsRegex = /[A-Za-z0-9 ]/g;
-      const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
-      return [
-        (val) =>
-          (val || "").length > 5 ||
-          "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
-        (val) =>
-          specialCharsRegex.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-        (val) => !emojiRegex.test(val) || "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
-      ];
     },
   },
   watch: {

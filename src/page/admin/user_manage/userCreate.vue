@@ -23,7 +23,7 @@
 
                   <v-col cols="12" sm="6">
                     <v-text-field
-                      :rules="usernameRules"
+                      :rules="rules.usernameRules"
                       dense
                       outlined
                       @keypress="validate($event, 'en-number')"
@@ -553,7 +553,7 @@
             <v-col cols="9">
               <labelCustom text="Username"></labelCustom>
               <v-text-field
-                :rules="usernameRules"
+                :rules="rules.usernameRules"
                 dense
                 outlined
                 v-model="relation.username"
@@ -715,7 +715,28 @@ export default {
     seledtedRole: "",
     preview_img: "",
     send_image_profile: null,
-
+    rules: {
+      usernameRules: [
+        (val) =>
+          (val || "").length > 5 ||
+          "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
+        (val) => (/[A-Za-z0-9 ]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+        (val) => !(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
+      ],
+      passwordRules: [
+        (val) =>
+          (val || "").length > 7 ||
+          "โปรดระบุรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
+        (val) =>
+          !(/[ ]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+      ],
+    },
     title: "ข้อมูลผู้ใช้งาน",
     titlePermissionManage: "การจัดการสิทธิ์",
     selectRoles: [],
@@ -1103,19 +1124,6 @@ export default {
     IpadSize() {
       const { sm } = this.$vuetify.breakpoint;
       return !!sm;
-    },
-    usernameRules() {
-      const specialCharsRegex = /[&*/#@!]/g;
-      const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
-      return [
-        (val) =>
-          (val || "").length > 5 ||
-          "Username must be at least 6 characters long",
-        (val) =>
-          !specialCharsRegex.test(val) ||
-          "Username cannot contain special characters",
-        (val) => !emojiRegex.test(val) || "Username cannot contain emojis",
-      ];
     },
   },
   watch: {
