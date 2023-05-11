@@ -45,12 +45,10 @@
                 ></div>
             </template>
             </v-calendar>
-            
         </v-card>
         <v-date-picker
             v-model="focus"
             v-else-if="type === 'month'"
-            
             no-title
             :event-color="(date) => (date[9] % 2 ? 'red' : 'yellow')"
             :events="functionEvents"
@@ -67,7 +65,7 @@
                 <template  v-if="event_date.length > 0">
                     <div v-for="(event, event_index) in event_date" :key="event_index">
                         <v-card flat>
-                            {{ event }}
+                            <!-- {{ event }} -->
                             <v-card-text class="border-2 border-[#ff6b81] " >
                                 <v-row dense>
                                     <v-col cols="auto" class="text-sm text-[#999999]">

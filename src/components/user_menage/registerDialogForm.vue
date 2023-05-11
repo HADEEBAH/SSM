@@ -1,6 +1,5 @@
 <template>
   <v-form ref="form" v-model="valid" lazy-validation>
-    {{ state }}
     <v-card
       :flat="crad_flat"
       :class="
@@ -286,7 +285,7 @@ export default {
           (val || "").length < 20 ||
           "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
         (val) =>
-          !(/[ ]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+          !(/[ ]/g).test(val) || "รหัสผ่านต้องไม่มีอักขระพิเศษ",
       ],
       confirm_password: (val) =>
         (val && val.length > 7) ||

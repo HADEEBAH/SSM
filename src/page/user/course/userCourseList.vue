@@ -22,10 +22,11 @@
         <v-row dense>
             <template v-if="!courses_is_loading">
                 <v-col cols="6"  v-for="(course, course_index) in courses" :key="course_index">
-                    <v-card :height="$vuetify.breakpoint.smAndUp ? '275' : '325.5'" class="overflow-hidden">
+                    <v-card  class="overflow-hidden">
                         <v-img @click="selectedCourse(course)" 
                             contain
-                            :height="180"
+                            :aspect-ratio="16/9" 
+                            cover   
                             :src="course.course_url ? course.course_url : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'">
                           <v-row>
                               <v-col class="pa-4" align="right"> <v-chip  color="#F9B320" text-color="white">{{ `${course.period}  ชั่วโมง`  }}</v-chip></v-col>
@@ -41,7 +42,19 @@
                         </v-row>  
                         </v-card-title>
                         <v-card-text class="text-xs pa-2">
-                            {{ course.course_detail.length > 150 ? course.course_detail.slice(0, 150) + '...' :  course.course_detail.length === 0 ? "-" : course.course_detail }}
+                            <div>
+                                {{
+                                    course.show
+                                    ? `${course.course_detail}`
+                                    : `${course.course_detail.slice(0, 15).trim()}`
+                                }}
+                                <span
+                                    v-if="course.course_detail.length > 15"
+                                    class="text-red-500 cursor-pointer"
+                                    @click="course.show = !course.show"
+                                    >{{ course.show ? `น้อยลง` : `อ่านต่อ...` }}</span
+                                >
+                            </div>
                         </v-card-text>
                     </v-card>
                 </v-col>

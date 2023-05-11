@@ -54,17 +54,16 @@
         <v-row dense>
           <v-col class="text-lg font-bold"> เลือกช่วงวันเรียน </v-col>
         </v-row>
+       <pre>{{ course_data.days }}</pre> 
         <v-radio-group v-model="course_order.day" @change="resetTime">
           <v-row>
             <v-col
               cols="6"
-              v-for="(date, date_index) in groupByDay(
-                course_data.days_of_class
-              )"
+              v-for="(date, date_index) in course_data.days"
               :key="date_index"
             >
               <v-radio
-                :label="dayOfWeekArray(date.day)"
+                :label="date.dayName"
                 color="#ff6B81"
                 :value="date"
               ></v-radio>
@@ -300,15 +299,9 @@
                     :rules="rules.usernameRules"
                     @keypress="Validation($event,'en-number')"
                     v-model="parent.username"
-                    @change="
-                      parent.username > 3 ? checkUsername(parent.username) : ''
-                    "
-                    @keyup.enter="
-                      parent.username > 3 ? checkUsername(parent.username) : ''
-                    "
-                    @blur="
-                      parent.username > 3 ? checkUsername(parent.username) : ''
-                    "
+                    @change=" parent.username > 3 ? checkUsername(parent.username) : '' "
+                    @keyup.enter=" parent.username > 3 ? checkUsername(parent.username) : '' "
+                    @blur=" parent.username > 3 ? checkUsername(parent.username) : ''"
                     placeholder="Username"
                   >
                     <template v-slot:append>
@@ -757,7 +750,7 @@
       persistent
       v-if="show_dialog_register_one_id"
       v-model="show_dialog_register_one_id"
-      width="60vw"
+      :width="$vuetify.breakpoint.smAndUp ? `60vw` : ''"
     >
       <registerDialogForm
         dialog
@@ -1201,27 +1194,6 @@ export default {
       }
     },
     groupByDay(originalArray) {
-      // console.log(originalArray);
-      // let days = originalArray.day
-      // const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-      // days.sort();
-      // let ranges = [];
-      // let rangeStart = days[0];
-      // let prevDay = rangeStart;
-
-      // for (let i = 1; i < days.length; i++) {
-      //   const day = days[i];
-      //   if (day === prevDay + 1) {
-      //     prevDay = day;
-      //   } else {
-      //     const rangeEnd = prevDay;
-      //     ranges.push({ start: rangeStart, end: rangeEnd });
-      //     rangeStart = day;
-      //     prevDay = day;
-      //   }
-      // }
-      // ranges.push({ start: rangeStart, end: prevDay });
-      // console.log(ranges.map(({ start, end }) => start === end ? weekdays[start] : `${weekdays[start]} - ${weekdays[end]}`).join(', '))
       return originalArray;
     },
     CreateReserve() {
@@ -1273,7 +1245,6 @@ export default {
       return is_equal;
     },
     dayOfWeekArray(day) {
-      // let day_arr = day.split(",")
       const daysOfWeek = [
         "วันอาทิตย์",
         "วันจันทร์",

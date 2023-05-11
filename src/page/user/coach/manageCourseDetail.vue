@@ -35,15 +35,17 @@
                 ลงเวลาเข้าสอน 
             </v-col>
         </v-row>
+
         <v-row dense class="mb-3">
             <v-col align="center">
-               <v-btn @click="checkIn()" depressed dense :color="student_check_in.length > 0 ? '#E6E6E6' :  '#ff6b81' " 
+            <!-- {{coach_check_in}} -->
+               <v-btn @click="checkIn()" depressed dense :color="coach_check_in.checkInCoachId ? '#E6E6E6' :  '#ff6b81' " 
                class="w-full rounded-lg"
                
                :loading="coach_check_in_is_loading"
-               :class="student_check_in.length > 0 ? 'green--text' :  'white--text'"
+               :class="coach_check_in.checkInCoachId? 'green--text' :  'white--text'"
                >
-                    <template v-if="student_check_in.length > 0">
+                    <template v-if="coach_check_in.checkInCoachId">
                         <v-icon class="mr-2">mdi-check-circle</v-icon> เข้าสอน
                     </template>
                     <template v-else>
@@ -660,7 +662,6 @@ export default {
     },
     "student_check_in":function(){
         this.student_check_in.forEach((check_in_data)=>{
-            console.log(check_in_data)
             if(check_in_data?.cpo?.packageName){
                 if(!this.package_name_filter){
                     this.package_name_filter = check_in_data?.cpo?.packageName
@@ -713,7 +714,7 @@ export default {
     }),
     FilterStatusCheckIn(selected_data){
         if(this.course_data.course_type_id === 'CT_1'){
-            console.log(`Total :${ parseInt(selected_data.totalDay/4) } count : ${selected_data.countCheckInleave}`)
+            // console.log(`Total :${ parseInt(selected_data.totalDay/4) } count : ${selected_data.countCheckInleave}`)
             if( parseInt(selected_data.totalDay/4) > selected_data.countCheckInleave ){
                 return this.check_in_status_options
             }else{
@@ -872,7 +873,9 @@ export default {
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     this.check_in = true
-                    this.CheckInCoach({course_id :this.course_data.course_id, date : this.$route.params.date, time_id: this.$route.params.timeId})
+                    await this.CheckInCoach({course_id :this.course_data.course_id, date : this.$route.params.date, time_id: this.$route.params.timeId}).then(async ()=>{
+                        await this.GetCoachCheckIn({course_id :this.$route.params.courseId, date : this.$route.params.date})
+                    })
                 }
             })
         }
@@ -886,7 +889,6 @@ export default {
         if(!this.student_check_in[this.selected_student].assessment.assessmentStudentsId){
             this.student_check_in[this.selected_student].assessment.oldremark = this.student_check_in[this.selected_student].assessment.remark
         }
-       
         this.show_comment_dialog = true
     },
     confirmStudentComment(){
@@ -907,7 +909,6 @@ export default {
         }else{
             this.student_check_in[selected_student].files = []
         }
-       
         this.selected_files = []
         this.show_comment_dialog = false
     },
