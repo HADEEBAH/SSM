@@ -287,10 +287,10 @@ const orderModules = {
                     payload.courses.push({
                         "courseId" :  course.course_id ,
                         "coursePackageOptionId": course.option.course_package_option_id,
-                        "dayOfWeekId": course?.time ? course.time.dayOfWeekId : course.dayOfWeekId,
-                        "timeId":  course?.time ? course.time.timeId : course.timeId,
+                        "dayOfWeekId": course?.time?.timeData ? course.time.timeData.filter(v => v.coach_id === course.coach_id)[0].dayOfWeekId : course.time.dayOfWeekId,
+                        "timeId":  course?.time?.timeData ? course.time.timeData.filter(v => v.coach_id === course.coach_id)[0].timeId : course.time.timeId,
                         "time": course.time,
-                        "startDate": "",
+                        "startDate": course.start_date,
                         "remark": "",
                         "price": course.option?.net_price ? course.option.net_price : course.price,
                         "coach": {

@@ -54,17 +54,16 @@
         <v-row dense>
           <v-col class="text-lg font-bold"> เลือกช่วงวันเรียน </v-col>
         </v-row>
+       <!-- <pre>{{ course_data.days }}</pre>  -->
         <v-radio-group v-model="course_order.day" @change="resetTime">
           <v-row>
             <v-col
               cols="6"
-              v-for="(date, date_index) in groupByDay(
-                course_data.days_of_class
-              )"
+              v-for="(date, date_index) in course_data.days"
               :key="date_index"
             >
               <v-radio
-                :label="dayOfWeekArray(date.day)"
+                :label="date.dayName"
                 color="#ff6B81"
                 :value="date"
               ></v-radio>
@@ -86,7 +85,6 @@
                   <v-col cols="auto" class="d-flex aling-center">
                     <v-radio color="#ff6B81" :value="time">
                       <template v-slot:label>
-                        <!-- {{`${time.start}-${time.end} (${GenReserve(time)})`}} -->
                         {{ `${time.start}-${time.end}` }}
                       </template>
                     </v-radio>
@@ -109,11 +107,7 @@
             v-model="course_order.coach_id"
             color="#FF6B81"
             @change="coachSelected($event)"
-            :items="
-              course_data.coachs.filter((v) =>
-                course_order.day.course_coach_id.includes(v.course_coach_id)
-              )
-            "
+            :items="course_order.time.timeData"
             item-text="coach_name"
             item-value="coach_id"
             item-color="pink"
@@ -135,7 +129,7 @@
                         : ''
                     "
                     >{{ item.coach_name }}
-                    {{ GenCoachNumberStudent(item.coach_id) }}</span
+                    {{ GenCoachNumberStudent(item.coach_id, item.dayOfWeekId, item.timeId) }}</span
                   ></v-list-item-title
                 >
               </v-list-item-content>
@@ -300,15 +294,9 @@
                     :rules="rules.usernameRules"
                     @keypress="Validation($event, 'en-number')"
                     v-model="parent.username"
-                    @change="
-                      parent.username > 3 ? checkUsername(parent.username) : ''
-                    "
-                    @keyup.enter="
-                      parent.username > 3 ? checkUsername(parent.username) : ''
-                    "
-                    @blur="
-                      parent.username > 3 ? checkUsername(parent.username) : ''
-                    "
+                    @change=" parent.username > 3 ? checkUsername(parent.username) : '' "
+                    @keyup.enter=" parent.username > 3 ? checkUsername(parent.username) : '' "
+                    @blur=" parent.username > 3 ? checkUsername(parent.username) : ''"
                     placeholder="Username"
                   >
                     <template v-slot:append>
@@ -535,8 +523,8 @@
           <template v-if="course_order.course_type_id === 'CT_1'">
             <v-btn
               v-if="
-                course_order.time
-                  ? GenReserve() <= course_order.time.maximumStudent &&
+                course_order.time && course_order.coach_id
+                  ? GenReserve() <= course_order.time.timeData.filter(v => v.coach_id === course_order.coach_id)[0].maximumStudent &&
                     GenMonitors() === 'Open'
                   : false
               "
@@ -574,8 +562,8 @@
         <v-col cols="12" sm="6">
           <v-btn
             v-if="
-              course_order.time
-                ? GenReserve() > course_order.time.maximumStudent ||
+              course_order.time && course_order.coach_id
+                ? GenReserve() > course_order.time.timeData.filter(v => v.coach_id === course_order.coach_id)[0].maximumStudent ||
                   GenMonitors() === 'Close'
                 : false
             "
@@ -590,10 +578,10 @@
           <!-- v-if="course_order.time ? GenReserve() < course_order.time.maximumStudent && GenMonitors() === 'Open' : false" -->
           <v-btn
             v-else-if="
-              course_order.time
-                ? GenReserve() <= course_order.time.maximumStudent &&
-                  GenMonitors() === 'Open'
-                : false
+             course_order.time && course_order.coach_id
+                  ? GenReserve() <= course_order.time.timeData.filter(v => v.coach_id === course_order.coach_id)[0].maximumStudent &&
+                    GenMonitors() === 'Open'
+                  : false
             "
             class="w-full white--text"
             :disabled="validateButton"
@@ -784,7 +772,7 @@
       persistent
       v-if="show_dialog_register_one_id"
       v-model="show_dialog_register_one_id"
-      width="60vw"
+      :width="$vuetify.breakpoint.smAndUp ? `60vw` : ''"
     >
       <registerDialogForm
         dialog
@@ -872,6 +860,7 @@ export default {
   },
   watch: {
     "course_order.time": function () {
+      // console.log(this.course_order)
       this.course_order.coach_id = null;
     },
     "course_order.apply_for_yourself": function () {
@@ -1027,9 +1016,10 @@ export default {
       }
       return "";
     },
-
     validateButton() {
-      this.GenMonitors();
+      if(this.course_order.coach_id){
+        this.GenMonitors();
+      }
       // console.log(this.course_order.coach_id)
       if (this.course_order.course_type_id === "CT_1") {
         let time = this.course_order.time ? true : false;
@@ -1077,8 +1067,10 @@ export default {
     Validation(e, lang) {
       inputValidation(e, lang);
     },
-    GenCoachNumberStudent(coach_id) {
-      let time_data = this.course_order.time;
+    
+    GenCoachNumberStudent(coach_id, dayOfWeekId, timeId) {
+      // let time_data = this.course_order.time;
+      console.log(coach_id, dayOfWeekId, timeId)
       let current_student = 0;
       let maximum_student = 0;
       console.log(coach_id);
@@ -1086,8 +1078,8 @@ export default {
         (v) =>
           v.m_coach_id == coach_id &&
           v.m_course_id == this.course_order.course_id &&
-          v.m_day_of_week_id === time_data.dayOfWeekId &&
-          v.m_time_id == time_data.timeId
+          v.m_day_of_week_id === dayOfWeekId &&
+          v.m_time_id == timeId
       );
       if (course_monitors_filter.length > 0) {
         for (const monitor of course_monitors_filter) {
@@ -1102,14 +1094,17 @@ export default {
     },
     GenMonitors() {
       if (this.course_monitors) {
-        let time_data = this.course_order.time;
-        if (this.course_order.time) {
+        if (this.course_order.time && this.course_order.coach_id) {
+          let time_data = this.course_order.time;
+          // console.log(time_data.timeData)
+          let dayOfWeekId = time_data?.timeData ? time_data.timeData.filter(v => v.coach_id === this.course_order.coach_id)[0].dayOfWeekId : time_data.dayOfWeekId
+          let timeId = time_data?.timeData ? time_data.timeData.filter(v => v.coach_id === this.course_order.coach_id)[0].timeId : time_data.timeId
           if (this.course_order.course_type_id === "CT_1") {
             let course_monitors_filter = this.course_monitors.filter(
               (v) =>
                 v.m_course_id == this.course_order.course_id &&
-                v.m_day_of_week_id === time_data.dayOfWeekId &&
-                v.m_time_id == time_data.timeId
+                v.m_day_of_week_id === dayOfWeekId &&
+                v.m_time_id == timeId
             );
             // console.log("course_monitors_filter + >",course_monitors_filter)
             if (course_monitors_filter.length > 0) {
@@ -1149,109 +1144,92 @@ export default {
       this.course_order.coach_id = null;
     },
     GenReserve(time_data) {
-      if (!time_data) {
-        time_data = this.course_order.time;
-        let studentNum = 0;
-        let course_monitors_filter = this.course_monitors.filter(
-          (v) =>
-            v.m_course_id == this.course_order.course_id &&
-            v.m_day_of_week_id === time_data.dayOfWeekId &&
-            v.m_time_id == time_data.timeId
-        );
-        // console.log(course_monitors_filter)
-        if (course_monitors_filter.length > 0) {
-          for (const monitor of course_monitors_filter) {
-            if (monitor.m_status === "Close") {
-              console.log(monitor.m_status);
-              return 0;
-            } else {
-              let course_student_filter = this.course_student.filter(
-                (v) =>
-                  v.courseId == this.course_order.course_id &&
-                  v.dayOfWeekId === time_data.dayOfWeekId &&
-                  v.timeId == time_data.timeId
-              );
-              for (const student of course_student_filter) {
-                studentNum = studentNum + parseInt(student.sum_student);
+      if(this.course_order.coach_id){
+        if (!time_data) {
+          time_data = this.course_order.time;
+          let studentNum = 0;
+          let dayOfWeekId = time_data?.timeData ? time_data.timeData.filter(v => v.coach_id === this.course_order.coach_id)[0].dayOfWeekId : time_data.dayOfWeekId
+          let timeId = time_data?.timeData ? time_data.timeData.filter(v => v.coach_id === this.course_order.coach_id)[0].timeId : time_data.timeId
+          let course_monitors_filter = this.course_monitors.filter(
+            (v) =>
+              v.m_course_id == this.course_order.course_id &&
+              v.m_day_of_week_id === dayOfWeekId &&
+              v.m_time_id == timeId
+          );
+          // console.log(course_monitors_filter)
+          if (course_monitors_filter.length > 0) {
+            for (const monitor of course_monitors_filter) {
+              if (monitor.m_status === "Close") {
+                console.log(monitor.m_status);
+                return 0;
+              } else {
+                let course_student_filter = this.course_student.filter(
+                  (v) =>
+                    v.courseId == this.course_order.course_id &&
+                    v.dayOfWeekId === dayOfWeekId &&
+                    v.timeId == timeId
+                );
+                for (const student of course_student_filter) {
+                  studentNum = studentNum + parseInt(student.sum_student);
+                }
+                return monitor.m_maximum_student - monitor.m_current_student;
               }
-              return monitor.m_maximum_student - monitor.m_current_student;
             }
+          } else {
+            let course_student_filter = this.course_student.filter(
+              (v) =>
+                v.courseId == this.course_order.course_id &&
+                v.dayOfWeekId === dayOfWeekId &&
+                v.timeId == timeId
+            );
+            for (const student of course_student_filter) {
+              studentNum = studentNum + parseInt(student.sum_student);
+            }
+            return time_data.timeData.filter(v => v.coach_id === this.course_order.coach_id)[0].maximumStudent - studentNum;
           }
         } else {
-          let course_student_filter = this.course_student.filter(
+          let studentNum = 0;
+          let course_monitors_filter = this.course_monitors.filter(
             (v) =>
-              v.courseId == this.course_order.course_id &&
-              v.dayOfWeekId === time_data.dayOfWeekId &&
-              v.timeId == time_data.timeId
+              v.m_course_id == this.course_order.course_id &&
+              v.m_day_of_week_id === time_data.dayOfWeekId &&
+              v.m_time_id == time_data.timeId
           );
-          for (const student of course_student_filter) {
-            studentNum = studentNum + parseInt(student.sum_student);
-          }
-          return time_data.maximumStudent - studentNum;
-        }
-      } else {
-        let studentNum = 0;
-        let course_monitors_filter = this.course_monitors.filter(
-          (v) =>
-            v.m_course_id == this.course_order.course_id &&
-            v.m_day_of_week_id === time_data.dayOfWeekId &&
-            v.m_time_id == time_data.timeId
-        );
-        // console.log(course_monitors_filter)
-        if (course_monitors_filter.length > 0) {
-          for (const monitor of course_monitors_filter) {
-            if (monitor.m_status === "Close") {
-              console.log(monitor.m_status);
-              return 0;
-            } else {
-              let course_student_filter = this.course_student.filter(
-                (v) =>
-                  v.courseId == this.course_order.course_id &&
-                  v.dayOfWeekId === time_data.dayOfWeekId &&
-                  v.timeId == time_data.timeId
-              );
-              for (const student of course_student_filter) {
-                studentNum = studentNum + parseInt(student.sum_student);
+          // console.log(course_monitors_filter)
+          if (course_monitors_filter.length > 0) {
+            for (const monitor of course_monitors_filter) {
+              if (monitor.m_status === "Close") {
+                console.log(monitor.m_status);
+                return 0;
+              } else {
+                let course_student_filter = this.course_student.filter(
+                  (v) =>
+                    v.courseId == this.course_order.course_id &&
+                    v.dayOfWeekId === time_data.dayOfWeekId &&
+                    v.timeId == time_data.timeId
+                );
+                for (const student of course_student_filter) {
+                  studentNum = studentNum + parseInt(student.sum_student);
+                }
+                return monitor.m_maximum_student - monitor.m_current_student;
               }
-              return monitor.m_maximum_student - monitor.m_current_student;
             }
+          } else {
+            let course_student_filter = this.course_student.filter(
+              (v) =>
+                v.courseId == this.course_order.course_id &&
+                v.dayOfWeekId === time_data.dayOfWeekId &&
+                v.timeId == time_data.timeId
+            );
+            for (const student of course_student_filter) {
+              studentNum = studentNum + parseInt(student.sum_student);
+            }
+            return time_data.maximumStudent - studentNum;
           }
-        } else {
-          let course_student_filter = this.course_student.filter(
-            (v) =>
-              v.courseId == this.course_order.course_id &&
-              v.dayOfWeekId === time_data.dayOfWeekId &&
-              v.timeId == time_data.timeId
-          );
-          for (const student of course_student_filter) {
-            studentNum = studentNum + parseInt(student.sum_student);
-          }
-          return time_data.maximumStudent - studentNum;
         }
-      }
+      }   
     },
     groupByDay(originalArray) {
-      // console.log(originalArray);
-      // let days = originalArray.day
-      // const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-      // days.sort();
-      // let ranges = [];
-      // let rangeStart = days[0];
-      // let prevDay = rangeStart;
-
-      // for (let i = 1; i < days.length; i++) {
-      //   const day = days[i];
-      //   if (day === prevDay + 1) {
-      //     prevDay = day;
-      //   } else {
-      //     const rangeEnd = prevDay;
-      //     ranges.push({ start: rangeStart, end: rangeEnd });
-      //     rangeStart = day;
-      //     prevDay = day;
-      //   }
-      // }
-      // ranges.push({ start: rangeStart, end: prevDay });
-      // console.log(ranges.map(({ start, end }) => start === end ? weekdays[start] : `${weekdays[start]} - ${weekdays[end]}`).join(', '))
       return originalArray;
     },
     CreateReserve() {
@@ -1303,7 +1281,6 @@ export default {
       return is_equal;
     },
     dayOfWeekArray(day) {
-      // let day_arr = day.split(",")
       const daysOfWeek = [
         "วันอาทิตย์",
         "วันจันทร์",
@@ -1465,28 +1442,27 @@ export default {
             } else {
               this.course_order.start_date = "";
             }
-            this.course_order.coach_name = this.course_data.coachs.filter((v) =>
-              this.course_order.day.course_coach_id.includes(v.course_coach_id)
-            )[0].coach_name;
+            this.course_order.coach = this.course_order.coach_id
+            this.course_order.coach_name = this.course_order.time.timeData.filter((v) => v.coach_id === this.course_order.coach_id)[0].coach_name
           } else {
+            //  CT_2
+            if (new Date(this.course_data.course_study_start_date) > new Date()) {
+              this.course_order.start_date = this.course_data.course_study_start_date
+            }else{
+              this.course_order.start_date = ""
+            }
             this.course_order.time = this.course_data.days_of_class[0].times[0];
-            this.course_order.coach_name =
-              this.course_data.coachs[0].coach_name;
+            this.course_order.coach_name = this.course_data.coachs[0].coach_name;
+            this.course_order.coach = this.course_data.coachs[0].coach_id;
+            this.course_order.coach_id = this.course_data.coachs[0].coach_id;
           }
-          this.course_order.coach = this.course_data.coachs[0].coach_id;
-          this.course_order.coach_id = this.course_data.coachs[0].coach_id;
-          if (
-            this.order.courses.filter(
-              (v) => v.course_id === this.course_order.course_id
-            ).length === 0
-          ) {
-            this.order.courses.push({ ...this.course_order });
-          }
+          if ( this.order.courses.filter((v) => v.course_id === this.course_order.course_id).length === 0
+          ) { this.order.courses.push({ ...this.course_order }); }
           this.order.created_by = this.user_login.account_id;
           this.changeOrderData(this.order);
           if (this.course_order.course_type_id == "CT_1") {
             if (this.course_order.day && this.course_order.time) {
-              this.saveOrder();
+               this.saveOrder();
             } else {
               Swal.fire({
                 icon: "error",
@@ -1494,7 +1470,7 @@ export default {
               });
             }
           } else {
-            this.saveOrder();
+             this.saveOrder();
           }
         }
       });
