@@ -44,9 +44,13 @@ const orderModules = {
         order_is_loading : false,
         orders_is_loading : false,
         relations:[],
-        cart_list :[]
+        cart_list :[],
+        reserve_list:[],
     },
     mutations: {
+        SetReserveList(state, payload){
+            state.reserve_list = payload
+        },
         SetOrderIsLoading(state, value){
             state.order_is_loading = value
         },
@@ -194,8 +198,8 @@ const orderModules = {
                         "courseId" :  course.course_id,
                         "courseName" : course.course_name,
                         "coursePackageOptionId": course.option.course_package_option_id ? course.option.course_package_option_id : "",
-                        "dayOfWeekId": course.time.dayOfWeekId ? course.time.dayOfWeekId : "",
-                        "timeId": course.time.timeId ? course.time.timeId : "",
+                        "dayOfWeekId": course?.time?.timeData ? course.time.timeData.filter(v => v.coach_id === course.coach_id)[0].dayOfWeekId : course.time.dayOfWeekId,
+                        "timeId":  course?.time?.timeData ? course.time.timeData.filter(v => v.coach_id === course.coach_id)[0].timeId : course.time.timeId,
                         "time": course.time ? course.time : "",
                         "startDate": "",
                         "remark": "",
@@ -488,6 +492,7 @@ const orderModules = {
         async CreateReserveCourse(context,{ course_data }){
             try{
                 console.log(course_data)
+                let count = 0
                 await course_data.students.forEach( async (student)=>{
                     let payload = {
                         "studentId": student.account_id,
@@ -500,9 +505,9 @@ const orderModules = {
                         "orderTmpId": null,
                     }
                     if(course_data.course_type_id === "CT_1"){
-                        payload.dayOfWeekId =  course_data.time.dayOfWeekId
+                        payload.dayOfWeekId =  course_data?.time?.timeData ? course_data.time.timeData.filter(v => v.coach_id === course_data.coach_id)[0].dayOfWeekId : course_data.time.dayOfWeekId
                         payload.coursePackageOptionId = course_data.option.course_package_option_id
-                        payload.timeId = course_data.time.timeId
+                        payload.timeId =  course_data?.time?.timeData ? course_data.time.timeData.filter(v => v.coach_id === course_data.coach_id)[0].timeId : course_data.time.timeId
                     }
                     // console.log(course_data)
                     let config = {
@@ -515,27 +520,52 @@ const orderModules = {
                     let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,payload, config)
                     if(data.statusCode === 201){
                         console.log(data)
+                        count = count + 1
                     }else{
                         throw {error : data.data} 
                     }
                 })
-                await Swal.fire({
-                    icon:"success",
-                    text: "จองคอร์สสำเร็จ เจ้าหน้าที่จะติดต่อกลับภายหลัง",
-                    showDenyButton: false,
-                    showCancelButton: false,
-                    confirmButtonText: "ตกลง",
-                }).then(async (result) => {
-                    if (result.isConfirmed) {
-                        router.replace({name : "UserKingdom"})
-                    }
-                })        
+                if (count === course_data.students.length) {
+                    await Swal.fire({
+                        icon:"success",
+                        text: "จองคอร์สสำเร็จ เจ้าหน้าที่จะติดต่อกลับภายหลัง",
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        confirmButtonText: "ตกลง",
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            router.replace({name : "UserKingdom"})
+                        }
+                    })        
+                }
+               
             }catch(error){
                 console.log(error)
             }
         },
+        // RESERVE BY STUDENT ID
+        async GetReserceByStudentId(context,{account_id}){
+            try{
+                let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/byStudentId/${account_id}`)
+                if(data.statusCode === 200){
+                    console.log(data.data)
+                    context.commit("SetReserveList",data.data)
+                }   
+            }catch(error){
+                await Swal.fire({
+                    icon:"error",
+                    text: `เกิดข้อผิดพลาด${error.message}`,
+                    showDenyButton: false,
+                    showCancelButton: false,
+                    confirmButtonText: "ตกลง",
+                })
+            }
+        }
     },
     getters: {
+        getReserveList(state){
+            return state.reserve_list
+        },
         getOrder(state) {
             return state.order
         },

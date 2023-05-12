@@ -2,6 +2,7 @@
   <v-app>
     <v-container>
       {{ setFunctions }}
+      <pre>{{ course_data }}</pre>
       <ImgCard color="#FEFBFC" outlined class="mb-3">
         <template v-slot:img>
           <v-row dense class="d-flex align-center h-full">
@@ -461,7 +462,7 @@
                 <v-col cols="12" sm="6">
                   <labelCustom required text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
                   <v-text-field
-                    :disabled="student.account_id"
+                    :disabled="student.account_id?true:false"
                     dense
                     outlined
                     v-model="student.firstname_en"
@@ -471,7 +472,7 @@
                 <v-col cols="12" sm="6">
                   <labelCustom required text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
                   <v-text-field
-                    :disabled="student.account_id"
+                    :disabled="student.account_id?true:false"
                     dense
                     outlined
                     v-model="student.lastname_en"
@@ -483,7 +484,7 @@
                 <v-col cols="12" sm="6">
                   <labelCustom required text="เบอร์โทรศัพท์"></labelCustom>
                   <v-text-field
-                    :disabled="student.account_id"
+                    :disabled="student.account_id?true:false"
                     dense
                     outlined
                     v-model="student.tel"
@@ -560,37 +561,30 @@
           </template>
         </v-col>
         <v-col cols="12" sm="6">
+          <!-- {{  GenReserve()  }}
+          {{ course_order.time.timeData.filter(v => v.coach_id === course_order.coach_id)[0].maximumStudent }} -->
           <v-btn
-            v-if="
-              course_order.time && course_order.coach_id
-                ? GenReserve() > course_order.time.timeData.filter(v => v.coach_id === course_order.coach_id)[0].maximumStudent ||
-                  GenMonitors() === 'Close'
-                : false
-            "
+            v-if="course_order.time && course_order.coach_id ? 
+              GenReserve() > course_order.time.timeData.filter(v => v.coach_id === course_order.coach_id)[0].maximumStudent || GenMonitors() === 'Close' : false "
             class="w-full white--text"
-            :disabled="validateButton"
+            :disabled="validateButton || ValidateReserve"
             elevation="0"
             dense
             @click="CreateReserve"
-            :color="disable_checkout ? '#C4C4C4' : '#ff6b81'"
-            >จอง</v-btn
+            :color="disable_checkout ? '#C4C4C4' : '#ff6b81'">จอง</v-btn
           >
           <!-- v-if="course_order.time ? GenReserve() < course_order.time.maximumStudent && GenMonitors() === 'Open' : false" -->
           <v-btn
-            v-else-if="
-             course_order.time && course_order.coach_id
-                  ? GenReserve() <= course_order.time.timeData.filter(v => v.coach_id === course_order.coach_id)[0].maximumStudent &&
-                    GenMonitors() === 'Open'
-                  : false
-            "
+            v-else-if=" course_order?.time && course_order.coach_id ? GenReserve() <= course_order.time.timeData.filter(v => v.coach_id === course_order.coach_id)[0].maximumStudent && GenMonitors() === 'Open' : false "
             class="w-full white--text"
             :disabled="validateButton"
             elevation="0"
             dense
             @click="checkOut"
             :color="disable_checkout ? '#C4C4C4' : '#ff6b81'"
-            >ชำระเงิน</v-btn
-          >
+            >
+            ชำระเงิน
+          </v-btn>
           <v-btn
             v-else
             class="w-full white--text"
@@ -862,6 +856,7 @@ export default {
     "course_order.time": function () {
       // console.log(this.course_order)
       this.course_order.coach_id = null;
+      this.coachSelect = false
     },
     "course_order.apply_for_yourself": function () {
       if (this.course_order.apply_for_yourself) {
@@ -936,9 +931,7 @@ export default {
             });
         }
       } else if (this.last_user_registered.type === "student") {
-        this.course_order.students[
-          this.course_order.students.length - 1
-        ].account_id = this.last_user_registered.account_id;
+        this.course_order.students[ this.course_order.students.length - 1].account_id = this.last_user_registered.account_id;
         this.course_order.students[
           this.course_order.students.length - 1
         ].firstname_en = this.last_user_registered.firstname_en;
@@ -990,8 +983,10 @@ export default {
       course_student: "CourseModules/getCourseStudent",
       course_is_loading: "CourseModules/getCourseIsLoading",
       course_monitors: "CourseMonitorModules/getCourseMonitor",
+      reserve_list : "OrderModules/getReserveList"
     }),
     setFunctions() {
+      this.GetReserceByStudentId({account_id : this.user_login.account_id})
       this.checkMaximumStudent();
       if (this.order_data) {
         if (this.order_data.course_type_id === "CT_1") {
@@ -1016,16 +1011,17 @@ export default {
       }
       return "";
     },
+    
     validateButton() {
       if(this.course_order.coach_id){
         this.GenMonitors();
+       this.ValidateReserve()
       }
       // console.log(this.course_order.coach_id)
       if (this.course_order.course_type_id === "CT_1") {
         let time = this.course_order.time ? true : false;
         let day = this.course_order.day ? true : false;
-        let coach =
-          this.coachSelect || this.course_order.coach_id ? true : false;
+        let coach = this.coachSelect || this.course_order.coach_id ? true : false;
         let student =
           this.course_order.students.length > 0
             ? this.course_order.students[0].account_id
@@ -1060,6 +1056,7 @@ export default {
       saveCart: "OrderModules/saveCart",
       checkUsernameOneid: "loginModules/checkUsernameOneid",
       CreateReserveCourse: "OrderModules/CreateReserveCourse",
+      GetReserceByStudentId : "OrderModules/GetReserceByStudentId",
       // monitor
       GetGeneralCourseMonitor: "CourseMonitorModules/GetGeneralCourseMonitor",
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
@@ -1067,7 +1064,14 @@ export default {
     Validation(e, lang) {
       inputValidation(e, lang);
     },
-    
+    ValidateReserve(){
+      // console.log("ValidateReserve",this.reserve_list.filter(v => v.courseId === this.course_order.course_id && v.coachId === this.course_order.coach_id))
+      if(this.reserve_list.filter(v => v.courseId === this.course_order.course_id && v.coachId === this.course_order.coach_id).length > 0){
+        return true
+      }else{
+        return false
+      }
+    },
     GenCoachNumberStudent(coach_id, dayOfWeekId, timeId) {
       // let time_data = this.course_order.time;
       console.log(coach_id, dayOfWeekId, timeId)
@@ -1108,16 +1112,10 @@ export default {
             );
             // console.log("course_monitors_filter + >",course_monitors_filter)
             if (course_monitors_filter.length > 0) {
-              console.log(course_monitors_filter[0]);
-              if (
-                this.course_order.students.length +
-                  course_monitors_filter[0].m_current_student <=
-                course_monitors_filter[0].m_maximum_student
-              ) {
-                if (
-                  this.course_order.option.course_package_option_id ===
-                  course_monitors_filter[0].m_course_package_options_id
-                ) {
+              console.log("m_current_student =>",course_monitors_filter[0].m_current_student);
+              console.log("students =>", this.course_order.students.length);
+              if ((this.course_order.students.length + course_monitors_filter[0].m_current_student) <= course_monitors_filter[0].m_maximum_student) {
+                if ( this.course_order.option.course_package_option_id === course_monitors_filter[0].m_course_package_options_id) {
                   return course_monitors_filter[0]?.m_status;
                 } else {
                   return "Close";
@@ -1227,6 +1225,7 @@ export default {
             return time_data.maximumStudent - studentNum;
           }
         }
+        
       }   
     },
     groupByDay(originalArray) {
@@ -1243,16 +1242,14 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           if (this.course_order.course_type_id == "CT_1") {
-            this.course_order.coach_name = this.course_data.coachs.filter((v) =>
-              this.course_order.day.course_coach_id.includes(v.course_coach_id)
-            )[0].coach_name;
+            this.course_order.coach = this.course_order.coach_id
+            this.course_order.coach_name = this.course_order.time.timeData.filter((v) => v.coach_id === this.course_order.coach_id)[0].coach_name
           } else {
             this.course_order.time = this.course_data.days_of_class[0].times[0];
-            this.course_order.coach_name =
-              this.course_data.coachs[0].coach_name;
+            this.course_order.coach_name =this.course_data.coachs[0].coach_name;
+            this.course_order.coach = this.course_data.coachs[0].coach_id;
+            this.course_order.coach_id = this.course_data.coachs[0].coach_id;
           }
-          this.course_order.coach = this.course_data.coachs[0].coach_id;
-          this.course_order.coach_id = this.course_data.coachs[0].coach_id;
           if (
             this.order.courses.filter(
               (v) => v.course_id === this.course_order.course_id
@@ -1384,9 +1381,8 @@ export default {
             this.course_order.coach_id = this.course_data.coachs[0].coach_id;
             this.course_order.coach = this.course_data.coachs[0].coach_id;
           } else {
-            this.course_order.coach_name = this.course_data.coachs.filter((v) =>
-              this.course_order.day.course_coach_id.includes(v.course_coach_id)
-            )[0].coach_name;
+            this.course_order.coach = this.course_order.coach_id
+            this.course_order.coach_name = this.course_order.time.timeData.filter((v) => v.coach_id === this.course_order.coach_id)[0].coach_name
           }
           this.order.courses.push({ ...this.course_order });
           this.order.created_by = this.user_login.account_id;
