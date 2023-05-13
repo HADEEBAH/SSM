@@ -109,12 +109,14 @@
           <v-tabs-items v-model="tab">
             <!-- COURSE -->
             <v-tab-item value="course">
-              <course-card
-                :disable="!course_edit"
-                edited
-                :categorys="categorys"
-                :coachs="coachs"
-              ></course-card>
+              <v-form ref="course_form" v-model="courseValidate">
+                <course-card
+                  :disable="!course_edit"
+                  edited
+                  :categorys="categorys"
+                  :coachs="coachs"
+                ></course-card>
+              </v-form>
               <!-- ACTION -->
               <v-row class="px-4" v-if="!course_edit">
                 <v-col align="right">
@@ -166,12 +168,14 @@
                 </headerCard>
                 <v-card-text class="pt-0">
                   <v-divider class="mb-3"></v-divider>
-                  <!-- COACH -->
-                  <coachs-card
-                    :disable="!course_edit"
-                    :coachs="coachs"
-                    edited
-                  ></coachs-card>
+                  <v-form ref="coach_form" v-model="coachValidate">
+                     <!-- COACH -->
+                    <coachs-card
+                      :disable="!course_edit"
+                      :coachs="coachs"
+                      edited
+                    ></coachs-card>
+                  </v-form>
                 </v-card-text>
               </v-card>
               <!-- ACTION -->
@@ -209,7 +213,9 @@
             </v-tab-item>
             <!-- PACKAGE -->
             <v-tab-item value="package">
-              <package-card :disable="!course_edit" edited></package-card>
+              <v-form ref="package_form" v-model="packageValidate">
+                <package-card :disable="!course_edit" edited></package-card>
+              </v-form>
               <v-row dense>
                 <v-col align="center">
                   <v-btn
@@ -1533,6 +1539,10 @@ export default {
     loadingOverlay,
   },
   data: () => ({
+    courseValidate : false,
+    coachValidate : false,
+    packageValidate : false,
+
     slide_group: null,
     show_dialog_assessmet: false,
     column: [
@@ -1867,77 +1877,88 @@ export default {
       this.ChangeCourseData(this.course_data);
     },
     CourseUpdateDetail() {
-      Swal.fire({
-        icon: "question",
-        title: "ต้องการแก้ไขคอร์สใช่มั้ย",
-        showDenyButton: false,
-        showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          this.UpdateCouserDetail({
-            course_id: this.course_data.course_id,
-            course_data: this.course_data,
-          }).then(() => {
-            this.course_edit = false;
-            this.GetCourse(this.$route.params.course_id);
-            this.GetArtworkByCourse({
-              course_id: this.$route.params.course_id,
+      this.$refs.course_form.validate()
+      if(this.courseValidate){
+        Swal.fire({
+          icon: "question",
+          title: "ต้องการแก้ไขคอร์สใช่มั้ย",
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: "ตกลง",
+          cancelButtonText: "ยกเลิก",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            this.UpdateCouserDetail({
+              course_id: this.course_data.course_id,
+              course_data: this.course_data,
+            }).then(() => {
+              this.course_edit = false;
+              this.GetCourse(this.$route.params.course_id);
+              this.GetArtworkByCourse({
+                course_id: this.$route.params.course_id,
+              });
             });
-          });
-        }
-      });
+          }
+        });
+      }
     },
     CourseUpdateCoach() {
-      console.log(this.course_data.coachs);
-      Swal.fire({
-        icon: "question",
-        title: "ต้องการแก้ไขคอร์สใช่มั้ย",
-        showDenyButton: false,
-        showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          this.UpdateCouserCoach({
-            course_id: this.course_data.course_id,
-            course_data: this.course_data,
-          }).then(() => {
-            this.course_edit = false;
-            this.GetCourse(this.$route.params.course_id);
-            this.GetArtworkByCourse({
-              course_id: this.$route.params.course_id,
+      this.$refs.coach_form.validate()
+      console.log(this.coachValidate)
+      if(this.coachValidate){
+        Swal.fire({
+          icon: "question",
+          title: "ต้องการแก้ไขคอร์สใช่มั้ย",
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: "ตกลง",
+          cancelButtonText: "ยกเลิก",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            this.UpdateCouserCoach({
+              course_id: this.course_data.course_id,
+              course_data: this.course_data,
+            }).then(() => {
+              this.course_edit = false;
+              this.GetCourse(this.$route.params.course_id);
+              this.GetArtworkByCourse({
+                course_id: this.$route.params.course_id,
+              });
             });
-          });
-        }
-      });
+          }
+        });
+      }
+     
     },
-    CourseUpdatePackage() {
-      Swal.fire({
-        icon: "question",
-        title: "ต้องการแก้ไขคอร์สใช่มั้ย",
-        showDenyButton: false,
-        showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          this.UpdateCouserPackage({
-            course_id: this.course_data.course_id,
-            course_data: this.course_data,
-          }).then(() => {
-            this.course_edit = false;
-            this.GetCourse(this.$route.params.course_id);
-            this.GetArtworkByCourse({
-              course_id: this.$route.params.course_id,
+    CourseUpdatePackage() { 
+      this.$refs.package_form.validate()
+      if(this.packageValidate){
+        Swal.fire({
+          icon: "question",
+          title: "ต้องการแก้ไขคอร์สใช่มั้ย",
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: "ตกลง",
+          cancelButtonText: "ยกเลิก",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            this.UpdateCouserPackage({
+              course_id: this.course_data.course_id,
+              course_data: this.course_data,
+            }).then(() => {
+              this.course_edit = false;
+              this.GetCourse(this.$route.params.course_id);
+              this.GetArtworkByCourse({
+                course_id: this.$route.params.course_id,
+              });
             });
-          });
-        }
-      });
+          }
+        });
+      }
+    
     },
-    CourseUpdateArkwork() {
-      Swal.fire({
+    async CourseUpdateArkwork() {
+      await Swal.fire({
         icon: "question",
         title: "ต้องการแก้ไขคอร์สใช่มั้ย",
         showDenyButton: false,
@@ -1946,16 +1967,19 @@ export default {
         cancelButtonText: "ยกเลิก",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          this.UpdateCourseArkwork({
+          await this.UpdateCourseArkwork({
             course_id: this.course_data.course_id,
             course_data: this.course_data,
-          }).then(() => {
-            this.course_edit = false;
-            this.GetCourse(this.$route.params.course_id);
-            this.GetArtworkByCourse({
-              course_id: this.$route.params.course_id,
-            });
+          }).then( async () => {
+            await setTimeout(async()=>{
+              await this.GetArtworkByCourse({
+                course_id: this.$route.params.course_id,
+              });
+              this.course_edit = false;
+            },200)
+            await this.GetCourse(this.$route.params.course_id);
           });
+
         }
       });
     },

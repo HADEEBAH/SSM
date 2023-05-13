@@ -93,6 +93,7 @@
                 deletable-chips
                 item-color="pink"
                 multiple
+                required
                 color="#FF6B81"
                 :items="filteredDays(coach_index, teach_day_index, state)"
                 item-text="label"
@@ -363,10 +364,10 @@ export default {
     ],
     rules: {
       course: [(val) => (val || "").length > 0 || "โปรดเลือกโค้ช"],
-      class_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันที่"],
+      class_date: [(val) => !!(val || val.length) || "โปรดเลือกวันที่"],
       start_time: [(val) => (val || "") > 0 || "โปรดเลือกเวลาเริ่ม"],
       end_time: [(val) => (val || "") > 0 || "โปรดเลือกเวลาสิ้นสุด"],
-      students: [(val) => (val || "").length > 0 || "โปรดระบุจำนวนนักเรียน"],
+      students: [(val) => (val || "") > 0 || "โปรดระบุจำนวนนักเรียน"],
     },
   }),
 
