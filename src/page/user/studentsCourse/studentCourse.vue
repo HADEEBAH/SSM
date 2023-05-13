@@ -281,7 +281,7 @@
           v-for="(day_list, index_day) in my_course_detail.checkIn"
           :key="index_day"
         >
-          <pre>{{ day_list }}</pre>
+          <!-- <pre>{{ day_list }}</pre> -->
           <v-card class="my-5 drop-shadow-lg rounded-xl">
             <v-card-text>
               <v-row class="" dense>
@@ -441,7 +441,7 @@
                         }}
                       </v-card-text>
 
-                      <v-card-text class="text-start">
+                      <!-- <v-card-text class="text-start">
                         <div
                           v-for="(data, index) in day_list.assessment
                             .attachment"
@@ -456,7 +456,7 @@
                             "
                           ></v-img>
                         </div>
-                      </v-card-text>
+                      </v-card-text> -->
 
                       <v-row dense>
                         <v-col

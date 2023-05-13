@@ -590,11 +590,52 @@
             </v-col>
           </v-row>
           <!-- Upload file -->
+          <div v-if="coach_check_in.attachment.length > 0">
+            <v-row dense>
+              <v-col class="font-bold text-lg"> ไฟล์แนบ </v-col>
+            </v-row>
+
+            <v-card
+              @click="openFile(file)"
+              flat
+              class="mb-3"
+              v-for="(file, index) of coach_check_in.attachment"
+              :key="`${index}-file`"
+            >
+              <v-card-text class="border border-2 border-[#ff6b81] rounded-lg">
+                <v-row>
+                  <v-col cols="auto" class="pr-2">
+                    <v-img
+                      height="35"
+                      width="26"
+                      src="../../../assets/coachLeave/file-pdf.png"
+                    />
+                  </v-col>
+                  <v-col class="px-2">
+                    <span class="font-bold">{{ file.originalFilesName }}</span
+                    ><br />
+                    <span class="text-caption"
+                      >ขนาดไฟล์ :
+                      {{ (file.filesSize / 1000000).toFixed(2) }} MB</span
+                    >
+                  </v-col>
+                  <v-col cols="auto" class="pl-2">
+                    <v-btn
+                      @click="removeAccessmentFile(selected_student, index)"
+                      icon
+                      color="#ff6b81"
+                      ><v-icon>mdi-close</v-icon></v-btn
+                    >
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </div>
           <v-card flat class="mb-3">
             <v-card-text
               class="border-dashed border-2 border-pink-600 rounded-lg"
             >
-              <v-row
+              <!-- <v-row
                 v-if="
                   preview_summary_files && preview_summary_files?.length > 0
                 "
@@ -640,12 +681,9 @@
                     >
                   </v-img>
                 </v-col>
-              </v-row>
-              <v-row
-                v-if="
-                  preview_summary_files && preview_summary_files?.length == 0
-                "
-              >
+              </v-row> -->
+
+              <v-row>
                 <v-col cols="12" class="flex align-center justify-center">
                   <v-img
                     src="../../../assets/manage_coach/upload_file.png"
@@ -668,6 +706,7 @@
                     @click="openFileSelector"
                     >อัพโหลดไฟล์แนบ</v-btn
                   >
+                  <!-- @change="handleFileChange" -->
                   <input
                     ref="fileInput"
                     type="file"
@@ -680,6 +719,100 @@
               </v-row>
             </v-card-text>
           </v-card>
+          <!-- <img v-if="fileURL" :src="fileURL" alt="Converted File" />
+          <a v-if="fileURL" :href="fileURL" :download="filename"
+            >Download File</a
+          > -->
+          <!-- <div
+            v-if="preview_summary_files && preview_summary_files?.length > 0"
+          >
+            <v-row dense>
+              <v-col class="font-bold text-lg"> ไฟล์แนบ </v-col>
+            </v-row>
+
+            <v-card
+              @click="openFile(file)"
+              flat
+              class="mb-3"
+              v-for="(file, index) in preview_summary_files"
+              :key="`${index}-file`"
+            >
+              <v-card-text class="border border-2 border-[#ff6b81] rounded-lg">
+                <v-row>
+                  <v-col cols="auto" class="pr-2">
+                    <v-img
+                      height="35"
+                      width="26"
+                      src="../../../assets/coachLeave/file-pdf.png"
+                    />
+                  </v-col>
+                  <v-col class="px-2">
+                    <span class="font-bold">{{ file.originalFilesName }}</span
+                    ><br />
+                    <span class="text-caption"
+                      >ขนาดไฟล์ :
+                      {{ (file.filesSize / 1000000).toFixed(2) }} MB</span
+                    >
+                  </v-col>
+                  <v-col cols="auto" class="pl-2">
+                    <v-btn
+                      @click="removeAccessmentFile(selected_student, index)"
+                      icon
+                      color="#ff6b81"
+                      ><v-icon>mdi-close</v-icon></v-btn
+                    >
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </div> -->
+
+          <v-row
+            v-if="preview_summary_files && preview_summary_files?.length > 0"
+          >
+            <v-col
+              cols="3"
+              align="center"
+              class="rounded-lg pa-2"
+              v-for="(file, index) in preview_summary_files"
+              :key="index"
+            >
+              <v-img
+                v-if="file.attId"
+                :src="file.url"
+                contain
+                max-height="200"
+                max-width="200"
+                align="right"
+              >
+                <v-btn
+                  icon
+                  class="bg-[#f00]"
+                  dark
+                  @click="removeSummaryFileInbase(file, index)"
+                  ><v-icon>mdi-close</v-icon></v-btn
+                >
+              </v-img>
+              <v-img
+                v-else
+                :src="file"
+                contain
+                max-height="200"
+                max-width="200"
+                align="right"
+              >
+                <v-btn
+                  v-if="coach_check_in.attachment.length == 0"
+                  icon
+                  class="bg-[#f00]"
+                  dark
+                  @click="removeSummaryFile(index)"
+                  ><v-icon>mdi-close</v-icon></v-btn
+                >
+              </v-img>
+            </v-col>
+          </v-row>
+
           <v-row dense>
             <v-col cols="12" sm="6">
               <v-btn
@@ -1114,6 +1247,8 @@ export default {
   },
   data: () => ({
     tab: "check in",
+    fileURL: null,
+    filename: "",
     evolution_options: [
       { label: "ดีมาก", value: "very good" },
       { label: "ดี", value: "good" },
@@ -1718,6 +1853,7 @@ export default {
     //   reader.readAsDataURL(this.file);
     // },
     uploadGeneralFile(selected_student) {
+      console.log("selected_student", this.selected_student);
       const files = this.$refs.generalfileInput.files;
       if (files.length > 0) {
         for (let i = 0; i < files.length; i++) {
@@ -1789,6 +1925,43 @@ export default {
       });
       //this.coach_check_in.summary_files.splice(index, 1)
       //
+    },
+
+    handleFileChange(event) {
+      const file = event.target.files[0];
+      this.convertToBase64(file);
+    },
+    convertToBase64(file) {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const base64Image = reader.result.split(",")[1];
+        this.filename = file.name;
+        const fileType = file.type;
+
+        const convertedFile = this.base64ToFile(
+          base64Image,
+          this.filename,
+          fileType
+        );
+        this.fileURL = URL.createObjectURL(convertedFile);
+      };
+
+      reader.readAsDataURL(file);
+    },
+    base64ToFile(base64Image, filename, fileType) {
+      const binaryString = window.atob(base64Image);
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len);
+
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+
+      const blob = new Blob([bytes], { type: fileType });
+      const convertedFile = new File([blob], filename, { type: fileType });
+
+      return convertedFile;
     },
   },
 };
