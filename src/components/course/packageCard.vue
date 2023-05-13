@@ -20,7 +20,7 @@
           <v-card-text>
             <v-row dense>
               <v-col cols="12" sm="6">
-                <label-custom required text="แพ็ตเกจ"></label-custom>
+                <label-custom required text="แพ็คเกจ"></label-custom>
                 <v-autocomplete 
                     dense
                     :disabled="disable"

@@ -491,9 +491,9 @@ const orderModules = {
         // RESERVE COURSE
         async CreateReserveCourse(context,{ course_data }){
             try{
-                console.log(course_data)
+                // console.log(course_data)
                 let count = 0
-                await course_data.students.forEach( async (student)=>{
+                 for await (let student of course_data.students){
                     let payload = {
                         "studentId": student.account_id,
                         "coursePackageOptionId": null,
@@ -524,7 +524,8 @@ const orderModules = {
                     }else{
                         throw {error : data.data} 
                     }
-                })
+                }
+                console.log(count === course_data.students.length)
                 if (count === course_data.students.length) {
                     await Swal.fire({
                         icon:"success",
@@ -543,12 +544,12 @@ const orderModules = {
                 console.log(error)
             }
         },
-        // RESERVE BY STUDENT ID
-        async GetReserceByStudentId(context,{account_id}){
+        async GetReserceByCreatedBy(context,{account_id}){
             try{
-                let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/byStudentId/${account_id}`)
+                // let localhost = "http://localhost:3002"
+                let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/byCreatedBy/${account_id}`)
+                // console.log(data.data)
                 if(data.statusCode === 200){
-                    console.log(data.data)
                     context.commit("SetReserveList",data.data)
                 }   
             }catch(error){
