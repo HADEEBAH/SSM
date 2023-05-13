@@ -534,7 +534,7 @@
               dense
               color="#ff6b81"
               @click="addToCart"
-              >เพิ่มรถเข็น</v-btn
+              >เพิ่มไปยังรถเข็น</v-btn
             >
             <v-btn
               v-else
@@ -544,7 +544,7 @@
               dense
               color="#ff6b81"
               @click="addToCart"
-              >เพิ่มรถเข็น</v-btn
+              >เพิ่มไปยังรถเข็น</v-btn
             >
           </template>
           <template v-else>
@@ -555,7 +555,7 @@
               dense
               color="#ff6b81"
               @click="addToCart"
-              >เพิ่มรถเข็น</v-btn
+              >เพิ่มไปยังรถเข็น</v-btn
             >
           </template>
         </v-col>
@@ -807,6 +807,7 @@ export default {
     loadingOverlay,
   },
   data: () => ({
+    usernameExists: false,
     edit_parent: false,
     parent: {
       account_id: "",

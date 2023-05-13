@@ -7,9 +7,20 @@
     <loading-overlay :loading="categorys_is_loading"></loading-overlay>
     <v-row dense>
       <v-col class="my-5" style="text-align: -webkit-center" cols="12">
-        <!-- {{ profile_detail.image }} -->
+        <!-- <pre>{{ profile_detail }}</pre> -->
         <!-- {{ data_local.image }} -->
-        <div class="cicle" v-if="data_local.image !== ''">
+
+        <div class="cicle">
+          <v-img
+            class="image-cropper items-end"
+            :src="
+              profile_detail.image !== ''
+                ? profile_detail.image
+                : require('@/assets/profile/default_image_profile.svg')
+            "
+          />
+        </div>
+        <!-- <div class="cicle" v-if="data_local.image !== ''">
           <v-img class="image-cropper items-end" :src="data_local.image" />
         </div>
         <div class="cicle" v-else>
@@ -17,7 +28,7 @@
             class="image-cropper items-end"
             src="../../../assets/userKingdom/default_image_profile.svg"
           />
-        </div>
+        </div> -->
       </v-col>
     </v-row>
     <div class="text-center text-xl font-bold">
