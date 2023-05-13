@@ -52,18 +52,22 @@
       <v-row dense>
         <v-col class="text-md font-bold"> ลงเวลาเข้าสอน </v-col>
       </v-row>
+
       <v-row dense class="mb-3">
         <v-col align="center">
+          <!-- {{coach_check_in}} -->
           <v-btn
             @click="checkIn()"
             depressed
             dense
-            :color="student_check_in.length > 0 ? '#E6E6E6' : '#ff6b81'"
+            :color="coach_check_in.checkInCoachId ? '#E6E6E6' : '#ff6b81'"
             class="w-full rounded-lg"
             :loading="coach_check_in_is_loading"
-            :class="student_check_in.length > 0 ? 'green--text' : 'white--text'"
+            :class="
+              coach_check_in.checkInCoachId ? 'green--text' : 'white--text'
+            "
           >
-            <template v-if="student_check_in.length > 0">
+            <template v-if="coach_check_in.checkInCoachId">
               <v-icon class="mr-2">mdi-check-circle</v-icon> เข้าสอน
             </template>
             <template v-else>
@@ -590,52 +594,11 @@
             </v-col>
           </v-row>
           <!-- Upload file -->
-          <div v-if="coach_check_in.attachment.length > 0">
-            <v-row dense>
-              <v-col class="font-bold text-lg"> ไฟล์แนบ </v-col>
-            </v-row>
-
-            <v-card
-              @click="openFile(file)"
-              flat
-              class="mb-3"
-              v-for="(file, index) of coach_check_in.attachment"
-              :key="`${index}-file`"
-            >
-              <v-card-text class="border border-2 border-[#ff6b81] rounded-lg">
-                <v-row>
-                  <v-col cols="auto" class="pr-2">
-                    <v-img
-                      height="35"
-                      width="26"
-                      src="../../../assets/coachLeave/file-pdf.png"
-                    />
-                  </v-col>
-                  <v-col class="px-2">
-                    <span class="font-bold">{{ file.originalFilesName }}</span
-                    ><br />
-                    <span class="text-caption"
-                      >ขนาดไฟล์ :
-                      {{ (file.filesSize / 1000000).toFixed(2) }} MB</span
-                    >
-                  </v-col>
-                  <v-col cols="auto" class="pl-2">
-                    <v-btn
-                      @click="removeAccessmentFile(selected_student, index)"
-                      icon
-                      color="#ff6b81"
-                      ><v-icon>mdi-close</v-icon></v-btn
-                    >
-                  </v-col>
-                </v-row>
-              </v-card-text>
-            </v-card>
-          </div>
           <v-card flat class="mb-3">
             <v-card-text
               class="border-dashed border-2 border-pink-600 rounded-lg"
             >
-              <!-- <v-row
+              <v-row
                 v-if="
                   preview_summary_files && preview_summary_files?.length > 0
                 "
@@ -681,9 +644,12 @@
                     >
                   </v-img>
                 </v-col>
-              </v-row> -->
-
-              <v-row>
+              </v-row>
+              <v-row
+                v-if="
+                  preview_summary_files && preview_summary_files?.length == 0
+                "
+              >
                 <v-col cols="12" class="flex align-center justify-center">
                   <v-img
                     src="../../../assets/manage_coach/upload_file.png"
@@ -706,7 +672,6 @@
                     @click="openFileSelector"
                     >อัพโหลดไฟล์แนบ</v-btn
                   >
-                  <!-- @change="handleFileChange" -->
                   <input
                     ref="fileInput"
                     type="file"
@@ -719,100 +684,6 @@
               </v-row>
             </v-card-text>
           </v-card>
-          <!-- <img v-if="fileURL" :src="fileURL" alt="Converted File" />
-          <a v-if="fileURL" :href="fileURL" :download="filename"
-            >Download File</a
-          > -->
-          <!-- <div
-            v-if="preview_summary_files && preview_summary_files?.length > 0"
-          >
-            <v-row dense>
-              <v-col class="font-bold text-lg"> ไฟล์แนบ </v-col>
-            </v-row>
-
-            <v-card
-              @click="openFile(file)"
-              flat
-              class="mb-3"
-              v-for="(file, index) in preview_summary_files"
-              :key="`${index}-file`"
-            >
-              <v-card-text class="border border-2 border-[#ff6b81] rounded-lg">
-                <v-row>
-                  <v-col cols="auto" class="pr-2">
-                    <v-img
-                      height="35"
-                      width="26"
-                      src="../../../assets/coachLeave/file-pdf.png"
-                    />
-                  </v-col>
-                  <v-col class="px-2">
-                    <span class="font-bold">{{ file.originalFilesName }}</span
-                    ><br />
-                    <span class="text-caption"
-                      >ขนาดไฟล์ :
-                      {{ (file.filesSize / 1000000).toFixed(2) }} MB</span
-                    >
-                  </v-col>
-                  <v-col cols="auto" class="pl-2">
-                    <v-btn
-                      @click="removeAccessmentFile(selected_student, index)"
-                      icon
-                      color="#ff6b81"
-                      ><v-icon>mdi-close</v-icon></v-btn
-                    >
-                  </v-col>
-                </v-row>
-              </v-card-text>
-            </v-card>
-          </div> -->
-
-          <v-row
-            v-if="preview_summary_files && preview_summary_files?.length > 0"
-          >
-            <v-col
-              cols="3"
-              align="center"
-              class="rounded-lg pa-2"
-              v-for="(file, index) in preview_summary_files"
-              :key="index"
-            >
-              <v-img
-                v-if="file.attId"
-                :src="file.url"
-                contain
-                max-height="200"
-                max-width="200"
-                align="right"
-              >
-                <v-btn
-                  icon
-                  class="bg-[#f00]"
-                  dark
-                  @click="removeSummaryFileInbase(file, index)"
-                  ><v-icon>mdi-close</v-icon></v-btn
-                >
-              </v-img>
-              <v-img
-                v-else
-                :src="file"
-                contain
-                max-height="200"
-                max-width="200"
-                align="right"
-              >
-                <v-btn
-                  v-if="coach_check_in.attachment.length == 0"
-                  icon
-                  class="bg-[#f00]"
-                  dark
-                  @click="removeSummaryFile(index)"
-                  ><v-icon>mdi-close</v-icon></v-btn
-                >
-              </v-img>
-            </v-col>
-          </v-row>
-
           <v-row dense>
             <v-col cols="12" sm="6">
               <v-btn
@@ -1408,7 +1279,6 @@ export default {
     },
     student_check_in: function () {
       this.student_check_in.forEach((check_in_data) => {
-        console.log(check_in_data);
         if (check_in_data?.cpo?.packageName) {
           if (!this.package_name_filter) {
             this.package_name_filter = check_in_data?.cpo?.packageName;
@@ -1479,11 +1349,7 @@ export default {
     }),
     FilterStatusCheckIn(selected_data) {
       if (this.course_data.course_type_id === "CT_1") {
-        console.log(
-          `Total :${parseInt(selected_data.totalDay / 4)} count : ${
-            selected_data.countCheckInleave
-          }`
-        );
+        // console.log(`Total :${ parseInt(selected_data.totalDay/4) } count : ${selected_data.countCheckInleave}`)
         if (
           parseInt(selected_data.totalDay / 4) > selected_data.countCheckInleave
         ) {
@@ -1678,10 +1544,15 @@ export default {
         }).then(async (result) => {
           if (result.isConfirmed) {
             this.check_in = true;
-            this.CheckInCoach({
+            await this.CheckInCoach({
               course_id: this.course_data.course_id,
               date: this.$route.params.date,
               time_id: this.$route.params.timeId,
+            }).then(async () => {
+              await this.GetCoachCheckIn({
+                course_id: this.$route.params.courseId,
+                date: this.$route.params.date,
+              });
             });
           }
         });
@@ -1700,7 +1571,6 @@ export default {
         this.student_check_in[this.selected_student].assessment.oldremark =
           this.student_check_in[this.selected_student].assessment.remark;
       }
-
       this.show_comment_dialog = true;
     },
     confirmStudentComment() {
@@ -1725,7 +1595,6 @@ export default {
       } else {
         this.student_check_in[selected_student].files = [];
       }
-
       this.selected_files = [];
       this.show_comment_dialog = false;
     },

@@ -183,9 +183,10 @@ const RegisterModules = {
                 }
             } catch ({ response }) {
                 context.commit("SetIsLoading", false)
+                console.log(response)
+                let text = ""
                 if (response?.data.statusCode === 400) {
-                    let text = ""
-                    switch (response.data.message.message) {
+                    switch (response.data.message) {
                         case "The mobile no must be at least 10 characters.":
                             text = 'หมายเลขมือถือต้องมีอย่างน้อย 10 ตัวอักษร'
                             break;
@@ -195,6 +196,9 @@ const RegisterModules = {
                         case "The password format is invalid.":
                             text = 'รูปแบบรหัสผ่านไม่ถูกต้อง'
                             break;
+                        case "The first name eng format is invalid.":
+                            text = 'รูปแบบชื่อภาษาอังกฤษไม่ถูกต้อง'
+                            break;
                         case "The last name th format is invalid.":
                             text = 'รูปแบบนามสกุลภาษาไทยไม่ถูกต้อง'
                             break;
@@ -202,11 +206,15 @@ const RegisterModules = {
                             text = 'รูปแบบนามสกุลภาษาอังกฤษไม่ถูกต้อง'
                             break;
                     }
-                    Swal.fire({
-                        icon: 'error',
-                        title: `กรอกข้อมูลให้ถูกต้อง`,
-                        text: text ? text : response.data.message.message
-                    })
+                    console.log(text)
+                    setTimeout(() => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: `กรอกข้อมูลให้ถูกต้อง`,
+                            text: text ? text : response.data.message
+                        })
+                    }, 200)
+
                 } else {
                     Swal.fire({
                         icon: 'error',
