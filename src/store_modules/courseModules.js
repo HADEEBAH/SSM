@@ -542,7 +542,7 @@ const CourseModules = {
         if(data.statusCode === 200){
           Swal.fire({
             icon: "success",
-            title: "สร้างคอร์สสำเร็จ"
+            title: "แก้ไขคอร์สสำเร็จ"
           })
         }
         }catch(error){
@@ -640,7 +640,7 @@ const CourseModules = {
         if(data.statusCode === 200){
           Swal.fire({
             icon: "success",
-            title: "สร้างคอร์สสำเร็จ"
+            title: "แก้ไขคอร์สสำเร็จ"
           })
         }
         }catch(error){
