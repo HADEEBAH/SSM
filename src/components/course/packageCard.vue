@@ -11,9 +11,15 @@
         :title="`แพ็คเกจที่ ${index + 1}`"
       >
         <template slot="actions">
-          <v-btn v-if="!package_data.course_package_option_id" icon color="red" @click="removePackage(index)"><v-icon>mdi-close</v-icon></v-btn>
-        </template> 
-     </headerCard>
+          <v-btn
+            v-if="!package_data.course_package_option_id"
+            icon
+            color="red"
+            @click="removePackage(index)"
+            ><v-icon>mdi-close</v-icon></v-btn
+          >
+        </template>
+      </headerCard>
       <v-card-text class="pt-0">
         <v-divider class="mb-3"></v-divider>
         <v-card class="bg-grey-card mb-3">
@@ -35,29 +41,40 @@
                     item-color="pink"
                     @change="checkPackage(package_data.package_id, package_data)"
                 >
-                    <template v-slot:no-data>
+                  <template v-slot:no-data>
                     <v-list-item>
-                        <v-list-item-title>
-                        ไม่พบข้อมูล
-                        </v-list-item-title>
+                      <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
                     </v-list-item>
-                    </template>
-                    <template v-slot:item="{ item }" >
-                    <v-list-item-content >
-                        <v-list-item-title ><span :class="package_data.package === item.packageId ? 'font-bold':''">{{ item.packageName }}</span></v-list-item-title>
+                  </template>
+                  <template v-slot:item="{ item }">
+                    <v-list-item-content>
+                      <v-list-item-title
+                        ><span
+                          :class="
+                            package_data.package === item.packageId
+                              ? 'font-bold'
+                              : ''
+                          "
+                          >{{ item.packageName }}</span
+                        ></v-list-item-title
+                      >
                     </v-list-item-content>
                     <v-list-item-action>
-                        <v-icon v-if="package_data.package === item.packageId">mdi-check-circle</v-icon>
+                      <v-icon v-if="package_data.package === item.packageId"
+                        >mdi-check-circle</v-icon
+                      >
                     </v-list-item-action>
-                    </template>  
+                  </template>
                 </v-autocomplete>
               </v-col>
               <v-col cols="12" sm="6">
-                <label-custom required text="จำนวนนักเรียน/คน"></label-custom>
+                <label-custom required text="จำนวนนักเรียน (คน)"></label-custom>
                 <v-text-field
                   suffix="คน"
                   type="number"
-                  :disabled="package_data.package_id !== 'PACK_3' ? true : disable "
+                  :disabled="
+                    package_data.package_id !== 'PACK_3' ? true : disable
+                  "
                   :outlined="!disable"
                   :filled="disable"
                   :rules="rules.packages_student"
@@ -80,35 +97,44 @@
             <v-row dense class="d-flex align-center">
               <v-col cols="12" sm="4">
                 <label-custom required text="ระยะเวลา"></label-custom>
-                <v-autocomplete 
-                    dense
-                    :disabled="disable"
-                    :outlined="!disable"
-                    :filled="disable"
-                    v-model="option.period_package"
-                    color="#FF6B81"
-                    :rules="rules.options"
-                    item-text="optionName"
-                    item-value="optionId"
-                    :items="optionsList(index, option_index)"
-                    item-color="pink"
-                    @change="checkOption(option, option_index, package_data)"
+                <v-autocomplete
+                  dense
+                  :disabled="disable"
+                  :outlined="!disable"
+                  :filled="disable"
+                  v-model="option.period_package"
+                  color="#FF6B81"
+                  :rules="rules.options"
+                  item-text="optionName"
+                  item-value="optionId"
+                  :items="optionsList(index, option_index)"
+                  item-color="pink"
+                  @change="checkOption(option, option_index, package_data)"
                 >
-                    <template v-slot:no-data>
+                  <template v-slot:no-data>
                     <v-list-item>
-                        <v-list-item-title>
-                        ไม่พบข้อมูล
-                        </v-list-item-title>
+                      <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
                     </v-list-item>
-                    </template>
-                    <template v-slot:item="{ item }" >
-                    <v-list-item-content >
-                        <v-list-item-title ><span :class="option.period_package === item.optionId ? 'font-bold':''">{{ item.optionName }}</span></v-list-item-title>
+                  </template>
+                  <template v-slot:item="{ item }">
+                    <v-list-item-content>
+                      <v-list-item-title
+                        ><span
+                          :class="
+                            option.period_package === item.optionId
+                              ? 'font-bold'
+                              : ''
+                          "
+                          >{{ item.optionName }}</span
+                        ></v-list-item-title
+                      >
                     </v-list-item-content>
                     <v-list-item-action>
-                        <v-icon v-if="option.period_package === item.optionId">mdi-check-circle</v-icon>
+                      <v-icon v-if="option.period_package === item.optionId"
+                        >mdi-check-circle</v-icon
+                      >
                     </v-list-item-action>
-                    </template>  
+                  </template>
                 </v-autocomplete>
               </v-col>
               <v-col cols="12" sm="4">
@@ -150,11 +176,10 @@
                     color="red"
                     @click="removeOptions(package_data.options, option_index)"
                   >
-                  <v-icon>mdi-delete-empty</v-icon>
-                  ลบระยะเวลา
-                </v-btn>
+                    <v-icon>mdi-delete-empty</v-icon>
+                    ลบระยะเวลา
+                  </v-btn>
                 </template>
-               
               </v-col>
             </v-row>
             <v-row dense>
@@ -191,7 +216,7 @@
                       @focus="$event.target.select()"
                       :disabled="!option.discount || disable"
                       placeholder="ระบุส่วนลด/บาท"
-                      :outlined="option.discount|| disable"
+                      :outlined="option.discount || disable"
                       :filled="!option.discount || disable"
                       v-model.number="option.discount_price"
                       @change="calNetPrice(option)"
@@ -243,111 +268,127 @@ import HeaderCard from "../header/headerCard.vue";
 import LabelCustom from "../label/labelCustom.vue";
 import { mapGetters, mapActions } from "vuex";
 export default {
-  props:{
-    disable: {type: Boolean, default: false},
-    edited : {type: Boolean, default: false}
+  props: {
+    disable: { type: Boolean, default: false },
+    edited: { type: Boolean, default: false },
   },
   components: {
     LabelCustom,
-    HeaderCard
+    HeaderCard,
   },
   data: () => ({
     packages_selected: [],
     options_selected: [],
     minimum_students: 0,
   }),
-  created() {
-     
-  },
+  created() {},
   mounted() {
-    this.$store.dispatch("CourseModules/GetPackages")
-    this.$store.dispatch("CourseModules/GetOptions")
+    this.$store.dispatch("CourseModules/GetPackages");
+    this.$store.dispatch("CourseModules/GetOptions");
   },
   watch: {},
   computed: {
     ...mapGetters({
       course_data: "CourseModules/getCourseData",
-      packages_data : "CourseModules/getPackages",
-      options_data : "CourseModules/getOptions",
+      packages_data: "CourseModules/getPackages",
+      options_data: "CourseModules/getOptions",
     }),
     rules() {
-      const vm = this // bind 'this' to the Vue component instance
+      const vm = this; // bind 'this' to the Vue component instance
       return {
-        packages: [function(val) {
-          return (val || '').length > 0 || 'โปรดเลือกแพ็คเกจ'
-        }],
-        packages_student: [function(val) {
-          return (val || '') > vm.minimum_students ? vm.minimum_students : 0 || 'โปรดระบุจำนวนนักเรียน'
-        }],
-        options: [function(val) {
-          return (val || '').length > 0 || 'โปรดเลือกระยะเวลา'
-        }],
-        options_amount: [function(val) {
-          return (val || '') > 0 || 'โปรดระบุจำนวนครั้ง/คน'
-        }],
-        price_unit: [function(val) {
-          return (val || '') > 0 || 'โปรดระบุราคาต่อ/คน'
-        }]
-      }
+        packages: [
+          function (val) {
+            return (val || "").length > 0 || "โปรดเลือกแพ็คเกจ";
+          },
+        ],
+        packages_student: [
+          function (val) {
+            return (val || "") > vm.minimum_students
+              ? vm.minimum_students
+              : 0 || "โปรดระบุจำนวนนักเรียน";
+          },
+        ],
+        options: [
+          function (val) {
+            return (val || "").length > 0 || "โปรดเลือกระยะเวลา";
+          },
+        ],
+        options_amount: [
+          function (val) {
+            return (val || "") > 0 || "โปรดระบุจำนวนครั้ง/คน";
+          },
+        ],
+        price_unit: [
+          function (val) {
+            return (val || "") > 0 || "โปรดระบุราคาต่อ/คน";
+          },
+        ],
+      };
     },
-   
   },
   methods: {
     ...mapActions({
       ChangeCourseData: "CourseModules/ChangeCourseData",
     }),
-    packageList(package_index){
-      let used_package = []
-      let current_package = this.course_data.packages[package_index].package_id
-      for(const package_data of  this.course_data.packages){
+    packageList(package_index) {
+      let used_package = [];
+      let current_package = this.course_data.packages[package_index].package_id;
+      for (const package_data of this.course_data.packages) {
         if (package_data.package_id !== current_package) {
           used_package.push(package_data.package_id);
         }
       }
-      return this.packages_data.filter(v => !used_package.includes(v.packageId))
+      return this.packages_data.filter(
+        (v) => !used_package.includes(v.packageId)
+      );
     },
-    removePackage(index){
-      this.course_data.packages.splice(index, 1)
+    removePackage(index) {
+      this.course_data.packages.splice(index, 1);
     },
-    optionsList(package_index, options_index){
-      let used_options = []
-      let current_option = this.course_data.packages[package_index].options[options_index].period_package
-      for(const option_data of  this.course_data.packages[package_index].options){
+    optionsList(package_index, options_index) {
+      let used_options = [];
+      let current_option =
+        this.course_data.packages[package_index].options[options_index]
+          .period_package;
+      for (const option_data of this.course_data.packages[package_index]
+        .options) {
         if (option_data.period_package !== current_option) {
           used_options.push(option_data.period_package);
         }
       }
-      return this.options_data.filter(v => !used_options.includes(v.optionId))
+      return this.options_data.filter(
+        (v) => !used_options.includes(v.optionId)
+      );
     },
-    calNetPrice(data){
-      if(data.discount){
-        data.net_price = data.price_unit - data.discount_price
-        data.net_price_unit = data.net_price / data.amount
+    calNetPrice(data) {
+      if (data.discount) {
+        data.net_price = data.price_unit - data.discount_price;
+        data.net_price_unit = data.net_price / data.amount;
       }
     },
-    checkOption(option_data){
-      if(option_data.period_package === "OP_1"){
-        option_data.amount = 1
-      }else if(option_data.period_package === "OP_2") {
-        option_data.amount = 4
-      }else if(option_data.period_package === "OP_3"){
-        option_data.amount = 12
-      }else if(option_data.period_package === "OP_4"){
-        option_data.amount = 24
-      } 
+    checkOption(option_data) {
+      if (option_data.period_package === "OP_1") {
+        option_data.amount = 1;
+      } else if (option_data.period_package === "OP_2") {
+        option_data.amount = 4;
+      } else if (option_data.period_package === "OP_3") {
+        option_data.amount = 12;
+      } else if (option_data.period_package === "OP_4") {
+        option_data.amount = 24;
+      }
     },
-    checkPackage(package_data, packages){
-      console.log(package_data)
-      let minimum_students_data = this.minimum_students
-      if(package_data === "PACK_1"){
-        packages.students = 1
-      }else if(package_data === "PACK_2") {
-        packages.students = 2
-      }else if(package_data === "PACK_3"){
-        packages.students = 3
-        minimum_students_data = 3
-      } 
-      return {packages, minimum_students_data}
+    checkPackage(package_data, packages) {
+      console.log(package_data);
+      let minimum_students_data = this.minimum_students;
+      if (package_data === "PACK_1") {
+        packages.students = 1;
+      } else if (package_data === "PACK_2") {
+        packages.students = 2;
+      } else if (package_data === "PACK_3") {
+        packages.students = 3;
+        minimum_students_data = 3;
+      }
+      return { packages, minimum_students_data };
     },
     addOptions(data) {
       data.push({
@@ -360,11 +401,11 @@ export default {
         net_price: 0,
         net_price_unit: 0,
       });
-      this.ChangeCourseData(this.course_data)
+      this.ChangeCourseData(this.course_data);
     },
-    removeOptions(data, index){
-        data.splice(index, 1);
-        this.ChangeCourseData(this.course_data)
+    removeOptions(data, index) {
+      data.splice(index, 1);
+      this.ChangeCourseData(this.course_data);
     },
   },
 };

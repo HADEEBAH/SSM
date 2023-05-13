@@ -98,6 +98,13 @@
                       <v-col>{{ `อาณาจักร :${course.category_name}` }}</v-col>
                     </v-row>
                     <v-row dense>
+                      <v-col cols="12" v-if="course.course_package_name">
+                        <rowData mini icon="mdi-account-box-multiple"
+                          >แพ็คเกจ : {{ course.course_package_name }}</rowData
+                        >
+                      </v-col>
+                    </v-row>
+                    <v-row dense>
                       <v-col cols="auto"
                         ><v-icon color="#ff6b81"
                           >mdi-clock-outline</v-icon
@@ -154,7 +161,7 @@
 
       <div v-if="tab === 'my teaching'">
         <v-row>
-          <v-col cols="auto"> ข้อมูลการสอนข้อฉัน : </v-col>
+          <v-col cols="auto"> ข้อมูลการสอนของฉัน : </v-col>
           <v-col class="font-bold">
             {{ `${user_detail.first_name_th} ${user_detail.last_name_th}` }}
           </v-col>

@@ -4,11 +4,11 @@
       <loading-overlay :loading="categorys_is_loading"></loading-overlay>
       <!-- <pre>{{ cart_list }}</pre> -->
       <v-row v-if="cart_list.length == 0">
-        <v-col cols="12">
-          <v-img src="../../../assets/cart/noCart.png"> </v-img>
-        </v-col>
         <v-col cols="12" class="text-xl font-bold text-center my-5 pink--text">
           ไม่พบข้อมูลในตะกร้า
+        </v-col>
+        <v-col cols="12">
+          <v-img src="../../../assets/cart/noCart.png"> </v-img>
         </v-col>
       </v-row>
       <div v-else>
@@ -37,7 +37,9 @@
                           <v-col>
                             <v-row dense>
                               <v-col class="text-lg font-bold">
-                                {{ item.course_name_th }}({{ item.course_name_en }})
+                                {{ item.course_name_th }}({{
+                                  item.course_name_en
+                                }})
                               </v-col>
                               <v-col cols="auto">
                                 <v-checkbox
@@ -52,10 +54,18 @@
                               </v-col>
                             </v-row>
                             <v-row dense>
-                              <v-col cols="12" sm="6" class="text-md font-semibold">
+                              <v-col
+                                cols="12"
+                                sm="6"
+                                class="text-md font-semibold"
+                              >
                                 โค้ช : {{ item.coach_name }}
                               </v-col>
-                              <v-col cols="12" sm="6" class="text-md font-semibold">
+                              <v-col
+                                cols="12"
+                                sm="6"
+                                class="text-md font-semibold"
+                              >
                                 <!-- เวลา : {{ item.time.start }}-{{ item.time.end }} -->
                               </v-col>
                             </v-row>
@@ -68,33 +78,59 @@
                         </v-row>
                       </v-col>
                     </v-row>
-                    <v-row  dense v-if="item.course_type_id === 'CT_1'">
-                        <v-col align="right" cols="8"> จำนวนครั้งที่เรียน</v-col>
-                        <v-col align="right" cols="4" class="text-md font-semibold text-[#FF6B81]">
+                    <v-row dense v-if="item.course_type_id === 'CT_1'">
+                      <v-col align="right" cols="8"> จำนวนครั้งที่เรียน</v-col>
+                      <v-col
+                        align="right"
+                        cols="4"
+                        class="text-md font-semibold text-[#FF6B81]"
+                      >
                         {{ item.option.amount }} ครั้ง</v-col
-                        >
+                      >
                     </v-row>
                     <v-row dense>
-                        <v-col align="right" cols="8"> จำนวนนักเรียน</v-col>
-                        <v-col align="right" cols="4" class="text-md font-semibold text-[#FF6B81]">
-                          {{ item.students.length }} คน</v-col
-                        >
+                      <v-col align="right" cols="8"> จำนวนนักเรียน</v-col>
+                      <v-col
+                        align="right"
+                        cols="4"
+                        class="text-md font-semibold text-[#FF6B81]"
+                      >
+                        {{ item.students.length }} คน</v-col
+                      >
                     </v-row>
                     <v-row dense v-if="item.course_type_id === 'CT_1'">
                       <v-col align="right" cols="8"> ส่วนลด</v-col>
-                      <v-col align="right" cols="4" class="text-md font-semibold text-[#FF6B81]">
+                      <v-col
+                        align="right"
+                        cols="4"
+                        class="text-md font-semibold text-[#FF6B81]"
+                      >
                         {{ item.option.discount_price }} บาท</v-col
                       >
                     </v-row>
                     <v-row dense class="mb-3">
                       <v-col align="right" cols="8"> ราคาชำระ</v-col>
-                      <v-col align="right" cols="4" class="text-md font-semibold text-[#FF6B81]">
-                        {{ item.course_type_id==="CT_1" ? item.option.net_price.toLocaleString() : item.net_price.toLocaleString() }} บาท</v-col
+                      <v-col
+                        align="right"
+                        cols="4"
+                        class="text-md font-semibold text-[#FF6B81]"
+                      >
+                        {{
+                          item.course_type_id === "CT_1"
+                            ? item.option.net_price.toLocaleString()
+                            : item.net_price.toLocaleString()
+                        }}
+                        บาท</v-col
                       >
                     </v-row>
                     <!-- <pre>{{ item }}</pre> -->
                     <div align="right">
-                      <v-btn outlined color="red" @click="removeCart(item.order_tmp_id)"><v-icon> mdi-delete</v-icon> ลบรายการ</v-btn>
+                      <v-btn
+                        outlined
+                        color="red"
+                        @click="removeCart(item.order_tmp_id)"
+                        ><v-icon> mdi-delete</v-icon> ลบรายการ</v-btn
+                      >
                     </div>
                   </v-card-text>
                 </v-col>
@@ -130,7 +166,7 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import { mapActions, mapGetters } from "vuex";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 export default {
@@ -172,12 +208,12 @@ export default {
       GetCartList: "OrderModules/GetCartList",
       saveOrder: "OrderModules/saveOrder",
       changeOrderData: "OrderModules/changeOrderData",
-      DeleteCart : "OrderModules/DeleteCart",
+      DeleteCart: "OrderModules/DeleteCart",
       // monitor
-      GetAllCourseMonitor : "CourseMonitorModules/GetAllCourseMonitor"
+      GetAllCourseMonitor: "CourseMonitorModules/GetAllCourseMonitor",
     }),
-    removeCart(cart_id){
-      console.log(cart_id)
+    removeCart(cart_id) {
+      console.log(cart_id);
       Swal.fire({
         icon: "question",
         title: "ต้องการลบรายการนี้หรือไม่ ?",
@@ -187,22 +223,25 @@ export default {
         confirmButtonText: "ตกลง",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          if(cart_id.length > 0){
-            for await(const id of cart_id ){
-              this.DeleteCart({cart_id: id, account_id : this.user_login.account_id})
+          if (cart_id.length > 0) {
+            for await (const id of cart_id) {
+              this.DeleteCart({
+                cart_id: id,
+                account_id: this.user_login.account_id,
+              });
             }
           }
         }
-      })
+      });
     },
     sumtotal() {
       this.total_price = 0;
       this.count_selected_cart = this.cart_list.filter((v) => v.checked).length;
       this.cart_list.forEach((course) => {
         if (course.checked) {
-          if(course.course_type_id === "CT_1"){
+          if (course.course_type_id === "CT_1") {
             this.total_price = this.total_price + course.option.net_price;
-          }else{
+          } else {
             this.total_price = this.total_price + course.net_price;
           }
         }
@@ -248,41 +287,52 @@ export default {
     },
 
     savePayment() {
-      if(this.cart_list.filter((v) => v.checked === true).length > 0){
-        let isValiDateCourse = []
+      if (this.cart_list.filter((v) => v.checked === true).length > 0) {
+        let isValiDateCourse = [];
         this.order.courses = this.cart_list.filter((v) => v.checked === true);
         this.order.total_price = this.total_price;
         this.order.payment_status = "pending";
         this.order.created_by = this.user_login.account_id;
         this.changeOrderData(this.order);
-        this.GetAllCourseMonitor().then(()=>{
-          console.log("course_monitors",this.course_monitors)
+        this.GetAllCourseMonitor().then(() => {
+          console.log("course_monitors", this.course_monitors);
           // console.log("courses",this.order.courses)
-          this.order.courses.forEach((course)=>{
-            console.log("courses",course)
-            if(this.course_monitors.filter(v => v.courseMonitorEntity_coach_id === course.coach &&
-              v.courseMonitorEntity_course_id ===  course.course_id && 
-              v.courseMonitorEntity_day_of_week_id === course.day_of_week_id &&
-              v.courseMonitorEntity_time_id === course.time_id).length > 0
-            ){
-              if(this.course_monitors.some(v => v.courseMonitorEntity_coach_id === course.coach &&
-                v.courseMonitorEntity_course_id ===  course.course_id && 
-                v.courseMonitorEntity_day_of_week_id === course.day_of_week_id &&
-                v.courseMonitorEntity_time_id === course.time_id && 
-                (v.courseMonitorEntity_current_student + course.students.length) <= v.courseMonitorEntity_maximum_student &&
-                v.courseMonitorEntity_status === "Open"
-              )){
-                isValiDateCourse.push(true)
-              }else{
-                isValiDateCourse.push(false)
+          this.order.courses.forEach((course) => {
+            console.log("courses", course);
+            if (
+              this.course_monitors.filter(
+                (v) =>
+                  v.courseMonitorEntity_coach_id === course.coach &&
+                  v.courseMonitorEntity_course_id === course.course_id &&
+                  v.courseMonitorEntity_day_of_week_id ===
+                    course.day_of_week_id &&
+                  v.courseMonitorEntity_time_id === course.time_id
+              ).length > 0
+            ) {
+              if (
+                this.course_monitors.some(
+                  (v) =>
+                    v.courseMonitorEntity_coach_id === course.coach &&
+                    v.courseMonitorEntity_course_id === course.course_id &&
+                    v.courseMonitorEntity_day_of_week_id ===
+                      course.day_of_week_id &&
+                    v.courseMonitorEntity_time_id === course.time_id &&
+                    v.courseMonitorEntity_current_student +
+                      course.students.length <=
+                      v.courseMonitorEntity_maximum_student &&
+                    v.courseMonitorEntity_status === "Open"
+                )
+              ) {
+                isValiDateCourse.push(true);
+              } else {
+                isValiDateCourse.push(false);
               }
-            }else{
-              isValiDateCourse.push(true)
+            } else {
+              isValiDateCourse.push(true);
             }
-          
-          })
-          console.log(isValiDateCourse)
-          if(isValiDateCourse.includes(false)){
+          });
+          console.log(isValiDateCourse);
+          if (isValiDateCourse.includes(false)) {
             Swal.fire({
               icon: "error",
               title: "คอร์สที่เลือกเต็มแล้วไม่สามารถชำระเงินได้",
@@ -290,17 +340,19 @@ export default {
               showCancelButton: true,
               cancelButtonText: "ยกเลิก",
               confirmButtonText: "ตกลง",
-            })
-          }else{
+            });
+          } else {
             this.saveOrder();
             for (const cart of this.cart_list) {
               for (const id of cart.order_tmp_id) {
-                this.DeleteCart({cart_id : id, account_id : this.user_login.account_id})
+                this.DeleteCart({
+                  cart_id: id,
+                  account_id: this.user_login.account_id,
+                });
               }
             }
           }
-          
-        })
+        });
       }
     },
   },
@@ -309,8 +361,8 @@ export default {
     ...mapGetters({
       cart_list: "OrderModules/getCartList",
       course_order: "OrderModules/getCourseOrder",
-      categorys_is_loading : "CategoryModules/getCategorysIsLoading",
-      course_monitors : "CourseMonitorModules/getCourseMonitor",
+      categorys_is_loading: "CategoryModules/getCategorysIsLoading",
+      course_monitors: "CourseMonitorModules/getCourseMonitor",
       order: "OrderModules/getOrder",
     }),
     MobileSize() {
