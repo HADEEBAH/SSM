@@ -26,20 +26,20 @@
           <v-card-text>
             <v-row dense>
               <v-col cols="12" sm="6">
-                <label-custom required text="แพ็ตเกจ"></label-custom>
-                <v-autocomplete
-                  dense
-                  :disabled="disable"
-                  :outlined="!disable"
-                  :filled="disable"
-                  v-model="package_data.package_id"
-                  color="#FF6B81"
-                  :rules="rules.packages"
-                  :items="packageList(index)"
-                  item-value="packageId"
-                  item-text="packageName"
-                  item-color="pink"
-                  @change="checkPackage(package_data.package_id, package_data)"
+                <label-custom required text="แพ็คเกจ"></label-custom>
+                <v-autocomplete 
+                    dense
+                    :disabled="disable"
+                    :outlined="!disable"
+                    :filled="disable"
+                    v-model="package_data.package_id"
+                    color="#FF6B81"
+                    :rules="rules.packages"
+                    :items="packageList(index)"
+                    item-value="packageId"
+                    item-text="packageName"
+                    item-color="pink"
+                    @change="checkPackage(package_data.package_id, package_data)"
                 >
                   <template v-slot:no-data>
                     <v-list-item>
