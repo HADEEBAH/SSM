@@ -773,9 +773,9 @@
             <v-col>
               <v-btn
                 :disabled="relation.username === '' ? true : false"
+                :color="relation.username !== '' ? '#ff6b81' : '#ccc'"
+                :dark="relation.username !== '' ? true : false"
                 class="w-full"
-                :color="relation.username.length < 1 ? '#CCCCCC' : '#ff6b81'"
-                dark
                 depressed
                 @click="addRealions"
                 >บันทึก</v-btn
