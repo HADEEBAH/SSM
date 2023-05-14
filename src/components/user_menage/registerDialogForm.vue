@@ -1,6 +1,6 @@
 <template>
   <v-form ref="form" v-model="valid" lazy-validation>
-    {{ state }}
+    <!-- {{ state }} -->
     <v-card
       :flat="crad_flat"
       :class="
