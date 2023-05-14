@@ -1,26 +1,30 @@
-<template>
-  <v-container>
-    <!-- {{ my_course }} -->
-    <!-- {{ profile_user }} -->
-    <!-- {{ data_local }} -->
-    <!-- {{ setFunctions }} -->
-    <loading-overlay :loading="categorys_is_loading"></loading-overlay>
-    <v-row dense>
-      <v-col class="my-5" style="text-align: -webkit-center" cols="12">
-        <!-- <pre>{{ profile_detail }}</pre> -->
-        <!-- {{ data_local.image }} -->
+//USER profile
 
-        <div class="cicle">
-          <v-img
-            class="image-cropper items-end"
-            :src="
-              profile_detail.image !== ''
-                ? profile_detail.image
-                : require('@/assets/profile/default_image_profile.svg')
-            "
-          />
-        </div>
-        <!-- <div class="cicle" v-if="data_local.image !== ''">
+
+<template>
+  <v-form ref="form" v-model="valid" lazy-validation>
+    <v-container>
+      <!-- {{ my_course }} -->
+      <!-- {{ profile_user }} -->
+      <!-- {{ data_local }} -->
+      <!-- {{ setFunctions }} -->
+      <loading-overlay :loading="categorys_is_loading"></loading-overlay>
+      <v-row dense>
+        <v-col class="my-5" style="text-align: -webkit-center" cols="12">
+          <!-- <pre>{{ profile_detail }}</pre> -->
+          <!-- {{ data_local.image }} -->
+
+          <div class="cicle">
+            <v-img
+              class="image-cropper items-end"
+              :src="
+                profile_detail.image !== ''
+                  ? profile_detail.image
+                  : require('@/assets/profile/default_image_profile.svg')
+              "
+            />
+          </div>
+          <!-- <div class="cicle" v-if="data_local.image !== ''">
           <v-img class="image-cropper items-end" :src="data_local.image" />
         </div>
         <div class="cicle" v-else>
@@ -29,685 +33,702 @@
             src="../../../assets/userKingdom/default_image_profile.svg"
           />
         </div> -->
-      </v-col>
-    </v-row>
-    <div class="text-center text-xl font-bold">
-      {{ profile_detail.firstNameTh }} {{ profile_detail.lastNameTh }}
-    </div>
-    <div class="my-3 text-center">
-      <v-btn
-        depressed
-        color="#FF6B81"
-        class="white--text rounded-xl"
-        @click="show_detail()"
-      >
-        ดูข้อมูลส่วนตัว
-      </v-btn>
-    </div>
-
-    <!-- ROLE STUDENT คอร์สเรียน-->
-    <div v-if="data_local.roles.includes('R_5')">
-      <div class="mt-8">
-        <label-custom text="คอร์สเรียน"></label-custom>
+        </v-col>
+      </v-row>
+      <div class="text-center text-xl font-bold">
+        {{ profile_detail.firstNameTh }} {{ profile_detail.lastNameTh }}
       </div>
-      <v-divider class=""></v-divider>
-      <!-- COURSE -->
-      <v-row
-        dense
-        class="mt-3"
-        @click="$router.push({ name: 'StudentsSchedule' })"
-      >
-        <v-col cols="2" sm="1">
-          <img src="../../../assets/profile/cource.png" />
-        </v-col>
-        <v-col cols="5" sm="6" align="left" class="mt-1">
-          <label>คอร์สเรียนของฉัน</label>
-        </v-col>
-        <v-col cols="3" sm="4" align="right" class="mt-1">
-          <label class="pink--text">{{ student_data.length }} คอร์ส</label>
-        </v-col>
-        <v-col cols="2" sm="1" align="right" class="mt2">
-          <span class="mdi mdi-chevron-right"></span>
-        </v-col>
-      </v-row>
-      <!-- CERTIFICATE -->
-      <!-- @click="show_certificate() -->
-      <v-row dense class="mt-3 mb-3">
-        <v-col cols="2" sm="1">
-          <img src="../../../assets/profile/certificate.png" />
-        </v-col>
-        <v-col cols="5" sm="6" align="left" class="mt-1">
-          <label>การแข่งขันและเกียรติบัตร</label>
-        </v-col>
-        <v-col cols="3" sm="4" align="right" class="mt-1">
-          <label class="pink--text">2 การแข่ง</label>
-        </v-col>
-        <v-col cols="2" sm="1" align="right" class="mt-2">
-          <span class="mdi mdi-chevron-right"></span>
-        </v-col>
-      </v-row>
-    </div>
-
-    <!-- ROLE STUDENT ข้อมูลผู้ปกครอง -->
-    <div v-if="data_local.roles.includes('R_5')">
-      <v-row class="mb-1">
-        <v-col align="start" class="d-flex align-center">
-          <label-custom text="ข้อมูลผู้ปกครอง"></label-custom>
-        </v-col>
-        <v-col cols="auto" align="end">
-          <v-btn dense outlined color="#ff6b81" @click="openAddParentDialog">
-            <v-icon>mdi-plus-circle-outline</v-icon>เพิ่มข้อมูลผู้ปกครอง</v-btn
-          >
-        </v-col>
-      </v-row>
-      <v-divider class="mb-3"></v-divider>
-      <!-- card parent -->
-      <div v-if="profile_user.length <= 0">
-        <v-card>
-          <v-card-text
-            class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
-          >
-            <span class="text-lg font-bold">
-              <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-              ไม่พบข้อมูลของผู้ปกครอง
-            </span>
-          </v-card-text>
-        </v-card>
-      </div>
-      <div v-else>
-        <v-card
-          v-for="(profile, index) in profile_user"
-          :key="`${index}-profile`"
-          class="cursor-pointer my-5"
-          @click="openParentDialog(profile.parent)"
+      <div class="my-3 text-center">
+        <v-btn
+          depressed
+          color="#FF6B81"
+          class="white--text rounded-xl"
+          @click="show_detail()"
         >
-          <v-row dense class="my-5">
-            <!-- col avatar -->
-            <v-col cols="auto" v-if="profile.parent.parentImage !== ''">
-              <v-img
-                :src="profile.parent.parentImage"
-                alt="Card image"
-                class="rounded-full ml-3 image-cropper"
-                style="max-width: 50px; max-height: 50px"
-              />
-            </v-col>
-            <v-col cols="auto" v-else>
-              <v-img
-                src="../../../assets/userKingdom/default_image_profile.svg"
-                alt="Card image"
-                class="rounded-full ml-3 image-cropper"
-                style="max-width: 50px; max-height: 50px"
-              />
-            </v-col>
-            <!-- col name -->
-            <v-col cols="12" sm="10" class="d-flex align-center pa-3">
-              <v-row dense>
-                <v-col cols="4"
-                  >{{
-                    !profile.parent.parentFirstnameTh
-                      ? "-"
-                      : profile.parent.parentFirstnameTh
-                  }}
-                </v-col>
-                <v-col cols="4">
-                  {{
-                    !profile.parent.parentLastnameTh
-                      ? "-"
-                      : profile.parent.parentLastnameTh
-                  }}</v-col
-                >
-                <v-col class="text-slate-400">{{
-                  !profile.parent.parentTel ? "-" : profile.parent.parentTel
-                }}</v-col>
-                <!-- col arrow -->
-                <v-col cols="auto">
-                  <span class="mdi mdi-chevron-right"></span>
-                </v-col>
-              </v-row>
-            </v-col>
-          </v-row>
-        </v-card>
+          ดูข้อมูลส่วนตัว
+        </v-btn>
       </div>
-    </div>
 
-    <!-- ROLE ALL ทั่วไป -->
-    <div class="mb-3">
-      <div class="mt-8">
-        <label-custom text="ทั่วไป"></label-custom>
+      <!-- ROLE STUDENT คอร์สเรียน-->
+      <div v-if="data_local.roles.includes('R_5')">
+        <div class="mt-8">
+          <label-custom text="คอร์สเรียน"></label-custom>
+        </div>
+        <v-divider class=""></v-divider>
+        <!-- COURSE -->
+        <v-row
+          dense
+          class="mt-3"
+          @click="$router.push({ name: 'StudentsSchedule' })"
+        >
+          <v-col cols="2" sm="1">
+            <img src="../../../assets/profile/cource.png" />
+          </v-col>
+          <v-col cols="5" sm="6" align="left" class="mt-1">
+            <label>คอร์สเรียนของฉัน</label>
+          </v-col>
+          <v-col cols="3" sm="4" align="right" class="mt-1">
+            <label class="pink--text">{{ student_data.length }} คอร์ส</label>
+          </v-col>
+          <v-col cols="2" sm="1" align="right" class="mt2">
+            <span class="mdi mdi-chevron-right"></span>
+          </v-col>
+        </v-row>
+        <!-- CERTIFICATE -->
+        <!-- @click="show_certificate() -->
+        <v-row dense class="mt-3 mb-3">
+          <v-col cols="2" sm="1">
+            <img src="../../../assets/profile/certificate.png" />
+          </v-col>
+          <v-col cols="5" sm="6" align="left" class="mt-1">
+            <label>การแข่งขันและเกียรติบัตร</label>
+          </v-col>
+          <v-col cols="3" sm="4" align="right" class="mt-1">
+            <label class="pink--text">2 การแข่ง</label>
+          </v-col>
+          <v-col cols="2" sm="1" align="right" class="mt-2">
+            <span class="mdi mdi-chevron-right"></span>
+          </v-col>
+        </v-row>
       </div>
-      <v-divider class=""></v-divider>
-      <!-- password -->
-      <v-row dense class="mt-3" @click="show_password()">
-        <v-col cols="2" sm="1">
-          <img src="@/assets/profile/password.png" />
-        </v-col>
-        <v-col cols="8" sm="9" align="left" class="mt-1">
-          <label>รหัสผ่าน</label>
-        </v-col>
 
-        <v-col cols="2" sm="2" align="right">
-          <span class="mdi mdi-chevron-right"></span>
-        </v-col>
-      </v-row>
-      <!-- translate -->
-      <!-- <v-row
+      <!-- ROLE STUDENT ข้อมูลผู้ปกครอง -->
+      <div v-if="data_local.roles.includes('R_5')">
+        <v-row class="mb-1">
+          <v-col align="start" class="d-flex align-center">
+            <label-custom text="ข้อมูลผู้ปกครอง"></label-custom>
+          </v-col>
+          <v-col cols="auto" align="end">
+            <v-btn dense outlined color="#ff6b81" @click="openAddParentDialog">
+              <v-icon>mdi-plus-circle-outline</v-icon
+              >เพิ่มข้อมูลผู้ปกครอง</v-btn
+            >
+          </v-col>
+        </v-row>
+        <v-divider class="mb-3"></v-divider>
+        <!-- card parent -->
+        <div v-if="profile_user.length <= 0">
+          <v-card>
+            <v-card-text
+              class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
+            >
+              <span class="text-lg font-bold">
+                <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                ไม่พบข้อมูลของผู้ปกครอง
+              </span>
+            </v-card-text>
+          </v-card>
+        </div>
+        <div v-else>
+          <v-card
+            v-for="(profile, index) in profile_user"
+            :key="`${index}-profile`"
+            class="cursor-pointer my-5"
+            @click="openParentDialog(profile.parent)"
+          >
+            <v-row dense class="my-5">
+              <!-- col avatar -->
+              <v-col cols="auto" v-if="profile.parent.parentImage !== ''">
+                <v-img
+                  :src="profile.parent.parentImage"
+                  alt="Card image"
+                  class="rounded-full ml-3 image-cropper"
+                  style="max-width: 50px; max-height: 50px"
+                />
+              </v-col>
+              <v-col cols="auto" v-else>
+                <v-img
+                  src="../../../assets/userKingdom/default_image_profile.svg"
+                  alt="Card image"
+                  class="rounded-full ml-3 image-cropper"
+                  style="max-width: 50px; max-height: 50px"
+                />
+              </v-col>
+              <!-- col name -->
+              <v-col cols="12" sm="10" class="d-flex align-center pa-3">
+                <v-row dense>
+                  <v-col cols="4"
+                    >{{
+                      !profile.parent.parentFirstnameTh
+                        ? "-"
+                        : profile.parent.parentFirstnameTh
+                    }}
+                  </v-col>
+                  <v-col cols="4">
+                    {{
+                      !profile.parent.parentLastnameTh
+                        ? "-"
+                        : profile.parent.parentLastnameTh
+                    }}</v-col
+                  >
+                  <v-col class="text-slate-400">{{
+                    !profile.parent.parentTel ? "-" : profile.parent.parentTel
+                  }}</v-col>
+                  <!-- col arrow -->
+                  <v-col cols="auto">
+                    <span class="mdi mdi-chevron-right"></span>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-card>
+        </div>
+      </div>
+
+      <!-- ROLE ALL ทั่วไป -->
+      <div class="mb-3">
+        <div class="mt-8">
+          <label-custom text="ทั่วไป"></label-custom>
+        </div>
+        <v-divider class=""></v-divider>
+        <!-- password -->
+        <v-row dense class="mt-3" @click="show_password()">
+          <v-col cols="2" sm="1">
+            <img src="@/assets/profile/password.png" />
+          </v-col>
+          <v-col cols="8" sm="9" align="left" class="mt-1">
+            <label>รหัสผ่าน</label>
+          </v-col>
+
+          <v-col cols="2" sm="2" align="right">
+            <span class="mdi mdi-chevron-right"></span>
+          </v-col>
+        </v-row>
+        <!-- translate -->
+        <!-- <v-row
         dense
         class="mt-3"
         @click="$router.push({ name: 'ProfileLanguages' })"
       > -->
-      <v-row dense class="mt-3">
+        <v-row dense class="mt-3">
+          <v-col cols="2" sm="1">
+            <img src="@/assets/profile/langueges.png" />
+          </v-col>
+          <v-col cols="8" sm="9" align="left" class="mt-1">
+            <label>ภาษา</label>
+          </v-col>
+
+          <v-col cols="2" sm="2" align="right">
+            <span class="mdi mdi-chevron-right"></span>
+          </v-col>
+        </v-row>
+      </div>
+      <!-- ROLE PARENT ข้อมูลนักเรียนในความดูแล-->
+      <div v-if="data_local.roles.includes('R_4')">
+        <v-row class="mb-1">
+          <v-col align="start" class="d-flex align-center">
+            <label-custom text="ข้อมูลนักเรียนในความดูแล"></label-custom>
+          </v-col>
+        </v-row>
+        <v-divider class="mb-3"></v-divider>
+        <div v-if="profile_user.length >= 1">
+          <v-card
+            v-for="(profile, index) in profile_user"
+            :key="`${index}-profile`"
+            class="mb-5 cursor-pointer"
+            @click="openDialogStudent(profile.student)"
+          >
+            <!-- <pre>{{ profile }}</pre> -->
+
+            <v-row dense class="my-5">
+              <!-- col avatar -->
+              <v-col cols="12" sm="2" class="webkit-center">
+                <div v-if="profile.student.studentImage !== ''">
+                  <img
+                    :src="profile.student.studentImage"
+                    alt="Card image"
+                    class="rounded-full image-cropper ml-3"
+                    style="max-width: 50px; max-height: 50px"
+                  />
+                </div>
+                <div v-else>
+                  <img
+                    src="../../../assets/userKingdom/default_image_profile.svg"
+                    alt="Card image"
+                    class="rounded-full image-cropper ml-3"
+                    style="max-width: 50px; max-height: 50px"
+                  />
+                </div>
+              </v-col>
+
+              <v-col cols="12" sm="10" class="d-flex align-center pa-3">
+                <v-row dense>
+                  <v-col cols="4">
+                    {{
+                      !profile.student.studentFirstnameTh
+                        ? "-"
+                        : profile.student.studentFirstnameTh
+                    }}
+                  </v-col>
+                  <v-col cols="4">
+                    {{
+                      !profile.student.studentLastnameTh
+                        ? "-"
+                        : profile.student.studentLastnameTh
+                    }}
+                  </v-col>
+                  <v-col class="pink--text">
+                    {{
+                      my_course.filter(
+                        (val) => val.studentId === profile.studentId
+                      ).length
+                    }}
+                    คอร์ส
+                  </v-col>
+
+                  <!-- col arrow -->
+                  <v-col cols="auto">
+                    <span class="mdi mdi-chevron-right"></span>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-card>
+        </div>
+        <div v-else>
+          <v-card flat>
+            <v-card-text
+              class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
+            >
+              <span class="text-lg font-bold">
+                <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                ไม่พบข้อมูลของนักเรียน
+              </span>
+            </v-card-text>
+          </v-card>
+        </div>
+      </div>
+      <!-- ROLE ALL -->
+      <div class="mt-8">
+        <label-custom text="นโยบาย"></label-custom>
+      </div>
+      <v-divider class=""></v-divider>
+
+      <!-- policy -->
+      <v-row dense class="mt-3" @click="show_policy()">
         <v-col cols="2" sm="1">
-          <img src="@/assets/profile/langueges.png" />
+          <img src="@/assets/profile/policy.png" />
         </v-col>
         <v-col cols="8" sm="9" align="left" class="mt-1">
-          <label>ภาษา</label>
+          <label>นโยบายการคุ้มครองข้อมูลส่วนบุคลล</label>
         </v-col>
 
         <v-col cols="2" sm="2" align="right">
           <span class="mdi mdi-chevron-right"></span>
         </v-col>
       </v-row>
-    </div>
-    <!-- ROLE PARENT ข้อมูลนักเรียนในความดูแล-->
-    <div v-if="data_local.roles.includes('R_4')">
-      <v-row class="mb-1">
-        <v-col align="start" class="d-flex align-center">
-          <label-custom text="ข้อมูลนักเรียนในความดูแล"></label-custom>
+      <!-- rules -->
+      <v-row dense class="mt-3" @click="show_rules()">
+        <v-col cols="2" sm="1">
+          <img src="@/assets/profile/rules.png" />
+        </v-col>
+        <v-col cols="8" sm="9" align="left" class="mt-1">
+          <label>ข้อกำหนดการและเงื่อนไขการใช้บริการ</label>
+        </v-col>
+
+        <v-col cols="2" sm="2" align="right">
+          <span class="mdi mdi-chevron-right"></span>
         </v-col>
       </v-row>
-      <v-divider class="mb-3"></v-divider>
-      <div v-if="profile_user.length >= 1">
-        <v-card
-          v-for="(profile, index) in profile_user"
-          :key="`${index}-profile`"
-          class="mb-5 cursor-pointer"
-          @click="openDialogStudent(profile.student)"
-        >
-          <!-- <pre>{{ profile }}</pre> -->
+      <div class="text-center my-5">
+        <v-btn outlined color="pink" @click="logOut"> ออกจากระบบ </v-btn>
+      </div>
 
-          <v-row dense class="my-5">
-            <!-- col avatar -->
-            <v-col cols="12" sm="2" class="webkit-center">
-              <div v-if="profile.student.studentImage !== ''">
-                <img
-                  :src="profile.student.studentImage"
-                  alt="Card image"
-                  class="rounded-full image-cropper ml-3"
-                  style="max-width: 50px; max-height: 50px"
+      <!-- PARENT DIALOG  -->
+      <v-dialog
+        v-if="dialog_show"
+        class="pa-2"
+        :width="!MobileSize ? `60vw` : ``"
+        v-model="dialog_show"
+        persistent
+      >
+        <v-card>
+          <v-card-title>
+            <v-row>
+              <v-col cols="6" align="left"> ข้อมูลผู้ปกครอง </v-col>
+              <v-col cols="6" align="right">
+                <v-btn icon @click="closeDialog">
+                  <v-icon color="#ff6b81">mdi-close</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-title>
+          <v-card-text>
+            <div class="profileCard my-5 center">
+              <v-img
+                src="@/assets/userManagePage/imgcardafterupload.png"
+                class="iconInCard drop-shadow-md"
+              >
+              </v-img>
+              <div style="position: absolute">
+                <div v-if="getParentData.parentImage != ''">
+                  <v-img :src="getParentData.parentImage" class="image-cropper">
+                  </v-img>
+                </div>
+                <div v-else>
+                  <v-img
+                    src="../../../assets/userKingdom/default_image_profile.svg"
+                    class="image-cropper"
+                    style="width: 190px; height: 190px"
+                  >
+                  </v-img>
+                </div>
+              </div>
+            </div>
+            <v-row dense>
+              <!--TH NAME -->
+              <v-col cols="12" sm="6">
+                <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
+                <br />
+                {{
+                  !getParentData.parentFirstnameTh
+                    ? "-"
+                    : getParentData.parentFirstnameTh
+                }}
+              </v-col>
+              <!-- TH LNAME -->
+              <v-col cols="12" sm="6">
+                <label-custom text="นามสกุล (ภาษาไทย)"></label-custom>
+                <br />
+                {{
+                  !getParentData.parentLastnameTh
+                    ? "-"
+                    : getParentData.parentLastnameTh
+                }}
+              </v-col>
+              <!-- nationality -->
+              <v-col cols="12" sm="6">
+                <label-custom text="สัญชาติ"></label-custom>
+                <br />
+                {{
+                  !getParentData.parentNation ? "-" : getParentData.parentNation
+                }}
+                <!-- {{ getParentData.parentNation == null ? '-' : getParentData.parentNation}} -->
+              </v-col>
+              <!-- tel -->
+              <v-col cols="12" sm="6">
+                <label-custom text="เบอร์โทรศัพท์"></label-custom>
+                <br />
+                {{ !getParentData.parentTel ? "-" : getParentData.parentTel }}
+              </v-col>
+              <!-- email -->
+              <v-col cols="12" sm="6">
+                <label-custom text="อีเมล"></label-custom>
+                <br />
+                {{
+                  !getParentData.parentEmail ? "-" : getParentData.parentEmail
+                }}
+                <!-- {{ getParentData.parentTel== ''? '-' : getParentData.parentTel}} -->
+              </v-col>
+            </v-row>
+            <v-row dense>
+              <!-- v-if="profile_user.length >= 1" -->
+
+              <v-col align="center">
+                <v-btn
+                  class="white--text"
+                  color="#FF6B81"
+                  @click="removeRelation(getParentData)"
+                >
+                  ลบข้อมูลผู้ปกครอง
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <!-- <dialogCard text="แก้ไขอาณาจักรเรียบร้อย"></dialogCard> -->
+          <div class="my-5 text-center"></div>
+        </v-card>
+      </v-dialog>
+      <!-- STUDENT DIALOG  -->
+      <v-dialog
+        v-if="show_student_data"
+        class="pa-2"
+        :width="!MobileSize ? `60vw` : ``"
+        v-model="show_student_data"
+        persistent
+      >
+        <!-- <pre>{{dialogGetStudentData}}</pre> -->
+        <v-card>
+          <v-card-title>
+            <v-row>
+              <v-col cols="6" align="left"> ข้อมูลนักเรียน </v-col>
+              <v-col cols="6" align="right">
+                <v-btn icon @click="closeDialog">
+                  <v-icon color="#ff6b81">mdi-close</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-title>
+          <v-card-text>
+            <v-row
+              style="text-align: -webkit-center"
+              class="justify-center my-5"
+            >
+              <div class="cicle">
+                <v-img
+                  class="image-cropper"
+                  :src="
+                    dialogGetStudentData.studentImage !== ''
+                      ? dialogGetStudentData.studentImage
+                      : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEpKC_pI1Y_lmnOSDilaMdTDvWbDicz53xGA&usqp=CAU`
+                  "
                 />
               </div>
-              <div v-else>
-                <img
-                  src="../../../assets/userKingdom/default_image_profile.svg"
-                  alt="Card image"
-                  class="rounded-full image-cropper ml-3"
-                  style="max-width: 50px; max-height: 50px"
-                />
-              </div>
-            </v-col>
+            </v-row>
 
-            <v-col cols="12" sm="10" class="d-flex align-center pa-3">
-              <v-row dense>
-                <v-col cols="4">
-                  {{
-                    !profile.student.studentFirstnameTh
-                      ? "-"
-                      : profile.student.studentFirstnameTh
-                  }}
-                </v-col>
-                <v-col cols="4">
-                  {{
-                    !profile.student.studentLastnameTh
-                      ? "-"
-                      : profile.student.studentLastnameTh
-                  }}
-                </v-col>
-                <v-col class="pink--text">
-                  {{
+            <v-row dense>
+              <!--TH NAME -->
+              <v-col cols="12" sm="6">
+                <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
+                <br />
+                {{
+                  !dialogGetStudentData.studentFirstnameTh
+                    ? "-"
+                    : dialogGetStudentData.studentFirstnameTh
+                }}
+              </v-col>
+              <!-- TH LNAME -->
+              <v-col cols="12" sm="6">
+                <label-custom text="นามสกุล (ภาษาไทย)"></label-custom>
+                <br />
+                {{
+                  !dialogGetStudentData.studentLastnameTh
+                    ? "-"
+                    : dialogGetStudentData.studentLastnameTh
+                }}
+              </v-col>
+              <!-- nationality -->
+              <v-col cols="12" sm="6">
+                <label-custom text="สัญชาติ"></label-custom>
+                <br />
+                {{
+                  !dialogGetStudentData.studentNation
+                    ? "-"
+                    : dialogGetStudentData.studentNation
+                }}
+              </v-col>
+              <!-- tel -->
+              <v-col cols="12" sm="6">
+                <label-custom text="เบอร์โทรศัพท์"></label-custom>
+                <br />
+                {{
+                  !dialogGetStudentData.studentTel
+                    ? "-"
+                    : dialogGetStudentData.studentTel
+                }}
+              </v-col>
+              <!-- email -->
+              <v-col cols="12" sm="6">
+                <label-custom text="อีเมล"></label-custom>
+                <br />
+                {{
+                  !dialogGetStudentData.studentEmail
+                    ? "-"
+                    : dialogGetStudentData.studentEmail
+                }}
+              </v-col>
+            </v-row>
+
+            <div class="mt-8">
+              <label-custom text="คอร์สเรียน"></label-custom>
+            </div>
+            <v-divider class=""></v-divider>
+
+            <!-- COURSE -->
+            <!-- @click="$router.push({ name: 'StudentsSchedule' })" -->
+
+            <v-row
+              dense
+              class="mt-3 cursor-pointer"
+              @click="myCourseStudent(dialogGetStudentData.studentId)"
+            >
+              <v-col cols="2" sm="1">
+                <img src="../../../assets/profile/cource.png" />
+              </v-col>
+              <v-col cols="5" sm="6" align="left" class="mt-1">
+                <label>คอร์สเรียนของนักเรียน</label>
+              </v-col>
+              <v-col cols="3" sm="4" align="right" class="mt-1">
+                <label class="pink--text"
+                  >{{
                     my_course.filter(
-                      (val) => val.studentId === profile.studentId
+                      (val) => val.studentId === dialogGetStudentData.studentId
                     ).length
                   }}
-                  คอร์ส
-                </v-col>
-
-                <!-- col arrow -->
-                <v-col cols="auto">
-                  <span class="mdi mdi-chevron-right"></span>
-                </v-col>
-              </v-row>
-            </v-col>
-          </v-row>
-        </v-card>
-      </div>
-      <div v-else>
-        <v-card flat>
-          <v-card-text
-            class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
-          >
-            <span class="text-lg font-bold">
-              <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-              ไม่พบข้อมูลของนักเรียน
-            </span>
-          </v-card-text>
-        </v-card>
-      </div>
-    </div>
-    <!-- ROLE ALL -->
-    <div class="mt-8">
-      <label-custom text="นโยบาย"></label-custom>
-    </div>
-    <v-divider class=""></v-divider>
-
-    <!-- policy -->
-    <v-row dense class="mt-3" @click="show_policy()">
-      <v-col cols="2" sm="1">
-        <img src="@/assets/profile/policy.png" />
-      </v-col>
-      <v-col cols="8" sm="9" align="left" class="mt-1">
-        <label>นโยบายการคุ้มครองข้อมูลส่วนบุคลล</label>
-      </v-col>
-
-      <v-col cols="2" sm="2" align="right">
-        <span class="mdi mdi-chevron-right"></span>
-      </v-col>
-    </v-row>
-    <!-- rules -->
-    <v-row dense class="mt-3" @click="show_rules()">
-      <v-col cols="2" sm="1">
-        <img src="@/assets/profile/rules.png" />
-      </v-col>
-      <v-col cols="8" sm="9" align="left" class="mt-1">
-        <label>ข้อกำหนดการและเงื่อนไขการใช้บริการ</label>
-      </v-col>
-
-      <v-col cols="2" sm="2" align="right">
-        <span class="mdi mdi-chevron-right"></span>
-      </v-col>
-    </v-row>
-    <div class="text-center my-5">
-      <v-btn outlined color="pink" @click="logOut"> ออกจากระบบ </v-btn>
-    </div>
-
-    <!-- PARENT DIALOG  -->
-    <v-dialog
-      v-if="dialog_show"
-      class="pa-2"
-      :width="!MobileSize ? `60vw` : ``"
-      v-model="dialog_show"
-      persistent
-    >
-      <v-card>
-        <v-card-title>
-          <v-row>
-            <v-col cols="6" align="left"> ข้อมูลผู้ปกครอง </v-col>
-            <v-col cols="6" align="right">
-              <v-btn icon @click="closeDialog">
-                <v-icon color="#ff6b81">mdi-close</v-icon>
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-card-title>
-        <v-card-text>
-          <div class="profileCard my-5 center">
-            <v-img
-              src="@/assets/userManagePage/imgcardafterupload.png"
-              class="iconInCard drop-shadow-md"
-            >
-            </v-img>
-            <div style="position: absolute">
-              <div v-if="getParentData.parentImage != ''">
-                <v-img :src="getParentData.parentImage" class="image-cropper">
-                </v-img>
-              </div>
-              <div v-else>
-                <v-img
-                  src="../../../assets/userKingdom/default_image_profile.svg"
-                  class="image-cropper"
-                  style="width: 190px; height: 190px"
+                  คอร์ส</label
                 >
-                </v-img>
-              </div>
-            </div>
-          </div>
-          <v-row dense>
-            <!--TH NAME -->
-            <v-col cols="12" sm="6">
-              <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
-              <br />
-              {{
-                !getParentData.parentFirstnameTh
-                  ? "-"
-                  : getParentData.parentFirstnameTh
-              }}
-            </v-col>
-            <!-- TH LNAME -->
-            <v-col cols="12" sm="6">
-              <label-custom text="นามสกุล (ภาษาไทย)"></label-custom>
-              <br />
-              {{
-                !getParentData.parentLastnameTh
-                  ? "-"
-                  : getParentData.parentLastnameTh
-              }}
-            </v-col>
-            <!-- nationality -->
-            <v-col cols="12" sm="6">
-              <label-custom text="สัญชาติ"></label-custom>
-              <br />
-              ยังไม่มีข้อมูล
-              <!-- {{ getParentData.parentNation == null ? '-' : getParentData.parentNation}} -->
-            </v-col>
-            <!-- tel -->
-            <v-col cols="12" sm="6">
-              <label-custom text="เบอร์โทรศัพท์"></label-custom>
-              <br />
-              {{ !getParentData.parentTel ? "-" : getParentData.parentTel }}
-            </v-col>
-            <!-- email -->
-            <v-col cols="12" sm="6">
-              <label-custom text="อีเมล"></label-custom>
-              <br />
-              ยังไม่มีข้อมูล
-              <!-- {{ getParentData.parentTel== ''? '-' : getParentData.parentTel}} -->
-            </v-col>
-          </v-row>
-          <v-row dense>
-            <!-- v-if="profile_user.length >= 1" -->
+              </v-col>
+              <v-col cols="2" sm="1" align="right" class="mt2">
+                <span class="mdi mdi-chevron-right"></span>
+              </v-col>
+            </v-row>
 
-            <v-col align="center">
-              <v-btn
-                class="white--text"
-                color="#FF6B81"
-                @click="removeRelation(getParentData)"
-              >
-                ลบข้อมูลผู้ปกครอง
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-card-text>
-        <!-- <dialogCard text="แก้ไขอาณาจักรเรียบร้อย"></dialogCard> -->
-        <div class="my-5 text-center"></div>
-      </v-card>
-    </v-dialog>
-    <!-- STUDENT DIALOG  -->
-    <v-dialog
-      v-if="show_student_data"
-      class="pa-2"
-      :width="!MobileSize ? `60vw` : ``"
-      v-model="show_student_data"
-      persistent
-    >
-      <!-- <pre>{{dialogGetStudentData}}</pre> -->
-      <v-card>
-        <v-card-title>
-          <v-row>
-            <v-col cols="6" align="left"> ข้อมูลนักเรียน </v-col>
-            <v-col cols="6" align="right">
-              <v-btn icon @click="closeDialog">
-                <v-icon color="#ff6b81">mdi-close</v-icon>
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-card-title>
-        <v-card-text>
-          <v-row style="text-align: -webkit-center" class="justify-center my-5">
-            <div class="cicle">
-              <v-img
-                class="image-cropper"
-                :src="
-                  dialogGetStudentData.studentImage !== ''
-                    ? dialogGetStudentData.studentImage
-                    : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEpKC_pI1Y_lmnOSDilaMdTDvWbDicz53xGA&usqp=CAU`
-                "
-              />
-            </div>
-          </v-row>
+            <!-- CERTIFICATE -->
+            <v-row
+              dense
+              class="mt-3 cursor-pointer"
+              @click="show_certificate()"
+            >
+              <v-col cols="2" sm="1">
+                <img src="../../../assets/profile/certificate.png" />
+              </v-col>
+              <v-col cols="5" sm="6" align="left" class="mt-1">
+                <label>การแข่งขันและเกียรติบัตร</label>
+              </v-col>
+              <v-col cols="3" sm="4" align="right" class="mt-1">
+                <label class="pink--text">2 การแข่ง</label>
+              </v-col>
+              <v-col cols="2" sm="1" align="right" class="mt-2">
+                <span class="mdi mdi-chevron-right"></span>
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <!-- <dialogCard text="แก้ไขอาณาจักรเรียบร้อย"></dialogCard> -->
+          <div class="my-5 text-center"></div>
+        </v-card>
+      </v-dialog>
 
-          <v-row dense>
-            <!--TH NAME -->
-            <v-col cols="12" sm="6">
-              <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
-              <br />
-              {{
-                !dialogGetStudentData.studentFirstnameTh
-                  ? "-"
-                  : dialogGetStudentData.studentFirstnameTh
-              }}
-            </v-col>
-            <!-- TH LNAME -->
-            <v-col cols="12" sm="6">
-              <label-custom text="นามสกุล (ภาษาไทย)"></label-custom>
-              <br />
-              {{
-                !dialogGetStudentData.studentLastnameTh
-                  ? "-"
-                  : dialogGetStudentData.studentLastnameTh
-              }}
-            </v-col>
-            <!-- nationality -->
-            <v-col cols="12" sm="6">
-              <label-custom text="สัญชาติ"></label-custom>
-              <br />
-              {{
-                !dialogGetStudentData.studentNation
-                  ? "-"
-                  : dialogGetStudentData.studentNation
-              }}
-            </v-col>
-            <!-- tel -->
-            <v-col cols="12" sm="6">
-              <label-custom text="เบอร์โทรศัพท์"></label-custom>
-              <br />
-              {{
-                !dialogGetStudentData.studentTel
-                  ? "-"
-                  : dialogGetStudentData.studentTel
-              }}
-            </v-col>
-            <!-- email -->
-            <v-col cols="12" sm="6">
-              <label-custom text="อีเมล"></label-custom>
-              <br />
-              {{
-                !dialogGetStudentData.studentEmail
-                  ? "-"
-                  : dialogGetStudentData.studentEmail
-              }}
-            </v-col>
-          </v-row>
-
-          <div class="mt-8">
-            <label-custom text="คอร์สเรียน"></label-custom>
-          </div>
-          <v-divider class=""></v-divider>
-
-          <!-- COURSE -->
-          <!-- @click="$router.push({ name: 'StudentsSchedule' })" -->
-
-          <v-row
-            dense
-            class="mt-3 cursor-pointer"
-            @click="myCourseStudent(dialogGetStudentData.studentId)"
+      <!-- CHECK USER PARENT DIALOG-->
+      <v-dialog v-model="add_parent" width="50vw" class="d-flex align-center">
+        <v-card class="pa-2" width="50vw">
+          <header-card
+            icon="mdi-card-account-details-outline"
+            icon_color="#ff6b81"
+            title="ผู้ปกครอง"
           >
-            <v-col cols="2" sm="1">
-              <img src="../../../assets/profile/cource.png" />
-            </v-col>
-            <v-col cols="5" sm="6" align="left" class="mt-1">
-              <label>คอร์สเรียนของนักเรียน</label>
-            </v-col>
-            <v-col cols="3" sm="4" align="right" class="mt-1">
-              <label class="pink--text"
-                >{{
-                  my_course.filter(
-                    (val) => val.studentId === dialogGetStudentData.studentId
-                  ).length
-                }}
-                คอร์ส</label
+            <template #actions>
+              <v-btn icon @click="closeDialog"
+                ><v-icon>mdi-close</v-icon></v-btn
               >
-            </v-col>
-            <v-col cols="2" sm="1" align="right" class="mt2">
-              <span class="mdi mdi-chevron-right"></span>
-            </v-col>
-          </v-row>
-
-          <!-- CERTIFICATE -->
-          <v-row dense class="mt-3 cursor-pointer" @click="show_certificate()">
-            <v-col cols="2" sm="1">
-              <img src="../../../assets/profile/certificate.png" />
-            </v-col>
-            <v-col cols="5" sm="6" align="left" class="mt-1">
-              <label>การแข่งขันและเกียรติบัตร</label>
-            </v-col>
-            <v-col cols="3" sm="4" align="right" class="mt-1">
-              <label class="pink--text">2 การแข่ง</label>
-            </v-col>
-            <v-col cols="2" sm="1" align="right" class="mt-2">
-              <span class="mdi mdi-chevron-right"></span>
-            </v-col>
-          </v-row>
-        </v-card-text>
-        <!-- <dialogCard text="แก้ไขอาณาจักรเรียบร้อย"></dialogCard> -->
-        <div class="my-5 text-center"></div>
-      </v-card>
-    </v-dialog>
-
-    <!-- CHECK USER PARENT DIALOG-->
-    <v-dialog v-model="add_parent" width="50vw" class="d-flex align-center">
-      <v-card class="pa-2" width="50vw">
-        <header-card
-          icon="mdi-card-account-details-outline"
-          icon_color="#ff6b81"
-          title="ผู้ปกครอง"
-        >
-          <template #actions>
-            <v-btn icon @click="closeDialog"><v-icon>mdi-close</v-icon></v-btn>
-          </template>
-        </header-card>
-        <v-card-text class="pb-2">
-          <v-row dense>
-            <v-col cols="9">
-              <labelCustom text="Username"></labelCustom>
-              <!-- :hide-details="!parent.account_id" -->
-              <v-text-field
-                :rules="rules.usernameRules"
-                ref="username"
-                dense
-                outlined
-                v-model="parent.username"
-                @change="checkUsername(parent.username)"
-                @keyup.enter="checkUsername(parent.username)"
-                @blur="checkUsername(parent.username)"
-                placeholder="Username"
-              >
-                <template v-slot:append>
-                  <v-icon v-if="parent.account_id" color="green"
-                    >mdi-checkbox-marked-circle-outline</v-icon
+            </template>
+          </header-card>
+          <v-card-text class="pb-2">
+            <v-row dense>
+              <v-col cols="9">
+                <labelCustom text="Username"></labelCustom>
+                <!-- :hide-details="!parent.account_id" -->
+                <v-text-field
+                  :rules="rules.usernameRules"
+                  @keypress="validate($event, 'en')"
+                  ref="username"
+                  dense
+                  outlined
+                  v-model="parent.username"
+                  @change="checkUsername(parent.username)"
+                  @keyup.enter="checkUsername(parent.username)"
+                  @blur="checkUsername(parent.username)"
+                  placeholder="Username"
+                >
+                  <template v-slot:append>
+                    <v-icon v-if="parent.account_id" color="green"
+                      >mdi-checkbox-marked-circle-outline</v-icon
+                    >
+                  </template>
+                </v-text-field>
+                <template v-if="!parent.account_id">
+                  <label> หากยังไม่มีบัญชีผู้ใช้กรุณา </label>
+                  <label
+                    class="text-[#ff6b81] underline cursor-pointer mt-5"
+                    @click="registerParent"
+                    >สมัคร One ID</label
                   >
                 </template>
-              </v-text-field>
-              <template v-if="!parent.account_id">
-                <label> หากยังไม่มีบัญชีผู้ใช้กรุณา </label>
-                <label
-                  class="text-[#ff6b81] underline cursor-pointer mt-5"
-                  @click="registerParent"
-                  >สมัคร One ID</label
+              </v-col>
+              <v-col cols="auto">
+                <br />
+                <v-btn
+                  :loading="is_loading"
+                  color="#ff6b81"
+                  @click="checkUsername(parent.username)"
+                  depressed
+                  dark
+                  >ตกลง</v-btn
                 >
-              </template>
-            </v-col>
-            <v-col cols="auto">
-              <br />
-              <v-btn
-                :loading="is_loading"
-                color="#ff6b81"
-                @click="checkUsername(parent.username)"
-                depressed
-                dark
-                >ตกลง</v-btn
-              >
-            </v-col>
-          </v-row>
-          <template>
-            <v-row dense>
-              <v-col cols="12">
-                <!-- :disabled="user_data.length > 0"
+              </v-col>
+            </v-row>
+            <template>
+              <v-row dense>
+                <v-col cols="12">
+                  <!-- :disabled="user_data.length > 0"
 :disabled="user_data.length > 0"
 :disabled="user_data.length > 0" -->
-                <labelCustom text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
-                <v-text-field
-                  disabled
-                  dense
-                  outlined
-                  v-model="parent.firstname_en"
-                  placeholder="ชื่อภาษาอังกฤษ"
-                ></v-text-field>
-              </v-col>
-            </v-row>
+                  <labelCustom text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
+                  <v-text-field
+                    disabled
+                    dense
+                    outlined
+                    v-model="parent.firstname_en"
+                    placeholder="ชื่อภาษาอังกฤษ"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row dense>
+                <v-col cols="12">
+                  <labelCustom text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
+                  <v-text-field
+                    disabled
+                    dense
+                    outlined
+                    v-model="parent.lastname_en"
+                    placeholder="นามสกุลภาษาอังกฤษ"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row dense>
+                <v-col cols="12">
+                  <labelCustom text="เบอร์โทรศัพท์"></labelCustom>
+                  <v-text-field
+                    disabled
+                    dense
+                    outlined
+                    v-model="parent.tel"
+                    placeholder="เบอร์โทรศัพท์"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </template>
+          </v-card-text>
+          <v-card-actions class="px-6">
             <v-row dense>
-              <v-col cols="12">
-                <labelCustom text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
-                <v-text-field
-                  disabled
-                  dense
+              <v-col>
+                <v-btn
+                  @click="closeDialog"
+                  class="w-full"
+                  color="#ff6b81"
                   outlined
-                  v-model="parent.lastname_en"
-                  placeholder="นามสกุลภาษาอังกฤษ"
-                ></v-text-field>
+                  >ยกเลิก</v-btn
+                >
+              </v-col>
+              <v-col>
+                <v-btn
+                  :color="parent.username.length < 1 ? '#CCCCCC' : '#ff6b81'"
+                  class="w-full"
+                  dark
+                  :disabled="!valid"
+                  depressed
+                  @click="addParent"
+                  >บันทึก</v-btn
+                >
               </v-col>
             </v-row>
-            <v-row dense>
-              <v-col cols="12">
-                <labelCustom text="เบอร์โทรศัพท์"></labelCustom>
-                <v-text-field
-                  disabled
-                  dense
-                  outlined
-                  v-model="parent.tel"
-                  placeholder="เบอร์โทรศัพท์"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-          </template>
-        </v-card-text>
-        <v-card-actions class="px-6">
-          <v-row dense>
-            <v-col>
-              <v-btn
-                @click="closeDialog"
-                class="w-full"
-                color="#ff6b81"
-                outlined
-                >ยกเลิก</v-btn
-              >
-            </v-col>
-            <v-col>
-              <v-btn
-                :color="parent.username.length < 1 ? '#CCCCCC' : '#ff6b81'"
-                class="w-full"
-                dark
-                depressed
-                @click="addParent"
-                >บันทึก</v-btn
-              >
-            </v-col>
-          </v-row>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    <!-- DIALOG::REGISTER -->
-    <v-dialog
-      persistent
-      v-if="show_dialog_register_one_id"
-      v-model="show_dialog_register_one_id"
-      :width="!MobileSize ? `60vw` : ``"
-    >
-      <registerDialogForm
-        dialog
-        title="สมัคร One ID"
-        :state="register_type"
-      ></registerDialogForm>
-    </v-dialog>
-  </v-container>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <!-- DIALOG::REGISTER -->
+      <v-dialog
+        persistent
+        v-if="show_dialog_register_one_id"
+        v-model="show_dialog_register_one_id"
+        :width="!MobileSize ? `60vw` : ``"
+      >
+        <registerDialogForm
+          dialog
+          title="สมัคร One ID"
+          :state="register_type"
+        ></registerDialogForm>
+      </v-dialog>
+    </v-container>
+  </v-form>
 </template>
 
 <script>
@@ -719,6 +740,8 @@ import headerCard from "@/components/header/headerCard.vue";
 import VueCookie from "vue-cookie";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { inputValidation } from "@/functions/functions";
+
 export default {
   components: {
     labelCustom,
@@ -735,6 +758,8 @@ export default {
     show_student_data: false,
     add_parent: false,
     edit_parent: false,
+    valid: true,
+
     set_parent_id: "",
     item_data: "",
     parent: {
@@ -873,6 +898,10 @@ export default {
       // Access the data in your component
       const studentData = this.$store.state.studentData;
       console.log(studentData);
+    },
+
+    validate(e, type) {
+      inputValidation(e, type);
     },
 
     show_detail() {
@@ -1079,67 +1108,69 @@ export default {
     },
 
     addParent() {
-      Swal.fire({
-        icon: "question",
-        title: "คุณต้องการเพิ่มผู้ปกครองหรือไม่",
-        showDenyButton: false,
-        showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            let config = {
-              headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Content-type": "Application/json",
-                Authorization: `Bearer ${VueCookie.get("token")}`,
-              },
-            };
-            this.user_login = JSON.parse(localStorage.getItem("userDetail"));
+      if (this.$refs.form.validate()) {
+        Swal.fire({
+          icon: "question",
+          title: "คุณต้องการเพิ่มผู้ปกครองหรือไม่",
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: "ตกลง",
+          cancelButtonText: "ยกเลิก",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+              let config = {
+                headers: {
+                  "Access-Control-Allow-Origin": "*",
+                  "Content-type": "Application/json",
+                  Authorization: `Bearer ${VueCookie.get("token")}`,
+                },
+              };
+              this.user_login = JSON.parse(localStorage.getItem("userDetail"));
 
-            console.log("object", this.user_data);
-            for (const data of this.user_data) {
-              console.log("data", data);
-              this.set_parent_id = data.userOneId;
-              console.log("userOneId", this.set_parent_id);
-            }
-            let payload = {
-              studentId: this.user_login.account_id,
-              parentId: this.set_parent_id,
-            };
-            console.log("payload :", payload);
-            let { data } = await axios.post(
-              `${process.env.VUE_APP_URL}/api/v1/relations/user`,
-              payload,
-              config
-            );
-
-            if (data.statusCode === 201) {
-              if (data.data && data.data.message !== "Duplicate relation.") {
-                console.log("succes");
-                this.add_parent = false;
-                this.user_login = JSON.parse(
-                  localStorage.getItem("userDetail")
-                );
-                this.GetAll(this.user_login.account_id);
-              } else {
-                throw { error: data };
+              console.log("object", this.user_data);
+              for (const data of this.user_data) {
+                console.log("data", data);
+                this.set_parent_id = data.userOneId;
+                console.log("userOneId", this.set_parent_id);
               }
-            } else {
-              throw { message: data.message };
+              let payload = {
+                studentId: this.user_login.account_id,
+                parentId: this.set_parent_id,
+              };
+              console.log("payload :", payload);
+              let { data } = await axios.post(
+                `${process.env.VUE_APP_URL}/api/v1/relations/user`,
+                payload,
+                config
+              );
+
+              if (data.statusCode === 201) {
+                if (data.data && data.data.message !== "Duplicate relation.") {
+                  console.log("succes");
+                  this.add_parent = false;
+                  this.user_login = JSON.parse(
+                    localStorage.getItem("userDetail")
+                  );
+                  this.GetAll(this.user_login.account_id);
+                } else {
+                  throw { error: data };
+                }
+              } else {
+                throw { message: data.message };
+              }
+            } catch (error) {
+              console.log(error);
+              Swal.fire({
+                icon: "error",
+                title: "Duplicate relation",
+              });
             }
-          } catch (error) {
-            console.log(error);
-            Swal.fire({
-              icon: "error",
-              title: "Duplicate relation",
-            });
+          } else {
+            Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
           }
-        } else {
-          Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
-        }
-      });
+        });
+      }
     },
 
     myCourseStudent(item) {
