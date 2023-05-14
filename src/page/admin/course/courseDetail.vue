@@ -267,6 +267,25 @@
                 <v-card-text
                   class="border-dashed border-2 border-blue-600 rounded-lg"
                 >
+                  <!-- <v-row v-if="course_data.course_img_privilege">
+                    <v-col align="center" class="rounded-lg pa-0">
+                      <v-img
+                        :src="course_data.course_img_privilege"
+                        contain
+                        style="max-width: 200px"
+                        align="right"
+                      >
+                        <v-btn
+                          v-if="course_edit"
+                          icon
+                          class="bg-[#f00]"
+                          dark
+                          @click="removePrivilegeFileData"
+                          ><v-icon>mdi-close</v-icon></v-btn
+                        >
+                      </v-img>
+                    </v-col>
+                  </v-row> -->
                   <v-row v-if="preview_privilege_url">
                     <v-col align="center" class="rounded-lg pa-0">
                       <v-img
@@ -304,7 +323,7 @@
                       cols="12"
                       class="flex align-center justify-center text-caption"
                     >
-                      ( ขนาดไฟล์งานไม่เกิน 1 Mb ต้องเป็นไฟล์ JPG, PNG )
+                      ( ขนาดไฟล์งานไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
                     </v-col>
                     <v-col cols="12" class="flex align-center justify-center">
                       <v-btn
@@ -399,7 +418,7 @@
                       cols="12"
                       class="flex align-center justify-center text-caption"
                     >
-                      ( ขนาดไฟล์งานไม่เกิน 1 Mb ต้องเป็นไฟล์ JPG, PNG )
+                      ( ขนาดไฟล์งานไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
                     </v-col>
                   </v-row>
                   <v-row dense>
@@ -459,9 +478,9 @@
             <!-- STUDENT LIST -->
             <v-tab-item value="student list">
               <v-tabs v-model="student_tab" color="#ff6b81" class="mb-3">
-                <v-tab value="students in course">นักเรียกในคอร์ส</v-tab>
-                <v-tab value="student booking">นักเรียกจองคิว</v-tab>
-                <v-tab value="student potential">นักเรียกที่จบ</v-tab>
+                <v-tab value="students in course">นักเรียนในคอร์ส</v-tab>
+                <v-tab value="student booking">นักเรียนจองคิว</v-tab>
+                <v-tab value="student potential">นักเรียนที่จบ</v-tab>
               </v-tabs>
               <v-tabs-items v-model="student_tab" class="rounded-lg">
                 <v-tab-item valus="students in course">
@@ -1710,6 +1729,7 @@ export default {
       GetStudentByDate: "CourseModules/GetStudentByDate",
       GetStudentReserveByCourseId: "CourseModules/GetStudentReserveByCourseId",
       GetStudentPotentialByCoach: "CourseModules/GetStudentPotentialByCoach",
+      RemovePrivilageByCourseID  : "CourseModules/RemovePrivilageByCourseID"
     }),
     readFile(file) {
       return `${process.env.VUE_APP_URL}/api/v1/files/${file}`;
@@ -1779,20 +1799,34 @@ export default {
       this.privilege_file = this.$refs.fileInputPrivilege.files[0];
       const allowedTypes = ["image/png", "image/jpeg"];
       if (CheckFileSize(this.privilege_file) === true) {
-        this.course_data.privilege_file =
+        const fileType = this.file.type; 
+        console.log(fileType)
+        if (fileType === 'image/png' || fileType === 'image/jpeg') {
+          this.course_data.privilege_file =
           this.$refs.fileInputPrivilege.files[0];
-        this.ChangeCourseData(this.course_data);
-        if (
-          this.privilege_file &&
-          allowedTypes.includes(this.privilege_file.type)
-        ) {
-          if (!this.privilege_file) return;
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            this.preview_privilege_url = e.target.result;
-          };
-          reader.readAsDataURL(this.privilege_file);
+          this.ChangeCourseData(this.course_data);
+          if (
+            this.privilege_file &&
+            allowedTypes.includes(this.privilege_file.type)
+          ) {
+            if (!this.privilege_file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              this.preview_privilege_url = e.target.result;
+            };
+            reader.readAsDataURL(this.privilege_file);
+          }
+        }else{
+          Swal.fire({
+            icon: "error",
+            title: "อัพโหลดเฉพาะไฟล์รูปภาพ(png, jpeg)เท่านั้น",
+            showDenyButton: false,
+            showCancelButton: false,
+            confirmButtonText: "ตกลง",
+            cancelButtonText: "ยกเลิก",
+          })
         }
+        
       }
     },
     showDialogAssessment(student_data, date) {
@@ -1842,7 +1876,7 @@ export default {
     removeArtworkFileData(data, index) {
       Swal.fire({
         icon: "question",
-        title: "ต้องการลบใช่หรือไม่",
+        title: "ต้องการลบไฟล์นี้ใช่หรือไม่",
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: "ตกลง",
@@ -1856,6 +1890,21 @@ export default {
     },
     removePrivilegeFile() {
       this.preview_privilege_url = null;
+    },
+    removePrivilegeFileData(){
+      Swal.fire({
+        icon: "question",
+        title: "ต้องการลบไฟล์นี้ใช่หรือไม่",
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: "ตกลง",
+        cancelButtonText: "ยกเลิก",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          this.RemovePrivilageByCourseID({ course_id: this.$route.params.course_id });
+          this.preview_privilege_url = null;
+        }
+      });
     },
     addPackage(data) {
       data.push({
@@ -1976,8 +2025,9 @@ export default {
                 course_id: this.$route.params.course_id,
               });
               this.course_edit = false;
+              this.preview_privilege_url = this.course_data.course_img_privilege;
             },200)
-            await this.GetCourse(this.$route.params.course_id);
+            await this.GetCourse(this.$route.params.course_id)
           });
 
         }
