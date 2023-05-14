@@ -1,3 +1,7 @@
+// STUDENT COURSE
+
+
+
 <template>
   <v-container>
     <loading-overlay :loading="course_list_is_loading"></loading-overlay>
@@ -144,14 +148,13 @@
       <div v-for="(item_data, index) in my_course_detail.checkIn" :key="index">
         <v-card class="pa-2" v-if="item_data.potential !== null">
           <v-row>
-            <v-col cols="2" sm="1">
+            <v-col cols="2" sm="1" align="center">
               <img src="../../../assets/student_course/certificates.png" />
             </v-col>
             <v-col class="text-lg font-bold" cols="6">ผลประเมินศักยาภาพ</v-col>
-            <v-col cols="auto" align="end">
-              <v-card flat align="end">
+            <v-col cols="4" align="end">
+              <v-card flat>
                 <v-card-text
-                  align="end"
                   class="pa-1 rounded-xl text-center"
                   :class="`text-[${
                     check_in_status_options.filter(
@@ -187,20 +190,19 @@
 
           <v-card color="#FBF3F5" class="my-2 mx-5">
             <v-row dense>
-              <v-col cols="12" sm="6" align="start">
-                <v-card-text
-                  :class="`text-[${
+              <v-col cols="auto" align="start">
+                <!-- :class="`text-[${
                     evolution_options.filter(
                       (v) => v.value === item_data.assessment.evolution
                     )[0]
-                  }]`"
-                >
-                  พัฒนาการ:
+                  }]`" -->
+                <v-card-text>
+                  <b>พัฒนาการ:</b>
                   <span
                     :class="`text-[${
                       evolution_options.filter(
                         (v) => v.value === item_data.assessment.evolution
-                      )[0]
+                      )[0].color
                     }]`"
                   >
                     {{
@@ -215,20 +217,19 @@
                   </span>
                 </v-card-text>
               </v-col>
-              <v-col cols="12" sm="6" align="start">
-                <v-card-text
-                  :class="`text-[${
+              <v-col cols="auto" align="start">
+                <!-- :class="`text-[${
                     interest_options.filter(
                       (v) => v.value === item_data.assessment.interest
                     )[0]
-                  }]`"
-                >
-                  ความสนใจ:
+                  }]`" -->
+                <v-card-text>
+                  <b>ความสนใจ:</b>
                   <span
                     :class="`text-[${
                       interest_options.filter(
                         (v) => v.value === item_data.assessment.interest
-                      )[0]
+                      )[0].color
                     }]`"
                   >
                     {{
@@ -243,7 +244,7 @@
                   </span>
                 </v-card-text>
               </v-col>
-              <v-col align="start">
+              <v-col align="start" cols="12">
                 <v-card-text
                   :class="`text-[${
                     interest_options.filter(
@@ -251,11 +252,59 @@
                     )[0]
                   }]`"
                 >
-                  ความคิดเห็นจากโค้ช:
+                  <b>ความคิดเห็นจากโค้ช:</b>
                   {{ item_data.assessment.remark }}
                 </v-card-text>
               </v-col>
-              <v-col cols="12" sm="6" align="start">
+
+              <pre> {{ item_data.assessment.attachment }}</pre>
+
+              <v-row dense class="mx-5">
+                <v-col
+                  cols="auto"
+                  class="font-bold text-lg ml-10"
+                  align="start"
+                >
+                  ไฟล์แนบ :
+                </v-col>
+                <v-col cols="12">
+                  <v-card
+                    @click="openFile(file.attachmentFiles)"
+                    flat
+                    class="mb-3"
+                    v-for="(file, index_file) in item_data.assessment
+                      .attachment"
+                    :key="index_file"
+                  >
+                    <v-card-text
+                      class="border border-2 border-[#ff6b81] rounded-lg"
+                    >
+                      <v-row>
+                        <v-col cols="12" sm="1" align="center">
+                          <v-img
+                            height="35"
+                            width="26"
+                            src="../../../assets/coachLeave/file-pdf.png"
+                          />
+                        </v-col>
+                        <v-col cols="12" sm="10" align="start">
+                          <span class="font-bold">{{
+                            file.originalFilesName
+                          }}</span
+                          ><br />
+                          <span class="text-caption"
+                            >ขนาดไฟล์ :
+                            {{ (file.filesSize / 1000000).toFixed(2) }}
+                            MB</span
+                          >
+                        </v-col>
+                      </v-row>
+                    </v-card-text>
+                  </v-card>
+                </v-col>
+              </v-row>
+
+              <!-- <v-col cols="12" sm="6" align="start">
                 <div
                   v-for="(data, index) in item_data.assessment.attachment"
                   :key="index"
@@ -270,7 +319,7 @@
                     "
                   ></v-img>
                 </div>
-              </v-col>
+              </v-col> -->
             </v-row>
           </v-card>
         </v-card>
@@ -281,7 +330,7 @@
           v-for="(day_list, index_day) in my_course_detail.checkIn"
           :key="index_day"
         >
-          <!-- <pre>{{ day_list }}</pre> -->
+          <pre>{{ day_list }}</pre>
           <v-card class="my-5 drop-shadow-lg rounded-xl">
             <v-card-text>
               <v-row class="" dense>
@@ -355,7 +404,7 @@
                 :key="index_day" -->
               <v-row dense>
                 <!-- พัฒนาการ -->
-                <v-col cols="6" sm="6" align="start">
+                <v-col cols="auto" align="start">
                   <v-card flat>
                     <v-card-text
                       :class="`text-[${
@@ -369,7 +418,7 @@
                         :class="`text-[${
                           evolution_options.filter(
                             (v) => v.value === day_list.assessment.evolution
-                          )[0]
+                          )[0].color
                         }]`"
                       >
                         {{
@@ -386,7 +435,7 @@
                   </v-card>
                 </v-col>
                 <!-- ความสนใจ -->
-                <v-col cols="6" sm="6" align="start">
+                <v-col cols="auto" align="start">
                   <v-card flat>
                     <v-card-text
                       :class="`text-[${
@@ -395,12 +444,12 @@
                         )[0]
                       }]`"
                     >
-                      ความสนใจ:
+                      <span class="font-bold text-lg ml-10"></span> ความสนใจ:
                       <span
                         :class="`text-[${
                           interest_options.filter(
                             (v) => v.value === day_list.assessment.interest
-                          )[0]
+                          )[0].color
                         }]`"
                       >
                         {{
@@ -433,7 +482,7 @@
                   <v-expand-transition>
                     <div v-show="day_list.show">
                       <v-card-text class="text-start">
-                        ความคิดเห็น:
+                        <b>ความคิดเห็น:</b>
                         {{
                           !day_list.assessment.remark
                             ? "ไม่มีความคิดเห็น"
@@ -460,15 +509,15 @@
 
                       <v-row dense>
                         <v-col
-                          cols="12"
-                          class="font-bold text-lg"
+                          cols="auto"
+                          class="font-bold text-lg ml-10"
                           align="start"
                         >
                           ไฟล์แนบ :
                         </v-col>
                         <v-col cols="12">
                           <v-card
-                            @click="openFile(file.attFiles)"
+                            @click="openFile(file.attachmentFiles)"
                             flat
                             class="mb-3"
                             v-for="(file, index_file) in day_list.assessment
@@ -829,7 +878,7 @@ export default {
 
     openFile(file) {
       console.log(file);
-      window.open(`${process.env.VUE_APP_URL}/api/v1/files/${file}`, "_blank");
+      window.open(file, "_blank");
     },
 
     // dayOfWeekName(day_numbers, language) {

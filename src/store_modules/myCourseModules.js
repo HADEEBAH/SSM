@@ -4,96 +4,96 @@ const myCourseModules = {
     namespaced: true,
     state: {
         student_data: [
-            {
-                courseId: "",
-                courseNameTh: "",
-                courseNameEng: "",
-                courseOpenDate: "",
-                courseLocation: "",
-                courseDescription: "",
-                courseMusicPerformance: null,
-                courseStatus: "",
-                courseCertification: "",
-                courseImg: "",
-                coursePerTime: "",
-                courseRegisterStartDate: null,
-                courseRegisterEndDate: null,
-                courseStudyStartDate: null,
-                courseStudyEndDate: null,
-                coursePeriodEndDate: null,
-                coursePeriodStartDate: null,
-                coursePrice: "",
-                courseStudentRecived: "",
-                courseStudentTotal: null,
-                totalAmount: "",
-                successCount: "",
-                pendingCount: "",
-                dates: [],
-                orderId: "",
-                orderItemId: "",
-                cpoId: "",
-                dayOfWeekId: "",
-                timeId: "",
-                coachId: "",
-                coachName: "",
-                orderStudentId: "",
-                studentId: "",
-                coursePackageOptionId: "",
-                courseNameEn: "",
-                start: "",
-                end: "",
-                dayOfWeekName: [],
-            },
+            // {
+            //     courseId: "",
+            //     courseNameTh: "",
+            //     courseNameEng: "",
+            //     courseOpenDate: "",
+            //     courseLocation: "",
+            //     courseDescription: "",
+            //     courseMusicPerformance: null,
+            //     courseStatus: "",
+            //     courseCertification: "",
+            //     courseImg: "",
+            //     coursePerTime: "",
+            //     courseRegisterStartDate: null,
+            //     courseRegisterEndDate: null,
+            //     courseStudyStartDate: null,
+            //     courseStudyEndDate: null,
+            //     coursePeriodEndDate: null,
+            //     coursePeriodStartDate: null,
+            //     coursePrice: "",
+            //     courseStudentRecived: "",
+            //     courseStudentTotal: null,
+            //     totalAmount: "",
+            //     successCount: "",
+            //     pendingCount: "",
+            //     dates: [],
+            //     orderId: "",
+            //     orderItemId: "",
+            //     cpoId: "",
+            //     dayOfWeekId: "",
+            //     timeId: "",
+            //     coachId: "",
+            //     coachName: "",
+            //     orderStudentId: "",
+            //     studentId: "",
+            //     coursePackageOptionId: "",
+            //     courseNameEn: "",
+            //     start: "",
+            //     end: "",
+            //     dayOfWeekName: [],
+            // },
         ],
         itemTime: {},
 
         profile_booked: [
-            {
-                orderTmpId: null,
-                studentId: null,
-                coursePackageOptionId: "",
-                dayOfWeekId: "",
-                timeId: "",
-                coachId: null,
-                courseId: "",
-                parentId: null,
-                createdDate: "",
-                createdBy: "",
-                status: "",
-                courseName: ""
-            }
+            // {
+            //     orderTmpId: null,
+            //     studentId: null,
+            //     coursePackageOptionId: "",
+            //     dayOfWeekId: "",
+            //     timeId: "",
+            //     coachId: null,
+            //     courseId: "",
+            //     parentId: null,
+            //     createdDate: "",
+            //     createdBy: "",
+            //     status: "",
+            //     courseName: ""
+            // }
         ],
 
         my_course_detail: {
-            courseId: "",
-            courseNameTh: "",
-            courseNameEng: "",
-            coachId: "",
-            coachName: "",
-            dates: {
-                day: [],
-                date: [],
-                count: 0,
-                totalDay: 5,
-                startDate: "",
-                endDate: ""
-            },
-            realCount: '',
-            time: {
-                start: "",
-                end: ""
-            },
-            checkIn: [
-                {
-                    checkInStudentId: "",
-                    orderId: "",
-                    courseId: "",
-                    studentId: "",
-                    status: "",
-                    date: ""
-                },
+            // courseId: "",
+            // courseNameTh: "",
+            // courseNameEng: "",
+            // coachId: "",
+            // coachName: "",
+            // dates: {
+            //     day: [],
+            //     date: [],
+            //     count: 0,
+            //     totalDay: 5,
+            //     startDate: "",
+            //     endDate: ""
+            // },
+            // realCount: '',
+            // time: {
+            //     start: "",
+            //     end: ""
+            // },
+            // checkIn: [
+            //     {
+            //         checkInStudentId: "",
+            //         orderId: "",
+            //         courseId: "",
+            //         studentId: "",
+            //         status: "",
+            //         date: ""
+            //     },
 
-            ]
+            // ]
         },
 
         my_course_student_id: '',
@@ -283,8 +283,8 @@ const myCourseModules = {
                     }
                 }
 
-                // let { data } = await axios.get(`http://localhost:3000/api/v1/mycourse/checkin/student/${account_id}/course/${course_id}`, config);
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/checkin/student/${account_id}/course/${course_id}`, config);
+                let { data } = await axios.get(`http://localhost:3000/api/v1/mycourse/checkin/student/${account_id}/course/${course_id}`, config);
+                // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/checkin/student/${account_id}/course/${course_id}`, config);
 
                 if (data.statusCode === 200) {
 

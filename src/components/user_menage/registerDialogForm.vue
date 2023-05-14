@@ -122,7 +122,7 @@
               dense
               autocomplete="off-autofill"
               ref="password_rig"
-              @keypress="Validation($event, 'en')"
+              @keypress="Validation($event, 'en-number')"
               :type="show_password ? 'text' : 'password'"
               :rules="rules.passwordRules"
               required
@@ -160,6 +160,7 @@
               @click:append="show_confirm_password = !show_confirm_password"
               @change="changeUserOneId(user_one_id)"
               outlined
+              @keypress="Validation($event, 'en-number')"
             >
             </v-text-field>
           </v-col>
@@ -282,9 +283,9 @@ export default {
         (val) =>
           (val || "").length < 20 ||
           "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => /[A-Za-z]/g.test(val) || "กรุณากรอกนามสกุลภาษาอังกฤษ",
+        (val) => /[A-Za-z ]/g.test(val) || "กรุณากรอกนามสกุลภาษาอังกฤษ",
         (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+          !/[\uD800-\uDBFF][\uDC00-\uDFFF ]/g.test(val) ||
           "กรุณากรอกสกุลภาษาอังกฤษ",
       ],
       passwordRules: [
