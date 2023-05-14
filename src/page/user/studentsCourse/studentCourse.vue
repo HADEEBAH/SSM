@@ -257,16 +257,8 @@
                 </v-card-text>
               </v-col>
 
-              <pre> {{ item_data.assessment.attachment }}</pre>
-
-              <v-row dense class="mx-5">
-                <v-col
-                  cols="auto"
-                  class="font-bold text-lg ml-10"
-                  align="start"
-                >
-                  ไฟล์แนบ :
-                </v-col>
+              <v-row dense class="">
+                <v-card-text class="text-start"> ไฟล์แนบ : </v-card-text>
                 <v-col cols="12">
                   <v-card
                     @click="openFile(file.attachmentFiles)"
@@ -302,6 +294,16 @@
                     </v-card-text>
                   </v-card>
                 </v-col>
+
+                <!-- <v-card v-if="item_data.assessment.attachment.length <= 0">
+                  <v-card-text
+                    class="border border-2 border-[#ff6b81] rounded-lg font-bold"
+                  >
+                    <v-row>
+                      <v-col cols="12"> ยังไม่มีไฟล์แนบ </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card> -->
               </v-row>
 
               <!-- <v-col cols="12" sm="6" align="start">
@@ -330,7 +332,6 @@
           v-for="(day_list, index_day) in my_course_detail.checkIn"
           :key="index_day"
         >
-          <pre>{{ day_list }}</pre>
           <v-card class="my-5 drop-shadow-lg rounded-xl">
             <v-card-text>
               <v-row class="" dense>
@@ -489,32 +490,10 @@
                             : day_list.assessment.remark
                         }}
                       </v-card-text>
-
-                      <!-- <v-card-text class="text-start">
-                        <div
-                          v-for="(data, index) in day_list.assessment
-                            .attachment"
-                          :key="index"
-                        >
-                          <v-img
-                            style="width: 500px"
-                            :src="
-                              !data.attFiles
-                                ? 'ไม่มีรูปภาพเพิ่มเติม'
-                                : showImg(data.attFiles)
-                            "
-                          ></v-img>
-                        </div>
-                      </v-card-text> -->
-
                       <v-row dense>
-                        <v-col
-                          cols="auto"
-                          class="font-bold text-lg ml-10"
-                          align="start"
-                        >
+                        <v-card-text class="text-start">
                           ไฟล์แนบ :
-                        </v-col>
+                        </v-card-text>
                         <v-col cols="12">
                           <v-card
                             @click="openFile(file.attachmentFiles)"
@@ -549,6 +528,15 @@
                               </v-row>
                             </v-card-text>
                           </v-card>
+                          <!-- <v-card
+                            v-if="day_list.assessment.attachment.length <= 0"
+                          >
+                            <v-card-text
+                              class="border border-2 border-[#ff6b81] rounded-lg font-bold"
+                            >
+                              ยังไม่มีไฟล์แนบ
+                            </v-card-text>
+                          </v-card> -->
                         </v-col>
                       </v-row>
                     </div>
