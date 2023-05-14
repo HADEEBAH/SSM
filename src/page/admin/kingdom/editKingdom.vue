@@ -52,57 +52,7 @@
                     </v-col>
                   </v-row>
           </div>
-        </div>
-       
-        <!-- <div v-if="category.categoryImg">
-        <v-img
-            v-if="showData"
-            style="
-              max-height: 105px;
-              max-width: 122px;
-              margin-left: auto;
-              margin-right: auto;
-            "
-            :src="showImg(category.categoryImg)"
-          >
-          </v-img>
-
-        <div v-else>
-
-          <v-row v-if="preview_url">
-                    <v-col class="flex align-center justify-center">
-                      <v-img
-                        :src="preview_url"
-                        style="max-width: 150px"
-                        class="text-right"
-                      >
-                      </v-img>
-                    </v-col>
-                    <input
-                      ref="fileInput"
-                      type="file"
-                      @change="uploadFile"
-                      style="display: none"
-                    />
-                  </v-row>
-
-                  <v-row v-if="!preview_url">
-                    <v-col cols="12" class="flex align-center justify-center">
-                      <v-btn outlined color="blue" @click="openFileSelector"
-                        >เลือกไฟล์</v-btn
-                      >
-                      <input
-                        ref="fileInput"
-                        type="file"
-                        @change="uploadFile"
-                        style="display: none"
-                      />
-                    </v-col>
-                  </v-row>
-        </div>
-       
-      </div> -->
-       
+        </div>  
         <div v-else class="text-center">
         <v-progress-circular  
         indeterminate 
@@ -277,7 +227,7 @@ export default {
 
     showImg(item) {
       console.log(item);
-      return `${process.env.VUE_APP_URL}/api/v1/files/${item}`;
+      return item;
     },
 
     openFileSelector() {
