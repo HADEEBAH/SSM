@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-container>
-      <!-- {{ course_data }} -->
+      {{ setFunctions }}
       <v-img
         contain
         class="rounded-lg mb-3"
@@ -70,7 +70,7 @@
             </template>
           </v-expansion-panel-header>
           <v-expansion-panel-content class="border-t pt-3">
-              {{ course_data.music_performance }}
+            <label>{{ course_data.music_performance }}</label>
           </v-expansion-panel-content>
         </v-expansion-panel>
         <v-expansion-panel>
@@ -80,8 +80,8 @@
               <v-icon color="#ff6b81"> $expand </v-icon>
             </template>
           </v-expansion-panel-header>
-          <v-expansion-panel-content class="border-t pt-3">
-            {{ course_data.catification }}
+          <v-expansion-panel-content class="border-t pt-3" >
+            <label>{{ course_data.catification }}</label>          
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -173,14 +173,12 @@ export default {
     }
   }),
   created() {
-    this.GetCourse(this.$route.params.course_id)
     this.order_data = JSON.parse(localStorage.getItem("Order"))
     if(this.order_data.course_type_id === "CT_2"){
       this.GetCourseStudent({course_id: this.order_data.course_id,cpo_id: null})
     }
   },
   mounted() {
-    this.GetCourse(this.$route.params.course_id)
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "คอร์สเรียน");
   },
   watch: {},
@@ -191,6 +189,10 @@ export default {
       order: "OrderModules/getOrder",
       course_is_loading : "CourseModules/getCourseIsLoading"
     }),
+    setFunctions(){
+      this.GetCourse(this.$route.params.course_id)
+      return ''
+    }
   },
   methods: {
     ...mapActions({

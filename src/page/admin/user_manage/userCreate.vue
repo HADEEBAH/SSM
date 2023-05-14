@@ -206,7 +206,6 @@
                               v-model="checkData.tel"
                               outlined
                               dense
-                              required
                               @input="checkPhoneNumber"
                               maxlength="12"
                             >
@@ -671,7 +670,7 @@
           <template>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom required text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
+                <labelCustom text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
                 <v-text-field
                   disabled
                   dense
@@ -683,7 +682,7 @@
             </v-row>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom required text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
+                <labelCustom text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
                 <v-text-field
                   disabled
                   dense
@@ -695,7 +694,7 @@
             </v-row>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom required text="เบอร์โทรศัพท์"></labelCustom>
+                <labelCustom text="เบอร์โทรศัพท์"></labelCustom>
                 <v-text-field
                   disabled
                   dense
@@ -721,7 +720,7 @@
             <v-col>
               <v-btn
                 class="w-full"
-                color="#ff6b81"
+                :color="relation.username.length < 1 ? '#CCCCCC' : '#ff6b81'"
                 dark
                 depressed
                 @click="addRealions"

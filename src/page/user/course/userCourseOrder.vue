@@ -2,6 +2,7 @@
   <v-app>
     <v-container>
       {{ setFunctions }}
+      <!-- <pre>{{ course_data }}</pre> -->
       <ImgCard color="#FEFBFC" outlined class="mb-3">
         <template v-slot:img>
           <v-row dense class="d-flex align-center h-full">
@@ -54,17 +55,16 @@
         <v-row dense>
           <v-col class="text-lg font-bold"> เลือกช่วงวันเรียน </v-col>
         </v-row>
+       <!-- <pre>{{ course_data.days }}</pre>  -->
         <v-radio-group v-model="course_order.day" @change="resetTime">
           <v-row>
             <v-col
               cols="6"
-              v-for="(date, date_index) in groupByDay(
-                course_data.days_of_class
-              )"
+              v-for="(date, date_index) in course_data.days"
               :key="date_index"
             >
               <v-radio
-                :label="dayOfWeekArray(date.day)"
+                :label="date.dayName"
                 color="#ff6B81"
                 :value="date"
               ></v-radio>
@@ -86,7 +86,6 @@
                   <v-col cols="auto" class="d-flex aling-center">
                     <v-radio color="#ff6B81" :value="time">
                       <template v-slot:label>
-                        <!-- {{`${time.start}-${time.end} (${GenReserve(time)})`}} -->
                         {{ `${time.start}-${time.end}` }}
                       </template>
                     </v-radio>
@@ -109,11 +108,7 @@
             v-model="course_order.coach_id"
             color="#FF6B81"
             @change="coachSelected($event)"
-            :items="
-              course_data.coachs.filter((v) =>
-                course_order.day.course_coach_id.includes(v.course_coach_id)
-              )
-            "
+            :items="course_order.time.timeData"
             item-text="coach_name"
             item-value="coach_id"
             item-color="pink"
@@ -135,7 +130,7 @@
                         : ''
                     "
                     >{{ item.coach_name }}
-                    {{ GenCoachNumberStudent(item.coach_id) }}</span
+                    {{ GenCoachNumberStudent(item.coach_id, item.dayOfWeekId, item.timeId) }}</span
                   ></v-list-item-title
                 >
               </v-list-item-content>
@@ -272,7 +267,7 @@
                     "
                     dense
                     :rules="rules.usernameRules"
-                    @keypress="Validation($event,'en-number')"
+                    @keypress="Validation($event, 'en-number')"
                     outlined
                     v-model="parent.username"
                     placeholder="Username"
@@ -298,17 +293,11 @@
                     dense
                     outlined
                     :rules="rules.usernameRules"
-                    @keypress="Validation($event,'en-number')"
+                    @keypress="Validation($event, 'en-number')"
                     v-model="parent.username"
-                    @change="
-                      parent.username > 3 ? checkUsername(parent.username) : ''
-                    "
-                    @keyup.enter="
-                      parent.username > 3 ? checkUsername(parent.username) : ''
-                    "
-                    @blur="
-                      parent.username > 3 ? checkUsername(parent.username) : ''
-                    "
+                    @change=" parent.username > 3 ? checkUsername(parent.username) : '' "
+                    @keyup.enter=" parent.username > 3 ? checkUsername(parent.username) : '' "
+                    @blur=" parent.username > 3 ? checkUsername(parent.username) : ''"
                     placeholder="Username"
                   >
                     <template v-slot:append>
@@ -407,11 +396,35 @@
                   dense
                   outlined
                   :rules="rules.usernameRules"
-                  @keypress="Validation($event,'en-number')"
+                  @keypress="Validation($event, 'en-number')"
                   v-model="student.username"
-                  @change="student.username.length > 3 ? checkUsername( student.username, 'student', index_student) : '' "
-                  @keyup.enter="student.username.length > 3 ? checkUsername( student.username, 'student', index_student ): ''"
-                  @blur="student.username.length > 3? checkUsername(student.username, 'student', index_student ) : ''"
+                  @change="
+                    student.username.length > 3
+                      ? checkUsername(
+                          student.username,
+                          'student',
+                          index_student
+                        )
+                      : ''
+                  "
+                  @keyup.enter="
+                    student.username.length > 3
+                      ? checkUsername(
+                          student.username,
+                          'student',
+                          index_student
+                        )
+                      : ''
+                  "
+                  @blur="
+                    student.username.length > 3
+                      ? checkUsername(
+                          student.username,
+                          'student',
+                          index_student
+                        )
+                      : ''
+                  "
                   placeholder="Username"
                 >
                   <template v-slot:append>
@@ -429,16 +442,19 @@
                   >
                 </template>
               </v-col>
-              <v-col cols="auto" class="mb-2" >
-                <br>
+              <v-col cols="auto" class="mb-2">
+                <br />
                 <v-btn
                   :loading="is_loading"
                   :dark="!student.username.length < 3"
                   :disabled="student.username.length < 3"
                   color="#ff6b81"
-                  @click="checkUsername(student.username, 'student', index_student)"
+                  @click="
+                    checkUsername(student.username, 'student', index_student)
+                  "
                   depressed
-                  >ตกลง</v-btn>
+                  >ตกลง</v-btn
+                >
               </v-col>
             </v-row>
             <template v-if="student.account_id">
@@ -446,7 +462,7 @@
                 <v-col cols="12" sm="6">
                   <labelCustom required text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
                   <v-text-field
-                    :disabled="student.account_id"
+                    :disabled="student.account_id?true:false"
                     dense
                     outlined
                     v-model="student.firstname_en"
@@ -456,7 +472,7 @@
                 <v-col cols="12" sm="6">
                   <labelCustom required text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
                   <v-text-field
-                    :disabled="student.account_id"
+                    :disabled="student.account_id?true:false"
                     dense
                     outlined
                     v-model="student.lastname_en"
@@ -468,7 +484,7 @@
                 <v-col cols="12" sm="6">
                   <labelCustom required text="เบอร์โทรศัพท์"></labelCustom>
                   <v-text-field
-                    :disabled="student.account_id"
+                    :disabled="student.account_id?true:false"
                     dense
                     outlined
                     v-model="student.tel"
@@ -499,17 +515,13 @@
           </v-col>
         </v-row>
       </div>
-      <!-- <pre>{{ course_order.students.filter(v => v.is_other === true) }}</pre> -->
-      <!-- <div v-if="checkMaximumStudent()" class="text-[#F03D3E] mb-3">
-                ผู้เรียนครบจำนวนที่คลาสจะรับได้แล้ว
-            </div> -->
       <v-row dense>
         <v-col cols="12" sm="6">
           <template v-if="course_order.course_type_id === 'CT_1'">
             <v-btn
               v-if="
-                course_order.time
-                  ? GenReserve() <= course_order.time.maximumStudent &&
+                course_order.time && course_order.coach_id
+                  ? GenReserve() <= course_order.time.timeData.filter(v => v.coach_id === course_order.coach_id)[0].maximumStudent &&
                     GenMonitors() === 'Open'
                   : false
               "
@@ -519,7 +531,7 @@
               dense
               color="#ff6b81"
               @click="addToCart"
-              >เพิ่มรถเข็น</v-btn
+              >เพิ่มไปยังรถเข็น</v-btn
             >
             <v-btn
               v-else
@@ -529,7 +541,7 @@
               dense
               color="#ff6b81"
               @click="addToCart"
-              >เพิ่มรถเข็น</v-btn
+              >เพิ่มไปยังรถเข็น</v-btn
             >
           </template>
           <template v-else>
@@ -540,42 +552,40 @@
               dense
               color="#ff6b81"
               @click="addToCart"
-              >เพิ่มรถเข็น</v-btn
+              >เพิ่มไปยังรถเข็น</v-btn
             >
           </template>
         </v-col>
+        <!-- <div v-if = "course_order.time && course_order.coach_id ">
+          {{  validateButton  }}
+          {{ ValidateReserve() }}
+          {{ GenMonitors() === 'Close'  }}
+          {{  GenReserve()  }}
+          {{ course_order.time.timeData.filter(v => v.coach_id === course_order.coach_id)[0].maximumStudent}}
+        </div> -->
         <v-col cols="12" sm="6">
           <v-btn
-            v-if="
-              course_order.time
-                ? GenReserve() > course_order.time.maximumStudent ||
-                  GenMonitors() === 'Close'
-                : false
-            "
+            v-if="course_order.time && course_order.coach_id ? 
+              GenReserve() > course_order.time.timeData.filter(v => v.coach_id === course_order.coach_id)[0].maximumStudent || GenMonitors() === 'Close' : false "
             class="w-full white--text"
-            :disabled="validateButton"
+            :disabled="validateButton || ValidateReserve()"
             elevation="0"
             dense
             @click="CreateReserve"
-            :color="disable_checkout ? '#C4C4C4' : '#ff6b81'"
-            >จอง</v-btn
+            :color="disable_checkout ? '#C4C4C4' : '#ff6b81'">จอง</v-btn
           >
           <!-- v-if="course_order.time ? GenReserve() < course_order.time.maximumStudent && GenMonitors() === 'Open' : false" -->
           <v-btn
-            v-else-if="
-              course_order.time
-                ? GenReserve() <= course_order.time.maximumStudent &&
-                  GenMonitors() === 'Open'
-                : false
-            "
+            v-else-if=" course_order?.time && course_order.coach_id ? GenReserve() <= course_order.time.timeData.filter(v => v.coach_id === course_order.coach_id)[0].maximumStudent && GenMonitors() === 'Open' : false "
             class="w-full white--text"
             :disabled="validateButton"
             elevation="0"
             dense
             @click="checkOut"
             :color="disable_checkout ? '#C4C4C4' : '#ff6b81'"
-            >ชำระเงิน</v-btn
-          >
+            >
+            ชำระเงิน
+          </v-btn>
           <v-btn
             v-else
             class="w-full white--text"
@@ -606,7 +616,7 @@
           </template>
         </header-card>
         <v-card-text class="pb-2">
-          <v-row dense >
+          <v-row dense>
             <v-col cols="9">
               <!-- :hide-details="!parent.account_id" -->
 
@@ -616,7 +626,7 @@
                 dense
                 outlined
                 v-model="parent.username"
-                @keypress="Validation($event,'en-number')"
+                @keypress="Validation($event, 'en-number')"
                 @change="
                   parent.username.length > 3
                     ? checkUsername(parent.username)
@@ -651,10 +661,10 @@
             </v-col>
             <v-col cols="auto">
               <br />
+              <!-- :disabled="parent.username.length < 3" -->
               <v-btn
                 :loading="is_loading"
                 :dark="!parent.username.length < 3"
-                :disabled="parent.username.length < 3"
                 color="#ff6b81"
                 @click="checkUsername(parent.username)"
                 depressed
@@ -714,8 +724,8 @@
             </v-col>
             <v-col>
               <v-btn
+                :color="parent.username.length < 1 ? '#CCCCCC' : '#ff6b81'"
                 class="w-full"
-                color="#ff6b81"
                 dark
                 depressed
                 @click="addParent"
@@ -757,7 +767,7 @@
       persistent
       v-if="show_dialog_register_one_id"
       v-model="show_dialog_register_one_id"
-      width="60vw"
+      :width="$vuetify.breakpoint.smAndUp ? `60vw` : ''"
     >
       <registerDialogForm
         dialog
@@ -792,6 +802,7 @@ export default {
     loadingOverlay,
   },
   data: () => ({
+    usernameExists: false,
     edit_parent: false,
     parent: {
       account_id: "",
@@ -816,8 +827,10 @@ export default {
         (val) =>
           (val || "").length < 20 ||
           "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => (/[A-Za-z0-9 ]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-        (val) => !(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
+        (val) => /[A-Za-z0-9 ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+        (val) =>
+          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+          "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
       ],
       passwordRules: [
         (val) =>
@@ -826,8 +839,7 @@ export default {
         (val) =>
           (val || "").length < 20 ||
           "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
-        (val) =>
-          !(/[ ]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+        (val) => !/[ ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
       ],
     },
   }),
@@ -844,7 +856,9 @@ export default {
   },
   watch: {
     "course_order.time": function () {
+      // console.log(this.course_order)
       this.course_order.coach_id = null;
+      this.coachSelect = false
     },
     "course_order.apply_for_yourself": function () {
       if (this.course_order.apply_for_yourself) {
@@ -919,9 +933,7 @@ export default {
             });
         }
       } else if (this.last_user_registered.type === "student") {
-        this.course_order.students[
-          this.course_order.students.length - 1
-        ].account_id = this.last_user_registered.account_id;
+        this.course_order.students[ this.course_order.students.length - 1].account_id = this.last_user_registered.account_id;
         this.course_order.students[
           this.course_order.students.length - 1
         ].firstname_en = this.last_user_registered.firstname_en;
@@ -973,8 +985,10 @@ export default {
       course_student: "CourseModules/getCourseStudent",
       course_is_loading: "CourseModules/getCourseIsLoading",
       course_monitors: "CourseMonitorModules/getCourseMonitor",
+      reserve_list : "OrderModules/getReserveList"
     }),
     setFunctions() {
+      this.GetReserceByCreatedBy({account_id : this.user_login.account_id})
       this.checkMaximumStudent();
       if (this.order_data) {
         if (this.order_data.course_type_id === "CT_1") {
@@ -999,28 +1013,34 @@ export default {
       }
       return "";
     },
-
+    
     validateButton() {
-      this.GenMonitors();
+      if(this.course_order.coach_id){
+        this.GenMonitors();
+       this.ValidateReserve()
+      }
       // console.log(this.course_order.coach_id)
       if (this.course_order.course_type_id === "CT_1") {
         let time = this.course_order.time ? true : false;
         let day = this.course_order.day ? true : false;
-        let coach =
-          this.coachSelect || this.course_order.coach_id ? true : false;
-        let student =
-          this.course_order.students.length > 0
-            ? this.course_order.students[0].account_id
-              ? true
-              : false
-            : false;
+        let coach = this.coachSelect || this.course_order.coach_id ? true : false;
+        let student = false;
+        if (this.course_order.students.length > 0) {
+          if (this.course_order.students.filter((v) => !v.account_id).length > 0 ) {
+            student = false;
+          }else{
+            student = true;
+          }
+        }
         // console.log(time && day && coach && student);
         return !(time && day && coach && student);
       } else {
-        let student = true
-        if( this.course_order.students.length > 0){
-          if(this.course_order.students.filter(v => !v.account_id).length > 0){
-            student = false
+        let student = true;
+        if (this.course_order.students.length > 0) {
+          if (
+            this.course_order.students.filter((v) => !v.account_id).length > 0
+          ) {
+            student = false;
           }
         }
         return !student;
@@ -1040,6 +1060,7 @@ export default {
       saveCart: "OrderModules/saveCart",
       checkUsernameOneid: "loginModules/checkUsernameOneid",
       CreateReserveCourse: "OrderModules/CreateReserveCourse",
+      GetReserceByCreatedBy : "OrderModules/GetReserceByCreatedBy",
       // monitor
       GetGeneralCourseMonitor: "CourseMonitorModules/GetGeneralCourseMonitor",
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
@@ -1047,8 +1068,18 @@ export default {
     Validation(e, lang) {
       inputValidation(e, lang);
     },
-    GenCoachNumberStudent(coach_id) {
-      let time_data = this.course_order.time;
+    ValidateReserve(){
+      // console.log(this.reserve_list)
+      // console.log("ValidateReserve",this.reserve_list.filter(v => v.courseId === this.course_order.course_id && v.coachId === this.course_order.coach_id))
+      if(this.reserve_list.filter(v => v.courseId === this.course_order.course_id && v.coachId === this.course_order.coach_id).length > 0){
+        return true
+      }else{
+        return false
+      }
+    },
+    GenCoachNumberStudent(coach_id, dayOfWeekId, timeId) {
+      // let time_data = this.course_order.time;
+      console.log(coach_id, dayOfWeekId, timeId)
       let current_student = 0;
       let maximum_student = 0;
       console.log(coach_id);
@@ -1056,8 +1087,8 @@ export default {
         (v) =>
           v.m_coach_id == coach_id &&
           v.m_course_id == this.course_order.course_id &&
-          v.m_day_of_week_id === time_data.dayOfWeekId &&
-          v.m_time_id == time_data.timeId
+          v.m_day_of_week_id === dayOfWeekId &&
+          v.m_time_id == timeId
       );
       if (course_monitors_filter.length > 0) {
         for (const monitor of course_monitors_filter) {
@@ -1072,27 +1103,24 @@ export default {
     },
     GenMonitors() {
       if (this.course_monitors) {
-        let time_data = this.course_order.time;
-        if (this.course_order.time) {
+        if (this.course_order.time && this.course_order.coach_id) {
+          let time_data = this.course_order.time;
+          // console.log(time_data.timeData)
+          let dayOfWeekId = time_data?.timeData ? time_data.timeData.filter(v => v.coach_id === this.course_order.coach_id)[0].dayOfWeekId : time_data.dayOfWeekId
+          let timeId = time_data?.timeData ? time_data.timeData.filter(v => v.coach_id === this.course_order.coach_id)[0].timeId : time_data.timeId
           if (this.course_order.course_type_id === "CT_1") {
             let course_monitors_filter = this.course_monitors.filter(
               (v) =>
                 v.m_course_id == this.course_order.course_id &&
-                v.m_day_of_week_id === time_data.dayOfWeekId &&
-                v.m_time_id == time_data.timeId
+                v.m_day_of_week_id === dayOfWeekId &&
+                v.m_time_id == timeId
             );
             // console.log("course_monitors_filter + >",course_monitors_filter)
             if (course_monitors_filter.length > 0) {
-              console.log(course_monitors_filter[0]);
-              if (
-                this.course_order.students.length +
-                  course_monitors_filter[0].m_current_student <=
-                course_monitors_filter[0].m_maximum_student
-              ) {
-                if (
-                  this.course_order.option.course_package_option_id ===
-                  course_monitors_filter[0].m_course_package_options_id
-                ) {
+              // console.log("m_current_student =>",course_monitors_filter[0].m_current_student);
+              // console.log("students =>", this.course_order.students.length);
+              if ((this.course_order.students.length + course_monitors_filter[0].m_current_student) <= course_monitors_filter[0].m_maximum_student) {
+                if ( this.course_order.option.course_package_option_id === course_monitors_filter[0].m_course_package_options_id) {
                   return course_monitors_filter[0]?.m_status;
                 } else {
                   return "Close";
@@ -1119,109 +1147,93 @@ export default {
       this.course_order.coach_id = null;
     },
     GenReserve(time_data) {
-      if (!time_data) {
-        time_data = this.course_order.time;
-        let studentNum = 0;
-        let course_monitors_filter = this.course_monitors.filter(
-          (v) =>
-            v.m_course_id == this.course_order.course_id &&
-            v.m_day_of_week_id === time_data.dayOfWeekId &&
-            v.m_time_id == time_data.timeId
-        );
-        // console.log(course_monitors_filter)
-        if (course_monitors_filter.length > 0) {
-          for (const monitor of course_monitors_filter) {
-            if (monitor.m_status === "Close") {
-              console.log(monitor.m_status);
-              return 0;
-            } else {
-              let course_student_filter = this.course_student.filter(
-                (v) =>
-                  v.courseId == this.course_order.course_id &&
-                  v.dayOfWeekId === time_data.dayOfWeekId &&
-                  v.timeId == time_data.timeId
-              );
-              for (const student of course_student_filter) {
-                studentNum = studentNum + parseInt(student.sum_student);
+      if(this.course_order.coach_id){
+        if (!time_data) {
+          time_data = this.course_order.time;
+          let studentNum = 0;
+          let dayOfWeekId = time_data?.timeData ? time_data.timeData.filter(v => v.coach_id === this.course_order.coach_id)[0].dayOfWeekId : time_data.dayOfWeekId
+          let timeId = time_data?.timeData ? time_data.timeData.filter(v => v.coach_id === this.course_order.coach_id)[0].timeId : time_data.timeId
+          let course_monitors_filter = this.course_monitors.filter(
+            (v) =>
+              v.m_course_id == this.course_order.course_id &&
+              v.m_day_of_week_id === dayOfWeekId &&
+              v.m_time_id == timeId
+          );
+          // console.log(course_monitors_filter)
+          if (course_monitors_filter.length > 0) {
+            for (const monitor of course_monitors_filter) {
+              if (monitor.m_status === "Close") {
+                console.log(monitor.m_status);
+                return 0;
+              } else {
+                let course_student_filter = this.course_student.filter(
+                  (v) =>
+                    v.courseId == this.course_order.course_id &&
+                    v.dayOfWeekId === dayOfWeekId &&
+                    v.timeId == timeId
+                );
+                for (const student of course_student_filter) {
+                  studentNum = studentNum + parseInt(student.sum_student);
+                }
+                return monitor.m_maximum_student - monitor.m_current_student;
               }
-              return monitor.m_maximum_student - monitor.m_current_student;
             }
+          } else {
+            let course_student_filter = this.course_student.filter(
+              (v) =>
+                v.courseId == this.course_order.course_id &&
+                v.dayOfWeekId === dayOfWeekId &&
+                v.timeId == timeId
+            );
+            for (const student of course_student_filter) {
+              studentNum = studentNum + parseInt(student.sum_student);
+            }
+            return time_data.timeData.filter(v => v.coach_id === this.course_order.coach_id)[0].maximumStudent - studentNum;
           }
         } else {
-          let course_student_filter = this.course_student.filter(
+          let studentNum = 0;
+          let course_monitors_filter = this.course_monitors.filter(
             (v) =>
-              v.courseId == this.course_order.course_id &&
-              v.dayOfWeekId === time_data.dayOfWeekId &&
-              v.timeId == time_data.timeId
+              v.m_course_id == this.course_order.course_id &&
+              v.m_day_of_week_id === time_data.dayOfWeekId &&
+              v.m_time_id == time_data.timeId
           );
-          for (const student of course_student_filter) {
-            studentNum = studentNum + parseInt(student.sum_student);
-          }
-          return time_data.maximumStudent - studentNum;
-        }
-      } else {
-        let studentNum = 0;
-        let course_monitors_filter = this.course_monitors.filter(
-          (v) =>
-            v.m_course_id == this.course_order.course_id &&
-            v.m_day_of_week_id === time_data.dayOfWeekId &&
-            v.m_time_id == time_data.timeId
-        );
-        // console.log(course_monitors_filter)
-        if (course_monitors_filter.length > 0) {
-          for (const monitor of course_monitors_filter) {
-            if (monitor.m_status === "Close") {
-              console.log(monitor.m_status);
-              return 0;
-            } else {
-              let course_student_filter = this.course_student.filter(
-                (v) =>
-                  v.courseId == this.course_order.course_id &&
-                  v.dayOfWeekId === time_data.dayOfWeekId &&
-                  v.timeId == time_data.timeId
-              );
-              for (const student of course_student_filter) {
-                studentNum = studentNum + parseInt(student.sum_student);
+          // console.log(course_monitors_filter)
+          if (course_monitors_filter.length > 0) {
+            for (const monitor of course_monitors_filter) {
+              if (monitor.m_status === "Close") {
+                console.log(monitor.m_status);
+                return 0;
+              } else {
+                let course_student_filter = this.course_student.filter(
+                  (v) =>
+                    v.courseId == this.course_order.course_id &&
+                    v.dayOfWeekId === time_data.dayOfWeekId &&
+                    v.timeId == time_data.timeId
+                );
+                for (const student of course_student_filter) {
+                  studentNum = studentNum + parseInt(student.sum_student);
+                }
+                return monitor.m_maximum_student - monitor.m_current_student;
               }
-              return monitor.m_maximum_student - monitor.m_current_student;
             }
+          } else {
+            let course_student_filter = this.course_student.filter(
+              (v) =>
+                v.courseId == this.course_order.course_id &&
+                v.dayOfWeekId === time_data.dayOfWeekId &&
+                v.timeId == time_data.timeId
+            );
+            for (const student of course_student_filter) {
+              studentNum = studentNum + parseInt(student.sum_student);
+            }
+            return time_data.maximumStudent - studentNum;
           }
-        } else {
-          let course_student_filter = this.course_student.filter(
-            (v) =>
-              v.courseId == this.course_order.course_id &&
-              v.dayOfWeekId === time_data.dayOfWeekId &&
-              v.timeId == time_data.timeId
-          );
-          for (const student of course_student_filter) {
-            studentNum = studentNum + parseInt(student.sum_student);
-          }
-          return time_data.maximumStudent - studentNum;
         }
-      }
+        
+      }   
     },
     groupByDay(originalArray) {
-      // console.log(originalArray);
-      // let days = originalArray.day
-      // const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-      // days.sort();
-      // let ranges = [];
-      // let rangeStart = days[0];
-      // let prevDay = rangeStart;
-
-      // for (let i = 1; i < days.length; i++) {
-      //   const day = days[i];
-      //   if (day === prevDay + 1) {
-      //     prevDay = day;
-      //   } else {
-      //     const rangeEnd = prevDay;
-      //     ranges.push({ start: rangeStart, end: rangeEnd });
-      //     rangeStart = day;
-      //     prevDay = day;
-      //   }
-      // }
-      // ranges.push({ start: rangeStart, end: prevDay });
-      // console.log(ranges.map(({ start, end }) => start === end ? weekdays[start] : `${weekdays[start]} - ${weekdays[end]}`).join(', '))
       return originalArray;
     },
     CreateReserve() {
@@ -1235,16 +1247,14 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           if (this.course_order.course_type_id == "CT_1") {
-            this.course_order.coach_name = this.course_data.coachs.filter((v) =>
-              this.course_order.day.course_coach_id.includes(v.course_coach_id)
-            )[0].coach_name;
+            this.course_order.coach = this.course_order.coach_id
+            this.course_order.coach_name = this.course_order.time.timeData.filter((v) => v.coach_id === this.course_order.coach_id)[0].coach_name
           } else {
             this.course_order.time = this.course_data.days_of_class[0].times[0];
-            this.course_order.coach_name =
-              this.course_data.coachs[0].coach_name;
+            this.course_order.coach_name =this.course_data.coachs[0].coach_name;
+            this.course_order.coach = this.course_data.coachs[0].coach_id;
+            this.course_order.coach_id = this.course_data.coachs[0].coach_id;
           }
-          this.course_order.coach = this.course_data.coachs[0].coach_id;
-          this.course_order.coach_id = this.course_data.coachs[0].coach_id;
           if (
             this.order.courses.filter(
               (v) => v.course_id === this.course_order.course_id
@@ -1273,7 +1283,6 @@ export default {
       return is_equal;
     },
     dayOfWeekArray(day) {
-      // let day_arr = day.split(",")
       const daysOfWeek = [
         "วันอาทิตย์",
         "วันจันทร์",
@@ -1377,9 +1386,8 @@ export default {
             this.course_order.coach_id = this.course_data.coachs[0].coach_id;
             this.course_order.coach = this.course_data.coachs[0].coach_id;
           } else {
-            this.course_order.coach_name = this.course_data.coachs.filter((v) =>
-              this.course_order.day.course_coach_id.includes(v.course_coach_id)
-            )[0].coach_name;
+            this.course_order.coach = this.course_order.coach_id
+            this.course_order.coach_name = this.course_order.time.timeData.filter((v) => v.coach_id === this.course_order.coach_id)[0].coach_name
           }
           this.order.courses.push({ ...this.course_order });
           this.order.created_by = this.user_login.account_id;
@@ -1435,28 +1443,27 @@ export default {
             } else {
               this.course_order.start_date = "";
             }
-            this.course_order.coach_name = this.course_data.coachs.filter((v) =>
-              this.course_order.day.course_coach_id.includes(v.course_coach_id)
-            )[0].coach_name;
+            this.course_order.coach = this.course_order.coach_id
+            this.course_order.coach_name = this.course_order.time.timeData.filter((v) => v.coach_id === this.course_order.coach_id)[0].coach_name
           } else {
+            //  CT_2
+            if (new Date(this.course_data.course_study_start_date) > new Date()) {
+              this.course_order.start_date = this.course_data.course_study_start_date
+            }else{
+              this.course_order.start_date = ""
+            }
             this.course_order.time = this.course_data.days_of_class[0].times[0];
-            this.course_order.coach_name =
-              this.course_data.coachs[0].coach_name;
+            this.course_order.coach_name = this.course_data.coachs[0].coach_name;
+            this.course_order.coach = this.course_data.coachs[0].coach_id;
+            this.course_order.coach_id = this.course_data.coachs[0].coach_id;
           }
-          this.course_order.coach = this.course_data.coachs[0].coach_id;
-          this.course_order.coach_id = this.course_data.coachs[0].coach_id;
-          if (
-            this.order.courses.filter(
-              (v) => v.course_id === this.course_order.course_id
-            ).length === 0
-          ) {
-            this.order.courses.push({ ...this.course_order });
-          }
+          if ( this.order.courses.filter((v) => v.course_id === this.course_order.course_id).length === 0
+          ) { this.order.courses.push({ ...this.course_order }); }
           this.order.created_by = this.user_login.account_id;
           this.changeOrderData(this.order);
           if (this.course_order.course_type_id == "CT_1") {
             if (this.course_order.day && this.course_order.time) {
-              this.saveOrder();
+               this.saveOrder();
             } else {
               Swal.fire({
                 icon: "error",
@@ -1464,7 +1471,7 @@ export default {
               });
             }
           } else {
-            this.saveOrder();
+             this.saveOrder();
           }
         }
       });
@@ -1476,80 +1483,68 @@ export default {
           status: "",
           type: type,
         }).then(() => {
-          if (type === "student") {
-            if (this.user_student_data.length > 0) {
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].firstname_en = this.user_student_data[0].firstNameEng;
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].lastname_en = this.user_student_data[0].lastNameEng;
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].firstname_th = this.user_student_data[0].firstNameTh;
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].lastname_th = this.user_student_data[0].lastNameTh;
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].student_name = `${this.user_student_data[0].firstNameEng} ${this.user_student_data[0].lastNameEng} `;
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].tel = this.user_student_data[0].mobileNo;
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].username = username;
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].account_id = this.user_student_data[0].userOneId;
+          console.log(this.course_order.students.filter((v) => v.username === username))
+          if(this.course_order.students.filter((v) => v.username === username).length === 1){
+            if (type === "student") {
+              let student = this.course_order.students.filter((v) => v.username === username)[0]
+              if (this.user_student_data.length > 0) {
+                student.firstname_en = this.user_student_data[0].firstNameEng;
+                student.lastname_en = this.user_student_data[0].lastNameEng;
+                student.firstname_th = this.user_student_data[0].firstNameTh;
+                student.lastname_th = this.user_student_data[0].lastNameTh;
+                student.student_name = `${this.user_student_data[0].firstNameEng} ${this.user_student_data[0].lastNameEng} `;
+                student.tel = this.user_student_data[0].mobileNo;
+                student.username = username;
+              student.account_id = this.user_student_data[0].userOneId;
+              } else {
+                if(student){
+                  student.firstname_en = ""
+                  student.lastname_en = ""
+                  student.firstname_th = ""
+                  student.lastname_th = ""
+                  student.student_name = ""
+                  student.tel =""
+                  student.username = ""
+                  student.account_id = ""
+                }else{
+                  console.log(student)
+                }
+              }
             } else {
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].firstname_en = "";
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].lastname_en = "";
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].student_name = "";
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].tel = "";
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].username = username;
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].account_id = "";
-            }
-          } else {
-            if (this.user_data.length > 0) {
-              if (this.edit_parent) {
-                this.edit_parent = false;
-              }
-              this.parent = {
-                account_id: this.user_data[0].userOneId,
-                username: username,
-                firstname_en: this.user_data[0].firstNameEng,
-                lastname_en: this.user_data[0].lastNameEng,
-                tel: this.user_data[0].mobileNo,
-              };
-              if (
-                this.course_order.students.filter(
-                  (v) => v.is_other === false
-                )[0].parents.length > 0
-              ) {
-                let parents = this.course_order.students.filter(
-                  (v) => v.is_other === false
-                )[0].parents;
-                parents[0].firstname_en = this.user_data[0].firstNameEng;
-                parents[0].lastname_en = this.user_data[0].lastNameEng;
-                parents[0].tel = this.user_data[0].mobileNo;
-                parents[0].account_id = this.user_data[0].userOneId;
-                parents[0].username = username;
+              if (this.user_data.length > 0) {
+                if (this.edit_parent) {
+                  this.edit_parent = false;
+                }
+                this.parent = {
+                  account_id: this.user_data[0].userOneId,
+                  username: username,
+                  firstname_en: this.user_data[0].firstNameEng,
+                  lastname_en: this.user_data[0].lastNameEng,
+                  tel: this.user_data[0].mobileNo,
+                };
+                if (
+                  this.course_order.students.filter(
+                    (v) => v.is_other === false
+                  )[0].parents.length > 0
+                ) {
+                  let parents = this.course_order.students.filter(
+                    (v) => v.is_other === false
+                  )[0].parents;
+                  parents[0].firstname_en = this.user_data[0].firstNameEng;
+                  parents[0].lastname_en = this.user_data[0].lastNameEng;
+                  parents[0].tel = this.user_data[0].mobileNo;
+                  parents[0].account_id = this.user_data[0].userOneId;
+                  parents[0].username = username;
+                }
               }
             }
+          }else if(this.course_order.students.filter((v) => v.username === username).length > 1){
+            Swal.fire({
+              icon: "error",
+              title: "ชื่อผู้ใช้นี้ถูกใส่ข้อมูลมาแล้ว กรุณาตรวจสอบอีกครั้ง"
+            })
           }
+        
         });
       } else {
         this.user_data = [];

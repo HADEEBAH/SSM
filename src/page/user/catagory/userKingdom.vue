@@ -1,5 +1,6 @@
 
 <template>
+  <!--  -->
   <v-app
     class="overflow-x-hidden overflow-y-hidden bg-kingdom"
     :style="
@@ -18,17 +19,40 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-card class="rounded-xl" :style="!MobileSize ? {'border-bottom-right-radius': '0px !important', 'border-bottom-left-radius': '0px !important'} : ''">
+
+    <v-card
+      class="rounded-xl"
+      :style="
+        !MobileSize
+          ? {
+              'border-bottom-right-radius': '0px !important',
+              'border-bottom-left-radius': '0px !important',
+            }
+          : ''
+      "
+    >
+      <!-- SLID -->
+      <!-- <v-card class="rounded-lg drop-shadow-lg"> -->
+      <!-- <div class="slider-container"> -->
+      <!-- <template>
+        <v-carousel cycle hide-delimiter-background>
+          <v-carousel-item v-for="(slide, i) in slides" :key="i">
+            <img :src="slide.src" alt="Slider Image" />
+          </v-carousel-item>
+        </v-carousel>
+      </template> -->
+      <!-- </div> -->
+      <!-- </v-card> -->
+
       <v-card
         class="mx-auto block rounded-xl drop-shadow-lg mt-3 ml-3 mr-3 banner-container"
       >
-        <template>
+        <template class="slider-container">
           <v-carousel cycle hide-delimiter-background>
             <v-carousel-item
               v-for="(slide, i) in slides"
               :key="i"
               :src="slide.src"
-              cover
             ></v-carousel-item>
           </v-carousel>
         </template>
@@ -66,13 +90,15 @@
             v-for="(item, index_item) in searchKingdom(search_kingdom)"
             :key="index_item"
           >
-            <v-card class="h-full block drop-shadow-none rounded-xl box-shadows">
+            <v-card
+              class="h-full block drop-shadow-none rounded-xl box-shadows"
+            >
               <!-- :src="item.categoryImg && item.categoryImg !== null ? showImg(item.categoryImg) : defaultImageUrl" -->
               <v-img
                 v-if="item.categoryImg && item.categoryImg !== null"
                 @click="selectedCategory(item)"
-                :aspect-ratio="16/9" 
-                cover   
+                :aspect-ratio="16 / 9"
+                cover
                 :src="item.categoryImg"
                 class="cursor-pointer"
               ></v-img>
@@ -269,9 +295,9 @@ export default {
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
-.example::-webkit-scrollbar {
+/* .example::-webkit-scrollbar {
   display: none;
-}
+} */
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .example {
@@ -281,14 +307,14 @@ export default {
   /* Firefox */
 }
 
-.item {
+/* .item {
   width: 300px;
   min-height: 120px;
-  /* max-height: auto;
-    float: left; */
-  /* margin: 3px;
-    padding: 3px; */
-}
+  max-height: auto;
+  float: left;
+  margin: 3px;
+  padding: 3px;
+} */
 
 .bg-kingdom {
   background-image: url("../../../assets/userKingdom/kingdom_bg_img.svg");
@@ -297,7 +323,7 @@ export default {
   /* background-size: contain; */
 }
 
-.banner-container {
+/* .banner-container {
   position: relative;
   width: auto;
   height: 500px;
@@ -311,8 +337,25 @@ export default {
   min-height: 100%;
   min-width: 100%;
   transform: translate(-50%, -50%);
-}
+} */
 .box-shadows {
-  box-shadow: 0 1px 1px -2px rgb(90 126 241 / 20%), 0 2px 2px 0 rgb(54 176 255 / 14%), 0 4px 16px 0 rgb(90 102 255 / 12%) !important;
+  box-shadow: 0 1px 1px -2px rgb(90 126 241 / 20%),
+    0 2px 2px 0 rgb(54 176 255 / 14%), 0 4px 16px 0 rgb(90 102 255 / 12%) !important;
+}
+
+.slider-container {
+  width: 300px;
+  height: 300px;
+}
+
+.slider-container-pc {
+  width: 100px;
+  height: 100px;
+}
+
+.slider-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 </style>

@@ -17,7 +17,7 @@
                   ? preview_file
                   : profile_detail.image !== ''
                   ? profile_detail.image
-                  : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU`
+                  : require('@/assets/profile/default_image_profile.svg')
               "
             >
               <v-btn

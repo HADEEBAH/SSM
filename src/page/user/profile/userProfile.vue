@@ -7,9 +7,20 @@
     <loading-overlay :loading="categorys_is_loading"></loading-overlay>
     <v-row dense>
       <v-col class="my-5" style="text-align: -webkit-center" cols="12">
-        <!-- {{ profile_detail.image }} -->
+        <!-- <pre>{{ profile_detail }}</pre> -->
         <!-- {{ data_local.image }} -->
-        <div class="cicle" v-if="data_local.image !== ''">
+
+        <div class="cicle">
+          <v-img
+            class="image-cropper items-end"
+            :src="
+              profile_detail.image !== ''
+                ? profile_detail.image
+                : require('@/assets/profile/default_image_profile.svg')
+            "
+          />
+        </div>
+        <!-- <div class="cicle" v-if="data_local.image !== ''">
           <v-img class="image-cropper items-end" :src="data_local.image" />
         </div>
         <div class="cicle" v-else>
@@ -17,7 +28,7 @@
             class="image-cropper items-end"
             src="../../../assets/userKingdom/default_image_profile.svg"
           />
-        </div>
+        </div> -->
       </v-col>
     </v-row>
     <div class="text-center text-xl font-bold">
@@ -622,7 +633,7 @@
                 <!-- :disabled="user_data.length > 0"
 :disabled="user_data.length > 0"
 :disabled="user_data.length > 0" -->
-                <labelCustom required text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
+                <labelCustom text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
                 <v-text-field
                   disabled
                   dense
@@ -634,7 +645,7 @@
             </v-row>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom required text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
+                <labelCustom text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
                 <v-text-field
                   disabled
                   dense
@@ -646,7 +657,7 @@
             </v-row>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom required text="เบอร์โทรศัพท์"></labelCustom>
+                <labelCustom text="เบอร์โทรศัพท์"></labelCustom>
                 <v-text-field
                   disabled
                   dense
@@ -671,8 +682,8 @@
             </v-col>
             <v-col>
               <v-btn
+                :color="parent.username.length < 1 ? '#CCCCCC' : '#ff6b81'"
                 class="w-full"
-                color="#ff6b81"
                 dark
                 depressed
                 @click="addParent"

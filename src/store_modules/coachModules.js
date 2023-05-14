@@ -201,6 +201,14 @@ const coachModules = {
         }
       } catch (error) {
         console.log(error)
+        await Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
+          showDenyButton: false,
+          showCancelButton: false,
+          cancelButtonText: "ยกเลิก",
+          confirmButtonText: "ตกลง",
+        })
         context.commit("SetStudentCheckInIsLoading", false)
       }
     },

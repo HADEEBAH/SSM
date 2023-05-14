@@ -4,7 +4,40 @@ import Swal from "sweetalert2";
 import router from "@/router";
 import VueCookie from "vue-cookie"
 import {dateDMY} from "../functions/functions"
-
+function dayOfWeekArray(day) {
+  // console.log
+  // let day_arr = day
+  let days = day
+  console.log(day)
+  const weekdays =[
+    "วันอาทิตย์",
+    "วันจันทร์",
+    "วันอังคาร",
+    "วันพุธ",
+    "วันพฤหัสบดี",
+    "วันศุกร์",
+    "วันเสาร์",
+  ];
+  days.sort();
+  let ranges = [];
+  if(days[0]){
+    let rangeStart =  parseInt(days[0]);
+    let prevDay = rangeStart;
+    for (let i = 1; i < days.length; i++) {
+      const day = parseInt(days[i]);
+      if (day === prevDay + 1) {
+        prevDay = day;
+      } else {
+        const rangeEnd = prevDay;
+        ranges.push({ start: rangeStart, end: rangeEnd });
+        rangeStart = day;
+        prevDay = day;
+      }
+    }
+    ranges.push({ start: rangeStart, end: prevDay });
+    return ranges.map(({ start, end }) => start === end ? weekdays[start] : `${weekdays[start]} - ${weekdays[end]}`).join(', ')
+  }
+}
 const CourseModules = {
   namespaced: true,
   state: {
@@ -509,7 +542,7 @@ const CourseModules = {
         if(data.statusCode === 200){
           Swal.fire({
             icon: "success",
-            title: "สร้างคอร์สสำเร็จ"
+            title: "แก้ไขคอร์สสำเร็จ"
           })
         }
         }catch(error){
@@ -607,7 +640,7 @@ const CourseModules = {
         if(data.statusCode === 200){
           Swal.fire({
             icon: "success",
-            title: "สร้างคอร์สสำเร็จ"
+            title: "แก้ไขคอร์สสำเร็จ"
           })
         }
         }catch(error){
@@ -684,6 +717,29 @@ const CourseModules = {
         // let localhost = "http://localhost:3000"
         console.log("artwork_data :", artwork_data)
         let {data} = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/course/artworkCourse/${artwork_data.artworkCourseId}`,config)
+        console.log(data)
+        if(data.statusCode == 200){
+          Swal.fire({
+            icon: "success",
+            title: "ลบไฟล์สำเร็จ"
+          })
+        }
+      }catch(error){
+        console.log(error)
+      }
+    },
+     // COURSE :: DELETA privilage
+     async RemovePrivilageByCourseID(context,{course_id}){
+      try{
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/course/privilage/${course_id}`,config)
         console.log(data)
         if(data.statusCode == 200){
           Swal.fire({
@@ -977,7 +1033,6 @@ const CourseModules = {
       try {
         // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
-        console.log("GetCourse => ",data.data)
         if (data.statusCode === 200) {
           let payload = {
             course_img_privilege : data.data.courseImgPrivilege ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.courseImgPrivilege}` : null,
@@ -1010,22 +1065,27 @@ const CourseModules = {
             packages: [],
             privilege_file: null,
             artwork_file : [],
-            days_of_class: []
+            days_of_class: [],
+            days : []
           }
+          console.log("payload 1048", data.data.coachs)
           let teach_day_data = []
-          data.data.coachs.forEach((coach) => {
-            data.data.dayOfWeek.filter(v => v.courseCoachId === coach.courseCoachId).forEach((coach_date) => {
+          for await (let coach of data.data.coachs){
+            // console.log("payload 1054",payload)
+            for await (let coach_date of data.data.dayOfWeek.filter(v => v.courseCoachId === coach.courseCoachId)){
               // DAY OF CLASS
               if(payload.days_of_class.filter(v => v.day_of_week_id === coach_date.times[0].dayOfWeekId).length === 0){
+                let dayName = dayOfWeekArray(coach_date.dayOfWeekName)
                 payload.days_of_class.push({
                   day_of_week_id :coach_date.times[0].dayOfWeekId,  
                   course_coach_id: [coach_date.courseCoachId],
                   day: coach_date.dayOfWeekName,
+                  dayName : dayName,
                   times: coach_date.times,
                 })
               }
               let class_dates = []
-              for (const time of coach_date.times) {
+              for await (const time of coach_date.times) {
                 class_dates.push({
                   class_date_range: {
                     time_id : time.timeId ? time.timeId : null,
@@ -1038,7 +1098,6 @@ const CourseModules = {
                   students: time.maximumStudent,
                 },)
               }
-
               // TEACH DAY
               teach_day_data.push({
                 day_of_week_id :coach_date.times[0].dayOfWeekId ? coach_date.times[0].dayOfWeekId : null,
@@ -1047,7 +1106,7 @@ const CourseModules = {
                 course_coach_id: coach_date.courseCoachId,
                 class_date: class_dates,
               })
-            })
+            }
             payload.coachs.push(
                 {
                   coach_id: coach.accountId,
@@ -1081,11 +1140,98 @@ const CourseModules = {
                   },
                 },
             )
-          })
+            //console.log("payload 1120",payload)
+          }
+          // console.log("payload 1122",payload)
           // console.log("teach_day_data",teach_day_data)
-          payload.coachs.forEach((coach) => {
+          for(let coach_date of data.data.dayOfWeek){
+            // DAYS
+            let dayName = dayOfWeekArray(coach_date.dayOfWeekName)
+            // console.log("payload 1127",payload.days.filter(v => v.dayName === dayName).length === 0)
+            if(payload.days.filter(v => v.dayName === dayName).length === 0){
+              // console.log("payload 1129",coach_date.times)
+              let times = []
+              for await (let time of coach_date.times){
+                // console.log("payload 1132",time)
+                if(times.filter(v => v.start ===  time.start && v.end ===  time.end).length === 0){
+                  times.push({
+                    start : time.start,
+                    end : time.end,
+                    timeData : []
+                  })
+                  for await (let t of times){
+                    // console.log("payload 1140", t.courseCoachId !== coach_date.courseCoachId)
+                    if(t.timeData.filter(v => v.courseCoachId == coach_date.courseCoachId).length === 0){
+                      t.timeData.push({
+                        maximumStudent: time.maximumStudent,
+                        dayOfWeekId: time.dayOfWeekId,
+                        timeId:  time.timeId,
+                        courseCoachId: coach_date.courseCoachId,
+                        coach_name : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachFirstNameTh +" "+data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachLastNameTh,
+                        coach_id : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].accountId
+                     })
+                    }
+                    // console.log("payload 1151", t)
+                  }
+                }
+              }
+              // console.log("payload 1147", times)
+              payload.days.push({
+                day: coach_date.dayOfWeekName,
+                dayName : dayName,
+                times: times,
+              }) 
+            
+            }else{
+              for await (let day of payload.days.filter(v => v.dayName === dayName)){
+                for (let time of coach_date.times){
+                  // console.log("payload 1160", time.start,time.end)
+                  if (day.times.filter(v => v.start == time.start && v.end == time.end).length > 0){
+                    for await (let day_time of day.times.filter(v => v.start == time.start && v.end == time.end)){
+                      // console.log("payload 1163",day_time.timeData)
+                      // console.log("payload 1164",coach_date.courseCoachId)
+                      if(day_time.timeData.filter(v => v.courseCoachId === coach_date.courseCoachId ).length === 0){
+                        day_time.timeData.push(
+                          {
+                            maximumStudent: time.maximumStudent,
+                            dayOfWeekId: time.dayOfWeekId,
+                            timeId:  time.timeId,
+                            courseCoachId: coach_date.courseCoachId,
+                            coach_name : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachFirstNameTh +" "+data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachLastNameTh,
+                            coach_id : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].accountId
+                          }
+                        )
+                      }
+                      // console.log("payload 1179", day.times) 
+                    }
+                  }else{
+                    let times = []
+                    for await (let time of coach_date.times){
+                      times.push({
+                        start : time.start,
+                        end : time.end,
+                        timeData : []
+                      })
+                      for await (let t of times){
+                        t.timeData.push({
+                          maximumStudent: time.maximumStudent,
+                          dayOfWeekId: time.dayOfWeekId,
+                          timeId:  time.timeId,
+                          courseCoachId: coach_date.courseCoachId, 
+                          coach_name : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachFirstNameTh +" "+data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachLastNameTh,
+                          coach_id : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].accountId
+                        })
+                      }
+                    }
+                    day.times.push(...times)
+                  }
+                }
+              }
+            }
+          }
+          for await (let coach of payload.coachs){
             coach.teach_day_data = teach_day_data.filter(v => v.course_coach_id === coach.course_coach_id)
-          })
+          }
           if (data.data.courseTypeId === "CT_1") {
             let options = []
             data.data.coursePackageOption.forEach((package_data) => {
@@ -1114,9 +1260,9 @@ const CourseModules = {
                 net_price_unit: (package_data.pricePerPerson - (package_data.discountPrice ? package_data.discountPrice : 0)) / package_data.hourPerTime,
               })
             })
-            payload.packages.forEach((package_data) => {
+            for(let package_data of payload.packages){
               package_data.options = options.filter(v => v.package_id === package_data.package_id)
-            })
+            }
           }
           let config = {
             headers: {
@@ -1127,8 +1273,6 @@ const CourseModules = {
           }
           if(payload.course_type_id === "CT_1"){
             console.log("payload :",payload)
-            // let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coursestudent?courseId=${course_id}&cpoId=${package_data.coursePackageOptionId}`,config)
-            // console.log("GetCourseStudent => ",data)
             await context.commit("SetCourseData", payload)
           }else{
             // console.log("payload :",payload)
@@ -1139,8 +1283,8 @@ const CourseModules = {
                   payload.course_studant_amount = parseInt(student_data.sum_student)
                   payload.student_course_data = student_data
                 }
+                await context.commit("SetCourseData", payload)
               }
-              await context.commit("SetCourseData", payload)
           }
           await context.commit("SetCourseIsLoading", false)
         }
@@ -1286,6 +1430,7 @@ const CourseModules = {
           for (const course of data.data) {
             let course_studant_amount = 0
             course.student_course_data = []
+            course.show = false
             course.course_url = course.course_img ? `${process.env.VUE_APP_URL}/api/v1/files/${course.course_img}` : ""
             let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/count/student?courseId=${course.course_id}`)
             if(data.statusCode === 200){

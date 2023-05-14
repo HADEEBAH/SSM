@@ -774,7 +774,7 @@
               <v-btn
                 :disabled="relation.username === '' ? true : false"
                 class="w-full"
-                color="#ff6b81"
+                :color="relation.username.length < 1 ? '#CCCCCC' : '#ff6b81'"
                 dark
                 depressed
                 @click="addRealions"
