@@ -257,7 +257,7 @@
                 </v-card-text>
               </v-col>
 
-              <v-row dense class="">
+              <v-row dense class="mx-5">
                 <v-card-text class="text-start"> ไฟล์แนบ : </v-card-text>
                 <v-col cols="12">
                   <v-card
