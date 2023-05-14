@@ -32,7 +32,7 @@
             cols="12"
             class="flex align-center justify-center text-caption"
           >
-            ( ขนาดไฟล์งานไม่เกิน 1 Mb ต้องเป็นไฟล์ JPG, PNG )
+            ( ขนาดไฟล์งานไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
           </v-col>
           <v-col cols="12" class="flex align-center justify-center">
             <v-btn outlined color="blue" @click="openFileSelector"
@@ -689,6 +689,7 @@ import LabelCustom from "@/components/label/labelCustom.vue";
 import headerCard from "@/components/header/headerCard.vue";
 import { mapGetters, mapActions } from "vuex";
 import { Input, TimePicker } from "ant-design-vue";
+import Swal from "sweetalert2";
 import {
   inputValidation,
   dateFormatter,
@@ -874,15 +875,27 @@ export default {
     uploadFile() {
       this.file = this.$refs.fileInput.files[0];
       if (!this.file) return;
-      console.log(CheckFileSize(this.file));
       if (CheckFileSize(this.file) === true) {
-        this.course_data.course_img = this.file;
-        this.ChangeCourseData(this.course_data);
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.preview_url = e.target.result;
-        };
-        reader.readAsDataURL(this.file);
+        const fileType = this.file.type; 
+        console.log(fileType)
+        if (fileType === 'image/png' || fileType === 'image/jpeg') {
+          this.course_data.course_img = this.file;
+          this.ChangeCourseData(this.course_data);
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            this.preview_url = e.target.result;
+          };
+          reader.readAsDataURL(this.file);
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "อัพโหลดเฉพาะไฟล์รูปภาพ(png, jpeg)เท่านั้น",
+            showDenyButton: false,
+            showCancelButton: false,
+            confirmButtonText: "ตกลง",
+            cancelButtonText: "ยกเลิก",
+          })
+        }
       }
     },
   },

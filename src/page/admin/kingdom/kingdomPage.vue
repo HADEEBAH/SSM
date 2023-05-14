@@ -63,7 +63,7 @@
                     cols="12"
                     class="flex align-center justify-center text-caption"
                   >
-                    ( ขนาดไฟล์งานไม่เกิน 1 Mb ต้องเป็นไฟล์ JPG, PNG )
+                    ( ขนาดไฟล์งานไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
                   </v-col>
                   <v-col cols="12" class="flex align-center justify-center">
                     <v-btn outlined color="blue" @click="openFileSelector"
