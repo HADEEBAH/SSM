@@ -110,9 +110,12 @@ const UserManageModules = {
           }
         }
 
+        console.log("data_account=======>", data_account);
+
         if (data_account?.userRoles?.map((val) => { return val.roleId }).includes("R_5")) {
           let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?student_id=${data_account.userOneId}`, config)
           if (data.statusCode === 200) {
+            console.log("data=> st", data);
             if (data?.data?.message !== "relation not found.") {
 
               context.commit("SetDataUserRelationsManagement", data.data)
@@ -129,6 +132,7 @@ const UserManageModules = {
         } else if (data_account?.userRoles?.map((val) => { return val.roleId }).includes("R_4")) {
           let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?parent_id=${data_account.userOneId}`, config)
           if (data.statusCode === 200) {
+            console.log("data=> pa", data);
             if (data?.data?.message !== "relation not found.") {
 
               context.commit("SetDataUserRelationsManagement", data.data)

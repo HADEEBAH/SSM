@@ -1,25 +1,24 @@
 <template>
-  <v-container class="overflow-x-hidden overflow-y-hidden">
-    <v-row dense>
+  <v-container fluid class="overflow-x-hidden overflow-y-hidden">
+    <v-row dense class="mt-5">
+      <!-- {{ show_by_id }} -->
       <v-col cols="12">
         <headerPage :breadcrumbs="breadcrumbs"></headerPage>
-        <v-card class="mx-auto">
-          <!-- USER DETAIL -->
-          <v-container grid-list-xs>
-            <!-- Check User Name ด้านบนสุด -->
+        <v-card class="rounded-lg">
+          <v-container fluid>
             <v-row dense>
               <v-col cols="12">
                 <headerCard
-                  class="ml-6 mt-8"
                   :icon="'mdi-card-account-details-outline'"
                   :icon_color="'#FF6B81'"
                   :title="title"
                 ></headerCard>
-                <v-divider class="mx-10"></v-divider>
-                <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
-                  <v-card-text class="mt-3">
-                    <v-row align="center">
-                      <v-col cols="12" sm="8">
+                <v-divider></v-divider>
+
+                <v-card class="rounded-lg my-3" color="#FCFCFC">
+                  <v-card-text>
+                    <v-row justify="between">
+                      <v-col cols="12" sm="6">
                         <label-custom text="Username(English)"></label-custom>
                         <v-text-field
                           placeholder="กรุณาระบุชื่อผู้ใช้งาน(ภาษาอังกฤษ)"
@@ -31,74 +30,29 @@
                           disabled
                         >
                           <template #append>
-                            <v-icon>mdi-check</v-icon>
+                            <v-icon color="green"
+                              >mdi-checkbox-marked-circle-outline</v-icon
+                            >
                           </template>
                         </v-text-field>
                       </v-col>
-                      <v-col cols="12" sm="auto" align="end">
+                      <v-col cols="12" offset-sm="2" sm="4" class="align-self-center">
                         <v-img
-                          class="img-one ml-auto mr-10 mb-2"
+                          :class="
+                            MobileSize ? `mx-auto w-2/4` : `ml-auto w-2/5`
+                          "
                           src="@/assets/manageuser/logo_one platform.svg"
                       /></v-col>
                     </v-row>
                   </v-card-text>
                 </v-card>
               </v-col>
+
               <!--DETAIL -->
               <v-col cols="12">
-                <v-card class="mt-10 ml-5 mr-5" color="#FCFCFC">
-                  <v-card-text class="mt-3">
+                <v-card class="rounded-lg my-3" color="#FCFCFC">
+                  <v-card-text>
                     <v-row>
-                      <!-- IMG DETAIL -->
-                      <!-- <v-col
-                        class="webkit-center"
-                        cols="12"
-                        sm="5"
-                        align-self="center"
-                      >
-                        <div class="cicle">
-                          <v-img
-                            class="image-cropper items-end"
-                            :src="
-                              preview_img != ''
-                                ? preview_img
-                                : show_by_id != ''
-                                ? show_by_id.image
-                                : '../../assets/userManagePage/default_img_update_profile.svg'
-                            "
-                          >
-                            <v-btn
-                              v-if="
-                                preview_img == '' && show_by_id.image !== ''
-                              "
-                              color="#ff6b81"
-                              @click="openFileSelector"
-                              class="w-full white--text"
-                              >เปลี่ยนรูป</v-btn
-                            >
-                            <v-btn
-                              v-if="
-                                show_by_id.image == '' || preview_img !== ''
-                              "
-                              color="#ff6b81"
-                              @click="removeImg"
-                              class="w-full white--text"
-                            >
-                              <span class="mdi mdi-close">ยกเลิก</span>
-                            </v-btn>
-                          </v-img>
-                        </div>
-
-                        <input
-                          id="fileInput"
-                          ref="fileInput"
-                          type="file"
-                          @change="uploadFile"
-                          accept="image/*"
-                          hidden
-                        />
-                      </v-col> -->
-
                       <v-col
                         class="webkit-center"
                         cols="12"
@@ -175,7 +129,7 @@
 
                             <v-text-field
                               @keypress="validate($event, 'th')"
-                              placeholder=""
+                              placeholder="-"
                               v-model="show_by_id.firstNameTh"
                               :rules="rules.name"
                               outlined
@@ -189,7 +143,7 @@
                             ></label-custom>
                             <v-text-field
                               @keypress="validate($event, 'th')"
-                              placeholder=""
+                              placeholder="-"
                               v-model="show_by_id.lastNameTh"
                               :rules="rules.name"
                               outlined
@@ -207,7 +161,7 @@
                             <v-text-field
                               v-bind:disabled="isDisabled"
                               @keypress="validate($event, 'en-special')"
-                              placeholder=""
+                              placeholder="-"
                               v-model="show_by_id.firstNameEng"
                               :rules="rules.name"
                               outlined
@@ -222,7 +176,7 @@
                             <v-text-field
                               v-bind:disabled="isDisabled"
                               @keypress="validate($event, 'en-special')"
-                              placeholder=""
+                              placeholder="-"
                               v-model="show_by_id.lastNameEng"
                               :rules="rules.name"
                               outlined
@@ -235,18 +189,18 @@
                           <v-col cols="12" sm="6">
                             <label-custom text="อีเมล"></label-custom>
                             <v-text-field
-                              placeholder=""
+                              disabled
+                              placeholder="-"
                               v-model="show_by_id.email"
                               outlined
                               dense
-                              v-bind:disabled="isDisabled"
                             >
                             </v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6">
                             <label-custom text="เบอร์โทรศัพท์"></label-custom>
                             <v-text-field
-                              v-bind:disabled="isDisabled"
+                              disabled
                               @keypress="validate($event, 'number')"
                               v-model="show_by_id.mobileNo"
                               :rules="rules.name"
@@ -267,66 +221,71 @@
             </v-row>
           </v-container>
 
-          <!-- การจัดการสิทธิ์ WhitOut Role-->
-          <div v-if="show_by_id.userRoles.length <= 0">
-            <headerCard
-              class="ml-6 mt-8"
-              :icon="'mdi-card-account-details-outline'"
-              :icon_color="'#FF6B81'"
-              :title="titlePermissionManage"
-            ></headerCard>
-            <v-divider class="mx-10"></v-divider>
-            <v-card class="my-10 mx-10" color="#FCFCFC">
-              <v-card-text class="mt-3">
-                <v-row class="mr-3 ml-3">
-                  <v-col cols="12" sm="5">
-                    <label-custom text="บทบาทผู้ใช้งาน"></label-custom>
-                    <v-autocomplete
-                      dense
-                      v-model="seledtedRole"
-                      :items="roles"
-                      item-text="role"
-                      item-value="roleNumber"
-                      label="กรุณาเลือกบทบาทผู้ใช้งาน"
-                      outlined
-                      chips
-                      item-color="#ff6b81"
-                      color="#ff6b81"
-                      @change="selectRole(seledtedRole)"
-                    >
-                      <template v-slot:item="{ item }">
-                        <v-list-item-content>
-                          {{ item.role }}
-                        </v-list-item-content>
-                        <v-list-item-action>
-                          <v-icon color="#FF6B81">
-                            {{
-                              selectRoles.includes(item.role)
-                                ? "mdi-checkbox-marked"
-                                : "mdi-checkbox-blank-circle-outline"
-                            }}</v-icon
-                          >
-                        </v-list-item-action>
-                      </template>
-                    </v-autocomplete>
-                  </v-col>
-                </v-row>
-              </v-card-text>
-            </v-card>
-          </div>
-
-          <div v-for="(item, index) in show_by_id.userRoles" :key="index">
-            <!-- การจัดการสิทธิ์ -->
-            <v-row dense>
+          <!-- การจัดการสิทธิ์ ไม่มี Role-->
+          <v-container fluid v-if="show_by_id.userRoles.length <= 0">
+            <v-row>
               <v-col cols="12">
                 <headerCard
-                  class="ml-6 mt-8"
                   :icon="'mdi-card-account-details-outline'"
                   :icon_color="'#FF6B81'"
                   :title="titlePermissionManage"
                 ></headerCard>
-                <v-divider class="mx-10"></v-divider>
-                <v-card class="my-10 mx-10" color="#FCFCFC">
+                <v-divider></v-divider>
+                <v-card class="rounded-lg my-3" color="#FCFCFC">
+                  <v-card-text>
+                    <v-row class="mr-3 ml-3">
+                      <v-col cols="12" sm="5">
+                        <label-custom text="บทบาทผู้ใช้งาน"></label-custom>
+                        <v-autocomplete
+                          dense
+                          v-model="seledtedRole"
+                          :items="roles"
+                          item-text="role"
+                          item-value="roleNumber"
+                          label="กรุณาเลือกบทบาทผู้ใช้งาน"
+                          solo
+                          item-color="#ff6b81"
+                          color="#ff6b81"
+                          @change="selectRole(seledtedRole)"
+                        >
+                          <template v-slot:item="{ item }">
+                            <v-list-item-content>
+                              {{ item.role }}
+                            </v-list-item-content>
+                            <!-- <v-list-item-action>
+                              <v-icon color="#FF6B81">
+                                {{
+                                  selectRoles.includes(item.role)
+                                    ? "mdi-checkbox-marked"
+                                    : "mdi-checkbox-blank-circle-outline"
+                                }}</v-icon
+                              >
+                            </v-list-item-action> -->
+                          </template>
+                        </v-autocomplete>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-container>
+
+          <!-- การจัดการสิทธิ์ มี role -->
+          <v-container
+            fluid
+            v-for="(item, index) in show_by_id.userRoles"
+            :key="index"
+          >
+            <v-row dense>
+              <v-col cols="12">
+                <headerCard
+                  :icon="'mdi-card-account-details-outline'"
+                  :icon_color="'#FF6B81'"
+                  :title="titlePermissionManage"
+                ></headerCard>
+                <v-divider></v-divider>
+                <v-card class="rounded-lg mt-5" color="#FCFCFC">
                   <v-card-text class="mt-3">
                     <v-row class="mr-3 ml-3">
                       <v-col cols="12" sm="5">
@@ -337,8 +296,8 @@
                           :items="roles"
                           item-text="role"
                           item-value="roleNumber"
-                          outlined
-                          chips
+                          label="กรุณาเลือกบทบาทผู้ใช้งาน"
+                          solo
                           item-color="#ff6b81"
                           color="#ff6b81"
                           @change="selectRole(seledtedRole)"
@@ -347,7 +306,7 @@
                             <v-list-item-content>
                               {{ item.role }}
                             </v-list-item-content>
-                            <v-list-item-action>
+                            <!-- <v-list-item-action>
                               <v-icon color="#FF6B81">
                                 {{
                                   seledtedRole.includes(item.role)
@@ -355,262 +314,274 @@
                                     : "mdi-checkbox-blank-circle-outline"
                                 }}</v-icon
                               >
-                            </v-list-item-action>
+                            </v-list-item-action> -->
                           </template>
                         </v-autocomplete>
                       </v-col>
                     </v-row>
                   </v-card-text>
                 </v-card>
-                <!-- <v-container
+              </v-col>
+              <!-- <v-container
                   grid-list-xs
                   
                 > -->
-                <v-row v-if="seledtedRole === 'R_4' || seledtedRole === 'R_5'">
-                  <v-col cols="12">
-                    <headerCard
-                      class="ml-6 mt-8"
-                      :icon="'mdi-file-plus-outline'"
-                      :icon_color="'#FF6B81'"
-                      :title="
-                        item.roleId === 'R_4'
-                          ? 'เพิ่มข้อมูลนักเรียนในการดูแล'
-                          : 'เพิ่มข้อมูลผู้ปกครอง'
-                      "
-                    ></headerCard>
-                    <v-divider class="mx-10"></v-divider>
-                    <v-card
-                      class="mx-10 my-5"
-                      color="#FCFCFC"
-                      v-for="(
-                        relations, index_relations
-                      ) in data_user_relation_management"
-                      :key="index_relations"
-                    >
-                      <v-card-text>
-                        <v-col align="right">
-                          <v-icon
-                            larg
-                            color="#FF6B81"
-                            @click="removeRelations(relations)"
-                            v-if="data_user_relation_management.length >= 1"
-                          >
-                            mdi-delete
-                          </v-icon>
-                        </v-col>
-                        <v-row dense align="center">
-                          <v-col cols="12" sm="6">
-                            <label-custom
-                              :text="
-                                item.roleId === 'R_4'
-                                  ? 'Student’s Username (English)'
-                                  : 'Parent’s Username (English)'
-                              "
-                            ></label-custom>
-                            <v-text-field
-                              outlined
-                              dense
-                              disabled
-                              v-if="item.roleId === 'R_4'"
-                              :value="relations.student.studentUsername"
-                            ></v-text-field>
-                            <v-text-field
-                              outlined
-                              dense
-                              disabled
-                              v-else
-                              :value="relations.parent.parentUsername"
-                            ></v-text-field>
-                            <!-- <div>
+              <!-- <v-row v-if="seledtedRole === 'R_4' || seledtedRole === 'R_5'"> -->
+              <v-col
+                v-if="seledtedRole === 'R_4' || seledtedRole === 'R_5'"
+                cols="12"
+              >
+                <headerCard
+                  class="mt-5"
+                  :icon="'mdi-file-plus-outline'"
+                  :icon_color="'#FF6B81'"
+                  :title="
+                    item.roleId === 'R_4'
+                      ? 'เพิ่มข้อมูลนักเรียนในการดูแล'
+                      : 'เพิ่มข้อมูลผู้ปกครอง'
+                  "
+                ></headerCard>
+                <v-divider></v-divider>
+
+                <v-card v-if="data_user_relation_management.length <= 0" class="rounded-lg my-3">
+                  <v-card-text
+                    class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
+                  >
+                    <span class="text-lg font-bold">
+                      <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                      {{ item.roleId === 'R_5' ? `ไม่พบข้อมูลของผู้ปกครอง` : `ไม่พบข้อมูลของนักเรียนในการดูแล` }}
+                    </span>
+                  </v-card-text>
+                </v-card>
+
+                <v-card
+                  v-else
+                  class="rounded-lg my-5"
+                  color="#FCFCFC"
+                  v-for="(
+                    relations, index_relations
+                  ) in data_user_relation_management"
+                  :key="index_relations"
+                >
+                  <v-card-text>
+                    <v-col align="right">
+                      <v-icon
+                        larg
+                        color="#FF6B81"
+                        @click="removeRelations(relations)"
+                        v-if="data_user_relation_management.length >= 1"
+                      >
+                        mdi-delete
+                      </v-icon>
+                    </v-col>
+                    <v-row dense align="center">
+                      <v-col cols="12" sm="6">
+                        <label-custom
+                          :text="
+                            item.roleId === 'R_4'
+                              ? 'Student’s Username (English)'
+                              : 'Parent’s Username (English)'
+                          "
+                        ></label-custom>
+                        <v-text-field
+                          outlined
+                          dense
+                          disabled
+                          v-if="item.roleId === 'R_4'"
+                          :value="relations.student.studentUsername"
+                        ></v-text-field>
+                        <v-text-field
+                          outlined
+                          dense
+                          disabled
+                          v-else
+                          :value="relations.parent.parentUsername"
+                        ></v-text-field>
+                        <!-- <div>
                           {{
                             item.roleId === "R_4"
                               ? relations.student.studentUsername
                               : relations.parent.parentUsername
                           }}
                         </div> -->
-                          </v-col>
+                      </v-col>
 
-                          <v-col cols="12" sm="6">
-                            <label-custom
-                              text="First Name (English)"
-                            ></label-custom>
-                            <v-text-field
-                              outlined
-                              dense
-                              disabled
-                              v-if="item.roleId === 'R_4'"
-                              :value="relations.student.studentFirstnameEn"
-                            ></v-text-field>
-                            <v-text-field
-                              outlined
-                              dense
-                              disabled
-                              v-else
-                              :value="relations.parent.parentFirstnameEn"
-                            ></v-text-field>
-                            <!-- <div>
+                      <v-col cols="12" sm="6">
+                        <label-custom
+                          text="First Name (English)"
+                        ></label-custom>
+                        <v-text-field
+                          outlined
+                          dense
+                          disabled
+                          v-if="item.roleId === 'R_4'"
+                          :value="relations.student.studentFirstnameEn"
+                        ></v-text-field>
+                        <v-text-field
+                          outlined
+                          dense
+                          disabled
+                          v-else
+                          :value="relations.parent.parentFirstnameEn"
+                        ></v-text-field>
+                        <!-- <div>
                                 {{
                                   item.roleId === "R_4"
                                     ? relations.student.studentFirstnameEn
                                     : relations.parent.parentFirstnameEn
                                 }}
                               </div> -->
-                          </v-col>
-                          <v-col cols="12" sm="6">
-                            <label-custom
-                              text="Last Name (English)"
-                            ></label-custom>
-                            <v-text-field
-                              outlined
-                              dense
-                              disabled
-                              v-if="item.roleId === 'R_4'"
-                              :value="relations.parent.parentLastnameEn"
-                            ></v-text-field>
-                            <v-text-field
-                              outlined
-                              dense
-                              disabled
-                              v-else
-                              :value="relations.parent.parentLastnameEn"
-                            ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6">
+                        <label-custom text="Last Name (English)"></label-custom>
+                        <v-text-field
+                          outlined
+                          dense
+                          disabled
+                          v-if="item.roleId === 'R_4'"
+                          :value="relations.parent.parentLastnameEn"
+                        ></v-text-field>
+                        <v-text-field
+                          outlined
+                          dense
+                          disabled
+                          v-else
+                          :value="relations.parent.parentLastnameEn"
+                        ></v-text-field>
 
-                            <!-- <div>
+                        <!-- <div>
                                 {{
                                   item.roleId === "R_4"
                                     ? relations.student.studentLastnameEn
                                     : relations.parent.parentLastnameEn
                                 }}
                               </div> -->
-                          </v-col>
-                          <v-col cols="12" sm="6">
-                            <label-custom text="เบอร์โทรศัพท์"></label-custom>
-                            <v-text-field
-                              outlined
-                              dense
-                              disabled
-                              v-if="item.roleId === 'R_4'"
-                              :value="relations.student.studentTel"
-                            ></v-text-field>
-                            <v-text-field
-                              outlined
-                              dense
-                              disabled
-                              v-else
-                              :value="relations.parent.parentTel"
-                            ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6">
+                        <label-custom text="เบอร์โทรศัพท์"></label-custom>
+                        <v-text-field
+                          outlined
+                          dense
+                          disabled
+                          v-if="item.roleId === 'R_4'"
+                          :value="relations.student.studentTel"
+                        ></v-text-field>
+                        <v-text-field
+                          outlined
+                          dense
+                          disabled
+                          v-else
+                          :value="relations.parent.parentTel"
+                        ></v-text-field>
 
-                            <!-- <div>
+                        <!-- <div>
                                 {{
                                   item.roleId === "R_4"
                                     ? relations.student.studentTel
                                     : relations.parent.parentTel
                                 }}
                               </div> -->
-                          </v-col>
-                        </v-row>
-                      </v-card-text>
-                    </v-card>
-                  </v-col>
-                </v-row>
-                <!-- </v-container> -->
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+              <!-- </v-row> -->
+              <!-- </v-container> -->
 
-                <!-- check box In relations -->
-                <v-row v-if="item.roleId === 'R_4' || item.roleId === 'R_5'">
-                  <v-col cols="12" sm="6" class="mx-15">
-                    <v-checkbox
-                      v-model="isCheckedRelation"
-                      :label="
-                        item.roleId === 'R_4'
-                          ? 'ต้องการเพิ่มนักเรียนในการดูแล'
-                          : 'ต้องการเพิ่มผู้ปกครอง'
-                      "
-                      value="Jacob"
-                      color="pink"
-                      item-color="pink"
-                      @change="onCheckboxChange(item.roleId)"
-                    ></v-checkbox>
-                  </v-col>
-                </v-row>
+              <!-- check box In relations -->
+              <!-- <v-row v-if="item.roleId === 'R_4' || item.roleId === 'R_5'"> -->
+              <v-col
+                cols="12"
+                sm="6"
+                v-if="item.roleId === 'R_4' || item.roleId === 'R_5'"
+              >
+                <v-checkbox
+                  v-model="isCheckedRelation"
+                  :label="
+                    item.roleId === 'R_4'
+                      ? 'ต้องการเพิ่มนักเรียนในการดูแล'
+                      : 'ต้องการเพิ่มผู้ปกครอง'
+                  "
+                  value="Jacob"
+                  color="pink"
+                  item-color="pink"
+                  @change="onCheckboxChange(item.roleId)"
+                ></v-checkbox>
+              </v-col>
+              <!-- </v-row> -->
 
-                <!-- เพิ่มความสัมพันธ์ -->
-                <v-row dense v-if="isCheckedRelation">
-                  <v-col cols="12" class="text-center">
-                    <v-btn
-                      dense
-                      outlined
-                      color="#ff6b81"
-                      @click="
-                        openAddRelationsDialog(relation.username, item.roleId)
-                      "
-                    >
-                      <v-icon>mdi-plus-circle-outline</v-icon
-                      >{{
-                        item.roleId === "R_4"
-                          ? "เพิ่มข้อมูลนักเรียน"
-                          : "เพิ่มข้อมูลผู้ปกครอง"
-                      }}</v-btn
-                    >
-                  </v-col>
-                </v-row>
-                <!-- ----------------------------------------------- -->
+              <!-- เพิ่มความสัมพันธ์ -->
+              <!-- <v-row dense v-if="isCheckedRelation"> -->
+              <v-col cols="12" class="text-center" v-if="isCheckedRelation">
+                <v-btn
+                  dense
+                  outlined
+                  color="#ff6b81"
+                  @click="
+                    openAddRelationsDialog(relation.username, item.roleId)
+                  "
+                >
+                  <v-icon>mdi-plus-circle-outline</v-icon
+                  >{{
+                    item.roleId === "R_4"
+                      ? "เพิ่มข้อมูลนักเรียน"
+                      : "เพิ่มข้อมูลผู้ปกครอง"
+                  }}</v-btn
+                >
+              </v-col>
+              <!-- </v-row> -->
+              <!-- ----------------------------------------------- -->
 
-                <!-- TABLE Role PARENT -->
-                <div v-if="item.roleId === 'R_4'">
-                  <headerCard
-                    class="ml-6 mt-8"
-                    :icon="'mdi-school-outline'"
-                    :icon_color="'#FF6B81'"
-                    :title="titleCourseDetail"
-                  ></headerCard>
-                  <v-divider class="mx-10"></v-divider>
-                  <div class="my-10 mx-10">
-                    <v-data-table
-                      :headers="roleParentTable"
-                      @page-count="pageCount = $event"
-                      class="elevation-1 header-table"
-                      :items="student_schedule"
-                      :search="search"
-                    >
-                      <template v-slot:[`item.dates`]="{ item }">
-                        {{ dayOfWeekName(item.dates.day) }}
-                        <!-- ({{
+              <!-- TABLE Role PARENT -->
+              <v-col cols="12" v-if="item.roleId === 'R_4'">
+                <headerCard
+                  :icon="'mdi-school-outline'"
+                  :icon_color="'#FF6B81'"
+                  :title="titleCourseDetail"
+                ></headerCard>
+                <v-divider></v-divider>
+                <v-data-table
+                  :headers="roleParentTable"
+                  @page-count="pageCount = $event"
+                  class="elevation-1 header-table"
+                  :items="student_schedule"
+                  :search="search"
+                >
+                  <template v-slot:[`item.dates`]="{ item }">
+                    {{ dayOfWeekName(item.dates.day) }}
+                    <!-- ({{
                           getThaiDayOfWeek(item.dates.day)
                         }}) -->
-                      </template>
-                    </v-data-table>
-                  </div>
-                </div>
+                  </template>
+                </v-data-table>
+              </v-col>
 
-                <!-- TABLE Role STUDENT -->
-                <div v-if="item.roleId === 'R_5'">
-                  <headerCard
-                    class="ml-6 mt-8"
-                    :icon="'mdi-school-outline'"
-                    :icon_color="'#FF6B81'"
-                    :title="titleCourseDetail"
-                  ></headerCard>
-                  <v-divider class="mx-10"></v-divider>
-                  <div class="my-10 mx-10">
-                    <v-data-table
-                      :headers="roleStudentTable"
-                      @page-count="pageCount = $event"
-                      class="elevation-1 header-table"
-                      :items="student_schedule"
-                      :search="search"
-                    >
-                      <template v-slot:[`item.dates`]="{ item }">
-                        {{ dayOfWeekName(item.dates.day) }}
-                        <!-- ({{
+              <!-- TABLE Role STUDENT -->
+              <v-col cols="12" v-if="item.roleId === 'R_5'">
+                <headerCard
+                  :icon="'mdi-school-outline'"
+                  :icon_color="'#FF6B81'"
+                  :title="titleCourseDetail"
+                ></headerCard>
+                <v-divider></v-divider>
+                <v-data-table
+                  :headers="roleStudentTable"
+                  @page-count="pageCount = $event"
+                  class="elevation-1 header-table"
+                  :items="student_schedule"
+                  :search="search"
+                >
+                  <template v-slot:[`item.dates`]="{ item }">
+                    {{ dayOfWeekName(item.dates.day) }}
+                    <!-- ({{
                           getThaiDayOfWeek(item.dates.day)
                         }}) -->
-                      </template>
-                    </v-data-table>
-                  </div>
-                </div>
+                  </template>
+                </v-data-table>
               </v-col>
             </v-row>
-          </div>
+          </v-container>
 
           <v-col class="text-right mt-5">
             <v-btn
@@ -636,19 +607,40 @@
         class="pa-2 w-full"
         :width="$vuetify.breakpoint.smAndUp ? '50vw' : ''"
       >
-        <header-card
+        <!-- <header-card
           icon="mdi-card-account-details-outline"
           icon_color="#ff6b81"
-          :title="global_role_id === 'R_4' ? 'เพิ่มนักเรียน' : 'เพิ่มผู้ปกครอง'"
+          :title="global_role_id === 'R_4' ? 'เพิ่มนักเรียน2' : 'เพิ่มผู้ปกครอง'"
         >
           <template #actions>
             <v-btn icon @click="closeDialog"><v-icon>mdi-close</v-icon></v-btn>
           </template>
-        </header-card>
+        </header-card> -->
+
+        <v-app-bar
+            flat
+            color="white"
+          >
+
+            <v-toolbar-title class="text-h6 pl-0 ">
+              <v-icon class="text-[#ff6b81!important] mb-1">mdi-card-account-details-outline</v-icon>
+               {{ global_role_id === 'R_4' ? 'เพิ่มนักเรียน' : 'เพิ่มผู้ปกครอง' }}
+            </v-toolbar-title>
+
+            <v-spacer></v-spacer>
+
+            <v-btn
+              icon
+              @click="closeDialog"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-app-bar>
+
         <v-card-text class="pb-2">
-          <v-row dense>
-            <v-col cols="9">
-              <labelCustom text="Username"></labelCustom>
+          <v-row dense class="mb-5">
+            <v-col cols="12">
+              <labelCustom required text="Username"></labelCustom>
               <!-- :hide-details="!relation.account_id" -->
               <v-text-field
                 :rules="rules.usernameRules"
@@ -681,6 +673,14 @@
                     >mdi-checkbox-marked-circle-outline</v-icon
                   >
                 </template>
+                <template v-slot:append-outer>
+                  <v-icon size="24" class="cursor-pointer" @click="
+                  checkUsername(
+                    relation.username,
+                    global_role_id === 'R_4' ? 'parent' : 'student'
+                  )
+                ">mdi-magnify</v-icon>
+                </template>
               </v-text-field>
               <template v-if="!relation.account_id">
                 <label> หากยังไม่มีบัญชีผู้ใช้กรุณา </label>
@@ -691,9 +691,11 @@
                 >
               </template>
             </v-col>
-            <v-col cols="auto">
-              <br />
+
+            
+            <!-- <v-col cols="3">
               <v-btn
+                block
                 :loading="is_loading"
                 color="#ff6b81"
                 @click="
@@ -706,9 +708,19 @@
                 dark
                 >ตกลง</v-btn
               >
-            </v-col>
+            </v-col> -->
           </v-row>
-          <template>
+          <!-- <v-row dense>
+            <v-col cols="12" v-if="!relation.account_id">
+                <label> หากยังไม่มีบัญชีผู้ใช้กรุณา </label>
+                <label
+                  class="text-[#ff6b81] underline cursor-pointer"
+                  @click="registerParent"
+                  >สมัคร One ID</label
+                >
+              </v-col>
+          </v-row> -->
+          <!-- <v-container> -->
             <v-row dense>
               <v-col cols="12">
                 <labelCustom text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
@@ -745,7 +757,7 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-          </template>
+          <!-- </v-container> -->
         </v-card-text>
         <v-card-actions class="px-6">
           <v-row dense>
@@ -760,6 +772,7 @@
             </v-col>
             <v-col>
               <v-btn
+                :disabled="relation.username === '' ? true : false"
                 class="w-full"
                 :color="relation.username.length < 1 ? '#CCCCCC' : '#ff6b81'"
                 dark
@@ -823,7 +836,7 @@
     </v-dialog>
   </v-container>
 </template>
-  <script>
+<script>
 import { inputValidation } from "@/functions/functions";
 import LabelCustom from "@/components/label/labelCustom.vue";
 import headerPage from "@/components/header/headerPage.vue";
@@ -980,6 +993,7 @@ export default {
       "ศุกร์",
       "เสาร์",
     ],
+    error_message: ""
   }),
   // bef
   created() {
@@ -1006,7 +1020,9 @@ export default {
       }
     }
 
-    this.GetDataRelationsManagement(this.data_user_by_id);
+    this.GetDataRelationsManagement(this.show_by_id);
+    // this.GetDataRelationsManagement(this.data_user_by_id);
+    console.log("before mounted data_user_relation_management", this.data_user_relation_management);
   },
 
   mounted() {
@@ -1030,7 +1046,9 @@ export default {
       }
     }
 
-    this.GetDataRelationsManagement(this.data_user_by_id);
+    this.GetDataRelationsManagement(this.show_by_id);
+    console.log("mounted data_user_relation_management", this.data_user_relation_management);
+    // this.GetDataRelationsManagement(this.data_user_by_id);
 
     // for (const show_data of this.show_by_id.userRoles) {
     //   console.log("show_data", show_data);
@@ -1332,7 +1350,8 @@ export default {
                       username: "",
                       tel: "",
                     };
-                    this.GetDataRelationsManagement(this.data_user_by_id);
+                    this.GetDataRelationsManagement(this.show_by_id);
+                    // this.GetDataRelationsManagement(this.data_user_by_id);
                     console.log("tset", this.data_user_relation_management);
                   }
                 });
@@ -1342,11 +1361,20 @@ export default {
             } else {
               throw { message: data.message };
             }
-          } catch (error) {
-            console.log(error);
+          } catch ({response}) {
+            if (response?.data?.message === "parentId not found." || response?.data?.message === "studentId and parentId not found." || response?.data?.message === "studentId not found.") {
+              this.error_message = "ชื่อผู้ใช้ไม่ถูกต้อง"
+            } else if (response?.data?.message === "Duplicate relation.") {
+              this.error_message = "ความสัมพันธ์ซ้ำ"
+            } else if (response?.data?.message === "parentId and studentId must not be duplicate.") {
+              this.error_message = "ชื่อผู้ใช้ของผู้ปกครองและนักเรียนต้องไม่ซ้ำกัน"
+            } else {
+              this.error_message = "เกิดข้อผิดพลาด"
+            }
+            console.log("error=>", response);
             Swal.fire({
               icon: "error",
-              title: "Duplicate relation",
+              title: this.error_message
             });
           }
         } else {
@@ -1382,7 +1410,8 @@ export default {
                   : relations.studentId,
             }).then(() => {
               // this.GetAll(this.user_login.account_id);
-              this.GetDataRelationsManagement(this.data_user_by_id);
+              this.GetDataRelationsManagement(this.show_by_id);
+              // this.GetDataRelationsManagement(this.data_user_by_id);
             });
           }
         }
@@ -1557,21 +1586,24 @@ export default {
           studentId: this.$route.params.account_id,
           parentId: this.last_user_registered.account_id,
         }).then(() => {
-          this.GetDataRelationsManagement(this.data_user_by_id);
+          this.GetDataRelationsManagement(this.show_by_id);
+          // this.GetDataRelationsManagement(this.data_user_by_id);
         });
       } else if (this.last_user_registered.type === "student") {
         this.AddRelations({
           parentId: this.$route.params.account_id,
           studentId: this.last_user_registered.account_id,
         }).then(() => {
-          this.GetDataRelationsManagement(this.data_user_by_id);
+          this.GetDataRelationsManagement(this.show_by_id);
+          // this.GetDataRelationsManagement(this.data_user_by_id);
         });
       }
       this.dialog_parent = false;
     },
 
     "data_user_relation_management.length": function () {
-      this.GetDataRelationsManagement(this.data_user_by_id);
+      this.GetDataRelationsManagement(this.show_by_id);
+      // this.GetDataRelationsManagement(this.data_user_by_id);
       for (const show_data of this.show_by_id.userRoles) {
         console.log("show_data", show_data);
         if (show_data.roleId == "R_4") {
@@ -1606,10 +1638,22 @@ export default {
         }
       }
     },
+
+    show_by_id: function () {
+      console.log("len", this.show_by_id.userRoles.length);
+      if (this.show_by_id.userRoles.length > 0) {
+        this.show_by_id.userRoles.map((val)=>{
+          this.seledtedRole = val.roleId
+        })
+      } else {
+        this.seledtedRole = ""
+      }
+      console.log("this.seledtedRole", this.seledtedRole);
+    }
   },
 };
 </script>
-  <style scoped>
+<style scoped>
 .img-one {
   width: 140px;
   height: 60px;
@@ -1689,4 +1733,3 @@ export default {
   /* transform: rotate(30deg); */
 }
 </style>
-  

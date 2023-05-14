@@ -27,7 +27,6 @@
           </v-card-text>
         </v-card>
       </v-row>
-
       <!-- search -->
       <v-card flat class="my-5">
         <v-card-text class="border">
@@ -44,10 +43,12 @@
                 prepend-inner-icon="mdi-magnify"
               ></v-text-field>
             </v-col>
-            <label-custom text="บทบาท"></label-custom>
+            <label-custom v-if="!MobileSize" text="บทบาท"></label-custom>
             <v-col cols="12" sm="3">
+            <label-custom v-if="MobileSize" text="บทบาท"></label-custom>
               <template>
                 <v-autocomplete
+                  disabled
                   dense
                   :items="roles"
                   item-text="role"
@@ -67,6 +68,7 @@
             <!-- เพิ่มผู้ใช้ -->
             <v-col cols="12" sm="2">
               <v-btn
+                block
                 color="#FF6B81"
                 dark
                 @click="$router.push({ name: 'UserCreate' })"
@@ -84,7 +86,10 @@
         <template>
           <v-data-table
             :headers="headers"
-            :items="user_list"
+            :items="user_list.map((val,i)=>{
+              val.index = i
+              return val 
+            })"
             :search="search"
             :page.sync="page"
             :items-per-page="itemsPerPage"
@@ -92,8 +97,9 @@
             @page-count="pageCount = $event"
             class="elevation-1 header-table"
           >
-            <!-- <div v-for="(item_data, index_item) in user_list"
-            :key="`${index_item}-cart`"> -->
+            <template v-slot:[`item.count`]="{item}">
+              {{ item.index + 1 }}
+            </template>
 
             <template v-slot:[`item.roles`]="{ item }">
               {{
@@ -103,10 +109,6 @@
                   })
                   .join()
               }}
-
-              <!-- <div>
-                {{ user_list.map((val)=>{val}) }}
-              </div> -->
             </template>
 
             <template v-slot:[`item.actions`]="{ item }">
@@ -206,6 +208,7 @@ export default {
         users: "",
       },
       headers: [
+        { text: "ลำดับ", value: "count", sortable: false, align: "start" },
         { text: "ชื่อ", value: "firstNameTh", sortable: false, align: "start" },
         {
           text: "นามสกุล",
@@ -217,7 +220,7 @@ export default {
         { text: "ผู้ใช้", value: "userName", sortable: false, align: "start" },
         // { text: "One ID", value: "oneid", sortable: false },
         { text: "บทบาท", value: "roles", sortable: false },
-        { text: "", value: "actions", sortable: false, align: "start" },
+        { text: "จัดการ", value: "actions", sortable: false, align: "start" },
       ],
       editedIndex: -1,
       editedItem: {
@@ -412,6 +415,10 @@ export default {
     },
     filteredKeys() {
       return this.keys.filter((key) => key !== "Name");
+    },
+    MobileSize() {
+      const { xs } = this.$vuetify.breakpoint;
+      return !!xs;
     },
   },
 };

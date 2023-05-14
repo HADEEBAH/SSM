@@ -105,7 +105,8 @@ const userModules = {
         },
 
         async GetStudentSchedule(context, student_id) {
-            console.log("GetStudentSchedule", student_id);
+            // console.log("GetStudentSchedule", student_id);
+            context.commit("SetStudentSchedule", [])
             try {
                 let config = {
                     headers: {
@@ -116,12 +117,11 @@ const userModules = {
                 }
                 // let { data } = await axios.get(`http://localhost:3000/api/v1/usermanagement/student/${student_id}`, config)
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/usermanagement/student/${student_id}`, config)
+                console.log("Schedule=>", data.data);
                 if (data.statusCode === 200) {
-                    context.commit("SetStudentSchedule", [])
                     context.commit("SetStudentSchedule", data.data)
-
                 } else {
-                    context.commit("SetStudentSchedule", [])
+                    // context.commit("SetStudentSchedule", [])
                     throw { error: data }
                 }
             } catch (error) {

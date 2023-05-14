@@ -16,28 +16,50 @@
         </v-app-bar-nav-icon>
         <!-- <v-app-bar-title><v-img max-height="37" max-width="51" src="../assets/navbar/title_img.jpg"></v-img></v-app-bar-title> -->
         <v-spacer></v-spacer>
-        <v-badge class="mr-5" overlap color="#F03D3E" content="1" message="1">
+        <v-badge class="mx-5" overlap color="#F03D3E" content="1" message="1">
           <v-icon dark>mdi-bell-outline</v-icon>
         </v-badge>
-        <div v-if="!$vuetify.breakpoint.smAndDown">
-          <div v-if="user_detail.image !== ''">
-            <v-avatar class="mr-2" size="24">
-              <v-img :src="user_detail.image" size="24" />
-            </v-avatar>
-          </div>
-          <div v-else>
-            <v-avatar class="mr-2" size="24">
-              <v-img
-                src="../assets/navbar_user/default_image_profile.svg"
-                size="24"
-              />
-            </v-avatar>
-          </div>
 
-          <span class="text-white">{{
-            `${user_detail.first_name_en} ${user_detail.last_name_en}`
-          }}</span>
+        <div class="mx-5" v-if="!$vuetify.breakpoint.smAndDown">
+          <v-menu offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <v-row v-bind="attrs"
+                v-on="on">
+                <div v-if="user_detail.image !== ''">
+                  <v-avatar class="mr-2" size="24">
+                    <v-img :src="user_detail.image" size="24" />
+                  </v-avatar>
+                </div>
+                <div v-else>
+                  <v-avatar class="mr-2" size="24">
+                    <v-img
+                      src="../assets/navbar_user/default_image_profile.svg"
+                      size="24"
+                    /> 
+                  </v-avatar>
+                </div>
+              
+                <span class="text-white">{{
+                  `${user_detail.first_name_en} ${user_detail.last_name_en}`
+                }}</span>
+
+              </v-row>
+            </template>
+            <v-list dense >
+              <v-subheader>ตัวเลือก</v-subheader>
+              <v-list-item
+              link
+              @click="selectMenu('head', 'UserKingdom')"
+              >
+                <v-list-item-icon>
+                  <v-icon>mdi-account</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title >หน้าผู้ใช้งาน</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
         </div>
+
       </v-app-bar>
       <v-navigation-drawer
         clipped
@@ -123,9 +145,9 @@ export default {
     },
     user_detail: null,
     menu_drawer_list: [
-      { title: "แดชบอร์ด", to: "dashbord", child: [] }, // to ให้ใส่ name ของ router
-      { title: "ตารางเรียน", to: "Schedule", child: [] },
-      { title: "เพิ่มผู้เรียน", to: "Student", child: [] },
+      // { title: "แดชบอร์ด", to: "dashbord", child: [] }, // to ให้ใส่ name ของ router
+      // { title: "ตารางเรียน", to: "Schedule", child: [] },
+      // { title: "เพิ่มผู้เรียน", to: "Student", child: [] },
       {
         title: "คอร์สเรียน",
         to: "",
@@ -142,14 +164,14 @@ export default {
           { title: "สร้างอาณาจักร", to: "Kingdom" },
         ],
       },
-      { title: "การเงิน", to: "Finance", child: [] },
+      // { title: "การเงิน", to: "Finance", child: [] },
       {
         title: "จัดการผู้ใช้งาน",
         to: "",
         child: [{ title: "จัดการผู้ใช้งาน", to: "UserList" }],
       },
-      { title: "การอนุมัติลา", to: "LeaveList", child: [] },
-      { title: "หน้าผู้ใช้งาน", to: "UserKingdom", child: [] },
+      // { title: "การอนุมัติลา", to: "LeaveList", child: [] },
+      // { title: "หน้าผู้ใช้งาน", to: "UserKingdom", child: [] },
     ],
   }),
 
