@@ -602,18 +602,20 @@
     <!-- LOADING -->
     <loading-overlay :loading="order_is_loading"></loading-overlay>
     <!-- DIALOG :: ADD PARENT-->
-    <v-dialog v-model="dialog_parent" width="50vw" class="d-flex align-center">
-      <v-card class="pa-2" width="50vw">
+    <v-dialog persistent v-model="dialog_parent" :width="$vuetify.breakpoint.smAndUp ? '50vw' : ''" class="d-flex align-center">
+      <v-card class="pa-2">
+        <v-row dense>
+          <v-col align="right">
+            <v-btn icon @click="closeDialogParent"
+              ><v-icon color="#ff6b81">mdi-close</v-icon></v-btn
+            >
+          </v-col>
+        </v-row>
         <header-card
           icon="mdi-card-account-details-outline"
           icon_color="#ff6b81"
           title="ผู้ปกครอง"
         >
-          <template #actions>
-            <v-btn icon @click="closeDialogParent"
-              ><v-icon>mdi-close</v-icon></v-btn
-            >
-          </template>
         </header-card>
         <v-card-text class="pb-2">
           <v-row dense>
@@ -627,21 +629,11 @@
                 outlined
                 v-model="parent.username"
                 @keypress="Validation($event, 'en-number')"
-                @change="
-                  parent.username.length > 3
-                    ? checkUsername(parent.username)
-                    : ''
+                @change=" parent.username.length > 3 ? checkUsername(parent.username) : ''
                 "
-                @keyup.enter="
-                  parent.username.length > 3
-                    ? checkUsername(parent.username)
-                    : ''
+                @keyup.enter=" parent.username.length > 3 ? checkUsername(parent.username) : ''
                 "
-                @blur="
-                  parent.username.length > 3
-                    ? checkUsername(parent.username)
-                    : ''
-                "
+                @blur=" parent.username.length > 3 ? checkUsername(parent.username) : ''"
                 placeholder="Username"
               >
                 <template v-slot:append>
@@ -724,10 +716,11 @@
             </v-col>
             <v-col>
               <v-btn
-                :color="parent.username.length < 1 ? '#CCCCCC' : '#ff6b81'"
+                :color="!parent.account_id ? '#CCCCCC' : '#ff6b81'"
                 class="w-full"
-                dark
+                :dark="parent.account_id ? true: false"
                 depressed
+                :disabled="!parent.account_id ? true: false"
                 @click="addParent"
                 >บันทึก</v-btn
               >
@@ -736,7 +729,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-dialog persistent v-model="show_dialog_cart" width="60vw">
+    <v-dialog persistent v-model="show_dialog_cart" :width="$vuetify.breakpoint.smAndUp ? '60vw' : ''">
       <v-card>
         <v-card-title>
           <v-row>
@@ -1163,7 +1156,7 @@ export default {
           if (course_monitors_filter.length > 0) {
             for (const monitor of course_monitors_filter) {
               if (monitor.m_status === "Close") {
-                console.log(monitor.m_status);
+                // console.log(monitor.m_status);
                 return 0;
               } else {
                 let course_student_filter = this.course_student.filter(
@@ -1483,68 +1476,83 @@ export default {
           status: "",
           type: type,
         }).then(() => {
-          console.log(this.course_order.students.filter((v) => v.username === username))
-          if(this.course_order.students.filter((v) => v.username === username).length === 1){
+          // console.log(this.course_order.students.filter((v) => v.username === username))
             if (type === "student") {
-              let student = this.course_order.students.filter((v) => v.username === username)[0]
-              if (this.user_student_data.length > 0) {
-                student.firstname_en = this.user_student_data[0].firstNameEng;
-                student.lastname_en = this.user_student_data[0].lastNameEng;
-                student.firstname_th = this.user_student_data[0].firstNameTh;
-                student.lastname_th = this.user_student_data[0].lastNameTh;
-                student.student_name = `${this.user_student_data[0].firstNameEng} ${this.user_student_data[0].lastNameEng} `;
-                student.tel = this.user_student_data[0].mobileNo;
-                student.username = username;
-              student.account_id = this.user_student_data[0].userOneId;
-              } else {
-                if(student){
-                  student.firstname_en = ""
-                  student.lastname_en = ""
-                  student.firstname_th = ""
-                  student.lastname_th = ""
-                  student.student_name = ""
-                  student.tel =""
-                  student.username = ""
-                  student.account_id = ""
-                }else{
-                  console.log(student)
-                }
+              if(this.course_order.students.filter((v) => v.username === username).length === 1){
+                  let student = this.course_order.students.filter((v) => v.username === username)[0]
+                  if (this.user_student_data.length > 0) {
+                    student.firstname_en = this.user_student_data[0].firstNameEng;
+                    student.lastname_en = this.user_student_data[0].lastNameEng;
+                    student.firstname_th = this.user_student_data[0].firstNameTh;
+                    student.lastname_th = this.user_student_data[0].lastNameTh;
+                    student.student_name = `${this.user_student_data[0].firstNameEng} ${this.user_student_data[0].lastNameEng} `;
+                    student.tel = this.user_student_data[0].mobileNo;
+                    student.username = username;
+                  student.account_id = this.user_student_data[0].userOneId;
+                  } else {
+                    if(student){
+                      student.firstname_en = ""
+                      student.lastname_en = ""
+                      student.firstname_th = ""
+                      student.lastname_th = ""
+                      student.student_name = ""
+                      student.tel =""
+                      student.username = ""
+                      student.account_id = ""
+                    }else{
+                      console.log(student)
+                    }
+                  }
+                }else if(this.course_order.students.filter((v) => v.username === username).length > 1){
+                  Swal.fire({
+                    icon: "error",
+                    title: "ชื่อผู้ใช้นี้ถูกใส่ข้อมูลมาแล้ว กรุณาตรวจสอบอีกครั้ง"
+                  })
               }
             } else {
-              if (this.user_data.length > 0) {
-                if (this.edit_parent) {
-                  this.edit_parent = false;
+              if(this.course_order.students.filter((v) => v.username === username).length === 0){
+                console.log(this.user_data)
+                if (this.user_data.length > 0) {
+                  if (this.edit_parent) {
+                    this.edit_parent = false;
+                  }
+                  this.parent = {
+                    account_id: this.user_data[0].userOneId,
+                    username: username,
+                    firstname_en: this.user_data[0].firstNameEng,
+                    lastname_en: this.user_data[0].lastNameEng,
+                    tel: this.user_data[0].mobileNo,
+                  };
+                  if ( this.course_order.students.filter((v) => v.is_other === false )[0].parents.length > 0) {
+                    let parents = this.course_order.students.filter( (v) => v.is_other === false )[0].parents;
+                    parents[0].firstname_en = this.user_data[0].firstNameEng;
+                    parents[0].lastname_en = this.user_data[0].lastNameEng;
+                    parents[0].tel = this.user_data[0].mobileNo;
+                    parents[0].account_id = this.user_data[0].userOneId;
+                    parents[0].username = username;
+                  }
+                }else{
+                  this.parent = {
+                    account_id: "",
+                    username: "",
+                    firstname_en: "",
+                    lastname_en: "",
+                    tel: ""
+                  };
+                  let parents = this.course_order.students.filter( (v) => v.is_other === false )[0].parents;
+                  parents[0].firstname_en = ""
+                  parents[0].lastname_en = ""
+                  parents[0].tel = ""
+                  parents[0].account_id = ""
+                  parents[0].username = ""
                 }
-                this.parent = {
-                  account_id: this.user_data[0].userOneId,
-                  username: username,
-                  firstname_en: this.user_data[0].firstNameEng,
-                  lastname_en: this.user_data[0].lastNameEng,
-                  tel: this.user_data[0].mobileNo,
-                };
-                if (
-                  this.course_order.students.filter(
-                    (v) => v.is_other === false
-                  )[0].parents.length > 0
-                ) {
-                  let parents = this.course_order.students.filter(
-                    (v) => v.is_other === false
-                  )[0].parents;
-                  parents[0].firstname_en = this.user_data[0].firstNameEng;
-                  parents[0].lastname_en = this.user_data[0].lastNameEng;
-                  parents[0].tel = this.user_data[0].mobileNo;
-                  parents[0].account_id = this.user_data[0].userOneId;
-                  parents[0].username = username;
-                }
+              }else if(this.course_order.students.filter((v) => v.username === username).length > 1){
+                  Swal.fire({
+                    icon: "error",
+                    title: "ชื่อผู้ใช้นี้ถูกใส่ข้อมูลมาแล้ว กรุณาตรวจสอบอีกครั้ง"
+                  })
               }
             }
-          }else if(this.course_order.students.filter((v) => v.username === username).length > 1){
-            Swal.fire({
-              icon: "error",
-              title: "ชื่อผู้ใช้นี้ถูกใส่ข้อมูลมาแล้ว กรุณาตรวจสอบอีกครั้ง"
-            })
-          }
-        
         });
       } else {
         this.user_data = [];

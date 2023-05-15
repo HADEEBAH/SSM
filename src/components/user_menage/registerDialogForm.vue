@@ -122,7 +122,7 @@
               dense
               autocomplete="off-autofill"
               ref="password_rig"
-              @keypress="Validation($event, 'en-number')"
+              @keypress="Validation($event, 'en')"
               :type="show_password ? 'text' : 'password'"
               :rules="rules.passwordRules"
               required
@@ -160,7 +160,7 @@
               @click:append="show_confirm_password = !show_confirm_password"
               @change="changeUserOneId(user_one_id)"
               outlined
-              @keypress="Validation($event, 'en-number')"
+              @keypress="Validation($event, 'en')"
             >
             </v-text-field>
           </v-col>
@@ -224,6 +224,9 @@ export default {
     phone_number: "",
     rules: {
       phone_number: [
+      (val) =>
+          ((val || "").length > 0 && val[0] === '0') ||
+          "โปรดระบุเบอร์โทรขึ้นต้นด้วยเลข 0",
         (val) =>
           ((val || "").length > 0 && val.length === 12) ||
           "โปรดระบุเบอร์โทรศัพท์ 10 หลัก",

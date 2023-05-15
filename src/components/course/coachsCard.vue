@@ -132,13 +132,15 @@
               </v-btn>
             </v-col>
             <v-col cols="6" sm="2">
-              <template v-if="teach_day.course_coach_id">
+             
+              <template v-if="teach_day.day_of_week_id">
+                <!-- {{  edited +'*'+ disable}} -->
                 <v-btn
-                  :disabled="disable || edited"
+                  :disabled="disable || !edited"
                   text
                   color="red"
                   v-if="coach.teach_day_data.length > 1"
-                  @click="removeTeachDay(coach.teach_day_data, teach_day_index)"
+                  @click="removeDayOfWeekData(coach.teach_day_data, teach_day.day_of_week_id)"
                   ><v-icon>mdi-calendar-plus-outline</v-icon>
                   ลบวันสอน
                 </v-btn>
@@ -298,12 +300,13 @@
               </v-col>
               <v-col cols="6" sm="2" class="d-flex align-center">
                 <template v-if="class_date.class_date_range.day_of_week_id">
+                  <!-- {{ class_date.class_date_range.time_id }} -->
                   <v-btn
-                    :disabled="disable || edited"
+                    :disabled="disable"
                     v-if="teach_day.class_date.length > 1"
                     text
                     color="red"
-                    @click="removeTime(teach_day.class_date, class_date_index)"
+                    @click="removeTimeData(teach_day.class_date, class_date.class_date_range.time_id)"
                   >
                     <v-icon>mdi-timer-minus-outline</v-icon>
                     ลบเวลา
@@ -334,6 +337,7 @@ import LabelCustom from "../label/labelCustom.vue";
 import { mapGetters, mapActions } from "vuex";
 import { Input, TimePicker } from "ant-design-vue";
 import moment from "moment";
+import Swal from "sweetalert2";
 export default {
   components: {
     LabelCustom,
@@ -386,6 +390,9 @@ export default {
     ...mapActions({
       ChangeCourseData: "CourseModules/ChangeCourseData",
       GetTeachDays: "CourseModules/GetTeachDays",
+      DeleteDayOfWeek : "CourseModules/DeleteDayOfWeek",
+      DeleteTime : "CourseModules/DeleteTime",
+      GetCourse: "CourseModules/GetCourse",
     }),
     width() {
       switch (this.$vuetify.breakpoint.name) {
@@ -612,6 +619,40 @@ export default {
       data.splice(index, 1);
       this.ChangeCourseData(this.course_data);
     },
+    removeTimeData(data, time_id){
+      Swal.fire({
+        icon: "question",
+        title: "ต้องการลบเวลาสอนนี้ใช่หรือไม่",
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: "ตกลง",
+        cancelButtonText: "ยกเลิก",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          this.DeleteTime({time_id:time_id}).then(()=>{
+            this.$store.dispatch("CourseModules/GetCourse", this.$route.params.course_id );
+          })
+        }
+      })
+    },
+    removeDayOfWeekData(data, day_of_week_id){
+      console.log(data, day_of_week_id)
+      Swal.fire({
+        icon: "question",
+        title: "ต้องการลบวันสอนนี้ใช่หรือไม่",
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: "ตกลง",
+        cancelButtonText: "ยกเลิก",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          this.DeleteDayOfWeek({day_of_week_id:day_of_week_id}).then(()=>{
+            this.$store.dispatch("CourseModules/GetCourse", this.$route.params.course_id );
+          })
+        }
+      })
+    },
+    
   },
 };
 </script>
