@@ -1,5 +1,7 @@
 <template>
+ 
   <v-app class="overflow-x-hidden overflaow-y-hidden">
+    {{ setFunctions }}
     <v-container>
       <loading-overlay :loading="categorys_is_loading"></loading-overlay>
       <!-- <pre>{{ cart_list }}</pre> -->
@@ -98,7 +100,7 @@
                         {{ item.students.length }} คน</v-col
                       >
                     </v-row>
-                    <v-row dense v-if="item.course_type_id === 'CT_1'">
+                    <v-row dense v-if="item.course_type_id === 'CT_1' ">
                       <v-col align="right" cols="8"> ส่วนลด</v-col>
                       <v-col
                         align="right"
@@ -194,10 +196,8 @@ export default {
     // console.log(this.user_login.account_id)
     // console.log(this.carts)
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "รถเข็น");
-
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
     // this.carts = JSON.parse(localStorage.getItem(this.user_login.account_id))
-    this.GetCartList(this.user_login.account_id);
     this.cart_list.map((val) => {
       val.checked = false;
     });
@@ -299,10 +299,7 @@ export default {
           // console.log("courses",this.order.courses)
           this.order.courses.forEach((course) => {
             console.log("courses", course);
-            if (
-              this.course_monitors.filter(
-                (v) =>
-                  v.courseMonitorEntity_coach_id === course.coach &&
+            if ( this.course_monitors.filter( (v) => v.courseMonitorEntity_coach_id === course.coach &&
                   v.courseMonitorEntity_course_id === course.course_id &&
                   v.courseMonitorEntity_day_of_week_id ===
                     course.day_of_week_id &&
@@ -318,13 +315,12 @@ export default {
                       course.day_of_week_id &&
                     v.courseMonitorEntity_time_id === course.time_id &&
                     v.courseMonitorEntity_current_student +
-                      course.students.length <=
-                      v.courseMonitorEntity_maximum_student &&
-                    v.courseMonitorEntity_status === "Open"
+                      course.students.length <= v.courseMonitorEntity_maximum_student && v.courseMonitorEntity_status === "Open"
                 )
               ) {
                 isValiDateCourse.push(true);
               } else {
+                console.log( this.course_monitors)
                 isValiDateCourse.push(false);
               }
             } else {
@@ -365,6 +361,10 @@ export default {
       course_monitors: "CourseMonitorModules/getCourseMonitor",
       order: "OrderModules/getOrder",
     }),
+    setFunctions(){
+      this.GetCartList(this.user_login.account_id);
+      return ""
+    },
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;

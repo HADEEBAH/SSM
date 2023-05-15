@@ -994,6 +994,7 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
+        // let localhost = "http://localhost:3002"
         if(cpo_id){
           let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/count/student?courseId=${course_id}&cpoId=${cpo_id}`,config)
           console.log("GetCourseStudent => ",data)
@@ -1277,6 +1278,7 @@ const CourseModules = {
             await context.commit("SetCourseData", payload)
           }else{
             // console.log("payload :",payload)
+            // let localhost = "http://localhost:3002"
             let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/count/student?courseId=${course_id}`,config)
               // console.log("GetCourseStudent => ",data)
               if(data.statusCode === 200){

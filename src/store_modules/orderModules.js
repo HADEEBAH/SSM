@@ -303,11 +303,19 @@ const orderModules = {
                         },
                         "student": students
                     })
-                    // console.log("course.students.lenght ",course.students )
-                    // console.log("course.price ",course.price )
+                    console.log("course.students.lenght ",course.students.length )
+                    console.log("course.price ",course.price )
                     let price = course.option?.net_price ? course.option.net_price : course.price
                     // console.log("price ",price )
-                    total_price =  total_price + (price * course.students.length )
+                    if((course.price * course.students.length) !== price ){
+                        total_price =  total_price + (price * course.students.length )
+                    }else{
+                        console.log("course.students.lenght => ",course.students.length )
+                        console.log("course.price =>",course.price )
+                        total_price =  total_price + price
+                    }
+                   
+                    console.log("total_price =>",total_price)
                 })
                 payload.totalPrice = total_price
                 let config = {
@@ -415,10 +423,9 @@ const orderModules = {
                 }
                 // let endpoint = "http://localhost:3002"
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/cart/${account_id}`,config)
-   
                 if (data.statusCode === 200) {
                     // console.log("Cart List =>",data.data)
-                    for (const item of data.data) {
+                    for await (const item of data.data) {
                         console.log("discount =>",item.option.discount)
                         item.course_img = `${process.env.VUE_APP_URL}/api/v1/files/${item.course_img}`
                       
@@ -429,12 +436,11 @@ const orderModules = {
                             item.option.net_price_unit = item.option.price_unit / item.option.amount 
                             // console.log("net_price_unit", item.option.net_price_unit)
                             // ราคา
-                            item.option.net_price = item.option.price_unit - discount
+                            item.option.net_price = (item.option.price_unit - discount)*item.students.length
                         }else{
                             item.net_price = item.price * item.students.length
                         }
                     }
-
                     context.commit("SetCartList", data.data)
                     // console.log("SetCartList", data.data);
                 } else {
