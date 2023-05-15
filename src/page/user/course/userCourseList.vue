@@ -3,43 +3,45 @@
       <v-container>
         <v-row dense>
             <v-col cols="12">
-                <v-text-field  outlined hide-details dense prepend-inner-icon="mdi-magnify" placeholder="ค้นหาคอร์สการเรียนรู้ที่คุณสนใจได้ที่นี่"></v-text-field>
+                <v-text-field  
+                    outlined 
+                    hide-details 
+                    dense prepend-inner-icon="mdi-magnify" 
+                    placeholder="ค้นหาคอร์สการเรียนรู้ที่คุณสนใจได้ที่นี่" 
+                    v-model="search_course"
+                    @change="searchCourse($event)"></v-text-field>
             </v-col>
         </v-row>
         <v-row dense>
             <v-col class="text-lg font-bold">{{ category.categoryNameTh }}</v-col>
         </v-row>
         <v-row dense>
-            <v-col cols="6" v-for="(type, type_index) in course_types" :key="type_index">
+            <v-col cols="6" v-for="(type, type_index) in course_types" :key="`${type_index}-type`">
                 <v-card flat @click="selectCourseType(type)" class="rounded-lg">
                     <v-card-text :class="type_selected === type.course_type_id ? 'bg-[#FF6B81]' : 'bg-[#F5F5F5]'" class="rounded-lg flex justify-center align-center pa-2">
                         <label :class="type_selected === type.course_type_id ? 'text-white' : ' text-[#B3B3B3]' " class="font-bold mr-2">{{type.course_type_name_th}}</label>
-                        <v-avatar size="32" color="white" class="font-bold" :class="type_selected === type.course_type_id ? 'text-[#ff6b81]' : 'text-[#B3B3B3]'"> {{ type.total_course }} </v-avatar>
+                        <v-avatar size="32" color="white" class="font-bold" :class="type_selected === type.course_type_id ? 'text-[#ff6b81]' : 'text-[#B3B3B3]'"> {{ search_results.filter(v => v.course_type_id === type_selected).length > 0 ? search_results.filter(v => v.course_type_id === type.course_type_id).length : type.total_course }} </v-avatar>
                     </v-card-text>
                 </v-card>
             </v-col>
         </v-row>
+        <!-- <pre>{{ search_results }}</pre> -->
         <v-row dense>
             <template v-if="!courses_is_loading">
-                <v-col cols="6"  v-for="(course, course_index) in courses" :key="course_index">
+                <v-col cols="6"  v-for="(course, course_index) in search_results.filter(v => v.course_type_id === type_selected).length > 0 ? search_results.filter(v => v.course_type_id === type_selected) : courses" :key="course_index">
                     <v-card  class="overflow-hidden">
                         <v-img @click="selectedCourse(course)" 
-                            contain
-                            :aspect-ratio="16/9" 
-                            cover   
+                            :aspect-ratio="16 / 9"
+                            cover
                             :src="course.course_url ? course.course_url : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'">
                           <v-row>
                               <v-col class="pa-4" align="right"> <v-chip  color="#F9B320" text-color="white">{{ `${course.period}  ชั่วโมง`  }}</v-chip></v-col>
                           </v-row>
                         </v-img>
                         <v-card-title  @click="selectedCourse(course)" class="  font-bold text-sm pa-2">
-                        <v-row  @click="selectedCourse(course)" dense class="d-flex align-center">
-                            <v-col>{{ `${course.course_name_th} (${course.course_name_en})` }}</v-col>
-                            <!-- <v-col class="d-flex align-center text-[#ff6b81]" cols="auto">
-                                <v-icon color="#ff6b81" size="18" class="mr-2">mdi-account-group-outline</v-icon>
-                                {{ sumCouserPotential(course)  }}
-                                {{ `${course.course_studant_amount ? course.course_studant_amount : 0 }/ ${ course.course_type_id === 'CT_2' ? course.course_student_recived : course.maximum_student }` }}</v-col> -->
-                        </v-row>  
+                            <v-row  @click="selectedCourse(course)" dense class="d-flex align-center">
+                                <v-col>{{ `${course.course_name_th} (${course.course_name_en})` }}</v-col>
+                            </v-row>  
                         </v-card-title>
                         <v-card-text class="text-xs pa-2">
                             <div>
@@ -78,6 +80,8 @@ import { mapGetters, mapActions } from 'vuex';
   components: {},
         name:"userCourseList",  
         data: () => ({
+            search_course : "",
+            search_results : [],
             loading : true,
             course_type : [{course_type_id : "CT_1", name : "คอร์สทั่วไป", amount : "8", value:"general_course"},{course_type_id : "CT_2",name : "คอร์สระยะสั้น", amount : "2", value:'short_course'}],
             type_selected :"CT_1",
@@ -116,6 +120,16 @@ import { mapGetters, mapActions } from 'vuex';
                 GetCoursesFilter : 'CourseModules/GetCoursesFilter',
                 GetPotential : "CourseModules/GetPotential"
             }),
+            searchCourse(event) {
+                const searchQuery = event.toLowerCase();    
+                console.log(this.type_selected)
+                this.search_results = this.courses.filter(course => {
+                    const courseNameTh = course.course_name_th.toLowerCase();
+                    const courseNameEn = course.course_name_en.toLowerCase();
+                    return (courseNameTh.includes(searchQuery) || courseNameEn.includes(searchQuery));
+                });
+                console.log(this.search_results)
+            },
             sumCouserPotential(courseData){
                 if(!this.course_potential){
                     this.GetPotential({course_id :courseData.course_id })
@@ -127,6 +141,7 @@ import { mapGetters, mapActions } from 'vuex';
             },
             selectCourseType(course_type){
                 this.type_selected = course_type.course_type_id
+                this.search_course = ""
                 this.GetCoursesFilter({
                     category_id: this.$route.params.category_id, 
                     status : "Active", 
