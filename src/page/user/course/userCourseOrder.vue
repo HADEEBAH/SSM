@@ -839,13 +839,15 @@ export default {
   created() {
     this.order_data = JSON.parse(localStorage.getItem("Order"));
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
-    console.log("course_order =>", this.course_order);
-    if (!this.course_order.course_id) {
-      this.$router.replace({ name: "UserKingdom" });
-    }
+    // this.course_order = {...this.order_data}  
+   
   },
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "สมัครเรียน");
+    this.changeCourseOrderData(this.order_data)
+    if (!this.course_order.course_id) {
+      this.$router.replace({ name: "UserKingdom" });
+    }
   },
   watch: {
     "course_order.time": function () {

@@ -180,8 +180,11 @@ import { mapGetters,mapActions } from 'vuex';
         selected_package: {},
 
     }),
-    created() {},
+    created() {
+        this.order_data = JSON.parse(localStorage.getItem("Order"));
+    },
     mounted() {
+        this.changeCourseOrderData(this.order_data)
         this.GetCourse(this.$route.params.course_id)
         this.$store.dispatch("NavberUserModules/changeTitleNavber","แพ็คเกจ")
         if(this.course_data){
