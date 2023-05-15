@@ -1,3 +1,6 @@
+// CALENDAR STUDENT
+
+
 <template>
   <div>
     <!-- <template v-if="type === 'week'">
@@ -214,7 +217,8 @@ export default {
     });
     this.ready = true;
     // this.scrollToTime();
-    this.updateTime();
+
+    // this.updateTime();
     this.colorOfDay();
   },
 
@@ -303,9 +307,10 @@ export default {
 
     //     this.cal.scrollToTime(first);
     // },
-    updateTime() {
-      setInterval(() => this.cal.updateTimes(), 60 * 1000);
-    },
+
+    // updateTime() {
+    //   setInterval(() => this.cal.updateTimes(), 60 * 1000);
+    // },
     functionEvents(date) {
       let events_data = [];
       this.events.forEach((event) => {

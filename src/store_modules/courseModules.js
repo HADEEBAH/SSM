@@ -728,6 +728,29 @@ const CourseModules = {
         console.log(error)
       }
     },
+     // COURSE :: DELETA privilage
+     async RemovePrivilageByCourseID(context,{course_id}){
+      try{
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/course/privilage/${course_id}`,config)
+        console.log(data)
+        if(data.statusCode == 200){
+          Swal.fire({
+            icon: "success",
+            title: "ลบไฟล์สำเร็จ"
+          })
+        }
+      }catch(error){
+        console.log(error)
+      }
+    },
     // COURSE :: UPDATE ARKWORK
     async UpdateCourseArkwork(context,{course_id, course_data}){
       try{

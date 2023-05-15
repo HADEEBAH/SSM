@@ -205,7 +205,7 @@
             :key="`${index}-relation`"
           >
             <v-card flat class="mb-3">
-              <v-card-text class="border border-2 border-[#ff6b81] rounded-lg">
+              <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                 <div>ชื่อ-สกุล</div>
                 <div class="pl-2 font-semibold">
                   {{
