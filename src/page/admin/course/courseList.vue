@@ -173,13 +173,6 @@ export default {
       { text: "สถานะ", align: "center", sortable: false, value: "status" },
       { text: "", align: "center", value: "actions", sortable: false },
     ],
-    // courses:[
-    //     {course_id:'000001', course : "เปียโน Kpop",category : "ศิลปะสมัยใหม่", course_type:"คอร์สทั่วไป",course_open : "12 มี.ค. - 29 มี.ค. 2566", status:"เปิดเรียน"},
-    //     {course_id:'000002', course : "เปียโนสากล",category : "ศิลปะสมัยใหม่", course_type:"คอร์สระยะสั้น",course_open : "12 มี.ค. - 29 มี.ค. 2566", status:"ปิดคอร์สเรียน"},
-    //     {course_id:'000003', course : "ไวโอลิน",category : "ศิลปะสมัยใหม่", course_type:"คอร์สทั่วไป",course_open : "12 มี.ค. - 29 มี.ค. 2566", status:"ปิดชั่วคราว"},
-    //     {course_id:'000004', course : "เวิร์กช๊อปกีต้าร์ไฟฟ้า เบื้องต้น",category : "คอร์สระยะสั้น", course_type:"คอร์สทั่วไป",course_open : "12 มี.ค. - 29 มี.ค. 2566", status:"เปิดเรียน"},
-    //     {course_id:'000005', course : "ว่ายน้ำ",category : "กีฬา P.E.", course_type:"คอร์สทั่วไป",course_open : "12 มี.ค. - 29 มี.ค. 2566", status:"เปิดเรียน"},
-    // ],
   }),
   created() {
     this.$store.dispatch("CourseModules/GetCoursesList");
