@@ -1,14 +1,14 @@
 <template>
   <div>
     <v-card
-      v-for="(coach, coach_index) in course_data.coachs"
+      v-for="(coach, coach_index) in course_data.coachs.filter(v => v.teach_day_data.length > 0)"
       :class="`bg-[${color}] mb-5`"
       :key="coach_index"
     >
+    <!-- <pre>{{ coach }}</pre> -->
       <!-- TEACH DAY -->
       <template v-for="(teach_day, teach_day_index) in coach.teach_day_data">
         <v-card-text :key="`${teach_day_index}-day`" class="border">
-          <!-- <pre>{{ teach_day }}</pre> -->
           <v-divider
             v-if="teach_day_index > 0"
             :key="teach_day_index"
@@ -93,7 +93,6 @@
                 deletable-chips
                 item-color="pink"
                 multiple
-                required
                 color="#FF6B81"
                 :items="filteredDays(coach_index, teach_day_index, state)"
                 item-text="label"
@@ -364,7 +363,8 @@ export default {
     ],
     rules: {
       course: [(val) => (val || "").length > 0 || "โปรดเลือกโค้ช"],
-      class_date: [(val) => !!(val || val.length) || "โปรดเลือกวันที่"],
+      class_date: [  
+      (val) => (val || "").length > 0 || 'โปรดเลือกวันที่'],
       start_time: [(val) => (val || "") > 0 || "โปรดเลือกเวลาเริ่ม"],
       end_time: [(val) => (val || "") > 0 || "โปรดเลือกเวลาสิ้นสุด"],
       students: [(val) => (val || "") > 0 || "โปรดระบุจำนวนนักเรียน"],
@@ -406,13 +406,9 @@ export default {
       coach.splice(index, 1);
     },
     coachsOptions(coach_selected) {
-      // Get the IDs of the coaches that have already been selected
       const selectedCoachIds = this.course_data.coachs.map(
         (coach) => coach.coach_id
       );
-
-      // console.log(selectedCoachIds)
-      // Filter out the coaches that have already been selected
       const availableCoaches = this.coachs.filter(
         (coach) =>
           !selectedCoachIds.includes(coach.accountId) ||
@@ -420,11 +416,6 @@ export default {
       );
 
       return availableCoaches;
-
-      // console.log(this.select_coachs)
-      // return this.coachs.filter(
-      //   (item) => !this.select_coachs.includes(item.accountId)
-      // );
     },
     filteredDays(coachIndex, teachDayIndex, state) {
       if (state === "create") {

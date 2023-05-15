@@ -12,16 +12,15 @@
       <v-row class="row">
         <v-col cols="12">
           <div class="text-2xl font-bold text-white">
-            <!-- {{ profile_detail }} -->
             <!-- สวัสดี, {{ dataStorage ? dataStorage.first_name_th : "" }} -->
-            สวัสดี, {{ profile_detail ? profile_detail.firstNameTh : "" }}
+            สวัสดี {{  profile_detail.firstNameTh ? ","+ profile_detail.firstNameTh : "" }}
           </div>
         </v-col>
       </v-row>
     </v-container>
 
     <v-card
-      class="rounded-xl"
+      class="rounded-xl pa-2"
       :style="
         !MobileSize
           ? {
@@ -31,122 +30,104 @@
           : ''
       "
     >
-      <!-- SLID -->
-      <!-- <v-card class="rounded-lg drop-shadow-lg"> -->
-      <!-- <div class="slider-container"> -->
-      <!-- <template>
-        <v-carousel cycle hide-delimiter-background>
-          <v-carousel-item v-for="(slide, i) in slides" :key="i">
-            <img :src="slide.src" alt="Slider Image" />
-          </v-carousel-item>
-        </v-carousel>
-      </template> -->
-      <!-- </div> -->
-      <!-- </v-card> -->
-
-      <v-card
-        class="mx-auto block rounded-xl drop-shadow-lg mt-3 ml-3 mr-3 banner-container"
-      >
-        <template class="slider-container">
-          <v-carousel cycle hide-delimiter-background>
-            <v-carousel-item
-              v-for="(slide, i) in slides"
-              :key="i"
-              :src="slide.src"
-            ></v-carousel-item>
-          </v-carousel>
-        </template>
-      </v-card>
-
-      <v-container fluid>
-        <v-row>
-          <v-col
-            cols="12"
-            sm="2"
-            class="text-2xl align-self-center font-weight-bold"
-          >
-            อาณาจักร
-          </v-col>
-          <v-col cols="12" sm="10" style="text-align: -webkit-right">
-            <v-text-field
-              v-model="search_kingdom"
-              :class="`bg-white rounded-xl ${
-                !MobileSize ? 'w-2/5' : 'w-full'
-              } `"
-              hide-details
-              dense
-              outlined
-              label="ค้นหาอาณาจักรการเรียนรู้ที่คุณสนใจได้ที่นี้"
-              prepend-inner-icon="mdi-magnify"
-            />
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col
-            cols="6"
-            md="4"
-            sm="6"
-            class="pa-2"
-            v-for="(item, index_item) in searchKingdom(search_kingdom)"
-            :key="index_item"
-          >
-            <v-card
-              class="h-full block drop-shadow-none rounded-xl box-shadows"
+      <v-carousel class="rounded-xl" cycle hide-delimiter-background height="300">
+        <v-carousel-item
+          v-for="(slide, i) in slides"
+          :key="i"
+          :src="slide.src"
+          cover
+        ></v-carousel-item>
+      </v-carousel>
+      <v-card-text>
+          <v-row>
+            <v-col
+              cols="12"
+              sm="4"
+              class="text-2xl align-self-center font-weight-bold"
             >
-              <!-- :src="item.categoryImg && item.categoryImg !== null ? showImg(item.categoryImg) : defaultImageUrl" -->
-              <v-img
-                v-if="item.categoryImg && item.categoryImg !== null"
-                @click="selectedCategory(item)"
-                :aspect-ratio="16 / 9"
-                cover
-                :src="item.categoryImg"
-                class="cursor-pointer"
-              ></v-img>
-              <v-img
-                v-else
-                @click="selectedCategory(item)"
-                contain
-                src="../../../assets/userKingdom/category_img.svg"
-                height="180"
-                class="cursor-pointer"
-              ></v-img>
-              <v-card-title
-                :class="$vuetify.breakpoint.smAndUp ? 'text-md' : 'text-sm'"
-                class="font-bold cursor-pointer"
-                @click="selectedCategory(item)"
+              อาณาจักร
+            </v-col>
+            <v-col cols="12" sm="8" style="text-align: -webkit-right">
+              <v-text-field
+                v-model="search_kingdom"
+                :class="`bg-white rounded-full ${
+                  !MobileSize ? 'w-2/5' : 'w-full'
+                } `"
+                hide-details
+                dense
+                outlined
+                label="ค้นหาอาณาจักรการเรียนรู้ที่คุณสนใจได้ที่นี้"
+                prepend-inner-icon="mdi-magnify"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col
+              cols="6"
+              md="4"
+              sm="6"
+              class="pa-1"
+              v-for="(item, index_item) in searchKingdom(search_kingdom)"
+              :key="index_item"
+            >
+              <v-card
+                class="h-full rounded-lg"
               >
-                {{ item.categoryNameTh }}
-                ({{ item.categoryNameEng }})
-              </v-card-title>
+                <!-- :src="item.categoryImg && item.categoryImg !== null ? showImg(item.categoryImg) : defaultImageUrl" -->
+                <v-img
+                  v-if="item.categoryImg && item.categoryImg !== null"
+                  @click="selectedCategory(item)"
+                  :aspect-ratio="16 / 9"
+                  cover
+                  :src="item.categoryImg"
+                  class="cursor-pointer"
+                ></v-img>
+                <v-img
+                  v-else
+                  @click="selectedCategory(item)"
+                  contain
+                  src="../../../assets/userKingdom/category_img.svg"
+                  height="180"
+                  class="cursor-pointer"
+                ></v-img>
+                <v-card-title
+                  :class="$vuetify.breakpoint.smAndUp ? 'text-md' : 'text-sm'"
+                  class="font-bold cursor-pointer"
+                  @click="selectedCategory(item)"
+                >
+                  {{ item.categoryNameTh }}
+                  ({{ item.categoryNameEng }})
+                </v-card-title>
 
-              <v-card-subtitle>
-                <div class="my-5">โดย {{ item.taughtBy }}</div>
-                <div>
-                  {{
-                    item.show
-                      ? `${item.categoryDescription}`
-                      : `${item.categoryDescription.slice(0, 15).trim()}`
-                  }}
-                  <span
-                    v-if="item.categoryDescription.length > 15"
-                    class="text-red-500 cursor-pointer"
-                    @click="item.show = !item.show"
-                    >{{ item.show ? `น้อยลง` : `อ่านต่อ...` }}</span
-                  >
-                </div>
-              </v-card-subtitle>
-            </v-card>
-          </v-col>
-          <v-col
-            cols="12"
-            v-if="searchKingdom(search_kingdom).length === 0"
-            class="font-weight-bold text-center text-xl"
-          >
-            ไม่พบอาณาจักร
-          </v-col>
-        </v-row>
-        <loading-overlay :loading="categorys_is_loading"></loading-overlay>
-      </v-container>
+                <v-card-subtitle>
+                  <div class="mb-2">โดย {{ item.taughtBy }}</div>
+                  <div>
+                    {{
+                      item.show
+                        ? `${item.categoryDescription}`
+                        : `${item.categoryDescription.slice(0, 15).trim()}`
+                    }}
+                    <span
+                      v-if="item.categoryDescription.length > 15"
+                      class="text-red-500 cursor-pointer"
+                      @click="item.show = !item.show"
+                      >{{ item.show ? `น้อยลง` : `อ่านต่อ...` }}</span
+                    >
+                  </div>
+                </v-card-subtitle>
+              </v-card>
+            </v-col>
+            <v-col
+              cols="12"
+              v-if="searchKingdom(search_kingdom).length === 0"
+              class="font-weight-bold text-center text-xl"
+            >
+              ไม่พบอาณาจักร
+            </v-col>
+          </v-row>
+          <loading-overlay :loading="categorys_is_loading"></loading-overlay>
+      </v-card-text>
+      
     </v-card>
   </v-app>
 </template>
