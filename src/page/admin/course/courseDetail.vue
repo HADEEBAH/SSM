@@ -1979,7 +1979,6 @@ export default {
             },200)
             await this.GetCourse(this.$route.params.course_id);
           });
-
         }
       });
     },

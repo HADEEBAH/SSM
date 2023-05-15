@@ -5,10 +5,10 @@
       :class="`bg-[${color}] mb-5`"
       :key="coach_index"
     >
+    <!-- <pre>{{ coach }}</pre> -->
       <!-- TEACH DAY -->
       <template v-for="(teach_day, teach_day_index) in coach.teach_day_data">
         <v-card-text :key="`${teach_day_index}-day`" class="border">
-          <!-- <pre>{{ teach_day }}</pre> -->
           <v-divider
             v-if="teach_day_index > 0"
             :key="teach_day_index"
@@ -93,7 +93,6 @@
                 deletable-chips
                 item-color="pink"
                 multiple
-                required
                 color="#FF6B81"
                 :items="filteredDays(coach_index, teach_day_index, state)"
                 item-text="label"
@@ -364,7 +363,8 @@ export default {
     ],
     rules: {
       course: [(val) => (val || "").length > 0 || "โปรดเลือกโค้ช"],
-      class_date: [(val) => !!(val || val.length) || "โปรดเลือกวันที่"],
+      class_date: [  
+      (val) => (val || "").length > 0 || 'โปรดเลือกวันที่'],
       start_time: [(val) => (val || "") > 0 || "โปรดเลือกเวลาเริ่ม"],
       end_time: [(val) => (val || "") > 0 || "โปรดเลือกเวลาสิ้นสุด"],
       students: [(val) => (val || "") > 0 || "โปรดระบุจำนวนนักเรียน"],

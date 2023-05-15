@@ -232,6 +232,7 @@
                   color="#FF6B81"
                   class="white--text w-full"
                   depressed
+                  :loading="loading"
                   @click="submitStep(step-1)"
                   >สร้างคอร์สเรียน</v-btn
                 >
@@ -243,6 +244,7 @@
                   color="#FF6B81"
                   class="white--text"
                   depressed
+                  :loading="loading"
                   @click="submitStep(step-1)"
                   >สร้างคอร์สเรียน</v-btn
                 >
@@ -299,6 +301,7 @@ export default {
     preview_privilege_url : null,
     artwork_files : [],
     preview_artwork_files : [],
+    loading : false,
   }),
   created() {
     if(this.course_data){
@@ -338,6 +341,8 @@ export default {
       ResetCourseData : "CourseModules/ResetCourseData"
     }),
     save(){
+      // console.log("save")
+      this.loading = true
       this.course_data.course_file = this.file
       this.ChangeCourseData(this.course_data);
       this.CreateCourse()
