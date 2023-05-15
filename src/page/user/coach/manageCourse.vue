@@ -361,7 +361,7 @@
                             ? "ดีมาก"
                             : student.assessment.interest === "good"
                             ? "ดี"
-                            : student.assessment.evolution === "adjust"
+                            : student.assessment.interest === "adjust"
                             ? "ปรับปรุง"
                             : "-"
                         }}</span></v-col
