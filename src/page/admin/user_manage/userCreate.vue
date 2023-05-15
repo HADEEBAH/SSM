@@ -1110,11 +1110,40 @@ export default {
               throw { message: data.message };
             }
           } catch (error) {
-            console.log(error);
-            Swal.fire({
-              icon: "error",
-              title: "Duplicate relation",
-            });
+            if (error.response.data.statusCode === 400) {
+              if (
+                error.response.data.message ==
+                "Parent does not have the required role."
+              ) {
+                Swal.fire({
+                  icon: "info",
+                  title: "เกิดข้อผิดพลาด",
+                  text: "บทบาทซ้ำกัน หรือ ผู้ใช้ยังไม่มีบทบาท",
+                });
+                this.add_relations = false;
+                this.relation = {
+                  account_id: "",
+                  firstname_en: "",
+                  lastname_en: "",
+                  username: "",
+                  tel: "",
+                };
+              } else if (error.response.data.message == "Duplicate relation.") {
+                console.log(error);
+                Swal.fire({
+                  icon: "error",
+                  title: "Duplicate relation",
+                });
+                this.add_relations = false;
+                this.relation = {
+                  account_id: "",
+                  firstname_en: "",
+                  lastname_en: "",
+                  username: "",
+                  tel: "",
+                };
+              }
+            }
           }
         } else {
           Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
