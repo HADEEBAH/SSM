@@ -727,9 +727,11 @@ export default {
     rules: {
       course_name_th: [
         (val) => (val || "").length > 0 || "โปรดระบุชื่อคอร์ส(ภาษาไทย)",
+        (val) => val.length < 256 || "ชื่อคอร์ส(ภาษาไทย)ความยาวเกินกว่าที่กำหนด",
       ],
       course_name_en: [
         (val) => (val || "").length > 0 || "โปรดระบุชื่อคอร์ส(ภาษาอังกฤษ)",
+        (val) => val.length < 256 || "ชื่อคอร์ส(ภาษาอังกฤษ)ความยาวเกินกว่าที่กำหนด",
       ],
       kingdom: [(val) => (val || "").length > 0 || "โปรดเลือกอาณาจักร"],
       course_open_date: [
@@ -737,8 +739,14 @@ export default {
       ],
       course_hours: [
         (val) => (val || "") > 0 || "โปรดระบุชั่วโมงการเรียน/ครั้ง",
+        (val) => val < 25 || "ชั่วโมงการเรียนเกินกว่าที่กำหนด",
       ],
-      location: [(val) => (val || "").length > 0 || "โปรดระบุสถานที่"],
+      location: [
+        (val) => (val || "").length > 0 || "โปรดระบุสถานที่"
+      ],
+      class_date: [
+        (val) => (val || "").length > 0 || 'โปรดเลือกวันที่'
+      ],
       coach: [(val) => (val || "").length > 0 || "โปรดระบุโค้ช"],
       start_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันที่เริ่ม"],
       end_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันที่สิ้นสุด"],
@@ -746,8 +754,11 @@ export default {
       end_time: [(val) => (val || "") > 0 || "โปรดเลือกเวลาสิ้นสุด"],
       student_recived: [
         (val) => (val || "") > 0 || "โปรดระบุจำนวนนักเรียนที่รับได้",
+        (val) => val < 1000 || "จำนวนนักเรียนที่รับได้เกินกว่าที่กำหนด",
       ],
-      price: [(val) => (val || "") > 0 || "โปรดระบุราคา"],
+      price: [
+        (val) => (val || "") > 0 || "โปรดระบุราคา"
+      ],
     },
     course_open_date_str: "",
     register_date_range_str: {

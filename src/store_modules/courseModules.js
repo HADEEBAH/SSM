@@ -588,7 +588,8 @@ const CourseModules = {
                 teach_day_data.push({
                   // "itmes" : day.times,
                   "dayOfWeekId": date.day_of_week_id,
-                  "classOpen": date.class_open === true ? 'Active' : 'InActive',
+                  // "classOpen": date.class_open === true ? 'Active' : 'InActive',
+                  "classOpen": date.class_open,
                   "teachDay": date.teach_day,
                   "courseCoachId": date.course_coach_id,
                   "classDate": class_date
