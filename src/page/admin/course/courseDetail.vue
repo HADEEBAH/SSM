@@ -267,7 +267,7 @@
                 <v-card-text
                   class="border-dashed border-2 border-blue-600 rounded-lg"
                 >
-                  <!-- <v-row v-if="course_data.course_img_privilege">
+                  <v-row v-if="course_data.course_img_privilege">
                     <v-col align="center" class="rounded-lg pa-0">
                       <v-img
                         :src="course_data.course_img_privilege"
@@ -285,8 +285,8 @@
                         >
                       </v-img>
                     </v-col>
-                  </v-row> -->
-                  <v-row v-if="preview_privilege_url">
+                  </v-row>
+                  <v-row v-else-if="preview_privilege_url">
                     <v-col align="center" class="rounded-lg pa-0">
                       <v-img
                         :src="preview_privilege_url"
@@ -705,11 +705,7 @@
                                         <v-chip
                                           text-color="white"
                                           :color="
-                                            date.cpo.packageId === 'PACK_1'
-                                              ? 'primary'
-                                              : date.cpo.packageId === 'PACK_2'
-                                              ? 'pink'
-                                              : '#ED7D2B'
+                                            date.cpo.packageId === 'PACK_1' ? 'primary' : date.cpo.packageId === 'PACK_2' ? 'pink' : '#ED7D2B'
                                           "
                                         >
                                           {{ date.cpo.packageName }}
@@ -846,7 +842,9 @@
                                             )"
                                             :key="student_index"
                                           >
+                                        
                                             <v-card-text class="pa-2">
+                                              
                                               <v-row
                                                 dense
                                                 class="text-md font-bold flex align-center"
@@ -911,6 +909,7 @@
                                                     <v-col class="pa-0">
                                                       <v-btn
                                                         text
+                                                        disabled
                                                         class="px-1"
                                                         color="#ff6b81"
                                                       >
@@ -936,7 +935,7 @@
                                             ) in date.students"
                                             :key="`${student_index}-index`"
                                           >
-                                            <!-- <pre>{{ student }}</pre> -->
+                                            
                                             <v-card-text class="pa-2">
                                               <v-row
                                                 dense
@@ -998,6 +997,7 @@
                                                     <v-col class="pa-0">
                                                       <v-btn
                                                         text
+                                                        disabled
                                                         class="px-1"
                                                         color="#ff6b81"
                                                       >
@@ -1273,6 +1273,7 @@
                                             <v-col class="pa-0">
                                               <v-btn
                                                 text
+                                                disabled
                                                 class="px-1"
                                                 color="#ff6b81"
                                               >
@@ -1799,8 +1800,8 @@ export default {
       this.privilege_file = this.$refs.fileInputPrivilege.files[0];
       const allowedTypes = ["image/png", "image/jpeg"];
       if (CheckFileSize(this.privilege_file) === true) {
-        const fileType = this.file.type; 
-        console.log(fileType)
+        const fileType = this.privilege_file.type; 
+        // console.log(fileType)
         if (fileType === 'image/png' || fileType === 'image/jpeg') {
           this.course_data.privilege_file =
           this.$refs.fileInputPrivilege.files[0];
@@ -1901,8 +1902,10 @@ export default {
         cancelButtonText: "ยกเลิก",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          this.RemovePrivilageByCourseID({ course_id: this.$route.params.course_id });
-          this.preview_privilege_url = null;
+          this.RemovePrivilageByCourseID({ course_id: this.$route.params.course_id }).then(()=>{
+            this.course_data.course_img_privilege = null
+            this.preview_privilege_url = null;
+          })
         }
       });
     },
