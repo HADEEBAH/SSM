@@ -154,15 +154,16 @@
           </v-btn>
         </v-col>
         <v-col cols="6" v-if="isEnabled">
+          <!-- :loading="is_loading"
+            :disabled="!valid" -->
           <v-btn
-            :disabled="is_loading"
             outlined
             class="my-5 w-full"
             depressed
             color="#ff6b81"
             @click="cancel()"
           >
-            <span class="mdi mdi-close">ยกเลิก</span>
+            <span>ยกเลิก</span>
           </v-btn>
         </v-col>
         <v-col cols="6" v-if="isEnabled">
@@ -174,7 +175,7 @@
             color="#ff6b81"
             @click="submitEdit()"
           >
-            <span class="mdi mdi-check">บันทึก</span>
+            <span>บันทึก</span>
           </v-btn>
         </v-col>
       </v-row>
@@ -303,6 +304,11 @@ export default {
     user_detail: {},
     image_profile: {},
     preview_file: "",
+    firstNameTh: "",
+    lastNameTh: "",
+    nation: "",
+    mobileNo: "",
+    email: "",
   }),
 
   created() {
@@ -329,8 +335,11 @@ export default {
       this.buttonName = "บันทึก";
     },
     cancel() {
+      // if (this.$refs.form.validate()) {
+      this.GetProfileDetail(this.$route.params.profile_id);
       this.isDisabled = true;
       this.isEnabled = false;
+      // }
     },
 
     submitEdit(account_id) {

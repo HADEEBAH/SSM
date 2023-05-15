@@ -84,7 +84,7 @@
                       >
                         <div class="cicle">
                           <v-img
-                            class="image-cropper items-end "
+                            class="image-cropper items-end"
                             :src="
                               preview_img !== ''
                                 ? preview_img
@@ -93,19 +93,25 @@
                                 : require(`../../../assets/userManagePage/default_img_update_profile.svg`)
                             "
                           >
-                          
                             <v-btn
-                              v-if="preview_img === '' && checkData.image && checkData.image !== ''"
+                              v-if="
+                                preview_img === '' &&
+                                checkData.image &&
+                                checkData.image !== ''
+                              "
                               color="#ff6b81"
                               @click="openFileSelector"
                               class="w-full white--text"
                               >เปลี่ยนรูป</v-btn
                             >
                             <v-btn
-                              v-if="preview_img === '' && (!checkData.image || checkData.image === '')"
+                              v-if="
+                                preview_img === '' &&
+                                (!checkData.image || checkData.image === '')
+                              "
                               color="#fff"
                               @click="openFileSelector"
-                              class="w-full text-[#ff6b81!important] "
+                              class="w-full text-[#ff6b81!important]"
                               >เพิ่มรูป</v-btn
                             >
                             <v-btn
@@ -347,7 +353,7 @@
                   :icon_color="'#FF6B81'"
                   :title="
                     roles.privilege === 'ผู้ปกครอง'
-                      ? 'เพิ่มข้อมูลนักเรียนในการดูแล'
+                      ? 'เพิ่มข้อมูลนักเรียนในการดูแล'privilege
                       : 'เพิ่มข้อมูลผู้ปกครอง'
                   "
                 ></headerCard>
@@ -363,6 +369,8 @@
                   v-for="(data_relations, index_relations) in user_student_data"
                   :key="index_relations"
                 >
+                  <!-- <pre>{{ data_relations }}</pre> -->
+
                   <v-card-text>
                     <v-col align="right">
                       <v-icon
@@ -387,7 +395,6 @@
                               : 'Parent’s Username (English)'
                           "
                         ></label-custom>
-
                         <!-- v-if="roles.privilege === 'ผู้ปกครอง'" -->
                         <v-text-field
                           outlined
@@ -546,10 +553,14 @@
                   outlined
                   color="#ff6b81"
                   @click="
-                    openAddRelationsDialog(global_data_relation_checked.userName, global_data_relation_checked.roles
-                      .map((val) => {
-                        return val.roleId;
-                      }).join())
+                    openAddRelationsDialog(
+                      global_data_relation_checked.userName,
+                      global_data_relation_checked.roles
+                        .map((val) => {
+                          return val.roleId;
+                        })
+                        .join()
+                    )
                   "
                 >
                   <v-icon>mdi-plus-circle-outline</v-icon
@@ -834,6 +845,8 @@ export default {
       { role: "ผู้ปกครอง", privilege: "ผู้ปกครอง", roleNumber: "R_4" },
       { role: "นักเรียน", privilege: "นักเรียน", roleNumber: "R_5" },
     ],
+
+    payloadSend: "",
   }),
 
   beforeMount() {
@@ -898,7 +911,7 @@ export default {
           status: null,
           type: type,
         }).then(() => {
-          this.seledtedRole = ""
+          this.seledtedRole = "";
           this.preview_img = "";
           this.global_data_relation_checked =
             type == "" ? this.user_student_data[0] : this.user_data[0];
@@ -920,22 +933,26 @@ export default {
           this.checkData.email = this.global_data_relation_checked.email;
           this.checkData.image = this.global_data_relation_checked.imgUrl;
 
-          const role_tmp = this.global_data_relation_checked.roles.map((val)=>{
-            return val.roleId
-          }).join()
+          const role_tmp = this.global_data_relation_checked.roles
+            .map((val) => {
+              return val.roleId;
+            })
+            .join();
 
           console.log("role_tmp", role_tmp);
-          this.roles.map((val)=>{
+          this.roles.map((val) => {
             if (role_tmp === val.roleNumber) {
-              this.seledtedRole = val.roleNumber
+              this.seledtedRole = val.roleNumber;
             }
-          })
-
+          });
 
           console.log("this.seledtedRole", this.seledtedRole);
 
-          console.log("global_data_relation_checked", this.global_data_relation_checked);
-          this.GetDataRelationsManagement(this.global_data_relation_checked)
+          console.log(
+            "global_data_relation_checked",
+            this.global_data_relation_checked
+          );
+          this.GetDataRelationsManagement(this.global_data_relation_checked);
         });
       } else {
         Swal.fire({
@@ -1038,29 +1055,46 @@ export default {
               },
             };
 
-            console.log("privilege", this.roles.privilege); //ข้อมูลที่เลือกจากcheckbox
-            console.log("relation", this.relation); // ข้อมูลจากการที่กำลังจะเชื่อมความ3000
-            let payload = {
-              parentId:
-                this.roles.privilege === "ผู้ปกครอง"
-                  ? this.checkData.account_id
-                  : this.relation.account_id,
-              studentId:
-                this.roles.privilege === "นักเรียน"
-                  ? this.checkData.account_id
-                  : this.relation.account_id,
-            };
-            console.log("payload :", payload);
+            for (const testRole of this.global_data_relation_checked.roles) {
+              console.log("testRole", testRole.roleNameTh);
+              this.payloadSend = {
+                parentId:
+                  testRole.roleNameTh === "ผู้ปกครอง"
+                    ? this.checkData.account_id
+                    : this.relation.account_id,
+                studentId:
+                  testRole.roleNameTh === "นักเรียน"
+                    ? this.checkData.account_id
+                    : this.relation.account_id,
+              };
+            }
+
+            // let payload = {
+
+            //   parentId:
+            //     this.roles.privilege === "ผู้ปกครอง"
+            //       ? this.checkData.account_id
+            //       : this.relation.account_id,
+            //   studentId:
+            //     this.roles.privilege === "นักเรียน"
+            //       ? this.checkData.account_id
+            //       : this.relation.account_id,
+            // };
+            console.log("payload :", this.payloadSend);
 
             let { data } = await axios.post(
               `${process.env.VUE_APP_URL}/api/v1/relations/user`,
-              payload,
+              this.payloadSend,
               config
             );
 
             if (data.statusCode === 201) {
               if (data.data && data.data.message !== "Duplicate relation.") {
                 console.log("succes");
+                Swal.fire({
+                  icon: "success",
+                  title: " เพิ่มข้อมูลสำเร็จ",
+                });
                 this.add_relations = false;
                 this.relation = {
                   account_id: "",
@@ -1235,8 +1269,8 @@ export default {
     // },
     last_user_registered: async function () {
       console.log("last_user_registered", this.last_user_registered);
-      this.checkData.username = this.last_user_registered.username
-      this.checkDataRelation(this.last_user_registered.username)
+      this.checkData.username = this.last_user_registered.username;
+      this.checkDataRelation(this.last_user_registered.username);
     },
 
     "data_user_relation_management.length": function () {
