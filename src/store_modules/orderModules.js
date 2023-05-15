@@ -419,7 +419,9 @@ const orderModules = {
                 if (data.statusCode === 200) {
                     // console.log("Cart List =>",data.data)
                     for (const item of data.data) {
+                        console.log("discount =>",item.option.discount)
                         item.course_img = `${process.env.VUE_APP_URL}/api/v1/files/${item.course_img}`
+                      
                         if(item.course_type_id === "CT_1"){
                             let discount = item.option.discount ? item.option.discount_price : 0
                             // console.log("discount", discount)
@@ -429,7 +431,7 @@ const orderModules = {
                             // ราคา
                             item.option.net_price = item.option.price_unit - discount
                         }else{
-                            item.net_price = item.price * item.students.length 
+                            item.net_price = item.price * item.students.length
                         }
                     }
 
