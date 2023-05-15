@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card
-      v-for="(coach, coach_index) in course_data.coachs"
+      v-for="(coach, coach_index) in course_data.coachs.filter(v => v.teach_day_data.length > 0)"
       :class="`bg-[${color}] mb-5`"
       :key="coach_index"
     >
@@ -406,13 +406,9 @@ export default {
       coach.splice(index, 1);
     },
     coachsOptions(coach_selected) {
-      // Get the IDs of the coaches that have already been selected
       const selectedCoachIds = this.course_data.coachs.map(
         (coach) => coach.coach_id
       );
-
-      // console.log(selectedCoachIds)
-      // Filter out the coaches that have already been selected
       const availableCoaches = this.coachs.filter(
         (coach) =>
           !selectedCoachIds.includes(coach.accountId) ||
@@ -420,11 +416,6 @@ export default {
       );
 
       return availableCoaches;
-
-      // console.log(this.select_coachs)
-      // return this.coachs.filter(
-      //   (item) => !this.select_coachs.includes(item.accountId)
-      // );
     },
     filteredDays(coachIndex, teachDayIndex, state) {
       if (state === "create") {
