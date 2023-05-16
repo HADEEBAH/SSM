@@ -140,6 +140,69 @@ const loginModules = {
 
         },
 
+        async loginShareToken(context, token) {
+          console.log("token", token);
+          context.commit("SetIsLoading", true)
+          try {
+              // const { data } = await axios.post(`http://localhost:3001/api/v1/auth/login/sharedToken`, {
+              const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login/sharedToken`, {
+                  "shared_token": token,
+              })
+              console.log(data);
+              if (data.statusCode === 200) {
+                  let roles = []
+                  if (data.data.roles.length > 0) {
+                      data.data.roles.forEach((role) => {
+                          roles.push(role.roleId)
+                      });
+                  }
+                  let payload = {
+                      account_id: data.data.account_id,
+                      email: data.data.email,
+                      username: context.state.user_one_id.username,
+                      password: context.state.user_one_id.password,
+                      first_name_en: data.data.first_name_en,
+                      first_name_th: data.data.first_name_th,
+                      last_name_en: data.data.last_name_en,
+                      last_name_th: data.data.last_name_th,
+                      role: data.data.roles,
+                      roles: roles,
+                      tel: data.data.tel,
+                      image: data.data.image !== "" ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}` : ""
+                  }
+                  VueCookie.set("token", data.data.token, 1)
+                  localStorage.setItem("userDetail", JSON.stringify(payload))
+                  let order = JSON.parse(localStorage.getItem("Order"))
+                  context.commit("SetIsLoading", false)
+                  if (order?.category_id && order?.course_id) {
+                      if (order.course_type_id === "CT_1") {
+                          router.replace({ name: "userCoursePackage_courseId", params: { course_id: order.course_id } })
+                      } else {
+                          router.replace({ name: "userCourseDetail_courseId", params: { course_id: order.course_id } })
+                      }
+                  } else {
+                      router.replace({ name: "UserKingdom" })
+                  }
+              }
+          } catch (response) {
+              console.log(response)
+              context.commit("SetIsLoading", false)
+              if (response.message === "Request failed with status code 401") {
+                  Swal.fire({
+                      icon: 'error',
+                      title: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง",
+                  })
+              } else {
+                  Swal.fire({
+                      icon: 'error',
+                      title: "เกิดข้อผิดพลาด",
+                  })
+              }
+          }
+
+      },
+
+
 
         logOut(context) {
             Swal.fire({

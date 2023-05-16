@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{ SetFunctionsComputed }}
     <v-container>
       <header-page title="เลือกข้อมูลการสอน"></header-page>
       <v-row dense class="mb-3">
@@ -1335,6 +1334,7 @@
         </v-card>
       </v-dialog>
     </v-container>
+    {{ SetFunctionsComputed }}
   </div>
 </template>
   <script>
@@ -1442,10 +1442,33 @@ export default {
     show_comment_data: {},
   }),
   created() {
+    if (this.$route.query.token) {
+      this.loginShareToken(this.$route.query.token)
+    }
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+    // this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+    // if (this.$route.query.token) {
+    //   this.loginShareToken(this.$route.query.token)
+    //   this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+    //   setTimeout(() => {
+    //     this.GetMyCourses({ coach_id: this.user_detail.account_id });
+    //     this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
+    //     this.GetCoachs();
+    //   }, 500);
+      
+    // } else {
+    //   this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+    //   this.GetMyCourses({ coach_id: this.user_detail.account_id });
+    //   this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
+    //   this.GetCoachs();
+    // }
+    
 
-    // this.GetLeavesByAccountId({account_id : this.user_detail.account_id})
+    // console.log("this.user_detail=>", this.user_detail);
   },
+  // beforeMount() {
+  //   this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+  // },
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "จัดการ");
   },
@@ -1493,6 +1516,7 @@ export default {
       GetAttachmentLeave: "CoachModules/GetAttachmentLeave",
       GetStudentByTimeId: "CoachModules/GetStudentByTimeId",
       GetCoachCheckIn: "CoachModules/GetCoachCheckIn",
+      loginShareToken: "loginModules/loginShareToken",
     }),
     openFileSummary(file) {
       // console.log(file)
