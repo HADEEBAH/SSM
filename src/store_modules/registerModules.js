@@ -162,7 +162,8 @@ const RegisterModules = {
                     }).then(async (result) => {
                         if (result.isConfirmed) {
                             console.log(data.data)
-                            let user = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account?username=${context.state.user_one_id.username}&status=active`)
+                            let localhost = "http://192.168.74.25:3000"
+                            let user = await axios.get(`${localhost}/api/v1/account?username=${context.state.user_one_id.username}&status=active`)
                             if (user.data.statusCode === 200) {
                                 console.log("user :", user.data)
                                 context.commit("SetLastUserRegistered", {
@@ -172,6 +173,7 @@ const RegisterModules = {
                                     lastname_en: context.state.user_one_id.lastname_en,
                                     phone_number: phone_number,
                                     username: context.state.user_one_id.username,
+                                    email : user.data.data[0].email,
                                     account_id: user.data.data[0].userOneId,
                                     type: type
                                 })
