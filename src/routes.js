@@ -41,6 +41,7 @@ import StudentCourse from '@/page/user/studentsCourse/studentCourse.vue'
 import StudentBookedDetail from '@/page/user/studentsCourse/studentBookedDetail.vue'
 //order
 import orderHistory from '@/page/user/order/orderHistory.vue'
+import callback from '@/page/callback/loginShareToken.vue'
 
 
 //auth
@@ -149,6 +150,11 @@ const routes = [
       },
 
     ]
+  },
+  {
+    path: '/callback/:page',
+    name: 'callback',
+    component: callback,
   },
 
   // user
@@ -271,6 +277,8 @@ const routes = [
       
     ]
   },
+
+
 ]
 
 
