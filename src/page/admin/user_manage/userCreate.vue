@@ -1005,6 +1005,12 @@ export default {
                 Swal.fire({
                   icon: "success",
                   title: " เพิ่มข้อมูลสำเร็จ",
+                }).then(async (result) => {
+                  if (result.isConfirmed) {
+                    this.$router.push({
+                      name: "UserList",
+                    });
+                  }
                 });
                 this.add_relations = false;
                 this.relation = {
@@ -1121,28 +1127,35 @@ export default {
             );
 
             if (data.statusCode === 200) {
-              // if (data.data && data.data.message !== "") {
-              Swal.fire({
-                icon: "success",
-                title: "บันทึกสำเร็จ",
-              }).then(async (result) => {
-                if (result.isConfirmed) {
-                  // this.$router.push({
-                  //   name: "UserDetail",
-                  //   params: {
-                  //     action: "view",
-                  //     account_id: this.checkData.account_id,
-                  //   },
-                  // });
-                  this.$router.push({ name: "UserList" });
-                }
-              });
-
-              // } else {
-              //   throw { error: data };
-              // }
+              if (data.data && data.message !== "Relation Already exists") {
+                Swal.fire({
+                  icon: "success",
+                  title: "บันทึกสำเร็จ",
+                }).then(async (result) => {
+                  if (result.isConfirmed) {
+                    this.$router.push({
+                      name: "UserList",
+                    });
+                  }
+                });
+              } else if (
+                data.data &&
+                data.message === "Relation Already exists"
+              ) {
+                Swal.fire({
+                  icon: "error",
+                  title: "เกิดข้อผิดพลาด",
+                  text: "USER นี้มีความสัมพันธ์แล้ว!",
+                }).then(async (result) => {
+                  if (result.isConfirmed) {
+                    this.$router.push({
+                      name: "UserList",
+                    });
+                  }
+                });
+              }
             } else {
-              throw { message: data.message };
+              throw { message: data.data };
             }
           } catch (error) {
             console.log(error);
