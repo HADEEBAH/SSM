@@ -36,7 +36,12 @@
                           </template>
                         </v-text-field>
                       </v-col>
-                      <v-col cols="12" offset-sm="2" sm="4" class="align-self-center">
+                      <v-col
+                        cols="12"
+                        offset-sm="2"
+                        sm="4"
+                        class="align-self-center"
+                      >
                         <v-img
                           :class="
                             MobileSize ? `mx-auto w-2/4` : `ml-auto w-2/5`
@@ -343,13 +348,20 @@
                 ></headerCard>
                 <v-divider></v-divider>
 
-                <v-card v-if="data_user_relation_management.length <= 0" class="rounded-lg my-3">
+                <v-card
+                  v-if="data_user_relation_management.length <= 0"
+                  class="rounded-lg my-3"
+                >
                   <v-card-text
                     class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
                   >
                     <span class="text-lg font-bold">
                       <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                      {{ item.roleId === 'R_5' ? `ไม่พบข้อมูลของผู้ปกครอง` : `ไม่พบข้อมูลของนักเรียนในการดูแล` }}
+                      {{
+                        item.roleId === "R_5"
+                          ? `ไม่พบข้อมูลของผู้ปกครอง`
+                          : `ไม่พบข้อมูลของนักเรียนในการดูแล`
+                      }}
                     </span>
                   </v-card-text>
                 </v-card>
@@ -617,25 +629,20 @@
           </template>
         </header-card> -->
 
-        <v-app-bar
-            flat
-            color="white"
-          >
-
-            <v-toolbar-title class="text-h6 pl-0 ">
-              <v-icon class="text-[#ff6b81!important] mb-1">mdi-card-account-details-outline</v-icon>
-               {{ global_role_id === 'R_4' ? 'เพิ่มนักเรียน' : 'เพิ่มผู้ปกครอง' }}
-            </v-toolbar-title>
-
-            <v-spacer></v-spacer>
-
-            <v-btn
-              icon
-              @click="closeDialog"
+        <v-app-bar flat color="white">
+          <v-toolbar-title class="text-h6 pl-0">
+            <v-icon class="text-[#ff6b81!important] mb-1"
+              >mdi-card-account-details-outline</v-icon
             >
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-          </v-app-bar>
+            {{ global_role_id === "R_4" ? "เพิ่มนักเรียน" : "เพิ่มผู้ปกครอง" }}
+          </v-toolbar-title>
+
+          <v-spacer></v-spacer>
+
+          <v-btn icon @click="closeDialog">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-app-bar>
 
         <v-card-text class="pb-2">
           <v-row dense class="mb-5">
@@ -674,12 +681,17 @@
                   >
                 </template>
                 <template v-slot:append-outer>
-                  <v-icon size="24" class="cursor-pointer" @click="
-                  checkUsername(
-                    relation.username,
-                    global_role_id === 'R_4' ? 'parent' : 'student'
-                  )
-                ">mdi-magnify</v-icon>
+                  <v-icon
+                    size="24"
+                    class="cursor-pointer"
+                    @click="
+                      checkUsername(
+                        relation.username,
+                        global_role_id === 'R_4' ? 'parent' : 'student'
+                      )
+                    "
+                    >mdi-magnify</v-icon
+                  >
                 </template>
               </v-text-field>
               <template v-if="!relation.account_id">
@@ -692,7 +704,6 @@
               </template>
             </v-col>
 
-            
             <!-- <v-col cols="3">
               <v-btn
                 block
@@ -721,42 +732,42 @@
               </v-col>
           </v-row> -->
           <!-- <v-container> -->
-            <v-row dense>
-              <v-col cols="12">
-                <labelCustom text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
-                <v-text-field
-                  disabled
-                  dense
-                  outlined
-                  v-model="relation.firstname_en"
-                  placeholder="ชื่อภาษาอังกฤษ"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row dense>
-              <v-col cols="12">
-                <labelCustom text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
-                <v-text-field
-                  disabled
-                  dense
-                  outlined
-                  v-model="relation.lastname_en"
-                  placeholder="นามสกุลภาษาอังกฤษ"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row dense>
-              <v-col cols="12">
-                <labelCustom text="เบอร์โทรศัพท์"></labelCustom>
-                <v-text-field
-                  disabled
-                  dense
-                  outlined
-                  v-model="relation.tel"
-                  placeholder="เบอร์โทรศัพท์"
-                ></v-text-field>
-              </v-col>
-            </v-row>
+          <v-row dense>
+            <v-col cols="12">
+              <labelCustom text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
+              <v-text-field
+                disabled
+                dense
+                outlined
+                v-model="relation.firstname_en"
+                placeholder="ชื่อภาษาอังกฤษ"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col cols="12">
+              <labelCustom text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
+              <v-text-field
+                disabled
+                dense
+                outlined
+                v-model="relation.lastname_en"
+                placeholder="นามสกุลภาษาอังกฤษ"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col cols="12">
+              <labelCustom text="เบอร์โทรศัพท์"></labelCustom>
+              <v-text-field
+                disabled
+                dense
+                outlined
+                v-model="relation.tel"
+                placeholder="เบอร์โทรศัพท์"
+              ></v-text-field>
+            </v-col>
+          </v-row>
           <!-- </v-container> -->
         </v-card-text>
         <v-card-actions class="px-6">
@@ -993,7 +1004,7 @@ export default {
       "ศุกร์",
       "เสาร์",
     ],
-    error_message: ""
+    error_message: "",
   }),
   // bef
   created() {
@@ -1022,7 +1033,10 @@ export default {
 
     this.GetDataRelationsManagement(this.show_by_id);
     // this.GetDataRelationsManagement(this.data_user_by_id);
-    console.log("before mounted data_user_relation_management", this.data_user_relation_management);
+    console.log(
+      "before mounted data_user_relation_management",
+      this.data_user_relation_management
+    );
   },
 
   mounted() {
@@ -1047,7 +1061,10 @@ export default {
     }
 
     this.GetDataRelationsManagement(this.show_by_id);
-    console.log("mounted data_user_relation_management", this.data_user_relation_management);
+    console.log(
+      "mounted data_user_relation_management",
+      this.data_user_relation_management
+    );
     // this.GetDataRelationsManagement(this.data_user_by_id);
 
     // for (const show_data of this.show_by_id.userRoles) {
@@ -1361,20 +1378,28 @@ export default {
             } else {
               throw { message: data.message };
             }
-          } catch ({response}) {
-            if (response?.data?.message === "parentId not found." || response?.data?.message === "studentId and parentId not found." || response?.data?.message === "studentId not found.") {
-              this.error_message = "ชื่อผู้ใช้ไม่ถูกต้อง"
+          } catch ({ response }) {
+            if (
+              response?.data?.message === "parentId not found." ||
+              response?.data?.message === "studentId and parentId not found." ||
+              response?.data?.message === "studentId not found."
+            ) {
+              this.error_message = "ชื่อผู้ใช้ไม่ถูกต้อง";
             } else if (response?.data?.message === "Duplicate relation.") {
-              this.error_message = "ความสัมพันธ์ซ้ำ"
-            } else if (response?.data?.message === "parentId and studentId must not be duplicate.") {
-              this.error_message = "ชื่อผู้ใช้ของผู้ปกครองและนักเรียนต้องไม่ซ้ำกัน"
+              this.error_message = "ความสัมพันธ์ซ้ำ";
+            } else if (
+              response?.data?.message ===
+              "parentId and studentId must not be duplicate."
+            ) {
+              this.error_message =
+                "ชื่อผู้ใช้ของผู้ปกครองและนักเรียนต้องไม่ซ้ำกัน";
             } else {
-              this.error_message = "เกิดข้อผิดพลาด"
+              this.error_message = "เกิดข้อผิดพลาด";
             }
             console.log("error=>", response);
             Swal.fire({
               icon: "error",
-              title: this.error_message
+              title: this.error_message,
             });
           }
         } else {
@@ -1481,31 +1506,43 @@ export default {
               config
             );
             if (data.statusCode === 200) {
-              // if (data.data && data.data !== "Relation Already exits") {
-              Swal.fire({
-                icon: "success",
-                title: "บันทึกสำเร็จ",
-              }).then(async (result) => {
-                if (result.isConfirmed) {
-                  // this.$router.push({ name: "UserList" });
-                  this.$router.push({
-                    name: "UserDetail",
-                    params: {
-                      action: "view",
-                      account_id: this.$route.params.account_id,
-                    },
-                  });
-                }
-              });
-              this.GetShowById(this.$route.params.account_id);
-              // } else if (data.data && data.data == "Relation Already exits") {
-              //   Swal.fire({
-              //     icon: "error",
-              //     title: "ผู้ใช้มีบทบาทแล้ว",
-              //   });
-              //   console.log("else");
-              //   throw { error: data };
-              // }
+              if (data.data && data.message !== "Relation Already exists") {
+                Swal.fire({
+                  icon: "success",
+                  title: "บันทึกสำเร็จ",
+                }).then(async (result) => {
+                  if (result.isConfirmed) {
+                    this.$router.push({
+                      name: "UserDetail",
+                      params: {
+                        action: "view",
+                        account_id: this.$route.params.account_id,
+                      },
+                    });
+                  }
+                });
+                this.GetShowById(this.$route.params.account_id);
+              } else if (
+                data.data &&
+                data.message === "Relation Already exists"
+              ) {
+                Swal.fire({
+                  icon: "error",
+                  title: "เกิดข้อผิดพลาด",
+                  text: "USER นี้มีความสัมพันธ์แล้ว!",
+                }).then(async (result) => {
+                  if (result.isConfirmed) {
+                    this.$router.push({
+                      name: "UserDetail",
+                      params: {
+                        action: "view",
+                        account_id: this.$route.params.account_id,
+                      },
+                    });
+                  }
+                });
+                this.GetShowById(this.$route.params.account_id);
+              }
             } else {
               throw { message: data.data };
             }
@@ -1642,14 +1679,14 @@ export default {
     show_by_id: function () {
       console.log("len", this.show_by_id.userRoles.length);
       if (this.show_by_id.userRoles.length > 0) {
-        this.show_by_id.userRoles.map((val)=>{
-          this.seledtedRole = val.roleId
-        })
+        this.show_by_id.userRoles.map((val) => {
+          this.seledtedRole = val.roleId;
+        });
       } else {
-        this.seledtedRole = ""
+        this.seledtedRole = "";
       }
       console.log("this.seledtedRole", this.seledtedRole);
-    }
+    },
   },
 };
 </script>

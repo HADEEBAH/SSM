@@ -171,6 +171,7 @@ const RegisterModules = {
                                     firstname_en: context.state.user_one_id.firstname_en,
                                     lastname_en: context.state.user_one_id.lastname_en,
                                     phone_number: phone_number,
+                                    email: user.data.data[0].email,
                                     username: context.state.user_one_id.username,
                                     account_id: user.data.data[0].userOneId,
                                     type: type
