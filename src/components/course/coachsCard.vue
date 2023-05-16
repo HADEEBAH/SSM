@@ -14,7 +14,7 @@
                 :key="teach_day_index"
               ></v-divider>
               <v-row dense>
-                <pre>{{ teach_day }}</pre>
+                <!-- <pre>{{ teach_day }}</pre> -->
                 <v-col cols class="d-flex align-center justify-end">
                   <v-switch
                     :disabled="disable"
@@ -161,7 +161,7 @@
                 v-for="(class_date, class_date_index) in teach_day.class_date"
               >
                 <v-row dense :key="`${class_date_index}-class-date`">
-                  <pre>{{ coach.disabled_hours }}</pre>
+                  <!-- <pre>{{ coach.disabled_hours }}</pre> -->
                   <v-col cols="12" sm="6">
                     <!-- <pre>{{class_date}}</pre> -->
                     <label-custom required text="ช่วงเวลา"></label-custom>
