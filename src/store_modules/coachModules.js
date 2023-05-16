@@ -91,7 +91,7 @@ const coachModules = {
           },
         };
         let count = 0
-        for await (const student of students) {
+        for await (const student of students.filter(v => v.potential)) {
           let payload = {
             status: student.check_in_status, // punctual, late,  leave, emergency leave, absent,
             evolution: student.potential.evolution ? student.potential.evolution : '',
@@ -116,7 +116,7 @@ const coachModules = {
             throw { error: data }
           }
         }
-        if (count === students.length) {
+        if(count === students.filter(v => v.potential).length) {
           context.commit("SetStudentCheckInIsLoading", false)
           await Swal.fire({
             icon: "success",
@@ -374,15 +374,15 @@ const coachModules = {
         // let user_detail = JSON.parse(localStorage.getItem("userDetail"));
         // let localhost ="http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/${course_id}/date/${date}`, config)
-        // console.log(data)
+        console.log(data.data)
         if (data.statusCode === 200) {
           data.data.forEach((student, index) => {
             //console.log("compensationStartTime : ",student.compensationStartTime )
             student.no = index + 1
             student.fullname = `${student.firstNameTh} ${student.lastNameTh}`
             student.check_in_student_id = student.checkInStudentId,
-              student.menu_compensation_date = false,
-              student.compensationDate = student.compensationDate ? student.compensationDate !== "Invalid date" ? moment(new Date(student.compensationDate)).format("YYYY-MM-DD") : null : null
+            student.menu_compensation_date = false,
+            student.compensationDate = student.compensationDate ? student.compensationDate !== "Invalid date" ? moment(new Date(student.compensationDate)).format("YYYY-MM-DD") : null : null
             student.compensation_date_str = student.compensationDate ? student.compensationDate !== "Invalid date" ? dateFormatter(new Date(student.compensationDate), "DD MT YYYYT") : null : null
             student.compensationStartTime = student.compensationStartTime ? student.compensationStartTime !== "Invalid date" ? moment(student.compensationStartTime, "HH:mm") : null : null
             student.compensationEndTime = student.compensationEndTime ? student.compensationStartTime !== "Invalid date" ? moment(student.compensationEndTime, "HH:mm") : null : null
