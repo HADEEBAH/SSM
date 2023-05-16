@@ -325,7 +325,7 @@ const orderModules = {
                         'Authorization' : `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                // let localhost = "http://localhost:3002"
+                // let localhost = "https://192.168.74.25:3002"
                 let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/regis/course`,payload , config)
                 console.log(data)
                 if(data.statusCode === 201){

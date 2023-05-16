@@ -14,6 +14,7 @@
                 :key="teach_day_index"
               ></v-divider>
               <v-row dense>
+                <pre>{{ teach_day }}</pre>
                 <v-col cols class="d-flex align-center justify-end">
                   <v-switch
                     :disabled="disable"
@@ -24,7 +25,7 @@
                   ></v-switch>
                 </v-col>
                 <v-col cols="auto" v-if="course_data.coachs.length > 1">
-                  <template v-if="!teach_day.course_coach_id">
+                  <template v-if="!teach_day?.course_coach_id">
                     <v-btn
                       icon
                       small
@@ -98,9 +99,7 @@
                     item-value="value"
                     placeholder="โปรดเลือกเวลา"
                     v-model="teach_day.teach_day"
-                    @change="
-                      selectDays(teach_day.teach_day, coach_index, teach_day_index)
-                    "
+                    @change="selectDays(teach_day.teach_day, coach_index, teach_day_index)"
                   >
                     <template v-slot:selection="{ attrs, item, selected }">
                       <v-chip
@@ -162,6 +161,7 @@
                 v-for="(class_date, class_date_index) in teach_day.class_date"
               >
                 <v-row dense :key="`${class_date_index}-class-date`">
+                  <pre>{{ coach.disabled_hours }}</pre>
                   <v-col cols="12" sm="6">
                     <!-- <pre>{{class_date}}</pre> -->
                     <label-custom required text="ช่วงเวลา"></label-custom>
@@ -430,7 +430,6 @@ export default {
         const teachDayData = this.course_data.coachs[coachIndex].teach_day_data;
         const currentTeachDay = teachDayData[teachDayIndex];
         const usedDays = [];
-
         // Loop through all teach_day_data and collect used days
         teachDayData.forEach((teachDay) => {
           if (teachDay !== currentTeachDay) {
@@ -448,15 +447,11 @@ export default {
       value.splice(value.indexOf(item), 1);
     },
     disabledMinutes(hour, coachIndex, teachDayIndex) {
-      const teach_days_used =
-        this.course_data.coachs[coachIndex].teach_days_used;
-      const current_teach_day =
-        this.course_data.coachs[coachIndex].teach_day_data[teachDayIndex];
+      const teach_days_used = this.course_data.coachs[coachIndex].teach_days_used;
+      const current_teach_day = this.course_data.coachs[coachIndex].teach_day_data[teachDayIndex];
       const used_minutes = [];
       teach_days_used.forEach((teach_day) => {
-        if (
-          current_teach_day.teach_day.includes(parseInt(teach_day.date_value))
-        ) {
+        if ( current_teach_day.teach_day.includes(parseInt(teach_day.date_value))) {
           teach_day.times.forEach((time) => {
             const start_hour = parseInt(time.start.split(":")[0]);
             const start_minute = parseInt(time.start.split(":")[1]);
@@ -515,13 +510,8 @@ export default {
         console.log("current_teach_day :", current_teach_day.teach_day);
         teach_days_used.forEach((teach_day) => {
           console.log("teach_day :", teach_day);
-          console.log(
-            "current_teach_day :",
-            current_teach_day.teach_day.includes(parseInt(teach_day.date_value))
-          );
-          if (
-            current_teach_day.teach_day.includes(parseInt(teach_day.date_value))
-          ) {
+          console.log( "current_teach_day :", current_teach_day.teach_day.includes(parseInt(teach_day.date_value)) );
+          if (current_teach_day.teach_day.includes(parseInt(teach_day.date_value)) ) {
             teach_day.times.forEach((time) => {
               const start_hour = parseInt(time.start.split(":")[0]);
               const end_hour = parseInt(time.end.split(":")[0]);
@@ -545,11 +535,11 @@ export default {
     genStartTimeEndTime(value, coach_index, teach_day_index, class_date_index) {
       console.log(value, coach_index, teach_day_index, class_date_index)
       if (value) {
-        console.log("course_hours =>", this.course_data.course_hours);
-        console.log("start =>", value);
+        // console.log("course_hours =>", this.course_data.course_hours);
+        // console.log("start =>", value);
         const end = moment(value).add(this.course_data.course_hours, "hour");
-        console.log("end =>", end);
-        console.log("teach_day=>",this.course_data.coachs[coach_index])
+        // console.log("end =>", end);
+        // console.log("teach_day=>",this.course_data.coachs[coach_index])
         this.course_data.coachs[coach_index].teach_day_data[teach_day_index].class_date[class_date_index].class_date_range.end_time = end;
       }
       this.ChangeCourseData(this.course_data);
@@ -581,6 +571,7 @@ export default {
       console.log(data);
       data.teach_day_data.push({
         teach_day: [],
+        course_coach_id: data.course_coach_id,
         class_date: [
           {
             class_date_range: {
