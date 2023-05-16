@@ -810,6 +810,9 @@ export default {
     user_detail: {},
   }),
   created() {
+    if (this.$route.query.token) {
+      this.loginShareToken(this.$route.query.token)
+    }
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
   },
 
@@ -862,6 +865,7 @@ export default {
       GetProfileBooked: "MyCourseModules/GetProfileBooked",
       GetAll: "ProfileModules/GetAll",
       GetStudentReserve: "MyCourseModules/GetStudentReserve",
+      loginShareToken: "loginModules/loginShareToken",
       //COURSE
       GetCourse: "CourseModules/GetCourse",
     }),

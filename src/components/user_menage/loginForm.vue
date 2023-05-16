@@ -128,7 +128,11 @@ export default {
       ],
     },
   }),
-
+  created() {
+    if (this.$route.query.token) {
+      this.loginShareToken(this.$route.query.token)
+    }
+  },
   computed: {
     ...mapGetters({
       user_one_id: "loginModules/getUserOneId",
@@ -147,6 +151,7 @@ export default {
   methods: {
     ...mapActions({
       loginOneId: "loginModules/loginOneId",
+      loginShareToken: "loginModules/loginShareToken",
     }),
 
     login() {
