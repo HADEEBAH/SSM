@@ -1,335 +1,336 @@
 <template>
   <div>
-    <v-card
-      v-for="(coach, coach_index) in course_data.coachs.filter(v => v.teach_day_data.length > 0)"
-      :class="`bg-[${color}] mb-5`"
-      :key="coach_index"
-    >
-    <!-- <pre>{{ coach }}</pre> -->
-      <!-- TEACH DAY -->
-      <template v-for="(teach_day, teach_day_index) in coach.teach_day_data">
-        <v-card-text :key="`${teach_day_index}-day`" class="border">
-          <v-divider
-            v-if="teach_day_index > 0"
-            :key="teach_day_index"
-          ></v-divider>
-          <v-row dense>
-            <v-col cols class="d-flex align-center justify-end">
-              <v-switch
-                :disabled="disable"
-                v-model="teach_day.class_open"
-                color="green"
-                hide-details
-                label="เปิดสอน"
-              ></v-switch>
-            </v-col>
-            <v-col cols="auto" v-if="course_data.coachs.length > 1">
-              <template v-if="!teach_day.course_coach_id">
-                <v-btn
-                  icon
-                  small
-                  color="red"
-                  v-if="!disable"
-                  @click="removeCoach(course_data.coachs, coach_index)"
-                  ><v-icon>mdi-close</v-icon></v-btn
-                >
-              </template>
-            </v-col>
-          </v-row>
-          <v-row dense class="flex align-center justify-end">
-            <v-col cols="12" sm="4">
-              <label-custom required text="โค้ช"></label-custom>
-              <v-autocomplete
-                dense
-                :disabled="
-                  disable ? disable : teach_day_index > 0 ? true : false
-                "
-                :outlined="!disable"
-                :filled="disable"
-                v-model="coach.coach_id"
-                color="#FF6B81"
-                :items="coachsOptions(coach)"
-                item-value="accountId"
-                item-text="fullNameTh"
-                item-color="pink"
-                @change="findTeachDays(coach, coach_index)"
-                :rules="rules.course"
-                placeholder="โค้ช"
-              >
-                <template v-slot:no-data>
-                  <v-list-item>
-                    <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
-                  </v-list-item>
-                </template>
-                <template v-slot:></template>
-                <template v-slot:item="{ item }">
-                  <v-list-item-content>
-                    <v-list-item-title
-                      ><span
-                        :class="
-                          coach.coach_id === item.accountId ? 'font-bold' : ''
-                        "
-                        >{{ item.fullNameTh }}</span
-                      ></v-list-item-title
-                    >
-                  </v-list-item-content>
-                  <v-list-item-action>
-                    <v-icon v-if="coach.coach_id === item.accountId"
-                      >mdi-check-circle</v-icon
-                    >
-                  </v-list-item-action>
-                </template>
-              </v-autocomplete>
-            </v-col>
-            <v-col cols="12" sm="4">
-              <label-custom required text="วันสอน"></label-custom>
-              <v-autocomplete
-                dense
-                :disabled="disable"
-                :outlined="!disable"
-                :filled="disable"
-                chips
-                :rules="rules.class_date"
-                deletable-chips
-                item-color="pink"
-                multiple
-                color="#FF6B81"
-                :items="filteredDays(coach_index, teach_day_index, state)"
-                item-text="label"
-                item-value="value"
-                placeholder="โปรดเลือกเวลา"
-                v-model="teach_day.teach_day"
-                @change="
-                  selectDays(teach_day.teach_day, coach_index, teach_day_index)
-                "
-              >
-                <template v-slot:selection="{ attrs, item, selected }">
-                  <v-chip
-                    v-bind="attrs"
-                    :input-value="selected"
-                    close
-                    small
+    <template v-for="(coach, coach_index) in course_data.coachs">
+      <v-card
+        v-if="coach.teach_day_data.length > 0"
+        :class="`bg-[${color}] mb-5`"
+        :key="coach_index"
+      >
+        <!-- TEACH DAY -->
+          <template v-for="(teach_day, teach_day_index) in coach.teach_day_data">
+            <v-card-text :key="`${teach_day_index}-day`" class="border">
+              <v-divider
+                v-if="teach_day_index > 0"
+                :key="teach_day_index"
+              ></v-divider>
+              <v-row dense>
+                <pre>{{ teach_day }}</pre>
+                <v-col cols class="d-flex align-center justify-end">
+                  <v-switch
                     :disabled="disable"
-                    color="#ffeeee"
-                    text-color="#ff6b81"
-                    @click:close="removeChip(item, teach_day.teach_day)"
+                    v-model="teach_day.class_open"
+                    color="green"
+                    hide-details
+                    label="เปิดสอน"
+                  ></v-switch>
+                </v-col>
+                <v-col cols="auto" v-if="course_data.coachs.length > 1">
+                  <template v-if="!teach_day?.course_coach_id">
+                    <v-btn
+                      icon
+                      small
+                      color="red"
+                      v-if="!disable"
+                      @click="removeCoach(course_data.coachs, coach_index)"
+                      ><v-icon>mdi-close</v-icon></v-btn
+                    >
+                  </template>
+                </v-col>
+              </v-row>
+              <v-row dense class="flex align-center justify-end">
+                <v-col cols="12" sm="4">
+                  <label-custom required text="โค้ช"></label-custom>
+                  <!-- <pre>{{ coach }}</pre> -->
+                  <v-autocomplete
+                    dense
+                    :disabled=" disable ? disable : coach.course_coach_id ? true : false "
+                    :outlined="!disable"
+                    :filled="disable"
+                    v-model="coach.coach_id"
+                    color="#FF6B81"
+                    :items="coachsOptions(coach)"
+                    item-value="accountId"
+                    item-text="fullNameTh"
+                    item-color="pink"
+                    @change="findTeachDays(coach, coach_index)"
+                    :rules="rules.course"
+                    placeholder="โค้ช"
                   >
-                    <strong>{{ item.label }}</strong>
-                  </v-chip>
-                </template>
-              </v-autocomplete>
-            </v-col>
-            <v-col cols="6" sm="2">
-              <v-btn
-                text
-                :disabled="disable"
-                v-if="teach_day_index === coach.teach_day_data.length - 1"
-                color="green"
-                @click="addTeachDay(coach)"
+                    <template v-slot:no-data>
+                      <v-list-item>
+                        <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
+                      </v-list-item>
+                    </template>
+                    <template v-slot:></template>
+                    <template v-slot:item="{ item }">
+                      <v-list-item-content>
+                        <v-list-item-title
+                          ><span
+                            :class="
+                              coach.coach_id === item.accountId ? 'font-bold' : ''
+                            "
+                            >{{ item.fullNameTh }}</span
+                          ></v-list-item-title
+                        >
+                      </v-list-item-content>
+                      <v-list-item-action>
+                        <v-icon v-if="coach.coach_id === item.accountId"
+                          >mdi-check-circle</v-icon
+                        >
+                      </v-list-item-action>
+                    </template>
+                  </v-autocomplete>
+                </v-col>
+                <v-col cols="12" sm="4">
+                  <label-custom required text="วันสอน"></label-custom>
+                  <v-autocomplete
+                    dense
+                    :disabled="disable"
+                    :outlined="!disable"
+                    :filled="disable"
+                    chips
+                    :rules="rules.class_date"
+                    deletable-chips
+                    item-color="pink"
+                    multiple
+                    color="#FF6B81"
+                    :items="filteredDays(coach_index, teach_day_index, state)"
+                    item-text="label"
+                    item-value="value"
+                    placeholder="โปรดเลือกเวลา"
+                    v-model="teach_day.teach_day"
+                    @change="selectDays(teach_day.teach_day, coach_index, teach_day_index)"
+                  >
+                    <template v-slot:selection="{ attrs, item, selected }">
+                      <v-chip
+                        v-bind="attrs"
+                        :input-value="selected"
+                        close
+                        small
+                        :disabled="disable"
+                        color="#ffeeee"
+                        text-color="#ff6b81"
+                        @click:close="removeChip(item, teach_day.teach_day)"
+                      >
+                        <strong>{{ item.label }}</strong>
+                      </v-chip>
+                    </template>
+                  </v-autocomplete>
+                </v-col>
+                <v-col cols="6" sm="2">
+                  <v-btn
+                    text
+                    :disabled="disable"
+                    v-if="teach_day_index === coach.teach_day_data.length - 1"
+                    color="green"
+                    @click="addTeachDay(coach)"
+                  >
+                    <v-icon>mdi-calendar-plus-outline</v-icon>
+                    เพิ่มวันสอน
+                  </v-btn>
+                </v-col>
+                <v-col cols="6" sm="2">
+                
+                  <template v-if="teach_day.day_of_week_id">
+                    <!-- {{  edited +'*'+ disable}} -->
+                    <v-btn
+                      :disabled="disable || !edited"
+                      text
+                      color="red"
+                      v-if="coach.teach_day_data.length > 1"
+                      @click="removeDayOfWeekData(coach.teach_day_data, teach_day.day_of_week_id)"
+                      ><v-icon>mdi-calendar-plus-outline</v-icon>
+                      ลบวันสอน
+                    </v-btn>
+                  </template>
+                  <template v-else>
+                    <v-btn
+                      :disabled="disable"
+                      text
+                      color="red"
+                      v-if="coach.teach_day_data.length > 1"
+                      @click="removeTeachDay(coach.teach_day_data, teach_day_index)"
+                      ><v-icon>mdi-calendar-plus-outline</v-icon>
+                      ลบวันสอน
+                    </v-btn>
+                  </template>
+                </v-col>
+              </v-row>
+              <!-- CLASS TIME -->
+              <template
+                v-for="(class_date, class_date_index) in teach_day.class_date"
               >
-                <v-icon>mdi-calendar-plus-outline</v-icon>
-                เพิ่มวันสอน
-              </v-btn>
-            </v-col>
-            <v-col cols="6" sm="2">
-             
-              <template v-if="teach_day.day_of_week_id">
-                <!-- {{  edited +'*'+ disable}} -->
-                <v-btn
-                  :disabled="disable || !edited"
-                  text
-                  color="red"
-                  v-if="coach.teach_day_data.length > 1"
-                  @click="removeDayOfWeekData(coach.teach_day_data, teach_day.day_of_week_id)"
-                  ><v-icon>mdi-calendar-plus-outline</v-icon>
-                  ลบวันสอน
-                </v-btn>
-              </template>
-              <template v-else>
-                <v-btn
-                  :disabled="disable"
-                  text
-                  color="red"
-                  v-if="coach.teach_day_data.length > 1"
-                  @click="removeTeachDay(coach.teach_day_data, teach_day_index)"
-                  ><v-icon>mdi-calendar-plus-outline</v-icon>
-                  ลบวันสอน
-                </v-btn>
-              </template>
-            </v-col>
-          </v-row>
-          <!-- CLASS TIME -->
-          <template
-            v-for="(class_date, class_date_index) in teach_day.class_date"
-          >
-            <v-row dense :key="`${class_date_index}-class-date`">
-              <v-col cols="12" sm="6">
-                <label-custom required text="ช่วงเวลา"></label-custom>
-                <v-row dense class="mb-3">
-                  <v-col class="px-2" cols="12" sm="6">
-                    <v-text-field
-                      :disabled="disable"
-                      :outlined="!disable"
-                      :filled="disable"
-                      dense
-                      style="position: absolute; display: block; z-index: 0"
-                      :style="`width:${width()}px;`"
-                      :rules="rules.start_time"
-                      v-model="class_date.class_date_range.start_time"
-                    >
-                    </v-text-field>
-                    <TimePicker
-                      :disabled="disable"
-                      v-if="coach.disabled_hours"
-                      style="z-index: 2"
-                      :style="`width:${width() - 4}px !important; `"
-                      class="w-full"
-                      :minuteStep="15"
-                      format="HH:mm"
-                      @focus="class_date.class_date_range.start_time = ''"
-                      :class="
-                        class_date.class_date_range.start_time ? 'active' : ''
-                      "
-                      :disabledMinutes="
-                        (hour) => {
-                          return disabledMinutes(
-                            hour,
-                            coach_index,
-                            teach_day_index
-                          );
-                        }
-                      "
-                      placeholder="เวลาเริ่มต้น"
-                      @change="
-                        genStartTimeEndTime(
-                          $event,
-                          coach_index,
-                          teach_day_index,
-                          class_date_index
-                        )
-                      "
-                      v-model="class_date.class_date_range.start_time"
-                    ></TimePicker>
-                    <TimePicker
-                      v-else
-                      :disabled="disable"
-                      style="z-index: 2"
-                      :style="`width:${width() - 4}px !important; `"
-                      class="w-full"
-                      :minuteStep="15"
-                      format="HH:mm"
-                      :class="
-                        class_date.class_date_range.start_time ? 'active' : ''
-                      "
-                      placeholder="เวลาเริ่มต้น"
-                      @change="
-                        genStartTimeEndTime(
-                          $event,
-                          coach_index,
-                          teach_day_index,
-                          class_date_index
-                        )
-                      "
-                      v-model="class_date.class_date_range.start_time"
-                    ></TimePicker>
+                <v-row dense :key="`${class_date_index}-class-date`">
+                  <pre>{{ coach.disabled_hours }}</pre>
+                  <v-col cols="12" sm="6">
+                    <!-- <pre>{{class_date}}</pre> -->
+                    <label-custom required text="ช่วงเวลา"></label-custom>
+                    <v-row dense class="mb-3">
+                      <v-col class="px-2" cols="12" sm="6">
+                        <v-text-field
+                          :disabled="disable"
+                          :outlined="!disable"
+                          :filled="disable"
+                          dense
+                          style="position: absolute; display: block; z-index: 0"
+                          :style="`width:${width()}px;`"
+                          :rules="rules.start_time"
+                          v-model="class_date.class_date_range.start_time"
+                        >
+                        </v-text-field>
+                        <TimePicker
+                          :disabled="disable"
+                          v-if="coach.disabled_hours"
+                          style="z-index: 2"
+                          :style="`width:${width() - 4}px !important; `"
+                          class="w-full"
+                          :minuteStep="15"
+                          format="HH:mm"
+                          @focus="class_date.class_date_range.start_time = ''"
+                          :class="
+                            class_date.class_date_range.start_time ? 'active' : ''
+                          "
+                          :disabledMinutes="
+                            (hour) => {
+                              return disabledMinutes(
+                                hour,
+                                coach_index,
+                                teach_day_index
+                              );
+                            }
+                          "
+                          placeholder="เวลาเริ่มต้น"
+                          @change="
+                            genStartTimeEndTime(
+                              $event,
+                              coach_index,
+                              teach_day_index,
+                              class_date_index
+                            )
+                          "
+                          v-model="class_date.class_date_range.start_time"
+                        ></TimePicker>
+                        <TimePicker
+                          v-else
+                          :disabled="disable"
+                          style="z-index: 2"
+                          :style="`width:${width() - 4}px !important; `"
+                          class="w-full"
+                          :minuteStep="15"
+                          format="HH:mm"
+                          :class="
+                            class_date.class_date_range.start_time ? 'active' : ''
+                          "
+                          placeholder="เวลาเริ่มต้น"
+                          @change="
+                            genStartTimeEndTime(
+                              $event,
+                              coach_index,
+                              teach_day_index,
+                              class_date_index
+                            )
+                          "
+                          v-model="class_date.class_date_range.start_time"
+                        ></TimePicker>
+                      </v-col>
+                      <v-col class="px-2" cols="12" sm="6">
+                        <v-text-field
+                          :disabled="disable"
+                          :outlined="!disable"
+                          :filled="disable"
+                          dense
+                          style="position: absolute; display: block; z-index: 0"
+                          :style="`width:${width()}px;`"
+                          :rules="rules.end_time"
+                          @change="ChangeCourseData(course_data)"
+                          v-model="class_date.class_date_range.end_time"
+                        >
+                        </v-text-field>
+                        <TimePicker
+                          disabled
+                          style="z-index: 2"
+                          :style="`width:${width() - 4}px !important; `"
+                          :minuteStep="15"
+                          format="HH:mm"
+                          :class="
+                            class_date.class_date_range.end_time ? 'active' : ''
+                          "
+                          placeholder="เวลาสิ้นสุด"
+                          @change="
+                            limitEndTime(
+                              $event,
+                              coach_index,
+                              teach_day_index,
+                              class_date_index
+                            )
+                          "
+                          v-model="class_date.class_date_range.end_time"
+                        ></TimePicker>
+                      </v-col>
+                    </v-row>
                   </v-col>
-                  <v-col class="px-2" cols="12" sm="6">
+                  <v-col cols="12" sm="2">
+                    <label-custom required text="นักเรียนที่รับได้"></label-custom>
                     <v-text-field
+                      class="input-text-right"
+                      dense
                       :disabled="disable"
                       :outlined="!disable"
                       :filled="disable"
-                      dense
-                      style="position: absolute; display: block; z-index: 0"
-                      :style="`width:${width()}px;`"
-                      :rules="rules.end_time"
+                      type="number"
+                      suffix="คน"
+                      @focus="$event.target.select()"
+                      :rules="rules.students"
                       @change="ChangeCourseData(course_data)"
-                      v-model="class_date.class_date_range.end_time"
+                      v-model="class_date.students"
+                      placeholder="ระบุนักเรียนที่รับได้"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="6" sm="2" class="d-flex align-center">
+                    <v-btn
+                      :disabled="disable"
+                      text
+                      v-if="class_date_index === teach_day.class_date.length - 1"
+                      color="green"
+                      @click="addTime(teach_day)"
                     >
-                    </v-text-field>
-                    <TimePicker
-                      disabled
-                      style="z-index: 2"
-                      :style="`width:${width() - 4}px !important; `"
-                      :minuteStep="15"
-                      format="HH:mm"
-                      :class="
-                        class_date.class_date_range.end_time ? 'active' : ''
-                      "
-                      placeholder="เวลาสิ้นสุด"
-                      @change="
-                        limitEndTime(
-                          $event,
-                          coach_index,
-                          teach_day_index,
-                          class_date_index
-                        )
-                      "
-                      v-model="class_date.class_date_range.end_time"
-                    ></TimePicker>
+                      <v-icon>mdi-timer-plus-outline</v-icon>
+                      เพิ่มเวลา
+                    </v-btn>
+                  </v-col>
+                  <v-col cols="6" sm="2" class="d-flex align-center">
+                    <template v-if="class_date.class_date_range.day_of_week_id">
+                      <!-- {{ class_date.class_date_range.time_id }} -->
+                      <v-btn
+                        :disabled="disable"
+                        v-if="teach_day.class_date.length > 1"
+                        text
+                        color="red"
+                        @click="removeTimeData(teach_day.class_date, class_date.class_date_range.time_id)"
+                      >
+                        <v-icon>mdi-timer-minus-outline</v-icon>
+                        ลบเวลา
+                      </v-btn>
+                    </template>
+                    <template v-else>
+                      <v-btn
+                        :disabled="disable"
+                        v-if="teach_day.class_date.length > 1"
+                        text
+                        color="red"
+                        @click="removeTime(teach_day.class_date, class_date_index)"
+                      >
+                        <v-icon>mdi-timer-minus-outline</v-icon>
+                        ลบเวลา
+                      </v-btn>
+                    </template>
                   </v-col>
                 </v-row>
-              </v-col>
-              <v-col cols="12" sm="2">
-                <label-custom required text="นักเรียนที่รับได้"></label-custom>
-                <v-text-field
-                  class="input-text-right"
-                  dense
-                  :disabled="disable"
-                  :outlined="!disable"
-                  :filled="disable"
-                  type="number"
-                  suffix="คน"
-                  @focus="$event.target.select()"
-                  :rules="rules.students"
-                  @change="ChangeCourseData(course_data)"
-                  v-model="class_date.students"
-                  placeholder="ระบุนักเรียนที่รับได้"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="6" sm="2" class="d-flex align-center">
-                <v-btn
-                  :disabled="disable"
-                  text
-                  v-if="class_date_index === teach_day.class_date.length - 1"
-                  color="green"
-                  @click="addTime(teach_day)"
-                >
-                  <v-icon>mdi-timer-plus-outline</v-icon>
-                  เพิ่มเวลา
-                </v-btn>
-              </v-col>
-              <v-col cols="6" sm="2" class="d-flex align-center">
-                <template v-if="class_date.class_date_range.day_of_week_id">
-                  <!-- {{ class_date.class_date_range.time_id }} -->
-                  <v-btn
-                    :disabled="disable"
-                    v-if="teach_day.class_date.length > 1"
-                    text
-                    color="red"
-                    @click="removeTimeData(teach_day.class_date, class_date.class_date_range.time_id)"
-                  >
-                    <v-icon>mdi-timer-minus-outline</v-icon>
-                    ลบเวลา
-                  </v-btn>
-                </template>
-                <template v-else>
-                  <v-btn
-                    :disabled="disable"
-                    v-if="teach_day.class_date.length > 1"
-                    text
-                    color="red"
-                    @click="removeTime(teach_day.class_date, class_date_index)"
-                  >
-                    <v-icon>mdi-timer-minus-outline</v-icon>
-                    ลบเวลา
-                  </v-btn>
-                </template>
-              </v-col>
-            </v-row>
+              </template>
+            </v-card-text>
           </template>
-        </v-card-text>
-      </template>
-    </v-card>
+      </v-card>
+    </template>
   </div>
 </template>
 <script>
@@ -429,7 +430,6 @@ export default {
         const teachDayData = this.course_data.coachs[coachIndex].teach_day_data;
         const currentTeachDay = teachDayData[teachDayIndex];
         const usedDays = [];
-
         // Loop through all teach_day_data and collect used days
         teachDayData.forEach((teachDay) => {
           if (teachDay !== currentTeachDay) {
@@ -447,15 +447,11 @@ export default {
       value.splice(value.indexOf(item), 1);
     },
     disabledMinutes(hour, coachIndex, teachDayIndex) {
-      const teach_days_used =
-        this.course_data.coachs[coachIndex].teach_days_used;
-      const current_teach_day =
-        this.course_data.coachs[coachIndex].teach_day_data[teachDayIndex];
+      const teach_days_used = this.course_data.coachs[coachIndex].teach_days_used;
+      const current_teach_day = this.course_data.coachs[coachIndex].teach_day_data[teachDayIndex];
       const used_minutes = [];
       teach_days_used.forEach((teach_day) => {
-        if (
-          current_teach_day.teach_day.includes(parseInt(teach_day.date_value))
-        ) {
+        if ( current_teach_day.teach_day.includes(parseInt(teach_day.date_value))) {
           teach_day.times.forEach((time) => {
             const start_hour = parseInt(time.start.split(":")[0]);
             const start_minute = parseInt(time.start.split(":")[1]);
@@ -514,13 +510,8 @@ export default {
         console.log("current_teach_day :", current_teach_day.teach_day);
         teach_days_used.forEach((teach_day) => {
           console.log("teach_day :", teach_day);
-          console.log(
-            "current_teach_day :",
-            current_teach_day.teach_day.includes(parseInt(teach_day.date_value))
-          );
-          if (
-            current_teach_day.teach_day.includes(parseInt(teach_day.date_value))
-          ) {
+          console.log( "current_teach_day :", current_teach_day.teach_day.includes(parseInt(teach_day.date_value)) );
+          if (current_teach_day.teach_day.includes(parseInt(teach_day.date_value)) ) {
             teach_day.times.forEach((time) => {
               const start_hour = parseInt(time.start.split(":")[0]);
               const end_hour = parseInt(time.end.split(":")[0]);
@@ -542,14 +533,14 @@ export default {
     },
 
     genStartTimeEndTime(value, coach_index, teach_day_index, class_date_index) {
+      console.log(value, coach_index, teach_day_index, class_date_index)
       if (value) {
-        console.log("course_hours =>", this.course_data.course_hours);
-        console.log("start =>", value);
+        // console.log("course_hours =>", this.course_data.course_hours);
+        // console.log("start =>", value);
         const end = moment(value).add(this.course_data.course_hours, "hour");
-        console.log("end =>", end);
-        this.course_data.coachs[coach_index].teach_day_data[
-          teach_day_index
-        ].class_date[class_date_index].class_date_range.end_time = end;
+        // console.log("end =>", end);
+        // console.log("teach_day=>",this.course_data.coachs[coach_index])
+        this.course_data.coachs[coach_index].teach_day_data[teach_day_index].class_date[class_date_index].class_date_range.end_time = end;
       }
       this.ChangeCourseData(this.course_data);
     },
@@ -580,6 +571,7 @@ export default {
       console.log(data);
       data.teach_day_data.push({
         teach_day: [],
+        course_coach_id: data.course_coach_id,
         class_date: [
           {
             class_date_range: {
