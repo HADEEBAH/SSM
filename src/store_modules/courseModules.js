@@ -994,6 +994,7 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
+        // let localhost = "http://localhost:3002"
         if(cpo_id){
           let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/count/student?courseId=${course_id}&cpoId=${cpo_id}`,config)
           console.log("GetCourseStudent => ",data)
@@ -1277,6 +1278,7 @@ const CourseModules = {
             await context.commit("SetCourseData", payload)
           }else{
             // console.log("payload :",payload)
+            // let localhost = "http://localhost:3002"
             let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/count/student?courseId=${course_id}`,config)
               // console.log("GetCourseStudent => ",data)
               if(data.statusCode === 200){
@@ -1475,6 +1477,68 @@ const CourseModules = {
        if(data.statusCode === 200){
         context.commit("SetCoursePotential",data.data)
        }
+      }catch(error){
+        console.log(error)
+      }
+    },
+    // COURSE :: Delete Day Of Week
+    async DeleteDayOfWeek(context, {day_of_week_id}){
+      try{
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        let {data} = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/manage/dayOfWeek/${day_of_week_id}`,config)
+        console.log(data)
+        if(data.statusCode === 200){
+          if(data.data[0] === "Delete Unsuccessfully:"){
+            Swal.fire({
+              icon : "error",
+              text : "ไม่สามารถลบได้ เนื่องจากที่การสมัครเรียนแล้ว",
+              confirmButtonText: "ตกลง",
+            })
+          }else{
+            Swal.fire({
+              icon : "success",
+              text : "ลบวันสอนสำเร็จ",
+              confirmButtonText: "ตกลง",
+            })
+          }
+        }
+      }catch(error){
+        console.log(error)
+      }
+    },
+     // COURSE :: Delete Time
+     async DeleteTime(context, {time_id}){
+      try{
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        let {data} = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/manage/time/${time_id}`, config)
+        console.log(data.data)
+        if(data.statusCode === 200){
+          if(data.data[0] === "Delete Unsuccessfully:"){
+            Swal.fire({
+              icon : "error",
+              text : "ไม่สามารถลบได้ เนื่องจากที่การสมัครเรียนแล้ว",
+              confirmButtonText: "ตกลง",
+            })
+          }else{
+            Swal.fire({
+              icon : "success",
+              text : "ลบเวลาสอนสำเร็จ",
+              confirmButtonText: "ตกลง",
+            })
+          }
+        }
       }catch(error){
         console.log(error)
       }

@@ -245,7 +245,9 @@ export default {
         this.changeCourseOrderData(this.course_order)
       }
       this.changeOrderData(this.order)
+      localStorage.setItem("Order", JSON.stringify(this.course_order))
       this.$router.push({name : "userCourseOrder"})
+      
     }
   },
 };
