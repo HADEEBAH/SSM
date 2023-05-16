@@ -83,7 +83,7 @@
                         align-self="center"
                       >
                         <div class="cicle">
-                          <v-img
+                          <!-- <v-img
                             class="image-cropper items-end"
                             :src="
                               preview_img !== ''
@@ -92,8 +92,16 @@
                                 ? checkData.image
                                 : require(`../../../assets/userManagePage/default_img_update_profile.svg`)
                             "
+                          > -->
+                          <v-img
+                            class="image-cropper items-end"
+                            :src="
+                                checkData.image || checkData.image !== ''
+                                ? checkData.image
+                                : require(`../../../assets/userManagePage/default_img_update_profile.svg`)
+                            "
                           >
-                            <v-btn
+                            <!-- <v-btn
                               v-if="
                                 preview_img === '' &&
                                 checkData.image &&
@@ -121,7 +129,7 @@
                               class="w-full white--text"
                             >
                               <span class="mdi mdi-close">ยกเลิก</span>
-                            </v-btn>
+                            </v-btn> -->
                           </v-img>
                         </div>
                         <input
@@ -139,6 +147,7 @@
                           <v-col cols="12" sm="6">
                             <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
                             <v-text-field
+                              disabled
                               @keypress="validate($event, 'th')"
                               placeholder="-"
                               v-model="checkData.firstname_th"
@@ -152,6 +161,7 @@
                               text="นามสกุล (ภาษาไทย)"
                             ></label-custom>
                             <v-text-field
+                              disabled
                               @keypress="validate($event, 'th')"
                               placeholder="-"
                               v-model="checkData.lastname_th"
@@ -168,6 +178,7 @@
                               text="First Name (English)"
                             ></label-custom>
                             <v-text-field
+                              disabled
                               @keypress="validate($event, 'en')"
                               placeholder="-"
                               v-model="checkData.firstname_en"
@@ -181,6 +192,7 @@
                               text="Last Name (English)"
                             ></label-custom>
                             <v-text-field
+                              disabled
                               @keypress="validate($event, 'en')"
                               placeholder="-"
                               v-model="checkData.lastname_en"
@@ -239,6 +251,7 @@
                         <label-custom text="บทบาทผู้ใช้งาน"></label-custom>
 
                         <v-autocomplete
+                          disabled
                           dense
                           solo
                           v-model="seledtedRole"
@@ -255,67 +268,19 @@
                             <v-list-item-content>
                               {{ item.role }}
                             </v-list-item-content>
-                            <!-- <v-list-item-action>
-                                <v-icon color="#FF6B81">
-                                  {{
-                                    selectRoles.includes(item.role)
-                                      ? "mdi-checkbox-marked"
-                                      : "mdi-checkbox-blank-circle-outline"
-                                  }}</v-icon
-                                >
-                              </v-list-item-action> -->
                           </template>
                         </v-autocomplete>
-
-                        <!-- <v-autocomplete
-                            dense
-                            v-model="seledtedRole"
-                            :items="roles"
-                            item-text="role"
-                            item-value="roleNumber"
-                            label="กรุณาเลือกบทบาทผู้ใช้งาน"
-                            placeholder="กรุณาเลือกบทบาทผู้ใช้งาน"
-                            single-line
-                            outlined
-                            chips
-                            item-color="#ff6b81"
-                            color="#ff6b81"
-                            @change="selectRole(seledtedRole)"
-                          >
-                          <template v-slot:item="{ item }">
-                            <v-list-item-content>
-                              {{ item.role }}
-                            </v-list-item-content>
-                            <v-list-item-action>
-                              <v-icon color="#FF6B81">
-                                {{
-                                  selectRoles.includes(item.role)
-                                    ? "mdi-checkbox-marked"
-                                    : "mdi-checkbox-blank-circle-outline"
-                                }}</v-icon
-                              >
-                            </v-list-item-action>
-                          </template>
-                          </v-autocomplete> -->
                       </v-col>
                     </v-row>
                   </v-card-text>
                 </v-card>
               </v-col>
             </v-row>
-            <!-- {{ global_data_relation_checked.roles.map((val)=>{val.roleId.includes("R_4")}) }} -->
+
             <v-row
               v-if="
-                global_data_relation_checked.roles
-                  .map((val) => {
-                    return val.roleId;
-                  })
-                  .includes('R_4') ||
-                global_data_relation_checked.roles
-                  .map((val) => {
-                    return val.roleId;
-                  })
-                  .includes('R_5')
+                global_role_code === 'R_4' ||
+                global_role_code === 'R_5'
               "
             >
               <v-col cols="12">
@@ -324,55 +289,24 @@
                   :icon="'mdi-file-plus-outline'"
                   :icon_color="'#FF6B81'"
                   :title="
-                    global_data_relation_checked.roles
-                      .map((val) => {
-                        return val.roleId;
-                      })
-                      .includes('R_4')
+                    global_role_code === 'R_4'
                       ? 'เพิ่มข้อมูลนักเรียนในการดูแล'
                       : 'เพิ่มข้อมูลผู้ปกครอง'
                   "
                 ></headerCard>
                 <v-divider></v-divider>
               </v-col>
-              <!-- </v-row>
-          </v-container> -->
 
-              <!-- หัวข้อ เพิ่มข้อมูล -->
-              <!-- <v-container
-            grid-list-xs
-            v-if="
-              roles.privilege === 'ผู้ปกครอง' || roles.privilege === 'นักเรียน'
-            "
-          > -->
-              <!-- <v-row>
-              <v-col cols="12">
-                <headerCard
-                  class="ml-6 mt-8"
-                  :icon="'mdi-file-plus-outline'"
-                  :icon_color="'#FF6B81'"
-                  :title="
-                    roles.privilege === 'ผู้ปกครอง'
-                      ? 'เพิ่มข้อมูลนักเรียนในการดูแล'privilege
-                      : 'เพิ่มข้อมูลผู้ปกครอง'
-                  "
-                ></headerCard>
-                <v-divider class="mx-10"></v-divider>
-              </v-col>
-            </v-row> -->
-              <!-- ข้อมูล ความสัมพันธ -->
-              <!-- <v-row> -->
-              <v-col v-if="user_student_data.length > 0" cols="12">
+              <v-col v-if="data_user_relation_management.length > 0" cols="12">
                 <v-card
                   class="my-5"
                   color="#FCFCFC"
-                  v-for="(data_relations, index_relations) in user_student_data"
+                  v-for="(data_relations, index_relations) in data_user_relation_management"
                   :key="index_relations"
                 >
-                  <!-- <pre>{{ data_relations }}</pre> -->
 
                   <v-card-text>
-                    <v-col align="right">
+                    <!-- <v-col align="right">
                       <v-icon
                         larg
                         color="#FF6B81"
@@ -381,42 +315,32 @@
                       >
                         mdi-delete
                       </v-icon>
-                    </v-col>
+                    </v-col> -->
                     <v-row dense align="center">
                       <v-col cols="12" sm="6">
                         <label-custom
                           :text="
-                            global_data_relation_checked.roles
-                              .map((val) => {
-                                return val.roleId;
-                              })
-                              .includes('R_4')
+                            global_role_code === 'R_4'
                               ? 'Student’s Username (English)'
                               : 'Parent’s Username (English)'
                           "
                         ></label-custom>
-                        <!-- v-if="roles.privilege === 'ผู้ปกครอง'" -->
+
                         <v-text-field
+                          v-if="global_role_code === 'R_4'"
                           outlined
                           dense
                           disabled
-                          :value="data_relations.userName"
-                          v-model="data_relations.userName"
+                          v-model="data_relations.student.studentUsername"
                         ></v-text-field>
-                        <!-- <v-text-field
-                              outlined
-                              dense
-                              disabled
-                              v-else
-                              :value="relations.parent.parentUsername"
-                            ></v-text-field> -->
-                        <!-- <div>
-                          {{
-                            item.roleId === "R_4"
-                              ? relations.student.studentUsername
-                              : relations.parent.parentUsername
-                          }}
-                        </div> -->
+
+                        <v-text-field
+                          v-else
+                          outlined
+                          dense
+                          disabled
+                          v-model="data_relations.parent.parentUsername"
+                        ></v-text-field>
                       </v-col>
 
                       <v-col cols="12" sm="6">
@@ -424,77 +348,60 @@
                           text="First Name (English)"
                         ></label-custom>
                         <v-text-field
+                          v-if="global_role_code === 'R_4'"
                           outlined
                           dense
                           disabled
-                          :value="data_relations.firstNameEng"
-                          v-model="data_relations.firstNameEng"
+                          v-model="data_relations.student.studentFirstnameEn"
                         ></v-text-field>
-                        <!-- <v-text-field
-                              outlined
-                              dense
-                              disabled
-                              v-else
-                              :value="relations.parent.parentFirstnameEn"
-                            ></v-text-field> -->
-                        <!-- <div>
-                                {{
-                                  item.roleId === "R_4"
-                                    ? relations.student.studentFirstnameEn
-                                    : relations.parent.parentFirstnameEn
-                                }}
-                              </div> -->
+
+                        <v-text-field
+                          v-else
+                          outlined
+                          dense
+                          disabled
+                          v-model="data_relations.parent.parentFirstnameEn"
+                        ></v-text-field>
                       </v-col>
+
                       <v-col cols="12" sm="6">
                         <label-custom text="Last Name (English)"></label-custom>
                         <v-text-field
+                          v-if="global_role_code === 'R_4'"
                           outlined
                           dense
                           disabled
-                          :value="data_relations.lastNameEng"
-                          v-model="data_relations.lastNameEng"
+                          v-model="data_relations.student.studentLastnameEn"
                         ></v-text-field>
-                        <!-- <v-text-field
-                              outlined
-                              dense
-                              disabled
-                              v-else
-                              :value="relations.parent.parentLastnameEn"
-                            ></v-text-field> -->
 
-                        <!-- <div>
-                                {{
-                                  item.roleId === "R_4"
-                                    ? relations.student.studentLastnameEn
-                                    : relations.parent.parentLastnameEn
-                                }}
-                              </div> -->
+                        <v-text-field
+                          v-else
+                          outlined
+                          dense
+                          disabled
+                          v-model="data_relations.parent.parentLastnameEn"
+                        ></v-text-field>
                       </v-col>
+
                       <v-col cols="12" sm="6">
                         <label-custom text="เบอร์โทรศัพท์"></label-custom>
                         <v-text-field
+                          v-if="global_role_code === 'R_4'"
                           outlined
                           dense
                           disabled
-                          :value="data_relations.mobileNo"
-                          v-model="data_relations.mobileNo"
+                          v-model="data_relations.student.studentTel"
                         ></v-text-field>
-                        <!-- <v-text-field
-                              outlined
-                              dense
-                              disabled
-                              v-else
-                              :value="relations.parent.parentTel"
-                            ></v-text-field> -->
 
-                        <!-- <div>
-                                {{
-                                  item.roleId === "R_4"
-                                    ? relations.student.studentTel
-                                    : relations.parent.parentTel
-                                }}
-                              </div> -->
+                        <v-text-field
+                          v-else
+                          outlined
+                          dense
+                          disabled
+                          v-model="data_relations.parent.parentTel"
+                        ></v-text-field>
                       </v-col>
+
                     </v-row>
                   </v-card-text>
                 </v-card>
@@ -508,11 +415,7 @@
                     <span class="text-lg font-bold">
                       <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
                       {{
-                        global_data_relation_checked.roles
-                          .map((val) => {
-                            return val.roleId;
-                          })
-                          .includes("R_4")
+                        global_role_code === 'R_4'
                           ? "ไม่พบข้อมูลของนักเรียนในการดูแล"
                           : "ไม่พบข้อมูลของผู้ปกครอง"
                       }}
@@ -520,21 +423,12 @@
                   </v-card-text>
                 </v-card>
               </v-col>
-              <!-- </v-row>
-          </v-container> -->
 
-              <!-- check box -->
-              <!-- <v-container fluid>
-            <v-row> -->
-              <v-col cols="12" sm="6">
+              <!-- <v-col cols="12" sm="6">
                 <v-checkbox
                   v-model="isCheckedRelation"
                   :label="
-                    global_data_relation_checked.roles
-                      .map((val) => {
-                        return val.roleId;
-                      })
-                      .includes('R_4')
+                    global_role_code === 'R_4'
                       ? 'ต้องการเพิ่มนักเรียนในการดูแล'
                       : 'ต้องการเพิ่มผู้ปกครอง'
                   "
@@ -542,11 +436,11 @@
                   color="pink"
                   item-color="pink"
                 ></v-checkbox>
-              </v-col>
+              </v-col> -->
             </v-row>
 
             <!-- เพิ่มความสัมพันธ์ -->
-            <v-row dense v-if="isCheckedRelation">
+            <!-- <v-row dense v-if="isCheckedRelation">
               <v-col cols="12" class="text-center">
                 <v-btn
                   dense
@@ -565,20 +459,16 @@
                 >
                   <v-icon>mdi-plus-circle-outline</v-icon
                   >{{
-                    global_data_relation_checked.roles
-                      .map((val) => {
-                        return val.roleId;
-                      })
-                      .includes("R_4")
+                    global_role_code === 'R_4'
                       ? "เพิ่มข้อมูลนักเรียน"
                       : "เพิ่มข้อมูลผู้ปกครอง"
                   }}</v-btn
                 >
               </v-col>
-            </v-row>
+            </v-row> -->
           </v-container>
 
-          <v-container v-if="checkData.account_id" fluid>
+          <!-- <v-container v-if="checkData.account_id" fluid>
             <v-row>
               <v-col class="text-right mt-5">
                 <v-btn
@@ -591,7 +481,32 @@
                 </v-btn>
               </v-col>
             </v-row>
+          </v-container> -->
+
+          <v-container v-if="checkData.account_id" fluid>
+            <v-row>
+              <v-col class="text-right mt-5">
+                <v-btn
+                  depressed
+                  class="white--text"
+                  color="#ff6b81"
+                  @click="
+                    $router.push({
+                      name: 'UserDetail',
+                      params: {
+                        action: 'edit',
+                        account_id: checkData.account_id,
+                      },
+                    })
+                  "
+                >
+                  แก้ไข
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-container>
+          
+          
         </v-card>
       </v-col>
     </v-row>
@@ -847,6 +762,7 @@ export default {
     ],
 
     payloadSend: "",
+    global_role_code: "",
   }),
 
   beforeMount() {
@@ -902,7 +818,7 @@ export default {
       }
     },
 
-    checkDataRelation(username, type) {
+    async checkDataRelation(username, type) {
       console.log("username=>", username);
       console.log("type=>", type);
       if (username != "") {
@@ -910,15 +826,12 @@ export default {
           username: username,
           status: null,
           type: type,
-        }).then(() => {
+        }).then(async() => {
           this.seledtedRole = "";
           this.preview_img = "";
           this.global_data_relation_checked =
             type == "" ? this.user_student_data[0] : this.user_data[0];
-          console.log(
-            "this.global_data_relation_checked",
-            this.global_data_relation_checked
-          );
+          console.log("show_by_id", this.show_by_id);
           this.checkData.account_id =
             this.global_data_relation_checked.userOneId;
           this.checkData.firstname_en =
@@ -933,26 +846,24 @@ export default {
           this.checkData.email = this.global_data_relation_checked.email;
           this.checkData.image = this.global_data_relation_checked.imgUrl;
 
-          const role_tmp = this.global_data_relation_checked.roles
+          this.global_role_code = this.global_data_relation_checked.roles
             .map((val) => {
               return val.roleId;
             })
             .join();
 
-          console.log("role_tmp", role_tmp);
           this.roles.map((val) => {
-            if (role_tmp === val.roleNumber) {
+            if (this.global_role_code === val.roleNumber) {
               this.seledtedRole = val.roleNumber;
             }
           });
 
-          console.log("this.seledtedRole", this.seledtedRole);
-
+          this.global_data_relation_checked.userRoles = this.global_data_relation_checked.roles
           console.log(
             "global_data_relation_checked",
             this.global_data_relation_checked
           );
-          this.GetDataRelationsManagement(this.global_data_relation_checked);
+          await this.GetDataRelationsManagement(this.global_data_relation_checked);
         });
       } else {
         Swal.fire({
