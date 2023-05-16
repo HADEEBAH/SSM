@@ -174,7 +174,6 @@ const RegisterModules = {
                                     phone_number: phone_number,
                                     email: user.data.data[0].email,
                                     username: context.state.user_one_id.username,
-                                    email : user.data.data[0].email,
                                     account_id: user.data.data[0].userOneId,
                                     type: type
                                 })
