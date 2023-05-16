@@ -913,7 +913,7 @@ export default {
     roleParentTable: [
       { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
       { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
-      { text: "ชื่อคอร์ส", value: "cpo.categoryNameTh", sortable: false },
+      { text: "ชื่อคอร์ส", value: "courseNameTh", sortable: false },
       { text: "แพ็คเกจ", value: "cpo.packageName", sortable: false },
       { text: "โค้ช", value: "coachName", sortable: false },
       { text: "ประเภท", value: "cpo.courseTypeNameTh", sortable: false },
@@ -925,7 +925,7 @@ export default {
     roleStudentTable: [
       { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
       { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
-      { text: "ชื่อคอร์ส", value: "cpo.categoryNameTh", sortable: false },
+      { text: "ชื่อคอร์ส", value: "courseNameTh", sortable: false },
       { text: "แพ็คเกจ", value: "cpo.packageName", sortable: false },
       { text: "โค้ช", value: "coachName", sortable: false },
       { text: "ประเภท", value: "cpo.courseTypeNameTh", sortable: false },
@@ -1389,6 +1389,16 @@ export default {
               this.error_message = "ความสัมพันธ์ซ้ำ";
             } else if (
               response?.data?.message ===
+              "Student does not have the required role."
+            ) {
+              this.error_message = "username นี้ยังไม่มีบทบาท";
+            } else if (
+              response?.data?.message ===
+              "Parent does not have the required role."
+            ) {
+              this.error_message = "username นี้ยังไม่มีบทบาท";
+            } else if (
+              response?.data?.message ===
               "parentId and studentId must not be duplicate."
             ) {
               this.error_message =
@@ -1396,6 +1406,7 @@ export default {
             } else {
               this.error_message = "เกิดข้อผิดพลาด";
             }
+
             console.log("error=>", response);
             Swal.fire({
               icon: "error",

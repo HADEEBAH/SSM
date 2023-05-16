@@ -471,17 +471,17 @@
                               >
                                 <div class="cicle">
                                   <v-img
-                                    class="image-cropper items-end "
+                                    class="image-cropper items-end"
                                     :src="
-                                      show_by_id.image || show_by_id.image !== ''
-                                      ? show_by_id.image
-                                      : require(`../../../assets/userManagePage/default_img_update_profile.svg`)
+                                      show_by_id.image ||
+                                      show_by_id.image !== ''
+                                        ? show_by_id.image
+                                        : require(`../../../assets/userManagePage/default_img_update_profile.svg`)
                                     "
                                   >
                                   </v-img>
                                 </div>
                               </v-col>
-
 
                               <v-col cols="12" sm="8">
                                 <v-row>
@@ -1102,7 +1102,7 @@
           <!-- Button -->
           <v-container fluid>
             <v-row>
-              <v-col v-if="!isEnabled" align="right"  cols="12">
+              <v-col v-if="!isEnabled" align="right" cols="12">
                 <v-btn
                   class="white--text mb-5"
                   depressed
@@ -1330,7 +1330,7 @@ export default {
     roleParentTable: [
       { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
       { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
-      { text: "ชื่อคอร์ส", value: "cpo.categoryNameTh", sortable: false },
+      { text: "ชื่อคอร์ส", value: "courseNameTh", sortable: false },
       { text: "แพ็คเกจ", value: "cpo.packageName", sortable: false },
       { text: "โค้ช", value: "coachName", sortable: false },
       { text: "ประเภท", value: "cpo.courseTypeNameTh", sortable: false },
@@ -1342,7 +1342,7 @@ export default {
     roleStudentTable: [
       { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
       { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
-      { text: "ชื่อคอร์ส", value: "cpo.categoryNameTh", sortable: false },
+      { text: "ชื่อคอร์ส", value: "courseNameTh", sortable: false },
       { text: "แพ็คเกจ", value: "cpo.packageName", sortable: false },
       { text: "โค้ช", value: "coachName", sortable: false },
       { text: "ประเภท", value: "cpo.courseTypeNameTh", sortable: false },
@@ -1886,7 +1886,10 @@ export default {
     // "data_user_relation_management.length": function () {
     show_by_id: async function () {
       console.log("=======================", this.show_by_id);
-      console.log("data_user_relation_management=>", this.data_user_relation_management);
+      console.log(
+        "data_user_relation_management=>",
+        this.data_user_relation_management
+      );
       await this.GetDataRelationsManagement(this.show_by_id);
       // this.GetDataRelationsManagement(this.data_user_by_id);
       for await (const show_data of this.show_by_id.userRoles) {
@@ -1898,7 +1901,7 @@ export default {
               this.GetStudentSchedule(item_relation.studentId);
             }
           } else {
-              this.GetStudentSchedule(this.show_by_id.userOneId);
+            this.GetStudentSchedule(this.show_by_id.userOneId);
             // this.data_user_relation_management = [];
           }
         } else if (show_data.roleId == "R_5") {
@@ -1908,7 +1911,7 @@ export default {
               this.GetStudentSchedule(item_relation.studentId);
             }
           } else {
-              this.GetStudentSchedule(this.show_by_id.userOneId);
+            this.GetStudentSchedule(this.show_by_id.userOneId);
             // this.data_user_relation_management = [];
           }
         } else {

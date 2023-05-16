@@ -1159,11 +1159,39 @@ export default {
               } else {
                 throw { message: data.message };
               }
-            } catch (error) {
-              console.log(error);
+            } catch ({ response }) {
+              if (
+                response?.data?.message === "parentId not found." ||
+                response?.data?.message ===
+                  "studentId and parentId not found." ||
+                response?.data?.message === "studentId not found."
+              ) {
+                this.error_message = "ชื่อผู้ใช้ไม่ถูกต้อง";
+              } else if (response?.data?.message === "Duplicate relation.") {
+                this.error_message = "ความสัมพันธ์ซ้ำ";
+              } else if (
+                response?.data?.message ===
+                "Student does not have the required role."
+              ) {
+                this.error_message = "username นี้ยังไม่มีบทบาท";
+              } else if (
+                response?.data?.message ===
+                "Parent does not have the required role."
+              ) {
+                this.error_message = "username นี้ยังไม่มีบทบาท";
+              } else if (
+                response?.data?.message ===
+                "parentId and studentId must not be duplicate."
+              ) {
+                this.error_message =
+                  "ชื่อผู้ใช้ของผู้ปกครองและนักเรียนต้องไม่ซ้ำกัน";
+              } else {
+                this.error_message = "เกิดข้อผิดพลาด";
+              }
+              console.log("response", response);
               Swal.fire({
                 icon: "error",
-                title: "Duplicate relation",
+                title: this.error_message,
               });
             }
           } else {
