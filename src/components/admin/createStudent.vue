@@ -197,7 +197,7 @@
                 </v-row>
                 <v-row dense>
                   <v-col cols="12" sm="4">
-                    {{ packages }}
+                    <!-- {{ packages }} -->
                     <label-custom text="แพ็คเกจ"></label-custom>
                     <v-autocomplete
                       item-value="course_id"
