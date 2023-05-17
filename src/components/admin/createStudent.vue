@@ -197,7 +197,7 @@
                 </v-row>
                 <v-row dense>
                   <v-col cols="12" sm="4">
-                    {{packages }}
+                    {{ packages }}
                     <label-custom text="แพ็คเกจ"></label-custom>
                     <v-autocomplete
                       item-value="course_id"
@@ -770,7 +770,7 @@ export default {
     ],
     kingdom: ["อาณาจักรศิลปะสมัยใหม่", "อาณาจักร P.E."],
     // courses: [],
-    coursepackage: ["Exclusive", "Family", "Group"],
+    coursepackage: ["Exclusive", "Family/duo", "Group"],
     period: ["3 วัน", "3 เดือน", "3 ปี"],
     day: [
       "วันจันทร์",
@@ -798,7 +798,7 @@ export default {
 
   mounted() {
     this.GetCategorys(),
-    // this.GetCourse(),
+      // this.GetCourse(),
       // this.GetPackages(),
 
       this.order.courses.push({
@@ -826,7 +826,7 @@ export default {
       GetCategorys: "CategoryModules/GetCategorys",
       GetCoursesFilter: "CourseModules/GetCoursesFilter",
       GetPackages: "CourseModules/GetPackages",
-      GetCourse: "CourseModules/GetCourse"
+      GetCourse: "CourseModules/GetCourse",
     }),
     remove(item) {
       const index = this.order.students.indexOf(item);
@@ -901,10 +901,9 @@ export default {
       });
     },
     selectPackage(courseId) {
-      console.log("course_id", courseId );
-      this.GetCourse(courseId)
-      
-    }
+      console.log("course_id", courseId);
+      this.GetCourse(courseId);
+    },
   },
   computed: {
     ...mapGetters({

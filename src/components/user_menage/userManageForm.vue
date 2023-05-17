@@ -892,6 +892,7 @@ export default {
     student_id: "",
     register_type: "",
     test: "",
+    search: "",
 
     // sortBy: [],
     // privilege: "",
@@ -1511,13 +1512,13 @@ export default {
             console.log("bodyFormData", bodyFormData);
 
             let { data } = await axios.patch(
-              // `http://localhost:3000/api/v1/usermanagement/update/${account_id}`,
-              `${process.env.VUE_APP_URL}/api/v1/usermanagement/update/${account_id}`,
+              `http://localhost:3000/api/v1/usermanagement/update/${account_id}`,
+              // `${process.env.VUE_APP_URL}/api/v1/usermanagement/update/${account_id}`,
               bodyFormData,
               config
             );
             if (data.statusCode === 200) {
-              if (data.data && data.message !== "Relation Already exists") {
+              if (data.data !== "Cannot update: Relation Already exists") {
                 Swal.fire({
                   icon: "success",
                   title: "บันทึกสำเร็จ",
@@ -1531,16 +1532,35 @@ export default {
                       },
                     });
                   }
+                  console.log("data", data.data);
                 });
                 this.GetShowById(this.$route.params.account_id);
-              } else if (
-                data.data &&
-                data.message === "Relation Already exists"
-              ) {
+              }
+              // else if (
+              //   data.data &&
+              //   data.message === "Relation Already exists"
+              // ) {
+              //   Swal.fire({
+              //     icon: "error",
+              //     title: "เกิดข้อผิดพลาด",
+              //     text: "USER นี้มีความสัมพันธ์แล้ว!",
+              //   }).then(async (result) => {
+              //     if (result.isConfirmed) {
+              //       this.$router.push({
+              //         name: "UserDetail",
+              //         params: {
+              //           action: "view",
+              //           account_id: this.$route.params.account_id,
+              //         },
+              //       });
+              //     }
+              //   });
+              //   this.GetShowById(this.$route.params.account_id);
+              // }
+              else if (data.data === "Cannot update: Relation Already exists") {
                 Swal.fire({
-                  icon: "error",
-                  title: "เกิดข้อผิดพลาด",
-                  text: "USER นี้มีความสัมพันธ์แล้ว!",
+                  icon: "success",
+                  title: "บันทึกสำเร็จ22",
                 }).then(async (result) => {
                   if (result.isConfirmed) {
                     this.$router.push({

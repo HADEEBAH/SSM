@@ -75,7 +75,6 @@
                   <v-card-text>
                     <v-row>
                       <!-- IMG DETAIL -->
-
                       <v-col
                         class="webkit-center"
                         cols="12"
@@ -96,7 +95,7 @@
                           <v-img
                             class="image-cropper items-end"
                             :src="
-                                checkData.image || checkData.image !== ''
+                              checkData.image && checkData.image !== ''
                                 ? checkData.image
                                 : require(`../../../assets/userManagePage/default_img_update_profile.svg`)
                             "
@@ -278,10 +277,7 @@
             </v-row>
 
             <v-row
-              v-if="
-                global_role_code === 'R_4' ||
-                global_role_code === 'R_5'
-              "
+              v-if="global_role_code === 'R_4' || global_role_code === 'R_5'"
             >
               <v-col cols="12">
                 <headerCard
@@ -301,10 +297,11 @@
                 <v-card
                   class="my-5"
                   color="#FCFCFC"
-                  v-for="(data_relations, index_relations) in data_user_relation_management"
+                  v-for="(
+                    data_relations, index_relations
+                  ) in data_user_relation_management"
                   :key="index_relations"
                 >
-
                   <v-card-text>
                     <!-- <v-col align="right">
                       <v-icon
@@ -401,7 +398,6 @@
                           v-model="data_relations.parent.parentTel"
                         ></v-text-field>
                       </v-col>
-
                     </v-row>
                   </v-card-text>
                 </v-card>
@@ -415,7 +411,7 @@
                     <span class="text-lg font-bold">
                       <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
                       {{
-                        global_role_code === 'R_4'
+                        global_role_code === "R_4"
                           ? "ไม่พบข้อมูลของนักเรียนในการดูแล"
                           : "ไม่พบข้อมูลของผู้ปกครอง"
                       }}
@@ -505,8 +501,6 @@
               </v-col>
             </v-row>
           </v-container>
-          
-          
         </v-card>
       </v-col>
     </v-row>
@@ -826,7 +820,7 @@ export default {
           username: username,
           status: null,
           type: type,
-        }).then(async() => {
+        }).then(async () => {
           this.seledtedRole = "";
           this.preview_img = "";
           this.global_data_relation_checked =
@@ -858,12 +852,15 @@ export default {
             }
           });
 
-          this.global_data_relation_checked.userRoles = this.global_data_relation_checked.roles
+          this.global_data_relation_checked.userRoles =
+            this.global_data_relation_checked.roles;
           console.log(
             "global_data_relation_checked",
             this.global_data_relation_checked
           );
-          await this.GetDataRelationsManagement(this.global_data_relation_checked);
+          await this.GetDataRelationsManagement(
+            this.global_data_relation_checked
+          );
         });
       } else {
         Swal.fire({
