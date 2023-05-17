@@ -141,8 +141,9 @@ const loginModules = {
 
         },
 
-        async loginShareToken(context, token) {
+        async loginShareToken(context, { token, page }) {
             console.log("token", token);
+            console.log("page", page);
             context.commit("SetIsLoading", true)
             try {
                 // const { data } = await axios.post(`http://localhost:3001/api/v1/auth/login/sharedToken`, {
@@ -173,32 +174,17 @@ const loginModules = {
                     }
                     VueCookie.set("token", data.data.token, 1)
                     localStorage.setItem("userDetail", JSON.stringify(payload))
-                    let order = JSON.parse(localStorage.getItem("Order"))
-                    context.commit("SetIsLoading", false)
-                    if (order?.category_id && order?.course_id) {
-                        if (order.course_type_id === "CT_1") {
-                            router.replace({ name: "userCoursePackage_courseId", params: { course_id: order.course_id } })
-                        } else {
-                            router.replace({ name: "userCourseDetail_courseId", params: { course_id: order.course_id } })
-                        }
-                    } else {
-                        router.replace({ name: "UserKingdom" })
+                    if (page === "menage-course") {
+                        router.replace({ name: "menageCourse" })
                     }
                 }
             } catch (response) {
-                console.log(response)
                 context.commit("SetIsLoading", false)
-                if (response.message === "Request failed with status code 401") {
-                    Swal.fire({
-                        icon: 'error',
-                        title: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง",
-                    })
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: "เกิดข้อผิดพลาด",
-                    })
-                }
+                Swal.fire({
+                    icon: 'error',
+                    title: "เกิดข้อผิดพลาด",
+                })
+                router.replace({ name: "UserKingdom" })
             }
 
         },

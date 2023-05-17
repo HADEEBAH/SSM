@@ -15,12 +15,16 @@ router.beforeEach((to, from, next ) => {
   if(!VueCookie.get("token")){
     localStorage.removeItem("userDetail")
   }
+  console.log("from", from);
+
   if(to.name !== "Login" && to.name !== "Register"){
-    if(to.matched[0].name !== "NavBarUser" && !VueCookie.get("token")){     
+    if (to.name === "callback") {
+      next()
+    } else if(to.matched[0].name !== "NavBarUser" && !VueCookie.get("token")){     
       next({name : 'Login'})
-    }else if(to.name === 'userCourseOrder' && !VueCookie.get("token")){
+    } else if(to.name === 'userCourseOrder' && !VueCookie.get("token")){
       next({name : 'Login'})
-    }else if(VueCookie.get("token")){
+    } else if(VueCookie.get("token")){
       let order =  JSON.parse(localStorage.getItem("Order"))
       let user_detail = JSON.parse(localStorage.getItem("userDetail"))
       console.log(from.name)

@@ -201,9 +201,7 @@
               </v-col>
               <v-col>
                 <v-row>
-                  <v-col class="font-bold text-md">{{
-                    course.start_date_str
-                  }}</v-col>
+                  <v-col class="font-bold text-md">{{ course.start_date_str }}</v-col>
                 </v-row>
                 <v-row dense>
                   <!-- <pre>{{ course }}</pre> -->
@@ -402,16 +400,12 @@
                   <v-card
                     outlined
                     class="mb-3"
-                    v-for="(student, index) in student_check_in.filter(
-                      (v) => v.potential
-                    )"
+                    v-for="(student, index) in student_check_in.filter((v) => v.potential)"
                     :key="`${index}-checkin`"
                   >
                     <v-card-text>
                       <v-row>
-                        <v-col class="text-lg font-bold">
-                          {{ index + 1 }} . {{ student.fullname }}</v-col
-                        >
+                        <v-col class="text-lg font-bold"> {{ index + 1 }} . {{ student.fullname }}</v-col>
                         <v-col align="center">
                           <v-row dense class="d-flex aling-center">
                             <v-col align="right"> การเข้าเรียน: </v-col>
@@ -447,11 +441,11 @@
                         <v-col align="left" class="font-semibold"
                           >พัฒนาการ :
                           <span class="text-[#ff6b81]">{{
-                            student.assessment.evolution === "very good"
+                            student.potential.evolution === "very good"
                               ? "ดีมาก"
-                              : student.assessment.evolution === "good"
+                              : student.potential.evolution === "good"
                               ? "ดี"
-                              : student.assessment.evolution === "adjust"
+                              : student.potential.evolution === "adjust"
                               ? "ปรับปรุง"
                               : "-"
                           }}</span></v-col
@@ -459,11 +453,11 @@
                         <v-col align="center" class="font-semibold"
                           >ความสนใจ :
                           <span class="text-[#ff6b81]">{{
-                            student.assessment.interest === "very good"
+                            student.potential.interest === "very good"
                               ? "ดีมาก"
-                              : student.assessment.interest === "good"
+                              : student.potential.interest === "good"
                               ? "ดี"
-                              : student.assessment.evolution === "adjust"
+                              : student.potential.interest === "adjust"
                               ? "ปรับปรุง"
                               : "-"
                           }}</span></v-col
@@ -471,7 +465,7 @@
                         <v-col align="center">
                           <v-btn
                             outlined
-                            @click="showComment(student)"
+                            @click="showPotentialComment(student)"
                             color="#ff6b81"
                             ><v-icon>mdi-message-text-outline</v-icon
                             >ดูความคิดเห็น</v-btn
@@ -778,12 +772,7 @@
               <template v-slot:expanded-item="{ headers, item }">
                 <td :colspan="headers.length" class="py-3">
                   <v-row>
-                    <v-col cols="12"
-                      >ผู้สอนแทน:
-                      {{
-                        `${item.substituteCoachFirstNameTh} ${item.substituteCoachLastNameTh}`
-                      }}</v-col
-                    >
+                    <v-col cols="12">ผู้สอนแทน: {{ `${item.substituteCoachFirstNameTh} ${item.substituteCoachLastNameTh}` }}</v-col>
                   </v-row>
                 </td>
               </template>
@@ -1333,6 +1322,71 @@
           </v-card-text>
         </v-card>
       </v-dialog>
+      <!-- POTENTIAL -->
+      <v-dialog
+        persistent
+        :width="$vuetify.breakpoint.smAndUp ? '60vw' : ''"
+        v-model="show_potential_comment"
+        v-if="show_potential_comment"
+      >
+        <v-card class="pa-1">
+          <!-- {{ show_potential_data }} -->
+          <v-row dense>
+            <v-col class="pa-0" cols="12" align="right">
+              <v-btn icon @click="closePotentialComment">
+                <v-icon color="#ff6b81">mdi-close</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+          <v-card-text>
+            <v-row dense>
+              <v-col align="center" class="text-lg font-bold"
+                >ความคิดเห็นเพิ่มเติม</v-col
+              >
+            </v-row>
+            <v-row class="mb-3" dense>
+              <v-col>
+                <labelCustom text="เพิ่มความคิดเห็น"></labelCustom>
+                <div>{{ show_potential_data.potential.remark }}</div>
+              </v-col>
+            </v-row>
+            <div v-if="show_potential_data.potential.attachmentPotential.length > 0">
+              <v-row dense>
+                <v-col class="font-bold text-lg"> ไฟล์แนบ </v-col>
+              </v-row>
+              <v-card
+                @click="openFile(file)"
+                flat
+                class="mb-3"
+                v-for="(file, index) of show_potential_data.potential.attachmentPotential"
+                :key="`${index}-fileattachment`"
+              >
+                <v-card-text
+                  class="border border-2 border-[#ff6b81] rounded-lg"
+                >
+                  <v-row>
+                    <v-col cols="auto" class="pr-2">
+                      <v-img
+                        height="35"
+                        width="26"
+                        src="../../../assets/coachLeave/file-pdf.png"
+                      />
+                    </v-col>
+                    <v-col class="px-2">
+                      <span class="font-bold">{{ file.originalFilesName }}</span
+                      ><br />
+                      <span class="text-caption"
+                        >ขนาดไฟล์ :
+                        {{ (file.filesSize / 1000000).toFixed(2) }} MB</span
+                      >
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
     </v-container>
     {{ SetFunctionsComputed }}
   </div>
@@ -1440,35 +1494,12 @@ export default {
     show_leave_detail: false,
     show_comment: false,
     show_comment_data: {},
+    show_potential_comment: false,
+    show_potential_data: {},
   }),
   created() {
-    if (this.$route.query.token) {
-      this.loginShareToken(this.$route.query.token)
-    }
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    // this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    // if (this.$route.query.token) {
-    //   this.loginShareToken(this.$route.query.token)
-    //   this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    //   setTimeout(() => {
-    //     this.GetMyCourses({ coach_id: this.user_detail.account_id });
-    //     this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
-    //     this.GetCoachs();
-    //   }, 500);
-      
-    // } else {
-    //   this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    //   this.GetMyCourses({ coach_id: this.user_detail.account_id });
-    //   this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
-    //   this.GetCoachs();
-    // }
-    
-
-    // console.log("this.user_detail=>", this.user_detail);
   },
-  // beforeMount() {
-  //   this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-  // },
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "จัดการ");
   },
@@ -1527,6 +1558,14 @@ export default {
         let url = `${process.env.VUE_APP_URL}/api/v1/files/${file.attFiles}`;
         window.open(url, "_blank");
       }
+    },
+    showPotentialComment(course) {
+      this.show_potential_comment = true;
+      this.show_potential_data = course;
+    },
+    closePotentialComment() {
+      this.show_potential_comment = false;
+      this.show_potential_data = {};
     },
     showComment(course) {
       this.show_comment = true;

@@ -116,16 +116,10 @@
             </v-col>
           </v-row>
           <v-card elevation="1" class="mb-2">
-            <pre></pre>
+            <!-- <pre>{{ student_check_in }}</pre> -->
             <v-data-table
               class="header-table border"
-              :items="
-                student_check_in.filter((v) =>
-                  v.cpo?.packageName
-                    ? v.cpo.packageName === package_name_filter
-                    : true
-                )
-              "
+              :items=" student_check_in.filter((v) => v.cpo?.packageName ? v.cpo.packageName === package_name_filter  : true ) "
               item-key="no"
               :expanded.sync="expanded_index"
               :headers="headers"
@@ -466,7 +460,7 @@
               :key="`${index_student}-student`"
             >
               <v-card-text>
-                <!-- <pre>{{ student }}</pre> -->
+                <!-- <pre>{{ student.potential }}</pre> -->
                 <v-row class="d-flex align-center">
                   <v-col cols="12" sm class="text-lg font-bold">
                     {{ student.no }} {{ student.fullname }}
