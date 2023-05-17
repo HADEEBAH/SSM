@@ -4,7 +4,7 @@
       <header-page title="เลือกข้อมูลการสอน"></header-page>
       <v-row dense class="mb-3">
         <v-col
-          cols="auto"
+          cols="12"
           sm="4"
           v-for="(tab_data, tab_index) in tabs"
           :key="tab_index"
@@ -27,11 +27,13 @@
               <v-card-text class="pa-2 border-2 border-[#ff6b81] rounded-lg">
                 <v-row dense class="d-flex justify-center">
                   <v-col
-                    cols="auto"
+                    cols="12"
+                    sm
                     v-for="(time, time_index) in time_frame_list"
                     :key="`${time_index}-time`"
                   >
                     <v-btn
+                      class="w-full"
                       @click="time_frame = time.value"
                       depressed
                       :dark="time_frame === time.value"
@@ -73,7 +75,8 @@
                 <v-row dense>
                   <v-col cols="auto">
                     <v-img
-                      contain
+                      :contain="$vuetify.breakpoint.smAndUp"
+                      :cover="$vuetify.breakpoint.smAndUp"
                       class="rounded-lg"
                       :src="
                         course.course_img
@@ -81,7 +84,7 @@
                           : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'
                       "
                       max-height="160"
-                      max-width="160"
+                      :max-width="$vuetify.breakpoint.smAndUp ? 160 : ''"
                     ></v-img>
                   </v-col>
                   <v-col>
@@ -157,7 +160,6 @@
           ></calendarCoach>
         </template>
       </div>
-
       <div v-if="tab === 'my teaching'">
         <v-row>
           <v-col cols="auto"> ข้อมูลการสอนของฉัน : </v-col>
@@ -188,7 +190,7 @@
         >
           <v-card-text class="bg-[#FBF3F5]">
             <v-row dense>
-              <v-col cols="4">
+              <v-col cols="12" sm="4">
                 <v-img
                   class="rounded-lg"
                   height="160"
@@ -200,7 +202,7 @@
                 />
               </v-col>
               <v-col>
-                <v-row>
+                <v-row dense>
                   <v-col class="font-bold text-md">{{ course.start_date_str }}</v-col>
                 </v-row>
                 <v-row dense>
@@ -230,17 +232,14 @@
                   </v-col>
                   <v-col cols="12">
                     <v-chip small color="#F9B320" dark
-                      >{{
-                        `${course.start_time} - ${course.end_time}`
-                      }}น.</v-chip
+                      >{{ `${course.start_time} - ${course.end_time}`}}น.</v-chip
                     >
                   </v-col>
                 </v-row>
               </v-col>
             </v-row>
             <v-row dense>
-              <v-col
-                align="center"
+              <v-col align="center"
                 @click="OpenAssessment(course)"
                 class="cursor-pointer"
                 >ประเมินนักเรียน
@@ -248,8 +247,7 @@
                   course.show_assessment ? "mdi-chevron-up" : "mdi-chevron-down"
                 }}</v-icon></v-col
               >
-              <v-col
-                align="center"
+              <v-col align="center"
                 @click="OpenAssessmentPotential(course)"
                 class="cursor-pointer"
                 >ประเมินศักยภาพ
@@ -259,8 +257,7 @@
                     : "mdi-chevron-down"
                 }}</v-icon></v-col
               >
-              <v-col
-                align="center"
+              <v-col align="center"
                 @click="OpenSummary(course)"
                 class="cursor-pointer"
                 >บันทึกสรุปการสอน
@@ -303,11 +300,11 @@
                   :key="`${index}-checkin`"
                 >
                   <v-card-text>
-                    <v-row>
-                      <v-col class="text-lg font-bold">
+                    <v-row dense>
+                      <v-col cols="12" sm class="text-lg font-bold">
                         {{ index + 1 }} . {{ student.fullname }}</v-col
                       >
-                      <v-col align="center">
+                      <v-col cols="12" sm="auto" >
                         <v-row dense class="d-flex aling-center">
                           <v-col align="right"> การเข้าเรียน: </v-col>
                           <v-col cols="auto">
@@ -338,33 +335,36 @@
                         </v-row>
                       </v-col>
                     </v-row>
-                    <v-row>
-                      <v-col align="left" class="font-semibold"
-                        >พัฒนาการ :
-                        <span class="text-[#ff6b81]">{{
-                          student.assessment.evolution === "very good"
-                            ? "ดีมาก"
-                            : student.assessment.evolution === "good"
-                            ? "ดี"
-                            : student.assessment.evolution === "adjust"
-                            ? "ปรับปรุง"
-                            : "-"
-                        }}</span></v-col
-                      >
-                      <v-col align="center" class="font-semibold"
-                        >ความสนใจ :
-                        <span class="text-[#ff6b81]">{{
-                          student.assessment.interest === "very good"
-                            ? "ดีมาก"
-                            : student.assessment.interest === "good"
-                            ? "ดี"
-                            : student.assessment.interest === "adjust"
-                            ? "ปรับปรุง"
-                            : "-"
-                        }}</span></v-col
-                      >
-                      <v-col align="center">
+                    <v-row dense>
+                      <v-col cols="12" sm align="left" class="font-semibold">
+                        พัฒนาการ 
+                        <v-rating
+                          v-model="student.assessment.rating_evolution"
+                          background-color="pink lighten-3"
+                          @input="CheckRating($event, student.checkInStudentId, 'assessment_evolution')"
+                          color="pink"
+                          large
+                          length="5"
+                          small
+                          readonly
+                        ></v-rating>
+                      </v-col>
+                      <v-col cols="12" sm  align="left" class="font-semibold"
+                        >ความสนใจ 
+                        <v-rating
+                          v-model="student.assessment.rating_interest"
+                          background-color="pink lighten-3" 
+                          @input="CheckRating($event, student.checkInStudentId, 'assessment_interest')"
+                          color="pink"
+                          large
+                          length="5"
+                          small
+                          readonly
+                        ></v-rating>
+                      </v-col>
+                      <v-col cols="12" sm  align="center">
                         <v-btn
+                          class="w-full"
                           outlined
                           @click="showComment(student)"
                           color="#ff6b81"
@@ -413,21 +413,9 @@
                               <v-chip
                                 class="font-bold"
                                 :color="
-                                  check_in_status_options.filter(
-                                    (v) => v.value === student.status
-                                  )[0].bg_color
-                                "
-                                :style="`color:${
-                                  check_in_status_options.filter(
-                                    (v) => v.value === student.status
-                                  )[0].color
-                                }`"
-                                v-if="
-                                  check_in_status_options.filter(
-                                    (v) => v.value === student.status
-                                  ).length > 0
-                                "
-                                >{{
+                                  check_in_status_options.filter( (v) => v.value === student.status )[0].bg_color"
+                                :style="`color:${ check_in_status_options.filter( (v) => v.value === student.status)[0].color}`"
+                                v-if="check_in_status_options.filter((v) => v.value === student.status).length > 0">{{
                                   check_in_status_options.filter(
                                     (v) => v.value === student.status
                                   )[0].label
@@ -440,29 +428,18 @@
                       <v-row>
                         <v-col align="left" class="font-semibold"
                           >พัฒนาการ :
-                          <span class="text-[#ff6b81]">{{
-                            student.potential.evolution === "very good"
-                              ? "ดีมาก"
-                              : student.potential.evolution === "good"
-                              ? "ดี"
-                              : student.potential.evolution === "adjust"
-                              ? "ปรับปรุง"
-                              : "-"
-                          }}</span></v-col
-                        >
-                        <v-col align="center" class="font-semibold"
-                          >ความสนใจ :
-                          <span class="text-[#ff6b81]">{{
-                            student.potential.interest === "very good"
-                              ? "ดีมาก"
-                              : student.potential.interest === "good"
-                              ? "ดี"
-                              : student.potential.interest === "adjust"
-                              ? "ปรับปรุง"
-                              : "-"
-                          }}</span></v-col
-                        >
-                        <v-col align="center">
+                          <v-rating
+                            v-model="student.potential.rating_evolution"
+                            background-color="pink lighten-3"
+                            @input="CheckRating($event, student.checkInStudentId, 'potential_evolution')"
+                            color="pink"
+                            large
+                            readonly
+                            small
+                            length="5"
+                          ></v-rating>
+                        </v-col>
+                        <v-col col="12" sm="auto">
                           <v-btn
                             outlined
                             @click="showPotentialComment(student)"
@@ -470,6 +447,13 @@
                             ><v-icon>mdi-message-text-outline</v-icon
                             >ดูความคิดเห็น</v-btn
                           >
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col  class="font-semibold">ความสนใจ 
+                          <span>
+                            {{student.potential.interest}}
+                          </span>
                         </v-col>
                       </v-row>
                     </v-card-text>
@@ -1276,16 +1260,15 @@
               >
             </v-row>
             <v-row class="mb-3" dense>
-              <v-col>
+              <v-col cols="12">
                 <labelCustom text="เพิ่มความคิดเห็น"></labelCustom>
                 <div>{{ show_comment_data.assessment.remark }}</div>
               </v-col>
             </v-row>
             <div v-if="show_comment_data.assessment.attachment.length > 0">
               <v-row dense>
-                <v-col class="font-bold text-lg"> ไฟล์แนบ </v-col>
+                <v-col class="font-bold"> ไฟล์แนบ </v-col>
               </v-row>
-              <!-- <Pre>{{ file }}</Pre> -->
               <v-card
                 @click="openFile(file)"
                 flat
@@ -1296,7 +1279,7 @@
                 <v-card-text
                   class="border border-2 border-[#ff6b81] rounded-lg"
                 >
-                  <v-row>
+                  <v-row dense>
                     <v-col cols="auto" class="pr-2">
                       <v-img
                         height="35"
@@ -1593,6 +1576,7 @@ export default {
       } else {
         course.show_summary = true;
       }
+      course.show_summary = !course.show_summary
       course.show_assessment = false;
       course.show_assessment_pantential = false;
     },
@@ -1604,12 +1588,14 @@ export default {
         time_id: course.time_id,
       });
       course.show_summary = false;
-      if (course.show_assessment) {
-        course.show_assessment = false;
-      } else {
-        course.show_assessment = true;
-      }
+      course.show_assessment = !course.show_assessment
+      // if (course.show_assessment) {
+      //   course.show_assessment = false;
+      // } else {
+      //   course.show_assessment = true;
+      // }
       course.show_assessment_pantential = false;
+      
     },
     OpenAssessmentPotential(course) {
       this.CloseOpenSummaryAll();
@@ -1620,11 +1606,12 @@ export default {
       });
       course.show_summary = false;
       course.show_assessment = false;
-      if (course.show_assessment_pantential) {
-        course.show_assessment_pantential = false;
-      } else {
-        course.show_assessment_pantential = true;
-      }
+      course.show_assessment_pantential = !course.show_assessment_pantential
+      // if (course.show_assessment_pantential) {
+      //   course.show_assessment_pantential = false;
+      // } else {
+      //   course.show_assessment_pantential = true;
+      // }
     },
     genDate(date) {
       // console.log(date)
