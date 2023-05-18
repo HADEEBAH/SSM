@@ -8,11 +8,7 @@
             <v-col cols="auto">
               <v-img
                 class="rounded-lg"
-                :src="
-                  course_data.course_img
-                    ? course_data.course_img
-                    : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'
-                "
+                :src="course_data.course_img ? course_data.course_img : 'https://cdn.vuetifyjs.com/images/cards/cooking.png' "
                 max-height="120"
                 max-width="120"
               ></v-img>
@@ -32,18 +28,14 @@
               </v-row>
               <v-row dense>
                 <v-col cols="12" sm class="pa-0">
-                  <rowData mini icon="mdi-bookshelf"
-                    >คอร์สเรียน : {{ course_data.course_name_th }}</rowData
-                  >
+                  <rowData mini icon="mdi-bookshelf">คอร์สเรียน : {{ course_data.course_name_th }}</rowData>
                 </v-col>
                 <!-- <v-col cols="12" sm="4"  class="pa-0"> 
-                                <rowData mini  icon=" mdi-account-box-multiple">แพ็คเกจ : Family</rowData>
-                            </v-col> -->
-                <v-col cols="12" sm class="pa-0"
-                  ><rowData mini icon="mdi-clock-outline"
-                    >เวลาสอน {{ course_data.course_hours }} ชั่วโมง</rowData
-                  ></v-col
-                >
+                    <rowData mini  icon=" mdi-account-box-multiple">แพ็คเกจ : Family</rowData>
+                </v-col> -->
+                <v-col cols="12" sm class="pa-0">
+                  <rowData mini icon="mdi-clock-outline">เวลาสอน {{ course_data.course_hours }} ชั่วโมง</rowData>
+                </v-col>
               </v-row>
             </v-col>
           </v-row>
@@ -52,7 +44,6 @@
       <v-row dense>
         <v-col class="text-md font-bold"> ลงเวลาเข้าสอน </v-col>
       </v-row>
-
       <v-row dense class="mb-3">
         <v-col align="center">
           <!-- {{coach_check_in}} -->
@@ -63,9 +54,7 @@
             :color="coach_check_in.checkInCoachId ? '#E6E6E6' : '#ff6b81'"
             class="w-full rounded-lg"
             :loading="coach_check_in_is_loading"
-            :class="
-              coach_check_in.checkInCoachId ? 'green--text' : 'white--text'
-            "
+            :class="coach_check_in.checkInCoachId ? 'green--text' : 'white--text'"
           >
             <template v-if="coach_check_in.checkInCoachId">
               <v-icon class="mr-2">mdi-check-circle</v-icon> เข้าสอน
@@ -80,18 +69,10 @@
       <!-- <pre>{{student_check_in}}</pre> -->
       <v-tabs class="mb-3" v-model="tab" color="#ff6b81" grow>
         <v-tab class="border-b-2" href="#check in"> เช็คชื่อ </v-tab>
-        <v-tab
-          :disabled="student_check_in.length == 0"
-          class="border-b-2"
-          href="#assess students"
-        >
+        <v-tab :disabled="student_check_in.length == 0" class="border-b-2" href="#assess students">
           ประเมินนักเรียน
         </v-tab>
-        <v-tab
-          :disabled="student_check_in.length == 0"
-          class="border-b-2"
-          href="#teaching summary"
-        >
+        <v-tab :disabled="student_check_in.length == 0" class="border-b-2" href="#teaching summary">
           บันทึกสรุปการสอน
         </v-tab>
       </v-tabs>
@@ -116,16 +97,10 @@
             </v-col>
           </v-row>
           <v-card elevation="1" class="mb-2">
-            <pre></pre>
+            <!-- <pre>{{ student_check_in }}</pre> -->
             <v-data-table
               class="header-table border"
-              :items="
-                student_check_in.filter((v) =>
-                  v.cpo?.packageName
-                    ? v.cpo.packageName === package_name_filter
-                    : true
-                )
-              "
+              :items=" student_check_in.filter((v) => v.cpo?.packageName ? v.cpo.packageName === package_name_filter  : true ) "
               item-key="no"
               :expanded.sync="expanded_index"
               :headers="headers"
@@ -251,7 +226,7 @@
           <v-card class="mb-2" flat>
             <v-card-text class="border bg-[#F6F0F1]">
               <v-row>
-                <v-col cols="6" class="pr-1">
+                <v-col cols="12" sm="6" class="pr-1">
                   <v-btn
                     depressed
                     class="w-full"
@@ -266,7 +241,7 @@
                     ประเมินนักเรียน
                   </v-btn>
                 </v-col>
-                <v-col cols="6" class="pl-1">
+                <v-col cols="12" sm="6" class="pl-1">
                   <v-badge
                     v-if="
                       student_check_in.filter((v) => v.type === 'potential')
@@ -321,7 +296,7 @@
               </v-row>
             </v-card-text>
           </v-card>
-          <!-- DETAIL -->
+          <!-- DETAIL :: EVALUATE -->
           <div v-if="tab_evaluate === 'evaluate_students'">
             <template
               v-if="
@@ -343,7 +318,7 @@
                 )"
                 :key="`${index_student}-student`"
               >
-                <!-- <pre>{{ student }}</pre> -->
+                <!-- <pre>{{ student.checkInStudentId }}</pre> -->
                 <v-card-text>
                   <v-row class="d-flex align-center">
                     <v-col cols="12" sm class="text-lg font-bold">
@@ -381,35 +356,33 @@
                     </v-col>
                   </v-row>
                   <v-row class="d-flex align-center">
-                    <v-col cols="12" sm="5" class="">
-                      <labelCustom text="พัฒนาการ"></labelCustom>
-                      <v-select
-                        outlined
-                        dense
-                        hide-details
-                        :items="evolution_options"
-                        item-text="label"
-                        item-value="value"
-                        v-model="student.assessment.evolution"
-                      ></v-select>
+                    <v-col cols="12" sm="4" >
+                      <labelCustom text="ระดับพัฒนาการ"></labelCustom>
+                      <v-rating
+                        v-model="student.assessment.rating_evolution"
+                        background-color="pink lighten-3"
+                        @input="CheckRating($event, student.checkInStudentId, 'assessment_evolution')"
+                        color="pink"
+                        large
+                        length="5"
+                        :min="2"
+                      ></v-rating>
                     </v-col>
-                    <v-col cols="12" sm="4">
+                    <v-col cols="12" sm>
                       <labelCustom text="ความสนใจ"></labelCustom>
-                      <v-select
-                        outlined
-                        dense
-                        hide-details
-                        :items="interest_options"
-                        item-text="label"
-                        item-value="value"
-                        v-model="student.assessment.interest"
-                      ></v-select>
+                      <v-rating
+                        v-model="student.assessment.rating_interest"
+                        background-color="pink lighten-3" 
+                        @input="CheckRating($event, student.checkInStudentId, 'assessment_interest')"
+                        color="pink"
+                        large
+                        length="5"
+                      ></v-rating>
                     </v-col>
-                    <v-col cols="12" sm="3">
-                      <br />
+                    <v-col cols="12" sm="auto">
                       <v-btn
                         outlined
-                        class="text-sm"
+                        class="text-sm w-full"
                         color="#ff6b81"
                         @click="selectStudentComment(student.checkInStudentId)"
                       >
@@ -455,18 +428,17 @@
               </v-col>
             </v-row>
           </div>
+          <!-- DETAIL :: POTENTIAl -->
           <div v-else>
             <v-card
               class="mb-2"
               flat
               style="border: 1px solid #999"
-              v-for="(student, index_student) in student_check_in.filter(
-                (v) => v.potential
-              )"
+              v-for="(student, index_student) in student_check_in.filter((v) => v.potential)"
               :key="`${index_student}-student`"
             >
               <v-card-text>
-                <!-- <pre>{{ student }}</pre> -->
+                <!-- <pre>{{ student.potential }}</pre> -->
                 <v-row class="d-flex align-center">
                   <v-col cols="12" sm class="text-lg font-bold">
                     {{ student.no }} {{ student.fullname }}
@@ -478,34 +450,28 @@
                         <v-chip
                           class="font-bold"
                           :color="
-                            check_in_status_options.filter(
-                              (v) => v.value === student.status
-                            )[0].bg_color
+                            check_in_status_options.filter((v) => v.value === student.status )[0].bg_color
                           "
-                          :style="`color:${
-                            check_in_status_options.filter(
-                              (v) => v.value === student.status
-                            )[0].color
-                          }`"
-                          v-if="
-                            check_in_status_options.filter(
-                              (v) => v.value === student.status
-                            ).length > 0
-                          "
-                          >{{
-                            check_in_status_options.filter(
-                              (v) => v.value === student.status
-                            )[0].label
-                          }}
+                          :style="`color:${ check_in_status_options.filter((v) => v.value === student.status)[0].color}`"
+                          v-if=" check_in_status_options.filter((v) => v.value === student.status).length > 0"
+                          >{{ check_in_status_options.filter((v) => v.value === student.status)[0].label }}
                         </v-chip>
                       </v-col>
                     </v-row>
                   </v-col>
                 </v-row>
                 <v-row class="d-flex align-center">
-                  <v-col cols="12" sm="5" class="">
-                    <labelCustom text="พัฒนาการ"></labelCustom>
-                    <v-select
+                  <v-col cols="12" sm>
+                    <labelCustom text="ระดับพัฒนาการ"></labelCustom>
+                    <v-rating
+                      v-model="student.potential.rating_evolution"
+                      background-color="pink lighten-3"
+                      @input="CheckRating($event, student.checkInStudentId, 'potential_evolution')"
+                      color="pink"
+                      large
+                      length="5"
+                    ></v-rating>
+                    <!-- <v-select
                       outlined
                       dense
                       hide-details
@@ -513,11 +479,27 @@
                       item-text="label"
                       item-value="value"
                       v-model="student.potential.evolution"
-                    ></v-select>
+                    ></v-select> -->
                   </v-col>
-                  <v-col cols="12" sm="4">
+                  <v-col cols="12" sm="auto">
+                    <v-btn
+                      outlined
+                      class="text-sm w-full"
+                      color="#ff6b81"
+                      @click="showDialogPotential(student.checkInStudentId)"
+                    >
+                      แสดงความคิดเห็น
+                    </v-btn>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12">
                     <labelCustom text="ความสนใจ"></labelCustom>
-                    <v-select
+                    <v-textarea
+                      outlined
+                      v-model="student.potential.interest"
+                    ></v-textarea>
+                    <!-- <v-select
                       outlined
                       dense
                       hide-details
@@ -525,18 +507,7 @@
                       item-text="label"
                       item-value="value"
                       v-model="student.potential.interest"
-                    ></v-select>
-                  </v-col>
-                  <v-col cols="12" sm="3">
-                    <br />
-                    <v-btn
-                      outlined
-                      class="text-sm"
-                      color="#ff6b81"
-                      @click="showDialogPotential(student.checkInStudentId)"
-                    >
-                      แสดงความคิดเห็น
-                    </v-btn>
+                    ></v-select> -->
                   </v-col>
                 </v-row>
               </v-card-text>
@@ -711,6 +682,7 @@
       </v-tabs-items>
       <!-- COMMENT -->
       <v-dialog
+        persistent
         :width="$vuetify.breakpoint.smAndUp ? '60vw' : ''"
         v-model="show_comment_dialog"
         v-if="show_comment_dialog"
@@ -718,8 +690,8 @@
         <!-- <pre>{{student_check_in[selected_student]}}</pre> -->
         <v-card class="pa-1">
           <v-row dense>
-            <v-col class="pa-0" cols="12" align="right">
-              <v-btn icon @click="closeStudentComment(selected_student)">
+            <v-col class="pa-1" cols="12" align="right">
+              <v-btn icon v-if="!student_check_in[selected_student].assessment.assessmentStudentsId" @click="closeStudentComment(selected_student)">
                 <v-icon color="#ff6b81">mdi-close</v-icon>
               </v-btn>
             </v-col>
@@ -824,9 +796,7 @@
                 </v-row>
               </v-card-text>
             </v-card>
-
-            <div
-              v-if="student_check_in[selected_student].files.length > 0"
+            <div v-if="student_check_in[selected_student].files.length > 0"
               class="mb-3"
             >
               <v-row dense>
@@ -890,7 +860,7 @@
               <v-col cols="12" sm="6">
                 <v-btn
                   class="w-full"
-                  @click="confirmStudentComment"
+                  @click="confirmStudentComment(selected_student)"
                   depressed
                   color="#ff6b81"
                   dark
@@ -904,15 +874,16 @@
       </v-dialog>
       <!-- COMMENT PROTENTIAL -->
       <v-dialog
+        persistent
         :width="$vuetify.breakpoint.smAndUp ? '60vw' : ''"
         v-model="show_comment_potential_dialog"
         v-if="show_comment_potential_dialog"
       >
         <v-card class="pa-1">
-          <!-- <pre>{{student_check_in[selected_student]}}</pre> -->
+          <!-- <pre>{{student_check_in[selected_student].potential.checkInPotentialId}}</pre> -->
           <v-row dense>
-            <v-col class="pa-0" cols="12" align="right">
-              <v-btn icon @click="claseDialogPotential(selected_student)">
+            <v-col class="pa-1" cols="12" align="right">
+              <v-btn v-if="!student_check_in[selected_student].potential.checkInPotentialId"  icon @click="closeDialogPotential(selected_student)">
                 <v-icon color="#ff6b81">mdi-close</v-icon>
               </v-btn>
             </v-col>
@@ -1074,11 +1045,10 @@
               <v-col cols="12" sm="6">
                 <v-btn
                   class="w-full"
-                  @click="
-                    student_check_in[selected_student].potential.remark = ''
-                  "
+                  @click="clearDialogPotential(selected_student)"
                   text
                   color="#ff6b81"
+                  :disabled="student_check_in[selected_student].potential.checkInPotentialId"
                 >
                   ล้างข้อมูล
                 </v-btn>
@@ -1086,7 +1056,7 @@
               <v-col cols="12" sm="6">
                 <v-btn
                   class="w-full"
-                  @click="confirmDialogPotential"
+                  @click="confirmDialogPotential(selected_student)"
                   depressed
                   color="#ff6b81"
                   dark
@@ -1175,84 +1145,6 @@ export default {
         value: "actions",
       },
     ],
-
-    students: [
-      {
-        no: "1",
-        fullname: "กมลรัตน์ สิทธิกรชัย",
-        nickname: "เมย์พิ้ง",
-        check_in_status: "punctual",
-        compensation_date: "",
-        compensation_date_str: "",
-        time: "",
-        start_time: "",
-        end_time: "",
-        menu_compensation_date: false,
-        menu_time: false,
-        count: 7,
-        max_count: 15,
-      },
-      {
-        no: "2",
-        fullname: "ออกัส สิหาคม",
-        nickname: "ออกัส",
-        check_in_status: "punctual",
-        compensation_date: "",
-        compensation_date_str: "",
-        time: "",
-        start_time: "",
-        end_time: "",
-        menu_compensation_date: false,
-        menu_time: false,
-        count: 2,
-        max_count: 4,
-      },
-      {
-        no: "3",
-        fullname: "น่านฟ้า ทะเลไกล",
-        nickname: "น้ำฟ้า",
-        check_in_status: "",
-        compensation_date: "",
-        compensation_date_str: "",
-        time: "",
-        start_time: "",
-        end_time: "",
-        menu_compensation_date: false,
-        menu_time: false,
-        count: 2,
-        max_count: 4,
-      },
-      {
-        no: "4",
-        fullname: "วรวุฒิ สารวงศ์",
-        nickname: "อ้วน",
-        check_in_status: "",
-        compensation_date: "",
-        compensation_date_str: "",
-        time: "",
-        start_time: "",
-        end_time: "",
-        menu_compensation_date: false,
-        menu_time: false,
-        count: 1,
-        max_count: 4,
-      },
-      {
-        no: "5",
-        fullname: "วรวุฒิ สารวงศ์",
-        nickname: "อ้วน",
-        check_in_status: "",
-        compensation_date: "",
-        compensation_date_str: "",
-        time: "",
-        start_time: "",
-        end_time: "",
-        menu_compensation_date: false,
-        menu_time: false,
-        count: 7,
-        max_count: 15,
-      },
-    ],
     selected_student: null,
     preview_summary_files: [],
     selected_files: [],
@@ -1297,15 +1189,16 @@ export default {
       });
     },
     tab: function () {
-      this.GetCoachCheckIn({
-        course_id: this.$route.params.courseId,
-        date: this.$route.params.date,
-      });
       this.GetStudentByTimeId({
         course_id: this.$route.params.courseId,
         date: this.$route.params.date,
         time_id: this.$route.params.timeId,
       });
+      this.GetCoachCheckIn({
+        course_id: this.$route.params.courseId,
+        date: this.$route.params.date,
+      });
+    
     },
   },
   computed: {
@@ -1327,7 +1220,6 @@ export default {
         date: this.$route.params.date,
         time_id: this.$route.params.timeId,
       });
-      // this.GetCoachCheckIn({course_id :this.$route.params.courseId, date : this.$route.params.date})
       return "";
     },
   },
@@ -1347,6 +1239,25 @@ export default {
       DeleteAssessmentPotentialFile:
         "CoachModules/DeleteAssessmentPotentialFile",
     }),
+    CheckRating(rating_data, checkInId, type){
+        if(this.student_check_in.filter(v => v.checkInStudentId === checkInId).length > 0){
+        this.student_check_in.filter(v => v.checkInStudentId === checkInId).forEach((student) => {
+          if(type === "assessment_evolution"){
+            if(student.assessment.rating_evolution < 3){
+              student.assessment.rating_evolution = 3
+            }
+          }else if(type === "assessment_interest"){
+            if(student.assessment.rating_interest < 3){
+              student.assessment.rating_interest = 3
+            }
+          }else if(type === "potential_evolution"){
+            if(student.assessment.rating_evolution < 3){
+              student.assessment.rating_evolution = 3
+            }
+          }
+        })
+      }
+    },
     FilterStatusCheckIn(selected_data) {
       if (this.course_data.course_type_id === "CT_1") {
         // console.log(`Total :${ parseInt(selected_data.totalDay/4) } count : ${selected_data.countCheckInleave}`)
@@ -1388,8 +1299,9 @@ export default {
         window.open(url, "_blank");
       }
     },
-    confirmDialogPotential() {
+    confirmDialogPotential(selected_student) {
       this.selected_files = [];
+      this.student_check_in[selected_student].potential.confirm = true
       this.show_comment_potential_dialog = false;
     },
     showDialogPotential(id) {
@@ -1398,23 +1310,23 @@ export default {
           this.selected_student = i;
         }
       }
-      if (
-        this.student_check_in[this.selected_student].potential
-          .checkInPotentialId
-      ) {
-        this.student_check_in[this.selected_student].potential.remark_old =
-          this.student_check_in[this.selected_student].potential.remark;
+      if (this.student_check_in[this.selected_student].potential.checkInPotentialId) {
+        this.student_check_in[this.selected_student].potential.remark_old = this.student_check_in[this.selected_student].potential.remark;
       }
       this.show_comment_potential_dialog = true;
     },
-    claseDialogPotential(selected_student) {
-      if (this.student_check_in[selected_student].potential.remark_old) {
-        this.student_check_in[selected_student].potential.remark =
-          this.student_check_in[selected_student].potential.remark_old;
-        this.student_check_in[selected_student].potentialfiles = [];
-      } else {
+    clearDialogPotential(selected_student){
+      if(!this.student_check_in[selected_student].potential.checkInPotentialId){
         this.student_check_in[selected_student].potential.remark = "";
         this.student_check_in[selected_student].potentialfiles = [];
+      }
+    },
+    closeDialogPotential(selected_student) {
+      if(!this.student_check_in[selected_student].potential.confirm){
+        if (!this.student_check_in[selected_student].potential.checkInPotentialId) {
+          this.student_check_in[selected_student].potential.remark = "";
+          this.student_check_in[selected_student].potentialfiles = [];
+        }
       }
       this.selected_files = [];
       this.show_comment_potential_dialog = false;
@@ -1440,6 +1352,8 @@ export default {
           await this.UploadFileSummary({
             checkInCoach: this.coach_check_in,
             files: this.coach_check_in.summary_files,
+            course_id: this.$route.params.courseId,
+            date: this.$route.params.date,
           }).then(async () => {
             await this.GetCoachCheckIn({
               course_id: this.$route.params.courseId,
@@ -1501,13 +1415,10 @@ export default {
         if (result.isConfirmed) {
           await this.AssessmentStudent({
             students: this.student_check_in,
-          }).then(async () => {
-            await this.GetStudentByTimeId({
-              course_id: this.$route.params.courseId,
-              date: this.$route.params.date,
-              time_id: this.$route.params.timeId,
-            });
-          });
+            course_id: this.$route.params.courseId,
+            date: this.$route.params.date,
+            time_id: this.$route.params.timeId,
+          })
         }
       });
     },
@@ -1522,13 +1433,11 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.UpdateCheckInStudent({ students: this.student_check_in });
-          setTimeout(() => {
-            this.GetStudentByTimeId({
-              course_id: this.$route.params.courseId,
-              date: this.$route.params.date,
-              time_id: this.$route.params.timeId,
-            });
-          }, 1000);
+          this.GetStudentByTimeId({
+            course_id: this.$route.params.courseId,
+            date: this.$route.params.date,
+            time_id: this.$route.params.timeId,
+          });
         }
       });
     },
@@ -1573,27 +1482,25 @@ export default {
       }
       this.show_comment_dialog = true;
     },
-    confirmStudentComment() {
+    confirmStudentComment(selected_student) {
       this.selected_files = [];
       this.show_comment_dialog = false;
+      this.student_check_in[selected_student].assessment.confrim = true
     },
     clearStudentComment(selected_student) {
-      if (
-        !this.student_check_in[selected_student].assessment.assessmentStudentsId
-      ) {
-        this.student_check_in[selected_student].assessment.remark = [];
-        this.student_check_in[selected_student].files = [];
+      if (!this.student_check_in[selected_student].assessment.assessmentStudentsId) {
+          this.student_check_in[selected_student].assessment.remark = [];
+          this.student_check_in[selected_student].files = [];
+        
       }
     },
     closeStudentComment(selected_student) {
       console.log(selected_student);
-      if (
-        !this.student_check_in[selected_student].assessment.assessmentStudentsId
-      ) {
-        this.student_check_in[selected_student].assessment.remark = [];
-        this.student_check_in[selected_student].files = [];
-      } else {
-        this.student_check_in[selected_student].files = [];
+      if (!this.student_check_in[selected_student].assessment.assessmentStudentsId) {
+        if(!this.student_check_in[selected_student].assessment.confrim){
+          this.student_check_in[selected_student].assessment.remark = [];
+          this.student_check_in[selected_student].files = [];
+        }
       }
       this.selected_files = [];
       this.show_comment_dialog = false;

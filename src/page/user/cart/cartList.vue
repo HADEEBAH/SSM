@@ -39,9 +39,7 @@
                           <v-col>
                             <v-row dense>
                               <v-col class="text-lg font-bold">
-                                {{ item.course_name_th }}({{
-                                  item.course_name_en
-                                }})
+                                {{ item.course_name_th }}({{ item.course_name_en }})
                               </v-col>
                               <v-col cols="auto">
                                 <v-checkbox
@@ -338,15 +336,17 @@ export default {
               confirmButtonText: "ตกลง",
             });
           } else {
-            this.saveOrder();
-            for (const cart of this.cart_list) {
-              for (const id of cart.order_tmp_id) {
-                this.DeleteCart({
-                  cart_id: id,
-                  account_id: this.user_login.account_id,
-                });
+            this.saveOrder().then(()=>{
+              for (const cart of this.cart_list) {
+                for (const id of cart.order_tmp_id) {
+                  this.DeleteCart({
+                    cart_id: id,
+                    account_id: this.user_login.account_id,
+                  });
+                }
               }
-            }
+            })
+            
           }
         });
       }

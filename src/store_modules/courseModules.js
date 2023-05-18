@@ -705,7 +705,7 @@ const CourseModules = {
         console.log(error)
       }
     },
-    // COURSE :: DELETA ARKWORK ID
+    // COURSE :: DELETE ARKWORK ID
     async RemoveArkworkByArkworkId(context,{artwork_data}){
       try{
         let config = {
@@ -777,6 +777,11 @@ const CourseModules = {
           Swal.fire({
             icon: "success",
             title: "แก้ไขคอร์สสำเร็จ"
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              await context.dispatch("GetArtworkByCourse",{course_id : course_id})
+              await context.dispatch("GetCourse",course_id)
+            }
           })
         }
       }catch(error){
@@ -1032,6 +1037,7 @@ const CourseModules = {
     // COURSE :: DETAIL
     async GetCourse(context, course_id) {
       context.commit("SetCourseIsLoading", true)
+      console.log("GetCourse")
       try {
         // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
@@ -1070,7 +1076,6 @@ const CourseModules = {
             days_of_class: [],
             days : []
           }
-          console.log("payload 1048", data.data.coachs)
           let teach_day_data = []
           for await (let coach of data.data.coachs){
             // console.log("payload 1054",payload)
@@ -1146,7 +1151,8 @@ const CourseModules = {
           }
           // console.log("payload 1122",payload)
           // console.log("teach_day_data",teach_day_data)
-          for(let coach_date of data.data.dayOfWeek){
+          for(let coach_date of data.data.dayOfWeek.filter(v => v.status === 'Active')){
+            // console.log(coach_date)
             // DAYS
             let dayName = dayOfWeekArray(coach_date.dayOfWeekName)
             // console.log("payload 1127",payload.days.filter(v => v.dayName === dayName).length === 0)
@@ -1274,7 +1280,7 @@ const CourseModules = {
             }
           }
           if(payload.course_type_id === "CT_1"){
-            console.log("payload :",payload)
+            // console.log("payload :",payload)
             await context.commit("SetCourseData", payload)
           }else{
             // console.log("payload :",payload)

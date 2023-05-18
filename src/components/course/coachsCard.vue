@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{ setFunction }}
     <template v-for="(coach, coach_index) in course_data.coachs">
       <v-card
         v-if="coach.teach_day_data.length > 0"
@@ -17,6 +18,7 @@
                 <!-- <pre>{{ teach_day }}</pre> -->
                 <v-col cols class="d-flex align-center justify-end">
                   <v-switch
+                    @click="checkStudyByDay($event,teach_day)"
                     :disabled="disable"
                     v-model="teach_day.class_open"
                     color="green"
@@ -385,7 +387,14 @@ export default {
     ...mapGetters({
       course_data: "CourseModules/getCourseData",
       teach_days: "CourseModules/getTeachDays",
+      course_monitors: "CourseMonitorModules/getCourseMonitor",
     }),
+    setFunction(){
+      this.GetShortCourseMonitor({
+        course_id: this.course_data.course_id,
+      });
+      return ""
+    }
   },
   methods: {
     ...mapActions({
@@ -394,7 +403,32 @@ export default {
       DeleteDayOfWeek : "CourseModules/DeleteDayOfWeek",
       DeleteTime : "CourseModules/DeleteTime",
       GetCourse: "CourseModules/GetCourse",
+      // monitor
+      GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
     }),
+    checkStudyByDay(e, data){
+      // console.log(e.target.click())
+      if(!data.class_open){
+        console.log(this.course_monitors.filter(v => v.m_day_of_week_id === data.day_of_week_id))
+        if(this.course_monitors.filter(v => v.m_day_of_week_id === data.day_of_week_id).length > 0){
+          if(this.course_monitors.filter(v => v.m_day_of_week_id === data.day_of_week_id).some(v => v.m_current_student > 0)){
+            data.class_open = true
+            e.target.click()
+            Swal.fire({
+              icon: "error",
+              title: "ไม่สามารถปิดวันสอนได้",
+              text: "เนื่องจากมีนักเรียนในคอร์ส",
+              showDenyButton: false,
+              showCancelButton: false,
+              confirmButtonText: "ตกลง",
+              cancelButtonText: "ยกเลิก",
+            })  
+          }
+        }
+       
+        console.log(data.class_open)
+      }
+    },
     width() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":

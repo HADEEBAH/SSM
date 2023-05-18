@@ -43,6 +43,7 @@ const loginModules = {
             context.commit("SetIsLoading", true)
             console.log("status", status);
             try {
+                // let { data } = await axios.get(` http://localhost:3000/api/v1/account/username?username=${username}`)
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/username?username=${username}`)
                 console.log(data)
                 if (data.statusCode === 200) {
@@ -140,53 +141,53 @@ const loginModules = {
 
         },
 
-        async loginShareToken(context, {token, page}) {
-          console.log("token", token);
-          console.log("page", page);
-          context.commit("SetIsLoading", true)
-          try {
-              // const { data } = await axios.post(`http://localhost:3001/api/v1/auth/login/sharedToken`, {
-              const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login/sharedToken`, {
-                  "shared_token": token,
-              })
-              console.log(data);
-              if (data.statusCode === 200) {
-                  let roles = []
-                  if (data.data.roles.length > 0) {
-                      data.data.roles.forEach((role) => {
-                          roles.push(role.roleId)
-                      });
-                  }
-                  let payload = {
-                      account_id: data.data.account_id,
-                      email: data.data.email,
-                      username: context.state.user_one_id.username,
-                      password: context.state.user_one_id.password,
-                      first_name_en: data.data.first_name_en,
-                      first_name_th: data.data.first_name_th,
-                      last_name_en: data.data.last_name_en,
-                      last_name_th: data.data.last_name_th,
-                      role: data.data.roles,
-                      roles: roles,
-                      tel: data.data.tel,
-                      image: data.data.image !== "" ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}` : ""
-                  }
-                  VueCookie.set("token", data.data.token, 1)
-                  localStorage.setItem("userDetail", JSON.stringify(payload))
-                  if (page === "menage-course") {
-                    router.replace({ name: "menageCourse" })
-                  }
-              }
-          } catch (response) {
-            context.commit("SetIsLoading", false)
-            Swal.fire({
-                icon: 'error',
-                title: "เกิดข้อผิดพลาด",
-            })
-            router.replace({ name: "UserKingdom" })
-          }
+        async loginShareToken(context, { token, page }) {
+            console.log("token", token);
+            console.log("page", page);
+            context.commit("SetIsLoading", true)
+            try {
+                // const { data } = await axios.post(`http://localhost:3001/api/v1/auth/login/sharedToken`, {
+                const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login/sharedToken`, {
+                    "shared_token": token,
+                })
+                console.log(data);
+                if (data.statusCode === 200) {
+                    let roles = []
+                    if (data.data.roles.length > 0) {
+                        data.data.roles.forEach((role) => {
+                            roles.push(role.roleId)
+                        });
+                    }
+                    let payload = {
+                        account_id: data.data.account_id,
+                        email: data.data.email,
+                        username: context.state.user_one_id.username,
+                        password: context.state.user_one_id.password,
+                        first_name_en: data.data.first_name_en,
+                        first_name_th: data.data.first_name_th,
+                        last_name_en: data.data.last_name_en,
+                        last_name_th: data.data.last_name_th,
+                        role: data.data.roles,
+                        roles: roles,
+                        tel: data.data.tel,
+                        image: data.data.image !== "" ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}` : ""
+                    }
+                    VueCookie.set("token", data.data.token, 1)
+                    localStorage.setItem("userDetail", JSON.stringify(payload))
+                    if (page === "menage-course") {
+                        router.replace({ name: "menageCourse" })
+                    }
+                }
+            } catch (response) {
+                context.commit("SetIsLoading", false)
+                Swal.fire({
+                    icon: 'error',
+                    title: "เกิดข้อผิดพลาด",
+                })
+                router.replace({ name: "UserKingdom" })
+            }
 
-      },
+        },
 
 
 
@@ -196,7 +197,7 @@ const loginModules = {
                 title: "ต้องการออกจากระบบใช่หรือไม่ ?",
                 showDenyButton: false,
                 showCancelButton: true,
-                cancelButtonText :"ยกเลิก",
+                cancelButtonText: "ยกเลิก",
                 confirmButtonText: "ตกลง",
             }).then(async (result) => {
                 if (result.isConfirmed) {
@@ -209,7 +210,7 @@ const loginModules = {
                     router.push({ name: "Login" });
                 }
             })
-           
+
 
 
         }

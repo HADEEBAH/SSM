@@ -101,7 +101,7 @@
       >
         <template v-slot:[`item.status`]="{ item }">
           <v-autocomplete
-            @change="updateStatusCourse(item.course_id, item.status)"
+            @change="updateStatusCourse(item, item.course_id, item.status)"
             dense
             outlined
             hide-details
@@ -135,6 +135,7 @@
   <script>
 import headerPage from "@/components/header/headerPage.vue";
 import imgCard from "@/components/course/imgCard.vue";
+import Swal from "sweetalert2";
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "courseList",
@@ -182,6 +183,7 @@ export default {
   computed: {
     ...mapGetters({
       courses: "CourseModules/getCourses",
+      course_monitors: "CourseMonitorModules/getCourseMonitor",
     }),
     LoadingTable() {
       return !this.courses;
@@ -190,13 +192,44 @@ export default {
   methods: {
     ...mapActions({
       UpdateStatusCourse: "CourseModules/UpdateStatusCourse",
+       // monitor
+      GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
     }),
-    updateStatusCourse(course_id, status) {
-      console.log(course_id, status);
-      this.UpdateStatusCourse({
-        courseStatus: status,
-        courseId: course_id,
-      });
+    updateStatusCourse(item,course_id, status) {
+      console.log("event :",item);
+      if(status !== 'Active'){
+        this.GetShortCourseMonitor({course_id: course_id}).then(async ()=>{
+          if(this.course_monitors){
+            let current_student = 0
+            console.log(this.course_monitors)
+            current_student = this.course_monitors.map(v => current_student += v.m_current_student)
+            console.log(current_student)
+            console.log(current_student.some( v => v > 0))
+            if(current_student.some( v => v > 0)){
+              item.status = 'Active'
+              Swal.fire({
+                icon: "error",
+                title: "ไม่สามารถปิดคอร์สได้",
+                text: "เนื่องจากมีนักเรียนในคอร์ส",
+                showDenyButton: false,
+                showCancelButton: false,
+                confirmButtonText: "ตกลง",
+                cancelButtonText: "ยกเลิก",
+              }) 
+            }else{
+              this.UpdateStatusCourse({
+                courseStatus: status,
+                courseId: course_id,
+              });
+            }
+          }
+        })
+      }else{
+        this.UpdateStatusCourse({
+          courseStatus: status,
+          courseId: course_id,
+        });
+      }
     },
   },
 };
