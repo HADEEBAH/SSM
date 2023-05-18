@@ -267,35 +267,24 @@
                 <v-card-text
                   class="border-dashed border-2 border-blue-600 rounded-lg"
                 >
-                  <v-row v-if="course_data.course_img_privilege">
+                  <v-row v-if="course_data.course_img_privilege || preview_privilege_url">
                     <v-col align="center" class="rounded-lg pa-0">
                       <v-img
-                        :src="course_data.course_img_privilege"
+                        :src="course_data.course_img_privilege ? course_data.course_img_privilege : preview_privilege_url"
                         contain
                         style="max-width: 200px"
                         align="right"
                       >
                         <v-btn
-                          v-if="course_edit"
+                          v-if="course_edit && course_data.course_img_privilege"
                           icon
                           class="bg-[#f00]"
                           dark
                           @click="removePrivilegeFileData"
                           ><v-icon>mdi-close</v-icon></v-btn
                         >
-                      </v-img>
-                    </v-col>
-                  </v-row>
-                  <v-row v-else-if="preview_privilege_url">
-                    <v-col align="center" class="rounded-lg pa-0">
-                      <v-img
-                        :src="preview_privilege_url"
-                        contain
-                        style="max-width: 200px"
-                        align="right"
-                      >
                         <v-btn
-                          v-if="course_edit"
+                          v-else-if="course_edit && preview_privilege_url"
                           icon
                           class="bg-[#f00]"
                           dark
@@ -305,7 +294,7 @@
                       </v-img>
                     </v-col>
                   </v-row>
-                  <v-row v-if="!preview_privilege_url">
+                  <v-row v-if="!preview_privilege_url && !course_data.course_img_privilege">
                     <v-col cols="12" class="flex align-center justify-center">
                       <v-img
                         src="../../../assets/course/upload_file.png"
@@ -2022,17 +2011,8 @@ export default {
           await this.UpdateCourseArkwork({
             course_id: this.course_data.course_id,
             course_data: this.course_data,
-          }).then(async () => {
-            await setTimeout(async () => {
-              await this.GetArtworkByCourse({
-                course_id: this.$route.params.course_id,
-              });
-              this.course_edit = false;
-              this.preview_privilege_url =
-                this.course_data.course_img_privilege;
-            }, 200);
-            await this.GetCourse(this.$route.params.course_id);
-          });
+          })
+          this.course_edit = false;
         }
       });
     },
