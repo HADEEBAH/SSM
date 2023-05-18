@@ -17,6 +17,13 @@ const userModules = {
             }
         ],
 
+        filter_role: [],
+        query_roles: "",
+        filter_role_is_loading: false,
+        user_filter: [],
+
+
+
         show_by_id: [],
         data_user_by_id: [],
         student_schedule: [],
@@ -34,6 +41,9 @@ const userModules = {
         SetStudentSchedule(state, payload) {
             state.student_schedule = payload
         },
+        SetfilterGetUserList(state, payload) {
+            state.user_list = payload
+        },
     },
     actions: {
         async GetUserList(context) {
@@ -48,12 +58,79 @@ const userModules = {
                 // config
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/usermanagement`, config)
                 if (data.statusCode === 200) {
+                    console.log("data1111", data.data);
+                    data.data.map((val, i) => {
+                        val.index = i + 1
+                        val.userRoles.map((value) => {
+                            val.roleNameTh = value.roleNameTh
+                            val.roleNameTh = value.roleNameTh
+                            val.roleNameTh = value.roleNameTh
+                            return value
+                        })
+                        return val
+                    })
+                    console.log("data.data.userRoles", data.data.userRoles);
+                    // data.data[key].userRoles.map((val) => {
+
+                    //     data.data[key]["roleNameTh"] = val.roleNameTh
+                    //     return val
+                    // })
+
+                    console.log("SetUserList", data.data);
                     context.commit("SetUserList", data.data)
                 } else {
                     throw { error: data }
                 }
             } catch (error) {
                 console.log("error", error);
+            }
+        },
+
+        async FilterGetUserList(context, role) {
+            this.user_lists_is_loading = true;
+            console.log("objectROLE", role);
+            let query_roles = "";
+            role.map((val) => {
+                query_roles += `roleId=${val}&`;
+            });
+            console.log("options_temp", query_roles);
+            try {
+                let config = {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-type": "Application/json",
+                        'Authorization': `Bearer ${VueCookie.get("token")}`
+                    }
+                }
+                // let { data } = await axios.get(`http://localhost:3000/api/v1/getrole/filter?${query_roles}`, config)
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/getrole/filter?${query_roles}`, config)
+
+                if (data.statusCode === 200) {
+                    console.log("ROLES", role);
+                    console.log("SetfilterGetUserList1", data.data)
+                    // if (role.length > 0) {
+
+                    // } else {
+
+                    // }
+                    data.data.map((val, i) => {
+                        val.index = i + 1;
+                        console.log("val", val);
+                        return val;
+                    })
+                    console.log("SetfilterGetUserList2", data.data)
+                    context.commit("SetfilterGetUserList", data.data)
+                    // this.user_filter = data.data;
+                    // context.commit("SetUserList", data.data)
+                    // console.log("SetUserList222", data.data)
+
+
+
+                } else {
+                    throw { error: data }
+                }
+            } catch (error) {
+                console.log("err", error);
             }
         },
 
@@ -143,6 +220,10 @@ const userModules = {
         getStudentSchedule(state) {
             return state.student_schedule
         },
+        getfilterGetUserList(state) {
+            return state.filter_role
+
+        }
     },
 };
 

@@ -20,6 +20,7 @@
                 <v-avatar size="40" color="#FBF3F5"
                   ><div class="pink--text">
                     {{ user_list.length }}
+                    <!-- {{ itemsPerPage !== 0 ? itemsPerPage : user_list.length }} -->
                   </div></v-avatar
                 >
               </v-col>
@@ -45,10 +46,9 @@
             </v-col>
             <label-custom v-if="!MobileSize" text="บทบาท"></label-custom>
             <v-col cols="12" sm="3">
-            <label-custom v-if="MobileSize" text="บทบาท"></label-custom>
+              <label-custom v-if="MobileSize" text="บทบาท"></label-custom>
               <template>
-                <v-autocomplete
-                  disabled
+                <!-- <v-autocomplete
                   dense
                   :items="roles"
                   item-text="role"
@@ -61,6 +61,51 @@
                   color="pink"
                   item-color="pink"
                 >
+                </v-autocomplete> -->
+                <v-autocomplete
+                  v-model="searchQuery"
+                  :items="roles"
+                  item-text="role"
+                  item-value="roleNumber"
+                  placeholder="ทั้งหมด"
+                  @input="FilterGetUserList(searchQuery)"
+                  outlined
+                  dense
+                  multiple
+                  hide-details
+                  color="pink"
+                  item-color="pink"
+                >
+                  <template v-slot:prepend-item>
+                    <v-list-item
+                      ripple
+                      @mousedown.prevent
+                      @click="selectedAll()"
+                    >
+                      <v-list-item-action>
+                        <v-icon
+                          :color="
+                            searchQuery.length > 0 ? 'indigo darken-4' : ''
+                          "
+                        >
+                          {{ icon }}
+                        </v-icon>
+                      </v-list-item-action>
+                      <v-list-item-content>
+                        <v-list-item-title> Select All </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-divider class="mt-2"></v-divider>
+                  </template>
+
+                  <template v-slot:selection="{ item, index }">
+                    <v-chip v-if="index === 0">
+                      <span>{{ item.role }}</span>
+                    </v-chip>
+                    <span v-if="index === 1" class="grey--text text-caption">
+                      (+{{ searchQuery.length - 1 }} others)
+                    </span>
+                  </template>
                 </v-autocomplete>
               </template>
             </v-col>
@@ -80,35 +125,30 @@
           </v-row>
         </v-card-text>
       </v-card>
-
-      <!-- table -->
+      <!-- table selectedRole == null -->
       <div>
+        <!-- :loading="filter_role_is_loading"-->
+        <!-- :items="selectedRole == null ? user_list : filter_role" -->
+        {{ search }}
         <template>
           <v-data-table
             :headers="headers"
-            :items="user_list.map((val,i)=>{
-              val.index = i
-              return val 
-            })"
+            :items="user_list"
             :search="search"
+            :selectedRole="selectedRole"
             :page.sync="page"
             :items-per-page="itemsPerPage"
-            :sort-by="sortBy"
-            @page-count="pageCount = $event"
+            :page-count="(pageCount = $event)"
+            loading-text="Loading... Please wait"
+            :loading="user_list.length < 0"
             class="elevation-1 header-table"
           >
-            <template v-slot:[`item.count`]="{item}">
-              {{ item.index + 1 }}
+            <template v-slot:[`item.count`]="{ item }">
+              {{ item.index }}
             </template>
 
             <template v-slot:[`item.roles`]="{ item }">
-              {{
-                item.userRoles
-                  .map((val) => {
-                    return val.roleNameTh;
-                  })
-                  .join()
-              }}
+              {{ item.roleNameTh }}
             </template>
 
             <template v-slot:[`item.actions`]="{ item }">
@@ -118,7 +158,12 @@
                 @click="
                   $router.push({
                     name: 'UserDetail',
-                    params: { action: 'view', account_id: item.accountId },
+                    params: {
+                      action: 'view',
+                      account_id: item.accountId
+                        ? item.accountId
+                        : item.userOneId,
+                    },
                   })
                 "
               >
@@ -131,7 +176,12 @@
                 @click="
                   $router.push({
                     name: 'UserDetail',
-                    params: { action: 'edit', account_id: item.accountId },
+                    params: {
+                      action: 'edit',
+                      account_id: item.accountId
+                        ? item.accountId
+                        : item.userOneId,
+                    },
                   })
                 "
               >
@@ -141,9 +191,12 @@
                 class="ml-5"
                 small
                 color="#FF6B81"
-                @click="deleteAccount(item.accountId)"
+                @click="
+                  deleteAccount(
+                    item.accountId ? item.accountId : item.userOneId
+                  )
+                "
               >
-                <!-- @click="deleteItem(item)" -->
                 mdi-delete
               </v-icon>
             </template>
@@ -191,11 +244,20 @@ export default {
       search: "",
       dialog: false,
       dialogDelete: false,
+      filter_role_is_loading: true,
       page: 1,
       itemsPerPage: 10,
       pageCount: 0,
       filter: {},
-      searchQuery: "ทั้งหมด",
+      searchQuery: [],
+      selectedRole: null, // Selected role from the autocomplete
+      roleList: [
+        { role: "Super Admin", privilege: "superAdmin", roleNumber: "R_1" },
+        { role: "Admin", privilege: "admin", roleNumber: "R_2" },
+        { role: "โค้ช", privilege: "โค้ช", roleNumber: "R_3" },
+        { role: "ผู้ปกครอง", privilege: "ผู้ปกครอง", roleNumber: "R_4" },
+        { role: "นักเรียน", privilege: "นักเรียน", roleNumber: "R_5" },
+      ],
 
       roles: [
         { role: "Super Admin", privilege: "superAdmin", roleNumber: "R_1" },
@@ -204,6 +266,7 @@ export default {
         { role: "ผู้ปกครอง", privilege: "ผู้ปกครอง", roleNumber: "R_4" },
         { role: "นักเรียน", privilege: "นักเรียน", roleNumber: "R_5" },
       ],
+      // roles: ["R_1", "R_2", "R_3", "R_4", "R_5"],
       user_data: {
         users: "",
       },
@@ -239,6 +302,10 @@ export default {
         oneid: "",
         role: "",
       },
+      selected_all_bool: false,
+      query_roles: "",
+      user_lists: [],
+      selectedFruits: [],
     };
   },
 
@@ -267,6 +334,7 @@ export default {
     ...mapActions({
       GetUserList: "UserModules/GetUserList",
       GetShowById: "UserModules/GetShowById",
+      FilterGetUserList: "UserModules/FilterGetUserList",
     }),
 
     initialize() {
@@ -325,6 +393,9 @@ export default {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
+        // setTimeout(() => {
+
+        // }, 1000);
         await axios.get(
           `${process.env.VUE_APP_URL}/api/v1/usermanagement/search?name=${name}`,
           config
@@ -343,7 +414,9 @@ export default {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
+        console.log("role-role", role);
         await axios.get(
+          // `http://localhost:3000/api/v1/getrole/query?roleId=${role}&roleId=${role}`,
           `${process.env.VUE_APP_URL}/api/v1/usermanagement/search?role=${role}`,
           config
         );
@@ -402,14 +475,85 @@ export default {
         }
       });
     },
+    async selectedAll(params) {
+      // this.$nextTick(() => {
+      //     if (this.likesAllFruit) {
+      //       this.selectedFruits = []
+      //     } else {
+      //       this.selectedFruits = this.fruits.slice()
+      //     }
+      //   })
+      let search_arr = [];
+      this.selected_all_bool = !this.selected_all_bool;
+      if (this.selected_all_bool) {
+        this.searchQuery = this.roles.slice();
+      } else {
+        this.searchQuery = [];
+      }
+      for await (let item of this.searchQuery) {
+        search_arr.push(item.roleNumber);
+        console.log("ITEM", item);
+      }
+      console.log("searchQuery", params);
+      this.FilterGetUserList(
+        search_arr.length > 0 ? search_arr : this.searchQuery
+      );
+    },
+    async selectedRoles(role) {
+      console.log("objectROLE", role);
+      this.query_roles = "";
+      role.map((val) => {
+        this.query_roles += `roleId=${val}&`;
+      });
+      console.log("options_temp", this.query_roles);
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        let { data } = await axios.get(
+          // `http://localhost:3000/api/v1/getrole/filter?${this.query_roles}`,
+          `${process.env.VUE_APP_URL}/api/v1/usermanagement/search?role=${role}`,
+          config
+        );
+        this.user_lists = data.data;
+        // if (data.data.length > 0) {
+        // } else {
+        // }
+        console.log("data=>", data);
+      } catch (error) {
+        console.log("err", error);
+      }
+    },
   },
 
   computed: {
     ...mapGetters({
       user_list: "UserModules/getUserList",
       show_by_id: "UserModules/getShowById",
+      filter_role: "UserModules/getfilterGetUserList",
     }),
-
+    // filterUserList() {
+    //   if (this.searchQuery.length > 0) {
+    //     console.log(
+    //       this.searchQuery.includes(this.user_list[0].userRoles[0].roleId)
+    //     );
+    //     console.log(
+    //       this.user_list.filter((v) => {
+    //         this.searchQuery.includes(v.userRoles[0].roleId);
+    //       })
+    //     );
+    //     return this.user_list.filter((v) => {
+    //       console.log(v.userRoles[0].roleId);
+    //       this.searchQuery.includes(v.userRoles[0].roleId);
+    //     });
+    //   } else {
+    //     return this.user_list;
+    //   }
+    // },
     formTitle() {
       return this.editedIndex === -1 ? "Edit" : "Edit";
     },
@@ -420,6 +564,28 @@ export default {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;
     },
+
+    icon() {
+      if (this.selected_all_bool) return "mdi-close-box";
+      if (
+        !this.selected_all_bool ||
+        this.searchQuery.length < this.roles.length
+      )
+        return "mdi-checkbox-blank-outline";
+      return "mdi-checkbox-blank-outline";
+    },
+
+    // likesAllFruit() {
+    //   return this.selectedFruits.length === this.user_list.length;
+    // },
+    // likesSomeFruit() {
+    //   return this.selectedFruits.length > 0 && !this.likesAllFruit;
+    // },
+    // icon() {
+    //   if (this.likesAllFruit) return "mdi-close-box";
+    //   if (this.likesSomeFruit) return "mdi-minus-box";
+    //   return "mdi-checkbox-blank-outline";
+    // },
   },
 };
 </script>

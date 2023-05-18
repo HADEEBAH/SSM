@@ -1,6 +1,7 @@
 <template>
   <v-container fluid class="overflow-x-hidden overflow-y-hidden">
     <v-row v-if="$route.params.action == 'view'" dense class="mt-5">
+      <!-- <pre>{{ show_by_id }}</pre> -->
       <v-col cols="12">
         <headerPage :breadcrumbs="breadcrumbs"></headerPage>
         <v-card class="rounded-lg">
@@ -85,7 +86,6 @@
                           </div>
                         </div>
                       </v-col> -->
-
                       <v-col
                         class="webkit-center"
                         cols="12"
@@ -1304,16 +1304,13 @@ import userManageForm from "@/components/user_menage/userManageForm.vue";
 import { CheckFileSize } from "@/functions/functions";
 import axios from "axios";
 import VueCookie from "vue-cookie";
-
 import { mapActions, mapGetters } from "vuex";
-// import LabelCustom from '../../../components/label/labelCustom.vue';
 export default {
   components: {
     headerPage,
     headerCard,
     userManageForm,
     LabelCustom,
-    // LabelCustom,
   },
   data: () => ({
     data_local: JSON.parse(localStorage.getItem("userDetail")),
