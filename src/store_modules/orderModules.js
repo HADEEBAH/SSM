@@ -325,6 +325,7 @@ const orderModules = {
                         'Authorization' : `Bearer ${VueCookie.get("token")}`
                     }
                 }
+                console.log(payload)
                 // let localhost = "https://192.168.74.25:3002"
                 let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/regis/course`,payload , config)
                 console.log(data)
@@ -337,6 +338,7 @@ const orderModules = {
                         "vatRate": 0,
                         "orderDesc": ""
                     }
+                    
                     let user_data = JSON.parse(localStorage.getItem("userDetail"))
                     const userLogin = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${user_data.account_id}`,)
                     if(userLogin.data.statusCode === 200){
