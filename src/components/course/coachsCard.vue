@@ -174,12 +174,12 @@
                           :outlined="!disable"
                           :filled="disable"
                           dense
-                          style="position: absolute; display: block; z-index: 0"
-                          :style="`width:${width()}px;`"
+                          @focus="SelectedStartDate($event)"
                           :rules="rules.start_time"
-                          v-model="class_date.class_date_range.start_time"
-                        >
-                        </v-text-field>
+                          v-model="class_date.class_date_range.start_time_str"
+                        ></v-text-field>
+                        <VueTimepicker class="time-picker-hidden" hide-clear-button advanced-keyboard  v-model="class_date.class_date_range.start_time" close-on-complete></VueTimepicker>
+                        <!--</v-text-field>
                         <TimePicker
                           :disabled="disable"
                           v-if="coach.disabled_hours"
@@ -233,10 +233,19 @@
                             )
                           "
                           v-model="class_date.class_date_range.start_time"
-                        ></TimePicker>
+                        ></TimePicker> -->
                       </v-col>
                       <v-col class="px-2" cols="12" sm="6">
                         <v-text-field
+                          :disabled="disable"
+                          :outlined="!disable"
+                          :filled="disable"
+                          dense
+                          :rules="rules.start_time"
+                          v-model="class_date.class_date_range.end_time_str"
+                        ></v-text-field>
+                        <VueTimepicker class="time-picker-hidden" disabled hide-clear-button advanced-keyboard  v-model="class_date.class_date_range.end_time" close-on-complete></VueTimepicker>
+                        <!-- <v-text-field
                           :disabled="disable"
                           :outlined="!disable"
                           :filled="disable"
@@ -267,7 +276,7 @@
                             )
                           "
                           v-model="class_date.class_date_range.end_time"
-                        ></TimePicker>
+                        ></TimePicker> -->
                       </v-col>
                     </v-row>
                   </v-col>
@@ -338,13 +347,16 @@
 <script>
 import LabelCustom from "../label/labelCustom.vue";
 import { mapGetters, mapActions } from "vuex";
-import { Input, TimePicker } from "ant-design-vue";
+// import { Input, TimePicker } from "ant-design-vue";
 import moment from "moment";
 import Swal from "sweetalert2";
+import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
+
 export default {
   components: {
     LabelCustom,
-    TimePicker,
+    // TimePicker,
+    VueTimepicker 
   },
   props: {
     color: { type: String, default: "#fcfcfc" },
@@ -353,9 +365,9 @@ export default {
     state: { type: String, default: "create" },
     edited: { type: Boolean, default: false },
   },
-  directives: {
-    "ant-input": Input,
-  },
+  // directives: {
+  //   "ant-input": Input,
+  // },
   data: () => ({
     select_coachs: [],
     coachs_option: [],
@@ -406,6 +418,11 @@ export default {
       // monitor
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
     }),
+    SelectedStartDate(e){
+      const timepickerElement = e.target.parentNode.parentNode.parentNode.parentNode.parentNode.getElementsByClassName("time-picker-hidden")[0];
+      // timepickerElement.next()
+      console.log( timepickerElement)
+    },
     checkStudyByDay(e, data){
       // console.log(e.target.click())
       if(!data.class_open){

@@ -1093,13 +1093,26 @@ const CourseModules = {
               }
               let class_dates = []
               for await (const time of coach_date.times) {
+                console.log(time.start, time.end)
+                let startTimePart = time.start.split(":")
+                let endTimePart = time.end.split(":")
+                let startTime = {
+                  "HH": startTimePart[0],
+                  "mm": startTimePart[1]
+                }
+                let endTime = {
+                  "HH": endTimePart[0],
+                  "mm": endTimePart[1]
+                }
                 class_dates.push({
                   class_date_range: {
                     time_id : time.timeId ? time.timeId : null,
                     day_of_week_id :time.dayOfWeekId ? time.dayOfWeekId : null,  
-                    start_time: time.start ? moment(time.start, "HH:mm") : null,
+                    start_time: time.start ? startTime : null,
+                    start_time_str : time.start,
                     menu_start_time: false,
-                    end_time:time.end ? moment(time.end, "HH:mm") : null,
+                    end_time:time.end ? endTime : null,
+                    end_time_str : time.end,
                     menu_end_time: false,
                   },
                   students: time.maximumStudent,
