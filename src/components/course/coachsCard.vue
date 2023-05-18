@@ -174,109 +174,36 @@
                           :outlined="!disable"
                           :filled="disable"
                           dense
-                          @focus="SelectedStartDate($event)"
+                          style="position: absolute; z-index: 4"
+                          @focus="SelectedStartDate($event, teach_day.class_date, class_date.class_date_range.start_time)"
                           :rules="rules.start_time"
-                          v-model="class_date.class_date_range.start_time_str"
+                          v-model="class_date.class_date_range.start_time"
                         ></v-text-field>
-                        <VueTimepicker class="time-picker-hidden" hide-clear-button advanced-keyboard  v-model="class_date.class_date_range.start_time" close-on-complete></VueTimepicker>
-                        <!--</v-text-field>
-                        <TimePicker
-                          :disabled="disable"
-                          v-if="coach.disabled_hours"
-                          style="z-index: 2"
-                          :style="`width:${width() - 4}px !important; `"
-                          class="w-full"
-                          :minuteStep="15"
-                          format="HH:mm"
-                          @focus="class_date.class_date_range.start_time = ''"
-                          :class="
-                            class_date.class_date_range.start_time ? 'active' : ''
-                          "
-                          :disabledMinutes="
-                            (hour) => {
-                              return disabledMinutes(
-                                hour,
-                                coach_index,
-                                teach_day_index
-                              );
-                            }
-                          "
-                          placeholder="เวลาเริ่มต้น"
-                          @change="
-                            genStartTimeEndTime(
-                              $event,
-                              coach_index,
-                              teach_day_index,
-                              class_date_index
-                            )
-                          "
-                          v-model="class_date.class_date_range.start_time"
-                        ></TimePicker>
-                        <TimePicker
-                          v-else
-                          :disabled="disable"
-                          style="z-index: 2"
-                          :style="`width:${width() - 4}px !important; `"
-                          class="w-full"
-                          :minuteStep="15"
-                          format="HH:mm"
-                          :class="
-                            class_date.class_date_range.start_time ? 'active' : ''
-                          "
-                          placeholder="เวลาเริ่มต้น"
-                          @change="
-                            genStartTimeEndTime(
-                              $event,
-                              coach_index,
-                              teach_day_index,
-                              class_date_index
-                            )
-                          "
-                          v-model="class_date.class_date_range.start_time"
-                        ></TimePicker> -->
+                        <VueTimepicker 
+                          class="time-picker-hidden" 
+                          hide-clear-button 
+                          advanced-keyboard 
+                          v-model="class_date.class_date_range.start_time_object" 
+                          @change="ChangeStartDate(class_date.class_date_range, teach_day.class_date, class_date.class_date_range.start_time_object)">
+                        </VueTimepicker>
                       </v-col>
                       <v-col class="px-2" cols="12" sm="6">
                         <v-text-field
-                          :disabled="disable"
-                          :outlined="!disable"
-                          :filled="disable"
-                          dense
-                          :rules="rules.start_time"
-                          v-model="class_date.class_date_range.end_time_str"
-                        ></v-text-field>
-                        <VueTimepicker class="time-picker-hidden" disabled hide-clear-button advanced-keyboard  v-model="class_date.class_date_range.end_time" close-on-complete></VueTimepicker>
-                        <!-- <v-text-field
-                          :disabled="disable"
-                          :outlined="!disable"
-                          :filled="disable"
-                          dense
-                          style="position: absolute; display: block; z-index: 0"
-                          :style="`width:${width()}px;`"
-                          :rules="rules.end_time"
-                          @change="ChangeCourseData(course_data)"
-                          v-model="class_date.class_date_range.end_time"
-                        >
-                        </v-text-field>
-                        <TimePicker
                           disabled
-                          style="z-index: 2"
-                          :style="`width:${width() - 4}px !important; `"
-                          :minuteStep="15"
-                          format="HH:mm"
-                          :class="
-                            class_date.class_date_range.end_time ? 'active' : ''
-                          "
-                          placeholder="เวลาสิ้นสุด"
-                          @change="
-                            limitEndTime(
-                              $event,
-                              coach_index,
-                              teach_day_index,
-                              class_date_index
-                            )
-                          "
+                          :outlined="!disable"
+                          :filled="disable"
+                          dense
+                          style="position: absolute; z-index: 4"
+                          :rules="rules.end_time"
                           v-model="class_date.class_date_range.end_time"
-                        ></TimePicker> -->
+                        ></v-text-field>
+                        <VueTimepicker 
+                          class="time-picker-hidden" 
+                          disabled 
+                          hide-clear-button 
+                          advanced-keyboard  
+                          v-model="class_date.class_date_range.end_time_object" 
+                          close-on-complete></VueTimepicker> 
                       </v-col>
                     </v-row>
                   </v-col>
@@ -355,7 +282,6 @@ import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
 export default {
   components: {
     LabelCustom,
-    // TimePicker,
     VueTimepicker 
   },
   props: {
@@ -365,9 +291,6 @@ export default {
     state: { type: String, default: "create" },
     edited: { type: Boolean, default: false },
   },
-  // directives: {
-  //   "ant-input": Input,
-  // },
   data: () => ({
     select_coachs: [],
     coachs_option: [],
@@ -384,8 +307,8 @@ export default {
       course: [(val) => (val || "").length > 0 || "โปรดเลือกโค้ช"],
       class_date: [  
       (val) => (val || "").length > 0 || 'โปรดเลือกวันที่'],
-      start_time: [(val) => (val || "") > 0 || "โปรดเลือกเวลาเริ่ม"],
-      end_time: [(val) => (val || "") > 0 || "โปรดเลือกเวลาสิ้นสุด"],
+      start_time: [(val) => (val || "").length > 0 || "โปรดเลือกเวลาเริ่ม"],
+      end_time: [(val) => (val || "").length > 0 || "โปรดเลือกเวลาสิ้นสุด"],
       students: [(val) => (val || "") > 0 || "โปรดระบุจำนวนนักเรียน"],
     },
   }),
@@ -418,9 +341,33 @@ export default {
       // monitor
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
     }),
+    ChangeStartDate(date){
+      date.start_time = `${date.start_time_object.HH}:${date.start_time_object.mm}`
+      date.end_time_object.HH = (parseInt(date.start_time_object.HH) + this.course_data.course_hours)
+      date.end_time_object.mm = date.start_time_object.mm
+      date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`
+      // if(!class_dates.some(v => v.class_date_range.start_time === `${date.start_time_object.HH}:${date.start_time_object.mm}`)){
+      //   date.start_time = `${date.start_time_object.HH}:${date.start_time_object.mm}`
+      //   date.end_time_object.HH = (parseInt(date.start_time_object.HH) + this.course_data.course_hours)
+      //   date.end_time_object.mm = date.start_time_object.mm
+      //   date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`
+      // }else{
+      //   Swal.fire({
+      //     icon: "error",
+      //     title: "ไม่สามารถเปลี่ยนเวลาสอนได้",
+      //     text: "เวลาสอนนี้มีอยู่แล้ว",
+      //     showDenyButton: false,
+      //     showCancelButton: false,
+      //     confirmButtonText: "ตกลง",
+      //     cancelButtonText: "ยกเลิก",
+      //   })
+      //   date.start_time_object.HH  
+      // }
+    },
     SelectedStartDate(e){
-      const timepickerElement = e.target.parentNode.parentNode.parentNode.parentNode.parentNode.getElementsByClassName("time-picker-hidden")[0];
-      // timepickerElement.next()
+      const timepickerElement =  e.target.parentNode.parentNode.parentNode.parentNode.parentNode
+      .getElementsByClassName("time-picker-hidden")[0]
+      .getElementsByTagName("input")[0].focus()
       console.log( timepickerElement)
     },
     checkStudyByDay(e, data){
@@ -442,8 +389,6 @@ export default {
             })  
           }
         }
-       
-        console.log(data.class_open)
       }
     },
     width() {
@@ -626,12 +571,12 @@ export default {
         class_date: [
           {
             class_date_range: {
-              start_date: "",
-              menu_start_date: false,
-              end_date: "",
-              menu_end_date: false,
               start_time: "",
+              start_time_object : {HH:"",mm:""},
+              menu_start_time: false,
               end_time: "",
+              end_time_object : {HH:"",mm:""},
+              menu_end_time: false,
             },
             students: 0,
           },
@@ -647,12 +592,12 @@ export default {
       console.log(data);
       data.class_date.push({
         class_date_range: {
-          start_date: "",
-          menu_start_date: false,
-          end_date: "",
-          menu_end_date: false,
           start_time: "",
+          start_time_object : {HH:"",mm:""},
+          menu_start_time: false,
           end_time: "",
+          end_time_object : {HH:"",mm:""},
+          menu_end_time: false,
         },
         students: 0,
       });
