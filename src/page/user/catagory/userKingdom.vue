@@ -71,7 +71,7 @@
               :key="index_item"
             >
               <v-card
-                class="h-full rounded-lg"
+                class="h-full rounded-lg box-shadows"
               >
                 <!-- :src="item.categoryImg && item.categoryImg !== null ? showImg(item.categoryImg) : defaultImageUrl" -->
                 <v-img
