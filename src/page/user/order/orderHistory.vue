@@ -256,10 +256,7 @@ export default {
         },
       };
       //  let localhost = "http://localhost:3002"
-      const { data } = await axios.get(
-        `${process.env.VUE_APP_URL}/api/v1/order/history`,
-        config
-      );
+      const { data } = await axios.get( `${process.env.VUE_APP_URL}/api/v1/order/history`, config );
       console.log("data", data);
       // const mapHistory = await data.data.map(async(val)=>{
       //   if (val.courseImg && val.courseImg !== "") {

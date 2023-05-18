@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{ setFunction }}
     <template v-for="(coach, coach_index) in course_data.coachs">
       <v-card
         v-if="coach.teach_day_data.length > 0"
@@ -17,6 +18,7 @@
                 <!-- <pre>{{ teach_day }}</pre> -->
                 <v-col cols class="d-flex align-center justify-end">
                   <v-switch
+                    @click="checkStudyByDay($event,teach_day)"
                     :disabled="disable"
                     v-model="teach_day.class_open"
                     color="green"
@@ -172,12 +174,12 @@
                           :outlined="!disable"
                           :filled="disable"
                           dense
-                          style="position: absolute; display: block; z-index: 0"
-                          :style="`width:${width()}px;`"
+                          @focus="SelectedStartDate($event)"
                           :rules="rules.start_time"
-                          v-model="class_date.class_date_range.start_time"
-                        >
-                        </v-text-field>
+                          v-model="class_date.class_date_range.start_time_str"
+                        ></v-text-field>
+                        <VueTimepicker class="time-picker-hidden" hide-clear-button advanced-keyboard  v-model="class_date.class_date_range.start_time" close-on-complete></VueTimepicker>
+                        <!--</v-text-field>
                         <TimePicker
                           :disabled="disable"
                           v-if="coach.disabled_hours"
@@ -231,10 +233,19 @@
                             )
                           "
                           v-model="class_date.class_date_range.start_time"
-                        ></TimePicker>
+                        ></TimePicker> -->
                       </v-col>
                       <v-col class="px-2" cols="12" sm="6">
                         <v-text-field
+                          :disabled="disable"
+                          :outlined="!disable"
+                          :filled="disable"
+                          dense
+                          :rules="rules.start_time"
+                          v-model="class_date.class_date_range.end_time_str"
+                        ></v-text-field>
+                        <VueTimepicker class="time-picker-hidden" disabled hide-clear-button advanced-keyboard  v-model="class_date.class_date_range.end_time" close-on-complete></VueTimepicker>
+                        <!-- <v-text-field
                           :disabled="disable"
                           :outlined="!disable"
                           :filled="disable"
@@ -265,7 +276,7 @@
                             )
                           "
                           v-model="class_date.class_date_range.end_time"
-                        ></TimePicker>
+                        ></TimePicker> -->
                       </v-col>
                     </v-row>
                   </v-col>
@@ -336,13 +347,16 @@
 <script>
 import LabelCustom from "../label/labelCustom.vue";
 import { mapGetters, mapActions } from "vuex";
-import { Input, TimePicker } from "ant-design-vue";
+// import { Input, TimePicker } from "ant-design-vue";
 import moment from "moment";
 import Swal from "sweetalert2";
+import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
+
 export default {
   components: {
     LabelCustom,
-    TimePicker,
+    // TimePicker,
+    VueTimepicker 
   },
   props: {
     color: { type: String, default: "#fcfcfc" },
@@ -351,9 +365,9 @@ export default {
     state: { type: String, default: "create" },
     edited: { type: Boolean, default: false },
   },
-  directives: {
-    "ant-input": Input,
-  },
+  // directives: {
+  //   "ant-input": Input,
+  // },
   data: () => ({
     select_coachs: [],
     coachs_option: [],
@@ -385,7 +399,14 @@ export default {
     ...mapGetters({
       course_data: "CourseModules/getCourseData",
       teach_days: "CourseModules/getTeachDays",
+      course_monitors: "CourseMonitorModules/getCourseMonitor",
     }),
+    setFunction(){
+      this.GetShortCourseMonitor({
+        course_id: this.course_data.course_id,
+      });
+      return ""
+    }
   },
   methods: {
     ...mapActions({
@@ -394,7 +415,37 @@ export default {
       DeleteDayOfWeek : "CourseModules/DeleteDayOfWeek",
       DeleteTime : "CourseModules/DeleteTime",
       GetCourse: "CourseModules/GetCourse",
+      // monitor
+      GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
     }),
+    SelectedStartDate(e){
+      const timepickerElement = e.target.parentNode.parentNode.parentNode.parentNode.parentNode.getElementsByClassName("time-picker-hidden")[0];
+      // timepickerElement.next()
+      console.log( timepickerElement)
+    },
+    checkStudyByDay(e, data){
+      // console.log(e.target.click())
+      if(!data.class_open){
+        console.log(this.course_monitors.filter(v => v.m_day_of_week_id === data.day_of_week_id))
+        if(this.course_monitors.filter(v => v.m_day_of_week_id === data.day_of_week_id).length > 0){
+          if(this.course_monitors.filter(v => v.m_day_of_week_id === data.day_of_week_id).some(v => v.m_current_student > 0)){
+            data.class_open = true
+            e.target.click()
+            Swal.fire({
+              icon: "error",
+              title: "ไม่สามารถปิดวันสอนได้",
+              text: "เนื่องจากมีนักเรียนในคอร์ส",
+              showDenyButton: false,
+              showCancelButton: false,
+              confirmButtonText: "ตกลง",
+              cancelButtonText: "ยกเลิก",
+            })  
+          }
+        }
+       
+        console.log(data.class_open)
+      }
+    },
     width() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":

@@ -705,7 +705,7 @@ const CourseModules = {
         console.log(error)
       }
     },
-    // COURSE :: DELETA ARKWORK ID
+    // COURSE :: DELETE ARKWORK ID
     async RemoveArkworkByArkworkId(context,{artwork_data}){
       try{
         let config = {
@@ -777,6 +777,11 @@ const CourseModules = {
           Swal.fire({
             icon: "success",
             title: "แก้ไขคอร์สสำเร็จ"
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              await context.dispatch("GetArtworkByCourse",{course_id : course_id})
+              await context.dispatch("GetCourse",course_id)
+            }
           })
         }
       }catch(error){
@@ -1032,6 +1037,7 @@ const CourseModules = {
     // COURSE :: DETAIL
     async GetCourse(context, course_id) {
       context.commit("SetCourseIsLoading", true)
+      console.log("GetCourse")
       try {
         // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
@@ -1070,7 +1076,6 @@ const CourseModules = {
             days_of_class: [],
             days : []
           }
-          console.log("payload 1048", data.data.coachs)
           let teach_day_data = []
           for await (let coach of data.data.coachs){
             // console.log("payload 1054",payload)
@@ -1088,13 +1093,26 @@ const CourseModules = {
               }
               let class_dates = []
               for await (const time of coach_date.times) {
+                console.log(time.start, time.end)
+                let startTimePart = time.start.split(":")
+                let endTimePart = time.end.split(":")
+                let startTime = {
+                  "HH": startTimePart[0],
+                  "mm": startTimePart[1]
+                }
+                let endTime = {
+                  "HH": endTimePart[0],
+                  "mm": endTimePart[1]
+                }
                 class_dates.push({
                   class_date_range: {
                     time_id : time.timeId ? time.timeId : null,
                     day_of_week_id :time.dayOfWeekId ? time.dayOfWeekId : null,  
-                    start_time: time.start ? moment(time.start, "HH:mm") : null,
+                    start_time: time.start ? startTime : null,
+                    start_time_str : time.start,
                     menu_start_time: false,
-                    end_time:time.end ? moment(time.end, "HH:mm") : null,
+                    end_time:time.end ? endTime : null,
+                    end_time_str : time.end,
                     menu_end_time: false,
                   },
                   students: time.maximumStudent,
@@ -1146,7 +1164,8 @@ const CourseModules = {
           }
           // console.log("payload 1122",payload)
           // console.log("teach_day_data",teach_day_data)
-          for(let coach_date of data.data.dayOfWeek){
+          for(let coach_date of data.data.dayOfWeek.filter(v => v.status === 'Active')){
+            // console.log(coach_date)
             // DAYS
             let dayName = dayOfWeekArray(coach_date.dayOfWeekName)
             // console.log("payload 1127",payload.days.filter(v => v.dayName === dayName).length === 0)
@@ -1274,7 +1293,7 @@ const CourseModules = {
             }
           }
           if(payload.course_type_id === "CT_1"){
-            console.log("payload :",payload)
+            // console.log("payload :",payload)
             await context.commit("SetCourseData", payload)
           }else{
             // console.log("payload :",payload)

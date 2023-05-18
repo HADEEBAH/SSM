@@ -80,6 +80,7 @@ const coachModules = {
         console.log(error)
       }
     },
+    // ASSESSMENT POTENTIAL
     async UpdateAssessmentPotential(context, { students }) {
       context.commit("SetStudentCheckInIsLoading", true)
       try {
@@ -102,10 +103,9 @@ const coachModules = {
           if (student.potentialfiles) {
             for (const file of student.potentialfiles) {
               // file.fileName  = encodeURIComponent(file.name);
-              payloadData.append(`img_url`, file);
+              payloadData.append("img_url", file);
             }
           }
-          console.log(payload)
           payloadData.append("payload", JSON.stringify(payload))
           // let localhost = "http://localhost:3000"
           let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/potential/${student.potential.checkInPotentialId}`, payloadData, config)
@@ -133,7 +133,8 @@ const coachModules = {
         console.log(error)
       }
     },
-    async AssessmentStudent(context, { students }) {
+     // ASSESSMENT
+    async AssessmentStudent(context, { students ,  course_id, date, time_id}) {
       context.commit("SetStudentCheckInIsLoading", true)
       try {
         let config = {
@@ -146,6 +147,20 @@ const coachModules = {
         let count = 0
         console.log(students.length)
         for await (const student of students) {
+          if(student.assessment.rating_evolution === 3){
+            student.assessment.evolution = "adjust"
+          }else if(student.assessment.rating_evolution === 4){
+            student.assessment.evolution = "good"
+          }else if(student.assessment.rating_evolution === 5){
+            student.assessment.evolution = "very good"
+          }
+          if(student.assessment.rating_interest === 3){
+            student.assessment.interest = "adjust"
+          }else if(student.assessment.rating_interest === 4){
+            student.assessment.interest = "good"
+          }else if(student.assessment.rating_interest === 5){
+            student.assessment.interest = "very good"
+          }
           let payload = {
             status: student.check_in_status, // punctual, late,  leave, emergency leave, absent,
             compensation_date: student.compensation_date,
@@ -197,6 +212,14 @@ const coachModules = {
             showCancelButton: false,
             cancelButtonText: "ยกเลิก",
             confirmButtonText: "ตกลง",
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              context.dispatch("GetStudentByTimeId",{
+                course_id: course_id,
+                date: date,
+                time_id: time_id,
+              })
+            }
           })
         }
       } catch (error) {
@@ -371,13 +394,11 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // let user_detail = JSON.parse(localStorage.getItem("userDetail"));
         // let localhost ="http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/${course_id}/date/${date}`, config)
         console.log(data.data)
         if (data.statusCode === 200) {
           data.data.forEach((student, index) => {
-            //console.log("compensationStartTime : ",student.compensationStartTime )
             student.no = index + 1
             student.fullname = `${student.firstNameTh} ${student.lastNameTh}`
             student.check_in_student_id = student.checkInStudentId,
@@ -416,7 +437,6 @@ const coachModules = {
         if (data.statusCode === 201) {
           // let localhost = "http://localhost:3000"
           let stadentData = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/${course_id}/date/${date}`, config)
-          // console.log(data)
           if (stadentData.data.statusCode === 200) {
             stadentData.data.data.forEach((student, index) => {
               student.no = index + 1
@@ -504,7 +524,6 @@ const coachModules = {
                     });
                   }
                 }
-
               } else if (course.dates.dates) {
                 for (const dates of course.dates.dates) {
                   let start_time = course.period.start;
@@ -532,7 +551,6 @@ const coachModules = {
                       start_time: start_time,
                       end_time: end_time,
                       category_name: course_data.data.data.categoryNameTh,
-                      // course_option_name: data.data.optionName,
                       course_package_name: data.data.packageName,
                       course_img: course_data.data.data.courseImg
                         ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}`
@@ -555,7 +573,7 @@ const coachModules = {
         console.log(error);
       }
     },
-    async UploadFileSummary(context, { checkInCoach, files }) {
+    async UploadFileSummary(context, { checkInCoach, files, course_id, date }) {
       try {
         console.log(checkInCoach)
         console.log(files)
@@ -585,41 +603,14 @@ const coachModules = {
             showCancelButton: false,
             cancelButtonText: "ยกเลิก",
             confirmButtonText: "ตกลง",
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              context.dispatch("GetCoachCheckIn",{
+                course_id: course_id,
+                date: date,
+              })
+            }
           })
-          // .then(async (result) => {
-          //   if (result.isConfirmed) {
-          //     let user_detail =  JSON.parse(localStorage.getItem("userDetail"));
-          //     let date = new Date(checkInCoach.date).toISOString().substring(0, 10)
-          //     let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${checkInCoach.courseId}/date/${date}`,config)
-          //     if(data.statusCode === 200){
-          //       console.log( data.data)
-          //       let payload = {}
-          //       data.data.forEach((check_in)=>{
-          //         let img_url = []
-          //         if(check_in.attachment.length > 0){
-          //           for(const img of check_in.attachment ){
-          //             img_url.push({
-          //               sumAttId : img.sumAttId,
-          //               checkInCoachId: img.checkInCoachId,
-          //               attFiles: img.attFiles,
-          //               attFilesUrl : `${process.env.VUE_APP_URL}/api/v1/files/${img.attFiles}`,
-
-          //             })
-          //           }
-          //         }
-          //         payload = {
-          //           checkInCoachId : check_in.checkInCoachId,
-          //           courseId : check_in.courseId,
-          //           date: check_in.date,
-          //           summary :check_in.summary,
-          //           homework :check_in.homework,
-          //           attachment : img_url
-          //         }
-          //       })
-          //       context.commit("SetCoachCheckIn",payload)
-          //     }
-          //   }
-          // })
         }
       } catch (error) {
         console.log(error)
