@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="overflow-x-hidden overflow-y-hidden">
     <v-row dense class="mt-5">
-      <!-- {{ show_by_id }} -->
+      <!-- <pre>{{ show_by_id }}</pre> -->
       <v-col cols="12">
         <headerPage :breadcrumbs="breadcrumbs"></headerPage>
         <v-card class="rounded-lg">
