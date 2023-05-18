@@ -17,7 +17,8 @@
 
                 <v-card class="rounded-lg my-3" color="#FCFCFC">
                   <v-card-text>
-                    <v-row justify="between">
+                    <!-- justify="between" -->
+                    <v-row>
                       <v-col cols="12" sm="6">
                         <label-custom text="Username(English)"></label-custom>
                         <v-text-field
@@ -1041,25 +1042,25 @@ export default {
   },
 
   mounted() {
-    if (this.$route.params.action == "edit") {
-      this.isMatch = true;
-      if (
-        this.user_data.selectedbox ==
-        this.user_data.privilege.includes("นักเรียน")
-      ) {
-        console.log("นักเรียน");
-        this.user_data.isCardOpen = true;
-      }
-      if (this.user_data.selectedbox == false) {
-        console.log("ปิดนักเรียน");
-        this.user_data.isCardOpen = false;
-      } else if (
-        this.user_data.selectedbox ==
-        this.user_data.privilege.includes("ผู้ปกครอง")
-      ) {
-        this.user_data.isCardParentOpen = true;
-      }
-    }
+    // if (this.$route.params.action == "edit") {
+    //   this.isMatch = true;
+    //   if (
+    //     this.user_data.selectedbox ==
+    //     this.user_data.privilege.includes("นักเรียน")
+    //   ) {
+    //     console.log("นักเรียน");
+    //     this.user_data.isCardOpen = true;
+    //   }
+    //   if (this.user_data.selectedbox == false) {
+    //     console.log("ปิดนักเรียน");
+    //     this.user_data.isCardOpen = false;
+    //   } else if (
+    //     this.user_data.selectedbox ==
+    //     this.user_data.privilege.includes("ผู้ปกครอง")
+    //   ) {
+    //     this.user_data.isCardParentOpen = true;
+    //   }
+    // }
 
     this.GetDataRelationsManagement(this.show_by_id);
     console.log(
@@ -1518,7 +1519,7 @@ export default {
               config
             );
             if (data.statusCode === 200) {
-              if (data.data !== "Cannot update: Relation Already exists") {
+              if (data.data !== "Can not change role relations is already.") {
                 Swal.fire({
                   icon: "success",
                   title: "บันทึกสำเร็จ",
@@ -1537,13 +1538,12 @@ export default {
                 this.GetShowById(this.$route.params.account_id);
               }
               // else if (
-              //   data.data &&
-              //   data.message === "Relation Already exists"
+              //   data.data === "Can not change role relations is already."
               // ) {
               //   Swal.fire({
               //     icon: "error",
               //     title: "เกิดข้อผิดพลาด",
-              //     text: "USER นี้มีความสัมพันธ์แล้ว!",
+              //     text: "เนื่องจากไม่สามารถเปลี่ยนบทบาทได้!",
               //   }).then(async (result) => {
               //     if (result.isConfirmed) {
               //       this.$router.push({
@@ -1557,32 +1557,60 @@ export default {
               //   });
               //   this.GetShowById(this.$route.params.account_id);
               // }
-              else if (data.data === "Cannot update: Relation Already exists") {
-                Swal.fire({
-                  icon: "success",
-                  title: "บันทึกสำเร็จ22",
-                }).then(async (result) => {
-                  if (result.isConfirmed) {
-                    this.$router.push({
-                      name: "UserDetail",
-                      params: {
-                        action: "view",
-                        account_id: this.$route.params.account_id,
-                      },
-                    });
-                  }
-                });
-                this.GetShowById(this.$route.params.account_id);
-              }
             } else {
+              // console.log("error", error);
+
               throw { message: data.data };
             }
-          } catch (error) {
-            console.log("catch");
+          } catch ({ response }) {
+            // catch (error) {
+            //   console.log("catch", error);
+            //   if (
+            //         data.data === "Can not change role relations is already."
+            //       ) {
+            //         Swal.fire({
+            //           icon: "error",
+            //           title: "เกิดข้อผิดพลาด",
+            //           text: "เนื่องจากไม่สามารถเปลี่ยนบทบาทได้!",
+            //         }).then(async (result) => {
+            //           if (result.isConfirmed) {
+            //             this.$router.push({
+            //               name: "UserDetail",
+            //               params: {
+            //                 action: "view",
+            //                 account_id: this.$route.params.account_id,
+            //               },
+            //             });
+            //           }
+            //         });
+            //         this.GetShowById(this.$route.params.account_id);
+            //       }
 
+            //   Swal.fire({
+            //     icon: "error",
+            //     title: error.data.data.message,
+            //   });
+            // }
+            if (
+              response?.data?.message ===
+              "Can not change role relations is already."
+            ) {
+              this.error_message = "ไม่สามารถเปลี่ยนบทบาทได้!";
+              this.$router.push({
+                name: "UserDetail",
+                params: {
+                  action: "view",
+                  account_id: this.$route.params.account_id,
+                },
+              });
+            } else {
+              this.error_message = "เกิดข้อผิดพลาด";
+            }
+
+            console.log("error=>", response);
             Swal.fire({
               icon: "error",
-              title: error.data.data.message,
+              title: this.error_message,
             });
           }
         } else {

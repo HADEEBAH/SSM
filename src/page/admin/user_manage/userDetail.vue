@@ -1304,16 +1304,13 @@ import userManageForm from "@/components/user_menage/userManageForm.vue";
 import { CheckFileSize } from "@/functions/functions";
 import axios from "axios";
 import VueCookie from "vue-cookie";
-
 import { mapActions, mapGetters } from "vuex";
-// import LabelCustom from '../../../components/label/labelCustom.vue';
 export default {
   components: {
     headerPage,
     headerCard,
     userManageForm,
     LabelCustom,
-    // LabelCustom,
   },
   data: () => ({
     data_local: JSON.parse(localStorage.getItem("userDetail")),
