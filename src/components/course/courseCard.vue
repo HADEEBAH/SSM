@@ -594,32 +594,45 @@
                     :outlined="!disable"
                     :filled="disable"
                     dense
-                    style="position: absolute; display: block; z-index: 0"
                     :style="`width:${width()}px;`"
-                    @focus="isTimePickerVisible = true"
+                    style="position: absolute; display: block; z-index: 4"
+                    @focus="SelectedStartDate($event,course_data.coachs[0].period.start_time)"
                     :rules="rules.start_time"
                     v-model="course_data.coachs[0].period.start_time"
                   >
                   </v-text-field>
-                  <TimePicker
-                    :disabled="disable"
-                    :minuteStep="15"
-                    format="HH:mm"
-                    style="z-index: 2"
-                    :style="`width:${width() - 4}px !important;`"
-                    :class="
-                      course_data.coachs[0].period.start_time ? 'active' : ''
-                    "
-                    placeholder="เวลาเริ่มต้น"
-                    @change="genStartTimeEndTime($event)"
-                    v-model="course_data.coachs[0].period.start_time"
-                  ></TimePicker>
+                  <VueTimepicker 
+                    class="time-picker-hidden" 
+                    hide-clear-button 
+                    advanced-keyboard 
+                    :style="`width:${width()}px;`"
+                    v-model="course_data.coachs[0].period.start_time_object" 
+                    @change="ChangeStartDate(course_data.coachs[0].period)">
+                  </VueTimepicker>
                 </v-col>
                 <v-col cols="auto" class="mt-2 px-0"
                   ><v-icon>mdi-minus</v-icon></v-col
                 >
-                <v-col>
+                <v-col >
                   <v-text-field
+                    disabled
+                    :outlined="!disable"
+                    :filled="disable"
+                    dense
+                    :style="`width:${width()}px;`"
+                    style="position: absolute; display: block; z-index: 4"
+                    :rules="rules.end_time"
+                    v-model="course_data.coachs[0].period.end_time"
+                  >
+                  </v-text-field>
+                  <VueTimepicker 
+                    class="time-picker-hidden" 
+                    hide-clear-button 
+                    advanced-keyboard 
+                    v-model="course_data.coachs[0].period.end_time_object" 
+                  >
+                  </VueTimepicker>
+                  <!-- <v-text-field
                     :disabled="disable"
                     :outlined="!disable"
                     :filled="disable"
@@ -644,7 +657,7 @@
                     placeholder="เวลาสิ้นสุด"
                     @change="limitEndTime($event)"
                     v-model="course_data.coachs[0].period.end_time"
-                  ></TimePicker>
+                  ></TimePicker> -->
                 </v-col>
               </v-row>
             </v-col>
@@ -688,7 +701,8 @@
 import LabelCustom from "@/components/label/labelCustom.vue";
 import headerCard from "@/components/header/headerCard.vue";
 import { mapGetters, mapActions } from "vuex";
-import { Input, TimePicker } from "ant-design-vue";
+// import { Input, TimePicker } from "ant-design-vue";
+import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
 import Swal from "sweetalert2";
 import {
   inputValidation,
@@ -707,11 +721,11 @@ export default {
   components: {
     LabelCustom,
     headerCard,
-    TimePicker,
+    VueTimepicker,
   },
-  directives: {
-    "ant-input": Input,
-  },
+  // directives: {
+  //   "ant-input": Input,
+  // },
   data: () => ({
     today: new Date(),
     preview_url: null,
@@ -750,8 +764,8 @@ export default {
       coach: [(val) => (val || "").length > 0 || "โปรดระบุโค้ช"],
       start_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันที่เริ่ม"],
       end_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันที่สิ้นสุด"],
-      start_time: [(val) => (val || "") > 0 || "โปรดเลือกเวลาเริ่ม"],
-      end_time: [(val) => (val || "") > 0 || "โปรดเลือกเวลาสิ้นสุด"],
+      start_time: [(val) => (val || "").length > 0 || "โปรดเลือกเวลาเริ่ม"],
+      end_time: [(val) => (val || "").length > 0 || "โปรดเลือกเวลาสิ้นสุด"],
       student_recived: [
         (val) => (val || "") > 0 || "โปรดระบุจำนวนนักเรียนที่รับได้",
         (val) => val < 1000 || "จำนวนนักเรียนที่รับได้เกินกว่าที่กำหนด",
@@ -809,7 +823,18 @@ export default {
     removeChip(item, value) {
       value.splice(value.indexOf(item), 1);
     },
-
+    SelectedStartDate(e){
+      e.target.parentNode.parentNode.parentNode.parentNode.parentNode
+      .getElementsByClassName("time-picker-hidden")[0]
+      .getElementsByTagName("input")[0].focus()
+    },
+    ChangeStartDate(date){
+      console.log(date)
+      date.start_time = `${date.start_time_object.HH}:${date.start_time_object.mm}`
+      date.end_time_object.HH = `${(parseInt(date.start_time_object.HH) + this.course_data.course_hours)}`
+      date.end_time_object.mm = date.start_time_object.mm
+      date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`
+    },
     width() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":

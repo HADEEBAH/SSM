@@ -76,8 +76,10 @@ const CourseModules = {
                 {
                   class_date_range: {
                     start_time: "",
+                    start_time_object : {HH:"",mm:""},
                     menu_start_time: false,
                     end_time: "",
+                    end_time_object : {HH:"",mm:""},
                     menu_end_time: false,
                   },
                   students: 0,
@@ -99,7 +101,9 @@ const CourseModules = {
           },
           period: {
             start_time: "",
+            start_time_object : {HH:"",mm:""},
             end_time: "",
+            end_time_object : {HH:"",mm:""},
           },
         },
       ],
@@ -240,8 +244,10 @@ const CourseModules = {
                   {
                     class_date_range: {
                       start_time: "",
+                      start_time_object : {HH:"",mm:""},
                       menu_start_time: false,
                       end_time: "",
+                      end_time_object : {HH:"",mm:""},
                       menu_end_time: false,
                     },
                     students: 0,
@@ -263,7 +269,9 @@ const CourseModules = {
             },
             period: {
               start_time: "",
+              start_time_object : {HH:"",mm:""},
               end_time: "",
+              end_time_object : {HH:"",mm:""}
             },
           },
         ],
@@ -575,8 +583,8 @@ const CourseModules = {
                 "dayOfWeekId": date.day_of_week_id,
                 "timeId":class_date_data.class_date_range.time_id,
                 "classDateRange": {
-                  "startTime": class_date_data.class_date_range.start_time ? moment(class_date_data.class_date_range.start_time).format('HH:mm') : null,
-                  "endTime": class_date_data.class_date_range.end_time ? moment(class_date_data.class_date_range.end_time).format('HH:mm') : null,
+                  "startTime": class_date_data.class_date_range.start_time ?class_date_data.class_date_range.start_time : null,
+                  "endTime": class_date_data.class_date_range.end_time ? class_date_data.class_date_range.end_time : null,
                 },
                 "students": parseInt(class_date_data.students)
               })
@@ -642,6 +650,10 @@ const CourseModules = {
           Swal.fire({
             icon: "success",
             title: "แก้ไขคอร์สสำเร็จ"
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              await context.dispatch("GetCourse",course_id)
+            }
           })
         }
         }catch(error){
@@ -1063,8 +1075,8 @@ const CourseModules = {
             price_course: data.data.coursePrice,
             course_register_start_date: data.data.courseRegisterStartDate? moment(data.data.courseRegisterStartDate).format("YYYY-MM-DD") : null,
             course_register_end_date: data.data.courseRegisterEndDate ? moment(data.data.courseRegisterEndDate).format("YYYY-MM-DD") : null,
-            course_period_start_date: data.data.coursePeriodStartDate ? moment(data.data.coursePeriodStartDate, "HH:mm") : null,
-            course_period_end_date: data.data.coursePeriodEndDate ? moment(data.data.coursePeriodEndDate, "HH:mm") : null,
+            course_period_start_date: data.data.coursePeriodStartDate ? data.data.coursePeriodStartDate : null,
+            course_period_end_date: data.data.coursePeriodEndDate ? data.data.coursePeriodEndDate : null,
             course_per_time: data.data.coursePerTime,
             student_recived: data.data.courseStudentRecived,
             course_study_end_date: data.data.courseStudyEndDate,
@@ -1108,11 +1120,11 @@ const CourseModules = {
                   class_date_range: {
                     time_id : time.timeId ? time.timeId : null,
                     day_of_week_id :time.dayOfWeekId ? time.dayOfWeekId : null,  
-                    start_time: time.start ? startTime : null,
-                    start_time_str : time.start,
+                    start_time: time.start,
+                    start_time_object : time.start ? startTime : null,
                     menu_start_time: false,
-                    end_time:time.end ? endTime : null,
-                    end_time_str : time.end,
+                    end_time: time.end ,
+                    end_time_object : time.end ? endTime : null,
                     menu_end_time: false,
                   },
                   students: time.maximumStudent,
@@ -1126,6 +1138,16 @@ const CourseModules = {
                 course_coach_id: coach_date.courseCoachId,
                 class_date: class_dates,
               })
+            }
+            let startTimePart = data.data.coursePeriodStartDate.split(":")
+            let endTimePart = data.data.coursePeriodEndDate.split(":")
+            let startTime = {
+              "HH": startTimePart[0],
+              "mm": startTimePart[1]
+            }
+            let endTime = {
+              "HH": endTimePart[0],
+              "mm": endTimePart[1]
             }
             payload.coachs.push(
                 {
@@ -1156,7 +1178,9 @@ const CourseModules = {
                   },
                   period: {
                     start_time: data.data.coursePeriodStartDate ? moment(data.data.coursePeriodStartDate, "HH:mm") : null,
+                    start_time_object : data.data.coursePeriodStartDate ? startTime : null,
                     end_time: data.data.coursePeriodEndDate ? moment(data.data.coursePeriodEndDate, "HH:mm") : null,
+                    end_time_object :data.data.coursePeriodEndDate ? endTime : null,
                   },
                 },
             )
@@ -1353,8 +1377,8 @@ const CourseModules = {
               "courseStudyEndDate": coach.class_date_range.end_date,
             },
             "period": {
-              "coursePeriodStartDate": coach.period.start_time ? moment(coach.period.start_time).format('HH:mm') : '',
-              "coursePeriodEndDate": coach.period.end_time ? moment(coach.period.end_time).format('HH:mm') : '',
+              "coursePeriodStartDate": coach.period.start_time ? coach.period.start_time : '',
+              "coursePeriodEndDate": coach.period.end_time ? coach.period.end_time : '',
             }
           })
           // Day Of Week
@@ -1363,14 +1387,14 @@ const CourseModules = {
             teach_day.class_date.forEach((date) => {
               if (course.course_type_id === "CT_1") {
                 times.push({
-                  "start": moment(date.class_date_range.start_time).format('HH:mm'),
-                  "end": moment(date.class_date_range.end_time).format('HH:mm'),
+                  "start":date.class_date_range.start_time,
+                  "end": date.class_date_range.end_time,
                   "maximumStudent": date.students
                 })
               } else {
                 times.push({
-                  "start": moment(coach.period.start_time).format('HH:mm'),
-                  "end": moment(coach.period.end_time).format('HH:mm'),
+                  "start": coach.period.start_time,
+                  "end": coach.period.end_time,
                   "maximumStudent": course.student_recived
                 })
               }

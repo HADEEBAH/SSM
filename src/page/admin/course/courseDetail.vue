@@ -1963,10 +1963,7 @@ export default {
               course_data: this.course_data,
             }).then(() => {
               this.course_edit = false;
-              this.GetCourse(this.$route.params.course_id);
-              this.GetArtworkByCourse({
-                course_id: this.$route.params.course_id,
-              });
+              
             });
           }
         });

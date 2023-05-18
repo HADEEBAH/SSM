@@ -67,6 +67,10 @@
     height: 24px !important;
     width: 24px !important;
 }
-.time-picker-hidden{
-    /* display: none; */
+.time-picker-hidden input{
+    z-index: 0 !important;
+    position: relative;
+    height: 40px !important;
+    border: none  !important;
+    color: transparent !important;
 }
