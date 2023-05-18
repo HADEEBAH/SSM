@@ -140,6 +140,7 @@ const RegisterModules = {
             console.log(type)
             try {
                 let phone_number = context.state.user_one_id.phone_number.replaceAll("-", "")
+                // let { data } = await axios.post(` http://localhost:3000/api/v1/register`, {
                 let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/register`, {
                     "accountTitleTh": "",
                     "firstNameTh": context.state.user_one_id.firstname_th,
@@ -164,6 +165,8 @@ const RegisterModules = {
                             console.log(data.data)
                             // let localhost = "http://192.168.74.25:3000"
                             let user = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account?username=${context.state.user_one_id.username}&status=active`)
+                            // let user = await axios.get(`http://localhost:3000/api/v1/account?username=${context.state.user_one_id.username}&status=active`)
+
                             if (user.data.statusCode === 200) {
                                 console.log("user :", user.data)
                                 context.commit("SetLastUserRegistered", {
@@ -230,20 +233,22 @@ const RegisterModules = {
             try {
                 let phone_number = context.state.user_one_id.phone_number.replaceAll("-", "")
                 // let localhost = "http://localhost:3000"
-                let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/register`, {
-                    "accountTitleTh": "",
-                    "firstNameTh": context.state.user_one_id.firstname_th,
-                    "lastNameTh": context.state.user_one_id.lastname_th,
-                    "accountTitleEng": "",
-                    "firstNameEng": context.state.user_one_id.firstname_en,
-                    "lastNameEng": context.state.user_one_id.lastname_en,
-                    "idCardType": "",
-                    "idCardNum": "",
-                    "email": "",
-                    "mobileNo": phone_number,
-                    "userName": context.state.user_one_id.username,
-                    "passWord": context.state.user_one_id.password
-                })
+                // let { data } = await axios.post(`http://localhost:3000/api/v1/register`
+                let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/register`
+                    , {
+                        "accountTitleTh": "",
+                        "firstNameTh": context.state.user_one_id.firstname_th,
+                        "lastNameTh": context.state.user_one_id.lastname_th,
+                        "accountTitleEng": "",
+                        "firstNameEng": context.state.user_one_id.firstname_en,
+                        "lastNameEng": context.state.user_one_id.lastname_en,
+                        "idCardType": "",
+                        "idCardNum": "",
+                        "email": "",
+                        "mobileNo": phone_number,
+                        "userName": context.state.user_one_id.username,
+                        "passWord": context.state.user_one_id.password
+                    })
                 if (data.statusCode === 201) {
                     Swal.fire({
                         icon: 'success',

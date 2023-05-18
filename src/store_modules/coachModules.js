@@ -394,8 +394,8 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let localhost ="http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/coachmanagement/course/${course_id}/date/${date}`, config)
+        // let localhost ="http://localhost:3000"
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/${course_id}/date/${date}`, config)
         console.log(data.data)
         if (data.statusCode === 200) {
           data.data.forEach((student, index) => {

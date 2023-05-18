@@ -299,7 +299,7 @@ export default {
       },
       {
         icon: "mdi-history",
-        title: "ประวัติการสั่งซื้อ",
+        title: "ประวัติการลงทะเบียน",
         to: "orderHistory",
         roles: [],
       },

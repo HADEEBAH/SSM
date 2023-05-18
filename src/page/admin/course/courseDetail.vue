@@ -81,7 +81,7 @@
                 width="72"
                 src="../../../assets/course/upload_file.png"
               ></v-img>
-              <span class="text-lg font-bold"> งานศิลปะ </span>
+              <span class="text-lg font-bold"> Learning Journey </span>
             </template>
           </img-card>
         </v-col>
@@ -169,7 +169,7 @@
                 <v-card-text class="pt-0">
                   <v-divider class="mb-3"></v-divider>
                   <v-form ref="coach_form" v-model="coachValidate">
-                     <!-- COACH -->
+                    <!-- COACH -->
                     <coachs-card
                       :disable="!course_edit"
                       :coachs="coachs"
@@ -332,7 +332,7 @@
                     </v-col>
                   </v-row>
                 </v-card-text>
-                <headerCard title="งานศิลปะ"></headerCard>
+                <headerCard title="Learning Journey"></headerCard>
                 <v-card-text
                   class="border-dashed border-2 border-blue-600 rounded-lg"
                 >
@@ -401,7 +401,7 @@
                       cols="12"
                       class="flex align-center justify-center text-h5"
                     >
-                      อัพโหลดภาพงานศิลปะ
+                      อัพโหลดภาพ Learning Journey
                     </v-col>
                     <v-col
                       cols="12"
@@ -694,7 +694,11 @@
                                         <v-chip
                                           text-color="white"
                                           :color="
-                                            date.cpo.packageId === 'PACK_1' ? 'primary' : date.cpo.packageId === 'PACK_2' ? 'pink' : '#ED7D2B'
+                                            date.cpo.packageId === 'PACK_1'
+                                              ? 'primary'
+                                              : date.cpo.packageId === 'PACK_2'
+                                              ? 'pink'
+                                              : '#ED7D2B'
                                           "
                                         >
                                           {{ date.cpo.packageName }}
@@ -831,9 +835,7 @@
                                             )"
                                             :key="student_index"
                                           >
-                                        
                                             <v-card-text class="pa-2">
-                                              
                                               <v-row
                                                 dense
                                                 class="text-md font-bold flex align-center"
@@ -924,7 +926,6 @@
                                             ) in date.students"
                                             :key="`${student_index}-index`"
                                           >
-                                            
                                             <v-card-text class="pa-2">
                                               <v-row
                                                 dense
@@ -1548,9 +1549,9 @@ export default {
     loadingOverlay,
   },
   data: () => ({
-    courseValidate : false,
-    coachValidate : false,
-    packageValidate : false,
+    courseValidate: false,
+    coachValidate: false,
+    packageValidate: false,
 
     slide_group: null,
     show_dialog_assessmet: false,
@@ -1602,7 +1603,7 @@ export default {
         img: "../../../assets/course/package.png",
       },
       {
-        label: "งานศิลปะ",
+        label: "Learning Journey",
         value: "arkwork",
         img: "../../../assets/course/course.png",
       },
@@ -1719,7 +1720,7 @@ export default {
       GetStudentByDate: "CourseModules/GetStudentByDate",
       GetStudentReserveByCourseId: "CourseModules/GetStudentReserveByCourseId",
       GetStudentPotentialByCoach: "CourseModules/GetStudentPotentialByCoach",
-      RemovePrivilageByCourseID  : "CourseModules/RemovePrivilageByCourseID"
+      RemovePrivilageByCourseID: "CourseModules/RemovePrivilageByCourseID",
     }),
     readFile(file) {
       return `${process.env.VUE_APP_URL}/api/v1/files/${file}`;
@@ -1789,11 +1790,11 @@ export default {
       this.privilege_file = this.$refs.fileInputPrivilege.files[0];
       const allowedTypes = ["image/png", "image/jpeg"];
       if (CheckFileSize(this.privilege_file) === true) {
-        const fileType = this.privilege_file.type; 
+        const fileType = this.privilege_file.type;
         // console.log(fileType)
-        if (fileType === 'image/png' || fileType === 'image/jpeg') {
+        if (fileType === "image/png" || fileType === "image/jpeg") {
           this.course_data.privilege_file =
-          this.$refs.fileInputPrivilege.files[0];
+            this.$refs.fileInputPrivilege.files[0];
           this.ChangeCourseData(this.course_data);
           if (
             this.privilege_file &&
@@ -1806,7 +1807,7 @@ export default {
             };
             reader.readAsDataURL(this.privilege_file);
           }
-        }else{
+        } else {
           Swal.fire({
             icon: "error",
             title: "อัพโหลดเฉพาะไฟล์รูปภาพ(png, jpeg)เท่านั้น",
@@ -1814,9 +1815,8 @@ export default {
             showCancelButton: false,
             confirmButtonText: "ตกลง",
             cancelButtonText: "ยกเลิก",
-          })
+          });
         }
-        
       }
     },
     showDialogAssessment(student_data, date) {
@@ -1881,7 +1881,7 @@ export default {
     removePrivilegeFile() {
       this.preview_privilege_url = null;
     },
-    removePrivilegeFileData(){
+    removePrivilegeFileData() {
       Swal.fire({
         icon: "question",
         title: "ต้องการลบไฟล์นี้ใช่หรือไม่",
@@ -1891,10 +1891,12 @@ export default {
         cancelButtonText: "ยกเลิก",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          this.RemovePrivilageByCourseID({ course_id: this.$route.params.course_id }).then(()=>{
-            this.course_data.course_img_privilege = null
+          this.RemovePrivilageByCourseID({
+            course_id: this.$route.params.course_id,
+          }).then(() => {
+            this.course_data.course_img_privilege = null;
             this.preview_privilege_url = null;
-          })
+          });
         }
       });
     },
@@ -1918,8 +1920,8 @@ export default {
       this.ChangeCourseData(this.course_data);
     },
     CourseUpdateDetail() {
-      this.$refs.course_form.validate()
-      if(this.courseValidate){
+      this.$refs.course_form.validate();
+      if (this.courseValidate) {
         Swal.fire({
           icon: "question",
           title: "ต้องการแก้ไขคอร์สใช่มั้ย",
@@ -1944,9 +1946,9 @@ export default {
       }
     },
     CourseUpdateCoach() {
-      this.$refs.coach_form.validate()
-      console.log(this.coachValidate)
-      if(this.coachValidate){
+      this.$refs.coach_form.validate();
+      console.log(this.coachValidate);
+      if (this.coachValidate) {
         Swal.fire({
           icon: "question",
           title: "ต้องการแก้ไขคอร์สใช่มั้ย",
@@ -1969,11 +1971,10 @@ export default {
           }
         });
       }
-     
     },
-    CourseUpdatePackage() { 
-      this.$refs.package_form.validate()
-      if(this.packageValidate){
+    CourseUpdatePackage() {
+      this.$refs.package_form.validate();
+      if (this.packageValidate) {
         Swal.fire({
           icon: "question",
           title: "ต้องการแก้ไขคอร์สใช่มั้ย",
@@ -1996,7 +1997,6 @@ export default {
           }
         });
       }
-    
     },
     async CourseUpdateArkwork() {
       await Swal.fire({
