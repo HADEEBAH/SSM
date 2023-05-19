@@ -173,7 +173,7 @@ export default {
   }),
   watch: {
     events(val) {
-      console.log("val ->>>", val);
+      // console.log("val ->>>", val);
       this.event_date.push(val);
     },
   },
@@ -321,7 +321,7 @@ export default {
           month: month,
           day: day,
         });
-        console.log(this.events_data, "<----");
+        // console.log(this.events_data, "<----");
       });
 
       let color = "";

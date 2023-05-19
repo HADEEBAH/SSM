@@ -170,6 +170,7 @@ const myCourseModules = {
                     context.commit("SetStudentsLoading", false)
                     const dataCourseSchedule = { dates: [] };
                     for (const course of data.data) {
+                        console.log("course", course);
                         for (const date of course.dates.date) {
                             dataCourseSchedule.dates.push({
                                 start: date.replace(" 00:00:00", "") + ' ' + course.period.start,
@@ -193,6 +194,7 @@ const myCourseModules = {
                         context.commit("SetMyCourseStudentId", '')
                     } else {
                         context.commit("SetStudentData", data.data)
+                        console.log("SetStudentData", data.data)
                     }
                     context.commit("SetcourseSchedule", dataCourseSchedule);
                     context.commit("SetStudentsLoading", false)
