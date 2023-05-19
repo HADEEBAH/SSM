@@ -545,7 +545,8 @@ const CourseModules = {
         if (typeof course_data.course_img == "object") {
           payloadData.append("img_url", course_data.course_img)
         }
-        let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-course/${course_id}`, payloadData, config)
+        // let localhost = "http://192.168.74.25:3000"
+        let {data} = await axios.patch(`${process}/api/v1/manage/update-course/${course_id}`, payloadData, config)
         // console.log(data)
         if(data.statusCode === 200){
           Swal.fire({
