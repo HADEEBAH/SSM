@@ -240,7 +240,7 @@
             </v-row>
             <v-row dense>
               <v-col align="center"
-                @click="OpenAssessment(course)"
+                @click="!course.show_assessment ? OpenAssessment(course) :  course.show_assessment = false"
                 class="cursor-pointer"
                 >ประเมินนักเรียน
                 <v-icon color="#ff6b81">{{
@@ -248,7 +248,7 @@
                 }}</v-icon></v-col
               >
               <v-col align="center"
-                @click="OpenAssessmentPotential(course)"
+                @click="!course.show_assessment_pantential ? OpenAssessmentPotential(course) : course.show_assessment_pantential = false"
                 class="cursor-pointer"
                 >ประเมินศักยภาพ
                 <v-icon color="#ff6b81">{{
@@ -258,7 +258,7 @@
                 }}</v-icon></v-col
               >
               <v-col align="center"
-                @click="OpenSummary(course)"
+                @click="!course.show_summary  ? OpenSummary(course) : course.show_summary = false "
                 class="cursor-pointer"
                 >บันทึกสรุปการสอน
                 <v-icon color="#ff6b81">{{
@@ -1571,11 +1571,6 @@ export default {
         course_id: course.course_id,
         date: course.start_date,
       });
-      if (course.show_summary) {
-        course.show_summary = false;
-      } else {
-        course.show_summary = true;
-      }
       course.show_summary = !course.show_summary
       course.show_assessment = false;
       course.show_assessment_pantential = false;
@@ -1589,11 +1584,6 @@ export default {
       });
       course.show_summary = false;
       course.show_assessment = !course.show_assessment
-      // if (course.show_assessment) {
-      //   course.show_assessment = false;
-      // } else {
-      //   course.show_assessment = true;
-      // }
       course.show_assessment_pantential = false;
       
     },
@@ -1607,11 +1597,6 @@ export default {
       course.show_summary = false;
       course.show_assessment = false;
       course.show_assessment_pantential = !course.show_assessment_pantential
-      // if (course.show_assessment_pantential) {
-      //   course.show_assessment_pantential = false;
-      // } else {
-      //   course.show_assessment_pantential = true;
-      // }
     },
     genDate(date) {
       // console.log(date)

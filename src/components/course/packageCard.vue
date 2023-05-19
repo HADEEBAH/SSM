@@ -205,6 +205,7 @@
                     <v-checkbox
                       :disabled="disable"
                       v-model="option.discount"
+                      @input="calNetPrice(option)"
                       label="มีส่วนลด"
                     ></v-checkbox>
                   </v-col>
