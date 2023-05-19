@@ -494,7 +494,7 @@
                       <v-col>
                         พัฒนาการ / การบ้าน :
                         <span class="font-semibold">{{
-                          coach_check_in.homework ? coach_check_in.summar : "-"
+                          coach_check_in.homework ? coach_check_in.homework : "-"
                         }}</span>
                       </v-col>
                     </v-row>
