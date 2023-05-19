@@ -339,12 +339,11 @@
                       <v-col cols="12" sm align="left" class="font-semibold">
                         พัฒนาการ 
                         <v-rating
-                          v-model="student.assessment.rating_evolution"
                           background-color="pink lighten-3"
-                          @input="CheckRating($event, student.checkInStudentId, 'assessment_evolution')"
                           color="pink"
                           large
-                          length="5"
+                          :value="evolution_options.filter(v => v.value === student.assessment.evolution).length > 0 ? evolution_options.filter(v => v.value === student.assessment.evolution)[0].num_value  : 0"
+                          :length="evolution_options.filter(v => v.value === student.assessment.evolution).length > 0 ? evolution_options.filter(v => v.value === student.assessment.evolution)[0].num_value  : 0"
                           small
                           readonly
                         ></v-rating>
@@ -352,12 +351,11 @@
                       <v-col cols="12" sm  align="left" class="font-semibold"
                         >ความสนใจ 
                         <v-rating
-                          v-model="student.assessment.rating_interest"
                           background-color="pink lighten-3" 
-                          @input="CheckRating($event, student.checkInStudentId, 'assessment_interest')"
                           color="pink"
                           large
-                          length="5"
+                          :value="interest_options.filter(v => v.value === student.assessment.interest).length > 0 ? interest_options.filter(v => v.value === student.assessment.interest)[0].num_value : 0"
+                          :length="interest_options.filter(v => v.value === student.assessment.interest).length > 0 ? interest_options.filter(v => v.value === student.assessment.interest)[0].num_value  : 0"
                           small
                           readonly
                         ></v-rating>
@@ -429,14 +427,14 @@
                         <v-col align="left" class="font-semibold"
                           >พัฒนาการ :
                           <v-rating
-                            v-model="student.potential.rating_evolution"
                             background-color="pink lighten-3"
-                            @input="CheckRating($event, student.checkInStudentId, 'potential_evolution')"
                             color="pink"
                             large
                             readonly
                             small
-                            length="5"
+                            :value="evolution_options.filter(v => v.value === student.potential.evolution).length > 0 ? evolution_options.filter(v => v.value === student.potential.evolution)[0].num_value : 0"
+                            :length="evolution_options.filter(v => v.value === student.potential.evolution).length > 0 ? evolution_options.filter(v => v.value === student.potential.evolution)[0].num_value : 0"
+                        
                           ></v-rating>
                         </v-col>
                         <v-col col="12" sm="auto">
@@ -1394,6 +1392,16 @@ export default {
     user_detail: "",
     tab: "teaching list",
     today: new Date(),
+    evolution_options: [
+      { label: "ดีมาก", value: "very good", num_value : 5, },
+      { label: "ดี", value: "good", num_value : 4, },
+      { label: "ปรับปรุง", value: "adjust", num_value : 3, },
+    ],
+    interest_options: [
+      { label: "ดีมาก", value: "very good", num_value : 5, },
+      { label: "ดี", value: "good", num_value : 4, },
+      { label: "ปรับปรุง", value: "adjust", num_value : 3, },
+    ],
     tabs: [
       { label: "รายการสอนวันนี้", value: "teaching list" },
       { label: "การสอนของฉัน", value: "my teaching" },
