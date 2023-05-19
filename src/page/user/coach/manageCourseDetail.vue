@@ -1439,12 +1439,7 @@ export default {
             files: this.coach_check_in.summary_files,
             course_id: this.$route.params.courseId,
             date: this.$route.params.date,
-          }).then(async () => {
-            await this.GetCoachCheckIn({
-              course_id: this.$route.params.courseId,
-              date: this.$route.params.date,
-            });
-          });
+          })
         }
       });
     },
@@ -1461,13 +1456,10 @@ export default {
         if (result.isConfirmed) {
           await this.UpdateAssessmentPotential({
             students: this.student_check_in,
-          }).then(async () => {
-            await this.GetStudentByTimeId({
-              course_id: this.$route.params.courseId,
-              date: this.$route.params.date,
-              time_id: this.$route.params.timeId,
-            });
-          });
+            course_id: this.$route.params.courseId,
+            date: this.$route.params.date,
+            time_id: this.$route.params.timeId,
+          })
         }
       });
     },
@@ -1517,8 +1509,8 @@ export default {
         confirmButtonText: "ตกลง",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          this.UpdateCheckInStudent({ students: this.student_check_in });
-          this.GetStudentByTimeId({
+          this.UpdateCheckInStudent({ 
+            students: this.student_check_in,
             course_id: this.$route.params.courseId,
             date: this.$route.params.date,
             time_id: this.$route.params.timeId,

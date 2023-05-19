@@ -81,7 +81,7 @@ const coachModules = {
       }
     },
     // ASSESSMENT POTENTIAL
-    async UpdateAssessmentPotential(context, { students }) {
+    async UpdateAssessmentPotential(context, { students, course_id, time_id, date}) {
       context.commit("SetStudentCheckInIsLoading", true)
       try {
         let config = {
@@ -125,6 +125,14 @@ const coachModules = {
             showCancelButton: false,
             cancelButtonText: "ยกเลิก",
             confirmButtonText: "ตกลง",
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              context.dispatch("GetStudentByTimeId",{
+                course_id: course_id,
+                date: date,
+                time_id: time_id,
+              })
+            }
           })
         }
 
@@ -332,8 +340,9 @@ const coachModules = {
         })
       }
     },
-    async UpdateCheckInStudent(context, { students }) {
+    async UpdateCheckInStudent(context, { students, course_id, date ,time_id }) {
       try {
+        context.commit("SetStudentCheckInIsLoading", true)
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -341,39 +350,53 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
+        let count = 0
         for await (const student of students) {
-          setTimeout(async () => {
-            const now = new Date(student.compensationDate);
-            const utcOffset = 7 * 60; // UTC+7 is 7 hours ahead of UTC
-            const localOffset = now.getTimezoneOffset();
-            const targetOffset = utcOffset + localOffset;
-            const targetTime = now.getTime() + targetOffset * 60 * 1000;
-            const utcPlus7Date = new Date(targetTime);
-            console.log(moment(utcPlus7Date).format("YYYY-MM-DD HH:mm"))
-            let payload = {
-              status: student.status, // punctual, late,  leave, emergency leave, absent,
-              compensationDate: student.compensationDate ? moment(utcPlus7Date).format("YYYY-MM-DD HH:mm") : '',
-              compensationStartTime: student.compensationStartTime ? moment(student.compensationStartTime).format("HH:mm") : '',
-              compensationEndTime: student.compensationEndTime ? moment(student.compensationEndTime).format("HH:mm") : '',
-            }
-            console.log("payload :", payload)
-            let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/checkin/student/${student.check_in_student_id}`, payload, config)
-            console.log(data)
-            if (data.statusCode !== 200) {
-              throw { error: data }
-            }
-          }, 500)
+          const now = new Date(student.compensationDate);
+          const utcOffset = 7 * 60; // UTC+7 is 7 hours ahead of UTC
+          const localOffset = now.getTimezoneOffset();
+          const targetOffset = utcOffset + localOffset;
+          const targetTime = now.getTime() + targetOffset * 60 * 1000;
+          const utcPlus7Date = new Date(targetTime);
+          console.log(moment(utcPlus7Date).format("YYYY-MM-DD HH:mm"))
+          let payload = {
+            status: student.status, // punctual, late,  leave, emergency leave, absent,
+            compensationDate: student.compensationDate ? moment(utcPlus7Date).format("YYYY-MM-DD HH:mm") : '',
+            compensationStartTime: student.compensationStartTime ? moment(student.compensationStartTime).format("HH:mm") : '',
+            compensationEndTime: student.compensationEndTime ? moment(student.compensationEndTime).format("HH:mm") : '',
+          }
+          console.log("payload :", payload)
+          let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/checkin/student/${student.check_in_student_id}`, payload, config)
+          console.log(data)
+          if(data.statusCode == 200){
+            count = count + 1
+          }else{
+            throw { error: data }
+          }
         }
-        Swal.fire({
-          icon: "success",
-          title: "บันทึกสำเร็จ",
-          showDenyButton: false,
-          showCancelButton: false,
-          cancelButtonText: "ยกเลิก",
-          confirmButtonText: "ตกลง",
-        })
+        console.log(count, students.length )
+        if (count === students.length) {
+          context.commit("SetStudentCheckInIsLoading", false)
+          await Swal.fire({
+            icon: "success",
+            title: "บันทึกสำเร็จ",
+            showDenyButton: false,
+            showCancelButton: false,
+            cancelButtonText: "ยกเลิก",
+            confirmButtonText: "ตกลง",
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              context.dispatch("GetStudentByTimeId",{
+                course_id: course_id,
+                date: date,
+                time_id: time_id,
+              })
+            }
+          })
+        }
       } catch (error) {
         console.log(error)
+        context.commit("SetStudentCheckInIsLoading", false)
         Swal.fire({
           icon: "error",
           title: "เกิดข้อผิดพลาด",
@@ -386,7 +409,7 @@ const coachModules = {
     },
     async GetStudentByTimeId(context, { course_id, date }) {
       try {
-        // console.log(course_id, time_id, date)
+        console.log("GetStudentByTimeId")
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
