@@ -506,7 +506,7 @@ const CourseModules = {
     // COURSE :: UPDATE COURSE DETAIL
     async UpdateCouserDetail(context,{course_id, course_data}){
       try{
-        console.log(typeof course_data.course_img == "object")
+        console.log(course_data)
         // let localhost = "http://localhost:3000"
         let config = {
           headers: {
@@ -534,57 +534,12 @@ const CourseModules = {
           "coursePrice": parseInt(course_data.price_course),
           "courseRegisterStartDate": course_data.course_register_start_date && course_data.course_register_start_date !== "Invalid date" ?  course_data.course_register_start_date : null,
           "courseRegisterEndDate": course_data.course_register_end_date ? moment(course_data.course_register_end_date) : null,
-          "coursePeriodStartDate":  course_data.course_period_start_date ? moment(course_data.course_period_start_date) : null,
-          "coursePeriodEndDate": course_data.course_period_end_date ? moment(course_data.course_period_end_date) : null,
+          "coursePeriodStartDate":  course_data.course_period_start_date ? course_data.course_period_start_date : null,
+          "coursePeriodEndDate": course_data.course_period_end_date ? course_data.course_period_end_date : null,
           "courseStudentRecived": course_data.student_recived,
           "courseStudyEndDate": course_data.course_study_end_date,
-          "courseStudyStartDate": course_data.course_study_start_date,
-          "coachs":[],
+          "courseStudyStartDate": course_data.course_study_start_date, 
         }
-        course_data.coachs.forEach((coach) => {
-          // Short Course
-          payload.coachs.push({
-            "accountId": coach.coach_id,
-            "registerDateRange": {
-              "courseRegisterStartDate": coach.register_date_range.start_date,
-              "courseRegisterEndDate": coach.register_date_range.end_date,
-            },
-            "classDateRange": {
-              "courseStudyStartDate": coach.class_date_range.start_date,
-              "courseStudyEndDate": coach.class_date_range.end_date,
-            },
-            "period": {
-              "coursePeriodStartDate": coach.period.start_time ? coach.period.start_time : '',
-              "coursePeriodEndDate": coach.period.end_time ? coach.period.end_time : '',
-            }
-          })
-          // Day Of Week
-          coach.teach_day_data.forEach((teach_day) => {
-            let times = []
-            teach_day.class_date.forEach((date) => {
-              if (course_data.course_type_id === "CT_1") {
-                times.push({
-                  "start":date.class_date_range.start_time,
-                  "end": date.class_date_range.end_time,
-                  "maximumStudent": date.students
-                })
-              } else {
-                times.push({
-                  "start": coach.period.start_time,
-                  "end": coach.period.end_time,
-                  "maximumStudent": course_data.student_recived
-                })
-              }
-
-            })
-            payload.dayOfweek.push({
-              "accountId": coach.coach_id,
-              "status": teach_day.class_open ? 'Active' : 'InActive',
-              "day": teach_day.teach_day,
-              "times": times
-            })
-          })
-        })
         let payloadData = new FormData()
         payloadData.append("payload",JSON.stringify(payload))
         if (typeof course_data.course_img == "object") {
