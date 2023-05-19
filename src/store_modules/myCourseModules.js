@@ -167,6 +167,7 @@ const myCourseModules = {
                 //   let user_account_id = this.user_detail.account_id
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
                 if (data.statusCode === 200) {
+                    console.log(data)
                     context.commit("SetStudentsLoading", false)
                     const dataCourseSchedule = { dates: [] };
                     for (const course of data.data) {
