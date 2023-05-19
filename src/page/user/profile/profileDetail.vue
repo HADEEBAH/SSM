@@ -98,8 +98,8 @@
             outlined
             dense
             :disabled="!isEnabled"
-            :rules="rules.nation"
           >
+            <!-- :rules="rules.nation" -->
           </v-text-field>
           <!-- </div> -->
         </v-col>

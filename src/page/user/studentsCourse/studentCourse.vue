@@ -190,19 +190,14 @@
 
           <v-card color="#FBF3F5" class="my-2 mx-5">
             <v-row dense>
-              <v-col cols="auto" align="start">
-                <!-- :class="`text-[${
-                    evolution_options.filter(
-                      (v) => v.value === item_data.assessment.evolution
-                    )[0]
-                  }]`" -->
+              <v-col cols="12" sm="4" align="start">
                 <v-card-text>
                   <b>พัฒนาการ:</b>
                   <span
                     :class="`text-[${
                       evolution_options.filter(
                         (v) => v.value === item_data.assessment.evolution
-                      )[0].color
+                      )[0]
                     }]`"
                   >
                     {{
@@ -217,19 +212,14 @@
                   </span>
                 </v-card-text>
               </v-col>
-              <v-col cols="auto" align="start">
-                <!-- :class="`text-[${
-                    interest_options.filter(
-                      (v) => v.value === item_data.assessment.interest
-                    )[0]
-                  }]`" -->
+              <v-col cols="12" sm="auto" align="start">
                 <v-card-text>
                   <b>ความสนใจ:</b>
                   <span
                     :class="`text-[${
                       interest_options.filter(
                         (v) => v.value === item_data.assessment.interest
-                      )[0].color
+                      )[0]
                     }]`"
                   >
                     {{
@@ -401,11 +391,9 @@
                   น.
                 </v-col>
               </v-row>
-              <!-- v-for="(reaction, index_day) in day_list.assessment.attachment"
-                :key="index_day" -->
               <v-row dense>
                 <!-- พัฒนาการ -->
-                <v-col cols="auto" align="start">
+                <v-col cols="12" sm="4" align="start">
                   <v-card flat>
                     <v-card-text
                       :class="`text-[${
@@ -436,7 +424,7 @@
                   </v-card>
                 </v-col>
                 <!-- ความสนใจ -->
-                <v-col cols="auto" align="start">
+                <v-col cols="12" sm="auto" align="start">
                   <v-card flat>
                     <v-card-text
                       :class="`text-[${
@@ -445,7 +433,7 @@
                         )[0]
                       }]`"
                     >
-                      <span class="font-bold text-lg ml-10"></span> ความสนใจ:
+                      ความสนใจ:
                       <span
                         :class="`text-[${
                           interest_options.filter(
@@ -528,15 +516,6 @@
                               </v-row>
                             </v-card-text>
                           </v-card>
-                          <!-- <v-card
-                            v-if="day_list.assessment.attachment.length <= 0"
-                          >
-                            <v-card-text
-                              class="border border-2 border-[#ff6b81] rounded-lg font-bold"
-                            >
-                              ยังไม่มีไฟล์แนบ
-                            </v-card-text>
-                          </v-card> -->
                         </v-col>
                       </v-row>
                     </div>
@@ -668,14 +647,17 @@ export default {
       { label: "ขาด", value: "absent", color: "#F03D3E", bg_color: "#F4CCCC" },
     ],
     evolution_options: [
-      { label: "ดีมาก", value: "very good", color: "#ff6b81" },
-      { label: "ดี", value: "good", color: "#58A144" },
-      { label: "ปรับปรุง", value: "adjust", color: "#FCC419" },
+      { label: "⭐⭐⭐⭐⭐", value: "very good", color: "#ff6b81" },
+      { label: "⭐⭐⭐⭐", value: "good", color: "#58A144" },
+      { label: "⭐⭐⭐", value: "adjust", color: "#FCC419" },
     ],
     interest_options: [
-      { label: "ดีมาก", value: "very good", color: "#ff6b81" },
-      { label: "ดี", value: "good", color: "#58A144" },
-      { label: "ปรับปรุง", value: "adjust", color: "#FCC419" },
+      // { label: "ดีมาก", value: "very good", color: "#ff6b81" },
+      // { label: "ดี", value: "good", color: "#58A144" },
+      // { label: "ปรับปรุง", value: "adjust", color: "#FCC419" },
+      { label: "⭐⭐⭐⭐⭐", value: "very good", color: "#ff6b81" },
+      { label: "⭐⭐⭐⭐", value: "good", color: "#58A144" },
+      { label: "⭐⭐⭐", value: "adjust", color: "#FCC419" },
     ],
     relations: [],
   }),
