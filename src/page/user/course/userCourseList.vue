@@ -148,6 +148,10 @@ import { mapGetters, mapActions } from 'vuex';
                     course_type_id : course_type.course_type_id})
             },
             selectedCourse(course){
+                this.course_order.option = {}
+                this.course_order.option_data = ""
+                this.course_order.package = ""
+                this.course_order.package_data = {}
                 this.course_order.course_id = course.course_id
                 this.course_order.course_name = `${course.course_name_th}(${course.course_name_en})`
                 this.course_order.course_type = course.course_type_th
