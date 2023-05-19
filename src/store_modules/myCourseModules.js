@@ -172,14 +172,17 @@ const myCourseModules = {
                     for (const course of data.data) {
                         console.log("course", course);
                         for (const date of course.dates.date) {
-                            dataCourseSchedule.dates.push({
-                                start: date.replace(" 00:00:00", "") + ' ' + course.period.start,
-                                end: date.replace(" 00:00:00", "") + ' ' + course.period.end,
-                                timed: `${course.courseNameTh}(${course.courseNameEng})`,
-                                name: course.student.firstNameTh,
-                                subtitle: course.coachName,
-                                courseId: course.courseId,
-                            })
+                            if(course.period.start !== "Invalid date" && course.period.end !== "Invalid date"){
+                                dataCourseSchedule.dates.push({
+                                    start: date.replace(" 00:00:00", "") + ' ' + course.period.start,
+                                    end: date.replace(" 00:00:00", "") + ' ' + course.period.end,
+                                    timed: `${course.courseNameTh}(${course.courseNameEng})`,
+                                    name: course.student.firstNameTh,
+                                    subtitle: course.coachName,
+                                    courseId: course.courseId,
+                                })
+                            }
+                            
                         }
                     }
                     if (data_local.roles.includes('R_4')) {
