@@ -129,7 +129,6 @@
       <div>
         <!-- :loading="filter_role_is_loading"-->
         <!-- :items="selectedRole == null ? user_list : filter_role" -->
-
         <template>
           <v-data-table
             :headers="headers"

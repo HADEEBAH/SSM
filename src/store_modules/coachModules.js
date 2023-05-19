@@ -384,9 +384,9 @@ const coachModules = {
         })
       }
     },
-    async GetStudentByTimeId(context, { course_id, time_id, date }) {
+    async GetStudentByTimeId(context, { course_id, date }) {
       try {
-        console.log(course_id, time_id, date)
+        // console.log(course_id, time_id, date)
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -396,7 +396,7 @@ const coachModules = {
         };
         // let localhost ="http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/${course_id}/date/${date}`, config)
-        console.log(data.data)
+        // console.log(data.data)
         if (data.statusCode === 200) {
           data.data.forEach((student, index) => {
             student.no = index + 1

@@ -358,7 +358,34 @@
                   <v-row class="d-flex align-center">
                     <v-col cols="12" sm="4" >
                       <labelCustom text="ระดับพัฒนาการ"></labelCustom>
-                      <v-rating
+                      <v-select
+                        outlined
+                        dense
+                        v-model="student.assessment.evolution"
+                        :items="evolution_options"
+                      >
+                        <template v-slot:item="{ item }">
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              <v-rating
+                                readonly
+                                :length="item.num_value"
+                                :value="item.num_value"
+                                color="#ff6b81"
+                              ></v-rating>
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </template>
+                        <template v-slot:selection="{ item }">
+                          <v-rating
+                            readonly
+                            :length="item.num_value"
+                            :value="item.num_value"
+                            color="#ff6b81"
+                          ></v-rating>
+                        </template>
+                      </v-select>
+                      <!-- <v-rating
                         v-model="student.assessment.rating_evolution"
                         background-color="pink lighten-3"
                         @input="CheckRating($event, student.checkInStudentId, 'assessment_evolution')"
@@ -366,18 +393,45 @@
                         large
                         length="5"
                         :min="2"
-                      ></v-rating>
+                      ></v-rating> -->
                     </v-col>
-                    <v-col cols="12" sm>
-                      <labelCustom text="ความสนใจ"></labelCustom>
-                      <v-rating
+                    <v-col cols="12" sm="4">
+                      <labelCustom text="ระดับความสนใจ"></labelCustom>
+                      <v-select
+                        outlined
+                        dense
+                        v-model="student.assessment.interest"
+                        :items="interest_options"
+                      >
+                        <template v-slot:item="{ item }">
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              <v-rating
+                                readonly
+                                :length="item.num_value"
+                                :value="item.num_value"
+                                color="#ff6b81"
+                              ></v-rating>
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </template>
+                        <template v-slot:selection="{ item }">
+                          <v-rating
+                              readonly
+                            :length="item.num_value"
+                            :value="item.num_value"
+                            color="#ff6b81"
+                          ></v-rating>
+                        </template>
+                      </v-select>
+                      <!-- <v-rating
                         v-model="student.assessment.rating_interest"
                         background-color="pink lighten-3" 
                         @input="CheckRating($event, student.checkInStudentId, 'assessment_interest')"
                         color="pink"
                         large
                         length="5"
-                      ></v-rating>
+                      ></v-rating> -->
                     </v-col>
                     <v-col cols="12" sm="auto">
                       <v-btn
@@ -462,15 +516,44 @@
                 </v-row>
                 <v-row class="d-flex align-center">
                   <v-col cols="12" sm>
+                    <!-- {{student.potential}} -->
                     <labelCustom text="ระดับพัฒนาการ"></labelCustom>
-                    <v-rating
+                    <v-select
+                        outlined
+                        dense
+                        v-model="student.potential.evolution"
+                        :items="evolution_options"
+                      >
+                        <template v-slot:item="{ item }">
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              <v-rating
+                                readonly
+                                :length="item.num_value"
+                                :value="item.num_value"
+                                color="#ff6b81"
+                              ></v-rating>
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </template>
+                        <template v-slot:selection="{ item }">
+                          <v-rating
+                              readonly
+                            :length="item.num_value"
+                            :value="item.num_value"
+                            color="#ff6b81"
+                          ></v-rating>
+                        </template>
+                      </v-select>
+
+                    <!-- <v-rating
                       v-model="student.potential.rating_evolution"
                       background-color="pink lighten-3"
                       @input="CheckRating($event, student.checkInStudentId, 'potential_evolution')"
                       color="pink"
                       large
                       length="5"
-                    ></v-rating>
+                    ></v-rating> -->
                     <!-- <v-select
                       outlined
                       dense
@@ -1091,14 +1174,14 @@ export default {
     fileURL: null,
     filename: "",
     evolution_options: [
-      { label: "ดีมาก", value: "very good" },
-      { label: "ดี", value: "good" },
-      { label: "ปรับปรุง", value: "adjust" },
+      { label: "ดีมาก", value: "very good", num_value : 5, },
+      { label: "ดี", value: "good", num_value : 4, },
+      { label: "ปรับปรุง", value: "adjust", num_value : 3, },
     ],
     interest_options: [
-      { label: "ดีมาก", value: "very good" },
-      { label: "ดี", value: "good" },
-      { label: "ปรับปรุง", value: "adjust" },
+      { label: "ดีมาก", value: "very good", num_value : 5, },
+      { label: "ดี", value: "good", num_value : 4, },
+      { label: "ปรับปรุง", value: "adjust", num_value : 3, },
     ],
     expanded_index: [],
     check_in: false,
@@ -1152,7 +1235,13 @@ export default {
     show_comment_potential_dialog: false,
     package_name_filter: null,
   }),
-  created() {},
+  created() {
+    this.GetStudentByTimeId({
+      course_id: this.$route.params.courseId,
+      date: this.$route.params.date,
+      time_id: this.$route.params.timeId,
+    });
+  },
   mounted() {},
   watch: {
     coach_check_in: function () {
@@ -1215,11 +1304,7 @@ export default {
         course_id: this.$route.params.courseId,
         date: this.$route.params.date,
       });
-      this.GetStudentByTimeId({
-        course_id: this.$route.params.courseId,
-        date: this.$route.params.date,
-        time_id: this.$route.params.timeId,
-      });
+      
       return "";
     },
   },

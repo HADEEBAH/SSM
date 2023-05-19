@@ -8,7 +8,7 @@ function dayOfWeekArray(day) {
   // console.log
   // let day_arr = day
   let days = day
-  console.log(day)
+  // console.log(day)
   const weekdays =[
     "วันอาทิตย์",
     "วันจันทร์",
@@ -1049,7 +1049,7 @@ const CourseModules = {
     // COURSE :: DETAIL
     async GetCourse(context, course_id) {
       context.commit("SetCourseIsLoading", true)
-      console.log("GetCourse")
+      // console.log("GetCourse")
       try {
         // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
@@ -1105,7 +1105,7 @@ const CourseModules = {
               }
               let class_dates = []
               for await (const time of coach_date.times) {
-                console.log(time.start, time.end)
+                // console.log(time.start, time.end)
                 let startTimePart = time.start.split(":")
                 let endTimePart = time.end.split(":")
                 let startTime = {

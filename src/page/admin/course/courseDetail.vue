@@ -2040,8 +2040,10 @@ export default {
               {
                 class_date_range: {
                   start_time: "",
+                  start_time_object : {HH:"",mm:""},
                   menu_start_time: false,
                   end_time: "",
+                  end_time_object : {HH:"",mm:""},
                   menu_end_time: false,
                 },
                 students: 0,
