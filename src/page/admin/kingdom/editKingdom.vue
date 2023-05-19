@@ -1,7 +1,8 @@
 <template>
   <v-container>
     <!-- {{ showImg(category.categoryImg)  }} -->
-    <headerPage title="แก้ไขอาณาจักร" class="my-5"></headerPage>
+    <v-form ref="category_form" v-model="category_form">
+      <headerPage title="แก้ไขอาณาจักร" class="my-5"></headerPage>
     <label-custom text="อัปโหลดภาพหน้าปกอาณาจักร"></label-custom>
     <v-card style="border: dashed blue">
       <v-card-title primary-title  align="end">
@@ -12,7 +13,6 @@
         </v-btn>
       </v-card-title>
       <v-card-text>
-       
         <div v-if="category.categoryImg">
           <v-img
             v-if="showData"
@@ -25,7 +25,6 @@
             :src="showImg(category.categoryImg)"
           >
           </v-img>
-
           <div v-else>
             <v-img
               @click="openFileSelector"
@@ -62,13 +61,12 @@
       </div>
       </v-card-text>
     </v-card>
-
     <br />
-
     <v-row dense>
       <v-col cols="12" sm="6">
-        <label-custom text="ชื่ออาณาจักร(ภาษาไทย)"></label-custom>
+        <label-custom required text="ชื่ออาณาจักร(ภาษาไทย)"></label-custom>
         <v-text-field
+          :rules="rules.category_name_th"
           :disabled="showData"
           dense
           placeholder="กรอกชื่ออาณาจักร"
@@ -79,8 +77,9 @@
       </v-col>
 
       <v-col cols="12" sm="6">
-        <label-custom text="ชื่ออาณาจักร(ภาษาอังกฤษ)"></label-custom>
+        <label-custom required text="ชื่ออาณาจักร(ภาษาอังกฤษ)"></label-custom>
         <v-text-field
+          :rules="rules.category_name_en"
           :disabled="showData"
           dense
           placeholder="กรอกชื่ออาณาจักร"
@@ -92,8 +91,9 @@
 
       <v-row dense>
         <v-col cols="12" sm="6">
-          <label-custom text="จัดสอนโดย"></label-custom>
+          <label-custom required text="จัดสอนโดย"></label-custom>
           <v-text-field
+            :rules="rules.taughtBy"
             :disabled="showData"
             dense
             placeholder="ระบุสถาบันผู้จัดสอน เช่น ศูนย์ดนตรี Manila Tamarind"
@@ -117,7 +117,6 @@
         ></v-textarea>
       </v-col>
     </v-row>
-
     <v-col cols="12" sm="12" v-if="showData" align="right">
       <v-btn
         class="white--text my-5 w-full"
@@ -129,7 +128,6 @@
         <span class="mdi mdi-pencil-outline">แก้ไข</span>
       </v-btn>
     </v-col>
-
     <div v-else>
       <v-row dense>
         <v-col align="right" sm="" cols="12">
@@ -155,6 +153,8 @@
         </v-col>
       </v-row>
     </div>
+    </v-form>
+   
 
     <!-- DIALOG -->
     <v-dialog class="pa-2" width="50vw" v-model="dialog_show" persistent>
@@ -196,6 +196,22 @@ export default {
     preview_url: null,
     showData: true,
     dialog_show: false,
+    category_form : false,
+    rules: {
+      category_name_th: [
+        (val) => (val || "").length > 0 || "โปรดระบุชื่ออาณาจักร(ภาษาไทย)",
+        (val) => val.length < 50 || "ชื่ออาณาจักร(ภาษาไทย)ความยาวเกินกว่าที่กำหนด",
+      ],
+      category_name_en: [
+        (val) => (val || "").length > 0 || "โปรดระบุชื่ออาณาจักร(ภาษาไทย)",
+        (val) => val.length < 50 || "ชื่ออาณาจักร(ภาษาไทย)ความยาวเกินกว่าที่กำหนด",
+      ],
+      taughtBy: [
+        (val) => (val || "").length > 0 || "โปรดระบุผู้จัดสอน",
+        (val) => val.length < 50 || "ผู้จัดสอนความยาวเกินกว่าที่กำหนด",
+      ],
+
+    }
     // kingdom: {
     //   kingdom_name_th: "",
     //   kingdom_name_eng: "",
@@ -258,7 +274,9 @@ export default {
     },
 
     openDialog() {
-      Swal.fire({
+      this.$refs.category_form.validate();
+      if(this.category_form){
+        Swal.fire({
         icon: "question",
         title: "คุณต้องการแก้ไขอาณาจักรหรือไม่",
         showDenyButton: false,
@@ -315,6 +333,7 @@ export default {
           Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
         }
       });
+      }
     },
   },
   computed: {
