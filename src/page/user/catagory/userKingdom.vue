@@ -186,7 +186,7 @@ export default {
       this.GetAll(this.dataStorage.account_id);
     }
     localStorage.removeItem("Order");
-    localStorage.setItem("Order", JSON.stringify(this.course_order));
+    //localStorage.setItem("Order", JSON.stringify(this.course_order));
   },
 
   mounted() {
