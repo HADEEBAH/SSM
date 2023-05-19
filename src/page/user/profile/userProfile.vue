@@ -5,7 +5,7 @@
   <v-form ref="form" v-model="valid" lazy-validation>
     <v-container>
       <!-- {{ my_course }} -->
-      <!-- {{ profile_user }} -->
+      <!-- <pre> {{ profile_user }} </pre> -->
       <!-- {{ data_local }} -->
       <!-- {{ setFunctions }} -->
       <loading-overlay :loading="categorys_is_loading"></loading-overlay>
@@ -68,7 +68,12 @@
             <label>คอร์สเรียนของฉัน</label>
           </v-col>
           <v-col cols="3" sm="4" align="right" class="mt-1">
-            <label class="pink--text">{{ student_data.length }} คอร์ส</label>
+            <label class="pink--text"
+              >{{
+                student_data.length ? student_data.length : "-"
+              }}
+              คอร์ส</label
+            >
           </v-col>
           <v-col cols="2" sm="1" align="right" class="mt2">
             <span class="mdi mdi-chevron-right"></span>
@@ -800,9 +805,48 @@ export default {
   created() {
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
     this.user_relation = JSON.parse(localStorage.getItem("relations"));
+    setTimeout(async () => {
+      this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
+      if (this.type_selected == "students_course") {
+        if (this.user_detail.roles.includes("R_4")) {
+          this.GetStudentData(this.user_detail.account_id);
+          for (const item of JSON.parse(localStorage.getItem("relations"))) {
+            this.GetStudentData(item.student.studentId);
+            console.log("student");
+          }
+        } else if (this.user_detail.roles.includes("R_5")) {
+          this.GetStudentData(this.user_detail.account_id);
+        } else {
+          this.GetStudentData(null);
+        }
+      }
+
+      this.loading = false;
+    }, 200);
   },
   mounted() {
     this.user_relation = JSON.parse(localStorage.getItem("relations"));
+    this.user_login = JSON.parse(localStorage.getItem("userDetail"));
+
+    setTimeout(async () => {
+      this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
+      if (this.type_selected == "students_course") {
+        if (this.user_detail.roles.includes("R_4")) {
+          this.GetStudentData(this.user_detail.account_id);
+          for (const item of JSON.parse(localStorage.getItem("relations"))) {
+            this.GetStudentData(item.student.studentId);
+            console.log("student");
+          }
+        } else if (this.user_detail.roles.includes("R_5")) {
+          this.GetStudentData(this.user_detail.account_id);
+        } else {
+          this.GetStudentData(null);
+        }
+      }
+
+      this.loading = false;
+    }, 200);
+
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "บัญชีผู้ใช้");
     for (const item of this.user_relation) {
       this.GetStudentData(item.student.studentId);
@@ -838,6 +882,7 @@ export default {
           this.GetAll(this.user_login.account_id);
           for (const item of JSON.parse(localStorage.getItem("relations"))) {
             this.GetStudentData(item.student.studentId);
+            console.log("GetStudentData", this.GetStudentData);
           }
         });
       } else if (this.last_user_registered.type === "student") {
@@ -875,6 +920,29 @@ export default {
         ].parents = [];
       }
       this.add_parent = false;
+    },
+
+    type_selected: function () {
+      console.log("type_selected", this.type_selected);
+      this.loading = true;
+      setTimeout(async () => {
+        this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
+        if (this.type_selected == "students_course") {
+          if (this.user_detail.roles.includes("R_4")) {
+            this.GetStudentData(this.user_detail.account_id);
+            for (const item of JSON.parse(localStorage.getItem("relations"))) {
+              this.GetStudentData(item.student.studentId);
+              console.log("student");
+            }
+          } else if (this.user_detail.roles.includes("R_5")) {
+            this.GetStudentData(this.user_detail.account_id);
+          } else {
+            this.GetStudentData(null);
+          }
+        }
+
+        this.loading = false;
+      }, 200);
     },
   },
 
@@ -1147,12 +1215,18 @@ export default {
 
               if (data.statusCode === 201) {
                 if (data.data && data.data.message !== "Duplicate relation.") {
-                  console.log("succes");
-                  this.add_parent = false;
-                  this.user_login = JSON.parse(
-                    localStorage.getItem("userDetail")
-                  );
-                  this.GetAll(this.user_login.account_id);
+                  Swal.fire({
+                    icon: "success",
+                    title: "บันทึกสำเร็จ",
+                  }).then(async (result) => {
+                    if (result.isConfirmed) {
+                      this.add_parent = false;
+                      this.user_login = JSON.parse(
+                        localStorage.getItem("userDetail")
+                      );
+                      this.GetAll(this.user_login.account_id);
+                    }
+                  });
                 } else {
                   throw { error: data };
                 }
@@ -1161,37 +1235,45 @@ export default {
               }
             } catch ({ response }) {
               if (
-                response?.data?.message === "parentId not found." ||
                 response?.data?.message ===
-                  "studentId and parentId not found." ||
-                response?.data?.message === "studentId not found."
-              ) {
-                this.error_message = "ชื่อผู้ใช้ไม่ถูกต้อง";
-              } else if (response?.data?.message === "Duplicate relation.") {
-                this.error_message = "ความสัมพันธ์ซ้ำ";
-              } else if (
-                response?.data?.message ===
-                "Student does not have the required role."
-              ) {
-                this.error_message = "username นี้ยังไม่มีบทบาท";
-              } else if (
-                response?.data?.message ===
-                "Parent does not have the required role."
-              ) {
-                this.error_message = "username นี้ยังไม่มีบทบาท";
-              } else if (
-                response?.data?.message ===
-                "parentId and studentId must not be duplicate."
+                "Can not add relations because roles have already, Parent is not match."
               ) {
                 this.error_message =
-                  "ชื่อผู้ใช้ของผู้ปกครองและนักเรียนต้องไม่ซ้ำกัน";
+                  "ไม่สามารถสร้างความสัมพันธ์ได้เนื่องจากอยู่ในบทบาทเดียวกัน";
+              } else if (response?.data?.message === "Duplicate relation.") {
+                this.error_message = "ความสัมพันธ์ซ้ำกัน";
+              } else if (
+                response?.data?.message ===
+                "Can not use the same accountID to create Relations."
+              ) {
+                this.error_message =
+                  "ไม่สามารถสร้างความสัมพันธ์ได้เนื่องจากชื่อผู้ใช้เดียวกัน";
               } else {
                 this.error_message = "เกิดข้อผิดพลาด";
               }
               console.log("response", response);
               Swal.fire({
-                icon: "error",
-                title: this.error_message,
+                icon: `${
+                  this.error_message === "เกิดข้อผิดพลาด" ? "error" : "warning"
+                }`,
+                title: `${
+                  this.error_message === "เกิดข้อผิดพลาด"
+                    ? this.error_message
+                    : "คำเตือน"
+                }`,
+                text: `${
+                  this.error_message === "เกิดข้อผิดพลาด"
+                    ? ""
+                    : `(${this.error_message})`
+                }`,
+              }).then(async (result) => {
+                if (result.isConfirmed) {
+                  this.add_parent = false;
+                  this.user_login = JSON.parse(
+                    localStorage.getItem("userDetail")
+                  );
+                  this.GetAll(this.user_login.account_id);
+                }
               });
             }
           } else {
