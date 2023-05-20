@@ -35,8 +35,8 @@
               <v-img
                 :src="
                   my_course_detail.courseImg
-                    ? showImg(my_course_detail.courseImg)
-                    : defaultImageUrl
+                    ? my_course_detail.courseImg
+                    : require(`@/assets/course/category_img.svg`)
                 "
               ></v-img>
             </v-col>
@@ -151,8 +151,8 @@
             <v-col cols="2" sm="1" align="center">
               <img src="../../../assets/student_course/certificates.png" />
             </v-col>
-            <v-col class="text-lg font-bold" cols="6">ผลประเมินศักยาภาพ</v-col>
-            <v-col cols="4" align="end">
+            <v-col class="text-lg font-bold" cols="6">ผลประเมินศักยภาพ</v-col>
+            <!-- <v-col cols="4" align="end">
               <v-card flat>
                 <v-card-text
                   class="pa-1 rounded-xl text-center"
@@ -185,27 +185,27 @@
                   </span>
                 </v-card-text>
               </v-card>
-            </v-col>
+            </v-col> -->
           </v-row>
 
           <v-card color="#FBF3F5" class="my-2 mx-5">
             <v-row dense>
               <v-col cols="12" sm="4" align="start">
                 <v-card-text>
-                  <b>พัฒนาการ:</b>
+                  <b>ระดับพัฒนาการ:</b>
                   <span
                     :class="`text-[${
                       evolution_options.filter(
-                        (v) => v.value === item_data.assessment.evolution
+                        (v) => v.value === item_data.potential.evolution
                       )[0]
                     }]`"
                   >
                     {{
                       evolution_options.filter(
-                        (v) => v.value === item_data.assessment.evolution
+                        (v) => v.value === item_data.potential.evolution
                       ).length > 0
                         ? evolution_options.filter(
-                            (v) => v.value === item_data.assessment.evolution
+                            (v) => v.value === item_data.potential.evolution
                           )[0].label
                         : "-"
                     }}
@@ -214,36 +214,14 @@
               </v-col>
               <v-col cols="12" sm="auto" align="start">
                 <v-card-text>
-                  <b>ความสนใจ:</b>
-                  <span
-                    :class="`text-[${
-                      interest_options.filter(
-                        (v) => v.value === item_data.assessment.interest
-                      )[0]
-                    }]`"
-                  >
-                    {{
-                      interest_options.filter(
-                        (v) => v.value === item_data.assessment.interest
-                      ).length > 0
-                        ? interest_options.filter(
-                            (v) => v.value === item_data.assessment.interest
-                          )[0].label
-                        : "-"
-                    }}
-                  </span>
+                  <b>ระดับความสนใจ:</b>
+                  {{ item_data.potential.interest }}
                 </v-card-text>
               </v-col>
-              <v-col align="start" cols="12">
-                <v-card-text
-                  :class="`text-[${
-                    interest_options.filter(
-                      (v) => v.value === item_data.assessment.remark
-                    )[0]
-                  }]`"
-                >
+              <v-col cols="12" align="start">
+                <v-card-text>
                   <b>ความคิดเห็นจากโค้ช:</b>
-                  {{ item_data.assessment.remark }}
+                  {{ item_data.potential.remark }}
                 </v-card-text>
               </v-col>
 
@@ -254,8 +232,8 @@
                     @click="openFile(file.attachmentFiles)"
                     flat
                     class="mb-3"
-                    v-for="(file, index_file) in item_data.assessment
-                      .attachment"
+                    v-for="(file, index_file) in item_data.potential
+                      .attachmentPotential.attachment"
                     :key="index_file"
                   >
                     <v-card-text
@@ -344,6 +322,7 @@
                 <v-col cols="4">
                   <v-card flat>
                     <v-card-text
+                      v-if="day_list.status"
                       class="pa-1 rounded-xl text-center"
                       :class="`text-[${
                         check_in_status_options.filter(
@@ -396,18 +375,19 @@
                 <v-col cols="12" sm="4" align="start">
                   <v-card flat>
                     <v-card-text
+                      v-if="day_list.assessment.evolution"
                       :class="`text-[${
                         evolution_options.filter(
                           (v) => v.value === day_list.assessment.evolution
                         )[0]
                       }]`"
                     >
-                      พัฒนาการ:
+                      ระดับพัฒนาการ:
                       <span
                         :class="`text-[${
                           evolution_options.filter(
                             (v) => v.value === day_list.assessment.evolution
-                          )[0].color
+                          )[0]
                         }]`"
                       >
                         {{
@@ -427,18 +407,19 @@
                 <v-col cols="12" sm="auto" align="start">
                   <v-card flat>
                     <v-card-text
+                      v-if="day_list.assessment.interest"
                       :class="`text-[${
                         interest_options.filter(
                           (v) => v.value === day_list.assessment.interest
                         )[0]
                       }]`"
                     >
-                      ความสนใจ:
+                      ระดับความสนใจ:
                       <span
                         :class="`text-[${
                           interest_options.filter(
                             (v) => v.value === day_list.assessment.interest
-                          )[0].color
+                          )[0]
                         }]`"
                       >
                         {{

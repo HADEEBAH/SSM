@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    {{ setFunctions }}
     <loading-overlay :loading="student_is_loading"></loading-overlay>
     <div class="mx-10 my-5">
       <label class="text-xl font-bold">ข้อมูลตารางเรียน</label>
@@ -44,6 +45,7 @@
                   item-value="studentId"
                   dense
                   filled
+                  clearable
                   label="เลือกนักเรียนของคุณได้ที่นี้"
                   @change="searchStudentCourse(search_course)"
                 ></v-autocomplete>
@@ -268,13 +270,14 @@
             <v-row class="my-5">
               <v-col cols="12">
                 <v-autocomplete
+                  :key="index"
                   v-model="search_schadule"
                   :items="students"
                   item-text="studentFirstnameTh"
                   item-value="studentId"
+                  label="เลือกนักเรียนของคุณได้ที่นี้"
                   dense
                   filled
-                  label="เลือกนักเรียนของคุณได้ที่นี้"
                   @change="searchStudentSchadule(search_schadule)"
                 ></v-autocomplete>
               </v-col>
@@ -283,9 +286,7 @@
             <v-row class="mb-2">
               <v-col cols="12" align="center">
                 <v-card flat width="340px">
-                  <v-card-text
-                    class="pa-2 border-2 border-[#ff6b81] rounded-lg"
-                  >
+                  <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                     <v-row dense class="d-flex justify-center">
                       <v-col
                         cols="auto"
@@ -808,10 +809,11 @@ export default {
     item: {},
     item_data: "",
     user_detail: {},
+    clearable: false,
   }),
   created() {
     if (this.$route.query.token) {
-      this.loginShareToken(this.$route.query.token)
+      this.loginShareToken(this.$route.query.token);
     }
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
   },
@@ -889,10 +891,9 @@ export default {
 
     async searchStudentCourse(studentId) {
       this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-
-      console.log("item", studentId);
+      console.log("item1", studentId);
       await this.GetStudentData(studentId);
-      console.log("mycourse", this.student_data);
+      console.log("mycourse1", this.student_data);
     },
 
     async searchStudentSchadule(studentId) {
