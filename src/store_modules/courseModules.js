@@ -533,25 +533,99 @@ const CourseModules = {
           "courseCertification": course_data.catification,
           "coursePrice": parseInt(course_data.price_course),
           "courseRegisterStartDate": course_data.course_register_start_date && course_data.course_register_start_date !== "Invalid date" ?  course_data.course_register_start_date : null,
-          "courseRegisterEndDate": course_data.course_register_end_date ? moment(course_data.course_register_end_date) : null,
-          "coursePeriodStartDate":  course_data.course_period_start_date ? course_data.course_period_start_date : null,
-          "coursePeriodEndDate": course_data.course_period_end_date ? course_data.course_period_end_date : null,
+          "courseRegisterEndDate": course_data.course_register_end_date ? course_data.course_register_end_date : null,
+          "coursePeriodStartDate":  course_data.coachs[0].period.start_time ? course_data.coachs[0].period.start_time : null,
+          "coursePeriodEndDate": course_data.coachs[0].period.end_time  ? course_data.coachs[0].period.end_time  : null,
           "courseStudentRecived": course_data.student_recived,
           "courseStudyEndDate": course_data.course_study_end_date,
           "courseStudyStartDate": course_data.course_study_start_date, 
+          "coachs": [],
+          "dayOfweek": [],
         }
+        if(course_data.course_type_id === "CT_2"){
+          for await (const coach of course_data.coachs.filter(v => v.teach_day_data.length > 0)){          
+            let teach_day_data = []
+            for await (const date of coach.teach_day_data){
+              let class_date = []
+              for await (const class_date_data of date.class_date){
+                class_date.push({
+                  "dayOfWeekId": date.day_of_week_id,
+                  "timeId":class_date_data.class_date_range.time_id,
+                  "classDateRange": {
+                    "startTime": class_date_data.class_date_range.start_time ?class_date_data.class_date_range.start_time : null,
+                    "endTime": class_date_data.class_date_range.end_time ? class_date_data.class_date_range.end_time : null,
+                  },
+                  "students": parseInt(class_date_data.students)
+                })
+              } 
+              if(date.day_of_week_id){
+                if(teach_day_data.filter((v)=> v.dayOfWeekId === date.day_of_week_id && v.courseCoachId === date.course_coach_id).length === 0){
+                  teach_day_data.push({
+                    // "itmes" : day.times,
+                    "dayOfWeekId": date.day_of_week_id,
+                    // "classOpen": date.class_open === true ? 'Active' : 'InActive',
+                    "classOpen": date.class_open,
+                    "teachDay": date.teach_day,
+                    "courseCoachId": date.course_coach_id,
+                    "classDate": class_date
+                  })
+                }
+              }else{
+                teach_day_data.push({
+                  // "itmes" : day.times,
+                  "dayOfWeekId": null,
+                  "classOpen": date.class_open === true ? 'Active' : 'InActive',
+                  "teachDay": date.teach_day,
+                  "courseCoachId": date.course_coach_id ? date.course_coach_id : null,
+                  "classDate": class_date
+                })
+              }
+            }
+            
+            payload.coachs.push({
+              "coachId": coach.coach_id,
+              "courseCoachId": coach.course_coach_id ?  coach.course_coach_id  : null,
+              "coachName": coach.coach_name,
+              "teachDayData" : teach_day_data,
+              "classDateRange": {
+                "startDate": coach.class_date_range.start_date ? moment(coach.class_date_range.start_date).format("YYYY-MM-DD") : null,
+                "endDate":  coach.class_date_range.end_date ? moment(coach.class_date_range.end_date).format("YYYY-MM-DD") : null ,
+              },
+              "registerDateRange": {
+                "startDate": coach.register_date_range.start_date && coach.register_date_range.start_date !== "-" ?  moment(coach.register_date_range.start_date).format("YYYY-MM-DD") : null,
+                "endDate": coach.register_date_range.end_date && coach.register_date_range.end_date !== "-" ? moment(coach.register_date_range.end_date).format("YYYY-MM-DD") : null,
+              },
+              "period": {
+                "startTime":  coach.period.start_time ?  coach.period.start_time : null,
+                "endTime":  coach.period.end_time ? coach.period.end_time :null
+              }
+            })
+            // payload.coachs[index].teachDayData = teach_day_data
+          }
+        }
+        
+        console.log("payload",payload)
         let payloadData = new FormData()
         payloadData.append("payload",JSON.stringify(payload))
         if (typeof course_data.course_img == "object") {
           payloadData.append("img_url", course_data.course_img)
         }
         // let localhost = "http://192.168.74.25:3000"
-        let {data} = await axios.patch(`${process}/api/v1/manage/update-course/${course_id}`, payloadData, config)
+        let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-course/${course_id}`, payloadData, config)
         // console.log(data)
         if(data.statusCode === 200){
           Swal.fire({
             icon: "success",
-            title: "แก้ไขคอร์สสำเร็จ"
+            title: "แก้ไขคอร์สสำเร็จ",
+            showDenyButton: false,
+            showCancelButton: false,
+            confirmButtonText: "ตกลง",
+            cancelButtonText: "ยกเลิก",
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              await context.dispatch("GetArtworkByCourse",{course_id : course_id})
+              await context.dispatch("GetCourse",course_id)
+            }
           })
         }
         }catch(error){
@@ -636,8 +710,8 @@ const CourseModules = {
               "endDate": coach.register_date_range.end_date && coach.register_date_range.end_date !== "-" ? moment(coach.register_date_range.end_date).format("YYYY-MM-DD") : null,
             },
             "period": {
-              "startTime":  coach.period.start_time ?  moment(coach.period.start_time).format('HH:mm') : null,
-              "endTime":  coach.period.end_time ?  moment(coach.period.end_time).format('HH:mm') :null
+              "startTime":  coach.period.start_time ? coach.period.start_time: null,
+              "endTime":  coach.period.end_time ? coach.period.end_time :null
             }
           })
           // payload.coachs[index].teachDayData = teach_day_data
@@ -650,7 +724,11 @@ const CourseModules = {
         if(data.statusCode === 200){
           Swal.fire({
             icon: "success",
-            title: "แก้ไขคอร์สสำเร็จ"
+            title: "แก้ไขคอร์สสำเร็จ",
+            showDenyButton: false,
+            showCancelButton: false,
+            confirmButtonText: "ตกลง",
+            cancelButtonText: "ยกเลิก",
           }).then(async (result) => {
             if (result.isConfirmed) {
               await context.dispatch("GetCourse",course_id)
@@ -711,7 +789,11 @@ const CourseModules = {
         if(data.statusCode === 200){
           Swal.fire({
             icon: "success",
-            title: "แก้ไขคอร์สสำเร็จ"
+            title: "แก้ไขคอร์สสำเร็จ",
+            showDenyButton: false,
+            showCancelButton: false,
+            confirmButtonText: "ตกลง",
+            cancelButtonText: "ยกเลิก",
           })
         }
         }catch(error){
@@ -735,7 +817,11 @@ const CourseModules = {
         if(data.statusCode == 200){
           Swal.fire({
             icon: "success",
-            title: "ลบไฟล์สำเร็จ"
+            title: "ลบไฟล์สำเร็จ",
+            showDenyButton: false,
+            showCancelButton: false,
+            confirmButtonText: "ตกลง",
+            cancelButtonText: "ยกเลิก",
           })
         }
       }catch(error){
@@ -758,7 +844,11 @@ const CourseModules = {
         if(data.statusCode == 200){
           Swal.fire({
             icon: "success",
-            title: "ลบไฟล์สำเร็จ"
+            title: "ลบไฟล์สำเร็จ",
+            showDenyButton: false,
+            showCancelButton: false,
+            confirmButtonText: "ตกลง",
+            cancelButtonText: "ยกเลิก",
           })
         }
       }catch(error){
@@ -789,7 +879,11 @@ const CourseModules = {
         if(data.statusCode === 200){
           Swal.fire({
             icon: "success",
-            title: "แก้ไขคอร์สสำเร็จ"
+            title: "แก้ไขคอร์สสำเร็จ",
+            showDenyButton: false,
+            showCancelButton: false,
+            confirmButtonText: "ตกลง",
+            cancelButtonText: "ยกเลิก",
           }).then(async (result) => {
             if (result.isConfirmed) {
               await context.dispatch("GetArtworkByCourse",{course_id : course_id})
@@ -801,7 +895,7 @@ const CourseModules = {
         console.log(error)
       }
     },
-    // COURSE :: UPDATE
+    // COURSE :: UPDATE * Not used
     async UpdateCourse(context, { course_data }) {
       try {
         let payload = {
@@ -1178,9 +1272,9 @@ const CourseModules = {
                     end_date: data.data.courseRegisterEndDate ? new Date(data.data.courseRegisterEndDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : "",
                   },
                   period: {
-                    start_time: data.data.coursePeriodStartDate ? moment(data.data.coursePeriodStartDate, "HH:mm") : null,
+                    start_time: data.data.coursePeriodStartDate ?data.data.coursePeriodStartDate : null,
                     start_time_object : data.data.coursePeriodStartDate ? startTime : null,
-                    end_time: data.data.coursePeriodEndDate ? moment(data.data.coursePeriodEndDate, "HH:mm") : null,
+                    end_time: data.data.coursePeriodEndDate ?data.data.coursePeriodEndDate : null,
                     end_time_object :data.data.coursePeriodEndDate ? endTime : null,
                   },
                 },

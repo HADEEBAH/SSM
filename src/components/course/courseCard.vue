@@ -598,7 +598,7 @@
                     style="position: absolute; display: block; z-index: 4"
                     @focus="SelectedStartDate($event,course_data.coachs[0].period.start_time)"
                     :rules="rules.start_time"
-                    v-model="course_data.course_period_start_date"
+                    v-model="course_data.coachs[0].period.start_time"
                   >
                   </v-text-field>
                   <VueTimepicker 
@@ -622,7 +622,7 @@
                     :style="`width:${width()}px;`"
                     style="position: absolute; display: block; z-index: 4"
                     :rules="rules.end_time"
-                    v-model="course_data.course_period_end_date"
+                    v-model="course_data.coachs[0].period.end_time"
                   >
                   </v-text-field>
                   <VueTimepicker 
@@ -632,32 +632,6 @@
                     v-model="course_data.coachs[0].period.end_time_object" 
                   >
                   </VueTimepicker>
-                  <!-- <v-text-field
-                    :disabled="disable"
-                    :outlined="!disable"
-                    :filled="disable"
-                    dense
-                    style="position: absolute; display: block; z-index: 0"
-                    :style="`width:${width()}px;`"
-                    @focus="isTimePickerVisible = true"
-                    :rules="rules.end_time"
-                    v-model="course_data.coachs[0].period.end_time"
-                  >
-                  </v-text-field>
-                  <TimePicker
-                    disabled
-                    :minuteStep="15"
-                    format="HH:mm"
-                    :rules="rules.end_time"
-                    style="z-index: 2"
-                    :style="`width:${width() - 4}px !important;`"
-                    :class="
-                      course_data.coachs[0].period.end_time ? 'active' : ''
-                    "
-                    placeholder="เวลาสิ้นสุด"
-                    @change="limitEndTime($event)"
-                    v-model="course_data.coachs[0].period.end_time"
-                  ></TimePicker> -->
                 </v-col>
               </v-row>
             </v-col>
@@ -831,9 +805,10 @@ export default {
     ChangeStartDate(date){
       // console.log(date)
       this.course_data.course_period_start_date = `${date.start_time_object.HH}:${date.start_time_object.mm}`
+      date.start_time = `${date.start_time_object.HH}:${date.start_time_object.mm}`
       date.end_time_object.HH = `${(parseInt(date.start_time_object.HH) + this.course_data.course_hours)}`
       date.end_time_object.mm = date.start_time_object.mm
-      this.course_data.course_period_end_date = `${date.end_time_object.HH}:${date.end_time_object.mm}`
+      // this.course_data.course_period_end_date = `${date.end_time_object.HH}:${date.end_time_object.mm}`
       date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`
     },
     width() {

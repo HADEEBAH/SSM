@@ -131,9 +131,7 @@
                 </v-select>
               </template>
               <template v-slot:[`item.package`]="{ item }">
-                <span class="font-semibold" v-if="item?.cpo?.packageName">
-                  {{ `${item.cpo.packageName}` }}</span
-                >
+                <span class="font-semibold" v-if="item?.cpo?.packageName"> {{ `${item.cpo.packageName}` }}</span >
                 <span class="font-semibold" v-else> - </span>
               </template>
               <template v-slot:[`item.class_time`]="{ item }">
@@ -577,20 +575,11 @@
                 </v-row>
                 <v-row>
                   <v-col cols="12">
-                    <labelCustom text="ความสนใจ"></labelCustom>
+                    <labelCustom text="ระดับความสนใจ"></labelCustom>
                     <v-textarea
                       outlined
                       v-model="student.potential.interest"
                     ></v-textarea>
-                    <!-- <v-select
-                      outlined
-                      dense
-                      hide-details
-                      :items="interest_options"
-                      item-text="label"
-                      item-value="value"
-                      v-model="student.potential.interest"
-                    ></v-select> -->
                   </v-col>
                 </v-row>
               </v-card-text>

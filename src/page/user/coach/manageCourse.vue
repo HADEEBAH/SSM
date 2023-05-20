@@ -206,7 +206,6 @@
                   <v-col class="font-bold text-md">{{ course.start_date_str }}</v-col>
                 </v-row>
                 <v-row dense>
-                  <!-- <pre>{{ course }}</pre> -->
                   <v-col cols="12">
                     <rowData mini icon="mdi-account"
                       >อาณาจักร : {{ course.category_name }}</rowData
@@ -337,7 +336,7 @@
                     </v-row>
                     <v-row dense>
                       <v-col cols="12" sm align="left" class="font-semibold">
-                        พัฒนาการ 
+                        ระดับพัฒนาการ 
                         <v-rating
                           background-color="pink lighten-3"
                           color="pink"
@@ -349,7 +348,7 @@
                         ></v-rating>
                       </v-col>
                       <v-col cols="12" sm  align="left" class="font-semibold"
-                        >ความสนใจ 
+                        >ระดับความสนใจ 
                         <v-rating
                           background-color="pink lighten-3" 
                           color="pink"
@@ -425,7 +424,7 @@
                       </v-row>
                       <v-row>
                         <v-col align="left" class="font-semibold"
-                          >พัฒนาการ :
+                          >ระดับพัฒนาการ :
                           <v-rating
                             background-color="pink lighten-3"
                             color="pink"
@@ -448,7 +447,11 @@
                         </v-col>
                       </v-row>
                       <v-row>
-                        <v-col  class="font-semibold">ความสนใจ 
+                        <v-col> ระดับความสนใจ </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col  class="font-semibold">
+                         
                           <span>
                             {{student.potential.interest}}
                           </span>
