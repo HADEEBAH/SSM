@@ -607,7 +607,7 @@
                     advanced-keyboard 
                     :style="`width:${width()}px;`"
                     v-model="course_data.coachs[0].period.start_time_object" 
-                    @change="ChangeStartDate(course_data.coachs[0].period)">
+                    @change="ChangeStartDate(course_data.coachs[0].period, course_data)">
                   </VueTimepicker>
                 </v-col>
                 <v-col cols="auto" class="mt-2 px-0"
@@ -632,32 +632,6 @@
                     v-model="course_data.coachs[0].period.end_time_object" 
                   >
                   </VueTimepicker>
-                  <!-- <v-text-field
-                    :disabled="disable"
-                    :outlined="!disable"
-                    :filled="disable"
-                    dense
-                    style="position: absolute; display: block; z-index: 0"
-                    :style="`width:${width()}px;`"
-                    @focus="isTimePickerVisible = true"
-                    :rules="rules.end_time"
-                    v-model="course_data.coachs[0].period.end_time"
-                  >
-                  </v-text-field>
-                  <TimePicker
-                    disabled
-                    :minuteStep="15"
-                    format="HH:mm"
-                    :rules="rules.end_time"
-                    style="z-index: 2"
-                    :style="`width:${width() - 4}px !important;`"
-                    :class="
-                      course_data.coachs[0].period.end_time ? 'active' : ''
-                    "
-                    placeholder="เวลาสิ้นสุด"
-                    @change="limitEndTime($event)"
-                    v-model="course_data.coachs[0].period.end_time"
-                  ></TimePicker> -->
                 </v-col>
               </v-row>
             </v-col>
@@ -829,10 +803,12 @@ export default {
       .getElementsByTagName("input")[0].focus()
     },
     ChangeStartDate(date){
-      console.log(date)
+      // console.log(date)
+      this.course_data.course_period_start_date = `${date.start_time_object.HH}:${date.start_time_object.mm}`
       date.start_time = `${date.start_time_object.HH}:${date.start_time_object.mm}`
       date.end_time_object.HH = `${(parseInt(date.start_time_object.HH) + this.course_data.course_hours)}`
       date.end_time_object.mm = date.start_time_object.mm
+      // this.course_data.course_period_end_date = `${date.end_time_object.HH}:${date.end_time_object.mm}`
       date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`
     },
     width() {

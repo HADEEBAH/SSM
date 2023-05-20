@@ -621,7 +621,6 @@
           <v-row dense>
             <v-col cols="9">
               <!-- :hide-details="!parent.account_id" -->
-
               <labelCustom text="Username (ถ้ามี)"></labelCustom>
               <v-text-field
                 :rules="rules.usernameRules"
@@ -1012,7 +1011,7 @@ export default {
     validateButton() {
       if(this.course_order.coach_id){
         this.GenMonitors();
-       this.ValidateReserve()
+        this.ValidateReserve()
       }
       // console.log(this.course_order.coach_id)
       if (this.course_order.course_type_id === "CT_1") {
@@ -1032,11 +1031,11 @@ export default {
       } else {
         let student = true;
         if (this.course_order.students.length > 0) {
-          if (
-            this.course_order.students.filter((v) => !v.account_id).length > 0
-          ) {
+          if ( this.course_order.students.filter((v) => !v.account_id).length > 0 ) {
             student = false;
           }
+        }else{
+          student = false
         }
         return !student;
       }
