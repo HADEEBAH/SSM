@@ -1364,7 +1364,7 @@
                         </v-row>
                         <v-row dense>
                           <v-col>
-                            พัฒนาการ:
+                            ระดับพัฒนาการ:
                             <span class="text-[#ff6b81] font-bold"
                               >{{
                                 student_data_assessment.potential.evolution
@@ -1378,18 +1378,8 @@
                                   : "-"
                               }}
                             </span>
-                            ความสนใจ:
-                            <span class="font-bold text-[#ff6b81]">{{
-                              student_data_assessment.potential.interest
-                                ? student_data_assessment.potential.interest ===
-                                  "very good"
-                                  ? "ดีมาก"
-                                  : student_data_assessment.potential
-                                      .interest === "good"
-                                  ? "ดี"
-                                  : "ปรับปรุง"
-                                : "-"
-                            }}</span>
+                            ระดับความสนใจ:
+                            <span class="font-bold">{{ student_data_assessment.potential.interest }}</span>
                           </v-col>
                         </v-row>
                         <v-row dense>
@@ -1456,7 +1446,7 @@
                 </v-row>
                 <v-row dense>
                   <v-col>
-                    พัฒนาการ:
+                    ระดับพัฒนาการ:
                     <span class="text-[#ff6b81] font-bold"
                       >{{
                         student_data_assessment.assessment.evolution
@@ -1470,7 +1460,7 @@
                           : "-"
                       }}
                     </span>
-                    ความสนใจ:
+                    ระดับความสนใจ:
                     <span class="font-bold text-[#ff6b81]">{{
                       student_data_assessment.assessment.interest
                         ? student_data_assessment.assessment.interest ===
@@ -1934,13 +1924,7 @@ export default {
             this.UpdateCouserDetail({
               course_id: this.course_data.course_id,
               course_data: this.course_data,
-            }).then(() => {
-              this.course_edit = false;
-              this.GetCourse(this.$route.params.course_id);
-              this.GetArtworkByCourse({
-                course_id: this.$route.params.course_id,
-              });
-            });
+            })
           }
         });
       }

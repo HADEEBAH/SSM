@@ -310,6 +310,7 @@
             </v-row>
             <diV>
               <template>
+                <!-- {{ itemTime.dates }} -->
                 <calendarStudent
                   :events="itemTime.dates"
                   :type="time_frame"
