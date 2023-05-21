@@ -291,8 +291,8 @@ const profileModules = {
           }
         }
 
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user-v2/?account_id=${account_id}`, config)
-        let { data } = await axios.get(`http://localhost:3000/api/v1/relations/user-v2/?account_id=${account_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user-v2/?account_id=${account_id}`, config)
+        // let { data } = await axios.get(`http://localhost:3000/api/v1/relations/user-v2/?account_id=${account_id}`, config)
         console.log("data=>", data);
         let response = data.data
 
