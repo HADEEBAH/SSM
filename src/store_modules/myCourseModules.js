@@ -104,6 +104,8 @@ const myCourseModules = {
         my_course: [],
         my_schadule: [],
         student_reserve: [],
+        /////////////////////////ยุทธ/////////////////////////
+        student_course:[]
     },
     mutations: {
         SetStudentReserve(state, payload) {
@@ -144,7 +146,11 @@ const myCourseModules = {
         },
         ResetMycourse(state) {
             state.my_course = []
-        }
+        },
+        /////////////////////////ยุทธ/////////////////////////
+        SetStudentCourse(state, payload) {
+          state.student_course = payload
+        },
     },
     actions: {
         courseSchedule(context) {
@@ -211,6 +217,7 @@ const myCourseModules = {
                 console.log(error);
             }
         },
+
         async GetStudentReserve(context, account_id) {
             console.log("GetStudentReserve", account_id);
             try {
@@ -324,7 +331,67 @@ const myCourseModules = {
             context.commit("SetStudentsLoading", false)
 
 
-        }
+        },
+
+        /////////////////////////ยุทธ/////////////////////////
+        async GetStudentCourse(context, account_id) { // ดึงคอร์สของนักเรียนในการดูแบ
+          // let data_local = JSON.parse(localStorage.getItem("userDetail"))
+          try {
+              let config = {
+                  headers: {
+                      "Access-Control-Allow-Origin": "*",
+                      "Content-type": "Application/json",
+                      'Authorization': `Bearer ${VueCookie.get("token")}`
+                  }
+              }
+              let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
+              console.log("data", data);
+              if (data.statusCode === 200) {
+              context.commit("SetStudentCourse",data.data)
+              // context.commit("SetStudentsLoading", false)
+                  // const dataCourseSchedule = { dates: [] };
+                  // for (const course of data.data) {
+                      // console.log("course", course);
+                      // for (const date of course.dates.date) {
+                          // if(course.period.start !== "Invalid date" && course.period.end !== "Invalid date"){
+                              // dataCourseSchedule.dates.push({
+                                  // start: date.replace(" 00:00:00", "") + ' ' + course.period.start,
+                                  // end: date.replace(" 00:00:00", "") + ' ' + course.period.end,
+                                  // timed: `${course.courseNameTh}(${course.courseNameEng})`,
+                                  // name: course.student.firstNameTh,
+                                  // subtitle: course.coachName,
+                                  // courseId: course.courseId,
+                              // })
+                          // }
+                          // 
+                      // }
+                  // }
+                  // if (data_local.roles.includes('R_4')) {
+                      // console.log(data.data)
+                      // let MyCourse = []
+                      // for await (const item of data.data) {
+                          // if (MyCourse.filter(v => v.orderItemId === item.orderItemId).length === 0) {
+                              // MyCourse.push(item)
+                          // }
+                      // }
+                      // context.commit("SetMyCourse", MyCourse)
+                      // context.commit("SetMyCourseStudentId", '')
+                  // } else {
+                      // context.commit("SetStudentData", data.data)
+                      // console.log("SetStudentData", data.data)
+                  // }
+                  // context.commit("SetcourseSchedule", dataCourseSchedule);
+                  // context.commit("SetStudentsLoading", false)
+              // } else {
+                  // context.commit("SetStudentsLoading", false)
+                  // throw { error: data };
+              }
+          } catch (error) {
+              // context.commit("SetStudentsLoading", false)
+              console.log(error);
+          }
+      },
+
     },
     getters: {
         getStudentReserve(state) {
@@ -354,6 +421,10 @@ const myCourseModules = {
         getMyCourse(state) {
             return state.my_course
         },
+        /////////////////////////ยุทธ/////////////////////////
+        getStudentCourse(state) {
+          return state.student_course
+      },
 
 
 

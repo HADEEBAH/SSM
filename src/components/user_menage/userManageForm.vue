@@ -1603,14 +1603,26 @@ export default {
                   account_id: this.$route.params.account_id,
                 },
               });
+            } else if (response?.data?.message === "Can not change Coach role, because Coach is teaching the course.") {
+              this.error_message = "ไม่สามารถเปลี่ยนบทบาทได้ เนื่องจากโค้ชกำลังอยู่ในสถานะการสอน";
             } else {
               this.error_message = "เกิดข้อผิดพลาด";
             }
 
-            console.log("error=>", response);
             Swal.fire({
-              icon: "error",
-              title: this.error_message,
+              icon: `${
+                this.error_message === "เกิดข้อผิดพลาด" ? "error" : "warning"
+              }`,
+              title: `${
+                this.error_message === "เกิดข้อผิดพลาด"
+                  ? this.error_message
+                  : "คำเตือน"
+              }`,
+              text: `${
+                this.error_message === "เกิดข้อผิดพลาด"
+                  ? ""
+                  : `(${this.error_message})`
+              }`,
             });
           }
         } else {

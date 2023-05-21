@@ -1226,7 +1226,7 @@
                 cols="12"
                 class="flex align-center justify-center text-caption"
               >
-                ( ขนาดไฟล์งานไม่เกิน 500 Mb ต้องเป็นไฟล์ JPG, PNG )
+                ( ขนาดไฟล์งานไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
               </v-col>
               <v-col cols="12" class="flex align-center justify-center">
                 <v-btn outlined color="blue" @click="openFileSelector"
@@ -1867,6 +1867,7 @@ export default {
       data_user_relation_management:
         "UserManageModules/getDataRelationsManagement",
       student_schedule: "UserModules/getStudentSchedule",
+      relations_detail: "UserManageModules/getRelationData",
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
