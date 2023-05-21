@@ -2,17 +2,14 @@
 
 
 <template>
-  <v-form ref="form" v-model="valid" lazy-validation>
+  <!-- <v-form ref="form" v-model="valid" lazy-validation> -->
     <v-container>
-      <!-- {{ my_course }} -->
-      <!-- <pre> {{ profile_user }} </pre> -->
-      <!-- {{ data_local }} -->
       <!-- {{ setFunctions }} -->
+      
+      <!-- {{ relation_data }} -->
       <loading-overlay :loading="categorys_is_loading"></loading-overlay>
       <v-row dense>
         <v-col class="my-5" style="text-align: -webkit-center" cols="12">
-          <!-- <pre>{{ profile_detail }}</pre> -->
-          <!-- {{ data_local.image }} -->
 
           <div class="cicle">
             <v-img
@@ -24,15 +21,6 @@
               "
             />
           </div>
-          <!-- <div class="cicle" v-if="data_local.image !== ''">
-          <v-img class="image-cropper items-end" :src="data_local.image" />
-        </div>
-        <div class="cicle" v-else>
-          <v-img
-            class="image-cropper items-end"
-            src="../../../assets/userKingdom/default_image_profile.svg"
-          />
-        </div> -->
         </v-col>
       </v-row>
       <div class="text-center text-xl font-bold">
@@ -48,9 +36,9 @@
           ดูข้อมูลส่วนตัว
         </v-btn>
       </div>
-
       <!-- ROLE STUDENT คอร์สเรียน-->
-      <div v-if="data_local.roles.includes('R_5')">
+      profile_detail : {{ profile_detail }}
+      <div v-if="profile_detail?.userRoles?.roleId === 'R_5'">
         <div class="mt-8">
           <label-custom text="คอร์สเรียน"></label-custom>
         </div>
@@ -69,9 +57,8 @@
           </v-col>
           <v-col cols="3" sm="4" align="right" class="mt-1">
             <label class="pink--text"
-              >{{
-                student_data.length ? student_data.length : "-"
-              }}
+              >
+              {{ student_course.length }}
               คอร์ส</label
             >
           </v-col>
@@ -98,35 +85,25 @@
       </div>
 
       <!-- ROLE STUDENT ข้อมูลผู้ปกครอง -->
-      <div v-if="data_local.roles.includes('R_5')">
+      <div v-if="profile_detail?.userRoles?.roleId === 'R_5'">
         <v-row class="mb-1">
           <v-col align="start" class="d-flex align-center">
             <label-custom text="ข้อมูลผู้ปกครอง"></label-custom>
           </v-col>
           <v-col cols="auto" align="end">
-            <v-btn dense outlined color="#ff6b81" @click="openAddParentDialog">
+            <v-btn dense outlined color="#ff6b81" @click="openAddRelationDialog">
               <v-icon>mdi-plus-circle-outline</v-icon
               >เพิ่มข้อมูลผู้ปกครอง</v-btn
             >
           </v-col>
         </v-row>
         <v-divider class="mb-3"></v-divider>
+        relation_data: {{ relation_data }}
         <!-- card parent -->
-        <div v-if="profile_user.length <= 0">
-          <v-card>
-            <v-card-text
-              class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
-            >
-              <span class="text-lg font-bold">
-                <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                ไม่พบข้อมูลของผู้ปกครอง
-              </span>
-            </v-card-text>
-          </v-card>
-        </div>
-        <div v-else>
+        <div v-if="relation_data.length > 0">
+          relation_data: {{ relation_data }}
           <v-card
-            v-for="(profile, index) in profile_user"
+            v-for="(profile, index) in relation_data"
             :key="`${index}-profile`"
             class="cursor-pointer my-5"
             @click="openParentDialog(profile.parent)"
@@ -178,6 +155,18 @@
             </v-row>
           </v-card>
         </div>
+        <div v-else>
+          <v-card>
+            <v-card-text
+              class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
+            >
+              <span class="text-lg font-bold">
+                <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                ไม่พบข้อมูลของผู้ปกครอง
+              </span>
+            </v-card-text>
+          </v-card>
+        </div>
       </div>
 
       <!-- ROLE ALL ทั่วไป -->
@@ -199,12 +188,7 @@
             <span class="mdi mdi-chevron-right"></span>
           </v-col>
         </v-row>
-        <!-- translate -->
-        <!-- <v-row
-        dense
-        class="mt-3"
-        @click="$router.push({ name: 'ProfileLanguages' })"
-      > -->
+
         <v-row dense class="mt-3">
           <v-col cols="2" sm="1">
             <img src="@/assets/profile/langueges.png" />
@@ -219,21 +203,26 @@
         </v-row>
       </div>
       <!-- ROLE PARENT ข้อมูลนักเรียนในความดูแล-->
-      <div v-if="data_local.roles.includes('R_4')">
+      <div v-if="profile_detail?.userRoles?.roleId === 'R_4'">
         <v-row class="mb-1">
           <v-col align="start" class="d-flex align-center">
             <label-custom text="ข้อมูลนักเรียนในความดูแล"></label-custom>
           </v-col>
+          <v-col cols="auto" align="end">
+            <v-btn dense outlined color="#ff6b81" @click="openAddRelationDialog">
+              <v-icon>mdi-plus-circle-outline</v-icon
+              >เพิ่มข้อมูลนักเรียนในความดูแล</v-btn
+            >
+          </v-col>
         </v-row>
         <v-divider class="mb-3"></v-divider>
-        <div v-if="profile_user.length >= 1">
+        <div v-if="relation_data.length >= 1">
           <v-card
-            v-for="(profile, index) in profile_user"
+            v-for="(profile, index) in relation_data"
             :key="`${index}-profile`"
             class="mb-5 cursor-pointer"
             @click="openDialogStudent(profile.student)"
           >
-            <!-- <pre>{{ profile }}</pre> -->
 
             <v-row dense class="my-5">
               <!-- col avatar -->
@@ -274,9 +263,7 @@
                   </v-col>
                   <v-col class="pink--text">
                     {{
-                      my_course.filter(
-                        (val) => val.studentId === profile.studentId
-                      ).length
+                      profile.student.course
                     }}
                     คอร์ส
                   </v-col>
@@ -440,7 +427,6 @@
               </v-col>
             </v-row>
           </v-card-text>
-          <!-- <dialogCard text="แก้ไขอาณาจักรเรียบร้อย"></dialogCard> -->
           <div class="my-5 text-center"></div>
         </v-card>
       </v-dialog>
@@ -452,7 +438,6 @@
         v-model="show_student_data"
         persistent
       >
-        <!-- <pre>{{dialogGetStudentData}}</pre> -->
         <v-card>
           <v-card-title>
             <v-row>
@@ -475,7 +460,7 @@
                   :src="
                     dialogGetStudentData.studentImage !== ''
                       ? dialogGetStudentData.studentImage
-                      : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEpKC_pI1Y_lmnOSDilaMdTDvWbDicz53xGA&usqp=CAU`
+                      : require(`../../../assets/userKingdom/default_image_profile.svg`)
                   "
                 />
               </div>
@@ -540,7 +525,6 @@
             <v-divider class=""></v-divider>
 
             <!-- COURSE -->
-            <!-- @click="$router.push({ name: 'StudentsSchedule' })" -->
 
             <v-row
               dense
@@ -556,9 +540,7 @@
               <v-col cols="3" sm="4" align="right" class="mt-1">
                 <label class="pink--text"
                   >{{
-                    my_course.filter(
-                      (val) => val.studentId === dialogGetStudentData.studentId
-                    ).length
+                    dialogGetStudentData.course
                   }}
                   คอร์ส</label
                 >
@@ -588,13 +570,12 @@
               </v-col>
             </v-row>
           </v-card-text>
-          <!-- <dialogCard text="แก้ไขอาณาจักรเรียบร้อย"></dialogCard> -->
           <div class="my-5 text-center"></div>
         </v-card>
       </v-dialog>
 
       <!-- CHECK USER PARENT DIALOG-->
-      <v-dialog v-model="add_parent" width="50vw" class="d-flex align-center">
+      <v-dialog v-model="add_relation" width="50vw" class="d-flex align-center">
         <v-card class="pa-2" width="50vw">
           <header-card
             icon="mdi-card-account-details-outline"
@@ -611,30 +592,29 @@
             <v-row dense>
               <v-col cols="9">
                 <labelCustom text="Username"></labelCustom>
-                <!-- :hide-details="!parent.account_id" -->
                 <v-text-field
                   :rules="rules.usernameRules"
                   @keypress="validate($event, 'en')"
                   ref="username"
                   dense
                   outlined
-                  v-model="parent.username"
-                  @change="checkUsername(parent.username)"
-                  @keyup.enter="checkUsername(parent.username)"
-                  @blur="checkUsername(parent.username)"
+                  v-model="relation_user.username"
+                  @change="checkUsername(relation_user.username)"
+                  @keyup.enter="checkUsername(relation_user.username)"
+                  @blur="checkUsername(relation_user.username)"
                   placeholder="Username"
                 >
                   <template v-slot:append>
-                    <v-icon v-if="parent.account_id" color="green"
+                    <v-icon v-if="relation_user.account_id" color="green"
                       >mdi-checkbox-marked-circle-outline</v-icon
                     >
                   </template>
                 </v-text-field>
-                <template v-if="!parent.account_id">
+                <template v-if="!relation_user.account_id">
                   <label> หากยังไม่มีบัญชีผู้ใช้กรุณา </label>
                   <label
                     class="text-[#ff6b81] underline cursor-pointer mt-5"
-                    @click="registerParent"
+                    @click="registerRelation"
                     >สมัคร One ID</label
                   >
                 </template>
@@ -644,7 +624,7 @@
                 <v-btn
                   :loading="is_loading"
                   color="#ff6b81"
-                  @click="checkUsername(parent.username)"
+                  @click="checkUsername(relation_user.username)"
                   depressed
                   dark
                   >ตกลง</v-btn
@@ -654,15 +634,12 @@
             <template>
               <v-row dense>
                 <v-col cols="12">
-                  <!-- :disabled="user_data.length > 0"
-:disabled="user_data.length > 0"
-:disabled="user_data.length > 0" -->
                   <labelCustom text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
                   <v-text-field
                     disabled
                     dense
                     outlined
-                    v-model="parent.firstname_en"
+                    v-model="relation_user.firstname_en"
                     placeholder="ชื่อภาษาอังกฤษ"
                   ></v-text-field>
                 </v-col>
@@ -674,7 +651,7 @@
                     disabled
                     dense
                     outlined
-                    v-model="parent.lastname_en"
+                    v-model="relation_user.lastname_en"
                     placeholder="นามสกุลภาษาอังกฤษ"
                   ></v-text-field>
                 </v-col>
@@ -686,7 +663,7 @@
                     disabled
                     dense
                     outlined
-                    v-model="parent.tel"
+                    v-model="relation_user.tel"
                     placeholder="เบอร์โทรศัพท์"
                   ></v-text-field>
                 </v-col>
@@ -706,12 +683,12 @@
               </v-col>
               <v-col>
                 <v-btn
-                  :color="parent.username.length < 1 ? '#CCCCCC' : '#ff6b81'"
+                  :color="!valid ? '#CCCCCC' : '#ff6b81'"
                   class="w-full"
-                  dark
+                  :dark="valid"
                   :disabled="!valid"
                   depressed
-                  @click="addParent"
+                  @click="addRelations"
                   >บันทึก</v-btn
                 >
               </v-col>
@@ -733,7 +710,7 @@
         ></registerDialogForm>
       </v-dialog>
     </v-container>
-  </v-form>
+  <!-- </v-form> -->
 </template>
 
 <script>
@@ -753,7 +730,6 @@ export default {
     loadingOverlay,
     registerDialogForm,
     headerCard,
-    // dialogCard,
   },
   data: () => ({
     user_relation: [],
@@ -762,12 +738,20 @@ export default {
     dialog_show: false,
     show_student_data: false,
     add_parent: false,
+    add_relation: false,
     edit_parent: false,
-    valid: true,
+    valid: false,
 
     set_parent_id: "",
     item_data: "",
     parent: {
+      account_id: "",
+      firstname_en: "",
+      lastname_en: "",
+      username: "",
+      tel: "",
+    },
+    relation_user: {
       account_id: "",
       firstname_en: "",
       lastname_en: "",
@@ -802,148 +786,167 @@ export default {
       ],
     },
   }),
+
   created() {
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
-    this.user_relation = JSON.parse(localStorage.getItem("relations"));
-    setTimeout(async () => {
-      this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-      if (this.type_selected == "students_course") {
-        if (this.user_detail.roles.includes("R_4")) {
-          this.GetStudentData(this.user_detail.account_id);
-          for (const item of JSON.parse(localStorage.getItem("relations"))) {
-            this.GetStudentData(item.student.studentId);
-            console.log("student");
-          }
-        } else if (this.user_detail.roles.includes("R_5")) {
-          this.GetStudentData(this.user_detail.account_id);
-        } else {
-          this.GetStudentData(null);
-        }
-      }
+    // this.user_relation = JSON.parse(localStorage.getItem("relations"));
+    // setTimeout(async () => {
+    //   this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
+    //   if (this.type_selected == "students_course") {
+    //     if (this.user_detail.roles.includes("R_4")) {
+    //       this.GetStudentData(this.user_detail.account_id);
+    //       for (const item of JSON.parse(localStorage.getItem("relations"))) {
+    //         this.GetStudentData(item.student.studentId);
+    //         console.log("student");
+    //       }
+    //     } else if (this.user_detail.roles.includes("R_5")) {
+    //       this.GetStudentData(this.user_detail.account_id);
+    //     } else {
+    //       this.GetStudentData(null);
+    //     }
+    //   }
 
-      this.loading = false;
-    }, 200);
+    //   this.loading = false;
+    // }, 200);
+  },
+  beforeMount() {
+    console.log("========");
+    // alert(this.user_login.account_id)
+    this.GetRelationDataV2(this.user_login.account_id)
+    this.GetProfileDetail(this.user_login.account_id);
+    this.GetStudentCourse(this.user_login.account_id)
+
+    //get student course
+    
+    
   },
   mounted() {
-    this.user_relation = JSON.parse(localStorage.getItem("relations"));
-    this.user_login = JSON.parse(localStorage.getItem("userDetail"));
+    // console.log("this.relation_data", this.relation_data.length);
+    // if (this.relation_data.length > 0) {
+    //   for (const course of this.relation_data) {
+    //     console.log("course", course);
+    //   }
+    // }
 
-    setTimeout(async () => {
-      this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-      if (this.type_selected == "students_course") {
-        if (this.user_detail.roles.includes("R_4")) {
-          this.GetStudentData(this.user_detail.account_id);
-          for (const item of JSON.parse(localStorage.getItem("relations"))) {
-            this.GetStudentData(item.student.studentId);
-            console.log("student");
-          }
-        } else if (this.user_detail.roles.includes("R_5")) {
-          this.GetStudentData(this.user_detail.account_id);
-        } else {
-          this.GetStudentData(null);
-        }
-      }
+    // this.user_relation = JSON.parse(localStorage.getItem("relations"));
+    // this.user_login = JSON.parse(localStorage.getItem("userDetail"));
 
-      this.loading = false;
-    }, 200);
+    // setTimeout(async () => {
+    //   this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
+    //   if (this.type_selected == "students_course") {
+    //     if (this.user_detail.roles.includes("R_4")) {
+    //       this.GetStudentData(this.user_detail.account_id);
+    //       for (const item of JSON.parse(localStorage.getItem("relations"))) {
+    //         this.GetStudentData(item.student.studentId);
+    //         console.log("student");
+    //       }
+    //     } else if (this.user_detail.roles.includes("R_5")) {
+    //       this.GetStudentData(this.user_detail.account_id);
+    //     } else {
+    //       this.GetStudentData(null);
+    //     }
+    //   }
 
-    this.$store.dispatch("NavberUserModules/changeTitleNavber", "บัญชีผู้ใช้");
-    for (const item of this.user_relation) {
-      this.GetStudentData(item.student.studentId);
-    }
-    if (this.$store.state.MyCourseModules.my_course_student_id !== "") {
-      this.GetStudentData(
-        this.$store.state.MyCourseModules.my_course_student_id
-      );
-    } else {
-      if (this.user_relation?.length != 0) {
-        for (const item of this.user_relation) {
-          this.GetStudentData(item.student.studentId);
-        }
-      } else {
-        if (!this.user_login.roles.includes("R_4")) {
-          this.GetStudentData(this.user_login.account_id);
-        } else {
-          this.GetStudentData(null);
-        }
-      }
-    }
-    this.GetAll(this.user_login.account_id);
+    //   this.loading = false;
+    // }, 200);
+
+    // this.$store.dispatch("NavberUserModules/changeTitleNavber", "บัญชีผู้ใช้");
+    // for (const item of this.user_relation) {
+    //   this.GetStudentData(item.student.studentId);
+    // }
+    // if (this.$store.state.MyCourseModules.my_course_student_id !== "") {
+    //   this.GetStudentData(
+    //     this.$store.state.MyCourseModules.my_course_student_id
+    //   );
+    // } else {
+    //   if (this.user_relation?.length != 0) {
+    //     for (const item of this.user_relation) {
+    //       this.GetStudentData(item.student.studentId);
+    //     }
+    //   } else {
+    //     if (!this.user_login.roles.includes("R_4")) {
+    //       this.GetStudentData(this.user_login.account_id);
+    //     } else {
+    //       this.GetStudentData(null);
+    //     }
+    //   }
+    // }
+    // this.GetAll(this.user_login.account_id);
   },
 
   watch: {
-    last_user_registered: function () {
-      console.log(this.last_user_registered);
-      if (this.last_user_registered.type === "parent") {
-        this.AddRelations({
-          studentId: this.data_local.account_id,
-          parentId: this.last_user_registered.account_id,
-        }).then(() => {
-          this.GetAll(this.user_login.account_id);
-          for (const item of JSON.parse(localStorage.getItem("relations"))) {
-            this.GetStudentData(item.student.studentId);
-            console.log("GetStudentData", this.GetStudentData);
-          }
-        });
-      } else if (this.last_user_registered.type === "student") {
-        this.course_order.students[
-          this.course_order.students.length - 1
-        ].account_id = this.last_user_registered.account_id;
-        this.course_order.students[
-          this.course_order.students.length - 1
-        ].firstname_en = this.last_user_registered.firstname_en;
-        this.course_order.students[
-          this.course_order.students.length - 1
-        ].lastname_en = this.last_user_registered.lastname_en;
-        this.course_order.students[
-          this.course_order.students.length - 1
-        ].firstname_th = this.last_user_registered.firstname_th;
-        this.course_order.students[
-          this.course_order.students.length - 1
-        ].lastname_th = this.last_user_registered.lastname_th;
-        this.course_order.students[
-          this.course_order.students.length - 1
-        ].student_name = `${this.last_user_registered.firstname_en} ${this.last_user_registered.lastname_en} `;
-        this.course_order.students[this.course_order.students.length - 1].tel =
-          this.last_user_registered.phone_number;
-        this.course_order.students[
-          this.course_order.students.length - 1
-        ].username = this.last_user_registered.username;
-        this.course_order.students[
-          this.course_order.students.length - 1
-        ].is_other = true;
-        this.course_order.students[
-          this.course_order.students.length - 1
-        ].is_account = true;
-        this.course_order.students[
-          this.course_order.students.length - 1
-        ].parents = [];
-      }
-      this.add_parent = false;
-    },
+    // last_user_registered: function () {
+      // console.log(this.last_user_registered);
+      // if (this.last_user_registered.type === "parent") {
+        // this.AddRelations({
+          // studentId: this.data_local.account_id,
+          // parentId: this.last_user_registered.account_id,
+        // }).then(() => {
+          // this.GetAll(this.user_login.account_id);
+          // for (const item of JSON.parse(localStorage.getItem("relations"))) {
+            // this.GetStudentData(item.student.studentId);
+            // console.log("GetStudentData", this.GetStudentData);
+          // }
+        // });
+      // } else if (this.last_user_registered.type === "student") {
+        // this.course_order.students[
+          // this.course_order.students.length - 1
+        // ].account_id = this.last_user_registered.account_id;
+        // this.course_order.students[
+          // this.course_order.students.length - 1
+        // ].firstname_en = this.last_user_registered.firstname_en;
+        // this.course_order.students[
+          // this.course_order.students.length - 1
+        // ].lastname_en = this.last_user_registered.lastname_en;
+        // this.course_order.students[
+          // this.course_order.students.length - 1
+        // ].firstname_th = this.last_user_registered.firstname_th;
+        // this.course_order.students[
+          // this.course_order.students.length - 1
+        // ].lastname_th = this.last_user_registered.lastname_th;
+        // this.course_order.students[
+          // this.course_order.students.length - 1
+        // ].student_name = `${this.last_user_registered.firstname_en} ${this.last_user_registered.lastname_en} `;
+        // this.course_order.students[this.course_order.students.length - 1].tel =
+          // this.last_user_registered.phone_number;
+        // this.course_order.students[
+          // this.course_order.students.length - 1
+        // ].username = this.last_user_registered.username;
+        // this.course_order.students[
+          // this.course_order.students.length - 1
+        // ].is_other = true;
+        // this.course_order.students[
+          // this.course_order.students.length - 1
+        // ].is_account = true;
+        // this.course_order.students[
+          // this.course_order.students.length - 1
+        // ].parents = [];
+      // }
+      // this.add_parent = false;
+    // },
 
-    type_selected: function () {
-      console.log("type_selected", this.type_selected);
-      this.loading = true;
-      setTimeout(async () => {
-        this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-        if (this.type_selected == "students_course") {
-          if (this.user_detail.roles.includes("R_4")) {
-            this.GetStudentData(this.user_detail.account_id);
-            for (const item of JSON.parse(localStorage.getItem("relations"))) {
-              this.GetStudentData(item.student.studentId);
-              console.log("student");
-            }
-          } else if (this.user_detail.roles.includes("R_5")) {
-            this.GetStudentData(this.user_detail.account_id);
-          } else {
-            this.GetStudentData(null);
-          }
-        }
-
-        this.loading = false;
-      }, 200);
-    },
+    // type_selected: function () {
+      // console.log("type_selected", this.type_selected);
+      // this.loading = true;
+      // setTimeout(async () => {
+        // this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
+        // if (this.type_selected == "students_course") {
+          // if (this.user_detail.roles.includes("R_4")) {
+            // this.GetStudentData(this.user_detail.account_id);
+            // for (const item of JSON.parse(localStorage.getItem("relations"))) {
+              // this.GetStudentData(item.student.studentId);
+              // console.log("student");
+            // }
+          // } else if (this.user_detail.roles.includes("R_5")) {
+            // this.GetStudentData(this.user_detail.account_id);
+          // } else {
+            // this.GetStudentData(null);
+          // }
+        // }
+// 
+        // this.loading = false;
+      // }, 200);
+    // },
   },
 
   methods: {
@@ -959,11 +962,12 @@ export default {
       AddRelations: "RegisterModules/AddRelations",
       RemoveRelation: "RegisterModules/RemoveRelation",
       GetProfileDetail: "ProfileModules/GetProfileDetail",
+      GetRelationDataV2: "ProfileModules/GetRelationData",
+      GetStudentCourse: "MyCourseModules/GetStudentCourse"
     }),
-    getWhat() {},
+    
     async getStudentData(order_item_id) {
       await this.$store.dispatch("getStudentData", order_item_id);
-      // Access the data in your component
       const studentData = this.$store.state.studentData;
       console.log(studentData);
     },
@@ -996,7 +1000,6 @@ export default {
       this.$router.push({ name: "ProfileCertificate" });
     },
     show_password() {
-      // this.$router.push({ name: "ProfilePassword" });
       window.location.href = `https://testoneid.inet.co.th/type_forgot_password?oauth_pass=true`;
     },
     show_policy() {
@@ -1008,7 +1011,7 @@ export default {
     closeDialog() {
       this.dialog_show = false;
       this.show_student_data = false;
-      this.add_parent = false;
+      this.add_relation = false;
     },
     openParentDialog(item) {
       this.getParentData = item;
@@ -1018,9 +1021,9 @@ export default {
       this.dialogGetStudentData = item;
       this.show_student_data = true;
     },
-    openAddParentDialog() {
-      this.add_parent = true;
-      this.parent = {
+    openAddRelationDialog() {
+      this.add_relation = true;
+      this.relation_user = {
         account_id: "",
         firstname_en: "",
         lastname_en: "",
@@ -1028,20 +1031,9 @@ export default {
         tel: "",
       };
     },
-    registerParent() {
-      this.register_type = "parent";
-      // this.changeCourseOrderData(this.course_order)
+    registerRelation() {
+      this.register_type = this.profile_detail?.userRoles?.roleId === 'R_5' ? "parent" : "student";
       this.changeDialogRegisterOneId(true);
-    },
-    openDialogParent() {
-      this.parent = {
-        account_id: "",
-        firstname_en: "",
-        lastname_en: "",
-        username: "",
-        tel: "",
-      };
-      this.dialog_parent = true;
     },
     removeRelation(relations) {
       console.log(relations);
@@ -1064,7 +1056,8 @@ export default {
             } else {
               this.relations;
             }
-            this.GetAll(this.user_login.account_id);
+            // this.GetAll(this.user_login.account_id);
+            this.GetRelationDataV2(this.user_login.account_id)
           });
         }
       });
@@ -1128,7 +1121,7 @@ export default {
               if (this.edit_parent) {
                 this.edit_parent = false;
               }
-              this.parent = {
+              this.relation_user = {
                 account_id: this.user_data[0].userOneId,
                 username: username,
                 firstname_en: this.user_data[0].firstNameEng,
@@ -1154,6 +1147,7 @@ export default {
             }
           }
         });
+        this.valid = true
       } else {
         this.user_data = [];
       }
@@ -1172,11 +1166,10 @@ export default {
         student: {},
         parent: {},
       });
-      // this.ChangeOrederData(this.order);
     },
 
-    addParent() {
-      if (this.$refs.form.validate()) {
+    addRelations() {
+      // if (this.$refs.form.validate()) {
         Swal.fire({
           icon: "question",
           title: "คุณต้องการเพิ่มผู้ปกครองหรือไม่",
@@ -1202,10 +1195,21 @@ export default {
                 this.set_parent_id = data.userOneId;
                 console.log("userOneId", this.set_parent_id);
               }
-              let payload = {
-                studentId: this.user_login.account_id,
-                parentId: this.set_parent_id,
-              };
+
+              let payload = {}
+
+              if (this.profile_detail?.userRoles?.roleId === 'R_5') {
+                payload = {
+                  studentId: this.user_login.account_id,
+                  parentId: this.set_parent_id,
+                };
+              } else {
+                payload = {
+                  parentId: this.user_login.account_id,
+                  studentId: this.set_parent_id,
+                };
+              }
+              
               console.log("payload :", payload);
               let { data } = await axios.post(
                 `${process.env.VUE_APP_URL}/api/v1/relations/user`,
@@ -1220,11 +1224,12 @@ export default {
                     title: "บันทึกสำเร็จ",
                   }).then(async (result) => {
                     if (result.isConfirmed) {
-                      this.add_parent = false;
+                      this.add_relation = false;
                       this.user_login = JSON.parse(
                         localStorage.getItem("userDetail")
                       );
-                      this.GetAll(this.user_login.account_id);
+                      // this.GetAll(this.user_login.account_id);
+                      this.GetRelationDataV2(this.user_login.account_id)
                     }
                   });
                 } else {
@@ -1268,11 +1273,12 @@ export default {
                 }`,
               }).then(async (result) => {
                 if (result.isConfirmed) {
-                  this.add_parent = false;
+                  this.add_relation = false;
                   this.user_login = JSON.parse(
                     localStorage.getItem("userDetail")
                   );
-                  this.GetAll(this.user_login.account_id);
+                  this.GetRelationDataV2(this.user_login.account_id)
+                  // this.GetAll(this.user_login.account_id);
                 }
               });
             }
@@ -1280,7 +1286,7 @@ export default {
             Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
           }
         });
-      }
+      // }
     },
 
     myCourseStudent(item) {
@@ -1302,23 +1308,25 @@ export default {
       my_course_student_id: "MyCourseModules/getMyCourseStudent",
       my_course: "MyCourseModules/getMyCourse",
       profile_detail: "ProfileModules/getProfileDetail",
+      relation_data: "ProfileModules/getRelationData",
+      student_course: "MyCourseModules/getStudentCourse"
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;
     },
 
-    setFunctions() {
-      this.GetAll(this.user_login.account_id);
-      this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-      this.GetProfileDetail(this.user_login.account_id);
-      this.GetRelations({
-        student_id: this.user_login.account_id,
-        parent_id: "",
-      });
+    // setFunctions() {
+    //   this.GetAll(this.user_login.account_id);
+    //   this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
+    //   this.GetProfileDetail(this.user_login.account_id);
+    //   this.GetRelations({
+    //     student_id: this.user_login.account_id,
+    //     parent_id: "",
+    //   });
 
-      return "";
-    },
+    //   return "";
+    // },
   },
 };
 </script>
