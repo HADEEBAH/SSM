@@ -350,8 +350,8 @@
               >
               </v-img>
               <div style="position: absolute">
-                <div v-if="getParentData.parentImage != ''">
-                  <v-img :src="getParentData.parentImage" class="image-cropper">
+                <div v-if="getParentDataDialog.parentImage != ''">
+                  <v-img :src="getParentDataDialog.parentImage" class="image-cropper">
                   </v-img>
                 </div>
                 <div v-else>
@@ -370,9 +370,9 @@
                 <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
                 <br />
                 {{
-                  !getParentData.parentFirstnameTh
+                  !getParentDataDialog.parentFirstnameTh
                     ? "-"
-                    : getParentData.parentFirstnameTh
+                    : getParentDataDialog.parentFirstnameTh
                 }}
               </v-col>
               <!-- TH LNAME -->
@@ -380,9 +380,9 @@
                 <label-custom text="นามสกุล (ภาษาไทย)"></label-custom>
                 <br />
                 {{
-                  !getParentData.parentLastnameTh
+                  !getParentDataDialog.parentLastnameTh
                     ? "-"
-                    : getParentData.parentLastnameTh
+                    : getParentDataDialog.parentLastnameTh
                 }}
               </v-col>
               <!-- nationality -->
@@ -390,24 +390,24 @@
                 <label-custom text="สัญชาติ"></label-custom>
                 <br />
                 {{
-                  !getParentData.parentNation ? "-" : getParentData.parentNation
+                  !getParentDataDialog.parentNation ? "-" : getParentDataDialog.parentNation
                 }}
-                <!-- {{ getParentData.parentNation == null ? '-' : getParentData.parentNation}} -->
+                <!-- {{ getParentDataDialog.parentNation == null ? '-' : getParentDataDialog.parentNation}} -->
               </v-col>
               <!-- tel -->
               <v-col cols="12" sm="6">
                 <label-custom text="เบอร์โทรศัพท์"></label-custom>
                 <br />
-                {{ !getParentData.parentTel ? "-" : getParentData.parentTel }}
+                {{ !getParentDataDialog.parentTel ? "-" : getParentDataDialog.parentTel }}
               </v-col>
               <!-- email -->
               <v-col cols="12" sm="6">
                 <label-custom text="อีเมล"></label-custom>
                 <br />
                 {{
-                  !getParentData.parentEmail ? "-" : getParentData.parentEmail
+                  !getParentDataDialog.parentEmail ? "-" : getParentDataDialog.parentEmail
                 }}
-                <!-- {{ getParentData.parentTel== ''? '-' : getParentData.parentTel}} -->
+                <!-- {{ getParentDataDialog.parentTel== ''? '-' : getParentDataDialog.parentTel}} -->
               </v-col>
             </v-row>
             <v-row dense>
@@ -417,7 +417,7 @@
                 <v-btn
                   class="white--text"
                   color="#FF6B81"
-                  @click="removeRelation(getParentData)"
+                  @click="removeRelation(getParentDataDialog)"
                 >
                   ลบข้อมูลผู้ปกครอง
                 </v-btn>
@@ -566,6 +566,20 @@
                 <span class="mdi mdi-chevron-right"></span>
               </v-col>
             </v-row>
+            <v-row dense>
+              <!-- v-if="profile_user.length >= 1" -->
+
+              <v-col align="center">
+                <v-btn
+                  class="white--text"
+                  color="#FF6B81"
+                  @click="removeRelation(dialogGetStudentData)"
+                >
+                  ลบข้อมูลนักเรียน
+                </v-btn>
+              </v-col>
+            </v-row>
+
           </v-card-text>
           <div class="my-5 text-center"></div>
         </v-card>
@@ -577,7 +591,7 @@
           <header-card
             icon="mdi-card-account-details-outline"
             icon_color="#ff6b81"
-            title="ผู้ปกครอง"
+            :title="profile_detail?.userRoles?.roleId === 'R_5' ? 'เพิ่มผู้ปกครอง' : 'เพิ่มนักเรียน'"
           >
             <template #actions>
               <v-btn icon @click="closeDialog"
@@ -756,7 +770,8 @@ export default {
       tel: "",
     },
     register_type: "parent",
-    getParentData: {},
+    getParentDataDialog: {},
+    getStudentDataDialog: {},
     dialogGetStudentData: {},
     list_course_count: 0,
     rules: {
@@ -1011,7 +1026,7 @@ export default {
       this.add_relation = false;
     },
     openParentDialog(item) {
-      this.getParentData = item;
+      this.getParentDataDialog = item;
       this.dialog_show = true;
     },
     openDialogStudent(item) {
@@ -1032,7 +1047,7 @@ export default {
       this.register_type = this.profile_detail?.userRoles?.roleId === 'R_5' ? "parent" : "student";
       this.changeDialogRegisterOneId(true);
     },
-    removeRelation(relations) {
+    async removeRelation(relations) {
       console.log(relations);
       Swal.fire({
         icon: "question",
@@ -1045,17 +1060,22 @@ export default {
         if (result.isConfirmed) {
           this.dialog_show = false;
           this.RemoveRelation({
-            studentId: this.data_local.account_id,
-            parentId: relations.parentId,
+            studentId: this.profile_detail?.userRoles?.roleId === 'R_5' ? this.profile_detail.userOneId : relations.studentId,
+            parentId: this.profile_detail?.userRoles?.roleId === 'R_5' ? relations.parentId : this.profile_detail.userOneId,
           }).then(() => {
-            if (relations.length <= 0) {
-              console.log("nonono");
-            } else {
-              this.relations;
-            }
-            // this.GetAll(this.user_login.account_id);
+            Swal.fire({
+              icon: "success",
+              title: "ลบสำเร็จ",
+            })
             this.GetRelationDataV2(this.user_login.account_id)
-          });
+          }).catch(()=>{
+            Swal.fire({
+              icon: "error",
+              title: "ลบไม่สำเร็จ",
+            })
+          })
+          this.dialog_show = false
+          this.show_student_data = false
         }
       });
     },
@@ -1165,7 +1185,7 @@ export default {
       });
     },
 
-    addRelations() {
+    async addRelations() {
       // if (this.$refs.form.validate()) {
         Swal.fire({
           icon: "question",
@@ -1184,55 +1204,59 @@ export default {
                   Authorization: `Bearer ${VueCookie.get("token")}`,
                 },
               };
-              this.user_login = JSON.parse(localStorage.getItem("userDetail"));
+              // this.user_login = JSON.parse(localStorage.getItem("userDetail"));
 
-              console.log("object", this.user_data);
-              for (const data of this.user_data) {
-                console.log("data", data);
-                this.set_parent_id = data.userOneId;
-                console.log("userOneId", this.set_parent_id);
-              }
+              // console.log("object", this.user_data);
+              // for (const data of this.user_data) {
+              //   console.log("data", data);
+              //   this.set_parent_id = data.userOneId;
+              //   console.log("userOneId", this.set_parent_id);
+              // }
 
               let payload = {}
 
               if (this.profile_detail?.userRoles?.roleId === 'R_5') {
                 payload = {
                   studentId: this.user_login.account_id,
-                  parentId: this.set_parent_id,
+                  parentId: this.relation_user.account_id,
                 };
               } else {
                 payload = {
                   parentId: this.user_login.account_id,
-                  studentId: this.set_parent_id,
+                  studentId: this.relation_user.account_id,
                 };
               }
               
-              console.log("payload :", payload);
               let { data } = await axios.post(
                 `${process.env.VUE_APP_URL}/api/v1/relations/user`,
                 payload,
                 config
               );
 
+              console.log("data+++++++++++", data);
+
               if (data.statusCode === 201) {
-                if (data.data && data.data.message !== "Duplicate relation.") {
+                if (data.data.message !== "Duplicate relation.") {
                   Swal.fire({
                     icon: "success",
                     title: "บันทึกสำเร็จ",
-                  }).then(async (result) => {
-                    if (result.isConfirmed) {
-                      this.add_relation = false;
-                      this.user_login = JSON.parse(
-                        localStorage.getItem("userDetail")
-                      );
-                      // this.GetAll(this.user_login.account_id);
-                      this.GetRelationDataV2(this.user_login.account_id)
-                    }
-                  });
-                } else {
+                  })
+                  // .then(async (result) => {
+                    // if (result.isConfirmed) {
+                      // this.user_login = JSON.parse(
+                      //   localStorage.getItem("userDetail")
+                      // );
+                      // this.GetRelationDataV2(this.user_login.account_id)
+                    // }
+                  // });
+                  this.add_relation = false;
+                  this.GetRelationDataV2(this.user_login.account_id)
+                }
+                 else {
                   throw { error: data };
                 }
-              } else {
+              }
+               else {
                 throw { message: data.message };
               }
             } catch ({ response }) {
@@ -1268,14 +1292,13 @@ export default {
                     ? ""
                     : `(${this.error_message})`
                 }`,
-              }).then(async (result) => {
+              }).then( (result) => {
                 if (result.isConfirmed) {
                   this.add_relation = false;
                   this.user_login = JSON.parse(
                     localStorage.getItem("userDetail")
                   );
                   this.GetRelationDataV2(this.user_login.account_id)
-                  // this.GetAll(this.user_login.account_id);
                 }
               });
             }
