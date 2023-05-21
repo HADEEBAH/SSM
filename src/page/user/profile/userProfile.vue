@@ -37,7 +37,6 @@
         </v-btn>
       </div>
       <!-- ROLE STUDENT คอร์สเรียน-->
-      profile_detail : {{ profile_detail }}
       <div v-if="profile_detail?.userRoles?.roleId === 'R_5'">
         <div class="mt-8">
           <label-custom text="คอร์สเรียน"></label-custom>
@@ -98,10 +97,8 @@
           </v-col>
         </v-row>
         <v-divider class="mb-3"></v-divider>
-        relation_data: {{ relation_data }}
         <!-- card parent -->
         <div v-if="relation_data.length > 0">
-          relation_data: {{ relation_data }}
           <v-card
             v-for="(profile, index) in relation_data"
             :key="`${index}-profile`"
