@@ -135,6 +135,8 @@ const profileModules = {
       policy: ' บริษัท อินเทอร์เน็ตประเทศไทย จำกัด (มหาชน) มีความมุ่งมั่นที่จะดำเนินการตามพระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 ให้สอดคล้องกับหลักเกณฑ์ของคณะกรรมการคุ้มครองข้อมูลส่วนบุคคลเพื่อให้มีหลักเกณฑ์การคุ้มครองสิทธิของเจ้าของข้อมูลเกี่ยวกับข้อมูลส่วนบุคคลสิทธิในความเป็นส่วนตัวและเสรีภาพในข้อมูลส่วนบุคคลของผู้เจ้าของข้อมูลและพัฒนาปรับปรุงนโยบายระเบียบปฏิบัติของ บริษัทให้ต่อเนื่องสืบไปเพื่อให้เป็นไปตามนโยบายการคุ้มครองข้อมูลส่วนบุคคลบริษัทจึงขอประกาศนโยบาย ดังนี้'
     },
 
+    relation_detail:[]
+
   },
   mutations: {
     SetUserData(state, payload) {
@@ -159,6 +161,11 @@ const profileModules = {
       state.students = payload
 
     },
+
+    SetRelationDetail(state, payload) {
+      state.relation_detail = payload
+    },
+    
 
 
   },
@@ -186,10 +193,10 @@ const profileModules = {
           if (data.statusCode === 200) {
             if (data?.data?.message !== "relation not found.") {
               localStorage.setItem("relations", JSON.stringify(data.data))
-              context.commit("SetProfileUser", data.data)
+              await context.commit("SetProfileUser", data.data)
             } else {
               localStorage.setItem("relations", [])
-              context.commit("SetProfileUser", [])
+              await context.commit("SetProfileUser", [])
 
             }
           } else {
@@ -206,13 +213,13 @@ const profileModules = {
                   students.push(student.student)
                 }
               }
-              context.commit("SetProfileUser", data.data)
-              context.commit("SetStudents", students)
+              await context.commit("SetProfileUser", data.data)
+              await context.commit("SetStudents", students)
               localStorage.setItem("relations", JSON.stringify(data.data))
             } else {
               // localStorage.removeItem("relations"); // clear existing data in local storage
               localStorage.setItem("relations", []);
-              context.commit("SetProfileUser", [])
+              await context.commit("SetProfileUser", [])
 
               throw { error: data };
             }
@@ -229,7 +236,6 @@ const profileModules = {
     },
 
     async GetProfileDetail(context, account_id) {
-      console.log("account_id5555", account_id);
       try {
         let config = {
           headers: {
@@ -238,13 +244,26 @@ const profileModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
+        // let { data } = await axios.get(`http://localhost:3000/api/v1/profile/${account_id}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/profile/${account_id}`, config)
-        // console.log("data_parent", data)
+        let roles = {
+          roleId:"",
+          roleNameEng:"",
+          roleNameTh:"",
+        }
         if (data.statusCode === 200) {
-          data.data.image = data.data.image && data.data.image != "" ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}` : ""
-          // data.data.image = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}`
-          context.commit("SetProfileDetail", data.data)
-          console.log("SetProfileDetail", data.data)
+          const response = data.data
+
+          response.image = response.image && response.image != "" ? `${process.env.VUE_APP_URL}/api/v1/files/${response.image}` : ""
+          
+          for await (const role of response.userRoles) {
+            roles.roleId = role.roleId
+            roles.roleNameEng = role.roleNameEng
+            roles.roleNameTh = role.roleNameTh
+          }
+
+          response.userRoles = roles
+          context.commit("SetProfileDetail", response)
         } else {
           throw { error: data }
         }
@@ -260,7 +279,30 @@ const profileModules = {
 
     ChangePassword(context, newPassword) {
       context.commit("SetPassword", newPassword)
-    }
+    },
+
+    async GetRelationData (context, account_id) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user-v2/?account_id=${account_id}`, config)
+        // let { data } = await axios.get(`http://localhost:3000/api/v1/relations/user-v2/?account_id=${account_id}`, config)
+        console.log("data=>", data);
+        let response = data.data
+
+        if (data.statusCode === 200) {
+          context.commit("SetRelationDetail", response)
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
 
   },
   getters: {
@@ -282,7 +324,9 @@ const profileModules = {
     getStudents(state) {
       return state.students
     },
-
+    getRelationData(state) {
+      return state.relation_detail
+    },
 
   },
 };
