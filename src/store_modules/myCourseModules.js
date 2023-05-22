@@ -184,6 +184,7 @@ const myCourseModules = {
                                     start: date.replace(" 00:00:00", "") + ' ' + course.period.start,
                                     end: date.replace(" 00:00:00", "") + ' ' + course.period.end,
                                     name: data_local.roles.includes('R_5') ? `${course.courseNameTh}(${course.courseNameEng})` : course.student.firstNameTh,
+                                    // name: `${course.courseNameTh}(${course.courseNameEng})`,
                                     timed: course.student.firstNameTh,
                                     subtitle: course.coachName,
                                     courseId: course.courseId,
@@ -193,7 +194,7 @@ const myCourseModules = {
                         }
                     }
                     if (data_local.roles.includes('R_4')) {
-                        console.log(data.data)
+                        console.log("data.data", data.data)
                         let MyCourse = []
                         for await (const item of data.data) {
                             if (MyCourse.filter(v => v.orderItemId === item.orderItemId).length === 0) {
@@ -203,6 +204,7 @@ const myCourseModules = {
                         context.commit("SetMyCourse", MyCourse)
                         context.commit("SetMyCourseStudentId", '')
                     } else {
+
                         context.commit("SetStudentData", data.data)
                         console.log("SetStudentData", data.data)
                     }
