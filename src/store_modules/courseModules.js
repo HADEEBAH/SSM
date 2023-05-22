@@ -1148,7 +1148,7 @@ const CourseModules = {
       try {
         // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
-        console.log("GetCourse => ",data.data)
+        // console.log("GetCourse => ",data.data)
         
         if (data.statusCode === 200) {
           let payload = {
@@ -1187,7 +1187,7 @@ const CourseModules = {
           }
           let teach_day_data = []
           for await (let coach of data.data.coachs){
-            console.log("payload 1054",payload)
+            // console.log("payload 1054",payload)
             for await (let coach_date of data.data.dayOfWeek.filter(v => v.courseCoachId === coach.courseCoachId)){
               // DAY OF CLASS
               if(payload.days_of_class.filter(v => v.day_of_week_id === coach_date.times[0].dayOfWeekId).length === 0){
@@ -1229,7 +1229,7 @@ const CourseModules = {
                   students: time.maximumStudent,
                 },)
               }
-              console.log("payload => 1232", payload)
+              // console.log("payload => 1232", payload)
               // TEACH DAY
               teach_day_data.push({
                 day_of_week_id :coach_date.times[0].dayOfWeekId ? coach_date.times[0].dayOfWeekId : null,
@@ -1249,7 +1249,7 @@ const CourseModules = {
               "HH": endTimePart[0],
               "mm": endTimePart[1]? endTimePart[1] : "00"
             } : null
-            console.log("payload => 1249", payload)
+            // console.log("payload => 1249", payload)
             payload.coachs.push(
                 {
                   coach_id: coach.accountId,
@@ -1285,7 +1285,7 @@ const CourseModules = {
                   },
                 },
             )
-            console.log("payload 1120",payload)
+            // console.log("payload 1120",payload)
           }
           // console.log("payload 1122",payload)
           // console.log("teach_day_data",teach_day_data)
