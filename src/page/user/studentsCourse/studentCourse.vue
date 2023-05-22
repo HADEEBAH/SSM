@@ -146,51 +146,22 @@
         </v-col> -->
       </v-row>
       <div v-for="(item_data, index) in my_course_detail.checkIn" :key="index">
-        <v-card class="pa-2" v-if="item_data.potential !== null">
+        <v-card
+          class="pa-2"
+          v-if="
+            item_data.potential !== null && my_course_detail.checkIn.length >= 1
+          "
+        >
           <v-row>
             <v-col cols="2" sm="1" align="center">
               <img src="../../../assets/student_course/certificates.png" />
             </v-col>
             <v-col class="text-lg font-bold" cols="6">ผลประเมินศักยภาพ</v-col>
-            <!-- <v-col cols="4" align="end">
-              <v-card flat>
-                <v-card-text
-                  class="pa-1 rounded-xl text-center"
-                  :class="`text-[${
-                    check_in_status_options.filter(
-                      (v) => v.value === item_data.status
-                    )[0].color
-                  }] bg-[${
-                    check_in_status_options.filter(
-                      (v) => v.value === item_data.status
-                    )[0].bg_color
-                  }]`"
-                >
-                  <span
-                    :class="`text-[${
-                      check_in_status_options.filter(
-                        (v) => v.value === item_data.status
-                      )[0].color
-                    }]`"
-                  >
-                    {{
-                      check_in_status_options.filter(
-                        (v) => v.value === item_data.status
-                      ).length > 0
-                        ? check_in_status_options.filter(
-                            (v) => v.value === item_data.status
-                          )[0].label
-                        : "-"
-                    }}
-                  </span>
-                </v-card-text>
-              </v-card>
-            </v-col> -->
           </v-row>
 
           <v-card color="#FBF3F5" class="my-2 mx-5">
             <v-row dense>
-              <v-col cols="12" sm="4" align="start">
+              <v-col cols="12" sm="6" md="12" align="start">
                 <v-card-text>
                   <b>ระดับพัฒนาการ:</b>
                   <span
@@ -212,7 +183,7 @@
                   </span>
                 </v-card-text>
               </v-col>
-              <v-col cols="12" sm="auto" align="start">
+              <v-col cols="12" sm="auto" md="12" align="start">
                 <v-card-text>
                   <b>ระดับความสนใจ:</b>
                   {{ item_data.potential.interest }}
@@ -225,43 +196,45 @@
                 </v-card-text>
               </v-col>
 
-              <v-row dense class="mx-5">
-                <v-card-text class="text-start"> ไฟล์แนบ : </v-card-text>
-                <v-col cols="12">
-                  <v-card
-                    @click="openFile(file.attachmentFiles)"
-                    flat
-                    class="mb-3"
-                    v-for="(file, index_file) in item_data.potential
-                      .attachmentPotential.attachment"
-                    :key="index_file"
-                  >
-                    <v-card-text
-                      class="border border-2 border-[#ff6b81] rounded-lg"
+              <v-row dense>
+                <v-card-text class="text-start">
+                  <v-col cols="12">
+                    <b>ไฟล์แนบ: </b>
+                    <v-card
+                      @click="openFile(file.attachmentFiles)"
+                      flat
+                      class="mb-3"
+                      v-for="(file, index_file) in item_data.potential
+                        .attachmentPotential"
+                      :key="index_file"
                     >
-                      <v-row>
-                        <v-col cols="12" sm="1" align="center">
-                          <v-img
-                            height="35"
-                            width="26"
-                            src="../../../assets/coachLeave/file-pdf.png"
-                          />
-                        </v-col>
-                        <v-col cols="12" sm="10" align="start">
-                          <span class="font-bold">{{
-                            file.originalFilesName
-                          }}</span
-                          ><br />
-                          <span class="text-caption"
-                            >ขนาดไฟล์ :
-                            {{ (file.filesSize / 1000000).toFixed(2) }}
-                            MB</span
-                          >
-                        </v-col>
-                      </v-row>
-                    </v-card-text>
-                  </v-card>
-                </v-col>
+                      <v-card-text
+                        class="border border-2 border-[#ff6b81] rounded-lg"
+                      >
+                        <v-row>
+                          <v-col align="center">
+                            <v-img
+                              height="35"
+                              width="26"
+                              src="../../../assets/coachLeave/file-pdf.png"
+                            />
+                          </v-col>
+                          <v-col cols="12" sm="10" align="start">
+                            <span class="font-bold">{{
+                              file.originalFilesName
+                            }}</span
+                            ><br />
+                            <span class="text-caption"
+                              >ขนาดไฟล์ :
+                              {{ (file.filesSize / 1000000).toFixed(2) }}
+                              MB</span
+                            >
+                          </v-col>
+                        </v-row>
+                      </v-card-text>
+                    </v-card>
+                  </v-col>
+                </v-card-text>
 
                 <!-- <v-card v-if="item_data.assessment.attachment.length <= 0">
                   <v-card-text
@@ -644,13 +617,13 @@ export default {
   }),
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    if(localStorage.getItem("relations")){
-      this.relations = JSON.parse(localStorage.getItem("relations"))
-    // console.log("relations => ",this.relations)
-    }else{
-      this.relations = null
+    if (localStorage.getItem("relations")) {
+      this.relations = JSON.parse(localStorage.getItem("relations"));
+      // console.log("relations => ",this.relations)
+    } else {
+      this.relations = null;
     }
-   
+
     this.show_id = this.$route.params.course_id;
     // this.GetAll(this.user_detail.account_id);
     // console.log(this.user_detail)
@@ -667,7 +640,10 @@ export default {
         course_id: this.$route.params.course_id,
       });
     }
-    if (this.my_course_detail.checkIn && this.my_course_detail.checkIn.length !== 0) {
+    if (
+      this.my_course_detail.checkIn &&
+      this.my_course_detail.checkIn.length !== 0
+    ) {
       this.my_course_detail.checkIn.map((val) => {
         val["show"] = false;
       });
@@ -679,7 +655,10 @@ export default {
       "NavberUserModules/changeTitleNavber",
       "ข้อมูลคอร์สเรียน"
     );
-    if (this.my_course_detail.checkIn && this.my_course_detail.checkIn.length !== 0) {
+    if (
+      this.my_course_detail.checkIn &&
+      this.my_course_detail.checkIn.length !== 0
+    ) {
       this.my_course_detail.checkIn.map((val) => {
         val["show"] = false;
       });

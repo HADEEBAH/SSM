@@ -135,7 +135,7 @@ const profileModules = {
       policy: ' บริษัท อินเทอร์เน็ตประเทศไทย จำกัด (มหาชน) มีความมุ่งมั่นที่จะดำเนินการตามพระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 ให้สอดคล้องกับหลักเกณฑ์ของคณะกรรมการคุ้มครองข้อมูลส่วนบุคคลเพื่อให้มีหลักเกณฑ์การคุ้มครองสิทธิของเจ้าของข้อมูลเกี่ยวกับข้อมูลส่วนบุคคลสิทธิในความเป็นส่วนตัวและเสรีภาพในข้อมูลส่วนบุคคลของผู้เจ้าของข้อมูลและพัฒนาปรับปรุงนโยบายระเบียบปฏิบัติของ บริษัทให้ต่อเนื่องสืบไปเพื่อให้เป็นไปตามนโยบายการคุ้มครองข้อมูลส่วนบุคคลบริษัทจึงขอประกาศนโยบาย ดังนี้'
     },
 
-    relation_detail:[]
+    relation_detail: []
 
   },
   mutations: {
@@ -165,7 +165,7 @@ const profileModules = {
     SetRelationDetail(state, payload) {
       state.relation_detail = payload
     },
-    
+
 
 
   },
@@ -247,15 +247,15 @@ const profileModules = {
         // let { data } = await axios.get(`http://localhost:3000/api/v1/profile/${account_id}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/profile/${account_id}`, config)
         let roles = {
-          roleId:"",
-          roleNameEng:"",
-          roleNameTh:"",
+          roleId: "",
+          roleNameEng: "",
+          roleNameTh: "",
         }
         if (data.statusCode === 200) {
           const response = data.data
 
           response.image = response.image && response.image != "" ? `${process.env.VUE_APP_URL}/api/v1/files/${response.image}` : ""
-          
+
           for await (const role of response.userRoles) {
             roles.roleId = role.roleId
             roles.roleNameEng = role.roleNameEng
@@ -281,7 +281,7 @@ const profileModules = {
       context.commit("SetPassword", newPassword)
     },
 
-    async GetRelationData (context, account_id) {
+    async GetRelationData(context, account_id) {
       try {
         let config = {
           headers: {
@@ -298,6 +298,7 @@ const profileModules = {
 
         if (data.statusCode === 200) {
           context.commit("SetRelationDetail", response)
+          localStorage.setItem("relations", JSON.stringify(response))
         }
       } catch (error) {
         console.log(error);

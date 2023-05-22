@@ -39,7 +39,7 @@
             <v-row class="my-5">
               <v-col cols="12">
                 <v-autocomplete
-                  v-model="search_course"
+                  v-model="search_course_detail"
                   :items="students"
                   item-text="studentFirstnameTh"
                   item-value="studentId"
@@ -47,7 +47,7 @@
                   filled
                   clearable
                   label="เลือกนักเรียนของคุณได้ที่นี้"
-                  @change="searchStudentCourse(search_course)"
+                  @change="searchStudentCourse(search_course_detail)"
                 ></v-autocomplete>
               </v-col>
             </v-row>
@@ -270,23 +270,24 @@
             <v-row class="my-5">
               <v-col cols="12">
                 <v-autocomplete
-                  :key="index"
-                  v-model="search_schadule"
+                  v-model="search_course"
                   :items="students"
                   item-text="studentFirstnameTh"
                   item-value="studentId"
-                  label="เลือกนักเรียนของคุณได้ที่นี้"
                   dense
                   filled
-                  @change="searchStudentSchadule(search_schadule)"
+                  clearable
+                  label="เลือกนักเรียนของคุณได้ที่นี้"
+                  @change="searchStudentCourse(search_course)"
                 ></v-autocomplete>
               </v-col>
             </v-row>
-
             <v-row class="mb-2">
               <v-col cols="12" align="center">
                 <v-card flat width="340px">
-                  <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
+                  <v-card-text
+                    class="pa-2 border-2 border-[#ff6b81] rounded-lg"
+                  >
                     <v-row dense class="d-flex justify-center">
                       <v-col
                         cols="auto"
@@ -310,7 +311,6 @@
             </v-row>
             <diV>
               <template>
-                <!-- {{ itemTime.dates }} -->
                 <calendarStudent
                   :events="itemTime.dates"
                   :type="time_frame"
@@ -801,6 +801,7 @@ export default {
     tasks: [],
     data_search_course: [],
     search_course: "",
+    search_course_detail: "",
     search_schadule: "",
     search_booked: "",
     type_selected: "students_schedule",
@@ -811,30 +812,49 @@ export default {
     item_data: "",
     user_detail: {},
     clearable: false,
+    userRelationsAccountId: "",
+    user_details: localStorage.getItem("userDetail"),
   }),
+  beforeCreate() {
+    localStorage.removeItem("userRelationsAccountId");
+  },
   created() {
+    this.userRelationsAccountId = localStorage.getItem(
+      "userRelationsAccountId"
+    );
     if (this.$route.query.token) {
       this.loginShareToken(this.$route.query.token);
     }
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+    // this.GetStudentData(this.user_detail.account_id);
   },
 
-  mounted() {
+  beforeUpdate() {
     this.$store.dispatch(
       "NavberUserModules/changeTitleNavber",
       "ข้อมูลตารางเรียน"
     );
+  },
+  mounted() {
     this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-    if (this.user_detail.roles.includes("R_4")) {
-      this.GetStudentData(this.user_detail.account_id);
-      for (const item of JSON.parse(localStorage.getItem("relations"))) {
-        this.GetStudentData(item.student.studentId);
-        console.log("student");
-      }
+
+    if (localStorage.getItem("userRelationsAccountId")) {
+      // localStorage.getItem("userRelationsAccountId");
+      // localStorage.getItem("userRelationsAccountId");
+      // console.log(
+      //   "object----userRelationsAccountId",
+      //   this.userRelationsAccountId
+      // );
+      // this.GetStudentData(this.userRelationsAccountId);
+      // for (const item of JSON.parse(localStorage.getItem("relations"))) {
+      //   this.GetStudentData(item.student.studentId);
+      //   console.log("student");
+      // }
     } else if (this.user_detail.roles.includes("R_5")) {
       this.GetStudentData(this.user_detail.account_id);
     } else {
-      this.GetStudentData(null);
+      // this.GetStudentData(null);
+      this.GetStudentData(this.user_detail.account_id);
     }
   },
 
@@ -891,10 +911,15 @@ export default {
     },
 
     async searchStudentCourse(studentId) {
-      this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-      console.log("item1", studentId);
-      await this.GetStudentData(studentId);
-      console.log("mycourse1", this.student_data);
+      if (studentId !== null) {
+        this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
+        console.log("item1", studentId);
+        await this.GetStudentData(studentId);
+        console.log("mycourse1", this.student_data);
+      } else {
+        console.log("this.user_detail.account_id", this.user_detail.account_id);
+        this.GetStudentData(this.user_detail.account_id);
+      }
     },
 
     async searchStudentSchadule(studentId) {
@@ -966,6 +991,10 @@ export default {
     showData() {
       this.show_detail = true;
     },
+  },
+
+  beforeDestroy() {
+    localStorage.removeItem("userRelationsAccountId");
   },
 
   computed: {

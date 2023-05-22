@@ -101,11 +101,12 @@
                     </v-col>
                     <v-col>
                       <v-row dense>
-                        <v-col> เรียนโดย: {{ event.name }} </v-col>
-                      </v-row>
-                      <v-row dense>
                         <label class="font-bold">{{ event.timed }} </label>
                       </v-row>
+                      <v-row dense>
+                        <v-col> เรียนโดย: {{ event.name }} </v-col>
+                      </v-row>
+
                       <v-row dense>
                         <v-col class="text-sm">
                           โค้ช: {{ event.subtitle }} <br />
@@ -171,6 +172,9 @@ export default {
     },
     event_date: [],
   }),
+  created() {
+    this.colorOfDay();
+  },
   watch: {
     events(val) {
       // console.log("val ->>>", val);
@@ -190,7 +194,6 @@ export default {
   },
   beforeUpdate() {
     this.colorOfDay();
-
   },
   mounted() {
     let today = new Date();
@@ -246,15 +249,15 @@ export default {
       this.events.forEach((event) => {
         let [start, start_time] = event.start.split(" ");
         let [end, end_time] = event.end.split(" ");
-        if(start_time !== "Invalid date" && end_time !== "Invalid date"){
+        if (start_time !== "Invalid date" && end_time !== "Invalid date") {
           if (start === end && start === date) {
             this.event_date.push({
+              timed: event.timed,
               name: event.name,
               subtitle: event.subtitle,
               coach: event.coach,
               start_time: start_time,
               end_time: end_time,
-              timed: event.timed,
               color: event.color,
               courseId: event.courseId,
             });

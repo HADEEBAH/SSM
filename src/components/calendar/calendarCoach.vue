@@ -6,106 +6,133 @@
                {{ start_of_week }} -  {{ end_of_week }}
                 </v-col>
             </v-row> -->
-            <v-row dense>
-                <v-col>
-                    <v-btn text class="underline" color="#ff6b81" @click="goToday">คลิกเพื่อไปคอร์สที่ต้องสอนล่าสุด</v-btn>
-                </v-col>
-            </v-row>
+      <v-row dense>
+        <v-col>
+          <v-btn text class="underline" color="#ff6b81" @click="goToday"
+            >คลิกเพื่อไปคอร์สที่ต้องสอนล่าสุด</v-btn
+          >
+        </v-col>
+      </v-row>
+    </template>
+    <v-card v-if="type === 'week' || $vuetify.breakpoint.smAndUp">
+      <v-card-title>
+        <v-row>
+          <v-col cols="auto">
+            <v-btn icon @click="prev"><v-icon>mdi-chevron-left</v-icon></v-btn>
+          </v-col>
+          <v-col align="center" v-if="$refs.calendar">{{
+            $refs.calendar.title
+          }}</v-col>
+          <v-col cols="auto">
+            <v-btn icon @click="next"><v-icon>mdi-chevron-right</v-icon></v-btn>
+          </v-col>
+        </v-row>
+      </v-card-title>
+      <v-calendar
+        ref="calendar"
+        color="#ff6b81"
+        :type="type"
+        v-model="focus"
+        :events="events"
+        event-text-color="#000000"
+        event-overlap-mode="column"
+        :first-interval="9"
+        :interval-count="12"
+        :event-overlap-threshold="30"
+        @click:event="selectedDate($event)"
+      >
+        <template v-if="type === 'week'" v-slot:day-body="{ date, week }">
+          <div
+            class="v-current-time"
+            :class="{ first: date === week[0].date }"
+            :style="{ top: nowY }"
+          ></div>
         </template>
-        <v-card v-if="type === 'week' || $vuetify.breakpoint.smAndUp">
-            <v-card-title>
-                <v-row >
-                    <v-col cols="auto">
-                        <v-btn icon @click="prev"><v-icon>mdi-chevron-left</v-icon></v-btn>
-                    </v-col>
-                    <v-col align="center" v-if="$refs.calendar">{{ $refs.calendar.title }}</v-col>
-                    <v-col cols="auto">
-                        <v-btn icon @click="next"><v-icon>mdi-chevron-right</v-icon></v-btn>
-                    </v-col>
-                </v-row>
-            </v-card-title>
-            <v-calendar
-                ref="calendar"
-                color="#ff6b81"
-                :type="type"
-                v-model="focus"
-                :events="events"
-                event-text-color="#000000"
-                event-overlap-mode="column"
-                :first-interval="9"
-                :interval-count="12"
-                :event-overlap-threshold="30"
-                @click:event="selectedDate($event)"
-            >
-            <template v-if="type === 'week'" v-slot:day-body="{ date, week }">
-                <div
-                    class="v-current-time"
-                    :class="{ first: date === week[0].date }"
-                    :style="{ top: nowY }"
-                ></div>
-            </template>
-            </v-calendar>
-        </v-card>
-        <v-date-picker
-            v-model="focus"
-            v-else-if="type === 'month'"
-            no-title
-            :event-color="(date) => (date[9] % 2 ? 'red' : 'yellow')"
-            :events="functionEvents"
-            @input="selectDate(focus)"
-        ></v-date-picker>
-        <v-bottom-sheet v-model="showModal">
-            <div class="bg-white rounded-t-lg pa-4">
+      </v-calendar>
+    </v-card>
+    <v-date-picker
+      v-model="focus"
+      v-else-if="type === 'month'"
+      no-title
+      :event-color="(date) => (date[9] % 2 ? 'red' : 'yellow')"
+      :events="functionEvents"
+      @input="selectDate(focus)"
+    ></v-date-picker>
+    <v-bottom-sheet v-model="showModal">
+      <div class="bg-white rounded-t-lg pa-4">
+        <v-row dense>
+          <v-col class="flex align-center">
+            <label class="text-lg font-bold ma-2">{{
+              new Date(focus).toLocaleDateString("th-TH", {
+                day: "numeric",
+                weekday: "long",
+              })
+            }}</label>
+            <v-divider></v-divider>
+          </v-col>
+        </v-row>
+        <template v-if="event_date.length > 0">
+          <div v-for="(event, event_index) in event_date" :key="event_index">
+            <v-card flat>
+              <!-- {{ event }} -->
+              <v-card-text class="border-2 border-[#ff6b81]">
                 <v-row dense>
-                    <v-col class="flex align-center">
-                        <label class="text-lg font-bold ma-2">{{ new Date(focus).toLocaleDateString('th-TH',{day: 'numeric', weekday:'long'}) }}</label>
-                        <v-divider></v-divider>
-                    </v-col>
-                </v-row>
-                <template  v-if="event_date.length > 0">
-                    <div v-for="(event, event_index) in event_date" :key="event_index">
-                        <v-card flat>
-                            <!-- {{ event }} -->
-                            <v-card-text class="border-2 border-[#ff6b81] " >
-                                <v-row dense>
-                                    <v-col cols="auto" class="text-sm text-[#999999]">
-                                    {{`${event.start_time}`}}<br>{{`${event.end_time}`}}
-                                    </v-col>
-                                    <v-col cols="auto" >
-                                        <v-icon small :color="event.color">mdi-circle</v-icon>
-                                    </v-col>
-                                    <v-col>
-                                        <v-row dense>
-                                            <v-col>
-                                                <label  class="font-bold">{{ event.name }}</label> 
-                                                <span class="text-xs text-[#999999]"> {{event.subtitle}}</span>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row dense>
-                                            <v-col class="text-sm">
-                                                โค้ช: {{ event.coach }} <br>
-                                                <v-btn @click="$router.push({name : 'menageCourseDetail', params:{ courseId : event.course_id, timeId : event.time_id, dayOfWeekId: event.day_of_week_id, date : event.start_date }})" small text class="underline pa-0" color="#ff6b81">
-                                                    ดูรายละเอียดคอร์สเรียน
-                                                </v-btn>
-                                            </v-col>
-                                        </v-row> 
-                                    </v-col>
-                                </v-row>
-                            </v-card-text>
-                        </v-card>
-                        <!-- <v-divider v-if="event_date.length !== event_index + 1" class="my-2"></v-divider> -->
-                    </div>
-                </template>
-                <div v-else>
-                    <v-row>
-                        <v-col class="text-lg font-bold" align="center"> 
-                            ไม่พบคอร์สเรียน
-                        </v-col>
+                  <v-col cols="auto" class="text-sm text-[#999999]">
+                    {{ `${event.start_time}` }}<br />{{ `${event.end_time}` }}
+                  </v-col>
+                  <v-col cols="auto">
+                    <v-icon small :color="event.color">mdi-circle</v-icon>
+                  </v-col>
+                  <v-col>
+                    <v-row dense>
+                      <v-col>
+                        <label class="font-bold">{{ event.name }}</label>
+                        <span class="text-xs text-[#999999]">
+                          {{ event.subtitle }}</span
+                        >
+                      </v-col>
                     </v-row>
-                </div>
-            </div>
-        </v-bottom-sheet>
-    </div>
+                    <v-row dense>
+                      <v-col class="text-sm">
+                        โค้ช: {{ event.coach }} <br />
+                        <v-btn
+                          @click="
+                            $router.push({
+                              name: 'menageCourseDetail',
+                              params: {
+                                courseId: event.course_id,
+                                timeId: event.time_id,
+                                dayOfWeekId: event.day_of_week_id,
+                                date: event.start_date,
+                              },
+                            })
+                          "
+                          small
+                          text
+                          class="underline pa-0"
+                          color="#ff6b81"
+                        >
+                          ดูรายละเอียดคอร์สเรียน
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+            <!-- <v-divider v-if="event_date.length !== event_index + 1" class="my-2"></v-divider> -->
+          </div>
+        </template>
+        <div v-else>
+          <v-row>
+            <v-col class="text-lg font-bold" align="center">
+              ไม่พบคอร์สเรียน
+            </v-col>
+          </v-row>
+        </div>
+      </div>
+    </v-bottom-sheet>
+  </div>
 </template>
 
 <script>
@@ -137,9 +164,11 @@ export default {
       return this.cal ? this.cal.timeToY(this.cal.times.now) + "px" : "-10px";
     },
   },
+  created() {
+    this.colorOfDay();
+  },
   beforeMount() {
     this.colorOfDay();
-
   },
   mounted() {
     let today = new Date();
