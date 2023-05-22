@@ -133,11 +133,7 @@
               </template>
             </course-card-list> -->
           </div>
-          <div
-            v-if="
-              my_courses.filter((v) => v.start_date === genToday).length == 0
-            "
-          >
+          <div v-if=" my_courses.filter((v) => v.start_date === genToday).length == 0 " >
             <v-card flat>
               <v-card-text
                 class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg"
@@ -152,12 +148,11 @@
         </template>
         <!-- รายสัปดาห์ -->
         <template v-else>
-          <!-- <pre>{{ my_courses }}</pre> -->
           <!-- COURSE LIST -->
-          <calendarCoach
-            :events="my_courses"
-            :type="time_frame"
-          ></calendarCoach>
+          <div align="center">
+            <v-progress-circular color="#ff6b81" v-if="my_courses_is_loading" indeterminate size="64"></v-progress-circular>
+          </div>
+          <calendarCoach v-if="!my_courses_is_loading" :events="my_courses" :type="time_frame"></calendarCoach>
         </template>
       </div>
       <div v-if="tab === 'my teaching'">
@@ -194,11 +189,7 @@
                 <v-img
                   class="rounded-lg"
                   height="160"
-                  :src="
-                    course.course_img
-                      ? course.course_img
-                      : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'
-                  "
+                  :src="course.course_img ? course.course_img : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'"
                 />
               </v-col>
               <v-col>
@@ -217,11 +208,9 @@
                       >แพ็คเกจ : {{ course.course_package_name }}</rowData
                     >
                   </v-col>
-
                   <v-col cols="12">
                     <rowData mini icon="mdi-bookshelf"
-                      >คอร์สเรียน :
-                      {{ `${course.name}(${course.subtitle})` }}</rowData
+                      >คอร์สเรียน :{{ `${course.name}(${course.subtitle})` }}</rowData
                     >
                   </v-col>
                   <v-col cols="12">
@@ -230,9 +219,7 @@
                     >
                   </v-col>
                   <v-col cols="12">
-                    <v-chip small color="#F9B320" dark
-                      >{{ `${course.start_time} - ${course.end_time}`}}น.</v-chip
-                    >
+                    <v-chip small color="#F9B320" dark >{{ `${course.start_time} - ${course.end_time}`}}น.</v-chip >
                   </v-col>
                 </v-row>
               </v-col>
@@ -1385,9 +1372,10 @@ import labelCustom from "../../../components/label/labelCustom.vue";
 import Swal from "sweetalert2";
 import { dateFormatter } from "@/functions/functions";
 import { mapActions, mapGetters } from "vuex";
+// import LoadingOverlay from '../../../components/loading/loadingOverlay.vue';
 export default {
   name: "menageCourse",
-  components: { calendarCoach, headerPage, rowData, imgCard, labelCustom },
+  components: { calendarCoach, headerPage, rowData, imgCard, labelCustom,  },
   data: () => ({
     singleExpand: false,
     expanded: [],
@@ -1493,6 +1481,7 @@ export default {
   }),
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+    this.GetMyCourses({ coach_id: this.user_detail.account_id });
   },
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "จัดการ");
@@ -1506,9 +1495,9 @@ export default {
       attachment_leave: "CoachModules/getAttachmentLeave",
       student_check_in: "CoachModules/getStudentCheckIn",
       coach_check_in: "CoachModules/getCoachCheckIn",
+      my_courses_is_loading: "CoachModules/getMyCoursesIsLoading",
     }),
     SetFunctionsComputed() {
-      this.GetMyCourses({ coach_id: this.user_detail.account_id });
       this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
       this.GetCoachs();
       return "";
