@@ -105,7 +105,7 @@ const myCourseModules = {
         my_schadule: [],
         student_reserve: [],
         /////////////////////////ยุทธ/////////////////////////
-        student_course:[]
+        student_course: []
     },
     mutations: {
         SetStudentReserve(state, payload) {
@@ -149,7 +149,7 @@ const myCourseModules = {
         },
         /////////////////////////ยุทธ/////////////////////////
         SetStudentCourse(state, payload) {
-          state.student_course = payload
+            state.student_course = payload
         },
     },
     actions: {
@@ -179,17 +179,17 @@ const myCourseModules = {
                     for (const course of data.data) {
                         console.log("course", course);
                         for (const date of course.dates.date) {
-                            if(course.period.start !== "Invalid date" && course.period.end !== "Invalid date"){
+                            if (course.period.start !== "Invalid date" && course.period.end !== "Invalid date") {
                                 dataCourseSchedule.dates.push({
                                     start: date.replace(" 00:00:00", "") + ' ' + course.period.start,
                                     end: date.replace(" 00:00:00", "") + ' ' + course.period.end,
-                                    timed: `${course.courseNameTh}(${course.courseNameEng})`,
-                                    name: course.student.firstNameTh,
+                                    name: data_local.roles.includes('R_5') ? `${course.courseNameTh}(${course.courseNameEng})` : course.student.firstNameTh,
+                                    timed: course.student.firstNameTh,
                                     subtitle: course.coachName,
                                     courseId: course.courseId,
                                 })
                             }
-                            
+
                         }
                     }
                     if (data_local.roles.includes('R_4')) {
@@ -335,62 +335,62 @@ const myCourseModules = {
 
         /////////////////////////ยุทธ/////////////////////////
         async GetStudentCourse(context, account_id) { // ดึงคอร์สของนักเรียนในการดูแบ
-          // let data_local = JSON.parse(localStorage.getItem("userDetail"))
-          try {
-              let config = {
-                  headers: {
-                      "Access-Control-Allow-Origin": "*",
-                      "Content-type": "Application/json",
-                      'Authorization': `Bearer ${VueCookie.get("token")}`
-                  }
-              }
-              let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
-              console.log("data", data);
-              if (data.statusCode === 200) {
-              context.commit("SetStudentCourse",data.data)
-              // context.commit("SetStudentsLoading", false)
-                  // const dataCourseSchedule = { dates: [] };
-                  // for (const course of data.data) {
-                      // console.log("course", course);
-                      // for (const date of course.dates.date) {
-                          // if(course.period.start !== "Invalid date" && course.period.end !== "Invalid date"){
-                              // dataCourseSchedule.dates.push({
-                                  // start: date.replace(" 00:00:00", "") + ' ' + course.period.start,
-                                  // end: date.replace(" 00:00:00", "") + ' ' + course.period.end,
-                                  // timed: `${course.courseNameTh}(${course.courseNameEng})`,
-                                  // name: course.student.firstNameTh,
-                                  // subtitle: course.coachName,
-                                  // courseId: course.courseId,
-                              // })
-                          // }
-                          // 
-                      // }
-                  // }
-                  // if (data_local.roles.includes('R_4')) {
-                      // console.log(data.data)
-                      // let MyCourse = []
-                      // for await (const item of data.data) {
-                          // if (MyCourse.filter(v => v.orderItemId === item.orderItemId).length === 0) {
-                              // MyCourse.push(item)
-                          // }
-                      // }
-                      // context.commit("SetMyCourse", MyCourse)
-                      // context.commit("SetMyCourseStudentId", '')
-                  // } else {
-                      // context.commit("SetStudentData", data.data)
-                      // console.log("SetStudentData", data.data)
-                  // }
-                  // context.commit("SetcourseSchedule", dataCourseSchedule);
-                  // context.commit("SetStudentsLoading", false)
-              // } else {
-                  // context.commit("SetStudentsLoading", false)
-                  // throw { error: data };
-              }
-          } catch (error) {
-              // context.commit("SetStudentsLoading", false)
-              console.log(error);
-          }
-      },
+            // let data_local = JSON.parse(localStorage.getItem("userDetail"))
+            try {
+                let config = {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-type": "Application/json",
+                        'Authorization': `Bearer ${VueCookie.get("token")}`
+                    }
+                }
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
+                console.log("data", data);
+                if (data.statusCode === 200) {
+                    context.commit("SetStudentCourse", data.data)
+                    // context.commit("SetStudentsLoading", false)
+                    // const dataCourseSchedule = { dates: [] };
+                    // for (const course of data.data) {
+                    // console.log("course", course);
+                    // for (const date of course.dates.date) {
+                    // if(course.period.start !== "Invalid date" && course.period.end !== "Invalid date"){
+                    // dataCourseSchedule.dates.push({
+                    // start: date.replace(" 00:00:00", "") + ' ' + course.period.start,
+                    // end: date.replace(" 00:00:00", "") + ' ' + course.period.end,
+                    // timed: `${course.courseNameTh}(${course.courseNameEng})`,
+                    // name: course.student.firstNameTh,
+                    // subtitle: course.coachName,
+                    // courseId: course.courseId,
+                    // })
+                    // }
+                    // 
+                    // }
+                    // }
+                    // if (data_local.roles.includes('R_4')) {
+                    // console.log(data.data)
+                    // let MyCourse = []
+                    // for await (const item of data.data) {
+                    // if (MyCourse.filter(v => v.orderItemId === item.orderItemId).length === 0) {
+                    // MyCourse.push(item)
+                    // }
+                    // }
+                    // context.commit("SetMyCourse", MyCourse)
+                    // context.commit("SetMyCourseStudentId", '')
+                    // } else {
+                    // context.commit("SetStudentData", data.data)
+                    // console.log("SetStudentData", data.data)
+                    // }
+                    // context.commit("SetcourseSchedule", dataCourseSchedule);
+                    // context.commit("SetStudentsLoading", false)
+                    // } else {
+                    // context.commit("SetStudentsLoading", false)
+                    // throw { error: data };
+                }
+            } catch (error) {
+                // context.commit("SetStudentsLoading", false)
+                console.log(error);
+            }
+        },
 
     },
     getters: {
@@ -423,8 +423,8 @@ const myCourseModules = {
         },
         /////////////////////////ยุทธ/////////////////////////
         getStudentCourse(state) {
-          return state.student_course
-      },
+            return state.student_course
+        },
 
 
 

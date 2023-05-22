@@ -275,7 +275,7 @@
                   :items="students"
                   item-text="studentFirstnameTh"
                   item-value="studentId"
-                  label="เลือกนักเรียนของคุณได้ที่นี้"
+                  :label="studentFirstnameTh"
                   dense
                   filled
                   @change="searchStudentSchadule(search_schadule)"
@@ -310,7 +310,6 @@
             </v-row>
             <diV>
               <template>
-                <!-- {{ itemTime.dates }} -->
                 <calendarStudent
                   :events="itemTime.dates"
                   :type="time_frame"
