@@ -644,11 +644,17 @@ export default {
   }),
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+    if(localStorage.getItem("relations")){
+      this.relations = JSON.parse(localStorage.getItem("relations"))
+    // console.log("relations => ",this.relations)
+    }else{
+      this.relations = null
+    }
+   
     this.show_id = this.$route.params.course_id;
     // this.GetAll(this.user_detail.account_id);
     // console.log(this.user_detail)
-    this.relations = JSON.parse(localStorage.getItem("relations"));
-    if (this.relations.length > 0) {
+    if (this.relations && this.relations.length > 0) {
       for (const item_data of this.relations) {
         this.GetMyCourseDetail({
           account_id: item_data.student.studentId,
@@ -661,154 +667,19 @@ export default {
         course_id: this.$route.params.course_id,
       });
     }
-
-    // this.relations = JSON.parse(localStorage.getItem("relations"));
-    // if (
-    //   this.data_local.roles.includes("R_4") &
-    //   this.data_local.roles.includes("R_5")
-    // ) {
-    //   this.GetMyCourseDetail({
-    //     account_id: this.user_detail.account_id,
-    //     course_id: this.$route.params.course_id,
-    //   });
-    // } else if (this.data_local.roles.includes("R_4")) {
-    //   this.GetMyCourseDetail({
-    //     account_id: this.user_detail.account_id,
-    //     course_id: this.$route.params.course_id,
-    //   });
-    // } else {
-    //   if (this.relations.length > 0) {
-    //     for (const item_data of this.relations) {
-    //       this.GetMyCourseDetail({
-    //         account_id: item_data.student.studentId,
-    //         course_id: this.$route.params.course_id,
-    //       });
-    //     }
-    //   } else {
-    //     this.GetMyCourseDetail({
-    //       account_id: this.user_detail.account_id,
-    //       course_id: this.$route.params.course_id,
-    //     });
-    //   }
-    // }
-
-    // if (this.relations.length > 0) {
-    //   for (const item_data of this.relations) {
-    //     this.GetMyCourseDetail({
-    //       account_id: item_data.student.studentId,
-    //       course_id: this.$route.params.course_id,
-    //     });
-    //   }
-    // } else {
-    //   this.GetMyCourseDetail({
-    //     account_id: this.user_detail.account_id,
-    //     course_id: this.$route.params.course_id,
-    //   });
-    // }
-
-    // if (this.my_course_detail.checkIn.length !== 0) {
-    //   this.my_course_detail.checkIn.map((val) => {
-    //     val["show"] = false;
-    //   });
-    // }
-
-    if (this.my_course_detail.checkIn.length !== 0) {
+    if (this.my_course_detail.checkIn && this.my_course_detail.checkIn.length !== 0) {
       this.my_course_detail.checkIn.map((val) => {
         val["show"] = false;
       });
     }
-
-    // this.check_in_detail = this.my_course_detail.checkIn;
-    // if (this.check_in_detail.length !== 0) {
-    //   this.check_in_detail.map((val) => {
-    //     val["show"] = false;
-    //   });
-    // }
-
-    // this.GetStudentData(this.item_data.student.studentId);
-
-    // this.GetMyCourseDetail({account_id : this.item_data.student.studentId, course_id: this.$route.params.course_id});
-    // this.GetMyCourseDetail(this.show_id);
-
-    this.relations = JSON.parse(localStorage.getItem("relations"));
-    // if (this.relations.length > 0) {
-    //   for (const item_data of this.relations) {
-    //     this.GetMyCourseDetail({
-    //       account_id: item_data.student.studentId,
-    //       course_id: this.$route.params.course_id,
-    //     });
-    //   }
-    // } else {
-    //   this.GetMyCourseDetail({
-    //     account_id: this.user_detail.account_id,
-    //     course_id: this.$route.params.course_id,
-    //   });
-    // }
-
-    // if (this.user_detail.roles.includes("R_4")) {
-    //   this.GetMyCourseDetail({
-    //     account_id: this.user_detail.account_id,
-    //     course_id: this.$route.params.course_id,
-    //   });
-    // } else if (this.user_detail.roles.includes("R_5")) {
-    //   if (this.relations.length > 0) {
-    //     for (const item_data of this.relations) {
-    //       this.GetMyCourseDetail({
-    //         account_id: item_data.student.studentId,
-    //         course_id: this.$route.params.course_id,
-    //       });
-    //     }
-    //   }
-    // } else {
-    //   this.GetMyCourseDetail({
-    //     account_id: this.user_detail.account_id,
-    //     course_id: this.$route.params.course_id,
-    //   });
-    // }
+    // this.relations = JSON.parse(localStorage.getItem("relations"));
   },
   mounted() {
     this.$store.dispatch(
       "NavberUserModules/changeTitleNavber",
       "ข้อมูลคอร์สเรียน"
     );
-
-    //   this.relations = JSON.parse(localStorage.getItem("relations"));
-    // if (
-    //   this.data_local.roles.includes("R_4") &
-    //   this.data_local.roles.includes("R_5")
-    // ) {
-    //   this.GetMyCourseDetail({
-    //     account_id: this.user_detail.account_id,
-    //     course_id: this.$route.params.course_id,
-    //   });
-    // } else if (this.data_local.roles.includes("R_4")) {
-    //   this.GetMyCourseDetail({
-    //     account_id: this.user_detail.account_id,
-    //     course_id: this.$route.params.course_id,
-    //   });
-    // } else {
-    //   if (this.relations.length > 0) {
-    //     for (const item_data of this.relations) {
-    //       this.GetMyCourseDetail({
-    //         account_id: item_data.student.studentId,
-    //         course_id: this.$route.params.course_id,
-    //       });
-    //     }
-    //   } else {
-    //     this.GetMyCourseDetail({
-    //       account_id: this.user_detail.account_id,
-    //       course_id: this.$route.params.course_id,
-    //     });
-    //   }
-    // }
-    // this.check_in_detail = this.my_course_detail.checkIn;
-    // if (this.check_in_detail.length !== 0) {
-    //   this.check_in_detail.map((val) => {
-    //     val["show"] = false;
-    //   });
-    // }
-
-    if (this.my_course_detail.checkIn.length !== 0) {
+    if (this.my_course_detail.checkIn && this.my_course_detail.checkIn.length !== 0) {
       this.my_course_detail.checkIn.map((val) => {
         val["show"] = false;
       });
@@ -831,48 +702,6 @@ export default {
       console.log(file);
       window.open(file, "_blank");
     },
-
-    // dayOfWeekName(day_numbers, language) {
-    //   let day_names = [];
-    //   for (let i = 0; i < day_numbers; i++) {
-    //     let day_number = +day_numbers[i];
-    //     if (language === "th") {
-    //       switch (day_number) {
-    //         case 0:
-    //           day_names.push("อาทิตย์");
-    //           break;
-    //         case 1:
-    //           day_names.push("จันทร์");
-    //           break;
-    //         case 2:
-    //           day_names.push("อังคาร");
-    //           break;
-    //         case 3:
-    //           day_names.push("พุธ");
-    //           break;
-    //         case 4:
-    //           day_names.push("พฤหัสบดี");
-    //           break;
-    //         case 5:
-    //           day_names.push("ศุกร์");
-    //           break;
-    //         case 6:
-    //           day_names.push("เสาร์");
-    //           break;
-    //         default:
-    //           day_names.push(null);
-    //       }
-    //     } else {
-    //       day_names.push(null);
-    //     }
-    //   }
-    //   day_names.sort(function (a, b) {
-    //     return b.localeCompare(a, "th", { numeric: true });
-    //   });
-
-    //   return day_names.join(", ");
-    // },
-
     dayOfWeekName(days) {
       const daysOfWeek = [
         "อาทิตย์",
