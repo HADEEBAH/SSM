@@ -1014,7 +1014,7 @@
                 :key="`${index}-file`"
               >
                 <v-card-text
-                  class="border border-2 border-[#ff6b81] rounded-lg"
+                  class="border-2 border-[#ff6b81] rounded-lg"
                 >
                   <v-row>
                     <v-col cols="auto" class="pr-2">
@@ -1211,7 +1211,7 @@
                 :key="`${index}-file`"
               >
                 <v-card-text
-                  class="border border-2 border-[#ff6b81] rounded-lg"
+                  class="border-2 border-[#ff6b81] rounded-lg"
                 >
                   <v-row>
                     <v-col cols="auto" class="pr-2">
@@ -1278,7 +1278,7 @@
                 :key="`${index}-fileattachment`"
               >
                 <v-card-text
-                  class="border border-2 border-[#ff6b81] rounded-lg"
+                  class="border-2 border-[#ff6b81] rounded-lg"
                 >
                   <v-row dense>
                     <v-col cols="auto" class="pr-2">
@@ -1346,7 +1346,7 @@
                 :key="`${index}-fileattachment`"
               >
                 <v-card-text
-                  class="border border-2 border-[#ff6b81] rounded-lg"
+                  class="border-2 border-[#ff6b81] rounded-lg"
                 >
                   <v-row>
                     <v-col cols="auto" class="pr-2">

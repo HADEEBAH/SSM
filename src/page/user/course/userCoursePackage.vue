@@ -167,7 +167,7 @@
         v-if="show_dialog_privilege"
         v-model="show_dialog_privilege"
         persistent
-        width="50vw"
+        :width="$vuetify.breakpoint.smAndUp ? '50vw' : ''"
       >
         <v-card>
           <v-card-title>
@@ -200,7 +200,7 @@
         v-if="show_dialog_artwork"
         v-model="show_dialog_artwork"
         persistent
-        width="90vw"
+        :width="$vuetify.breakpoint.smAndUp ? '90vw' : ''"
       >
         <v-card class="pa-2">
           <v-row dense>
