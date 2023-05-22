@@ -521,8 +521,7 @@
             <v-btn
               v-if="
                 course_order.time && course_order.coach_id
-                  ? GenReserve() <= course_order.time.timeData.filter(v => v.coach_id === course_order.coach_id)[0].maximumStudent &&
-                    GenMonitors() === 'Open'
+                  ? GenMonitors() === 'Open'
                   : false
               "
               class="w-full"
@@ -556,17 +555,9 @@
             >
           </template>
         </v-col>
-        <!-- <div v-if = "course_order.time && course_order.coach_id ">
-          {{  validateButton  }}
-          {{ ValidateReserve() }}
-          {{ GenMonitors() === 'Close'  }}
-          {{  GenReserve()  }}
-          {{ course_order.time.timeData.filter(v => v.coach_id === course_order.coach_id)[0].maximumStudent}}
-        </div> -->
         <v-col cols="12" sm="6">
           <v-btn
-            v-if="course_order.time && course_order.coach_id ? 
-              GenReserve() > course_order.time.timeData.filter(v => v.coach_id === course_order.coach_id)[0].maximumStudent || GenMonitors() === 'Close' : false "
+            v-if="course_order.time && course_order.coach_id ? GenMonitors() === 'Close' : false "
             class="w-full white--text"
             :disabled="validateButton || ValidateReserve()"
             elevation="0"
@@ -576,7 +567,7 @@
           >
           <!-- v-if="course_order.time ? GenReserve() < course_order.time.maximumStudent && GenMonitors() === 'Open' : false" -->
           <v-btn
-            v-else-if=" course_order?.time && course_order.coach_id ? GenReserve() <= course_order.time.timeData.filter(v => v.coach_id === course_order.coach_id)[0].maximumStudent && GenMonitors() === 'Open' : false "
+            v-else-if=" course_order?.time && course_order.coach_id ? GenMonitors() === 'Open' : false "
             class="w-full white--text"
             :disabled="validateButton"
             elevation="0"
@@ -1139,93 +1130,6 @@ export default {
     resetTime() {
       this.course_order.time = null;
       this.course_order.coach_id = null;
-    },
-    GenReserve(time_data) {
-      if(this.course_order.coach_id){
-        if (!time_data) {
-          time_data = this.course_order.time;
-          let studentNum = 0;
-          let dayOfWeekId = time_data?.timeData ? time_data.timeData.filter(v => v.coach_id === this.course_order.coach_id)[0].dayOfWeekId : time_data.dayOfWeekId
-          let timeId = time_data?.timeData ? time_data.timeData.filter(v => v.coach_id === this.course_order.coach_id)[0].timeId : time_data.timeId
-          let course_monitors_filter = this.course_monitors.filter(
-            (v) =>
-              v.m_course_id == this.course_order.course_id &&
-              v.m_day_of_week_id === dayOfWeekId &&
-              v.m_time_id == timeId
-          );
-          // console.log(course_monitors_filter)
-          if (course_monitors_filter.length > 0) {
-            for (const monitor of course_monitors_filter) {
-              if (monitor.m_status === "Close") {
-                // console.log(monitor.m_status);
-                return 0;
-              } else {
-                let course_student_filter = this.course_student.filter(
-                  (v) =>
-                    v.courseId == this.course_order.course_id &&
-                    v.dayOfWeekId === dayOfWeekId &&
-                    v.timeId == timeId
-                );
-                for (const student of course_student_filter) {
-                  studentNum = studentNum + parseInt(student.sum_student);
-                }
-                return monitor.m_maximum_student - monitor.m_current_student;
-              }
-            }
-          } else {
-            let course_student_filter = this.course_student.filter(
-              (v) =>
-                v.courseId == this.course_order.course_id &&
-                v.dayOfWeekId === dayOfWeekId &&
-                v.timeId == timeId
-            );
-            for (const student of course_student_filter) {
-              studentNum = studentNum + parseInt(student.sum_student);
-            }
-            return time_data.timeData.filter(v => v.coach_id === this.course_order.coach_id)[0].maximumStudent - studentNum;
-          }
-        } else {
-          let studentNum = 0;
-          let course_monitors_filter = this.course_monitors.filter(
-            (v) =>
-              v.m_course_id == this.course_order.course_id &&
-              v.m_day_of_week_id === time_data.dayOfWeekId &&
-              v.m_time_id == time_data.timeId
-          );
-          // console.log(course_monitors_filter)
-          if (course_monitors_filter.length > 0) {
-            for (const monitor of course_monitors_filter) {
-              if (monitor.m_status === "Close") {
-                console.log(monitor.m_status);
-                return 0;
-              } else {
-                let course_student_filter = this.course_student.filter(
-                  (v) =>
-                    v.courseId == this.course_order.course_id &&
-                    v.dayOfWeekId === time_data.dayOfWeekId &&
-                    v.timeId == time_data.timeId
-                );
-                for (const student of course_student_filter) {
-                  studentNum = studentNum + parseInt(student.sum_student);
-                }
-                return monitor.m_maximum_student - monitor.m_current_student;
-              }
-            }
-          } else {
-            let course_student_filter = this.course_student.filter(
-              (v) =>
-                v.courseId == this.course_order.course_id &&
-                v.dayOfWeekId === time_data.dayOfWeekId &&
-                v.timeId == time_data.timeId
-            );
-            for (const student of course_student_filter) {
-              studentNum = studentNum + parseInt(student.sum_student);
-            }
-            return time_data.maximumStudent - studentNum;
-          }
-        }
-        
-      }   
     },
     groupByDay(originalArray) {
       return originalArray;
