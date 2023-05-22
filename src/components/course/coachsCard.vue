@@ -342,8 +342,15 @@ export default {
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
     }),
     ChangeStartDate(date){
+      if(!date.start_time_object.mm){
+        date.start_time_object.mm = "00"
+      }
       date.start_time = `${date.start_time_object.HH}:${date.start_time_object.mm}`
-      date.end_time_object.HH = (parseInt(date.start_time_object.HH) + this.course_data.course_hours)
+      if((parseInt(date.start_time_object.HH) + this.course_data.course_hours) >= 24){
+          date.end_time_object.HH = (parseInt(date.start_time_object.HH) + this.course_data.course_hours) - 24
+      }else{
+          date.end_time_object.HH = (parseInt(date.start_time_object.HH) + this.course_data.course_hours)
+      }
       date.end_time_object.mm = date.start_time_object.mm
       date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`
       // if(!class_dates.some(v => v.class_date_range.start_time === `${date.start_time_object.HH}:${date.start_time_object.mm}`)){

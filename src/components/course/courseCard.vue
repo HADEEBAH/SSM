@@ -766,8 +766,7 @@ export default {
         end_date: this.course_data?.coachs[0].class_date_range_str.end_date,
       };
       this.register_date_range_str = {
-        start_date:
-          this.course_data?.coachs[0].register_date_range_str.start_date,
+        start_date: this.course_data?.coachs[0].register_date_range_str.start_date,
         end_date: this.course_data?.coachs[0].register_date_range_str.end_date,
       };
     }
@@ -803,7 +802,7 @@ export default {
       .getElementsByTagName("input")[0].focus()
     },
     ChangeStartDate(date){
-      // console.log(date)
+      console.log(date)
       this.course_data.course_period_start_date = `${date.start_time_object.HH}:${date.start_time_object.mm}`
       date.start_time = `${date.start_time_object.HH}:${date.start_time_object.mm}`
       date.end_time_object.HH = `${(parseInt(date.start_time_object.HH) + this.course_data.course_hours)}`
