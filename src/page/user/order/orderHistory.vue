@@ -214,7 +214,7 @@ export default {
   mounted() {
     this.$store.dispatch(
       "NavberUserModules/changeTitleNavber",
-      "ประวัติการซื้อ"
+      "ประวัติการการลงทะเบียน"
     );
   },
   watch: {},
