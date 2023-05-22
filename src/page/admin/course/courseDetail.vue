@@ -1924,7 +1924,9 @@ export default {
             this.UpdateCouserDetail({
               course_id: this.course_data.course_id,
               course_data: this.course_data,
-            })
+            }).then(() => {
+              this.course_edit = false;
+            });
           }
         });
       }
