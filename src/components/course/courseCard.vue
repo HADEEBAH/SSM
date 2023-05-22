@@ -802,10 +802,17 @@ export default {
       .getElementsByTagName("input")[0].focus()
     },
     ChangeStartDate(date){
-      console.log(date)
+      if(!date.start_time_object.mm){
+        date.start_time_object.mm = "00"
+      }
       this.course_data.course_period_start_date = `${date.start_time_object.HH}:${date.start_time_object.mm}`
+      console.log(date)
+      if((parseInt(date.start_time_object.HH) + this.course_data.course_hours) >= 24){
+        date.end_time_object.HH = (parseInt(date.start_time_object.HH) + this.course_data.course_hours) - 24
+      }else{
+        date.end_time_object.HH = `${(parseInt(date.start_time_object.HH) + this.course_data.course_hours)}`
+      }
       date.start_time = `${date.start_time_object.HH}:${date.start_time_object.mm}`
-      date.end_time_object.HH = `${(parseInt(date.start_time_object.HH) + this.course_data.course_hours)}`
       date.end_time_object.mm = date.start_time_object.mm
       // this.course_data.course_period_end_date = `${date.end_time_object.HH}:${date.end_time_object.mm}`
       date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`
