@@ -172,6 +172,9 @@ export default {
     },
     event_date: [],
   }),
+  created() {
+    this.colorOfDay();
+  },
   watch: {
     events(val) {
       // console.log("val ->>>", val);
@@ -191,7 +194,6 @@ export default {
   },
   beforeUpdate() {
     this.colorOfDay();
-
   },
   mounted() {
     let today = new Date();
