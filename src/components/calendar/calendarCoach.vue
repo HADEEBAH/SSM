@@ -137,6 +137,10 @@ export default {
       return this.cal ? this.cal.timeToY(this.cal.times.now) + "px" : "-10px";
     },
   },
+  beforeMount() {
+    this.colorOfDay();
+
+  },
   mounted() {
     let today = new Date();
     this.start_of_week = new Date(
@@ -164,7 +168,6 @@ export default {
     this.ready = true;
     this.scrollToTime();
     this.updateTime();
-    this.colorOfDay();
   },
   methods: {
     selectedDate(data) {
