@@ -189,8 +189,9 @@ export default {
       return this.cal ? this.cal.timeToY(this.cal.times.now) + "px" : "-10px";
     },
   },
-  created() {
+  beforeUpdate() {
     this.colorOfDay();
+
   },
   mounted() {
     let today = new Date();
@@ -220,7 +221,7 @@ export default {
     // this.scrollToTime();
 
     // this.updateTime();
-    this.colorOfDay();
+    // this.colorOfDay();
   },
 
   methods: {
