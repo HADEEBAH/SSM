@@ -504,7 +504,7 @@ const coachModules = {
         let user_detail = JSON.parse(localStorage.getItem("userDetail"));
         // let localhost = "http://localhost:3000"
         const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${coach_id}`, config);
-        console.log("GetMyCourses", data.data)
+        // console.log("GetMyCourses", data.data)
         if (data.statusCode == 200) {
           let courses_task = [];
           for (const course of data.data) {
