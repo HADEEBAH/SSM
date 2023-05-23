@@ -172,9 +172,7 @@ export default {
     },
     event_date: [],
   }),
-  created() {
-    this.colorOfDay();
-  },
+
   watch: {
     events(val) {
       // console.log("val ->>>", val);
@@ -196,6 +194,8 @@ export default {
     this.colorOfDay();
   },
   mounted() {
+    this.colorOfDay();
+
     let today = new Date();
     this.start_of_week = new Date(
       today.getFullYear(),
