@@ -75,19 +75,10 @@
               >
                 <!-- :src="item.categoryImg && item.categoryImg !== null ? showImg(item.categoryImg) : defaultImageUrl" -->
                 <v-img
-                  v-if="item.categoryImg && item.categoryImg !== null"
                   @click="selectedCategory(item)"
                   :aspect-ratio="16 / 9"
                   cover
-                  :src="item.categoryImg"
-                  class="cursor-pointer"
-                ></v-img>
-                <v-img
-                  v-else
-                  @click="selectedCategory(item)"
-                  contain
-                  src="../../../assets/userKingdom/category_img.svg"
-                  height="180"
+                  :src="item.categoryImg && item.categoryImg !== '' ? item.categoryImg : require('@/assets/userKingdom/default_category_img.svg')"
                   class="cursor-pointer"
                 ></v-img>
                 <v-card-title

@@ -98,7 +98,7 @@
                             :src="
                               show_by_id.image || show_by_id.image !== ''
                                 ? show_by_id.image
-                                : require(`../../../assets/userManagePage/default_img_update_profile.svg`)
+                                : require(`@/assets/userManagePage/default_img_update_profile.svg`)
                             "
                           >
                           </v-img>
@@ -260,7 +260,7 @@
                             :src="
                               show_by_id.image || show_by_id.image !== ''
                                 ? show_by_id.image
-                                : require(`../../../assets/userManagePage/default_img_update_profile.svg`)
+                                : require(`@/assets/userManagePage/default_img_update_profile.svg`)
                             "
                           >
                           </v-img>
@@ -476,7 +476,7 @@
                                       show_by_id.image ||
                                       show_by_id.image !== ''
                                         ? show_by_id.image
-                                        : require(`../../../assets/userManagePage/default_img_update_profile.svg`)
+                                        : require(`@/assets/userManagePage/default_img_update_profile.svg`)
                                     "
                                   >
                                   </v-img>
