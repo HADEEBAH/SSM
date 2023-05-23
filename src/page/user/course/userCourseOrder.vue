@@ -10,9 +10,9 @@
               <v-img
                 class="rounded-lg"
                 :src="
-                  course_data.course_img
+                  course_data.course_img || course_data.course_img !== ''
                     ? course_data.course_img
-                    : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'
+                    : require(`@/assets/course/default_course_img.svg`)
                 "
                 max-height="122"
                 max-width="122"

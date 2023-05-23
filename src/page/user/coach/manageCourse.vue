@@ -79,9 +79,9 @@
                       :cover="$vuetify.breakpoint.smAndUp"
                       class="rounded-lg"
                       :src="
-                        course.course_img
+                        course.course_img || course.course_img !== ''
                           ? course.course_img
-                          : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'
+                          : require(`@/assets/course/default_course_img.svg`)
                       "
                       max-height="160"
                       :max-width="$vuetify.breakpoint.smAndUp ? 160 : ''"
@@ -125,13 +125,6 @@
                 </v-row>
               </v-card-text>
             </v-card>
-            <!-- <course-card-list  class="mb-2 cursor-pointer " bg_color="#fff" 
-            :title="`${course.name}(${course.subtitle})`" 
-            :course_per_time="`เวลาสอน :${course.course_per_time}`" :period="`${course.start_time}-${course.end_time}`">
-              <template #img>
-                <v-img class="rounded-lg" :src="course.course_img ? course.course_img :'https://cdn.vuetifyjs.com/images/cards/cooking.png'" max-height="120" max-width="120"></v-img>
-              </template>
-            </course-card-list> -->
           </div>
           <div
             v-if="
@@ -203,9 +196,9 @@
                   class="rounded-lg"
                   height="160"
                   :src="
-                    course.course_img
+                    course.course_img || course.course_img !== ''
                       ? course.course_img
-                      : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'
+                      : require(`@/assets/course/default_course_img.svg`)
                   "
                 />
               </v-col>

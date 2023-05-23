@@ -8,7 +8,7 @@
             <v-col cols="auto">
               <v-img
                 class="rounded-lg"
-                :src="course_data.course_img ? course_data.course_img : 'https://cdn.vuetifyjs.com/images/cards/cooking.png' "
+                :src="course_data.course_img || course_data.course_img !== '' ? course_data.course_img : require(`@/assets/course/default_course_img.svg`)"
                 max-height="120"
                 max-width="120"
               ></v-img>
