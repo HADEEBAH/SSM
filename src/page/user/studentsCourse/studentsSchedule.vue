@@ -77,7 +77,7 @@
                         :src="
                           item.courseImg
                             ? showImg(item.courseImg)
-                            : defaultImageUrl
+                            :  require(`@/assets/course/default_course_img.svg`)
                         "
                       ></v-img>
                     </v-col>
@@ -187,7 +187,7 @@
                         :src="
                           item.courseImg
                             ? showImg(item.courseImg)
-                            : defaultImageUrl
+                            :  require(`@/assets/course/default_course_img.svg`)
                         "
                       ></v-img>
                     </v-col>
