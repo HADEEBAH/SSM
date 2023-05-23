@@ -82,22 +82,12 @@
                         align-self="center"
                       >
                         <div class="cicle">
-                          <!-- <v-img
-                            class="image-cropper items-end"
-                            :src="
-                              preview_img !== ''
-                                ? preview_img
-                                : checkData.image && checkData.image !== ''
-                                ? checkData.image
-                                : require(`../../../assets/userManagePage/default_img_update_profile.svg`)
-                            "
-                          > -->
                           <v-img
                             class="image-cropper items-end"
                             :src="
                               checkData.image && checkData.image !== ''
                                 ? checkData.image
-                                : require(`../../../assets/userManagePage/default_img_update_profile.svg`)
+                                : require(`@/assets/userManagePage/default_img_update_profile.svg`)
                             "
                           >
                             <!-- <v-btn

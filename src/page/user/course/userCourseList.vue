@@ -33,7 +33,7 @@
                         <v-img @click="selectedCourse(course)" 
                             :aspect-ratio="16 / 9"
                             cover
-                            :src="course.course_url ? course.course_url : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'">
+                            :src="course.course_url || course.course_url !== '' ? course.course_url : require(`@/assets/course/default_course_img.svg`)">
                           <v-row>
                               <v-col class="pa-4" align="right"> <v-chip  color="#F9B320" text-color="white">{{ `${course.period}  ชั่วโมง`  }}</v-chip></v-col>
                           </v-row>

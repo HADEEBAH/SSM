@@ -36,7 +36,7 @@
                 :src="
                   my_course_detail.courseImg
                     ? my_course_detail.courseImg
-                    : require(`@/assets/course/category_img.svg`)
+                    : require(`@/assets/course/default_course_img.svg`)
                 "
               ></v-img>
             </v-col>

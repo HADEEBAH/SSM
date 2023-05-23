@@ -459,7 +459,7 @@
                 :src="
                   dialogGetStudentData.studentImage !== ''
                     ? dialogGetStudentData.studentImage
-                    : require(`../../../assets/userKingdom/default_image_profile.svg`)
+                    : require(`@/assets/userKingdom/default_image_profile.svg`)
                 "
               />
             </div>
