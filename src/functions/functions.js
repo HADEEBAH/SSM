@@ -66,9 +66,28 @@ export const dateFormatter = (date, formatter) => {
 }
 
 export const CheckFileSize = (file) => {
+    console.log("func File", file);
     const fileSizeInBytes = file.size;
     const fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+    console.log("fileSizeInMB", fileSizeInMB);
     if (fileSizeInMB > 10) {
+        Swal.fire({
+            icon: "error",
+            text: "ขนาดไฟล์ต้องไม่เกิน 10 MB",
+            confirmButtonText: "ตกลง"
+        })
+        return false
+    }
+    return true
+}
+
+export const CheckFileSizeV2 = (file, id) => { //check file รอ merge กับ พี่น๊อต
+    const key = document.getElementById(id)
+    const fileSizeInBytes = file.size;
+    const fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+    console.log("fileSizeInMB", fileSizeInMB);
+    if (fileSizeInMB > 10) {
+        key.value = ''
         Swal.fire({
             icon: "error",
             text: "ขนาดไฟล์ต้องไม่เกิน 10 MB",

@@ -38,9 +38,10 @@
                     </v-img>
                   </v-col>
                   <input
+                    id="inputFile"
                     ref="fileInput"
                     type="file"
-                    @change="uploadFile"
+                    @change="uploadFile($event)"
                     style="display: none"
                   />
                 </v-row>
@@ -70,10 +71,11 @@
                       >เลือกไฟล์</v-btn
                     >
                     <input
+                      id="inputFile"
                       ref="fileInput"
                       type="file"
                       accept="image/png, image/jpeg"
-                      @change="uploadFile"
+                      @change="uploadFile($event)"
                       style="display: none"
                     />
                   </v-col>
@@ -205,7 +207,7 @@
 import headerPage from "@/components/header/headerPage.vue";
 import LabelCustom from "../../../components/label/labelCustom.vue";
 import dialogCard from "@/components/dialog/dialogCard.vue";
-import { inputValidation, CheckFileSize } from "@/functions/functions";
+import { inputValidation, CheckFileSizeV2 } from "@/functions/functions";
 import Swal from "sweetalert2";
 import axios from "axios";
 import VueCookie from "vue-cookie";
@@ -332,15 +334,28 @@ export default {
         }
       });
     },
-    uploadFile() {
+    uploadFile(event) {
       this.file = this.$refs.fileInput.files[0];
       if (!this.file) return;
-      if (CheckFileSize(this.file) === true) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.preview_url = e.target.result;
-        };
-        reader.readAsDataURL(this.file);
+      if (CheckFileSizeV2(this.file, event.target.id) === true) {
+        const fileType = this.file.type;
+        console.log("fileType", fileType);
+        if (fileType === "image/png" || fileType === "image/jpeg") {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            this.preview_url = e.target.result;
+          };
+          reader.readAsDataURL(this.file);
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "อัพโหลดเฉพาะไฟล์รูปภาพ(png, jpeg)เท่านั้น",
+            showDenyButton: false,
+            showCancelButton: false,
+            confirmButtonText: "ตกลง",
+            cancelButtonText: "ยกเลิก",
+          });
+        }
       }
     },
     validate(e, type) {

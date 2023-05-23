@@ -1233,9 +1233,10 @@
                   >เลือกไฟล์</v-btn
                 >
                 <input
+                  id="inputFile"
                   ref="fileInput"
                   type="file"
-                  @change="uploadFile"
+                  @change="uploadFile($event)"
                   style="display: none"
                 />
               </v-col>
@@ -1301,7 +1302,7 @@ import LabelCustom from "@/components/label/labelCustom.vue";
 import headerPage from "@/components/header/headerPage.vue";
 import headerCard from "@/components/header/headerCard.vue";
 import userManageForm from "@/components/user_menage/userManageForm.vue";
-import { CheckFileSize } from "@/functions/functions";
+import { CheckFileSizeV2 } from "@/functions/functions";
 import axios from "axios";
 import VueCookie from "vue-cookie";
 import { mapActions, mapGetters } from "vuex";
@@ -1564,15 +1565,28 @@ export default {
       this.addCertificate_dialog_show = false;
     },
 
-    uploadFile() {
+    uploadFile(event) {
       this.file = this.$refs.fileInput.files[0];
       if (!this.file) return;
-      if (CheckFileSize(this.file) === true) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.preview_url = e.target.result;
-        };
-        reader.readAsDataURL(this.file);
+      if (CheckFileSizeV2(this.file, event.target.id) === true) {
+        const fileType = this.file.type;
+        console.log("fileType", fileType);
+        if (fileType === "image/png" || fileType === "image/jpeg") {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            this.preview_url = e.target.result;
+          };
+          reader.readAsDataURL(this.file);
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "อัพโหลดเฉพาะไฟล์รูปภาพ(png, jpeg)เท่านั้น",
+            showDenyButton: false,
+            showCancelButton: false,
+            confirmButtonText: "ตกลง",
+            cancelButtonText: "ยกเลิก",
+          });
+        }
       }
     },
     removeFile() {

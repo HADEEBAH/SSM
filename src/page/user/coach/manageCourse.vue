@@ -133,7 +133,11 @@
               </template>
             </course-card-list> -->
           </div>
-          <div v-if=" my_courses.filter((v) => v.start_date === genToday).length == 0 " >
+          <div
+            v-if="
+              my_courses.filter((v) => v.start_date === genToday).length == 0
+            "
+          >
             <v-card flat>
               <v-card-text
                 class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg"
@@ -150,16 +154,25 @@
         <template v-else>
           <!-- COURSE LIST -->
           <div align="center">
-            <v-progress-circular color="#ff6b81" v-if="my_courses_is_loading" indeterminate size="64"></v-progress-circular>
+            <v-progress-circular
+              color="#ff6b81"
+              v-if="my_courses_is_loading"
+              indeterminate
+              size="64"
+            ></v-progress-circular>
           </div>
-          <calendarCoach v-if="!my_courses_is_loading" :events="my_courses" :type="time_frame"></calendarCoach>
+          <calendarCoach
+            v-if="!my_courses_is_loading"
+            :events="my_courses"
+            :type="time_frame"
+          ></calendarCoach>
         </template>
       </div>
       <div v-if="tab === 'my teaching'">
         <v-row>
           <v-col cols="auto"> ข้อมูลการสอนของฉัน : </v-col>
           <v-col class="font-bold">
-            {{ `${user_detail.first_name_th} ${user_detail.last_name_th}` }}
+            {{ profile_detail.firstNameTh }}
           </v-col>
         </v-row>
         <v-row dense>
@@ -189,12 +202,18 @@
                 <v-img
                   class="rounded-lg"
                   height="160"
-                  :src="course.course_img ? course.course_img : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'"
+                  :src="
+                    course.course_img
+                      ? course.course_img
+                      : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'
+                  "
                 />
               </v-col>
               <v-col>
                 <v-row dense>
-                  <v-col class="font-bold text-md">{{ course.start_date_str }}</v-col>
+                  <v-col class="font-bold text-md">{{
+                    course.start_date_str
+                  }}</v-col>
                 </v-row>
                 <v-row dense>
                   <v-col cols="12">
@@ -210,7 +229,9 @@
                   </v-col>
                   <v-col cols="12">
                     <rowData mini icon="mdi-bookshelf"
-                      >คอร์สเรียน :{{ `${course.name}(${course.subtitle})` }}</rowData
+                      >คอร์สเรียน :{{
+                        `${course.name}(${course.subtitle})`
+                      }}</rowData
                     >
                   </v-col>
                   <v-col cols="12">
@@ -219,22 +240,36 @@
                     >
                   </v-col>
                   <v-col cols="12">
-                    <v-chip small color="#F9B320" dark >{{ `${course.start_time} - ${course.end_time}`}}น.</v-chip >
+                    <v-chip small color="#F9B320" dark
+                      >{{
+                        `${course.start_time} - ${course.end_time}`
+                      }}น.</v-chip
+                    >
                   </v-col>
                 </v-row>
               </v-col>
             </v-row>
             <v-row dense>
-              <v-col align="center"
-                @click="!course.show_assessment ? OpenAssessment(course) :  course.show_assessment = false"
+              <v-col
+                align="center"
+                @click="
+                  !course.show_assessment
+                    ? OpenAssessment(course)
+                    : (course.show_assessment = false)
+                "
                 class="cursor-pointer"
                 >ประเมินนักเรียน
                 <v-icon color="#ff6b81">{{
                   course.show_assessment ? "mdi-chevron-up" : "mdi-chevron-down"
                 }}</v-icon></v-col
               >
-              <v-col align="center"
-                @click="!course.show_assessment_pantential ? OpenAssessmentPotential(course) : course.show_assessment_pantential = false"
+              <v-col
+                align="center"
+                @click="
+                  !course.show_assessment_pantential
+                    ? OpenAssessmentPotential(course)
+                    : (course.show_assessment_pantential = false)
+                "
                 class="cursor-pointer"
                 >ประเมินศักยภาพ
                 <v-icon color="#ff6b81">{{
@@ -243,8 +278,13 @@
                     : "mdi-chevron-down"
                 }}</v-icon></v-col
               >
-              <v-col align="center"
-                @click="!course.show_summary  ? OpenSummary(course) : course.show_summary = false "
+              <v-col
+                align="center"
+                @click="
+                  !course.show_summary
+                    ? OpenSummary(course)
+                    : (course.show_summary = false)
+                "
                 class="cursor-pointer"
                 >บันทึกสรุปการสอน
                 <v-icon color="#ff6b81">{{
@@ -290,7 +330,7 @@
                       <v-col cols="12" sm class="text-lg font-bold">
                         {{ index + 1 }} . {{ student.fullname }}</v-col
                       >
-                      <v-col cols="12" sm="auto" >
+                      <v-col cols="12" sm="auto">
                         <v-row dense class="d-flex aling-center">
                           <v-col align="right"> การเข้าเรียน: </v-col>
                           <v-col cols="auto">
@@ -323,30 +363,64 @@
                     </v-row>
                     <v-row dense>
                       <v-col cols="12" sm align="left" class="font-semibold">
-                        ระดับพัฒนาการ 
+                        ระดับพัฒนาการ
                         <v-rating
                           background-color="pink lighten-3"
                           color="pink"
                           large
-                          :value="evolution_options.filter(v => v.value === student.assessment.evolution).length > 0 ? evolution_options.filter(v => v.value === student.assessment.evolution)[0].num_value  : 0"
-                          :length="evolution_options.filter(v => v.value === student.assessment.evolution).length > 0 ? evolution_options.filter(v => v.value === student.assessment.evolution)[0].num_value  : 0"
+                          :value="
+                            evolution_options.filter(
+                              (v) => v.value === student.assessment.evolution
+                            ).length > 0
+                              ? evolution_options.filter(
+                                  (v) =>
+                                    v.value === student.assessment.evolution
+                                )[0].num_value
+                              : 0
+                          "
+                          :length="
+                            evolution_options.filter(
+                              (v) => v.value === student.assessment.evolution
+                            ).length > 0
+                              ? evolution_options.filter(
+                                  (v) =>
+                                    v.value === student.assessment.evolution
+                                )[0].num_value
+                              : 0
+                          "
                           small
                           readonly
                         ></v-rating>
                       </v-col>
-                      <v-col cols="12" sm  align="left" class="font-semibold"
-                        >ระดับความสนใจ 
+                      <v-col cols="12" sm align="left" class="font-semibold"
+                        >ระดับความสนใจ
                         <v-rating
-                          background-color="pink lighten-3" 
+                          background-color="pink lighten-3"
                           color="pink"
                           large
-                          :value="interest_options.filter(v => v.value === student.assessment.interest).length > 0 ? interest_options.filter(v => v.value === student.assessment.interest)[0].num_value : 0"
-                          :length="interest_options.filter(v => v.value === student.assessment.interest).length > 0 ? interest_options.filter(v => v.value === student.assessment.interest)[0].num_value  : 0"
+                          :value="
+                            interest_options.filter(
+                              (v) => v.value === student.assessment.interest
+                            ).length > 0
+                              ? interest_options.filter(
+                                  (v) => v.value === student.assessment.interest
+                                )[0].num_value
+                              : 0
+                          "
+                          :length="
+                            interest_options.filter(
+                              (v) => v.value === student.assessment.interest
+                            ).length > 0
+                              ? interest_options.filter(
+                                  (v) => v.value === student.assessment.interest
+                                )[0].num_value
+                              : 0
+                          "
                           small
                           readonly
                         ></v-rating>
                       </v-col>
-                      <v-col cols="12" sm  align="center">
+                      <v-col cols="12" sm align="center">
                         <v-btn
                           class="w-full"
                           outlined
@@ -384,12 +458,16 @@
                   <v-card
                     outlined
                     class="mb-3"
-                    v-for="(student, index) in student_check_in.filter((v) => v.potential)"
+                    v-for="(student, index) in student_check_in.filter(
+                      (v) => v.potential
+                    )"
                     :key="`${index}-checkin`"
                   >
                     <v-card-text>
                       <v-row>
-                        <v-col class="text-lg font-bold"> {{ index + 1 }} . {{ student.fullname }}</v-col>
+                        <v-col class="text-lg font-bold">
+                          {{ index + 1 }} . {{ student.fullname }}</v-col
+                        >
                         <v-col align="center">
                           <v-row dense class="d-flex aling-center">
                             <v-col align="right"> การเข้าเรียน: </v-col>
@@ -397,9 +475,21 @@
                               <v-chip
                                 class="font-bold"
                                 :color="
-                                  check_in_status_options.filter( (v) => v.value === student.status )[0].bg_color"
-                                :style="`color:${ check_in_status_options.filter( (v) => v.value === student.status)[0].color}`"
-                                v-if="check_in_status_options.filter((v) => v.value === student.status).length > 0">{{
+                                  check_in_status_options.filter(
+                                    (v) => v.value === student.status
+                                  )[0].bg_color
+                                "
+                                :style="`color:${
+                                  check_in_status_options.filter(
+                                    (v) => v.value === student.status
+                                  )[0].color
+                                }`"
+                                v-if="
+                                  check_in_status_options.filter(
+                                    (v) => v.value === student.status
+                                  ).length > 0
+                                "
+                                >{{
                                   check_in_status_options.filter(
                                     (v) => v.value === student.status
                                   )[0].label
@@ -418,9 +508,26 @@
                             large
                             readonly
                             small
-                            :value="evolution_options.filter(v => v.value === student.potential.evolution).length > 0 ? evolution_options.filter(v => v.value === student.potential.evolution)[0].num_value : 0"
-                            :length="evolution_options.filter(v => v.value === student.potential.evolution).length > 0 ? evolution_options.filter(v => v.value === student.potential.evolution)[0].num_value : 0"
-                        
+                            :value="
+                              evolution_options.filter(
+                                (v) => v.value === student.potential.evolution
+                              ).length > 0
+                                ? evolution_options.filter(
+                                    (v) =>
+                                      v.value === student.potential.evolution
+                                  )[0].num_value
+                                : 0
+                            "
+                            :length="
+                              evolution_options.filter(
+                                (v) => v.value === student.potential.evolution
+                              ).length > 0
+                                ? evolution_options.filter(
+                                    (v) =>
+                                      v.value === student.potential.evolution
+                                  )[0].num_value
+                                : 0
+                            "
                           ></v-rating>
                         </v-col>
                         <v-col col="12" sm="auto">
@@ -437,10 +544,9 @@
                         <v-col> ระดับความสนใจ </v-col>
                       </v-row>
                       <v-row>
-                        <v-col  class="font-semibold">
-                         
+                        <v-col class="font-semibold">
                           <span>
-                            {{student.potential.interest}}
+                            {{ student.potential.interest }}
                           </span>
                         </v-col>
                       </v-row>
@@ -484,7 +590,9 @@
                       <v-col>
                         พัฒนาการ / การบ้าน :
                         <span class="font-semibold">{{
-                          coach_check_in.homework ? coach_check_in.homework : "-"
+                          coach_check_in.homework
+                            ? coach_check_in.homework
+                            : "-"
                         }}</span>
                       </v-col>
                     </v-row>
@@ -744,7 +852,12 @@
               <template v-slot:expanded-item="{ headers, item }">
                 <td :colspan="headers.length" class="py-3">
                   <v-row>
-                    <v-col cols="12">ผู้สอนแทน: {{ `${item.substituteCoachFirstNameTh} ${item.substituteCoachLastNameTh}` }}</v-col>
+                    <v-col cols="12"
+                      >ผู้สอนแทน:
+                      {{
+                        `${item.substituteCoachFirstNameTh} ${item.substituteCoachLastNameTh}`
+                      }}</v-col
+                    >
                   </v-row>
                 </td>
               </template>
@@ -1000,9 +1113,7 @@
                 v-for="(file, index) of selected_files"
                 :key="`${index}-file`"
               >
-                <v-card-text
-                  class="border-2 border-[#ff6b81] rounded-lg"
-                >
+                <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                   <v-row>
                     <v-col cols="auto" class="pr-2">
                       <v-img
@@ -1197,9 +1308,7 @@
                 v-for="(file, index) of attachment_leave"
                 :key="`${index}-file`"
               >
-                <v-card-text
-                  class="border-2 border-[#ff6b81] rounded-lg"
-                >
+                <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                   <v-row>
                     <v-col cols="auto" class="pr-2">
                       <v-img
@@ -1264,9 +1373,7 @@
                 v-for="(file, index) of show_comment_data.assessment.attachment"
                 :key="`${index}-fileattachment`"
               >
-                <v-card-text
-                  class="border-2 border-[#ff6b81] rounded-lg"
-                >
+                <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                   <v-row dense>
                     <v-col cols="auto" class="pr-2">
                       <v-img
@@ -1321,7 +1428,11 @@
                 <div>{{ show_potential_data.potential.remark }}</div>
               </v-col>
             </v-row>
-            <div v-if="show_potential_data.potential.attachmentPotential.length > 0">
+            <div
+              v-if="
+                show_potential_data.potential.attachmentPotential.length > 0
+              "
+            >
               <v-row dense>
                 <v-col class="font-bold text-lg"> ไฟล์แนบ </v-col>
               </v-row>
@@ -1329,12 +1440,11 @@
                 @click="openFile(file)"
                 flat
                 class="mb-3"
-                v-for="(file, index) of show_potential_data.potential.attachmentPotential"
+                v-for="(file, index) of show_potential_data.potential
+                  .attachmentPotential"
                 :key="`${index}-fileattachment`"
               >
-                <v-card-text
-                  class="border-2 border-[#ff6b81] rounded-lg"
-                >
+                <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                   <v-row>
                     <v-col cols="auto" class="pr-2">
                       <v-img
@@ -1375,7 +1485,7 @@ import { mapActions, mapGetters } from "vuex";
 // import LoadingOverlay from '../../../components/loading/loadingOverlay.vue';
 export default {
   name: "menageCourse",
-  components: { calendarCoach, headerPage, rowData, imgCard, labelCustom,  },
+  components: { calendarCoach, headerPage, rowData, imgCard, labelCustom },
   data: () => ({
     singleExpand: false,
     expanded: [],
@@ -1384,14 +1494,14 @@ export default {
     tab: "teaching list",
     today: new Date(),
     evolution_options: [
-      { label: "ดีมาก", value: "very good", num_value : 5, },
-      { label: "ดี", value: "good", num_value : 4, },
-      { label: "ปรับปรุง", value: "adjust", num_value : 3, },
+      { label: "ดีมาก", value: "very good", num_value: 5 },
+      { label: "ดี", value: "good", num_value: 4 },
+      { label: "ปรับปรุง", value: "adjust", num_value: 3 },
     ],
     interest_options: [
-      { label: "ดีมาก", value: "very good", num_value : 5, },
-      { label: "ดี", value: "good", num_value : 4, },
-      { label: "ปรับปรุง", value: "adjust", num_value : 3, },
+      { label: "ดีมาก", value: "very good", num_value: 5 },
+      { label: "ดี", value: "good", num_value: 4 },
+      { label: "ปรับปรุง", value: "adjust", num_value: 3 },
     ],
     tabs: [
       { label: "รายการสอนวันนี้", value: "teaching list" },
@@ -1485,6 +1595,9 @@ export default {
   },
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "จัดการ");
+    if (this.user_detail?.account_id) {
+      this.GetProfileDetail(this.user_detail.account_id);
+    }
   },
   watch: {},
   computed: {
@@ -1496,6 +1609,7 @@ export default {
       student_check_in: "CoachModules/getStudentCheckIn",
       coach_check_in: "CoachModules/getCoachCheckIn",
       my_courses_is_loading: "CoachModules/getMyCoursesIsLoading",
+      profile_detail: "ProfileModules/getProfileDetail",
     }),
     SetFunctionsComputed() {
       this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
@@ -1531,6 +1645,7 @@ export default {
       GetStudentByTimeId: "CoachModules/GetStudentByTimeId",
       GetCoachCheckIn: "CoachModules/GetCoachCheckIn",
       loginShareToken: "loginModules/loginShareToken",
+      GetProfileDetail: "ProfileModules/GetProfileDetail",
     }),
     openFileSummary(file) {
       // console.log(file)
@@ -1571,7 +1686,7 @@ export default {
         course_id: course.course_id,
         date: course.start_date,
       });
-      course.show_summary = !course.show_summary
+      course.show_summary = !course.show_summary;
       course.show_assessment = false;
       course.show_assessment_pantential = false;
     },
@@ -1583,9 +1698,8 @@ export default {
         time_id: course.time_id,
       });
       course.show_summary = false;
-      course.show_assessment = !course.show_assessment
+      course.show_assessment = !course.show_assessment;
       course.show_assessment_pantential = false;
-      
     },
     OpenAssessmentPotential(course) {
       this.CloseOpenSummaryAll();
@@ -1596,7 +1710,7 @@ export default {
       });
       course.show_summary = false;
       course.show_assessment = false;
-      course.show_assessment_pantential = !course.show_assessment_pantential
+      course.show_assessment_pantential = !course.show_assessment_pantential;
     },
     genDate(date) {
       // console.log(date)
