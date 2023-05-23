@@ -168,9 +168,8 @@ export default {
   beforeMount() {
     this.colorOfDay();
   },
-  mounted() {
-    this.colorOfDay();
 
+  mounted() {
     let today = new Date();
     this.start_of_week = new Date(
       today.getFullYear(),
