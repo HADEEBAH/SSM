@@ -68,9 +68,13 @@
     width: 24px !important;
 }
 .time-picker-hidden input{
-    z-index: 99 !important;
+    z-index: 0 !important;
     position: relative;
     height: 40px !important;
     border: none  !important;
     color: transparent !important;
+}
+.overflow-none .v-stepper__wrapper {
+    overflow: unset !important;
+    transition: none;
 }

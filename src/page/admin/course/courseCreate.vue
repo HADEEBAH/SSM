@@ -78,7 +78,7 @@
           </v-form>
         </v-stepper-content>
         <!-- Step 2 -->
-        <v-stepper-content style="overflow : none !important;" step="2" class="pa-2">
+        <v-stepper-content class="overflow-none pa-2" step="2" >
           <v-form ref="coach_form" v-model="steps[step - 1]">
             <v-card flat>
               <headerCard title="รายละเอียดเวลาและโค้ช">
@@ -333,7 +333,7 @@ export default {
   },
   data: () => ({
     menu: false,
-    step: 1,
+    step: 2,
     steps: [false, false, false, false],
     file: null,
     dragOver: false,
@@ -606,5 +606,6 @@ export default {
   },
 };
 </script>
+
 
       

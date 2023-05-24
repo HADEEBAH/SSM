@@ -11,12 +11,12 @@ const router = new VueRouter({
   routes
 })
 router.beforeEach((to, from, next ) => {
-  window.scrollTo({ top: 0, behavior: 'smooth' })
+  window.scrollTo({ 
+    top: 0, 
+  })
   if(!VueCookie.get("token")){
     localStorage.removeItem("userDetail")
   }
-  console.log("from", from);
-
   if(to.name !== "Login" && to.name !== "Register"){
     if (to.name === "callback") {
       next()
