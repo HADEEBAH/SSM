@@ -416,15 +416,6 @@
                         )
                       : ''
                   "
-                  @blur="
-                    student.username.length > 3
-                      ? checkUsername(
-                          student.username,
-                          'student',
-                          index_student
-                        )
-                      : ''
-                  "
                   placeholder="Username"
                 >
                   <template v-slot:append>
@@ -1044,6 +1035,7 @@ export default {
       saveOrder: "OrderModules/saveOrder",
       saveCart: "OrderModules/saveCart",
       checkUsernameOneid: "loginModules/checkUsernameOneid",
+      checkUsernameOneidByOrder :"loginModules/checkUsernameOneidByOrder",
       CreateReserveCourse: "OrderModules/CreateReserveCourse",
       GetReserceByCreatedBy : "OrderModules/GetReserceByCreatedBy",
       // monitor
@@ -1376,89 +1368,100 @@ export default {
     },
     checkUsername(username, type) {
       if (username) {
-        this.checkUsernameOneid({
+        if (type === "student") {
+          this.checkUsernameOneidByOrder({
           username: username,
           status: "",
           type: type,
-        }).then(() => {
-          // console.log(this.course_order.students.filter((v) => v.username === username))
-            if (type === "student") {
-              if(this.course_order.students.filter((v) => v.username === username).length === 1){
-                  let student = this.course_order.students.filter((v) => v.username === username)[0]
-                  if (this.user_student_data.length > 0) {
-                    student.firstname_en = this.user_student_data[0].firstNameEng;
-                    student.lastname_en = this.user_student_data[0].lastNameEng;
-                    student.firstname_th = this.user_student_data[0].firstNameTh;
-                    student.lastname_th = this.user_student_data[0].lastNameTh;
-                    student.student_name = `${this.user_student_data[0].firstNameEng} ${this.user_student_data[0].lastNameEng} `;
-                    student.tel = this.user_student_data[0].mobileNo;
-                    student.username = username;
-                  student.account_id = this.user_student_data[0].userOneId;
-                  } else {
-                    if(student){
-                      student.firstname_en = ""
-                      student.lastname_en = ""
-                      student.firstname_th = ""
-                      student.lastname_th = ""
-                      student.student_name = ""
-                      student.tel =""
-                      student.username = ""
-                      student.account_id = ""
-                    }else{
-                      console.log(student)
+          course_id : this.course_data.course_id
+          }).then(() => {
+            // console.log(this.course_order.students.filter((v) => v.username === username))
+              if (type === "student") {
+                if(this.course_order.students.filter((v) => v.username === username).length === 1){
+                    let student = this.course_order.students.filter((v) => v.username === username)[0]
+                    if (this.user_student_data.length > 0) {
+                      student.firstname_en = this.user_student_data[0].firstNameEng;
+                      student.lastname_en = this.user_student_data[0].lastNameEng;
+                      student.firstname_th = this.user_student_data[0].firstNameTh;
+                      student.lastname_th = this.user_student_data[0].lastNameTh;
+                      student.student_name = `${this.user_student_data[0].firstNameEng} ${this.user_student_data[0].lastNameEng} `;
+                      student.tel = this.user_student_data[0].mobileNo;
+                      student.username = username;
+                    student.account_id = this.user_student_data[0].userOneId;
+                    } else {
+                      if(student){
+                        student.firstname_en = ""
+                        student.lastname_en = ""
+                        student.firstname_th = ""
+                        student.lastname_th = ""
+                        student.student_name = ""
+                        student.tel =""
+                        student.username = ""
+                        student.account_id = ""
+                      }else{
+                        console.log(student)
+                      }
                     }
-                  }
-                }else if(this.course_order.students.filter((v) => v.username === username).length > 1){
-                  Swal.fire({
-                    icon: "error",
-                    title: "ชื่อผู้ใช้นี้ถูกใส่ข้อมูลมาแล้ว กรุณาตรวจสอบอีกครั้ง"
-                  })
-              }
-            } else {
-              if(this.course_order.students.filter((v) => v.username === username).length === 0){
-                console.log(this.user_data)
-                if (this.user_data.length > 0) {
-                  if (this.edit_parent) {
-                    this.edit_parent = false;
-                  }
-                  this.parent = {
-                    account_id: this.user_data[0].userOneId,
-                    username: username,
-                    firstname_en: this.user_data[0].firstNameEng,
-                    lastname_en: this.user_data[0].lastNameEng,
-                    tel: this.user_data[0].mobileNo,
-                  };
-                  if ( this.course_order.students.filter((v) => v.is_other === false )[0].parents.length > 0) {
-                    let parents = this.course_order.students.filter( (v) => v.is_other === false )[0].parents;
-                    parents[0].firstname_en = this.user_data[0].firstNameEng;
-                    parents[0].lastname_en = this.user_data[0].lastNameEng;
-                    parents[0].tel = this.user_data[0].mobileNo;
-                    parents[0].account_id = this.user_data[0].userOneId;
-                    parents[0].username = username;
-                  }
-                }else{
-                  this.parent = {
-                    account_id: "",
-                    username: "",
-                    firstname_en: "",
-                    lastname_en: "",
-                    tel: ""
-                  };
-                  let parents = this.course_order.students.filter( (v) => v.is_other === false )[0].parents;
-                  parents[0].firstname_en = ""
-                  parents[0].lastname_en = ""
-                  parents[0].tel = ""
-                  parents[0].account_id = ""
-                  parents[0].username = ""
+                  }else if(this.course_order.students.filter((v) => v.username === username).length > 1){
+                    Swal.fire({
+                      icon: "error",
+                      title: "ชื่อผู้ใช้นี้ถูกใส่ข้อมูลมาแล้ว กรุณาตรวจสอบอีกครั้ง"
+                    })
                 }
-              }else if(this.course_order.students.filter((v) => v.username === username).length > 1){
-                  Swal.fire({
-                    icon: "error",
-                    title: "ชื่อผู้ใช้นี้ถูกใส่ข้อมูลมาแล้ว กรุณาตรวจสอบอีกครั้ง"
-                  })
               }
+          });
+        }else{
+          this.checkUsernameOneid({
+          username: username,
+          status: "",
+          type: type,
+          course_id : this.course_data.course_id
+          }).then(() => {
+            // console.log(this.course_order.students.filter((v) => v.username === username))
+            if(this.course_order.students.filter((v) => v.username === username).length === 0){
+              console.log(this.user_data)
+              if (this.user_data.length > 0) {
+                if (this.edit_parent) {
+                  this.edit_parent = false;
+                }
+                this.parent = {
+                  account_id: this.user_data[0].userOneId,
+                  username: username,
+                  firstname_en: this.user_data[0].firstNameEng,
+                  lastname_en: this.user_data[0].lastNameEng,
+                  tel: this.user_data[0].mobileNo,
+                };
+                if ( this.course_order.students.filter((v) => v.is_other === false )[0].parents.length > 0) {
+                  let parents = this.course_order.students.filter( (v) => v.is_other === false )[0].parents;
+                  parents[0].firstname_en = this.user_data[0].firstNameEng;
+                  parents[0].lastname_en = this.user_data[0].lastNameEng;
+                  parents[0].tel = this.user_data[0].mobileNo;
+                  parents[0].account_id = this.user_data[0].userOneId;
+                  parents[0].username = username;
+                }
+              }else{
+                this.parent = {
+                  account_id: "",
+                  username: "",
+                  firstname_en: "",
+                  lastname_en: "",
+                  tel: ""
+                };
+                let parents = this.course_order.students.filter( (v) => v.is_other === false )[0].parents;
+                parents[0].firstname_en = ""
+                parents[0].lastname_en = ""
+                parents[0].tel = ""
+                parents[0].account_id = ""
+                parents[0].username = ""
+              }
+            }else if(this.course_order.students.filter((v) => v.username === username).length > 1){
+                Swal.fire({
+                  icon: "error",
+                  title: "ชื่อผู้ใช้นี้ถูกใส่ข้อมูลมาแล้ว กรุณาตรวจสอบอีกครั้ง"
+                })
             }
-        });
+          });
+        }
       } else {
         this.user_data = [];
       }

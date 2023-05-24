@@ -385,7 +385,22 @@ const orderModules = {
                 }    
             }catch(error){
                 context.commit("SetOrderIsLoading", false)
-                console.log(error)
+                // console.log(error.response)
+                if(error.response.data.message === "User is duplicate in this course. Cannot enroll again"){
+                    Swal.fire({
+                        icon: "error",
+                        title: "ผู้ใช้ซ้ำกันในหลักสูตรนี้ ไม่สามารถลงทะเบียนได้",
+                        showCancelButton: false,
+                        confirmButtonText: "ตกลง",
+                    })
+                }else{
+                    Swal.fire({
+                        icon: "error",
+                        title: "เกิดข้อผิดพลาด",
+                        showCancelButton: false,
+                        confirmButtonText: "ตกลง",
+                    })
+                }
             }
         },
         async savePayment(context, {paymnet_data}){
