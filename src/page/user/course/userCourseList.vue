@@ -1,5 +1,4 @@
 <template>
-    <v-app>
       <v-container>
         <v-row dense>
             <v-col cols="12">
@@ -17,7 +16,7 @@
         </v-row>
         <v-row dense>
             <v-col cols="6" v-for="(type, type_index) in course_types" :key="`${type_index}-type`">
-                <v-card flat @click="selectCourseType(type)" class="rounded-lg">
+                <v-card flat @click="selectCourseType(type)" class="rounded-lg h-full">
                     <v-card-text :class="type_selected === type.course_type_id ? 'bg-[#FF6B81]' : 'bg-[#F5F5F5]'" class="rounded-lg flex justify-center align-center pa-2">
                         <label :class="type_selected === type.course_type_id ? 'text-white' : ' text-[#B3B3B3]' " class="font-bold mr-2">{{type.course_type_name_th}}</label>
                         <v-avatar size="32" color="white" class="font-bold" :class="type_selected === type.course_type_id ? 'text-[#ff6b81]' : 'text-[#B3B3B3]'"> {{ search_results.filter(v => v.course_type_id === type_selected).length > 0 ? search_results.filter(v => v.course_type_id === type.course_type_id).length : type.total_course }} </v-avatar>
@@ -29,7 +28,7 @@
         <v-row dense>
             <template v-if="!courses_is_loading">
                 <v-col cols="6"  v-for="(course, course_index) in search_results.filter(v => v.course_type_id === type_selected).length > 0 ? search_results.filter(v => v.course_type_id === type_selected) : courses" :key="course_index">
-                    <v-card  class="overflow-hidden">
+                    <v-card  class="overflow-hidden  h-full">
                         <v-img @click="selectedCourse(course)" 
                             :aspect-ratio="16 / 9"
                             cover
@@ -48,10 +47,10 @@
                                 {{
                                     course.show
                                     ? `${course.course_detail}`
-                                    : `${course.course_detail.slice(0, 15).trim()}`
+                                    : `${course.course_detail.slice(0, 50).trim()}`
                                 }}
                                 <span
-                                    v-if="course.course_detail.length > 15"
+                                    v-if="course.course_detail.length > 50"
                                     class="text-red-500 cursor-pointer"
                                     @click="course.show = !course.show"
                                     >{{ course.show ? `น้อยลง` : `อ่านต่อ...` }}</span
@@ -72,7 +71,6 @@
             </template>
         </v-row>
       </v-container>
-    </v-app>
   </template>
   <script>
 import { mapGetters, mapActions } from 'vuex';

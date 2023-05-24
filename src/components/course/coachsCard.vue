@@ -184,7 +184,7 @@
                           hide-clear-button 
                           advanced-keyboard 
                           v-model="class_date.class_date_range.start_time_object" 
-                          @change="ChangeStartDate(class_date.class_date_range, teach_day.class_date, class_date.class_date_range.start_time_object)">
+                          @change="ChangeStartDate(class_date.class_date_range, teach_day.class_date)">
                         </VueTimepicker>
                       </v-col>
                       <v-col class="px-2" cols="12" sm="6">
@@ -325,9 +325,11 @@ export default {
       course_monitors: "CourseMonitorModules/getCourseMonitor",
     }),
     setFunction(){
-      this.GetShortCourseMonitor({
-        course_id: this.course_data.course_id,
-      });
+      if( this.course_data.course_id){
+        this.GetShortCourseMonitor({
+          course_id: this.course_data.course_id,
+        });
+      }
       return ""
     }
   },
@@ -341,7 +343,7 @@ export default {
       // monitor
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
     }),
-    ChangeStartDate(date){
+    ChangeStartDate(date, teach_day){
       if(!date.start_time_object.mm){
         date.start_time_object.mm = "00"
       }
@@ -353,6 +355,7 @@ export default {
       }
       date.end_time_object.mm = date.start_time_object.mm
       date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`
+      console.log(teach_day)
       // if(!class_dates.some(v => v.class_date_range.start_time === `${date.start_time_object.HH}:${date.start_time_object.mm}`)){
       //   date.start_time = `${date.start_time_object.HH}:${date.start_time_object.mm}`
       //   date.end_time_object.HH = (parseInt(date.start_time_object.HH) + this.course_data.course_hours)

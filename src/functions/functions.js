@@ -73,7 +73,7 @@ export const CheckFileSize = (file) => {
     if (fileSizeInMB > 10) {
         Swal.fire({
             icon: "error",
-            text: "ขนาดไฟล์ต้องไม่เกิน 10 MB",
+            title: "ขนาดไฟล์ต้องไม่เกิน 10 MB",
             confirmButtonText: "ตกลง"
         })
         return false
