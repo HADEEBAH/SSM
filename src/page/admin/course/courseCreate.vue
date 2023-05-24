@@ -78,7 +78,7 @@
           </v-form>
         </v-stepper-content>
         <!-- Step 2 -->
-        <v-stepper-content step="2" class="pa-2">
+        <v-stepper-content style="overflow : none !important;" step="2" class="pa-2">
           <v-form ref="coach_form" v-model="steps[step - 1]">
             <v-card flat>
               <headerCard title="รายละเอียดเวลาและโค้ช">
@@ -89,7 +89,7 @@
                   </v-btn>
                 </template>
               </headerCard>
-              <v-card-text class="pt-0">
+              <v-card-text>
                 <v-divider class="mb-3"></v-divider>
                 <!-- COACH -->
                 <coachs-card :coachs="coachs"></coachs-card>
@@ -157,7 +157,7 @@
                     cols="12"
                     class="flex align-center justify-center text-caption"
                   >
-                    ( ขนาดไฟล์งานไม่เกิน 1 Mb ต้องเป็นไฟล์ JPG, PNG )
+                    ( ขนาดไฟล์งานไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
                   </v-col>
                   <v-col cols="12" class="flex align-center justify-center">
                     <v-btn
@@ -231,7 +231,7 @@
                     cols="12"
                     class="flex align-center justify-center text-caption"
                   >
-                    ( ขนาดไฟล์งานไม่เกิน 1 Mb ต้องเป็นไฟล์ JPG, PNG )
+                    ( ขนาดไฟล์งานไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
                   </v-col>
                 </v-row>
                 <v-row dense>

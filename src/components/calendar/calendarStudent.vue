@@ -106,11 +106,9 @@
                       <v-row dense>
                         <v-col> เรียนโดย: {{ event.name }} </v-col>
                       </v-row>
-
                       <v-row dense>
                         <v-col class="text-sm">
                           โค้ช: {{ event.subtitle }} <br />
-
                           <div>
                             <v-btn
                               small
@@ -146,7 +144,6 @@
     </v-bottom-sheet>
   </div>
 </template>
-
 <script>
 import { mapActions, mapGetters } from "vuex";
 

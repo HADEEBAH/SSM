@@ -39,6 +39,67 @@ const loginModules = {
         }
     },
     actions: {
+        async checkUsernameOneidByOrder(context, { username, type, course_id }) {
+            context.commit("SetIsLoading", true)
+            try {
+                // let { data } = await axios.get(` http://localhost:3000/api/v1/account/username?username=${username}`)
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/username?username=${username}`)
+                if (data.statusCode === 200) {
+                    if (data.data.userOneId) {
+                        // console.log("type =>",course_id)
+                        if (type === 'student') {
+                            let student = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/username-potencial/${data.data.userOneId}`)
+                            // console.log(student.data.statusCode)
+                            if(student.data.statusCode === 200){
+                                // console.log(student.data.data.data)
+                                if(student.data.message === "study"){
+                                    if(student.data.data.data.some(v => v.courseId === course_id)){
+                                        Swal.fire({
+                                            icon: "error",
+                                            title: "ผู้ใช้ซ้ำกันในหลักสูตรนี้ ไม่สามารถลงทะเบียนได้",
+                                            showCancelButton: false,
+                                            confirmButtonText: "ตกลง",
+                                        })
+                                        if (type === 'student') {
+                                            context.commit("SetUserStudentData", [])
+                                        } else {
+                                            context.commit("SetUserData", [])
+                                        }
+                                    }else{
+                                        context.commit("SetUserStudentData", [data.data])
+                                    }
+                                }else{
+                                    context.commit("SetUserStudentData", [data.data])
+                                }
+                            }
+                        } else {
+                            context.commit("SetUserData", [data.data])
+                        }
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "ไม่พบผู้ใช้"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                if (type === 'student') {
+                                    context.commit("SetUserStudentData", [])
+                                } else {
+                                    context.commit("SetUserData", [])
+                                }
+                            }
+                        })
+                    }
+                    context.commit("SetIsLoading", false)
+                }
+            } catch (error) {
+                context.commit("SetIsLoading", false)
+                Swal.fire({
+                    icon: "error",
+                    title: error.message
+                })
+                // console.log(error)
+            }
+        },
         async checkUsernameOneid(context, { username, status, type }) {
             context.commit("SetIsLoading", true)
             console.log("status", status);
