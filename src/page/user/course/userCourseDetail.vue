@@ -1,141 +1,7 @@
 <template>
   <!-- <v-app> -->
   <v-container class="h-full">
-    <v-img
-        contain
-        class="rounded-lg mb-3"
-        max-height="180"
-        :src="course_data.course_img || course_data.course_img !== '' ? course_data.course_img : require(`@/assets/course/default_course_img.svg`)"
-      >
-      <template v-slot:placeholder>
-            <v-row class="fill-height ma-0" align="center" justify="center">
-              <v-progress-circular
-                indeterminate
-                color="#ff6b81"
-              ></v-progress-circular>
-            </v-row>
-          </template>
-    </v-img>
-      <v-row dense
-        ><v-col class="text-lg font-bold">
-          {{ `${course_data.course_name_th} (${course_data.course_name_en})` }}
-        </v-col>
-      </v-row>
-      <v-row dense><v-col class="text-md">{{`โดย ${course_data.location}`}}</v-col></v-row>
-      <template v-if="course_data.course_type_id === 'CT_2'">
-        <v-row dense>
-          <v-col cols="auto">
-            <v-icon  class="mr-2" color="#ff6b81">mdi-currency-usd</v-icon>
-          </v-col>
-          <v-col class="font-bold">{{parseFloat(course_data.price_course).toLocaleString()}} บาท/คน</v-col>
-        </v-row>
-        <rowData col_detail="5" mini icon="mdi-account-group-outline"
-          > {{ course_data.course_studant_amount ?   course_data.course_studant_amount : 0 }} / {{course_data.student_recived}} ที่นั่ง</rowData
-        >
-      </template>
-      <!-- GENERAL COURSE -->
-      <template v-if="course_data.course_type_id === 'CT_1'">
-        <!-- <rowData col_detail="5" mini icon="mdi-calendar-today"
-          >วันเสาร์ - อาทิตย์</rowData
-        > -->
-        <rowData col_detail="5" mini icon="mdi-clock-time-four-outline"
-          >{{ course_data.course_hours  }} ชม. / ครั้ง</rowData
-        >
-        <!-- <rowData col_detail="5" mini icon="mdi-account-group-outline"
-          > 9 / 10 ที่นั่ง</rowData
-        > -->
-      </template>
-      <v-row dense>
-        <v-col cols="12" class="text-[#999999]">
-          {{ course_data.detail  }}</v-col
-        >
-      </v-row>
-      <v-expansion-panels flat>
-        <v-expansion-panel  v-if="course_data.course_type_id === 'CT_2'">
-          <v-expansion-panel-header class="px-0 font-bold">
-            วันและเวลา
-            <template v-slot:actions>
-              <v-icon color="#ff6b81"> $expand </v-icon>
-            </template>
-          </v-expansion-panel-header>
-          <v-expansion-panel-content class="border-t pt-3">
-            <v-row dense>
-              <v-col cols="auto">วันรับสมัคร:</v-col>
-              <v-col> {{ new Date(course_data.course_register_start_date).toLocaleDateString("th-TH",date_options)}}-{{ new Date(course_data.course_register_end_date).toLocaleDateString("th-TH",date_options)}}</v-col>
-            </v-row>
-            <v-row dense>
-              <v-col cols="auto">วันเรียน:</v-col>
-              <v-col>{{ new Date(course_data.course_study_start_date).toLocaleDateString("th-TH",date_options)}} - {{ new Date(course_data.course_study_end_date).toLocaleDateString("th-TH",date_options)}} ({{ getTime(course_data.course_period_start_date) }}-{{ getTime(course_data.course_period_end_date) }} น.)</v-col>
-            </v-row>
-           
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-        <v-expansion-panel  v-if="course_data.course_type_id === 'CT_1'">
-          <v-expansion-panel-header class="px-0 font-bold">
-            Music performance
-            <template v-slot:actions>
-              <v-icon color="#ff6b81"> $expand </v-icon>
-            </template>
-          </v-expansion-panel-header>
-          <v-expansion-panel-content class="border-t pt-3">
-            <label>{{ course_data.music_performance }}</label>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-        <v-expansion-panel>
-          <v-expansion-panel-header class="px-0 font-bold">
-            Certification
-            <template v-slot:actions>
-              <v-icon color="#ff6b81"> $expand </v-icon>
-            </template>
-          </v-expansion-panel-header>
-          <v-expansion-panel-content class="border-t pt-3" >
-            <label>{{ course_data.catification }}</label>          
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
-      
-      <v-row>
-        <v-col
-          v-if="course_order.course_type_id === 'CT_1'"
-          cols="12"
-          class="flex justify-center"
-        >
-          <v-btn
-            depressed
-            class="w-full font-bold white--text"
-            @click="$router.push({ name: 'userCoursePackage_courseId', params:{course_id : $route.params.course_id} })"
-            color="#ff6b81"
-          >
-            เลือกแพ็คเกจ
-          </v-btn>
-        </v-col>
-        <v-col
-          v-if="course_order.course_type_id === 'CT_2'"
-          cols="12"
-          class="flex justify-center"
-        >
-          <v-btn
-            v-if=" course_data.course_studant_amount ? course_data.course_studant_amount < course_data.student_recived : 0 < course_data.student_recived"
-            depressed
-            class="w-full font-bold white--text"
-            @click="registerCourse"
-            color="#ff6b81"
-          >
-            สมัคร
-          </v-btn>
-          <v-btn
-            v-else
-            depressed
-            disabled
-            class="w-full font-bold white--text"
-            color="#ff6b81"
-          >
-            คอร์สเรียนเต็ม
-          </v-btn>
-        </v-col>
-      </v-row>
-
-    <!-- <v-row class="h-full">
+    <v-row class="h-full">
       <v-col cols="12" sm="6" :class="MobileSize ? '' : 'h-full'">
         <v-img
           cover
@@ -320,7 +186,7 @@
           </v-col>
         </v-row>
       </v-col>
-    </v-row> -->
+    </v-row>
 
     <!-- GENERAL COURSE -->
 

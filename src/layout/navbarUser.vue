@@ -324,6 +324,13 @@ export default {
       this.GetCartList(this.user_detail.account_id);
     }
   },
+  beforeMount() {
+    if (this.MobileSize) {
+      this.drawer = false
+    } else {
+      this.drawer = true
+    }
+  },
   mounted() {
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail.account_id);
@@ -340,6 +347,10 @@ export default {
       titel_navber: "NavberUserModules/getTitleNavber",
       profile_detail: "ProfileModules/getProfileDetail",
     }),
+    MobileSize() {
+      const { xs } = this.$vuetify.breakpoint;
+      return !!xs;
+    },
   },
   methods: {
     ...mapActions({
