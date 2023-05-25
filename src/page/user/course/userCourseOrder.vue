@@ -1347,8 +1347,14 @@ export default {
             this.course_order.coach = this.course_data.coachs[0].coach_id;
             this.course_order.coach_id = this.course_data.coachs[0].coach_id;
           }
-          if ( this.order.courses.filter((v) => v.course_id === this.course_order.course_id).length === 0
-          ) { this.order.courses.push({ ...this.course_order }); }
+          console.log("this.order => ",this.order)
+          if( this.order.courses.length === 0){
+            if ( this.order.courses.filter((v) => v.course_id === this.course_order.course_id).length === 0
+            ) { this.order.courses.push({ ...this.course_order }); }
+          }else{
+            this.order.courses = []
+            this.order.courses.push({ ...this.course_order }); 
+          }
           this.order.created_by = this.user_login.account_id;
           this.changeOrderData(this.order);
           if (this.course_order.course_type_id == "CT_1") {
@@ -1454,11 +1460,6 @@ export default {
                 parents[0].account_id = ""
                 parents[0].username = ""
               }
-            }else if(this.course_order.students.filter((v) => v.username === username).length > 1){
-                Swal.fire({
-                  icon: "error",
-                  title: "ชื่อผู้ใช้นี้ถูกใส่ข้อมูลมาแล้ว กรุณาตรวจสอบอีกครั้ง"
-                })
             }
           });
         }

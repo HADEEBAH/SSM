@@ -272,13 +272,14 @@
   </div>
 </template>
 <script>
+
 import LabelCustom from "../label/labelCustom.vue";
 import { mapGetters, mapActions } from "vuex";
 // import { Input, TimePicker } from "ant-design-vue";
 import moment from "moment";
 import Swal from "sweetalert2";
 import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
-
+import {generateTimeArray} from "../../functions/functions"
 export default {
   components: {
     LabelCustom,
@@ -343,7 +344,8 @@ export default {
       // monitor
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
     }),
-    ChangeStartDate(date, teach_day){
+    
+    ChangeStartDate(date){
       if(!date.start_time_object.mm){
         date.start_time_object.mm = "00"
       }
@@ -355,24 +357,17 @@ export default {
       }
       date.end_time_object.mm = date.start_time_object.mm
       date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`
-      console.log(teach_day)
-      // if(!class_dates.some(v => v.class_date_range.start_time === `${date.start_time_object.HH}:${date.start_time_object.mm}`)){
-      //   date.start_time = `${date.start_time_object.HH}:${date.start_time_object.mm}`
-      //   date.end_time_object.HH = (parseInt(date.start_time_object.HH) + this.course_data.course_hours)
-      //   date.end_time_object.mm = date.start_time_object.mm
-      //   date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`
-      // }else{
-      //   Swal.fire({
-      //     icon: "error",
-      //     title: "ไม่สามารถเปลี่ยนเวลาสอนได้",
-      //     text: "เวลาสอนนี้มีอยู่แล้ว",
-      //     showDenyButton: false,
-      //     showCancelButton: false,
-      //     confirmButtonText: "ตกลง",
-      //     cancelButtonText: "ยกเลิก",
-      //   })
-      //   date.start_time_object.HH  
-      // }
+      // this.checkHour(teach_day)
+    },
+    checkHour(teach_day){
+      let timeused = []
+      timeused = teach_day.map((v) => {
+       return {start_time : v.class_date_range.start_time_object, end_time : v.class_date_range.end_time_object}
+      })
+      timeused.forEach((time)=>{
+        // console.log(time)
+        return (generateTimeArray(time))
+      })
     },
     SelectedStartDate(e){
       const timepickerElement =  e.target.parentNode.parentNode.parentNode.parentNode.parentNode
