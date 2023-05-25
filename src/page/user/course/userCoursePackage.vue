@@ -14,6 +14,14 @@
             "
             max-height="140"
             max-width="140"
+          >
+            <template v-slot:placeholder>
+              <v-row class="fill-height ma-0" align="center" justify="center">
+                <v-progress-circular
+                  indeterminate
+                  color="#ff6b81"
+                ></v-progress-circular>
+              </v-row> </template
           ></v-img>
         </template>
         <template v-slot:header>
@@ -186,6 +194,14 @@
               max-height="600"
               max-width="800"
               :src="course_data.course_img_privilege"
+            >
+              <template v-slot:placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular
+                    indeterminate
+                    color="#ff6b81"
+                  ></v-progress-circular>
+                </v-row> </template
             ></v-img>
           </v-card-text>
           <!-- <v-card-actions>
@@ -227,7 +243,6 @@
               >
                 <v-img
                   :src="artwork.attachmentUrl"
-                  :lazy-src="artwork.attachmentUrl"
                   aspect-ratio="1"
                   contain
                   class="bg-grey-lighten-2"
@@ -240,7 +255,7 @@
                     >
                       <v-progress-circular
                         indeterminate
-                        color="grey-lighten-5"
+                        color="#ff6b81"
                       ></v-progress-circular>
                     </v-row>
                   </template>
@@ -253,8 +268,8 @@
     </v-container>
   </v-app>
 </template>
-  
-  <script>
+
+<script>
 import ImgCard from "@/components/course/imgCard.vue";
 import rowData from "@/components/label/rowData.vue";
 import { mapGetters, mapActions } from "vuex";
@@ -328,7 +343,7 @@ export default {
   },
 };
 </script>
-  <style scoped>
+<style scoped>
 .card-package-size {
   height: 380px;
   width: 254px;
@@ -340,4 +355,3 @@ export default {
   background: linear-gradient(141.48deg, #ff6b81 14.35%, #fdcb6e 85.47%);
 }
 </style>
-  
