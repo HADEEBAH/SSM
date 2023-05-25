@@ -250,13 +250,6 @@ export default {
       filter: {},
       searchQuery: [],
       selectedRole: null, // Selected role from the autocomplete
-      roleList: [
-        { role: "Super Admin", privilege: "superAdmin", roleNumber: "R_1" },
-        { role: "Admin", privilege: "admin", roleNumber: "R_2" },
-        { role: "โค้ช", privilege: "โค้ช", roleNumber: "R_3" },
-        { role: "ผู้ปกครอง", privilege: "ผู้ปกครอง", roleNumber: "R_4" },
-        { role: "นักเรียน", privilege: "นักเรียน", roleNumber: "R_5" },
-      ],
 
       roles: [
         { role: "Super Admin", privilege: "superAdmin", roleNumber: "R_1" },
