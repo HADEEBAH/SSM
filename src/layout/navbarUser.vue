@@ -146,7 +146,6 @@
         <v-row dense>
           <v-col
             cols="12"
-            sm="6"
             class="flex align-center justify-center font-bold text-md"
           >
             {{ show_profile_detail.firstNameTh }}
