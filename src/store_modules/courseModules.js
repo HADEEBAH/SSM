@@ -1546,13 +1546,15 @@ const CourseModules = {
           context.commit("SetCourseIsLoading", false)
           Swal.fire({
             icon: "success",
-            title: "สร้างคอร์สสำเร็จ"
+            title: "สร้างคอร์สสำเร็จ",
+            showDenyButton: false,
+            showCancelButton: false,
+            confirmButtonText: "ตกลง",
           }).then((result) => {
             if (result.isConfirmed) {
               router.replace({ name: "CourseList" })
             }
           })
-
         } else {
           context.commit("SetCourseIsLoading", false)
           throw { message: data }

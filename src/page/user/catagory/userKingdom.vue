@@ -1,4 +1,3 @@
-
 <template>
   <!--  -->
   <v-app
@@ -13,7 +12,10 @@
         <v-col cols="12">
           <div class="text-2xl font-bold text-white">
             <!-- สวัสดี, {{ dataStorage ? dataStorage.first_name_th : "" }} -->
-            สวัสดี {{  profile_detail.firstNameTh ? ","+ profile_detail.firstNameTh : "" }}
+            สวัสดี
+            {{
+              profile_detail.firstNameTh ? "," + profile_detail.firstNameTh : ""
+            }}
           </div>
         </v-col>
       </v-row>
@@ -30,7 +32,12 @@
           : ''
       "
     >
-      <v-carousel class="rounded-xl" cycle hide-delimiter-background height="300">
+      <v-carousel
+        class="rounded-xl"
+        cycle
+        hide-delimiter-background
+        height="300"
+      >
         <v-carousel-item
           v-for="(slide, i) in slides"
           :key="i"
@@ -39,99 +46,104 @@
         ></v-carousel-item>
       </v-carousel>
       <v-card-text>
-          <v-row>
-            <v-col
-              cols="12"
-              sm="4"
-              class="text-2xl align-self-center font-weight-bold"
-            >
-              อาณาจักร
-            </v-col>
-            <v-col cols="12" sm="8" style="text-align: -webkit-right">
-              <v-text-field
-                v-model="search_kingdom"
-                :class="`bg-white rounded-full ${
-                  !MobileSize ? 'w-2/5' : 'w-full'
-                } `"
-                hide-details
-                dense
-                outlined
-                label="ค้นหาอาณาจักรการเรียนรู้ที่คุณสนใจได้ที่นี้"
-                prepend-inner-icon="mdi-magnify"
-              />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col
-              cols="6"
-              md="4"
-              sm="6"
-              class="pa-1"
-              v-for="(item, index_item) in searchKingdom(search_kingdom)"
-              :key="index_item"
-            >
-              <v-card
-                class="h-full rounded-lg box-shadows"
+        <v-row>
+          <v-col
+            cols="12"
+            sm="4"
+            class="text-2xl align-self-center font-weight-bold"
+          >
+            อาณาจักร
+          </v-col>
+          <v-col cols="12" sm="8" style="text-align: -webkit-right">
+            <v-text-field
+              v-model="search_kingdom"
+              :class="`bg-white rounded-full ${
+                !MobileSize ? 'w-2/5' : 'w-full'
+              } `"
+              hide-details
+              dense
+              outlined
+              label="ค้นหาอาณาจักรการเรียนรู้ที่คุณสนใจได้ที่นี้"
+              prepend-inner-icon="mdi-magnify"
+            />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col
+            cols="6"
+            md="4"
+            sm="6"
+            class="pa-1"
+            v-for="(item, index_item) in searchKingdom(search_kingdom)"
+            :key="index_item"
+          >
+            <v-card class="h-full rounded-lg box-shadows">
+              <!-- :src="item.categoryImg && item.categoryImg !== null ? showImg(item.categoryImg) : defaultImageUrl" -->
+              <v-img
+                @click="selectedCategory(item)"
+                :aspect-ratio="16 / 9"
+                cover
+                :src="
+                  item.categoryImg && item.categoryImg !== ''
+                    ? item.categoryImg
+                    : require('@/assets/userKingdom/default_category_img.svg')
+                "
+                class="cursor-pointer"
               >
-                <!-- :src="item.categoryImg && item.categoryImg !== null ? showImg(item.categoryImg) : defaultImageUrl" -->
-                <v-img
-                  v-if="item.categoryImg && item.categoryImg !== null"
-                  @click="selectedCategory(item)"
-                  :aspect-ratio="16 / 9"
-                  cover
-                  :src="item.categoryImg"
-                  class="cursor-pointer"
-                ></v-img>
-                <v-img
-                  v-else
-                  @click="selectedCategory(item)"
-                  contain
-                  src="../../../assets/userKingdom/category_img.svg"
-                  height="180"
-                  class="cursor-pointer"
-                ></v-img>
-                <v-card-title
-                  :class="$vuetify.breakpoint.smAndUp ? 'text-md' : 'text-sm'"
-                  class="font-bold cursor-pointer"
-                  @click="selectedCategory(item)"
-                >
-                  {{ item.categoryNameTh }}
-                  ({{ item.categoryNameEng }})
-                </v-card-title>
+                <template v-slot:placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular
+                      indeterminate
+                      color="#ff6b81"
+                    ></v-progress-circular>
+                  </v-row>
+                </template>
+              </v-img>
+              <v-card-title
+                :class="$vuetify.breakpoint.smAndUp ? 'text-md' : 'text-sm'"
+                class="font-bold cursor-pointer"
+                @click="selectedCategory(item)"
+              >
+                {{ item.categoryNameTh }}
+                ({{ item.categoryNameEng }})
+              </v-card-title>
 
-                <v-card-subtitle>
-                  <div class="mb-2">โดย {{ item.taughtBy }}</div>
-                  <div>
-                    {{
-                      item.show
-                        ? `${item.categoryDescription}`
-                        : `${item.categoryDescription.slice(0, 15).trim()}`
-                    }}
-                    <span
-                      v-if="item.categoryDescription.length > 15"
-                      class="text-red-500 cursor-pointer"
-                      @click="item.show = !item.show"
-                      >{{ item.show ? `น้อยลง` : `อ่านต่อ...` }}</span
-                    >
-                  </div>
-                </v-card-subtitle>
-              </v-card>
-            </v-col>
-            <v-col
-              cols="12"
-              v-if="searchKingdom(search_kingdom).length === 0"
-              class="font-weight-bold text-center text-xl"
-            >
-              ไม่พบอาณาจักร
-            </v-col>
-          </v-row>
-          <loading-overlay :loading="categorys_is_loading"></loading-overlay>
+              <v-card-subtitle>
+                <div class="mb-2">โดย {{ item.taughtBy }}</div>
+                <div>
+                  {{
+                    item.show
+                      ? `${item.categoryDescription}`
+                      : `${item.categoryDescription.slice(0, 15).trim()}`
+                  }}
+                  <span
+                    v-if="item.categoryDescription.length > 15"
+                    class="text-red-500 cursor-pointer"
+                    @click="item.show = !item.show"
+                    >{{ item.show ? `น้อยลง` : `อ่านต่อ...` }}</span
+                  >
+                </div>
+              </v-card-subtitle>
+            </v-card>
+          </v-col>
+          <v-col
+            cols="12"
+            v-if="searchKingdom(search_kingdom).length === 0"
+            class="font-weight-bold text-center text-xl"
+          >
+            ไม่พบอาณาจักร
+          </v-col>
+        </v-row>
+        <loading-overlay :loading="categorys_is_loading"></loading-overlay>
       </v-card-text>
-      
     </v-card>
   </v-app>
 </template>
- 
+
 <script>
 import { mapActions, mapGetters } from "vuex";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";

@@ -152,7 +152,7 @@
             </v-tab-item>
             <!-- COACH AND TIME -->
             <v-tab-item value="time and coach">
-              <v-card flat>
+              <v-card flat class="mb-3">
                 <headerCard title="รายละเอียดเวลาและโค้ช">
                   <template v-slot:actions>
                     <v-btn
