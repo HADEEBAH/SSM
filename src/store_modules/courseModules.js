@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import router from "@/router";
 import VueCookie from "vue-cookie"
 import {dateDMY} from "../functions/functions"
+var XLSX = require("xlsx");
 function dayOfWeekArray(day) {
   // console.log
   // let day_arr = day
@@ -385,7 +386,7 @@ const CourseModules = {
             for await (const coachDate of coach.allDates){
               // console.log(coachDate)
               if (!coachDate.cpo.cpoId){
-                console.log("ระยะสั้น")
+                // console.log("ระยะสั้น")
                 for await (const date of coachDate.dates.dates){
                   if(datesList.filter(v => v.date === date).length === 0){
                     datesList.push({
@@ -1740,6 +1741,106 @@ const CourseModules = {
         console.log(error);
       }
 
+    },
+    // EXPORT COURSE STUDENT LIST
+    async ExportStudentList(context,{coach_list, course_id, course_name, course_type_id}){
+      try{
+        console.log(course_name);
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        let report = []
+        for await(const coach of coach_list){
+          if(coach.checked){
+            for await (const date of coach.datesList){
+              let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/date/${date.date}`,config)
+              if(data.statusCode === 200){
+                if(data.data.length > 0){
+                  console.log("data=>",data.data);
+                  for await(const student of data.data){
+                    if(course_type_id === "CT_1"){
+                    report.push({
+                      "วันที่" : date.date,
+                      "เวลาเรียน" : date.time,
+                      "ชืี่อโค้ช" : `${coach.firstNameTh} ${coach.lastNameTh}`,
+                      "ชื่อนักเรียน" : `${student.firstNameTh} ${student.lastNameTh}`,
+                      "แพ็คเกจ" : date.cpo.packageName,
+                      "ระยะเวลา" : student.cpo?.optionName,
+                      "จำนวนครั้ง" : `${student.countCheckIn}/${student.totalDay}`,
+                      "การเขาเรียน" : student.status === "punctual" ? "ตรงเวลา" : student.status === "late" ? "สาย" :  student.status === "leave" ? "ลา"  : student.status === "emergency leave" ? 'ลาฉุกเฉิน' :  student.status === "absent" ? 'ขาด' : '-' ,
+                      "ระดับพัฒนาการ" : student.assessment?.evolution === "very good" ? 'ดีมาก' : student.assessment?.evolution === "good" ? 'ดี' : 'ปรับปรุง',
+                      "ระดับความสนใจ" : student.assessment?.interest  === "very good" ? 'ดีมาก' : student.assessment?.interest === "good" ? 'ดี' : 'ปรับปรุง',
+                      "ความคิดเห็น" : student.assessment?.remark,
+                    })
+                    }else{
+                       report.push({
+                        "วันที่" : date.date,
+                        "เวลาเรียน" : date.time,
+                        "ชืี่อโค้ช" : `${coach.firstNameTh} ${coach.lastNameTh}`,
+                        "ชื่อนักเรียน" : `${student.firstNameTh} ${student.lastNameTh}`,
+                        "การเขาเรียน" : student.status === "punctual" ? "ตรงเวลา" : student.status === "late" ? "สาย" :  student.status === "leave" ? "ลา"  : student.status === "emergency leave" ? 'ลาฉุกเฉิน' :  student.status === "absent" ? 'ขาด' : '-',
+                        "ระดับพัฒนาการ" : student.assessment?.evolution === "very good" ? 'ดีมาก' : student.assessment?.evolution === "good" ? 'ดี' : 'ปรับปรุง',
+                        "ระดับความสนใจ" : student.assessment?.interest  === "very good" ? 'ดีมาก' : student.assessment?.interest === "good" ? 'ดี' : 'ปรับปรุง',
+                        "ความคิดเห็น" : student.assessment?.remark,
+                      })
+                    }
+                  }
+                 
+                }else{
+                  for await (const student of date.students){
+                    if(course_type_id === "CT_1"){
+                      // console.log(student)
+                      report.push({
+                        "วันที่" : date.date,
+                        "เวลาเรียน" : date.time,
+                        "ชืี่อโค้ช" : `${coach.firstNameTh} ${coach.lastNameTh}`,
+                        "ชื่อนักเรียน" : `${student.firstNameTh} ${student.lastNameTh}`,
+                        "แพ็คเกจ" : date.cpo.packageName,
+                        "ระยะเวลา" : date.cpo?.optionName,
+                        "จำนวนครั้ง" : "",
+                        "การเขาเรียน" : "",
+                        "ระดับพัฒนาการ" : "",
+                        "ระดับความสนใจ" : "",
+                        "ความคิดเห็น" : "",
+                      })
+                    }else{
+                      report.push({
+                        "วันที่" : date.date,
+                        "เวลาเรียน" : date.time,
+                        "ชืี่อโค้ช" : `${coach.firstNameTh} ${coach.lastNameTh}`,
+                        "ชื่อนักเรียน" : `${student.firstNameTh} ${student.lastNameTh}`,
+                        "การเขาเรียน" : "",
+                        "ระดับพัฒนาการ" : "",
+                        "ระดับความสนใจ" : "",
+                        "ความคิดเห็น" : "",
+                      })
+                    }
+                  }
+                }
+              }
+             
+            }
+          }
+        }
+        console.log(report);
+        var workbook = XLSX.utils.book_new();
+        var worksheet = XLSX.utils.json_to_sheet(report);
+        XLSX.utils.book_append_sheet(workbook, worksheet, course_name);
+        var excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+        var blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement("a");
+        link.href = url;
+        link.download =  `${course_name}.xlsx`;
+        link.click();
+        URL.revokeObjectURL(url);
+      }catch(error){
+        console.log(error)
+      }
     }
   },
   getters: {
