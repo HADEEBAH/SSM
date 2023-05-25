@@ -1835,7 +1835,7 @@ export default {
         } else {
           Swal.fire({
             icon: "error",
-            title: "อัพโหลดเฉพาะไฟล์รูปภาพ(png, jpeg)เท่านั้น",
+            text: "อัพโหลดเฉพาะไฟล์รูปภาพ(png, jpeg)เท่านั้น",
             showDenyButton: false,
             showCancelButton: false,
             confirmButtonText: "ตกลง",
