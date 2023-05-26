@@ -181,6 +181,8 @@
                         ></v-text-field>
                         <VueTimepicker 
                           class="time-picker-hidden" 
+                          :hour-range="checkHour(teach_day.class_date, class_date_index)"
+                          :minute-range="checkMinute(teach_day.class_date, class_date.class_date_range.start_time_object.HH)"
                           hide-clear-button 
                           advanced-keyboard 
                           v-model="class_date.class_date_range.start_time_object" 
@@ -279,7 +281,7 @@ import { mapGetters, mapActions } from "vuex";
 import moment from "moment";
 import Swal from "sweetalert2";
 import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
-import {generateTimeArray} from "../../functions/functions"
+import {generateTimeArrayHours} from "../../functions/functions"
 export default {
   components: {
     LabelCustom,
@@ -344,36 +346,67 @@ export default {
       // monitor
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
     }),
-    
+    checkMinute(teach_day, hours){
+      if(teach_day.length > 1){
+        let timeused = []
+        let timeMinUsed = []
+        timeused = teach_day.map((v) => {
+          return {start_time : v.class_date_range.start_time_object, end_time : v.class_date_range.end_time_object}
+        })
+        timeused.forEach((time)=>{
+          if(hours === time.end_time.HH ){
+            let min_end = parseInt(time.end_time.mm)
+            for (let min = min_end+1;  min < 60 ; min++) {
+              timeMinUsed.push(min);
+            }
+          }
+        })
+        // console.log("timeMinUsed => ",timeMinUsed)
+        return timeMinUsed
+      }
+    },
+    checkHour(teach_day, timeindex){
+      let timeused = []
+      let timeusedHH = []
+      // let timeInUsed = []
+      timeused = teach_day.map((v) => {
+       return {start_time : v.class_date_range.start_time_object, end_time : v.class_date_range.end_time_object}
+      })
+      timeused.forEach((time, index)=>{
+        // console.log("timeindex", timeindex)
+        // console.log("index", index)
+        // console.log("Time :",time)
+        if(timeindex !== index){
+          if(time.start_time.HH){
+            timeusedHH.push(parseInt(time.start_time.HH))
+          }
+        }
+      })
+      // console.log(generateTimeArrayHours(timeusedHH))
+      return generateTimeArrayHours(timeusedHH)
+    },
     ChangeStartDate(date){
       if(!date.start_time_object.mm){
         date.start_time_object.mm = "00"
       }
       date.start_time = `${date.start_time_object.HH}:${date.start_time_object.mm}`
       if((parseInt(date.start_time_object.HH) + this.course_data.course_hours) >= 24){
-          date.end_time_object.HH = (parseInt(date.start_time_object.HH) + this.course_data.course_hours) - 24
+          date.end_time_object.HH = `${(parseInt(date.start_time_object.HH) + this.course_data.course_hours) - 24}`
+          date.end_time_object.HH = date.end_time_object.HH.toString().padStart(2, '0')
       }else{
-          date.end_time_object.HH = (parseInt(date.start_time_object.HH) + this.course_data.course_hours)
+          date.end_time_object.HH = `${(parseInt(date.start_time_object.HH) + this.course_data.course_hours)}`
+          date.end_time_object.HH = date.end_time_object.HH.toString().padStart(2, '0')
       }
       date.end_time_object.mm = date.start_time_object.mm
       date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`
       // this.checkHour(teach_day)
     },
-    checkHour(teach_day){
-      let timeused = []
-      timeused = teach_day.map((v) => {
-       return {start_time : v.class_date_range.start_time_object, end_time : v.class_date_range.end_time_object}
-      })
-      timeused.forEach((time)=>{
-        // console.log(time)
-        return (generateTimeArray(time))
-      })
-    },
+   
     SelectedStartDate(e){
-      const timepickerElement =  e.target.parentNode.parentNode.parentNode.parentNode.parentNode
+      e.target.parentNode.parentNode.parentNode.parentNode.parentNode
       .getElementsByClassName("time-picker-hidden")[0]
       .getElementsByTagName("input")[0].focus()
-      console.log( timepickerElement)
+      // console.log( timepickerElement)
     },
     checkStudyByDay(e, data){
       // console.log(e.target.click())
