@@ -14,12 +14,13 @@ import MyCourseModules from '@/store_modules/myCourseModules'
 import CoachModules from '@/store_modules/coachModules'
 import UserModules from '@/store_modules/userModules'
 import courseMonitorModules from '@/store_modules/courseMonitorModules'
+import ManageScheduleModules from '../src/store_modules/manageScheduleModules'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   modules: {
-    CoachModules :CoachModules,
+    CoachModules: CoachModules,
     RegisterModules: RegisterModules,
     CourseModules: CourseModules,
     FinanceModules: FinanceModules,
@@ -32,7 +33,8 @@ const store = new Vuex.Store({
     ProfileModules: ProfileModules,
     MyCourseModules: MyCourseModules,
     UserModules: UserModules,
-    CourseMonitorModules : courseMonitorModules
+    CourseMonitorModules: courseMonitorModules,
+    ManageScheduleModules: ManageScheduleModules
   }
 })
 

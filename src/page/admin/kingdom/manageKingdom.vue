@@ -9,12 +9,21 @@
         :loading="LoadingTable"
       >
         <template v-slot:[`item.actions`]="{ item }">
-          <v-btn text color="#FF6B81" @click="$router.push({name:'EditKingdom', params:{category_id : item.categoryId}})">
+          <v-btn
+            text
+            color="#FF6B81"
+            @click="
+              $router.push({
+                name: 'EditKingdom',
+                params: { category_id: item.categoryId },
+              })
+            "
+          >
             <v-icon>mdi-text-box-search-outline</v-icon>
             ดูรายละเอียด
           </v-btn>
           <v-btn icon color="#ff6b81" @click="categoryDelete(item)">
-              <v-icon>mdi-delete</v-icon>
+            <v-icon>mdi-delete</v-icon>
           </v-btn>
         </template>
       </v-data-table>
@@ -49,32 +58,31 @@ export default {
   methods: {
     ...mapActions({
       GetCategorys: "CategoryModules/GetCategorys",
-      DeleteCategory: "CategoryModules/DeleteCategory"
+      DeleteCategory: "CategoryModules/DeleteCategory",
     }),
-    categoryDelete(category){
+    categoryDelete(category) {
       Swal.fire({
-          icon: "question",
-          title: `ต้องการลบ ${category.categoryNameTh}`,
-          showDenyButton: false,
-          showCancelButton: true,
-          cancelButtonText :"ยกเลิก",
-          confirmButtonText: "ตกลง",
-        }).then(async (result) => {
-          if (result.isConfirmed) {
-            this.DeleteCategory({category_id : category.categoryId})
-          }
-        })
-    
-    }
+        icon: "question",
+        title: `ต้องการลบ ${category.categoryNameTh}`,
+        showDenyButton: false,
+        showCancelButton: true,
+        cancelButtonText: "ยกเลิก",
+        confirmButtonText: "ตกลง",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          this.DeleteCategory({ category_id: category.categoryId });
+        }
+      });
+    },
   },
   computed: {
     ...mapGetters({
       categorys: "CategoryModules/getCategorys",
     }),
-    LoadingTable(){
-            console.log(this.categorys)
-            return !this.categorys
-        } 
+    LoadingTable() {
+      console.log(this.categorys);
+      return !this.categorys;
+    },
   },
 };
 </script>
