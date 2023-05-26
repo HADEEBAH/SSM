@@ -46,7 +46,7 @@
             บาท/คน</v-col
           >
         </v-row>
-        <rowData col_detail="5" mini icon="mdi-account-group-outline">
+        <rowData  v-if="course_data.course_type_id === 'CT_2'"  col_detail="5" mini icon="mdi-account-group-outline">
           {{
             course_data.course_studant_amount
               ? course_data.course_studant_amount

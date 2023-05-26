@@ -64,17 +64,21 @@ export const dateFormatter = (date, formatter) => {
     return date_string
 
 }
-export const generateTimeArray = (timedata) => {
-    const startHour = parseInt(timedata.start_time.HH);
+export const generateTimeArrayHours = (timedata) => {
+    const startHour = timedata;
+    // console.log("timedata +> ",startHour)
     // const endHour = parseInt(timedata.end_time.HH);
-
     const output = [];
-    for (let hour = 0; hour <= 24; hour++) {
-        if (hour !== startHour) {
-            output.push(hour);
-        }
+    for (let hour = 0; hour <= 23; hour++) {
+        if(startHour.length > 0){
+            if (!startHour.some(v => v === hour)) {
+                output.push(hour.toString().padStart(2, '0'));
+            }
+        }else{
+            output.push(hour.toString().padStart(2, '0'));
+        }  
     }
-
+    // console.log(output)
     return output;
 }
 export const CheckFileSize = (file) => {
