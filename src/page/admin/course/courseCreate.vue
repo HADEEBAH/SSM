@@ -333,7 +333,7 @@ export default {
   },
   data: () => ({
     menu: false,
-    step: 2,
+    step: 1,
     steps: [false, false, false, false],
     file: null,
     dragOver: false,

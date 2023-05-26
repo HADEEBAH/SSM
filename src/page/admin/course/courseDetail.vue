@@ -466,11 +466,20 @@
             </v-tab-item>
             <!-- STUDENT LIST -->
             <v-tab-item value="student list">
-              <v-tabs v-model="student_tab" color="#ff6b81" class="mb-3">
-                <v-tab value="students in course">นักเรียนในคอร์ส</v-tab>
-                <v-tab value="student booking">นักเรียนจองคิว</v-tab>
-                <v-tab value="student potential">นักเรียนที่จบ</v-tab>
-              </v-tabs>
+              <v-row>
+                <v-col>
+                  <v-tabs v-model="student_tab" color="#ff6b81" class="mb-3">
+                    <v-tab value="students in course">นักเรียนในคอร์ส</v-tab>
+                    <v-tab value="student booking">นักเรียนจองคิว</v-tab>
+                    <v-tab value="student potential">นักเรียนที่จบ</v-tab>
+                  </v-tabs>
+                </v-col>
+                <v-col cols="auto">
+                  <v-btn v-if="student_tab == 0" :disabled="!coach_list.some(v => v.checked === true)" depressed color="#ff6b81" :dark="coach_list.some(v => v.checked === true)" @click="exportStudents()">
+                    export
+                  </v-btn>
+                </v-col>
+              </v-row>
               <v-tabs-items v-model="student_tab" class="rounded-lg">
                 <v-tab-item valus="students in course">
                   <!-- <pre>{{coach_list}}</pre> -->
@@ -479,16 +488,10 @@
                       <v-row dense class="d-flex align-center">
                         <v-col cols="auto">
                           <v-btn icon @click="selectAllCoach()">
-                            <v-icon color="#ff6b81">{{
-                              selected_all_coach
-                                ? "mdi-checkbox-marked"
-                                : "mdi-checkbox-blank-outline"
-                            }}</v-icon>
+                            <v-icon color="#ff6b81">{{ selected_all_coach ? "mdi-checkbox-marked" : "mdi-checkbox-blank-outline" }}</v-icon>
                           </v-btn>
                         </v-col>
-                        <v-col class="text-[#ff6b81] font-bold"
-                          >รายชื่อโค้ช</v-col
-                        >
+                        <v-col class="text-[#ff6b81] font-bold" >รายชื่อโค้ช</v-col>
                         <v-col cols="auto">
                           <v-text-field
                             class="bg-white rounded-lg"
@@ -536,11 +539,7 @@
                             <v-row dense class="d-flex align-center">
                               <v-col cols="auto">
                                 <v-btn icon @click="selectCoachChecked(coach)">
-                                  <v-icon color="#ff6b81">{{
-                                    coach.checked
-                                      ? "mdi-checkbox-marked"
-                                      : "mdi-checkbox-blank-outline"
-                                  }}</v-icon>
+                                  <v-icon color="#ff6b81">{{coach.checked ? "mdi-checkbox-marked" : "mdi-checkbox-blank-outline" }}</v-icon>
                                 </v-btn>
                               </v-col>
                               <v-col
@@ -579,8 +578,11 @@
                             <!-- FILTER -->
                             <v-row dense class="mb-3">
                               <v-col>
+                                <!-- <pre>{{dowOption}}</pre>
+                                {{selected_coach}} -->
                                 <v-autocomplete
                                   dense
+                                  v-model="filter.dow"
                                   outlined
                                   hide-details
                                   placeholder="วัน"
@@ -589,6 +591,7 @@
                               <v-col>
                                 <v-autocomplete
                                   dense
+                                  v-model="filter.date"
                                   outlined
                                   hide-details
                                   placeholder="วันที่"
@@ -597,6 +600,7 @@
                               <v-col>
                                 <v-autocomplete
                                   dense
+                                  v-model="filter.time"
                                   outlined
                                   hide-details
                                   placeholder="เวลา"
@@ -605,6 +609,7 @@
                               <v-col>
                                 <v-autocomplete
                                   dense
+                                  v-model="filter.package"
                                   outlined
                                   hide-details
                                   placeholder="แพ็คเกจ"
@@ -786,7 +791,7 @@
                                                 cols="2"
                                                 align="center"
                                                 v-if="
-                                                  course_data.course_type ===
+                                                  course_data.course_type_id ===
                                                   'CT_1'
                                                 "
                                               >
@@ -796,8 +801,7 @@
                                                 cols="2"
                                                 align="center"
                                                 v-if="
-                                                  course_data.course_type ===
-                                                  'CT_1'
+                                                  course_data.course_type_id === 'CT_1'
                                                 "
                                               >
                                                 จำนวนครั้ง
@@ -1603,14 +1607,20 @@ export default {
         img: "../../../assets/course/student_list.png",
       },
     ],
+    filter:{
+      dow : "",
+      date : "",
+      time : "",
+      package : "",
+    },
     day_option: [
       { label: "วันอาทิตย์", value: 0 },
-      { label: "วันจันทร์", value: 0 },
-      { label: "วันอังคาร", value: 0 },
-      { label: "วันพุธ", value: 0 },
-      { label: "วันพฤหัสบดี", value: 0 },
-      { label: "วันศุกร์", value: 0 },
-      { label: "วันเสาร์", value: 0 },
+      { label: "วันจันทร์", value: 1 },
+      { label: "วันอังคาร", value: 2 },
+      { label: "วันพุธ", value: 3 },
+      { label: "วันพฤหัสบดี", value: 4 },
+      { label: "วันศุกร์", value: 5 },
+      { label: "วันเสาร์", value: 6 },
     ],
     student_tab: null,
     course_edit: false,
@@ -1694,6 +1704,21 @@ export default {
       this.GetCoachsByCourse({ course_id: this.$route.params.course_id });
       return "";
     },
+    dowOption(){
+      let dow = []
+      console.log(this.selected_coach)
+      if(this.selected_coach){
+        for (const coach of this.coach_list[this.selected_coach].allDates){
+          console.log(coach)
+          // for (const day of coach.date.day){
+          //   if(dow.filter(v => v.value === day).length > 0){
+          //     dow.push(this.day_option.filter(v => v.value === day)[0])
+          //   }
+          // }
+        }
+      }
+      return dow
+    }
   },
   methods: {
     ...mapActions({
@@ -1711,7 +1736,17 @@ export default {
       GetStudentReserveByCourseId: "CourseModules/GetStudentReserveByCourseId",
       GetStudentPotentialByCoach: "CourseModules/GetStudentPotentialByCoach",
       RemovePrivilageByCourseID: "CourseModules/RemovePrivilageByCourseID",
+      ExportStudentList : "CourseModules/ExportStudentList",
     }),
+    //FILTER DATE COACH LIST
+    filterDateCoach(){
+
+    },
+    //EXPORT STUDENT
+    exportStudents(){
+      console.log(this.course_data)
+      this.ExportStudentList({coach_list : this.coach_list, course_id : this.$route.params.course_id , course_name : this.course_data.course_name_th, course_type_id :this.course_data.course_type_id})
+    },
     readFile(file) {
       return `${process.env.VUE_APP_URL}/api/v1/files/${file}`;
     },
@@ -1800,7 +1835,7 @@ export default {
         } else {
           Swal.fire({
             icon: "error",
-            title: "อัพโหลดเฉพาะไฟล์รูปภาพ(png, jpeg)เท่านั้น",
+            text: "อัพโหลดเฉพาะไฟล์รูปภาพ(png, jpeg)เท่านั้น",
             showDenyButton: false,
             showCancelButton: false,
             confirmButtonText: "ตกลง",

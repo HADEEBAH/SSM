@@ -61,7 +61,7 @@
             </div> -->
 
               <span class="text-white mx-2">
-                {{ profile_detail.firstNameTh }} {{ profile_detail.lastNameTh }}
+                {{ show_profile_detail.firstNameTh }} {{ show_profile_detail.lastNameTh }}
                 <!-- {{ user_detail.first_name_en }} {{ user_detail.last_name_en }} -->
               </span>
             </div>
@@ -77,7 +77,7 @@
               </v-avatar>
 
               <span class="text-white mx-2">
-                {{ profile_detail.firstNameTh }} {{ profile_detail.lastNameTh }}
+                {{ show_profile_detail.firstNameTh }} {{ show_profile_detail.lastNameTh }}
                 <!-- {{ user_detail.first_name_en }} {{ user_detail.last_name_en }} -->
               </span>
             </div>
@@ -146,14 +146,20 @@
         <v-row dense>
           <v-col
             cols="12"
-            class="flex align-center justify-center font-bold text-lg"
+            class="flex align-center justify-center font-bold text-md"
           >
-            <!-- {{ `${profile_detail.first_name_en} ${profile_detail.last_name_en}` }} -->
-            {{ profile_detail.firstNameTh }}
-            {{ profile_detail.lastNameTh }}
+            {{ show_profile_detail.firstNameTh }}
+            {{ show_profile_detail.lastNameTh }}
           </v-col>
+          <!-- <v-col
+            cols="12"
+            sm="6"
+            class="flex align-center justify-center font-bold text-md"
+          >
+            {{ show_profile_detail.lastNameTh }}
+          </v-col> -->
           <v-col cols="12" class="flex align-center justify-center text-sm">
-            {{ profile_detail.email }}
+            {{ show_profile_detail.email }}
           </v-col>
         </v-row>
         <v-list nav>
@@ -312,6 +318,15 @@ export default {
       { icon: "mdi-logout", title: "ออกจากระบบ", to: "logOut", roles: [] },
     ],
     user_detail: null,
+    show_profile_detail:{
+      firstNameTh: "",
+      lastNameTh: "",
+      firstNameEng: "",
+      lastNameEng: "",
+      nation: "",
+      mobileNo: "",
+      email: ""
+    }
   }),
 
   created() {
@@ -330,6 +345,7 @@ export default {
     } else {
       this.drawer = true
     }
+    
   },
   mounted() {
     if (this.user_detail?.account_id) {
@@ -339,6 +355,15 @@ export default {
     if (this.user_detail?.account_id) {
       this.GetCartList(this.user_detail.account_id);
     }
+  },
+  beforeUpdate() {
+    this.show_profile_detail.firstNameTh = this.profile_detail.firstNameTh 
+    this.show_profile_detail.lastNameTh = this.profile_detail.lastNameTh 
+    this.show_profile_detail.firstNameEng = this.profile_detail.firstNameEng 
+    this.show_profile_detail.lastNameEng = this.profile_detail.lastNameEng 
+    this.show_profile_detail.nation = this.profile_detail.nation 
+    this.show_profile_detail.mobileNo = this.profile_detail.mobileNo 
+    this.show_profile_detail.email = this.profile_detail.email 
   },
   watch: {},
   computed: {
