@@ -60,6 +60,10 @@ import userMenageCourseDetail from '@/page/user/coach/manageCourseDetail'
 import LeaveList from '@/page/admin/coachLeave/leaveList.vue'
 // admin calendar
 import ManageSchedule from '@/page/admin/scheduleCalendar/manageSchedule.vue'
+// admin banner
+import Banner from '@/page/admin/banner/manageBanner.vue'
+
+
 const routes = [
   {
     path: '/auth',
@@ -154,6 +158,11 @@ const routes = [
         path: 'manageSchedule',
         name: 'ManageSchedule',
         component: ManageSchedule,
+      },
+      {
+        path: 'banner',
+        name: 'Banner',
+        component: Banner,
       },
 
     ]
