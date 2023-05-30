@@ -13,8 +13,12 @@ const loginModules = {
         user_data: [],
         user_student_data: [],
         is_loading: false,
+        username_list :[],
     },
     mutations: {
+        SetUsernameList(state, payload){
+            state.username_list = payload
+        },
         UserOneId(state, payload) {
             state.user_one_id = payload
         },
@@ -39,6 +43,23 @@ const loginModules = {
         }
     },
     actions: {
+        async searchNameUser(context, {search_name}){
+            try{
+                let config = {
+                    headers:{
+                        "Access-Control-Allow-Origin" : "*",
+                        "Content-type": "Application/json",
+                        'Authorization' : `Bearer ${VueCookie.get("token")}`
+                    }
+                }
+                let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/student?username=${search_name}`, config)
+                if(data.statusCode == 200){
+                    console.log(data)
+                }
+            }catch(error){
+                console.log(error)
+            }
+        },
         async checkUsernameOneidByOrder(context, { username, type, course_id }) {
             context.commit("SetIsLoading", true)
             try {
@@ -277,6 +298,9 @@ const loginModules = {
         }
     },
     getters: {
+        getUsernameList(state){
+            return state.username_list
+        },
         getUserOneId(state) {
             return state.user_one_id
         },
