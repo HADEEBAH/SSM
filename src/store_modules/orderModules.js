@@ -8,6 +8,7 @@ const orderModules = {
         course_order: {
             apply_for_yourself : false,
             apply_for_others : false,
+            course_id: "",
             kingdom: {},
             course_type: "",
             course_type_id : "CT_1",
@@ -28,7 +29,6 @@ const orderModules = {
             selected : true,
             parents: [],
             students: [],
-
         },
         order: {
             order_step : 0,
@@ -78,6 +78,7 @@ const orderModules = {
                 apply_for_yourself : false,
                 apply_for_others : false,
                 kingdom: {},
+                course_id: "",
                 course_type: "",
                 course_type_id : "CT_1",
                 category_id: "",
