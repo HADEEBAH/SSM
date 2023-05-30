@@ -25,7 +25,7 @@ import Student from '@/page/admin/addStudent/createStudent.vue'
 //User
 import UserKingdom from '@/page/user/catagory/userKingdom.vue'
 import CartList from '@/page/user/cart/cartList.vue'
-  //userProfile 
+//userProfile 
 import ProfileRelations from '@/page/user/profile/profileRelations.vue'
 import ProfileDetail from '@/page/user/profile/profileDetail.vue'
 import UserProfile from '@/page/user/profile/userProfile.vue'
@@ -58,19 +58,21 @@ import userMenageCourse from '@/page/user/coach/manageCourse'
 import userMenageCourseDetail from '@/page/user/coach/manageCourseDetail'
 // coach leave
 import LeaveList from '@/page/admin/coachLeave/leaveList.vue'
+// admin calendar
+import ManageSchedule from '@/page/admin/scheduleCalendar/manageSchedule.vue'
 const routes = [
   {
     path: '/auth',
     name: 'authLayout',
     component: AuthLayout,
-    children:[
+    children: [
       {
         path: '/login',
         name: 'Login',
         component: Login,
       },
       {
-        path: 'register',  
+        path: 'register',
         name: 'Register',
         component: RegisterPage,
       },
@@ -81,14 +83,14 @@ const routes = [
     path: '/admin',
     name: 'Admin',
     component: NavBarAdmin,
-    children:[
+    children: [
       {
-        path: 'userCreate',  
+        path: 'userCreate',
         name: 'UserCreate',
         component: UserCreate,
       },
       {
-        path: 'userDetail/:action/:account_id',  
+        path: 'userDetail/:action/:account_id',
         name: 'UserDetail',
         component: UserDetail,
       },
@@ -98,17 +100,17 @@ const routes = [
         component: UserList,
       },
       {
-        path: 'course/create',  
+        path: 'course/create',
         name: 'CourseCreate',
         component: CourseCreate,
       },
       {
-        path: 'course/:course_id',  
+        path: 'course/:course_id',
         name: 'Course_courseID',
         component: CourseDetail,
       },
       {
-        path: 'course',  
+        path: 'course',
         name: 'CourseList',
         component: CourseList,
       },
@@ -132,7 +134,7 @@ const routes = [
         name: 'Student',
         component: Student,
       },
-    
+
       {
         path: 'finance',
         name: 'Finance',
@@ -147,6 +149,11 @@ const routes = [
         path: 'leavelist',
         name: 'LeaveList',
         component: LeaveList,
+      },
+      {
+        path: 'manageSchedule',
+        name: 'ManageSchedule',
+        component: ManageSchedule,
       },
 
     ]
@@ -164,117 +171,117 @@ const routes = [
     component: NavBarUser,
     children: [
       {
-        path: '',  
+        path: '',
         name: 'UserKingdom',
         component: UserKingdom,
       },
       {
-        path: 'menage-course',  
+        path: 'menage-course',
         name: 'menageCourse',
         component: userMenageCourse,
       },
       {
-        path: 'menage-course/detail/:courseId/:timeId/:dayOfWeekId/:date',  
+        path: 'menage-course/detail/:courseId/:timeId/:dayOfWeekId/:date',
         name: 'menageCourseDetail',
         component: userMenageCourseDetail,
       },
       {
-        path: 'course/category/:category_id',  
+        path: 'course/category/:category_id',
         name: 'userCourseList_categoryId',
         component: userCourseList,
       },
       {
-        path: 'course/detail/:course_id',  
+        path: 'course/detail/:course_id',
         name: 'userCourseDetail_courseId',
         component: userCourseDetail,
       },
       {
-        path: 'course/package/:course_id',  
+        path: 'course/package/:course_id',
         name: 'userCoursePackage_courseId',
         component: userCoursePackage,
       },
       {
-        path: 'course/order',  
+        path: 'course/order',
         name: 'userCourseOrder',
         component: userCourseOrder,
       },
       {
-        path: 'course/payment',  
+        path: 'course/payment',
         name: 'userCoursePayment',
         component: userCoursePayment,
       },
       {
-        path: 'cartList',  
+        path: 'cartList',
         name: 'CartList',
         component: CartList,
       },
       {
-        path: 'profileRelations/:action',  
+        path: 'profileRelations/:action',
         name: 'ProfileRelations',
         component: ProfileRelations,
       },
       {
-        path: 'profileDetail/:profile_id',  
+        path: 'profileDetail/:profile_id',
         name: 'ProfileDetail',
         component: ProfileDetail,
       },
       {
-        path: 'userProfile',  
+        path: 'userProfile',
         name: 'UserProfile',
         component: UserProfile,
       },
       {
-        path: 'profileCertificate',  
+        path: 'profileCertificate',
         name: 'ProfileCertificate',
         component: ProfileCertificate,
       },
       {
-        path: 'profilePassword',  
+        path: 'profilePassword',
         name: 'ProfilePassword',
         component: ProfilePassword,
       },
       {
-        path: 'profileResetPassword',  
+        path: 'profileResetPassword',
         name: 'ProfileResetPassword',
         component: ProfileResetPassword,
       },
       {
-        path: 'profileLanguages',  
+        path: 'profileLanguages',
         name: 'ProfileLanguages',
         component: ProfileLanguages,
       },
       {
-        path: 'profilePolicy',  
+        path: 'profilePolicy',
         name: 'ProfilePolicy',
         component: ProfilePolicy,
       },
       {
-        path: 'profileRules',  
+        path: 'profileRules',
         name: 'ProfileRules',
         component: ProfileRules,
       },
       {
-        path: 'studentsSchedule',  
+        path: 'studentsSchedule',
         name: 'StudentsSchedule',
         component: StudentsSchedule,
       },
       {
-        
-        path: 'studentCourse/:course_id',  
+
+        path: 'studentCourse/:course_id',
         name: 'StudentCourse',
         component: StudentCourse,
       },
       {
-        path: 'studentBookedDetail',  
+        path: 'studentBookedDetail',
         name: 'StudentBookedDetail',
         component: StudentBookedDetail,
       },
       {
-        path: 'order/history',  
+        path: 'order/history',
         name: 'orderHistory',
         component: orderHistory,
       },
-      
+
     ]
   },
 

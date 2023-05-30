@@ -10,52 +10,52 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
-router.beforeEach((to, from, next ) => {
-  window.scrollTo({ 
-    top: 0, 
+router.beforeEach((to, from, next) => {
+  window.scrollTo({
+    top: 0,
   })
-  if(!VueCookie.get("token")){
+  if (!VueCookie.get("token")) {
     localStorage.removeItem("userDetail")
   }
-  if(to.name !== "Login" && to.name !== "Register"){
+  if (to.name !== "Login" && to.name !== "Register") {
     if (to.name === "callback") {
       next()
-    } else if(to.matched[0].name !== "NavBarUser" && !VueCookie.get("token")){     
-      next({name : 'Login'})
-    } else if(to.name === 'userCourseOrder' && !VueCookie.get("token")){
-      next({name : 'Login'})
-    } else if(VueCookie.get("token")){
-      let order =  JSON.parse(localStorage.getItem("Order"))
+    } else if (to.matched[0].name !== "NavBarUser" && !VueCookie.get("token")) {
+      next({ name: 'Login' })
+    } else if (to.name === 'userCourseOrder' && !VueCookie.get("token")) {
+      next({ name: 'Login' })
+    } else if (VueCookie.get("token")) {
+      let order = JSON.parse(localStorage.getItem("Order"))
       let user_detail = JSON.parse(localStorage.getItem("userDetail"))
       console.log(from.name)
-      if(to.name == "userCourseDetail_courseId" || to.name == "userCoursePackage_courseId" || to.name == "userCourseOrder" ){
-        console.log("order",order)
-        if(order){
-          if(from.name === "Login" && order.course_id && order.category_id){
+      if (to.name == "userCourseDetail_courseId" || to.name == "userCoursePackage_courseId" || to.name == "userCourseOrder") {
+        console.log("order", order)
+        if (order) {
+          if (from.name === "Login" && order.course_id && order.category_id) {
             next()
-          }else{
+          } else {
             next()
           }
-        }else{
-          next({name : 'UserKingdom'})
+        } else {
+          next({ name: 'UserKingdom' })
         }
-      }else if(to.matched[0].name === "Admin"){
-        console.log("user_detail",user_detail)
-        if(user_detail?.roles.includes("R_2") || user_detail?.roles.includes("R_1")){
+      } else if (to.matched[0].name === "Admin") {
+        console.log("user_detail", user_detail)
+        if (user_detail?.roles.includes("R_2") || user_detail?.roles.includes("R_1")) {
           next()
-        }else{
-          next({name : 'UserKingdom'})
+        } else {
+          next({ name: 'UserKingdom' })
         }
-      }else{
+      } else {
         next()
       }
-    }else {
+    } else {
       next()
     }
-  }else{
+  } else {
     next()
   }
 })
-  
+
 
 export default router
