@@ -147,7 +147,7 @@ export default {
     menu_drawer_list: [
       // { title: "แดชบอร์ด", to: "dashbord", child: [] }, // to ให้ใส่ name ของ router
       // { title: "ตารางเรียน", to: "Schedule", child: [] },
-      // { title: "เพิ่มผู้เรียน", to: "Student", child: [] },
+      { title: "เพิ่มผู้เรียน", to: "Student", child: [] },
       {
         title: "คอร์สเรียน",
         to: "",

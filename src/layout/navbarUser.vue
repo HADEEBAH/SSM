@@ -253,6 +253,7 @@
             ></v-img>
           </v-col>
         </v-row>
+        
         <v-row dense class="text-caption border-t">
           <v-col col="12" sm>
             Copyright 2022 Tourish Promp. All rights reserved . Design by UI
