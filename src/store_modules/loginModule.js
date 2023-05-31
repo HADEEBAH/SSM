@@ -44,6 +44,7 @@ const loginModules = {
     },
     actions: {
         async searchNameUser(context, {search_name}){
+            context.commit("SetUsernameList",[])
             try{
                 let config = {
                     headers:{
@@ -52,9 +53,13 @@ const loginModules = {
                         'Authorization' : `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/student?username=${search_name}`, config)
+                console.log(search_name)
+                let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/student?firstNameTh=${search_name}`, config)
                 if(data.statusCode == 200){
-                    console.log(data)
+                    for(const user of data.data){
+                        user.fullname = `${user.firstNameTh} ${user.lastNameTh}`
+                    }
+                    context.commit("SetUsernameList",data.data)
                 }
             }catch(error){
                 console.log(error)
