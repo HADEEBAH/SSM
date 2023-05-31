@@ -23,8 +23,7 @@
         <div class="mx-5" v-if="!$vuetify.breakpoint.smAndDown">
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
-              <v-row v-bind="attrs"
-                v-on="on">
+              <v-row v-bind="attrs" v-on="on">
                 <div v-if="user_detail.image !== ''">
                   <v-avatar class="mr-2" size="24">
                     <v-img :src="user_detail.image" size="24" />
@@ -35,31 +34,26 @@
                     <v-img
                       src="../assets/navbar_user/default_image_profile.svg"
                       size="24"
-                    /> 
+                    />
                   </v-avatar>
                 </div>
-              
+
                 <span class="text-white">{{
                   `${user_detail.first_name_en} ${user_detail.last_name_en}`
                 }}</span>
-
               </v-row>
             </template>
-            <v-list dense >
+            <v-list dense>
               <v-subheader>ตัวเลือก</v-subheader>
-              <v-list-item
-              link
-              @click="selectMenu('head', 'UserKingdom')"
-              >
+              <v-list-item link @click="selectMenu('head', 'UserKingdom')">
                 <v-list-item-icon>
                   <v-icon>mdi-account</v-icon>
                 </v-list-item-icon>
-                <v-list-item-title >หน้าผู้ใช้งาน</v-list-item-title>
+                <v-list-item-title>หน้าผู้ใช้งาน</v-list-item-title>
               </v-list-item>
             </v-list>
           </v-menu>
         </div>
-
       </v-app-bar>
       <v-navigation-drawer
         clipped
@@ -146,6 +140,8 @@ export default {
     user_detail: null,
     menu_drawer_list: [
       // { title: "แดชบอร์ด", to: "dashbord", child: [] }, // to ให้ใส่ name ของ router
+      { title: "ตารางเรียน", to: "ManageSchedule", child: [] },
+      // { title: "เพิ่มผู้เรียน", to: "Student", child: [] },
       // { title: "ตารางเรียน", to: "Schedule", child: [] },
       { title: "เพิ่มผู้เรียน", to: "Student", child: [] },
       {
