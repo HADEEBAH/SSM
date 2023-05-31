@@ -892,7 +892,7 @@ export default {
         this.course_order.students.push({
           account_id: this.user_login.account_id,
           student_name: `${this.user_login.first_name_th} ${this.user_login.last_name_th}`,
-          username: "surahet",
+          username: "",
           firstname_en: this.user_login.first_name_th,
           lastname_en: this.user_login.last_name_th,
           tel: this.user_login.tel,

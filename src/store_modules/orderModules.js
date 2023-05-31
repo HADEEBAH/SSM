@@ -31,6 +31,7 @@ const orderModules = {
             students: [],
         },
         order: {
+            type : "",
             order_step : 0,
             order_number: "",
             courses:[],
@@ -250,8 +251,8 @@ const orderModules = {
                     order_id : "",
                     courses : [],
                     created_by : order.created_by,
-                    paymentStatus: "pending",
-                    paymentType: "",
+                    paymentStatus: 'pending',
+                    paymentType: order.payment_type,
                     totalPrice: 0,
                 }
                 let total_price = 0
@@ -326,8 +327,8 @@ const orderModules = {
                         'Authorization' : `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                console.log(payload)
-                // let localhost = "https://192.168.74.25:3002"
+                console.log("payload =>",payload)
+                // let localhost = "http://localhost:3002"
                 let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/regis/course`,payload , config)
                 console.log(data)
                 if(data.statusCode === 201){
@@ -365,24 +366,93 @@ const orderModules = {
                         // VueCookie.set("token", userLogin.data.data.token, 1)
                         localStorage.setItem("userDetail", JSON.stringify(payload))
                     }
-                    let payment = await axios.post(`${process.env.VUE_APP_URL}/api/v1/payment/code`,payment_payload)
-                    console.log("payment",payment)
-                    console.log("payment statusCode",payment.data.statusCode)
-                    if(payment.data.statusCode === 201){
-                        window.location.href = payment.data.data
-                        localStorage.removeItem("Order")
-                        context.commit("SetResetCourseData")
-                        context.commit("SetOrder",{
-                            order_step : 0,
-                            order_number: "",
-                            courses:[],
-                            created_by : "",
-                            payment_status: "",
-                            payment_type: "",
-                            total_price: 0,
-                        })
-                        context.commit("SetOrderIsLoading", false)
-                    }
+                    if(order.type !== "addStudent"){
+                        console.log("370 addStudent :",data.data.orderNumber)
+                        let payment = await axios.post(`${process.env.VUE_APP_URL}/api/v1/payment/code`,payment_payload)
+                        console.log("payment",payment)
+                        console.log("payment statusCode",payment.data.statusCode)
+                        if(payment.data.statusCode === 201){
+                            window.location.href = payment.data.data
+                            localStorage.removeItem("Order")
+                            context.commit("SetResetCourseData")
+                            context.commit("SetOrder",{
+                                type:"",
+                                order_step : 0,
+                                order_number: "",
+                                courses:[],
+                                created_by : "",
+                                payment_status: "",
+                                payment_type: "",
+                                total_price: 0,
+                            })
+                            context.commit("SetOrderIsLoading", false)
+                        }
+                    }else{
+                        console.log("391 payment data :",data.data.orderNumber)
+                        console.log("order.payment_type : ",order.payment_type)
+                        console.log("|||||||||||||||||||||||||||||||||")
+                        if(order.payment_status === "paid"){
+                            let payment_payload = {
+                                "orderId": data.data.orderNumber,
+                                "paymentType": order.payment_type,
+                                "total": data.data.totalPrice,
+                            }
+                            console.log(payment_payload)
+                            // let localhost = "http://192.168.74.25:3003"
+                            let  payment = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/payment/data/${data.data.orderNumber}`,payment_payload)
+                            if(payment.data.statusCode === 200){
+                                Swal.fire({
+                                    icon:"success",
+                                    text: "ทำรายการสำเร็จ",
+                                    showDenyButton: false,
+                                    showCancelButton: false,
+                                    confirmButtonText: "ตกลง",
+                                }).then(async (result) => {
+                                    if (result.isConfirmed) {
+                                        router.replace({name : "Finance"})
+                                    }
+                                })    
+                                localStorage.removeItem("Order")
+                                context.commit("SetResetCourseData")
+                                context.commit("SetOrder",{
+                                    type:"",
+                                    order_step : 0,
+                                    order_number: "",
+                                    courses:[],
+                                    created_by : "",
+                                    payment_status: "",
+                                    payment_type: "",
+                                    total_price: 0,
+                                })
+                                context.commit("SetOrderIsLoading", false)
+                            }
+                        }else{
+                            Swal.fire({
+                                icon:"success",
+                                text: "ทำรายการสำเร็จ",
+                                showDenyButton: false,
+                                showCancelButton: false,
+                                confirmButtonText: "ตกลง",
+                            }).then(async (result) => {
+                                if (result.isConfirmed) {
+                                    router.replace({name : "Finance"})
+                                }
+                            })    
+                            localStorage.removeItem("Order")
+                            context.commit("SetResetCourseData")
+                            context.commit("SetOrder",{
+                                type:"",
+                                order_step : 0,
+                                order_number: "",
+                                courses:[],
+                                created_by : "",
+                                payment_status: "",
+                                payment_type: "",
+                                total_price: 0,
+                            })
+                            context.commit("SetOrderIsLoading", false)
+                        }
+                    }  
                 }    
             }catch(error){
                 context.commit("SetOrderIsLoading", false)
