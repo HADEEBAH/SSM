@@ -206,6 +206,8 @@ export default {
           this.files_preview = [];
           this.files_input = [];
           this.loading = false;
+          document.getElementById("fileInput").value = "";
+
           Swal.fire({
             icon: "success",
             text: "เพิ่มแบนเนอร์สำเร็จ",
@@ -225,6 +227,7 @@ export default {
     },
 
     async removeBannerFiles(id) {
+      console.log("id", id);
       Swal.fire({
         icon: "question",
         text: "คุณต้องการลบรูปใช่หรือไม่",
@@ -235,6 +238,7 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.GetDeleteBannerList(id);
+          document.getElementById("fileInput").value = "";
 
           Swal.fire({
             icon: "success",
