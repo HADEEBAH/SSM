@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import router from "@/router";
 import VueCookie from "vue-cookie"
 import {dateDMY} from "../functions/functions"
+// import { dateFormatter } from "@/functions/functions";
 var XLSX = require("xlsx");
 function dayOfWeekArray(day) {
   // console.log
@@ -1149,9 +1150,8 @@ const CourseModules = {
       try {
         // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
-        // console.log("GetCourse => ",data.data)
-        
         if (data.statusCode === 200) {
+          console.log("1155 => ",data)
           let payload = {
             course_img_privilege : data.data.courseImgPrivilege ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.courseImgPrivilege}` : null,
             course_id: data.data.courseId,
@@ -1177,8 +1177,10 @@ const CourseModules = {
             course_period_end_date: data.data.coursePeriodEndDate ? data.data.coursePeriodEndDate : null,
             course_per_time: data.data.coursePerTime,
             student_recived: data.data.courseStudentRecived,
-            course_study_end_date: data.data.courseStudyEndDate,
+            course_study_end_date: data.data.courseStudyEndDate ,
             course_study_start_date: data.data.courseStudyStartDate,
+            course_study_end_date_str: data.data.courseStudyEndDate ?  new Date(data.data.courseStudyEndDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : null ,
+            course_study_start_date_str: data.data.courseStudyStartDate ?  new Date(data.data.courseStudyStartDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : null ,
             coachs: [],
             packages: [],
             privilege_file: null,
@@ -1186,9 +1188,10 @@ const CourseModules = {
             days_of_class: [],
             days : []
           }
+          // console.log("payload 1192",payload)
           let teach_day_data = []
           for await (let coach of data.data.coachs){
-            // console.log("payload 1054",payload)
+            // console.log("payload 1194",payload)
             for await (let coach_date of data.data.dayOfWeek.filter(v => v.courseCoachId === coach.courseCoachId)){
               // DAY OF CLASS
               if(payload.days_of_class.filter(v => v.day_of_week_id === coach_date.times[0].dayOfWeekId).length === 0){
@@ -1230,7 +1233,7 @@ const CourseModules = {
                   students: time.maximumStudent,
                 },)
               }
-              // console.log("payload => 1232", payload)
+              // console.log("payload => 1236", payload)
               // TEACH DAY
               teach_day_data.push({
                 day_of_week_id :coach_date.times[0].dayOfWeekId ? coach_date.times[0].dayOfWeekId : null,
@@ -1250,7 +1253,7 @@ const CourseModules = {
               "HH": endTimePart[0],
               "mm": endTimePart[1]? endTimePart[1] : "00"
             } : null
-            // console.log("payload => 1249", payload)
+            // console.log("payload => 1256", payload)
             payload.coachs.push(
                 {
                   coach_id: coach.accountId,
@@ -1286,9 +1289,9 @@ const CourseModules = {
                   },
                 },
             )
-            // console.log("payload 1120",payload)
+            // console.log("payload 1292",payload)
           }
-          // console.log("payload 1122",payload)
+          // console.log("payload 1294",payload)
           // console.log("teach_day_data",teach_day_data)
           for(let coach_date of data.data.dayOfWeek.filter(v => v.status === 'Active')){
             // console.log(coach_date)
@@ -1418,14 +1421,16 @@ const CourseModules = {
               'Authorization': `Bearer ${VueCookie.get("token")}`
             }
           }
+          // console.log("payload :",payload)
           if(payload.course_type_id === "CT_1"){
             console.log("payload :",payload)
             await context.commit("SetCourseData", payload)
           }else{
+            console.log("payload :",payload)
             // console.log("payload :",payload)
-            // let localhost = "http://localhost:3002"
-            let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/count/student?courseId=${course_id}`,config)
-              // console.log("GetCourseStudent => ",data)
+            // let localhost = "https://192.168.74.25:3002"
+             let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/count/student?courseId=${course_id}`,config)
+              console.log("GetCourseStudent => ",data)
               if(data.statusCode === 200){
                 for(const student_data of data.data){
                   payload.course_studant_amount = parseInt(student_data.sum_student)
@@ -1601,9 +1606,9 @@ const CourseModules = {
                 course.course_studant_amount = course_studant_amount
               }
             }
-           
           }
           context.commit("SetCoursesIsLoading", false)
+          console.log(data.data)
           context.commit("SetCourses", data.data)
         } else {
           context.commit("SetCoursesIsLoading", false)
