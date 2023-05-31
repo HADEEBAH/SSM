@@ -168,6 +168,7 @@ export default {
       },
       // { title: "การอนุมัติลา", to: "LeaveList", child: [] },
       // { title: "หน้าผู้ใช้งาน", to: "UserKingdom", child: [] },
+      { title: "จัดการแบนเนอร์", to: "Banner", child: [] },
     ],
   }),
 
