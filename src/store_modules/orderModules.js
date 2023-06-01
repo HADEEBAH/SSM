@@ -70,7 +70,9 @@ const orderModules = {
         SetCartList(state, payload) {
             state.cart_list = payload
         },
-        SetOrderDetail(){},
+        SetOrderDetail(state, payload){
+            state.order_detail = payload
+        },
         SetOrderCourse(state, payload) {
             state.course_order = payload
         },
@@ -138,14 +140,73 @@ const orderModules = {
         },
         async GetOrders(context){
             try{
-                let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order`)
+                let config = {
+                    headers:{
+                        "Access-Control-Allow-Origin" : "*",
+                        "Content-type": "Application/json",
+                        'Authorization' : `Bearer ${VueCookie.get("token")}`
+                    }
+                }
+                // let localhost = "http://localhost:3000"
+                let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/`,config)
                 console.log(data)
                 if(data.statusCode === 200){
+                    if(data.data.length > 0){
+                        for(const order of data.data){
+                            order.paid_date =  order.payment_status === "success" ? new Date(order.updated_date).toLocaleString("th-TH")  : ''
+                            order.course_name = `${order.course.courseNameTh}(${order.course.courseNameEn})`
+                            order.student_name = `${ order.user.firstNameTh } ${ order.user.lastNameTh }`
+                        }
+                    }
                     context.commit("SetOrders",data.data)
                 }else{
                     throw {error : data}
                 }
             }catch(error){
+                console.log(error)
+            }
+        },
+        async GetOrderDetail(context,{order_number}){
+            try{
+                let config = {
+                    headers:{
+                        "Access-Control-Allow-Origin" : "*",
+                        "Content-type": "Application/json",
+                        'Authorization' : `Bearer ${VueCookie.get("token")}`
+                    }
+                }
+                let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/${order_number}`, config)
+                console.log(data)
+                if(data.statusCode == 200){
+                    let student_name_list = []
+                    for(const order_item of  data.data.orderItem){
+                        if(order_item.students.length > 0){
+                            order_item.students.forEach((student)=>{
+                                if(!student_name_list.includes(`${student.firstNameTh} ${student.lastNameTh}`)){
+                                    student_name_list.push(`${student.firstNameTh} ${student.lastNameTh}`)
+                                }
+                            })
+                            data.data.student_name_list = student_name_list.join(', ')
+                        }
+                    }
+                    if(data.data.payment.paymentDate){
+                        const timestamp =`${data.data.payment.paymentDate} ${data.data.payment.paymentTime}`;
+                        const year = timestamp.substr(0, 4);
+                        const month = timestamp.substr(4, 2);
+                        const day = timestamp.substr(6, 2);
+                        const hours = timestamp.substr(9, 2);
+                        const minutes = timestamp.substr(11, 2);
+                        const seconds = timestamp.substr(13, 2);
+    
+                        const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+                        data.data.payment.paid_date = formattedDate
+                    }
+                    
+                    
+                    context.commit("SetOrderDetail",data.data)
+                }
+            }
+            catch(error){
                 console.log(error)
             }
         },
@@ -297,7 +358,7 @@ const orderModules = {
                         "timeId":  course?.time?.timeData ? course.time.timeData.filter(v => v.coach_id === course.coach_id)[0].timeId : course.time.timeId,
                         "time": course.time,
                         "startDate": course.start_date,
-                        "remark": "",
+                        "remark": course.remark? course.remark : "",
                         "price": course.option?.net_price ? course.option.net_price : course.price,
                         "coach": {
                             "accountId": course.coach_id ? course.coach_id : course.coach,
@@ -472,6 +533,66 @@ const orderModules = {
                         confirmButtonText: "ตกลง",
                     })
                 }
+            }
+        },
+        async updateOrderStatus(context,{order_detail}){
+            let payload = {
+                paymentStatus: order_detail.paymentStatus,
+                paymentType: order_detail.paymentType,
+            }
+            let config = {
+                headers:{
+                    "Access-Control-Allow-Origin" : "*",
+                    "Content-type": "Application/json",
+                    'Authorization' : `Bearer ${VueCookie.get("token")}`
+                }
+            }
+            let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/update/${order_detail.orderNumber}`, payload, config)
+            if(data.statusCode === 200){
+                await Swal.fire({
+                    icon:"success",
+                    text: "ยกเลิกคำสั่งซื้อสำเร็จ",
+                    showDenyButton: false,
+                    showCancelButton: false,
+                    confirmButtonText: "ตกลง",
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        context.dispatch("GetOrderDetail",{order_number : order_detail.orderNumber})
+                    }
+                })        
+            }
+        },
+        async updatePayment(context, {order_data}){
+            try{
+                let config = {
+                    headers:{
+                        "Access-Control-Allow-Origin" : "*",
+                        "Content-type": "Application/json",
+                        'Authorization' : `Bearer ${VueCookie.get("token")}`
+                    }
+                }
+                let payment_payload = {
+                    "orderId": order_data.orderNumber,
+                    "paymentType": order_data.paymentType,
+                    "total": order_data.totalPrice,
+                }
+                // let localhost = "http://localhost:3003"
+                let  {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/payment/data/${order_data.orderNumber}`, payment_payload, config)
+                if(data.statusCode === 200){
+                    await Swal.fire({
+                        icon:"success",
+                        text: "ยืนยันการชำระเงินเรียบร้อย",
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        confirmButtonText: "ตกลง",
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            context.dispatch("GetOrderDetail",{order_number : order_data.orderNumber})
+                        }
+                    })        
+                }
+            }catch(error){
+                console.log(error)
             }
         },
         async savePayment(context, {paymnet_data}){
@@ -671,6 +792,9 @@ const orderModules = {
         },
         getOrders(state){
             return state.orders
+        },
+        getOrderDetail(state){
+            return state.order_detail
         },
         getOrderIsLoading(state){
             return state.order_is_loading

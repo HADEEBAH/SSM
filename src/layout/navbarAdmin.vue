@@ -160,7 +160,7 @@ export default {
           { title: "สร้างอาณาจักร", to: "Kingdom" },
         ],
       },
-      // { title: "การเงิน", to: "Finance", child: [] },
+      { title: "การเงิน", to: "Finance", child: [] },
       {
         title: "จัดการผู้ใช้งาน",
         to: "",

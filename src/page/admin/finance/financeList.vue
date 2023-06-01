@@ -40,11 +40,11 @@
               ></v-img>
             </template>
             <template v-slot:header>
-              <div class="font-bold">คอร์สทั่วไป</div>
+              <div class="font-bold">ทั้งหมด</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
-                <v-col align="center" class="text-3xl font-bold">5</v-col>
+                <v-col align="center" class="text-3xl font-bold">{{ orders.length }}</v-col>
                 <v-col class="text-sm">รายการ</v-col>
               </v-row>
             </template>
@@ -67,7 +67,7 @@
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
-                <v-col align="center" class="text-3xl font-bold">5</v-col>
+                <v-col align="center" class="text-3xl font-bold">{{orders.filter(v => v.payment_status === 'success').length}}</v-col>
                 <v-col class="text-sm">รายการ</v-col>
               </v-row>
             </template>
@@ -90,14 +90,13 @@
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
-                <v-col align="center" class="text-3xl font-bold">1</v-col>
+                <v-col align="center" class="text-3xl font-bold">{{ orders.filter(v => v.payment_status === 'pending').length }}</v-col>
                 <v-col class="text-sm">รายการ</v-col>
               </v-row>
             </template>
           </img-card>
         </v-col>
       </v-row>
-
       <v-data-table
         v-model="selected"
         :headers="columns"
@@ -107,21 +106,24 @@
         show-select
         class="elevation-1 header-table"
       >
-        <template v-slot:[`item.paymentStatus`]="{ item }">
+      <template v-slot:[`item.total_price`]="{ item }">
+        {{ item.total_price.toLocaleString(undefined,{  minimumFractionDigits: 2,}) }}
+      </template>
+        <template v-slot:[`item.payment_status`]="{ item }">
           <div
             class="d-flex align-center pa-1 rounded-lg"
             :class="
-              item.paymentStatus === 'pending'
+              item.payment_status === 'pending'
                 ? 'bg-[#FFF9E8] text-[#FCC419]'
-                : item.paymentStatus === 'success'
+                : item.payment_status === 'success'
                 ? 'bg-[#F0F9EE] text-[#58A144]'
                 : 'bg-[#ffeeee] text-[#f00808]'
             "
           >
             <span class="w-full text-center">{{
-              item.paymentStatus == "pending"
+              item.payment_status == "pending"
                 ? "รอดำเนินการ"
-                : item.paymentStatus === "success"
+                : item.payment_status === "success"
                 ? "สำเร็จ"
                 : "ยกเลิก"
             }}</span>
@@ -136,70 +138,13 @@
             @click="
               $router.push({
                 name: 'Finance_orderID',
-                params: { order_id: item.orderId },
+                params: { order_id: item.order_number },
               })
             "
             >เพิ่มเติม</v-btn
           >
         </template>
       </v-data-table>
-
-      <!-- <v-data-table
-        :headers="columns"
-        :items="orders"
-        :search="search"
-        v-model="selected"
-        show-select
-        :items-per-page="itemsPerPage"
-        class="elevation-1 header-table"
-      >
-        <template v-slot:[`item.orderNumber`]="{ item }">
-          <span class="font-semibold">{{ item.orderNumber }}</span>
-        </template>
-        <template v-slot:[`item.course`]="{ item }">
-          <span class="font-semibold">{{ item.course }}</span>
-        </template>
-        <template v-slot:[`item.totalPrice`]="{ item }">
-          <span class="font-semibold">{{
-            item.totalPrice ? genPrice(item.totalPrice) : "-"
-          }}</span>
-        </template>
-        <template v-slot:[`item.paymentStatus`]="{ item }">
-          <div
-            class="d-flex align-center pa-1 rounded-lg"
-            :class="
-              item.paymentStatus === 'pending'
-                ? 'bg-[#FFF9E8] text-[#FCC419]'
-                : item.paymentStatus === 'success'
-                ? 'bg-[#F0F9EE] text-[#58A144]'
-                : 'bg-[#ffeeee] text-[#f00808]'
-            "
-          >
-            <span class="w-full text-center">{{
-              item.paymentStatus == "pending"
-                ? "รอดำเนินการ"
-                : item.paymentStatus === "success"
-                ? "สำเร็จ"
-                : "ยกเลิก"
-            }}</span>
-          </div>
-        </template>
-        <template v-slot:[`item.actions`]="{ item }">
-          <v-btn
-            text
-            class="underline"
-            color="#FF6B81"
-            @click="
-              $router.push({
-                name: 'Finance_orderID',
-                params: { order_id: item.orderId },
-              })
-            "
-            >เพิ่มเติม</v-btn
-          >
-        </template>
-      </v-data-table> -->
-
       <!-- DIALOG -->
       <v-dialog
         v-model="show_dialog"
@@ -679,104 +624,7 @@ export default {
     serviceChargeStart: "",
     serviceChargeEnd: "",
     closeModal: true,
-
     selected: [],
-    headers: [
-      {
-        text: "Dessert (100g serving)",
-        align: "start",
-        sortable: false,
-        value: "name",
-      },
-      { text: "Calories", value: "calories" },
-      { text: "Fat (g)", value: "fat" },
-      { text: "Carbs (g)", value: "carbs" },
-      { text: "Protein (g)", value: "protein" },
-      { text: "Iron (%)", value: "iron" },
-    ],
-    desserts: [
-      {
-        name: "Frozen Yogurt",
-        calories: 159,
-        fat: 6.0,
-        carbs: 24,
-        protein: 4.0,
-        iron: 1,
-      },
-      {
-        name: "Ice cream sandwich",
-        calories: 237,
-        fat: 9.0,
-        carbs: 37,
-        protein: 4.3,
-        iron: 1,
-      },
-      {
-        name: "Eclair",
-        calories: 262,
-        fat: 16.0,
-        carbs: 23,
-        protein: 6.0,
-        iron: 7,
-      },
-      {
-        name: "Cupcake",
-        calories: 305,
-        fat: 3.7,
-        carbs: 67,
-        protein: 4.3,
-        iron: 8,
-      },
-      {
-        name: "Gingerbread",
-        calories: 356,
-        fat: 16.0,
-        carbs: 49,
-        protein: 3.9,
-        iron: 16,
-      },
-      {
-        name: "Jelly bean",
-        calories: 375,
-        fat: 0.0,
-        carbs: 94,
-        protein: 0.0,
-        iron: 0,
-      },
-      {
-        name: "Lollipop",
-        calories: 392,
-        fat: 0.2,
-        carbs: 98,
-        protein: 0,
-        iron: 2,
-      },
-      {
-        name: "Honeycomb",
-        calories: 408,
-        fat: 3.2,
-        carbs: 87,
-        protein: 6.5,
-        iron: 45,
-      },
-      {
-        name: "Donut",
-        calories: 452,
-        fat: 25.0,
-        carbs: 51,
-        protein: 4.9,
-        iron: 22,
-      },
-      {
-        name: "KitKat",
-        calories: 518,
-        fat: 26.0,
-        carbs: 65,
-        protein: 7,
-        iron: 6,
-      },
-    ],
-
     tab: "all",
     items: ["ทั้งหมด", "ชำระเงินแล้ว", "รอดำเนินการ"],
     columns: [
@@ -784,28 +632,22 @@ export default {
         text: "หมายเลขคำสั่งซื้อ",
         align: "start",
         sortable: false,
-        value: "orderNumber",
+        value: "order_number",
         width: 150,
       },
       {
-        text: "ชื่อผู้เรียน",
+        text: "ชื่อ-นามสกุลผู้เรียน",
         align: "center",
         sortable: false,
         value: "student_name",
       },
-      {
-        text: "นามสกุลผู้เรียน",
-        align: "center",
-        sortable: false,
-        value: "student_name",
-      },
-      { text: "ชื่อคอร์ส", align: "center", sortable: false, value: "course" },
-      { text: "ราคา", align: "center", sortable: false, value: "totalPrice" },
+      { text: "ชื่อคอร์ส", align: "center", sortable: false, value: "course_name" },
+      { text: "ราคา", align: "center", sortable: false, value: "total_price" },
       {
         text: "สถานะการชำระ",
         align: "center",
         sortable: false,
-        value: "paymentStatus",
+        value: "payment_status",
       },
       {
         text: "วันที่ชำระ",

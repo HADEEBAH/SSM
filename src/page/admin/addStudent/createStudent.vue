@@ -16,9 +16,9 @@
                 deletable-chips
                 :loading="loading"
                 prepend-inner-icon="mdi-magnify"
-                cache-items
                 :rules="rules.student"
                 v-model="students"
+                cache-items
                 :items="username_list"
                 :search-input.sync="search"
                 placeholder="ค้นหา/เลือกผู้เรียน"
@@ -33,7 +33,6 @@
                   <v-chip
                     v-bind="data.attrs"
                     :input-value="data.selected"
-                    @click="data.select"
                     color="#FBF3F5"
                   >
                     {{ `${data.item.firstNameTh} ${data.item.lastNameTh}` }}
@@ -42,16 +41,6 @@
                     >
                   </v-chip>
                 </template>
-                <!-- <template v-slot:item="data">
-                  <v-list-item-content>
-                    <v-list-item-title>{{  `${data.item.firstNameTh} ${data.item.lastNameTh}` }}</v-list-item-title>
-                  </v-list-item-content>
-                  <v-list-item-action v-if=" students.some(v=>v.userOneId === data.item.userOneId )">
-                      <v-icon
-                        >mdi-check-circle</v-icon
-                      >
-                    </v-list-item-action>
-                </template> -->
               </v-autocomplete>
             </v-col>
             <v-col cols="12" sm="auto">
@@ -65,7 +54,7 @@
         </v-col>
       </v-row>
       <v-card
-        flat
+        outlined
         v-for="(course, course_index) in order.courses"
         class="mb-3"
         :key="course_index"
@@ -419,6 +408,7 @@
               <v-textarea
                 v-model="course.remark"
                 auto-grow
+                :rules="rules.remark"
                 outlined
               ></v-textarea>
             </v-col>
@@ -583,7 +573,7 @@
           > ยืนยัน </v-btn>
         </v-col>
       </v-row>
-      <v-dialog persistent v-model="show_dialog_register_one_id" width="60vw">
+      <v-dialog persistent v-model="show_dialog_register_one_id" :width="$vuetify.breakpoint.smAndUp ? '60vw': ''">
         <registerDialogForm state="student" dialog title="สมัคร One ID"></registerDialogForm>
       </v-dialog>
     </v-form>
@@ -676,6 +666,21 @@ export default {
     this.GetCategorys()
   },
   watch: {
+    last_user_registered: function () {
+      if(this.last_user_registered?.account_id){
+        this.students.push(this.last_user_registered.account_id)
+        this.username_list.push({
+          userOneId: this.last_user_registered.account_id,
+          firstNameEng: this.last_user_registered.firstname_en,
+          lastNameEng: this.last_user_registered.lastname_en,
+          firstNameTh: this.last_user_registered.firstname_th,
+          lastNameTh: this.last_user_registered.lastname_th,
+          mobileNo: this.last_user_registered.phone_number,
+          userName: this.last_user_registered.username,
+          fullname: `${this.last_user_registered.firstname_th} ${this.last_user_registered.lastname_th}`
+        })
+      }
+    },
     search (val) {
       console.log(val);
       if(val.length > 3  ){ 
