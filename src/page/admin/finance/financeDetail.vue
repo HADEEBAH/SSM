@@ -2,7 +2,7 @@
   <v-app>
     <v-container>
       <headerPage :breadcrumbs="breadcrumbs"></headerPage>
-      <pre>{{ order_detail }}</pre>
+      <!-- <pre>{{ order_detail }}</pre> -->
       <v-card class="mb-3">
         <v-card-text>
           <v-row>
@@ -142,7 +142,7 @@
             <v-card-text>
               <v-card class="mb-3">
                 <v-card-text class="bg-[#FFF5F6]">
-                  <rowData col_header="5" col_detail="7" title="ราคารวม"
+                  <rowData col_header="4" col_detail="8" title="ราคารวม"
                     >:
                     <span class="w-full font-bold">{{
                       order_detail.totalPrice.toLocaleString()
@@ -152,15 +152,14 @@
                   <!-- <rowData col_header="5" col_detail="7" title="หมายเหตุ"
                     >: {{ payment.remark ? payment.remark : "-" }}</rowData
                   > -->
-                  <rowData v-if="order_detail.payment" col_header="5" col_detail="7" title="วันที่ชำระ"
-                    >: {{order_detail.payment.paymentDate ? `${order_detail.payment.paymentDate} ${order_detail.payment.paymentTime}` : "-" }}</rowData
+                  <rowData v-if="order_detail.payment" col_header="4" col_detail="8" title="วันที่ชำระ"
+                    >: {{order_detail.payment.paid_date ? order_detail.payment.paid_date : "-" }}</rowData
                   >
                 </v-card-text>
               </v-card>
               <template v-if="order_detail.paymentStatus === 'success'">
                 <div class="font-bold">วิธีการชำระเงิน</div>
-                <v-card
-                  v-for="(status, index) in payment_status.filter(
+                <v-card v-for="(status, index) in payment_status.filter(
                     (v) => v.value === order_detail.paymentType
                   )"
                   :key="index"
@@ -210,7 +209,7 @@
                   </v-card-actions>
                 </v-card>
               </template>
-              <template v-else>
+              <template v-else-if="order_detail.paymentStatus !== 'cancel'">
                 <div class="font-bold mb-3">เลือกวิธีการชำระเงิน</div>
                 <v-card
                   v-for="(status, index) in payment_status"
@@ -263,7 +262,7 @@
               </template>
             </v-card-text>
             <v-card-actions>
-              <v-btn
+            <v-btn
                 v-if="order_detail.paymentStatus === 'success'"
                 class="w-full"
                 color="#ff6b81"
@@ -273,23 +272,30 @@
               <v-row dense v-else>
                 <v-col cols="12">
                   <v-btn
-                    v-if="order_detail.paymentType === ''"
+                    v-if="order_detail.paymentType === '' || order_detail.paymentType==='unpaid' "
                     class="w-full"
                     color="#ff6b81"
                     dark
                     >ส่งการแจ้งเตือน</v-btn
                   >
                   <v-btn
-                    v-if="order_detail.paymentType !== ''"
+                    v-if="order_detail.paymentType !== '' && order_detail.paymentType !== 'unpaid' && order_detail.paymentStatus !== 'cancel'"
+                    depressed
                     class="w-full"
                     color="#ff6b81"
+                    :disabled="order_detail.paymentStatus == 'cancel'"
                     dark
                     @click="confirmPayment()"
-                    >ยืนยันการชำระ</v-btn
-                  >
+                    >ยืนยันการชำระ</v-btn>
                 </v-col>
                 <v-col cols="12">
-                  <v-btn class="w-full" text color="#ff6b81" dark
+                  <v-btn 
+                  class="w-full" 
+                  text 
+                  :disabled="order_detail.paymentStatus == 'cancel'"
+                  color="#ff6b81" 
+                  :dark="!order_detail.paymentStatus == 'cancel'"
+                  @click="cancelOrder()"
                     >ยกเลิกการซื้อคอร์ส</v-btn
                   >
                 </v-col>
@@ -299,7 +305,7 @@
         </v-col>
       </v-row>
       <!-- DIALOG -->
-      <v-dialog class="pa-2" width="50vw" v-model="dialog_show" persistent>
+      <!-- <v-dialog class="pa-2" width="50vw" v-model="dialog_show" persistent>
         <v-card>
           <v-card-title>
             <v-row>
@@ -312,7 +318,7 @@
           </v-card-title>
           <dialogCard text="ยืนยันการชำระเงินเรียบร้อย"></dialogCard>
         </v-card>
-      </v-dialog>
+      </v-dialog> -->
     </v-container>
   </v-app>
 </template>
@@ -320,11 +326,12 @@
   <script>
 import headerPage from "@/components/header/headerPage.vue";
 import rowData from "@/components/label/rowData.vue";
-import dialogCard from "@/components/dialog/dialogCard.vue";
+// import dialogCard from "@/components/dialog/dialogCard.vue";
 import { mapActions, mapGetters } from 'vuex';
+import Swal from 'sweetalert2';
 export default {
   name: "financeDetail",
-  components: { headerPage, rowData, dialogCard },
+  components: { headerPage, rowData },
   data: () => ({
     dialog_show: false,
     payment_types: ["เงินสด", "บัตรเคตดิต", "โอนเข้าบัญชีโรงเรียน"],
@@ -399,13 +406,46 @@ export default {
   },
   methods: {
     ...mapActions({
-      GetOrderDetail : "OrderModules/GetOrderDetail"
+      GetOrderDetail : "OrderModules/GetOrderDetail",
+      updatePayment : "OrderModules/updatePayment",
+      updateOrderStatus: "OrderModules/updateOrderStatus"
     }),
     chengeStatus(status) {
       this.order_detail.paymentType = status.value;
     },
+    cancelOrder(){
+      this.order_detail.paymentStatus = "cancel"
+      Swal.fire({
+        icon: "question",
+        title : "การยกเลิกคำสั่งซื้อ",
+        text: `ต้องการยกเลิกคำสั่งซื้อหมายเลข ${this.order_detail.orderNumber}`,
+        showDenyButton: false,
+        showCancelButton: true,
+        cancelButtonText: "ยกเลิก",
+        confirmButtonText: "ตกลง",
+      }).then(async (result) =>{
+        if (result.isConfirmed) {
+          // console.log(this.order_detail)
+          this.updateOrderStatus({order_detail : this.order_detail})
+        }
+      })
+    },
     confirmPayment() {
-      this.payment.status = "paid";
+      Swal.fire({
+        icon: "question",
+        title : "ยืนยันการชำระเงิน",
+        text: "ยืนยันการชำระเงินใช่หรือไม่?",
+        showDenyButton: false,
+        showCancelButton: true,
+        cancelButtonText: "ยกเลิก",
+        confirmButtonText: "ตกลง",
+      }).then(async (result) =>{
+        if (result.isConfirmed) {
+          console.log(this.order_detail)
+          this.updatePayment({order_data : this.order_detail})
+        }
+      })
+      // this.payment.status = "paid";
       // this.dialog_show = true
     },
     dayOfWeekArray(day) {

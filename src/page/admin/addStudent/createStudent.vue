@@ -18,6 +18,7 @@
                 prepend-inner-icon="mdi-magnify"
                 :rules="rules.student"
                 v-model="students"
+                cache-items
                 :items="username_list"
                 :search-input.sync="search"
                 placeholder="ค้นหา/เลือกผู้เรียน"
@@ -407,6 +408,7 @@
               <v-textarea
                 v-model="course.remark"
                 auto-grow
+                :rules="rules.remark"
                 outlined
               ></v-textarea>
             </v-col>
