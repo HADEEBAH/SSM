@@ -14,7 +14,8 @@ import MyCourseModules from '@/store_modules/myCourseModules'
 import CoachModules from '@/store_modules/coachModules'
 import UserModules from '@/store_modules/userModules'
 import courseMonitorModules from '@/store_modules/courseMonitorModules'
-import ManageScheduleModules from '../src/store_modules/manageScheduleModules'
+import ManageScheduleModules from '@/store_modules/manageScheduleModules'
+import BannerModules from '@/store_modules/bannerModules'
 
 Vue.use(Vuex)
 
@@ -34,7 +35,8 @@ const store = new Vuex.Store({
     MyCourseModules: MyCourseModules,
     UserModules: UserModules,
     CourseMonitorModules: courseMonitorModules,
-    ManageScheduleModules: ManageScheduleModules
+    ManageScheduleModules: ManageScheduleModules,
+    BannerModules:BannerModules
   }
 })
 

@@ -1,21 +1,32 @@
+import axios from "axios";
+
 const financeModules = {
   namespaced: true,
   state: {
-    order: {
-      order_id: "",
-      course : [],
-      students:[],
-      payment_status : "",
-      payment_type : "",
-      paid_at : "",
-      total_price : "",
-      remark : "",
-      payee : "",
+    finance_detail : {},
+  },
+  mutations: {
+    SetFinanceDetail(state, payload){
+      state.finance_detail = payload
     },
   },
-  mutations: {},
-  actions: {},
-  getters: {},
+  actions: {
+    async financeDetail(context,{order_number}){
+      try{
+        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/${order_number}`)
+        if(data.stateCode == 200){
+          console.log(data)
+        }
+      }catch(error){
+        console.log(error)
+      }
+    }
+  },
+  getters: {
+    getFinanceDetail(state){
+      return state.finance_detail
+    }
+  },
 };
 
 export default financeModules;
