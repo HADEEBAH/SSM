@@ -1,6 +1,7 @@
 <template>
-  <v-container>
+  <v-container class="overflow-y: hidden; overflow-x: hidden;">
     <headerPage title="จัดการตาราง"></headerPage>
+    <!-- {{ courseToday }} -->
     <v-row class="py-2">
       <v-col cols="12" md="8" sm="8">
         <v-text-field
@@ -37,7 +38,7 @@
     <v-row>
       <v-col cols="12" md="8" sm="8">
         <template>
-          <calendarAdmin :events="itemTime.dates"></calendarAdmin>
+          <calendarAdmin></calendarAdmin>
         </template>
       </v-col>
 
@@ -53,25 +54,60 @@
           <div class="font-bold my-2 mx-5">ตารางวิชาเรียน</div>
           <!-- ตารางวิชาเรียน -->
           <v-alert
+            class="mx-2"
             border="left"
             colored-border
             color="#ff6b81"
             elevation="2"
-            v-for="(getAllCourse, index_course) in get_course"
-            :key="index_course"
+            v-if="courseDate"
           >
             <v-row dense class="font-bold">
-              <v-col cols="6" sm="6"> {{ getAllCourse.courseNameTh }} </v-col>
-              <v-col cols="6" sm="6"> 09:00-11:00 </v-col>
+              <v-col cols="12" sm="6">
+                {{ courseDate.courseName.courseNameTh }}</v-col
+              >
+              <v-col cols="12" sm="6">
+                {{ courseDate.time.start }} - {{ courseDate.time.end }}</v-col
+              >
             </v-row>
-            <v-row dense class="font-bold">
-              <v-col cols="6" sm="6"> เปียโนคลาสสิค ขั้นต้น </v-col>
-              <v-col cols="6" sm="6"> 09:00-11:00 </v-col>
+
+            <v-row dense>
+              <v-col cols="12" sm="6">โค้ช:{{ courseDate.coachName }} </v-col>
+              <v-col cols="12" sm="6">
+                <v-chip
+                  :color="
+                    check_in_status_options.filter(
+                      (v) => v.value === courseDate.cpo.packageName
+                    )[0].bg_color
+                  "
+                  :style="`color:${
+                    check_in_status_options.filter(
+                      (v) => v.value === courseDate.cpo.packageName
+                    )[0].color
+                  }`"
+                >
+                  {{
+                    check_in_status_options.filter(
+                      (v) => v.value === courseDate.cpo.packageName
+                    )[0].label
+                  }}
+                </v-chip>
+              </v-col>
             </v-row>
-            <v-row dense class="font-bold">
-              <v-col cols="6" sm="6"> เปียโนคลาสสิค ขั้นต้น </v-col>
-              <v-col cols="6" sm="6"> 09:00-11:00 </v-col>
-            </v-row>
+            <div v-if="courseDate.courseMonitor.length > 0">
+              <v-row
+                dense
+                v-for="(seat, index) in courseDate.courseMonitor"
+                :key="index"
+              >
+                <v-col
+                  cols="12"
+                  class="mdi mdi-account-group-outline"
+                  style="color: #ff6b81"
+                >
+                  {{ seat.currentStudent }} / {{ seat.maximumStudent }} ที่นั่ง
+                </v-col>
+              </v-row>
+            </div>
           </v-alert>
           <!-- แก้ไขวันหยุด -->
           <v-card
@@ -80,6 +116,8 @@
             class="mx-2 my-5"
             color="#FDF1E7"
           >
+            <!-- @click="editHolidays(getHolidays.holidayId)" -->
+
             <v-card-text>
               <v-row dense>
                 <v-col cols="6" sm="6" class="font-bold" style="color: #f19a5a">
@@ -88,7 +126,7 @@
                 <v-col
                   cols="6"
                   sm="6"
-                  @click="editHolidays(getHolidays.holidayId)"
+                  @click="editHolidays(getHolidays)"
                   align="end"
                 >
                   <span
@@ -106,6 +144,157 @@
       </v-col>
     </v-row>
 
+    <!-- แก้ไขวันหยุด -->
+
+    <template>
+      <v-row justify="center">
+        <v-dialog
+          v-model="show_dialog_edit_holoday"
+          persistent
+          max-width="600px"
+        >
+          <v-card>
+            <v-card-title>
+              <v-row dense>
+                <v-col cols="12" align="end">
+                  <v-btn icon @click="show_dialog_edit_holoday = false">
+                    <v-icon color="#ff6b81">mdi-close</v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-card-title>
+            <v-card-title>
+              <v-row>
+                <v-col cols="12" align="center" class="font-bold">
+                  แก้ไขวันหยุด
+                </v-col>
+              </v-row>
+            </v-card-title>
+            <v-card-title>
+              <v-row dense>
+                <!-- วันที่ -->
+                <v-col cols="12" sm="6">
+                  วันที่
+                  <v-menu
+                    v-model="selectEditHolidaydates"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="auto"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        dense
+                        outlined
+                        prepend-icon="mdi-calendar"
+                        readonly
+                        v-bind="attrs"
+                        v-on="on"
+                        color="#FF6B81"
+                        :value="
+                          editHolidayDates
+                            ? editHolidayDates
+                            : setDataEditDialog.fullDateHolidaysTh
+                        "
+                      ></v-text-field>
+                    </template>
+
+                    <v-date-picker
+                      v-model="editHolidayDates"
+                      @input="selectEditHolidaydates = false"
+                      :min="tomorrowDate()"
+                    ></v-date-picker>
+                  </v-menu>
+                </v-col>
+                <!-- Switch -->
+                <!-- @change="changeSwitchHoliday(setDataEditDialog)" -->
+                <v-col cols="12" sm="6" class="mt-5">
+                  <v-switch
+                    v-model="setDataEditDialog.allDay"
+                    :label="`ทั้งวัน`"
+                    color="#FF6B81"
+                    inset
+                  ></v-switch>
+                </v-col>
+              </v-row>
+            </v-card-title>
+            <v-card-title>
+              <!--  v-if="setDataEditDialog.allDay == false" -->
+              <v-row dense v-if="setDataEditDialog.allDay === false">
+                <!-- เวลาเริ่ม -->
+                <v-col cols="12" sm="6">
+                  เวลาเริ่ม{{ setDataEditDialog.holidayStartTime }}
+                  <br />
+                  <!-- holidayStartTime -->
+                  <vue-timepicker
+                    :format="formatsStartTime"
+                    v-model="setDataEditDialog.holidayStartTime"
+                    color="#FF6B81"
+                    item-color="#FF6B81"
+                    hide-clear-button
+                  >
+                  </vue-timepicker>
+                </v-col>
+                <!-- เวลาสิ้นสุด -->
+                <v-col cols="12" sm="6">
+                  เวลาสิ้นสุด
+                  <br />
+                  <vue-timepicker
+                    v-model="setDataEditDialog.holidayEndTime"
+                    :format="formatsEndTime"
+                    color="#FF6B81"
+                    item-color="#FF6B81"
+                    hide-clear-button
+                  >
+                  </vue-timepicker>
+                </v-col>
+              </v-row>
+            </v-card-title>
+            <!-- ชื่อวันหยุด -->
+            <v-card-title>
+              <v-row dense>
+                <v-col cols="12">
+                  ชื่อวันหยุด
+                  <v-textarea
+                    v-model="setDataEditDialog.holidayName"
+                    outlined
+                    placeholder="ระบุชื่อวันหยุด เช่น วันสงกรานต์"
+                  ></v-textarea>
+                </v-col>
+              </v-row>
+            </v-card-title>
+
+            <v-card-title>
+              <v-row dense>
+                <v-col cols="12" align="center">
+                  <v-btn
+                    depressed
+                    color="#FF6B81"
+                    class="white--text"
+                    width="30vw"
+                    @click="editHolidaysData()"
+                  >
+                    บันทึก
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-card-title>
+
+            <v-card-title>
+              <v-row dense>
+                <v-col cols="12" align="center">
+                  <v-btn depressed @click="deleteHoliday" width="30vw">
+                    ลบวันหยุด
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-card-title>
+          </v-card>
+        </v-dialog>
+      </v-row>
+    </template>
+
     <!-- เพิ่มวันหยุด -->
     <template>
       <v-row justify="center">
@@ -114,7 +303,7 @@
             <v-card-title>
               <v-row dense>
                 <v-col cols="12" align="end">
-                  <v-btn icon @click="show_dialog_holoday = false">
+                  <v-btn icon @click="closeDialog">
                     <v-icon color="#ff6b81">mdi-close</v-icon>
                   </v-btn>
                 </v-col>
@@ -141,6 +330,18 @@
                     offset-y
                     min-width="auto"
                   >
+                    <!--  :value="
+                          holidaydates
+                            ? new Date(holidaydates).toLocaleDateString(
+                                'th-TH',
+                                {
+                                  year: 'numeric',
+                                  month: 'short',
+                                  day: 'numeric',
+                                }
+                              )
+                            : holidaydates
+                        " -->
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
                         dense
@@ -152,18 +353,7 @@
                         v-on="on"
                         :rules="rules.dates"
                         color="#FF6B81"
-                        :value="
-                          holidaydates
-                            ? new Date(holidaydates).toLocaleDateString(
-                                'th-TH',
-                                {
-                                  year: 'numeric',
-                                  month: 'short',
-                                  day: 'numeric',
-                                }
-                              )
-                            : holidaydates
-                        "
+                        v-model="holidaydates"
                       ></v-text-field>
                     </template>
 
@@ -243,7 +433,7 @@
               </v-row>
             </v-card-title>
 
-            <v-card-title>
+            <!-- <v-card-title>
               <v-row dense>
                 <v-col cols="12" align="center">
                   <v-btn depressed @click="deleteHoliday" width="30vw">
@@ -251,182 +441,7 @@
                   </v-btn>
                 </v-col>
               </v-row>
-            </v-card-title>
-          </v-card>
-        </v-dialog>
-      </v-row>
-    </template>
-
-    <!-- แก้ไขวันหยุด -->
-    <template>
-      <v-row justify="center">
-        <v-dialog
-          v-model="show_dialog_edit_holoday"
-          persistent
-          max-width="600px"
-        >
-          <v-card>
-            <v-card-title>
-              <v-row dense>
-                <v-col cols="12" align="end">
-                  <v-btn icon @click="show_dialog_edit_holoday = false">
-                    <v-icon color="#ff6b81">mdi-close</v-icon>
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-card-title>
-            <v-card-title>
-              <v-row>
-                <v-col cols="12" align="center" class="font-bold">
-                  แก้ไขวันหยุด
-                </v-col>
-              </v-row>
-            </v-card-title>
-
-            <div
-              v-for="(
-                dialog_holidays, index_holidaysDialog
-              ) in get_holidays_by_id"
-              :key="index_holidaysDialog"
-            >
-              <v-card-title>
-                <v-row dense>
-                  <!-- วันที่ -->
-                  <v-col cols="12" sm="6">
-                    วันที่
-                    <v-menu
-                      v-model="selectEditHolidaydates"
-                      :close-on-content-click="false"
-                      :nudge-right="40"
-                      transition="scale-transition"
-                      offset-y
-                      min-width="auto"
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          dense
-                          outlined
-                          prepend-icon="mdi-calendar"
-                          readonly
-                          v-bind="attrs"
-                          v-on="on"
-                          color="#FF6B81"
-                          :value="
-                            editHolidayDates
-                              ? new Date(editHolidayDates).toLocaleDateString(
-                                  'th-TH',
-                                  {
-                                    year: 'numeric',
-                                    month: 'short',
-                                    day: 'numeric',
-                                  }
-                                )
-                              : new Date(
-                                  dialog_holidays.fullDateHolidays
-                                ).toLocaleDateString('th-TH', {
-                                  year: 'numeric',
-                                  month: 'short',
-                                  day: 'numeric',
-                                })
-                          "
-                        ></v-text-field>
-                      </template>
-
-                      <v-date-picker
-                        v-model="editHolidayDates"
-                        @input="selectEditHolidaydates = false"
-                        :min="tomorrowDate()"
-                      ></v-date-picker>
-                    </v-menu>
-                  </v-col>
-                  <!-- Switch -->
-                  <!-- @change="
-                        () => {
-                          if (dialog_holidays.allDay) {
-                            dialog_holidays.holidayStartTime = '';
-                            dialog_holidays.holidayEndTime = '';
-                          }
-                        }
-                      " -->
-                  <v-col cols="12" sm="6" class="mt-5">
-                    <v-switch
-                      v-model="dialog_holidays.allDay"
-                      :label="`ทั้งวัน`"
-                      color="#FF6B81"
-                      inset
-                    ></v-switch>
-                  </v-col>
-                </v-row>
-              </v-card-title>
-              <v-card-title>
-                <v-row dense v-if="dialog_holidays.allDay == false">
-                  <!-- เวลาเริ่ม -->
-                  <v-col cols="12" sm="6">
-                    เวลาเริ่ม
-                    <br />
-                    <!-- holidayStartTime -->
-                    <vue-timepicker
-                      v-model="holidayStartTime"
-                      color="#FF6B81"
-                      item-color="#FF6B81"
-                      hide-clear-button
-                    >
-                    </vue-timepicker>
-                  </v-col>
-                  <!-- เวลาสิ้นสุด -->
-                  <v-col cols="12" sm="6">
-                    เวลาสิ้นสุด
-                    <br />
-                    <vue-timepicker
-                      v-model="holidayEndTime"
-                      color="#FF6B81"
-                      item-color="#FF6B81"
-                      hide-clear-button
-                    >
-                    </vue-timepicker>
-                  </v-col>
-                </v-row>
-              </v-card-title>
-              <!-- ชื่อวันหยุด -->
-              <v-card-title>
-                <v-row dense>
-                  <v-col cols="12">
-                    ชื่อวันหยุด
-                    <v-textarea
-                      v-model="dialog_holidays.holidayName"
-                      outlined
-                      placeholder="ระบุชื่อวันหยุด เช่น วันสงกรานต์"
-                    ></v-textarea>
-                  </v-col>
-                </v-row>
-              </v-card-title>
-
-              <v-card-title>
-                <v-row dense>
-                  <v-col cols="12" align="center">
-                    <v-btn
-                      depressed
-                      color="#FF6B81"
-                      class="white--text"
-                      width="30vw"
-                      @click="editHolidaysData(dialog_holidays)"
-                    >
-                      บันทึก
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-card-title>
-
-              <v-card-title>
-                <v-row dense>
-                  <v-col cols="12" align="center">
-                    <v-btn depressed @click="deleteHoliday" width="30vw">
-                      ลบวันหยุด
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-card-title>
-            </div>
+            </v-card-title> -->
           </v-card>
         </v-dialog>
       </v-row>
@@ -465,7 +480,7 @@
                 </v-badge>
                 <v-autocomplete
                   v-model="selectedCourse"
-                  :items="get_course"
+                  :items="get_filter_course"
                   item-text="courseNameTh"
                   item-value=""
                   multiple
@@ -658,28 +673,30 @@ export default {
     selectEditHoliday: "",
     selectEditStartTime: "",
     selectEditEndTime: "",
-    editholidaydates: "",
-    editHolidayDates: "",
+    editHolidayDates: null,
+
+    EditHolidayStartTime: "",
+    EditHolidayEndTime: "",
 
     check_in_status_options: [
       {
-        label: "Family",
-        value: "punctual",
-        color: "#58A144",
-        bg_color: "#F0F9EE",
+        label: "Family Package",
+        value: "Family Package",
+        color: "#FFFFFF",
+        bg_color: "#58A144",
       },
       {
-        label: "Exclusive",
-        value: "exclusive",
-        color: "#FCC419",
-        bg_color: "#FFF9E8",
+        label: "Exclusive Package",
+        value: "Exclusive Package",
+        color: "#FFFFFF",
+        bg_color: "#FCC419",
       },
 
       {
-        label: "Group",
-        value: " emergency leave",
-        color: "#43A4F5",
-        bg_color: "#CFE2F3",
+        label: "Group Package",
+        value: "Group Package",
+        color: "#FFFFFF",
+        bg_color: "#43A4F5",
       },
     ],
 
@@ -691,26 +708,99 @@ export default {
         (val) => (val || "").length > 0 || "กรุณาเลือกอย่างน้อย1วันก่อนวันหยุด",
       ],
     },
+
+    events: [],
+    formatsStartTime: {
+      hh: "",
+      mm: "",
+    },
+    formatsEndTime: {
+      hh: "",
+      mm: "",
+    },
+    setDataEditDialog: {},
+
+    courseToday: [],
   }),
 
   created() {
     this.GetAllHolidays();
+    this.GetAllCourse();
+    // this.courseDate();
   },
-  beforeMount() {},
+  beforeMount() {
+    // this.courseDate();
+    const events = [];
+
+    const startDate = new Date();
+    const endDate = new Date();
+    events.push({
+      name: this.names[this.rnd(0, this.names.length - 1)],
+      start: startDate,
+      end: endDate,
+      color: this.colors[this.rnd(0, this.colors.length - 1)],
+      // timed: !allDay,
+    });
+
+    this.events = events;
+  },
   mounted() {
-    this.GetCourse();
+    // this.courseDate();
+
+    // this.GetCourse();
     this.GetCoachs();
+    this.GetFilterCourse();
   },
 
   methods: {
     ...mapActions({
-      GetCourse: "ManageScheduleModules/GetCourse",
+      GetFilterCourse: "ManageScheduleModules/GetFilterCourse",
+      GetAllCourse: "ManageScheduleModules/GetAllCourse",
       GetCoachs: "CourseModules/GetCoachs",
       GetAllHolidays: "ManageScheduleModules/GetAllHolidays",
       GetHolidaysById: "ManageScheduleModules/GetHolidaysById",
+      GetEditHolidays: "ManageScheduleModules/GetEditHolidays",
     }),
-    deleteHoliday() {
-      console.log("deleteHoliday");
+
+    async deleteHoliday() {
+      console.log("del", this.setDataEditDialog);
+      Swal.fire({
+        icon: "question",
+        title: "คุณต้องการลบหยุดใช่หรือไม่ ?",
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: "ตกลง",
+        cancelButtonText: "ยกเลิก",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            let config = {
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-type": "Application/json",
+                Authorization: `Bearer ${VueCookie.get("token")}`,
+              },
+            };
+            let { data } = await axios.delete(
+              `${process.env.VUE_APP_URL}/api/v1/holiday/id/${this.setDataEditDialog.holidayId}`,
+              config
+            );
+            if (data.statusCode === 200) {
+              Swal.fire({
+                icon: "success",
+                title: "บันทึกเรียบร้อย",
+              }).then(async (result) => {
+                if (result.isConfirmed) {
+                  (this.show_dialog_edit_holoday = false),
+                    this.GetAllHolidays();
+                }
+              });
+            }
+          } catch (error) {
+            console.log("SetDeleteHoliday", error);
+          }
+        }
+      });
     },
 
     async CreateHolidays() {
@@ -736,7 +826,6 @@ export default {
               holidayName: this.nameHoliday,
               description: "",
               allDay: this.holidaySwitch,
-              status: "",
               holidayDate: this.holidaydates.split("-")[2],
               holidayMonth: this.holidaydates.split("-")[1],
               holidayYears: this.holidaydates.split("-")[0],
@@ -745,7 +834,6 @@ export default {
                 : null,
               holidayEndTime: this.holidayEndTime ? this.holidayEndTime : null,
             };
-            console.log("payload", payload);
             let { data } = await axios.post(
               `${process.env.VUE_APP_URL}/api/v1/holiday/create`,
               payload,
@@ -759,14 +847,12 @@ export default {
                   title: "บันทึกเรียบร้อย",
                 }).then(async (result) => {
                   if (result.isConfirmed) {
-                    (this.nameHoliday = ""),
-                      (this.holidaySwitch = ""),
-                      (this.holidaydates.split("-")[2] = ""),
-                      (this.holidaydates.split("-")[1] = ""),
-                      (this.holidaydates.split("-")[0] = ""),
-                      (this.holidayStartTime = ""),
-                      (this.holidayEndTime = ""),
-                      (this.show_dialog_holoday = false);
+                    this.show_dialog_holoday = false;
+                    this.holidaydates = "";
+                    this.holidaySwitch = true;
+                    this.holidayStartTime = "";
+                    this.holidayEndTime = "";
+                    this.nameHoliday = "";
                     this.GetAllHolidays();
                   }
                 });
@@ -776,10 +862,31 @@ export default {
                   title: "บันทึกไม่สำเร็จ",
                 });
               }
-              console.log("CreateHolidays", data.data);
             }
           } catch (error) {
             console.log(error);
+            if (error.response.data.statusCode === 400) {
+              if (
+                error.response.data.message ==
+                "Holiday with the same date already exists."
+              ) {
+                Swal.fire({
+                  icon: "info",
+                  title: "เกิดข้อผิดพลาด",
+                  text: "วันที่นี้ถูกสร้างลงในวันหยุดแล้ว",
+                }).then(async (result) => {
+                  if (result.isConfirmed) {
+                    // this.show_dialog_holoday = false;
+                    this.holidaydates = "";
+                    this.holidaySwitch = true;
+                    this.holidayStartTime = "";
+                    this.holidayEndTime = "";
+                    this.nameHoliday = "";
+                    this.GetAllHolidays();
+                  }
+                });
+              }
+            }
           }
         }
       });
@@ -793,38 +900,54 @@ export default {
       return `${date} ${month} ${year}`;
     },
 
-    editHolidays(holidayId) {
+    editHolidays(holiday) {
       this.show_dialog_edit_holoday = true;
-      this.GetHolidaysById(holidayId).then(() => {
-        this.holidayStartTime = this.get_holidays_by_id[0].holidayStartTime
-          ? this.get_holidays_by_id[0].holidayStartTime
-          : null;
-        console.log("this.holidayStartTime", this.holidayStartTime),
-          (this.holidayEndTime = this.get_holidays_by_id[0].holidayEndTime
-            ? this.get_holidays_by_id[0].holidayEndTime
-            : null);
-        console.log("this.holidayEndTime", this.holidayEndTime),
-          (this.fullDateHolidaysTh = `${this.holidayDate} ${
-            this.thaiMonths[parseInt(this.holidayMonth) - 1]
-          } ${parseInt(this.holidayYears) + 543}`);
+      console.log("holiday", holiday);
 
-        this.holidayDate = this.editHolidayDates.split("-")[2];
-        this.holidayMonth = this.editHolidayDates.split("-")[1];
-        this.holidayYears = this.editHolidayDates.split("-")[0];
+      this.setDataEditDialog = { ...holiday };
 
-        this.holidayDate = this.editHolidayDates;
-        this.holidayMonth = this.editHolidayDates;
-        this.holidayYears = this.editHolidayDates;
-
-        if (this.holidayStartTime == null && this.holidayEndTime == null) {
-          this.allDay == false;
-        }
-      });
+      //format
+      if (!this.setDataEditDialog.allDay) {
+        this.formatsStartTime.hh = holiday.holidayStartTime.split(":")[0];
+        this.formatsStartTime.mm = holiday.holidayStartTime.split(":")[1];
+        this.formatsEndTime.hh = holiday.holidayEndTime.split(":")[0];
+        this.formatsEndTime.mm = holiday.holidayEndTime.split(":")[1];
+      } else {
+        this.formatsStartTime.hh = "";
+        this.formatsStartTime.mm = "";
+        this.formatsEndTime.hh = "";
+        this.formatsEndTime.mm = "";
+      }
     },
 
-    async editHolidaysData(holiday) {
-      console.log("editHolidaysData", holiday);
-      console.log("holiday.allDay", holiday.allDay);
+    async editHolidaysData() {
+      console.log("setDataEditDialog", this.setDataEditDialog);
+      this.setDataEditDialog.holidayDate = this.editHolidayDates
+        ? this.editHolidayDates.split("-")[2]
+        : this.setDataEditDialog.holidayDate;
+      this.setDataEditDialog.holidayMonth = this.editHolidayDates
+        ? this.editHolidayDates.split("-")[1]
+        : this.setDataEditDialog.holidayMonth;
+      this.setDataEditDialog.holidayYears = this.editHolidayDates
+        ? this.editHolidayDates.split("-")[0]
+        : this.setDataEditDialog.holidayYears;
+
+      this.setDataEditDialog.holidayStartTime =
+        this.setDataEditDialog.holidayStartTime.HH +
+        ":" +
+        this.setDataEditDialog.holidayStartTime.mm;
+
+      this.setDataEditDialog.holidayEndTime =
+        this.setDataEditDialog.holidayEndTime.HH +
+        ":" +
+        this.setDataEditDialog.holidayEndTime.mm;
+
+      // this.setDataEditDialog.holidayStartTime =
+      //   this.setDataEditDialog.holidayStartTime.join("HH");
+
+      // this.setDataEditDialog.holidayEndTime =
+      //   this.setDataEditDialog.holidayEndTime.join("HH");
+
       Swal.fire({
         icon: "question",
         title: "คุณต้องการแก้ไขวันหยุดใช่หรือไม่ ?",
@@ -835,53 +958,11 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            let config = {
-              headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Content-type": "Application/json",
-                Authorization: `Bearer ${VueCookie.get("token")}`,
-              },
-            };
-            let payload = {
-              holidayName: holiday.holidayName,
-              description: "",
-              allDay: holiday.allDay,
-              status: "",
-              holidayDate: this.editHolidayDates.split("-")[2],
-              holidayMonth: this.editHolidayDates.split("-")[1],
-              holidayYears: this.editHolidayDates.split("-")[0],
-              holidayStartTime: this.holidayStartTime
-                ? this.holidayStartTime.HH + ":" + this.holidayStartTime.mm
-                : null,
-              holidayEndTime: this.holidayEndTime
-                ? this.holidayEndTime.HH + ":" + this.holidayEndTime.mm
-                : null,
-            };
-            console.log("payload", payload);
-            let { data } = await axios.patch(
-              `${process.env.VUE_APP_URL}/api/v1/holiday/update-holiday/${holiday.holidayId}`,
-              payload,
-              config
-            );
-            if (data.statusCode === 200) {
-              if (data.data && data.message == "Update Successful") {
-                Swal.fire({
-                  icon: "success",
-                  title: "บันทึกเรียบร้อย",
-                }).then(async (result) => {
-                  if (result.isConfirmed) {
-                    (this.show_dialog_edit_holoday = false),
-                      this.GetAllHolidays();
-                  }
-                });
-              } else {
-                Swal.fire({
-                  icon: "error",
-                  title: "บันทึกไม่สำเร็จ",
-                });
-              }
-              console.log("CreateHolidays", data.data);
-            }
+            let payload = {};
+            payload = { ...this.setDataEditDialog };
+            this.GetEditHolidays(payload);
+            this.show_dialog_edit_holoday = false;
+            this.editHolidayDates = null;
           } catch (error) {
             console.log(error);
           }
@@ -905,15 +986,25 @@ export default {
     changeSwitchHoliday() {
       this.holidayStartTime = "";
       this.holidayEndTime = "";
-      // this.holidaydates = "";
-      this.editHolidayDates = "";
+      this.editHolidayDates = null;
+    },
+
+    closeDialog() {
+      this.show_dialog_holoday = false;
+      this.holidaydates = "";
+      this.holidaySwitch = true;
+      this.holidayStartTime = "";
+      this.holidayEndTime = "";
+      this.nameHoliday = "";
     },
   },
 
   computed: {
     ...mapGetters({
       itemTime: "MyCourseModules/getcourseSchedule",
-      get_course: "ManageScheduleModules/getCourse", //get all course
+      get_filter_course: "ManageScheduleModules/getFilterCourse", //get all course
+      get_all_course: "ManageScheduleModules/getAllCourse",
+      date_arr: "ManageScheduleModules/getDateArray",
       get_coachs: "CourseModules/getCoachs",
       get_all_holidays: "ManageScheduleModules/getAllHolidays",
       get_holidays_by_id: "ManageScheduleModules/getHolidaysById",
@@ -926,6 +1017,34 @@ export default {
       const year = date.getFullYear() + 543; // Add 543 to convert to Thai year
 
       return `${day} ${dateNumber} ${month}, ${year}`;
+    },
+
+    courseDate() {
+      // let getAllCourseDate;
+      // let courseTodayDate = new Date().toLocaleDateString("en-CA");
+      let courseTodayDate = "2023-06-21";
+
+      let getAllCourseDate = [];
+      let success = "";
+      let allCourse = [];
+      // console.log("----------->", this.date_arr);
+
+      for (let [index, item] of this.date_arr.entries()) {
+        // console.log("get_all_course", this.get_all_course[index]);
+        // console.log("items", item);
+        // console.log("index", index);
+
+        for (const CourseDate of item) {
+          getAllCourseDate.push(CourseDate);
+          // console.log(courseTodayDate == CourseDate);
+          if (courseTodayDate == CourseDate) {
+            success = true;
+            allCourse = this.get_all_course[index];
+          }
+        }
+      }
+
+      return success && allCourse;
     },
   },
 };

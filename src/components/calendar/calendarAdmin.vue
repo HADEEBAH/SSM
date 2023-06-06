@@ -14,32 +14,26 @@
         </v-col>
       </v-row>
     </v-card-title>
-
     <v-calendar
       ref="calendar"
       color="#ff6b81"
       type="month"
       v-model="focus"
-      :events="events"
+      :events="get_events"
       event-text-color="#000000"
       event-overlap-mode="column"
       :first-interval="1"
       :interval-count="24"
       :event-overlap-threshold="30"
-      @click:event="selectedDate($event)"
     >
+      <template v-slot:event="{ event }">
+        {{ event.timed }}
+        {{ event.name }}
+      </template>
     </v-calendar>
 
     <!-- MONTH -->
-    <!-- <v-date-picker
-      v-model="focus"
-      type="month"
-      class="w-full"
-      no-title
-      :event-color="(date) => (date[9] % 2 ? 'red' : 'yellow')"
-      :events="functionEvents"
-      @input="selectDate(focus)"
-    ></v-date-picker> -->
+
     <v-bottom-sheet v-model="showModal">
       <div class="bg-white rounded-t-lg pa-4">
         <v-row dense>
@@ -121,6 +115,7 @@ export default {
     events: { type: Array },
   },
   data: () => ({
+    eventss: [],
     showModal: false,
     test_course_id: "",
     focus: "",
@@ -144,7 +139,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      student_data: "MyCourseModules/getStudentData",
+      get_all_holidays: "ManageScheduleModules/getAllHolidays",
+      get_events: "ManageScheduleModules/getEventsHolidays",
     }),
     cal() {
       return this.ready ? this.$refs.calendar : null;
@@ -154,8 +150,26 @@ export default {
     },
   },
 
+  created() {
+    // this.loopData();
+  },
   beforeMount() {
-    // this.colorOfDay();
+    this.loopData();
+    // const events = [];
+    // const days = "1";
+    // const month = "6";
+    // const years = "2023";
+    // const startDate = new Date(years, parseInt(month) - 1, days);
+    // const endDate = new Date(years, parseInt(month) - 1, days);
+    // console.log("startDate", startDate);
+    // events.push({
+    //   name: "ทดสอบ1",
+    //   start: startDate,
+    //   end: endDate,
+    //   color: "#cdcdcd",
+    //   timed: true,
+    // });
+    // this.eventss = events;
   },
   mounted() {
     let today = new Date();
@@ -188,23 +202,50 @@ export default {
     // this.colorOfDay();
   },
   beforeUpdate() {
-    this.colorOfDay();
+    this.loopData();
+    // this.colorOfDay();
   },
 
   methods: {
     ...mapActions({
-      GetStudentData: "MyCourseModules/GetStudentData",
+      GetAllHolidays: "ManageScheduleModules/GetAllHolidays",
     }),
+
+    async loopData() {
+      const events = [];
+      for (const item of this.get_all_holidays) {
+        // console.log("item", item);
+
+        const days = item.holidayDate;
+        const month = item.holidayMonth;
+        const years = item.holidayYears;
+        const startDate = new Date(years, parseInt(month) - 1, days);
+        // console.log("startDate", startDate);
+
+        const holidayTime = !item.allDay
+          ? `${item.holidayStartTime}-${item.holidayEndTime}`
+          : null;
+        // console.log("holidayTime", holidayTime);
+        events.push({
+          name: `วันหยุด ${item.holidayName}`,
+          start: startDate,
+          color: "#f19a5a",
+          timed: holidayTime,
+        });
+        this.eventss = events;
+      }
+    },
+
     selectedDate(data) {
       console.log(data.event);
       for (const item in this.student_data) {
         this.test_course_id = item.courseId;
       }
 
-      this.$router.push({
-        name: "StudentCourse",
-        params: { course_id: data.event.courseId },
-      });
+      // this.$router.push({
+      //   name: "StudentCourse",
+      //   params: { course_id: data.event.courseId },
+      // });
       // this.$router.push({ name: 'StudentsSchedule' })
       // $router.push({ name: 'StudentCourse' })
     },
