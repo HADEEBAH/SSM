@@ -166,7 +166,7 @@ export default {
         to: "",
         child: [{ title: "จัดการผู้ใช้งาน", to: "UserList" }],
       },
-      // { title: "การอนุมัติลา", to: "LeaveList", child: [] },
+      { title: "การอนุมัติลา", to: "LeaveList", child: [] },
       // { title: "หน้าผู้ใช้งาน", to: "UserKingdom", child: [] },
       { title: "จัดการแบนเนอร์", to: "Banner", child: [] },
     ],

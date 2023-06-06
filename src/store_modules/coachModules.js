@@ -16,11 +16,15 @@ const coachModules = {
     coach_check_in_is_loading: false,
     coach_leaves: [],
     coach_leaves_is_loading: false,
-    attachment_leave: []
+    attachment_leave: [],
+    coach_leave : {},
   },
   mutations: {
     SetAttachmentLeave(state, payload) {
       state.attachment_leave = payload
+    },
+    SetCoachLeave(state, payload){
+      state.coach_leave = payload
     },
     SetCoachLeaves(state, payload) {
       state.coach_leaves = payload
@@ -658,6 +662,28 @@ const coachModules = {
         console.log(error)
       }
     },
+    // COACH LEAVE 
+    async GetLeavesAll(context){
+      context.commit("SetCoachLeavesIsLoading",true)
+      try{
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        let localhost = "http://localhost:3000"
+        let {data} = await axios.get(`${localhost}/api/v1/coach/leave`,config)
+        if(data.statusCode == 200){
+          context.commit("SetCoachLeaves",data.data)
+          context.commit("SetCoachLeavesIsLoading",false)
+        }
+      }catch(error){
+        context.commit("SetCoachLeavesIsLoading",false)
+        console.log(error)
+      }
+    },
     async SaveCoachLeave(context, { coach_leave_data, files }) {
       try {
         let user_detail = JSON.parse(localStorage.getItem("userDetail"))
@@ -689,8 +715,8 @@ const coachModules = {
         // let localhost = "http://localhost:3000"
         let payloadData = new FormData()
         payloadData.append("payload", JSON.stringify(payload))
-        for (const [index, file] of files.entries()) {
-          payloadData.append(`file${index}`, file, encodeURIComponent(file.name));
+        for (const file of files) {
+          payloadData.append(`files`, file);
         }
         let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coach/leave`, payloadData, config)
         if (data.statusCode === 201) {
@@ -766,7 +792,47 @@ const coachModules = {
       } catch (error) {
         console.log(error)
       }
-    }
+    },
+    async updateStatusCoachLeaveAndCoach(context, { coach_leave_data, coach_leave_id }) {
+      context.commit("SetCoachLeavesIsLoading",true)
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        let localhost = "http://localhost:3000"
+        let {data} = await axios.patch(`${localhost}/api/v1/coach/leave/coach/status/${coach_leave_id}`, coach_leave_data, config)
+        if(data.statusCode == 200){
+          context.dispatch("GetLeavesDetail",{coach_leave_id : coach_leave_id})
+          context.commit("SetCoachLeavesIsLoading",false)
+        }
+      } catch (error) {
+        context.commit("SetCoachLeavesIsLoading",false)
+        console.log(error)
+      }
+    },
+    async GetLeavesDetail(context,{coach_leave_id}){
+      try{
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        let localhost = "http://localhost:3000"
+        let {data} = await axios.get(`${localhost}/api/v1/coach/leave/detail/${coach_leave_id}`,config)
+        if(data.statusCode == 200){
+          // console.log(data.data)
+          context.commit("SetCoachLeave",data.data)
+        }
+      }catch(error){
+        console.log(error)
+      }
+    },
   },
   getters: {
     getStudentCheckInIsLoading(state) {
@@ -784,11 +850,15 @@ const coachModules = {
     getMyCoursesIsLoading(state) {
       return state.my_courses_is_loading;
     },
+    
     getCoachCheckIn(state) {
       return state.coach_check_in
     },
     getCoachCheckInIsLoading(state) {
       return state.coach_check_in_is_loading
+    },
+    getCoachLeave(state){
+      return state.coach_leave
     },
     getCoachLeaves(state) {
       return state.coach_leaves
