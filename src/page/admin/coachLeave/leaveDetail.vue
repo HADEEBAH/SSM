@@ -67,6 +67,7 @@
                         </v-row>
                     </v-card-text>
                 </v-card>
+                <!-- {{ coachs }} -->
                 <v-card class="mb-3">
                     <v-data-table
                         class="elevation-1 header-table"
@@ -85,7 +86,7 @@
                                         item-value="accountId"
                                         item-text="fullNameTh"
                                         @change="selectCoach(item)"
-                                        :items="coachs"
+                                        :items="coachs.filter(v=>v.accountId !== coach_leave.coachId)"
                                     >
                                     </v-select>
                                 </v-col>
@@ -96,7 +97,7 @@
                 <v-card class="mb-3">
                     <v-card-text>
                         <v-row dense>
-                            <v-col cols="12" class="text-[#999999]">เหตุผลการลา</v-col>
+                            <v-col cols="12" class="text-[#999999] font-bold">เหตุผลการลา</v-col>
                             <v-col class="text-[#333333] pl-5">{{  coach_leave.remark  }}</v-col>
                         </v-row>
                         <v-row dense>
@@ -214,7 +215,7 @@
             item : {status : "pending"},
             column:[
                 {text: 'ชื่อคอร์ส',align: 'start',sortable: false, value: 'courseNameTh'},
-                {text: 'ชื่อผู้แทน',align: 'start',sortable: false, value: 'coach'},
+                {text: 'ชื่อผู้แทน',align: 'start',sortable: false, value: 'coach', width:400},
             ],
             show_disapproved: false,
         }),
@@ -242,14 +243,12 @@
             },
             selectCoach(coach_selected){
                 let coach_detail = this.coachs.filter(v => v.accountId === coach_selected.substituteCoachId)[0]
-                console.log(coach_detail)
                 coach_selected.substitutefirstNameEn = coach_detail.firstNameEng
                 coach_selected.substitutefirstNameTh = coach_detail.firstNameTh
                 coach_selected.substitutelastNameEn = coach_detail.lastNameEng
                 coach_selected.substitutelastNameTh = coach_detail.lastNameTh
                 coach_selected.substitutefullNameEn = coach_detail.fullNameEh
                 coach_selected.substitutefullNameTh = coach_detail.fullNameTh
-                console.log(coach_selected)
             },
             dowloadFile(file) {
                 console.log(file)

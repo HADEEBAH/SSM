@@ -806,7 +806,18 @@ const coachModules = {
         // let localhost = "http://localhost:3000"
         let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coach/leave/coach/status/${coach_leave_id}`, coach_leave_data, config)
         if(data.statusCode == 200){
-          context.dispatch("GetLeavesDetail",{coach_leave_id : coach_leave_id})
+          Swal.fire({
+            icon: "success",
+            title: "บันทึกสำเร็จ",
+            showDenyButton: false,
+            showCancelButton: false,
+            cancelButtonText: "ยกเลิก",
+            confirmButtonText: "ตกลง",
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              context.dispatch("GetLeavesDetail",{coach_leave_id : coach_leave_id})
+            }
+          })
           context.commit("SetCoachLeavesIsLoading",false)
         }
       } catch (error) {
