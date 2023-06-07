@@ -12,7 +12,8 @@ const manageScheduleModules = {
         get_holidays_by_id: [],
         delete_holiday: [],
         events: [],
-        date_arr: []
+        date_arr: [],
+        data_in_schedile: [],
 
     },
     mutations: {
@@ -33,6 +34,9 @@ const manageScheduleModules = {
         },
         SetEvents(state, payload) {
             state.events = payload
+        },
+        SetDataInSchedile(state, payload) {
+            state.data_in_schedile = payload
         },
     },
     actions: {
@@ -71,7 +75,6 @@ const manageScheduleModules = {
                     let arr_tmp = []
 
                     for await (let items of data.data) {
-                        console.log("itemmmmmm", items);
                         arr_tmp.push(items.dates.date || items.dates.dates)
                     }
                     await context.commit("SetGetDateArray", arr_tmp)
@@ -108,27 +111,38 @@ const manageScheduleModules = {
                 }
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config)
                 if (data.statusCode === 200) {
-                    let event = []
+                    // let event = []
 
                     data.data.map((item) => {
                         // console.log("item------->", item);
                         item.fullDateHolidaysTh = `${item.holidayDate} ${thaiMonths[parseInt(item.holidayMonth) - 1]} ${parseInt(item.holidayYears) + 543}`
+                        if (item.holidayStartTime && item.holidayEndTime) {
+                            item.ob_holidayStartTime = {
+                                HH: item.holidayStartTime.split(":")[0],
+                                mm: item.holidayStartTime.split(":")[1],
+                            }
+                            item.ob_holidayEndTime = {
+                                HH: item.holidayEndTime.split(":")[0],
+                                mm: item.holidayEndTime.split(":")[1],
+                            }
+                        }
 
-                        let days = item.holidayDate;
-                        let month = item.holidayMonth;
-                        let years = item.holidayYears;
-                        let startDate = new Date(years, parseInt(month) - 1, days);
 
-                        let holidayTime = !item.allDay
-                            ? `${item.holidayStartTime}-${item.holidayEndTime}`
-                            : null;
-                        event.push({
-                            name: item.holidayName,
-                            start: startDate,
-                            color: "#f19a5a",
-                            timed: holidayTime,
-                        });
-                        events = event;
+                        // let days = item.holidayDate;
+                        // let month = item.holidayMonth;
+                        // let years = item.holidayYears;
+                        // let startDate = new Date(years, parseInt(month) - 1, days);
+                        // console.log("item.holidayStartTime", item.holidayStartTime);
+                        // let holidayTime = !item.allDay
+                        //     ? `${item.holidayStartTime}-${item.holidayEndTime}`
+                        //     : null;
+                        // event.push({
+                        //     name: item.holidayName,
+                        //     start: startDate,
+                        //     color: "#f19a5a",
+                        //     timed: holidayTime,
+                        // });
+                        // events = event;
 
                     })
                     context.commit("SetGetAllHolidays", data.data)
@@ -168,6 +182,7 @@ const manageScheduleModules = {
                         timerProgressBar: true
                     })
                     context.dispatch("GetAllHolidays")
+                    context.dispatch("GetDataInSchedile")
                 } else {
                     Swal.fire({
                         icon: "warning",
@@ -236,6 +251,89 @@ const manageScheduleModules = {
             }
         },
 
+        async GetDataInSchedile(context) {
+
+            let dataInSchadule = []
+            try {
+                let config = {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-type": "Application/json",
+                        'Authorization': `Bearer ${VueCookie.get("token")}`
+                    }
+                }
+
+                let { data } = await axios.get(` ${process.env.VUE_APP_URL}/api/v1/admincourse/courseholiday`, config)
+
+                if (data.statusCode === 200) {
+                    let eventSchadule = []
+
+                    data.data.map((item) => {
+                        let times = null
+                        let colors
+                        if (item.type === "holiday") {
+                            colors = "#e9967a"
+                            if (!item.allDay) {
+                                times = `${item.startTime} - ${item.endTime}`
+                                colors = "#f19a5a"
+
+                            }
+                        } else {
+                            times = `${item.startTime} - ${item.endTime}`
+                            if (item.startDate) {
+                                switch (new Date(item.startDate).getDay()) {
+                                    case 0:
+                                        colors = "#F898A4";
+                                        break;
+                                    case 1:
+                                        colors = "#FFFACD";
+                                        break;
+                                    case 2:
+                                        colors = "#FFBBDA";
+                                        break;
+                                    case 3:
+                                        colors = "#D0F4DE";
+                                        break;
+                                    case 4:
+                                        colors = "#FFE2D1";
+                                        break;
+                                    case 5:
+                                        colors = "#C0E4F6";
+                                        break;
+                                    case 6:
+                                        colors = "#E8CFF8";
+                                        break;
+                                }
+                            }
+                        }
+
+                        eventSchadule.push(
+                            {
+                                name: item.name,
+                                start: item.startDate,
+                                timed: times,
+                                color: colors,
+                                allday: item.allDay,
+                                coach: item.coachName,
+                                package: item.packageName,
+                                type: item.type,
+                                startTime: item.startTime,
+                                endTime: item.endTime
+                            }
+                        )
+
+                        dataInSchadule = eventSchadule;
+                    })
+                    // await context.commit("SetDataInSchedile", data.data)
+                    // console.log("SetDataInSchedile", data.data);
+                    context.commit("SetDataInSchedile", dataInSchadule)
+                }
+
+            } catch (error) {
+                console.log("error", error);
+            }
+        }
+
 
 
     },
@@ -257,6 +355,9 @@ const manageScheduleModules = {
         },
         getEventsHolidays(state) {
             return state.events
+        },
+        getdataInSchadule(state) {
+            return state.data_in_schedile
         },
     },
 };
