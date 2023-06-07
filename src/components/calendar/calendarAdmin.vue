@@ -19,12 +19,13 @@
       color="#ff6b81"
       type="month"
       v-model="focus"
-      :events="get_events"
+      :events="data_in_schedile"
       event-text-color="#000000"
       event-overlap-mode="column"
       :first-interval="1"
       :interval-count="24"
       :event-overlap-threshold="30"
+      @click:event="selectedDate($event)"
     >
       <template v-slot:event="{ event }">
         {{ event.timed }}
@@ -102,6 +103,152 @@
         </div>
       </div>
     </v-bottom-sheet>
+
+    <template>
+      <v-row justify="center">
+        <v-dialog v-model="dialog_detail" persistent max-width="600px">
+          <v-card>
+            <v-card-title>
+              <v-row dense>
+                <v-col cols="12" align="end">
+                  <v-btn icon @click="dialog_detail = false">
+                    <v-icon color="#ff6b81">mdi-close</v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-card-title>
+
+            <v-card-title>
+              <v-row>
+                <v-col cols="12" align="center" class="font-bold">
+                  {{
+                    details.type == "holiday"
+                      ? "ข้อมูลวันหยุด"
+                      : "ข้อมูลวันเรียน"
+                  }}
+                </v-col>
+              </v-row>
+            </v-card-title>
+
+            <v-card-title>
+              <v-row dense>
+                <v-col cols="12">
+                  {{ details.type == "holiday" ? "ชื่อวันหยุด" : "ชื่อคอร์ส" }}
+                  <v-text-field
+                    :label="details.name"
+                    solo
+                    disabled
+                    class="font-bold"
+                    dense
+                  >
+                  </v-text-field>
+                </v-col>
+                <!-- วันที่ -->
+                <v-col cols="12">
+                  วันที่
+                  <v-text-field
+                    :label="
+                      new Date(details.start).toLocaleDateString('th-TH', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                      })
+                    "
+                    dense
+                    solo
+                    disabled
+                    append-icon="mdi-calendar"
+                    class="font-bold"
+                  >
+                  </v-text-field>
+                </v-col>
+              </v-row>
+            </v-card-title>
+
+            <v-card-title>
+              <v-row dense v-if="details.type == 'normal'">
+                <v-col cols="12" sm="6">
+                  เวลาเริ่ม
+                  <v-text-field
+                    dense
+                    solo
+                    :label="details.startTime"
+                    class="font-bold"
+                    disabled
+                  >
+                  </v-text-field>
+                </v-col>
+
+                <v-col cols="12" sm="6">
+                  เวลาสิ้นสุด
+                  <v-text-field
+                    dense
+                    solo
+                    :label="details.endTime"
+                    class="font-bold"
+                    disabled
+                  >
+                  </v-text-field>
+                </v-col>
+              </v-row>
+
+              <v-row dense v-if="details.type == 'holiday'">
+                <v-col cols="12" sm="6" v-if="details.allday === false">
+                  เวลาเริ่ม
+                  <v-text-field
+                    dense
+                    solo
+                    :label="details.startTime"
+                    class="font-bold"
+                  >
+                  </v-text-field>
+                </v-col>
+
+                <v-col cols="12" sm="6" v-if="details.allday === false">
+                  เวลาสิ้นสุด
+                  <v-text-field
+                    dense
+                    solo
+                    :label="details.endTime"
+                    class="font-bold"
+                  >
+                  </v-text-field>
+                </v-col>
+                <v-col cols="12" align="center" v-else> หยุดทั้งวัน </v-col>
+              </v-row>
+            </v-card-title>
+
+            <v-card-title>
+              <v-row dense v-if="details.type == 'normal'">
+                <v-col cols="12" sm="6">
+                  โค้ช
+                  <v-text-field
+                    dense
+                    class="font-bold"
+                    solo
+                    disabled
+                    :label="details.coach"
+                  >
+                  </v-text-field>
+                </v-col>
+
+                <v-col cols="12" sm="6" v-if="details.package">
+                  แพ็กเกจ
+                  <v-text-field
+                    dense
+                    class="font-bold"
+                    solo
+                    disabled
+                    :label="details.package"
+                  >
+                  </v-text-field>
+                </v-col>
+              </v-row>
+            </v-card-title>
+          </v-card>
+        </v-dialog>
+      </v-row>
+    </template>
   </div>
 </template>
 <script>
@@ -111,7 +258,6 @@ export default {
   name: "calendarCoach",
   props: {
     type: { type: String, default: "month" },
-    // , default: () => []
     events: { type: Array },
   },
   data: () => ({
@@ -129,18 +275,20 @@ export default {
       weekday: "long",
     },
     event_date: [],
+    dialog_detail: false,
+    details: "",
+    holidaySwitch: true,
   }),
 
   watch: {
     events(val) {
-      // console.log("val ->>>", val);
       this.event_date.push(val);
     },
   },
   computed: {
     ...mapGetters({
       get_all_holidays: "ManageScheduleModules/getAllHolidays",
-      get_events: "ManageScheduleModules/getEventsHolidays",
+      data_in_schedile: "ManageScheduleModules/getdataInSchadule",
     }),
     cal() {
       return this.ready ? this.$refs.calendar : null;
@@ -150,28 +298,10 @@ export default {
     },
   },
 
-  created() {
-    // this.loopData();
-  },
-  beforeMount() {
-    this.loopData();
-    // const events = [];
-    // const days = "1";
-    // const month = "6";
-    // const years = "2023";
-    // const startDate = new Date(years, parseInt(month) - 1, days);
-    // const endDate = new Date(years, parseInt(month) - 1, days);
-    // console.log("startDate", startDate);
-    // events.push({
-    //   name: "ทดสอบ1",
-    //   start: startDate,
-    //   end: endDate,
-    //   color: "#cdcdcd",
-    //   timed: true,
-    // });
-    // this.eventss = events;
-  },
+  created() {},
+  beforeMount() {},
   mounted() {
+    this.GetDataInSchedile();
     let today = new Date();
     this.start_of_week = new Date(
       today.getFullYear(),
@@ -196,58 +326,18 @@ export default {
       weekday: "long",
     });
     this.ready = true;
-    // this.scrollToTime();
-
-    // this.updateTime();
-    // this.colorOfDay();
-  },
-  beforeUpdate() {
-    this.loopData();
-    // this.colorOfDay();
   },
 
   methods: {
     ...mapActions({
       GetAllHolidays: "ManageScheduleModules/GetAllHolidays",
+      GetDataInSchedile: "ManageScheduleModules/GetDataInSchedile",
     }),
 
-    async loopData() {
-      const events = [];
-      for (const item of this.get_all_holidays) {
-        // console.log("item", item);
-
-        const days = item.holidayDate;
-        const month = item.holidayMonth;
-        const years = item.holidayYears;
-        const startDate = new Date(years, parseInt(month) - 1, days);
-        // console.log("startDate", startDate);
-
-        const holidayTime = !item.allDay
-          ? `${item.holidayStartTime}-${item.holidayEndTime}`
-          : null;
-        // console.log("holidayTime", holidayTime);
-        events.push({
-          name: `วันหยุด ${item.holidayName}`,
-          start: startDate,
-          color: "#f19a5a",
-          timed: holidayTime,
-        });
-        this.eventss = events;
-      }
-    },
-
     selectedDate(data) {
-      console.log(data.event);
-      for (const item in this.student_data) {
-        this.test_course_id = item.courseId;
-      }
-
-      // this.$router.push({
-      //   name: "StudentCourse",
-      //   params: { course_id: data.event.courseId },
-      // });
-      // this.$router.push({ name: 'StudentsSchedule' })
-      // $router.push({ name: 'StudentCourse' })
+      this.details = data.event;
+      console.log("details", this.details);
+      this.dialog_detail = true;
     },
     selectDate(date) {
       this.event_date = [];
