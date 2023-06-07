@@ -115,31 +115,28 @@
                     <v-icon color="#ff6b81">mdi-close</v-icon>
                   </v-btn>
                 </v-col>
+                <v-row dense>
+                  <v-col cols="12" align="center">
+                    {{
+                      details.type == "holiday"
+                        ? "ข้อมูลวันหยุด"
+                        : "ข้อมูลวันเรียน"
+                    }}
+                  </v-col>
+                </v-row>
               </v-row>
             </v-card-title>
 
-            <v-card-title>
-              <v-row>
-                <v-col cols="12" align="center" class="font-bold">
-                  {{
-                    details.type == "holiday"
-                      ? "ข้อมูลวันหยุด"
-                      : "ข้อมูลวันเรียน"
-                  }}
-                </v-col>
-              </v-row>
-            </v-card-title>
-
-            <v-card-title>
+            <v-card-text>
               <v-row dense>
                 <v-col cols="12">
                   {{ details.type == "holiday" ? "ชื่อวันหยุด" : "ชื่อคอร์ส" }}
                   <v-text-field
-                    :label="details.name"
-                    solo
-                    disabled
-                    class="font-bold"
+                    :value="details.name"
+                    outlined
+                    readonly
                     dense
+                    hide-details
                   >
                   </v-text-field>
                 </v-col>
@@ -147,34 +144,34 @@
                 <v-col cols="12">
                   วันที่
                   <v-text-field
-                    :label="
+                    :value="
                       new Date(details.start).toLocaleDateString('th-TH', {
                         year: 'numeric',
                         month: 'short',
                         day: 'numeric',
                       })
                     "
+                    hide-details
+                    outlined
+                    readonly
                     dense
-                    solo
-                    disabled
                     append-icon="mdi-calendar"
-                    class="font-bold"
                   >
                   </v-text-field>
                 </v-col>
               </v-row>
-            </v-card-title>
+            </v-card-text>
 
-            <v-card-title>
+            <v-card-text>
               <v-row dense v-if="details.type == 'normal'">
                 <v-col cols="12" sm="6">
                   เวลาเริ่ม
                   <v-text-field
+                    hide-details
                     dense
-                    solo
-                    :label="details.startTime"
-                    class="font-bold"
-                    disabled
+                    outlined
+                    readonly
+                    :value="details.startTime"
                   >
                   </v-text-field>
                 </v-col>
@@ -182,11 +179,11 @@
                 <v-col cols="12" sm="6">
                   เวลาสิ้นสุด
                   <v-text-field
+                    hide-details
                     dense
-                    solo
-                    :label="details.endTime"
-                    class="font-bold"
-                    disabled
+                    outlined
+                    readonly
+                    :value="details.endTime"
                   >
                   </v-text-field>
                 </v-col>
@@ -196,10 +193,11 @@
                 <v-col cols="12" sm="6" v-if="details.allday === false">
                   เวลาเริ่ม
                   <v-text-field
+                    hide-details
                     dense
-                    solo
-                    :label="details.startTime"
-                    class="font-bold"
+                    outlined
+                    readonly
+                    :value="details.startTime"
                   >
                   </v-text-field>
                 </v-col>
@@ -207,27 +205,38 @@
                 <v-col cols="12" sm="6" v-if="details.allday === false">
                   เวลาสิ้นสุด
                   <v-text-field
+                    hide-details
                     dense
-                    solo
-                    :label="details.endTime"
-                    class="font-bold"
+                    outlined
+                    readonly
+                    :value="details.endTime"
                   >
                   </v-text-field>
                 </v-col>
-                <v-col cols="12" align="center" v-else> หยุดทั้งวัน </v-col>
+                <v-col cols="12" align="center" v-else>
+                  <v-text-field
+                    hide-details
+                    dense
+                    outlined
+                    readonly
+                    value="หยุดทั้งวัน"
+                  >
+                  </v-text-field
+                ></v-col>
               </v-row>
-            </v-card-title>
+            </v-card-text>
 
-            <v-card-title>
+            <v-card-text>
               <v-row dense v-if="details.type == 'normal'">
                 <v-col cols="12" sm="6">
                   โค้ช
+
                   <v-text-field
                     dense
-                    class="font-bold"
-                    solo
-                    disabled
-                    :label="details.coach"
+                    outlined
+                    readonly
+                    :value="details.coach"
+                    hide-details
                   >
                   </v-text-field>
                 </v-col>
@@ -236,15 +245,15 @@
                   แพ็กเกจ
                   <v-text-field
                     dense
-                    class="font-bold"
-                    solo
-                    disabled
-                    :label="details.package"
+                    outlined
+                    readonly
+                    :value="details.package"
+                    hide-details
                   >
                   </v-text-field>
                 </v-col>
               </v-row>
-            </v-card-title>
+            </v-card-text>
           </v-card>
         </v-dialog>
       </v-row>
