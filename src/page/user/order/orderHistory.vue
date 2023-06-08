@@ -440,8 +440,8 @@ export default {
           Authorization: `Bearer ${VueCookie.get("token")}`,
         },
       };
-       let localhost = "http://localhost:3002"
-      const { data } = await axios.get( `${localhost}/api/v1/order/history`, config );
+      //  let localhost = "http://localhost:3002"
+      const { data } = await axios.get( `${process.env.VUE_APP_URL}/api/v1/order/history`, config );
       console.log("data", data);
       
 
