@@ -63,6 +63,8 @@ import LeaveDetail from '@/page/admin/coachLeave/leaveDetail.vue'
 import ManageSchedule from '@/page/admin/scheduleCalendar/manageSchedule.vue'
 // admin banner
 import Banner from '@/page/admin/banner/manageBanner.vue'
+// admin dashboard
+import DashboardList from '@/page/admin/dashboard/dashboardList.vue'
 
 
 const routes = [
@@ -168,6 +170,11 @@ const routes = [
         path: 'banner',
         name: 'Banner',
         component: Banner,
+      },
+      {
+        path: 'dashboardList',
+        name: 'DashboardList',
+        component: DashboardList,
       },
 
     ]
