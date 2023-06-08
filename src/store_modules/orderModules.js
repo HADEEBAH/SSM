@@ -155,7 +155,7 @@ const orderModules = {
                         for(const order of data.data){
                             order.paid_date =  order.payment_status === "success" ? new Date(order.updated_date).toLocaleString("th-TH")  : ''
                             order.course_name = `${order.course.courseNameTh}(${order.course.courseNameEn})`
-                            order.student_name = `${ order.user.firstNameTh } ${ order.user.lastNameTh }`
+                            order.student_name = `${ order.user?.firstNameTh } ${ order.user?.lastNameTh }`
                         }
                     }
                     context.commit("SetOrders",data.data)
