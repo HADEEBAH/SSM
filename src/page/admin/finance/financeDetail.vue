@@ -338,7 +338,7 @@ export default {
     payment_types: ["เงินสด", "บัตรเคตดิต", "โอนเข้าบัญชีโรงเรียน"],
     breadcrumbs: [
       { text: "การเงิน", to: "Finance" },
-      { text: "รายระเอียดเพิ่มเติม", to: "" },
+      { text: "รายละเอียดเพิ่มเติม", to: "" },
     ],
     course: [
       {
@@ -403,6 +403,7 @@ export default {
   computed: {
     ...mapGetters({
       order_detail : "OrderModules/getOrderDetail",
+      student_list : "OrderModules/getStudentListOrderDetail",
     })
   },
   methods: {

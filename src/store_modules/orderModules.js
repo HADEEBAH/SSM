@@ -47,6 +47,7 @@ const orderModules = {
         relations:[],
         cart_list :[],
         reserve_list:[],
+        student_list:[],
     },
     mutations: {
         SetReserveList(state, payload){
@@ -72,6 +73,9 @@ const orderModules = {
         },
         SetOrderDetail(state, payload){
             state.order_detail = payload
+        },
+        SetStudentListOrderDetail(state, payload){
+          state.student_list = payload
         },
         SetOrderCourse(state, payload) {
             state.course_order = payload
@@ -152,10 +156,10 @@ const orderModules = {
                 console.log(data)
                 if(data.statusCode === 200){
                     if(data.data.length > 0){
-                        for(const order of data.data){
+                        for await (const order of data.data){
                             order.paid_date =  order.payment_status === "success" ? new Date(order.updated_date).toLocaleString("th-TH")  : ''
                             order.course_name = `${order.course.courseNameTh}(${order.course.courseNameEn})`
-                            order.student_name = `${ order.user?.firstNameTh } ${ order.user?.lastNameTh }`
+                            order.student_name = `${order.user?.firstNameTh} ${order.user?.lastNameTh}`
                         }
                     }
                     context.commit("SetOrders",data.data)
@@ -179,11 +183,13 @@ const orderModules = {
                 console.log(data)
                 if(data.statusCode == 200){
                     let student_name_list = []
+                    let student_list = []
                     for(const order_item of  data.data.orderItem){
                         if(order_item.students.length > 0){
                             order_item.students.forEach((student)=>{
-                                if(!student_name_list.includes(`${student.firstNameTh} ${student.lastNameTh}`)){
-                                    student_name_list.push(`${student.firstNameTh} ${student.lastNameTh}`)
+                                if(!student_name_list.includes(`${student?.firstNameTh} ${student?.lastNameTh}`)){
+                                    student_name_list.push(`${student?.firstNameTh} ${student?.lastNameTh}`)
+                                    student_list.push(student)
                                 }
                             })
                             data.data.student_name_list = student_name_list.join(', ')
@@ -203,7 +209,8 @@ const orderModules = {
                     }
                     
                     
-                    context.commit("SetOrderDetail",data.data)
+                    await context.commit("SetOrderDetail",data.data)
+                    await context.commit("SetStudentListOrderDetail", student_list)
                 }
             }
             catch(error){
@@ -808,6 +815,9 @@ const orderModules = {
         getOrderDetail(state){
             return state.order_detail
         },
+        // getStudentListOrderDetail(state){
+        //   return state.student_list
+        // },
         getOrderIsLoading(state){
             return state.order_is_loading
         },
