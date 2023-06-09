@@ -272,9 +272,11 @@
 </template>
 
 <script>
+import mixin from '../mixin';
 import { mapActions, mapGetters } from "vuex";
 
 export default {
+  mixins:[mixin],
   name: "navbarUser",
   data: () => ({
     menu: false,
