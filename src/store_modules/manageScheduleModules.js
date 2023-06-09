@@ -69,7 +69,7 @@ const manageScheduleModules = {
                     }
                 }
 
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/admincourse/`, config)
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/admincourse`, config)
 
                 if (data.statusCode === 200) {
                     let arr_tmp = []
@@ -116,6 +116,7 @@ const manageScheduleModules = {
                     data.data.map((item) => {
                         // console.log("item------->", item);
                         item.fullDateHolidaysTh = `${item.holidayDate} ${thaiMonths[parseInt(item.holidayMonth) - 1]} ${parseInt(item.holidayYears) + 543}`
+                        // console.log("fullDateHolidaysTh", item.fullDateHolidaysTh);
                         if (item.holidayStartTime && item.holidayEndTime) {
                             item.ob_holidayStartTime = {
                                 HH: item.holidayStartTime.split(":")[0],

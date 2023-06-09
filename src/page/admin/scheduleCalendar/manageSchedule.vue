@@ -50,7 +50,6 @@
               {{ formattedDate }}
             </div>
           </v-card-text>
-
           <div class="font-bold my-2 mx-5">ตารางวิชาเรียน</div>
           <!-- ตารางวิชาเรียน -->
           <v-alert
@@ -985,6 +984,7 @@ export default {
 
     courseDate() {
       let courseTodayDate = new Date().toLocaleDateString("en-CA");
+      // let courseTodayDate = new Date("2023-06-13").toLocaleDateString("en-CA");
 
       let getAllCourseDate = [];
       let success = "";
