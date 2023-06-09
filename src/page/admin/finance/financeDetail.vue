@@ -166,6 +166,7 @@
                   class="cursor-pointer mb-3"
                   @click="chengeStatus(status)"
                 >
+                
                   <v-card-actions>
                     <v-row class="d-flex align-center">
                       <v-col cols="auto"
@@ -189,7 +190,7 @@
                             src="../../../assets/finance/close.png"
                           ></v-img>
                           <v-img
-                            v-if="status.value === 'cadit card'"
+                            v-if="status.value === 'credit card' || status.value == 'Credit Card'"
                             src="../../../assets/finance/card.png"
                           ></v-img>
                           <v-img
@@ -222,12 +223,12 @@
                       <v-col cols="auto"
                         ><v-icon
                           :color="
-                            order_detail.paymentType === status.value
+                            order_detail.paymentType.toLowerCase() === status.value
                               ? '#FF6B81'
                               : ''
                           "
                           >{{
-                            order_detail.paymentType === status.value
+                            order_detail.paymentType.toLowerCase() === status.value
                               ? "mdi-radiobox-marked"
                               : "mdi-radiobox-blank"
                           }}</v-icon
@@ -240,7 +241,7 @@
                             src="../../../assets/finance/close.png"
                           ></v-img>
                           <v-img
-                            v-if="status.value === 'cadit card'"
+                            v-if="status.value === 'credit card'"
                             src="../../../assets/finance/card.png"
                           ></v-img>
                           <v-img
@@ -337,7 +338,7 @@ export default {
     payment_types: ["เงินสด", "บัตรเคตดิต", "โอนเข้าบัญชีโรงเรียน"],
     breadcrumbs: [
       { text: "การเงิน", to: "Finance" },
-      { text: "รายระเอียดเพิ่มเติม", to: "" },
+      { text: "รายละเอียดเพิ่มเติม", to: "" },
     ],
     course: [
       {
@@ -380,7 +381,7 @@ export default {
       {
         text: "เครดิต/เดบิท",
         img: "../../../assets/finance/card.png",
-        value: "cadit card",
+        value: "Credit Card",
       },
       {
         text: "โอนเงินเข้าบัญชีโรงเรียน",
@@ -402,6 +403,7 @@ export default {
   computed: {
     ...mapGetters({
       order_detail : "OrderModules/getOrderDetail",
+      student_list : "OrderModules/getStudentListOrderDetail",
     })
   },
   methods: {

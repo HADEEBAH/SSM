@@ -1609,8 +1609,7 @@ export default {
       { text: "จัดการคอร์สทั้งหมด", to: "CourseList" },
       { text: "รายละเอียดคอร์สเรียน", to: "" },
     ],
-    // tab: "course",
-    tab : 'student list',
+    tab: "course",
     tab_menu: [
       {
         label: "คอร์สเรียน",

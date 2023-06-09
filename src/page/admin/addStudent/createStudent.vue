@@ -643,7 +643,7 @@ export default {
     pay: "",
     transfer: [
       {label : "โอนเข้าบัญชี", value : "transfer"}, 
-      {label : "บัตรเครดิต", value : "credit card"}, 
+      {label : "บัตรเครดิต", value : "Credit Card"}, 
       {label : "เงินสด", value : "cash"}
     ],
     rules: {
