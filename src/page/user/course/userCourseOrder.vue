@@ -530,6 +530,7 @@
           </v-col>
         </v-row>
       </div>
+      <div v-if="course_order.time && course_order.coach_id">{{ GenMonitors ()}}</div>
       <v-row dense>
         <v-col cols="12" sm="6">
           <template v-if="course_order.course_type_id === 'CT_1'">
@@ -572,8 +573,7 @@
         </v-col>
         <v-col cols="12" sm="6">
           <v-btn
-            v-if="
-              course_order.time && course_order.coach_id
+            v-if=" course_order.time && course_order.coach_id
                 ? GenMonitors() === 'Close'
                 : false
             "
@@ -648,21 +648,9 @@
                 outlined
                 v-model="parent.username"
                 @keypress="Validation($event, 'en-number')"
-                @change="
-                  parent.username.length > 3
-                    ? checkUsername(parent.username)
-                    : ''
-                "
-                @keyup.enter="
-                  parent.username.length > 3
-                    ? checkUsername(parent.username)
-                    : ''
-                "
-                @blur="
-                  parent.username.length > 3
-                    ? checkUsername(parent.username)
-                    : ''
-                "
+                @change="parent.username.length > 3 ? checkUsername(parent.username) : '' "
+                @keyup.enter=" parent.username.length > 3 ? checkUsername(parent.username) : '' "
+                @blur="parent.username.length > 3 ? checkUsername(parent.username) : '' "
                 placeholder="Username"
               >
                 <template v-slot:append>
@@ -1164,32 +1152,33 @@ export default {
                 v.m_day_of_week_id === dayOfWeekId &&
                 v.m_time_id == timeId
             );
-            // console.log("course_monitors_filter + >",course_monitors_filter)
             if (course_monitors_filter.length > 0) {
-              // console.log("m_current_student =>",course_monitors_filter[0].m_current_student);
-              // console.log("students =>", this.course_order.students.length);
               if (
                 this.course_order.students.length +
                   course_monitors_filter[0].m_current_student <=
                 course_monitors_filter[0].m_maximum_student
               ) {
-                if (
-                  this.course_order.option.course_package_option_id ===
-                  course_monitors_filter[0].m_course_package_options_id
-                ) {
+                if ( this.course_order.option.course_package_option_id === course_monitors_filter[0].m_course_package_options_id) {
                   return course_monitors_filter[0]?.m_status;
-                } else {
+                } else if(course_monitors_filter[0]?.m_status === "Open" && course_monitors_filter[0]?.m_current_student == 0){
+                  // console.log("1167");
+                  return "Open"
+                }else{
+                  // console.log("1169");
                   return "Close";
                 }
               } else {
+                // console.log("1174")
                 return "Close";
               }
             } else {
+              // console.log("1178")
               return "Open";
             }
           }
         }
       } else {
+        console.log("1184")
         return "Open";
       }
     },
