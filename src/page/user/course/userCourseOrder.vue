@@ -519,14 +519,13 @@
           "
         >
           <v-col>
-            <v-btn
-              v-if="!checkMaximumStudent()"
+            <v-btn v-if="!checkMaximumStudent()"
               @click="addStudent"
               text
               dense
-              color="#ff6b81"
-              ><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มผู้เรียน</v-btn
-            >
+              color="#ff6b81">
+                <v-icon>mdi-plus-circle-outline</v-icon>เพิ่มผู้เรียน
+            </v-btn>
           </v-col>
         </v-row>
       </div>

@@ -308,6 +308,21 @@ const orderModules = {
             context.commit("SetOrderIsLoading", true)
             try{
                 let order = context.state.order
+                let configs = {
+                    headers:{
+                        "Access-Control-Allow-Origin" : "*",
+                        "Content-type": "Application/json",
+                        'Authorization' : `Bearer ${VueCookie.get("token")}`
+                    }
+                }
+                // let localhost = "http://localhost:3000"
+                for await (const course of order.courses){
+                    for await (const student of course.students){
+                        let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/add/username/one`,student, configs)
+                        console.log(data)
+                    }
+                }
+                
                 let payload = {
                     order_id : "",
                     courses : [],
@@ -449,9 +464,6 @@ const orderModules = {
                             context.commit("SetOrderIsLoading", false)
                         }
                     }else{
-                        console.log("391 payment data :",data.data.orderNumber)
-                        console.log("order.payment_type : ",order.payment_type)
-                        console.log("|||||||||||||||||||||||||||||||||")
                         if(order.payment_status === "paid"){
                             let payment_payload = {
                                 "orderId": data.data.orderNumber,
@@ -517,7 +529,7 @@ const orderModules = {
                 }    
             }catch(error){
                 context.commit("SetOrderIsLoading", false)
-                // console.log(error.response)
+                console.log(error)
                 if(error.response.data.message === "User is duplicate in this course. Cannot enroll again"){
                     Swal.fire({
                         icon: "error",
