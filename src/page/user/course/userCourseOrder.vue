@@ -530,7 +530,6 @@
           </v-col>
         </v-row>
       </div>
-      <div v-if="course_order.time && course_order.coach_id">{{ GenMonitors ()}}</div>
       <v-row dense>
         <v-col cols="12" sm="6">
           <template v-if="course_order.course_type_id === 'CT_1'">
