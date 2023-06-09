@@ -29,7 +29,7 @@
             <!-- <pre>{{ coach_leaves }}</pre> -->
             <v-data-table 
                 class="elevation-1 header-table"
-                :items="coach_leaves"
+                :items="type_selected === 'all' ? coach_leaves : coach_leaves.filter(v => v.status == type_selected)"
                 :loading="coach_leaves_is_loading" 
                 :headers="column">
                 <template v-slot:[`item.actions`]="{ item }">
