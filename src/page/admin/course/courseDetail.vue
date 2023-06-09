@@ -578,33 +578,68 @@
                             <!-- FILTER -->
                             <v-row dense class="mb-3">
                               <v-col>
-                                <!-- <pre>{{dowOption}}</pre>
-                                {{selected_coach}} -->
                                 <v-autocomplete
                                   dense
                                   v-model="filter.dow"
                                   outlined
                                   hide-details
+                                  item-text="label"
+                                  item-value="value"
+                                  :items="dow_option"
                                   placeholder="วัน"
+                                  @change="filterDateByCoach(coach_index)"
                                 ></v-autocomplete>
                               </v-col>
                               <v-col>
-                                <v-autocomplete
-                                  dense
-                                  v-model="filter.date"
-                                  outlined
-                                  hide-details
-                                  placeholder="วันที่"
-                                ></v-autocomplete>
+                                <v-menu
+                                  ref="menu1"
+                                  v-model="filter.date_menu"
+                                  :close-on-content-click="false"
+                                  transition="scale-transition"
+                                  offset-y
+                                  max-width="290px"
+                                  min-width="auto"
+                                >
+                                  <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                      dense
+                                      outlined
+                                      v-model="filter.date"
+                                      placeholder="วันที่"
+                                      persistent-hint
+                                      append-icon="mdi-calendar"
+                                      v-bind="attrs"
+                                      v-on="on"
+                                    ></v-text-field>
+                                  </template>
+                                  <v-date-picker
+                                    v-model="filter.date"
+                                    no-title
+                                    @change="filterDateByCoach(coach_index)"
+                                    @input="filter.date_menu = false"
+                                  ></v-date-picker>
+                                </v-menu>
                               </v-col>
                               <v-col>
                                 <v-autocomplete
-                                  dense
                                   v-model="filter.time"
+                                  :items="time_option"
                                   outlined
-                                  hide-details
+                                  item-value="timeId"
+                                  dense
                                   placeholder="เวลา"
-                                ></v-autocomplete>
+                                  cache-items
+                                  @change="filterDateByCoach(coach_index)"
+                                >
+                                <template v-slot:selection="{item}">
+                                    {{`${item.start} - ${item.end}น.`}}
+                                </template>
+                                <template v-slot:item="{ item }">
+                                    <v-list-item-content>
+                                      <v-list-item-title> {{`${item.start} - ${item.end}น.`}} </v-list-item-title>
+                                    </v-list-item-content>
+                                </template>
+                                </v-autocomplete>
                               </v-col>
                               <v-col>
                                 <v-autocomplete
@@ -612,8 +647,15 @@
                                   v-model="filter.package"
                                   outlined
                                   hide-details
+                                  item-text="packageName"
+                                  item-value="packageId"
+                                  :items="package_option"
                                   placeholder="แพ็คเกจ"
+                                  @change="filterDateByCoach(coach_index)"
                                 ></v-autocomplete>
+                              </v-col>
+                              <v-col cols="auto">
+                                <v-btn color="#ff6b81" @click="resetFilter()" icon><v-icon>mdi-refresh</v-icon></v-btn>
                               </v-col>
                             </v-row>
                             <!-- Herder -->
@@ -647,7 +689,7 @@
                             </v-card>
                             <div v-if="coach.datesList.length > 0">
                               <div
-                                v-for="(date, index_date) in coach.datesList"
+                                v-for="(date, index_date) in filterDateByCoach(coach_index)"
                                 :key="`${index_date}-date`"
                               >
                                 <v-card
@@ -1197,13 +1239,6 @@
                                       <v-col cols align="center"
                                         >ชื่อ - นามสกุล
                                       </v-col>
-                                      <!-- <v-col cols="1" align="center"
-                                                                            >ชื่อเล่น
-                                                                            </v-col
-                                                                            > -->
-                                      <!-- <v-col cols="3" align="center"
-                                                                            >วันเริ่ม - วันสิ้นสุด
-                                                                            </v-col> -->
                                       <v-col cols="2" align="center"
                                         >ระยะเวลา
                                       </v-col>
@@ -1238,10 +1273,6 @@
                                             `${potential.firstNameTh} ${potential.lastNameTh}`
                                           }}
                                         </v-col>
-                                        <!-- <v-col cols="3" align="center">{{
-                                                                                        `${student.start_date} - ${student.end_date}`
-                                                                                    }}
-                                                                                </v-col> -->
                                         <v-col cols="2" align="center"
                                           >{{ potential.cpo?.optionName }}
                                         </v-col>
@@ -1546,7 +1577,6 @@ export default {
     courseValidate: false,
     coachValidate: false,
     packageValidate: false,
-
     slide_group: null,
     show_dialog_assessmet: false,
     column: [
@@ -1609,10 +1639,15 @@ export default {
     ],
     filter:{
       dow : "",
+      date_menu : false,
       date : "",
+      date_formatter : "",
       time : "",
       package : "",
     },
+    time_option : [],
+    dow_option:[],
+    package_option: [],
     day_option: [
       { label: "วันอาทิตย์", value: 0 },
       { label: "วันจันทร์", value: 1 },
@@ -1704,21 +1739,7 @@ export default {
       this.GetCoachsByCourse({ course_id: this.$route.params.course_id });
       return "";
     },
-    dowOption(){
-      let dow = []
-      console.log(this.selected_coach)
-      if(this.selected_coach){
-        for (const coach of this.coach_list[this.selected_coach].allDates){
-          console.log(coach)
-          // for (const day of coach.date.day){
-          //   if(dow.filter(v => v.value === day).length > 0){
-          //     dow.push(this.day_option.filter(v => v.value === day)[0])
-          //   }
-          // }
-        }
-      }
-      return dow
-    }
+   
   },
   methods: {
     ...mapActions({
@@ -1738,9 +1759,80 @@ export default {
       RemovePrivilageByCourseID: "CourseModules/RemovePrivilageByCourseID",
       ExportStudentList : "CourseModules/ExportStudentList",
     }),
+    resetFilter(){
+      this.filter = {
+        dow : "",
+        date_menu : false,
+        date : "",
+        date_formatter : "",
+        time : "",
+        package : "",
+      }
+    },
+    filterDateByCoach(coach_index){
+      console.log("datesList =>", this.coach_list[coach_index].datesList)
+      let filterCoachList =  this.coach_list[coach_index].datesList
+      if(this.filter.dow){
+        filterCoachList = filterCoachList.filter(v => new Date(v.date).getDay() === this.filter.dow)
+      }
+      if(this.filter.date){ 
+        filterCoachList = filterCoachList.filter(v => v.date == this.filter.date)
+      }
+      if(this.filter.time){
+        filterCoachList = filterCoachList.filter(v => v.timeId === this.filter.time )
+      }
+      if(this.filter.package){
+        filterCoachList = filterCoachList.filter(v => v.cpo.packageId === this.filter.package)
+      }
+      if(this.filter.dow || this.filter.date ||  this.filter.time ||  this.filter.package){
+        return filterCoachList
+      }else{
+        return this.coach_list[coach_index].datesList
+      }
+     
+    },
+    async dowOption(selected_coach){
+      let dow = []
+      this.dow_option = []
+      if(selected_coach >= 0){
+        for await (const coach of this.coach_list[selected_coach].allDates){
+          for await (const day of coach.dates.day){
+            if(dow.length === 0){
+              dow.push(this.day_option.filter(v => v.value == day)[0])
+            }else if(dow.filter(v => v.value == day).length === 0){
+              dow.push(this.day_option.filter(v => v.value == day)[0])
+            }
+          }
+        }
+      }
+      // console.log("dow =>",dow)
+      this.dow_option = dow
+    },
+    async filterPackageCoach(selected_coach){
+      this.package_option = []
+      if(selected_coach >= 0){
+        console.log("coach_list => ",this.coach_list[selected_coach])
+        for await (const coach of this.coach_list[selected_coach].allDates){
+          if( this.package_option.length === 0){
+            this.package_option.push(coach.cpo)
+          }else if(this.package_option.filter(v => v.cpoId === coach.cpo.cpoId).length == 0){
+            this.package_option.push(coach.cpo)
+          }
+        }
+      }
+    },
     //FILTER DATE COACH LIST
-    filterDateCoach(){
-
+    async filterTimeCoach(selected_coach){
+      this.time_option = []
+      if(selected_coach >= 0){
+        for await (const coach of this.coach_list[selected_coach].allDates){
+          if(this.time_option.length > 0){
+            this.time_option.push(coach.time)
+          }else if(this.time_option.filter(v => v.timeId === coach.time.timeId).length === 0){
+            this.time_option.push(coach.time)
+          }
+        }
+      }
     },
     //EXPORT STUDENT
     exportStudents(){
@@ -1877,8 +1969,6 @@ export default {
               }
             };
             reader.readAsDataURL(file);
-          } else {
-            // Display error message or handle invalid file type
           }
         }
       }
@@ -2102,6 +2192,9 @@ export default {
     selectCoach(coach, index) {
       if (this.selected_coach !== index) {
         this.selected_coach = index;
+        this.dowOption(index)
+        this.filterPackageCoach(index)
+        this.filterTimeCoach(index)
       } else {
         this.selected_coach = "";
       }

@@ -50,10 +50,10 @@
             </template>
           </img-card>
         </v-col>
-        <v-col cols="12" sm="4" @click="tab = 'paid'">
+        <v-col cols="12" sm="4" @click="tab = 'success'">
           <img-card
             class="cursor-pointer"
-            :class="tab === 'paid' ? 'img-card-active' : ''"
+            :class="tab === 'success' ? 'img-card-active' : ''"
           >
             <template v-slot:img>
               <v-img
@@ -100,7 +100,7 @@
       <v-data-table
         v-model="selected"
         :headers="columns"
-        :items="orders"
+        :items="tab == 'all' ? orders : orders.filter(v =>v.payment_status === tab)"
         item-key="name"
         :search="search"
         show-select
@@ -612,7 +612,6 @@ export default {
     disableExportpackage: false,
     selectDate: true,
     open_date: "",
-
     dateDocStart: "",
     dateDocEnd: "",
     selectDateDocStart: false,
@@ -657,12 +656,6 @@ export default {
       },
       { text: "", align: "center", value: "actions", sortable: false },
     ],
-    // orders : [
-    //   {order_id: "00000001", student_name: ["กมลรัตน์ สิทธิกรชัย", "ออกัส สิงหาคม"], course: "เปียโนสากล (Family)", price: 2000, status:'ชำระเงินแล้ว', paid_date: "22/07/2022" },
-    //   {order_id: "00000222", student_name: ["น่านฟ้า ทะเลไกล"], course: "ไวโอลินเบื้องต้น (Exclusive)", price: 2000, status:'รอดำเนินการ', paid_date: ""},
-    //   {order_id: "00000333", student_name: ["ออกัส สิงหาคม"], course: "ไวโอลินเบื้องต้น (Exclusive)ไวโอลินเวิร์คช้อป", price: 1000, status:'ชำระเงินแล้ว', paid_date: "22/07/2022"},
-    //   {order_id: "00000004", student_name: ["วรวุฒิ สาระวงศ์"], course: "เปียโนสากล (Exclusive)", price: 2000, status:'รอดำเนินการ', paid_date: ""},
-    // ]
   }),
   created() {},
   mounted() {

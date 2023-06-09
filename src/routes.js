@@ -58,10 +58,13 @@ import userMenageCourse from '@/page/user/coach/manageCourse'
 import userMenageCourseDetail from '@/page/user/coach/manageCourseDetail'
 // coach leave
 import LeaveList from '@/page/admin/coachLeave/leaveList.vue'
+import LeaveDetail from '@/page/admin/coachLeave/leaveDetail.vue'
 // admin calendar
 import ManageSchedule from '@/page/admin/scheduleCalendar/manageSchedule.vue'
 // admin banner
 import Banner from '@/page/admin/banner/manageBanner.vue'
+// admin dashboard
+import DashboardList from '@/page/admin/dashboard/dashboardList.vue'
 
 
 const routes = [
@@ -138,7 +141,6 @@ const routes = [
         name: 'Student',
         component: Student,
       },
-
       {
         path: 'finance',
         name: 'Finance',
@@ -155,6 +157,11 @@ const routes = [
         component: LeaveList,
       },
       {
+        path: 'leave/:coachleave_id',
+        name: 'LeaveDetail_coachleaveId',
+        component: LeaveDetail,
+      },
+      {
         path: 'manageSchedule',
         name: 'ManageSchedule',
         component: ManageSchedule,
@@ -163,6 +170,11 @@ const routes = [
         path: 'banner',
         name: 'Banner',
         component: Banner,
+      },
+      {
+        path: 'dashboardList',
+        name: 'DashboardList',
+        component: DashboardList,
       },
 
     ]

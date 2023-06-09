@@ -844,11 +844,16 @@
               </template>
               <template v-slot:expanded-item="{ headers, item }">
                 <td :colspan="headers.length" class="py-3">
-                  <v-row>
-                    <v-col cols="12"
+                  <v-row v-for="(course,index) in item.courses" :key="`${index}-courses`">
+                     <v-col cols="6" class="font-bold"
+                      >คอร์ส:
+                      {{
+                        `${course.courseNameTh}(${course.courseNameEn})`
+                      }}</v-col>
+                    <v-col cols="6"
                       >ผู้สอนแทน:
                       {{
-                        `${item.substituteCoachFirstNameTh} ${item.substituteCoachLastNameTh}`
+                        `${course.substituteCoachFirstNameTh} ${course.substituteCoachLastNameTh}`
                       }}</v-col
                     >
                   </v-row>
@@ -1294,36 +1299,44 @@
                 <v-col class="font-bold text-lg"> ไฟล์แนบ </v-col>
               </v-row>
               <v-divider class="my-2"></v-divider>
-              <v-card
-                @click="dowloadFile(file)"
-                flat
-                class="mb-3"
-                v-for="(file, index) of attachment_leave"
-                :key="`${index}-file`"
-              >
-                <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
-                  <v-row>
-                    <v-col cols="auto" class="pr-2">
-                      <v-img
-                        height="35"
-                        width="26"
-                        src="../../../assets/coachLeave/file-pdf.png"
-                      />
-                    </v-col>
-                    <v-col class="px-2">
-                      <span class="font-bold">{{ file.fileName }}</span
-                      ><br />
-                      <span class="text-caption"
-                        >ขนาดไฟล์ :
-                        {{ (file.size / 1000000).toFixed(2) }} MB</span
-                      >
-                    </v-col>
-                    <!-- <v-col cols="auto" class="pl-2">
-                      <v-btn @click="removeFile(index)" icon color="#ff6b81"><v-icon>mdi-close</v-icon></v-btn>
-                    </v-col> -->
-                  </v-row>
-                </v-card-text>
-              </v-card>
+              <template  v-for="(file, index) of attachment_leave">
+                <v-card
+                  v-if="file.coachLeaveAttachmentId"
+                  @click="dowloadFile(file)"
+                  flat
+                  class="mb-3"
+                  :key="`${index}-file`"
+                >
+                  <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
+                    <v-row>
+                      <v-col cols="auto" class="pr-2">
+                        <v-img
+                          height="35"
+                          width="26"
+                          src="../../../assets/coachLeave/file-pdf.png"
+                        />
+                      </v-col>
+                      <v-col class="px-2">
+                        <span class="font-bold">{{ file.fileName }}</span
+                        ><br />
+                        <span class="text-caption"
+                          >ขนาดไฟล์ :
+                          {{ (file.size / 1000000).toFixed(2) }} MB</span
+                        >
+                      </v-col>
+                      <!-- <v-col cols="auto" class="pl-2">
+                        <v-btn @click="removeFile(index)" icon color="#ff6b81"><v-icon>mdi-close</v-icon></v-btn>
+                      </v-col> -->
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+                <v-card flat v-else :key="`${index}-file`" >
+                  <v-card-text class="border-2 border-[#ff6b81] rounded-lg" align="center">
+                    ไม่พบไฟล์แนบ
+                  </v-card-text>
+                </v-card>
+              </template>
+              
             </template>
           </v-card-text>
         </v-card>
@@ -1740,30 +1753,9 @@ export default {
       });
     },
     dowloadFile(file) {
-      let parts = file.attachmentFile.split("/");
-      console.log(parts);
-      let endpoint = `${process.env.VUE_APP_URL}/api/v1/files/`;
-      parts.forEach((part, index) => {
-        if (parts.length - 1 !== index) {
-          endpoint = endpoint + `${part}/`;
-        } else {
-          endpoint = endpoint + encodeURIComponent(part);
-        }
-      });
-      // const https = require('https');
-      // const fs = require('fs');
-      // console.log(endpoint)
-      // let filename =  file.fileName
-      // window.open(endpoint, '_self');
-      // https.get(endpoint, (response) => {
-      //   const fileStream = fs.createWriteStream(filename);
-      //   response.pipe(fileStream);
-      //   fileStream.on('finish', () => {
-      //     console.log(`File ${filename} downloaded successfully.`);
-      //   });
-      // }).on('error', (err) => {
-      //   console.error(`Error downloading file: ${err.message}`);
-      // });
+      console.log(file.attachmentFile)
+      let url = `${process.env.VUE_APP_URL}/api/v1/files/${file.attachmentFile}`
+      window.open(url, '_blank');
     },
     saveCoachLeave() {
       Swal.fire({
@@ -1820,6 +1812,7 @@ export default {
       this.show_leave_form = true;
     },
     closeDialogLeaveForm() {
+      this.selected_files = []
       this.show_leave_form = false;
       this.coach_leave_data = {
         menu_start_date: false,

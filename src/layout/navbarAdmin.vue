@@ -139,7 +139,7 @@ export default {
     },
     user_detail: null,
     menu_drawer_list: [
-      // { title: "แดชบอร์ด", to: "dashbord", child: [] }, // to ให้ใส่ name ของ router
+      { title: "แดชบอร์ด", to: "DashboardList", child: [] }, // to ให้ใส่ name ของ router
       { title: "ตารางเรียน", to: "ManageSchedule", child: [] },
       // { title: "เพิ่มผู้เรียน", to: "Student", child: [] },
       // { title: "ตารางเรียน", to: "Schedule", child: [] },
@@ -166,7 +166,7 @@ export default {
         to: "",
         child: [{ title: "จัดการผู้ใช้งาน", to: "UserList" }],
       },
-      // { title: "การอนุมัติลา", to: "LeaveList", child: [] },
+      { title: "การอนุมัติลา", to: "LeaveList", child: [] },
       // { title: "หน้าผู้ใช้งาน", to: "UserKingdom", child: [] },
       { title: "จัดการแบนเนอร์", to: "Banner", child: [] },
     ],
