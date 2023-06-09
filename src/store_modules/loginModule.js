@@ -77,17 +77,16 @@ const loginModules = {
                         'Authorization' : `Bearer ${VueCookie.get("token")}`
                     }
                 }
+                // let localhost = " http://localhost:3000"
                 // let { data } = await axios.get(` http://localhost:3000/api/v1/account/username?username=${username}`)
-                // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/search/username/one?username=${username}`, config)
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/username?username=${username}`, config)
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/search/username/one?username=${username}`, config)
+                // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/username?username=${username}`, config)
                 if (data.statusCode === 200) {
                     if (data.data.userOneId) {
                         // console.log("type =>",course_id)
                         if (type === 'student') {
                             let student = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/username-potencial/${data.data.userOneId}`)
-                            // console.log(student.data.statusCode)
                             if(student.data.statusCode === 200){
-                                // console.log(student.data.data.data)
                                 if(student.data.message === "study"){
                                     if(student.data.data.data.some(v => v.courseId === course_id)){
                                         Swal.fire({
@@ -128,7 +127,7 @@ const loginModules = {
                     context.commit("SetIsLoading", false)
                 }
             } catch (error) {
-                console.log(error)
+                console.log(error.response.data)
                 context.commit("SetIsLoading", false)
                 Swal.fire({
                     icon: "error",
