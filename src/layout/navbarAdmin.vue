@@ -16,62 +16,11 @@
         </v-app-bar-nav-icon>
         <!-- <v-app-bar-title><v-img max-height="37" max-width="51" src="../assets/navbar/title_img.jpg"></v-img></v-app-bar-title> -->
         <v-spacer></v-spacer>
-        <!-- <v-badge class="mx-5" overlap color="#F03D3E" content="1" message="1">
+        <v-badge class="mx-5" overlap color="#F03D3E" content="1" message="1">
           <v-icon dark>mdi-bell-outline</v-icon>
-        </v-badge> -->
+        </v-badge>
 
-        <v-menu v-model="notify" :close-on-content-click="false" offset-y>
-          <template v-slot:activator="{ on, attrs }">
-            <v-badge
-              overlap
-              color="#F03D3E"
-              content="1"
-              message="1"
-              class="mx-5"
-            >
-              <v-icon dark v-bind="attrs" v-on="on">mdi-bell-outline</v-icon>
-            </v-badge>
-          </template>
-          <v-card height="500px" style="overflow-y: scroll; overflow-x: hidden">
-            <v-card-title>
-              <v-row>
-                <v-col cols="8" sm="8">Notifications</v-col>
-                <v-col cols="4" sm="4" align="end">
-                  <v-icon color="#ff6b81">mdi-email</v-icon>
-                </v-col>
-              </v-row>
-            </v-card-title>
-            <v-divider></v-divider>
-
-            <v-card-text
-              v-for="(notify, index_data) in notifyData"
-              :key="index_data"
-            >
-              <v-row>
-                <v-col cols="2" sm="2" align="center" class="mt-2">
-                  <v-img :src="notify.avatar" height="30" width="30"></v-img
-                ></v-col>
-                <v-col cols="8" sm="8">
-                  {{ notify.header }} <br />
-                  {{ notify.detail }}
-                </v-col>
-                <v-col
-                  cols="2"
-                  sm="2"
-                  align="center"
-                  v-if="notify.read"
-                  class="mt-5"
-                >
-                  <v-tab>
-                    <v-badge color="#ff6b81" dot> </v-badge>
-                  </v-tab>
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </v-card>
-        </v-menu>
-
-        <div class="mx-5 pa-2" v-if="!$vuetify.breakpoint.smAndDown">
+        <div class="mx-5" v-if="!$vuetify.breakpoint.smAndDown">
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-row v-bind="attrs" v-on="on">
@@ -164,7 +113,7 @@
           <v-divider></v-divider>
           <v-list-item link @click="logOut">
             <v-list-item-icon><v-icon>mdi-login</v-icon></v-list-item-icon>
-            <v-list-item-title>ออกจากระบบ</v-list-item-title>
+            <v-list-item-title>ออกจากระบบz</v-list-item-title>
           </v-list-item>
         </template>
       </v-navigation-drawer>
@@ -220,136 +169,6 @@ export default {
       { title: "การอนุมัติลา", to: "LeaveList", child: [] },
       // { title: "หน้าผู้ใช้งาน", to: "UserKingdom", child: [] },
       { title: "จัดการแบนเนอร์", to: "Banner", child: [] },
-    ],
-
-    notify: false,
-    // message: false,
-    hints: true,
-
-    notifyData: [
-      {
-        avatar:
-          "https://cdn.icon-icons.com/icons2/2643/PNG/512/female_woman_person_people_avatar_icon_159366.png",
-        header: "Congratulation Flora! 🎉",
-        detail: "Won the monthly best seller badge",
-        read: false,
-      },
-      {
-        avatar:
-          "https://cdn.icon-icons.com/icons2/2643/PNG/512/avatar_female_woman_person_people_white_tone_icon_159360.png",
-        header: "Congratulation Flora! 🎉",
-        detail: "Won the monthly best seller badge",
-        read: true,
-      },
-      {
-        avatar:
-          "https://cdn4.iconfinder.com/data/icons/people-avatar-flat-1/64/girl_female_young_people_woman_teenager_avatar-512.png",
-        header: "Congratulation Flora! 🎉",
-        detail: "Won the monthly best seller badge",
-        read: true,
-      },
-      {
-        avatar:
-          "https://www.pngmart.com/files/22/User-Avatar-Profile-PNG-Isolated-Transparent-Picture.png",
-        header: "Congratulation Flora! 🎉",
-        detail: "Won the monthly best seller badge",
-        read: false,
-      },
-      {
-        avatar:
-          "https://w7.pngwing.com/pngs/481/915/png-transparent-computer-icons-user-avatar-woman-avatar-computer-business-conversation-thumbnail.png",
-        header: "Congratulation Flora! 🎉",
-        detail: "Won the monthly best seller badge",
-        read: true,
-      },
-      {
-        avatar: "https://image.pngaaa.com/414/81414-middle.png",
-        header: "Congratulation Flora! 🎉",
-        detail: "Won the monthly best seller badge",
-        read: false,
-      },
-      {
-        avatar:
-          "https://cdn.icon-icons.com/icons2/2643/PNG/512/female_woman_person_people_avatar_icon_159366.png",
-        header: "Congratulation Flora! 🎉",
-        detail: "Won the monthly best seller badge",
-        read: false,
-      },
-      {
-        avatar:
-          "https://cdn.icon-icons.com/icons2/2643/PNG/512/avatar_female_woman_person_people_white_tone_icon_159360.png",
-        header: "Congratulation Flora! 🎉",
-        detail: "Won the monthly best seller badge",
-        read: true,
-      },
-      {
-        avatar:
-          "https://cdn4.iconfinder.com/data/icons/people-avatar-flat-1/64/girl_female_young_people_woman_teenager_avatar-512.png",
-        header: "Congratulation Flora! 🎉",
-        detail: "Won the monthly best seller badge",
-        read: true,
-      },
-      {
-        avatar:
-          "https://www.pngmart.com/files/22/User-Avatar-Profile-PNG-Isolated-Transparent-Picture.png",
-        header: "Congratulation Flora! 🎉",
-        detail: "Won the monthly best seller badge",
-        read: false,
-      },
-      {
-        avatar:
-          "https://w7.pngwing.com/pngs/481/915/png-transparent-computer-icons-user-avatar-woman-avatar-computer-business-conversation-thumbnail.png",
-        header: "Congratulation Flora! 🎉",
-        detail: "Won the monthly best seller badge",
-        read: true,
-      },
-      {
-        avatar: "https://image.pngaaa.com/414/81414-middle.png",
-        header: "Congratulation Flora! 🎉",
-        detail: "Won the monthly best seller badge",
-        read: false,
-      },
-      {
-        avatar:
-          "https://cdn.icon-icons.com/icons2/2643/PNG/512/female_woman_person_people_avatar_icon_159366.png",
-        header: "Congratulation Flora! 🎉",
-        detail: "Won the monthly best seller badge",
-        read: false,
-      },
-      {
-        avatar:
-          "https://cdn.icon-icons.com/icons2/2643/PNG/512/avatar_female_woman_person_people_white_tone_icon_159360.png",
-        header: "Congratulation Flora! 🎉",
-        detail: "Won the monthly best seller badge",
-        read: true,
-      },
-      {
-        avatar:
-          "https://cdn4.iconfinder.com/data/icons/people-avatar-flat-1/64/girl_female_young_people_woman_teenager_avatar-512.png",
-        header: "Congratulation Flora! 🎉",
-        detail: "Won the monthly best seller badge",
-        read: true,
-      },
-      {
-        avatar:
-          "https://www.pngmart.com/files/22/User-Avatar-Profile-PNG-Isolated-Transparent-Picture.png",
-        header: "Congratulation Flora! 🎉",
-        detail: "Won the monthly best seller badge",
-        read: false,
-      },
-      {
-        avatar:
-          "https://w7.pngwing.com/pngs/481/915/png-transparent-computer-icons-user-avatar-woman-avatar-computer-business-conversation-thumbnail.png",
-        header: "Congratulation Flora! 🎉",
-        detail: "Won the monthly best seller badge",
-        read: true,
-      },
-      {
-        avatar: "https://image.pngaaa.com/414/81414-middle.png",
-        header: "Congratulation Flora! 🎉",
-        detail: "Won the monthly best seller badge",
-        read: false,
-      },
     ],
   }),
 
@@ -432,22 +251,5 @@ export default {
   position: absolute;
   bottom: 0px;
   width: 100%;
-}
-
-::-webkit-scrollbar {
-  width: 5px;
-}
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #c7c7c7;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #c7c7c7;
 }
 </style>
