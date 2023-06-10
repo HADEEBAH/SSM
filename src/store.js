@@ -16,6 +16,7 @@ import UserModules from '@/store_modules/userModules'
 import courseMonitorModules from '@/store_modules/courseMonitorModules'
 import ManageScheduleModules from '@/store_modules/manageScheduleModules'
 import BannerModules from '@/store_modules/bannerModules'
+import NotificationsModules from '@/store_modules/notificationsModules'
 
 Vue.use(Vuex)
 
@@ -36,7 +37,8 @@ const store = new Vuex.Store({
     UserModules: UserModules,
     CourseMonitorModules: courseMonitorModules,
     ManageScheduleModules: ManageScheduleModules,
-    BannerModules:BannerModules
+    BannerModules: BannerModules,
+    NotificationsModules: NotificationsModules
   }
 })
 
