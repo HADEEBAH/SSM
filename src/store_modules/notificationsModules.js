@@ -24,11 +24,7 @@ const notificatiosModules = {
         async GetNotifications(context, data) {
             const user_detail = JSON.parse(localStorage.getItem("userDetail"));
             context.commit("SetGetNotify", data)
-            console.log("SetGetNotify", data);
             context.dispatch("GetNotificationsAll", user_detail.account_id)
-
-
-
         },
 
         async GetNotificationsAll(context, account_id) {
@@ -37,23 +33,19 @@ const notificatiosModules = {
                 // let { data } = await axios.get(`http://localhost:3004/api/v1/notification/byId/${account_id}`)
                 if (data.statusCode === 200) {
                     context.commit("setgetNotificationsAll", data.data)
-
                 }
             } catch (error) {
                 console.log("GetNotificationsAll", error);
             }
         },
 
-        async PatchNotificationsRead(context, notify_id) {
-            console.log("notify_id", notify_id);
+        async ReadNotifications(context, item) {
             try {
 
                 // let { data } = await axios.patch(`http://localhost:3004/api/v1/notification/read/${notify_id}`)
-                let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/notification/read/${notify_id}`)
+                let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/notification/read/${item.notification_id}`)
                 if (data.statusCode === 200) {
-                    context.commit("setgetNotificationsRead", data.data)
-                    console.log("setgetNotificationsRead", data.data)
-
+                  context.dispatch("GetNotificationsAll",item.account_id)
                 }
             } catch (error) {
                 console.log("setgetNotificationsRead", error);
@@ -69,7 +61,7 @@ const notificatiosModules = {
         getNotificationsAll(state) {
             return state.get_notifications_all
         },
-        patchNotificationsRead(state) {
+        readNotifications(state) {
             return state.notifications_read
         }
 

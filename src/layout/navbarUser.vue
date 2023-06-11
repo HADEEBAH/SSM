@@ -27,73 +27,68 @@
         }}</v-app-bar-title>
         <v-spacer></v-spacer>
         <template v-if="user_detail">
-          <!-- {{ get_notifications }} -->
-          <!-- <v-icon class="mr-5" dark>mdi-bell-outline</v-icon> -->
-          <v-menu
-            v-model="notify"
-            :close-on-content-click="false"
-            :nudge-width="200"
-            offset-y
-          >
+          <v-menu v-model="notify" :close-on-content-click="false" offset-y>
             <template v-slot:activator="{ on, attrs }">
-              <!-- <v-badge
-                overlap
-                color="#F03D3E"
-                content="1"
-                message="1"
+              <v-badge
+                color="pink"
+                dot
+                :value="get_notifications_all.filter((item)=>
+                  item.notificationRead === false
+                ).length"
                 class="mx-5"
-              > -->
-              <v-icon dark v-bind="attrs" v-on="on" class="mx-5 pa-2"
-                >mdi-bell-outline</v-icon
               >
-              <!-- </v-badge> -->
+                <v-icon dark v-bind="attrs" v-on="on">
+                  mdi-bell-outline
+                </v-icon>
+              </v-badge>
             </template>
-            <v-card
-              height="500px"
-              style="overflow-y: scroll; overflow-x: hidden"
-            >
+
+            <v-card width="360px" max-height="500px" style="overflow: auto">
               <v-card-title>
-                <v-row>
-                  <v-col cols="8" sm="8">Notifications</v-col>
-                  <v-col cols="4" sm="4" align="end">
-                    <v-icon color="#ff6b81">mdi-email</v-icon>
+                <v-row dense>
+                  <v-col cols="8">การแจ้งเตือน</v-col>
+                  <v-col cols="4" align="end">
+                    <v-icon size="32" color="#ff6b81">
+                      <!-- mdi-email-open -->
+                      mdi-email
+                      <!-- mdi-email-outline -->
+                      <!-- mdi-email-open-outline -->
+                    </v-icon>
                   </v-col>
                 </v-row>
               </v-card-title>
               <v-divider></v-divider>
-              <!-- <v-card-text>
-                {{
-                  get_notifications_all.map((val) => {
-                    return val.notificationName;
-                  })
-                }}
-                </v-card-text> -->
 
-              <v-card-text
-                v-for="(notify, index_data) in get_notifications_all"
-                :key="index_data"
-                @click="hideBadge(notify)"
-              >
-                <v-row>
-                  <v-col cols="2" sm="2" align="center" class="mt-2">
-                    <v-img
-                      src="https://cdn-icons-png.flaticon.com/512/666/666162.png"
-                      height="30"
-                      width="30"
-                    ></v-img
-                  ></v-col>
-                  <v-col cols="6" sm="6">
-                    {{ notify.notificationName }} <br />
-                    {{ notify.notificationDescription }}
-                  </v-col>
-                  <!--   v-if="!notify.notificationRead" -->
-                  <v-col cols="2" sm="2" align="center" class="mt-5">
-                    <v-tab>
-                      <v-badge color="#ff6b81" dot v-model="alertNotify">
-                      </v-badge>
-                    </v-tab>
-                  </v-col>
-                </v-row>
+              <v-card-text>
+                <v-list three-line>
+                  <v-list-item
+                    class="pl-0"
+                    link
+                    v-for="(item, index) in get_notifications_all"
+                    :key="index"
+                    @click="readNotification(item)"
+                  >
+                    <v-list-item-avatar class="align-self-center">
+                      <v-icon size="32" color="#ff6b81">
+                        {{ item.notificationRead ? "mdi-email-open" : "mdi-email" }}
+                      </v-icon>
+                    </v-list-item-avatar>
+
+                    <v-list-item-content>
+                      <v-list-item-title class="font-weight-bold">
+                        {{ item.notificationName }}
+                      </v-list-item-title>
+                      <v-list-item-subtitle>{{
+                        item.notificationDescription
+                      }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                    <v-list-item-action>
+                      <v-icon v-if="!item.notificationRead" color="#ff6b81" size="10">
+                        mdi-checkbox-blank-circle
+                      </v-icon>
+                    </v-list-item-action>
+                  </v-list-item>
+                </v-list>
               </v-card-text>
             </v-card>
           </v-menu>
@@ -201,8 +196,6 @@
         v-model="drawer"
         :temporary="$vuetify.breakpoint.smAndDown"
       >
-        <!-- <pre>{{ profile_detail }}</pre> -->
-
         <v-row class="pt-8 pb-6">
           <v-col class="flex align-center justify-center">
             <div
@@ -420,6 +413,61 @@ export default {
 
     alertVisible: true,
     alertNotify: true,
+    // get_notifications_alls: [
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+    // ],
+
     // getData: this.get_notifications,
   }),
 
@@ -445,12 +493,9 @@ export default {
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail.account_id);
     }
-    // console.log("profile_detail", this.profile_detail);
     if (this.user_detail?.account_id) {
       this.GetCartList(this.user_detail.account_id);
     }
-
-    // this.GetNotifications();
     this.GetNotificationsAll(this.user_detail.account_id);
 
     setTimeout(() => {
@@ -474,7 +519,7 @@ export default {
       profile_detail: "ProfileModules/getProfileDetail",
       get_notifications: "NotificationsModules/getNotifications",
       get_notifications_all: "NotificationsModules/getNotificationsAll",
-      notifications_read: "NotificationsModules/patchNotificationsRead",
+      notifications_read: "NotificationsModules/readNotifications",
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
@@ -488,7 +533,7 @@ export default {
       GetProfileDetail: "ProfileModules/GetProfileDetail",
       GetNotifications: "NotificationsModules/GetNotifications",
       GetNotificationsAll: "NotificationsModules/GetNotificationsAll",
-      PatchNotificationsRead: "NotificationsModules/PatchNotificationsRead",
+      ReadNotifications: "NotificationsModules/ReadNotifications",
     }),
     selectMenu(type, to, head) {
       if (type === "child" && head === this.active_menu) {
@@ -505,19 +550,8 @@ export default {
         }
       }
     },
-    hideBadge(notifyData) {
-      this.PatchNotificationsRead(notifyData.notificationId);
-
-      if (!notifyData.notificationRead) {
-
-        this.alertNotify == false;
-      } else {
-        this.alertNotify == true;
-      }
-      // this.get_notifications_all;
-
-      console.log("555555550", notifyData);
-      // this.showBadge = false;
+    readNotification(params) {
+      this.ReadNotifications({notification_id: params.notificationId, account_id: params.accountId});
     },
   },
 };

@@ -3,6 +3,7 @@
 // import axios from "axios";
 import io from "socket.io-client";
 import { mapActions } from "vuex";
+import { notification } from 'ant-design-vue';
 
 export default {
   data() {
@@ -31,6 +32,14 @@ export default {
     this.socket.on("events", (data) => {
       this.GetNotifications(data)
       console.log("[data]: ", data);
+      
+      notification.open({
+        message: data.name,
+        description:data.description
+        // onClick: () => {
+        //   console.log('Notification Clicked!');
+        // },
+      });
 
     });
     this.socket.on("disconnect", (reason) => {
@@ -69,6 +78,7 @@ export default {
     }
   },
   beforeDestroy() {
+    console.log("destroyed");
     this.socket.disconnect()
   },
 }

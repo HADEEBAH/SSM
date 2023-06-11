@@ -36,7 +36,7 @@
         class="rounded-xl"
         cycle
         hide-delimiter-background
-        height="300"
+        :height="MobileSize ? 300 : 600"
       >
         <v-carousel-item
           v-for="(slide, i) in slides"
@@ -145,6 +145,7 @@
 </template>
 
 <script>
+
 import { mapActions, mapGetters } from "vuex";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 export default {
@@ -191,6 +192,7 @@ export default {
     showingFullText: false,
     body: "I am some text! Instead of being on the data object, though, I would be pulled from the store.",
   }),
+  
   created() {
     this.dataStorage = JSON.parse(localStorage.getItem("userDetail"));
     if (this.dataStorage) {
