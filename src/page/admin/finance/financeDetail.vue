@@ -263,6 +263,7 @@
               </template>
             </v-card-text>
             <v-card-actions>
+
             <v-btn
                 v-if="order_detail.paymentStatus === 'success'"
                 class="w-full"
@@ -277,6 +278,7 @@
                     class="w-full"
                     color="#ff6b81"
                     dark
+                    @click="sendNotificationByAccount(student_list)"
                     >ส่งการแจ้งเตือน</v-btn
                   >
                   <v-btn
@@ -330,9 +332,12 @@ import rowData from "@/components/label/rowData.vue";
 // import dialogCard from "@/components/dialog/dialogCard.vue";
 import { mapActions, mapGetters } from 'vuex';
 import Swal from 'sweetalert2';
+import mixin from "../../../mixin";
+
 export default {
   name: "financeDetail",
   components: { headerPage, rowData },
+  mixins:[mixin],
   data: () => ({
     dialog_show: false,
     payment_types: ["เงินสด", "บัตรเคตดิต", "โอนเข้าบัญชีโรงเรียน"],
@@ -394,6 +399,8 @@ export default {
         value: "cash",
       },
     ],
+    notification_name: "แจ้งเตือน",
+    notification_description: "หมายเลขออร์เดอร์ที่ ... ยังไม่ชำระเงิน",
   }),
   created() {
     this.GetOrderDetail({order_number : this.$route.params.order_id})
@@ -403,7 +410,7 @@ export default {
   computed: {
     ...mapGetters({
       order_detail : "OrderModules/getOrderDetail",
-      student_list : "OrderModules/getStudentListOrderDetail",
+      student_list : "OrderModules/getStudentList",
     })
   },
   methods: {
@@ -412,6 +419,16 @@ export default {
       updatePayment : "OrderModules/updatePayment",
       updateOrderStatus: "OrderModules/updateOrderStatus"
     }),
+
+    sendNotificationByAccount(account){
+
+      const payload = {
+        notificationName:this.notification_name,
+        notificationDescription:this.notification_description,
+        accountId:account
+      }
+      this.sendNotification(payload)
+    },
     chengeStatus(status) {
       this.order_detail.paymentType = status.value;
     },
