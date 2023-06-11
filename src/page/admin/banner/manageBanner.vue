@@ -110,7 +110,8 @@
           border="left"
           class="mt-3"
         >
-          ไม่มีรูปตัวอย่าง
+          ไม่มีรูปตัวอย่าง <br/>
+        <span class="font-weight-bold">คำแนะนำ</span>   : ควรอัปโหลดรูปที่มีขนาด 1280 x 600
         </v-alert>
       </v-col>
     </v-row>

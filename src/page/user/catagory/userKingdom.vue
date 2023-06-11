@@ -39,11 +39,12 @@
         :height="MobileSize ? 300 : 600"
       >
         <v-carousel-item
-          v-for="(slide, i) in slides"
+          v-for="(slide, i) in banner_list"
           :key="i"
-          :src="slide.src"
+          :src="slide.bannerPath"
           cover
-        ></v-carousel-item>
+        >
+      </v-carousel-item>
       </v-carousel>
       <v-card-text>
         <v-row>
@@ -203,6 +204,10 @@ export default {
     //localStorage.setItem("Order", JSON.stringify(this.course_order));
   },
 
+  beforeMount() {
+    this.GetBannerList();
+  },
+
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "อาณาจักร");
   },
@@ -214,6 +219,7 @@ export default {
       GetAll: "ProfileModules/GetAll",
       GetProfileDetail: "ProfileModules/GetProfileDetail",
       logOut: "loginModules/logOut",
+      GetBannerList: "BannerModules/GetBannerList",
     }),
 
     selectedCategory(category) {
@@ -254,6 +260,7 @@ export default {
       categorys_is_loading: "CategoryModules/getCategorysIsLoading",
       profile_user: "ProfileModules/getProfileUser",
       profile_detail: "ProfileModules/getProfileDetail",
+      banner_list: "BannerModules/getBannerList",
     }),
     setFunctions() {
       this.$store.dispatch("CategoryModules/GetCategoryCourse");
