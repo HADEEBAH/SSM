@@ -110,7 +110,8 @@
           border="left"
           class="mt-3"
         >
-          ไม่มีรูปตัวอย่าง
+          ไม่มีรูปตัวอย่าง <br/>
+        <span class="font-weight-bold">คำแนะนำ</span>   : ควรอัปโหลดรูปที่มีขนาด 1280 x 600
         </v-alert>
       </v-col>
     </v-row>
@@ -132,11 +133,11 @@
 import { mapActions, mapGetters } from "vuex";
 import { CheckFileSizeV2 } from "@/functions/functions";
 import Swal from "sweetalert2";
-import mixin from "../../../mixin";
+// import mixin from "../../../mixin";
 // import Swal from "sweetalert2";
 export default {
   components: {},
-  mixins:[mixin],
+  // mixins:[mixin],
   data() {
     return {
       files_input: [],
@@ -153,14 +154,6 @@ export default {
     console.log("banner_list", this.banner_list);
   },
   methods: {
-    // handleMessage(){
-    //   const payload = {
-    //     notificationName:this.notificationName,
-    //     notificationDescription:this.notificationDescription,
-    //     accountId:this.accountIdArr
-    //   }
-    //   this.sendNotification(payload)
-    // },
     ...mapActions({
       GetBannerList: "BannerModules/GetBannerList",
       GetInsertBannerList: "BannerModules/GetInsertBannerList",

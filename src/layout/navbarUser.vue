@@ -27,7 +27,72 @@
         }}</v-app-bar-title>
         <v-spacer></v-spacer>
         <template v-if="user_detail">
-          <v-icon class="mr-5" dark>mdi-bell-outline</v-icon>
+          <v-menu v-model="notify" :close-on-content-click="false" offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <v-badge
+                color="pink"
+                dot
+                :value="get_notifications_all.filter((item)=>
+                  item.notificationRead === false
+                ).length"
+                class="mx-5"
+              >
+                <v-icon dark v-bind="attrs" v-on="on">
+                  mdi-bell-outline
+                </v-icon>
+              </v-badge>
+            </template>
+
+            <v-card width="360px" max-height="500px" style="overflow: auto">
+              <v-card-title>
+                <v-row dense>
+                  <v-col cols="8">การแจ้งเตือน</v-col>
+                  <v-col cols="4" align="end">
+                    <v-icon size="32" color="#ff6b81">
+                      <!-- mdi-email-open -->
+                      mdi-email
+                      <!-- mdi-email-outline -->
+                      <!-- mdi-email-open-outline -->
+                    </v-icon>
+                  </v-col>
+                </v-row>
+              </v-card-title>
+              <v-divider></v-divider>
+
+              <v-card-text>
+                <v-list three-line>
+                  <v-list-item
+                    class="pl-0"
+                    link
+                    v-for="(item, index) in get_notifications_all"
+                    :key="index"
+                    @click="readNotification(item)"
+                  >
+                    <v-list-item-avatar class="align-self-center">
+                      <v-icon size="32" color="#ff6b81">
+                        {{ item.notificationRead ? "mdi-email-open" : "mdi-email" }}
+                      </v-icon>
+                    </v-list-item-avatar>
+
+                    <v-list-item-content>
+                      <v-list-item-title class="font-weight-bold">
+                        {{ item.notificationName }}
+                      </v-list-item-title>
+                      <v-list-item-subtitle>{{
+                        item.notificationDescription
+                      }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                    <v-list-item-action>
+                      <v-icon v-if="!item.notificationRead" color="#ff6b81" size="10">
+                        mdi-checkbox-blank-circle
+                      </v-icon>
+                    </v-list-item-action>
+                  </v-list-item>
+                </v-list>
+              </v-card-text>
+            </v-card>
+          </v-menu>
+
           <v-badge
             v-if="cart_list.length > 0"
             class="mr-5"
@@ -61,7 +126,8 @@
             </div> -->
 
               <span class="text-white mx-2">
-                {{ show_profile_detail.firstNameTh }} {{ show_profile_detail.lastNameTh }}
+                {{ show_profile_detail.firstNameTh }}
+                {{ show_profile_detail.lastNameTh }}
                 <!-- {{ user_detail.first_name_en }} {{ user_detail.last_name_en }} -->
               </span>
             </div>
@@ -77,15 +143,25 @@
               </v-avatar>
 
               <span class="text-white mx-2">
-                {{ show_profile_detail.firstNameTh }} {{ show_profile_detail.lastNameTh }}
+                {{ show_profile_detail.firstNameTh }}
+                {{ show_profile_detail.lastNameTh }}
                 <!-- {{ user_detail.first_name_en }} {{ user_detail.last_name_en }} -->
               </span>
             </div>
           </div>
-
           <v-btn icon @click="drawer = !drawer">
             <v-icon>{{ drawer ? "mdi-chevron-right" : "mdi-menu" }}</v-icon>
           </v-btn>
+          <!-- ALERT v-if="get_notifications"-->
+          <!-- <v-alert
+            v-if="alertVisible"
+            type="success"
+            dismissible
+            @input="alertVisible = false"
+          >
+            This alert will automatically close after 3 seconds.
+          </v-alert> -->
+          <!-- END ALRT -->
         </template>
         <template v-else>
           <v-btn
@@ -111,6 +187,7 @@
           </v-btn>
         </template>
       </v-app-bar>
+
       <v-navigation-drawer
         v-if="user_detail"
         right
@@ -119,7 +196,6 @@
         v-model="drawer"
         :temporary="$vuetify.breakpoint.smAndDown"
       >
-        <!-- <pre>{{ profile_detail }}</pre> -->
         <v-row class="pt-8 pb-6">
           <v-col class="flex align-center justify-center">
             <div
@@ -253,7 +329,7 @@
             ></v-img>
           </v-col>
         </v-row>
-        
+
         <v-row dense class="text-caption border-t">
           <v-col col="12" sm>
             Copyright 2022 Tourish Promp. All rights reserved . Design by UI
@@ -272,11 +348,11 @@
 </template>
 
 <script>
-import mixin from '../mixin';
+import mixin from "../mixin";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   name: "navbarUser",
   data: () => ({
     menu: false,
@@ -321,19 +397,83 @@ export default {
       { icon: "mdi-logout", title: "ออกจากระบบ", to: "logOut", roles: [] },
     ],
     user_detail: null,
-    show_profile_detail:{
+    show_profile_detail: {
       firstNameTh: "",
       lastNameTh: "",
       firstNameEng: "",
       lastNameEng: "",
       nation: "",
       mobileNo: "",
-      email: ""
-    }
+      email: "",
+    },
+
+    notify: false,
+    hints: true,
+    alert: true,
+
+    alertVisible: true,
+    alertNotify: true,
+    // get_notifications_alls: [
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+      // {
+        // notificationName: "แจ้งเตือน",
+        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+      // },
+    // ],
+
+    // getData: this.get_notifications,
   }),
 
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+    console.log("object", this.user_detail.account_id);
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail.account_id);
     }
@@ -344,29 +484,32 @@ export default {
   },
   beforeMount() {
     if (this.MobileSize) {
-      this.drawer = false
+      this.drawer = false;
     } else {
-      this.drawer = true
+      this.drawer = true;
     }
-    
   },
   mounted() {
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail.account_id);
     }
-    // console.log("profile_detail", this.profile_detail);
     if (this.user_detail?.account_id) {
       this.GetCartList(this.user_detail.account_id);
     }
+    this.GetNotificationsAll(this.user_detail.account_id);
+
+    setTimeout(() => {
+      this.alertVisible = false;
+    }, 3000); // Set the timeout to 3 seconds
   },
   beforeUpdate() {
-    this.show_profile_detail.firstNameTh = this.profile_detail.firstNameTh 
-    this.show_profile_detail.lastNameTh = this.profile_detail.lastNameTh 
-    this.show_profile_detail.firstNameEng = this.profile_detail.firstNameEng 
-    this.show_profile_detail.lastNameEng = this.profile_detail.lastNameEng 
-    this.show_profile_detail.nation = this.profile_detail.nation 
-    this.show_profile_detail.mobileNo = this.profile_detail.mobileNo 
-    this.show_profile_detail.email = this.profile_detail.email 
+    this.show_profile_detail.firstNameTh = this.profile_detail.firstNameTh;
+    this.show_profile_detail.lastNameTh = this.profile_detail.lastNameTh;
+    this.show_profile_detail.firstNameEng = this.profile_detail.firstNameEng;
+    this.show_profile_detail.lastNameEng = this.profile_detail.lastNameEng;
+    this.show_profile_detail.nation = this.profile_detail.nation;
+    this.show_profile_detail.mobileNo = this.profile_detail.mobileNo;
+    this.show_profile_detail.email = this.profile_detail.email;
   },
   watch: {},
   computed: {
@@ -374,6 +517,9 @@ export default {
       cart_list: "OrderModules/getCartList",
       titel_navber: "NavberUserModules/getTitleNavber",
       profile_detail: "ProfileModules/getProfileDetail",
+      get_notifications: "NotificationsModules/getNotifications",
+      get_notifications_all: "NotificationsModules/getNotificationsAll",
+      notifications_read: "NotificationsModules/readNotifications",
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
@@ -385,6 +531,9 @@ export default {
       GetCartList: "OrderModules/GetCartList",
       logOut: "loginModules/logOut",
       GetProfileDetail: "ProfileModules/GetProfileDetail",
+      GetNotifications: "NotificationsModules/GetNotifications",
+      GetNotificationsAll: "NotificationsModules/GetNotificationsAll",
+      ReadNotifications: "NotificationsModules/ReadNotifications",
     }),
     selectMenu(type, to, head) {
       if (type === "child" && head === this.active_menu) {
@@ -400,6 +549,9 @@ export default {
           this.active_menu = to;
         }
       }
+    },
+    readNotification(params) {
+      this.ReadNotifications({notification_id: params.notificationId, account_id: params.accountId});
     },
   },
 };
@@ -488,5 +640,22 @@ export default {
   background-origin: content-box, border-box, border-box, border-box, border-box;
   background-clip: content-box, border-box, border-box, border-box, border-box;
   /* transform: rotate(30deg); */
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #c7c7c7;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #c7c7c7;
 }
 </style>

@@ -830,6 +830,9 @@ const orderModules = {
         getCartList(state) {
             return state.cart_list
         },
+        getStudentList(state){
+          return state.student_list
+        },
     },
 };
 
