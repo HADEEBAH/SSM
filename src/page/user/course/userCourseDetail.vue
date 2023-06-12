@@ -62,9 +62,9 @@
           >{{ course_data.course_hours }} ชม. / ครั้ง</rowData
         >
         <v-row dense>
-          <v-col cols="12" class="text-[#999999]">
-            {{ course_data.detail }}</v-col
-          >
+          <v-col  cols="12" class="text-[#999999]">
+            <label v-html="course_data.detail"></label>
+          </v-col>
         </v-row>
         <v-expansion-panels flat>
           <v-expansion-panel v-if="course_data.course_type_id === 'CT_2'">
@@ -113,13 +113,13 @@
           </v-expansion-panel>
           <v-expansion-panel v-if="course_data.course_type_id === 'CT_1'">
             <v-expansion-panel-header class="px-0 font-bold">
-              Music performance
+              Performance
               <template v-slot:actions>
                 <v-icon color="#ff6b81"> $expand </v-icon>
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content class="border-t pt-3">
-              <label>{{ course_data.music_performance }}</label>
+              <label v-html=" course_data.music_performance"></label>
             </v-expansion-panel-content>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -130,7 +130,7 @@
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content class="border-t pt-3">
-              <label>{{ course_data.catification }}</label>
+              <label v-html="course_data.catification"></label>
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>

@@ -875,10 +875,11 @@ export default {
     },
     "course_order.apply_for_yourself": function () {
       if (this.course_order.apply_for_yourself) {
+        // console.log("user_login => ",this.user_login.username)
         this.course_order.students.push({
           account_id: this.user_login.account_id,
           student_name: `${this.user_login.first_name_th} ${this.user_login.last_name_th}`,
-          username: "",
+          username: this.user_login.username,
           firstname_en: this.user_login.first_name_th,
           lastname_en: this.user_login.last_name_th,
           tel: this.user_login.tel,
