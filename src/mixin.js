@@ -2,6 +2,9 @@
 // import Swal from "sweetalert2";
 // import axios from "axios";
 import io from "socket.io-client";
+import { mapActions } from "vuex";
+import { notification } from 'ant-design-vue';
+
 export default {
   data() {
     return {
@@ -19,15 +22,25 @@ export default {
     this.socket = io(
       this.socketioURL,
       {
-        query:{ account_id: JSON.parse(localStorage.getItem("userDetail")) ? JSON.parse(localStorage.getItem("userDetail")).account_id : "" },
-        transports : ['websocket']
+        query: { account_id: JSON.parse(localStorage.getItem("userDetail")) ? JSON.parse(localStorage.getItem("userDetail")).account_id : "" },
+        transports: ['websocket']
       }
     );
     this.socket.on("connect", () => {
       console.log("[socket connected]: ", this.socket.connected);
     });
     this.socket.on("events", (data) => {
+      this.GetNotifications(data)
       console.log("[data]: ", data);
+      
+      notification.open({
+        message: data.name,
+        description:data.description
+        // onClick: () => {
+        //   console.log('Notification Clicked!');
+        // },
+      });
+
     });
     this.socket.on("disconnect", (reason) => {
       console.log("[socket disconnected]: ", reason);
@@ -37,6 +50,7 @@ export default {
     });
   },
   methods: {
+    ...mapActions({ GetNotifications: "NotificationsModules/GetNotifications" }),
     async sendNotification(params) {
       this.socket.emit("events", params, (response) => {
         console.log("response: ", response);
@@ -49,21 +63,22 @@ export default {
       //   },
       // };
       // try {
-        // let { data } = await axios.post(
-          // `${process.env.VUE_APP_URL}/api/v1/notification`,
-        //   `http://localhost:3004/api/v1/notification`,
-        //   params,
-        //   config
-        // );
+      // let { data } = await axios.post(
+      // `${process.env.VUE_APP_URL}/api/v1/notification`,
+      //   `http://localhost:3004/api/v1/notification`,
+      //   params,
+      //   config
+      // );
 
-        // console.log("data=>", data);
-        
+      // console.log("data=>", data);
+
       // } catch (error) {
       //   console.log("error=>", error);
       // }
     }
   },
   beforeDestroy() {
+    console.log("destroyed");
     this.socket.disconnect()
   },
 }

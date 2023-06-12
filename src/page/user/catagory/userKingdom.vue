@@ -36,14 +36,15 @@
         class="rounded-xl"
         cycle
         hide-delimiter-background
-        height="300"
+        :height="MobileSize ? 300 : 600"
       >
         <v-carousel-item
-          v-for="(slide, i) in slides"
+          v-for="(slide, i) in banner_list"
           :key="i"
-          :src="slide.src"
+          :src="slide.bannerPath"
           cover
-        ></v-carousel-item>
+        >
+      </v-carousel-item>
       </v-carousel>
       <v-card-text>
         <v-row>
@@ -145,6 +146,7 @@
 </template>
 
 <script>
+
 import { mapActions, mapGetters } from "vuex";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 export default {
@@ -191,6 +193,7 @@ export default {
     showingFullText: false,
     body: "I am some text! Instead of being on the data object, though, I would be pulled from the store.",
   }),
+  
   created() {
     this.dataStorage = JSON.parse(localStorage.getItem("userDetail"));
     if (this.dataStorage) {
@@ -199,6 +202,10 @@ export default {
     }
     localStorage.removeItem("Order");
     //localStorage.setItem("Order", JSON.stringify(this.course_order));
+  },
+
+  beforeMount() {
+    this.GetBannerList();
   },
 
   mounted() {
@@ -212,6 +219,7 @@ export default {
       GetAll: "ProfileModules/GetAll",
       GetProfileDetail: "ProfileModules/GetProfileDetail",
       logOut: "loginModules/logOut",
+      GetBannerList: "BannerModules/GetBannerList",
     }),
 
     selectedCategory(category) {
@@ -252,6 +260,7 @@ export default {
       categorys_is_loading: "CategoryModules/getCategorysIsLoading",
       profile_user: "ProfileModules/getProfileUser",
       profile_detail: "ProfileModules/getProfileDetail",
+      banner_list: "BannerModules/getBannerList",
     }),
     setFunctions() {
       this.$store.dispatch("CategoryModules/GetCategoryCourse");
