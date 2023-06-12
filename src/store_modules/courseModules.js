@@ -1434,7 +1434,9 @@ const CourseModules = {
               })
             })
             for(let package_data of payload.packages){
-              package_data.options = options.filter(v => v.package_id === package_data.package_id)
+              package_data.options = options.filter(v => v.package_id === package_data.package_id).sort((a, b) => {
+                return a.amount - b.amount;
+            });
             }
           }
           let config = {
