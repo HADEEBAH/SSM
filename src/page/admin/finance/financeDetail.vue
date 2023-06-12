@@ -422,7 +422,7 @@ export default {
 
     sendNotificationByAccount(account){
 
-      const payload = {
+      let payload = {
         notificationName:this.notification_name,
         notificationDescription:this.notification_description,
         accountId:account

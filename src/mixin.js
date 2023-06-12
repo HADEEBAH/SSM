@@ -32,15 +32,6 @@ export default {
     this.socket.on("events", (data) => {
       this.GetNotifications(data)
       console.log("[data]: ", data);
-      
-      notification.open({
-        message: data.name,
-        description:data.description
-        // onClick: () => {
-        //   console.log('Notification Clicked!');
-        // },
-      });
-
     });
     this.socket.on("disconnect", (reason) => {
       console.log("[socket disconnected]: ", reason);
@@ -53,28 +44,12 @@ export default {
     ...mapActions({ GetNotifications: "NotificationsModules/GetNotifications" }),
     async sendNotification(params) {
       this.socket.emit("events", params, (response) => {
+        notification.open({
+          message: params.notificationName,
+          description:params.notificationDescription
+        });
         console.log("response: ", response);
       });
-      // let config = {
-      //   headers: {
-      //     "Access-Control-Allow-Origin": "*",
-      //     "Content-type": "Application/json",
-      //     Authorization: `Bearer ${VueCookie.get("token")}`,
-      //   },
-      // };
-      // try {
-      // let { data } = await axios.post(
-      // `${process.env.VUE_APP_URL}/api/v1/notification`,
-      //   `http://localhost:3004/api/v1/notification`,
-      //   params,
-      //   config
-      // );
-
-      // console.log("data=>", data);
-
-      // } catch (error) {
-      //   console.log("error=>", error);
-      // }
     }
   },
   beforeDestroy() {
