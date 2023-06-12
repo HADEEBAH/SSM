@@ -174,7 +174,30 @@
               required
               text="จำนวนชั่วโมงการเรียน/ครั้ง"
             ></label-custom>
-            <v-text-field
+            <div>
+                <v-text-field
+                :disabled="disable"
+                :outlined="!disable"
+                :filled="disable"
+                dense
+                suffix="ชั่วโมง"
+                :style="`width:${width()}px;`"
+                style="position: absolute; display: block; z-index: 4"
+                @focus="SelectedStartDate($event,course_data.course_hours)"
+                :rules="rules.course_hours"
+                v-model="course_data.course_hours"
+              >
+              </v-text-field>
+              <VueTimepicker 
+                class="time-picker-hidden" 
+                hide-clear-button 
+                advanced-keyboard 
+                :style="`width:${width()}px;`"
+                v-model="course_data.course_hours_obj" 
+                @change="ChangeHours(course_data.course_hours_obj, course_data.course_hours)">
+              </VueTimepicker>
+            </div>
+            <!-- <v-text-field
               class="input-text-right"
               suffix="ชั่วโมง"
               dense
@@ -187,7 +210,7 @@
               :rules="rules.course_hours"
               v-model.number="course_data.course_hours"
               placeholder="ระบุจำนวนชั่วโมงการเรียน/ครั้ง"
-            ></v-text-field>
+            ></v-text-field> -->
           </v-col>
           <v-col cols="12" sm="6">
             <label-custom required text="สถานที่เรียน"></label-custom>
@@ -224,40 +247,55 @@
           <v-row dense>
             <v-col cols="12">
               <label-custom text="รายละเอียดคอร์ส"></label-custom>
-              <v-textarea
+              <vue-editor 
+              :placeholder= "course_data.detail ?'' : 'กรอกรายละเอียด...'"
+              :disabled="disable" 
+              @text-change="ChangeCourseData(course_data)" 
+              v-model="course_data.detail"></vue-editor>
+               <!-- <v-textarea
                 v-model="course_data.detail"
                 :disabled="disable"
                 :outlined="!disable"
                 :filled="disable"
                 @change="ChangeCourseData(course_data)"
                 placeholder="กรอกรายละเอียด..."
-              ></v-textarea>
+              ></v-textarea> -->
             </v-col>
           </v-row>
           <v-row dense>
             <v-col cols="12">
-              <label-custom text="music performance"></label-custom>
-              <v-textarea
+              <label-custom text="performance"></label-custom>
+              <vue-editor 
+              :placeholder= "course_data.music_performance ? '' : 'กรอกรายละเอียด...'"
+              :disabled="disable"
+              @text-change="ChangeCourseData(course_data)"
+              v-model="course_data.music_performance"></vue-editor>
+              <!-- <v-textarea
                 v-model="course_data.music_performance"
                 :disabled="disable"
                 :outlined="!disable"
                 :filled="disable"
                 @change="ChangeCourseData(course_data)"
                 placeholder="กรอกรายละเอียด..."
-              ></v-textarea>
+              ></v-textarea> -->
             </v-col>
           </v-row>
           <v-row dense>
             <v-col cols="12">
               <label-custom text="certification"></label-custom>
-              <v-textarea
+              <vue-editor 
+              :placeholder= "course_data.catification ?'' : 'กรอกรายละเอียด...'"
+              :disabled="disable" 
+              @text-change="ChangeCourseData(course_data)" 
+              v-model="course_data.catification"></vue-editor>
+              <!-- <v-textarea
                 v-model="course_data.catification"
                 :disabled="disable"
                 :outlined="!disable"
                 :filled="disable"
                 @change="ChangeCourseData(course_data)"
                 placeholder="กรอกรายละเอียด..."
-              ></v-textarea>
+              ></v-textarea> -->
             </v-col>
           </v-row>
         </template>
@@ -683,6 +721,7 @@ import {
   dateFormatter,
   CheckFileSize,
 } from "@/functions/functions";
+import { VueEditor } from "vue2-editor";
 import moment from "moment";
 export default {
   name: "courseCard",
@@ -696,6 +735,7 @@ export default {
     LabelCustom,
     headerCard,
     VueTimepicker,
+    VueEditor
   },
   // directives: {
   //   "ant-input": Input,
@@ -801,19 +841,28 @@ export default {
       .getElementsByClassName("time-picker-hidden")[0]
       .getElementsByTagName("input")[0].focus()
     },
+    ChangeHours(hours, course_hours){
+      console.log("hours",hours)
+      console.log("couser_hours",course_hours)
+      if(hours){
+        this.course_data.course_hours = parseInt(hours.HH)+"."+parseInt(hours.mm)
+      }
+    },
     ChangeStartDate(date){
       if(!date.start_time_object.mm){
         date.start_time_object.mm = "00"
       }
       this.course_data.course_period_start_date = `${date.start_time_object.HH}:${date.start_time_object.mm}`
       console.log(date)
-      if((parseInt(date.start_time_object.HH) + this.course_data.course_hours) >= 24){
-        date.end_time_object.HH = (parseInt(date.start_time_object.HH) + this.course_data.course_hours) - 24
+      if((parseInt(date.start_time_object.HH) + parseInt(this.course_data.course_hours_obj.HH)) >= 24){
+        date.end_time_object.HH = (parseInt(date.start_time_object.HH) + parseInt(this.course_data.course_hours_obj.HH)) - 24
+        date.end_time_object.mm = (parseInt(date.start_time_object.mm) + parseInt(this.course_data.course_hours_obj.mm)) - 60
       }else{
-        date.end_time_object.HH = `${(parseInt(date.start_time_object.HH) + this.course_data.course_hours)}`
+        date.end_time_object.HH = `${(parseInt(date.start_time_object.HH) + parseInt(this.course_data.course_hours_obj.HH))}`
+        date.end_time_object.mm = (parseInt(date.start_time_object.mm) + parseInt(this.course_data.course_hours_obj.mm))
       }
       date.start_time = `${date.start_time_object.HH}:${date.start_time_object.mm}`
-      date.end_time_object.mm = date.start_time_object.mm
+      // date.end_time_object.mm = date.start_time_object.mm
       // this.course_data.course_period_end_date = `${date.end_time_object.HH}:${date.end_time_object.mm}`
       date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`
     },
