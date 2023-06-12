@@ -31,6 +31,10 @@ export default {
     });
     this.socket.on("events", (data) => {
       this.GetNotifications(data)
+      notification.open({
+        message: data.notificationName,
+        description:data.notificationDescription
+      });
       console.log("[data]: ", data);
     });
     this.socket.on("disconnect", (reason) => {
@@ -44,10 +48,6 @@ export default {
     ...mapActions({ GetNotifications: "NotificationsModules/GetNotifications" }),
     async sendNotification(params) {
       this.socket.emit("events", params, (response) => {
-        notification.open({
-          message: params.notificationName,
-          description:params.notificationDescription
-        });
         console.log("response: ", response);
       });
     }
