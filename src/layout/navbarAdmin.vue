@@ -16,11 +16,12 @@
         </v-app-bar-nav-icon>
         <!-- <v-app-bar-title><v-img max-height="37" max-width="51" src="../assets/navbar/title_img.jpg"></v-img></v-app-bar-title> -->
         <v-spacer></v-spacer>
-        <v-badge class="mx-5" overlap color="#F03D3E" content="1" message="1">
+        <!-- <v-badge class="mx-5" overlap color="#F03D3E" content="1" message="1">
           <v-icon dark>mdi-bell-outline</v-icon>
-        </v-badge>
+        </v-badge> -->
 
-        <div class="mx-5" v-if="!$vuetify.breakpoint.smAndDown">
+        <!-- <div class="mx-5" v-if="$vuetify.breakpoint.smAndDown"> -->
+        <div class="mx-5">
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-row v-bind="attrs" v-on="on">
