@@ -390,14 +390,18 @@ export default {
         date.start_time_object.mm = "00"
       }
       date.start_time = `${date.start_time_object.HH}:${date.start_time_object.mm}`
-      if((parseInt(date.start_time_object.HH) + this.course_data.course_hours) >= 24){
-          date.end_time_object.HH = `${(parseInt(date.start_time_object.HH) + this.course_data.course_hours) - 24}`
-          date.end_time_object.HH = date.end_time_object.HH.toString().padStart(2, '0')
+      if((parseInt(date.start_time_object.HH) + parseInt(this.course_data.course_hours_obj.HH)) >= 24){
+          date.end_time_object.HH = `${(parseInt(date.start_time_object.HH) +  parseInt(this.course_data.course_hours_obj.HH)) - 24}`.padStart(2, '0')
       }else{
-          date.end_time_object.HH = `${(parseInt(date.start_time_object.HH) + this.course_data.course_hours)}`
-          date.end_time_object.HH = date.end_time_object.HH.toString().padStart(2, '0')
+          date.end_time_object.HH = `${(parseInt(date.start_time_object.HH) + parseInt(this.course_data.course_hours_obj.HH))}`.padStart(2, '0')
+          // date.end_time_object.mm = `${parseInt(date.start_time_object.mm) + parseInt(this.course_data.course_hours_obj.mm)}`
       }
-      date.end_time_object.mm = date.start_time_object.mm
+      if((parseInt(date.start_time_object.mm) + parseInt(this.course_data.course_hours_obj.mm) > 60)){
+        date.end_time_object.mm = `${(parseInt(date.start_time_object.mm) + parseInt(this.course_data.course_hours_obj.mm)) - 60}`.padStart(2,'0')
+      }else{
+        date.end_time_object.mm = `${parseInt(date.start_time_object.mm) + parseInt(this.course_data.course_hours_obj.mm)}`.padStart(2, '0')
+      }
+      // date.end_time_object.mm = date.start_time_object.mm
       date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`
       // this.checkHour(teach_day)
     },
