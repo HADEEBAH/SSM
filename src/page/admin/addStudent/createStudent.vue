@@ -660,7 +660,39 @@ export default {
       remark : [(val)=> val.length < 256 || "หมายเหตุความยาวเกินกว่าที่กำหมด" ]
     },
   }),
-  created() {},
+  created() {
+    if( this.order.courses.length == 0){
+      this.order.courses.push({
+        course_options : [],
+        course_data : null,
+        apply_for_yourself : false,
+        apply_for_others : false,
+        course_id : "",
+        course_type: "",
+        course_type_id : "CT_1",
+        category_id: "",
+        package: "",
+        package_data : null,
+        option : {},
+        option_data : "",
+        period: 0,
+        times_in_class: 0,
+        day: "",
+        time: "",
+        coach: "",
+        manu_start_date : true,
+        start_date_str : "",
+        start_date : "",
+        start_day: "",
+        price: 0,
+        detail : "",
+        remark: "",
+        selected : true,
+        parents: [],
+        students: [],
+      });
+    }
+  },
   mounted() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     this.GetCategorys()
