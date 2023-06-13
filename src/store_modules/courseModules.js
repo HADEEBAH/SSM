@@ -57,7 +57,11 @@ const CourseModules = {
       course_open_date: "",
       course_open_date_str: "",
       menu_course_open_date: false,
-      course_hours: 1,
+      course_hours: 1.0,
+      course_hours_obj : {
+        HH : '01',
+        mm : '00'
+      },
       location: "",
       detail: "",
       music_performance: "",
@@ -226,6 +230,10 @@ const CourseModules = {
         course_open_date_str: "",
         menu_course_open_date: false,
         course_hours: 1,
+        course_hours_obj : {
+          HH : '01',
+          mm : '00'
+        },
         location: "",
         detail: "",
         music_performance: "",
@@ -1152,6 +1160,21 @@ const CourseModules = {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
         if (data.statusCode === 200) {
           console.log("1155 => ",data)
+          // console.log(data.data.coursePerTime)
+          let course_hours_part = data.data.coursePerTime.toFixed(2).split(".")
+          let course_hours_object = {}
+          if(course_hours_part.length > 1){
+            console.log(course_hours_part)
+            course_hours_object = {
+              HH : course_hours_part[0].padStart(2, '0'),
+              mm : course_hours_part[1].padStart(2, '0')
+            }
+          }else{
+            course_hours_object = {
+              HH :  data.data.coursePerTime.padStart(2, '0'),
+              mm :  "00"
+            }
+          }
           let payload = {
             course_img_privilege : data.data.courseImgPrivilege ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.courseImgPrivilege}` : null,
             course_id: data.data.courseId,
@@ -1166,6 +1189,7 @@ const CourseModules = {
             course_open_date_str: data.data.courseOpenDate ? new Date(data.data.courseOpenDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : "",
             menu_course_open_date: false,
             course_hours: data.data.coursePerTime,
+            course_hours_obj: course_hours_object,
             location: data.data.courseLocation,
             detail: data.data.courseDescription,
             music_performance: data.data.courseMusicPerformance,
@@ -1188,14 +1212,13 @@ const CourseModules = {
             days_of_class: [],
             days : []
           }
-          // console.log("payload 1192",payload)
+          console.log("payload 1192",payload)
           let teach_day_data = []
           for await (let coach of data.data.coachs){
             // console.log("payload 1194",payload)
             for await (let coach_date of data.data.dayOfWeek.filter(v => v.courseCoachId === coach.courseCoachId)){
               // DAY OF CLASS
               if(payload.days_of_class.filter(v => v.day_of_week_id === coach_date.times[0].dayOfWeekId).length === 0){
-               
                 let dayName = dayOfWeekArray(coach_date.dayOfWeekName)
                 payload.days_of_class.push({
                   day_of_week_id :coach_date.times[0].dayOfWeekId,  
@@ -1212,12 +1235,12 @@ const CourseModules = {
                 let startTimePart = time.start.split(":")
                 let endTimePart = time.end.split(":")
                 let startTime = {
-                  "HH": startTimePart[0],
-                  "mm": startTimePart[1] ? startTimePart[1] : "00"
+                  "HH": startTimePart[0].padStart(2, '0'),
+                  "mm": startTimePart[1] ? startTimePart[1].padStart(2, '0') : "00"
                 }
                 let endTime = {
-                  "HH": endTimePart[0],
-                  "mm": endTimePart[1]? endTimePart[1] : "00"
+                  "HH": endTimePart[0].padStart(2, '0'),
+                  "mm": endTimePart[1]? endTimePart[1].padStart(2, '0') : "00"
                 }
                 class_dates.push({
                   class_date_range: {
@@ -1411,7 +1434,9 @@ const CourseModules = {
               })
             })
             for(let package_data of payload.packages){
-              package_data.options = options.filter(v => v.package_id === package_data.package_id)
+              package_data.options = options.filter(v => v.package_id === package_data.package_id).sort((a, b) => {
+                return a.amount - b.amount;
+            });
             }
           }
           let config = {

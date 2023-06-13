@@ -190,7 +190,7 @@
                             src="../../../assets/finance/close.png"
                           ></v-img>
                           <v-img
-                            v-if="status.value === 'credit card' || status.value == 'Credit Card'"
+                            v-if="status.value == 'Credit Card'"
                             src="../../../assets/finance/card.png"
                           ></v-img>
                           <v-img
@@ -222,18 +222,14 @@
                     <v-row class="d-flex align-center">
                       <v-col cols="auto"
                         ><v-icon
-                          :color="
-                            order_detail.paymentType.toLowerCase() === status.value
-                              ? '#FF6B81'
-                              : ''
-                          "
-                          >{{
-                            order_detail.paymentType.toLowerCase() === status.value
+                          :color=" order_detail.paymentType === status.value ? '#FF6B81' : ''"
+                        >{{
+                            order_detail.paymentType  === status.value
                               ? "mdi-radiobox-marked"
                               : "mdi-radiobox-blank"
-                          }}</v-icon
-                        ></v-col
-                      >
+                        }}
+                        </v-icon>
+                      </v-col>
                       <v-col cols="auto">
                         <v-avatar>
                           <v-img
@@ -241,7 +237,7 @@
                             src="../../../assets/finance/close.png"
                           ></v-img>
                           <v-img
-                            v-if="status.value === 'credit card'"
+                            v-if="status.value === 'Credit Card'"
                             src="../../../assets/finance/card.png"
                           ></v-img>
                           <v-img
@@ -422,11 +418,12 @@ export default {
 
     sendNotificationByAccount(account){
 
-      const payload = {
+      let payload = {
         notificationName:this.notification_name,
         notificationDescription:this.notification_description,
         accountId:account
       }
+      console.log(payload)
       this.sendNotification(payload)
     },
     chengeStatus(status) {

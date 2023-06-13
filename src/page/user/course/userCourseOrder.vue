@@ -875,10 +875,11 @@ export default {
     },
     "course_order.apply_for_yourself": function () {
       if (this.course_order.apply_for_yourself) {
+        // console.log("user_login => ",this.user_login.username)
         this.course_order.students.push({
           account_id: this.user_login.account_id,
           student_name: `${this.user_login.first_name_th} ${this.user_login.last_name_th}`,
-          username: "",
+          username: this.user_login.username,
           firstname_en: this.user_login.first_name_th,
           lastname_en: this.user_login.last_name_th,
           tel: this.user_login.tel,
@@ -1158,7 +1159,7 @@ export default {
               ) {
                 if ( this.course_order.option.course_package_option_id === course_monitors_filter[0].m_course_package_options_id) {
                   return course_monitors_filter[0]?.m_status;
-                } else if(course_monitors_filter[0]?.m_status === "Open" && course_monitors_filter[0]?.m_current_student == 0){
+                } else if(course_monitors_filter[0]?.m_status === "Open" && course_monitors_filter[0]?.m_current_student <= course_monitors_filter[0].m_maximum_student){
                   // console.log("1167");
                   return "Open"
                 }else{

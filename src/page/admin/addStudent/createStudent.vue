@@ -264,8 +264,6 @@
                 :items="course.course_data.days_of_class.filter(v => v.day_of_week_id === course.day)[0].times"
                 placeholder="เลือกเวลา"
                 outlined
-                item-color="pink"
-                color="pink"
                 @change="course.coach = {}"
               >
                 <template v-slot:selection="data">
@@ -280,13 +278,14 @@
                   <v-list-item-content>
                     <v-list-item-title
                       ><span
-                        :class="course.time.timeId === item.timeId ? 'font-bold' : ''"
+
+                        :class="course.time.timeId === item.timeId ? 'font-bold text-[#ff6b81]' : ''"
                         >{{ item.start }}-{{ item.end }}น.</span
                       ></v-list-item-title
                     >
                   </v-list-item-content>
                   <v-list-item-action>
-                    <v-icon>{{course.time.timeId === item.timeId ? "mdi-check-circle": "mdi-radiobox-blank"}}</v-icon>
+                    <v-icon :color="course.time.timeId === item.timeId ? '#ff6b81':''">{{course.time.timeId === item.timeId ? "mdi-check-circle": "mdi-radiobox-blank"}}</v-icon>
                   </v-list-item-action>
                 </template>
               </v-select>
@@ -297,11 +296,10 @@
                 dense
                 :rules="rules.coach"
                 v-model="course.coach"
-                :items="course.course_data.coachs.filter(v => v.teach_day_data.map(v => v.timeId === course.time.timeId))"
+                :items="course.course_data.coachs.filter(v => v.teach_day_data.some(td => td.class_date.some(cd => cd.class_date_range.time_id === course.time.timeId)))"
                 placeholder="เลือกโค้ช"
-                outlined
                 item-color="pink"
-                color="pink"
+                outlined
               >
                 <template v-slot:selection="data">
                 {{ `${data.item.coach_name}` }}
@@ -310,13 +308,13 @@
                   <v-list-item-content>
                     <v-list-item-title
                       ><span
-                        :class="course.coach.course_coach_id === item.course_coach_id ? 'font-bold' : ''"
+                        :class="course.coach.course_coach_id === item.course_coach_id ? 'font-bold  text-[#ff6b81]' : ''"
                         >{{ item.coach_name }}</span
                       ></v-list-item-title
                     >
                   </v-list-item-content>
                   <v-list-item-action>
-                    <v-icon>{{course.coach.course_coach_id === item.course_coach_id ? "mdi-check-circle": "mdi-radiobox-blank"}}</v-icon>
+                    <v-icon :color="course.time.timeId === item.timeId ? '#ff6b81':''">{{course.coach.course_coach_id === item.course_coach_id ? "mdi-check-circle": "mdi-radiobox-blank"}}</v-icon>
                   </v-list-item-action>
                 </template>
               </v-autocomplete>
@@ -389,7 +387,7 @@
           </v-row>
           <!-- PRICE -->
           <v-row dense>
-            <v-col cols="12" sm="4" v-if="course.price > 0">
+            <v-col cols="12" sm="4">
               <label-custom text="ราคา"></label-custom>
               <v-text-field 
                 dense
@@ -613,6 +611,7 @@ import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 import { mapActions, mapGetters } from "vuex";
 import { dateFormatter } from "@/functions/functions";
 import Swal from "sweetalert2";
+import mixin from "../../../mixin";
 export default {
   name: "addlearnPage",
   components: {
@@ -622,8 +621,11 @@ export default {
     dialogCard,
     loadingOverlay
   },
+  mixins :[mixin],
   props: {},
   data: () => ({
+    notification_name: "แจ้งเตือน",
+    notification_description: "แอตมินได้เพิ่มคอร์สเรียนให้คุณ",
     validate_form: null,
     user_detail : null,
     course_name_th: "",
@@ -660,7 +662,40 @@ export default {
       remark : [(val)=> val.length < 256 || "หมายเหตุความยาวเกินกว่าที่กำหมด" ]
     },
   }),
-  created() {},
+  created() {
+    if( this.order.courses.length == 0){
+      this.order.courses.push({
+        course_options : [],
+        course_data : null,
+        apply_for_yourself : false,
+        apply_for_others : false,
+        course_id : "",
+        course_type: "",
+        course_type_id : "CT_1",
+        category_id: "",
+        package: "",
+        package_data : null,
+        option : {},
+        option_data : "",
+        period: 0,
+        times_in_class: 0,
+        day: "",
+        time: "",
+        coach: "",
+        manu_start_date : true,
+        start_date_str : "",
+        start_date : "",
+        start_day: "",
+        price: 0,
+        detail : "",
+        remark: "",
+        selected : true,
+        parents: [],
+        students: [],
+      });
+
+    }
+  },
   mounted() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     this.GetCategorys()
@@ -764,6 +799,7 @@ export default {
         parents: [],
         students: [],
       });
+      
     },
     Calprice(course){
       course.price = course.option.net_price
@@ -802,6 +838,20 @@ export default {
     },
     selectCourse(courseId,course) {
       console.log("course_id", courseId);
+      course.package_data = {}
+      course.package = ""
+      course.option = {}
+      course.option_data = {}
+      course.day = ""
+      course.time = ""
+      course.time_str = ""
+      course.coach = ""
+      course.manu_start_date = false
+      course.start_date_str = ""
+      course.start_date = ""
+      course.price = 0
+      course.detail = ""
+      course.remark = ""
       if(courseId){
         this.GetCourse(courseId).then(()=>{
           if(this.course_data){
@@ -831,26 +881,62 @@ export default {
           cancelButtonText: "ยกเลิก",
         }).then(async (result) => {
           if (result.isConfirmed) {
-            this.order.courses.forEach((course)=>{
-              course.coach_id = course.coach.coach_id
-              course.coach_name = course.coach.coach_name
-              for(const student of this.students){
-                course.students.push({
-                  account_id: student,
-                  student_name: null,
-                  username: null,
-                  firstname_en: null,
-                  lastname_en: null,
-                  tel:null,
-                  parents: [],
-                  is_account: false,
-                  is_other: false,
-                })
+            if(this.order.payment_status === "warn"){
+              let account = []
+              this.order.courses.forEach((course)=>{
+                course.coach_id = course.coach.coach_id
+                course.coach_name = course.coach.coach_name
+                for(const student of this.students){
+                  account.push({
+                    studentId : student
+                  })
+                  course.students.push({
+                    account_id: student,
+                    student_name: null,
+                    username: null,
+                    firstname_en: null,
+                    lastname_en: null,
+                    tel:null,
+                    parents: [],
+                    is_account: false,
+                    is_other: false,
+                  })
+                }
+              })
+              this.order.type = "addStudent"
+              this.changeOrderData(this.order);
+              let payload = {
+                notificationName: this.notification_name,
+                notificationDescription:this.notification_description,
+                accountId:account
               }
-            })
-            this.order.type = "addStudent"
-            this.changeOrderData(this.order);
-            this.saveOrder()
+              console.log(payload)
+              this.sendNotification(payload)
+              this.saveOrder()
+             
+            }else{
+              this.order.courses.forEach((course)=>{
+                course.coach_id = course.coach.coach_id
+                course.coach_name = course.coach.coach_name
+                for(const student of this.students){
+                  course.students.push({
+                    account_id: student,
+                    student_name: null,
+                    username: null,
+                    firstname_en: null,
+                    lastname_en: null,
+                    tel:null,
+                    parents: [],
+                    is_account: false,
+                    is_other: false,
+                  })
+                }
+              })
+              this.order.type = "addStudent"
+              this.changeOrderData(this.order);
+              this.saveOrder()
+            }
+           
           }
         })
       }
