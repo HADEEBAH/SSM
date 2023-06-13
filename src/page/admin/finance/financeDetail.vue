@@ -222,18 +222,14 @@
                     <v-row class="d-flex align-center">
                       <v-col cols="auto"
                         ><v-icon
-                          :color="
-                            order_detail.paymentType === status.value
-                              ? '#FF6B81'
-                              : ''
-                          "
-                          >{{
+                          :color=" order_detail.paymentType === status.value ? '#FF6B81' : ''"
+                        >{{
                             order_detail.paymentType  === status.value
                               ? "mdi-radiobox-marked"
                               : "mdi-radiobox-blank"
-                          }}</v-icon
-                        ></v-col
-                      >
+                        }}
+                        </v-icon>
+                      </v-col>
                       <v-col cols="auto">
                         <v-avatar>
                           <v-img
