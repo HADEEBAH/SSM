@@ -264,8 +264,6 @@
                 :items="course.course_data.days_of_class.filter(v => v.day_of_week_id === course.day)[0].times"
                 placeholder="เลือกเวลา"
                 outlined
-                item-color="pink"
-                color="pink"
                 @change="course.coach = {}"
               >
                 <template v-slot:selection="data">
@@ -280,13 +278,14 @@
                   <v-list-item-content>
                     <v-list-item-title
                       ><span
-                        :class="course.time.timeId === item.timeId ? 'font-bold' : ''"
+
+                        :class="course.time.timeId === item.timeId ? 'font-bold text-[#ff6b81]' : ''"
                         >{{ item.start }}-{{ item.end }}น.</span
                       ></v-list-item-title
                     >
                   </v-list-item-content>
                   <v-list-item-action>
-                    <v-icon>{{course.time.timeId === item.timeId ? "mdi-check-circle": "mdi-radiobox-blank"}}</v-icon>
+                    <v-icon :color="course.time.timeId === item.timeId ? '#ff6b81':''">{{course.time.timeId === item.timeId ? "mdi-check-circle": "mdi-radiobox-blank"}}</v-icon>
                   </v-list-item-action>
                 </template>
               </v-select>
@@ -297,11 +296,10 @@
                 dense
                 :rules="rules.coach"
                 v-model="course.coach"
-                :items="course.course_data.coachs.filter(v => v.teach_day_data.map(v => v.timeId === course.time.timeId))"
+                :items="course.course_data.coachs.filter(v => v.teach_day_data.some(td => td.class_date.some(cd => cd.class_date_range.time_id === course.time.timeId)))"
                 placeholder="เลือกโค้ช"
-                outlined
                 item-color="pink"
-                color="pink"
+                outlined
               >
                 <template v-slot:selection="data">
                 {{ `${data.item.coach_name}` }}
@@ -310,13 +308,13 @@
                   <v-list-item-content>
                     <v-list-item-title
                       ><span
-                        :class="course.coach.course_coach_id === item.course_coach_id ? 'font-bold' : ''"
+                        :class="course.coach.course_coach_id === item.course_coach_id ? 'font-bold  text-[#ff6b81]' : ''"
                         >{{ item.coach_name }}</span
                       ></v-list-item-title
                     >
                   </v-list-item-content>
                   <v-list-item-action>
-                    <v-icon>{{course.coach.course_coach_id === item.course_coach_id ? "mdi-check-circle": "mdi-radiobox-blank"}}</v-icon>
+                    <v-icon :color="course.time.timeId === item.timeId ? '#ff6b81':''">{{course.coach.course_coach_id === item.course_coach_id ? "mdi-check-circle": "mdi-radiobox-blank"}}</v-icon>
                   </v-list-item-action>
                 </template>
               </v-autocomplete>
@@ -389,7 +387,7 @@
           </v-row>
           <!-- PRICE -->
           <v-row dense>
-            <v-col cols="12" sm="4" v-if="course.price > 0">
+            <v-col cols="12" sm="4">
               <label-custom text="ราคา"></label-custom>
               <v-text-field 
                 dense
@@ -840,6 +838,20 @@ export default {
     },
     selectCourse(courseId,course) {
       console.log("course_id", courseId);
+      course.package_data = {}
+      course.package = ""
+      course.option = {}
+      course.option_data = {}
+      course.day = ""
+      course.time = ""
+      course.time_str = ""
+      course.coach = ""
+      course.manu_start_date = false
+      course.start_date_str = ""
+      course.start_date = ""
+      course.price = 0
+      course.detail = ""
+      course.remark = ""
       if(courseId){
         this.GetCourse(courseId).then(()=>{
           if(this.course_data){
