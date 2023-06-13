@@ -190,7 +190,7 @@
                             src="../../../assets/finance/close.png"
                           ></v-img>
                           <v-img
-                            v-if="status.value === 'credit card' || status.value == 'Credit Card'"
+                            v-if="status.value == 'Credit Card'"
                             src="../../../assets/finance/card.png"
                           ></v-img>
                           <v-img
@@ -223,12 +223,12 @@
                       <v-col cols="auto"
                         ><v-icon
                           :color="
-                            order_detail.paymentType.toLowerCase() === status.value
+                            order_detail.paymentType === status.value
                               ? '#FF6B81'
                               : ''
                           "
                           >{{
-                            order_detail.paymentType.toLowerCase() === status.value
+                            order_detail.paymentType  === status.value
                               ? "mdi-radiobox-marked"
                               : "mdi-radiobox-blank"
                           }}</v-icon
@@ -241,7 +241,7 @@
                             src="../../../assets/finance/close.png"
                           ></v-img>
                           <v-img
-                            v-if="status.value === 'credit card'"
+                            v-if="status.value === 'Credit Card'"
                             src="../../../assets/finance/card.png"
                           ></v-img>
                           <v-img
@@ -427,6 +427,7 @@ export default {
         notificationDescription:this.notification_description,
         accountId:account
       }
+      console.log(payload)
       this.sendNotification(payload)
     },
     chengeStatus(status) {
