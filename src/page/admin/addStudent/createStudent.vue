@@ -613,6 +613,7 @@ import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 import { mapActions, mapGetters } from "vuex";
 import { dateFormatter } from "@/functions/functions";
 import Swal from "sweetalert2";
+import mixin from "../../../mixin";
 export default {
   name: "addlearnPage",
   components: {
@@ -622,8 +623,11 @@ export default {
     dialogCard,
     loadingOverlay
   },
+  mixins :[mixin],
   props: {},
   data: () => ({
+    notification_name: "แจ้งเตือน",
+    notification_description: "แอตมินได้เพิ่มคอร์สเรียนให้คุณ",
     validate_form: null,
     user_detail : null,
     course_name_th: "",
@@ -691,6 +695,7 @@ export default {
         parents: [],
         students: [],
       });
+
     }
   },
   mounted() {
@@ -796,6 +801,7 @@ export default {
         parents: [],
         students: [],
       });
+      
     },
     Calprice(course){
       course.price = course.option.net_price
@@ -863,26 +869,62 @@ export default {
           cancelButtonText: "ยกเลิก",
         }).then(async (result) => {
           if (result.isConfirmed) {
-            this.order.courses.forEach((course)=>{
-              course.coach_id = course.coach.coach_id
-              course.coach_name = course.coach.coach_name
-              for(const student of this.students){
-                course.students.push({
-                  account_id: student,
-                  student_name: null,
-                  username: null,
-                  firstname_en: null,
-                  lastname_en: null,
-                  tel:null,
-                  parents: [],
-                  is_account: false,
-                  is_other: false,
-                })
+            if(this.order.payment_status === "warn"){
+              let account = []
+              this.order.courses.forEach((course)=>{
+                course.coach_id = course.coach.coach_id
+                course.coach_name = course.coach.coach_name
+                for(const student of this.students){
+                  account.push({
+                    studentId : student
+                  })
+                  course.students.push({
+                    account_id: student,
+                    student_name: null,
+                    username: null,
+                    firstname_en: null,
+                    lastname_en: null,
+                    tel:null,
+                    parents: [],
+                    is_account: false,
+                    is_other: false,
+                  })
+                }
+              })
+              this.order.type = "addStudent"
+              this.changeOrderData(this.order);
+              let payload = {
+                notificationName: this.notification_name,
+                notificationDescription:this.notification_description,
+                accountId:account
               }
-            })
-            this.order.type = "addStudent"
-            this.changeOrderData(this.order);
-            this.saveOrder()
+              console.log(payload)
+              this.sendNotification(payload)
+              this.saveOrder()
+             
+            }else{
+              this.order.courses.forEach((course)=>{
+                course.coach_id = course.coach.coach_id
+                course.coach_name = course.coach.coach_name
+                for(const student of this.students){
+                  course.students.push({
+                    account_id: student,
+                    student_name: null,
+                    username: null,
+                    firstname_en: null,
+                    lastname_en: null,
+                    tel:null,
+                    parents: [],
+                    is_account: false,
+                    is_other: false,
+                  })
+                }
+              })
+              this.order.type = "addStudent"
+              this.changeOrderData(this.order);
+              this.saveOrder()
+            }
+           
           }
         })
       }

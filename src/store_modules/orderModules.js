@@ -322,14 +322,16 @@ const orderModules = {
                         'Authorization' : `Bearer ${VueCookie.get("token")}`
                     }
                 }
+                console.log(order)
                 // let localhost = "http://localhost:3000"
-                for await (const course of order.courses){
-                    for await (const student of course.students){
-                        let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/add/username/one`,student, configs)
-                        console.log(data)
+                if(order.type !== "addStudent"){
+                    for await (const course of order.courses){
+                        for await (const student of course.students){
+                            let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/add/username/one`,student, configs)
+                            console.log(data)
+                        }
                     }
                 }
-                
                 let payload = {
                     order_id : "",
                     courses : [],
