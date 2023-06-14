@@ -665,14 +665,6 @@
                             {{ item_booked.start }} - {{ item_booked.end }} น.
                           </v-card>
                         </v-col>
-
-                        <v-row dense>
-                          <v-col cols="auto">
-                            <v-card outlined>
-                              <v-card-text class="py-0"> </v-card-text>
-                            </v-card>
-                          </v-col>
-                        </v-row>
                       </v-col>
                       <!-- circle -->
                       <v-col
@@ -699,7 +691,7 @@
                     v-if="activeCard === index && !course_is_loading"
                     class="mt-3"
                   >
-                    <v-card>
+                    <v-card outlined>
                       <v-row dense class="pa-3">
                         <v-col
                           cols="12"
@@ -730,7 +722,8 @@
                         </v-col>
 
                         <v-col cols="12" md="12" sm="12" class="text-lg">
-                          {{ course_data.detail }}
+                          <div v-html="course_data.detail"></div>
+                        
                         </v-col>
                         <v-col cols="12" md="12" sm="12">
                           <div class="mt-8">
@@ -740,7 +733,7 @@
                           </div>
                           <v-divider class=""></v-divider>
                           <span class="pa-2">
-                            {{ course_data.music_performance }}
+                            <div v-html="course_data.music_performance"></div>
                           </span>
                         </v-col>
 
@@ -750,7 +743,7 @@
                           </div>
                           <v-divider class=""></v-divider>
                           <span class="pa-2">
-                            {{ course_data.catification }}
+                            <div v-html="course_data.catification"></div>
                           </span>
                         </v-col>
                       </v-row>
