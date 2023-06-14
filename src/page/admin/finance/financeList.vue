@@ -174,8 +174,10 @@
                 <v-autocomplete
                   dense
                   v-model="export_filter.students"
-                  :items="items"
+                  :items="students"
                   multiple
+                  item-text="student_name"
+                  item-value="account_id"
                   class="py-1"
                   label="กรุณากรอกชื่อผู้เรียน"
                   outlined
@@ -183,8 +185,8 @@
                   item-color="#FF6B81"
                 >
                   <template v-slot:selection="{ item, index }">
-                    <v-chip v-if="index === 0">
-                      <span>{{ item }}</span>
+                    <v-chip dark v-if="index === 0" color="#FF6B81">
+                      <span>{{ item.student_name }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
                       (+{{ export_filter.students.length - 1 }} others)
@@ -210,7 +212,7 @@
                   hide-details
                 >
                   <template v-slot:selection="{ item, index }">
-                    <v-chip v-if="index === 0">
+                    <v-chip dark v-if="index === 0" color="#FF6B81">
                       <span>{{ item.namePayment }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
@@ -225,11 +227,12 @@
               <!-- ประเภทการชำระเงิน -->
               <v-col cols="12" sm="6">
                 <label-custom text="ประเภทการชำระเงิน"></label-custom>
+                <!-- {{ export_filter.payment_type }} -->
                 <v-autocomplete
                   dense
                   :items="typeOfPayment"
-                  item-text="nameOfType"
-                  item-value="valueOfType"
+                  item-text="name"
+                  item-value="value"
                   v-model="export_filter.payment_type"
                   label="กรุณาเลือกประเภทการชำระเงิน"
                   outlined
@@ -240,8 +243,8 @@
                   item-color="#FF6B81"
                 >
                   <template v-slot:selection="{ item, index }">
-                    <v-chip v-if="index === 0">
-                      <span>{{ item.nameOfType }}</span>
+                    <v-chip dark v-if="index === 0" color="#FF6B81">
+                      <span >{{ item.name }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
                       (+{{ export_filter.payment_type.length - 1 }} others)
@@ -252,17 +255,30 @@
               <!-- ชื่อคอร์ส -->
               <v-col cols="12" sm="6">
                 <label-custom text="ชื่อคอร์ส"></label-custom>
-                <v-select
+                <v-autocomplete
                   dense
-                  class="py-1"
                   :items="courses"
                   item-text="course"
                   item-value="course_id"
+                  v-model="export_filter.course_id"
                   label="กรุณาเลือกชื่อคอร์ส"
                   outlined
+                  multiple
+                  hide-details
+                  class="py-1"
                   color="#FF6B81"
-                  v-model="export_filter.course_id"
-                ></v-select>
+                  item-color="#FF6B81"
+                >
+                  <template v-slot:selection="{ item, index }">
+                    <v-chip dark v-if="index === 0" color="#FF6B81">
+                      <span >{{ item.course }}</span>
+                    </v-chip>
+                    <span v-if="index === 1" class="grey--text text-caption">
+                      (+{{ export_filter.course_id.length - 1 }} others)
+                    </span>
+                  </template>
+                </v-autocomplete>
+                
               </v-col>
             </v-row>
             <!-- 3 -->
@@ -285,7 +301,7 @@
                   @input="setCourseType()"
                 >
                   <template v-slot:selection="{ item, index }">
-                    <v-chip v-if="index === 0">
+                    <v-chip dark v-if="index === 0" color="#FF6B81">
                       <span>{{ item.typeName }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
@@ -303,7 +319,7 @@
                       dense
                       :items="packages"
                       item-text="packageName"
-                      item-value="packageValue"
+                      item-value="packageId"
                       v-model="export_filter.package_id"
                       class="py-1"
                       label="กรุณาเลือกแพ็คเกจ"
@@ -314,7 +330,7 @@
                       :disabled="disableExportpackage"
                     >
                       <template v-slot:selection="{ item, index }">
-                        <v-chip v-if="index === 0">
+                        <v-chip dark v-if="index === 0" color="#FF6B81">
                           <span>{{ item.packageName }}</span>
                         </v-chip>
                         <span
@@ -331,9 +347,9 @@
                     <label-custom text="ระยะเวลาคอร์ส"></label-custom>
                     <v-autocomplete
                       dense
-                      :items="courseTime"
-                      item-text="courseTimeName"
-                      item-value="courseTimeValue"
+                      :items="options"
+                      item-text="optionName"
+                      item-value="optionId"
                       v-model="export_filter.option_id"
                       class="py-1"
                       label="กรุณาเลือกระยะเวลา"
@@ -343,8 +359,8 @@
                       item-color="#FF6B81"
                     >
                       <template v-slot:selection="{ item, index }">
-                        <v-chip v-if="index === 0">
-                          <span>{{ item.courseTimeName }}</span>
+                        <v-chip dark v-if="index === 0" color="#FF6B81">
+                          <span>{{ item.optionName }}</span>
                         </v-chip>
                         <span
                           v-if="index === 1"
@@ -360,7 +376,6 @@
             </v-row>
           </v-card-text>
           <!-- รายละเอียดการชำระเงิน -->
-
           <headerCard title="รายละเอียดการชำระเงิน"></headerCard>
           <v-card-text class="py-0">
             <v-divider class="mb-3"></v-divider>
@@ -543,12 +558,9 @@
               <v-col cols="12" sm="6">
                 <v-row>
                   <v-col cols="12" sm="8" align="end">
-                    <v-btn depressed @click="clearDateExport()">
-                      ล้างข้อมูล
-                    </v-btn></v-col
-                  >
+                    <v-btn depressed @click="clearDateExport()">ล้างข้อมูล</v-btn></v-col>
                   <v-col cols="12" sm="4" align="end">
-                    <v-btn depressed color="#ff6b81" @click="Export()"> เรียกดูทั้งหมด </v-btn>
+                    <v-btn depressed dark color="#ff6b81" @click="Export()"> เรียกดูทั้งหมด </v-btn>
                   </v-col>
                 </v-row>
               </v-col>
@@ -580,29 +592,19 @@ export default {
     itemsPerPage: 10,
     show_dialog: false,
     statusPayment: [
-      { namePayment: "ชำระแล้ว", valuePayment: "Payed" },
-      { namePayment: "รอดำเนินการ", valuePayment: "waitToPayed" },
+      { namePayment: "ชำระแล้ว", valuePayment: "success" },
+      { namePayment: "รอดำเนินการ", valuePayment: "pending" },
+      { namePayment: "ยกเลิก", valuePayment: "cancel" },
     ],
     typeOfPayment: [
-      { nameOfType: "เงินสด", valueOftype: "cash" },
-      { nameOfType: "บัตรเครดิต / เดบิต", valueOftype: "card" },
-      { nameOfType: "โอนเงินเข้าบัญชี", valueOftype: "banckIn" },
+      { name: "เงินสด", value: "cash" },
+      { name: "บัตรเครดิต / เดบิต", value: "Credit Card" },
+      { name: "โอนเงินเข้าบัญชี", value: "transfer" },
     ],
     courseName: [],
     courseType: [
       { typeName: "คอร์สทั่วไป", typeOfValue: "CT_1" },
       { typeName: "คอร์สระยะสั้น", typeOfValue: "CT_2" },
-    ],
-    packages: [
-      { packageName: "Exclusive Package", packageValue: "Exclusive Package" },
-      { packageName: "Family Package", packageValue: "Family Package" },
-      { packageName: "Group Package", packageValue: "Group Package" },
-    ],
-    courseTime: [
-      { courseTimeName: "รายวัน", courseTimeValue: "day" },
-      { courseTimeName: "รายเดือน", courseTimeValue: "month" },
-      { courseTimeName: "รายเทอม", courseTimeValue: "semester" },
-      { courseTimeName: "รายปี", courseTimeValue: "year" },
     ],
     export_filter : {
       course_id : [],
@@ -663,14 +665,17 @@ export default {
   }),
   created() {
     this.GetCoursesList()
-  },
-  mounted() {
+    this.GetOptions()
+    this.GetPackages()
     this.GetOrders();
   },
+  mounted() { },
   methods: {
     ...mapActions({
       GetOrders: "OrderModules/GetOrders",
-      GetCoursesList : "CourseModules/GetCoursesList"
+      GetCoursesList : "CourseModules/GetCoursesList",
+      GetOptions : "CourseModules/GetOptions",
+      GetPackages : "CourseModules/GetPackages",
     }),
     genPrice(price) {
       return price.toLocaleString();
@@ -680,10 +685,10 @@ export default {
         this.export_filter.course_type_id.length === 1 &&
         this.export_filter.course_type_id.includes("CT_2")
       ) {
-        console.log("ปิด");
+        // console.log("ปิด");
         this.disableExportpackage = true;
       } else {
-        console.log("เปิด");
+        // console.log("เปิด");
         this.disableExportpackage = false;
       }
     },
@@ -716,7 +721,53 @@ export default {
       }
     },
     Export(){
-      console.log(this.export_filter)
+      let order_filter = this.orders
+      if(this.export_filter.students.length > 0){
+        order_filter = order_filter.filter((v) => {
+          v.student = v.student.filter((s) => {
+            const filteredStudent = this.export_filter.students.find((efs) => efs === s.userOneId);
+            return filteredStudent !== undefined;
+          });
+          return v.student.length > 0;
+        });
+      }
+      if(this.export_filter.payment_status.length > 0){
+        order_filter = order_filter.filter((v) => {
+          const filteredStudent = this.export_filter.payment_status.find((efs) => efs === v.payment_status);
+          return filteredStudent !== undefined;
+        });
+      }
+      if(this.export_filter.payment_type.length > 0){
+        order_filter = order_filter.filter((v) => {
+          const filtered = this.export_filter.payment_type.find((efs) => efs.toLowerCase() === v.payment_type.toLowerCase());
+          return filtered !== undefined;
+        });
+      }
+      if(this.export_filter.course_id.length > 0){
+        order_filter = order_filter.filter((v) => {
+          const filtered = this.export_filter.course_id.find((efs) => efs === v.course_id);
+          return filtered !== undefined;
+        });
+      }
+      if(this.export_filter.course_type_id.length > 0){
+        order_filter = order_filter.filter((v) => {
+          const filtered = this.export_filter.course_type_id.find((efs) => efs === v.course_type_id);
+          return filtered !== undefined;
+        });
+      }
+      if(this.export_filter.package_id.length > 0){
+        order_filter = order_filter.filter((v) => {
+          const filtered = this.export_filter.package_id.find((efs) => efs === v.package_id);
+          return filtered !== undefined;
+        });
+      }
+      if(this.export_filter.option_id.length > 0){
+        order_filter = order_filter.filter((v) => {
+          const filtered = this.export_filter.option_id.find((efs) => efs === v.option_id);
+          return filtered !== undefined;
+        });
+      }
+      console.log(order_filter)
     },
     closeDialog() {
       this.show_dialog = false
@@ -747,7 +798,10 @@ export default {
   computed: {
     ...mapGetters({
       orders: "OrderModules/getOrders",
-      courses : "CourseModules/getCourses"
+      courses : "CourseModules/getCourses",
+      students : "OrderModules/getStudents",
+      packages : "CourseModules/getPackages",
+      options : "CourseModules/getOptions",
     }),
   },
   watch: {},
