@@ -58,6 +58,24 @@ const coachModules = {
     },
   },
   actions: {
+    async SearchCourseDateCoachLeave(context, {account_id, start_date, end_date}){
+      let config = {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-type": "Application/json",
+          Authorization: `Bearer ${VueCookie.get("token")}`,
+        },
+      };
+      try{
+        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/manage/course-fillter/${account_id}/?startDate=${start_date}&endDate=${end_date}`, config)
+        if(data.statusCode  == 200){
+          console.log(data.data)
+        }
+        console.log(context)
+      }catch(error){
+        console.log(error)
+      }
+    },
     async DeleteAssessmentPotentialFile(context, { att_assessment_id }) {
       try {
         // let localhost = "http://localhost:3000"
