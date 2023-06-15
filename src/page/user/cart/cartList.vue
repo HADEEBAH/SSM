@@ -245,7 +245,6 @@ export default {
         }
       });
     },
-
     selectOne(bool, key) {
       let result = this.cart_list.map((element, index) => {
         console.log("index", index);
@@ -256,7 +255,6 @@ export default {
 
         return element;
       });
-
       let resultAll = result.filter((element) => {
         if (!element.checked) {
           this.selected_all = false;
@@ -268,7 +266,6 @@ export default {
       }
       this.sumtotal();
     },
-
     selectAll(bool) {
       // console.log("bool", bool);
       let result = this.cart_list.map((element) => {
@@ -283,7 +280,6 @@ export default {
       this.sumtotal();
       // this.cart_list = result;
     },
-
     savePayment() {
       if (this.cart_list.filter((v) => v.checked === true).length > 0) {
         let isValiDateCourse = [];
@@ -291,6 +287,7 @@ export default {
         this.order.total_price = this.total_price;
         this.order.payment_status = "pending";
         this.order.created_by = this.user_login.account_id;
+        this.order.type = "cart"
         this.changeOrderData(this.order);
         this.GetAllCourseMonitor().then(() => {
           console.log("course_monitors", this.course_monitors);

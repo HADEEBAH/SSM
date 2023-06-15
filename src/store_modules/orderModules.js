@@ -366,6 +366,7 @@ const orderModules = {
                   }
                 }
                 // console.log(payload)
+                // let localhost = "http://localhost:3002"
                 let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/cart`,payload, config)
                 if(data.statusCode === 201){
                     localStorage.removeItem("Order")
@@ -727,7 +728,7 @@ const orderModules = {
                 // let endpoint = "http://localhost:3002"
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/cart/${account_id}`,config)
                 if (data.statusCode === 200) {
-                    // console.log("Cart List =>",data.data)
+                    console.log("Cart List =>",data.data)
                     for await (const item of data.data) {
                         console.log("discount =>",item.option.discount)
                         item.course_img = `${process.env.VUE_APP_URL}/api/v1/files/${item.course_img}`
