@@ -15,106 +15,86 @@
         </span>
       </v-card-text>
     </div>
-
     <div v-if="my_course_detail.countCheckIn >= 1">
-      <v-card class="my-10 drop-shadow-lg">
-        <v-row dense>
-          <!-- img -->
-          <v-col cols="12" sm="2">
-            <v-col
-              style="
-                display: block;
-                margin-left: auto;
-                margin-right: auto;
-                width: 100%;
-                margin-top: 10%;
-              "
-            >
-              <!-- <img src="../../../assets/student_course/download.png" /> -->
-              <!-- {{ student_data.courseImg }} -->
-              <v-img
-                :src="
-                  my_course_detail.courseImg
-                    ? my_course_detail.courseImg
-                    : require(`@/assets/course/default_course_img.svg`)
-                "
-              ></v-img>
+      <v-card outlined class="mb-3">
+        <v-card-text>
+          <v-row dense>
+            <!-- img -->
+            <v-col cols="12" sm="2">
+                <v-img max-height="180" :src="my_course_detail.courseImg ? my_course_detail.courseImg  : require(`@/assets/course/default_course_img.svg`) " ></v-img>
             </v-col>
-          </v-col>
-          <!-- detail -->
-          <v-col cols="12" sm="6">
-            <v-col class="text-lg font-bold">
-              {{
-                !my_course_detail.courseNameTh
-                  ? "-"
-                  : my_course_detail.courseNameTh
-              }}
-            </v-col>
-            <v-col class="text-slate-400">
-              {{
-                !my_course_detail.courseNameEng
-                  ? "-"
-                  : my_course_detail.courseNameEng
-              }}
-            </v-col>
-            <v-col class="text-slate-400">
-              <span class="mdi mdi-account">โค้ช :</span>
-              {{
-                !my_course_detail.coachName ? "-" : my_course_detail.coachName
-              }}
-            </v-col>
-
-            <v-col class="text-slate-400">
-              <span class="mdi mdi-account">ผู้เรียน :</span>
-
-              {{
-                !my_course_detail.student
-                  ? "-"
-                  : my_course_detail.student.firstNameTh
-              }}
-              {{
-                !my_course_detail.student
-                  ? "-"
-                  : my_course_detail.student.lastNameTh
-              }}
-            </v-col>
-
-            <v-col class="text-slate-400">
-              <span class="mdi mdi-account">ทำรายการโดย :</span>
-
-              {{
-                !my_course_detail.createdBy
-                  ? "-"
-                  : my_course_detail.createdBy.firstNameTh
-              }}
-              {{
-                !my_course_detail.createdBy
-                  ? "-"
-                  : my_course_detail.createdBy.lastNameTh
-              }}
-            </v-col>
-
-            <v-col>
-              <v-card color="yellow" class="rounded-lg text-center">
-                <span
-                  v-for="(day_list, index_day) in my_course_detail.dates.day"
-                  :key="index_day"
-                >
+            <!-- detail -->
+            <v-col  cols="12" sm="7">
+              <v-row dense>
+                <v-col class="text-lg font-bold">
                   {{
-                    dayOfWeekName(day_list) == ""
+                    !my_course_detail.courseNameTh
                       ? "-"
-                      : dayOfWeekName(day_list)
+                      : my_course_detail.courseNameTh
+                  }}({{ my_course_detail.courseNameEng }})
+                </v-col>
+              </v-row>
+              <v-row dense>
+                <v-col class="text-slate-400">
+                  <span class="mdi mdi-account">โค้ช :</span>
+                  {{
+                    !my_course_detail.coachName ? "-" : my_course_detail.coachName
                   }}
-                </span>
-                {{ my_course_detail.time.start }} -
-                {{ my_course_detail.time.end }} น.
-              </v-card>
-            </v-col>
-          </v-col>
+                </v-col>
+              </v-row>
+              <v-row dense>
+                <v-col class="text-slate-400">
+                  <span class="mdi mdi-account">ผู้เรียน :</span>
 
-          <!-- circle -->
-          <v-col cols="12" sm="4" class="pt-6" align="center">
-            <v-col>
+                  {{
+                    !my_course_detail.student
+                      ? "-"
+                      : my_course_detail.student.firstNameTh
+                  }}
+                  {{
+                    !my_course_detail.student
+                      ? "-"
+                      : my_course_detail.student.lastNameTh
+                  }}
+                </v-col>
+              </v-row>
+              <v-row dense>
+                <v-col class="text-slate-400">
+                  <span class="mdi mdi-account">ทำรายการโดย :</span>
+
+                  {{
+                    !my_course_detail.createdBy
+                      ? "-"
+                      : my_course_detail.createdBy.firstNameTh
+                  }}
+                  {{
+                    !my_course_detail.createdBy
+                      ? "-"
+                      : my_course_detail.createdBy.lastNameTh
+                  }}
+                </v-col>
+              </v-row>
+              <v-row dense>
+                <v-col>
+                  <v-chip dark color="#F9B320">
+                    <span
+                      v-for="(day_list, index_day) in my_course_detail.dates.day"
+                      :key="index_day"
+                    >
+                      {{
+                        dayOfWeekName(day_list) == ""
+                          ? "-"
+                          : dayOfWeekName(day_list)
+                      }}
+                    </span>
+                    {{ my_course_detail.time.start }} -
+                    {{ my_course_detail.time.end }} น.
+                  </v-chip>
+                </v-col>
+              </v-row>
+            </v-col>
+            <!-- circle -->
+            <v-col cols="12" sm="3" class="d-flex align-center justify-center" >
               <v-progress-circular
                 :rotate="-90"
                 :size="90"
@@ -130,74 +110,55 @@
                 {{ my_course_detail.dates.totalDay }} <br />ครั้ง
               </v-progress-circular>
             </v-col>
-          </v-col>
-        </v-row>
+          </v-row>
+        </v-card-text>
       </v-card>
-      <!-- </div> -->
-      <!-- </div> -->
-      <!-- </v-card> -->
-
-      <v-row>
+      <v-row dense class="mb-3">
         <v-col cols="6" align="start">
           <div class="text-lg font-bold">ข้อมูลการเรียน</div>
         </v-col>
-        <!-- <v-col cols="6" align="end">
-          <div class="text-lg pink--text">เลือกทั้งหมด</div>
-        </v-col> -->
       </v-row>
-      <div v-for="(item_data, index) in my_course_detail.checkIn" :key="index">
-        <v-card
-          class="pa-2"
-          v-if="
-            item_data.potential !== null && my_course_detail.checkIn.length >= 1
-          "
-        >
-          <v-row>
-            <v-col cols="2" sm="1" align="center">
-              <img src="../../../assets/student_course/certificates.png" />
-            </v-col>
-            <v-col class="text-lg font-bold" cols="6">ผลประเมินศักยภาพ</v-col>
-          </v-row>
-
-          <v-card color="#FBF3F5" class="my-2 mx-5">
-            <v-row dense>
-              <v-col cols="12" sm="6" md="12" align="start">
-                <v-card-text>
-                  <b>ระดับพัฒนาการ:</b>
-                  <span
-                    :class="`text-[${
-                      evolution_options.filter(
-                        (v) => v.value === item_data.potential.evolution
-                      )[0]
-                    }]`"
-                  >
-                    {{
-                      evolution_options.filter(
-                        (v) => v.value === item_data.potential.evolution
-                      ).length > 0
-                        ? evolution_options.filter(
-                            (v) => v.value === item_data.potential.evolution
-                          )[0].label
-                        : "-"
-                    }}
-                  </span>
-                </v-card-text>
+      <div class="mb-3" v-for="(item_data, index) in my_course_detail.checkIn" :key="index">
+        <v-card class="rounded-lg" v-if=" item_data.potential !== null && my_course_detail.checkIn.length >= 1 " >
+          <v-card-text>
+            <v-row dense class="mb-2">
+              <v-col cols="2" sm="1" align="center">
+                <img src="../../../assets/student_course/certificates.png" />
               </v-col>
-              <v-col cols="12" sm="auto" md="12" align="start">
-                <v-card-text>
-                  <b>ระดับความสนใจ:</b>
-                  {{ item_data.potential.interest }}
-                </v-card-text>
-              </v-col>
-              <v-col cols="12" align="start">
-                <v-card-text>
-                  <b>ความคิดเห็นจากโค้ช:</b>
-                  {{ item_data.potential.remark }}
-                </v-card-text>
-              </v-col>
-
-              <v-row dense>
-                <v-card-text class="text-start">
+              <v-col class="text-lg font-bold" cols="6">ผลประเมินศักยภาพ</v-col>
+            </v-row>
+            <v-card flat color="#FBF3F5">
+              <v-card-text>
+                <v-row dense>                 
+                  <v-col>
+                    <b>ระดับพัฒนาการ:</b>
+                    <span :class="`text-[${evolution_options.filter((v) => v.value === item_data.potential.evolution )[0]}]`"
+                    >
+                      {{
+                        evolution_options.filter(
+                          (v) => v.value === item_data.potential.evolution
+                        ).length > 0
+                          ? evolution_options.filter(
+                              (v) => v.value === item_data.potential.evolution
+                            )[0].label
+                          : "-"
+                      }}
+                    </span>
+                  </v-col>
+                </v-row>
+                <v-row dense>
+                  <v-col >
+                    <b>ระดับความสนใจ:</b>
+                    {{ item_data.potential.interest }}
+                  </v-col>
+                </v-row>
+                <v-row dense>
+                  <v-col cols="12" align="start">
+                      <b>ความคิดเห็นจากโค้ช:</b>
+                      {{ item_data.potential.remark }}
+                  </v-col>
+                </v-row>
+                <v-row dense>
                   <v-col cols="12">
                     <b>ไฟล์แนบ: </b>
                     <v-card
@@ -234,254 +195,187 @@
                       </v-card-text>
                     </v-card>
                   </v-col>
-                </v-card-text>
-
-                <!-- <v-card v-if="item_data.assessment.attachment.length <= 0">
-                  <v-card-text
-                    class="border border-2 border-[#ff6b81] rounded-lg font-bold"
-                  >
-                    <v-row>
-                      <v-col cols="12"> ยังไม่มีไฟล์แนบ </v-col>
-                    </v-row>
-                  </v-card-text>
-                </v-card> -->
-              </v-row>
-
-              <!-- <v-col cols="12" sm="6" align="start">
-                <div
-                  v-for="(data, index) in item_data.assessment.attachment"
-                  :key="index"
-                >
-                  <v-img
-                    class="mx-5"
-                    style=""
-                    :src="
-                      !data.attFiles
-                        ? 'ไม่มีรูปภาพเพิ่มเติม'
-                        : showImg(data.attFiles)
-                    "
-                  ></v-img>
-                </div>
-              </v-col> -->
-            </v-row>
-          </v-card>
+                </v-row>
+              </v-card-text>
+             
+            </v-card>
+          </v-card-text>
+         
+       
         </v-card>
       </div>
-
-      <template>
-        <div
-          v-for="(day_list, index_day) in my_course_detail.checkIn"
-          :key="index_day"
-        >
-          <v-card class="my-5 drop-shadow-lg rounded-xl">
-            <v-card-text>
-              <v-row class="" dense>
-                <v-col cols="12" v-if="checked == true">
-                  <v-checkbox
-                    v-model="checked[index]"
-                    color="#FF6B81"
-                    hide-details
-                  ></v-checkbox>
-                </v-col>
-                <v-col cols="2" sm="1">
-                  <v-icon color="#FF6B81">mdi-calendar-month-outline</v-icon>
-                </v-col>
-                <v-col cols="6">
-                  {{ genDate(day_list.date) }}
-                </v-col>
-
-                <!-- ตรงเวลา -->
-
-                <v-col cols="4">
-                  <v-card flat>
-                    <v-card-text
-                      v-if="day_list.status"
-                      class="pa-1 rounded-xl text-center"
+      <div
+        v-for="(day_list, index_day) in my_course_detail.checkIn"
+        :key="index_day"
+      >
+        <v-card outlined class="rounded-lg">
+          <v-card-text>
+            <v-row dense>
+              <v-col cols="12" v-if="checked == true">
+                <v-checkbox
+                  v-model="checked[index]"
+                  color="#FF6B81"
+                  hide-details
+                ></v-checkbox>
+              </v-col>
+              <v-col cols="2" sm="1">
+                <v-icon color="#FF6B81">mdi-calendar-month-outline</v-icon>
+              </v-col>
+              <v-col class="text-lg font-bold">
+                {{ genDate(day_list.date) }}
+              </v-col>
+              <!-- ตรงเวลา -->
+              <v-col cols="2">
+                <v-card flat>
+                  <v-card-text
+                    v-if="day_list.status"
+                    class="pa-1 rounded-xl text-center"
+                    :class="`text-[${
+                      check_in_status_options.filter(
+                        (v) => v.value === day_list.status
+                      )[0].color
+                    }] bg-[${
+                      check_in_status_options.filter(
+                        (v) => v.value === day_list.status
+                      )[0].bg_color
+                    }]`"
+                  >
+                    <span
                       :class="`text-[${
                         check_in_status_options.filter(
                           (v) => v.value === day_list.status
                         )[0].color
-                      }] bg-[${
+                      }]`"
+                    >
+                      {{
                         check_in_status_options.filter(
                           (v) => v.value === day_list.status
-                        )[0].bg_color
-                      }]`"
-                    >
-                      <span
-                        :class="`text-[${
-                          check_in_status_options.filter(
-                            (v) => v.value === day_list.status
-                          )[0].color
-                        }]`"
-                      >
-                        {{
-                          check_in_status_options.filter(
-                            (v) => v.value === day_list.status
-                          ).length > 0
-                            ? check_in_status_options.filter(
-                                (v) => v.value === day_list.status
-                              )[0].label
-                            : "-"
-                        }}
-                      </span>
-                    </v-card-text>
-                  </v-card>
-                </v-col>
-              </v-row>
-              <v-row dense>
-                <v-col class="text-slate-400">
-                  เวลาเรียน
-                  {{
-                    !my_course_detail.time.start
-                      ? "-"
-                      : my_course_detail.time.start
-                  }}
-                  -
-                  {{
-                    !my_course_detail.time.end ? "-" : my_course_detail.time.end
-                  }}
-                  น.
-                </v-col>
-              </v-row>
-              <v-row dense>
-                <!-- พัฒนาการ -->
-                <v-col cols="12" sm="4" align="start">
-                  <v-card flat>
-                    <v-card-text
-                      v-if="day_list.assessment.evolution"
-                      :class="`text-[${
+                        ).length > 0
+                          ? check_in_status_options.filter(
+                              (v) => v.value === day_list.status
+                            )[0].label
+                          : "-"
+                      }}
+                    </span>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+            <v-row dense>
+              <v-col class="text-slate-400">
+                เวลาเรียน
+                {{ !my_course_detail.time.start ? "-" : my_course_detail.time.start}}
+                -
+                {{!my_course_detail.time.end ? "-" : my_course_detail.time.end}} น.
+              </v-col>
+            </v-row>
+            <v-row dense>
+              <!-- พัฒนาการ -->
+              <v-col cols="12" sm="4" align="start">
+                  <div
+                    v-if="day_list.assessment.evolution"
+                  >
+                  <b>ระดับพัฒนาการ:</b>
+                    <span>
+                      {{
                         evolution_options.filter(
                           (v) => v.value === day_list.assessment.evolution
-                        )[0]
-                      }]`"
-                    >
-                      ระดับพัฒนาการ:
-                      <span
-                        :class="`text-[${
-                          evolution_options.filter(
-                            (v) => v.value === day_list.assessment.evolution
-                          )[0]
-                        }]`"
-                      >
-                        {{
-                          evolution_options.filter(
-                            (v) => v.value === day_list.assessment.evolution
-                          ).length > 0
-                            ? evolution_options.filter(
-                                (v) => v.value === day_list.assessment.evolution
-                              )[0].label
-                            : "-"
-                        }}
-                      </span>
-                    </v-card-text>
-                  </v-card>
-                </v-col>
-                <!-- ความสนใจ -->
-                <v-col cols="12" sm="auto" align="start">
-                  <v-card flat>
-                    <v-card-text
-                      v-if="day_list.assessment.interest"
-                      :class="`text-[${
-                        interest_options.filter(
-                          (v) => v.value === day_list.assessment.interest
-                        )[0]
-                      }]`"
-                    >
-                      ระดับความสนใจ:
-                      <span
-                        :class="`text-[${
-                          interest_options.filter(
-                            (v) => v.value === day_list.assessment.interest
-                          )[0]
-                        }]`"
-                      >
-                        {{
-                          interest_options.filter(
-                            (v) => v.value === day_list.assessment.interest
-                          ).length > 0
-                            ? interest_options.filter(
-                                (v) => v.value === day_list.assessment.interest
-                              )[0].label
-                            : "-"
-                        }}
-                      </span>
-                    </v-card-text>
-                  </v-card>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12" align="center">
-                  <v-btn
-                    color="#FF6B81"
-                    text
-                    @click="showAssessment(index_day)"
-                  >
-                    ดูเพิ่มเติม
-                    <v-icon>{{
-                      day_list.show ? "mdi-chevron-up" : "mdi-chevron-down"
-                    }}</v-icon>
-                  </v-btn>
-
-                  <v-expand-transition>
-                    <div v-show="day_list.show">
-                      <v-card-text class="text-start">
-                        <b>ความคิดเห็น:</b>
-                        {{
-                          !day_list.assessment.remark
-                            ? "ไม่มีความคิดเห็น"
-                            : day_list.assessment.remark
-                        }}
-                      </v-card-text>
-                      <v-row dense>
-                        <v-card-text class="text-start">
-                          ไฟล์แนบ :
-                        </v-card-text>
-                        <v-col cols="12">
-                          <v-card
-                            @click="openFile(file.attachmentFiles)"
-                            flat
-                            class="mb-3"
-                            v-for="(file, index_file) in day_list.assessment
-                              .attachment"
-                            :key="index_file"
-                          >
-                            <v-card-text
-                              class="border border-2 border-[#ff6b81] rounded-lg"
-                            >
-                              <v-row>
-                                <v-col cols="12" sm="1" align="center">
-                                  <v-img
-                                    height="35"
-                                    width="26"
-                                    src="../../../assets/coachLeave/file-pdf.png"
-                                  />
-                                </v-col>
-                                <v-col cols="12" sm="10" align="start">
-                                  <span class="font-bold">{{
-                                    file.originalFilesName
-                                  }}</span
-                                  ><br />
-                                  <span class="text-caption"
-                                    >ขนาดไฟล์ :
-                                    {{ (file.filesSize / 1000000).toFixed(2) }}
-                                    MB</span
-                                  >
-                                </v-col>
-                              </v-row>
-                            </v-card-text>
-                          </v-card>
-                        </v-col>
-                      </v-row>
-                    </div>
-                  </v-expand-transition></v-col
+                        ).length > 0
+                          ? evolution_options.filter(
+                              (v) => v.value === day_list.assessment.evolution
+                            )[0].label
+                          : "-"
+                      }}
+                    </span>
+                  </div>
+              </v-col>
+              <!-- ความสนใจ -->
+              <v-col cols="12" sm="auto" align="start">
+                <div
+                  v-if="day_list.assessment.interest"
                 >
-              </v-row>
-            </v-card-text>
-
-            <v-card-text class="center pa-2"> </v-card-text>
-          </v-card>
-        </div>
-      </template>
+                <b> ระดับความสนใจ:</b>
+                  <span>
+                    {{
+                      interest_options.filter(
+                        (v) => v.value === day_list.assessment.interest
+                      ).length > 0
+                        ? interest_options.filter(
+                            (v) => v.value === day_list.assessment.interest
+                          )[0].label
+                        : "-"
+                    }}
+                  </span>
+                </div>
+              </v-col>
+            </v-row>
+            <div align="center">
+              <v-btn
+                  color="#FF6B81"
+                  text
+                  @click="showAssessment(index_day)"
+                >
+                  ดูเพิ่มเติม
+                  <v-icon>{{
+                    day_list.show ? "mdi-chevron-up" : "mdi-chevron-down"
+                  }}</v-icon>
+              </v-btn>
+            </div>
+            <v-expand-transition>
+                <div v-show="day_list.show">
+                  <v-row dense>
+                    <v-col>
+                      <b>ความคิดเห็น:</b>
+                      {{
+                        !day_list.assessment.remark
+                          ? "ไม่มีความคิดเห็น"
+                          : day_list.assessment.remark
+                      }}
+                    </v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col cols="12">
+                      ไฟล์แนบ :
+                      <v-card
+                        @click="openFile(file.attachmentFiles)"
+                        flat
+                        class="mb-3"
+                        v-for="(file, index_file) in day_list.assessment
+                          .attachment"
+                        :key="index_file"
+                      >
+                        <v-card-text
+                          class="border border-2 border-[#ff6b81] rounded-lg"
+                        >
+                          <v-row dense>
+                            <v-col cols="12" sm="1" align="center">
+                              <v-img
+                                height="35"
+                                width="26"
+                                src="../../../assets/coachLeave/file-pdf.png"
+                              />
+                            </v-col>
+                            <v-col cols="12" sm="10" align="start">
+                              <span class="font-bold">{{
+                                file.originalFilesName
+                              }}</span
+                              ><br />
+                              <span class="text-caption"
+                                >ขนาดไฟล์ :
+                                {{ (file.filesSize / 1000000).toFixed(2) }}
+                                MB</span
+                              >
+                            </v-col>
+                          </v-row>
+                        </v-card-text>
+                      </v-card>
+                    </v-col>
+                  </v-row>
+                </div>
+              </v-expand-transition>
+          </v-card-text>
+        </v-card>
+      </div>
       <!-- DIALOG -->
       <!-- <v-dialog class="pa-2" width="50vw" v-model="dialog_show" persistent>
       <v-card>
