@@ -59,6 +59,7 @@ const coachModules = {
   },
   actions: {
     async SearchCourseDateCoachLeave(context, {account_id, start_date, end_date}){
+      context.commit("SetMyCoursesIsLoading",true)
       let config = {
         headers: {
           "Access-Control-Allow-Origin": "*",
@@ -67,12 +68,15 @@ const coachModules = {
         },
       };
       try{
-        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/manage/course-fillter/${account_id}/?startDate=${start_date}&endDate=${end_date}`, config)
+        let localhost = "http://localhost:3000"
+        let {data} = await axios.get(`${localhost}/api/v1/manage/course-filter/${account_id}/?startDate=${start_date}&endDate=${end_date}`, config)
         if(data.statusCode  == 200){
           console.log(data.data)
+          context.commit("SetMyCourses",data.data)
+          context.commit("SetMyCoursesIsLoading",false)
         }
-        console.log(context)
       }catch(error){
+        context.commit("SetMyCoursesIsLoading",false)
         console.log(error)
       }
     },
@@ -319,14 +323,15 @@ const coachModules = {
           },
         };
         let user_detail = JSON.parse(localStorage.getItem("userDetail"));
-        // let localhost ="http://localhost:3000"
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}/date/${date}`, config)
+        let localhost ="http://localhost:3000"
+        let { data } = await axios.get(`${localhost}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}/date/${date}`, config)
         if (data.statusCode === 200) {
           console.log(data.data)
           data.data.forEach((check_in) => {
             let img_url = []
             if (check_in.attachment.length > 0) {
               for (const img of check_in.attachment) {
+                console.log(img)
                 img_url.push({
                   sumAttId: img.sumAttId,
                   checkInCoachId: img.checkInCoachId,
@@ -334,6 +339,7 @@ const coachModules = {
                   attFilesUrl: `${process.env.VUE_APP_URL}/api/v1/files/${img.attFiles}`,
                   originalFilesName: img.originalFilesName,
                   filesSize: img.filesSize,
+                  filesType : img.filesType
                 })
               }
             }
