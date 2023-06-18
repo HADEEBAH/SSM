@@ -569,6 +569,7 @@ export default {
         remark: "",
         status: "",
         leave_type: "",
+        dates:[],
         courses: [
           {
             my_course_id: "",
