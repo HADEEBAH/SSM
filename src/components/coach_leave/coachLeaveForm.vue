@@ -166,14 +166,15 @@
                   <v-select
                     dense
                     outlined
+                    cache-items
                     v-model="course.my_course_id"
-                    :items="GenCourseLeaveOptions()"
+                    :items="GenCourseLeaveOptions(date.courses).filter(v => v.day_of_week_name.includes(`${new Date(date.date).getDay()}`))"
                     item-value="my_course_id"
                     item-text="course_name"
                   ></v-select>
                 </v-col>
               </v-row>
-              <v-row dense>
+              <v-row dense v-if="course.type === 'teach'">
                 <v-col>
                   ผู้สอนแทน
                   <v-select
@@ -189,6 +190,60 @@
                     v-model="course.substitute_coach_id"
                   >
                   </v-select>
+                </v-col>
+              </v-row>
+              <v-row dense v-else-if="course.type === 'date'">
+                <v-col>
+                  วันที่ชดเชย
+                  <v-menu
+                        v-model="course.menu_compensation_date"
+                        :close-on-content-click="false"
+                        transition="scale-transition"
+                        min-width="auto"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            dense
+                            outlined
+                            hide-details
+                            v-model="course.compensation_date"
+                            readonly
+                            placeholder="เลือกวันที่ชดเชย"
+                            v-bind="attrs" 
+                            v-on="on"
+                          >
+                            <template v-slot:append>
+                              <v-icon
+                                :color="course.compensation_date ? '#FF6B81' : ''"
+                                >mdi-calendar</v-icon
+                              >
+                            </template>
+                          </v-text-field>
+                        </template>
+                        <v-date-picker
+                          :min="new Date().toISOString()"
+                          v-model="course.compensation_date"
+                        ></v-date-picker>
+                      </v-menu>
+                </v-col>
+                <v-col>
+                  เวลาช่วงเวลา
+                  <v-row dense class="mb-3">
+                      <v-col class="px-2" cols="12" sm="6">
+                        <VueTimepicker 
+                          class="input-size-lg"
+                          advanced-keyboard 
+                          v-model="course.compensation_start_time_obj" 
+                          close-on-complete></VueTimepicker>
+                      </v-col>
+                      <v-col class="px-2" cols="12" sm="6">
+                        <VueTimepicker 
+                          class="input-size-lg"
+                          advanced-keyboard  
+                          v-model="course.compensation_end_time_obj" 
+                          close-on-complete></VueTimepicker> 
+                      </v-col>
+                    </v-row>
                 </v-col>
               </v-row>
             </v-card-text>
@@ -311,10 +366,11 @@
 import Swal from "sweetalert2";
 import { dateFormatter } from "@/functions/functions";
 import { mapActions, mapGetters, } from "vuex";
+import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
 export default {
   name:"coachLeaveForm",
   props:{},
-  components: {},
+  components: {VueTimepicker},
   data: () => ({
     today: new Date(),
     periods: [
@@ -372,13 +428,8 @@ export default {
       let end_date = this.coach_leave_data.end_date ? true : false;
       let period = this.coach_leave_data.period ? true : false;
       let leave_type = this.coach_leave_data.leave_type ? true : false;
-      let course =
-        this.coach_leave_data.courses.length > 0
-          ? this.coach_leave_data.courses[0].my_course_id
-            ? true: false
-          : false;
-      console.log(start_date && end_date && period && leave_type && course);
-      return !(start_date && end_date && period && leave_type && course);
+      console.log(start_date && end_date && period && leave_type );
+      return !(start_date && end_date && period && leave_type );
     },
   },
   methods: {
@@ -411,7 +462,15 @@ export default {
           date_str: currentDate.toLocaleDateString("th-TH",options),
           courses: [
             {
+              menu_compensation_date : false,
+              compensation_date_str : "",
+              compensation_date : "",
+              compensation_start_time_obj : {HH : '' ,mm : ""},
+              compensation_end_time_obj : {HH : '' ,mm : ""},
+              compensation_start_time : "",
+              compensation_end_time : "",
               my_course_id: "",
+              type : "",
               course_id: "",
               substitute_coach_id: "",
               day_of_week_id: "",
@@ -427,6 +486,12 @@ export default {
       date.courses.push({
         my_course_id: "",
         course_id: "",
+        menu_compensation_date : false,
+        compensation_date : "",
+        compensation_start_time_obj : {HH : '' ,mm : ""},
+        compensation_end_time_obj : {HH : '' ,mm : ""},
+        compensation_start_time : "",
+        compensation_end_time : "",
         substitute_coach_id: "",
         day_of_week_id: "",
         time_id: "",
@@ -447,26 +512,36 @@ export default {
     removeFile(index) {
       this.selected_files.splice(index, 1);
     },
-    GenCourseLeaveOptions() {
+    GenCourseLeaveOptions(courses) {
       let my_course_data = [];
-      this.my_courses.forEach((course) => {
-        my_course_data.push({
-          my_course_id: `${course.course_id}|${course.day_of_week_id}|${course.time_id}`,
-          cousre_id: course.course_id,
-          course_name: `${course.name} ${course.start_time} - ${course.end_time}น.`,
-          time_id: course.time_id,
-          day_of_week_id: course.day_of_week_id,
+      console.log("521=>",courses)
+      if(courses.length > 0){
+        console.log("520 =>", this.my_courses)
+        this.my_courses.forEach((course) => {
+          if(courses.filter(v => v.my_course_id.split("|")[0] === course.courseId).length === 0){
+            my_course_data.push({
+              my_course_id: `${course.courseId}|${course.dayOfWeekId}|${course.timeId}`,
+              cousre_id: course.courseId,
+              course_name: `${course.courseNameTh} ${course.start} - ${course.end}น.`,
+              time_id: course.timeId,
+              day_of_week_id: course.dayOfWeekId,
+              day_of_week_name : course.dayOfWeekName
+            });
+          }
         });
-      });
+      }
+      
       return my_course_data;
     },
     inputDate(e, data) {
       switch (data) {
         case "start":
+          this.coach_leave_data.menu_start_date = false
           this.coach_leave_data.start_date_str = dateFormatter( e,  "DD MT YYYYT" );
           this.GenDates()
           break;
         case "end":
+          this.coach_leave_data.menu_end_date = false
           this.coach_leave_data.end_date_str = dateFormatter(e, "DD MT YYYYT");
           this.GenDates()
           this.SearchCourseDateCoachLeave({
@@ -515,12 +590,14 @@ export default {
         confirmButtonText: "ตกลง",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          this.coach_leave_data.courses.forEach((course) => {
-            let my_course_id_part = course.my_course_id.split("|");
-            course.course_id = my_course_id_part[0];
-            course.day_of_week_id = my_course_id_part[1];
-            course.time_id = my_course_id_part[2];
-          });
+          for(let date of this.coach_leave_data.dates){
+            for(let course of date.courses){
+              let my_course_id_part = course.my_course_id.split("|");
+              course.course_id = my_course_id_part[0];
+              course.day_of_week_id = my_course_id_part[1];
+              course.time_id = my_course_id_part[2];
+            }
+          }
           this.coach_leave_data.coach_id = this.user_detail.account_id;
           this.SaveCoachLeave({
             coach_leave_data: this.coach_leave_data,
@@ -533,3 +610,8 @@ export default {
   },
 };
 </script>
+<style>
+  .input-size-lg input {
+    height: 40px !important;
+  }
+</style>

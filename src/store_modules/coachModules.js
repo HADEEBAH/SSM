@@ -774,23 +774,34 @@ const coachModules = {
           endDate: coach_leave_data.end_date,
           remark: coach_leave_data.remark,
           status: "pending",
-          courses: []
+          dates: []
         }
-        await coach_leave_data.courses.forEach((course) => {
-          payload.courses.push({
-            courseId: course.course_id,
-            substituteCoachId: course.substitute_coach_id,
-            dayOfWeekId: course.day_of_week_id,
-            timeId: course.time_id
+          for await (let date of coach_leave_data.dates){
+          let cousers = []
+          for await (const course of date.courses){
+            cousers.push({
+              courseId: course.course_id,
+              substituteCoachId: course.substitute_coach_id ? course.substitute_coach_id : null ,
+              dayOfWeekId: course.day_of_week_id,
+              timeId: course.time_id,
+              type : course.type,
+              compensationDate : course.compensation_date ? course.compensation_date : null,
+              compensationStartTime : course.compensation_start_time_obj.HH ? `${course.compensation_start_time_obj.HH}:${course.compensation_start_time_obj.mm}` : null,
+              compensationEndTime : course.compensation_end_time_obj.HH ? `${course.compensation_end_time_obj.HH}:${course.compensation_end_time_obj.mm}` : null,
+            })
+          }
+          payload.dates.push({
+            date: date.date,
+            courses: cousers,
           })
-        })
-        // let localhost = "http://localhost:3000"
+        }
+        let localhost = "http://localhost:3000"
         let payloadData = new FormData()
         payloadData.append("payload", JSON.stringify(payload))
         for (const file of files) {
           payloadData.append(`files`, file);
         }
-        let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coach/leave`, payloadData, config)
+        let { data } = await axios.post(`${localhost}/api/v1/coach/leave`, payloadData, config)
         if (data.statusCode === 201) {
           Swal.fire({
             icon: "success",
