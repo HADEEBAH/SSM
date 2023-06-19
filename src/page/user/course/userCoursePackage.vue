@@ -102,6 +102,7 @@
           v-slot="{ active, toggle }"
         >
           <v-card
+            outlined
             :class="active ? '' : ''"
             class="ma-4 card-package-size"
             @click="toggle"

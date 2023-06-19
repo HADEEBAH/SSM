@@ -2,6 +2,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import router from "@/router";
 import VueCookie from "vue-cookie"
+import {dateFormatter} from "../functions/functions"
 const orderModules = {
     namespaced: true,
     state: {
@@ -48,8 +49,17 @@ const orderModules = {
         cart_list :[],
         reserve_list:[],
         student_list:[],
+        students : [],
+        order_history : [],
+        order_history_is_loading : false,
     },
     mutations: {
+        SetOrderHistory(state, payload){
+            state.order_history = payload
+        },
+        SetOrderHistoryIsLoading(state, value){
+            state.order_history_is_loading = value
+        },
         SetReserveList(state, payload){
             state.reserve_list = payload
         },
@@ -73,6 +83,9 @@ const orderModules = {
         },
         SetOrderDetail(state, payload){
             state.order_detail = payload
+        },
+        SetStudents(state, payload){
+            state.students = payload
         },
         SetStudentListOrderDetail(state, payload){
           state.student_list = payload
@@ -109,6 +122,56 @@ const orderModules = {
         }
     },
     actions: {
+        async getHistory(context){
+            try{
+                context.commit("SetOrderHistoryIsLoading",true)
+                let mapHistory = [];
+                const config = {
+                  headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Content-type": "Application/json",
+                    Authorization: `Bearer ${VueCookie.get("token")}`,
+                  },
+                };
+                //  let localhost = "http://localhost:3002"
+                const { data } = await axios.get( `${process.env.VUE_APP_URL}/api/v1/order/history`, config );
+                if(data.statusCode === 200 ){
+                    console.log("data", data);
+                  for (const item of data.data) {
+                    // console.log("item =>", data.data.filter(v => v.orderNumber == item.orderNumber))
+                    if (item.courseImg && item.courseImg !== "") {
+                      item.courseImg = process.env.VUE_APP_URL.concat(
+                        `/api/v1/files/${item.courseImg}`
+                      );
+                      item.show_student = false;
+                    }
+                    if( data.data.filter(v => v.orderNumber == item.orderNumber).length > 0){
+                      let courses = []
+                      for await (const course of data.data.filter(v => v.orderNumber == item.orderNumber)){
+                        if(!courses.some(v => v.orderItemId == course.orderItemId)){
+                          courses.push(course)
+                        }
+                      }
+                      if(!mapHistory.some(v => v.orderId === item.orderId)){
+                        mapHistory.push({
+                          orderId : item.orderId,
+                          orderNumber :  item.orderNumber,
+                          paymentStatus : item.paymentStatus,
+                          courses : courses,
+                          totalPrice: item.totalPrice,
+                          createdDate :  dateFormatter(new Date(item.createdDate), "DD MT YYYYT"),
+                          createdByData : item.createdByData
+                        });
+                      }
+                    }
+                  }
+                }
+                context.commit("SetOrderHistory",mapHistory)
+                context.commit("SetOrderHistoryIsLoading",false)
+            }catch(error){
+                console.log(error)
+            }
+        },
         resetCourseData(context) {
             context.commit("SetResetCourseData")
         },
@@ -152,17 +215,27 @@ const orderModules = {
                     }
                 }
                 // let localhost = "http://localhost:3000"
+                let students = []
                 let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/`,config)
-                console.log(data)
                 if(data.statusCode === 200){
                     if(data.data.length > 0){
+                        console.log(data.data)
                         for await (const order of data.data){
+                            for await (const student of order.student){
+                                if(!students.some(v=>v.account_id == student.userOneId)){
+                                    students.push({
+                                        student_name : `${student.firstNameTh} ${student.lastNameTh}`,
+                                        account_id : student.userOneId
+                                    })
+                                }
+                            }
                             order.paid_date =  order.payment_status === "success" ? new Date(order.updated_date).toLocaleString("th-TH")  : ''
                             order.course_name = `${order.course.courseNameTh}(${order.course.courseNameEn})`
                             order.student_name = `${order.user?.firstNameTh} ${order.user?.lastNameTh}`
                         }
                     }
                     context.commit("SetOrders",data.data)
+                    context.commit("SetStudents",students)
                 }else{
                     throw {error : data}
                 }
@@ -293,6 +366,7 @@ const orderModules = {
                   }
                 }
                 // console.log(payload)
+                // let localhost = "http://localhost:3002"
                 let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/cart`,payload, config)
                 if(data.statusCode === 201){
                     localStorage.removeItem("Order")
@@ -654,7 +728,7 @@ const orderModules = {
                 // let endpoint = "http://localhost:3002"
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/cart/${account_id}`,config)
                 if (data.statusCode === 200) {
-                    // console.log("Cart List =>",data.data)
+                    console.log("Cart List =>",data.data)
                     for await (const item of data.data) {
                         console.log("discount =>",item.option.discount)
                         item.course_img = `${process.env.VUE_APP_URL}/api/v1/files/${item.course_img}`
@@ -802,6 +876,12 @@ const orderModules = {
         }
     },
     getters: {
+        orderHistory(state){
+            return state.order_history
+        },
+        orderHistoryIsLoading(state){
+            return state.order_history_is_loading
+        },
         getReserveList(state){
             return state.reserve_list
         },
@@ -816,6 +896,9 @@ const orderModules = {
         },
         getOrderDetail(state){
             return state.order_detail
+        },
+        getStudents(state){
+            return state.students
         },
         // getStudentListOrderDetail(state){
         //   return state.student_list

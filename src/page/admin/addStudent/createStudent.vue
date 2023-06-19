@@ -825,6 +825,21 @@ export default {
     },
     selectCategory(categoryId, course_type_id, course) {
       console.log(categoryId, course_type_id)
+      course.course_id = ""
+      course.package_data = {}
+      course.package = ""
+      course.option = {}
+      course.option_data = {}
+      course.day = ""
+      course.time = ""
+      course.time_str = ""
+      course.coach = ""
+      course.manu_start_date = false
+      course.start_date_str = ""
+      course.start_date = ""
+      course.price = 0
+      course.detail = ""
+      course.remark = ""
       this.GetCoursesFilter({
         category_id: categoryId,
         status: "Active",
