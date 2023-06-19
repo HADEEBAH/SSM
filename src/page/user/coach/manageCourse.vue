@@ -630,8 +630,9 @@
           </v-col>
         </v-row>
         <v-row dense>
-          <v-col cols="7">
+          <v-col cols="7"  @click="SelectedStatus('all')">
             <img-card
+              :color="select_status == 'all' ? '#FBF3F5' : '#ffffff'"
               class="cursor-pointer"
               :class="tab === 'all' ? 'img-card-active' : ''"
             >
@@ -655,9 +656,10 @@
               </template>
             </img-card>
           </v-col>
-          <v-col cols="5">
+          <v-col cols="5" @click="SelectedStatus('approved')">
             <img-card
-              class="cursor-pointer h-full"
+              :color="select_status == 'approved' ? '#FBF3F5' : '#ffffff'"
+              class="cursor-pointer"
               :class="tab === 'all' ? 'img-card-active' : ''"
             >
               <template v-slot:img>
@@ -671,7 +673,7 @@
                 <div class="font-bold text-center text-[#57A363]">อนุมัติ</div>
               </template>
               <template v-slot:detail>
-                <v-row class="d-flex align-end">
+                <v-row class="d-flex align-end mb-1">
                   <v-col
                     align="end"
                     class="text-3xl font-bold text-[#57A363]"
@@ -681,13 +683,15 @@
                   >
                   <v-col class="text-sm">รายการ</v-col>
                 </v-row>
+               
               </template>
             </img-card>
           </v-col>
         </v-row>
-        <v-row dense class="mb-3">
-          <v-col cols="4">
+        <v-row dense class="mb-3" >
+          <v-col cols="4" @click="SelectedStatus('pending')">
             <img-card
+              :color="select_status == 'pending' ? '#FBF3F5' : '#ffffff'"
               class="cursor-pointer"
               :class="tab === 'all' ? 'img-card-active' : ''"
             >
@@ -708,17 +712,16 @@
                   <v-col
                     align="end"
                     class="text-3xl font-bold text-[#FCC419]"
-                    >{{
-                      coach_leaves.filter((v) => v.status === "pending").length
-                    }}</v-col
+                    >{{coach_leaves.filter((v) => v.status === "pending").length}}</v-col
                   >
                   <v-col class="text-sm">รายการ</v-col>
                 </v-row>
               </template>
             </img-card>
           </v-col>
-          <v-col cols="4">
+          <v-col cols="4" @click="SelectedStatus('reject')">
             <img-card
+              :color="select_status == 'reject' ? '#FBF3F5' : '#ffffff'"
               class="cursor-pointer"
               :class="tab === 'all' ? 'img-card-active' : ''"
             >
@@ -739,18 +742,16 @@
                   <v-col
                     align="end"
                     class="text-3xl font-bold text-[#F03D3E]"
-                    >{{
-                      coach_leaves.filter((v) => v.status === "disapproved")
-                        .length
-                    }}</v-col
+                    >{{ coach_leaves.filter((v) => v.status === "reject").length}}</v-col
                   >
                   <v-col class="text-sm">รายการ</v-col>
                 </v-row>
               </template>
             </img-card>
           </v-col>
-          <v-col cols="4">
+          <v-col cols="4" @click="SelectedStatus('cancel')">
             <img-card
+              :color="select_status == 'cancel' ? '#FBF3F5' : '#ffffff'"
               class="cursor-pointer"
               :class="tab === 'all' ? 'img-card-active' : ''"
             >
@@ -784,7 +785,7 @@
             <v-data-table
               class="elevation-1 header-table"
               :headers="column"
-              :items="coach_leaves"
+              :items="select_status == 'all' ?  coach_leaves : coach_leaves.filter(v => v.status === select_status)"
               :single-expand="singleExpand"
               :expanded.sync="expanded"
               item-key="coachLeaveId"
@@ -844,19 +845,28 @@
               </template>
               <template v-slot:expanded-item="{ headers, item }">
                 <td :colspan="headers.length" class="py-3">
-                  <v-row v-for="(course,index) in item.courses" :key="`${index}-courses`">
-                     <v-col cols="6" class="font-bold"
+                  <div v-for="(date,index) in item.dates" :key="`${index}-courses`">
+                    <v-row v-for="(course,index) in date.courses" :key="`${index}-courses`">
+                      <v-col cols="4" class="font-bold">
+                      {{ date.date ? GenDateStr(new Date(date.date)) : "-" }}                      
+                      </v-col>
+                     <v-col cols="4" class="font-bold"
                       >คอร์ส:
                       {{
                         `${course.courseNameTh}(${course.courseNameEn})`
                       }}</v-col>
-                    <v-col cols="6"
+                    <v-col cols="4" v-if="course.type !== 'date'"
                       >ผู้สอนแทน:
                       {{
                         `${course.substituteCoachFirstNameTh} ${course.substituteCoachLastNameTh}`
-                      }}</v-col
-                    >
+                      }}</v-col>
+                    <v-col cols="4" v-if="course.type === 'date'"
+                      >วันที่สอนแทน:
+                      {{ `${GenDateStr(new Date(course.compensationDate))}(${course.compensationStartTime}:${course.compensationEndTime})`}}
+                    </v-col>
                   </v-row>
+                  </div>
+                  
                 </td>
               </template>
             </v-data-table>
@@ -910,7 +920,7 @@
                       ? 'bg-[#FFF9E8] text-[#FCC419]'
                       : edited_coach_leave_data.status === 'approved'
                       ? 'bg-[#F0F9EE] text-[#58A144]'
-                      : edited_coach_leave_data.status === 'reject'
+                      : edited_coach_leave_data.status === 'cancel'
                       ? 'bg-[#e8e8e8] text-[#636363]'
                       : 'bg-[#ffeeee] text-[#f00808]'
                   "
@@ -920,7 +930,7 @@
                       ? "รออนุมัติ"
                       : edited_coach_leave_data.status === "approved"
                       ? "อนุมัติ"
-                      : edited_coach_leave_data.status === "reject"
+                      : edited_coach_leave_data.status === "cancel"
                       ? "ยกเลิก"
                       : "ไม่อนุมัติ"
                   }}</span>
@@ -975,7 +985,7 @@
                 </v-row>
               </v-card-text>
             </v-card>
-            <template v-if="edited_coach_leave_data.dates.length > 0">
+            <template v-if="edited_coach_leave_data?.dates.length > 0">
               <div
                 class="mb-3"
                 v-for="(date, index_date ) in edited_coach_leave_data.dates"
@@ -1043,9 +1053,7 @@
                         <v-col>
                           <div>วันที่ชดเชย</div>
                           <div class="font-semibold pl-2">
-                            {{
-                              `${GenDateStr(new Date(course.compensationDate))} (${course.compensationStartTime}-${course.compensationEndTime})`
-                            }}
+                            {{`${GenDateStr(new Date(course.compensationDate))} (${course.compensationStartTime}-${course.compensationEndTime})`}}
                           </div>
                         </v-col>
                       </v-row>
@@ -1354,6 +1362,7 @@ export default {
     show_comment_data: {},
     show_potential_comment: false,
     show_potential_data: {},
+    select_status : "all",
   }),
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
@@ -1387,6 +1396,7 @@ export default {
     genToday() {
       return moment(new Date()).format("YYYY-MM-DD");
     },
+    
     validateCoachLeave() {
       let start_date = this.coach_leave_data.start_date ? true : false;
       let end_date = this.coach_leave_data.end_date ? true : false;
@@ -1416,6 +1426,10 @@ export default {
       GetProfileDetail: "ProfileModules/GetProfileDetail",
       ShowDialogCoachLeaveForm: "CoachModules/ShowDialogCoachLeaveForm",
     }),
+    SelectedStatus(status){
+      console.log(status)
+      this.select_status = status
+    },
     GenDateStr(date){
       const options = {
         year: "numeric",
