@@ -14,12 +14,14 @@
         </v-col>
       </v-row>
     </v-card-title>
+    <!-- data_filter_schedule : {{ data_filter_schedule }} <br/>
+    data_in_schedule : {{ data_in_schedule }} -->
     <v-calendar
       ref="calendar"
       color="#ff6b81"
       type="month"
       v-model="focus"
-      :events="data_in_schedile"
+      :events="data_search_schedule ? data_search_schedule : (data_filter_schedule ? data_filter_schedule : data_in_schedule)"
       event-text-color="#000000"
       event-overlap-mode="column"
       :first-interval="1"
@@ -297,7 +299,9 @@ export default {
   computed: {
     ...mapGetters({
       get_all_holidays: "ManageScheduleModules/getAllHolidays",
-      data_in_schedile: "ManageScheduleModules/getdataInSchadule",
+      data_in_schedule: "ManageScheduleModules/getdataInSchadule",
+      data_filter_schedule: "ManageScheduleModules/getFilterSchedule",
+      data_search_schedule: "ManageScheduleModules/getSearchFilterSchedule"
     }),
     cal() {
       return this.ready ? this.$refs.calendar : null;

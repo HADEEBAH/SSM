@@ -3,34 +3,39 @@
     <headerPage title="จัดการตาราง"></headerPage>
 
     <v-row class="py-2">
-      <v-col cols="12" md="8" sm="8">
+      <v-col cols="12" sm="8" class="w-full">
         <v-text-field
           dense
+          class="w-full"
           outlined
           label="ค้นหา"
           color="pink"
           hide-details
           v-model="search"
-          prepend-inner-icon="mdi-magnify"
+          append-outer-icon="mdi-magnify"
+          @keyup="GetSearchSchedule(search)"
         ></v-text-field>
       </v-col>
-      <v-col cols="6" md="2" sm="2" align="center">
+      <v-col cols="6" sm="2" align="center" class="w-full">
         <v-btn
           @click="show_dialog_holoday = true"
           color="#FF6B81"
-          class="white--text btn-size-lg"
+          class="white--text btn-size-lg w-full"
           depressed
+          block
           ><span class="mdi mdi-plus">เพิ่มวันหยุด</span>
         </v-btn>
       </v-col>
-      <v-col cols="6" md="2" sm="2" align="center">
+      <v-col cols="6" sm="2" align="center" class="w-full">
         <v-btn
+          outlined
           color="#FF6B81"
-          class="white--text btn-size-lg"
+          class="w-full"
           depressed
+          block
           @click="filter_dialog = true"
         >
-          <span class="mdi mdi-filter-variant"></span>
+          <v-icon size="24" class="mdi mdi-filter-variant"></v-icon>
         </v-btn>
       </v-col>
     </v-row>
@@ -437,7 +442,7 @@
       <v-row justify="center">
         <v-dialog v-model="filter_dialog" persistent max-width="600px">
           <v-card>
-            <v-card-title>
+            <!-- <v-card-title>
               <v-row dense>
                 <v-col cols="12" align="end">
                   <v-btn icon @click="filter_dialog = false">
@@ -445,33 +450,40 @@
                   </v-btn>
                 </v-col>
               </v-row>
-            </v-card-title>
+            </v-card-title> -->
 
             <v-card-title>
-              <v-row>
+              <v-row dense>
                 <v-col cols="12" align="center" class="font-bold">
                   ตัวกรอง
+                  <v-btn class="absolute top-0 right-0" icon @click="filter_dialog = false">
+                    <v-icon color="#ff6b81">mdi-close</v-icon>
+                  </v-btn>
                 </v-col>
               </v-row>
             </v-card-title>
             <v-card-text>
-              <v-container>
-                คอร์ส
+              <!-- <v-container> -->
+                  <!-- v-if="selectedCourse != ''" -->
+                  <!-- {{ selectedCourse }} -->
                 <v-badge
-                  v-if="selectedCourse != ''"
                   color="#FF6B81"
                   :content="selectedCourse.length"
+                  :value="selectedCourse.length"
                 >
+                คอร์ส
                 </v-badge>
                 <v-autocomplete
+                  outlined
                   v-model="selectedCourse"
                   :items="get_filter_course"
                   item-text="courseNameTh"
-                  item-value=""
+                  item-value="courseId"
                   multiple
                   color="#FF6B81"
                   item-color="#FF6B81"
                   dense
+                  placeholder="คอร์ส"
                 >
                   <template v-slot:selection="{ item, index }">
                     <v-chip v-if="index === 0">
@@ -484,14 +496,18 @@
                 </v-autocomplete>
 
                 <!-- สถานะคอร์ส -->
-                สถานะคอร์ส
+                
+                  <!-- v-if="selectedCourseType != ''" -->
+                  <!-- {{ selectedCourseType }} -->
                 <v-badge
-                  v-if="selectedCourseType != ''"
                   color="#FF6B81"
                   :content="selectedCourseType.length"
+                  :value="selectedCourseType.length"
                 >
+                สถานะคอร์ส
                 </v-badge>
                 <v-autocomplete
+                  outlined
                   v-model="selectedCourseType"
                   :items="courseType"
                   item-text="coursTypeName"
@@ -500,6 +516,7 @@
                   color="#FF6B81"
                   item-color="#FF6B81"
                   dense
+                  placeholder="สถานะคอร์ส"
                 >
                   <template v-slot:selection="{ item, index }">
                     <v-chip v-if="index === 0">
@@ -512,25 +529,29 @@
                 </v-autocomplete>
 
                 <!-- โค้ช -->
-                โค้ช
+                  <!-- v-if="selectedCoach != ''" -->
                 <v-badge
-                  v-if="selectedCoach != ''"
                   color="#FF6B81"
                   :content="selectedCoach.length"
+                  :value="selectedCoach.length"
                 >
+                โค้ช
                 </v-badge>
 
                 <v-autocomplete
+                  outlined
                   v-model="selectedCoach"
                   :items="get_coachs"
                   item-text="firstNameTh"
-                  item-value=""
+                  item-value="accountId"
                   multiple
                   color="#FF6B81"
                   item-color="#FF6B81"
                   dense
+                  placeholder="โค้ช"
                 >
                   <template v-slot:selection="{ item, index }">
+                    <!-- {{ item }} -->
                     <v-chip v-if="index === 0">
                       <span>{{ item.firstNameTh }}</span>
                     </v-chip>
@@ -541,23 +562,29 @@
                 </v-autocomplete>
 
                 <v-row>
-                  <v-col cols="12" align="center">
+                  <v-col cols="12" sm="6" align="center">
                     <v-btn
+                      @click="GetDataInSchedile(), filter_dialog = false, selectedCourseType = [], selectedCourse = [], selectedCoach = []"
+                      depressed
+                      outlined
+                      :color="'#ff6b81'"
+                      class="w-full"
+                    >
+                      ล้างค่า
+                    </v-btn>
+                  </v-col>
+                  <v-col cols="12" sm="6" align="center">
+                    <v-btn
+                      @click="filterSchedules(selectedCourse, selectedCoach, selectedCourseType)"
                       depressed
                       :color="'#ff6b81'"
-                      class="white--text"
-                      width="30vw"
-                      :disabled="
-                        selectedCoach.length <= 0 &&
-                        selectedCourseType.length <= 0 &&
-                        selectedCourse.length <= 0
-                      "
+                      class="white--text w-full"
                     >
-                      บันทึก
+                      กรอง
                     </v-btn>
                   </v-col>
                 </v-row>
-              </v-container>
+              <!-- </v-container> -->
             </v-card-text>
           </v-card>
         </v-dialog>
@@ -636,8 +663,8 @@ export default {
       "ธันวาคม",
     ],
     courseType: [
-      { coursTypeName: "คอร์สเต็ม", courseTypeValue: "full" },
-      { coursTypeName: "คอร์สว่าง", courseTypeValue: "free" },
+      { coursTypeName: "คอร์สเต็ม", courseTypeValue: "Close" },
+      { coursTypeName: "คอร์สว่าง", courseTypeValue: "Open" },
     ],
 
     show_dialog_holoday: false,
@@ -648,9 +675,9 @@ export default {
     holidaySwitch: true,
     nameHoliday: "",
     filter_dialog: false,
-    selectedCourse: "",
-    selectedCourseType: "",
-    selectedCoach: "",
+    selectedCourse: [],
+    selectedCourseType: [],
+    selectedCoach: [],
     holidayStartTime: {},
     holidayEndTime: {},
     selectEditHolidaydates: false,
@@ -697,6 +724,7 @@ export default {
     // events: [],
     setDataEditDialog: {},
     courseToday: [],
+    resultSearchSchedule: null,
   }),
 
   created() {
@@ -722,7 +750,7 @@ export default {
   },
 
   updated() {
-    this.GetDataInSchedile();
+    // this.GetDataInSchedile();
   },
 
   methods: {
@@ -734,7 +762,31 @@ export default {
       GetHolidaysById: "ManageScheduleModules/GetHolidaysById",
       GetEditHolidays: "ManageScheduleModules/GetEditHolidays",
       GetDataInSchedile: "ManageScheduleModules/GetDataInSchedile",
+      GetFilterSchedule: "ManageScheduleModules/GetFilterSchedule",
+      GetSearchSchedule: "ManageScheduleModules/GetSearchSchedule"
     }),
+
+    // searchSchedule() {
+    //   console.log("search", this.search);
+    //   if (this.search !== "") {
+    //     if (this.data_filter_schedule) {
+    //       let res = this.data_filter_schedule.filter((items)=> this.search === items.name || this.search === items.coach || items.search === items.package || items.name.indexOf(this.search) !== -1 || items.coach.indexOf(this.search) !== -1 || items.package.indexOf(this.search) !== -1)
+    //       console.log("res=>", res);
+    //       this.resultSearchSchedule = res
+    //     }
+    //   }
+    // },
+
+    async filterSchedules(courseId, coachId, status) {
+      this.GetFilterSchedule({courseId, coachId, status})
+      console.log({
+        courseId: courseId,
+        coach_id: coachId,
+        status: status,
+      });
+      this.filter_dialog = false
+
+    },
 
     async deleteHoliday() {
       console.log("del", this.setDataEditDialog);
@@ -972,6 +1024,8 @@ export default {
       get_all_holidays: "ManageScheduleModules/getAllHolidays",
       get_holidays_by_id: "ManageScheduleModules/getHolidaysById",
       data_in_schedile: "ManageScheduleModules/getdataInSchadule",
+      data_filter_schedule: "ManageScheduleModules/getFilterSchedule",
+      data_search_schedule: "ManageScheduleModules/getSearchFilterSchedule"
     }),
     formattedDate() {
       const date = new Date();
