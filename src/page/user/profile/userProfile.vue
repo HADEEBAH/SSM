@@ -4,9 +4,6 @@
 <template>
   <!-- <v-form ref="form" v-model="valid" lazy-validation> -->
   <v-container>
-    <!-- {{ setFunctions }} -->
-
-    <!-- {{ relation_data }} -->
     <loading-overlay :loading="categorys_is_loading"></loading-overlay>
     <v-row dense>
       <v-col class="my-5" style="text-align: -webkit-center" cols="12">
@@ -102,7 +99,8 @@
           class="cursor-pointer my-5"
           @click="openParentDialog(profile.parent)"
         >
-          <v-row dense class="my-5">
+        <v-card-text>
+          <v-row dense>
             <!-- col avatar -->
             <v-col cols="auto" v-if="profile.parent.parentImage !== ''">
               <v-img
@@ -121,16 +119,16 @@
               />
             </v-col>
             <!-- col name -->
-            <v-col cols="12" sm="10" class="d-flex align-center pa-3">
+            <v-col cols="8" sm="10" class="d-flex align-center pa-3">
               <v-row dense>
-                <v-col cols="4"
+                <v-col cols="6" sm="4"
                   >{{
                     !profile.parent.parentFirstnameTh
                       ? "-"
                       : profile.parent.parentFirstnameTh
                   }}
                 </v-col>
-                <v-col cols="4">
+                <v-col cols="6" sm="4">
                   {{
                     !profile.parent.parentLastnameTh
                       ? "-"
@@ -140,13 +138,16 @@
                 <v-col class="text-slate-400">{{
                   !profile.parent.parentTel ? "-" : profile.parent.parentTel
                 }}</v-col>
-                <!-- col arrow -->
-                <v-col cols="auto">
-                  <span class="mdi mdi-chevron-right"></span>
-                </v-col>
+               
               </v-row>
             </v-col>
+            <!-- col arrow -->
+            <v-col cols="auto" class="d-flex align-center justify-center">
+              <v-icon>mdi-chevron-right</v-icon>
+            </v-col>
           </v-row>
+        </v-card-text>
+         
         </v-card>
       </div>
       <div v-else>
@@ -580,8 +581,13 @@
     </v-dialog>
 
     <!-- CHECK USER PARENT DIALOG-->
-    <v-dialog v-model="add_relation" width="50vw" class="d-flex align-center">
-      <v-card class="pa-2" width="50vw">
+    <v-dialog v-model="add_relation" :width="$vuetify.breakpoint.smAndUp? '50vw' : ''" >
+      <v-card class="pa-2">
+        <v-row dense>
+          <v-col cols="12" align="right">
+            <v-btn color="#ff6b81" icon @click="closeDialog"><v-icon>mdi-close</v-icon></v-btn>
+          </v-col>
+        </v-row>
         <header-card
           icon="mdi-card-account-details-outline"
           icon_color="#ff6b81"
@@ -589,13 +595,9 @@
             profile_detail?.userRoles?.roleId === 'R_5'
               ? 'เพิ่มผู้ปกครอง'
               : 'เพิ่มนักเรียน'
-          "
-        >
-          <template #actions>
-            <v-btn icon @click="closeDialog"><v-icon>mdi-close</v-icon></v-btn>
-          </template>
+          ">
         </header-card>
-        <v-card-text class="pb-2">
+        <v-card-text class="pa-2">
           <v-row dense>
             <v-col cols="9">
               <labelCustom text="Username"></labelCustom>
@@ -710,6 +712,7 @@
       v-model="show_dialog_register_one_id"
       :width="!MobileSize ? `60vw` : ``"
     >
+    {{ register_type }}
       <registerDialogForm
         dialog
         title="สมัคร One ID"
@@ -879,74 +882,50 @@ export default {
   },
 
   watch: {
-    // last_user_registered: function () {
-    // console.log(this.last_user_registered);
-    // if (this.last_user_registered.type === "parent") {
-    // this.AddRelations({
-    // studentId: this.data_local.account_id,
-    // parentId: this.last_user_registered.account_id,
-    // }).then(() => {
-    // this.GetAll(this.user_login.account_id);
-    // for (const item of JSON.parse(localStorage.getItem("relations"))) {
-    // this.GetStudentData(item.student.studentId);
-    // console.log("GetStudentData", this.GetStudentData);
-    // }
-    // });
-    // } else if (this.last_user_registered.type === "student") {
-    // this.course_order.students[
-    // this.course_order.students.length - 1
-    // ].account_id = this.last_user_registered.account_id;
-    // this.course_order.students[
-    // this.course_order.students.length - 1
-    // ].firstname_en = this.last_user_registered.firstname_en;
-    // this.course_order.students[
-    // this.course_order.students.length - 1
-    // ].lastname_en = this.last_user_registered.lastname_en;
-    // this.course_order.students[
-    // this.course_order.students.length - 1
-    // ].firstname_th = this.last_user_registered.firstname_th;
-    // this.course_order.students[
-    // this.course_order.students.length - 1
-    // ].lastname_th = this.last_user_registered.lastname_th;
-    // this.course_order.students[
-    // this.course_order.students.length - 1
-    // ].student_name = `${this.last_user_registered.firstname_en} ${this.last_user_registered.lastname_en} `;
-    // this.course_order.students[this.course_order.students.length - 1].tel =
-    // this.last_user_registered.phone_number;
-    // this.course_order.students[
-    // this.course_order.students.length - 1
-    // ].username = this.last_user_registered.username;
-    // this.course_order.students[
-    // this.course_order.students.length - 1
-    // ].is_other = true;
-    // this.course_order.students[
-    // this.course_order.students.length - 1
-    // ].is_account = true;
-    // this.course_order.students[
-    // this.course_order.students.length - 1
-    // ].parents = [];
-    // }
-    // this.add_parent = false;
-    // },
+    last_user_registered: function () {
+      if (this.last_user_registered.type === "parent") {
+        this.AddRelations({
+          studentId: this.data_local.account_id,
+          parentId: this.last_user_registered.account_id,
+        }).then(() => {
+            this.GetAll(this.user_login.account_id);
+            this.GetRelationDataV2(this.user_login.account_id);
+            for (const item of JSON.parse(localStorage.getItem("relations"))) {
+            this.GetStudentData(item.student.studentId);
+          } 
+      });
+    } else if (this.last_user_registered.type === "student") {
+      console.log(this.last_user_registered);
+        this.AddRelations({
+          studentId: this.last_user_registered.account_id,
+          parentId: this.user_login.account_id,
+        }).then(() => {
+            this.GetAll(this.user_login.account_id);
+            this.GetRelationDataV2(this.user_login.account_id);
+        });
+      }
+      this.add_parent = false;
+      this.add_relation = false
+    },
     // type_selected: function () {
-    // console.log("type_selected", this.type_selected);
-    // this.loading = true;
-    // setTimeout(async () => {
-    // this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-    // if (this.type_selected == "students_course") {
-    // if (this.user_detail.roles.includes("R_4")) {
-    // this.GetStudentData(this.user_detail.account_id);
-    // for (const item of JSON.parse(localStorage.getItem("relations"))) {
-    // this.GetStudentData(item.student.studentId);
-    // console.log("student");
+    //   console.log("type_selected", this.type_selected);
+    //   this.loading = true;
+    //   setTimeout(async () => {
+    //     this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
+    //     if (this.type_selected == "students_course") {
+    //     if (this.user_detail.roles.includes("R_4")) {
+    //     this.GetStudentData(this.user_detail.account_id);
+    //     for (const item of JSON.parse(localStorage.getItem("relations"))) {
+    //     this.GetStudentData(item.student.studentId);
+    //     console.log("student");
+    //   }
+    //   } else if (this.user_detail.roles.includes("R_5")) {
+    //   this.GetStudentData(this.user_detail.account_id);
+    //   } else {
+    //   this.GetStudentData(null);
+    //   }
     // }
-    // } else if (this.user_detail.roles.includes("R_5")) {
-    // this.GetStudentData(this.user_detail.account_id);
-    // } else {
-    // this.GetStudentData(null);
-    // }
-    // }
-    //
+    
     // this.loading = false;
     // }, 200);
     // },
