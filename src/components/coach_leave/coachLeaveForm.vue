@@ -545,7 +545,7 @@ export default {
           }
         });
       }
-      
+      console.log(my_course_data)
       return my_course_data;
     },
     inputDate(e, data) {
