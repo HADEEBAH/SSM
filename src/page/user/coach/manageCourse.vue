@@ -847,22 +847,18 @@
                 <td :colspan="headers.length" class="py-3">
                   <div v-for="(date,index) in item.dates" :key="`${index}-courses`">
                     <v-row v-for="(course,index) in date.courses" :key="`${index}-courses`">
-                      <v-col cols="4" class="font-bold">
+                      <v-col cols="auto" class="font-bold">
                       {{ date.date ? GenDateStr(new Date(date.date)) : "-" }}                      
                       </v-col>
-                     <v-col cols="4" class="font-bold"
+                     <v-col class="font-bold"
                       >คอร์ส:
-                      {{
-                        `${course.courseNameTh}(${course.courseNameEn})`
-                      }}</v-col>
-                    <v-col cols="4" v-if="course.type !== 'date'"
+                      {{ `${course.courseNameTh}(${course.courseNameEn})` }}</v-col>
+                    <v-col cols="5" v-if="course.type !== 'date'"
                       >ผู้สอนแทน:
-                      {{
-                        `${course.substituteCoachFirstNameTh} ${course.substituteCoachLastNameTh}`
-                      }}</v-col>
-                    <v-col cols="4" v-if="course.type === 'date'"
+                      {{ `${course.substituteCoachFirstNameTh} ${course.substituteCoachLastNameTh}` }}</v-col>
+                    <v-col cols="5" v-if="course.type === 'date'"
                       >วันที่สอนแทน:
-                      {{ `${GenDateStr(new Date(course.compensationDate))}(${course.compensationStartTime}:${course.compensationEndTime})`}}
+                      {{ `${GenDateStr(new Date(course.compensationDate))}(${course.compensationStartTime}:${course.compensationEndTime})น.`}}
                     </v-col>
                   </v-row>
                   </div>
@@ -935,6 +931,11 @@
                       : "ไม่อนุมัติ"
                   }}</span>
                 </div>
+              </v-col>
+            </v-row>
+            <v-row v-if="edited_coach_leave_data.status === 'reject'" dense class="mb-3">
+              <v-col>
+                หมายเหตุ: <span class="font-bold">{{ edited_coach_leave_data.remarkReject }}</span> 
               </v-col>
             </v-row>
             <v-card flat class="mb-3">

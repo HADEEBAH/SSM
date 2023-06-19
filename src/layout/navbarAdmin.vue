@@ -199,15 +199,20 @@ export default {
     selectMenu(type, to, head) {
       if (type === "child" && head === this.active_menu) {
         this.active_menu_child = to;
-        this.$router.push({ name: to });
+        if(this.$route.name !== to ){
+          this.$router.push({ name: to });
+        }
+       
       } else {
         this.active_menu_child = to;
       }
       if (type === "head") {
         if (to) {
-          this.$router.push({ name: to });
-          this.active_menu_child = "";
-          this.active_menu = to;
+          if(this.$route.name !== to ){
+            this.$router.push({ name: to });
+            this.active_menu_child = "";
+            this.active_menu = to;
+          }
         }
       }
     },
