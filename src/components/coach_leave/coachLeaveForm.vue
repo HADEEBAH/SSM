@@ -1,10 +1,25 @@
 <template>
+  
   <v-card flat class="pa-0">
+  
     <v-card-title class="d-flex justify-center">
     แบบฟอร์มขอลา
     </v-card-title>
     <v-card-text>
       <!-- DATE LEAVE AND PERIOD -->
+      <v-row dense v-if="admin">
+        <v-col>
+          โค้ชที่ต้องการลา
+          <v-select
+            dense
+            outlined
+            :items="coachs"
+            item-value="accountId"
+            item-text="fullNameTh"
+            v-model="coach_leave_data.coach_id"
+          ></v-select>
+        </v-col>
+      </v-row>
       <v-row dense>
         <v-col cols="12">
           วันที่ลา
@@ -21,7 +36,6 @@
                   <v-text-field
                     dense
                     outlined
-                    hide-details
                     v-model="coach_leave_data.start_date_str"
                     readonly
                     placeholder="เลือกวันที่เริ่มต้น"
@@ -257,7 +271,6 @@
             </v-col>
           </v-row>
       </div>
-     
       <v-row dense>
         <v-col>
           รายละเอียดการลา
@@ -369,7 +382,9 @@ import { mapActions, mapGetters, } from "vuex";
 import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
 export default {
   name:"coachLeaveForm",
-  props:{},
+  props:{
+    admin: {type:  Boolean}
+  },
   components: {VueTimepicker},
   data: () => ({
     today: new Date(),
@@ -545,7 +560,7 @@ export default {
           this.coach_leave_data.end_date_str = dateFormatter(e, "DD MT YYYYT");
           this.GenDates()
           this.SearchCourseDateCoachLeave({
-            account_id : this.user_detail.account_id,
+            account_id : this.admin ? this.coach_leave_data.coach_id : this.user_detail.account_id,
             start_date :  this.coach_leave_data.start_date,
             end_date :  this.coach_leave_data.end_date
           })
@@ -599,10 +614,14 @@ export default {
               course.time_id = my_course_id_part[2];
             }
           }
-          this.coach_leave_data.coach_id = this.user_detail.account_id;
+          if(!this.admin){
+            this.coach_leave_data.coach_id = this.user_detail.account_id;
+          }
+        
           this.SaveCoachLeave({
             coach_leave_data: this.coach_leave_data,
             files: this.selected_files,
+            admin: this.admin
           });
           this.closeDialogLeaveForm();
         }

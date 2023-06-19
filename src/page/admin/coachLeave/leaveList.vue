@@ -1,6 +1,16 @@
 <template>
     <v-container>
         <headerPage title="การอนุมัติลา"></headerPage>
+        <v-row>
+            <v-col cols="12" align="right">
+                <v-btn
+                @click="showLeaveForm"
+                :class="$vuetify.breakpoint.smAndUp ? '' : 'w-full'"
+                outlined
+                color="#ff6b81"
+                ><v-icon>mdi-plus-circle-outline</v-icon>แบบฟอร์มการลา</v-btn>
+            </v-col>
+        </v-row>
         <v-row class="mb-2">
             <template  v-for="(type, type_index) in course_type"  >
                 <v-col cols="12" sm="3"  :key="`${type_index}-type`"  @click="type_selected = type.value" >
@@ -26,7 +36,6 @@
         </v-row> 
         <!-- TABLE -->
         <v-card class="my-5" >
-            <!-- <pre>{{ coach_leaves }}</pre> -->
             <v-data-table 
                 class="elevation-1 header-table"
                 :items="type_selected === 'all' ? coach_leaves : coach_leaves.filter(v => v.status == type_selected)"
@@ -56,6 +65,12 @@
                         }}</span>
                     </div>
                 </template>
+                <template v-slot:[`item.startDateStr`]="{item}">
+                    {{ new Date(item.startDateStr).toLocaleDateString('th-TH', { year: "numeric", month: "short", day: "numeric", calendar: "buddhist" } ) }}
+                </template>
+                <template v-slot:[`item.createdDateStr`]="{item}">
+                    {{ new Date(item.createdDateStr).toLocaleDateString('th-TH', { year: "numeric", month: "short", day: "numeric", calendar: "buddhist" } ) }}
+                </template>
                 <template v-slot:[`item.show`]="{item}">
                     <v-btn
                         @click="showDetail(item.coachLeaveId)"
@@ -70,6 +85,23 @@
                 </template>
             </v-data-table>
         </v-card>
+        <v-dialog
+            persistent
+            :width="$vuetify.breakpoint.smAndUp ? '70vw' : ''"
+            v-model="show_dialog_coach_leave_form"
+            v-if="show_dialog_coach_leave_form"
+        >
+            <v-card class="pa-1">
+                <v-row dense>
+                    <v-col class="pa-0" align="right">
+                    <v-btn @click="closeDialogLeaveForm" icon color="#ff6b81"
+                        ><v-icon>mdi-close</v-icon></v-btn
+                    >
+                    </v-col>
+                </v-row>
+            <coachLeaveForm admin ></coachLeaveForm>
+        </v-card>
+      </v-dialog>
     </v-container>
   </template>
   
@@ -77,13 +109,37 @@
   import headerPage from "@/components/header/headerPage.vue";
   import imgCard from '@/components/course/imgCard.vue';
   import { mapActions, mapGetters } from "vuex";
+  import coachLeaveForm from "../../../components/coach_leave/coachLeaveForm.vue";
   export default {
     components: {
           headerPage,
-          imgCard
+          imgCard,
+          coachLeaveForm
     },
     data: () => ({
         type_selected: "all",
+        coach_leave_data: {
+            menu_start_date: false,
+            start_date: null,
+            start_date_str: "",
+            menu_end_date: false,
+            end_date: null,
+            end_date_str: "",
+            period: "",
+            coach_id: "",
+            remark: "",
+            status: "",
+            leave_type: "",
+            courses: [
+                {
+                my_course_id: "",
+                course_id: "",
+                substitute_coach_id: "",
+                day_of_week_id: "",
+                time_id: "",
+                },
+            ],
+        },
         column:[
             {text: 'รหัสโค้ช',align: 'start',sortable: false, value: 'accountId'},
             {text: 'ชื่อ - นามสกุล',align: 'start',sortable: false, value: 'fullnameTh'},
@@ -102,20 +158,55 @@
     }),
     created(){
         this.GetLeavesAll()
+        this.GetCoachs()
     },
     mounted() { },
     methods: {
         ...mapActions({
-            GetLeavesAll : "CoachModules/GetLeavesAll"
+            GetCoachs: "CourseModules/GetCoachs",
+            GetLeavesAll : "CoachModules/GetLeavesAll",
+            ShowDialogCoachLeaveForm : "CoachModules/ShowDialogCoachLeaveForm"
         }),
+        showLeaveForm(){
+            this.ShowDialogCoachLeaveForm(true)
+        },
         showDetail(coach_leave_id){
             this.$router.push({name: 'LeaveDetail_coachleaveId', params:{coachleave_id :coach_leave_id }})
+        },
+        closeDialogLeaveForm() {
+            this.selected_files = []
+            this.ShowDialogCoachLeaveForm(false)
+            this.coach_leave_data = {
+                menu_start_date: false,
+                start_date: null,
+                start_date_str: "",
+                menu_end_date: false,
+                end_date: null,
+                end_date_str: "",
+                period: "",
+                coach_id: "",
+                day_of_week_id: "",
+                time_id: "",
+                remark: "",
+                status: "",
+                leave_type: "",
+                courses: [
+                {
+                    my_course_id: "",
+                    course_id: "",
+                    substitute_coach_id: "",
+                    day_of_week_id: "",
+                    time_id: "",
+                },
+                ],
+            };
         },
     },
     computed: {
         ...mapGetters({ 
             coach_leaves : "CoachModules/getCoachLeaves",
-            coach_leaves_is_loading : "CoachModules/getCoachLeavesIsLoading"
+            coach_leaves_is_loading : "CoachModules/getCoachLeavesIsLoading",
+            show_dialog_coach_leave_form : "CoachModules/getShowDialogCoachLeaveForm"
         }),
     },
   }

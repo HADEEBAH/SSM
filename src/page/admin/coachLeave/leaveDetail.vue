@@ -68,7 +68,155 @@
                     </v-card-text>
                 </v-card>
                 <!-- {{ coachs }} -->
-                <v-card class="mb-3">
+                <div
+                    class="mb-3"
+                    v-for="(date, index_date ) in coach_leave.dates"
+                    :key="`${index_date}-course`"
+                >
+                    <v-row dense>
+                        <v-col cols="auto">
+                            <v-icon color="#ff6b81"
+                            >mdi-calendar-outline</v-icon
+                            >
+                        </v-col>
+                        <v-col class="font-bold text-lg"> {{ date.date ? GenDateStr(new Date(date.date)) : "-" }} </v-col>
+                        </v-row>
+                        <v-card
+                        class="mb-3"
+                        flat
+                        v-for="(course, index) in date.courses"
+                        :key="index"
+                        >
+                        <v-card-text class="rounded-md border">
+                        <v-radio-group readonly v-model="course.type" row>
+                            <v-radio
+                            label="มีผู้สอนแทน"
+                            color="#ff6b81"
+                            value="teach"
+                            ></v-radio>
+                            <v-radio
+                            label="ไม่มีผู้สอนแทน"
+                            color="#ff6b81"
+                            value="date"
+                            ></v-radio>
+                        </v-radio-group>
+                        <v-row dense>
+                            <v-col cols="auto">
+                            <v-icon color="#ff6b81"
+                                >mdi-card-account-details-outline</v-icon
+                            >
+                            </v-col>
+                            <v-col class="font-bold text-lg"> คอร์ส </v-col>
+                        </v-row>
+                        <v-divider class="my-2"></v-divider>
+                        <v-card flat>
+                            <v-card-text class="border border-1 rounded-lg">
+                            <v-row dense>
+                                <v-col>
+                                <div>ชื่อคอร์ส</div>
+                                <div class="font-semibold pl-2">
+                                    {{`${course.courseNameTh}`}}
+                                </div>
+                                </v-col>
+                            </v-row>
+                            <v-row dense v-if="course.type === 'teach'">
+                                <v-col>
+                                    <div>ผู้สอนแทน</div>
+                                    <div class="font-semibold pl-2">
+                                        <v-select
+                                            dense
+                                            :disabled="coach_leave.status === 'pending' ? false: true"
+                                            v-model="course.substituteCoachId"
+                                            outlined
+                                            hide-details
+                                            item-value="accountId"
+                                            item-text="fullNameTh"
+                                            @change="selectCoach(course)"
+                                            :items="coachs.filter(v=>v.accountId !== coach_leave.coachId)"
+                                        >
+                                        </v-select>
+                                    </div>
+                                </v-col>
+                            </v-row>
+                            <v-row dense v-else-if="course.type === 'date'">
+                                <v-col>
+                                    วันที่ชดเชย
+                                    <v-menu
+                                        :disabled="coach_leave.status === 'pending' ? false: true"
+                                        v-model="course.menuCompensationDate"
+                                        :close-on-content-click="false"
+                                        transition="scale-transition"
+                                        min-width="auto"
+                                    >
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <v-text-field
+                                                dense
+                                                outlined
+                                                hide-details
+                                                v-model="course.compensationDate"
+                                                readonly
+                                                placeholder="เลือกวันที่ชดเชย"
+                                                v-bind="attrs" 
+                                                v-on="on"
+                                            >
+                                                <template v-slot:append>
+                                                <v-icon
+                                                    :color="course.compensationDate ? '#FF6B81' : ''"
+                                                    >mdi-calendar</v-icon
+                                                >
+                                                </template>
+                                            </v-text-field>
+                                        </template>
+                                        <v-date-picker
+                                        :disabled="coach_leave.status === 'pending' ? false: true"
+                                        :min="new Date().toISOString()"
+                                        v-model="course.compensationDate"
+                                        ></v-date-picker>
+                                    </v-menu>
+                                    </v-col>
+                                    <v-col>
+                                        เวลาช่วงเวลา
+                                        <v-row dense class="mb-3" v-if="coach_leave.status === 'pending'">
+                                            <v-col class="px-2" cols="12" sm="6">
+                                                <VueTimepicker 
+                                                class="input-size-lg"
+                                                advanced-keyboard 
+                                                v-model="course.compensationStartTimeObj" 
+                                                close-on-complete
+                                                ></VueTimepicker>
+                                            </v-col>
+                                            <v-col class="px-2" cols="12" sm="6">
+                                                <VueTimepicker 
+                                                class="input-size-lg"
+                                                advanced-keyboard  
+                                                v-model="course.compensationEndTimeObj" 
+                                                close-on-complete></VueTimepicker> 
+                                            </v-col>
+                                        </v-row>
+                                        <v-row v-else>
+                                            <v-col>
+                                                <v-text-field
+                                                    dense
+                                                    readonly outlined
+                                                    v-model="course.compensationStartTime"
+                                                ></v-text-field>
+                                            </v-col>
+                                            <v-col>
+                                                <v-text-field
+                                                    dense
+                                                    readonly outlined
+                                                    v-model="course.compensationEndTime"
+                                                ></v-text-field>
+                                            </v-col>
+                                        </v-row>
+                                    </v-col>
+                                </v-row>
+                            </v-card-text>
+                        </v-card>
+                        </v-card-text>
+                    </v-card>
+                </div>
+                <!-- <v-card class="mb-3">
                     <v-data-table
                         class="elevation-1 header-table"
                         :headers="column"
@@ -93,7 +241,7 @@
                             </v-row>
                         </template>
                     </v-data-table>
-                </v-card>
+                </v-card> -->
                 <v-card class="mb-3">
                     <v-card-text>
                         <v-row dense>
@@ -199,9 +347,10 @@
     import Swal from "sweetalert2";
     import { mapActions, mapGetters } from 'vuex';
     import LabelCustom from '../../../components/label/labelCustom.vue';
+    import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
     export default {
         name:"leaveDetail",
-        components: {headerPage, LabelCustom},
+        components: {headerPage, LabelCustom, VueTimepicker},
         data: () => ({
             periods: [
                 { label: "ลาเต็มวัน", value: "full" },
@@ -233,11 +382,22 @@
             })
         },
         methods: {
+
             ...mapActions({
                 GetLeavesDetail : "CoachModules/GetLeavesDetail",
                 GetCoach : "CourseModules/GetCoachs",
                 updateStatusCoachLeaveAndCoach : "CoachModules/updateStatusCoachLeaveAndCoach"
             }),
+            GenDateStr(date){
+                const options = {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                    calendar: "buddhist",
+                    era: "short"
+                };
+             return date.toLocaleDateString("th-TH",options)
+            },
             closeDisapprovedDialog(){
                 this.show_disapproved = false 
             },

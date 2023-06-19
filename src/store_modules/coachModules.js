@@ -18,8 +18,12 @@ const coachModules = {
     coach_leaves_is_loading: false,
     attachment_leave: [],
     coach_leave : {},
+    show_dialog_coach_leave_form : false,
   },
   mutations: {
+    SetShowDialogCoachLeaveForm(state, payload){
+      state.show_dialog_coach_leave_form = payload
+    },
     SetAttachmentLeave(state, payload) {
       state.attachment_leave = payload
     },
@@ -68,8 +72,8 @@ const coachModules = {
         },
       };
       try{
-        let localhost = "http://localhost:3000"
-        let {data} = await axios.get(`${localhost}/api/v1/manage/course-filter/${account_id}/?startDate=${start_date}&endDate=${end_date}`, config)
+        // let localhost = "http://localhost:3000"
+        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/manage/course-filter/${account_id}/?startDate=${start_date}&endDate=${end_date}`, config)
         if(data.statusCode  == 200){
           console.log(data.data)
           context.commit("SetMyCourses",data.data)
@@ -323,8 +327,8 @@ const coachModules = {
           },
         };
         let user_detail = JSON.parse(localStorage.getItem("userDetail"));
-        let localhost ="http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}/date/${date}`, config)
+        // let localhost ="http://localhost:3000"
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}/date/${date}`, config)
         if (data.statusCode === 200) {
           console.log(data.data)
           data.data.forEach((check_in) => {
@@ -513,7 +517,9 @@ const coachModules = {
         console.log(error)
       }
     },
-  
+    ShowDialogCoachLeaveForm(context,value){
+      context.commit("SetShowDialogCoachLeaveForm",value)
+    },
     async GetMyCourses(context, { coach_id }) {
       context.commit("SetMyCoursesIsLoading", true);
       try {
@@ -756,7 +762,7 @@ const coachModules = {
         console.log(error)
       }
     },
-    async SaveCoachLeave(context, { coach_leave_data, files }) {
+    async SaveCoachLeave(context, { coach_leave_data, files ,admin}) {
       try {
         let user_detail = JSON.parse(localStorage.getItem("userDetail"))
         let config = {
@@ -795,13 +801,13 @@ const coachModules = {
             courses: cousers,
           })
         }
-        let localhost = "http://localhost:3000"
+        // let localhost = "http://localhost:3000"
         let payloadData = new FormData()
         payloadData.append("payload", JSON.stringify(payload))
         for (const file of files) {
           payloadData.append(`files`, file);
         }
-        let { data } = await axios.post(`${localhost}/api/v1/coach/leave`, payloadData, config)
+        let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coach/leave`, payloadData, config)
         if (data.statusCode === 201) {
           Swal.fire({
             icon: "success",
@@ -812,12 +818,23 @@ const coachModules = {
             confirmButtonText: "ตกลง",
           }).then(async (result) => {
             if (result.isConfirmed) {
-              let getLeaves = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${user_detail.account_id}`, config)
-              console.log(getLeaves)
-              if (getLeaves.data.statusCode === 200) {
-                context.commit("SetCoachLeaves", getLeaves.data.data)
-              } else {
-                throw { error: getLeaves }
+              if(admin){
+                let getLeavesAll = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave`,config)
+                if(getLeavesAll.data.statusCode == 200){
+                  context.commit("SetCoachLeaves",getLeavesAll.data.data)
+                  context.commit("SetCoachLeavesIsLoading",false)
+                } else {
+                  throw { error: getLeavesAll }
+                }
+              }else{
+                let getLeaves = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${user_detail.account_id}`, config)
+                console.log(getLeaves)
+                if (getLeaves.data.statusCode === 200) {
+                  context.commit("SetShowDialogCoachLeaveForm",false)
+                  context.commit("SetCoachLeaves", getLeaves.data.data)
+                } else {
+                  throw { error: getLeaves }
+                }
               }
             }
           })
@@ -920,7 +937,19 @@ const coachModules = {
         // let localhost = "http://localhost:3000"
         let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/detail/${coach_leave_id}`,config)
         if(data.statusCode == 200){
-          // console.log(data.data)
+          console.log(data.data)
+          for(let date of data.data.dates){
+            for(let course of date.courses){
+              if(course.type === "date"){
+                let startPart = course.compensationStartTime.split(":")
+                let endPart = course.compensationEndTime.split(":")
+                course.menuCompensationDate = false
+                course.compensationDate = course.compensationDate  ? new Date(course.compensationDate).toISOString().split('T')[0] : null,
+                course.compensationStartTimeObj = {HH : startPart[0], mm : startPart[1]}
+                course.compensationEndTimeObj= {HH : endPart[0], mm : endPart[1]}
+              }
+            }
+          }
           context.commit("SetCoachLeave",data.data)
         }
       }catch(error){
@@ -929,6 +958,9 @@ const coachModules = {
     },
   },
   getters: {
+    getShowDialogCoachLeaveForm(state){
+      return state.show_dialog_coach_leave_form
+    },
     getStudentCheckInIsLoading(state) {
       return state.student_check_in_is_loading
     },

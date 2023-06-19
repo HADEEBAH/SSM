@@ -867,8 +867,8 @@
       <v-dialog
         persistent
         :width="$vuetify.breakpoint.smAndUp ? '70vw' : ''"
-        v-model="show_leave_form"
-        v-if="show_leave_form"
+        v-model="show_dialog_coach_leave_form"
+        v-if="show_dialog_coach_leave_form"
       >
         <v-card class="pa-1">
           <v-row dense>
@@ -910,7 +910,7 @@
                       ? 'bg-[#FFF9E8] text-[#FCC419]'
                       : edited_coach_leave_data.status === 'approved'
                       ? 'bg-[#F0F9EE] text-[#58A144]'
-                      : edited_coach_leave_data.status === 'cancel'
+                      : edited_coach_leave_data.status === 'reject'
                       ? 'bg-[#e8e8e8] text-[#636363]'
                       : 'bg-[#ffeeee] text-[#f00808]'
                   "
@@ -920,7 +920,7 @@
                       ? "รออนุมัติ"
                       : edited_coach_leave_data.status === "approved"
                       ? "อนุมัติ"
-                      : edited_coach_leave_data.status === "cancel"
+                      : edited_coach_leave_data.status === "reject"
                       ? "ยกเลิก"
                       : "ไม่อนุมัติ"
                   }}</span>
@@ -934,9 +934,7 @@
                     <div>วันที่ลา</div>
                     <div class="font-semibold pl-2">
                       {{
-                        `${genDate(
-                          edited_coach_leave_data.startDate
-                        )} - ${genDate(edited_coach_leave_data.endDate)}`
+                        `${genDate(edited_coach_leave_data.startDate)} - ${genDate(edited_coach_leave_data.endDate)}`
                       }}
                     </div>
                   </v-col>
@@ -977,47 +975,84 @@
                 </v-row>
               </v-card-text>
             </v-card>
-            <template v-if="edited_coach_leave_data.courses.length > 0">
+            <template v-if="edited_coach_leave_data.dates.length > 0">
               <div
                 class="mb-3"
-                v-for="(
-                  course, index_course
-                ) in edited_coach_leave_data.courses"
-                :key="`${index_course}-course`"
+                v-for="(date, index_date ) in edited_coach_leave_data.dates"
+                :key="`${index_date}-course`"
               >
                 <v-row dense>
                   <v-col cols="auto">
                     <v-icon color="#ff6b81"
-                      >mdi-card-account-details-outline</v-icon
+                      >mdi-calendar-outline</v-icon
                     >
                   </v-col>
-                  <v-col class="font-bold text-lg"> คอร์ส </v-col>
+                  <v-col class="font-bold text-lg"> {{ date.date ? GenDateStr(new Date(date.date)) : "-" }} </v-col>
                 </v-row>
-                <v-divider class="my-2"></v-divider>
-                <v-card flat>
-                  <v-card-text class="border border-1 rounded-lg">
-                    <v-row dense>
-                      <v-col>
-                        <div>ชื่อคอร์ส</div>
-                        <div class="font-semibold pl-2">
-                          {{
-                            `${course.courseNameTh} ${course.startTime}-${course.endTime}`
-                          }}
-                        </div>
-                      </v-col>
-                    </v-row>
-                    <v-row dense>
-                      <v-col>
-                        <div>ผู้สอนแทน</div>
-                        <div class="font-semibold pl-2">
-                          {{
-                            `${course.substituteCoachFirstNameTh} ${course.substituteCoachLastNameTh}`
-                          }}
-                        </div>
-                      </v-col>
-                    </v-row>
-                  </v-card-text>
-                </v-card>
+                <v-card
+                  class="mb-3"
+                  flat
+                  v-for="(course, index) in date.courses"
+                  :key="index"
+                >
+                <v-card-text class="rounded-md border">
+                  <v-radio-group readonly v-model="course.type" row>
+                    <v-radio
+                      label="มีผู้สอนแทน"
+                      color="#ff6b81"
+                      value="teach"
+                    ></v-radio>
+                    <v-radio
+                      label="ไม่มีผู้สอนแทน"
+                      color="#ff6b81"
+                      value="date"
+                    ></v-radio>
+                  </v-radio-group>
+                  <v-row dense>
+                    <v-col cols="auto">
+                      <v-icon color="#ff6b81"
+                        >mdi-card-account-details-outline</v-icon
+                      >
+                    </v-col>
+                    <v-col class="font-bold text-lg"> คอร์ส </v-col>
+                  </v-row>
+                  <v-divider class="my-2"></v-divider>
+                  <v-card flat>
+                    <v-card-text class="border border-1 rounded-lg">
+                      <v-row dense>
+                        <v-col>
+                          <div>ชื่อคอร์ส</div>
+                          <div class="font-semibold pl-2">
+                            {{
+                              `${course.courseNameTh} ${course.startTime}-${course.endTime}`
+                            }}
+                          </div>
+                        </v-col>
+                      </v-row>
+                      <v-row dense v-if="course.type === 'teach'">
+                        <v-col>
+                          <div>ผู้สอนแทน</div>
+                          <div class="font-semibold pl-2">
+                            {{
+                              `${course.substituteCoachFirstNameTh} ${course.substituteCoachLastNameTh}`
+                            }}
+                          </div>
+                        </v-col>
+                      </v-row>
+                      <v-row dense v-if="course.type === 'date'">
+                        <v-col>
+                          <div>วันที่ชดเชย</div>
+                          <div class="font-semibold pl-2">
+                            {{
+                              `${GenDateStr(new Date(course.compensationDate))} (${course.compensationStartTime}-${course.compensationEndTime})`
+                            }}
+                          </div>
+                        </v-col>
+                      </v-row>
+                    </v-card-text>
+                  </v-card>
+                </v-card-text>
+               </v-card>
               </div>
               <v-row dense>
                 <v-col class="font-bold text-lg"> ไฟล์แนบ </v-col>
@@ -1341,6 +1376,8 @@ export default {
       coach_check_in: "CoachModules/getCoachCheckIn",
       my_courses_is_loading: "CoachModules/getMyCoursesIsLoading",
       profile_detail: "ProfileModules/getProfileDetail",
+      show_dialog_coach_leave_form : "CoachModules/getShowDialogCoachLeaveForm"
+      
     }),
     SetFunctionsComputed() {
       this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
@@ -1377,7 +1414,18 @@ export default {
       GetCoachCheckIn: "CoachModules/GetCoachCheckIn",
       loginShareToken: "loginModules/loginShareToken",
       GetProfileDetail: "ProfileModules/GetProfileDetail",
+      ShowDialogCoachLeaveForm: "CoachModules/ShowDialogCoachLeaveForm",
     }),
+    GenDateStr(date){
+      const options = {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        calendar: "buddhist",
+        era: "short"
+      };
+      return date.toLocaleDateString("th-TH",options)
+    },
     openFileSummary(file) {
       // console.log(file)
       window.open(file.attFilesUrl, "_blank");
@@ -1534,11 +1582,13 @@ export default {
       }
     },
     showLeaveForm() {
+      this.ShowDialogCoachLeaveForm(true)
       this.show_leave_form = true;
     },
     closeDialogLeaveForm() {
       this.selected_files = []
       this.show_leave_form = false;
+      this.ShowDialogCoachLeaveForm(false)
       this.coach_leave_data = {
         menu_start_date: false,
         start_date: null,
