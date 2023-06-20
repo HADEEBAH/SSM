@@ -1559,8 +1559,8 @@ export default {
             console.log("bodyFormData", bodyFormData);
 
             let { data } = await axios.patch(
-              `http://localhost:3000/api/v1/usermanagement/update/${account_id}`,
-              // `${process.env.VUE_APP_URL}/api/v1/usermanagement/update/${account_id}`,
+              //`http://localhost:3000/api/v1/usermanagement/update/${account_id}`,
+              `${process.env.VUE_APP_URL}/api/v1/usermanagement/update/${account_id}`,
               bodyFormData,
               config
             );
