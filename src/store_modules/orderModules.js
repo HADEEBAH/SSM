@@ -532,19 +532,21 @@ const orderModules = {
                         console.log("payment statusCode",payment.data.statusCode)
                         if(payment.data.statusCode === 201){
                             window.location.href = payment.data.data
-                            localStorage.removeItem("Order")
-                            context.commit("SetResetCourseData")
-                            context.commit("SetOrder",{
-                                type:"",
-                                order_step : 0,
-                                order_number: "",
-                                courses:[],
-                                created_by : "",
-                                payment_status: "",
-                                payment_type: "",
-                                total_price: 0,
-                            })
-                            context.commit("SetOrderIsLoading", false)
+                            setTimeout(()=>{
+                                localStorage.removeItem("Order")
+                                context.commit("SetResetCourseData")
+                                context.commit("SetOrder",{
+                                    type:"",
+                                    order_step : 0,
+                                    order_number: "",
+                                    courses:[],
+                                    created_by : "",
+                                    payment_status: "",
+                                    payment_type: "",
+                                    total_price: 0,
+                                })
+                                context.commit("SetOrderIsLoading", false)
+                            },500)
                         }
                     }else{
                         if(order.payment_status === "paid"){
@@ -566,21 +568,21 @@ const orderModules = {
                                 }).then(async (result) => {
                                     if (result.isConfirmed) {
                                         router.replace({name : "Finance"})
+                                        localStorage.removeItem("Order")
+                                        context.commit("SetResetCourseData")
+                                        context.commit("SetOrder",{
+                                            type:"",
+                                            order_step : 0,
+                                            order_number: "",
+                                            courses:[],
+                                            created_by : "",
+                                            payment_status: "",
+                                            payment_type: "",
+                                            total_price: 0,
+                                        })
+                                        context.commit("SetOrderIsLoading", false)
                                     }
                                 })    
-                                localStorage.removeItem("Order")
-                                context.commit("SetResetCourseData")
-                                context.commit("SetOrder",{
-                                    type:"",
-                                    order_step : 0,
-                                    order_number: "",
-                                    courses:[],
-                                    created_by : "",
-                                    payment_status: "",
-                                    payment_type: "",
-                                    total_price: 0,
-                                })
-                                context.commit("SetOrderIsLoading", false)
                             }
                         }else{
                             Swal.fire({
@@ -592,21 +594,21 @@ const orderModules = {
                             }).then(async (result) => {
                                 if (result.isConfirmed) {
                                     router.replace({name : "Finance"})
+                                    localStorage.removeItem("Order")
+                                    context.commit("SetResetCourseData")
+                                    context.commit("SetOrder",{
+                                        type:"",
+                                        order_step : 0,
+                                        order_number: "",
+                                        courses:[],
+                                        created_by : "",
+                                        payment_status: "",
+                                        payment_type: "",
+                                        total_price: 0,
+                                    })
+                                    context.commit("SetOrderIsLoading", false)
                                 }
                             })    
-                            localStorage.removeItem("Order")
-                            context.commit("SetResetCourseData")
-                            context.commit("SetOrder",{
-                                type:"",
-                                order_step : 0,
-                                order_number: "",
-                                courses:[],
-                                created_by : "",
-                                payment_status: "",
-                                payment_type: "",
-                                total_price: 0,
-                            })
-                            context.commit("SetOrderIsLoading", false)
                         }
                     }  
                 }    

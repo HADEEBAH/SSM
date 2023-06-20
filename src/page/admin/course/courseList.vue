@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-container>
-      <header-page title="จัดการคอร์สทั้งหมด">
+      <header-page slot_tag title="จัดการคอร์สทั้งหมด">
         <v-text-field
           class="w-full"
           outlined
@@ -92,6 +92,7 @@
       <v-data-table
         class="elevation-1 header-table"
         :headers="column"
+        :search="search"
         :items="
           tab === 'all'
             ? courses

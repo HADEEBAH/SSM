@@ -134,10 +134,10 @@
                             <!-- @keypress="validate($event, 'th-special')" -->
 
                             <v-text-field
-                              @keypress="validate($event, 'th')"
+                              @keypress="validate($event, 'th-special')"
                               placeholder="-"
                               v-model="show_by_id.firstNameTh"
-                              :rules="rules.name"
+                              :rules="rules.firstNameThRules"
                               outlined
                               dense
                             >
@@ -148,10 +148,10 @@
                               text="นามสกุล (ภาษาไทย)"
                             ></label-custom>
                             <v-text-field
-                              @keypress="validate($event, 'th')"
+                              @keypress="validate($event, 'th-special')"
                               placeholder="-"
                               v-model="show_by_id.lastNameTh"
-                              :rules="rules.name"
+                              :rules="rules.lastNameThRules"
                               outlined
                               dense
                             >
@@ -169,7 +169,7 @@
                               @keypress="validate($event, 'en-special')"
                               placeholder="-"
                               v-model="show_by_id.firstNameEng"
-                              :rules="rules.name"
+                              :rules="rules.firstNameEnRules"
                               outlined
                               dense
                             >
@@ -184,7 +184,7 @@
                               @keypress="validate($event, 'en-special')"
                               placeholder="-"
                               v-model="show_by_id.lastNameEng"
-                              :rules="rules.name"
+                              :rules="rules.lastNameEnRules"
                               outlined
                               dense
                             >
@@ -303,7 +303,7 @@
                           item-text="role"
                           item-value="roleNumber"
                           label="กรุณาเลือกบทบาทผู้ใช้งาน"
-                          solo
+                          outlined
                           item-color="#ff6b81"
                           color="#ff6b81"
                           @change="selectRole(seledtedRole)"
@@ -886,7 +886,6 @@ export default {
     add_relations: false,
     show_sucsess: false,
     seledtedRole: "",
-    dataArray: ["apple", "banana", "orange"],
     dialog_show: false,
     show_dialog: false,
     selectedItem: false,
@@ -949,6 +948,54 @@ export default {
     addParentData: "เพิ่มข้อมูลผู้ใช้ของผู้ปกครอง",
     titleCreateRelation: "",
     rules: {
+      firstNameThRules: [
+        (val) =>
+          (val || "").length > 1 ||
+          "โปรดระบุชื่อ (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุชื่อ (ภาษาไทย) ความยาวไม่เกิน 20 ตัวอักษร",
+        (val) => /[ก-๏\s]/g.test(val) || "กรุณากรอกชื่อภาษาไทย",
+        (val) =>
+          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+          "กรุณากรอกชื่อภาษาไทย",
+      ],
+      firstNameEnRules: [
+        (val) =>
+          (val || "").length > 1 ||
+          "โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
+        (val) => /[A-Za-z]/g.test(val) || "กรุณากรอกชื่อภาษาอังกฤษ",
+        (val) =>
+          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+          "กรุณากรอกชื่อภาษาอังกฤษ",
+      ],
+      lastNameThRules: [
+        (val) =>
+          (val || "").length > 1 ||
+          "โปรดระบุนามสกุล (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุนามสกุล (ภาษาไทย) ความยาวไม่เกิน 20 ตัวอักษร",
+        (val) => /[ก-๏\s]/g.test(val) || "กรุณากรอกนามสกุลภาษาไทย",
+        (val) =>
+          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+          "กรุณากรอกสกุลภาษาไทย",
+      ],
+      lastNameEnRules: [
+        (val) =>
+          (val || "").length > 1 ||
+          "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
+        (val) =>
+          (val || "").length < 20 ||
+          "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
+        (val) => /[A-Za-z ]/g.test(val) || "กรุณากรอกนามสกุลภาษาอังกฤษ",
+        (val) =>
+          !/[\uD800-\uDBFF][\uDC00-\uDFFF ]/g.test(val) ||
+          "กรุณากรอกสกุลภาษาอังกฤษ",
+      ],
       name: [
         (val) =>
           (val || "").length > 0 ||
@@ -1470,7 +1517,6 @@ export default {
     },
     updateData(account_id) {
       console.log("user_account_id", account_id);
-
       Swal.fire({
         icon: "question",
         title: "คุณต้องการแก้ไขข้อมูลหรือไม่",
@@ -1513,8 +1559,8 @@ export default {
             console.log("bodyFormData", bodyFormData);
 
             let { data } = await axios.patch(
-              // `http://localhost:3000/api/v1/usermanagement/update/${account_id}`,
-              `${process.env.VUE_APP_URL}/api/v1/usermanagement/update/${account_id}`,
+              `http://localhost:3000/api/v1/usermanagement/update/${account_id}`,
+              // `${process.env.VUE_APP_URL}/api/v1/usermanagement/update/${account_id}`,
               bodyFormData,
               config
             );

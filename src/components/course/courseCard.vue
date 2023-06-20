@@ -806,16 +806,17 @@ export default {
     },
   }),
   created() {
+    console.log("809 => ",this.edited)
     if (this.edited) {
       this.preview_url = this.course_data?.course_img;
-      console.log(this.course_data?.coachs[0])
+      console.log(' this.course_data =>',this.course_data?.coachs[0])
       this.class_date_range_str = {
-        start_date: this.course_data?.coachs[0].class_date_range.start_date,
-        end_date: this.course_data?.coachs[0].class_date_range.end_date,
+        start_date: dateFormatter( this.course_data?.coachs[0].class_date_range.start_date, "DD MT YYYYT" ),
+        end_date:  dateFormatter(this.course_data?.coachs[0].class_date_range.end_date, "DD MT YYYYT"),
       };
       this.register_date_range_str = {
-        start_date: this.course_data?.coachs[0].register_date_range.start_date,
-        end_date: this.course_data?.coachs[0].register_date_range.end_date,
+        start_date: dateFormatter(this.course_data?.coachs[0].register_date_range.start_date, "DD MT YYYYT"),
+        end_date: dateFormatter( this.course_data?.coachs[0].register_date_range.end_date, "DD MT YYYYT"),
       };
     }
   },
@@ -863,17 +864,18 @@ export default {
       this.course_data.course_period_start_date = `${date.start_time_object.HH}:${date.start_time_object.mm}`
       console.log(date)
       if((parseInt(date.start_time_object.HH) + parseInt(this.course_data.course_hours_obj.HH)) >= 24){
-        date.end_time_object.HH = `${(parseInt(date.start_time_object.HH) + parseInt(this.course_data.course_hours_obj.HH)) - 24}`
+        date.end_time_object.HH = '0'+`${((parseInt(date.start_time_object.HH) + parseInt(this.course_data.course_hours_obj.HH)) - 24)}`.slice(-2)
       }else{
-        date.end_time_object.HH = `${(parseInt(date.start_time_object.HH) + parseInt(this.course_data.course_hours_obj.HH))}`
+        date.end_time_object.HH = `${'0'+(parseInt(date.start_time_object.HH) + parseInt(this.course_data.course_hours_obj.HH))}`.slice(-2)
       }
       if( (parseInt(date.start_time_object.mm) + parseInt(this.course_data.course_hours_obj.mm)) > 60){
-        date.end_time_object.mm = `${(parseInt(date.start_time_object.mm) + parseInt(this.course_data.course_hours_obj.mm)) - 60}`
+        date.end_time_object.mm = `${'0'+((parseInt(date.start_time_object.mm) + parseInt(this.course_data.course_hours_obj.mm)) - 60)}`.slice(-2)
       }else{
-        date.end_time_object.mm = `${(parseInt(date.start_time_object.mm) + parseInt(this.course_data.course_hours_obj.mm))}`
+        date.end_time_object.mm = `${'0'+(parseInt(date.start_time_object.mm) + parseInt(this.course_data.course_hours_obj.mm))}`.slice(-2)
       }
       date.start_time = `${date.start_time_object.HH}:${date.start_time_object.mm}`
       date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`
+      this.course_data.course_period_end_date = date.end_time
     },
     width() {
       switch (this.$vuetify.breakpoint.name) {
@@ -929,6 +931,7 @@ export default {
       inputValidation(e, lang);
     },
     inputDate(e, data) {
+      console.log(e)
       switch (data) {
         case "course open":
           this.course_data.course_open_date_str = dateFormatter(
