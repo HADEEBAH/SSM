@@ -47,7 +47,7 @@
             <v-card-text>
                 <v-card class="mb-3">
                     <v-card-text>
-                        <v-row>
+                        <v-row dense>
                             <v-col>
                                 <span class="text-[#999999]">วันที่ลา:</span>
                                 <div  class="text-[#2F3542] font-semibold">{{ `${coach_leave.startDateStr} - ${coach_leave.endDateStr}`  }}</div>

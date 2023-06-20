@@ -74,21 +74,14 @@
               <v-col cols="12" sm="6">โค้ช:{{ courseDate.coachName }} </v-col>
               <v-col cols="12" sm="6">
                 <v-chip
-                  :color="
-                    package_options.filter(
-                      (v) => v.value === courseDate.cpo.packageName
-                    )[0].bg_color
-                  "
-                  :style="`color:${
-                    package_options.filter(
-                      (v) => v.value === courseDate.cpo.packageName
-                    )[0].color
-                  }`"
+                  v-if ="courseDate.cpo.packageName"
+                  :color="courseDate.cpo.packageName ? package_options.filter( (v) => v.value === courseDate.cpo.packageName)[0].bg_color : ''"
+                  :style="courseDate.cpo.packageName ? `color:${ package_options.filter((v) => v.value === courseDate.cpo.packageName)[0].color}` : ''"
                 >
-                  {{
+                  {{ courseDate.cpo.packageName ? 
                     package_options.filter(
                       (v) => v.value === courseDate.cpo.packageName
-                    )[0].label
+                    )[0].label : "" 
                   }}
                 </v-chip>
               </v-col>
