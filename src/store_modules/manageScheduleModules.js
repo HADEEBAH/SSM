@@ -12,7 +12,7 @@ const manageScheduleModules = {
     delete_holiday: [],
     events: [],
     date_arr: [],
-    data_in_schedile: [],
+    data_in_schedule: [],
     data_filter_schedule: null,
     data_search_schedule: null,
   },
@@ -36,7 +36,7 @@ const manageScheduleModules = {
       state.events = payload;
     },
     SetDataInSchedile(state, payload) {
-      state.data_in_schedile = payload;
+      state.data_in_schedule = payload;
     },
     SetDataFilterSchedule(state, payload) {
       state.data_filter_schedule = payload;
@@ -47,8 +47,21 @@ const manageScheduleModules = {
       let dataInSchadule = []
       
       if (payload !== "") {
-        
-        if (state.data_filter_schedule.length > 0 ) {
+        if (state.data_in_schedule.length > 0 ) {
+          console.log("state.data_in_schedule", state.data_in_schedule);
+          res = state.data_in_schedule.filter((items)=>
+            items.name?.indexOf(payload) !== -1 || items.coach?.indexOf(payload) !== -1 || items.package?.indexOf(payload) !== -1
+            // await items.name === payload || items.coach === payload || items.package === payload
+            // {
+            //   if (items.name?.indexOf(payload) !== -1 || items.coach?.indexOf(payload) !== -1 || items.package?.indexOf(payload) !== -1) {
+            //     return items
+            //   }
+              
+            // }
+          )
+
+          console.log("res", res);
+        } else if (state.data_filter_schedule.length > 0) {
           res = state.data_filter_schedule.filter((items)=>
             items.name.indexOf(payload) !== -1 || items.coach.indexOf(payload) !== -1 || items.package.indexOf(payload) !== -1
           )
@@ -511,7 +524,7 @@ const manageScheduleModules = {
     },
 
     async GetSearchSchedule(context, search) {
-      context.commit("SetSearchFilterSchedule", search);
+      await context.commit("SetSearchFilterSchedule", search);
     },
 
   },
@@ -535,7 +548,7 @@ const manageScheduleModules = {
       return state.events;
     },
     getdataInSchadule(state) {
-      return state.data_in_schedile;
+      return state.data_in_schedule;
     },
     getFilterSchedule(state) {
       return state.data_filter_schedule;

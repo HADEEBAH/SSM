@@ -14,6 +14,7 @@
           v-model="search"
           append-outer-icon="mdi-magnify"
           @keyup="GetSearchSchedule(search)"
+          @click:append-outer="GetSearchSchedule(search)"
         ></v-text-field>
       </v-col>
       <v-col cols="6" sm="2" align="center" class="w-full">
@@ -79,6 +80,7 @@
               <v-col cols="12" sm="6">โค้ช:{{ courseDate.coachName }} </v-col>
               <v-col cols="12" sm="6">
                 <v-chip
+                  v-if="courseDate.cpo.packageName"
                   :color="courseDate.cpo.packageName ? package_options.filter( (v) => v.value === courseDate.cpo.packageName)[0].bg_color : ''"
                   :style="courseDate.cpo.packageName ? `color:${ package_options.filter((v) => v.value === courseDate.cpo.packageName)[0].color}` : ''"
                 >
@@ -1015,7 +1017,7 @@ export default {
       get_coachs: "CourseModules/getCoachs",
       get_all_holidays: "ManageScheduleModules/getAllHolidays",
       get_holidays_by_id: "ManageScheduleModules/getHolidaysById",
-      data_in_schedile: "ManageScheduleModules/getdataInSchadule",
+      data_in_schedule: "ManageScheduleModules/getdataInSchadule",
       data_filter_schedule: "ManageScheduleModules/getFilterSchedule",
       data_search_schedule: "ManageScheduleModules/getSearchFilterSchedule"
     }),
