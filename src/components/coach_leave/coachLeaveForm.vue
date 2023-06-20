@@ -59,6 +59,7 @@
             </v-col>
             <v-col cols="12" sm="6">
               <v-menu
+                :disabled="!coach_leave_data.start_date"
                 v-model="coach_leave_data.menu_end_date"
                 :close-on-content-click="false"
                 transition="scale-transition"
