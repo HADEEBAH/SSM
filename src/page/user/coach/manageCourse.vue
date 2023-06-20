@@ -1375,7 +1375,11 @@ export default {
       this.GetProfileDetail(this.user_detail.account_id);
     }
   },
-  watch: {},
+  watch: {
+    tab: function(){
+      this.GetMyCourses({ coach_id: this.user_detail.account_id });
+    }
+  },
   computed: {
     ...mapGetters({
       my_courses: "CoachModules/getMyCourses",
