@@ -47,66 +47,31 @@ const manageScheduleModules = {
       let dataInSchadule = []
       
       if (payload !== "") {
-        if (state.data_in_schedule.length > 0 ) {
-          console.log("state.data_in_schedule", state.data_in_schedule);
-          res = state.data_in_schedule.filter((items)=>
-            items.name?.indexOf(payload) !== -1 || items.coach?.indexOf(payload) !== -1 || items.package?.indexOf(payload) !== -1
-            // await items.name === payload || items.coach === payload || items.package === payload
-            // {
-            //   if (items.name?.indexOf(payload) !== -1 || items.coach?.indexOf(payload) !== -1 || items.package?.indexOf(payload) !== -1) {
-            //     return items
-            //   }
-              
-            // }
+        if (state.data_filter_schedule?.length > 0 ) {
+          res = state.data_filter_schedule?.filter((items)=>
+            (items.name && items.name?.indexOf(payload) !== -1) || (items.coach && items.coach?.indexOf(payload) !== -1) || (items.package && items.package?.indexOf(payload) !== -1)
           )
 
-          console.log("res", res);
-        } else if (state.data_filter_schedule.length > 0) {
-          res = state.data_filter_schedule.filter((items)=>
-            items.name.indexOf(payload) !== -1 || items.coach.indexOf(payload) !== -1 || items.package.indexOf(payload) !== -1
+        } else if (state.data_in_schedule?.length > 0) {
+          res = state.data_in_schedule?.filter((items)=>
+            (items.name && items.name?.indexOf(payload) !== -1) || (items.coach && items.coach?.indexOf(payload) !== -1) || (items.package && items.package?.indexOf(payload) !== -1)
           )
         }
 
         if (res?.length > 0) {
           res.map((item) => {
             let times = null;
-            let colors;
             times = `${item.startTime} - ${item.endTime}`;
-            if (item.startDate) {
-              switch (new Date(item.startDate).getDay()) {
-                case 0:
-                  colors = "#F898A4";
-                  break;
-                case 1:
-                  colors = "#FFFACD";
-                  break;
-                case 2:
-                  colors = "#FFBBDA";
-                  break;
-                case 3:
-                  colors = "#D0F4DE";
-                  break;
-                case 4:
-                  colors = "#FFE2D1";
-                  break;
-                case 5:
-                  colors = "#C0E4F6";
-                  break;
-                case 6:
-                  colors = "#E8CFF8";
-                  break;
-              }
-            }
           
             eventSchadule.push({
-              name: item.courseNameTh,
-              start: item.startDate,
+              name: item.name,
+              start: item.start,
               timed: times,
-              color: colors,
-              allday: false,
-              coach: item.coachName,
-              package: item.packageName,
-              type: "normal",
+              color: item.color,
+              allday: item.allday,
+              coach: item.coach,
+              package: item.package,
+              type: item.type,
               startTime: item.startTime,
               endTime: item.endTime,
             });
@@ -119,7 +84,6 @@ const manageScheduleModules = {
       } else {
         state.data_search_schedule = null
       }
-
 
     },
   },
@@ -442,7 +406,6 @@ const manageScheduleModules = {
         let key = Object.keys(query);
 
         key.forEach((items, index) => {
-          console.log("+++", query[items]);
           if (query[items].length > 0) {
             query_length = query[items].length
           }
@@ -453,16 +416,11 @@ const manageScheduleModules = {
           params.push(`${key[index]}=${query[items].join(`&&${key[index]}=`)}`);
         });
 
-        console.log("num", query_length);
         // console.log("params", params.join("&&"));
 
-        let { data } = await axios.get(
-          `http://localhost:3000/api/v1/admincourse/filter-schedule?${params.join(
-            "&"
-          )}`,
-          config
-        );
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/admincourse/courseholiday`, config)
+        // const endpoint = `http://localhost:3000/api/v1/admincourse/filter-schedule?${params.join("&&")}`
+        const endpoint = `${process.env.VUE_APP_URL}/api/v1/admincourse/filter-schedule?${params.join("&&")}`
+        let { data } = await axios.get(endpoint,config);
         const res = data.data;
 
         if (data.statusCode === 200) {

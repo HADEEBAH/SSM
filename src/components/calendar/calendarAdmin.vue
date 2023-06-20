@@ -1,6 +1,6 @@
 
 <template>
-  <div>
+  <v-container>
     <v-card-title>
       <v-row>
         <v-col cols="auto">
@@ -106,8 +106,8 @@
       </div>
     </v-bottom-sheet>
 
-    <template>
-      <v-row justify="center">
+    <!-- <template> -->
+      <!-- <v-row justify="center"> -->
         <v-dialog v-model="dialog_detail" persistent max-width="600px">
           <v-card>
             <v-card-title>
@@ -258,9 +258,9 @@
             </v-card-text>
           </v-card>
         </v-dialog>
-      </v-row>
-    </template>
-  </div>
+      <!-- </v-row> -->
+    <!-- </template> -->
+  </v-container>
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";

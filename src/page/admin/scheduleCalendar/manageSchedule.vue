@@ -1,5 +1,5 @@
 <template>
-  <v-container class="overflow-y: hidden; overflow-x: hidden;">
+  <v-container >
     <headerPage title="จัดการตาราง"></headerPage>
 
     <v-row class="py-2">
@@ -12,9 +12,8 @@
           color="pink"
           hide-details
           v-model="search"
-          append-outer-icon="mdi-magnify"
+          prepend-inner-icon="mdi-magnify"
           @keyup="GetSearchSchedule(search)"
-          @click:append-outer="GetSearchSchedule(search)"
         ></v-text-field>
       </v-col>
       <v-col cols="6" sm="2" align="center" class="w-full">
