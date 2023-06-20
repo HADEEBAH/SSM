@@ -1,7 +1,5 @@
 <template>
-  
   <v-card flat class="pa-0">
-  
     <v-card-title class="d-flex justify-center">
     แบบฟอร์มขอลา
     </v-card-title>
@@ -425,7 +423,6 @@ export default {
       ],
     },
   }),
-  
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
   },
@@ -452,7 +449,8 @@ export default {
       SaveCoachLeave: "CoachModules/SaveCoachLeave",
       GetMyCourses: "CoachModules/GetMyCourses",
       GetCoachs: "CourseModules/GetCoachs",
-      SearchCourseDateCoachLeave: "CoachModules/SearchCourseDateCoachLeave"
+      SearchCourseDateCoachLeave: "CoachModules/SearchCourseDateCoachLeave",
+      ShowDialogCoachLeaveForm: "CoachModules/ShowDialogCoachLeaveForm"
     }),
     RemoveCourse(date,index) {
       date.courses.splice(index, 1);
@@ -570,6 +568,7 @@ export default {
     closeDialogLeaveForm() {
       this.selected_files = []
       this.show_leave_form = false;
+      this.ShowDialogCoachLeaveForm(false)
       this.coach_leave_data = {
         menu_start_date: false,
         start_date: null,
