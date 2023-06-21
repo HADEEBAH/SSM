@@ -289,7 +289,7 @@
                         .length > 0
                     : true
                 "
-                @click="$router.push({ name: list.to })"
+                @click="$route.name !== list.to ? $router.push({ name: list.to }) : ''"
                 :class="
                   menu_drawer_list.length - 1 !== list_index
                     ? 'list-items-border-bottom'

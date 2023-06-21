@@ -36,7 +36,7 @@
         class="rounded-xl"
         cycle
         hide-delimiter-background
-        :height="MobileSize ? 300 : 600"
+        :height="height()"
       >
         <v-carousel-item
           v-for="(slide, i) in banner_list"
@@ -221,7 +221,15 @@ export default {
       logOut: "loginModules/logOut",
       GetBannerList: "BannerModules/GetBannerList",
     }),
-
+    height () {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return 240
+        case 'sm': return 320
+        case 'md': return 400
+        case 'lg': return 480
+        case 'xl': return 560
+      }
+    },
     selectedCategory(category) {
       console.log("category", category);
       this.course_order.kingdom = category.categoryNameTh;

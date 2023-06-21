@@ -543,7 +543,6 @@
                           ></v-rating>
                         </template>
                       </v-select>
-
                     <!-- <v-rating
                       v-model="student.potential.rating_evolution"
                       background-color="pink lighten-3"
@@ -638,14 +637,8 @@
           </v-row>
           <!-- Upload file -->
           <v-card flat class="mb-3">
-            <v-card-text
-              class="border-dashed border-2 border-pink-600 rounded-lg"
-            >
-              <v-row
-                v-if="
-                  preview_summary_files && preview_summary_files?.length > 0
-                "
-              >
+            <v-card-text class="border-dashed border-2 border-pink-600 rounded-lg">
+              <v-row v-if=" preview_summary_files && preview_summary_files?.length > 0">
                 <v-col
                   cols="3"
                   align="center"
@@ -653,39 +646,79 @@
                   v-for="(file, index) in preview_summary_files"
                   :key="index"
                 >
-                  <v-img
-                    v-if="file.attId"
-                    :src="file.url"
-                    contain
-                    max-height="200"
-                    max-width="200"
-                    align="right"
-                  >
-                    <v-btn
-                      icon
-                      class="bg-[#f00]"
-                      dark
-                      @click="removeSummaryFileInbase(file, index)"
-                      ><v-icon>mdi-close</v-icon></v-btn
+                  <template v-if="!file.attId && file.search('video') > -1">
+                    <v-card flat>
+                      <div class="flex justify-end">
+                        <v-btn
+                          icon
+                          class="bg-[#f00]"
+                          dark
+                          @click="removeSummaryFile(index)"
+                        > <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                      </div>
+                      <video
+                        :src="file"
+                        controls
+                        max-height="200"
+                        max-width="200"
+                      ></video>
+                    </v-card>
+                  </template>
+                  <template v-if="file.attId && file.filesType.search('video') > -1">
+                    <v-card flat>
+                      <div class="flex justify-end">
+                          <v-btn
+                            icon
+                            class="bg-[#f00]"
+                            dark
+                            @click="removeSummaryFileInbase(file, index)"
+                            ><v-icon>mdi-close</v-icon></v-btn
+                          >
+                      </div>
+                      <video
+                        :src="file.url"
+                        controls
+                        max-height="200"
+                        max-width="200"
+                      ></video>
+                    </v-card>
+                  </template>
+                  <template v-else>
+                    <v-img
+                      v-if="file.attId"
+                      :src="file.url"
+                      contain
+                      max-height="200"
+                      max-width="200"
+                      align="right"
                     >
-                  </v-img>
-                  <v-img
-                    v-else
-                    :src="file"
-                    contain
-                    max-height="200"
-                    max-width="200"
-                    align="right"
-                  >
-                    <v-btn
-                      v-if="coach_check_in.attachment.length == 0"
-                      icon
-                      class="bg-[#f00]"
-                      dark
-                      @click="removeSummaryFile(index)"
-                      ><v-icon>mdi-close</v-icon></v-btn
+                      <v-btn
+                        icon
+                        class="bg-[#f00]"
+                        dark
+                        @click="removeSummaryFileInbase(file, index)"
+                        ><v-icon>mdi-close</v-icon></v-btn
+                      >
+                    </v-img>
+                    <v-img
+                      v-else
+                      :src="file"
+                      contain
+                      max-height="200"
+                      max-width="200"
+                      align="right"
                     >
-                  </v-img>
+                      <v-btn
+                        v-if="coach_check_in.attachment.length == 0"
+                        icon
+                        class="bg-[#f00]"
+                        dark
+                        @click="removeSummaryFile(index)"
+                        ><v-icon>mdi-close</v-icon></v-btn
+                      >
+                    </v-img>
+                  </template>
                 </v-col>
               </v-row>
               <v-row
@@ -707,6 +740,8 @@
                 >
                   แนบไฟล์รูปภาพหรือวิดีโอ
                 </v-col>
+              </v-row>
+              <v-row>
                 <v-col cols="12" class="flex align-center justify-center">
                   <v-btn
                     text
@@ -718,11 +753,10 @@
                   <input
                     ref="fileInput"
                     type="file"
-                    accept="image/*"
+                    accept="image/* ,video/*"
                     multiple
                     @change="previewSummaryFile"
-                    style="display: none"
-                  />
+                    style="display: none" />
                 </v-col>
               </v-row>
             </v-card-text>
@@ -1029,14 +1063,9 @@
             <v-card
               flat
               class="mb-3"
-              v-if="
-                student_check_in[selected_student].potential.type ===
-                'potential'
-              "
+              v-if=" student_check_in[selected_student].potential.type ==='potential'"
             >
-              <v-card-text
-                class="border-dashed border-2 border-pink-600 rounded-lg"
-              >
+              <v-card-text class="border-dashed border-2 border-pink-600 rounded-lg">
                 <v-row>
                   <v-col cols="12" class="flex align-center justify-center">
                     <v-img
@@ -1239,9 +1268,12 @@ export default {
       if (this.coach_check_in.attachment) {
         if (this.coach_check_in?.attachment.length > 0) {
           for (const img_url of this.coach_check_in.attachment) {
+            console.log(img_url)
             this.preview_summary_files.push({
               url: img_url.attFilesUrl,
               attId: img_url.sumAttId,
+              originalFilesName : img_url.originalFilesName,
+              filesType : img_url.filesType
             });
           }
         }
@@ -1726,6 +1758,7 @@ export default {
       const fileUrls = [];
       for (let i = 0; i < selectedFiles.length; i++) {
         if (CheckFileSize(selectedFiles[i]) === true) {
+          console.log(selectedFiles[i])
           this.coach_check_in.summary_files.push(selectedFiles[i]);
           const file = selectedFiles[i];
           const reader = new FileReader();

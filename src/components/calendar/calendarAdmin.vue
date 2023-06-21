@@ -1,6 +1,6 @@
 
 <template>
-  <div>
+  <v-container>
     <v-card-title>
       <v-row>
         <v-col cols="auto">
@@ -14,12 +14,14 @@
         </v-col>
       </v-row>
     </v-card-title>
+    <!-- data_filter_schedule : {{ data_filter_schedule }} <br/>
+    data_in_schedule : {{ data_in_schedule }} -->
     <v-calendar
       ref="calendar"
       color="#ff6b81"
       type="month"
       v-model="focus"
-      :events="data_in_schedile"
+      :events="data_search_schedule ? data_search_schedule : (data_filter_schedule ? data_filter_schedule : data_in_schedule)"
       event-text-color="#000000"
       event-overlap-mode="column"
       :first-interval="1"
@@ -104,8 +106,8 @@
       </div>
     </v-bottom-sheet>
 
-    <template>
-      <v-row justify="center">
+    <!-- <template> -->
+      <!-- <v-row justify="center"> -->
         <v-dialog v-model="dialog_detail" persistent max-width="600px">
           <v-card>
             <v-card-title>
@@ -256,9 +258,9 @@
             </v-card-text>
           </v-card>
         </v-dialog>
-      </v-row>
-    </template>
-  </div>
+      <!-- </v-row> -->
+    <!-- </template> -->
+  </v-container>
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
@@ -297,7 +299,9 @@ export default {
   computed: {
     ...mapGetters({
       get_all_holidays: "ManageScheduleModules/getAllHolidays",
-      data_in_schedile: "ManageScheduleModules/getdataInSchadule",
+      data_in_schedule: "ManageScheduleModules/getdataInSchadule",
+      data_filter_schedule: "ManageScheduleModules/getFilterSchedule",
+      data_search_schedule: "ManageScheduleModules/getSearchFilterSchedule"
     }),
     cal() {
       return this.ready ? this.$refs.calendar : null;

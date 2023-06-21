@@ -22,13 +22,17 @@
                 :items="username_list"
                 :search-input.sync="search"
                 placeholder="ค้นหา/เลือกผู้เรียน"
-                label="ค้นหา/เลือกผู้เรียน"
                 item-text="fullname"
                 item-value="userOneId"
                 outlined
                 multiple
                 clearable
               >
+                <template v-slot:no-data>
+                  <v-list-item>
+                    <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
+                  </v-list-item>
+                </template>
                 <template v-slot:selection="data">
                   <v-chip
                     v-bind="data.attrs"
@@ -127,7 +131,7 @@
                 </template>
               </v-autocomplete>
             </v-col>
-            <v-col cols="12" sm="4" v-if="course.course_options.length > 0">
+            <v-col cols="12" sm="4" >
               <label-custom text="คอร์สเรียน"></label-custom>
               <v-autocomplete
                 dense
@@ -471,8 +475,8 @@
                       <v-col cols="auto">
                         <v-autocomplete
                           dense
-                          hide-details
-                          v-model="order.payment_type"
+                          :rules="order.payment_status === 'paid' ? rules.payment_type : false"
+                          v-model="order.payment_type "
                           item-value="value"
                           item-text="label"
                           :items="transfer"
@@ -659,7 +663,8 @@ export default {
       coach : [(val) => (val ? true : false) || "โปรดเลือกโค้ช"],
       start_date : [(val) => (val || "").length > 0 || "โปรดเลือกวันเริ่ม"],
       price : [(val) => (val || "") > 0 || "โปรดเลือกระบุราคา"],
-      remark : [(val)=> val.length < 256 || "หมายเหตุความยาวเกินกว่าที่กำหมด" ]
+      remark : [(val)=> val.length < 256 || "หมายเหตุความยาวเกินกว่าที่กำหมด" ],
+      payment_type :  [(val)=> val ? true : false || "โปรดเลือกช่องทางการชำระเงิน" ],
     },
   }),
   created() {
@@ -825,15 +830,31 @@ export default {
     },
     selectCategory(categoryId, course_type_id, course) {
       console.log(categoryId, course_type_id)
+      course.course_id = ""
+      course.package_data = {}
+      course.package = ""
+      course.option = {}
+      course.option_data = {}
+      course.day = ""
+      course.time = ""
+      course.time_str = ""
+      course.coach = ""
+      course.manu_start_date = false
+      course.start_date_str = ""
+      course.start_date = ""
+      course.price = 0
+      course.detail = ""
+      course.remark = ""
       this.GetCoursesFilter({
         category_id: categoryId,
         status: "Active",
         course_type_id: course_type_id,
       }).then(()=>{
-        if(this.courses.length > 0){
-          course.course_options = this.courses
+        let course_ids = []
+        for(let order_course of this.order.courses){
+          course_ids.push(order_course.course_id)
         }
-        
+        course.course_options = this.courses.filter(v => !course_ids.includes(v.course_id))
       })
     },
     selectCourse(courseId,course) {

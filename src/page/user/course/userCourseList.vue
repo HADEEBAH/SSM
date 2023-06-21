@@ -77,7 +77,7 @@
               : courses"
             :key="course_index"
           >
-            <v-card class="overflow-hidden h-full">
+            <v-card class="overflow-hidden h-full rounded-lg">
               <v-img
                 @click="selectedCourse(course)"
                 :aspect-ratio="16 / 9"
