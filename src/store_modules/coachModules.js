@@ -75,7 +75,12 @@ const coachModules = {
         // let localhost = "http://localhost:3000"
         let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/manage/course-filter/${account_id}/?startDate=${start_date}&endDate=${end_date}`, config)
         if(data.statusCode  == 200){
-          console.log(data.data)
+          // console.log("78 =>",data.data)
+          for(let course of data.data){
+            if(course.courseTypeId === 'CT_2'){
+              course.dayOfWeekName = course.dayOfWeekName.split(",")
+            }
+          }
           context.commit("SetMyCourses",data.data)
           context.commit("SetMyCoursesIsLoading",false)
         }
