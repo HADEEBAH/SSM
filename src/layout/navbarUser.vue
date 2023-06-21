@@ -32,9 +32,11 @@
               <v-badge
                 color="pink"
                 dot
-                :value="get_notifications_all.filter((item)=>
-                  item.notificationRead === false
-                ).length"
+                :value="
+                  get_notifications_all.filter(
+                    (item) => item.notificationRead === false
+                  ).length
+                "
                 class="mx-5"
               >
                 <v-icon dark v-bind="attrs" v-on="on">
@@ -44,20 +46,53 @@
             </template>
 
             <v-card width="360px" max-height="500px" style="overflow: auto">
-              <v-card-title>
-                <v-row dense>
+              <div style="position: sticky; top: 0; z-index: 1">
+                <v-toolbar dense elevation="0">
+                  <v-row dense height="500">
+                    <v-col cols="8">
+                      <div class="my-2 font-bold">การแจ้งเตือน</div>
+                    </v-col>
+                    <v-col cols="4" align="end">
+                      <v-icon size="32" color="#ff6b81">
+                        <!-- mdi-email-open -->
+                        mdi-email
+                        <!-- mdi-email-outline -->
+                        <!-- mdi-email-open-outline -->
+                      </v-icon>
+                    </v-col>
+                  </v-row>
+                  <!-- <span
+                  class="flex text-center"
+                  style="
+                    font-weight: 700;
+                    font-size: 16px;
+                    line-height: 24px;
+                    color: #2a70c3;
+                  "
+                >
+                </span>
+                <v-btn icon dark @click="closeDialog()">
+                  <v-icon color="#2A70C3">mdi-close</v-icon>
+                </v-btn> -->
+                </v-toolbar>
+                <v-divider></v-divider>
+              </div>
+
+              <!-- <v-card-title style="position: sticky; top: 0; z-index: 1">
+                <v-row dense height="500">
                   <v-col cols="8">การแจ้งเตือน</v-col>
                   <v-col cols="4" align="end">
                     <v-icon size="32" color="#ff6b81">
-                      <!-- mdi-email-open -->
                       mdi-email
-                      <!-- mdi-email-outline -->
-                      <!-- mdi-email-open-outline -->
                     </v-icon>
                   </v-col>
                 </v-row>
-              </v-card-title>
-              <v-divider></v-divider>
+                <v-row>
+                  <v-col cols="12">
+                    <v-divider></v-divider>
+                  </v-col>
+                </v-row>
+              </v-card-title> -->
 
               <v-card-text>
                 <v-list three-line>
@@ -70,7 +105,9 @@
                   >
                     <v-list-item-avatar class="align-self-center">
                       <v-icon size="32" color="#ff6b81">
-                        {{ item.notificationRead ? "mdi-email-open" : "mdi-email" }}
+                        {{
+                          item.notificationRead ? "mdi-email-open" : "mdi-email"
+                        }}
                       </v-icon>
                     </v-list-item-avatar>
 
@@ -83,7 +120,11 @@
                       }}</v-list-item-subtitle>
                     </v-list-item-content>
                     <v-list-item-action>
-                      <v-icon v-if="!item.notificationRead" color="#ff6b81" size="10">
+                      <v-icon
+                        v-if="!item.notificationRead"
+                        color="#ff6b81"
+                        size="10"
+                      >
                         mdi-checkbox-blank-circle
                       </v-icon>
                     </v-list-item-action>
@@ -414,58 +455,58 @@ export default {
     alertVisible: true,
     alertNotify: true,
     // get_notifications_alls: [
-      // {
-        // notificationName: "แจ้งเตือน",
-        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-      // },
-      // {
-        // notificationName: "แจ้งเตือน",
-        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-      // },
-      // {
-        // notificationName: "แจ้งเตือน",
-        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-      // },
-      // {
-        // notificationName: "แจ้งเตือน",
-        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-      // },
-      // {
-        // notificationName: "แจ้งเตือน",
-        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-      // },
-      // {
-        // notificationName: "แจ้งเตือน",
-        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-      // },
-      // {
-        // notificationName: "แจ้งเตือน",
-        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-      // },
-      // {
-        // notificationName: "แจ้งเตือน",
-        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-      // },
-      // {
-        // notificationName: "แจ้งเตือน",
-        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-      // },
-      // {
-        // notificationName: "แจ้งเตือน",
-        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-      // },
-      // {
-        // notificationName: "แจ้งเตือน",
-        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-      // },
-      // {
-        // notificationName: "แจ้งเตือน",
-        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-      // },
-      // {
-        // notificationName: "แจ้งเตือน",
-        // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-      // },
+    // {
+    // notificationName: "แจ้งเตือน",
+    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+    // },
+    // {
+    // notificationName: "แจ้งเตือน",
+    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+    // },
+    // {
+    // notificationName: "แจ้งเตือน",
+    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+    // },
+    // {
+    // notificationName: "แจ้งเตือน",
+    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+    // },
+    // {
+    // notificationName: "แจ้งเตือน",
+    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+    // },
+    // {
+    // notificationName: "แจ้งเตือน",
+    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+    // },
+    // {
+    // notificationName: "แจ้งเตือน",
+    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+    // },
+    // {
+    // notificationName: "แจ้งเตือน",
+    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+    // },
+    // {
+    // notificationName: "แจ้งเตือน",
+    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+    // },
+    // {
+    // notificationName: "แจ้งเตือน",
+    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+    // },
+    // {
+    // notificationName: "แจ้งเตือน",
+    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+    // },
+    // {
+    // notificationName: "แจ้งเตือน",
+    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+    // },
+    // {
+    // notificationName: "แจ้งเตือน",
+    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
+    // },
     // ],
 
     // getData: this.get_notifications,
@@ -551,7 +592,10 @@ export default {
       }
     },
     readNotification(params) {
-      this.ReadNotifications({notification_id: params.notificationId, account_id: params.accountId});
+      this.ReadNotifications({
+        notification_id: params.notificationId,
+        account_id: params.accountId,
+      });
     },
   },
 };

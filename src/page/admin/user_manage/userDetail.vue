@@ -1322,6 +1322,7 @@ export default {
     // text2: "Lorem ipsum dolor2",
 
     breadcrumbs: [
+      { text: "แดชบอร์ด", to: "StudentList" },
       { text: "จัดการผู้ใช้งาน", to: "UserList" },
       { text: "เพิ่มผู้ใช้งาน", to: "" },
     ],

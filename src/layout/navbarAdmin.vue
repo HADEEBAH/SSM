@@ -114,7 +114,7 @@
           <v-divider></v-divider>
           <v-list-item link @click="logOut">
             <v-list-item-icon><v-icon>mdi-login</v-icon></v-list-item-icon>
-            <v-list-item-title>ออกจากระบบz</v-list-item-title>
+            <v-list-item-title>ออกจากระบบ</v-list-item-title>
           </v-list-item>
         </template>
       </v-navigation-drawer>
