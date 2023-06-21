@@ -121,7 +121,7 @@
             >
               <v-row dense>
                 <v-col cols="6" sm="6" class="font-bold" style="color: #f19a5a">
-                  วันหยุด
+                  วันหยุด {{ getHolidays.fullDateHolidaysTh }}
                 </v-col>
                 <v-col
                   cols="6"
