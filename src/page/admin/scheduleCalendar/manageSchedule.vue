@@ -48,53 +48,56 @@
       </v-col>
 
       <v-col cols="12" md="4" sm="4">
-        <v-card height="500px" style="overflow-y: scroll">
+        <v-card class="my-3 pa-2 max-h-[300px] overflow-auto rounded-lg">
           <!-- วันที่ -->
           <v-card-text>
-            <div class="pink--text font-bold">
+            <div class="pink--text font-bold text-center">
               {{ formattedDate }}
             </div>
           </v-card-text>
 
-          <div class="font-bold my-2 mx-5">ตารางวิชาเรียน</div>
+          <div class="font-bold">ตารางวิชาเรียน</div>
           <!-- ตารางวิชาเรียน -->
           <v-alert
-            class="mx-2"
+            class="my-2"
             border="left"
             colored-border
             color="#ff6b81"
             elevation="2"
-            v-if="courseDate"
+            v-for="(item, index) in courseDate"
+            :key="index"
           >
+           <!-- {{ item }} -->
             <v-row dense class="font-bold">
               <v-col cols="12" sm="6">
-                {{ courseDate.courseName.courseNameTh }}</v-col
+                {{ item.courseName.courseNameTh }}</v-col
               >
               <v-col cols="12" sm="6">
-                {{ courseDate.time.start }} - {{ courseDate.time.end }}</v-col
+                {{ item.time.start }} - {{ item.time.end }}</v-col
               >
             </v-row>
 
             <v-row dense>
-              <v-col cols="12" sm="6">โค้ช:{{ courseDate.coachName }} </v-col>
+              <v-col cols="12" sm="6">โค้ช : {{ item.coachName }} </v-col>
               <v-col cols="12" sm="6">
                 <v-chip
-                  v-if="courseDate.cpo.packageName"
-                  :color="courseDate.cpo.packageName ? package_options.filter( (v) => v.value === courseDate.cpo.packageName)[0].bg_color : ''"
-                  :style="courseDate.cpo.packageName ? `color:${ package_options.filter((v) => v.value === courseDate.cpo.packageName)[0].color}` : ''"
+                  v-if="item.cpo.packageName"
+                  :color="item.cpo.packageName ? package_options.filter( (v) => v.value === item.cpo.packageName)[0].bg_color : ''"
+                  :style="item.cpo.packageName ? `color:${ package_options.filter((v) => v.value === item.cpo.packageName)[0].color}` : ''"
                 >
-                  {{ courseDate.cpo.packageName ? 
+                  {{ item.cpo.packageName ? 
                     package_options.filter(
-                      (v) => v.value === courseDate.cpo.packageName
+                      (v) => v.value === item.cpo.packageName
                     )[0].label : "" 
                   }}
                 </v-chip>
               </v-col>
             </v-row>
-            <div v-if="courseDate.courseMonitor.length > 0">
+
+            <div v-if="item.courseMonitor.length > 0">
               <v-row
                 dense
-                v-for="(seat, index) in courseDate.courseMonitor"
+                v-for="(seat, index) in item.courseMonitor"
                 :key="index"
               >
                 <v-col
@@ -108,16 +111,17 @@
             </div>
           </v-alert>
           <!-- แก้ไขวันหยุด -->
-          <v-card
-            v-for="(getHolidays, index_holidays) in get_all_holidays"
-            :key="index_holidays"
-            class="mx-2 my-5"
-            color="#FDF1E7"
-          >
-            <v-card-text>
+        </v-card>
+        <v-card class="pa-2 max-h-[300px] overflow-auto rounded-lg">
+          <div class="font-bold">วันหยุด</div>
+            <v-card-text v-for="(getHolidays, index_holidays) in get_all_holidays"
+              :key="index_holidays"
+              class="bg-[#FDF1E7] my-2 rounded-lg"
+              color="#ED7D2B"
+            >
               <v-row dense>
                 <v-col cols="6" sm="6" class="font-bold" style="color: #f19a5a">
-                  วันหยุด
+                  วันหยุด {{ getHolidays.fullDateHolidaysTh }}
                 </v-col>
                 <v-col
                   cols="6"
@@ -136,7 +140,7 @@
               </div>
             </v-card-text>
           </v-card>
-        </v-card>
+
       </v-col>
     </v-row>
 
@@ -293,21 +297,22 @@
       <v-row justify="center">
         <v-dialog v-model="show_dialog_holoday" persistent max-width="600px">
           <v-card>
-            <v-card-title>
+            <!-- <v-card-title>
               <v-row dense>
                 <v-col cols="12" align="end">
-                  <v-btn icon @click="closeDialog">
-                    <v-icon color="#ff6b81">mdi-close</v-icon>
-                  </v-btn>
+                  
                 </v-col>
               </v-row>
-            </v-card-title>
+            </v-card-title> -->
             <v-card-title>
               <v-row>
                 <v-col cols="12" align="center" class="font-bold">
                   เพิ่มวันหยุด
                 </v-col>
               </v-row>
+              <v-btn class="absolute right-0 top-0" icon @click="closeDialog">
+                <v-icon color="#ff6b81">mdi-close</v-icon>
+              </v-btn>
             </v-card-title>
 
             <v-card-title>
@@ -1027,7 +1032,7 @@ export default {
       const month = this.thaiMonths[date.getMonth()];
       const year = date.getFullYear() + 543; // Add 543 to convert to Thai year
 
-      return `${day} ${dateNumber} ${month}, ${year}`;
+      return `${day} ${dateNumber} ${month} ${year}`;
     },
 
     courseDate() {
@@ -1042,7 +1047,7 @@ export default {
           getAllCourseDate.push(CourseDate);
           if (courseTodayDate == CourseDate) {
             success = true;
-            allCourse = this.get_all_course[index];
+            allCourse.push(this.get_all_course[index])
           }
         }
       }
