@@ -1393,9 +1393,6 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           if (this.course_order.course_type_id == "CT_1") {
-            console.log(
-              new Date(this.course_data.course_open_date) > new Date()
-            );
             if (new Date(this.course_data.course_open_date) > new Date()) {
               this.course_order.start_date = this.course_data.course_open_date;
             } else {
@@ -1422,7 +1419,6 @@ export default {
             this.course_order.coach = this.course_data.coachs[0].coach_id;
             this.course_order.coach_id = this.course_data.coachs[0].coach_id;
           }
-          console.log("this.order => ",this.order)
           if( this.order.courses.length === 0){
             if ( this.order.courses.filter((v) => v.course_id === this.course_order.course_id).length === 0
             ) { this.order.courses.push({ ...this.course_order }); }

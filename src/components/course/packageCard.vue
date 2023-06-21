@@ -214,6 +214,7 @@
                       dense
                       type="number"
                       class="input-text-right"
+                      :rules="rules.discount"
                       @focus="$event.target.select()"
                       :disabled="!option.discount || disable"
                       placeholder="ระบุส่วนลด/บาท"
@@ -362,9 +363,19 @@ export default {
       );
     },
     calNetPrice(data) {
+      if(data.discount_price < 0){
+        data.discount_price = 0
+      }
       if (data.discount) {
-        data.net_price = data.price_unit - data.discount_price;
-        data.net_price_unit = data.net_price / data.amount;
+        if(data.price_unit - data.discount_price < 0){
+          data.discount_price = data.price_unit - 1
+          data.net_price = data.price_unit - data.discount_price;
+          data.net_price_unit = data.net_price / data.amount;
+        }else{
+          data.net_price = data.price_unit - data.discount_price;
+          data.net_price_unit = data.net_price / data.amount;
+        }
+       
       }
     },
     checkOption(option_data) {
