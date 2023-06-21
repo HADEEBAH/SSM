@@ -313,15 +313,9 @@
                     :rules="rules.usernameRules"
                     @keypress="Validation($event, 'en-number')"
                     v-model="parent.username"
-                    @change="
-                      parent.username > 3 ? checkUsername(parent.username) : ''
-                    "
-                    @keyup.enter="
-                      parent.username > 3 ? checkUsername(parent.username) : ''
-                    "
-                    @blur="
-                      parent.username > 3 ? checkUsername(parent.username) : ''
-                    "
+                    @change="parent.username > 3 ? checkUsername(parent.username) : ''"
+                    @keyup.enter=" parent.username > 3 ? checkUsername(parent.username) : ''"
+                    @blur="parent.username > 3 ? checkUsername(parent.username) : '' "
                     placeholder="Username"
                   >
                     <template v-slot:append>
