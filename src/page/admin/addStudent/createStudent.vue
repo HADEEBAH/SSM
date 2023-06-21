@@ -886,7 +886,11 @@ export default {
             course.start_date = this.course_data.course_study_start_date
             course.start_date_str = this.course_data.course_study_start_date_str
             course.coach = this.course_data.coachs[0]
-            course.time_str = `${this.course_data.course_period_start_date}-${this.course_data.course_period_end_date}`
+            let startTimePart = this.course_data.course_period_start_date.split(":")
+            let endTimePart = this.course_data.course_period_end_date.split(":")
+            let period_start = `${startTimePart[0].padStart(2, '0')}:${startTimePart[1].padStart(2, '0')}`
+            let period_end = `${endTimePart[0].padStart(2, '0')}:${endTimePart[1].padStart(2, '0')}`
+            course.time_str = `${period_start}-${period_end}`
             course.price = parseInt(this.course_data.price_course)
             course.time = this.course_data.days_of_class[0].times[0];
             this.CalTotalPrice()
