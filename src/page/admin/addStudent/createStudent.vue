@@ -399,6 +399,7 @@
                 v-model="course.price"
                 @change="CalTotalPrice()"
                 outlined
+                @keypress="Validation($event, 'number')"
                 type="number"
                 color="pink"
                 suffix="บาท"
@@ -613,7 +614,7 @@ import dialogCard from "@/components/dialog/dialogCard.vue";
 import registerDialogForm from "@/components/user_menage/registerDialogForm.vue";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 import { mapActions, mapGetters } from "vuex";
-import { dateFormatter } from "@/functions/functions";
+import { dateFormatter, inputValidation} from "@/functions/functions";
 import Swal from "sweetalert2";
 import mixin from "../../../mixin";
 export default {
@@ -741,6 +742,9 @@ export default {
       GetCourse: "CourseModules/GetCourse",
       searchNameUser: "loginModules/searchNameUser"
     }),
+    Validation(e, lang) {
+      inputValidation(e, lang);
+    },
     remove(item) {
       const index = this.students.indexOf(item);
       if (index >= 0) this.students.splice(index, 1);
