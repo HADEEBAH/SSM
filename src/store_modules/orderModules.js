@@ -622,6 +622,13 @@ const orderModules = {
                         showCancelButton: false,
                         confirmButtonText: "ตกลง",
                     })
+                }else if(error.response.data.message === "The price is not correct!!"){
+                    Swal.fire({
+                        icon: "error",
+                        title: "ราคาไม่ถูกต้อง ไม่สามารถดำเนินการชำระได้",
+                        showCancelButton: false,
+                        confirmButtonText: "ตกลง",
+                    })
                 }else{
                     Swal.fire({
                         icon: "error",
