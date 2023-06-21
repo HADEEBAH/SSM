@@ -80,32 +80,48 @@ const loginModules = {
                 // let localhost = " http://localhost:3000"
                 // let { data } = await axios.get(` http://localhost:3000/api/v1/account/username?username=${username}`)
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/search/username/one?username=${username}`, config)
-                // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/username?username=${username}`, config)
                 if (data.statusCode === 200) {
                     if (data.data.userOneId) {
-                        // console.log("type =>",course_id)
+                        console.log("85 =>",data.data)
                         if (type === 'student') {
-                            let student = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/username-potencial/${data.data.userOneId}`)
-                            if(student.data.statusCode === 200){
-                                if(student.data.message === "study"){
-                                    if(student.data.data.data.some(v => v.courseId === course_id)){
-                                        Swal.fire({
-                                            icon: "error",
-                                            title: "ผู้ใช้ซ้ำกันในหลักสูตรนี้ ไม่สามารถลงทะเบียนได้",
-                                            showCancelButton: false,
-                                            confirmButtonText: "ตกลง",
-                                        })
+                            let roles = ["R_1","R_2","R_3"]
+                            if(!data.data.roles || !roles.includes(data.data.roles?.roleId)){
+                                let student = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/username-potencial/${data.data.userOneId}`)
+                                if(student.data.statusCode === 200){
+                                    if(student.data.message === "study"){
+                                        if(student.data.data.data.some(v => v.courseId === course_id)){
+                                            Swal.fire({
+                                                icon: "error",
+                                                title: "ผู้ใช้ซ้ำกันในหลักสูตรนี้ ไม่สามารถลงทะเบียนได้",
+                                                showCancelButton: false,
+                                                confirmButtonText: "ตกลง",
+                                            })
+                                            if (type === 'student') {
+                                                context.commit("SetUserStudentData", [])
+                                            } else {
+                                                context.commit("SetUserData", [])
+                                            }
+                                        }else{
+                                            context.commit("SetUserStudentData", [data.data])
+                                        }
+                                    }else{
+                                        context.commit("SetUserStudentData", [data.data])
+                                    }
+                                }
+                            }else{
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "ไม่สามารถสมัครได้",
+                                    text : "เนื่องจากผู้สมัครมีตำแหน่งอื่นๆ อยู่แล้ว"
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
                                         if (type === 'student') {
                                             context.commit("SetUserStudentData", [])
                                         } else {
                                             context.commit("SetUserData", [])
                                         }
-                                    }else{
-                                        context.commit("SetUserStudentData", [data.data])
                                     }
-                                }else{
-                                    context.commit("SetUserStudentData", [data.data])
-                                }
+                                })
                             }
                         } else {
                             context.commit("SetUserData", [data.data])
