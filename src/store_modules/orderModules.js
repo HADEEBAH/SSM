@@ -487,8 +487,8 @@ const orderModules = {
                     }
                 }
                 console.log("payload =>",payload)
-                // let localhost = "http://localhost:3002"
-                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/regis/course`,payload , config)
+                let localhost = "http://localhost:3002"
+                let {data} = await axios.post(`${localhost}/api/v1/order/regis/course`,payload , config)
                 console.log(data)
                 if(data.statusCode === 201){
                     let payment_payload = {
@@ -619,6 +619,13 @@ const orderModules = {
                     Swal.fire({
                         icon: "error",
                         title: "ผู้ใช้ซ้ำกันในหลักสูตรนี้ ไม่สามารถลงทะเบียนได้",
+                        showCancelButton: false,
+                        confirmButtonText: "ตกลง",
+                    })
+                }else if(error.response.data.message === "The price is not correct!!"){
+                    Swal.fire({
+                        icon: "error",
+                        title: "ราคาไม่ถูกต้อง ไม่สามารถดำเนินการชำระได้",
                         showCancelButton: false,
                         confirmButtonText: "ตกลง",
                     })
