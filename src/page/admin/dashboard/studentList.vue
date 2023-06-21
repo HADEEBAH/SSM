@@ -257,7 +257,7 @@
                 name: 'UserDetail',
                 params: {
                   action: 'view',
-                  account_id: item.accountId,
+                  account_id: item.studentId,
                 },
               })
             "

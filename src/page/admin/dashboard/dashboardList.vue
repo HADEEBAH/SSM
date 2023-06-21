@@ -4,7 +4,7 @@
       <loading-overlay :loading="dashboard_loading"> </loading-overlay>
 
       <headerPage title="แดชบอร์ด"></headerPage>
-      <pre>{{ get_potential }}</pre>
+      <!-- <pre>{{ get_potential }}</pre> -->
 
       <!-- TOP CARD -->
       <v-row dense>
