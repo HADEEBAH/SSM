@@ -234,39 +234,28 @@
                 <label-custom text="ระยะเวลา"></label-custom>
                 <v-autocomplete
                   dense
+                  outlined
                   :rules="rules.option"
                   v-model="course.option"
-                  :items="
-                    course.course_data.packages.filter(
-                      (v) => v.package_id == course.package
-                    )[0].options
-                  "
+                  :items="course.course_data.packages.filter((v) => v.package_id == course.package )[0].options"
                   placeholder="เลือกระยะเวลา"
-                  outlined
+                  @change="Calprice(course)"
                   item-color="pink"
                   color="pink"
-                  @change="Calprice(course)"
                 >
                   <template v-slot:selection="data">
                     {{ `${data.item.option_name}` }}
                   </template>
                   <template v-slot:item="{ item }">
-                    <v-list-item-content>
-                      <v-list-item-title
-                        ><span
-                          :class="
-                            course.option.package_id === item.package_id
-                              ? 'font-bold'
-                              : ''
-                          "
+                    <v-list-item-content >
+                      <v-list-item-title class="text-[#ff6b81] bg-[#fff]"
+                        ><span :class=" course.option.option_id === item.option_id ? 'font-bold' : '' "
                           >{{ item.option_name }}</span
-                        ></v-list-item-title
-                      >
+                        ></v-list-item-title >
                     </v-list-item-content>
                     <v-list-item-action>
-                      <v-icon>
-                        {{
-                          course.option.package_id === item.package_id
+                      <v-icon color="#ff6b81">
+                        {{ course.option.option_id === item.option_id
                             ? "mdi-check-circle"
                             : "mdi-radiobox-blank"
                         }}</v-icon
