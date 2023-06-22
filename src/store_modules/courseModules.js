@@ -3,7 +3,7 @@ import moment from "moment";
 import Swal from "sweetalert2";
 import router from "@/router";
 import VueCookie from "vue-cookie"
-import {dateDMY} from "../functions/functions"
+// import {dateDMY} from "../functions/functions"
 // import { dateFormatter } from "@/functions/functions";
 var XLSX = require("xlsx");
 function dayOfWeekArray(day) {
@@ -403,8 +403,8 @@ const CourseModules = {
                       timeId : coachDate.time.timeId,
                       start : coachDate.time.start,
                       end :  coachDate.time.end,
-                      startDate : dateDMY(coachDate.dates.startDate),
-                      endDate :   dateDMY(coachDate.dates.endDate),
+                      startDate :coachDate.dates.startDate ? new Date(coachDate.dates.startDate).toLocaleDateString("th-TH") : '',
+                      endDate : coachDate.dates.endDate ? new Date(coachDate.dates.endDate).toLocaleDateString("th-TH"): '',
                       time : `${coachDate.time.start}น.-${coachDate.time.end}น.`,
                       cpo : coachDate.cpo ? coachDate.cpo : null,
                       cpoId : coachDate.cpo.cpoId ? coachDate.cpo.cpoId  : null,
