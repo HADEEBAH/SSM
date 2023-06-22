@@ -395,8 +395,8 @@ const CourseModules = {
             for await (const coachDate of coach.allDates){
               // console.log(coachDate)
               if (!coachDate.cpo.cpoId){
-                // console.log("ระยะสั้น")
-                for await (const date of coachDate.dates.dates){
+                console.log("ระยะสั้น => ",coachDate)
+                for await (const date of coachDate.dates.date){
                   if(datesList.filter(v => v.date === date).length === 0){
                     datesList.push({
                       date : date,
