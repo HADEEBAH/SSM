@@ -219,8 +219,8 @@ const orderModules = {
                 let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/`,config)
                 if(data.statusCode === 200){
                     if(data.data.length > 0){
-                        console.log(data.data)
-                        for await (const order of data.data){
+                        console.log("222",data.data)
+                        for await (let order of data.data){
                             for await (const student of order.student){
                                 if(!students.some(v=>v.account_id == student.userOneId)){
                                     students.push({
@@ -229,7 +229,49 @@ const orderModules = {
                                     })
                                 }
                             }
-                            order.paid_date =  order.payment_status === "success" ? new Date(order.updated_date).toLocaleString("th-TH")  : ''
+
+                            // let cutDate = order.payment_status === "success" ? order.payment.paymentDate : '';
+                            // let y = parseInt(cutDate.slice(0, 4)) + 543;
+                            // let m = cutDate.slice(4, 6);
+                            // let d = cutDate.slice(6, 8);
+
+                            // let cutTime = order.payment_status === "success" ? order.payment.paymentTime : '';
+                            // let HH = cutTime.slice(0, 2);
+                            // let mm = cutTime.slice(2, 4);
+                            // let ss = cutTime.slice(4, 6);
+                            
+                            // order.paid_date = order.payment_status === "success" ? `${d + "-" + m + "-" + y} ${HH + ":" + mm + ":" + ss}` : ''
+
+                            let inputDate = order.payment_status === "success" ? order.payment.paymentDate : '';
+                            const year = inputDate.substring(0, 4);
+                            const month = parseInt(inputDate.substring(4, 6));
+                            const day = inputDate.substring(6, 8);
+
+                            const monthNames = [
+                                "",
+                                "มกราคม",
+                                "กุมภาพันธ์",
+                                "มีนาคม",
+                                "เมษายน",
+                                "พฤษภาคม",
+                                "มิถุนายน",
+                                "กรกฎาคม",
+                                "สิงหาคม",
+                                "กันยายน",
+                                "ตุลาคม",
+                                "พฤศจิกายน",
+                                "ธันวาคม"
+                            ];
+                            
+                            const formatted = `${day} ${monthNames[month]} ${year}`;
+                            // console.log("267", formatted);
+                            
+                            let cutTime = order.payment_status === "success" ? order.payment.paymentTime : '';
+                            let HH = cutTime.slice(0, 2);
+                            let mm = cutTime.slice(2, 4);
+                            let ss = cutTime.slice(4, 6);
+
+                            order.paid_date = order.payment_status === "success" ? `${formatted} ${HH + ":" + mm + ":" + ss}` : ''
                             order.course_name = `${order.course.courseNameTh}(${order.course.courseNameEn})`
                             order.student_name = `${order.user?.firstNameTh} ${order.user?.lastNameTh}`
                         }

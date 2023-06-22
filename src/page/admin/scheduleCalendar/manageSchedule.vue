@@ -1,5 +1,5 @@
 <template>
-  <v-container >
+  <v-container>
     <headerPage title="จัดการตาราง"></headerPage>
 
     <v-row class="py-2">
@@ -67,7 +67,7 @@
             v-for="(item, index) in courseDate"
             :key="index"
           >
-           <!-- {{ item }} -->
+            <!-- {{ item }} -->
             <v-row dense class="font-bold">
               <v-col cols="12" sm="6">
                 {{ item.courseName.courseNameTh }}</v-col
@@ -82,13 +82,29 @@
               <v-col cols="12" sm="6">
                 <v-chip
                   v-if="item.cpo.packageName"
-                  :color="item.cpo.packageName ? package_options.filter( (v) => v.value === item.cpo.packageName)[0].bg_color : ''"
-                  :style="item.cpo.packageName ? `color:${ package_options.filter((v) => v.value === item.cpo.packageName)[0].color}` : ''"
+                  :color="
+                    item.cpo.packageName
+                      ? package_options.filter(
+                          (v) => v.value === item.cpo.packageName
+                        )[0].bg_color
+                      : ''
+                  "
+                  :style="
+                    item.cpo.packageName
+                      ? `color:${
+                          package_options.filter(
+                            (v) => v.value === item.cpo.packageName
+                          )[0].color
+                        }`
+                      : ''
+                  "
                 >
-                  {{ item.cpo.packageName ? 
-                    package_options.filter(
-                      (v) => v.value === item.cpo.packageName
-                    )[0].label : "" 
+                  {{
+                    item.cpo.packageName
+                      ? package_options.filter(
+                          (v) => v.value === item.cpo.packageName
+                        )[0].label
+                      : ""
                   }}
                 </v-chip>
               </v-col>
@@ -114,33 +130,33 @@
         </v-card>
         <v-card class="pa-2 max-h-[300px] overflow-auto rounded-lg">
           <div class="font-bold">วันหยุด</div>
-            <v-card-text v-for="(getHolidays, index_holidays) in get_all_holidays"
-              :key="index_holidays"
-              class="bg-[#FDF1E7] my-2 rounded-lg"
-              color="#ED7D2B"
-            >
-              <v-row dense>
-                <v-col cols="6" sm="6" class="font-bold" style="color: #f19a5a">
-                  วันหยุด {{ getHolidays.fullDateHolidaysTh }}
-                </v-col>
-                <v-col
-                  cols="6"
-                  sm="6"
-                  @click="editHolidays(getHolidays)"
-                  align="end"
-                >
-                  <span
-                    class="mdi mdi-pencil-box cursor-pointer"
-                    style="color: #f19a5a; font-size: 2em"
-                  ></span>
-                </v-col>
-              </v-row>
-              <div style="color: #f19a5a">
-                {{ getHolidays.holidayName }}
-              </div>
-            </v-card-text>
-          </v-card>
-
+          <v-card-text
+            v-for="(getHolidays, index_holidays) in get_all_holidays"
+            :key="index_holidays"
+            class="bg-[#FDF1E7] my-2 rounded-lg"
+            color="#ED7D2B"
+          >
+            <v-row dense>
+              <v-col cols="6" sm="6" class="font-bold" style="color: #f19a5a">
+                วันหยุด {{ getHolidays.fullDateHolidaysTh }}
+              </v-col>
+              <v-col
+                cols="6"
+                sm="6"
+                @click="editHolidays(getHolidays)"
+                align="end"
+              >
+                <span
+                  class="mdi mdi-pencil-box cursor-pointer"
+                  style="color: #f19a5a; font-size: 2em"
+                ></span>
+              </v-col>
+            </v-row>
+            <div style="color: #f19a5a">
+              {{ getHolidays.holidayName }}
+            </div>
+          </v-card-text>
+        </v-card>
       </v-col>
     </v-row>
 
@@ -155,7 +171,6 @@
         >
           <v-card>
             <v-container>
-
               <v-card-title>
                 <v-row dense>
                   <v-col class="absolute top-0 right-0" cols="12" align="end">
@@ -202,7 +217,10 @@
 
                       <v-date-picker
                         v-model="editHolidayDates"
-                        @input="setHolidaydates(editHolidayDates), selectEditHolidaydates = false"
+                        @input="
+                          setHolidaydates(editHolidayDates),
+                            (selectEditHolidaydates = false)
+                        "
                         :min="tomorrowDate()"
                       ></v-date-picker>
                     </v-menu>
@@ -293,7 +311,11 @@
             <v-container>
               <v-card-title>
                 <v-row>
-                  <v-col cols="12" align="end" class="font-bold absolute right-0 top-0">
+                  <v-col
+                    cols="12"
+                    align="end"
+                    class="font-bold absolute right-0 top-0"
+                  >
                     <v-btn icon @click="closeDialog">
                       <v-icon color="#ff6b81">mdi-close</v-icon>
                     </v-btn>
@@ -310,7 +332,7 @@
                   <!-- วันที่ -->
                   <v-col cols="12" sm="8">
                     <label class="font-weight-bold">วันที่</label>
-                    
+
                     <v-menu
                       v-model="selectHolidaydates"
                       :close-on-content-click="false"
@@ -332,12 +354,15 @@
                           color="#FF6B81"
                           v-model="holidaydatesTh"
                         >
-                      </v-text-field>
+                        </v-text-field>
                       </template>
 
                       <v-date-picker
                         v-model="holidaydates"
-                        @input="setHolidaydates(holidaydates), selectHolidaydates = false"
+                        @input="
+                          setHolidaydates(holidaydates),
+                            (selectHolidaydates = false)
+                        "
                         :min="tomorrowDate()"
                       ></v-date-picker>
                     </v-menu>
@@ -355,7 +380,6 @@
                 </v-row>
                 <v-row v-if="!holidaySwitch" dense>
                   <v-col cols="12" sm="6">
-                    
                     <label class="font-weight-bold">เวลาเริ่ม</label>
                     <br />
                     <vue-timepicker
@@ -367,7 +391,6 @@
                     </vue-timepicker>
                   </v-col>
                   <v-col cols="12" sm="6">
-                    
                     <label class="font-weight-bold">เวลาสิ้นสุด</label>
                     <br />
                     <vue-timepicker
@@ -383,7 +406,6 @@
 
                 <v-row dense>
                   <v-col cols="12">
-                    
                     <label class="font-weight-bold">ชื่อวันหยุด</label>
                     <v-textarea
                       v-model="nameHoliday"
@@ -407,9 +429,7 @@
                     </v-btn>
                   </v-col>
                 </v-row>
-
               </v-card-actions>
-
             </v-container>
           </v-card>
         </v-dialog>
@@ -422,10 +442,13 @@
         <v-dialog v-model="filter_dialog" persistent max-width="600px">
           <v-card>
             <v-container>
-
               <v-card-title>
                 <v-row dense>
-                  <v-col cols="12" align="end" class="font-bold absolute top-0 right-0">
+                  <v-col
+                    cols="12"
+                    align="end"
+                    class="font-bold absolute top-0 right-0"
+                  >
                     <v-btn class="" icon @click="filter_dialog = false">
                       <v-icon color="#ff6b81">mdi-close</v-icon>
                     </v-btn>
@@ -436,126 +459,136 @@
                 </v-row>
               </v-card-title>
               <v-card-text>
-                  <v-badge
-                    color="#FF6B81"
-                    :content="selectedCourse.length"
-                    :value="selectedCourse.length"
-                  >
-                    <label class="font-weight-bold">คอร์ส</label>
-                  </v-badge>
-                  <v-autocomplete
-                    outlined
-                    v-model="selectedCourse"
-                    :items="get_filter_course"
-                    item-text="courseNameTh"
-                    item-value="courseId"
-                    multiple
-                    color="#FF6B81"
-                    item-color="#FF6B81"
-                    dense
-                    placeholder="คอร์ส"
-                  >
-                    <template v-slot:selection="{ item, index }">
-                      <v-chip v-if="index === 0">
-                        <span>{{ item.courseNameTh }}</span>
-                      </v-chip>
-                      <span v-if="index === 1" class="grey--text text-caption">
-                        (+{{ selectedCourse.length - 1 }} others)
-                      </span>
-                    </template>
-                  </v-autocomplete>
+                <v-badge
+                  color="#FF6B81"
+                  :content="selectedCourse.length"
+                  :value="selectedCourse.length"
+                >
+                  <label class="font-weight-bold">คอร์ส</label>
+                </v-badge>
+                <v-autocomplete
+                  outlined
+                  v-model="selectedCourse"
+                  :items="get_filter_course"
+                  item-text="courseNameTh"
+                  item-value="courseId"
+                  multiple
+                  color="#FF6B81"
+                  item-color="#FF6B81"
+                  dense
+                  placeholder="คอร์ส"
+                >
+                  <template v-slot:selection="{ item, index }">
+                    <v-chip v-if="index === 0">
+                      <span>{{ item.courseNameTh }}</span>
+                    </v-chip>
+                    <span v-if="index === 1" class="grey--text text-caption">
+                      (+{{ selectedCourse.length - 1 }} others)
+                    </span>
+                  </template>
+                </v-autocomplete>
 
-                  <!-- สถานะคอร์ส -->
+                <!-- สถานะคอร์ส -->
 
-                    <!-- v-if="selectedCourseType != ''" -->
-                    <!-- {{ selectedCourseType }} -->
-                  <v-badge
-                    color="#FF6B81"
-                    :content="selectedCourseType.length"
-                    :value="selectedCourseType.length"
-                  >
-                    <label class="font-weight-bold">สถานะคอร์ส</label>
-                  
-                  </v-badge>
-                  <v-autocomplete
-                    outlined
-                    v-model="selectedCourseType"
-                    :items="courseType"
-                    item-text="coursTypeName"
-                    item-value="courseTypeValue"
-                    multiple
-                    color="#FF6B81"
-                    item-color="#FF6B81"
-                    dense
-                    placeholder="สถานะคอร์ส"
-                  >
-                    <template v-slot:selection="{ item, index }">
-                      <v-chip v-if="index === 0">
-                        <span>{{ item.coursTypeName }}</span>
-                      </v-chip>
-                      <span v-if="index === 1" class="grey--text text-caption">
-                        (+{{ selectedCourseType.length - 1 }} others)
-                      </span>
-                    </template>
-                  </v-autocomplete>
+                <!-- v-if="selectedCourseType != ''" -->
+                <!-- {{ selectedCourseType }} -->
+                <v-badge
+                  color="#FF6B81"
+                  :content="selectedCourseType.length"
+                  :value="selectedCourseType.length"
+                >
+                  <label class="font-weight-bold">สถานะคอร์ส</label>
+                </v-badge>
+                <v-autocomplete
+                  outlined
+                  v-model="selectedCourseType"
+                  :items="courseType"
+                  item-text="coursTypeName"
+                  item-value="courseTypeValue"
+                  multiple
+                  color="#FF6B81"
+                  item-color="#FF6B81"
+                  dense
+                  placeholder="สถานะคอร์ส"
+                >
+                  <template v-slot:selection="{ item, index }">
+                    <v-chip v-if="index === 0">
+                      <span>{{ item.coursTypeName }}</span>
+                    </v-chip>
+                    <span v-if="index === 1" class="grey--text text-caption">
+                      (+{{ selectedCourseType.length - 1 }} others)
+                    </span>
+                  </template>
+                </v-autocomplete>
 
-                  <!-- โค้ช -->
-                    <!-- v-if="selectedCoach != ''" -->
-                  <v-badge
-                    color="#FF6B81"
-                    :content="selectedCoach.length"
-                    :value="selectedCoach.length"
-                  >
-                    <label class="font-weight-bold">โค้ช</label>
-                  
-                  </v-badge>
+                <!-- โค้ช -->
+                <!-- v-if="selectedCoach != ''" -->
+                <v-badge
+                  color="#FF6B81"
+                  :content="selectedCoach.length"
+                  :value="selectedCoach.length"
+                >
+                  <label class="font-weight-bold">โค้ช</label>
+                </v-badge>
 
-                  <v-autocomplete
-                    outlined
-                    v-model="selectedCoach"
-                    :items="get_coachs"
-                    item-text="firstNameTh"
-                    item-value="accountId"
-                    multiple
-                    color="#FF6B81"
-                    item-color="#FF6B81"
-                    dense
-                    placeholder="โค้ช"
-                  >
-                    <template v-slot:selection="{ item, index }">
-                      <!-- {{ item }} -->
-                      <v-chip v-if="index === 0">
-                        <span>{{ item.firstNameTh }}</span>
-                      </v-chip>
-                      <span v-if="index === 1" class="grey--text text-caption">
-                        (+{{ selectedCoach.length - 1 }} others)
-                      </span>
-                    </template>
-                  </v-autocomplete>
+                <v-autocomplete
+                  outlined
+                  v-model="selectedCoach"
+                  :items="get_coachs"
+                  item-text="firstNameTh"
+                  item-value="accountId"
+                  multiple
+                  color="#FF6B81"
+                  item-color="#FF6B81"
+                  dense
+                  placeholder="โค้ช"
+                >
+                  <template v-slot:selection="{ item, index }">
+                    <!-- {{ item }} -->
+                    <v-chip v-if="index === 0">
+                      <span>{{ item.firstNameTh }}</span>
+                    </v-chip>
+                    <span v-if="index === 1" class="grey--text text-caption">
+                      (+{{ selectedCoach.length - 1 }} others)
+                    </span>
+                  </template>
+                </v-autocomplete>
 
-                  <v-row>
-                    <v-col cols="12" sm="6" align="center">
-                      <v-btn
-                        @click="GetDataInSchedile(), filter_dialog = false, selectedCourseType = [], selectedCourse = [], selectedCoach = []"
-                        depressed
-                        outlined
-                        :color="'#ff6b81'"
-                        class="w-full"
-                      >
-                        ล้างค่า
-                      </v-btn>
-                    </v-col>
-                    <v-col cols="12" sm="6" align="center">
-                      <v-btn
-                        @click="filterSchedules(selectedCourse, selectedCoach, selectedCourseType)"
-                        depressed
-                        :color="'#ff6b81'"
-                        class="white--text w-full"
-                      >
-                        กรอง
-                      </v-btn>
-                    </v-col>
-                  </v-row>
+                <v-row>
+                  <v-col cols="12" sm="6" align="center">
+                    <v-btn
+                      @click="
+                        GetDataInSchedile(),
+                          (filter_dialog = false),
+                          (selectedCourseType = []),
+                          (selectedCourse = []),
+                          (selectedCoach = [])
+                      "
+                      depressed
+                      outlined
+                      :color="'#ff6b81'"
+                      class="w-full"
+                    >
+                      ล้างค่า
+                    </v-btn>
+                  </v-col>
+                  <v-col cols="12" sm="6" align="center">
+                    <v-btn
+                      @click="
+                        filterSchedules(
+                          selectedCourse,
+                          selectedCoach,
+                          selectedCourseType
+                        )
+                      "
+                      depressed
+                      :color="'#ff6b81'"
+                      class="white--text w-full"
+                    >
+                      กรอง
+                    </v-btn>
+                  </v-col>
+                </v-row>
                 <!-- </v-container> -->
               </v-card-text>
             </v-container>
@@ -691,7 +724,8 @@ export default {
     todayDate: new Date().toLocaleDateString(),
     rules: {
       dates: [
-        (val) => (val || "").length > 0 || "กรุณาเลือกอย่างน้อย 1 วันก่อนวันหยุด",
+        (val) =>
+          (val || "").length > 0 || "กรุณาเลือกอย่างน้อย 1 วันก่อนวันหยุด",
       ],
     },
 
@@ -737,7 +771,7 @@ export default {
       GetEditHolidays: "ManageScheduleModules/GetEditHolidays",
       GetDataInSchedile: "ManageScheduleModules/GetDataInSchedile",
       GetFilterSchedule: "ManageScheduleModules/GetFilterSchedule",
-      GetSearchSchedule: "ManageScheduleModules/GetSearchSchedule"
+      GetSearchSchedule: "ManageScheduleModules/GetSearchSchedule",
     }),
 
     setHolidaydates(item) {
@@ -756,11 +790,11 @@ export default {
         "ธันวาคม",
       ];
       if (item !== "") {
-        const newDate = new Date(item).toLocaleDateString("th-TH")
-        const date = newDate.split("/")[0]
-        const month = newDate.split("/")[1]
-        const year = newDate.split("/")[2]
-        this.holidaydatesTh = `${date} ${thaiMonths[month-1]} ${year}`
+        const newDate = new Date(item).toLocaleDateString("th-TH");
+        const date = newDate.split("/")[0];
+        const month = newDate.split("/")[1];
+        const year = newDate.split("/")[2];
+        this.holidaydatesTh = `${date} ${thaiMonths[month - 1]} ${year}`;
       }
     },
 
@@ -776,14 +810,13 @@ export default {
     // },
 
     async filterSchedules(courseId, coachId, status) {
-      this.GetFilterSchedule({courseId, coachId, status})
+      this.GetFilterSchedule({ courseId, coachId, status });
       console.log({
         courseId: courseId,
         coach_id: coachId,
         status: status,
       });
-      this.filter_dialog = false
-
+      this.filter_dialog = false;
     },
 
     async deleteHoliday() {
@@ -1009,8 +1042,8 @@ export default {
       this.nameHoliday = "";
       this.show_dialog_edit_holoday = false;
       this.setDataEditDialog = {};
-      this.editHolidayDates = null
-      this.holidaydatesTh = null
+      this.editHolidayDates = null;
+      this.holidaydatesTh = null;
     },
   },
 
@@ -1025,7 +1058,7 @@ export default {
       get_holidays_by_id: "ManageScheduleModules/getHolidaysById",
       data_in_schedule: "ManageScheduleModules/getdataInSchadule",
       data_filter_schedule: "ManageScheduleModules/getFilterSchedule",
-      data_search_schedule: "ManageScheduleModules/getSearchFilterSchedule"
+      data_search_schedule: "ManageScheduleModules/getSearchFilterSchedule",
     }),
     formattedDate() {
       const date = new Date();
@@ -1049,7 +1082,7 @@ export default {
           getAllCourseDate.push(CourseDate);
           if (courseTodayDate == CourseDate) {
             success = true;
-            allCourse.push(this.get_all_course[index])
+            allCourse.push(this.get_all_course[index]);
           }
         }
       }

@@ -45,7 +45,7 @@
           :src="slide.bannerPath"
           cover
         >
-      </v-carousel-item>
+        </v-carousel-item>
       </v-carousel>
       <v-card-text>
         <v-row>
@@ -147,7 +147,6 @@
 </template>
 
 <script>
-
 import { mapActions, mapGetters } from "vuex";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 export default {
@@ -194,7 +193,7 @@ export default {
     showingFullText: false,
     body: "I am some text! Instead of being on the data object, though, I would be pulled from the store.",
   }),
-  
+
   created() {
     this.dataStorage = JSON.parse(localStorage.getItem("userDetail"));
     if (this.dataStorage) {
@@ -222,13 +221,18 @@ export default {
       logOut: "loginModules/logOut",
       GetBannerList: "BannerModules/GetBannerList",
     }),
-    height () {
+    height() {
       switch (this.$vuetify.breakpoint.name) {
-        case 'xs': return 240
-        case 'sm': return 320
-        case 'md': return 400
-        case 'lg': return 480
-        case 'xl': return 560
+        case "xs":
+          return 240;
+        case "sm":
+          return 320;
+        case "md":
+          return 400;
+        case "lg":
+          return 480;
+        case "xl":
+          return 560;
       }
     },
     selectedCategory(category) {
