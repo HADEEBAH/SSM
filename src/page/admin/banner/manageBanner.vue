@@ -112,7 +112,7 @@
         >
           ไม่มีรูปตัวอย่าง <br />
           <span class="font-weight-bold">คำแนะนำ</span> : ควรอัปโหลดรูปที่มีขนาด
-          1280 x 600px
+          1280 x 500px
         </v-alert>
       </v-col>
     </v-row>
