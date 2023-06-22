@@ -1,5 +1,5 @@
 <template>
-  <v-container >
+  <v-container>
     <headerPage title="จัดการตาราง"></headerPage>
 
     <v-row class="py-2">
@@ -67,7 +67,7 @@
             v-for="(item, index) in courseDate"
             :key="index"
           >
-           <!-- {{ item }} -->
+            <!-- {{ item }} -->
             <v-row dense class="font-bold">
               <v-col cols="12" sm="6">
                 {{ item.courseName.courseNameTh }}</v-col
@@ -82,13 +82,29 @@
               <v-col cols="12" sm="6">
                 <v-chip
                   v-if="item.cpo.packageName"
-                  :color="item.cpo.packageName ? package_options.filter( (v) => v.value === item.cpo.packageName)[0].bg_color : ''"
-                  :style="item.cpo.packageName ? `color:${ package_options.filter((v) => v.value === item.cpo.packageName)[0].color}` : ''"
+                  :color="
+                    item.cpo.packageName
+                      ? package_options.filter(
+                          (v) => v.value === item.cpo.packageName
+                        )[0].bg_color
+                      : ''
+                  "
+                  :style="
+                    item.cpo.packageName
+                      ? `color:${
+                          package_options.filter(
+                            (v) => v.value === item.cpo.packageName
+                          )[0].color
+                        }`
+                      : ''
+                  "
                 >
-                  {{ item.cpo.packageName ? 
-                    package_options.filter(
-                      (v) => v.value === item.cpo.packageName
-                    )[0].label : "" 
+                  {{
+                    item.cpo.packageName
+                      ? package_options.filter(
+                          (v) => v.value === item.cpo.packageName
+                        )[0].label
+                      : ""
                   }}
                 </v-chip>
               </v-col>
@@ -114,33 +130,33 @@
         </v-card>
         <v-card class="pa-2 max-h-[300px] overflow-auto rounded-lg">
           <div class="font-bold">วันหยุด</div>
-            <v-card-text v-for="(getHolidays, index_holidays) in get_all_holidays"
-              :key="index_holidays"
-              class="bg-[#FDF1E7] my-2 rounded-lg"
-              color="#ED7D2B"
-            >
-              <v-row dense>
-                <v-col cols="6" sm="6" class="font-bold" style="color: #f19a5a">
-                  วันหยุด {{ getHolidays.fullDateHolidaysTh }}
-                </v-col>
-                <v-col
-                  cols="6"
-                  sm="6"
-                  @click="editHolidays(getHolidays)"
-                  align="end"
-                >
-                  <span
-                    class="mdi mdi-pencil-box cursor-pointer"
-                    style="color: #f19a5a; font-size: 2em"
-                  ></span>
-                </v-col>
-              </v-row>
-              <div style="color: #f19a5a">
-                {{ getHolidays.holidayName }}
-              </div>
-            </v-card-text>
-          </v-card>
-
+          <v-card-text
+            v-for="(getHolidays, index_holidays) in get_all_holidays"
+            :key="index_holidays"
+            class="bg-[#FDF1E7] my-2 rounded-lg"
+            color="#ED7D2B"
+          >
+            <v-row dense>
+              <v-col cols="6" sm="6" class="font-bold" style="color: #f19a5a">
+                วันหยุด {{ getHolidays.fullDateHolidaysTh }}
+              </v-col>
+              <v-col
+                cols="6"
+                sm="6"
+                @click="editHolidays(getHolidays)"
+                align="end"
+              >
+                <span
+                  class="mdi mdi-pencil-box cursor-pointer"
+                  style="color: #f19a5a; font-size: 2em"
+                ></span>
+              </v-col>
+            </v-row>
+            <div style="color: #f19a5a">
+              {{ getHolidays.holidayName }}
+            </div>
+          </v-card-text>
+        </v-card>
       </v-col>
     </v-row>
 
@@ -154,139 +170,134 @@
           max-width="600px"
         >
           <v-card>
-            <v-card-title>
-              <v-row dense>
-                <v-col cols="12" align="end">
-                  <v-btn icon @click="closeDialog">
-                    <v-icon color="#ff6b81">mdi-close</v-icon>
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-card-title>
-            <v-card-title>
-              <v-row>
-                <v-col cols="12" align="center" class="font-bold">
-                  แก้ไขวันหยุด
-                </v-col>
-              </v-row>
-            </v-card-title>
-            <v-card-title>
-              <v-row dense>
-                <!-- วันที่ -->
-                <v-col cols="12" sm="6">
-                  วันที่
-                  <v-menu
-                    v-model="selectEditHolidaydates"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="auto"
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
-                        dense
-                        outlined
-                        append-icon="mdi-calendar"
-                        readonly
-                        v-bind="attrs"
-                        v-on="on"
-                        color="#FF6B81"
-                        :value="
-                          editHolidayDates
-                            ? editHolidayDates
-                            : setDataEditDialog.fullDateHolidaysTh
+            <v-container>
+              <v-card-title>
+                <v-row dense>
+                  <v-col class="absolute top-0 right-0" cols="12" align="end">
+                    <v-btn icon @click="closeDialog">
+                      <v-icon color="#ff6b81">mdi-close</v-icon>
+                    </v-btn>
+                  </v-col>
+
+                  <v-col cols="12" align="center" class="font-bold">
+                    แก้ไขวันหยุด
+                  </v-col>
+                </v-row>
+              </v-card-title>
+
+              <v-card-text>
+                <v-row dense>
+                  <!-- วันที่ -->
+                  <v-col cols="12" sm="8">
+                    <label class="font-weight-bold">วันที่</label>
+                    <v-menu
+                      v-model="selectEditHolidaydates"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="auto"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          dense
+                          outlined
+                          append-icon="mdi-calendar"
+                          readonly
+                          v-bind="attrs"
+                          v-on="on"
+                          color="#FF6B81"
+                          :value="
+                            holidaydatesTh
+                              ? holidaydatesTh
+                              : setDataEditDialog.fullDateHolidaysTh
+                          "
+                        ></v-text-field>
+                      </template>
+
+                      <v-date-picker
+                        v-model="editHolidayDates"
+                        @input="
+                          setHolidaydates(editHolidayDates),
+                            (selectEditHolidaydates = false)
                         "
-                      ></v-text-field>
-                    </template>
+                        :min="tomorrowDate()"
+                      ></v-date-picker>
+                    </v-menu>
+                  </v-col>
+                  <!-- Switch -->
+                  <v-col cols="12" sm="4" class="text-center align-self-center">
+                    <v-switch
+                      v-model="setDataEditDialog.allDay"
+                      :label="`ทั้งวัน`"
+                      color="#FF6B81"
+                      inset
+                    ></v-switch>
+                  </v-col>
+                </v-row>
 
-                    <v-date-picker
-                      v-model="editHolidayDates"
-                      @input="selectEditHolidaydates = false"
-                      :min="tomorrowDate()"
-                    ></v-date-picker>
-                  </v-menu>
-                </v-col>
-                <!-- Switch -->
-                <v-col cols="12" sm="6" class="mt-5">
-                  <v-switch
-                    v-model="setDataEditDialog.allDay"
-                    :label="`ทั้งวัน`"
-                    color="#FF6B81"
-                    inset
-                  ></v-switch>
-                </v-col>
-              </v-row>
-            </v-card-title>
-            <v-card-title>
-              <v-row dense v-if="setDataEditDialog.allDay === false">
-                <!-- เวลาเริ่ม -->
-                <v-col cols="12" sm="6">
-                  เวลาเริ่ม
-                  <br />
-                  <vue-timepicker
-                    v-model="setDataEditDialog.ob_holidayStartTime"
-                    color="#FF6B81"
-                    item-color="#FF6B81"
-                    hide-clear-button
-                    dense
-                  >
-                  </vue-timepicker>
-                </v-col>
-                <!-- เวลาสิ้นสุด -->
-                <v-col cols="12" sm="6">
-                  เวลาสิ้นสุด
-                  <br />
-                  <vue-timepicker
-                    v-model="setDataEditDialog.ob_holidayEndTime"
-                    color="#FF6B81"
-                    item-color="#FF6B81"
-                    hide-clear-button
-                    dense
-                  >
-                  </vue-timepicker>
-                </v-col>
-              </v-row>
-            </v-card-title>
-            <!-- ชื่อวันหยุด -->
-            <v-card-title>
-              <v-row dense>
-                <v-col cols="12">
-                  ชื่อวันหยุด
-                  <v-textarea
-                    v-model="setDataEditDialog.holidayName"
-                    outlined
-                    placeholder="ระบุชื่อวันหยุด เช่น วันสงกรานต์"
-                  ></v-textarea>
-                </v-col>
-              </v-row>
-            </v-card-title>
+                <v-row dense v-if="setDataEditDialog.allDay === false">
+                  <!-- เวลาเริ่ม -->
+                  <v-col cols="12" sm="6">
+                    <label class="font-weight-bold">เวลาเริ่ม</label>
+                    <br />
+                    <vue-timepicker
+                      v-model="setDataEditDialog.ob_holidayStartTime"
+                      color="#FF6B81"
+                      item-color="#FF6B81"
+                      hide-clear-button
+                      dense
+                    >
+                    </vue-timepicker>
+                  </v-col>
+                  <!-- เวลาสิ้นสุด -->
+                  <v-col cols="12" sm="6">
+                    <label class="font-weight-bold">เวลาสิ้นสุด</label>
+                    <br />
+                    <vue-timepicker
+                      v-model="setDataEditDialog.ob_holidayEndTime"
+                      color="#FF6B81"
+                      item-color="#FF6B81"
+                      hide-clear-button
+                      dense
+                      class=""
+                    >
+                    </vue-timepicker>
+                  </v-col>
+                </v-row>
 
-            <v-card-title>
-              <v-row dense>
-                <v-col cols="12" align="center">
-                  <v-btn
-                    depressed
-                    color="#FF6B81"
-                    class="white--text"
-                    width="30vw"
-                    @click="editHolidaysData()"
-                  >
-                    บันทึก
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-card-title>
+                <v-row dense>
+                  <v-col cols="12">
+                    <label class="font-weight-bold">ชื่อวันหยุด</label>
+                    <v-textarea
+                      v-model="setDataEditDialog.holidayName"
+                      outlined
+                      placeholder="ระบุชื่อวันหยุด เช่น วันสงกรานต์"
+                    ></v-textarea>
+                  </v-col>
+                </v-row>
+              </v-card-text>
 
-            <v-card-title>
-              <v-row dense>
-                <v-col cols="12" align="center">
-                  <v-btn depressed @click="deleteHoliday" width="30vw">
-                    ลบวันหยุด
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-card-title>
+              <v-card-actions>
+                <v-row dense>
+                  <v-col cols="6" align="center">
+                    <v-btn class="w-full" depressed @click="deleteHoliday">
+                      ลบวันหยุด
+                    </v-btn>
+                  </v-col>
+                  <v-col cols="6" align="center">
+                    <v-btn
+                      depressed
+                      color="#FF6B81"
+                      class="white--text w-full"
+                      @click="editHolidaysData()"
+                    >
+                      บันทึก
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-card-actions>
+            </v-container>
           </v-card>
         </v-dialog>
       </v-row>
@@ -297,139 +308,129 @@
       <v-row justify="center">
         <v-dialog v-model="show_dialog_holoday" persistent max-width="600px">
           <v-card>
-            <!-- <v-card-title>
-              <v-row dense>
-                <v-col cols="12" align="end">
-                  
-                </v-col>
-              </v-row>
-            </v-card-title> -->
-            <v-card-title>
-              <v-row>
-                <v-col cols="12" align="center" class="font-bold">
-                  เพิ่มวันหยุด
-                </v-col>
-              </v-row>
-              <v-btn class="absolute right-0 top-0" icon @click="closeDialog">
-                <v-icon color="#ff6b81">mdi-close</v-icon>
-              </v-btn>
-            </v-card-title>
-
-            <v-card-title>
-              <v-row dense>
-                <!-- วันที่ -->
-                <v-col cols="12" sm="6">
-                  วันที่
-                  <v-menu
-                    v-model="selectHolidaydates"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="auto"
+            <v-container>
+              <v-card-title>
+                <v-row>
+                  <v-col
+                    cols="12"
+                    align="end"
+                    class="font-bold absolute right-0 top-0"
                   >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
-                        dense
-                        label="ระบุวันที่"
-                        outlined
-                        append-icon="mdi-calendar"
-                        readonly
-                        v-bind="attrs"
-                        v-on="on"
-                        :rules="rules.dates"
-                        color="#FF6B81"
+                    <v-btn icon @click="closeDialog">
+                      <v-icon color="#ff6b81">mdi-close</v-icon>
+                    </v-btn>
+                  </v-col>
+
+                  <v-col cols="12" align="center" class="font-bold">
+                    เพิ่มวันหยุด
+                  </v-col>
+                </v-row>
+              </v-card-title>
+
+              <v-card-text>
+                <v-row dense>
+                  <!-- วันที่ -->
+                  <v-col cols="12" sm="8">
+                    <label class="font-weight-bold">วันที่</label>
+
+                    <v-menu
+                      v-model="selectHolidaydates"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="auto"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          dense
+                          label="ระบุวันที่"
+                          outlined
+                          append-icon="mdi-calendar"
+                          readonly
+                          v-bind="attrs"
+                          v-on="on"
+                          :rules="rules.dates"
+                          color="#FF6B81"
+                          v-model="holidaydatesTh"
+                        >
+                        </v-text-field>
+                      </template>
+
+                      <v-date-picker
                         v-model="holidaydates"
-                      ></v-text-field>
-                    </template>
+                        @input="
+                          setHolidaydates(holidaydates),
+                            (selectHolidaydates = false)
+                        "
+                        :min="tomorrowDate()"
+                      ></v-date-picker>
+                    </v-menu>
+                  </v-col>
+                  <!-- Switch -->
+                  <v-col cols="12" sm="4" class="align-self-center">
+                    <v-switch
+                      v-model="holidaySwitch"
+                      :label="`ทั้งวัน`"
+                      color="#FF6B81"
+                      inset
+                      @change="changeSwitchHoliday($event)"
+                    ></v-switch>
+                  </v-col>
+                </v-row>
+                <v-row v-if="!holidaySwitch" dense>
+                  <v-col cols="12" sm="6">
+                    <label class="font-weight-bold">เวลาเริ่ม</label>
+                    <br />
+                    <vue-timepicker
+                      v-model="holidayStartTime"
+                      color="#FF6B81"
+                      item-color="#FF6B81"
+                      dense
+                    >
+                    </vue-timepicker>
+                  </v-col>
+                  <v-col cols="12" sm="6">
+                    <label class="font-weight-bold">เวลาสิ้นสุด</label>
+                    <br />
+                    <vue-timepicker
+                      v-model="holidayEndTime"
+                      :disabled="!holidayStartTime"
+                      color="#FF6B81"
+                      item-color="#FF6B81"
+                      dense
+                    >
+                    </vue-timepicker>
+                  </v-col>
+                </v-row>
 
-                    <v-date-picker
-                      v-model="holidaydates"
-                      @input="selectHolidaydates = false"
-                      :min="tomorrowDate()"
-                    ></v-date-picker>
-                  </v-menu>
-                </v-col>
-                <!-- Switch -->
-                <v-col cols="12" sm="6" class="mt-5">
-                  <v-switch
-                    v-model="holidaySwitch"
-                    :label="`ทั้งวัน`"
-                    color="#FF6B81"
-                    inset
-                    @change="changeSwitchHoliday($event)"
-                  ></v-switch>
-                </v-col>
-              </v-row>
-            </v-card-title>
+                <v-row dense>
+                  <v-col cols="12">
+                    <label class="font-weight-bold">ชื่อวันหยุด</label>
+                    <v-textarea
+                      v-model="nameHoliday"
+                      outlined
+                      placeholder="ระบุชื่อวันหยุด เช่น วันสงกรานต์"
+                    ></v-textarea>
+                  </v-col>
+                </v-row>
+              </v-card-text>
 
-            <!-- เวลา -->
-            <v-card-title>
-              <v-row v-if="!holidaySwitch" dense>
-                <v-col cols="12" sm="6">
-                  เวลาเริ่ม
-                  <br />
-                  <vue-timepicker
-                    v-model="holidayStartTime"
-                    color="#FF6B81"
-                    item-color="#FF6B81"
-                    dense
-                  >
-                  </vue-timepicker>
-                </v-col>
-                <v-col cols="12" sm="6">
-                  เวลาสิ้นสุด
-                  <br />
-                  <vue-timepicker
-                    v-model="holidayEndTime"
-                    :disabled="!holidayStartTime"
-                    color="#FF6B81"
-                    item-color="#FF6B81"
-                    dense
-                  >
-                  </vue-timepicker>
-                </v-col>
-              </v-row>
-            </v-card-title>
-            <!-- ชื่อวันหยุด -->
-            <v-card-title>
-              <v-row dense>
-                <v-col cols="12">
-                  ชื่อวันหยุด
-                  <v-textarea
-                    v-model="nameHoliday"
-                    outlined
-                    placeholder="ระบุชื่อวันหยุด เช่น วันสงกรานต์"
-                  ></v-textarea>
-                </v-col>
-              </v-row>
-            </v-card-title>
-
-            <v-card-title>
-              <v-row dense>
-                <v-col cols="12" align="center">
-                  <v-btn
-                    depressed
-                    color="#FF6B81"
-                    class="white--text"
-                    width="30vw"
-                    @click="CreateHolidays()"
-                  >
-                    บันทึก
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-card-title>
-
-            <!-- <v-card-title>
-              <v-row dense>
-                <v-col cols="12" align="center">
-                  <v-btn depressed @click="deleteHoliday" width="30vw">
-                    ลบวันหยุด
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-card-title> -->
+              <v-card-actions>
+                <v-row dense>
+                  <v-col cols="12" align="center">
+                    <v-btn
+                      depressed
+                      color="#FF6B81"
+                      class="white--text w-full"
+                      @click="CreateHolidays()"
+                    >
+                      บันทึก
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-card-actions>
+            </v-container>
           </v-card>
         </v-dialog>
       </v-row>
@@ -440,36 +441,30 @@
       <v-row justify="center">
         <v-dialog v-model="filter_dialog" persistent max-width="600px">
           <v-card>
-            <!-- <v-card-title>
-              <v-row dense>
-                <v-col cols="12" align="end">
-                  <v-btn icon @click="filter_dialog = false">
-                    <v-icon color="#ff6b81">mdi-close</v-icon>
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-card-title> -->
-
-            <v-card-title>
-              <v-row dense>
-                <v-col cols="12" align="center" class="font-bold">
-                  ตัวกรอง
-                  <v-btn class="absolute top-0 right-0" icon @click="filter_dialog = false">
-                    <v-icon color="#ff6b81">mdi-close</v-icon>
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-card-title>
-            <v-card-text>
-              <!-- <v-container> -->
-                  <!-- v-if="selectedCourse != ''" -->
-                  <!-- {{ selectedCourse }} -->
+            <v-container>
+              <v-card-title>
+                <v-row dense>
+                  <v-col
+                    cols="12"
+                    align="end"
+                    class="font-bold absolute top-0 right-0"
+                  >
+                    <v-btn class="" icon @click="filter_dialog = false">
+                      <v-icon color="#ff6b81">mdi-close</v-icon>
+                    </v-btn>
+                  </v-col>
+                  <v-col cols="12" align="center" class="font-bold">
+                    ตัวกรอง
+                  </v-col>
+                </v-row>
+              </v-card-title>
+              <v-card-text>
                 <v-badge
                   color="#FF6B81"
                   :content="selectedCourse.length"
                   :value="selectedCourse.length"
                 >
-                คอร์ส
+                  <label class="font-weight-bold">คอร์ส</label>
                 </v-badge>
                 <v-autocomplete
                   outlined
@@ -494,15 +489,15 @@
                 </v-autocomplete>
 
                 <!-- สถานะคอร์ส -->
-                
-                  <!-- v-if="selectedCourseType != ''" -->
-                  <!-- {{ selectedCourseType }} -->
+
+                <!-- v-if="selectedCourseType != ''" -->
+                <!-- {{ selectedCourseType }} -->
                 <v-badge
                   color="#FF6B81"
                   :content="selectedCourseType.length"
                   :value="selectedCourseType.length"
                 >
-                สถานะคอร์ส
+                  <label class="font-weight-bold">สถานะคอร์ส</label>
                 </v-badge>
                 <v-autocomplete
                   outlined
@@ -527,13 +522,13 @@
                 </v-autocomplete>
 
                 <!-- โค้ช -->
-                  <!-- v-if="selectedCoach != ''" -->
+                <!-- v-if="selectedCoach != ''" -->
                 <v-badge
                   color="#FF6B81"
                   :content="selectedCoach.length"
                   :value="selectedCoach.length"
                 >
-                โค้ช
+                  <label class="font-weight-bold">โค้ช</label>
                 </v-badge>
 
                 <v-autocomplete
@@ -562,7 +557,13 @@
                 <v-row>
                   <v-col cols="12" sm="6" align="center">
                     <v-btn
-                      @click="GetDataInSchedile(), filter_dialog = false, selectedCourseType = [], selectedCourse = [], selectedCoach = []"
+                      @click="
+                        GetDataInSchedile(),
+                          (filter_dialog = false),
+                          (selectedCourseType = []),
+                          (selectedCourse = []),
+                          (selectedCoach = [])
+                      "
                       depressed
                       outlined
                       :color="'#ff6b81'"
@@ -573,7 +574,13 @@
                   </v-col>
                   <v-col cols="12" sm="6" align="center">
                     <v-btn
-                      @click="filterSchedules(selectedCourse, selectedCoach, selectedCourseType)"
+                      @click="
+                        filterSchedules(
+                          selectedCourse,
+                          selectedCoach,
+                          selectedCourseType
+                        )
+                      "
                       depressed
                       :color="'#ff6b81'"
                       class="white--text w-full"
@@ -582,8 +589,9 @@
                     </v-btn>
                   </v-col>
                 </v-row>
-              <!-- </v-container> -->
-            </v-card-text>
+                <!-- </v-container> -->
+              </v-card-text>
+            </v-container>
           </v-card>
         </v-dialog>
       </v-row>
@@ -670,6 +678,7 @@ export default {
     show_dialog_edit_holoday: false,
     selectHolidaydates: false,
     holidaydates: "",
+    holidaydatesTh: "",
     holidaySwitch: true,
     nameHoliday: "",
     filter_dialog: false,
@@ -715,7 +724,8 @@ export default {
     todayDate: new Date().toLocaleDateString(),
     rules: {
       dates: [
-        (val) => (val || "").length > 0 || "กรุณาเลือกอย่างน้อย1วันก่อนวันหยุด",
+        (val) =>
+          (val || "").length > 0 || "กรุณาเลือกอย่างน้อย 1 วันก่อนวันหยุด",
       ],
     },
 
@@ -761,8 +771,32 @@ export default {
       GetEditHolidays: "ManageScheduleModules/GetEditHolidays",
       GetDataInSchedile: "ManageScheduleModules/GetDataInSchedile",
       GetFilterSchedule: "ManageScheduleModules/GetFilterSchedule",
-      GetSearchSchedule: "ManageScheduleModules/GetSearchSchedule"
+      GetSearchSchedule: "ManageScheduleModules/GetSearchSchedule",
     }),
+
+    setHolidaydates(item) {
+      const thaiMonths = [
+        "มกราคม",
+        "กุมภาพันธ์",
+        "มีนาคม",
+        "เมษายน",
+        "พฤษภาคม",
+        "มิถุนายน",
+        "กรกฎาคม",
+        "สิงหาคม",
+        "กันยายน",
+        "ตุลาคม",
+        "พฤศจิกายน",
+        "ธันวาคม",
+      ];
+      if (item !== "") {
+        const newDate = new Date(item).toLocaleDateString("th-TH");
+        const date = newDate.split("/")[0];
+        const month = newDate.split("/")[1];
+        const year = newDate.split("/")[2];
+        this.holidaydatesTh = `${date} ${thaiMonths[month - 1]} ${year}`;
+      }
+    },
 
     // searchSchedule() {
     //   console.log("search", this.search);
@@ -776,21 +810,20 @@ export default {
     // },
 
     async filterSchedules(courseId, coachId, status) {
-      this.GetFilterSchedule({courseId, coachId, status})
+      this.GetFilterSchedule({ courseId, coachId, status });
       console.log({
         courseId: courseId,
         coach_id: coachId,
         status: status,
       });
-      this.filter_dialog = false
-
+      this.filter_dialog = false;
     },
 
     async deleteHoliday() {
       console.log("del", this.setDataEditDialog);
       Swal.fire({
         icon: "question",
-        title: "คุณต้องการลบหยุดใช่หรือไม่ ?",
+        title: "คุณต้องการลบวันหยุดใช่หรือไม่ ?",
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: "ตกลง",
@@ -1009,6 +1042,8 @@ export default {
       this.nameHoliday = "";
       this.show_dialog_edit_holoday = false;
       this.setDataEditDialog = {};
+      this.editHolidayDates = null;
+      this.holidaydatesTh = null;
     },
   },
 
@@ -1023,7 +1058,7 @@ export default {
       get_holidays_by_id: "ManageScheduleModules/getHolidaysById",
       data_in_schedule: "ManageScheduleModules/getdataInSchadule",
       data_filter_schedule: "ManageScheduleModules/getFilterSchedule",
-      data_search_schedule: "ManageScheduleModules/getSearchFilterSchedule"
+      data_search_schedule: "ManageScheduleModules/getSearchFilterSchedule",
     }),
     formattedDate() {
       const date = new Date();
@@ -1047,7 +1082,7 @@ export default {
           getAllCourseDate.push(CourseDate);
           if (courseTodayDate == CourseDate) {
             success = true;
-            allCourse.push(this.get_all_course[index])
+            allCourse.push(this.get_all_course[index]);
           }
         }
       }

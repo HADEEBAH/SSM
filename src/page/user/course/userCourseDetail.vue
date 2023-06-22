@@ -103,8 +103,8 @@
                       course_data.course_study_end_date
                     ).toLocaleDateString("th-TH", date_options)
                   }}
-                  ({{ getTime(course_data.course_period_start_date) }}-{{
-                    getTime(course_data.course_period_end_date)
+                  ({{ course_data.course_period_start_date }}-{{
+                    course_data.course_period_end_date
                   }}
                   น.)</v-col
                 >

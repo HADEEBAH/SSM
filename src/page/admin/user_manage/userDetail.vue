@@ -819,6 +819,23 @@
                           <template v-slot:[`item.dates`]="{ item }">
                             {{ dayOfWeekName(item.dates.day) }}
                           </template>
+
+                          <template v-slot:[`item.package`]="{ item }">
+                            <!-- {{ item.cpo.packageName }} -->
+                            {{ item.cpo ? item.cpo.packageName : "-" }}
+                          </template>
+
+                          <template v-slot:[`item.courseType`]="{ item }">
+                            {{
+                              item.cpo
+                                ? item.cpo.courseTypeNameTh
+                                : "คอร์สระยะสั้น"
+                            }}
+                          </template>
+
+                          <template v-slot:[`item.timeLine`]="{ item }">
+                            {{ item.cpo ? item.cpo.optionName : "-" }}
+                          </template>
                         </v-data-table>
                       </v-col>
                     </v-row>
@@ -1092,6 +1109,19 @@
                           getThaiDayOfWeek(item.dates.day)
                         }}) -->
                   </template>
+
+                  <template v-slot:[`item.package`]="{ item }">
+                    <!-- {{ item.cpo.packageName }} -->
+                    {{ item.cpo ? item.cpo.packageName : "-" }}
+                  </template>
+
+                  <template v-slot:[`item.courseType`]="{ item }">
+                    {{ item.cpo ? item.cpo.courseTypeNameTh : "คอร์สระยะสั้น" }}
+                  </template>
+
+                  <template v-slot:[`item.timeLine`]="{ item }">
+                    {{ item.cpo ? item.cpo.optionName : "-" }}
+                  </template>
                 </v-data-table>
               </v-col>
 
@@ -1329,10 +1359,10 @@ export default {
       { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
       { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
       { text: "ชื่อคอร์ส", value: "courseNameTh", sortable: false },
-      { text: "แพ็คเกจ", value: "cpo.packageName", sortable: false },
+      { text: "แพ็คเกจ", value: "package", sortable: false },
       { text: "โค้ช", value: "coachName", sortable: false },
-      { text: "ประเภท", value: "cpo.courseTypeNameTh", sortable: false },
-      { text: "ระยะเวลา", value: "cpo.optionName", sortable: false },
+      { text: "ประเภท", value: "courseType", sortable: false },
+      { text: "ระยะเวลา", value: "timeLine", sortable: false },
       { text: "วัน", value: "dates", sortable: false },
       { text: "เวลาเริ่ม", value: "start", sortable: false },
       { text: "เวลาสิ้นสุด", value: "end", sortable: false },
@@ -1341,10 +1371,10 @@ export default {
       { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
       { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
       { text: "ชื่อคอร์ส", value: "courseNameTh", sortable: false },
-      { text: "แพ็คเกจ", value: "cpo.packageName", sortable: false },
+      { text: "แพ็คเกจ", value: "package", sortable: false },
       { text: "โค้ช", value: "coachName", sortable: false },
-      { text: "ประเภท", value: "cpo.courseTypeNameTh", sortable: false },
-      { text: "ระยะเวลา", value: "cpo.optionName", sortable: false },
+      { text: "ประเภท", value: "courseType", sortable: false },
+      { text: "ระยะเวลา", value: "timeLine", sortable: false },
       { text: "วัน", value: "dates", sortable: false },
       { text: "เวลาเริ่ม", value: "start", sortable: false },
       { text: "เวลาสิ้นสุด", value: "end", sortable: false },
