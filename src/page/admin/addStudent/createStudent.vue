@@ -226,7 +226,7 @@
                   :items="course.course_data.packages"
                   placeholder="เลือกแพ็คเกจ"
                   outlined
-                  @change="course.option = {}"
+                  @change="selectPackage(course)"
                 >
                 </v-autocomplete>
               </v-col>
@@ -494,6 +494,7 @@
                   v-model="course.price"
                   @change="CalTotalPrice()"
                   outlined
+                  @keypress="Validation($event, 'number')"
                   type="number"
                   color="pink"
                   suffix="บาท"
@@ -742,7 +743,7 @@ import dialogCard from "@/components/dialog/dialogCard.vue";
 import registerDialogForm from "@/components/user_menage/registerDialogForm.vue";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 import { mapActions, mapGetters } from "vuex";
-import { dateFormatter } from "@/functions/functions";
+import { dateFormatter, inputValidation } from "@/functions/functions";
 import Swal from "sweetalert2";
 import mixin from "../../../mixin";
 export default {
@@ -871,7 +872,11 @@ export default {
       GetPackages: "CourseModules/GetPackages",
       GetCourse: "CourseModules/GetCourse",
       searchNameUser: "loginModules/searchNameUser",
+      GetAllCourseMonitor: "CourseMonitorModules/GetAllCourseMonitor",
     }),
+    Validation(e, lang) {
+      inputValidation(e, lang);
+    },
     remove(item) {
       const index = this.students.indexOf(item);
       if (index >= 0) this.students.splice(index, 1);
@@ -905,6 +910,12 @@ export default {
       course.price = 0;
       course.detail = "";
       course.remark = "";
+    },
+    selectPackage(course) {
+      course.option = {};
+      course.package_data = course.course_data.packages.filter(
+        (v) => v.package_id === course.package
+      )[0];
     },
     addCourse() {
       this.order.courses.push({
@@ -1013,7 +1024,19 @@ export default {
             course.start_date_str =
               this.course_data.course_study_start_date_str;
             course.coach = this.course_data.coachs[0];
-            course.time_str = `${this.course_data.course_period_start_date}-${this.course_data.course_period_end_date}`;
+            let startTimePart =
+              this.course_data.course_period_start_date.split(":");
+            let endTimePart =
+              this.course_data.course_period_end_date.split(":");
+            let period_start = `${startTimePart[0].padStart(
+              2,
+              "0"
+            )}:${startTimePart[1].padStart(2, "0")}`;
+            let period_end = `${endTimePart[0].padStart(
+              2,
+              "0"
+            )}:${endTimePart[1].padStart(2, "0")}`;
+            course.time_str = `${period_start}-${period_end}`;
             course.price = parseInt(this.course_data.price_course);
             course.time = this.course_data.days_of_class[0].times[0];
             this.CalTotalPrice();
@@ -1022,73 +1045,137 @@ export default {
       }
     },
     save() {
+      this.GetAllCourseMonitor();
       this.$refs.course_form.validate();
-      if (this.validate_form) {
-        Swal.fire({
-          icon: "question",
-          title: "ต้องการเพิ่มผู้เรียนใช่หรือไม่",
-          showDenyButton: false,
-          showCancelButton: true,
-          confirmButtonText: "ตกลง",
-          cancelButtonText: "ยกเลิก",
-        }).then(async (result) => {
-          if (result.isConfirmed) {
-            if (this.order.payment_status === "warn") {
-              let account = [];
-              this.order.courses.forEach((course) => {
-                course.coach_id = course.coach.coach_id;
-                course.coach_name = course.coach.coach_name;
-                for (const student of this.students) {
-                  account.push({
-                    studentId: student,
-                  });
-                  course.students.push({
-                    account_id: student,
-                    student_name: null,
-                    username: null,
-                    firstname_en: null,
-                    lastname_en: null,
-                    tel: null,
-                    parents: [],
-                    is_account: false,
-                    is_other: false,
-                  });
-                }
-              });
-              this.order.type = "addStudent";
-              this.changeOrderData(this.order);
-              let payload = {
-                notificationName: this.notification_name,
-                notificationDescription: this.notification_description,
-                accountId: account,
-              };
-              console.log(payload);
-              this.sendNotification(payload);
-              this.saveOrder();
+      let isValiDateCourse = [];
+      let studentFail = false;
+      if (this.validate_form && this.course_monitors.length > 0) {
+        for (let course of this.order.courses) {
+          if (course.package_data.students < this.students.length) {
+            console.log("912 =>", course.package_data.students);
+            console.log("913 =>", this.students.length);
+            studentFail = true;
+          } else {
+            if (
+              this.course_monitors.filter(
+                (v) =>
+                  v.courseMonitorEntity_coach_id === course.coach.coach_id &&
+                  v.courseMonitorEntity_course_id === course.course_id &&
+                  v.courseMonitorEntity_day_of_week_id ===
+                    course.time.dayOfWeekId &&
+                  v.courseMonitorEntity_time_id === course.time.timeId
+              ).length > 0
+            ) {
+              if (
+                this.course_monitors.some(
+                  (v) =>
+                    v.courseMonitorEntity_coach_id === course.coach.coach_id &&
+                    v.courseMonitorEntity_course_id === course.course_id &&
+                    v.courseMonitorEntity_day_of_week_id ===
+                      course.time.dayOfWeekId &&
+                    v.courseMonitorEntity_time_id === course.time.timeId &&
+                    v.courseMonitorEntity_current_student +
+                      course.students.length <=
+                      v.courseMonitorEntity_maximum_student &&
+                    v.courseMonitorEntity_status === "Open"
+                )
+              ) {
+                isValiDateCourse.push(true);
+              } else {
+                // console.log( this.course_monitors)
+                isValiDateCourse.push(false);
+              }
             } else {
-              this.order.courses.forEach((course) => {
-                course.coach_id = course.coach.coach_id;
-                course.coach_name = course.coach.coach_name;
-                for (const student of this.students) {
-                  course.students.push({
-                    account_id: student,
-                    student_name: null,
-                    username: null,
-                    firstname_en: null,
-                    lastname_en: null,
-                    tel: null,
-                    parents: [],
-                    is_account: false,
-                    is_other: false,
-                  });
-                }
-              });
-              this.order.type = "addStudent";
-              this.changeOrderData(this.order);
-              this.saveOrder();
+              isValiDateCourse.push(true);
             }
           }
-        });
+        }
+        if (studentFail) {
+          Swal.fire({
+            icon: "error",
+            title: "จำนวนนักเรียนไม่ถูกต้อง",
+            text: "จำนวนนักเรียนเกินกว่าจำนวนที่จะรับได้ใน Package",
+            showDenyButton: false,
+            showCancelButton: true,
+            cancelButtonText: "ยกเลิก",
+            confirmButtonText: "ตกลง",
+          });
+        } else if (isValiDateCourse.includes(false)) {
+          Swal.fire({
+            icon: "error",
+            title: "คอร์สที่เลือกเต็มแล้วไม่สามารถชำระเงินได้",
+            showDenyButton: false,
+            showCancelButton: true,
+            cancelButtonText: "ยกเลิก",
+            confirmButtonText: "ตกลง",
+          });
+        } else {
+          Swal.fire({
+            icon: "question",
+            title: "ต้องการเพิ่มผู้เรียนใช่หรือไม่",
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonText: "ตกลง",
+            cancelButtonText: "ยกเลิก",
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              if (this.order.payment_status === "warn") {
+                let account = [];
+                this.order.courses.forEach((course) => {
+                  course.coach_id = course.coach.coach_id;
+                  course.coach_name = course.coach.coach_name;
+                  for (const student of this.students) {
+                    account.push({
+                      studentId: student,
+                    });
+                    course.students.push({
+                      account_id: student,
+                      student_name: null,
+                      username: null,
+                      firstname_en: null,
+                      lastname_en: null,
+                      tel: null,
+                      parents: [],
+                      is_account: false,
+                      is_other: false,
+                    });
+                  }
+                });
+                this.order.type = "addStudent";
+                this.changeOrderData(this.order);
+                let payload = {
+                  notificationName: this.notification_name,
+                  notificationDescription: this.notification_description,
+                  accountId: account,
+                };
+                console.log(payload);
+                this.sendNotification(payload);
+                this.saveOrder();
+              } else {
+                this.order.courses.forEach((course) => {
+                  course.coach_id = course.coach.coach_id;
+                  course.coach_name = course.coach.coach_name;
+                  for (const student of this.students) {
+                    course.students.push({
+                      account_id: student,
+                      student_name: null,
+                      username: null,
+                      firstname_en: null,
+                      lastname_en: null,
+                      tel: null,
+                      parents: [],
+                      is_account: false,
+                      is_other: false,
+                    });
+                  }
+                });
+                this.order.type = "addStudent";
+                this.changeOrderData(this.order);
+                this.saveOrder();
+              }
+            }
+          });
+        }
       }
     },
   },
@@ -1103,6 +1190,7 @@ export default {
       last_user_registered: "RegisterModules/getLastUserRegistered",
       username_list: "loginModules/getUsernameList",
       order_is_loading: "OrderModules/getOrderIsLoading",
+      course_monitors: "CourseMonitorModules/getCourseMonitor",
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;

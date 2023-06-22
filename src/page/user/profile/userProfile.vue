@@ -832,53 +832,10 @@ export default {
     //get student course
   },
   mounted() {
-    // console.log("this.relation_data", this.relation_data.length);
-    // if (this.relation_data.length > 0) {
-    //   for (const course of this.relation_data) {
-    //     console.log("course", course);
-    //   }
-    // }
-    // this.user_relation = JSON.parse(localStorage.getItem("relations"));
-    // this.user_login = JSON.parse(localStorage.getItem("userDetail"));
-    // setTimeout(async () => {
-    //   this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-    //   if (this.type_selected == "students_course") {
-    //     if (this.user_detail.roles.includes("R_4")) {
-    //       this.GetStudentData(this.user_detail.account_id);
-    //       for (const item of JSON.parse(localStorage.getItem("relations"))) {
-    //         this.GetStudentData(item.student.studentId);
-    //         console.log("student");
-    //       }
-    //     } else if (this.user_detail.roles.includes("R_5")) {
-    //       this.GetStudentData(this.user_detail.account_id);
-    //     } else {
-    //       this.GetStudentData(null);
-    //     }
-    //   }
-    //   this.loading = false;
-    // }, 200);
-    // this.$store.dispatch("NavberUserModules/changeTitleNavber", "บัญชีผู้ใช้");
-    // for (const item of this.user_relation) {
-    //   this.GetStudentData(item.student.studentId);
-    // }
-    // if (this.$store.state.MyCourseModules.my_course_student_id !== "") {
-    //   this.GetStudentData(
-    //     this.$store.state.MyCourseModules.my_course_student_id
-    //   );
-    // } else {
-    //   if (this.user_relation?.length != 0) {
-    //     for (const item of this.user_relation) {
-    //       this.GetStudentData(item.student.studentId);
-    //     }
-    //   } else {
-    //     if (!this.user_login.roles.includes("R_4")) {
-    //       this.GetStudentData(this.user_login.account_id);
-    //     } else {
-    //       this.GetStudentData(null);
-    //     }
-    //   }
-    // }
-    // this.GetAll(this.user_login.account_id);
+    this.$store.dispatch(
+      "NavberUserModules/changeTitleNavber",
+      "โปรไฟล์"
+    );
   },
 
   watch: {
