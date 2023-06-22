@@ -37,6 +37,7 @@
         cycle
         hide-delimiter-background
         :height="height()"
+        hide-delimiters
       >
         <v-carousel-item
           v-for="(slide, i) in banner_list"
