@@ -195,9 +195,7 @@
       <v-row dense>
         <v-col cols="12" sm="6">
           <v-checkbox
-            :disabled="
-              course_order.apply_for_others ? false : checkMaximumStudent()
-            "
+            :disabled="course_order.apply_for_others ? false : checkMaximumStudent() "
             v-model="course_order.apply_for_others"
             color="#ff6B81"
             label="สมัครเรียนให้ผู้อื่น"
@@ -236,11 +234,7 @@
         </v-row>
       </template>
       <!-- PARENT -->
-      <template
-        v-if="
-          course_order.students.filter((v) => v.is_other === false).length > 0
-        "
-      >
+      <template v-if=" course_order.students.filter((v) => v.is_other === false).length > 0 ">
         <div
           class="mb-3"
           v-for="(parent, index_parent) in course_order.students.filter(
@@ -257,11 +251,7 @@
             <v-col class="text-lg font-bold">{{ `ผู้ปกครอง` }}</v-col>
             <v-col cols="auto">
               <v-btn
-                @click="
-                  removeParent(
-                    course_order.students.filter((v) => v.is_other === false)[0]
-                  )
-                "
+                @click=" removeParent( course_order.students.filter((v) => v.is_other === false)[0]) "
                 small
                 icon
                 color="red"
@@ -277,12 +267,8 @@
                   <labelCustom text="Username (ถ้ามี)"></labelCustom>
                   <v-text-field
                     :disabled="!edit_parent"
-                    @blur="
-                      parent.username > 3 ? checkUsername(parent.username) : ''
-                    "
-                    @keyup.enter="
-                      parent.username > 3 ? checkUsername(parent.username) : ''
-                    "
+                    @blur=" parent.username > 3 ? checkUsername(parent.username) : ''"
+                    @keyup.enter="parent.username > 3 ? checkUsername(parent.username) : '' "
                     dense
                     :rules="rules.usernameRules"
                     @keypress="Validation($event, 'en-number')"
@@ -384,9 +370,7 @@
       </template>
       <!-- STUDENT -->
       <div
-        v-for="(student, index_student) in course_order.students.filter(
-          (v) => v.is_other === true
-        )"
+        v-for="(student, index_student) in course_order.students.filter((v) => v.is_other === true )"
         :key="index_student"
       >
         <v-row dense>
@@ -523,6 +507,15 @@
           </v-col>
         </v-row>
       </div>
+      <v-row dense>
+        <v-col>
+          <v-checkbox
+            color=pink
+            v-model="policy"
+            :label="`ยอมรับ policy`"
+          ></v-checkbox>
+        </v-col>
+      </v-row>
       <v-row dense>
         <v-col cols="12" sm="6">
           <template v-if="course_order.course_type_id === 'CT_1'">
@@ -781,6 +774,64 @@
         :state="register_type"
       ></registerDialogForm>
     </v-dialog>
+    <!-- policy -->
+    <v-dialog 
+      v-model="policy_show" 
+      v-if="policy_show" 
+      persistent
+      :width="$vuetify.breakpoint.smAndUp ? `60vw` : ''"
+    >
+      <v-card flat class="pa-2">
+        <v-row dense>
+          <v-col class="pa-2" align="right">
+            <v-btn
+              icon
+              @click="policy_show = false"
+            >  
+              <v-icon color="red">
+                mdi-close
+              </v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-card-title >
+          <v-row dense>
+            <v-col align="center">
+              policy
+            </v-col>
+          </v-row>
+        </v-card-title>
+        <v-card-text>
+          <v-row dense>
+            <v-col>
+              รอทางทีมกฏหมาย ดำเนินการ
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col>
+              <v-checkbox
+                hide-details
+                color="pink"
+                v-model="policy"
+                :label="`ยอมรับ policy`"
+              ></v-checkbox>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col align="right">
+              <v-btn outlined color="#ff6b81" text-color="#ff6b81" @click="closePolicy()">
+                ยกเลิก
+              </v-btn>
+            </v-col>
+            <v-col>
+              <v-btn depressed dark color="#ff6b81" @click="policy_show = false">
+                ตกลง
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -808,6 +859,8 @@ export default {
     loadingOverlay,
   },
   data: () => ({
+    policy : false,
+    policy_show : false,
     usernameExists: false,
     edit_parent: false,
     parent: {
@@ -1081,6 +1134,10 @@ export default {
       GetGeneralCourseMonitor: "CourseMonitorModules/GetGeneralCourseMonitor",
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
     }),
+    closePolicy(){
+      this.policy = false
+      this.policy_show = false
+    },
     Validation(e, lang) {
       inputValidation(e, lang);
     },
@@ -1383,65 +1440,70 @@ export default {
       this.dialog_parent = false;
     },
     checkOut() {
-      Swal.fire({
+      if(!this.policy){
+        this.policy_show = true
+      }else{
+        Swal.fire({
         icon: "question",
         title: "ดำเนินการชำระเงินใช่หรือไม่ ?",
         showDenyButton: false,
         showCancelButton: true,
         cancelButtonText: "ยกเลิก",
         confirmButtonText: "ตกลง",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          if (this.course_order.course_type_id == "CT_1") {
-            if (new Date(this.course_data.course_open_date) > new Date()) {
-              this.course_order.start_date = this.course_data.course_open_date;
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            if (this.course_order.course_type_id == "CT_1") {
+              if (new Date(this.course_data.course_open_date) > new Date()) {
+                this.course_order.start_date = this.course_data.course_open_date;
+              } else {
+                this.course_order.start_date = "";
+              }
+              this.course_order.coach = this.course_order.coach_id;
+              this.course_order.coach_name =
+                this.course_order.time.timeData.filter(
+                  (v) => v.coach_id === this.course_order.coach_id
+                )[0].coach_name;
             } else {
-              this.course_order.start_date = "";
+              //  CT_2
+              if (
+                new Date(this.course_data.course_study_start_date) > new Date()
+              ) {
+                this.course_order.start_date =
+                  this.course_data.course_study_start_date;
+              } else {
+                this.course_order.start_date = "";
+              }
+              this.course_order.time = this.course_data.days_of_class[0].times[0];
+              this.course_order.coach_name =
+                this.course_data.coachs[0].coach_name;
+              this.course_order.coach = this.course_data.coachs[0].coach_id;
+              this.course_order.coach_id = this.course_data.coachs[0].coach_id;
             }
-            this.course_order.coach = this.course_order.coach_id;
-            this.course_order.coach_name =
-              this.course_order.time.timeData.filter(
-                (v) => v.coach_id === this.course_order.coach_id
-              )[0].coach_name;
-          } else {
-            //  CT_2
-            if (
-              new Date(this.course_data.course_study_start_date) > new Date()
-            ) {
-              this.course_order.start_date =
-                this.course_data.course_study_start_date;
+            if( this.order.courses.length === 0){
+              if ( this.order.courses.filter((v) => v.course_id === this.course_order.course_id).length === 0
+              ) { this.order.courses.push({ ...this.course_order }); }
+            }else{
+              this.order.courses = []
+              this.order.courses.push({ ...this.course_order }); 
+            }
+            this.order.created_by = this.user_login.account_id;
+            this.changeOrderData(this.order);
+            if (this.course_order.course_type_id == "CT_1") {
+              if (this.course_order.day && this.course_order.time) {
+                this.saveOrder();
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  text: `ข้อมูลไม่ถูกต้อง ${this.course_order.day} : ${this.course_order.time}`,
+                });
+              }
             } else {
-              this.course_order.start_date = "";
-            }
-            this.course_order.time = this.course_data.days_of_class[0].times[0];
-            this.course_order.coach_name =
-              this.course_data.coachs[0].coach_name;
-            this.course_order.coach = this.course_data.coachs[0].coach_id;
-            this.course_order.coach_id = this.course_data.coachs[0].coach_id;
-          }
-          if( this.order.courses.length === 0){
-            if ( this.order.courses.filter((v) => v.course_id === this.course_order.course_id).length === 0
-            ) { this.order.courses.push({ ...this.course_order }); }
-          }else{
-            this.order.courses = []
-            this.order.courses.push({ ...this.course_order }); 
-          }
-          this.order.created_by = this.user_login.account_id;
-          this.changeOrderData(this.order);
-          if (this.course_order.course_type_id == "CT_1") {
-            if (this.course_order.day && this.course_order.time) {
               this.saveOrder();
-            } else {
-              Swal.fire({
-                icon: "error",
-                text: `ข้อมูลไม่ถูกต้อง ${this.course_order.day} : ${this.course_order.time}`,
-              });
             }
-          } else {
-            this.saveOrder();
           }
-        }
-      });
+        });
+      }
+      
     },
     checkUsername(username, type) {
       if (username) {

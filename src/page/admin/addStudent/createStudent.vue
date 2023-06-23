@@ -21,12 +21,13 @@
                   cache-items
                   :items="username_list"
                   :search-input.sync="search"
-                  placeholder="ค้นหา/เลือกผู้เรียน"
+                  placeholder="ค้นหา/โปรดเลือกผู้เรียน"
                   item-text="fullname"
                   item-value="userOneId"
                   outlined
                   multiple
                   clearable
+                  @input="search = null"
                 >
                   <template v-slot:no-data>
                     <v-list-item>
@@ -237,7 +238,11 @@
                   outlined
                   :rules="rules.option"
                   v-model="course.option"
-                  :items="course.course_data.packages.filter((v) => v.package_id == course.package )[0].options"
+                  :items="
+                    course.course_data.packages.filter(
+                      (v) => v.package_id == course.package
+                    )[0].options
+                  "
                   placeholder="เลือกระยะเวลา"
                   @change="Calprice(course)"
                   item-color="white"
@@ -247,15 +252,28 @@
                     {{ `${data.item.option_name}` }}
                   </template>
                   <template v-slot:item="{ item }">
-                    <v-list-item-content >
+                    <v-list-item-content>
                       <v-list-item-title class=""
-                        ><span :class=" course.option.option_id === item.option_id ? 'font-bold text-[#ff6b81]' : 'text-[#000]' "
+                        ><span
+                          :class="
+                            course.option.option_id === item.option_id
+                              ? 'font-bold text-[#ff6b81]'
+                              : 'text-[#000]'
+                          "
                           >{{ item.option_name }}</span
-                        ></v-list-item-title >
+                        ></v-list-item-title
+                      >
                     </v-list-item-content>
                     <v-list-item-action>
-                      <v-icon :color="course.option.option_id === item.option_id ? '#ff6b81' : '#9999'">
-                        {{ course.option.option_id === item.option_id
+                      <v-icon
+                        :color="
+                          course.option.option_id === item.option_id
+                            ? '#ff6b81'
+                            : '#9999'
+                        "
+                      >
+                        {{
+                          course.option.option_id === item.option_id
                             ? "mdi-check-circle"
                             : "mdi-radiobox-blank"
                         }}</v-icon
@@ -282,15 +300,15 @@
                 course.course_id
               "
             >
-              <v-col cols="12" sm="2">
+              <v-col cols="12" sm="2" v-if="course.option.amount">
                 <label-custom text="วัน"></label-custom>
                 <v-autocomplete
                   dense
                   :rules="rules.day"
                   v-model="course.day"
                   item-text="dayName"
-                  item-value="day_of_week_id"
-                  :items="course.course_data.days_of_class"
+                  item-value="dayName"
+                  :items="course.course_data.days"
                   placeholder="เลือกวัน"
                   outlined
                   item-color="pink"
@@ -305,15 +323,14 @@
                   :rules="rules.time"
                   v-model="course.time"
                   :items="
-                    course.course_data.days_of_class.filter(
-                      (v) => v.day_of_week_id === course.day
+                    course.course_data.days.filter(
+                      (v) => v.dayName === course.day
                     )[0].times
                   "
                   placeholder="เลือกเวลา"
                   outlined
                   item-color="white"
-                  color="pink"
-                  @change="course.coach = {}"
+                  @change="selectTime(course.time, course)"
                 >
                   <template v-slot:selection="data">
                     {{ `${data.item.start}-${data.item.end}น.` }}
@@ -327,7 +344,8 @@
                     <v-list-item-content>
                       <v-list-item-title
                         ><span
-                          :class="course.time.timeId === item.timeId
+                          :class="
+                            course.time === item
                               ? 'font-bold text-[#ff6b81]'
                               : 'text-[#000]'
                           "
@@ -337,11 +355,9 @@
                     </v-list-item-content>
                     <v-list-item-action>
                       <v-icon
-                        :color="
-                          course.time.timeId === item.timeId ? '#ff6b81' : ''
-                        "
+                        :color="course.time === item ? '#ff6b81' : '#999'"
                         >{{
-                          course.time.timeId === item.timeId
+                          course.time === item
                             ? "mdi-check-circle"
                             : "mdi-radiobox-blank"
                         }}</v-icon
@@ -352,20 +368,16 @@
               </v-col>
               <v-col cols="12" sm="4" v-if="course.course_data && course.time">
                 <label-custom text="โค้ช"></label-custom>
+                <!-- // course.course_data.coachs.filter((v) => v.teach_day_data.some((td) => td.class_date.some(
+                      //       (cd) =>  cd.class_date_range.time_id === course.time.timeId ) )
+                      // ) -->
+                <!-- <per>{{ course.time.timeData }}</per> -->
+                <!-- <pre>{{ course.coach }}</pre> -->
                 <v-autocomplete
                   dense
                   :rules="rules.coach"
                   v-model="course.coach"
-                  :items="
-                    course.course_data.coachs.filter((v) =>
-                      v.teach_day_data.some((td) =>
-                        td.class_date.some(
-                          (cd) =>
-                            cd.class_date_range.time_id === course.time.timeId
-                        )
-                      )
-                    )
-                  "
+                  :items="course.time.timeData"
                   placeholder="เลือกโค้ช"
                   item-color="pink"
                   outlined
@@ -378,8 +390,7 @@
                       <v-list-item-title
                         ><span
                           :class="
-                            course.coach.course_coach_id ===
-                            item.course_coach_id
+                            course.coach.courseCoachId === item.courseCoachId
                               ? 'font-bold  text-[#ff6b81]'
                               : ''
                           "
@@ -390,10 +401,12 @@
                     <v-list-item-action>
                       <v-icon
                         :color="
-                          course.time.timeId === item.timeId ? '#ff6b81' : ''
+                          course.coach.courseCoachId === item.courseCoachId
+                            ? '#ff6b81'
+                            : ''
                         "
                         >{{
-                          course.coach.course_coach_id === item.course_coach_id
+                          course.coach.courseCoachId === item.courseCoachId
                             ? "mdi-check-circle"
                             : "mdi-radiobox-blank"
                         }}</v-icon
@@ -668,10 +681,11 @@
           <!-- <v-col align="right" sm="" cols="12">
             <v-btn
               outlined
+              @click=ClearData()
               :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
               color="#ff6b81"
             >
-              ยกเลิก
+              ล้างข้อมูล
             </v-btn>
           </v-col> -->
           <v-col align="right" cols="12">
@@ -777,10 +791,11 @@ export default {
       category: [(val) => (val || "").length > 0 || "โปรดเลือกอาณาจักร"],
       course: [(val) => (val || "").length > 0 || "โปรดเลือกคอร์สเรียน"],
       package: [(val) => (val || "").length > 0 || "โปรดเลือกแพ็คเกจ"],
-      option: [(val) => (val ? true : false) || "โปรดเลือกระยะเวลา"],
+      option: [
+        (val) => (val.option_id ? true : false) || "โปรดเลือกระยะเวลา"],
       day: [(val) => (val || "").length > 0 || "โปรดเลือกวันเรียน"],
       time: [(val) => (val ? true : false) || "โปรดเลือกเวลาเรียน"],
-      coach: [(val) => (val ? true : false) || "โปรดเลือกโค้ช"],
+      coach: [(val) => (val.courseCoachId ? true : false) || "โปรดเลือกโค้ช"],
       start_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันเริ่ม"],
       price: [(val) => (val || "") > 0 || "โปรดเลือกระบุราคา"],
       remark: [(val) => val.length < 256 || "หมายเหตุความยาวเกินกว่าที่กำหมด"],
@@ -957,6 +972,10 @@ export default {
       // this.$delete(this.short_course)
       this.order.courses.splice(index, 1);
     },
+    selectTime(time, course) {
+      course.coach = {};
+      console.log(time);
+    },
     selectCategory(categoryId, course_type_id, course) {
       console.log(categoryId, course_type_id);
       course.course_id = "";
@@ -1035,138 +1054,183 @@ export default {
       }
     },
     save() {
-      this.GetAllCourseMonitor();
-      this.$refs.course_form.validate();
-      let isValiDateCourse = [];
-      let studentFail = false;
-      if (this.validate_form && this.course_monitors.length > 0) {
-        for (let course of this.order.courses) {
-          if (course.package_data.students < this.students.length) {
-            console.log("912 =>", course.package_data.students);
-            console.log("913 =>", this.students.length);
-            studentFail = true;
-          } else {
-            if (
-              this.course_monitors.filter(
-                (v) =>
-                  v.courseMonitorEntity_coach_id === course.coach.coach_id &&
-                  v.courseMonitorEntity_course_id === course.course_id &&
-                  v.courseMonitorEntity_day_of_week_id ===
-                    course.time.dayOfWeekId &&
-                  v.courseMonitorEntity_time_id === course.time.timeId
-              ).length > 0
-            ) {
+      this.GetAllCourseMonitor().then(() => {
+        this.$refs.course_form.validate();
+        let isValiDateCourse = [];
+        let studentFail = false;
+        if (this.validate_form && this.course_monitors.length > 0) {
+          for (let course of this.order.courses) {
+            if (course.package_data.students < this.students.length) {
+              console.log("912 =>", course.package_data.students);
+              console.log("913 =>", this.students.length);
+              studentFail = true;
+            } else {
               if (
-                this.course_monitors.some(
+                this.course_monitors.filter(
                   (v) =>
                     v.courseMonitorEntity_coach_id === course.coach.coach_id &&
                     v.courseMonitorEntity_course_id === course.course_id &&
                     v.courseMonitorEntity_day_of_week_id ===
                       course.time.dayOfWeekId &&
-                    v.courseMonitorEntity_time_id === course.time.timeId &&
-                    v.courseMonitorEntity_current_student +
-                      course.students.length <=
-                      v.courseMonitorEntity_maximum_student &&
-                    v.courseMonitorEntity_status === "Open"
-                )
+                    v.courseMonitorEntity_time_id === course.time.timeId
+                ).length > 0
               ) {
-                isValiDateCourse.push(true);
+                if (
+                  this.course_monitors.some(
+                    (v) =>
+                      v.courseMonitorEntity_coach_id ===
+                        course.coach.coach_id &&
+                      v.courseMonitorEntity_course_id === course.course_id &&
+                      v.courseMonitorEntity_day_of_week_id ===
+                        course.time.dayOfWeekId &&
+                      v.courseMonitorEntity_time_id === course.time.timeId &&
+                      v.courseMonitorEntity_current_student +
+                        course.students.length <=
+                        v.courseMonitorEntity_maximum_student &&
+                      v.courseMonitorEntity_status === "Open"
+                  )
+                ) {
+                  isValiDateCourse.push(true);
+                } else {
+                  // console.log( this.course_monitors)
+                  isValiDateCourse.push(false);
+                }
               } else {
-                // console.log( this.course_monitors)
-                isValiDateCourse.push(false);
+                isValiDateCourse.push(true);
               }
-            } else {
-              isValiDateCourse.push(true);
             }
           }
-        }
-        if (studentFail) {
-          Swal.fire({
-            icon: "error",
-            title: "จำนวนนักเรียนไม่ถูกต้อง",
-            text: "จำนวนนักเรียนเกินกว่าจำนวนที่จะรับได้ใน Package",
-            showDenyButton: false,
-            showCancelButton: true,
-            cancelButtonText: "ยกเลิก",
-            confirmButtonText: "ตกลง",
-          });
-        } else if (isValiDateCourse.includes(false)) {
-          Swal.fire({
-            icon: "error",
-            title: "คอร์สที่เลือกเต็มแล้วไม่สามารถชำระเงินได้",
-            showDenyButton: false,
-            showCancelButton: true,
-            cancelButtonText: "ยกเลิก",
-            confirmButtonText: "ตกลง",
-          });
-        } else {
-          Swal.fire({
-            icon: "question",
-            title: "ต้องการเพิ่มผู้เรียนใช่หรือไม่",
-            showDenyButton: false,
-            showCancelButton: true,
-            confirmButtonText: "ตกลง",
-            cancelButtonText: "ยกเลิก",
-          }).then(async (result) => {
-            if (result.isConfirmed) {
-              if (this.order.payment_status === "warn") {
-                let account = [];
-                this.order.courses.forEach((course) => {
-                  course.coach_id = course.coach.coach_id;
-                  course.coach_name = course.coach.coach_name;
-                  for (const student of this.students) {
-                    account.push({
-                      studentId: student,
-                    });
-                    course.students.push({
-                      account_id: student,
-                      student_name: null,
-                      username: null,
-                      firstname_en: null,
-                      lastname_en: null,
-                      tel: null,
-                      parents: [],
-                      is_account: false,
-                      is_other: false,
-                    });
-                  }
-                });
-                this.order.type = "addStudent";
-                this.changeOrderData(this.order);
-                let payload = {
-                  notificationName: this.notification_name,
-                  notificationDescription: this.notification_description,
-                  accountId: account,
-                };
-                console.log(payload);
-                this.sendNotification(payload);
-                this.saveOrder();
-              } else {
-                this.order.courses.forEach((course) => {
-                  course.coach_id = course.coach.coach_id;
-                  course.coach_name = course.coach.coach_name;
-                  for (const student of this.students) {
-                    course.students.push({
-                      account_id: student,
-                      student_name: null,
-                      username: null,
-                      firstname_en: null,
-                      lastname_en: null,
-                      tel: null,
-                      parents: [],
-                      is_account: false,
-                      is_other: false,
-                    });
-                  }
-                });
-                this.order.type = "addStudent";
-                this.changeOrderData(this.order);
-                this.saveOrder();
+          if (studentFail) {
+            Swal.fire({
+              icon: "error",
+              title: "จำนวนนักเรียนไม่ถูกต้อง",
+              text: "จำนวนนักเรียนเกินกว่าจำนวนที่จะรับได้ใน Package",
+              showDenyButton: false,
+              showCancelButton: true,
+              cancelButtonText: "ยกเลิก",
+              confirmButtonText: "ตกลง",
+            });
+          } else if (isValiDateCourse.includes(false)) {
+            Swal.fire({
+              icon: "error",
+              title: "คอร์สที่เลือกเต็มแล้วไม่สามารถชำระเงินได้",
+              showDenyButton: false,
+              showCancelButton: true,
+              cancelButtonText: "ยกเลิก",
+              confirmButtonText: "ตกลง",
+            });
+          } else {
+            Swal.fire({
+              icon: "question",
+              title: "ต้องการเพิ่มผู้เรียนใช่หรือไม่",
+              showDenyButton: false,
+              showCancelButton: true,
+              confirmButtonText: "ตกลง",
+              cancelButtonText: "ยกเลิก",
+            }).then(async (result) => {
+              if (result.isConfirmed) {
+                if (this.order.payment_status === "warn") {
+                  let account = [];
+                  this.order.courses.forEach((course) => {
+                    course.coach_id = course.coach.coach_id;
+                    course.coach_name = course.coach.coach_name;
+                    for (const student of this.students) {
+                      account.push({
+                        studentId: student,
+                      });
+                      course.students.push({
+                        account_id: student,
+                        student_name: null,
+                        username: null,
+                        firstname_en: null,
+                        lastname_en: null,
+                        tel: null,
+                        parents: [],
+                        is_account: false,
+                        is_other: false,
+                      });
+                    }
+                  });
+                  this.order.type = "addStudent";
+                  this.changeOrderData(this.order);
+                  let payload = {
+                    notificationName: this.notification_name,
+                    notificationDescription: this.notification_description,
+                    accountId: account,
+                  };
+                  console.log(payload);
+                  this.sendNotification(payload);
+                  this.saveOrder();
+                } else {
+                  this.order.courses.forEach((course) => {
+                    course.coach_id = course.coach.coach_id;
+                    course.coach_name = course.coach.coach_name;
+                    for (const student of this.students) {
+                      course.students.push({
+                        account_id: student,
+                        student_name: null,
+                        username: null,
+                        firstname_en: null,
+                        lastname_en: null,
+                        tel: null,
+                        parents: [],
+                        is_account: false,
+                        is_other: false,
+                      });
+                    }
+                  });
+                  this.order.type = "addStudent";
+                  this.changeOrderData(this.order);
+                  this.saveOrder();
+                }
               }
-            }
-          });
+            });
+          }
         }
-      }
+      });
+    },
+    ClearData() {
+      this.students = [];
+      this.changeOrderData({
+        type: "",
+        order_step: 0,
+        order_number: "",
+        courses: [
+          {
+            course_options: [],
+            course_data: null,
+            apply_for_yourself: false,
+            apply_for_others: false,
+            course_id: "",
+            course_type: "",
+            course_type_id: "CT_1",
+            category_id: "",
+            package: "",
+            package_data: null,
+            option: {},
+            option_data: "",
+            period: 0,
+            times_in_class: 0,
+            day: "",
+            time: "",
+            coach: "",
+            manu_start_date: true,
+            start_date_str: "",
+            start_date: "",
+            start_day: "",
+            price: 0,
+            detail: "",
+            remark: "",
+            selected: true,
+            parents: [],
+            students: [],
+          },
+        ],
+        created_by: "",
+        payment_status: "",
+        payment_type: "",
+        total_price: 0,
+      });
     },
   },
   computed: {
