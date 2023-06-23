@@ -70,50 +70,50 @@
             <!-- {{ item }} -->
             <v-row dense class="font-bold">
               <v-col cols="12" sm="6">
-                {{ item.courseName.courseNameTh }}</v-col
+                {{ item?.courseName?.courseNameTh }}</v-col
               >
               <v-col cols="12" sm="6">
-                {{ item.time.start }} - {{ item.time.end }}</v-col
+                {{ item?.time?.start }} - {{ item?.time?.end }}</v-col
               >
             </v-row>
 
             <v-row dense>
-              <v-col cols="12" sm="6">โค้ช : {{ item.coachName }} </v-col>
+              <v-col cols="12" sm="6">โค้ช : {{ item?.coachName }} </v-col>
               <v-col cols="12" sm="6">
                 <v-chip
-                  v-if="item.cpo.packageName"
+                  v-if="item?.cpo?.packageName"
                   :color="
-                    item.cpo.packageName
+                    item?.cpo?.packageName
                       ? package_options.filter(
-                          (v) => v.value === item.cpo.packageName
-                        )[0].bg_color
+                          (v) => v.value === item?.cpo?.packageName
+                        )[0]?.bg_color
                       : ''
                   "
                   :style="
                     item.cpo.packageName
                       ? `color:${
                           package_options.filter(
-                            (v) => v.value === item.cpo.packageName
-                          )[0].color
+                            (v) => v.value === item?.cpo?.packageName
+                          )[0]?.color
                         }`
                       : ''
                   "
                 >
                   {{
-                    item.cpo.packageName
+                    item?.cpo?.packageName
                       ? package_options.filter(
-                          (v) => v.value === item.cpo.packageName
-                        )[0].label
+                          (v) => v.value === item?.cpo?.packageName
+                        )[0]?.label
                       : ""
                   }}
                 </v-chip>
               </v-col>
             </v-row>
 
-            <div v-if="item.courseMonitor.length > 0">
+            <div v-if="item?.courseMonitor?.length > 0">
               <v-row
                 dense
-                v-for="(seat, index) in item.courseMonitor"
+                v-for="(seat, index) in item?.courseMonitor"
                 :key="index"
               >
                 <v-col
@@ -121,7 +121,7 @@
                   class="mdi mdi-account-group-outline"
                   style="color: #ff6b81"
                 >
-                  {{ seat.currentStudent }} / {{ seat.maximumStudent }} ที่นั่ง
+                  {{ seat?.currentStudent }} / {{ seat?.maximumStudent }} ที่นั่ง
                 </v-col>
               </v-row>
             </div>
@@ -138,7 +138,7 @@
           >
             <v-row dense>
               <v-col cols="6" sm="6" class="font-bold" style="color: #f19a5a">
-                วันหยุด {{ getHolidays.fullDateHolidaysTh }}
+                วันหยุด {{ getHolidays?.fullDateHolidaysTh }}
               </v-col>
               <v-col
                 cols="6"
@@ -216,7 +216,7 @@
                       </template>
 
                       <v-date-picker
-                        v-model="editHolidayDates"
+                        :v-model="`2023-06-27`"
                         @input="
                           setHolidaydates(editHolidayDates),
                             (selectEditHolidaydates = false)
@@ -558,7 +558,7 @@
                   <v-col cols="12" sm="6" align="center">
                     <v-btn
                       @click="
-                        GetDataInSchedile(),
+                        GetDataInSchedule(),
                           (filter_dialog = false),
                           (selectedCourseType = []),
                           (selectedCourse = []),
@@ -754,11 +754,11 @@ export default {
   mounted() {
     this.GetCoachs();
     this.GetFilterCourse();
-    this.GetDataInSchedile();
+    this.GetDataInSchedule();
   },
 
   updated() {
-    // this.GetDataInSchedile();
+    // this.GetDataInSchedule();
   },
 
   methods: {
@@ -769,7 +769,7 @@ export default {
       GetAllHolidays: "ManageScheduleModules/GetAllHolidays",
       GetHolidaysById: "ManageScheduleModules/GetHolidaysById",
       GetEditHolidays: "ManageScheduleModules/GetEditHolidays",
-      GetDataInSchedile: "ManageScheduleModules/GetDataInSchedile",
+      GetDataInSchedule: "ManageScheduleModules/GetDataInSchedule",
       GetFilterSchedule: "ManageScheduleModules/GetFilterSchedule",
       GetSearchSchedule: "ManageScheduleModules/GetSearchSchedule",
     }),
@@ -850,6 +850,7 @@ export default {
                 if (result.isConfirmed) {
                   (this.show_dialog_edit_holoday = false),
                     this.GetAllHolidays();
+                    this.GetDataInSchedule()
                 }
               });
             }
@@ -911,7 +912,7 @@ export default {
                     this.holidayEndTime = "";
                     this.nameHoliday = "";
                     this.GetAllHolidays();
-                    this.GetDataInSchedile();
+                    this.GetDataInSchedule();
                   }
                 });
               } else {
@@ -960,7 +961,9 @@ export default {
     editHolidays(holiday) {
       this.show_dialog_edit_holoday = true;
       console.log("holiday", holiday);
-
+      console.log("++++", new Date(`${holiday.holidayDate}/${holiday.holidayMonth}/${holiday.holidayYears}`));
+      // this.editHolidayDates = `${holiday.holidayDate}/${holiday.holidayMonth}/${holiday.holidayYears}`
+      // this.editHolidayDates = new Date(`${holiday.holidayDate}/${holiday.holidayMonth}/${holiday.holidayYears}`)
       this.setDataEditDialog = { ...holiday };
     },
 
@@ -1003,7 +1006,7 @@ export default {
             let payload = {};
             payload = { ...this.setDataEditDialog };
             this.GetEditHolidays(payload);
-            this.GetDataInSchedile();
+            this.GetDataInSchedule();
             this.show_dialog_edit_holoday = false;
             this.editHolidayDates = null;
             this.setDataEditDialog = {};

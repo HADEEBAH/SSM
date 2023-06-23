@@ -35,7 +35,7 @@ const manageScheduleModules = {
     SetEvents(state, payload) {
       state.events = payload;
     },
-    SetDataInSchedile(state, payload) {
+    SetDataInSchedule(state, payload) {
       state.data_in_schedule = payload;
     },
     SetDataFilterSchedule(state, payload) {
@@ -237,7 +237,7 @@ const manageScheduleModules = {
             timerProgressBar: true,
           });
           context.dispatch("GetAllHolidays");
-          context.dispatch("GetDataInSchedile");
+          context.dispatch("GetDataInSchedule");
         } else {
           Swal.fire({
             icon: "warning",
@@ -306,7 +306,7 @@ const manageScheduleModules = {
       }
     },
 
-    async GetDataInSchedile(context) {
+    async GetDataInSchedule(context) {
       let dataInSchadule = [];
       try {
         let config = {
@@ -378,9 +378,9 @@ const manageScheduleModules = {
 
             dataInSchadule = eventSchadule;
           });
-          // await context.commit("SetDataInSchedile", data.data)
-          // console.log("SetDataInSchedile", data.data);
-          context.commit("SetDataInSchedile", dataInSchadule);
+          // await context.commit("SetDataInSchedule", data.data)
+          // console.log("SetDataInSchedule", data.data);
+          context.commit("SetDataInSchedule", dataInSchadule);
           context.commit("SetDataFilterSchedule", null);
         }
       } catch (error) {
