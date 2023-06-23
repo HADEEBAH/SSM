@@ -240,7 +240,7 @@
                   :items="course.course_data.packages.filter((v) => v.package_id == course.package )[0].options"
                   placeholder="เลือกระยะเวลา"
                   @change="Calprice(course)"
-                  item-color="pink"
+                  item-color="white"
                   color="pink"
                 >
                   <template v-slot:selection="data">
@@ -248,13 +248,13 @@
                   </template>
                   <template v-slot:item="{ item }">
                     <v-list-item-content >
-                      <v-list-item-title class="text-[#ff6b81] bg-[#fff]"
-                        ><span :class=" course.option.option_id === item.option_id ? 'font-bold' : '' "
+                      <v-list-item-title class=""
+                        ><span :class=" course.option.option_id === item.option_id ? 'font-bold text-[#ff6b81]' : 'text-[#000]' "
                           >{{ item.option_name }}</span
                         ></v-list-item-title >
                     </v-list-item-content>
                     <v-list-item-action>
-                      <v-icon color="#ff6b81">
+                      <v-icon :color="course.option.option_id === item.option_id ? '#ff6b81' : '#9999'">
                         {{ course.option.option_id === item.option_id
                             ? "mdi-check-circle"
                             : "mdi-radiobox-blank"
@@ -311,6 +311,8 @@
                   "
                   placeholder="เลือกเวลา"
                   outlined
+                  item-color="white"
+                  color="pink"
                   @change="course.coach = {}"
                 >
                   <template v-slot:selection="data">
@@ -325,10 +327,9 @@
                     <v-list-item-content>
                       <v-list-item-title
                         ><span
-                          :class="
-                            course.time.timeId === item.timeId
+                          :class="course.time.timeId === item.timeId
                               ? 'font-bold text-[#ff6b81]'
-                              : ''
+                              : 'text-[#000]'
                           "
                           >{{ item.start }}-{{ item.end }}น.</span
                         ></v-list-item-title
