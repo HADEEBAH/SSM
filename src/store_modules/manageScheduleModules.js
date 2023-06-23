@@ -61,8 +61,9 @@ const manageScheduleModules = {
         if (res?.length > 0) {
           res.map((item) => {
             let times = null;
-            times = `${item.startTime} - ${item.endTime}`;
-          
+            times = item.allday ? null : `${item.startTime} - ${item.endTime}`;
+        
+            // console.log("item", item);
             eventSchadule.push({
               name: item.name,
               start: item.start,

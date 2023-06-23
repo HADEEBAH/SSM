@@ -30,7 +30,8 @@
       @click:event="selectedDate($event)"
     >
       <template v-slot:event="{ event }">
-        {{ event.timed }}
+        <!-- {{ event.timed }} -->
+        {{ event.timed ?? event.timed }}
         {{ event.name }}
       </template>
     </v-calendar>
