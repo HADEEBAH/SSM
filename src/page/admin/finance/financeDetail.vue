@@ -197,29 +197,14 @@
                         : "-"
                     }}
                   </rowData>
-
                   <rowData
                     v-if="order_detail.payment"
                     col_header="4"
                     col_detail="8"
                     title="เวลาที่ชำระ"
                     >:
-                    {{
-                      new Date(order_detail.payment.paid_date).toLocaleString(
-                        "en-US",
-                        {
-                          timeStyle: "medium",
-                          hour12: false,
-                        }
-                      )
-                        ? new Date(
-                            order_detail.payment.paid_date
-                          ).toLocaleString("en-US", {
-                            timeStyle: "medium",
-                            hour12: false,
-                          })
-                        : "-"
-                    }}
+
+                    {{ order_detail.payment.paid_date.slice(11, 16) }} น.
                   </rowData>
                 </v-card-text>
               </v-card>
