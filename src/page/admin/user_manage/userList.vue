@@ -199,6 +199,11 @@
                 mdi-delete
               </v-icon>
             </template>
+
+            <template v-slot:[`no-results`]>
+              <div class="font-bold">ไม่พบข้อมูล</div>
+            </template>
+
             <!-- </div> -->
           </v-data-table>
         </template>

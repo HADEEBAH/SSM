@@ -243,7 +243,7 @@ const orderModules = {
                             // order.paid_date = order.payment_status === "success" ? `${d + "-" + m + "-" + y} ${HH + ":" + mm + ":" + ss}` : ''
 
                             let inputDate = order.payment_status === "success" ? order.payment.paymentDate : '';
-                            const year = inputDate.substring(0, 4);
+                            const year = parseInt(inputDate.substring(0, 4)) + 543;
                             const month = parseInt(inputDate.substring(4, 6));
                             const day = inputDate.substring(6, 8);
 
@@ -269,9 +269,9 @@ const orderModules = {
                             let cutTime = order.payment_status === "success" ? order.payment.paymentTime : '';
                             let HH = cutTime.slice(0, 2);
                             let mm = cutTime.slice(2, 4);
-                            let ss = cutTime.slice(4, 6);
+                            // let ss = cutTime.slice(4, 6);
 
-                            order.paid_date = order.payment_status === "success" ? `${formatted} ${HH + ":" + mm + ":" + ss}` : ''
+                            order.paid_date = order.payment_status === "success" ? `${formatted} ${HH + ":" + mm }` : ''
                             order.course_name = `${order.course.courseNameTh}(${order.course.courseNameEn})`
                             order.student_name = `${order.user?.firstNameTh} ${order.user?.lastNameTh}`
                         }

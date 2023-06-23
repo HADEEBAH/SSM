@@ -21,7 +21,7 @@
                   cache-items
                   :items="username_list"
                   :search-input.sync="search"
-                  placeholder="ค้นหา/เลือกผู้เรียน"
+                  placeholder="ค้นหา/โปรดเลือกผู้เรียน"
                   item-text="fullname"
                   item-value="userOneId"
                   outlined
@@ -238,7 +238,11 @@
                   outlined
                   :rules="rules.option"
                   v-model="course.option"
-                  :items="course.course_data.packages.filter((v) => v.package_id == course.package )[0].options"
+                  :items="
+                    course.course_data.packages.filter(
+                      (v) => v.package_id == course.package
+                    )[0].options
+                  "
                   placeholder="เลือกระยะเวลา"
                   @change="Calprice(course)"
                   item-color="white"
@@ -248,15 +252,28 @@
                     {{ `${data.item.option_name}` }}
                   </template>
                   <template v-slot:item="{ item }">
-                    <v-list-item-content >
+                    <v-list-item-content>
                       <v-list-item-title class=""
-                        ><span :class=" course.option.option_id === item.option_id ? 'font-bold text-[#ff6b81]' : 'text-[#000]' "
+                        ><span
+                          :class="
+                            course.option.option_id === item.option_id
+                              ? 'font-bold text-[#ff6b81]'
+                              : 'text-[#000]'
+                          "
                           >{{ item.option_name }}</span
-                        ></v-list-item-title >
+                        ></v-list-item-title
+                      >
                     </v-list-item-content>
                     <v-list-item-action>
-                      <v-icon :color="course.option.option_id === item.option_id ? '#ff6b81' : '#9999'">
-                        {{ course.option.option_id === item.option_id
+                      <v-icon
+                        :color="
+                          course.option.option_id === item.option_id
+                            ? '#ff6b81'
+                            : '#9999'
+                        "
+                      >
+                        {{
+                          course.option.option_id === item.option_id
                             ? "mdi-check-circle"
                             : "mdi-radiobox-blank"
                         }}</v-icon
@@ -305,7 +322,11 @@
                   dense
                   :rules="rules.time"
                   v-model="course.time"
-                  :items="course.course_data.days.filter((v) => v.dayName === course.day)[0].times"
+                  :items="
+                    course.course_data.days.filter(
+                      (v) => v.dayName === course.day
+                    )[0].times
+                  "
                   placeholder="เลือกเวลา"
                   outlined
                   item-color="white"
@@ -334,7 +355,7 @@
                     </v-list-item-content>
                     <v-list-item-action>
                       <v-icon
-                        :color=" course.time === item ? '#ff6b81' : '#999' "
+                        :color="course.time === item ? '#ff6b81' : '#999'"
                         >{{
                           course.time === item
                             ? "mdi-check-circle"
@@ -347,16 +368,16 @@
               </v-col>
               <v-col cols="12" sm="4" v-if="course.course_data && course.time">
                 <label-custom text="โค้ช"></label-custom>
-                  <!-- // course.course_data.coachs.filter((v) => v.teach_day_data.some((td) => td.class_date.some(
+                <!-- // course.course_data.coachs.filter((v) => v.teach_day_data.some((td) => td.class_date.some(
                       //       (cd) =>  cd.class_date_range.time_id === course.time.timeId ) )
                       // ) -->
-                  <!-- <per>{{ course.time.timeData }}</per> -->
-                  <!-- <pre>{{ course.coach }}</pre> -->
+                <!-- <per>{{ course.time.timeData }}</per> -->
+                <!-- <pre>{{ course.coach }}</pre> -->
                 <v-autocomplete
                   dense
                   :rules="rules.coach"
                   v-model="course.coach"
-                  :items=" course.time.timeData"
+                  :items="course.time.timeData"
                   placeholder="เลือกโค้ช"
                   item-color="pink"
                   outlined
@@ -369,8 +390,7 @@
                       <v-list-item-title
                         ><span
                           :class="
-                            course.coach.courseCoachId ===
-                            item.courseCoachId
+                            course.coach.courseCoachId === item.courseCoachId
                               ? 'font-bold  text-[#ff6b81]'
                               : ''
                           "
@@ -381,8 +401,9 @@
                     <v-list-item-action>
                       <v-icon
                         :color="
-                             course.coach.courseCoachId ===
-                            item.courseCoachId ? '#ff6b81' : ''
+                          course.coach.courseCoachId === item.courseCoachId
+                            ? '#ff6b81'
+                            : ''
                         "
                         >{{
                           course.coach.courseCoachId === item.courseCoachId
@@ -951,9 +972,9 @@ export default {
       // this.$delete(this.short_course)
       this.order.courses.splice(index, 1);
     },
-    selectTime(time, course){
-      course.coach = {}
-      console.log(time)
+    selectTime(time, course) {
+      course.coach = {};
+      console.log(time);
     },
     selectCategory(categoryId, course_type_id, course) {
       console.log(categoryId, course_type_id);
@@ -1009,12 +1030,21 @@ export default {
           }
           if (this.course_data.course_type_id === "CT_2") {
             course.start_date = this.course_data.course_study_start_date;
-            course.start_date_str = this.course_data.course_study_start_date_str;
+            course.start_date_str =
+              this.course_data.course_study_start_date_str;
             course.coach = this.course_data.coachs[0];
-            let startTimePart = this.course_data.course_period_start_date.split(":");
-            let endTimePart = this.course_data.course_period_end_date.split(":");
-            let period_start = `${startTimePart[0].padStart(2,"0")}:${startTimePart[1].padStart(2, "0")}`;
-            let period_end = `${endTimePart[0].padStart(2, "0")}:${endTimePart[1].padStart(2, "0")}`;
+            let startTimePart =
+              this.course_data.course_period_start_date.split(":");
+            let endTimePart =
+              this.course_data.course_period_end_date.split(":");
+            let period_start = `${startTimePart[0].padStart(
+              2,
+              "0"
+            )}:${startTimePart[1].padStart(2, "0")}`;
+            let period_end = `${endTimePart[0].padStart(
+              2,
+              "0"
+            )}:${endTimePart[1].padStart(2, "0")}`;
             course.time_str = `${period_start}-${period_end}`;
             course.price = parseInt(this.course_data.price_course);
             course.time = this.course_data.days_of_class[0].times[0];
@@ -1024,7 +1054,7 @@ export default {
       }
     },
     save() {
-      this.GetAllCourseMonitor().then(()=>{
+      this.GetAllCourseMonitor().then(() => {
         this.$refs.course_form.validate();
         let isValiDateCourse = [];
         let studentFail = false;
@@ -1048,7 +1078,8 @@ export default {
                 if (
                   this.course_monitors.some(
                     (v) =>
-                      v.courseMonitorEntity_coach_id === course.coach.coach_id &&
+                      v.courseMonitorEntity_coach_id ===
+                        course.coach.coach_id &&
                       v.courseMonitorEntity_course_id === course.course_id &&
                       v.courseMonitorEntity_day_of_week_id ===
                         course.time.dayOfWeekId &&
@@ -1156,16 +1187,15 @@ export default {
             });
           }
         }
-      })
-     
+      });
     },
-    ClearData(){
-      this.students = []
+    ClearData() {
+      this.students = [];
       this.changeOrderData({
-        type:"",
-        order_step : 0,
+        type: "",
+        order_step: 0,
         order_number: "",
-        courses:[
+        courses: [
           {
             course_options: [],
             course_data: null,
@@ -1194,14 +1224,14 @@ export default {
             selected: true,
             parents: [],
             students: [],
-          }
+          },
         ],
-        created_by : "",
+        created_by: "",
         payment_status: "",
         payment_type: "",
         total_price: 0,
-      })
-    }
+      });
+    },
   },
   computed: {
     ...mapGetters({
