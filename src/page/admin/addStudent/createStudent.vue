@@ -162,7 +162,7 @@
                 </v-autocomplete>
               </v-col>
               <v-col cols="12" sm="4">
-                <label-custom text="คอร์สเรียน 55"></label-custom>
+                <label-custom text="คอร์สเรียน"></label-custom>
                 <v-autocomplete
                   dense
                   item-value="course_id"
