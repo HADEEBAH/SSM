@@ -139,6 +139,15 @@
           </v-col>
         </v-row>
         <v-row dense>
+          <v-col>
+            <v-checkbox
+              color=pink
+              v-model="policy"
+              :label="`ยอมรับ policy`"
+            ></v-checkbox>
+          </v-col>
+        </v-row>
+        <v-row dense>
           <v-col cols="12" sm="4">
             <v-checkbox
               class="card_checkbox"
@@ -162,9 +171,65 @@
       </div>
       <!-- <v-btn depressed dark color="#ff6b81" @click="saveCartData"> ชำระเงิน  </v-btn> -->
     </v-container>
+    <v-dialog 
+      v-model="policy_show" 
+      v-if="policy_show" 
+      persistent
+      :width="$vuetify.breakpoint.smAndUp ? `60vw` : ''"
+    >
+      <v-card flat class="pa-2">
+        <v-row dense>
+          <v-col class="pa-2" align="right">
+            <v-btn
+              icon
+              @click="policy_show = false"
+            >  
+              <v-icon color="red">
+                mdi-close
+              </v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-card-title >
+          <v-row dense>
+            <v-col align="center">
+              policy
+            </v-col>
+          </v-row>
+        </v-card-title>
+        <v-card-text>
+          <v-row dense>
+            <v-col>
+              รอทางทีมกฏหมาย ดำเนินการ
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col>
+              <v-checkbox
+                hide-details
+                color="pink"
+                v-model="policy"
+                :label="`ยอมรับ policy`"
+              ></v-checkbox>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col align="right">
+              <v-btn outlined color="#ff6b81" text-color="#ff6b81" @click="closePolicy()">
+                ยกเลิก
+              </v-btn>
+            </v-col>
+            <v-col>
+              <v-btn depressed dark color="#ff6b81" @click="policy_show = false">
+                ตกลง
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
-
 <script>
 import Swal from "sweetalert2";
 import { mapActions, mapGetters } from "vuex";
@@ -174,6 +239,8 @@ export default {
     loadingOverlay,
   },
   data: () => ({
+    policy: false,
+    policy_show : false,
     search: "",
     drawer: true,
     detail: false,
@@ -189,7 +256,6 @@ export default {
     user_login: {},
   }),
   created() {},
-
   mounted() {
     // console.log(this.user_login.account_id)
     // console.log(this.carts)
@@ -210,6 +276,10 @@ export default {
       // monitor
       GetAllCourseMonitor: "CourseMonitorModules/GetAllCourseMonitor",
     }),
+    closePolicy(){
+      this.policy = false
+      this.policy_show = false
+    },
     removeCart(cart_id) {
       console.log(cart_id);
       Swal.fire({
@@ -281,71 +351,75 @@ export default {
       // this.cart_list = result;
     },
     savePayment() {
-      if (this.cart_list.filter((v) => v.checked === true).length > 0) {
-        let isValiDateCourse = [];
-        this.order.courses = this.cart_list.filter((v) => v.checked === true);
-        this.order.total_price = this.total_price;
-        this.order.payment_status = "pending";
-        this.order.created_by = this.user_login.account_id;
-        this.order.type = "cart"
-        this.changeOrderData(this.order);
-        this.GetAllCourseMonitor().then(() => {
-          console.log("course_monitors", this.course_monitors);
-          // console.log("courses",this.order.courses)
-          this.order.courses.forEach((course) => {
-            console.log("courses", course);
-            if ( this.course_monitors.filter( (v) => v.courseMonitorEntity_coach_id === course.coach &&
-                  v.courseMonitorEntity_course_id === course.course_id &&
-                  v.courseMonitorEntity_day_of_week_id ===
-                    course.day_of_week_id &&
-                  v.courseMonitorEntity_time_id === course.time_id
-              ).length > 0
-            ) {
-              if (
-                this.course_monitors.some(
-                  (v) =>
-                    v.courseMonitorEntity_coach_id === course.coach &&
+      if(!this.policy){
+        this.policy_show = true
+      }else{
+        if (this.cart_list.filter((v) => v.checked === true).length > 0) {
+          let isValiDateCourse = [];
+          this.order.courses = this.cart_list.filter((v) => v.checked === true);
+          this.order.total_price = this.total_price;
+          this.order.payment_status = "pending";
+          this.order.created_by = this.user_login.account_id;
+          this.order.type = "cart"
+          this.changeOrderData(this.order);
+          this.GetAllCourseMonitor().then(() => {
+            console.log("course_monitors", this.course_monitors);
+            // console.log("courses",this.order.courses)
+            this.order.courses.forEach((course) => {
+              console.log("courses", course);
+              if ( this.course_monitors.filter( (v) => v.courseMonitorEntity_coach_id === course.coach &&
                     v.courseMonitorEntity_course_id === course.course_id &&
                     v.courseMonitorEntity_day_of_week_id ===
                       course.day_of_week_id &&
-                    v.courseMonitorEntity_time_id === course.time_id &&
-                    v.courseMonitorEntity_current_student +
-                      course.students.length <= v.courseMonitorEntity_maximum_student && v.courseMonitorEntity_status === "Open"
-                )
+                    v.courseMonitorEntity_time_id === course.time_id
+                ).length > 0
               ) {
-                isValiDateCourse.push(true);
+                if (
+                  this.course_monitors.some(
+                    (v) =>
+                      v.courseMonitorEntity_coach_id === course.coach &&
+                      v.courseMonitorEntity_course_id === course.course_id &&
+                      v.courseMonitorEntity_day_of_week_id ===
+                        course.day_of_week_id &&
+                      v.courseMonitorEntity_time_id === course.time_id &&
+                      v.courseMonitorEntity_current_student +
+                        course.students.length <= v.courseMonitorEntity_maximum_student && v.courseMonitorEntity_status === "Open"
+                  )
+                ) {
+                  isValiDateCourse.push(true);
+                } else {
+                  console.log( this.course_monitors)
+                  isValiDateCourse.push(false);
+                }
               } else {
-                console.log( this.course_monitors)
-                isValiDateCourse.push(false);
+                isValiDateCourse.push(true);
               }
+            });
+            console.log(isValiDateCourse);
+            if (isValiDateCourse.includes(false)) {
+              Swal.fire({
+                icon: "error",
+                title: "คอร์สที่เลือกเต็มแล้วไม่สามารถชำระเงินได้",
+                showDenyButton: false,
+                showCancelButton: true,
+                cancelButtonText: "ยกเลิก",
+                confirmButtonText: "ตกลง",
+              });
             } else {
-              isValiDateCourse.push(true);
+              this.saveOrder().then(()=>{
+                for (const cart of this.cart_list) {
+                  for (const id of cart.order_tmp_id) {
+                    this.DeleteCart({
+                      cart_id: id,
+                      account_id: this.user_login.account_id,
+                    });
+                  }
+                }
+              })
+              
             }
           });
-          console.log(isValiDateCourse);
-          if (isValiDateCourse.includes(false)) {
-            Swal.fire({
-              icon: "error",
-              title: "คอร์สที่เลือกเต็มแล้วไม่สามารถชำระเงินได้",
-              showDenyButton: false,
-              showCancelButton: true,
-              cancelButtonText: "ยกเลิก",
-              confirmButtonText: "ตกลง",
-            });
-          } else {
-            this.saveOrder().then(()=>{
-              for (const cart of this.cart_list) {
-                for (const id of cart.order_tmp_id) {
-                  this.DeleteCart({
-                    cart_id: id,
-                    account_id: this.user_login.account_id,
-                  });
-                }
-              }
-            })
-            
-          }
-        });
+        }
       }
     },
   },
