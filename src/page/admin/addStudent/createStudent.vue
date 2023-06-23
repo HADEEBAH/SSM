@@ -162,7 +162,7 @@
                 </v-autocomplete>
               </v-col>
               <v-col cols="12" sm="4">
-                <label-custom text="คอร์สเรียน"></label-custom>
+                <label-custom text="คอร์สเรียน 55"></label-custom>
                 <v-autocomplete
                   dense
                   item-value="course_id"
@@ -848,8 +848,8 @@ export default {
           lastNameTh: this.last_user_registered.lastname_th,
           mobileNo: this.last_user_registered.phone_number,
           userName: this.last_user_registered.username,
-          fullname: `${this.last_user_registered.firstname_th} ${this.last_user_registered.lastname_th}(${this.last_user_registered.firstname_en} ${this.last_user_registered.lastname_en})|${this.last_user_registered.username} `
-        })
+          fullname: `${this.last_user_registered.firstname_th} ${this.last_user_registered.lastname_th}(${this.last_user_registered.firstname_en} ${this.last_user_registered.lastname_en})|${this.last_user_registered.username} `,
+        });
       }
     },
     search(val) {
