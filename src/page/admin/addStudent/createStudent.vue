@@ -234,39 +234,28 @@
                 <label-custom text="ระยะเวลา"></label-custom>
                 <v-autocomplete
                   dense
+                  outlined
                   :rules="rules.option"
                   v-model="course.option"
-                  :items="
-                    course.course_data.packages.filter(
-                      (v) => v.package_id == course.package
-                    )[0].options
-                  "
+                  :items="course.course_data.packages.filter((v) => v.package_id == course.package )[0].options"
                   placeholder="เลือกระยะเวลา"
-                  outlined
-                  item-color="pink"
-                  color="pink"
                   @change="Calprice(course)"
+                  item-color="white"
+                  color="pink"
                 >
                   <template v-slot:selection="data">
                     {{ `${data.item.option_name}` }}
                   </template>
                   <template v-slot:item="{ item }">
-                    <v-list-item-content>
-                      <v-list-item-title
-                        ><span
-                          :class="
-                            course.option.package_id === item.package_id
-                              ? 'font-bold'
-                              : ''
-                          "
+                    <v-list-item-content >
+                      <v-list-item-title class=""
+                        ><span :class=" course.option.option_id === item.option_id ? 'font-bold text-[#ff6b81]' : 'text-[#000]' "
                           >{{ item.option_name }}</span
-                        ></v-list-item-title
-                      >
+                        ></v-list-item-title >
                     </v-list-item-content>
                     <v-list-item-action>
-                      <v-icon>
-                        {{
-                          course.option.package_id === item.package_id
+                      <v-icon :color="course.option.option_id === item.option_id ? '#ff6b81' : '#9999'">
+                        {{ course.option.option_id === item.option_id
                             ? "mdi-check-circle"
                             : "mdi-radiobox-blank"
                         }}</v-icon
@@ -322,6 +311,8 @@
                   "
                   placeholder="เลือกเวลา"
                   outlined
+                  item-color="white"
+                  color="pink"
                   @change="course.coach = {}"
                 >
                   <template v-slot:selection="data">
@@ -336,10 +327,9 @@
                     <v-list-item-content>
                       <v-list-item-title
                         ><span
-                          :class="
-                            course.time.timeId === item.timeId
+                          :class="course.time.timeId === item.timeId
                               ? 'font-bold text-[#ff6b81]'
-                              : ''
+                              : 'text-[#000]'
                           "
                           >{{ item.start }}-{{ item.end }}น.</span
                         ></v-list-item-title
@@ -848,7 +838,7 @@ export default {
           lastNameTh: this.last_user_registered.lastname_th,
           mobileNo: this.last_user_registered.phone_number,
           userName: this.last_user_registered.username,
-          fullname: `${this.last_user_registered.firstname_th} ${this.last_user_registered.lastname_th}`,
+          fullname: `${this.last_user_registered.firstname_th} ${this.last_user_registered.lastname_th}(${this.last_user_registered.firstname_en} ${this.last_user_registered.lastname_en})|${this.last_user_registered.username} `,
         });
       }
     },

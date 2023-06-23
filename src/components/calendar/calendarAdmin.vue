@@ -324,7 +324,7 @@ export default {
   created() {},
   beforeMount() {},
   mounted() {
-    this.GetDataInSchedile();
+    this.GetDataInSchedule();
     let today = new Date();
     this.start_of_week = new Date(
       today.getFullYear(),
@@ -354,7 +354,7 @@ export default {
   methods: {
     ...mapActions({
       GetAllHolidays: "ManageScheduleModules/GetAllHolidays",
-      GetDataInSchedile: "ManageScheduleModules/GetDataInSchedile",
+      GetDataInSchedule: "ManageScheduleModules/GetDataInSchedule",
     }),
 
     selectedDate(data) {
