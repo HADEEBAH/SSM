@@ -665,7 +665,7 @@
         </template>
         <!-- BUTTON :ACTION -->
         <v-row>
-          <v-col align="right" sm="" cols="12">
+          <!-- <v-col align="right" sm="" cols="12">
             <v-btn
               outlined
               :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
@@ -673,8 +673,8 @@
             >
               ยกเลิก
             </v-btn>
-          </v-col>
-          <v-col sm="auto" cols="12">
+          </v-col> -->
+          <v-col align="right" cols="12">
             <v-btn
               depressed
               :disabled="!order.courses.length > 0"
