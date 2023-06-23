@@ -1,12 +1,25 @@
 <template>
   <v-container>
-    <label class="text-xl font-bold">จัดการอาณาจักรทั้งหมด</label>
+    <!-- <label class="text-xl font-bold">จัดการอาณาจักรทั้งหมด</label> -->
+    <header-page slot_tag title="จัดการคอร์สทั้งหมด">
+      <v-text-field
+        class="w-full"
+        outlined
+        dense
+        hide-details
+        prepend-inner-icon="mdi-magnify"
+        v-model="search"
+        placeholder="ค้นหา"
+      ></v-text-field>
+    </header-page>
+
     <div class="my-5">
       <v-data-table
         class="elevation-1 header-table"
         :headers="column"
         :items="categorys"
         :loading="LoadingTable"
+        :search="search"
       >
         <template v-slot:[`item.actions`]="{ item }">
           <v-btn
@@ -26,6 +39,9 @@
             <v-icon>mdi-delete</v-icon>
           </v-btn>
         </template>
+        <template v-slot:[`no-results`]>
+          <div class="font-bold">ไม่พบข้อมูล</div>
+        </template>
       </v-data-table>
     </div>
   </v-container>
@@ -33,7 +49,12 @@
   <script>
 import { mapActions, mapGetters } from "vuex";
 import Swal from "sweetalert2";
+import headerPage from "@/components/header/headerPage.vue";
+
 export default {
+  components: {
+    headerPage,
+  },
   data: () => ({
     column: [
       {
@@ -51,6 +72,7 @@ export default {
       { text: "จัดสอนโดย", align: "start", sortable: false, value: "taughtBy" },
       { text: "", align: "center", value: "actions", sortable: false },
     ],
+    search: "",
   }),
   mounted() {
     this.$store.dispatch("CategoryModules/GetCategorys");

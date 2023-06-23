@@ -21,7 +21,7 @@
                   cache-items
                   :items="username_list"
                   :search-input.sync="search"
-                  placeholder="ค้นหา/เลือกผู้เรียน"
+                  placeholder="ค้นหา/โปรดเลือกผู้เรียน"
                   item-text="fullname"
                   item-value="userOneId"
                   outlined
@@ -237,7 +237,11 @@
                   outlined
                   :rules="rules.option"
                   v-model="course.option"
-                  :items="course.course_data.packages.filter((v) => v.package_id == course.package )[0].options"
+                  :items="
+                    course.course_data.packages.filter(
+                      (v) => v.package_id == course.package
+                    )[0].options
+                  "
                   placeholder="เลือกระยะเวลา"
                   @change="Calprice(course)"
                   item-color="white"
@@ -247,15 +251,28 @@
                     {{ `${data.item.option_name}` }}
                   </template>
                   <template v-slot:item="{ item }">
-                    <v-list-item-content >
+                    <v-list-item-content>
                       <v-list-item-title class=""
-                        ><span :class=" course.option.option_id === item.option_id ? 'font-bold text-[#ff6b81]' : 'text-[#000]' "
+                        ><span
+                          :class="
+                            course.option.option_id === item.option_id
+                              ? 'font-bold text-[#ff6b81]'
+                              : 'text-[#000]'
+                          "
                           >{{ item.option_name }}</span
-                        ></v-list-item-title >
+                        ></v-list-item-title
+                      >
                     </v-list-item-content>
                     <v-list-item-action>
-                      <v-icon :color="course.option.option_id === item.option_id ? '#ff6b81' : '#9999'">
-                        {{ course.option.option_id === item.option_id
+                      <v-icon
+                        :color="
+                          course.option.option_id === item.option_id
+                            ? '#ff6b81'
+                            : '#9999'
+                        "
+                      >
+                        {{
+                          course.option.option_id === item.option_id
                             ? "mdi-check-circle"
                             : "mdi-radiobox-blank"
                         }}</v-icon
@@ -327,7 +344,8 @@
                     <v-list-item-content>
                       <v-list-item-title
                         ><span
-                          :class="course.time.timeId === item.timeId
+                          :class="
+                            course.time.timeId === item.timeId
                               ? 'font-bold text-[#ff6b81]'
                               : 'text-[#000]'
                           "

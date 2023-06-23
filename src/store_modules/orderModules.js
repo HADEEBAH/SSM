@@ -243,7 +243,7 @@ const orderModules = {
                             // order.paid_date = order.payment_status === "success" ? `${d + "-" + m + "-" + y} ${HH + ":" + mm + ":" + ss}` : ''
 
                             let inputDate = order.payment_status === "success" ? order.payment.paymentDate : '';
-                            const year = inputDate.substring(0, 4);
+                            const year = parseInt(inputDate.substring(0, 4)) + 543;
                             const month = parseInt(inputDate.substring(4, 6));
                             const day = inputDate.substring(6, 8);
 
