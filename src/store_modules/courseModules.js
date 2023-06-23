@@ -1278,39 +1278,39 @@ const CourseModules = {
             } : null
             // console.log("payload => 1256", payload)
             payload.coachs.push(
-                {
-                  coach_id: coach.accountId,
-                  course_coach_id: coach.courseCoachId,
-                  coach_name: `${coach.coachFirstNameTh} ${coach.coachLastNameTh}`,
-                  teach_day_data: [],
-                  teach_days_used: [],
-                  class_date_range: {
-                    start_date: data.data.courseStudyStartDate ? moment(data.data.courseStudyStartDate).format("YYYY-MM-DD") : null,
-                    menu_start_date: false,
-                    end_date: data.data.courseStudyStartDate ? moment(data.data.courseStudyEndDate).format("YYYY-MM-DD") : null,
-                    menu_end_date: false,
-                  },
-                  class_date_range_str: {
-                    start_date: data.data.courseStudyStartDate ? new Date(data.data.courseStudyStartDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : null,
-                    end_date: data.data.courseStudyStartDate ? new Date(data.data.courseStudyEndDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : null,
-                  },
-                  register_date_range: {
-                    start_date: data.data.courseRegisterStartDate ? moment(data.data.courseRegisterStartDate).format("YYYY-MM-DD") : null,
-                    menu_start_date: false,
-                    end_date: data.data.courseRegisterStartDate ? moment(data.data.courseRegisterEndDate).format("YYYY-MM-DD") : null,
-                    menu_end_date: false,
-                  },
-                  register_date_range_str: {
-                    start_date: data.data.courseRegisterEndDate ? new Date(data.data.courseRegisterStartDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : "",
-                    end_date: data.data.courseRegisterEndDate ? new Date(data.data.courseRegisterEndDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : "",
-                  },
-                  period: {
-                    start_time: data.data.coursePeriodStartDate ? data.data.coursePeriodStartDate : null,
-                    start_time_object : data.data.coursePeriodStartDate ? startTime : null,
-                    end_time: data.data.coursePeriodEndDate ? data.data.coursePeriodEndDate : null,
-                    end_time_object :data.data.coursePeriodEndDate ? endTime : null,
-                  },
+              {
+                coach_id: coach.accountId,
+                course_coach_id: coach.courseCoachId,
+                coach_name: `${coach.coachFirstNameTh} ${coach.coachLastNameTh}`,
+                teach_day_data: [],
+                teach_days_used: [],
+                class_date_range: {
+                  start_date: data.data.courseStudyStartDate ? moment(data.data.courseStudyStartDate).format("YYYY-MM-DD") : null,
+                  menu_start_date: false,
+                  end_date: data.data.courseStudyStartDate ? moment(data.data.courseStudyEndDate).format("YYYY-MM-DD") : null,
+                  menu_end_date: false,
                 },
+                class_date_range_str: {
+                  start_date: data.data.courseStudyStartDate ? new Date(data.data.courseStudyStartDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : null,
+                  end_date: data.data.courseStudyStartDate ? new Date(data.data.courseStudyEndDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : null,
+                },
+                register_date_range: {
+                  start_date: data.data.courseRegisterStartDate ? moment(data.data.courseRegisterStartDate).format("YYYY-MM-DD") : null,
+                  menu_start_date: false,
+                  end_date: data.data.courseRegisterStartDate ? moment(data.data.courseRegisterEndDate).format("YYYY-MM-DD") : null,
+                  menu_end_date: false,
+                },
+                register_date_range_str: {
+                  start_date: data.data.courseRegisterEndDate ? new Date(data.data.courseRegisterStartDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : "",
+                  end_date: data.data.courseRegisterEndDate ? new Date(data.data.courseRegisterEndDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : "",
+                },
+                period: {
+                  start_time: data.data.coursePeriodStartDate ? data.data.coursePeriodStartDate : null,
+                  start_time_object : data.data.coursePeriodStartDate ? startTime : null,
+                  end_time: data.data.coursePeriodEndDate ? data.data.coursePeriodEndDate : null,
+                  end_time_object :data.data.coursePeriodEndDate ? endTime : null,
+                },
+              },
             )
             // console.log("payload 1292",payload)
           }
@@ -1320,7 +1320,6 @@ const CourseModules = {
             // console.log(coach_date)
             // DAYS
             let dayName = dayOfWeekArray(coach_date.dayOfWeekName)
-            // console.log("payload 1127",payload.days.filter(v => v.dayName === dayName).length === 0)
             if(payload.days.filter(v => v.dayName === dayName).length === 0){
               // console.log("payload 1129",coach_date.times)
               let times = []
@@ -1358,11 +1357,8 @@ const CourseModules = {
             }else{
               for await (let day of payload.days.filter(v => v.dayName === dayName)){
                 for (let time of coach_date.times){
-                  // console.log("payload 1160", time.start,time.end)
                   if (day.times.filter(v => v.start == time.start && v.end == time.end).length > 0){
                     for await (let day_time of day.times.filter(v => v.start == time.start && v.end == time.end)){
-                      // console.log("payload 1163",day_time.timeData)
-                      // console.log("payload 1164",coach_date.courseCoachId)
                       if(day_time.timeData.filter(v => v.courseCoachId === coach_date.courseCoachId ).length === 0){
                         day_time.timeData.push(
                           {
@@ -1375,7 +1371,6 @@ const CourseModules = {
                           }
                         )
                       }
-                      // console.log("payload 1179", day.times) 
                     }
                   }else{
                     let times = []
@@ -1386,14 +1381,16 @@ const CourseModules = {
                         timeData : []
                       })
                       for await (let t of times){
-                        t.timeData.push({
-                          maximumStudent: time.maximumStudent,
-                          dayOfWeekId: time.dayOfWeekId,
-                          timeId:  time.timeId,
-                          courseCoachId: coach_date.courseCoachId, 
-                          coach_name : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachFirstNameTh +" "+data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachLastNameTh,
-                          coach_id : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].accountId
-                        })
+                        if(t.timeData.filter(v => v.courseCoachId == coach_date.courseCoachId).length === 0){
+                          t.timeData.push({
+                            maximumStudent: time.maximumStudent,
+                            dayOfWeekId: time.dayOfWeekId,
+                            timeId:  time.timeId,
+                            courseCoachId: coach_date.courseCoachId, 
+                            coach_name : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachFirstNameTh +" "+data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachLastNameTh,
+                            coach_id : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].accountId
+                          })
+                        }
                       }
                     }
                     day.times.push(...times)
