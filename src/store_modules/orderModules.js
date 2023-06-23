@@ -529,8 +529,8 @@ const orderModules = {
                     }
                 }
                 console.log("payload =>",payload)
-                // let localhost = "http://localhost:3002"
-                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/regis/course`,payload , config)
+                let localhost = "http://localhost:3002"
+                let {data} = await axios.post(`${localhost}/api/v1/order/regis/course`,payload , config)
                 console.log(data)
                 if(data.statusCode === 201){
                     let payment_payload = {
@@ -657,7 +657,16 @@ const orderModules = {
             }catch(error){
                 context.commit("SetOrderIsLoading", false)
                 console.log(error)
-                if(error.response.data.message === "User is duplicate in this course. Cannot enroll again"){
+
+                if(error.response.data.message === "duplicate pending order"){
+                    Swal.fire({
+                        icon: "error",
+                        title: "ไม่สามารถลงทะเบียนได้",
+                        text: "ไม่สามารถลงทะเบียนได้ เนื่องจากหลักสูตรนี้อยู่ในรายการรอชำระเงินของคุณแล้ว",
+                        showCancelButton: false,
+                        confirmButtonText: "ตกลง",
+                    })
+                }else if(error.response.data.message === "User is duplicate in this course. Cannot enroll again"){
                     Swal.fire({
                         icon: "error",
                         title: "ผู้ใช้ซ้ำกันในหลักสูตรนี้ ไม่สามารถลงทะเบียนได้",
