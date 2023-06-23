@@ -26,7 +26,7 @@
             ></v-img>
           </v-col>
           <v-col cols="12" class="flex align-center justify-center text-h5">
-            อัพโหลดภาพหน้าปกคอร์สเรียน 55555555
+            อัพโหลดภาพหน้าปกคอร์สเรียน
           </v-col>
           <v-col
             cols="12"

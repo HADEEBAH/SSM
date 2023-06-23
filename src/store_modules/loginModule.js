@@ -57,7 +57,7 @@ const loginModules = {
                 let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/student?firstNameTh=${search_name}`, config)
                 if(data.statusCode == 200){
                     for(const user of data.data){
-                        user.fullname = `${user.firstNameTh} ${user.lastNameTh}`
+                        user.fullname = `${user.firstNameTh} ${user.lastNameTh}(${user.firstNameEng} ${user.lastNameEng})|${user.userName}`
                     }
                     context.commit("SetUsernameList",data.data)
                 }
