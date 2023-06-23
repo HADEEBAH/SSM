@@ -195,9 +195,7 @@
       <v-row dense>
         <v-col cols="12" sm="6">
           <v-checkbox
-            :disabled="
-              course_order.apply_for_others ? false : checkMaximumStudent()
-            "
+            :disabled="course_order.apply_for_others ? false : checkMaximumStudent() "
             v-model="course_order.apply_for_others"
             color="#ff6B81"
             label="สมัครเรียนให้ผู้อื่น"
@@ -236,11 +234,7 @@
         </v-row>
       </template>
       <!-- PARENT -->
-      <template
-        v-if="
-          course_order.students.filter((v) => v.is_other === false).length > 0
-        "
-      >
+      <template v-if=" course_order.students.filter((v) => v.is_other === false).length > 0 ">
         <div
           class="mb-3"
           v-for="(parent, index_parent) in course_order.students.filter(
@@ -257,11 +251,7 @@
             <v-col class="text-lg font-bold">{{ `ผู้ปกครอง` }}</v-col>
             <v-col cols="auto">
               <v-btn
-                @click="
-                  removeParent(
-                    course_order.students.filter((v) => v.is_other === false)[0]
-                  )
-                "
+                @click=" removeParent( course_order.students.filter((v) => v.is_other === false)[0]) "
                 small
                 icon
                 color="red"
@@ -277,12 +267,8 @@
                   <labelCustom text="Username (ถ้ามี)"></labelCustom>
                   <v-text-field
                     :disabled="!edit_parent"
-                    @blur="
-                      parent.username > 3 ? checkUsername(parent.username) : ''
-                    "
-                    @keyup.enter="
-                      parent.username > 3 ? checkUsername(parent.username) : ''
-                    "
+                    @blur=" parent.username > 3 ? checkUsername(parent.username) : ''"
+                    @keyup.enter="parent.username > 3 ? checkUsername(parent.username) : '' "
                     dense
                     :rules="rules.usernameRules"
                     @keypress="Validation($event, 'en-number')"
@@ -384,9 +370,7 @@
       </template>
       <!-- STUDENT -->
       <div
-        v-for="(student, index_student) in course_order.students.filter(
-          (v) => v.is_other === true
-        )"
+        v-for="(student, index_student) in course_order.students.filter((v) => v.is_other === true )"
         :key="index_student"
       >
         <v-row dense>
