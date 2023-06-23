@@ -27,6 +27,7 @@
                   outlined
                   multiple
                   clearable
+                  @input="search = null"
                 >
                   <template v-slot:no-data>
                     <v-list-item>
@@ -282,7 +283,7 @@
                 course.course_id
               "
             >
-              <v-col cols="12" sm="2">
+              <v-col cols="12" sm="2" v-if="course.option.amount">
                 <label-custom text="วัน"></label-custom>
                 <v-autocomplete
                   dense
@@ -769,10 +770,11 @@ export default {
       category: [(val) => (val || "").length > 0 || "โปรดเลือกอาณาจักร"],
       course: [(val) => (val || "").length > 0 || "โปรดเลือกคอร์สเรียน"],
       package: [(val) => (val || "").length > 0 || "โปรดเลือกแพ็คเกจ"],
-      option: [(val) => (val ? true : false) || "โปรดเลือกระยะเวลา"],
+      option: [
+        (val) => (val.option_id ? true : false) || "โปรดเลือกระยะเวลา"],
       day: [(val) => (val || "").length > 0 || "โปรดเลือกวันเรียน"],
       time: [(val) => (val ? true : false) || "โปรดเลือกเวลาเรียน"],
-      coach: [(val) => (val ? true : false) || "โปรดเลือกโค้ช"],
+      coach: [(val) => (val.courseCoachId ? true : false) || "โปรดเลือกโค้ช"],
       start_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันเริ่ม"],
       price: [(val) => (val || "") > 0 || "โปรดเลือกระบุราคา"],
       remark: [(val) => val.length < 256 || "หมายเหตุความยาวเกินกว่าที่กำหมด"],
