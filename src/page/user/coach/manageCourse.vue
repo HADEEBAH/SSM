@@ -73,7 +73,7 @@
             >
               <v-card-text class="cursor-pointer">
                 <v-row dense>
-                  <v-col cols="auto">
+                  <v-col cols="12" sm="auto">
                     <v-img
                       :contain="$vuetify.breakpoint.smAndUp"
                       :cover="$vuetify.breakpoint.smAndUp"
@@ -87,11 +87,16 @@
                       :max-width="$vuetify.breakpoint.smAndUp ? 160 : ''"
                     ></v-img>
                   </v-col>
-                  <v-col>
-                    <v-row dense>
+                  <v-col >
+                    <v-row  dense>
                       <v-col class="text-lg font-bold">{{
                         `${course.name}(${course.subtitle})`
                       }}</v-col>
+                      <v-col cols="auto">
+                        <v-chip small color="#F9B320" dark
+                          >{{ `${course.start_time}-${course.end_time}` }}น.</v-chip
+                        >
+                      </v-col>
                     </v-row>
                     <v-row dense>
                       <v-col cols="auto"
@@ -117,11 +122,7 @@
                       }}</v-col>
                     </v-row>
                   </v-col>
-                  <v-col>
-                    <v-chip small color="#F9B320" dark
-                      >{{ `${course.start_time}-${course.end_time}` }}น.</v-chip
-                    >
-                  </v-col>
+                  
                 </v-row>
               </v-card-text>
             </v-card>
@@ -630,7 +631,7 @@
           </v-col>
         </v-row>
         <v-row dense>
-          <v-col cols="7" @click="SelectedStatus('all')">
+          <v-col cols="12" sm="7" @click="SelectedStatus('all')">
             <img-card
               :color="select_status == 'all' ? '#FBF3F5' : '#ffffff'"
               class="cursor-pointer"
@@ -656,7 +657,7 @@
               </template>
             </img-card>
           </v-col>
-          <v-col cols="5" @click="SelectedStatus('approved')">
+          <v-col cols="12" sm="5" @click="SelectedStatus('approved')">
             <img-card
               :color="select_status == 'approved' ? '#FBF3F5' : '#ffffff'"
               class="cursor-pointer"
@@ -688,7 +689,7 @@
           </v-col>
         </v-row>
         <v-row dense class="mb-3">
-          <v-col cols="4" @click="SelectedStatus('pending')">
+          <v-col cols="12" sm="4" @click="SelectedStatus('pending')">
             <img-card
               :color="select_status == 'pending' ? '#FBF3F5' : '#ffffff'"
               class="cursor-pointer"
@@ -720,7 +721,7 @@
               </template>
             </img-card>
           </v-col>
-          <v-col cols="4" @click="SelectedStatus('reject')">
+          <v-col cols="12" sm="4" @click="SelectedStatus('reject')">
             <img-card
               :color="select_status == 'reject' ? '#FBF3F5' : '#ffffff'"
               class="cursor-pointer"
@@ -752,7 +753,7 @@
               </template>
             </img-card>
           </v-col>
-          <v-col cols="4" @click="SelectedStatus('cancel')">
+          <v-col cols="12" sm="4" @click="SelectedStatus('cancel')">
             <img-card
               :color="select_status == 'cancel' ? '#FBF3F5' : '#ffffff'"
               class="cursor-pointer"
