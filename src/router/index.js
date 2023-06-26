@@ -41,6 +41,7 @@ router.beforeEach((to, from, next) => {
         }
       } else if (to.matched[0].name === "Admin") {
         console.log("user_detail", user_detail)
+        // console.log('next to DashboardList')
         if (user_detail?.roles.includes("R_2") || user_detail?.roles.includes("R_1")) {
           next()
         } else {

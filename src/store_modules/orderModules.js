@@ -490,10 +490,11 @@ const orderModules = {
                             })
                         }
                     })
-                    
+                    console.log(course)
                     payload.courses.push({
                         "courseId" :  course.course_id ,
                         "coursePackageOptionId": course.option.course_package_option_id,
+                        "dayName" : course.day?.dayName ? course.day.dayName : course.day,
                         "dayOfWeekId": course?.time?.timeData ? course.time.timeData.filter(v => v.coach_id === course.coach_id)[0].dayOfWeekId : course.time.dayOfWeekId,
                         "timeId":  course?.time?.timeData ? course.time.timeData.filter(v => v.coach_id === course.coach_id)[0].timeId : course.time.timeId,
                         "time": course.time,
