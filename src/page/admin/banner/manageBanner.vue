@@ -171,7 +171,7 @@ export default {
       for (let i = 0; i < this.$refs.fileInput.files.length; i++) {
         const file = this.$refs.fileInput.files[i];
         this.files_input.push(this.$refs.fileInput.files[i]);
-        if (CheckFileSizeType(file, event.target.id))
+        if (!CheckFileSizeType(file, event.target.id)) return;
         if (CheckFileSizeV2(file, event.target.id) ) {
           const reader = new FileReader();
           reader.onload = () => {

@@ -121,11 +121,11 @@ export const CheckFileSizeType = (file, id) => { //check file รอ merge ก�
   ]
   const key = document.getElementById(id)
   if (!format.includes(file.type)) {
-    key.value = null
+    key.value = ""
     Swal.fire({
       icon: "error",
       title: "รูปแบบไฟล์ไม่ถูกต้อง",
-      text: "( กรุณาแนบไฟล์ที่มีนามสกุล jpg, jpeg, png )",
+      text: "( กรุณาแนบไฟล์นามสกุล jpg, jpeg, png )",
       confirmButtonText: "ตกลง"
     })
     return false

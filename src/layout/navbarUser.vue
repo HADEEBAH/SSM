@@ -289,7 +289,9 @@
                         .length > 0
                     : true
                 "
-                @click="$route.name !== list.to ? $router.push({ name: list.to }) : ''"
+                @click="
+                  $route.name !== list.to ? $router.push({ name: list.to }) : ''
+                "
                 :class="
                   menu_drawer_list.length - 1 !== list_index
                     ? 'list-items-border-bottom'
@@ -432,7 +434,7 @@ export default {
       {
         icon: "mdi-swap-horizontal-bold",
         title: "หน้าผู้ดูแลระบบ",
-        to: "Admin",
+        to: "DashboardList",
         roles: ["R_1", "R_2"],
       },
       { icon: "mdi-logout", title: "ออกจากระบบ", to: "logOut", roles: [] },
@@ -454,62 +456,6 @@ export default {
 
     alertVisible: true,
     alertNotify: true,
-    // get_notifications_alls: [
-    // {
-    // notificationName: "แจ้งเตือน",
-    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-    // },
-    // {
-    // notificationName: "แจ้งเตือน",
-    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-    // },
-    // {
-    // notificationName: "แจ้งเตือน",
-    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-    // },
-    // {
-    // notificationName: "แจ้งเตือน",
-    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-    // },
-    // {
-    // notificationName: "แจ้งเตือน",
-    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-    // },
-    // {
-    // notificationName: "แจ้งเตือน",
-    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-    // },
-    // {
-    // notificationName: "แจ้งเตือน",
-    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-    // },
-    // {
-    // notificationName: "แจ้งเตือน",
-    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-    // },
-    // {
-    // notificationName: "แจ้งเตือน",
-    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-    // },
-    // {
-    // notificationName: "แจ้งเตือน",
-    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-    // },
-    // {
-    // notificationName: "แจ้งเตือน",
-    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-    // },
-    // {
-    // notificationName: "แจ้งเตือน",
-    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-    // },
-    // {
-    // notificationName: "แจ้งเตือน",
-    // notificationDescription: "ท่านสามารถเข้าเรียนในคอร์สเรียนทดสอบได้แล้ว",
-    // },
-    // ],
-
-    // getData: this.get_notifications,
   }),
 
   created() {

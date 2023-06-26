@@ -678,7 +678,7 @@
         </template>
         <!-- BUTTON :ACTION -->
         <v-row>
-          <!-- <v-col align="right" sm="" cols="12">
+          <v-col align="right" sm="" cols="12">
             <v-btn
               outlined
               @click=ClearData()
@@ -687,8 +687,8 @@
             >
               ล้างข้อมูล
             </v-btn>
-          </v-col> -->
-          <v-col align="right" cols="12">
+          </v-col>
+          <v-col align="right" sm="auto" cols="12">
             <v-btn
               depressed
               :disabled="!order.courses.length > 0"
