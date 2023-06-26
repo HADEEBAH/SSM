@@ -65,7 +65,8 @@ import ManageSchedule from '@/page/admin/scheduleCalendar/manageSchedule.vue'
 import Banner from '@/page/admin/banner/manageBanner.vue'
 // admin dashboard
 import DashboardList from '@/page/admin/dashboard/dashboardList.vue'
-
+// admin course reserve
+import manageCourseReserve from '@/page/admin/courseReserve/manageCourseReserve.vue'
 
 const routes = [
   {
@@ -79,7 +80,7 @@ const routes = [
         component: Login,
       },
       {
-        path: 'register',
+        path: '/register',
         name: 'Register',
         component: RegisterPage,
       },
@@ -91,6 +92,11 @@ const routes = [
     name: 'Admin',
     component: NavBarAdmin,
     children: [
+      {
+        path: 'courseReserve',
+        name: 'CourseReserveList',
+        component: manageCourseReserve,
+      },
       {
         path: 'userCreate',
         name: 'UserCreate',

@@ -39,7 +39,6 @@
         </v-btn>
       </v-col>
     </v-row>
-
     <v-row>
       <v-col cols="12" md="8" sm="8">
         <template>
@@ -113,7 +112,7 @@
             <div v-if="item?.courseMonitor?.length > 0">
               <v-row
                 dense
-                v-for="(seat, index) in item?.courseMonitor"
+                v-for="(seat, index) in item?.courseMonitor.filter(v => v.timeId === item.time.timeId )"
                 :key="index"
               >
                 <v-col
