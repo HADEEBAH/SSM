@@ -82,7 +82,11 @@
               </v-btn>
             </v-col>
           </v-row>
-          <div class="text-center mt-2 text_bottom" v-if="bottomtext">
+          <div
+            class="text-center mt-2 text_bottom cursor-pointer"
+            v-if="bottomtext"
+            @click="forgot_password()"
+          >
             ลืมรหัสผ่านใช่หรือไม่ ?
           </div>
           <div v-else class="text-center mt-2">
@@ -113,8 +117,10 @@ export default {
         // (val) =>
         //   (val || "").length < 20 ||
         //   "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => (/[A-Za-z0-9 ]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-        (val) => !(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
+        (val) => /[A-Za-z0-9 ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+        (val) =>
+          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+          "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
       ],
       passwordRules: [
         (val) =>
@@ -123,14 +129,13 @@ export default {
         // (val) =>
         //   (val || "").length < 20 ||
         //   "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
-        (val) =>
-          !(/[ ]/g).test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+        (val) => !/[ ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
       ],
     },
   }),
   created() {
     if (this.$route.query.token) {
-      this.loginShareToken(this.$route.query.token)
+      this.loginShareToken(this.$route.query.token);
     }
   },
   computed: {
@@ -165,6 +170,10 @@ export default {
     },
     validate(e, type) {
       inputValidation(e, type);
+    },
+
+    forgot_password() {
+      window.location.href = `https://testoneid.inet.co.th/type_forgot_password?oauth_pass=true`;
     },
   },
 };

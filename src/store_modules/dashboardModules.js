@@ -73,8 +73,8 @@ const dashboardModules = {
       context.commit("SetGetLoading", true)
 
       try {
-        let { data } = await axios.get(`http://localhost:3000/api/v1/dashboard/potencial/`)
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potencial/`)
+        // let { data } = await axios.get(`http://localhost:3000/api/v1/dashboard/potencial/`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potencial/`)
         if (data.statusCode === 200) {
           context.commit("SetGetLoading", false)
           context.commit("SetGetPotential", data.data)

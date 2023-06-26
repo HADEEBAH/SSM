@@ -787,12 +787,11 @@ export default {
       { label: "เงินสด", value: "cash" },
     ],
     rules: {
-      student: [(val) => (val || "").length > 0 || "โปรดเลือกนักเรียน"],
+      student: [(val) => (val || "").length > 0 || "โปรดเลือกผู้เรียน"],
       category: [(val) => (val || "").length > 0 || "โปรดเลือกอาณาจักร"],
       course: [(val) => (val || "").length > 0 || "โปรดเลือกคอร์สเรียน"],
       package: [(val) => (val || "").length > 0 || "โปรดเลือกแพ็คเกจ"],
-      option: [
-        (val) => (val.option_id ? true : false) || "โปรดเลือกระยะเวลา"],
+      option: [(val) => (val.option_id ? true : false) || "โปรดเลือกระยะเวลา"],
       day: [(val) => (val || "").length > 0 || "โปรดเลือกวันเรียน"],
       time: [(val) => (val ? true : false) || "โปรดเลือกเวลาเรียน"],
       coach: [(val) => (val.courseCoachId ? true : false) || "โปรดเลือกโค้ช"],
