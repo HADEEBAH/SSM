@@ -13,8 +13,10 @@
             </v-card-text>
           </v-card>
         </div>
+
         <div v-for="(order, index) in order_history" :key="`${index}-order`">
           <v-card class="mb-3"> 
+            <!-- <pre>{{ order }}</pre> -->
             <v-card-text>
               <v-row  dense class="mb-3">
                 <v-col>
@@ -99,18 +101,14 @@
                                 <v-col cols="auto">เวลา :</v-col>
                                 <v-col>{{
                                   `${
-                                    course.coursePeriodStartDate &&
-                                    course.coursePeriodStartDate !== ""
-                                      ? course.coursePeriodStartDate
-                                      : course.timeStart
-                                      ? course.timeStart
+                                    course.timeStartOrder &&
+                                    course.timeStartOrder !== ""
+                                      ? course.timeStartOrder
                                       : "-"
                                   } - ${
-                                    course.coursePeriodEndDate &&
-                                    course.coursePeriodEndDate !== ""
-                                      ? course.coursePeriodEndDate
-                                      : course.timeEnd
-                                      ? course.timeEnd
+                                    course.timeEndOrder &&
+                                    course.timeEndOrder !== ""
+                                      ? course.timeEndOrder
                                       : "-"
                                   } น.`
                                 }}</v-col>
