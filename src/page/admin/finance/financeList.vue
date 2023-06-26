@@ -6,7 +6,11 @@
           <headerPage title="การเงิน"></headerPage>
         </v-col>
         <v-col cols="6" sm="6" align="end">
-          <v-btn depressed color="#ff6b81" class="white--text" @click="show_dialog = true"
+          <v-btn
+            depressed
+            color="#ff6b81"
+            class="white--text"
+            @click="show_dialog = true"
             >Export</v-btn
           >
         </v-col>
@@ -44,7 +48,9 @@
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
-                <v-col align="center" class="text-3xl font-bold">{{ orders.length }}</v-col>
+                <v-col align="center" class="text-3xl font-bold">{{
+                  orders.length
+                }}</v-col>
                 <v-col class="text-sm">รายการ</v-col>
               </v-row>
             </template>
@@ -67,7 +73,9 @@
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
-                <v-col align="center" class="text-3xl font-bold">{{orders.filter(v => v.payment_status === 'success').length}}</v-col>
+                <v-col align="center" class="text-3xl font-bold">{{
+                  orders.filter((v) => v.payment_status === "success").length
+                }}</v-col>
                 <v-col class="text-sm">รายการ</v-col>
               </v-row>
             </template>
@@ -90,7 +98,9 @@
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
-                <v-col align="center" class="text-3xl font-bold">{{ orders.filter(v => v.payment_status === 'pending').length }}</v-col>
+                <v-col align="center" class="text-3xl font-bold">{{
+                  orders.filter((v) => v.payment_status === "pending").length
+                }}</v-col>
                 <v-col class="text-sm">รายการ</v-col>
               </v-row>
             </template>
@@ -100,15 +110,21 @@
       <v-data-table
         v-model="selected"
         :headers="columns"
-        :items="tab == 'all' ? orders : orders.filter(v =>v.payment_status === tab)"
+        :items="
+          tab == 'all' ? orders : orders.filter((v) => v.payment_status === tab)
+        "
         item-key="name"
         :search="search"
         show-select
         class="elevation-1 header-table"
       >
-      <template v-slot:[`item.total_price`]="{ item }">
-        {{ item.total_price.toLocaleString(undefined,{  minimumFractionDigits: 2,}) }}
-      </template>
+        <template v-slot:[`item.total_price`]="{ item }">
+          {{
+            item.total_price.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+            })
+          }}
+        </template>
         <template v-slot:[`item.payment_status`]="{ item }">
           <div
             class="d-flex align-center pa-1 rounded-lg"
@@ -144,22 +160,25 @@
             >เพิ่มเติม</v-btn
           >
         </template>
+        <template v-slot:[`no-results`]>
+          <div class="font-bold">ไม่พบข้อมูล</div>
+        </template>
       </v-data-table>
       <!-- DIALOG -->
-      <v-dialog
-        v-model="show_dialog"
-      >
-        <v-card  class="pa-3">
-          <v-row> 
+      <v-dialog v-model="show_dialog">
+        <v-card class="pa-3">
+          <v-row>
             <v-col cols="12" align="right">
-              <v-btn icon @click="closeDialog()" >
+              <v-btn icon @click="closeDialog()">
                 <v-icon color="#ff6b81">mdi-close</v-icon>
               </v-btn>
             </v-col>
           </v-row>
           <v-card-title>
             <v-row dense>
-              <v-col cols="12" align="center" class="font-semibold">Export</v-col>
+              <v-col cols="12" align="center" class="font-semibold"
+                >Export</v-col
+              >
             </v-row>
           </v-card-title>
           <!-- รายละเอียดคอร์สเรียน -->
@@ -244,7 +263,7 @@
                 >
                   <template v-slot:selection="{ item, index }">
                     <v-chip dark v-if="index === 0" color="#FF6B81">
-                      <span >{{ item.name }}</span>
+                      <span>{{ item.name }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
                       (+{{ export_filter.payment_type.length - 1 }} others)
@@ -271,14 +290,13 @@
                 >
                   <template v-slot:selection="{ item, index }">
                     <v-chip dark v-if="index === 0" color="#FF6B81">
-                      <span >{{ item.course }}</span>
+                      <span>{{ item.course }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
                       (+{{ export_filter.course_id.length - 1 }} others)
                     </span>
                   </template>
                 </v-autocomplete>
-                
               </v-col>
             </v-row>
             <!-- 3 -->
@@ -558,9 +576,14 @@
               <v-col cols="12" sm="6">
                 <v-row>
                   <v-col cols="12" sm="8" align="end">
-                    <v-btn depressed @click="clearDateExport()">ล้างข้อมูล</v-btn></v-col>
+                    <v-btn depressed @click="clearDateExport()"
+                      >ล้างข้อมูล</v-btn
+                    ></v-col
+                  >
                   <v-col cols="12" sm="4" align="end">
-                    <v-btn depressed dark color="#ff6b81" @click="Export()"> เรียกดูทั้งหมด </v-btn>
+                    <v-btn depressed dark color="#ff6b81" @click="Export()">
+                      เรียกดูทั้งหมด
+                    </v-btn>
                   </v-col>
                 </v-row>
               </v-col>
@@ -606,14 +629,14 @@ export default {
       { typeName: "คอร์สทั่วไป", typeOfValue: "CT_1" },
       { typeName: "คอร์สระยะสั้น", typeOfValue: "CT_2" },
     ],
-    export_filter : {
-      course_id : [],
-      course_type_id : [],
-      students : [],
-      payment_type : [],
-      payment_status : [],
-      option_id : "",
-      package_id :[],
+    export_filter: {
+      course_id: [],
+      course_type_id: [],
+      students: [],
+      payment_type: [],
+      payment_status: [],
+      option_id: "",
+      package_id: [],
       select_date_doc_start: false,
       select_date_doc_end: false,
       date_doc_start: "",
@@ -646,7 +669,12 @@ export default {
         sortable: false,
         value: "student_name",
       },
-      { text: "ชื่อคอร์ส", align: "center", sortable: false, value: "course_name" },
+      {
+        text: "ชื่อคอร์ส",
+        align: "center",
+        sortable: false,
+        value: "course_name",
+      },
       { text: "ราคา", align: "center", sortable: false, value: "total_price" },
       {
         text: "สถานะการชำระ",
@@ -664,18 +692,18 @@ export default {
     ],
   }),
   created() {
-    this.GetCoursesList()
-    this.GetOptions()
-    this.GetPackages()
+    this.GetCoursesList();
+    this.GetOptions();
+    this.GetPackages();
     this.GetOrders();
   },
-  mounted() { },
+  mounted() {},
   methods: {
     ...mapActions({
       GetOrders: "OrderModules/GetOrders",
-      GetCoursesList : "CourseModules/GetCoursesList",
-      GetOptions : "CourseModules/GetOptions",
-      GetPackages : "CourseModules/GetPackages",
+      GetCoursesList: "CourseModules/GetCoursesList",
+      GetOptions: "CourseModules/GetOptions",
+      GetPackages: "CourseModules/GetPackages",
     }),
     genPrice(price) {
       return price.toLocaleString();
@@ -720,68 +748,82 @@ export default {
           break;
       }
     },
-    Export(){
-      let order_filter = this.orders
-      if(this.export_filter.students.length > 0){
+    Export() {
+      let order_filter = this.orders;
+      if (this.export_filter.students.length > 0) {
         order_filter = order_filter.filter((v) => {
           v.student = v.student.filter((s) => {
-            const filteredStudent = this.export_filter.students.find((efs) => efs === s.userOneId);
+            const filteredStudent = this.export_filter.students.find(
+              (efs) => efs === s.userOneId
+            );
             return filteredStudent !== undefined;
           });
           return v.student.length > 0;
         });
       }
-      if(this.export_filter.payment_status.length > 0){
+      if (this.export_filter.payment_status.length > 0) {
         order_filter = order_filter.filter((v) => {
-          const filteredStudent = this.export_filter.payment_status.find((efs) => efs === v.payment_status);
+          const filteredStudent = this.export_filter.payment_status.find(
+            (efs) => efs === v.payment_status
+          );
           return filteredStudent !== undefined;
         });
       }
-      if(this.export_filter.payment_type.length > 0){
+      if (this.export_filter.payment_type.length > 0) {
         order_filter = order_filter.filter((v) => {
-          const filtered = this.export_filter.payment_type.find((efs) => efs.toLowerCase() === v.payment_type.toLowerCase());
+          const filtered = this.export_filter.payment_type.find(
+            (efs) => efs.toLowerCase() === v.payment_type.toLowerCase()
+          );
           return filtered !== undefined;
         });
       }
-      if(this.export_filter.course_id.length > 0){
+      if (this.export_filter.course_id.length > 0) {
         order_filter = order_filter.filter((v) => {
-          const filtered = this.export_filter.course_id.find((efs) => efs === v.course_id);
+          const filtered = this.export_filter.course_id.find(
+            (efs) => efs === v.course_id
+          );
           return filtered !== undefined;
         });
       }
-      if(this.export_filter.course_type_id.length > 0){
+      if (this.export_filter.course_type_id.length > 0) {
         order_filter = order_filter.filter((v) => {
-          const filtered = this.export_filter.course_type_id.find((efs) => efs === v.course_type_id);
+          const filtered = this.export_filter.course_type_id.find(
+            (efs) => efs === v.course_type_id
+          );
           return filtered !== undefined;
         });
       }
-      if(this.export_filter.package_id.length > 0){
+      if (this.export_filter.package_id.length > 0) {
         order_filter = order_filter.filter((v) => {
-          const filtered = this.export_filter.package_id.find((efs) => efs === v.package_id);
+          const filtered = this.export_filter.package_id.find(
+            (efs) => efs === v.package_id
+          );
           return filtered !== undefined;
         });
       }
-      if(this.export_filter.option_id.length > 0){
+      if (this.export_filter.option_id.length > 0) {
         order_filter = order_filter.filter((v) => {
-          const filtered = this.export_filter.option_id.find((efs) => efs === v.option_id);
+          const filtered = this.export_filter.option_id.find(
+            (efs) => efs === v.option_id
+          );
           return filtered !== undefined;
         });
       }
-      console.log(order_filter)
+      console.log(order_filter);
     },
     closeDialog() {
-      this.show_dialog = false
-      this.clearDateExport()
+      this.show_dialog = false;
+      this.clearDateExport();
     },
-    clearDateExport(){
-      this.export_filter= {
-        course_id : [],
-        course_type_id : [],
-        students : [],
-        payment_type : [],
-        payment_status : [],
-        option_id : [],
-        package_id :[],
+    clearDateExport() {
+      this.export_filter = {
+        course_id: [],
+        course_type_id: [],
+        students: [],
+        payment_type: [],
+        payment_status: [],
+        option_id: [],
+        package_id: [],
         select_date_doc_start: false,
         select_date_doc_end: false,
         date_doc_start: "",
@@ -792,16 +834,16 @@ export default {
         date_pay_end: "",
         service_charge_start: "",
         service_charge_end: "",
-      }
+      };
     },
   },
   computed: {
     ...mapGetters({
       orders: "OrderModules/getOrders",
-      courses : "CourseModules/getCourses",
-      students : "OrderModules/getStudents",
-      packages : "CourseModules/getPackages",
-      options : "CourseModules/getOptions",
+      courses: "CourseModules/getCourses",
+      students: "OrderModules/getStudents",
+      packages: "CourseModules/getPackages",
+      options: "CourseModules/getOptions",
     }),
   },
   watch: {},

@@ -129,6 +129,9 @@
             ดูรายละเอียด
           </v-btn>
         </template>
+        <template v-slot:[`no-results`]>
+          <div class="font-bold">ไม่พบข้อมูล</div>
+        </template>
       </v-data-table>
     </v-container>
   </v-app>
@@ -148,9 +151,9 @@ export default {
     search: "",
     tab: "all",
     status: [
-        { label: "เปิดคอร์ส", value: "Active" },
-        { label: "ปิดคอร์สชั่วคราว", value: "TemporaryInActive" },
-        { label: "ปิดคอร์ส", value: "InActive" },
+      { label: "เปิดคอร์ส", value: "Active" },
+      { label: "ปิดคอร์สชั่วคราว", value: "TemporaryInActive" },
+      { label: "ปิดคอร์ส", value: "InActive" },
     ],
     column: [
       { text: "ชื่อคอร์ส", align: "start", sortable: false, value: "course" },
@@ -193,21 +196,23 @@ export default {
   methods: {
     ...mapActions({
       UpdateStatusCourse: "CourseModules/UpdateStatusCourse",
-       // monitor
+      // monitor
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
     }),
-    updateStatusCourse(item,course_id, status) {
-      console.log("event :",item);
-      if(status !== 'Active'){
-        this.GetShortCourseMonitor({course_id: course_id}).then(async ()=>{
-          if(this.course_monitors){
-            let current_student = 0
-            console.log(this.course_monitors)
-            current_student = this.course_monitors.map(v => current_student += v.m_current_student)
-            console.log(current_student)
-            console.log(current_student.some( v => v > 0))
-            if(current_student.some( v => v > 0)){
-              item.status = 'Active'
+    updateStatusCourse(item, course_id, status) {
+      console.log("event :", item);
+      if (status !== "Active") {
+        this.GetShortCourseMonitor({ course_id: course_id }).then(async () => {
+          if (this.course_monitors) {
+            let current_student = 0;
+            console.log(this.course_monitors);
+            current_student = this.course_monitors.map(
+              (v) => (current_student += v.m_current_student)
+            );
+            console.log(current_student);
+            console.log(current_student.some((v) => v > 0));
+            if (current_student.some((v) => v > 0)) {
+              item.status = "Active";
               Swal.fire({
                 icon: "error",
                 title: "ไม่สามารถปิดคอร์สได้",
@@ -216,16 +221,16 @@ export default {
                 showCancelButton: false,
                 confirmButtonText: "ตกลง",
                 cancelButtonText: "ยกเลิก",
-              }) 
-            }else{
+              });
+            } else {
               this.UpdateStatusCourse({
                 courseStatus: status,
                 courseId: course_id,
               });
             }
           }
-        })
-      }else{
+        });
+      } else {
         this.UpdateStatusCourse({
           courseStatus: status,
           courseId: course_id,

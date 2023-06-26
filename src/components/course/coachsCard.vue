@@ -8,284 +8,327 @@
         :key="coach_index"
       >
         <!-- TEACH DAY -->
-          <template v-for="(teach_day, teach_day_index) in coach.teach_day_data">
-            <v-card-text :key="`${teach_day_index}-day`" class="border">
-              <v-divider
-                v-if="teach_day_index > 0"
-                :key="teach_day_index"
-              ></v-divider>
-              <v-row dense>
-                <!-- <pre>{{ teach_day }}</pre> -->
-                <v-col cols class="d-flex align-center justify-end">
-                  <v-switch
-                    @click="checkStudyByDay($event,teach_day)"
-                    :disabled="disable"
-                    v-model="teach_day.class_open"
-                    color="green"
-                    hide-details
-                    label="เปิดสอน"
-                  ></v-switch>
-                </v-col>
-                <v-col cols="auto" v-if="course_data.coachs.length > 1">
-                  <template v-if="!teach_day?.course_coach_id">
-                    <v-btn
-                      icon
-                      small
-                      color="red"
-                      v-if="!disable"
-                      @click="removeCoach(course_data.coachs, coach_index)"
-                      ><v-icon>mdi-close</v-icon></v-btn
-                    >
-                  </template>
-                </v-col>
-              </v-row>
-              <v-row dense class="flex align-center justify-end">
-                <v-col cols="12" sm="4">
-                  <label-custom required text="โค้ช"></label-custom>
-                  <!-- <pre>{{ coach }}</pre> -->
-                  <v-autocomplete
-                    dense
-                    :disabled=" disable ? disable : coach.course_coach_id ? true : false "
-                    :outlined="!disable"
-                    :filled="disable"
-                    v-model="coach.coach_id"
-                    color="#FF6B81"
-                    :items="coachsOptions(coach)"
-                    item-value="accountId"
-                    item-text="fullNameTh"
-                    item-color="pink"
-                    @change="findTeachDays(coach, coach_index)"
-                    :rules="rules.course"
-                    placeholder="โค้ช"
-                  >
-                    <template v-slot:no-data>
-                      <v-list-item>
-                        <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
-                      </v-list-item>
-                    </template>
-                    <template v-slot:></template>
-                    <template v-slot:item="{ item }">
-                      <v-list-item-content>
-                        <v-list-item-title
-                          ><span
-                            :class="
-                              coach.coach_id === item.accountId ? 'font-bold' : ''
-                            "
-                            >{{ item.fullNameTh }}</span
-                          ></v-list-item-title
-                        >
-                      </v-list-item-content>
-                      <v-list-item-action>
-                        <v-icon v-if="coach.coach_id === item.accountId"
-                          >mdi-check-circle</v-icon
-                        >
-                      </v-list-item-action>
-                    </template>
-                  </v-autocomplete>
-                </v-col>
-                <v-col cols="12" sm="4">
-                  <label-custom required text="วันสอน"></label-custom>
-                  <v-autocomplete
-                    dense
-                    :disabled="disable"
-                    :outlined="!disable"
-                    :filled="disable"
-                    chips
-                    :rules="rules.class_date"
-                    deletable-chips
-                    item-color="pink"
-                    multiple
-                    color="#FF6B81"
-                    :items="filteredDays(coach_index, teach_day_index, state)"
-                    item-text="label"
-                    item-value="value"
-                    placeholder="โปรดเลือกเวลา"
-                    v-model="teach_day.teach_day"
-                    @change="selectDays(teach_day.teach_day, coach_index, teach_day_index)"
-                  >
-                    <template v-slot:selection="{ attrs, item, selected }">
-                      <v-chip
-                        v-bind="attrs"
-                        :input-value="selected"
-                        close
-                        small
-                        :disabled="disable"
-                        color="#ffeeee"
-                        text-color="#ff6b81"
-                        @click:close="removeChip(item, teach_day.teach_day)"
-                      >
-                        <strong>{{ item.label }}</strong>
-                      </v-chip>
-                    </template>
-                  </v-autocomplete>
-                </v-col>
-                <v-col cols="6" sm="2">
+        <template v-for="(teach_day, teach_day_index) in coach.teach_day_data">
+          <v-card-text :key="`${teach_day_index}-day`" class="border">
+            <v-divider
+              v-if="teach_day_index > 0"
+              :key="teach_day_index"
+            ></v-divider>
+            <v-row dense>
+              <!-- <pre>{{ teach_day }}</pre> -->
+              <v-col cols class="d-flex align-center justify-end">
+                <v-switch
+                  @click="checkStudyByDay($event, teach_day)"
+                  :disabled="disable"
+                  v-model="teach_day.class_open"
+                  color="green"
+                  hide-details
+                  label="เปิดสอน"
+                ></v-switch>
+              </v-col>
+              <v-col cols="auto" v-if="course_data.coachs.length > 1">
+                <template v-if="!teach_day?.course_coach_id">
                   <v-btn
-                    text
-                    :disabled="disable"
-                    v-if="teach_day_index === coach.teach_day_data.length - 1"
-                    color="green"
-                    @click="addTeachDay(coach)"
+                    icon
+                    small
+                    color="red"
+                    v-if="!disable"
+                    @click="removeCoach(course_data.coachs, coach_index)"
+                    ><v-icon>mdi-close</v-icon></v-btn
                   >
-                    <v-icon>mdi-calendar-plus-outline</v-icon>
-                    เพิ่มวันสอน
+                </template>
+              </v-col>
+            </v-row>
+            <v-row dense class="flex align-center justify-end">
+              <v-col cols="12" sm="4">
+                <label-custom required text="โค้ช"></label-custom>
+                <!-- <pre>{{ coach }}</pre> -->
+                <v-autocomplete
+                  dense
+                  :disabled="
+                    disable ? disable : coach.course_coach_id ? true : false
+                  "
+                  :outlined="!disable"
+                  :filled="disable"
+                  v-model="coach.coach_id"
+                  color="#FF6B81"
+                  :items="coachsOptions(coach)"
+                  item-value="accountId"
+                  item-text="fullNameTh"
+                  item-color="pink"
+                  @change="findTeachDays(coach, coach_index)"
+                  :rules="rules.course"
+                  placeholder="โค้ช"
+                >
+                  <template v-slot:no-data>
+                    <v-list-item>
+                      <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
+                    </v-list-item>
+                  </template>
+                  <template v-slot:></template>
+                  <template v-slot:item="{ item }">
+                    <v-list-item-content>
+                      <v-list-item-title
+                        ><span
+                          :class="
+                            coach.coach_id === item.accountId ? 'font-bold' : ''
+                          "
+                          >{{ item.fullNameTh }}</span
+                        ></v-list-item-title
+                      >
+                    </v-list-item-content>
+                    <v-list-item-action>
+                      <v-icon v-if="coach.coach_id === item.accountId"
+                        >mdi-check-circle</v-icon
+                      >
+                    </v-list-item-action>
+                  </template>
+                </v-autocomplete>
+              </v-col>
+              <v-col cols="12" sm="4">
+                <label-custom required text="วันสอน"></label-custom>
+                <v-autocomplete
+                  dense
+                  :disabled="disable"
+                  :outlined="!disable"
+                  :filled="disable"
+                  chips
+                  :rules="rules.class_date"
+                  deletable-chips
+                  item-color="pink"
+                  multiple
+                  color="#FF6B81"
+                  :items="filteredDays(coach_index, teach_day_index, state)"
+                  item-text="label"
+                  item-value="value"
+                  placeholder="โปรดเลือกเวลา"
+                  v-model="teach_day.teach_day"
+                  @change="
+                    selectDays(
+                      teach_day.teach_day,
+                      coach_index,
+                      teach_day_index
+                    )
+                  "
+                >
+                  <template v-slot:selection="{ attrs, item, selected }">
+                    <v-chip
+                      v-bind="attrs"
+                      :input-value="selected"
+                      close
+                      small
+                      :disabled="disable"
+                      color="#ffeeee"
+                      text-color="#ff6b81"
+                      @click:close="removeChip(item, teach_day.teach_day)"
+                    >
+                      <strong>{{ item.label }}</strong>
+                    </v-chip>
+                  </template>
+                </v-autocomplete>
+              </v-col>
+              <v-col cols="6" sm="2">
+                <v-btn
+                  text
+                  :disabled="disable"
+                  v-if="teach_day_index === coach.teach_day_data.length - 1"
+                  color="green"
+                  @click="addTeachDay(coach)"
+                >
+                  <v-icon>mdi-calendar-plus-outline</v-icon>
+                  เพิ่มวันสอน
+                </v-btn>
+              </v-col>
+              <v-col cols="6" sm="2">
+                <template v-if="teach_day.day_of_week_id">
+                  <!-- {{  edited +'*'+ disable}} -->
+                  <v-btn
+                    :disabled="disable || !edited"
+                    text
+                    color="red"
+                    v-if="coach.teach_day_data.length > 1"
+                    @click="
+                      removeDayOfWeekData(
+                        coach.teach_day_data,
+                        teach_day.day_of_week_id
+                      )
+                    "
+                    ><v-icon>mdi-calendar-plus-outline</v-icon>
+                    ลบวันสอน
+                  </v-btn>
+                </template>
+                <template v-else>
+                  <v-btn
+                    :disabled="disable"
+                    text
+                    color="red"
+                    v-if="coach.teach_day_data.length > 1"
+                    @click="
+                      removeTeachDay(coach.teach_day_data, teach_day_index)
+                    "
+                    ><v-icon>mdi-calendar-plus-outline</v-icon>
+                    ลบวันสอน
+                  </v-btn>
+                </template>
+              </v-col>
+            </v-row>
+            <!-- CLASS TIME -->
+            <template
+              v-for="(class_date, class_date_index) in teach_day.class_date"
+            >
+              <v-row dense :key="`${class_date_index}-class-date`">
+                <!-- <pre>{{ coach.disabled_hours }}</pre> -->
+                <v-col cols="12" sm="6">
+                  <!-- <pre>{{class_date}}</pre> -->
+                  <label-custom required text="ช่วงเวลา"></label-custom>
+                  <v-row dense class="mb-3">
+                    <v-col class="px-2" cols="12" sm="6">
+                      <v-text-field
+                        :disabled="disable"
+                        :outlined="!disable"
+                        :filled="disable"
+                        dense
+                        style="position: absolute; z-index: 4"
+                        @focus="
+                          SelectedStartDate(
+                            $event,
+                            teach_day.class_date,
+                            class_date.class_date_range.start_time
+                          )
+                        "
+                        :rules="rules.start_time"
+                        v-model="class_date.class_date_range.start_time"
+                      ></v-text-field>
+                      <VueTimepicker
+                        class="time-picker-hidden"
+                        :hour-range="
+                          checkHour(teach_day.class_date, class_date_index)
+                        "
+                        :minute-range="
+                          checkMinute(
+                            teach_day.class_date,
+                            class_date.class_date_range.start_time_object.HH
+                          )
+                        "
+                        hide-clear-button
+                        advanced-keyboard
+                        v-model="class_date.class_date_range.start_time_object"
+                        @change="
+                          ChangeStartDate(
+                            class_date.class_date_range,
+                            teach_day.class_date
+                          )
+                        "
+                      >
+                      </VueTimepicker>
+                    </v-col>
+                    <v-col class="px-2" cols="12" sm="6">
+                      <v-text-field
+                        disabled
+                        :outlined="!disable"
+                        :filled="disable"
+                        dense
+                        style="position: absolute; z-index: 4"
+                        :rules="rules.end_time"
+                        v-model="class_date.class_date_range.end_time"
+                      ></v-text-field>
+                      <VueTimepicker
+                        class="time-picker-hidden"
+                        disabled
+                        hide-clear-button
+                        advanced-keyboard
+                        v-model="class_date.class_date_range.end_time_object"
+                        close-on-complete
+                      ></VueTimepicker>
+                    </v-col>
+                  </v-row>
+                </v-col>
+                <v-col cols="12" sm="2">
+                  <label-custom
+                    required
+                    text="นักเรียนที่รับได้"
+                  ></label-custom>
+                  <v-text-field
+                    class="input-text-right"
+                    dense
+                    :disabled="disable"
+                    :outlined="!disable"
+                    :filled="disable"
+                    type="number"
+                    suffix="คน"
+                    @focus="$event.target.select()"
+                    :rules="rules.students"
+                    @change="ChangeCourseData(course_data)"
+                    v-model="class_date.students"
+                    placeholder="ระบุนักเรียนที่รับได้"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="6" sm="2" class="d-flex align-center">
+                  <v-btn
+                    :disabled="disable"
+                    text
+                    v-if="class_date_index === teach_day.class_date.length - 1"
+                    color="green"
+                    @click="addTime(teach_day)"
+                  >
+                    <v-icon>mdi-timer-plus-outline</v-icon>
+                    เพิ่มเวลา
                   </v-btn>
                 </v-col>
-                <v-col cols="6" sm="2">
-                
-                  <template v-if="teach_day.day_of_week_id">
-                    <!-- {{  edited +'*'+ disable}} -->
+                <v-col cols="6" sm="2" class="d-flex align-center">
+                  <template v-if="class_date.class_date_range.day_of_week_id">
+                    <!-- {{ class_date.class_date_range.time_id }} -->
                     <v-btn
-                      :disabled="disable || !edited"
+                      :disabled="disable"
+                      v-if="teach_day.class_date.length > 1"
                       text
                       color="red"
-                      v-if="coach.teach_day_data.length > 1"
-                      @click="removeDayOfWeekData(coach.teach_day_data, teach_day.day_of_week_id)"
-                      ><v-icon>mdi-calendar-plus-outline</v-icon>
-                      ลบวันสอน
+                      @click="
+                        removeTimeData(
+                          teach_day.class_date,
+                          class_date.class_date_range.time_id
+                        )
+                      "
+                    >
+                      <v-icon>mdi-timer-minus-outline</v-icon>
+                      ลบเวลา
                     </v-btn>
                   </template>
                   <template v-else>
                     <v-btn
                       :disabled="disable"
+                      v-if="teach_day.class_date.length > 1"
                       text
                       color="red"
-                      v-if="coach.teach_day_data.length > 1"
-                      @click="removeTeachDay(coach.teach_day_data, teach_day_index)"
-                      ><v-icon>mdi-calendar-plus-outline</v-icon>
-                      ลบวันสอน
+                      @click="
+                        removeTime(teach_day.class_date, class_date_index)
+                      "
+                    >
+                      <v-icon>mdi-timer-minus-outline</v-icon>
+                      ลบเวลา
                     </v-btn>
                   </template>
                 </v-col>
               </v-row>
-              <!-- CLASS TIME -->
-              <template
-                v-for="(class_date, class_date_index) in teach_day.class_date"
-              >
-                <v-row dense :key="`${class_date_index}-class-date`">
-                  <!-- <pre>{{ coach.disabled_hours }}</pre> -->
-                  <v-col cols="12" sm="6">
-                    <!-- <pre>{{class_date}}</pre> -->
-                    <label-custom required text="ช่วงเวลา"></label-custom>
-                    <v-row dense class="mb-3">
-                      <v-col class="px-2" cols="12" sm="6">
-                        <v-text-field
-                          :disabled="disable"
-                          :outlined="!disable"
-                          :filled="disable"
-                          dense
-                          style="position: absolute; z-index: 4"
-                          @focus="SelectedStartDate($event, teach_day.class_date, class_date.class_date_range.start_time)"
-                          :rules="rules.start_time"
-                          v-model="class_date.class_date_range.start_time"
-                        ></v-text-field>
-                        <VueTimepicker 
-                          class="time-picker-hidden" 
-                          :hour-range="checkHour(teach_day.class_date, class_date_index)"
-                          :minute-range="checkMinute(teach_day.class_date, class_date.class_date_range.start_time_object.HH)"
-                          hide-clear-button 
-                          advanced-keyboard 
-                          v-model="class_date.class_date_range.start_time_object" 
-                          @change="ChangeStartDate(class_date.class_date_range, teach_day.class_date)">
-                        </VueTimepicker>
-                      </v-col>
-                      <v-col class="px-2" cols="12" sm="6">
-                        <v-text-field
-                          disabled
-                          :outlined="!disable"
-                          :filled="disable"
-                          dense
-                          style="position: absolute; z-index: 4"
-                          :rules="rules.end_time"
-                          v-model="class_date.class_date_range.end_time"
-                        ></v-text-field>
-                        <VueTimepicker 
-                          class="time-picker-hidden" 
-                          disabled 
-                          hide-clear-button 
-                          advanced-keyboard  
-                          v-model="class_date.class_date_range.end_time_object" 
-                          close-on-complete></VueTimepicker> 
-                      </v-col>
-                    </v-row>
-                  </v-col>
-                  <v-col cols="12" sm="2">
-                    <label-custom required text="นักเรียนที่รับได้"></label-custom>
-                    <v-text-field
-                      class="input-text-right"
-                      dense
-                      :disabled="disable"
-                      :outlined="!disable"
-                      :filled="disable"
-                      type="number"
-                      suffix="คน"
-                      @focus="$event.target.select()"
-                      :rules="rules.students"
-                      @change="ChangeCourseData(course_data)"
-                      v-model="class_date.students"
-                      placeholder="ระบุนักเรียนที่รับได้"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="6" sm="2" class="d-flex align-center">
-                    <v-btn
-                      :disabled="disable"
-                      text
-                      v-if="class_date_index === teach_day.class_date.length - 1"
-                      color="green"
-                      @click="addTime(teach_day)"
-                    >
-                      <v-icon>mdi-timer-plus-outline</v-icon>
-                      เพิ่มเวลา
-                    </v-btn>
-                  </v-col>
-                  <v-col cols="6" sm="2" class="d-flex align-center">
-                    <template v-if="class_date.class_date_range.day_of_week_id">
-                      <!-- {{ class_date.class_date_range.time_id }} -->
-                      <v-btn
-                        :disabled="disable"
-                        v-if="teach_day.class_date.length > 1"
-                        text
-                        color="red"
-                        @click="removeTimeData(teach_day.class_date, class_date.class_date_range.time_id)"
-                      >
-                        <v-icon>mdi-timer-minus-outline</v-icon>
-                        ลบเวลา
-                      </v-btn>
-                    </template>
-                    <template v-else>
-                      <v-btn
-                        :disabled="disable"
-                        v-if="teach_day.class_date.length > 1"
-                        text
-                        color="red"
-                        @click="removeTime(teach_day.class_date, class_date_index)"
-                      >
-                        <v-icon>mdi-timer-minus-outline</v-icon>
-                        ลบเวลา
-                      </v-btn>
-                    </template>
-                  </v-col>
-                </v-row>
-              </template>
-            </v-card-text>
-          </template>
+            </template>
+          </v-card-text>
+        </template>
       </v-card>
     </template>
   </div>
 </template>
 <script>
-
 import LabelCustom from "../label/labelCustom.vue";
 import { mapGetters, mapActions } from "vuex";
 // import { Input, TimePicker } from "ant-design-vue";
 import moment from "moment";
 import Swal from "sweetalert2";
-import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
-import {generateTimeArrayHours} from "../../functions/functions"
+import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
+import { generateTimeArrayHours } from "../../functions/functions";
 export default {
   components: {
     LabelCustom,
-    VueTimepicker 
+    VueTimepicker,
   },
   props: {
     color: { type: String, default: "#fcfcfc" },
@@ -308,8 +351,7 @@ export default {
     ],
     rules: {
       course: [(val) => (val || "").length > 0 || "โปรดเลือกโค้ช"],
-      class_date: [  
-      (val) => (val || "").length > 0 || 'โปรดเลือกวันที่'],
+      class_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันที่"],
       start_time: [(val) => (val || "").length > 0 || "โปรดเลือกเวลาเริ่ม"],
       end_time: [(val) => (val || "").length > 0 || "โปรดเลือกเวลาสิ้นสุด"],
       students: [(val) => (val || "") > 0 || "โปรดระบุจำนวนนักเรียน"],
@@ -327,99 +369,140 @@ export default {
       teach_days: "CourseModules/getTeachDays",
       course_monitors: "CourseMonitorModules/getCourseMonitor",
     }),
-    setFunction(){
-      if( this.course_data.course_id){
+    setFunction() {
+      if (this.course_data.course_id) {
         this.GetShortCourseMonitor({
           course_id: this.course_data.course_id,
         });
       }
-      return ""
-    }
+      return "";
+    },
   },
   methods: {
     ...mapActions({
       ChangeCourseData: "CourseModules/ChangeCourseData",
       GetTeachDays: "CourseModules/GetTeachDays",
-      DeleteDayOfWeek : "CourseModules/DeleteDayOfWeek",
-      DeleteTime : "CourseModules/DeleteTime",
+      DeleteDayOfWeek: "CourseModules/DeleteDayOfWeek",
+      DeleteTime: "CourseModules/DeleteTime",
       GetCourse: "CourseModules/GetCourse",
       // monitor
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
     }),
-    checkMinute(teach_day, hours){
-      if(teach_day.length > 1){
-        let timeused = []
-        let timeMinUsed = []
+    checkMinute(teach_day, hours) {
+      if (teach_day.length > 1) {
+        let timeused = [];
+        let timeMinUsed = [];
         timeused = teach_day.map((v) => {
-          return {start_time : v.class_date_range.start_time_object, end_time : v.class_date_range.end_time_object}
-        })
-        timeused.forEach((time)=>{
-          if(hours === time.end_time.HH ){
-            let min_end = parseInt(time.end_time.mm)
-            for (let min = min_end+1;  min < 60 ; min++) {
+          return {
+            start_time: v.class_date_range.start_time_object,
+            end_time: v.class_date_range.end_time_object,
+          };
+        });
+        timeused.forEach((time) => {
+          if (hours === time.end_time.HH) {
+            let min_end = parseInt(time.end_time.mm);
+            for (let min = min_end + 1; min < 60; min++) {
               timeMinUsed.push(min);
             }
           }
-        })
+        });
         // console.log("timeMinUsed => ",timeMinUsed)
-        return timeMinUsed
+        return timeMinUsed;
       }
     },
-    checkHour(teach_day, timeindex){
-      let timeused = []
-      let timeusedHH = []
+    checkHour(teach_day, timeindex) {
+      let timeused = [];
+      let timeusedHH = [];
       // let timeInUsed = []
       timeused = teach_day.map((v) => {
-       return {start_time : v.class_date_range.start_time_object, end_time : v.class_date_range.end_time_object}
-      })
-      timeused.forEach((time, index)=>{
+        return {
+          start_time: v.class_date_range.start_time_object,
+          end_time: v.class_date_range.end_time_object,
+        };
+      });
+      timeused.forEach((time, index) => {
         // console.log("timeindex", timeindex)
         // console.log("index", index)
         // console.log("Time :",time)
-        if(timeindex !== index){
-          if(time.start_time.HH){
-            timeusedHH.push(parseInt(time.start_time.HH))
+        if (timeindex !== index) {
+          if (time.start_time.HH) {
+            timeusedHH.push(parseInt(time.start_time.HH));
           }
         }
-      })
+      });
       // console.log(generateTimeArrayHours(timeusedHH))
-      return generateTimeArrayHours(timeusedHH)
+      return generateTimeArrayHours(timeusedHH);
     },
-    ChangeStartDate(date){
-      if(!date.start_time_object.mm){
-        date.start_time_object.mm = "00"
+    ChangeStartDate(date) {
+      if (!date.start_time_object.mm) {
+        date.start_time_object.mm = "00";
       }
-      date.start_time = `${date.start_time_object.HH}:${date.start_time_object.mm}`
-      if((parseInt(date.start_time_object.HH) + parseInt(this.course_data.course_hours_obj.HH)) >= 24){
-          date.end_time_object.HH = `${(parseInt(date.start_time_object.HH) +  parseInt(this.course_data.course_hours_obj.HH)) - 24}`.padStart(2, '0')
-      }else{
-          date.end_time_object.HH = `${(parseInt(date.start_time_object.HH) + parseInt(this.course_data.course_hours_obj.HH))}`.padStart(2, '0')
-          // date.end_time_object.mm = `${parseInt(date.start_time_object.mm) + parseInt(this.course_data.course_hours_obj.mm)}`
+      date.start_time = `${date.start_time_object.HH}:${date.start_time_object.mm}`;
+      if (
+        parseInt(date.start_time_object.HH) +
+          parseInt(this.course_data.course_hours_obj.HH) >=
+        24
+      ) {
+        date.end_time_object.HH = `${
+          parseInt(date.start_time_object.HH) +
+          parseInt(this.course_data.course_hours_obj.HH) -
+          24
+        }`.padStart(2, "0");
+      } else {
+        date.end_time_object.HH = `${
+          parseInt(date.start_time_object.HH) +
+          parseInt(this.course_data.course_hours_obj.HH)
+        }`.padStart(2, "0");
+        // date.end_time_object.mm = `${parseInt(date.start_time_object.mm) + parseInt(this.course_data.course_hours_obj.mm)}`
       }
-      if((parseInt(date.start_time_object.mm) + parseInt(this.course_data.course_hours_obj.mm) > 60)){
-        date.end_time_object.mm = `${(parseInt(date.start_time_object.mm) + parseInt(this.course_data.course_hours_obj.mm)) - 60}`.padStart(2,'0')
-      }else{
-        date.end_time_object.mm = `${parseInt(date.start_time_object.mm) + parseInt(this.course_data.course_hours_obj.mm)}`.padStart(2, '0')
+      if (
+        parseInt(date.start_time_object.mm) +
+          parseInt(this.course_data.course_hours_obj.mm) >
+        60
+      ) {
+        date.end_time_object.mm = `${
+          parseInt(date.start_time_object.mm) +
+          parseInt(this.course_data.course_hours_obj.mm) -
+          60
+        }`.padStart(2, "0");
+      } else {
+        date.end_time_object.mm = `${
+          parseInt(date.start_time_object.mm) +
+          parseInt(this.course_data.course_hours_obj.mm)
+        }`.padStart(2, "0");
       }
       // date.end_time_object.mm = date.start_time_object.mm
-      date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`
+      date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`;
       // this.checkHour(teach_day)
     },
-   
-    SelectedStartDate(e){
+
+    SelectedStartDate(e) {
       e.target.parentNode.parentNode.parentNode.parentNode.parentNode
-      .getElementsByClassName("time-picker-hidden")[0]
-      .getElementsByTagName("input")[0].focus()
+        .getElementsByClassName("time-picker-hidden")[0]
+        .getElementsByTagName("input")[0]
+        .focus();
       // console.log( timepickerElement)
     },
-    checkStudyByDay(e, data){
+    checkStudyByDay(e, data) {
       // console.log(e.target.click())
-      if(!data.class_open){
-        console.log(this.course_monitors.filter(v => v.m_day_of_week_id === data.day_of_week_id))
-        if(this.course_monitors.filter(v => v.m_day_of_week_id === data.day_of_week_id).length > 0){
-          if(this.course_monitors.filter(v => v.m_day_of_week_id === data.day_of_week_id).some(v => v.m_current_student > 0)){
-            data.class_open = true
-            e.target.click()
+      if (!data.class_open) {
+        console.log(
+          this.course_monitors.filter(
+            (v) => v.m_day_of_week_id === data.day_of_week_id
+          )
+        );
+        if (
+          this.course_monitors.filter(
+            (v) => v.m_day_of_week_id === data.day_of_week_id
+          ).length > 0
+        ) {
+          if (
+            this.course_monitors
+              .filter((v) => v.m_day_of_week_id === data.day_of_week_id)
+              .some((v) => v.m_current_student > 0)
+          ) {
+            data.class_open = true;
+            e.target.click();
             Swal.fire({
               icon: "error",
               title: "ไม่สามารถปิดวันสอนได้",
@@ -428,7 +511,7 @@ export default {
               showCancelButton: false,
               confirmButtonText: "ตกลง",
               cancelButtonText: "ยกเลิก",
-            })  
+            });
           }
         }
       }
@@ -485,11 +568,15 @@ export default {
       value.splice(value.indexOf(item), 1);
     },
     disabledMinutes(hour, coachIndex, teachDayIndex) {
-      const teach_days_used = this.course_data.coachs[coachIndex].teach_days_used;
-      const current_teach_day = this.course_data.coachs[coachIndex].teach_day_data[teachDayIndex];
+      const teach_days_used =
+        this.course_data.coachs[coachIndex].teach_days_used;
+      const current_teach_day =
+        this.course_data.coachs[coachIndex].teach_day_data[teachDayIndex];
       const used_minutes = [];
       teach_days_used.forEach((teach_day) => {
-        if ( current_teach_day.teach_day.includes(parseInt(teach_day.date_value))) {
+        if (
+          current_teach_day.teach_day.includes(parseInt(teach_day.date_value))
+        ) {
           teach_day.times.forEach((time) => {
             const start_hour = parseInt(time.start.split(":")[0]);
             const start_minute = parseInt(time.start.split(":")[1]);
@@ -548,8 +635,13 @@ export default {
         console.log("current_teach_day :", current_teach_day.teach_day);
         teach_days_used.forEach((teach_day) => {
           console.log("teach_day :", teach_day);
-          console.log( "current_teach_day :", current_teach_day.teach_day.includes(parseInt(teach_day.date_value)) );
-          if (current_teach_day.teach_day.includes(parseInt(teach_day.date_value)) ) {
+          console.log(
+            "current_teach_day :",
+            current_teach_day.teach_day.includes(parseInt(teach_day.date_value))
+          );
+          if (
+            current_teach_day.teach_day.includes(parseInt(teach_day.date_value))
+          ) {
             teach_day.times.forEach((time) => {
               const start_hour = parseInt(time.start.split(":")[0]);
               const end_hour = parseInt(time.end.split(":")[0]);
@@ -571,14 +663,16 @@ export default {
     },
 
     genStartTimeEndTime(value, coach_index, teach_day_index, class_date_index) {
-      console.log(value, coach_index, teach_day_index, class_date_index)
+      console.log(value, coach_index, teach_day_index, class_date_index);
       if (value) {
         // console.log("course_hours =>", this.course_data.course_hours);
         // console.log("start =>", value);
         const end = moment(value).add(this.course_data.course_hours, "hour");
         // console.log("end =>", end);
         // console.log("teach_day=>",this.course_data.coachs[coach_index])
-        this.course_data.coachs[coach_index].teach_day_data[teach_day_index].class_date[class_date_index].class_date_range.end_time = end;
+        this.course_data.coachs[coach_index].teach_day_data[
+          teach_day_index
+        ].class_date[class_date_index].class_date_range.end_time = end;
       }
       this.ChangeCourseData(this.course_data);
     },
@@ -614,10 +708,10 @@ export default {
           {
             class_date_range: {
               start_time: "",
-              start_time_object : {HH:"",mm:""},
+              start_time_object: { HH: "", mm: "" },
               menu_start_time: false,
               end_time: "",
-              end_time_object : {HH:"",mm:""},
+              end_time_object: { HH: "", mm: "" },
               menu_end_time: false,
             },
             students: 0,
@@ -635,10 +729,10 @@ export default {
       data.class_date.push({
         class_date_range: {
           start_time: "",
-          start_time_object : {HH:"",mm:""},
+          start_time_object: { HH: "", mm: "" },
           menu_start_time: false,
           end_time: "",
-          end_time_object : {HH:"",mm:""},
+          end_time_object: { HH: "", mm: "" },
           menu_end_time: false,
         },
         students: 0,
@@ -649,7 +743,7 @@ export default {
       data.splice(index, 1);
       this.ChangeCourseData(this.course_data);
     },
-    removeTimeData(data, time_id){
+    removeTimeData(data, time_id) {
       Swal.fire({
         icon: "question",
         title: "ต้องการลบเวลาสอนนี้ใช่หรือไม่",
@@ -659,14 +753,17 @@ export default {
         cancelButtonText: "ยกเลิก",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          this.DeleteTime({time_id:time_id}).then(()=>{
-            this.$store.dispatch("CourseModules/GetCourse", this.$route.params.course_id );
-          })
+          this.DeleteTime({ time_id: time_id }).then(() => {
+            this.$store.dispatch(
+              "CourseModules/GetCourse",
+              this.$route.params.course_id
+            );
+          });
         }
-      })
+      });
     },
-    removeDayOfWeekData(data, day_of_week_id){
-      console.log(data, day_of_week_id)
+    removeDayOfWeekData(data, day_of_week_id) {
+      console.log(data, day_of_week_id);
       Swal.fire({
         icon: "question",
         title: "ต้องการลบวันสอนนี้ใช่หรือไม่",
@@ -676,13 +773,15 @@ export default {
         cancelButtonText: "ยกเลิก",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          this.DeleteDayOfWeek({day_of_week_id:day_of_week_id}).then(()=>{
-            this.$store.dispatch("CourseModules/GetCourse", this.$route.params.course_id );
-          })
+          this.DeleteDayOfWeek({ day_of_week_id: day_of_week_id }).then(() => {
+            this.$store.dispatch(
+              "CourseModules/GetCourse",
+              this.$route.params.course_id
+            );
+          });
         }
-      })
+      });
     },
-    
   },
 };
 </script>

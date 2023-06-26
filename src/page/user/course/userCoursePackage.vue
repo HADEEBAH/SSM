@@ -159,6 +159,7 @@
               <v-row dense>
                 <v-col cols="12">
                   <v-btn
+                    :disabled="option.net_price < 0"
                     depressed
                     class="w-full font-bold white--text"
                     color="#ff6b81"

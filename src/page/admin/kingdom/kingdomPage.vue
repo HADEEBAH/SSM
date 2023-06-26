@@ -58,7 +58,7 @@
                     cols="12"
                     class="flex align-center justify-center text-h5"
                   >
-                    อัพโหลดภาพหน้าปกคอร์สเรียน
+                    อัพโหลดภาพหน้าปกอาณาจักร
                   </v-col>
                   <v-col
                     cols="12"

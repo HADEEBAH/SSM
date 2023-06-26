@@ -113,3 +113,22 @@ export const CheckFileSizeV2 = (file, id) => { //check file รอ merge กั�
     }
     return true
 }
+
+export const CheckFileSizeType = (file, id) => { //check file รอ merge กับ พี่น๊อต
+  const format = [
+    "image/png",
+    "image/jpeg"
+  ]
+  const key = document.getElementById(id)
+  if (!format.includes(file.type)) {
+    key.value = null
+    Swal.fire({
+      icon: "error",
+      title: "รูปแบบไฟล์ไม่ถูกต้อง",
+      text: "( กรุณาแนบไฟล์ที่มีนามสกุล jpg, jpeg, png )",
+      confirmButtonText: "ตกลง"
+    })
+    return false
+  }
+  return true
+}

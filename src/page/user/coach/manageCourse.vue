@@ -630,7 +630,7 @@
           </v-col>
         </v-row>
         <v-row dense>
-          <v-col cols="7"  @click="SelectedStatus('all')">
+          <v-col cols="7" @click="SelectedStatus('all')">
             <img-card
               :color="select_status == 'all' ? '#FBF3F5' : '#ffffff'"
               class="cursor-pointer"
@@ -683,12 +683,11 @@
                   >
                   <v-col class="text-sm">รายการ</v-col>
                 </v-row>
-               
               </template>
             </img-card>
           </v-col>
         </v-row>
-        <v-row dense class="mb-3" >
+        <v-row dense class="mb-3">
           <v-col cols="4" @click="SelectedStatus('pending')">
             <img-card
               :color="select_status == 'pending' ? '#FBF3F5' : '#ffffff'"
@@ -712,7 +711,9 @@
                   <v-col
                     align="end"
                     class="text-3xl font-bold text-[#FCC419]"
-                    >{{coach_leaves.filter((v) => v.status === "pending").length}}</v-col
+                    >{{
+                      coach_leaves.filter((v) => v.status === "pending").length
+                    }}</v-col
                   >
                   <v-col class="text-sm">รายการ</v-col>
                 </v-row>
@@ -742,7 +743,9 @@
                   <v-col
                     align="end"
                     class="text-3xl font-bold text-[#F03D3E]"
-                    >{{ coach_leaves.filter((v) => v.status === "reject").length}}</v-col
+                    >{{
+                      coach_leaves.filter((v) => v.status === "reject").length
+                    }}</v-col
                   >
                   <v-col class="text-sm">รายการ</v-col>
                 </v-row>
@@ -785,7 +788,11 @@
             <v-data-table
               class="elevation-1 header-table"
               :headers="column"
-              :items="select_status == 'all' ?  coach_leaves : coach_leaves.filter(v => v.status === select_status)"
+              :items="
+                select_status == 'all'
+                  ? coach_leaves
+                  : coach_leaves.filter((v) => v.status === select_status)
+              "
               :single-expand="singleExpand"
               :expanded.sync="expanded"
               item-key="coachLeaveId"
@@ -845,24 +852,39 @@
               </template>
               <template v-slot:expanded-item="{ headers, item }">
                 <td :colspan="headers.length" class="py-3">
-                  <div v-for="(date,index) in item.dates" :key="`${index}-courses`">
-                    <v-row v-for="(course,index) in date.courses" :key="`${index}-courses`">
+                  <div
+                    v-for="(date, index) in item.dates"
+                    :key="`${index}-courses`"
+                  >
+                    <v-row
+                      v-for="(course, index) in date.courses"
+                      :key="`${index}-courses`"
+                    >
                       <v-col cols="auto" class="font-bold">
-                      {{ date.date ? GenDateStr(new Date(date.date)) : "-" }}                      
+                        {{ date.date ? GenDateStr(new Date(date.date)) : "-" }}
                       </v-col>
-                     <v-col class="font-bold"
-                      >คอร์ส:
-                      {{ `${course.courseNameTh}(${course.courseNameEn})` }}</v-col>
-                    <v-col cols="5" v-if="course.type !== 'date'"
-                      >ผู้สอนแทน:
-                      {{ `${course.substituteCoachFirstNameTh} ${course.substituteCoachLastNameTh}` }}</v-col>
-                    <v-col cols="5" v-if="course.type === 'date'"
-                      >วันที่สอนแทน:
-                      {{ `${GenDateStr(new Date(course.compensationDate))}(${course.compensationStartTime}:${course.compensationEndTime})น.`}}
-                    </v-col>
-                  </v-row>
+                      <v-col class="font-bold"
+                        >คอร์ส:
+                        {{
+                          `${course.courseNameTh}(${course.courseNameEn})`
+                        }}</v-col
+                      >
+                      <v-col cols="5" v-if="course.type !== 'date'"
+                        >ผู้สอนแทน:
+                        {{
+                          `${course.substituteCoachFirstNameTh} ${course.substituteCoachLastNameTh}`
+                        }}</v-col
+                      >
+                      <v-col cols="5" v-if="course.type === 'date'"
+                        >วันที่สอนแทน:
+                        {{
+                          `${GenDateStr(new Date(course.compensationDate))}(${
+                            course.compensationStartTime
+                          }:${course.compensationEndTime})น.`
+                        }}
+                      </v-col>
+                    </v-row>
                   </div>
-                  
                 </td>
               </template>
             </v-data-table>
@@ -933,9 +955,16 @@
                 </div>
               </v-col>
             </v-row>
-            <v-row v-if="edited_coach_leave_data.status === 'reject'" dense class="mb-3">
+            <v-row
+              v-if="edited_coach_leave_data.status === 'reject'"
+              dense
+              class="mb-3"
+            >
               <v-col>
-                หมายเหตุ: <span class="font-bold">{{ edited_coach_leave_data.remarkReject }}</span> 
+                หมายเหตุ:
+                <span class="font-bold">{{
+                  edited_coach_leave_data.remarkReject
+                }}</span>
               </v-col>
             </v-row>
             <v-card flat class="mb-3">
@@ -945,7 +974,9 @@
                     <div>วันที่ลา</div>
                     <div class="font-semibold pl-2">
                       {{
-                        `${genDate(edited_coach_leave_data.startDate)} - ${genDate(edited_coach_leave_data.endDate)}`
+                        `${genDate(
+                          edited_coach_leave_data.startDate
+                        )} - ${genDate(edited_coach_leave_data.endDate)}`
                       }}
                     </div>
                   </v-col>
@@ -989,16 +1020,16 @@
             <template v-if="edited_coach_leave_data?.dates.length > 0">
               <div
                 class="mb-3"
-                v-for="(date, index_date ) in edited_coach_leave_data.dates"
+                v-for="(date, index_date) in edited_coach_leave_data.dates"
                 :key="`${index_date}-course`"
               >
                 <v-row dense>
                   <v-col cols="auto">
-                    <v-icon color="#ff6b81"
-                      >mdi-calendar-outline</v-icon
-                    >
+                    <v-icon color="#ff6b81">mdi-calendar-outline</v-icon>
                   </v-col>
-                  <v-col class="font-bold text-lg"> {{ date.date ? GenDateStr(new Date(date.date)) : "-" }} </v-col>
+                  <v-col class="font-bold text-lg">
+                    {{ date.date ? GenDateStr(new Date(date.date)) : "-" }}
+                  </v-col>
                 </v-row>
                 <v-card
                   class="mb-3"
@@ -1006,68 +1037,74 @@
                   v-for="(course, index) in date.courses"
                   :key="index"
                 >
-                <v-card-text class="rounded-md border">
-                  <v-radio-group readonly v-model="course.type" row>
-                    <v-radio
-                      label="มีผู้สอนแทน"
-                      color="#ff6b81"
-                      value="teach"
-                    ></v-radio>
-                    <v-radio
-                      label="ไม่มีผู้สอนแทน"
-                      color="#ff6b81"
-                      value="date"
-                    ></v-radio>
-                  </v-radio-group>
-                  <v-row dense>
-                    <v-col cols="auto">
-                      <v-icon color="#ff6b81"
-                        >mdi-card-account-details-outline</v-icon
-                      >
-                    </v-col>
-                    <v-col class="font-bold text-lg"> คอร์ส </v-col>
-                  </v-row>
-                  <v-divider class="my-2"></v-divider>
-                  <v-card flat>
-                    <v-card-text class="border border-1 rounded-lg">
-                      <v-row dense>
-                        <v-col>
-                          <div>ชื่อคอร์ส</div>
-                          <div class="font-semibold pl-2">
-                            {{
-                              `${course.courseNameTh} ${course.startTime}-${course.endTime}`
-                            }}
-                          </div>
-                        </v-col>
-                      </v-row>
-                      <v-row dense v-if="course.type === 'teach'">
-                        <v-col>
-                          <div>ผู้สอนแทน</div>
-                          <div class="font-semibold pl-2">
-                            {{
-                              `${course.substituteCoachFirstNameTh} ${course.substituteCoachLastNameTh}`
-                            }}
-                          </div>
-                        </v-col>
-                      </v-row>
-                      <v-row dense v-if="course.type === 'date'">
-                        <v-col>
-                          <div>วันที่ชดเชย</div>
-                          <div class="font-semibold pl-2">
-                            {{`${GenDateStr(new Date(course.compensationDate))} (${course.compensationStartTime}-${course.compensationEndTime})`}}
-                          </div>
-                        </v-col>
-                      </v-row>
-                    </v-card-text>
-                  </v-card>
-                </v-card-text>
-               </v-card>
+                  <v-card-text class="rounded-md border">
+                    <v-radio-group readonly v-model="course.type" row>
+                      <v-radio
+                        label="มีผู้สอนแทน"
+                        color="#ff6b81"
+                        value="teach"
+                      ></v-radio>
+                      <v-radio
+                        label="ไม่มีผู้สอนแทน"
+                        color="#ff6b81"
+                        value="date"
+                      ></v-radio>
+                    </v-radio-group>
+                    <v-row dense>
+                      <v-col cols="auto">
+                        <v-icon color="#ff6b81"
+                          >mdi-card-account-details-outline</v-icon
+                        >
+                      </v-col>
+                      <v-col class="font-bold text-lg"> คอร์ส </v-col>
+                    </v-row>
+                    <v-divider class="my-2"></v-divider>
+                    <v-card flat>
+                      <v-card-text class="border border-1 rounded-lg">
+                        <v-row dense>
+                          <v-col>
+                            <div>ชื่อคอร์ส</div>
+                            <div class="font-semibold pl-2">
+                              {{
+                                `${course.courseNameTh} ${course.startTime}-${course.endTime}`
+                              }}
+                            </div>
+                          </v-col>
+                        </v-row>
+                        <v-row dense v-if="course.type === 'teach'">
+                          <v-col>
+                            <div>ผู้สอนแทน</div>
+                            <div class="font-semibold pl-2">
+                              {{
+                                `${course.substituteCoachFirstNameTh} ${course.substituteCoachLastNameTh}`
+                              }}
+                            </div>
+                          </v-col>
+                        </v-row>
+                        <v-row dense v-if="course.type === 'date'">
+                          <v-col>
+                            <div>วันที่ชดเชย</div>
+                            <div class="font-semibold pl-2">
+                              {{
+                                `${GenDateStr(
+                                  new Date(course.compensationDate)
+                                )} (${course.compensationStartTime}-${
+                                  course.compensationEndTime
+                                })`
+                              }}
+                            </div>
+                          </v-col>
+                        </v-row>
+                      </v-card-text>
+                    </v-card>
+                  </v-card-text>
+                </v-card>
               </div>
               <v-row dense>
                 <v-col class="font-bold text-lg"> ไฟล์แนบ </v-col>
               </v-row>
               <v-divider class="my-2"></v-divider>
-              <template  v-for="(file, index) of attachment_leave">
+              <template v-for="(file, index) of attachment_leave">
                 <v-card
                   v-if="file.coachLeaveAttachmentId"
                   @click="dowloadFile(file)"
@@ -1098,13 +1135,15 @@
                     </v-row>
                   </v-card-text>
                 </v-card>
-                <v-card flat v-else :key="`${index}-file`" >
-                  <v-card-text class="border-2 border-[#ff6b81] rounded-lg" align="center">
+                <v-card flat v-else :key="`${index}-file`">
+                  <v-card-text
+                    class="border-2 border-[#ff6b81] rounded-lg"
+                    align="center"
+                  >
                     ไม่พบไฟล์แนบ
                   </v-card-text>
                 </v-card>
               </template>
-              
             </template>
           </v-card-text>
         </v-card>
@@ -1260,7 +1299,14 @@ import coachLeaveForm from "../../../components/coach_leave/coachLeaveForm.vue";
 // import LoadingOverlay from '../../../components/loading/loadingOverlay.vue';
 export default {
   name: "menageCourse",
-  components: { calendarCoach, headerPage, rowData, imgCard, labelCustom, coachLeaveForm },
+  components: {
+    calendarCoach,
+    headerPage,
+    rowData,
+    imgCard,
+    labelCustom,
+    coachLeaveForm,
+  },
   data: () => ({
     singleExpand: false,
     expanded: [],
@@ -1363,7 +1409,7 @@ export default {
     show_comment_data: {},
     show_potential_comment: false,
     show_potential_data: {},
-    select_status : "all",
+    select_status: "all",
   }),
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
@@ -1376,9 +1422,9 @@ export default {
     }
   },
   watch: {
-    tab: function(){
+    tab: function () {
       this.GetMyCourses({ coach_id: this.user_detail.account_id });
-    }
+    },
   },
   computed: {
     ...mapGetters({
@@ -1390,8 +1436,7 @@ export default {
       coach_check_in: "CoachModules/getCoachCheckIn",
       my_courses_is_loading: "CoachModules/getMyCoursesIsLoading",
       profile_detail: "ProfileModules/getProfileDetail",
-      show_dialog_coach_leave_form : "CoachModules/getShowDialogCoachLeaveForm"
-      
+      show_dialog_coach_leave_form: "CoachModules/getShowDialogCoachLeaveForm",
     }),
     SetFunctionsComputed() {
       this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
@@ -1401,7 +1446,7 @@ export default {
     genToday() {
       return moment(new Date()).format("YYYY-MM-DD");
     },
-    
+
     validateCoachLeave() {
       let start_date = this.coach_leave_data.start_date ? true : false;
       let end_date = this.coach_leave_data.end_date ? true : false;
@@ -1431,19 +1476,19 @@ export default {
       GetProfileDetail: "ProfileModules/GetProfileDetail",
       ShowDialogCoachLeaveForm: "CoachModules/ShowDialogCoachLeaveForm",
     }),
-    SelectedStatus(status){
-      console.log(status)
-      this.select_status = status
+    SelectedStatus(status) {
+      console.log(status);
+      this.select_status = status;
     },
-    GenDateStr(date){
+    GenDateStr(date) {
       const options = {
         year: "numeric",
         month: "short",
         day: "numeric",
         calendar: "buddhist",
-        era: "short"
+        era: "short",
       };
-      return date.toLocaleDateString("th-TH",options)
+      return date.toLocaleDateString("th-TH", options);
     },
     openFileSummary(file) {
       // console.log(file)
@@ -1545,9 +1590,9 @@ export default {
       });
     },
     dowloadFile(file) {
-      console.log(file.attachmentFile)
-      let url = `${process.env.VUE_APP_URL}/api/v1/files/${file.attachmentFile}`
-      window.open(url, '_blank');
+      console.log(file.attachmentFile);
+      let url = `${process.env.VUE_APP_URL}/api/v1/files/${file.attachmentFile}`;
+      window.open(url, "_blank");
     },
     saveCoachLeave() {
       Swal.fire({
@@ -1601,13 +1646,13 @@ export default {
       }
     },
     showLeaveForm() {
-      this.ShowDialogCoachLeaveForm(true)
+      this.ShowDialogCoachLeaveForm(true);
       this.show_leave_form = true;
     },
     closeDialogLeaveForm() {
-      this.selected_files = []
+      this.selected_files = [];
       this.show_leave_form = false;
-      this.ShowDialogCoachLeaveForm(false)
+      this.ShowDialogCoachLeaveForm(false);
       this.coach_leave_data = {
         menu_start_date: false,
         start_date: null,

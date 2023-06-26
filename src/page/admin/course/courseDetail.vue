@@ -267,10 +267,18 @@
                 <v-card-text
                   class="border-dashed border-2 border-blue-600 rounded-lg"
                 >
-                  <v-row v-if="course_data.course_img_privilege || preview_privilege_url">
+                  <v-row
+                    v-if="
+                      course_data.course_img_privilege || preview_privilege_url
+                    "
+                  >
                     <v-col align="center" class="rounded-lg pa-0">
                       <v-img
-                        :src="course_data.course_img_privilege ? course_data.course_img_privilege : preview_privilege_url"
+                        :src="
+                          course_data.course_img_privilege
+                            ? course_data.course_img_privilege
+                            : preview_privilege_url
+                        "
                         contain
                         style="max-width: 200px"
                         align="right"
@@ -294,7 +302,12 @@
                       </v-img>
                     </v-col>
                   </v-row>
-                  <v-row v-if="!preview_privilege_url && !course_data.course_img_privilege">
+                  <v-row
+                    v-if="
+                      !preview_privilege_url &&
+                      !course_data.course_img_privilege
+                    "
+                  >
                     <v-col cols="12" class="flex align-center justify-center">
                       <v-img
                         src="../../../assets/course/upload_file.png"
@@ -475,7 +488,14 @@
                   </v-tabs>
                 </v-col>
                 <v-col cols="auto">
-                  <v-btn v-if="student_tab == 0" :disabled="!coach_list.some(v => v.checked === true)" depressed color="#ff6b81" :dark="coach_list.some(v => v.checked === true)" @click="exportStudents()">
+                  <v-btn
+                    v-if="student_tab == 0"
+                    :disabled="!coach_list.some((v) => v.checked === true)"
+                    depressed
+                    color="#ff6b81"
+                    :dark="coach_list.some((v) => v.checked === true)"
+                    @click="exportStudents()"
+                  >
                     export
                   </v-btn>
                 </v-col>
@@ -488,10 +508,16 @@
                       <v-row dense class="d-flex align-center">
                         <v-col cols="auto">
                           <v-btn icon @click="selectAllCoach()">
-                            <v-icon color="#ff6b81">{{ selected_all_coach ? "mdi-checkbox-marked" : "mdi-checkbox-blank-outline" }}</v-icon>
+                            <v-icon color="#ff6b81">{{
+                              selected_all_coach
+                                ? "mdi-checkbox-marked"
+                                : "mdi-checkbox-blank-outline"
+                            }}</v-icon>
                           </v-btn>
                         </v-col>
-                        <v-col class="text-[#ff6b81] font-bold" >รายชื่อโค้ช</v-col>
+                        <v-col class="text-[#ff6b81] font-bold"
+                          >รายชื่อโค้ช</v-col
+                        >
                         <v-col cols="auto">
                           <v-text-field
                             class="bg-white rounded-lg"
@@ -539,7 +565,11 @@
                             <v-row dense class="d-flex align-center">
                               <v-col cols="auto">
                                 <v-btn icon @click="selectCoachChecked(coach)">
-                                  <v-icon color="#ff6b81">{{coach.checked ? "mdi-checkbox-marked" : "mdi-checkbox-blank-outline" }}</v-icon>
+                                  <v-icon color="#ff6b81">{{
+                                    coach.checked
+                                      ? "mdi-checkbox-marked"
+                                      : "mdi-checkbox-blank-outline"
+                                  }}</v-icon>
                                 </v-btn>
                               </v-col>
                               <v-col
@@ -631,14 +661,16 @@
                                   cache-items
                                   @change="filterDateByCoach(coach_index)"
                                 >
-                                <template v-slot:selection="{item}">
-                                    {{`${item.start} - ${item.end}น.`}}
-                                </template>
-                                <template v-slot:item="{ item }">
+                                  <template v-slot:selection="{ item }">
+                                    {{ `${item.start} - ${item.end}น.` }}
+                                  </template>
+                                  <template v-slot:item="{ item }">
                                     <v-list-item-content>
-                                      <v-list-item-title> {{`${item.start} - ${item.end}น.`}} </v-list-item-title>
+                                      <v-list-item-title>
+                                        {{ `${item.start} - ${item.end}น.` }}
+                                      </v-list-item-title>
                                     </v-list-item-content>
-                                </template>
+                                  </template>
                                 </v-autocomplete>
                               </v-col>
                               <v-col>
@@ -655,7 +687,12 @@
                                 ></v-autocomplete>
                               </v-col>
                               <v-col cols="auto">
-                                <v-btn color="#ff6b81" @click="resetFilter()" icon><v-icon>mdi-refresh</v-icon></v-btn>
+                                <v-btn
+                                  color="#ff6b81"
+                                  @click="resetFilter()"
+                                  icon
+                                  ><v-icon>mdi-refresh</v-icon></v-btn
+                                >
                               </v-col>
                             </v-row>
                             <!-- Herder -->
@@ -689,7 +726,9 @@
                             </v-card>
                             <div v-if="coach.datesList.length > 0">
                               <div
-                                v-for="(date, index_date) in filterDateByCoach(coach_index)"
+                                v-for="(date, index_date) in filterDateByCoach(
+                                  coach_index
+                                )"
                                 :key="`${index_date}-date`"
                               >
                                 <v-card
@@ -843,7 +882,8 @@
                                                 cols="2"
                                                 align="center"
                                                 v-if="
-                                                  course_data.course_type_id === 'CT_1'
+                                                  course_data.course_type_id ===
+                                                  'CT_1'
                                                 "
                                               >
                                                 จำนวนครั้ง
@@ -1414,7 +1454,9 @@
                               }}
                             </span>
                             ระดับความสนใจ:
-                            <span class="font-bold">{{ student_data_assessment.potential.interest }}</span>
+                            <span class="font-bold">{{
+                              student_data_assessment.potential.interest
+                            }}</span>
                           </v-col>
                         </v-row>
                         <v-row dense>
@@ -1637,16 +1679,16 @@ export default {
         img: "../../../assets/course/student_list.png",
       },
     ],
-    filter:{
-      dow : "",
-      date_menu : false,
-      date : "",
-      date_formatter : "",
-      time : "",
-      package : "",
+    filter: {
+      dow: "",
+      date_menu: false,
+      date: "",
+      date_formatter: "",
+      time: "",
+      package: "",
     },
-    time_option : [],
-    dow_option:[],
+    time_option: [],
+    dow_option: [],
     package_option: [],
     day_option: [
       { label: "วันอาทิตย์", value: 0 },
@@ -1739,7 +1781,6 @@ export default {
       this.GetCoachsByCourse({ course_id: this.$route.params.course_id });
       return "";
     },
-   
   },
   methods: {
     ...mapActions({
@@ -1757,87 +1798,110 @@ export default {
       GetStudentReserveByCourseId: "CourseModules/GetStudentReserveByCourseId",
       GetStudentPotentialByCoach: "CourseModules/GetStudentPotentialByCoach",
       RemovePrivilageByCourseID: "CourseModules/RemovePrivilageByCourseID",
-      ExportStudentList : "CourseModules/ExportStudentList",
+      ExportStudentList: "CourseModules/ExportStudentList",
     }),
-    resetFilter(){
+    resetFilter() {
       this.filter = {
-        dow : "",
-        date_menu : false,
-        date : "",
-        date_formatter : "",
-        time : "",
-        package : "",
+        dow: "",
+        date_menu: false,
+        date: "",
+        date_formatter: "",
+        time: "",
+        package: "",
+      };
+    },
+    filterDateByCoach(coach_index) {
+      console.log("datesList =>", this.coach_list[coach_index].datesList);
+      let filterCoachList = this.coach_list[coach_index].datesList;
+      if (this.filter.dow) {
+        filterCoachList = filterCoachList.filter(
+          (v) => new Date(v.date).getDay() === this.filter.dow
+        );
+      }
+      if (this.filter.date) {
+        filterCoachList = filterCoachList.filter(
+          (v) => v.date == this.filter.date
+        );
+      }
+      if (this.filter.time) {
+        filterCoachList = filterCoachList.filter(
+          (v) => v.timeId === this.filter.time
+        );
+      }
+      if (this.filter.package) {
+        filterCoachList = filterCoachList.filter(
+          (v) => v.cpo.packageId === this.filter.package
+        );
+      }
+      if (
+        this.filter.dow ||
+        this.filter.date ||
+        this.filter.time ||
+        this.filter.package
+      ) {
+        return filterCoachList;
+      } else {
+        return this.coach_list[coach_index].datesList;
       }
     },
-    filterDateByCoach(coach_index){
-      console.log("datesList =>", this.coach_list[coach_index].datesList)
-      let filterCoachList =  this.coach_list[coach_index].datesList
-      if(this.filter.dow){
-        filterCoachList = filterCoachList.filter(v => new Date(v.date).getDay() === this.filter.dow)
-      }
-      if(this.filter.date){ 
-        filterCoachList = filterCoachList.filter(v => v.date == this.filter.date)
-      }
-      if(this.filter.time){
-        filterCoachList = filterCoachList.filter(v => v.timeId === this.filter.time )
-      }
-      if(this.filter.package){
-        filterCoachList = filterCoachList.filter(v => v.cpo.packageId === this.filter.package)
-      }
-      if(this.filter.dow || this.filter.date ||  this.filter.time ||  this.filter.package){
-        return filterCoachList
-      }else{
-        return this.coach_list[coach_index].datesList
-      }
-     
-    },
-    async dowOption(selected_coach){
-      let dow = []
-      this.dow_option = []
-      if(selected_coach >= 0){
-        for await (const coach of this.coach_list[selected_coach].allDates){
-          for await (const day of coach.dates.day){
-            if(dow.length === 0){
-              dow.push(this.day_option.filter(v => v.value == day)[0])
-            }else if(dow.filter(v => v.value == day).length === 0){
-              dow.push(this.day_option.filter(v => v.value == day)[0])
+    async dowOption(selected_coach) {
+      let dow = [];
+      this.dow_option = [];
+      if (selected_coach >= 0) {
+        for await (const coach of this.coach_list[selected_coach].allDates) {
+          for await (const day of coach.dates.day) {
+            if (dow.length === 0) {
+              dow.push(this.day_option.filter((v) => v.value == day)[0]);
+            } else if (dow.filter((v) => v.value == day).length === 0) {
+              dow.push(this.day_option.filter((v) => v.value == day)[0]);
             }
           }
         }
       }
       // console.log("dow =>",dow)
-      this.dow_option = dow
+      this.dow_option = dow;
     },
-    async filterPackageCoach(selected_coach){
-      this.package_option = []
-      if(selected_coach >= 0){
-        console.log("coach_list => ",this.coach_list[selected_coach])
-        for await (const coach of this.coach_list[selected_coach].allDates){
-          if( this.package_option.length === 0){
-            this.package_option.push(coach.cpo)
-          }else if(this.package_option.filter(v => v.cpoId === coach.cpo.cpoId).length == 0){
-            this.package_option.push(coach.cpo)
+    async filterPackageCoach(selected_coach) {
+      this.package_option = [];
+      if (selected_coach >= 0) {
+        console.log("coach_list => ", this.coach_list[selected_coach]);
+        for await (const coach of this.coach_list[selected_coach].allDates) {
+          if (this.package_option.length === 0) {
+            this.package_option.push(coach.cpo);
+          } else if (
+            this.package_option.filter((v) => v.cpoId === coach.cpo.cpoId)
+              .length == 0
+          ) {
+            this.package_option.push(coach.cpo);
           }
         }
       }
     },
     //FILTER DATE COACH LIST
-    async filterTimeCoach(selected_coach){
-      this.time_option = []
-      if(selected_coach >= 0){
-        for await (const coach of this.coach_list[selected_coach].allDates){
-          if(this.time_option.length > 0){
-            this.time_option.push(coach.time)
-          }else if(this.time_option.filter(v => v.timeId === coach.time.timeId).length === 0){
-            this.time_option.push(coach.time)
+    async filterTimeCoach(selected_coach) {
+      this.time_option = [];
+      if (selected_coach >= 0) {
+        for await (const coach of this.coach_list[selected_coach].allDates) {
+          if (this.time_option.length > 0) {
+            this.time_option.push(coach.time);
+          } else if (
+            this.time_option.filter((v) => v.timeId === coach.time.timeId)
+              .length === 0
+          ) {
+            this.time_option.push(coach.time);
           }
         }
       }
     },
     //EXPORT STUDENT
-    exportStudents(){
-      console.log(this.course_data)
-      this.ExportStudentList({coach_list : this.coach_list, course_id : this.$route.params.course_id , course_name : this.course_data.course_name_th, course_type_id :this.course_data.course_type_id})
+    exportStudents() {
+      console.log(this.course_data);
+      this.ExportStudentList({
+        coach_list: this.coach_list,
+        course_id: this.$route.params.course_id,
+        course_name: this.course_data.course_name_th,
+        course_type_id: this.course_data.course_type_id,
+      });
     },
     readFile(file) {
       return `${process.env.VUE_APP_URL}/api/v1/files/${file}`;
@@ -2074,7 +2138,6 @@ export default {
               course_data: this.course_data,
             }).then(() => {
               this.course_edit = false;
-              
             });
           }
         });
@@ -2119,7 +2182,7 @@ export default {
           await this.UpdateCourseArkwork({
             course_id: this.course_data.course_id,
             course_data: this.course_data,
-          })
+          });
           this.course_edit = false;
         }
       });
@@ -2151,10 +2214,10 @@ export default {
               {
                 class_date_range: {
                   start_time: "",
-                  start_time_object : {HH:"",mm:""},
+                  start_time_object: { HH: "", mm: "" },
                   menu_start_time: false,
                   end_time: "",
-                  end_time_object : {HH:"",mm:""},
+                  end_time_object: { HH: "", mm: "" },
                   menu_end_time: false,
                 },
                 students: 0,
@@ -2192,9 +2255,9 @@ export default {
     selectCoach(coach, index) {
       if (this.selected_coach !== index) {
         this.selected_coach = index;
-        this.dowOption(index)
-        this.filterPackageCoach(index)
-        this.filterTimeCoach(index)
+        this.dowOption(index);
+        this.filterPackageCoach(index);
+        this.filterTimeCoach(index);
       } else {
         this.selected_coach = "";
       }

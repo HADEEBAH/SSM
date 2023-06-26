@@ -57,7 +57,7 @@ const loginModules = {
                 let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/student?firstNameTh=${search_name}`, config)
                 if(data.statusCode == 200){
                     for(const user of data.data){
-                        user.fullname = `${user.firstNameTh} ${user.lastNameTh}`
+                        user.fullname = `${user.firstNameTh} ${user.lastNameTh}(${user.firstNameEng} ${user.lastNameEng})|${user.userName}`
                     }
                     context.commit("SetUsernameList",data.data)
                 }
@@ -112,7 +112,11 @@ const loginModules = {
                                 Swal.fire({
                                     icon: "error",
                                     title: "ไม่สามารถสมัครได้",
-                                    text : "เนื่องจากผู้สมัครมีตำแหน่งอื่นๆ อยู่แล้ว"
+                                    text : "เนื่องจากผู้สมัครมีตำแหน่งอื่นๆ อยู่แล้ว",
+                                    showDenyButton: false,
+                                    showCancelButton: true,
+                                    confirmButtonText: "ตกลง",
+                                    cancelButtonText: "ยกเลิก",
                                 }).then((result) => {
                                     if (result.isConfirmed) {
                                         if (type === 'student') {
@@ -129,7 +133,11 @@ const loginModules = {
                     } else {
                         Swal.fire({
                             icon: "error",
-                            title: "ไม่พบผู้ใช้"
+                            title: "ไม่พบผู้ใช้",
+                            showDenyButton: false,
+                            showCancelButton: true,
+                            confirmButtonText: "ตกลง",
+                            cancelButtonText: "ยกเลิก",
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 if (type === 'student') {
@@ -145,10 +153,17 @@ const loginModules = {
             } catch (error) {
                 console.log(error.response.data)
                 context.commit("SetIsLoading", false)
-                Swal.fire({
-                    icon: "error",
-                    title: error.message
-                })
+                if(error.response.data.message === "This username not found."){
+                    Swal.fire({
+                        icon: "error",
+                        title : "ไม่พบผู้ใช้นี้"
+                    })
+                }else{
+                    Swal.fire({
+                        icon: "error",
+                        title: error.message
+                    })
+                }
                 // console.log(error)
             }
         },

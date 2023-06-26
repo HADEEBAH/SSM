@@ -24,6 +24,7 @@ const bannerModules = {
         }
       } catch (error) {
         console.log("error", error);
+
       }
     },
 
@@ -38,7 +39,7 @@ const bannerModules = {
         }
         let { data } = await axios.post(
           // `http://localhost:3000/api/v1/banner`, payload ,config
-          `${process.env.VUE_APP_URL}/api/v1/banner`, payload ,config
+          `${process.env.VUE_APP_URL}/api/v1/banner`, payload, config
         );
         console.log("data=>", data);
         if (data.statusCode === 201) {
@@ -60,7 +61,7 @@ const bannerModules = {
         }
         let { data } = await axios.delete(
           // `http://localhost:3000/api/v1/banner/${id}`, config
-          `${process.env.VUE_APP_URL}/api/v1/banner/${id}` ,config
+          `${process.env.VUE_APP_URL}/api/v1/banner/${id}`, config
         );
         if (data.statusCode === 200) {
           context.dispatch("GetBannerList")

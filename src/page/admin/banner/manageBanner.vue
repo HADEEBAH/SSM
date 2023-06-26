@@ -110,8 +110,9 @@
           border="left"
           class="mt-3"
         >
-          ไม่มีรูปตัวอย่าง <br/>
-        <span class="font-weight-bold">คำแนะนำ</span>   : ควรอัปโหลดรูปที่มีขนาด 1280 x 600
+          ไม่มีรูปตัวอย่าง <br />
+          <span class="font-weight-bold">คำแนะนำ</span> : ควรอัปโหลดรูปที่มีขนาด
+          1280 x 500px
         </v-alert>
       </v-col>
     </v-row>
@@ -131,7 +132,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { CheckFileSizeV2 } from "@/functions/functions";
+import { CheckFileSizeV2, CheckFileSizeType } from "@/functions/functions";
 import Swal from "sweetalert2";
 // import mixin from "../../../mixin";
 // import Swal from "sweetalert2";
@@ -170,7 +171,8 @@ export default {
       for (let i = 0; i < this.$refs.fileInput.files.length; i++) {
         const file = this.$refs.fileInput.files[i];
         this.files_input.push(this.$refs.fileInput.files[i]);
-        if (CheckFileSizeV2(file, event.target.id)) {
+        if (CheckFileSizeType(file, event.target.id))
+        if (CheckFileSizeV2(file, event.target.id) ) {
           const reader = new FileReader();
           reader.onload = () => {
             this.files_preview.push(reader.result);

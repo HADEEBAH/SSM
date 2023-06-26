@@ -175,7 +175,7 @@
               text="จำนวนชั่วโมงการเรียน/ครั้ง"
             ></label-custom>
             <div>
-                <v-text-field
+              <v-text-field
                 :disabled="disable"
                 :outlined="!disable"
                 :filled="disable"
@@ -183,18 +183,24 @@
                 suffix="ชั่วโมง"
                 :style="`width:${widthfull()}px;`"
                 style="position: absolute; display: block; z-index: 4"
-                @focus="SelectedStartDate($event,course_data.course_hours)"
+                @focus="SelectedStartDate($event, course_data.course_hours)"
                 :rules="rules.course_hours"
                 v-model="course_data.course_hours"
               >
               </v-text-field>
-              <VueTimepicker 
-                class="time-picker-hidden" 
-                hide-clear-button 
-                advanced-keyboard 
+              <VueTimepicker
+                class="time-picker-hidden"
+                hide-clear-button
+                advanced-keyboard
                 :style="`width:${widthfull()}px;`"
-                v-model="course_data.course_hours_obj" 
-                @change="ChangeHours(course_data.course_hours_obj, course_data.course_hours)">
+                v-model="course_data.course_hours_obj"
+                @change="
+                  ChangeHours(
+                    course_data.course_hours_obj,
+                    course_data.course_hours
+                  )
+                "
+              >
               </VueTimepicker>
             </div>
             <!-- <v-text-field
@@ -247,13 +253,14 @@
           <v-row dense>
             <v-col cols="12">
               <label-custom text="รายละเอียดคอร์ส"></label-custom>
-              <vue-editor 
-              :editorToolbar="customToolbar"
-              :placeholder= "course_data.detail ?'' : 'กรอกรายละเอียด...'"
-              :disabled="disable" 
-              @text-change="ChangeCourseData(course_data)" 
-              v-model="course_data.detail"></vue-editor>
-               <!-- <v-textarea
+              <vue-editor
+                :editorToolbar="customToolbar"
+                :placeholder="course_data.detail ? '' : 'กรอกรายละเอียด...'"
+                :disabled="disable"
+                @text-change="ChangeCourseData(course_data)"
+                v-model="course_data.detail"
+              ></vue-editor>
+              <!-- <v-textarea
                 v-model="course_data.detail"
                 :disabled="disable"
                 :outlined="!disable"
@@ -266,12 +273,15 @@
           <v-row dense>
             <v-col cols="12">
               <label-custom text="performance"></label-custom>
-              <vue-editor 
-              :editorToolbar="customToolbar"
-              :placeholder= "course_data.music_performance ? '' : 'กรอกรายละเอียด...'"
-              :disabled="disable"
-              @text-change="ChangeCourseData(course_data)"
-              v-model="course_data.music_performance"></vue-editor>
+              <vue-editor
+                :editorToolbar="customToolbar"
+                :placeholder="
+                  course_data.music_performance ? '' : 'กรอกรายละเอียด...'
+                "
+                :disabled="disable"
+                @text-change="ChangeCourseData(course_data)"
+                v-model="course_data.music_performance"
+              ></vue-editor>
               <!-- <v-textarea
                 v-model="course_data.music_performance"
                 :disabled="disable"
@@ -285,12 +295,15 @@
           <v-row dense>
             <v-col cols="12">
               <label-custom text="certification"></label-custom>
-              <vue-editor 
-              :editorToolbar="customToolbar"
-              :placeholder= "course_data.catification ?'' : 'กรอกรายละเอียด...'"
-              :disabled="disable" 
-              @text-change="ChangeCourseData(course_data)" 
-              v-model="course_data.catification"></vue-editor>
+              <vue-editor
+                :editorToolbar="customToolbar"
+                :placeholder="
+                  course_data.catification ? '' : 'กรอกรายละเอียด...'
+                "
+                :disabled="disable"
+                @text-change="ChangeCourseData(course_data)"
+                v-model="course_data.catification"
+              ></vue-editor>
               <!-- <v-textarea
                 v-model="course_data.catification"
                 :disabled="disable"
@@ -637,24 +650,32 @@
                     dense
                     :style="`width:${width()}px;`"
                     style="position: absolute; display: block; z-index: 4"
-                    @focus="SelectedStartDate($event,course_data.coachs[0].period.start_time)"
+                    @focus="
+                      SelectedStartDate(
+                        $event,
+                        course_data.coachs[0].period.start_time
+                      )
+                    "
                     :rules="rules.start_time"
                     v-model="course_data.coachs[0].period.start_time"
                   >
                   </v-text-field>
-                  <VueTimepicker 
-                    class="time-picker-hidden" 
-                    hide-clear-button 
-                    advanced-keyboard 
+                  <VueTimepicker
+                    class="time-picker-hidden"
+                    hide-clear-button
+                    advanced-keyboard
                     :style="`width:${width()}px;`"
-                    v-model="course_data.coachs[0].period.start_time_object" 
-                    @change="ChangeStartDate(course_data.coachs[0].period, course_data)">
+                    v-model="course_data.coachs[0].period.start_time_object"
+                    @change="
+                      ChangeStartDate(course_data.coachs[0].period, course_data)
+                    "
+                  >
                   </VueTimepicker>
                 </v-col>
                 <v-col cols="auto" class="mt-2 px-0"
                   ><v-icon>mdi-minus</v-icon></v-col
                 >
-                <v-col >
+                <v-col>
                   <v-text-field
                     disabled
                     :outlined="!disable"
@@ -666,11 +687,11 @@
                     v-model="course_data.coachs[0].period.end_time"
                   >
                   </v-text-field>
-                  <VueTimepicker 
-                    class="time-picker-hidden" 
-                    hide-clear-button 
-                    advanced-keyboard 
-                    v-model="course_data.coachs[0].period.end_time_object" 
+                  <VueTimepicker
+                    class="time-picker-hidden"
+                    hide-clear-button
+                    advanced-keyboard
+                    v-model="course_data.coachs[0].period.end_time_object"
                   >
                   </VueTimepicker>
                 </v-col>
@@ -717,7 +738,7 @@ import LabelCustom from "@/components/label/labelCustom.vue";
 import headerCard from "@/components/header/headerCard.vue";
 import { mapGetters, mapActions } from "vuex";
 // import { Input, TimePicker } from "ant-design-vue";
-import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
+import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import Swal from "sweetalert2";
 import {
   inputValidation,
@@ -738,7 +759,7 @@ export default {
     LabelCustom,
     headerCard,
     VueTimepicker,
-    VueEditor
+    VueEditor,
   },
   // directives: {
   //   "ant-input": Input,
@@ -762,11 +783,13 @@ export default {
     rules: {
       course_name_th: [
         (val) => (val || "").length > 0 || "โปรดระบุชื่อคอร์ส(ภาษาไทย)",
-        (val) => val.length < 256 || "ชื่อคอร์ส(ภาษาไทย)ความยาวเกินกว่าที่กำหนด",
+        (val) =>
+          val.length < 256 || "ชื่อคอร์ส(ภาษาไทย)ความยาวเกินกว่าที่กำหนด",
       ],
       course_name_en: [
         (val) => (val || "").length > 0 || "โปรดระบุชื่อคอร์ส(ภาษาอังกฤษ)",
-        (val) => val.length < 256 || "ชื่อคอร์ส(ภาษาอังกฤษ)ความยาวเกินกว่าที่กำหนด",
+        (val) =>
+          val.length < 256 || "ชื่อคอร์ส(ภาษาอังกฤษ)ความยาวเกินกว่าที่กำหนด",
       ],
       kingdom: [(val) => (val || "").length > 0 || "โปรดเลือกอาณาจักร"],
       course_open_date: [
@@ -776,12 +799,8 @@ export default {
         (val) => (val || "") > 0 || "โปรดระบุชั่วโมงการเรียน/ครั้ง",
         (val) => val < 25 || "ชั่วโมงการเรียนเกินกว่าที่กำหนด",
       ],
-      location: [
-        (val) => (val || "").length > 0 || "โปรดระบุสถานที่"
-      ],
-      class_date: [
-        (val) => (val || "").length > 0 || 'โปรดเลือกวันที่'
-      ],
+      location: [(val) => (val || "").length > 0 || "โปรดระบุสถานที่"],
+      class_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันที่"],
       coach: [(val) => (val || "").length > 0 || "โปรดระบุโค้ช"],
       start_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันที่เริ่ม"],
       end_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันที่สิ้นสุด"],
@@ -791,9 +810,7 @@ export default {
         (val) => (val || "") > 0 || "โปรดระบุจำนวนนักเรียนที่รับได้",
         (val) => val < 1000 || "จำนวนนักเรียนที่รับได้เกินกว่าที่กำหนด",
       ],
-      price: [
-        (val) => (val || "") > 0 || "โปรดระบุราคา"
-      ],
+      price: [(val) => (val || "") > 0 || "โปรดระบุราคา"],
     },
     course_open_date_str: "",
     register_date_range_str: {
@@ -806,17 +823,29 @@ export default {
     },
   }),
   created() {
-    console.log("809 => ",this.edited)
+    console.log("809 => ", this.edited);
     if (this.edited) {
       this.preview_url = this.course_data?.course_img;
-      console.log(' this.course_data =>',this.course_data?.coachs[0])
+      console.log(" this.course_data =>", this.course_data?.coachs[0]);
       this.class_date_range_str = {
-        start_date: dateFormatter( this.course_data?.coachs[0].class_date_range.start_date, "DD MT YYYYT" ),
-        end_date:  dateFormatter(this.course_data?.coachs[0].class_date_range.end_date, "DD MT YYYYT"),
+        start_date: dateFormatter(
+          this.course_data?.coachs[0].class_date_range.start_date,
+          "DD MT YYYYT"
+        ),
+        end_date: dateFormatter(
+          this.course_data?.coachs[0].class_date_range.end_date,
+          "DD MT YYYYT"
+        ),
       };
       this.register_date_range_str = {
-        start_date: dateFormatter(this.course_data?.coachs[0].register_date_range.start_date, "DD MT YYYYT"),
-        end_date: dateFormatter( this.course_data?.coachs[0].register_date_range.end_date, "DD MT YYYYT"),
+        start_date: dateFormatter(
+          this.course_data?.coachs[0].register_date_range.start_date,
+          "DD MT YYYYT"
+        ),
+        end_date: dateFormatter(
+          this.course_data?.coachs[0].register_date_range.end_date,
+          "DD MT YYYYT"
+        ),
       };
     }
   },
@@ -845,37 +874,66 @@ export default {
     removeChip(item, value) {
       value.splice(value.indexOf(item), 1);
     },
-    SelectedStartDate(e){
+    SelectedStartDate(e) {
       e.target.parentNode.parentNode.parentNode.parentNode.parentNode
-      .getElementsByClassName("time-picker-hidden")[0]
-      .getElementsByTagName("input")[0].focus()
+        .getElementsByClassName("time-picker-hidden")[0]
+        .getElementsByTagName("input")[0]
+        .focus();
     },
-    ChangeHours(hours, course_hours){
-      console.log("hours",hours)
-      console.log("couser_hours",course_hours)
-      if(hours){
-        this.course_data.course_hours = parseInt(hours.HH)+"."+parseInt(hours.mm)
+    ChangeHours(hours, course_hours) {
+      console.log("hours", hours);
+      console.log("couser_hours", course_hours);
+      if (hours) {
+        this.course_data.course_hours =
+          parseInt(hours.HH) + "." + parseInt(hours.mm);
       }
     },
-    ChangeStartDate(date){
-      if(!date.start_time_object.mm){
-        date.start_time_object.mm = "00"
+    ChangeStartDate(date) {
+      if (!date.start_time_object.mm) {
+        date.start_time_object.mm = "00";
       }
-      this.course_data.course_period_start_date = `${date.start_time_object.HH}:${date.start_time_object.mm}`
-      console.log(date)
-      if((parseInt(date.start_time_object.HH) + parseInt(this.course_data.course_hours_obj.HH)) >= 24){
-        date.end_time_object.HH = '0'+`${((parseInt(date.start_time_object.HH) + parseInt(this.course_data.course_hours_obj.HH)) - 24)}`.slice(-2)
-      }else{
-        date.end_time_object.HH = `${'0'+(parseInt(date.start_time_object.HH) + parseInt(this.course_data.course_hours_obj.HH))}`.slice(-2)
+      this.course_data.course_period_start_date = `${date.start_time_object.HH}:${date.start_time_object.mm}`;
+      console.log(date);
+      if (
+        parseInt(date.start_time_object.HH) +
+          parseInt(this.course_data.course_hours_obj.HH) >=
+        24
+      ) {
+        date.end_time_object.HH =
+          "0" +
+          `${
+            parseInt(date.start_time_object.HH) +
+            parseInt(this.course_data.course_hours_obj.HH) -
+            24
+          }`.slice(-2);
+      } else {
+        date.end_time_object.HH = `${
+          "0" +
+          (parseInt(date.start_time_object.HH) +
+            parseInt(this.course_data.course_hours_obj.HH))
+        }`.slice(-2);
       }
-      if( (parseInt(date.start_time_object.mm) + parseInt(this.course_data.course_hours_obj.mm)) > 60){
-        date.end_time_object.mm = `${'0'+((parseInt(date.start_time_object.mm) + parseInt(this.course_data.course_hours_obj.mm)) - 60)}`.slice(-2)
-      }else{
-        date.end_time_object.mm = `${'0'+(parseInt(date.start_time_object.mm) + parseInt(this.course_data.course_hours_obj.mm))}`.slice(-2)
+      if (
+        parseInt(date.start_time_object.mm) +
+          parseInt(this.course_data.course_hours_obj.mm) >
+        60
+      ) {
+        date.end_time_object.mm = `${
+          "0" +
+          (parseInt(date.start_time_object.mm) +
+            parseInt(this.course_data.course_hours_obj.mm) -
+            60)
+        }`.slice(-2);
+      } else {
+        date.end_time_object.mm = `${
+          "0" +
+          (parseInt(date.start_time_object.mm) +
+            parseInt(this.course_data.course_hours_obj.mm))
+        }`.slice(-2);
       }
-      date.start_time = `${date.start_time_object.HH}:${date.start_time_object.mm}`
-      date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`
-      this.course_data.course_period_end_date = date.end_time
+      date.start_time = `${date.start_time_object.HH}:${date.start_time_object.mm}`;
+      date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`;
+      this.course_data.course_period_end_date = date.end_time;
     },
     width() {
       switch (this.$vuetify.breakpoint.name) {
@@ -931,7 +989,7 @@ export default {
       inputValidation(e, lang);
     },
     inputDate(e, data) {
-      console.log(e)
+      console.log(e);
       switch (data) {
         case "course open":
           this.course_data.course_open_date_str = dateFormatter(
@@ -969,9 +1027,9 @@ export default {
       this.file = this.$refs.fileInput.files[0];
       if (!this.file) return;
       if (CheckFileSize(this.file) === true) {
-        const fileType = this.file.type; 
-        console.log(fileType)
-        if (fileType === 'image/png' || fileType === 'image/jpeg') {
+        const fileType = this.file.type;
+        console.log(fileType);
+        if (fileType === "image/png" || fileType === "image/jpeg") {
           this.course_data.course_img = this.file;
           this.ChangeCourseData(this.course_data);
           const reader = new FileReader();
@@ -987,7 +1045,7 @@ export default {
             showCancelButton: false,
             confirmButtonText: "ตกลง",
             cancelButtonText: "ยกเลิก",
-          })
+          });
         }
       }
     },
