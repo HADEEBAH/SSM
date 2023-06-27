@@ -45,15 +45,15 @@ const manageScheduleModules = {
       let res = null
       let eventSchadule = []
       let dataInSchadule = []
-      
+
       if (payload !== "") {
-        if (state.data_filter_schedule?.length > 0 ) {
-          res = state.data_filter_schedule?.filter((items)=>
+        if (state.data_filter_schedule?.length > 0) {
+          res = state.data_filter_schedule?.filter((items) =>
             (items.name && items.name?.indexOf(payload) !== -1) || (items.coach && items.coach?.indexOf(payload) !== -1) || (items.package && items.package?.indexOf(payload) !== -1)
           )
 
         } else if (state.data_in_schedule?.length > 0) {
-          res = state.data_in_schedule?.filter((items)=>
+          res = state.data_in_schedule?.filter((items) =>
             (items.name && items.name?.indexOf(payload) !== -1) || (items.coach && items.coach?.indexOf(payload) !== -1) || (items.package && items.package?.indexOf(payload) !== -1)
           )
         }
@@ -62,7 +62,7 @@ const manageScheduleModules = {
           res.map((item) => {
             let times = null;
             times = item.allday ? null : `${item.startTime} - ${item.endTime}`;
-        
+
             // console.log("item", item);
             eventSchadule.push({
               name: item.name,
@@ -76,10 +76,10 @@ const manageScheduleModules = {
               startTime: item.startTime,
               endTime: item.endTime,
             });
-          
+
             dataInSchadule = eventSchadule;
           });
-        
+
         }
         state.data_search_schedule = dataInSchadule
       } else {
@@ -121,10 +121,7 @@ const manageScheduleModules = {
           },
         };
 
-        let { data } = await axios.get(
-          `${process.env.VUE_APP_URL}/api/v1/admincourse/`,
-          config
-        );
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/admincourse/`, config)
 
         if (data.statusCode === 200) {
           let arr_tmp = [];
@@ -173,18 +170,16 @@ const manageScheduleModules = {
 
           data.data.map((item) => {
             // console.log("item------->", item);
-            item.fullDateHolidaysTh = `${item.holidayDate} ${
-              thaiMonths[parseInt(item.holidayMonth) - 1]
-            } ${parseInt(item.holidayYears) + 543}`;
+            item.fullDateHolidaysTh = `${item.holidayDate} ${thaiMonths[parseInt(item.holidayMonth) - 1]} ${parseInt(item.holidayYears) + 543}`
             if (item.holidayStartTime && item.holidayEndTime) {
               item.ob_holidayStartTime = {
                 HH: item.holidayStartTime.split(":")[0],
                 mm: item.holidayStartTime.split(":")[1],
-              };
+              }
               item.ob_holidayEndTime = {
                 HH: item.holidayEndTime.split(":")[0],
                 mm: item.holidayEndTime.split(":")[1],
-              };
+              }
             }
 
             // let days = item.holidayDate;
@@ -287,9 +282,8 @@ const manageScheduleModules = {
 
         if (data.statusCode === 200) {
           data.data.map((item) => {
-            item.fullDateHolidaysTh = `${item.holidayDate} ${
-              thaiMonths[parseInt(item.holidayMonth) - 1]
-            } ${parseInt(item.holidayYears) + 543}`;
+            item.fullDateHolidaysTh = `${item.holidayDate} ${thaiMonths[parseInt(item.holidayMonth) - 1]
+              } ${parseInt(item.holidayYears) + 543}`;
             // item.fullDateHolidays = `${item.holidayDate} ${item.holidayMonth} ${item.holidayYears}`
             item.fullDateHolidays = `${item.holidayYears}-${item.holidayMonth}-${item.holidayDate}`;
             if (item.holidayStartTime && item.holidayEndTime) {
@@ -421,7 +415,7 @@ const manageScheduleModules = {
 
         // const endpoint = `http://localhost:3000/api/v1/admincourse/filter-schedule?${params.join("&&")}`
         const endpoint = `${process.env.VUE_APP_URL}/api/v1/admincourse/filter-schedule?${params.join("&&")}`
-        let { data } = await axios.get(endpoint,config);
+        let { data } = await axios.get(endpoint, config);
         const res = data.data;
 
         if (data.statusCode === 200) {

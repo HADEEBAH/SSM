@@ -65,6 +65,8 @@ import ManageSchedule from '@/page/admin/scheduleCalendar/manageSchedule.vue'
 import Banner from '@/page/admin/banner/manageBanner.vue'
 // admin dashboard
 import DashboardList from '@/page/admin/dashboard/dashboardList.vue'
+import StudentList from '../src/page/admin/dashboard/studentList.vue'
+
 // admin course reserve
 import manageCourseReserve from '@/page/admin/courseReserve/manageCourseReserve.vue'
 
@@ -181,6 +183,11 @@ const routes = [
         path: 'dashboardList',
         name: 'DashboardList',
         component: DashboardList,
+      },
+      {
+        path: 'studentList',
+        name: 'StudentList',
+        component: StudentList,
       },
 
     ]

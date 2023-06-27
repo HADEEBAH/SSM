@@ -99,55 +99,53 @@
           class="cursor-pointer my-5"
           @click="openParentDialog(profile.parent)"
         >
-        <v-card-text>
-          <v-row dense>
-            <!-- col avatar -->
-            <v-col cols="auto" v-if="profile.parent.parentImage !== ''">
-              <v-img
-                :src="profile.parent.parentImage"
-                alt="Card image"
-                class="rounded-full ml-3 image-cropper"
-                style="max-width: 50px; max-height: 50px"
-              />
-            </v-col>
-            <v-col cols="auto" v-else>
-              <v-img
-                src="../../../assets/userKingdom/default_image_profile.svg"
-                alt="Card image"
-                class="rounded-full ml-3 image-cropper"
-                style="max-width: 50px; max-height: 50px"
-              />
-            </v-col>
-            <!-- col name -->
-            <v-col cols="8" sm="10" class="d-flex align-center pa-3">
-              <v-row dense>
-                <v-col cols="6" sm="4"
-                  >{{
-                    !profile.parent.parentFirstnameTh
-                      ? "-"
-                      : profile.parent.parentFirstnameTh
-                  }}
-                </v-col>
-                <v-col cols="6" sm="4">
-                  {{
-                    !profile.parent.parentLastnameTh
-                      ? "-"
-                      : profile.parent.parentLastnameTh
-                  }}</v-col
-                >
-                <v-col class="text-slate-400">{{
-                  !profile.parent.parentTel ? "-" : profile.parent.parentTel
-                }}</v-col>
-               
-              </v-row>
-            </v-col>
-            <!-- col arrow -->
-            <v-col cols="auto" class="d-flex align-center justify-center">
-              <v-icon>mdi-chevron-right</v-icon>
-            </v-col>
-          </v-row>
-        </v-card-text>
-         
+          <v-card-text>
+            <v-row dense>
+              <!-- col avatar -->
+              <v-col cols="auto" v-if="profile.parent.parentImage !== ''">
+                <v-img
+                  :src="profile.parent.parentImage"
+                  alt="Card image"
+                  class="rounded-full ml-3 image-cropper"
+                  style="max-width: 50px; max-height: 50px"
+                />
+              </v-col>
+              <v-col cols="auto" v-else>
+                <v-img
+                  src="../../../assets/userKingdom/default_image_profile.svg"
+                  alt="Card image"
+                  class="rounded-full ml-3 image-cropper"
+                  style="max-width: 50px; max-height: 50px"
+                />
+              </v-col>
+              <!-- col name -->
+              <v-col cols="8" sm="10" class="d-flex align-center pa-3">
+                <v-row dense>
+                  <v-col cols="6" sm="4"
+                    >{{
+                      !profile.parent.parentFirstnameTh
+                        ? "-"
+                        : profile.parent.parentFirstnameTh
+                    }}
+                  </v-col>
+                  <v-col cols="6" sm="4">
+                    {{
+                      !profile.parent.parentLastnameTh
+                        ? "-"
+                        : profile.parent.parentLastnameTh
+                    }}</v-col
+                  >
+                  <v-col class="text-slate-400">{{
+                    !profile.parent.parentTel ? "-" : profile.parent.parentTel
+                  }}</v-col>
+                </v-row>
+              </v-col>
+              <!-- col arrow -->
+              <v-col cols="auto" class="d-flex align-center justify-center">
+                <v-icon>mdi-chevron-right</v-icon>
+              </v-col>
+            </v-row>
+          </v-card-text>
         </v-card>
       </div>
       <div v-else>
@@ -171,7 +169,7 @@
       </div>
       <v-divider class=""></v-divider>
       <!-- password -->
-      <v-row dense class="mt-3" @click="show_password()">
+      <v-row dense class="mt-3 cursor-pointer" @click="show_password()">
         <v-col cols="2" sm="1">
           <img src="@/assets/profile/password.png" />
         </v-col>
@@ -184,7 +182,7 @@
         </v-col>
       </v-row>
 
-      <v-row dense class="mt-3">
+      <v-row dense class="mt-3 cursor-pointer">
         <v-col cols="2" sm="1">
           <img src="@/assets/profile/langueges.png" />
         </v-col>
@@ -581,11 +579,16 @@
     </v-dialog>
 
     <!-- CHECK USER PARENT DIALOG-->
-    <v-dialog v-model="add_relation" :width="$vuetify.breakpoint.smAndUp? '50vw' : ''" >
+    <v-dialog
+      v-model="add_relation"
+      :width="$vuetify.breakpoint.smAndUp ? '50vw' : ''"
+    >
       <v-card class="pa-2">
         <v-row dense>
           <v-col cols="12" align="right">
-            <v-btn color="#ff6b81" icon @click="closeDialog"><v-icon>mdi-close</v-icon></v-btn>
+            <v-btn color="#ff6b81" icon @click="closeDialog"
+              ><v-icon>mdi-close</v-icon></v-btn
+            >
           </v-col>
         </v-row>
         <header-card
@@ -595,7 +598,8 @@
             profile_detail?.userRoles?.roleId === 'R_5'
               ? 'เพิ่มผู้ปกครอง'
               : 'เพิ่มนักเรียน'
-          ">
+          "
+        >
         </header-card>
         <v-card-text class="pa-2">
           <v-row dense>
@@ -712,7 +716,7 @@
       v-model="show_dialog_register_one_id"
       :width="!MobileSize ? `60vw` : ``"
     >
-    {{ register_type }}
+      {{ register_type }}
       <registerDialogForm
         dialog
         title="สมัคร One ID"
@@ -832,10 +836,7 @@ export default {
     //get student course
   },
   mounted() {
-    this.$store.dispatch(
-      "NavberUserModules/changeTitleNavber",
-      "โปรไฟล์"
-    );
+    this.$store.dispatch("NavberUserModules/changeTitleNavber", "โปรไฟล์");
   },
 
   watch: {
@@ -845,24 +846,24 @@ export default {
           studentId: this.data_local.account_id,
           parentId: this.last_user_registered.account_id,
         }).then(() => {
-            this.GetAll(this.user_login.account_id);
-            this.GetRelationDataV2(this.user_login.account_id);
-            for (const item of JSON.parse(localStorage.getItem("relations"))) {
+          this.GetAll(this.user_login.account_id);
+          this.GetRelationDataV2(this.user_login.account_id);
+          for (const item of JSON.parse(localStorage.getItem("relations"))) {
             this.GetStudentData(item.student.studentId);
-          } 
-      });
-    } else if (this.last_user_registered.type === "student") {
-      console.log(this.last_user_registered);
+          }
+        });
+      } else if (this.last_user_registered.type === "student") {
+        console.log(this.last_user_registered);
         this.AddRelations({
           studentId: this.last_user_registered.account_id,
           parentId: this.user_login.account_id,
         }).then(() => {
-            this.GetAll(this.user_login.account_id);
-            this.GetRelationDataV2(this.user_login.account_id);
+          this.GetAll(this.user_login.account_id);
+          this.GetRelationDataV2(this.user_login.account_id);
         });
       }
       this.add_parent = false;
-      this.add_relation = false
+      this.add_relation = false;
     },
     // type_selected: function () {
     //   console.log("type_selected", this.type_selected);
@@ -882,7 +883,7 @@ export default {
     //   this.GetStudentData(null);
     //   }
     // }
-    
+
     // this.loading = false;
     // }, 200);
     // },

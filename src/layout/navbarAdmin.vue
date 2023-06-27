@@ -140,7 +140,8 @@ export default {
     },
     user_detail: null,
     menu_drawer_list: [
-      { title: "แดชบอร์ด", to: "DashboardList", child: [] }, // to ให้ใส่ name ของ router
+      // { title: "แดชบอร์ด", to: "DashboardList", child: [] }, // to ให้ใส่ name ของ router
+      { title: "แดชบอร์ด", to: "", child: [] }, // to ให้ใส่ name ของ router
       { title: "ตารางเรียน", to: "ManageSchedule", child: [] },
       // { title: "เพิ่มผู้เรียน", to: "Student", child: [] },
       // { title: "ตารางเรียน", to: "Schedule", child: [] },
@@ -200,16 +201,15 @@ export default {
     selectMenu(type, to, head) {
       if (type === "child" && head === this.active_menu) {
         this.active_menu_child = to;
-        if(this.$route.name !== to ){
+        if (this.$route.name !== to) {
           this.$router.push({ name: to });
         }
-       
       } else {
         this.active_menu_child = to;
       }
       if (type === "head") {
         if (to) {
-          if(this.$route.name !== to ){
+          if (this.$route.name !== to) {
             this.$router.push({ name: to });
             this.active_menu_child = "";
             this.active_menu = to;
