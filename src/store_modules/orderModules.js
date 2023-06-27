@@ -206,6 +206,7 @@ const orderModules = {
             }
         },
         async GetOrders(context){
+            context.commit("SetOrdersIsLoading", true)
             try{
                 let config = {
                     headers:{
@@ -219,7 +220,7 @@ const orderModules = {
                 let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/`,config)
                 if(data.statusCode === 200){
                     if(data.data.length > 0){
-                        console.log("222",data.data)
+                        // console.log("222",data.data)
                         for await (let order of data.data){
                             for await (const student of order.student){
                                 if(!students.some(v=>v.account_id == student.userOneId)){
@@ -229,19 +230,6 @@ const orderModules = {
                                     })
                                 }
                             }
-
-                            // let cutDate = order.payment_status === "success" ? order.payment.paymentDate : '';
-                            // let y = parseInt(cutDate.slice(0, 4)) + 543;
-                            // let m = cutDate.slice(4, 6);
-                            // let d = cutDate.slice(6, 8);
-
-                            // let cutTime = order.payment_status === "success" ? order.payment.paymentTime : '';
-                            // let HH = cutTime.slice(0, 2);
-                            // let mm = cutTime.slice(2, 4);
-                            // let ss = cutTime.slice(4, 6);
-                            
-                            // order.paid_date = order.payment_status === "success" ? `${d + "-" + m + "-" + y} ${HH + ":" + mm + ":" + ss}` : ''
-
                             let inputDate = order.payment_status === "success" ? order.payment.paymentDate : '';
                             const year = parseInt(inputDate.substring(0, 4)) + 543;
                             const month = parseInt(inputDate.substring(4, 6));
@@ -268,17 +256,18 @@ const orderModules = {
                             
                             let cutTime = order.payment_status === "success" ? order.payment.paymentTime : '';
                             let HH = cutTime.slice(0, 2);
-                            let mm = cutTime.slice(2, 4);
-                            // let ss = cutTime.slice(4, 6);
-
-                            order.paid_date = order.payment_status === "success" ? `${formatted} ${HH + ":" + mm }` : ''
+                            let mm = cutTime.slice(2, 4); 
+                            order.paid_date = order.payment_status === "success" ? `${formatted} ${HH + ":" + mm }`:""
+                            // console.log(order.paid_date)
                             order.course_name = `${order.course.courseNameTh}(${order.course.courseNameEn})`
                             order.student_name = `${order.user?.firstNameTh} ${order.user?.lastNameTh}`
                         }
                     }
                     context.commit("SetOrders",data.data)
                     context.commit("SetStudents",students)
+                    context.commit("SetOrdersIsLoading", false)
                 }else{
+                    context.commit("SetOrdersIsLoading", true)
                     throw {error : data}
                 }
             }catch(error){
@@ -519,7 +508,7 @@ const orderModules = {
                         total_price =  total_price + price
                     }
                    
-                    console.log("total_price =>",total_price)
+                    // console.log("total_price =>",total_price)
                 })
                 payload.totalPrice = total_price
                 let config = {
@@ -599,8 +588,8 @@ const orderModules = {
                                 "total": data.data.totalPrice,
                             }
                             console.log(payment_payload)
-                            // let localhost = "http://192.168.74.25:3003"
-                            let  payment = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/payment/data/${data.data.orderNumber}`,payment_payload)
+                            let localhost = "http://localhost:3003"
+                            let  payment = await axios.patch(`${localhost}/api/v1/payment/data/${data.data.orderNumber}`,payment_payload)
                             if(payment.data.statusCode === 200){
                                 Swal.fire({
                                     icon:"success",

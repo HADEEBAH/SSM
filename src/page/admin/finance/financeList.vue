@@ -1,6 +1,7 @@
 <template>
   <v-app>
-    <v-container>
+    <loading-overlay :loading="orders_is_loading"></loading-overlay>
+    <v-container v-if="!orders_is_loading">
       <v-row>
         <v-col cols="6" sm="6" align="start">
           <headerPage title="การเงิน"></headerPage>
@@ -600,7 +601,7 @@ import headerPage from "@/components/header/headerPage.vue";
 import headerCard from "@/components/header/headerCard.vue";
 import LabelCustom from "../../../components/label/labelCustom.vue";
 import { dateFormatter } from "@/functions/functions";
-
+import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "financeList",
@@ -609,6 +610,7 @@ export default {
     imgCard,
     headerCard,
     LabelCustom,
+    loadingOverlay,
   },
   data: () => ({
     search: "",
@@ -840,6 +842,7 @@ export default {
   computed: {
     ...mapGetters({
       orders: "OrderModules/getOrders",
+      orders_is_loading : "OrderModules/getOrdersIsLoading",
       courses: "CourseModules/getCourses",
       students: "OrderModules/getStudents",
       packages: "CourseModules/getPackages",

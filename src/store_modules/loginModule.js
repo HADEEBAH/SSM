@@ -14,8 +14,12 @@ const loginModules = {
         user_student_data: [],
         is_loading: false,
         username_list :[],
+        profile_fail : false,
     },
     mutations: {
+        SetProfileFail(state, payload){
+            state.profile_fail =  payload
+        },
         SetUsernameList(state, payload){
             state.username_list = payload
         },
@@ -208,6 +212,9 @@ const loginModules = {
                 console.log(error)
             }
         },
+        changeProfileFail(context, value){
+            context.commit("SetProfileFail",value)
+        },
         async loginOneId(context) {
             context.commit("SetIsLoading", true)
             try {
@@ -241,17 +248,21 @@ const loginModules = {
                     localStorage.setItem("userDetail", JSON.stringify(payload))
                     let order = JSON.parse(localStorage.getItem("Order"))
                     context.commit("SetIsLoading", false)
-
-                    if (order?.category_id && order?.course_id) {
-                        if (order.course_type_id === "CT_1") {
-                            router.replace({ name: "userCoursePackage_courseId", params: { course_id: order.course_id } })
+                    console.log("SetProfileFail")
+                    if(!payload.first_name_th || !payload.last_name_th){
+                        router.replace({ name: "ProfileDetail",params : {profile_id: payload.account_id}})
+                        context.commit("SetProfileFail",true)
+                    }else{
+                        if (order?.category_id && order?.course_id) {
+                            if (order.course_type_id === "CT_1") {
+                                router.replace({ name: "userCoursePackage_courseId", params: { course_id: order.course_id } })
+                            } else {
+                                router.replace({ name: "userCourseDetail_courseId", params: { course_id: order.course_id } })
+                            }
                         } else {
-                            router.replace({ name: "userCourseDetail_courseId", params: { course_id: order.course_id } })
+                            router.replace({ name: "UserKingdom" })
                         }
-                    } else {
-                        router.replace({ name: "UserKingdom" })
                     }
-
                 }
             } catch (response) {
                 console.log(response)
@@ -270,7 +281,6 @@ const loginModules = {
             }
 
         },
-
         async loginShareToken(context, { token, page }) {
             console.log("token", token);
             console.log("page", page);
@@ -346,6 +356,9 @@ const loginModules = {
         }
     },
     getters: {
+        getProfileFail(state){
+            return state.profile_fail
+        },
         getUsernameList(state){
             return state.username_list
         },
