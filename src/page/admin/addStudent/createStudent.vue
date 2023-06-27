@@ -1136,20 +1136,22 @@ export default {
                     course.coach_id = course.coach.coach_id;
                     course.coach_name = course.coach.coach_name;
                     for (const student of this.students) {
-                      account.push({
-                        studentId: student,
-                      });
-                      course.students.push({
-                        account_id: student,
-                        student_name: null,
-                        username: null,
-                        firstname_en: null,
-                        lastname_en: null,
-                        tel: null,
-                        parents: [],
-                        is_account: false,
-                        is_other: false,
-                      });
+                      if(student){
+                        account.push({
+                          studentId: student,
+                        });
+                        course.students.push({
+                          account_id: student,
+                          student_name: null,
+                          username: null,
+                          firstname_en: null,
+                          lastname_en: null,
+                          tel: null,
+                          parents: [],
+                          is_account: false,
+                          is_other: false,
+                        });
+                      }
                     }
                   });
                   this.order.type = "addStudent";
@@ -1169,17 +1171,20 @@ export default {
                     course.coach_id = course.coach.coach_id;
                     course.coach_name = course.coach.coach_name;
                     for (const student of this.students) {
-                      course.students.push({
-                        account_id: student,
-                        student_name: null,
-                        username: null,
-                        firstname_en: null,
-                        lastname_en: null,
-                        tel: null,
-                        parents: [],
-                        is_account: false,
-                        is_other: false,
-                      });
+                      if(student){
+                        course.students.push({
+                          account_id: student,
+                          student_name: null,
+                          username: null,
+                          firstname_en: null,
+                          lastname_en: null,
+                          tel: null,
+                          parents: [],
+                          is_account: false,
+                          is_other: false,
+                        });
+                      }
+                     
                     }
                   });
                   this.order.type = "addStudent";

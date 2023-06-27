@@ -325,7 +325,7 @@ export default {
   created() {},
   beforeMount() {},
   mounted() {
-    this.GetDataInSchedule();
+    // this.GetDataInSchedule();
     let today = new Date();
     this.start_of_week = new Date(
       today.getFullYear(),

@@ -7,7 +7,9 @@ const manageScheduleModules = {
   state: {
     get_filter_course: [],
     get_all_course: [],
+    get_all_course_is_loading : false,
     get_all_holidays: [],
+    get_all_holidays_is_loading : false,
     get_holidays_by_id: [],
     delete_holiday: [],
     events: [],
@@ -17,6 +19,12 @@ const manageScheduleModules = {
     data_search_schedule: null,
   },
   mutations: {
+    SetGetAllCourseIsLoading(state, value){
+      state.get_all_course_is_loading = value;
+    },
+    SetGetAllHolidaysIsLoading(state, value){
+      state.get_all_holidays_is_loading = value;
+    },
     SetGetFilterCourse(state, payload) {
       state.get_filter_course = payload;
     },
@@ -112,6 +120,7 @@ const manageScheduleModules = {
     },
 
     async GetAllCourse(context) {
+      context.commit("SetGetAllCourseIsLoading", true)
       try {
         let config = {
           headers: {
@@ -130,14 +139,17 @@ const manageScheduleModules = {
             arr_tmp.push(items.dates.date || items.dates.dates);
           }
           await context.commit("SetGetDateArray", arr_tmp);
+          await context.commit("SetGetAllCourseIsLoading", false)
           await context.commit("SetGetAllCourse", data.data);
         }
       } catch (error) {
+        context.commit("SetGetAllCourseIsLoading", false)
         console.log("err", error);
       }
     },
 
     async GetAllHolidays(context) {
+      context.commit("SetGetAllHolidaysIsLoading",true)
       const thaiMonths = [
         "มกราคม",
         "กุมภาพันธ์",
@@ -199,9 +211,11 @@ const manageScheduleModules = {
             // events = event;
           });
           context.commit("SetGetAllHolidays", data.data);
+          context.commit("SetGetAllHolidaysIsLoading",false)
           context.commit("SetEvents", events);
         }
       } catch (error) {
+        context.commit("SetGetAllHolidaysIsLoading",false)
         console.log("GetAllHolidaysError", error);
       }
     },
@@ -303,6 +317,7 @@ const manageScheduleModules = {
 
     async GetDataInSchedule(context) {
       let dataInSchadule = [];
+      context.commit("SetGetAllHolidaysIsLoading",true)
       try {
         let config = {
           headers: {
@@ -375,10 +390,12 @@ const manageScheduleModules = {
           });
           // await context.commit("SetDataInSchedule", data.data)
           // console.log("SetDataInSchedule", data.data);
+          context.commit("SetGetAllHolidaysIsLoading",false)
           context.commit("SetDataInSchedule", dataInSchadule);
           context.commit("SetDataFilterSchedule", null);
         }
       } catch (error) {
+        context.commit("SetGetAllHolidaysIsLoading",false)
         console.log("error", error);
       }
     },
@@ -493,6 +510,12 @@ const manageScheduleModules = {
     },
     getAllHolidays(state) {
       return state.get_all_holidays;
+    },
+    getAllCourseIsLoading(state){
+      return state.get_all_course_is_loading
+    },
+    getAllHolidaysIsLoading(state){
+      return state.get_all_holidays_is_loading
     },
     getHolidaysById(state) {
       return state.get_holidays_by_id;

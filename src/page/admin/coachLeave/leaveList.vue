@@ -1,6 +1,14 @@
 <template>
     <v-container>
-        <headerPage title="การอนุมัติลา"></headerPage>
+        <headerPage title="การอนุมัติลา" slot_tag>
+            <v-text-field 
+                v-model="search" 
+                placeholder="ค้นหา"  
+                prepend-inner-icon="mdi-magnify" 
+                outlined 
+                dense>
+            </v-text-field>
+        </headerPage>
         <v-row>
             <v-col cols="12" align="right">
                 <v-btn
@@ -37,6 +45,7 @@
         <!-- TABLE -->
         <v-card class="my-5" >
             <v-data-table 
+                :search="search"
                 class="elevation-1 header-table"
                 :items="type_selected === 'all' ? coach_leaves : coach_leaves.filter(v => v.status == type_selected)"
                 :loading="coach_leaves_is_loading" 
@@ -79,9 +88,6 @@
                         color="#ff6b81"
                     ><v-icon>mdi-eye-outline</v-icon>
                     </v-btn>
-                    <v-btn icon color="#ff6b81"
-                    ><v-icon>mdi-file-cancel-outline</v-icon>
-                    </v-btn>
                 </template>
             </v-data-table>
         </v-card>
@@ -114,10 +120,12 @@
     components: {
           headerPage,
           imgCard,
-          coachLeaveForm
+          coachLeaveForm,
+          
     },
     data: () => ({
         type_selected: "all",
+        search: "",
         coach_leave_data: {
             menu_start_date: false,
             start_date: null,

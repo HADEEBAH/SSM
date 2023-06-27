@@ -248,6 +248,7 @@
                           <VueTimepicker 
                             class="input-size-lg"
                             advanced-keyboard 
+                            @change="ChengeTimeMin(course.compensation_start_time_obj)"
                             v-model="course.compensation_start_time_obj" 
                             close-on-complete></VueTimepicker>
                         </v-col>
@@ -255,6 +256,7 @@
                           <VueTimepicker 
                             class="input-size-lg"
                             advanced-keyboard  
+                            @change="ChengeTimeMin(course.compensation_end_time_obj)"
                             v-model="course.compensation_end_time_obj" 
                             close-on-complete></VueTimepicker> 
                         </v-col>
@@ -458,6 +460,11 @@ export default {
       SearchCourseDateCoachLeave: "CoachModules/SearchCourseDateCoachLeave",
       ShowDialogCoachLeaveForm: "CoachModules/ShowDialogCoachLeaveForm"
     }),
+    ChengeTimeMin(time){
+      if( time.mm === ""){
+        time.mm = "00"
+      }
+    },
     RemoveCourse(date,index) {
       date.courses.splice(index, 1);
     },

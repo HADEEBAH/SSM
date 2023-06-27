@@ -220,7 +220,7 @@ const orderModules = {
                 let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/`,config)
                 if(data.statusCode === 200){
                     if(data.data.length > 0){
-                        // console.log("222",data.data)
+                        console.log("222",data.data)
                         for await (let order of data.data){
                             for await (const student of order.student){
                                 if(!students.some(v=>v.account_id == student.userOneId)){
