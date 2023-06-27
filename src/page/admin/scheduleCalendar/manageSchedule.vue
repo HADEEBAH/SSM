@@ -112,7 +112,9 @@
             <div v-if="item?.courseMonitor?.length > 0">
               <v-row
                 dense
-                v-for="(seat, index) in item?.courseMonitor.filter(v => v.timeId === item.time.timeId )"
+                v-for="(seat, index) in item?.courseMonitor.filter(
+                  (v) => v.timeId === item.time.timeId
+                )"
                 :key="index"
               >
                 <v-col
@@ -120,7 +122,8 @@
                   class="mdi mdi-account-group-outline"
                   style="color: #ff6b81"
                 >
-                  {{ seat?.currentStudent }} / {{ seat?.maximumStudent }} ที่นั่ง
+                  {{ seat?.currentStudent }} /
+                  {{ seat?.maximumStudent }} ที่นั่ง
                 </v-col>
               </v-row>
             </div>
@@ -849,7 +852,7 @@ export default {
                 if (result.isConfirmed) {
                   (this.show_dialog_edit_holoday = false),
                     this.GetAllHolidays();
-                    this.GetDataInSchedule()
+                  this.GetDataInSchedule();
                 }
               });
             }
@@ -912,6 +915,7 @@ export default {
                     this.nameHoliday = "";
                     this.GetAllHolidays();
                     this.GetDataInSchedule();
+                    this.holidaydatesTh = "";
                   }
                 });
               } else {
@@ -960,7 +964,12 @@ export default {
     editHolidays(holiday) {
       this.show_dialog_edit_holoday = true;
       console.log("holiday", holiday);
-      console.log("++++", new Date(`${holiday.holidayDate}/${holiday.holidayMonth}/${holiday.holidayYears}`));
+      console.log(
+        "++++",
+        new Date(
+          `${holiday.holidayDate}/${holiday.holidayMonth}/${holiday.holidayYears}`
+        )
+      );
       // this.editHolidayDates = `${holiday.holidayDate}/${holiday.holidayMonth}/${holiday.holidayYears}`
       // this.editHolidayDates = new Date(`${holiday.holidayDate}/${holiday.holidayMonth}/${holiday.holidayYears}`)
       this.setDataEditDialog = { ...holiday };
@@ -1074,6 +1083,7 @@ export default {
 
     courseDate() {
       let courseTodayDate = new Date().toLocaleDateString("en-CA");
+      // let courseTodayDate = new Date("2023-06-13").toLocaleDateString("en-CA");
 
       let getAllCourseDate = [];
       let success = "";

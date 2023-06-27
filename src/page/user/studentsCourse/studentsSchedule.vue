@@ -2,7 +2,7 @@
   <v-container>
     {{ setFunctions }}
     <loading-overlay :loading="student_is_loading"></loading-overlay>
-    <div >
+    <div>
       <label class="text-xl font-bold">ข้อมูลตารางเรียน</label>
       <v-row dense class="my-3">
         <v-col
@@ -68,19 +68,21 @@
                     <!-- img -->
                     <v-col cols="12" sm="2">
                       <v-img
-                          max-height="180"
-                          :src="
-                            item.courseImg
-                              ? showImg(item.courseImg)
-                              :  require(`@/assets/course/default_course_img.svg`)
-                          "
-                        ></v-img>
+                        max-height="180"
+                        :src="
+                          item.courseImg
+                            ? showImg(item.courseImg)
+                            : require(`@/assets/course/default_course_img.svg`)
+                        "
+                      ></v-img>
                     </v-col>
                     <!-- detail -->
                     <v-col cols="12" sm="7">
                       <v-row dense>
                         <v-col class="text-lg font-bold">
-                          {{ item.courseNameTh == "" ? "-" : item.courseNameTh }}
+                          {{
+                            item.courseNameTh == "" ? "-" : item.courseNameTh
+                          }}
                           ({{
                             item.courseNameEng == "" ? "-" : item.courseNameEng
                           }})
@@ -101,7 +103,9 @@
                               : item.student.firstNameTh
                           }}
                           {{
-                            !item.student.lastNameTh ? "-" : item.student.lastNameTh
+                            !item.student.lastNameTh
+                              ? "-"
+                              : item.student.lastNameTh
                           }}
                           <!-- {{ item.student.firstNameTh }} -->
                           <!-- {{ !my_course_detail.coachName? '-' :  my_course_detail.coachName}} -->
@@ -111,8 +115,12 @@
                         <v-col class="text-slate-400">
                           <span class="mdi mdi-account">ทำรายการโดย :</span>
                           <!-- {{ !item.createdBy.firstNameTh? "-" : item.createdBy.firstNameTh }}  {{ !item.createdBy.lastNameTh? "-" : item.createdBy.lastNameTh }}  -->
-                          {{ !item.createdBy ? "-" : item.createdBy.firstNameTh }}
-                          {{ !item.createdBy ? "-" : item.createdBy.lastNameTh }}
+                          {{
+                            !item.createdBy ? "-" : item.createdBy.firstNameTh
+                          }}
+                          {{
+                            !item.createdBy ? "-" : item.createdBy.lastNameTh
+                          }}
                         </v-col>
                       </v-row>
                       <v-row dense>
@@ -130,7 +138,11 @@
                     </v-col>
 
                     <!-- circle -->
-                    <v-col cols="12" sm="3" class="d-flex align-center justify-center">
+                    <v-col
+                      cols="12"
+                      sm="3"
+                      class="d-flex align-center justify-center"
+                    >
                       <!-- {{ item.courseNameEn }} -->
                       <v-progress-circular
                         :rotate="-90"
@@ -169,87 +181,101 @@
                     params: { course_id: item.courseId },
                   })
                 "
-                class="mb-3 "
+                class="mb-3"
               >
-                <v-card-text>
-                  <v-row dense>
-                    <!-- img -->
-                    <v-col cols="12" sm="2">
-                        <v-img
-                          max-height="180"
-                          :src="
-                            item.courseImg
-                              ? showImg(item.courseImg)
-                              :  require(`@/assets/course/default_course_img.svg`)
-                          "
-                        ></v-img>
+                <v-row dense>
+                  <!-- img -->
+                  <v-col cols="12" sm="2">
+                    <v-col
+                      style="
+                        display: block;
+                        margin-left: auto;
+                        margin-right: auto;
+                        width: 100%;
+                        margin-top: 10%;
+                      "
+                    >
+                      <v-img
+                        :src="
+                          item.courseImg
+                            ? showImg(item.courseImg)
+                            : require(`@/assets/course/default_course_img.svg`)
+                        "
+                      ></v-img>
                     </v-col>
-                    <!-- detail -->
-                    <v-col cols="12" sm="7">
-                      <v-row dense>
-                        <v-col class="text-lg font-bold">
-                          {{ item.courseNameTh == "" ? "-" : item.courseNameTh }}
-                          ({{
-                            item.courseNameEng == "" ? "-" : item.courseNameEng
-                          }})
-                        </v-col>
-                      </v-row>
-                      <v-row dense>
-                        <v-col class="text-slate-400">
-                          <span class="mdi mdi-account">โค้ช :</span>
-                          {{ item.coachName == null ? "-" : item.coachName }}
-                        </v-col>
-                      </v-row>
-                      <v-row dense>
-                        <v-col class="text-slate-400">
-                          <span class="mdi mdi-account">ผู้เรียน :</span>
-                          {{
-                            !item.student.firstNameTh
-                              ? "-"
-                              : item.student.firstNameTh
-                          }}
-                          {{
-                            !item.student.lastNameTh ? "-" : item.student.lastNameTh
-                          }}
-                        </v-col>
-                      </v-row>
-                      <v-row dense>
-                        <v-col class="text-slate-400">
-                          <span class="mdi mdi-account">ทำรายการโดย :</span>
+                  </v-col>
+                  <!-- detail -->
+                  <v-col cols="12" sm="7">
+                    <v-row dense>
+                      <v-col class="text-lg font-bold">
+                        {{ item.courseNameTh == "" ? "-" : item.courseNameTh }}
+                        ({{
+                          item.courseNameEng == "" ? "-" : item.courseNameEng
+                        }})
+                      </v-col>
+                    </v-row>
+                    <v-row dense>
+                      <v-col class="text-slate-400">
+                        <span class="mdi mdi-account">โค้ช :</span>
+                        {{ item.coachName == null ? "-" : item.coachName }}
+                      </v-col>
+                    </v-row>
+                    <v-row dense>
+                      <v-col class="text-slate-400">
+                        <span class="mdi mdi-account">ผู้เรียน :</span>
+                        {{
+                          !item.student.firstNameTh
+                            ? "-"
+                            : item.student.firstNameTh
+                        }}
+                        {{
+                          !item.student.lastNameTh
+                            ? "-"
+                            : item.student.lastNameTh
+                        }}
+                      </v-col>
+                    </v-row>
+                    <v-row dense>
+                      <v-col class="text-slate-400">
+                        <span class="mdi mdi-account">ทำรายการโดย :</span>
 
-                          {{ !item.createdBy ? "-" : item.createdBy.firstNameTh }}
-                          {{ !item.createdBy ? "-" : item.createdBy.lastNameTh }}
-                        </v-col>
-                      </v-row>
-                      <v-row dense>
-                        <v-col>
-                          <v-chip color="#F9B320" dark>
-                            {{
-                              dayOfWeekName(item.dates.day) == ""
-                                ? "-"
-                                : dayOfWeekName(item.dates.day)
-                            }}
-                            {{ item.period.start }} - {{ item.period.end }} น.
-                          </v-chip>
-                        </v-col>
-                      </v-row>
-                    </v-col>
-                    <!-- circle -->
-                    <v-col cols="12" sm="3" class="d-flex align-center justify-center">  
-                        <!-- {{ item.courseNameEn }} -->
-                        <v-progress-circular
-                          :rotate="-90"
-                          :size="90"
-                          :width="10"
-                          :value="(item.dates.count / item.dates.totalDay) * 100"
-                          color="#ff6b81"
-                        >
-                          {{ item.dates.count }} / {{ item.dates.totalDay }}
-                          <br />ครั้ง
-                        </v-progress-circular>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
+                        {{ !item.createdBy ? "-" : item.createdBy.firstNameTh }}
+                        {{ !item.createdBy ? "-" : item.createdBy.lastNameTh }}
+                      </v-col>
+                    </v-row>
+                    <v-row dense>
+                      <v-col>
+                        <v-chip color="#F9B320" dark>
+                          {{
+                            dayOfWeekName(item.dates.day) == ""
+                              ? "-"
+                              : dayOfWeekName(item.dates.day)
+                          }}
+                          {{ item.period.start }} - {{ item.period.end }} น.
+                        </v-chip>
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                  <!-- circle -->
+                  <v-col
+                    cols="12"
+                    sm="3"
+                    class="d-flex align-center justify-center"
+                  >
+                    <!-- {{ item.courseNameEn }} -->
+                    <v-progress-circular
+                      :rotate="-90"
+                      :size="90"
+                      :width="10"
+                      :value="(item.dates.count / item.dates.totalDay) * 100"
+                      color="#ff6b81"
+                    >
+                      {{ item.dates.count }} / {{ item.dates.totalDay }}
+                      <br />ครั้ง
+                    </v-progress-circular>
+                  </v-col>
+                </v-row>
+                <!-- </v-card-text> -->
               </v-card>
             </div>
           </div>
@@ -375,7 +401,7 @@
                 ></v-autocomplete>
               </v-col>
             </v-row>
-            <v-card flat  v-if="ReserveList().length == 0">
+            <v-card flat v-if="ReserveList().length == 0">
               <v-card-text
                 class="pa-2 text-center border-2 border-[#ff6b81] rounded-lg"
               >
@@ -720,7 +746,6 @@
 
                         <v-col cols="12" md="12" sm="12" class="text-lg">
                           <div v-html="course_data.detail"></div>
-                        
                         </v-col>
                         <v-col cols="12" md="12" sm="12">
                           <div class="mt-8">

@@ -386,33 +386,7 @@ export default {
         }
       });
     },
-    // colorOfDay() {
-    //   this.events.forEach((event) => {
-    //     switch (new Date(event.start).getDay()) {
-    //       case 0:
-    //         event.color = "#F898A4";
-    //         break;
-    //       case 1:
-    //         event.color = "#FFFACD";
-    //         break;
-    //       case 2:
-    //         event.color = "#FFBBDA";
-    //         break;
-    //       case 3:
-    //         event.color = "#D0F4DE";
-    //         break;
-    //       case 4:
-    //         event.color = "#FFE2D1";
-    //         break;
-    //       case 5:
-    //         event.color = "#C0E4F6";
-    //         break;
-    //       case 6:
-    //         event.color = "#E8CFF8";
-    //         break;
-    //     }
-    //   });
-    // },
+
     goToday() {
       this.focus = new Date();
     },
@@ -422,21 +396,12 @@ export default {
     next() {
       this.$refs.calendar.next();
     },
-    getCurrentTime() {
-      return this.cal
-        ? this.cal.times.now.hour * 60 + this.cal.times.now.minute
-        : 0;
-    },
-    // scrollToTime() {
-    //     const time = this.getCurrentTime();
-    //     const first = Math.max(0, time - (time % 30) - 30);
-
-    //     this.cal.scrollToTime(first);
+    // getCurrentTime() {
+    //   return this.cal
+    //     ? this.cal.times.now.hour * 60 + this.cal.times.now.minute
+    //     : 0;
     // },
 
-    // updateTime() {
-    //   setInterval(() => this.cal.updateTimes(), 60 * 1000);
-    // },
     functionEvents(date) {
       let events_data = [];
       this.events.forEach((event) => {
