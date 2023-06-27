@@ -130,7 +130,7 @@
         </v-col>
       </v-row>
       <template v-for="(date, date_index) in this.coach_leave_data.dates" >
-        <div :key="`${date_index}-date`" v-if="GenCourseLeaveOptions(date.courses).filter(v => v.day_of_week_name.includes(`${new Date(date.date).getDay()}`)).length > 0">
+        <div :key="`${date_index}-date`">
           <v-row dense>
             <v-col cols="auto">
               <v-icon color="#ff6b81"
