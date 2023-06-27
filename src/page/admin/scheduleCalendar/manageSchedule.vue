@@ -1,7 +1,7 @@
 <template>
-  <v-container>
+  <loading-overlay v-if=" get_all_course_is_loading && get_all_holidays_is_loading" :loading="get_all_course_is_loading && get_all_holidays_is_loading"></loading-overlay>
+  <v-container v-else>
     <headerPage title="จัดการตาราง"></headerPage>
-
     <v-row class="py-2">
       <v-col cols="12" sm="8" class="w-full">
         <v-text-field
@@ -560,7 +560,7 @@
                   <v-col cols="12" sm="6" align="center">
                     <v-btn
                       @click="
-                        GetDataInSchedule(),
+                          GetDataInSchedule(),
                           (filter_dialog = false),
                           (selectedCourseType = []),
                           (selectedCourse = []),
@@ -636,13 +636,14 @@ import axios from "axios";
 import { mapActions, mapGetters } from "vuex";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import headerPage from "@/components/header/headerPage.vue";
-
+import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 export default {
   components: {
     calendarAdmin,
     dialogCard,
     VueTimepicker,
     headerPage,
+    loadingOverlay
   },
   data: () => ({
     dialog: true,
@@ -740,6 +741,7 @@ export default {
   created() {
     this.GetAllHolidays();
     this.GetAllCourse();
+
   },
   beforeMount() {
     // const events = [];
@@ -758,11 +760,6 @@ export default {
     this.GetFilterCourse();
     this.GetDataInSchedule();
   },
-
-  updated() {
-    // this.GetDataInSchedule();
-  },
-
   methods: {
     ...mapActions({
       GetFilterCourse: "ManageScheduleModules/GetFilterCourse",
@@ -1063,9 +1060,11 @@ export default {
       itemTime: "MyCourseModules/getcourseSchedule",
       get_filter_course: "ManageScheduleModules/getFilterCourse", //get all course
       get_all_course: "ManageScheduleModules/getAllCourse",
+      get_all_course_is_loading: "ManageScheduleModules/getAllCourseIsLoading",
       date_arr: "ManageScheduleModules/getDateArray",
       get_coachs: "CourseModules/getCoachs",
       get_all_holidays: "ManageScheduleModules/getAllHolidays",
+      get_all_holidays_is_loading: "ManageScheduleModules/getAllHolidaysIsLoading",
       get_holidays_by_id: "ManageScheduleModules/getHolidaysById",
       data_in_schedule: "ManageScheduleModules/getdataInSchadule",
       data_filter_schedule: "ManageScheduleModules/getFilterSchedule",
