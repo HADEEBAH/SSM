@@ -1131,6 +1131,8 @@ export default {
                 if (this.order.payment_status === "warn") {
                   let account = [];
                   this.order.courses.forEach((course) => {
+                    course.students = []
+                    console.log("1136",this.students)
                     course.coach_id = course.coach.coach_id;
                     course.coach_name = course.coach.coach_name;
                     for (const student of this.students) {
@@ -1162,6 +1164,8 @@ export default {
                   this.saveOrder();
                 } else {
                   this.order.courses.forEach((course) => {
+                    course.students = []
+                    console.log("1136",this.students)
                     course.coach_id = course.coach.coach_id;
                     course.coach_name = course.coach.coach_name;
                     for (const student of this.students) {
