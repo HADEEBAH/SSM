@@ -179,6 +179,37 @@
           </v-btn>
         </v-col>
       </v-row>
+      <v-dialog 
+        v-if="profile_fail" 
+        v-model="profile_fail" 
+        persistent
+        :width="$vuetify.breakpoint.smAndUp ? `60vw` : ''"
+      >
+        <v-card flat>
+          <v-card-title >
+            <v-row dense>
+              <v-col align="center">
+                ข้อมูลไม่ครบถ้วน
+              </v-col>
+            </v-row>
+          </v-card-title>
+          <v-card-text>
+            <v-row dense>
+              <v-col  align="center">
+                กรุณากรอกข้อมูลส่วนตัวให้ครบถ้วน
+              </v-col>
+            </v-row>
+           <v-row dense>
+            <v-col align="right">
+              <v-btn outlined color="#ff6b81" @click="closeDialogPorfile(false)">ยกเลิก</v-btn>
+            </v-col>
+            <v-col>
+              <v-btn depressed color="#ff6b81" dark @click="closeDialogPorfile(false)">ตกลง</v-btn>
+            </v-col>
+           </v-row>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
     </v-container>
   </v-form>
 </template>
@@ -197,7 +228,6 @@ export default {
   data: () => ({
     isEnabled: false,
     valid: true,
-
     rules: {
       email: [
         (value) => !!value || "Required.",
@@ -327,6 +357,7 @@ export default {
       GetUserData: "ProfileModules/GetUserData",
       GetAll: "ProfileModules/GetAll",
       GetProfileDetail: "ProfileModules/GetProfileDetail",
+      changeProfileFail: "loginModules/changeProfileFail"
       // GetParentData: "ProfileModules/GetParentData",
     }),
     edit() {
@@ -341,7 +372,9 @@ export default {
       this.isEnabled = false;
       // }
     },
-
+    closeDialogPorfile(value){
+      this.changeProfileFail(value)
+    },
     submitEdit(account_id) {
       if (this.$refs.form.validate()) {
         Swal.fire({
@@ -489,6 +522,7 @@ export default {
       user_data: "ProfileModules/getUserData",
       profile_user: "ProfileModules/getProfileUser",
       profile_detail: "ProfileModules/getProfileDetail",
+      profile_fail: "loginModules/getProfileFail",
       // parent_data: "ProfileModules/getParentData",
     }),
     setFunctions() {

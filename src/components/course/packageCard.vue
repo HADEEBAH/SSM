@@ -387,6 +387,12 @@ export default {
         option_data.amount = 12;
       } else if (option_data.period_package === "OP_4") {
         option_data.amount = 24;
+      }else if (option_data.period_package === "OP_5") {
+        option_data.amount = 4;
+      }else if (option_data.period_package === "OP_6") {
+        option_data.amount = 8;
+      }else if (option_data.period_package === "OP_7") {
+        option_data.amount = 10;
       }
     },
     checkPackage(package_data, packages) {
