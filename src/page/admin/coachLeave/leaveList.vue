@@ -156,7 +156,7 @@
                 v-if="type.value == 'cancel'"
                 max-height="90"
                 max-width="70"
-                src="../../../assets/coachLeave/disaccept.png"
+                src="../../../assets/coachLeave/cancel.svg"
               ></v-img>
             </template>
             <template v-slot:header>
