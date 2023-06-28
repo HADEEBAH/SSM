@@ -183,14 +183,29 @@
               <v-card-title>
                 <v-row dense>
                   <v-col
-                    cols="6"
-                    sm="6"
+                    cols="12"
+                    sm="12"
+                    md="12"
+                    lg="4"
                     style="color: #ff6b81; font-weight: bold"
                   >
-                    <v-icon color="#ff6b81">mdi-currency-usd</v-icon>
+                    <v-icon color="#ff6b81">mdi-currency-thb</v-icon>
                     รายได้
                   </v-col>
-                  <v-col cols="6" sm="6">
+                  <!-- Year -->
+                  <v-col cols="6" sm="6" md="6" lg="4">
+                    <v-select
+                      v-model="selected_years"
+                      :items="thaiyears"
+                      item-text="name"
+                      return-object
+                      dense
+                      outlined
+                      @input="selectYears()"
+                    ></v-select>
+                  </v-col>
+                  <!-- Month -->
+                  <v-col cols="6" sm="6" md="6" lg="4">
                     <v-select
                       v-model="selected_mounth"
                       :items="thaiMonths"
@@ -206,7 +221,11 @@
               <v-card-title>
                 <v-row dense>
                   <v-badge color="green" content="6">
-                    {{ get_graf.sumSuccess }}
+                    {{
+                      get_graf.sumSuccess
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    }}
                   </v-badge>
                 </v-row>
               </v-card-title>
@@ -233,14 +252,29 @@
               <v-card-title>
                 <v-row dense>
                   <v-col
-                    cols="6"
-                    sm="6"
+                    cols="12"
+                    sm="12"
+                    md="12"
+                    lg="4"
                     style="color: #ff6b81; font-weight: bold"
                   >
                     <v-icon color="#ff6b81">mdi-elevation-rise</v-icon>
                     สัดส่วนรายได้
                   </v-col>
-                  <v-col cols="6" sm="6">
+                  <!-- YEAR -->
+                  <v-col cols="6" sm="6" md="6" lg="4">
+                    <v-select
+                      v-model="donut_years"
+                      :items="thaiyears"
+                      item-text="name"
+                      return-object
+                      dense
+                      outlined
+                      @input="selectDonutYears()"
+                    ></v-select>
+                  </v-col>
+                  <!-- MONTH -->
+                  <v-col cols="6" sm="6" md="6" lg="4">
                     <v-select
                       v-model="donut_mounth"
                       :items="thaiMonths"
@@ -560,53 +594,50 @@ export default {
       { name: "พฤศจิกายน", key: "11", type: "month" },
       { name: "ธันวาคม", key: "12", type: "month" },
     ],
+
+    thaiyears: [
+      { name: "2566", key: "2023", type: "year" },
+      { name: "2567", key: "2024", type: "year" },
+      { name: "2568", key: "2025", type: "year" },
+      { name: "2569", key: "2026", type: "year" },
+      { name: "2580", key: "2027", type: "year" },
+    ],
+
     selected_mounth: "",
     donut_mounth: "",
-    setSelectedMonth: null,
-    // donutSeries: [44, 55, 41, 17, 15],
-    donutOptions: {
-      labels: ["คอร์ส 1", "คอร์ส 2"],
-      chart: {
-        width: 380,
-        type: "donut",
-      },
-      plotOptions: {
-        pie: {
-          startAngle: -90,
-          endAngle: 270,
-        },
-      },
-      dataLabels: {
-        // labels: ["คอร์ส 1", "คอร์ส 2", "คอร์ส 3", "คอร์ส 4", "คอร์ส 5"],
-        enabled: true,
-      },
-      fill: {
-        type: "gradient",
-      },
-      legend: {
-        // formatter: function (val, opts) {
-        //   return val + " - " + opts.w.globals.series[opts.seriesIndex];
-        // },
-      },
-
-      // responsive: [
-      //   {
-      //     breakpoint: 600,
-      //     options: {
-      //       chart: {
-      //         width: 500,
-      //       },
-      //       legend: {
-      //         position: "bottom",
-      //       },
-      //     },
-      //   },
-      // ],
-    },
+    selected_years: "",
+    donut_years: "",
+    total: 9999999,
+    // donutOptions: {
+    //   labels: ["คอร์ส 1", "คอร์ส 2"],
+    //   chart: {
+    //     width: 380,
+    //     type: "donut",
+    //   },
+    //   plotOptions: {
+    //     pie: {
+    //       startAngle: -90,
+    //       endAngle: 270,
+    //     },
+    //   },
+    //   dataLabels: {
+    //     // labels: ["คอร์ส 1", "คอร์ส 2", "คอร์ส 3", "คอร์ส 4", "คอร์ส 5"],
+    //     enabled: true,
+    //   },
+    //   fill: {
+    //     type: "gradient",
+    //   },
+    //   legend: {
+    //     // formatter: function (val, opts) {
+    //     //   return val + " - " + opts.w.globals.series[opts.seriesIndex];
+    //     // },
+    //   },
+    // },
   }),
   created() {
     this.selectMunth();
     this.selectDonutMounth();
+    this.selectYears();
   },
   beforeMount() {
     const month = new Date().getMonth() + 1;
@@ -618,6 +649,17 @@ export default {
     this.selectMunth();
     this.donut_mounth = mapMonth;
     this.selectDonutMounth();
+
+    const currentYear = new Date().getFullYear();
+    console.log("646", currentYear);
+    const mapyears = this.thaiyears.filter(
+      (item) => parseInt(item.key) === currentYear
+    )[0];
+    console.log("mapyears", mapyears);
+    this.selected_years = mapyears;
+    this.selectYears();
+    this.donut_years = mapyears;
+    this.selectDonutYears();
   },
   mounted() {
     this.GetEmptyCourse();
@@ -643,6 +685,16 @@ export default {
     selectDonutMounth() {
       console.log("thaiMonthsD", this.donut_mounth);
       this.GetDonut(this.donut_mounth);
+    },
+
+    selectYears() {
+      console.log("688", this.selected_years);
+      this.GetGraf(this.selected_years);
+    },
+
+    selectDonutYears() {
+      console.log("707", this.donut_years);
+      this.GetDonut(this.donut_years);
     },
   },
   computed: {
@@ -687,6 +739,7 @@ export default {
     series() {
       const lineChart = [
         {
+          name: "Desktops",
           data:
             this.get_graf.length !== 0
               ? this.get_graf.orderData.map((item) => {
@@ -697,56 +750,77 @@ export default {
       ];
       return lineChart;
     },
-    //   donutOptions() {
-    //     const donutdata = {}
-    //   return donutdata
-    // },
-
-    // donutOptions: {
-    //   labels: ["คอร์ส 1", "คอร์ส 2"],
-    //   chart: {
-    //     width: 380,
-    //     type: "donut",
-    //   },
-    //   plotOptions: {
-    //     pie: {
-    //       startAngle: -90,
-    //       endAngle: 270,
-    //     },
-    //   },
-    //   dataLabels: {
-    //     enabled: true,
-    //   },
-    //   fill: {
-    //     type: "gradient",
-    //   },
-    //   legend: {
-    //     // formatter: function (val, opts) {
-    //     //   return val + " - " + opts.w.globals.series[opts.seriesIndex];
-    //     // },
-    //   },
-
-    //   // responsive: [
-    //   //   {
-    //   //     breakpoint: 600,
-    //   //     options: {
-    //   //       chart: {
-    //   //         width: 500,
-    //   //       },
-    //   //       legend: {
-    //   //         position: "bottom",
-    //   //       },
-    //   //     },
-    //   //   },
-    //   // ],
-    // },
+    donutOptions() {
+      const donutdata = {
+        colors: [
+          "#ff6b6b",
+          "#ff906b",
+          "#ffb56b",
+          "#ffda6b",
+          "#ffff6b",
+          "#daff6b",
+          "#b5ff6b",
+          "#90ff6b",
+          "#6bff6b",
+          "#6bff90",
+          "#6bffb5",
+        ],
+        labels: [
+          "คอร์ส 1",
+          "คอร์ส 2",
+          "คอร์ส 3",
+          "คอร์ส 4",
+          "คอร์ส 5",
+          "คอร์ส 6",
+          "คอร์ส 7",
+          "คอร์ส 8",
+          "คอร์ส 9",
+          "คอร์ส 10",
+          "คอร์ส อื่นๆ",
+        ],
+        chart: {
+          width: 380,
+          type: "donut",
+        },
+        plotOptions: {
+          pie: {
+            startAngle: -90,
+            endAngle: 270,
+          },
+        },
+        dataLabels: {
+          enabled: true,
+        },
+        fill: {
+          type: "gradient",
+        },
+        legend: {
+          // formatter: function (val, opts) {
+          //   return val + " - " + opts.w.globals.series[opts.seriesIndex];
+          // },
+        },
+      };
+      return donutdata;
+    },
 
     donutSeries() {
-      let success = this.get_empty_course.countOpen;
-      let pending = this.get_donut.sumPending;
-      const donut = [success, pending];
+      // let success = this.get_empty_course.countOpen;
+      // let pending = this.get_donut.sumPending;
+      // const donut = [success, pending];
+      // return donut;
+
+      const donut = [
+        1000000, 900000, 800000, 700000, 600000, 500000, 400000, 300000, 200000,
+        100000, 2558,
+      ];
       return donut;
     },
+
+    // donutSeries() {
+    //   const donut = ["1000000", "pending"];
+    //   return donut;
+    // },
+
     pieSeries() {
       let Open = this.get_empty_course.countOpen;
       let Close = this.get_empty_course.countClose;
