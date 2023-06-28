@@ -1,8 +1,6 @@
 <template>
   <v-card flat class="pa-0">
-    <v-card-title class="d-flex justify-center">
-    แบบฟอร์มขอลา
-    </v-card-title>
+    <v-card-title class="d-flex justify-center"> แบบฟอร์มขอลา </v-card-title>
     <v-card-text>
       <!-- DATE LEAVE AND PERIOD -->
       <v-row dense v-if="admin">
@@ -43,9 +41,7 @@
                   >
                     <template v-slot:append>
                       <v-icon
-                        :color="
-                          coach_leave_data.start_date ? '#FF6B81' : ''
-                        "
+                        :color="coach_leave_data.start_date ? '#FF6B81' : ''"
                         >mdi-calendar</v-icon
                       >
                     </template>
@@ -80,9 +76,7 @@
                   >
                     <template v-slot:append>
                       <v-icon
-                        :color="
-                          coach_leave_data.end_date ? '#FF6B81' : ''
-                        "
+                        :color="coach_leave_data.end_date ? '#FF6B81' : ''"
                         >mdi-calendar</v-icon
                       >
                     </template>
@@ -129,13 +123,11 @@
           ></v-select>
         </v-col>
       </v-row>
-      <template v-for="(date, date_index) in this.coach_leave_data.dates" >
+      <template v-for="(date, date_index) in this.coach_leave_data.dates">
         <div :key="`${date_index}-date`">
           <v-row dense>
             <v-col cols="auto">
-              <v-icon color="#ff6b81"
-                >mdi-calendar-outline</v-icon
-              >
+              <v-icon color="#ff6b81">mdi-calendar-outline</v-icon>
             </v-col>
             <v-col class="font-bold text-lg"> {{ date.date_str }} </v-col>
           </v-row>
@@ -156,10 +148,9 @@
               v-for="(course, index) in date.courses"
               :key="index"
             >
-            
               <v-card-text class="rounded-md border">
                 <div v-if="date.courses.length > 1" align="right">
-                  <v-btn icon color="red" @click="RemoveCourse(date,index)"
+                  <v-btn icon color="red" @click="RemoveCourse(date, index)"
                     ><v-icon>mdi-close</v-icon></v-btn
                   >
                 </div>
@@ -183,7 +174,13 @@
                       outlined
                       cache-items
                       v-model="course.my_course_id"
-                      :items="GenCourseLeaveOptions(date.courses, index).filter(v => v.day_of_week_name.includes(`${new Date(date.date).getDay()}`))"
+                      :items="
+                        GenCourseLeaveOptions(date.courses, index).filter((v) =>
+                          v.day_of_week_name.includes(
+                            `${new Date(date.date).getDay()}`
+                          )
+                        )
+                      "
                       item-value="my_course_id"
                       item-text="course_name"
                     ></v-select>
@@ -211,85 +208,85 @@
                   <v-col>
                     วันที่ชดเชย
                     <v-menu
-                          v-model="course.menu_compensation_date"
-                          :close-on-content-click="false"
-                          transition="scale-transition"
-                          min-width="auto"
+                      v-model="course.menu_compensation_date"
+                      :close-on-content-click="false"
+                      transition="scale-transition"
+                      min-width="auto"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          dense
+                          outlined
+                          hide-details
+                          v-model="course.compensation_date"
+                          readonly
+                          placeholder="เลือกวันที่ชดเชย"
+                          v-bind="attrs"
+                          v-on="on"
                         >
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-text-field
-                              dense
-                              outlined
-                              hide-details
-                              v-model="course.compensation_date"
-                              readonly
-                              placeholder="เลือกวันที่ชดเชย"
-                              v-bind="attrs" 
-                              v-on="on"
+                          <template v-slot:append>
+                            <v-icon
+                              :color="course.compensation_date ? '#FF6B81' : ''"
+                              >mdi-calendar</v-icon
                             >
-                              <template v-slot:append>
-                                <v-icon
-                                  :color="course.compensation_date ? '#FF6B81' : ''"
-                                  >mdi-calendar</v-icon
-                                >
-                              </template>
-                            </v-text-field>
                           </template>
-                          <v-date-picker
-                            :min="new Date().toISOString()"
-                            v-model="course.compensation_date"
-                          ></v-date-picker>
-                        </v-menu>
+                        </v-text-field>
+                      </template>
+                      <v-date-picker
+                        :min="new Date().toISOString()"
+                        v-model="course.compensation_date"
+                      ></v-date-picker>
+                    </v-menu>
                   </v-col>
                   <v-col>
                     เวลาช่วงเวลา
                     <v-row dense class="mb-3">
-                        <v-col class="px-2" cols="12" sm="6">
-                          <VueTimepicker 
-                            class="input-size-lg"
-                            advanced-keyboard 
-                            @change="ChengeTimeMin(course.compensation_start_time_obj)"
-                            v-model="course.compensation_start_time_obj" 
-                            close-on-complete></VueTimepicker>
-                        </v-col>
-                        <v-col class="px-2" cols="12" sm="6">
-                          <VueTimepicker 
-                            class="input-size-lg"
-                            advanced-keyboard  
-                            @change="ChengeTimeMin(course.compensation_end_time_obj)"
-                            v-model="course.compensation_end_time_obj" 
-                            close-on-complete></VueTimepicker> 
-                        </v-col>
-                      </v-row>
+                      <v-col class="px-2" cols="12" sm="6">
+                        <VueTimepicker
+                          class="input-size-lg"
+                          advanced-keyboard
+                          @change="
+                            ChengeTimeMin(course.compensation_start_time_obj)
+                          "
+                          v-model="course.compensation_start_time_obj"
+                          close-on-complete
+                        ></VueTimepicker>
+                      </v-col>
+                      <v-col class="px-2" cols="12" sm="6">
+                        <VueTimepicker
+                          class="input-size-lg"
+                          advanced-keyboard
+                          @change="
+                            ChengeTimeMin(course.compensation_end_time_obj)
+                          "
+                          v-model="course.compensation_end_time_obj"
+                          close-on-complete
+                        ></VueTimepicker>
+                      </v-col>
+                    </v-row>
                   </v-col>
                 </v-row>
               </v-card-text>
             </v-card>
           </div>
           <v-row dense>
-              <v-col align="center">
-                <v-btn outlined color="#FF6b81" @click="AddCourse(date)"
-                  ><v-icon>mdi-plus</v-icon> เพิ่มคอร์ส
-                </v-btn>
-              </v-col>
-            </v-row>
+            <v-col align="center">
+              <v-btn outlined color="#FF6b81" @click="AddCourse(date)"
+                ><v-icon>mdi-plus</v-icon> เพิ่มคอร์ส
+              </v-btn>
+            </v-col>
+          </v-row>
         </div>
       </template>
-      
-     
+
       <v-row dense>
         <v-col>
           รายละเอียดการลา
-          <v-textarea
-            v-model="coach_leave_data.remark"
-            outlined
-          ></v-textarea>
+          <v-textarea v-model="coach_leave_data.remark" outlined></v-textarea>
         </v-col>
       </v-row>
       <v-card flat class="mb-3">
-        <v-card-text
-          class="border-dashed border-2 border-pink-600 rounded-lg"
-        >
+        <v-card-text class="border-dashed border-2 border-pink-600 rounded-lg">
           <v-row dense>
             <v-col cols="12" class="flex align-center justify-center">
               <v-img
@@ -298,10 +295,7 @@
                 max-width="100"
               ></v-img>
             </v-col>
-            <v-col
-              cols="12"
-              class="flex align-center justify-center text-lg"
-            >
+            <v-col cols="12" class="flex align-center justify-center text-lg">
               แนบไฟล์
             </v-col>
             <v-col cols="12" class="flex align-center justify-center">
@@ -347,8 +341,7 @@
                 <span class="font-bold">{{ file.name }}</span
                 ><br />
                 <span class="text-caption"
-                  >ขนาดไฟล์ :
-                  {{ (file.size / 1000000).toFixed(2) }} MB</span
+                  >ขนาดไฟล์ : {{ (file.size / 1000000).toFixed(2) }} MB</span
                 >
               </v-col>
               <v-col cols="auto" class="pl-2">
@@ -384,14 +377,14 @@
 <script>
 import Swal from "sweetalert2";
 import { dateFormatter } from "@/functions/functions";
-import { mapActions, mapGetters, } from "vuex";
-import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
+import { mapActions, mapGetters } from "vuex";
+import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 export default {
-  name:"coachLeaveForm",
-  props:{
-    admin: {type:  Boolean}
+  name: "coachLeaveForm",
+  props: {
+    admin: { type: Boolean },
   },
-  components: {VueTimepicker},
+  components: { VueTimepicker },
   data: () => ({
     today: new Date(),
     periods: [
@@ -404,7 +397,7 @@ export default {
       { label: "ลากิจ", value: "personal" },
       { label: "ลาพักร้อน", value: "take annual leave" },
     ],
-    selected_files :[],
+    selected_files: [],
     user_detail: null,
     coach_leave_data: {
       menu_start_date: false,
@@ -418,7 +411,7 @@ export default {
       remark: "",
       status: "",
       leave_type: "",
-      dates:[],
+      dates: [],
       courses: [
         {
           my_course_id: "",
@@ -426,7 +419,7 @@ export default {
           substitute_coach_id: "",
           day_of_week_id: "",
           time_id: "",
-          type : "date",
+          type: "date",
         },
       ],
     },
@@ -435,7 +428,7 @@ export default {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
   },
   mounted() {
-    console.log(this.coach_leave_data)
+    console.log(this.coach_leave_data);
   },
   watch: {},
   computed: {
@@ -448,8 +441,8 @@ export default {
       let end_date = this.coach_leave_data.end_date ? true : false;
       let period = this.coach_leave_data.period ? true : false;
       let leave_type = this.coach_leave_data.leave_type ? true : false;
-      console.log(start_date && end_date && period && leave_type );
-      return !(start_date && end_date && period && leave_type );
+      console.log(start_date && end_date && period && leave_type);
+      return !(start_date && end_date && period && leave_type);
     },
   },
   methods: {
@@ -458,55 +451,61 @@ export default {
       GetMyCourses: "CoachModules/GetMyCourses",
       GetCoachs: "CourseModules/GetCoachs",
       SearchCourseDateCoachLeave: "CoachModules/SearchCourseDateCoachLeave",
-      ShowDialogCoachLeaveForm: "CoachModules/ShowDialogCoachLeaveForm"
+      ShowDialogCoachLeaveForm: "CoachModules/ShowDialogCoachLeaveForm",
     }),
-    ChengeTimeMin(time){
-      if( time.mm === ""){
-        time.mm = "00"
+    ChengeTimeMin(time) {
+      if (time.mm === "") {
+        time.mm = "00";
       }
     },
-    RemoveCourse(date,index) {
+    RemoveCourse(date, index) {
       date.courses.splice(index, 1);
     },
-    SelectedCoach(){
-      this.coach_leave_data.start_date = null
-      this.coach_leave_data.start_date_str = ""
-      this.coach_leave_data.end_date = null
-      this.coach_leave_data.end_date_str = ""
-      this.coach_leave_data.period = ""
-      this.coach_leave_data.remark = ""
-      this.coach_leave_data.status = ""
-      this.coach_leave_data.leave_type = ""
-      this.coach_leave_data.dates = []
-      this.coach_leave_data.courses = []
+    SelectedCoach() {
+      this.coach_leave_data.start_date = null;
+      this.coach_leave_data.start_date_str = "";
+      this.coach_leave_data.end_date = null;
+      this.coach_leave_data.end_date_str = "";
+      this.coach_leave_data.period = "";
+      this.coach_leave_data.remark = "";
+      this.coach_leave_data.status = "";
+      this.coach_leave_data.leave_type = "";
+      this.coach_leave_data.dates = [];
+      this.coach_leave_data.courses = [];
     },
     GenCourseLeaveOptions(courses) {
       let my_course_data = [];
-      if(courses.length > 0){
+      if (courses.length > 0) {
         this.my_courses.forEach((course) => {
-          if(courses.filter(v => v.my_course_id.split("|")[0] === course.courseId && v.my_course_id.split("|")[2] === course.timeId).length === 0){
+          if (
+            courses.filter(
+              (v) =>
+                v.my_course_id.split("|")[0] === course.courseId &&
+                v.my_course_id.split("|")[2] === course.timeId
+            ).length === 0
+          ) {
             my_course_data.push({
               my_course_id: `${course.courseId}|${course.dayOfWeekId}|${course.timeId}`,
               cousre_id: course.courseId,
               course_name: `${course.courseNameTh} ${course.start} - ${course.end}น.`,
               time_id: course.timeId,
               day_of_week_id: course.dayOfWeekId,
-              day_of_week_name : course.dayOfWeekName
+              day_of_week_name: course.dayOfWeekName,
             });
           }
         });
       }
-      console.log(my_course_data)
+      console.log(my_course_data);
       return my_course_data;
     },
-    async GenDates(){
-      this.coach_leave_data.dates = []
+    async GenDates() {
+      this.coach_leave_data.dates = [];
       const options = {
         year: "numeric",
         month: "short",
         day: "numeric",
         calendar: "buddhist",
-        era: "short"
+        era: "short",
       };
       const start_date = this.coach_leave_data.start_date;
       const end_date = this.coach_leave_data.end_date;
@@ -515,22 +514,28 @@ export default {
       let currentDate = start;
       while (currentDate <= end) {
         this.my_courses.forEach((course) => {
-          if(course.dayOfWeekName.includes(`${new Date(currentDate).getDay()}`)){
-            if(!this.coach_leave_data.dates.some(v => v.date === currentDate.toISOString().split('T')[0])){
-              this.coach_leave_data.dates.push({ 
-                date: currentDate.toISOString().split('T')[0],
-                date_str: currentDate.toLocaleDateString("th-TH",options),
+          if (
+            course.dayOfWeekName.includes(`${new Date(currentDate).getDay()}`)
+          ) {
+            if (
+              !this.coach_leave_data.dates.some(
+                (v) => v.date === currentDate.toISOString().split("T")[0]
+              )
+            ) {
+              this.coach_leave_data.dates.push({
+                date: currentDate.toISOString().split("T")[0],
+                date_str: currentDate.toLocaleDateString("th-TH", options),
                 courses: [
                   {
-                    menu_compensation_date : false,
-                    compensation_date_str : "",
-                    compensation_date : "",
-                    compensation_start_time_obj : {HH : '' ,mm : ""},
-                    compensation_end_time_obj : {HH : '' ,mm : ""},
-                    compensation_start_time : "",
-                    compensation_end_time : "",
+                    menu_compensation_date: false,
+                    compensation_date_str: "",
+                    compensation_date: "",
+                    compensation_start_time_obj: { HH: "", mm: "" },
+                    compensation_end_time_obj: { HH: "", mm: "" },
+                    compensation_start_time: "",
+                    compensation_end_time: "",
                     my_course_id: "",
-                    type : "",
+                    type: "",
                     course_id: "",
                     substitute_coach_id: "",
                     day_of_week_id: "",
@@ -540,7 +545,7 @@ export default {
               });
             }
           }
-        })
+        });
         currentDate.setDate(currentDate.getDate() + 1);
       }
       console.log(this.coach_leave_data.dates);
@@ -549,12 +554,12 @@ export default {
       date.courses.push({
         my_course_id: "",
         course_id: "",
-        menu_compensation_date : false,
-        compensation_date : "",
-        compensation_start_time_obj : {HH : '' ,mm : ""},
-        compensation_end_time_obj : {HH : '' ,mm : ""},
-        compensation_start_time : "",
-        compensation_end_time : "",
+        menu_compensation_date: false,
+        compensation_date: "",
+        compensation_start_time_obj: { HH: "", mm: "" },
+        compensation_end_time_obj: { HH: "", mm: "" },
+        compensation_start_time: "",
+        compensation_end_time: "",
         substitute_coach_id: "",
         day_of_week_id: "",
         time_id: "",
@@ -575,30 +580,35 @@ export default {
     removeFile(index) {
       this.selected_files.splice(index, 1);
     },
-    
+
     inputDate(e, data) {
       switch (data) {
         case "start":
-          this.coach_leave_data.menu_start_date = false
-          this.coach_leave_data.start_date_str = dateFormatter( e,  "DD MT YYYYT" );
-          this.GenDates()
+          this.coach_leave_data.menu_start_date = false;
+          this.coach_leave_data.start_date_str = dateFormatter(
+            e,
+            "DD MT YYYYT"
+          );
+          this.GenDates();
           break;
         case "end":
-          this.coach_leave_data.menu_end_date = false
+          this.coach_leave_data.menu_end_date = false;
           this.coach_leave_data.end_date_str = dateFormatter(e, "DD MT YYYYT");
-          this.GenDates()
+          this.GenDates();
           this.SearchCourseDateCoachLeave({
-            account_id : this.admin ? this.coach_leave_data.coach_id : this.user_detail.account_id,
-            start_date :  this.coach_leave_data.start_date,
-            end_date :  this.coach_leave_data.end_date
-          })
+            account_id: this.admin
+              ? this.coach_leave_data.coach_id
+              : this.user_detail.account_id,
+            start_date: this.coach_leave_data.start_date,
+            end_date: this.coach_leave_data.end_date,
+          });
           break;
       }
     },
     closeDialogLeaveForm() {
-      this.selected_files = []
+      this.selected_files = [];
       this.show_leave_form = false;
-      this.ShowDialogCoachLeaveForm(false)
+      this.ShowDialogCoachLeaveForm(false);
       this.coach_leave_data = {
         menu_start_date: false,
         start_date: null,
@@ -613,7 +623,7 @@ export default {
         remark: "",
         status: "",
         leave_type: "",
-        dates:[],
+        dates: [],
         courses: [
           {
             my_course_id: "",
@@ -635,22 +645,22 @@ export default {
         confirmButtonText: "ตกลง",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          for(let date of this.coach_leave_data.dates){
-            for(let course of date.courses){
+          for (let date of this.coach_leave_data.dates) {
+            for (let course of date.courses) {
               let my_course_id_part = course.my_course_id.split("|");
               course.course_id = my_course_id_part[0];
               course.day_of_week_id = my_course_id_part[1];
               course.time_id = my_course_id_part[2];
             }
           }
-          if(!this.admin){
+          if (!this.admin) {
             this.coach_leave_data.coach_id = this.user_detail.account_id;
           }
-        
+
           this.SaveCoachLeave({
             coach_leave_data: this.coach_leave_data,
             files: this.selected_files,
-            admin: this.admin
+            admin: this.admin,
           });
           this.closeDialogLeaveForm();
         }
@@ -660,7 +670,7 @@ export default {
 };
 </script>
 <style>
-  .input-size-lg input {
-    height: 40px !important;
-  }
+.input-size-lg input {
+  height: 40px !important;
+}
 </style>
