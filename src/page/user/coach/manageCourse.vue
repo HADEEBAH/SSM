@@ -87,14 +87,16 @@
                       :max-width="$vuetify.breakpoint.smAndUp ? 160 : ''"
                     ></v-img>
                   </v-col>
-                  <v-col >
-                    <v-row  dense>
+                  <v-col>
+                    <v-row dense>
                       <v-col class="text-lg font-bold">{{
                         `${course.name}(${course.subtitle})`
                       }}</v-col>
                       <v-col cols="auto">
                         <v-chip small color="#F9B320" dark
-                          >{{ `${course.start_time}-${course.end_time}` }}น.</v-chip
+                          >{{
+                            `${course.start_time}-${course.end_time}`
+                          }}น.</v-chip
                         >
                       </v-col>
                     </v-row>
@@ -122,7 +124,6 @@
                       }}</v-col>
                     </v-row>
                   </v-col>
-                  
                 </v-row>
               </v-card-text>
             </v-card>
@@ -626,7 +627,7 @@
               :class="$vuetify.breakpoint.smAndUp ? '' : 'w-full'"
               outlined
               color="#ff6b81"
-              ><v-icon>mdi-plus-circle-outline</v-icon>แบบฟอร์มการลา</v-btn
+              ><v-icon>mdi-plus-circle-outline</v-icon>แบบฟอร์มขอลา</v-btn
             >
           </v-col>
         </v-row>
@@ -1442,7 +1443,6 @@ export default {
       show_dialog_coach_leave_form: "CoachModules/getShowDialogCoachLeaveForm",
     }),
     SetFunctionsComputed() {
-    
       return "";
     },
     genToday() {

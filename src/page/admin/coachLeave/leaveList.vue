@@ -17,7 +17,7 @@
           :class="$vuetify.breakpoint.smAndUp ? '' : 'w-full'"
           outlined
           color="#ff6b81"
-          ><v-icon>mdi-plus-circle-outline</v-icon>แบบฟอร์มการลา</v-btn
+          ><v-icon>mdi-plus-circle-outline</v-icon>แบบฟอร์มขอลา</v-btn
         >
       </v-col>
     </v-row>
@@ -242,6 +242,9 @@
             color="#ff6b81"
             ><v-icon>mdi-eye-outline</v-icon>
           </v-btn>
+        </template>
+        <template v-slot:[`no-results`]>
+          <div class="font-bold">ไม่พบข้อมูล</div>
         </template>
       </v-data-table>
     </v-card>
