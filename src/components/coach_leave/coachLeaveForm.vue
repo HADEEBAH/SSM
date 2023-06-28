@@ -484,7 +484,7 @@ export default {
       let my_course_data = [];
       if(courses.length > 0){
         this.my_courses.forEach((course) => {
-          if(courses.filter(v => v.my_course_id.split("|")[0] === course.courseId).length === 0){
+          if(courses.filter(v => v.my_course_id.split("|")[0] === course.courseId && v.my_course_id.split("|")[2] === course.timeId).length === 0){
             my_course_data.push({
               my_course_id: `${course.courseId}|${course.dayOfWeekId}|${course.timeId}`,
               cousre_id: course.courseId,
@@ -514,27 +514,33 @@ export default {
       const end = new Date(end_date);
       let currentDate = start;
       while (currentDate <= end) {
-        this.coach_leave_data.dates.push({ 
-          date: currentDate.toISOString().split('T')[0],
-          date_str: currentDate.toLocaleDateString("th-TH",options),
-          courses: [
-            {
-              menu_compensation_date : false,
-              compensation_date_str : "",
-              compensation_date : "",
-              compensation_start_time_obj : {HH : '' ,mm : ""},
-              compensation_end_time_obj : {HH : '' ,mm : ""},
-              compensation_start_time : "",
-              compensation_end_time : "",
-              my_course_id: "",
-              type : "",
-              course_id: "",
-              substitute_coach_id: "",
-              day_of_week_id: "",
-              time_id: "",
-            },
-          ],
-        });
+        this.my_courses.forEach((course) => {
+          if(course.dayOfWeekName.includes(`${new Date(currentDate).getDay()}`)){
+            if(!this.coach_leave_data.dates.some(v => v.date === currentDate.toISOString().split('T')[0])){
+              this.coach_leave_data.dates.push({ 
+                date: currentDate.toISOString().split('T')[0],
+                date_str: currentDate.toLocaleDateString("th-TH",options),
+                courses: [
+                  {
+                    menu_compensation_date : false,
+                    compensation_date_str : "",
+                    compensation_date : "",
+                    compensation_start_time_obj : {HH : '' ,mm : ""},
+                    compensation_end_time_obj : {HH : '' ,mm : ""},
+                    compensation_start_time : "",
+                    compensation_end_time : "",
+                    my_course_id: "",
+                    type : "",
+                    course_id: "",
+                    substitute_coach_id: "",
+                    day_of_week_id: "",
+                    time_id: "",
+                  },
+                ],
+              });
+            }
+          }
+        })
         currentDate.setDate(currentDate.getDate() + 1);
       }
       console.log(this.coach_leave_data.dates);
