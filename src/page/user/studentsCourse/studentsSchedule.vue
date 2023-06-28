@@ -4,7 +4,7 @@
     <loading-overlay :loading="student_is_loading"></loading-overlay>
     <div>
       <label class="text-xl font-bold">ข้อมูลตารางเรียน</label>
-      <v-row dense class="my-3">
+      <!-- <v-row dense class="my-3">
         <v-col
           cols="4"
           v-for="(type, type_index) in course_type"
@@ -29,11 +29,112 @@
             </v-card-text>
           </v-card>
         </v-col>
+      </v-row> -->
+
+      <v-row dense class="my-3">
+        <v-col cols="4">
+          <v-card
+            flat
+            @click="
+              $router.push({
+                name: 'StudentsSchedule',
+                params: { action: 'students_course' },
+              })
+            "
+            class="rounded-lg"
+          >
+            <v-card-text
+              :class="
+                this.$route.params.action == 'students_course'
+                  ? 'bg-[#FF6B81]'
+                  : 'bg-[#F5F5F5]'
+              "
+              class="rounded-lg flex justify-center align-center pa-2"
+            >
+              <label
+                :class="
+                  this.$route.params.action == 'students_course'
+                    ? 'text-white'
+                    : ' text-[#B3B3B3]'
+                "
+                class="font-bold mr-2"
+                >คอร์สของฉัน</label
+              >
+            </v-card-text>
+          </v-card>
+        </v-col>
+        <v-col cols="4">
+          <v-card
+            flat
+            @click="
+              $router.push({
+                name: 'StudentsSchedule',
+                params: { action: 'students_schedule' },
+              })
+            "
+            class="rounded-lg"
+          >
+            <v-card-text
+              :class="
+                this.$route.params.action == 'students_schedule'
+                  ? 'bg-[#FF6B81]'
+                  : 'bg-[#F5F5F5]'
+              "
+              class="rounded-lg flex justify-center align-center pa-2"
+            >
+              <label
+                :class="
+                  this.$route.params.action == 'students_schedule'
+                    ? 'text-white'
+                    : ' text-[#B3B3B3]'
+                "
+                class="font-bold mr-2"
+                >ตารางเรียน</label
+              >
+            </v-card-text>
+          </v-card>
+        </v-col>
+        <v-col cols="4">
+          <v-card
+            flat
+            @click="
+              $router.push({
+                name: 'StudentsSchedule',
+                params: { action: 'students_bookedcourse' },
+              })
+            "
+            class="rounded-lg"
+          >
+            <v-card-text
+              :class="
+                this.$route.params.action == 'students_bookedcourse'
+                  ? 'bg-[#FF6B81]'
+                  : 'bg-[#F5F5F5]'
+              "
+              class="rounded-lg flex justify-center align-center pa-2"
+            >
+              คอร์สที่จอง
+              <!-- <label
+                :class="
+                  this.$route.params.action == 'students_bookedcourse'
+                    ? 'text-white'
+                    : ' text-[#B3B3B3]'
+                "
+                class="font-bold mr-2"
+                >คอร์สที่จอง</label
+              > -->
+            </v-card-text>
+          </v-card>
+        </v-col>
+
+        <!-- <v-col cols="4" v-if="$route.params.action == 'students_schedule'"> ตารางเรียน </v-col>
+        <v-col cols="4" v-if="$route.params.action == 'students_bookedcourse'"> คอร์สที่จอง </v-col> -->
       </v-row>
 
       <!-- PAGE 1 -->
       <v-expand-x-transition transition="scale-transition">
-        <div v-if="type_selected == 'students_course'">
+        <!-- <div v-if="type_selected == 'students_course'"> -->
+        <div v-if="$route.params.action == 'students_course'">
           <!-- Role Parent -->
           <div v-if="data_local.roles.includes('R_4')">
             <v-row dense class="mb-3">
@@ -55,7 +156,7 @@
             <div v-for="(item, index) in my_course" :key="index">
               <v-card
                 outlined
-                class="mb-3"
+                class="mb-3 pa-2"
                 @click="
                   $router.push({
                     name: 'StudentCourse',
@@ -181,7 +282,7 @@
                     params: { course_id: item.courseId },
                   })
                 "
-                class="mb-3"
+                class="mb-3 pa-2"
               >
                 <v-row dense>
                   <!-- img -->
@@ -284,7 +385,8 @@
 
       <!-- PAGE 2 -->
       <v-expand-x-transition transition="scale-transition">
-        <div v-if="type_selected == 'students_schedule'">
+        <!-- <div v-if="type_selected == 'students_schedule'"> -->
+        <div v-if="$route.params.action == 'students_schedule'">
           <!-- Role parent -->
           <div v-if="data_local.roles.includes('R_4')">
             <v-row class="mb-3">
@@ -382,7 +484,8 @@
 
       <!-- PAGE 3 -->
       <v-expand-x-transition transition="scale-transition">
-        <div v-if="type_selected == 'students_bookedcourse'">
+        <!-- <div v-if="type_selected == 'students_bookedcourse'"> -->
+        <div v-if="$route.params.action == 'students_bookedcourse'">
           <!-- <pre>{{ profile_booked }}</pre> -->
           <!-- Role Parent -->
           <div v-if="data_local.roles.includes('R_4')">
@@ -873,30 +976,30 @@ export default {
     }
   },
 
-  watch: {
-    type_selected: function () {
-      console.log("type_selected", this.type_selected);
-      this.loading = true;
-      setTimeout(async () => {
-        this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-        if (this.type_selected == "students_course") {
-          if (this.user_detail.roles.includes("R_4")) {
-            this.GetStudentData(this.user_detail.account_id);
-            for (const item of JSON.parse(localStorage.getItem("relations"))) {
-              this.GetStudentData(item.student.studentId);
-              console.log("student");
-            }
-          } else if (this.user_detail.roles.includes("R_5")) {
-            this.GetStudentData(this.user_detail.account_id);
-          } else {
-            this.GetStudentData(null);
-          }
-        }
+  // watch: {
+  //   type_selected: function () {
+  //     console.log("type_selected", this.type_selected);
+  //     this.loading = true;
+  //     setTimeout(async () => {
+  //       this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
+  //       if (this.type_selected == "students_course") {
+  //         if (this.user_detail.roles.includes("R_4")) {
+  //           this.GetStudentData(this.user_detail.account_id);
+  //           for (const item of JSON.parse(localStorage.getItem("relations"))) {
+  //             this.GetStudentData(item.student.studentId);
+  //             console.log("student");
+  //           }
+  //         } else if (this.user_detail.roles.includes("R_5")) {
+  //           this.GetStudentData(this.user_detail.account_id);
+  //         } else {
+  //           this.GetStudentData(null);
+  //         }
+  //       }
 
-        this.loading = false;
-      }, 200);
-    },
-  },
+  //       this.loading = false;
+  //     }, 200);
+  //   },
+  // },
   methods: {
     ...mapActions({
       GetStudentData: "MyCourseModules/GetStudentData",
