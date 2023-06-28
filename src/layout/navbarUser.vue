@@ -289,9 +289,7 @@
                         .length > 0
                     : true
                 "
-                @click="
-                  $route.name !== list.to ? $router.push({ name: list.to }) : ''
-                "
+                @click="nextpage(list)"
                 :class="
                   menu_drawer_list.length - 1 !== list_index
                     ? 'list-items-border-bottom'
@@ -411,30 +409,35 @@ export default {
         icon: "mdi-account-circle",
         title: "โปรไฟล์",
         to: "UserProfile",
+        params: null,
         roles: [],
       },
       {
         icon: "mdi-calendar-month",
         title: "ตารางเรียน",
         to: "StudentsSchedule",
+        params: { action: "students_schedule" },
         roles: ["R_4", "R_5"],
       },
       {
         icon: "mdi-book-cog-outline",
         title: "การจัดการ",
         to: "menageCourse",
+        params: null,
         roles: ["R_1", "R_2", "R_3"],
       },
       {
         icon: "mdi-history",
         title: "ประวัติการลงทะเบียน",
         to: "orderHistory",
+        params: null,
         roles: [],
       },
       {
         icon: "mdi-swap-horizontal-bold",
         title: "หน้าผู้ดูแลระบบ",
         to: "DashboardList",
+        params: null,
         roles: ["R_1", "R_2"],
       },
       { icon: "mdi-logout", title: "ออกจากระบบ", to: "logOut", roles: [] },
@@ -542,6 +545,15 @@ export default {
         notification_id: params.notificationId,
         account_id: params.accountId,
       });
+    },
+    nextpage(list) {
+      if (this.$route.name !== list.to) {
+        if (list.params) {
+          this.$router.push({ name: list.to, params: { ...list.params } });
+        } else {
+          this.$router.push({ name: list.to });
+        }
+      }
     },
   },
 };
