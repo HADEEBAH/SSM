@@ -1415,6 +1415,8 @@ export default {
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     this.GetMyCourses({ coach_id: this.user_detail.account_id });
+    this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
+    this.GetCoachs();
   },
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "จัดการ");
@@ -1440,8 +1442,7 @@ export default {
       show_dialog_coach_leave_form: "CoachModules/getShowDialogCoachLeaveForm",
     }),
     SetFunctionsComputed() {
-      this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
-      this.GetCoachs();
+    
       return "";
     },
     genToday() {
