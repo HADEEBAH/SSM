@@ -1310,6 +1310,7 @@ export default {
     coachLeaveForm,
   },
   data: () => ({
+    form_coach_leave: false,
     singleExpand: false,
     expanded: [],
     filter_course: "",
@@ -1595,31 +1596,6 @@ export default {
       console.log(file.attachmentFile);
       let url = `${process.env.VUE_APP_URL}/api/v1/files/${file.attachmentFile}`;
       window.open(url, "_blank");
-    },
-    saveCoachLeave() {
-      Swal.fire({
-        icon: "question",
-        title: "ต้องการส่งใบลาใช่หรือไม่ ?",
-        showDenyButton: false,
-        showCancelButton: true,
-        cancelButtonText: "ยกเลิก",
-        confirmButtonText: "ตกลง",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          this.coach_leave_data.courses.forEach((course) => {
-            let my_course_id_part = course.my_course_id.split("|");
-            course.course_id = my_course_id_part[0];
-            course.day_of_week_id = my_course_id_part[1];
-            course.time_id = my_course_id_part[2];
-          });
-          this.coach_leave_data.coach_id = this.user_detail.account_id;
-          this.SaveCoachLeave({
-            coach_leave_data: this.coach_leave_data,
-            files: this.selected_files,
-          });
-          this.closeDialogLeaveForm();
-        }
-      });
     },
     GenCourseLeaveOptions() {
       let my_course_data = [];
