@@ -108,9 +108,11 @@
                 :rules="rules.period"
                 dense
                 outlined
-                :items="periods"
+                :disabled="!coach_leave_data.start_date &&  !coach_leave_data.end_date"
+                :items="date_range_length > 0 ? periods.filter(v => v.value === 'full') : periods"
                 item-text="label"
                 item-value="value"
+                @change="checkHour(coach_leave_data.period)"
                 v-model="coach_leave_data.period"
               ></v-select>
             </v-col>
@@ -131,7 +133,7 @@
             </v-col>
           </v-row>
           <template v-for="(date, date_index) in this.coach_leave_data.dates">
-            <div :key="`${date_index}-date`">
+            <div v-if="coach_leave_data.leave_type && coach_leave_data.period" :key="`${date_index}-date`">
               <v-row dense>
                 <v-col cols="auto">
                   <v-icon color="#ff6b81">mdi-calendar-outline</v-icon>
@@ -201,11 +203,7 @@
                           :rules="rules.sub_coach"
                           dense
                           outlined
-                          :items="
-                            coachs.filter(
-                              (v) => v.accountId !== user_detail.account_id
-                            )
-                          "
+                          :items="coach_leave_data.coach_id ?coachs.filter((v) => v.accountId !== coach_leave_data.coach_id) :coachs.filter((v) => v.accountId !== user_detail.account_id )"
                           item-value="accountId"
                           item-text="fullNameTh"
                           v-model="course.substitute_coach_id"
@@ -230,6 +228,7 @@
                               hide-details
                               v-model="course.compensation_date"
                               readonly
+                              @focus="getDatesBetween(coach_leave_data.start_date, coach_leave_data.end_date)"
                               placeholder="เลือกวันที่ชดเชย"
                               v-bind="attrs"
                               v-on="on"
@@ -244,6 +243,7 @@
                           </template>
                           <v-date-picker
                             :min="new Date().toISOString()"
+                            :allowed-dates="allowedDates"
                             v-model="course.compensation_date"
                           ></v-date-picker>
                         </v-menu>
@@ -255,6 +255,7 @@
                             <v-text-field
                               outlined
                               dense
+                              :disabled="!course.compensation_date"
                               :style="`width:${width()}px;`"
                               style="position: absolute; display: block; z-index: 4"
                               @focus="SelectedStartDate($event)"
@@ -270,6 +271,7 @@
                               advanced-keyboard
                               @change="ChengeTimeMin(course.compensation_start_time_obj, index, date_index,'start')"
                               v-model="course.compensation_start_time_obj"
+                              :hour-range="checkHour(coach_leave_data.period, course.compensation_date)"
                               close-on-complete
                             ></VueTimepicker>
                           </v-col>
@@ -277,6 +279,7 @@
                             <v-text-field
                               outlined
                               dense
+                              :disabled="!course.compensation_date"
                               :style="`width:${width()}px;`"
                               style="position: absolute; display: block; z-index: 4"
                               @focus="SelectedStartDate($event)"
@@ -286,11 +289,12 @@
                             </v-text-field>
                             <VueTimepicker
                               class="time-picker-hidden"   
-                              hide-clear-button          
+                              hide-clear-button       
                               input-class="input-size-lg"
                               advanced-keyboard
                               @change=" ChengeTimeMin(course.compensation_end_time_obj, index, date_index, 'end')"
                               v-model="course.compensation_end_time_obj"
+                              :hour-range="checkHour(coach_leave_data.period, course.compensation_date)"
                               close-on-complete
                             ></VueTimepicker>        
                           </v-col>
@@ -411,6 +415,7 @@ import Swal from "sweetalert2";
 import { dateFormatter } from "@/functions/functions";
 import { mapActions, mapGetters } from "vuex";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
+import moment from "moment";
 export default {
   name: "coachLeaveForm",
   props: {
@@ -418,6 +423,7 @@ export default {
   },
   components: { VueTimepicker },
   data: () => ({
+    focusCompensationDate : "",
     today: new Date(),
     rules: {
       start_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันเริ่ม"],
@@ -433,15 +439,16 @@ export default {
       compensation_end_time: [(val) => (val || "").length > 0 || "โปรดเลือกเวลาสิ้นสุด"],
     },
     periods: [
-      { label: "ลาเต็มวัน", value: "full" },
-      { label: "ลาช่วงเช้า", value: "morning" },
-      { label: "ลาช่วงบ่าย", value: "afternoon" },
+      { label: "ลาเต็มวัน", value: "full",  start: 0, end: 23,},
+      { label: "ลาช่วงเช้า", value: "morning" , start: 13, end: 23,},
+      { label: "ลาช่วงบ่าย", value: "afternoon",  start: 0, end: 12,},
     ],
     leaveTypes: [
       { label: "ลาป่วย", value: "sick" },
       { label: "ลากิจ", value: "personal" },
       { label: "ลาพักร้อน", value: "take annual leave" },
     ],
+    date_range_length : null,
     form_coach_leave :false,
     selected_files: [],
     user_detail: null,
@@ -474,7 +481,18 @@ export default {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
   },
   mounted() { },
-  watch: {},
+  watch: {
+    "coach_leave_data.start_date" : function(){
+      if(this.coach_leave_data.start_date && this.coach_leave_data.end_date){
+        this.getDateRangeLength()
+      }
+    },
+    "coach_leave_data.end_date" : function(){
+      if(this.coach_leave_data.start_date && this.coach_leave_data.end_date){
+        this.getDateRangeLength()
+      }
+    },
+  },
   computed: {
     ...mapGetters({
       coachs: "CourseModules/getCoachs",
@@ -487,7 +505,7 @@ export default {
       let end_date = this.coach_leave_data.end_date ? true : false;
       let period = this.coach_leave_data.period ? true : false;
       let leave_type = this.coach_leave_data.leave_type ? true : false;
-      console.log(start_date && end_date && period && leave_type);
+      // console.log(start_date && end_date && period && leave_type);
       return !(start_date && end_date && period && leave_type);
     },
   },
@@ -499,6 +517,63 @@ export default {
       SearchCourseDateCoachLeave: "CoachModules/SearchCourseDateCoachLeave",
       ShowDialogCoachLeaveForm: "CoachModules/ShowDialogCoachLeaveForm",
     }),
+    getDateRangeLength() {
+      let startDate = new Date(this.coach_leave_data.start_date)
+      let endDate = new Date(this.coach_leave_data.end_date)
+      const startTimestamp = Date.UTC(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+      const endTimestamp = Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+      const millisecondsPerDay = 24 * 60 * 60 * 1000;
+      const dateRangeLength = Math.floor((endTimestamp - startTimestamp) / millisecondsPerDay);
+      this.date_range_length = dateRangeLength
+      console.log(dateRangeLength)
+    },
+    checkHour(period, date){
+      if(date){
+        if(new Date(date) >=  new Date(this.coach_leave_data.start_date)  && new Date(date) <=  new Date(this.coach_leave_data.end_date) ){
+          if( this.periods.filter( v => v.value === period).length > 0 ){
+            let hrs = []
+            let start = this.periods.filter( v => v.value === period)[0].start
+            let end = this.periods.filter( v => v.value === period)[0].end
+            for(let hr = 0 ; hr < 24 ; hr++){
+              if(hr >= start && hr <= end){
+                hrs.push(hr)
+              }
+            } 
+            return hrs      
+          }
+        }else{
+          let hrs = []
+            let start = this.periods.filter( v => v.value === period)[0].start
+            let end = this.periods.filter( v => v.value === period)[0].end
+            for(let hr = 0 ; hr < 24 ; hr++){
+              if(hr >= start && hr <= end){
+                hrs.push(hr)
+              }
+            } 
+            return hrs   
+        }
+      }
+    },
+    getDatesBetween(startDate, endDate) {
+      console.log("549 => ",startDate, endDate)
+      const dates = [];
+      const currentDate = new Date(startDate);
+      while (currentDate <= new Date(endDate)) {
+        dates.push(moment(currentDate).format("YYYY-MM-DD"));
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+      this.focusCompensationDate = dates
+      console.log(dates)
+      return dates ;
+    },
+    allowedDates(val) {
+      if(this.coach_leave_data.period === 'full'){
+        return !this.focusCompensationDate.includes(val) 
+      }else{
+        return val
+      }
+      
+    },
     ChengeTimeMin(time, index_course, index_date, type) {
       if (time.mm === "") {
         time.mm = "00";
@@ -616,11 +691,10 @@ export default {
               }
             }
           }
-          
         });
         currentDate.setDate(currentDate.getDate() + 1);
       }
-      console.log(this.coach_leave_data.dates);
+      // console.log(this.coach_leave_data.dates);
     },
     AddCourse(date) {
       date.courses.push({
