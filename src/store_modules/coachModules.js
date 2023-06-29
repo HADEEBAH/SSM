@@ -10,6 +10,8 @@ const coachModules = {
     coachs: {},
     my_courses: [],
     my_courses_is_loading: false,
+    my_courses_leave:[],
+    my_courses_leave_is_loading : false,
     coach_check_in: {},
     student_check_in: [],
     student_check_in_is_loading: false,
@@ -21,6 +23,12 @@ const coachModules = {
     show_dialog_coach_leave_form : false,
   },
   mutations: {
+    SetMyCoursesLeave(state, payload){
+      state.my_courses_leave = payload
+    },
+    SetMyCoursesLeaveIsLoading(state, value){
+      state.my_courses_leave_is_loading = value
+    },
     SetShowDialogCoachLeaveForm(state, payload){
       state.show_dialog_coach_leave_form = payload
     },
@@ -63,7 +71,7 @@ const coachModules = {
   },
   actions: {
     async SearchCourseDateCoachLeave(context, {account_id, start_date, end_date}){
-      context.commit("SetMyCoursesIsLoading",true)
+      context.commit("SetMyCoursesLeaveIsLoading",true)
       let config = {
         headers: {
           "Access-Control-Allow-Origin": "*",
@@ -81,11 +89,11 @@ const coachModules = {
               course.dayOfWeekName = course.dayOfWeekName.split(",")
             }
           }
-          context.commit("SetMyCourses",data.data)
-          context.commit("SetMyCoursesIsLoading",false)
+          context.commit("SetMyCoursesLeave",data.data)
+          context.commit("SetMyCoursesLeaveIsLoading",false)
         }
       }catch(error){
-        context.commit("SetMyCoursesIsLoading",false)
+        context.commit("SetMyCoursesLeaveIsLoading",false)
         console.log(error)
       }
     },
@@ -1003,6 +1011,12 @@ const coachModules = {
     },
   },
   getters: {
+    getMyCoursesLeave(state) {
+      return state.my_courses_leave
+    },
+    getMyCoursesLeaveIsLoading(state) {
+      return state.my_courses_leave_is_loading
+    },
     getShowDialogCoachLeaveForm(state){
       return state.show_dialog_coach_leave_form
     },

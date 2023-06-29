@@ -194,12 +194,7 @@
                 advanced-keyboard
                 :style="`width:${widthfull()}px;`"
                 v-model="course_data.course_hours_obj"
-                @change="
-                  ChangeHours(
-                    course_data.course_hours_obj,
-                    course_data.course_hours
-                  )
-                "
+                @change="ChangeHours( course_data.course_hours_obj, course_data.course_hours) "
               >
               </VueTimepicker>
             </div>
