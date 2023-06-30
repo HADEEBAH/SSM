@@ -1,5 +1,39 @@
 import axios from "axios";
 import VueCookie from "vue-cookie"
+function dayOfWeekArray(day) {
+    // console.log
+    // let day_arr = day
+    let days = day
+    console.log(day)
+    const weekdays =[
+      "วันอาทิตย์",
+      "วันจันทร์",
+      "วันอังคาร",
+      "วันพุธ",
+      "วันพฤหัสบดี",
+      "วันศุกร์",
+      "วันเสาร์",
+    ];
+    days.sort();
+    let ranges = [];
+    if(days[0]){
+      let rangeStart =  parseInt(days[0]);
+      let prevDay = rangeStart;
+      for (let i = 1; i < days.length; i++) {
+        const day = parseInt(days[i]);
+        if (day === prevDay + 1) {
+          prevDay = day;
+        } else {
+          const rangeEnd = prevDay;
+          ranges.push({ start: rangeStart, end: rangeEnd });
+          rangeStart = day;
+          prevDay = day;
+        }
+      }
+      ranges.push({ start: rangeStart, end: prevDay });
+      return ranges.map(({ start, end }) => start === end ? weekdays[start] : `${weekdays[start]} - ${weekdays[end]}`).join(', ')
+    }
+  }
 const myCourseModules = {
     namespaced: true,
     state: {
@@ -173,11 +207,13 @@ const myCourseModules = {
                 //   let user_account_id = this.user_detail.account_id
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
                 if (data.statusCode === 200) {
-                    console.log(data)
+                    console.log("176=>",data.data)
                     context.commit("SetStudentsLoading", false)
+                     
                     const dataCourseSchedule = { dates: [] };
                     for (const course of data.data) {
                         console.log("course", course);
+                        course.day_name = course.dates.day ? dayOfWeekArray(course.dates.day) : course.dates.day
                         for (const date of course.dates.date) {
                             if (course.period.start !== "Invalid date" && course.period.end !== "Invalid date") {
                                 dataCourseSchedule.dates.push({
