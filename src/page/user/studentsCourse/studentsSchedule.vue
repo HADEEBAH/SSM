@@ -4,33 +4,6 @@
     <loading-overlay :loading="student_is_loading"></loading-overlay>
     <div>
       <label class="text-xl font-bold">ข้อมูลตารางเรียน</label>
-      <!-- <v-row dense class="my-3">
-        <v-col
-          cols="4"
-          v-for="(type, type_index) in course_type"
-          :key="type_index"
-        >
-          <v-card flat @click="type_selected = type.value" class="rounded-lg">
-            <v-card-text
-              :class="
-                type_selected === type.value ? 'bg-[#FF6B81]' : 'bg-[#F5F5F5]'
-              "
-              class="rounded-lg flex justify-center align-center pa-2"
-            >
-              <label
-                :class="
-                  type_selected === type.value
-                    ? 'text-white'
-                    : ' text-[#B3B3B3]'
-                "
-                class="font-bold mr-2"
-                >{{ type.name }}</label
-              >
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row> -->
-
       <v-row dense class="my-3">
         <v-col cols="4">
           <v-card
@@ -75,19 +48,11 @@
             class="rounded-lg"
           >
             <v-card-text
-              :class="
-                this.$route.params.action == 'students_schedule'
-                  ? 'bg-[#FF6B81]'
-                  : 'bg-[#F5F5F5]'
-              "
+              :class=" this.$route.params.action == 'students_schedule' ? 'bg-[#FF6B81]' : 'bg-[#F5F5F5]' "
               class="rounded-lg flex justify-center align-center pa-2"
             >
               <label
-                :class="
-                  this.$route.params.action == 'students_schedule'
-                    ? 'text-white'
-                    : ' text-[#B3B3B3]'
-                "
+                :class=" this.$route.params.action == 'students_schedule' ? 'text-white' : ' text-[#B3B3B3]'"
                 class="font-bold mr-2"
                 >ตารางเรียน</label
               >
@@ -114,15 +79,6 @@
               class="rounded-lg flex justify-center align-center pa-2"
             >
               คอร์สที่จอง
-              <!-- <label
-                :class="
-                  this.$route.params.action == 'students_bookedcourse'
-                    ? 'text-white'
-                    : ' text-[#B3B3B3]'
-                "
-                class="font-bold mr-2"
-                >คอร์สที่จอง</label
-              > -->
             </v-card-text>
           </v-card>
         </v-col>
@@ -227,12 +183,7 @@
                       <v-row dense>
                         <v-col>
                           <v-chip color="#F9B320" dark>
-                            {{
-                              dayOfWeekName(item.dates.day) == ""
-                                ? "-"
-                                : dayOfWeekName(item.dates.day)
-                            }}
-                            {{ item.period.start }} - {{ item.period.end }} น.
+                            {{ `${item.day_name} ${item.period.start} - ${ item.period.end}น.` }}
                           </v-chip>
                         </v-col>
                       </v-row>
@@ -273,7 +224,7 @@
                 </span>
               </v-card-text>
             </v-card>
-            <div v-else v-for="(item, index) in student_data" :key="index">
+            <div v-else v-for="(item, index) in student_data.filter(v => !v.comp)" :key="index">
               <v-card
                 outlined
                 @click="
@@ -347,12 +298,7 @@
                     <v-row dense>
                       <v-col>
                         <v-chip color="#F9B320" dark>
-                          {{
-                            dayOfWeekName(item.dates.day) == ""
-                              ? "-"
-                              : dayOfWeekName(item.dates.day)
-                          }}
-                          {{ item.period.start }} - {{ item.period.end }} น.
+                          {{ `${item.day_name} ${item.period.start} - ${ item.period.end}น.` }}
                         </v-chip>
                       </v-col>
                     </v-row>
@@ -433,6 +379,7 @@
               </v-col>
             </v-row>
             <div>
+              <per>{{ itemTime.dates }}</per>
               <template>
                 <calendarStudent
                   :events="itemTime.dates"

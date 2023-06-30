@@ -173,13 +173,10 @@ const manageScheduleModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let { data } = await axios.get(
-          `${process.env.VUE_APP_URL}/api/v1/holiday/all`,
-          config
-        );
+
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
         if (data.statusCode === 200) {
           // let event = []
-
           data.data.map((item) => {
             // console.log("item------->", item);
             item.fullDateHolidaysTh = `${item.holidayDate} ${thaiMonths[parseInt(item.holidayMonth) - 1]} ${parseInt(item.holidayYears) + 543}`
@@ -326,15 +323,10 @@ const manageScheduleModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-
-        let { data } = await axios.get(
-          ` ${process.env.VUE_APP_URL}/api/v1/admincourse/courseholiday`,
-          config
-        );
-
+        // let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/admincourse/courseholiday`,config);
         if (data.statusCode === 200) {
           let eventSchadule = [];
-
           data.data.map((item) => {
             let times = null;
             let colors;
@@ -372,7 +364,7 @@ const manageScheduleModules = {
                 }
               }
             }
-
+            // console.log(item)
             eventSchadule.push({
               name: item.name,
               start: item.startDate,
@@ -384,6 +376,8 @@ const manageScheduleModules = {
               type: item.type,
               startTime: item.startTime,
               endTime: item.endTime,
+              selectedDate: item.selectedDate,
+              itmeData : item
             });
 
             dataInSchadule = eventSchadule;
