@@ -646,7 +646,7 @@
                 ></v-img>
               </template>
               <template v-slot:header>
-                <div class="font-bold text-center">คอร์สทั้งหมด</div>
+                <div class="font-bold text-center">ทั้งหมด</div>
               </template>
               <template v-slot:detail>
                 <v-row class="d-flex align-end">
@@ -800,6 +800,9 @@
               item-key="coachLeaveId"
               show-expand
             >
+            <template v-slot:no-data>
+                ไม่พบข้อมูลใบลา
+            </template>
               <template v-slot:[`item.date`]="{ item }">
                 {{
                   item.startDate === item.endDate
@@ -848,7 +851,7 @@
                   @click="showDialogDetail(item)"
                   ><v-icon>mdi-eye-outline</v-icon>
                 </v-btn>
-                <v-btn icon color="#ff6b81" @click="cancelCoachLeave(item)"
+                <v-btn :disabled="item.status !== 'pending'" icon color="#ff6b81" @click="cancelCoachLeave(item)"
                   ><v-icon>mdi-file-cancel-outline</v-icon>
                 </v-btn>
               </template>
