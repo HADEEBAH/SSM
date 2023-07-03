@@ -48,6 +48,9 @@
                       >
                     </v-chip>
                   </template>
+                  <template v-slot:item="{ item }">
+                    {{ `${item.firstNameTh} ${item.lastNameTh}` }}  
+                  </template>
                 </v-autocomplete>
               </v-col>
               <v-col cols="12" sm="auto">
