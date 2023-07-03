@@ -728,22 +728,13 @@ export default {
           this.open_date = dateFormatter(e, "DD MT YYYYT");
           break;
         case "register start date":
-          this.register_date_range_str.start_date = dateFormatter(
-            e,
-            "DD MT YYYYT"
-          );
+          this.register_date_range_str.start_date = dateFormatter(e, "DD MT YYYYT" );
           break;
         case "register end date":
-          this.register_date_range_str.end_date = dateFormatter(
-            e,
-            "DD MT YYYYT"
-          );
+          this.register_date_range_str.end_date = dateFormatter( e,"DD MT YYYYT");
           break;
         case "class start date":
-          this.class_date_range_str.start_date = dateFormatter(
-            e,
-            "DD MT YYYYT"
-          );
+          this.class_date_range_str.start_date = dateFormatter( e, "DD MT YYYYT");
           break;
         case "class end date":
           this.class_date_range_str.end_date = dateFormatter(e, "DD MT YYYYT");

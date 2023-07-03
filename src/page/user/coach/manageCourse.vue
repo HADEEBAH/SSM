@@ -87,14 +87,16 @@
                       :max-width="$vuetify.breakpoint.smAndUp ? 160 : ''"
                     ></v-img>
                   </v-col>
-                  <v-col >
-                    <v-row  dense>
+                  <v-col>
+                    <v-row dense>
                       <v-col class="text-lg font-bold">{{
                         `${course.name}(${course.subtitle})`
                       }}</v-col>
                       <v-col cols="auto">
                         <v-chip small color="#F9B320" dark
-                          >{{ `${course.start_time}-${course.end_time}` }}น.</v-chip
+                          >{{
+                            `${course.start_time}-${course.end_time}`
+                          }}น.</v-chip
                         >
                       </v-col>
                     </v-row>
@@ -122,7 +124,6 @@
                       }}</v-col>
                     </v-row>
                   </v-col>
-                  
                 </v-row>
               </v-card-text>
             </v-card>
@@ -626,7 +627,7 @@
               :class="$vuetify.breakpoint.smAndUp ? '' : 'w-full'"
               outlined
               color="#ff6b81"
-              ><v-icon>mdi-plus-circle-outline</v-icon>แบบฟอร์มการลา</v-btn
+              ><v-icon>mdi-plus-circle-outline</v-icon>แบบฟอร์มขอลา</v-btn
             >
           </v-col>
         </v-row>
@@ -645,7 +646,7 @@
                 ></v-img>
               </template>
               <template v-slot:header>
-                <div class="font-bold text-center">คอร์สทั้งหมด</div>
+                <div class="font-bold text-center">ทั้งหมด</div>
               </template>
               <template v-slot:detail>
                 <v-row class="d-flex align-end">
@@ -799,6 +800,9 @@
               item-key="coachLeaveId"
               show-expand
             >
+            <template v-slot:no-data>
+                ไม่พบข้อมูลใบลา
+            </template>
               <template v-slot:[`item.date`]="{ item }">
                 {{
                   item.startDate === item.endDate
@@ -847,7 +851,7 @@
                   @click="showDialogDetail(item)"
                   ><v-icon>mdi-eye-outline</v-icon>
                 </v-btn>
-                <v-btn icon color="#ff6b81" @click="cancelCoachLeave(item)"
+                <v-btn :disabled="item.status !== 'pending'" icon color="#ff6b81" @click="cancelCoachLeave(item)"
                   ><v-icon>mdi-file-cancel-outline</v-icon>
                 </v-btn>
               </template>
@@ -1309,6 +1313,7 @@ export default {
     coachLeaveForm,
   },
   data: () => ({
+    form_coach_leave: false,
     singleExpand: false,
     expanded: [],
     filter_course: "",
@@ -1415,6 +1420,8 @@ export default {
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     this.GetMyCourses({ coach_id: this.user_detail.account_id });
+    this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
+    this.GetCoachs();
   },
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "จัดการ");
@@ -1440,8 +1447,6 @@ export default {
       show_dialog_coach_leave_form: "CoachModules/getShowDialogCoachLeaveForm",
     }),
     SetFunctionsComputed() {
-      this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
-      this.GetCoachs();
       return "";
     },
     genToday() {
@@ -1594,31 +1599,6 @@ export default {
       console.log(file.attachmentFile);
       let url = `${process.env.VUE_APP_URL}/api/v1/files/${file.attachmentFile}`;
       window.open(url, "_blank");
-    },
-    saveCoachLeave() {
-      Swal.fire({
-        icon: "question",
-        title: "ต้องการส่งใบลาใช่หรือไม่ ?",
-        showDenyButton: false,
-        showCancelButton: true,
-        cancelButtonText: "ยกเลิก",
-        confirmButtonText: "ตกลง",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          this.coach_leave_data.courses.forEach((course) => {
-            let my_course_id_part = course.my_course_id.split("|");
-            course.course_id = my_course_id_part[0];
-            course.day_of_week_id = my_course_id_part[1];
-            course.time_id = my_course_id_part[2];
-          });
-          this.coach_leave_data.coach_id = this.user_detail.account_id;
-          this.SaveCoachLeave({
-            coach_leave_data: this.coach_leave_data,
-            files: this.selected_files,
-          });
-          this.closeDialogLeaveForm();
-        }
-      });
     },
     GenCourseLeaveOptions() {
       let my_course_data = [];

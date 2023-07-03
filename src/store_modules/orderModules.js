@@ -220,7 +220,7 @@ const orderModules = {
                 let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/`,config)
                 if(data.statusCode === 200){
                     if(data.data.length > 0){
-                        // console.log("222",data.data)
+                        console.log("222",data.data)
                         for await (let order of data.data){
                             for await (const student of order.student){
                                 if(!students.some(v=>v.account_id == student.userOneId)){
@@ -479,11 +479,11 @@ const orderModules = {
                             })
                         }
                     })
-                    console.log(course)
+                    console.log(course.day.day)
                     payload.courses.push({
                         "courseId" :  course.course_id ,
                         "coursePackageOptionId": course.option.course_package_option_id,
-                        "dayName" : course.day?.dayName ? course.day.dayName : course.day,
+                        "dayName" : course.day?.dayName ? course.day.dayName : course.day.day ,
                         "dayOfWeekId": course?.time?.timeData ? course.time.timeData.filter(v => v.coach_id === course.coach_id)[0].dayOfWeekId : course.time.dayOfWeekId,
                         "timeId":  course?.time?.timeData ? course.time.timeData.filter(v => v.coach_id === course.coach_id)[0].timeId : course.time.timeId,
                         "time": course.time,
@@ -589,7 +589,8 @@ const orderModules = {
                             }
                             console.log(payment_payload)
                             // let localhost = "http://localhost:3003"
-                            let  payment = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/payment/data/${data.data.orderNumber}`,payment_payload)
+                            let endpoint = process.env.VUE_APP_URL
+                            let  payment = await axios.patch(`${endpoint}/api/v1/payment/data/${data.data.orderNumber}`,payment_payload)
                             if(payment.data.statusCode === 200){
                                 Swal.fire({
                                     icon:"success",

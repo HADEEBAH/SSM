@@ -173,9 +173,7 @@
               </v-col>
             </v-row>
             <!-- CLASS TIME -->
-            <template
-              v-for="(class_date, class_date_index) in teach_day.class_date"
-            >
+            <template v-for="(class_date, class_date_index) in teach_day.class_date" >
               <v-row dense :key="`${class_date_index}-class-date`">
                 <!-- <pre>{{ coach.disabled_hours }}</pre> -->
                 <v-col cols="12" sm="6">
@@ -398,14 +396,20 @@ export default {
             end_time: v.class_date_range.end_time_object,
           };
         });
-        timeused.forEach((time) => {
-          if (hours === time.end_time.HH) {
-            let min_end = parseInt(time.end_time.mm);
-            for (let min = min_end + 1; min < 60; min++) {
-              timeMinUsed.push(min);
+        if(timeused.filter(v => v.end_time.HH === hours).length > 0){
+          timeused.filter(v => v.end_time.HH === hours).forEach((time) => {
+            if (hours === time.end_time.HH) {
+              let min_end = parseInt(time.end_time.mm);
+              for (let min = min_end; min < 60; min++) {
+                timeMinUsed.push(min);
+              }
             }
+          });
+        }else{
+          for (let min = 0 ; min < 60; min++) {
+            timeMinUsed.push(min);
           }
-        });
+        }
         // console.log("timeMinUsed => ",timeMinUsed)
         return timeMinUsed;
       }

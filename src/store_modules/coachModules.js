@@ -10,6 +10,8 @@ const coachModules = {
     coachs: {},
     my_courses: [],
     my_courses_is_loading: false,
+    my_courses_leave:[],
+    my_courses_leave_is_loading : false,
     coach_check_in: {},
     student_check_in: [],
     student_check_in_is_loading: false,
@@ -21,6 +23,12 @@ const coachModules = {
     show_dialog_coach_leave_form : false,
   },
   mutations: {
+    SetMyCoursesLeave(state, payload){
+      state.my_courses_leave = payload
+    },
+    SetMyCoursesLeaveIsLoading(state, value){
+      state.my_courses_leave_is_loading = value
+    },
     SetShowDialogCoachLeaveForm(state, payload){
       state.show_dialog_coach_leave_form = payload
     },
@@ -63,7 +71,7 @@ const coachModules = {
   },
   actions: {
     async SearchCourseDateCoachLeave(context, {account_id, start_date, end_date}){
-      context.commit("SetMyCoursesIsLoading",true)
+      context.commit("SetMyCoursesLeaveIsLoading",true)
       let config = {
         headers: {
           "Access-Control-Allow-Origin": "*",
@@ -81,11 +89,11 @@ const coachModules = {
               course.dayOfWeekName = course.dayOfWeekName.split(",")
             }
           }
-          context.commit("SetMyCourses",data.data)
-          context.commit("SetMyCoursesIsLoading",false)
+          context.commit("SetMyCoursesLeave",data.data)
+          context.commit("SetMyCoursesLeaveIsLoading",false)
         }
       }catch(error){
-        context.commit("SetMyCoursesIsLoading",false)
+        context.commit("SetMyCoursesLeaveIsLoading",false)
         console.log(error)
       }
     },
@@ -545,12 +553,52 @@ const coachModules = {
         // let localhost = "http://localhost:3000"
         
         const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${coach_id}`, config);
-        // console.log("GetMyCourses", data.data)
+        console.log("GetMyCourses", data.data)
         if (data.statusCode == 200) {  
           let courses_task = [];       
           for await (const course of data.data) {
             const course_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course.courseId}`);
             if (course_data.data.statusCode === 200) {
+              if(course.coachLeaveCourses.length > 0){
+                for (const leaveCourse of course.coachLeaveCourses) {
+                  for(const compensationDate of leaveCourse.teachCompensationDate){
+                    let start_time = leaveCourse.teachCompensationStartTime;
+                    let end_time = leaveCourse.teachCompensationEndTime;
+                    const [start_hours, start_minutes] = start_time.split(":");
+                    const [end_hours, end_minutes] = end_time.split(":");
+                    const startDate = new Date(compensationDate);
+                    startDate.setHours(start_hours);
+                    startDate.setMinutes(start_minutes);
+                    const endDate = new Date(compensationDate);
+                    endDate.setHours(end_hours);
+                    endDate.setMinutes(end_minutes);
+                    if (courses_task.filter(v => v.course_id === course.courseId && v.time_id === course.timeId && v.day_of_week_id === course.dayOfWeekId && v.start_date === moment(startDate).format("YYYY-MM-DD")).length === 0) {
+                      courses_task.push({
+                        course_package_name: course.packageName,
+                        course_option_name: course.optionName,
+                        name: course_data.data.data.courseNameTh,
+                        subtitle: course_data.data.data.courseNameEn,
+                        course_id: course.courseId,
+                        time_id: course.timeId,
+                        day_of_week_id: course.dayOfWeekId,
+                        coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
+                        start_date: moment(startDate).format("YYYY-MM-DD"),
+                        start_date_str: startDate.toLocaleDateString("th-TH", options),
+                        start: moment(startDate).format("YYYY-MM-DD HH:mm"),
+                        end: moment(endDate).format("YYYY-MM-DD HH:mm"),
+                        start_time: start_time,
+                        end_time: end_time,
+                        category_name: course_data.data.data.categoryNameTh,
+                        course_img: course_data.data.data.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}` : "",
+                        course_per_time: course_data.data.data.coursePerTime,
+                        show_summary: false,
+                        show_assessment: false,
+                        show_assessment_pantential: false,
+                      });
+                    }
+                  }
+                }
+              }
               if (course.dates.date) {
                 for (const dates of course.dates.date) {
                   let start_time = course.period.start;
@@ -631,7 +679,7 @@ const coachModules = {
           }
           const sub_coach = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/subcoach/${coach_id}`, config);
           if(sub_coach.data.statusCode === 200){
-            console.log(sub_coach.data.data)
+            console.log("674 => ",sub_coach.data.data)
             for await (const course of sub_coach.data.data) {
               const course_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course.courseId}`);
               if (course.dates.date) {
@@ -963,6 +1011,12 @@ const coachModules = {
     },
   },
   getters: {
+    getMyCoursesLeave(state) {
+      return state.my_courses_leave
+    },
+    getMyCoursesLeaveIsLoading(state) {
+      return state.my_courses_leave_is_loading
+    },
     getShowDialogCoachLeaveForm(state){
       return state.show_dialog_coach_leave_form
     },

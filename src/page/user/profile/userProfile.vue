@@ -41,8 +41,13 @@
       <!-- COURSE -->
       <v-row
         dense
-        class="mt-3"
-        @click="$router.push({ name: 'StudentsSchedule' })"
+        class="mt-3 cursor-pointer"
+        @click="
+          $router.push({
+            name: 'StudentsSchedule',
+            params: { action: 'students_course' },
+          })
+        "
       >
         <v-col cols="2" sm="1">
           <img src="../../../assets/profile/cource.png" />

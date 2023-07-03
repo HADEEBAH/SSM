@@ -295,7 +295,7 @@ const routes = [
         component: ProfileRules,
       },
       {
-        path: 'studentsSchedule',
+        path: 'studentsSchedule/:action',
         name: 'StudentsSchedule',
         component: StudentsSchedule,
       },

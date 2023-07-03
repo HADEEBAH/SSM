@@ -1,9 +1,12 @@
 <template>
   <v-app>
     <v-container>
-      <loading-overlay v-if="order_history_is_loading" :loading="order_history_is_loading"></loading-overlay>
+      <loading-overlay
+        v-if="order_history_is_loading"
+        :loading="order_history_is_loading"
+      ></loading-overlay>
       <template v-else>
-          <div v-if="!order_history || order_history.length == 0">
+        <div v-if="!order_history || order_history.length == 0">
           <v-card class="my-3" flat>
             <v-card-text
               class="rounded-lg border-2 border-[#ff6b81] text-lg font-bold"
@@ -15,10 +18,10 @@
         </div>
 
         <div v-for="(order, index) in order_history" :key="`${index}-order`">
-          <v-card class="mb-3"> 
+          <v-card class="mb-3">
             <!-- <pre>{{ order }}</pre> -->
             <v-card-text>
-              <v-row  dense class="mb-3">
+              <v-row dense class="mb-3">
                 <v-col>
                   <label class="text-caption">หมายเลขคำสั่งซื้อ:</label>
                   <v-row dense>
@@ -28,42 +31,46 @@
                   </v-row>
                 </v-col>
                 <v-col
-                    cols="12"
-                    sm="6"
-                    class="align-self-center"
-                    align="right"
-                    @click="nextStep(order)"
+                  cols="12"
+                  sm="6"
+                  class="align-self-center"
+                  align="right"
+                >
+                  <v-chip
+                    v-if="order.paymentStatus === 'success'"
+                    color="#F0F9EE"
+                    text-color="#58A144"
                   >
-                    <v-chip
-                      v-if="order.paymentStatus === 'success'"
-                      color="#F0F9EE"
-                      text-color="#58A144"
-                    >
-                      ชำระเงินแล้ว
-                    </v-chip>
+                    ชำระเงินแล้ว
+                  </v-chip>
 
-                    <v-chip
-                      v-else-if="order.paymentStatus === 'pending'"
-                      color="#FFF9E8"
-                      text-color="#FCC419"
-                    >
-                      รอชำระเงิน
-                    </v-chip>
+                  <v-chip
+                    v-else-if="order.paymentStatus === 'pending'"
+                    color="#FFF9E8"
+                    text-color="#FCC419"
+                  >
+                    รอชำระเงิน
+                  </v-chip>
 
-                    <v-chip
-                      v-else-if="order.paymentStatus === 'cancel'"
-                      color="#FDECEC"
-                      text-color="#F03D3E"
-                    >
-                      ยกเลิกแล้ว
-                    </v-chip>
-                    
-                    <v-chip v-else color="#FDECEC" text-color="#F03D3E">
-                      เกิดข้อผิดพลาด
-                    </v-chip>
+                  <v-chip
+                    v-else-if="order.paymentStatus === 'cancel'"
+                    color="#FDECEC"
+                    text-color="#F03D3E"
+                  >
+                    ยกเลิกแล้ว
+                  </v-chip>
+
+                  <v-chip v-else color="#FDECEC" text-color="#F03D3E">
+                    เกิดข้อผิดพลาด
+                  </v-chip>
                 </v-col>
               </v-row>
-              <v-card outlined class="mb-3" v-for="(course, index_courses) in order.courses" :key="`${index_courses}_courses`">
+              <v-card
+                outlined
+                class="mb-3"
+                v-for="(course, index_courses) in order.courses"
+                :key="`${index_courses}_courses`"
+              >
                 <v-row>
                   <v-col cols="3" class="pr-0">
                     <v-img
@@ -73,7 +80,11 @@
                       :height="course.show_student ? '' : '160'"
                       class="w-full h-full rounded-l-lg"
                     />
-                    <img v-else src="@/assets/course/payment.png" height="160" />
+                    <img
+                      v-else
+                      src="@/assets/course/payment.png"
+                      height="160"
+                    />
                   </v-col>
                   <v-col>
                     <v-card-text class="pa-2">
@@ -136,13 +147,20 @@
                         </v-col>
                       </v-row>
                       <v-expand-transition>
-                        <div v-if="course.show_student" class="border rounded-md pa-2">
+                        <div
+                          v-if="course.show_student"
+                          class="border rounded-md pa-2"
+                        >
                           <v-row dense>
                             <v-col class="font-bold" align="center">
                               ชื่อ-สกุล
                             </v-col>
-                            <v-col class="font-bold" align="center"> เบอร์โทร </v-col>
-                            <v-col class="font-bold" align="center"> email </v-col>
+                            <v-col class="font-bold" align="center">
+                              เบอร์โทร
+                            </v-col>
+                            <v-col class="font-bold" align="center">
+                              email
+                            </v-col>
                           </v-row>
                           <v-divider class="my-2"></v-divider>
                           <v-row
@@ -150,7 +168,9 @@
                             :key="`${index}-student`"
                           >
                             <v-col align="center">
-                              {{ `${student.firstNameTh} ${student.lastNameTh}` }}
+                              {{
+                                `${student.firstNameTh} ${student.lastNameTh}`
+                              }}
                             </v-col>
                             <v-col align="center">
                               {{ `${student.mobileNo}` }}
@@ -188,7 +208,11 @@
                 </v-col>
               </v-row>
               <v-row dense>
-                <v-col cols="12" align="right" v-if="order.paymentStatus === 'pending'">
+                <v-col
+                  cols="12"
+                  align="right"
+                  v-if="order.paymentStatus === 'pending'"
+                >
                   <v-btn @click="payment(order)" outlined color="#ff6b81"
                     ><v-icon>mdi-cash</v-icon>ดำเนินการชำระเงิน</v-btn
                   >
@@ -198,7 +222,6 @@
           </v-card>
         </div>
       </template>
-     
     </v-container>
   </v-app>
 </template>
@@ -206,36 +229,36 @@
   <script>
 import { dateFormatter } from "../../../functions/functions";
 import { mapActions, mapGetters } from "vuex";
-import loadingOverlay from "../../../components/loading/loadingOverlay"
+import loadingOverlay from "../../../components/loading/loadingOverlay";
 import Swal from "sweetalert2";
 export default {
   name: "orderHistory",
-  components: {loadingOverlay},
+  components: { loadingOverlay },
   data: () => ({
     panel: false,
+    course_id_select: "",
   }),
   created() {
     // this.$store.dispatch("NavberUserModules/changeTitleNavber","ประวัติการซื้อ")
-    
   },
   mounted() {
     this.$store.dispatch(
       "NavberUserModules/changeTitleNavber",
       "ประวัติการการลงทะเบียน"
     );
-    this.getHistory()
+    this.getHistory();
   },
   watch: {},
   computed: {
     ...mapGetters({
-      order_history : "OrderModules/orderHistory",
-      order_history_is_loading : "OrderModules/orderHistoryIsLoading",
-    })
+      order_history: "OrderModules/orderHistory",
+      order_history_is_loading: "OrderModules/orderHistoryIsLoading",
+    }),
   },
   methods: {
     ...mapActions({
       savePayment: "OrderModules/savePayment",
-      getHistory : "OrderModules/getHistory"
+      getHistory: "OrderModules/getHistory",
     }),
     genDate(date) {
       return dateFormatter(new Date(date), "DD MT YYYYT");
@@ -253,20 +276,7 @@ export default {
           this.savePayment({ paymnet_data: payment_data });
         }
       });
-    },
-    nextStep(items) {
-      console.log("paymentStatus", items);
-      if (items.paymentStatus === "success") {
-        this.$router.push({ name: "StudentsSchedule" });
-      } else if (items.paymentStatus === "pending") {
-        this.$router.push({ name: "userCourseOrder" });
-      } else if (items.paymentStatus === "cancel") {
-        this.$router.push({
-          name: "userCourseDetail_courseId",
-          params: { course_id: items.courseId },
-        });
-      }
-    },
+    },  
   },
 };
 </script>

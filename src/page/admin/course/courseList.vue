@@ -93,6 +93,7 @@
         class="elevation-1 header-table"
         :headers="column"
         :search="search"
+        
         :items="
           tab === 'all'
             ? courses
@@ -100,6 +101,13 @@
         "
         :loading="LoadingTable"
       >
+        <template v-slot:no-data>
+          <v-row dense>
+            <v-col align="center">
+               ไม่พบข้อมูล
+            </v-col>
+          </v-row>
+        </template>
         <template v-slot:[`item.status`]="{ item }">
           <v-autocomplete
             @change="updateStatusCourse(item, item.course_id, item.status)"
