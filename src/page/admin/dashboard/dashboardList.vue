@@ -290,34 +290,18 @@
 
               <v-row dense>
                 <!-- DOnut -->
-                <v-col cols="12" sm="12" md="12" lg="6" align="center">
-                  <div style="height: 100%">
-                    <!-- <v-progress-circular
-                      style="stroke-linecap: round"
-                      :rotate="-90"
-                      :size="250"
-                      :width="20"
-                      :model-value="get_donut.sumSuccess"
-                      :value="
-                        (get_donut.sumPending / get_donut.sumSuccess) * 10000
-                      "
-                      color="#ff6b81"
-                    >
-                      ทั้งหมด
-                      <br />
-                      {{
-                        `${get_donut.sumPending + get_donut.sumSuccess}`
-                          .toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                      }}
-                    </v-progress-circular> -->
-                    <apexchart
-                      type="donut"
-                      width="380"
-                      :options="donutOptions"
-                      :series="donutSeries"
-                    ></apexchart>
-                  </div>
+                <v-col cols="12" sm="12" md="12" lg="6">
+                  <!-- <v-card color="pink">
+                    <v-col cols="12" sm="12" md="12" lg="6" align="start"> -->
+                  <apexchart
+                    style="width: 100%; height: 100%"
+                    type="donut"
+                    :options="donutOptions"
+                    :series="donutSeries"
+                    :width="widthDonut()"
+                  ></apexchart>
+                  <!-- </v-col>
+                  </v-card> -->
                 </v-col>
                 <!-- Dot Data -->
                 <!-- <v-col cols="12" sm="12" md="12" lg="6">
@@ -391,9 +375,11 @@
             <!-- PIE -->
             <v-col cols="12" sm="12" md="12" lg="4" align="center">
               <apexchart
+                style="width: 100%; height: 100%"
                 type="pie"
                 :options="pieChartOptions"
                 :series="pieSeries"
+                :width="widthPie()"
               ></apexchart>
             </v-col>
             <!-- COURSE CLOSE -->
@@ -696,6 +682,32 @@ export default {
       console.log("707", this.donut_years);
       this.GetDonut(this.donut_years);
     },
+
+    widthDonut() {
+      switch (this.$vuetify.breakpoint.name) {
+        // case "xs":
+        //   return 400;
+        // case "sm":
+        //   return 550;
+        // case "md":
+        //   return 400;
+        case "lg":
+          return 500;
+      }
+    },
+
+    widthPie() {
+      switch (this.$vuetify.breakpoint.name) {
+        // case "xs":
+        //   return 400;
+        // case "sm":
+        //   return 550;
+        // case "md":
+        //   return 400;
+        case "lg":
+          return 500;
+      }
+    },
   },
   computed: {
     ...mapGetters({
@@ -750,6 +762,7 @@ export default {
       ];
       return lineChart;
     },
+
     donutOptions() {
       const donutdata = {
         colors: [
@@ -779,7 +792,6 @@ export default {
           "คอร์ส อื่นๆ",
         ],
         chart: {
-          width: 380,
           type: "donut",
         },
         plotOptions: {
@@ -795,9 +807,10 @@ export default {
           type: "gradient",
         },
         legend: {
-          // formatter: function (val, opts) {
-          //   return val + " - " + opts.w.globals.series[opts.seriesIndex];
-          // },
+          formatter: function (val, opts) {
+            return val + " - " + opts.w.globals.series[opts.seriesIndex];
+          },
+          position: "bottom",
         },
       };
       return donutdata;
@@ -833,7 +846,6 @@ export default {
       const pieChartOptions = {
         colors: ["#7CD464", "#A1A1A1"],
         chart: {
-          width: 380,
           type: "pie",
         },
         dataLabels: {
