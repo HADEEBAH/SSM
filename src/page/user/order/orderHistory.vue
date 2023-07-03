@@ -35,7 +35,6 @@
                   sm="6"
                   class="align-self-center"
                   align="right"
-                  @click="nextStep(order)"
                 >
                   <v-chip
                     v-if="order.paymentStatus === 'success'"
@@ -277,38 +276,7 @@ export default {
           this.savePayment({ paymnet_data: payment_data });
         }
       });
-    },
-    nextStep(items) {
-      console.log("paymentStatus", items);
-
-      // console.log("paymentStatus", items.courses.coachName);
-      if (items.paymentStatus === "success") {
-        this.$router.push({
-          name: "StudentsSchedule",
-          params: { action: "students_course" },
-        });
-      } else if (items.paymentStatus === "pending") {
-        this.$router.push({
-          name: "userCourseOrder",
-        });
-      } else if (items.paymentStatus === "cancel") {
-        for (const item of items.courses) {
-          this.course_id_select = item.courseId;
-        }
-        this.$router.push({
-          name: "userCourseDetail_courseId",
-          params: { course_id: this.course_id_select },
-        });
-      } else if (items.paymentStatus === "fail") {
-        for (const item of items.courses) {
-          this.course_id_select = item.courseId;
-        }
-        this.$router.push({
-          name: "userCourseDetail_courseId",
-          params: { course_id: this.course_id_select },
-        });
-      }
-    },
+    },  
   },
 };
 </script>
