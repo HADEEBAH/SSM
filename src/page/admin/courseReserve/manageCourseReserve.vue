@@ -26,10 +26,16 @@
           </template>
           
         </v-row>
+        <pre>
+          {{ reserve_list }}
+        </pre>
         <v-card outlined>
-          <v-data-table ></v-data-table>
+          <v-data-table 
+          :headers="columns"
+          :items="reserve_list"
+          >
+          </v-data-table>
         </v-card>
-        
     </v-container>
 </template>
   
@@ -37,7 +43,7 @@
   import headerPage from "../../../components/header/headerPage.vue";
 //   import rowData from "../../../components/label/rowData.vue";
   import imgCard from "../../../components/course/imgCard.vue";
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
   export default {
     name:"manageCourseReserve",
     components: {headerPage,imgCard },
@@ -50,16 +56,51 @@ import { mapGetters } from 'vuex';
             // { name: "ลงทะเบียนแล้ว", value: "registered"},
             { name: "ยกเลิกการจอง", value: "cancel"},
         ],
+      columns: [
+      {
+          text: "วันที่จอง",
+          align: "center",
+          sortable: false,
+          value: "created_date",
+        },
+        {
+          text: "ชื่อคอร์ส",
+          align: "center",
+          sortable: false,
+          value: "course_name",
+        },
+        {
+          text: "ชื่อ-นามสกุลผู้เรียน",
+          align: "center",
+          sortable: false,
+          value: "student_name",
+        },
+        { text: "ชื่อ-นามสกุลผู้จอง", align: "center", sortable: false, value: "created_by" },
+        {
+          text: "สถานะการจอง",
+          align: "center",
+          sortable: false,
+          value: "status",
+        },
+        { text: "", align: "center", value: "actions", sortable: false },
+      ],
     }),
-    created() {},
+    created() {
+      this.GetReserveList()
+    },
     mounted() {},
     watch: {},
     computed: {
       ...mapGetters({
-        student_reserve_list: "CourseModules/getStudentReserveList",
+        reserve_list: "reserveCourseModules/reserveList",
+        reserve_list_is_loading: "reserveCourseModules/reserve_list_is_loading",
       })
     },
-    methods: {},
+    methods: {
+      ...mapActions({
+        GetReserveList:"reserveCourseModules/GetReserveList"
+      })
+    },
   };
   </script>
   

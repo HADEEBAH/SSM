@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import moment from "moment";
 const reserveCourseModules = {
     namespaced: true,
     state: {
@@ -16,18 +16,23 @@ const reserveCourseModules = {
       }
     },
     actions: {
-        GetReserveList(context){
-            context.commit("SetReserveListIsLoading",true)
-            try{
-                let {data} = axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/getAll`)
-                if(data.statusCode === 200){
-                    console.log(data)
-                    context.commit("SetReserveList",data.data)
-                    context.commit("SetReserveListIsLoading",false)
-                }
-            }catch(error){
-                context.commit("SetReserveListIsLoading",false)
-            }
+        async GetReserveList(context){
+          console.log("GetReserveList")
+          context.commit("SetReserveListIsLoading",true)
+          try{
+              let localhost = "http://localhost:3002"
+              let {data} = await axios.get(`${localhost}/api/v1/order/reserve/getAll-studentDetail`)
+              if(data.statusCode === 200){
+                  for(let reserve of data.data){
+                    reserve.created_date = moment(reserve.createdDate).format("DD-MM-YYYY HH:mm")
+                  }
+                  context.commit("SetReserveList",data.data)
+                  context.commit("SetReserveListIsLoading",false)
+              }
+          }catch(error){
+              console.log(error)
+              context.commit("SetReserveListIsLoading",false)
+          }
         }
     },
     getters: {

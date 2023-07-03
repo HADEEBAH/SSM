@@ -1,6 +1,7 @@
 <template>
   <!-- <v-app> -->
   <v-container class="h-full">
+    <pre>{{ course_data }}</pre>
     <v-row class="h-full">
       <v-col cols="12" sm="6" :class="MobileSize ? '' : 'h-full'">
         <v-img

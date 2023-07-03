@@ -150,7 +150,7 @@ export default {
         title: "คอร์สเรียน",
         to: "",
         child: [
-          // { title: "จัดการการจอง", to: "CourseReserveList" },
+          { title: "จัดการการจอง", to: "CourseReserveList" },
           { title: "จัดการคอร์สทั้งหมด", to: "CourseList" },
           { title: "สร้างคอร์สเรียน", to: "CourseCreate" },
         ],
