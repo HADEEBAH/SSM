@@ -20,8 +20,8 @@ const reserveCourseModules = {
           console.log("GetReserveList")
           context.commit("SetReserveListIsLoading",true)
           try{
-              let localhost = "http://localhost:3002"
-              let {data} = await axios.get(`${localhost}/api/v1/order/reserve/getAll-studentDetail`)
+              // let localhost = "http://localhost:3002"
+              let {data} = await axios.get(`${process.env.VUP_APP_URL}/api/v1/order/reserve/getAll-studentDetail`)
               if(data.statusCode === 200){
                   for(let reserve of data.data){
                     reserve.created_date = moment(reserve.createdDate).format("DD-MM-YYYY HH:mm")

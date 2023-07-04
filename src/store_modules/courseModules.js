@@ -1156,8 +1156,8 @@ const CourseModules = {
       context.commit("SetCourseIsLoading", true)
       // console.log("GetCourse")
       try {
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/course/detail/${course_id}`)
+        // let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
         if (data.statusCode === 200) {
           console.log("1155 => ",data)
           // console.log(data.data.coursePerTime)
