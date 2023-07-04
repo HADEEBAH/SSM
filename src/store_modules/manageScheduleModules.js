@@ -364,7 +364,7 @@ const manageScheduleModules = {
                 }
               }
             }
-            // console.log(item)
+            // console.log("367 =>",item)
             eventSchadule.push({
               name: item.name,
               start: item.startDate,
@@ -459,7 +459,6 @@ const manageScheduleModules = {
                   break;
               }
             }
-
             eventSchadule.push({
               name: item.courseNameTh,
               start: item.startDate,
