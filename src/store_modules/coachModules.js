@@ -556,6 +556,21 @@ const coachModules = {
         console.log("GetMyCourses", data.data)
         if (data.statusCode == 200) {  
           let courses_task = [];       
+          let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
+          if(holidays.data.statusCode === 200){
+            console.log("561 => ",holidays.data.data)
+            for(let holiday of holidays.data.data){
+              courses_task.push({
+                type : 'holiday',
+                name: holiday.holidayName,
+                start_date:`${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`, 
+                start:`${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`
+                // start_time: start_time,
+                // end_time: end_time,
+              });
+              console.log("569 => ",courses_task)
+            }
+          }
           for await (const course of data.data) {
             const course_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course.courseId}`);
             if (course_data.data.statusCode === 200) {
