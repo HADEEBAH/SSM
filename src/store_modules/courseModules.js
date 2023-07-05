@@ -674,8 +674,6 @@ const CourseModules = {
                 "students": parseInt(class_date_data.students)
               })
             } 
-            console.log(`${date.day_of_week_id} => `,class_date)
-            console.log("///////////////////////////")
             if(date.day_of_week_id){
               if(teach_day_data.filter((v)=> v.dayOfWeekId === date.day_of_week_id && v.courseCoachId === date.course_coach_id).length === 0){
                 teach_day_data.push({
