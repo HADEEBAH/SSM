@@ -8,11 +8,11 @@
         <v-col cols="4">
           <v-card
             flat
-            @click="
+            @click=" data_local.roles.length > 0 ?
               $router.push({
                 name: 'StudentsSchedule',
                 params: { action: 'MyCourse' },
-              })
+              }) : ''
             "
             class="rounded-lg"
           >
@@ -39,11 +39,11 @@
         <v-col cols="4">
           <v-card
             flat
-            @click="
+            @click=" data_local.roles.length > 0 ?
               $router.push({
                 name: 'StudentsSchedule',
                 params: { action: 'MySchedule' },
-              })
+              }) : ''
             "
             class="rounded-lg"
           >
@@ -76,7 +76,7 @@
                   ? 'bg-[#FF6B81]'
                   : 'bg-[#F5F5F5]'
               "
-              class="rounded-lg flex justify-center align-center pa-2"
+              class="rounded-lg font-bold flex justify-center align-center pa-2"
             >
               คอร์สที่จอง
             </v-card-text>
@@ -471,7 +471,7 @@
                   <div>
                     <v-row dense>
                       <!-- img -->
-                      <v-col cols="12" sm="2">
+                      <v-col cols="12" sm="2" >
                         <img
                           :src="
                             item_booked.courseImg
@@ -537,14 +537,12 @@
                         </v-col>
 
                         <v-col>
-                          <v-card color="yellow" class="rounded-lg text-center">
+                          <v-chip color="#F9B320" dark>
                             {{
-                              dayOfWeekName(
-                                item_booked.dayOfWeekName.split(",")
-                              )
+                              item_booked.day_name
                             }}
                             {{ item_booked.start }} - {{ item_booked.end }} น.
-                          </v-card>
+                          </v-chip>
                         </v-col>
 
                         <v-row dense>
@@ -597,9 +595,7 @@
                             class="mdi mdi-calendar-today"
                             style="color: #ff6b81"
                           ></span>
-                          {{
-                            dayOfWeekName(item_booked.dayOfWeekName.split(","))
-                          }}
+                            {{ item_booked.day_name }}
                         </v-col>
 
                         <v-col cols="12" md="12" sm="12">
@@ -641,7 +637,7 @@
             </div>
           </div>
           <!-- Role student -->
-          <div v-if="data_local.roles.includes('R_5')">
+          <div>
             <v-card-text
               class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
               v-if="ReserveList().length == 0"
@@ -728,14 +724,9 @@
                         </v-col>
 
                         <v-col>
-                          <v-card color="yellow" class="rounded-lg text-center">
-                            {{
-                              dayOfWeekName(
-                                item_booked.dayOfWeekName.split(",")
-                              )
-                            }}
-                            {{ item_booked.start }} - {{ item_booked.end }} น.
-                          </v-card>
+                          <v-chip color="#F9B320" dark>
+                            {{item_booked.day_name}} {{ item_booked.start }} - {{ item_booked.end }} น.
+                          </v-chip>
                         </v-col>
                       </v-col>
                       <!-- circle -->
@@ -780,9 +771,7 @@
                             class="mdi mdi-calendar-today"
                             style="color: #ff6b81"
                           ></span>
-                          {{
-                            dayOfWeekName(item_booked.dayOfWeekName.split(","))
-                          }}
+                          {{ item_booked.day_name }}
                         </v-col>
 
                         <v-col cols="12" md="12" sm="12">
@@ -912,36 +901,13 @@ export default {
       console.log(localStorage.getItem("userRelationsAccountId"))
     } else if (this.user_detail.roles.includes("R_5")) {
       this.GetStudentData(this.user_detail.account_id);
-    } else {
-      // this.GetStudentData(null);
-      this.GetStudentData(this.user_detail.account_id);
-    }
+    } 
+    // else {
+    //   // this.GetStudentData(null);
+    //   this.GetStudentData(this.user_detail.account_id);
+    // }
   },
 
-  // watch: {
-  //   type_selected: function () {
-  //     console.log("type_selected", this.type_selected);
-  //     this.loading = true;
-  //     setTimeout(async () => {
-  //       this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-  //       if (this.type_selected == "MyCourse") {
-  //         if (this.user_detail.roles.includes("R_4")) {
-  //           this.GetStudentData(this.user_detail.account_id);
-  //           for (const item of JSON.parse(localStorage.getItem("relations"))) {
-  //             this.GetStudentData(item.student.studentId);
-  //             console.log("student");
-  //           }
-  //         } else if (this.user_detail.roles.includes("R_5")) {
-  //           this.GetStudentData(this.user_detail.account_id);
-  //         } else {
-  //           this.GetStudentData(null);
-  //         }
-  //       }
-
-  //       this.loading = false;
-  //     }, 200);
-  //   },
-  // },
   methods: {
     ...mapActions({
       GetStudentData: "MyCourseModules/GetStudentData",
@@ -1009,21 +975,21 @@ export default {
           reserveList.push(reserve);
         }
       });
-      this.student_reserve.forEach((reserve) => {
-        if (
-          reserveList.filter(
-            (v) =>
-              v.coachId == reserve.coachId &&
-              v.courseId == reserve.courseId &&
-              v.dayOfWeekId === reserve.dayOfWeekId &&
-              v.timeId === reserve.timeId &&
-              v.studentId === reserve.studentId
-          ).length === 0
-        ) {
-          reserveList.push(reserve);
-        }
-      });
-      console.log("student_reserve :", this.student_reserve);
+      // this.student_reserve.forEach((reserve) => {
+      //   if (
+      //     reserveList.filter(
+      //       (v) =>
+      //         v.coachId == reserve.coachId &&
+      //         v.courseId == reserve.courseId &&
+      //         v.dayOfWeekId === reserve.dayOfWeekId &&
+      //         v.timeId === reserve.timeId &&
+      //         v.studentId === reserve.studentId
+      //     ).length === 0
+      //   ) {
+      //     reserveList.push(reserve);
+      //   }
+      // });
+      // console.log("student_reserve :", this.student_reserve);
       return reserveList;
     },
     dayOfWeekName(days) {
@@ -1076,9 +1042,11 @@ export default {
     //   },
     // },
     setFunctions() {
+      if(this.user_detail.roles.includes("R_5")){
+        // this.GetStudentReserve(this.user_detail.account_id);
+        this.GetAll(this.user_detail.account_id);
+      }
       this.GetProfileBooked(this.user_detail.account_id);
-      this.GetStudentReserve(this.user_detail.account_id);
-      this.GetAll(this.user_detail.account_id);
       return "";
     },
     MobileSize() {
