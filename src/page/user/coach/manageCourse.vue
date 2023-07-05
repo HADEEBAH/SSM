@@ -1470,6 +1470,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      GetAllHolidays: "ManageScheduleModules/GetAllHolidays",
       GetMyCourses: "CoachModules/GetMyCourses",
       GetCoachs: "CourseModules/GetCoachs",
       SaveCoachLeave: "CoachModules/SaveCoachLeave",

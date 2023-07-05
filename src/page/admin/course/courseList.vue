@@ -93,7 +93,6 @@
         class="elevation-1 header-table"
         :headers="column"
         :search="search"
-        
         :items="
           tab === 'all'
             ? courses

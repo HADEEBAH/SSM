@@ -1726,7 +1726,9 @@ export default {
     selected_all_coach: false,
     selected_coach_potential: null,
   }),
-  created() {},
+  created() {
+    console.log("Now ",new Date())
+  },
   mounted() {},
   watch: {
     student_tab: function () {
