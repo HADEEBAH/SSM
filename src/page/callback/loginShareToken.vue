@@ -5,12 +5,11 @@ export default {
   name:"helloWorld",
   components: {loadingOverlay},
   data: () => ({}),
-  created() {
-    if (this.$route.query.token) {
-      console.log("this.$route.params.page", this.$route.params.page);
-     this.loginShareToken({token:this.$route.query.token, page:this.$route.params.page})
-    }
-  },
+  // created() {
+  //   if (this.$route.query.token) {
+  //    this.loginShareToken({token:this.$route.query.token, page:this.$route.params.page})
+  //   }
+  // },
   mounted() {},
   watch: {},
   computed: {},

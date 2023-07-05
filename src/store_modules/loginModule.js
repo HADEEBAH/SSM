@@ -281,14 +281,14 @@ const loginModules = {
             }
 
         },
-        async loginShareToken(context, { token, page }) {
-            console.log("token", token);
-            console.log("page", page);
+        async loginShareToken(context, route) {
+            console.log("token=>", route.query.token);
+            console.log("path=>", route.name);
             context.commit("SetIsLoading", true)
             try {
                 // const { data } = await axios.post(`http://localhost:3001/api/v1/auth/login/sharedToken`, {
                 const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login/sharedToken`, {
-                    "shared_token": token,
+                    "shared_token":route.query.token,
                 })
                 console.log(data);
                 if (data.statusCode === 200) {
@@ -314,9 +314,17 @@ const loginModules = {
                     }
                     VueCookie.set("token", data.data.token, 1)
                     localStorage.setItem("userDetail", JSON.stringify(payload))
-                    if (page === "menage-course") {
-                        router.replace({ name: "menageCourse" })
+                    if (route.name === "Login") {
+                      router.replace({ name: "UserKingdom" })
+                    } else {
+                      router.replace({name:route.name})
                     }
+                    // if (route.name) {
+                    //   console.log("router", router);
+                    //   router.replace({name:route.name})
+                    // }
+                    // window.location.href = `http://localhost:8080${route.path}` 
+                    // window.location.href = `${process.env.VUE_APP_URL}${route.path}` 
                 }
             } catch (response) {
                 context.commit("SetIsLoading", false)

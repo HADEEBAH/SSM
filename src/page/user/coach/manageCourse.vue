@@ -1438,6 +1438,14 @@ export default {
     this.GetMyCourses({ coach_id: this.user_detail.account_id });
     this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
     this.GetCoachs();
+    // if (this.$route.query.token) {
+    //  this.loginShareToken(this.$route.query.token)
+    // }
+  },
+  beforeMount() {
+    if (this.$route.query.token) {
+     this.loginShareToken(this.$route)
+    }
   },
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "จัดการ");
