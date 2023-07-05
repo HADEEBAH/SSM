@@ -420,7 +420,7 @@ export default {
         title: "ตารางเรียน",
         to: "StudentsSchedule",
         params: { action: "MySchedule" },
-        roles: ["R_4", "R_5"],
+        roles: [],
       },
       {
         icon: "mdi-book-cog-outline",

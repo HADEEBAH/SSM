@@ -384,7 +384,6 @@ const CourseModules = {
           for await (let coach  of data.data){
             let coach_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${coach.coachId}`)
             if(coach_data.data.statusCode === 200){
-                // console.log(coach_data.data.data)
                 coach.firstNameTh =  coach_data.data.data.firstNameTh
                 coach.firstNameEn =  coach_data.data.data.firstNameEng
                 coach.lastNameTh =  coach_data.data.data.lastNameTh
@@ -392,45 +391,46 @@ const CourseModules = {
                 coach.checked = false
             }
             let datesList = []
-            for await (const coachDate of coach.allDates){
-              // console.log(coachDate)
-              if (!coachDate.cpo.cpoId){
-                console.log("ระยะสั้น => ",coachDate)
-                for await (const date of coachDate.dates.date){
-                  if(datesList.filter(v => v.date === date).length === 0){
-                    datesList.push({
-                      date : date,
-                      timeId : coachDate.time.timeId,
-                      start : coachDate.time.start,
-                      end :  coachDate.time.end,
-                      startDate :coachDate.dates.startDate ? new Date(coachDate.dates.startDate).toLocaleDateString("th-TH") : '',
-                      endDate : coachDate.dates.endDate ? new Date(coachDate.dates.endDate).toLocaleDateString("th-TH"): '',
-                      time : `${coachDate.time.start}น.-${coachDate.time.end}น.`,
-                      cpo : coachDate.cpo ? coachDate.cpo : null,
-                      cpoId : coachDate.cpo.cpoId ? coachDate.cpo.cpoId  : null,
-                      students : coachDate.studentArr,
-                      checked : false,
-                    })
-                  }
+            console.log("394",coach)
+            let coachDate = coach.allDates
+            // console.log(coachDate)
+            if (!coach.allDates?.cpo?.cpoId){
+              console.log("ระยะสั้น => ",coachDate)
+              for await (const date of coachDate.dates.date){
+                if(datesList.filter(v => v.date === date).length === 0){
+                  datesList.push({
+                    date : date,
+                    timeId : coachDate.time.timeId,
+                    start : coachDate.time.start,
+                    end :  coachDate.time.end,
+                    startDate :coachDate.dates.startDate ? new Date(coachDate.dates.startDate).toLocaleDateString("th-TH") : '',
+                    endDate : coachDate.dates.endDate ? new Date(coachDate.dates.endDate).toLocaleDateString("th-TH"): '',
+                    time : `${coachDate.time.start}น.-${coachDate.time.end}น.`,
+                    cpo : coachDate.cpo ? coachDate.cpo : null,
+                    cpoId : coachDate?.cpo?.cpoId ? coachDate.cpo.cpoId  : null,
+                    students : coachDate.studentArr,
+                    checked : false,
+                  })
                 }
-              }else{
-                for await (const date of coachDate.dates.date){
-                  if(datesList.filter(v => v.date === date && v.start === coachDate.time.start && v.end === coachDate.time.end && v.cpo.packageName === coachDate.cpo.packageName).length === 0){
-                    datesList.push({
-                      date : date,
-                      timeId : coachDate.time.timeId,
-                      start : coachDate.time.start,
-                      end :  coachDate.time.end,
-                      time : `${coachDate.time.start}น.-${coachDate.time.end}น.`,
-                      cpo : coachDate.cpo ? coachDate.cpo : null,
-                      cpoId : coachDate.cpo.cpoId ? coachDate.cpo.cpoId  : null,
-                      students : coachDate.studentArr,
-                      checked : false,
-                    })
-                  }
+              }
+            }else{
+              for await (const date of coachDate.dates.date){
+                if(datesList.filter(v => v.date === date && v.start === coachDate.time.start && v.end === coachDate.time.end && v.cpo.packageName === coachDate.cpo.packageName).length === 0){
+                  datesList.push({
+                    date : date,
+                    timeId : coachDate.time.timeId,
+                    start : coachDate.time.start,
+                    end :  coachDate.time.end,
+                    time : `${coachDate.time.start}น.-${coachDate.time.end}น.`,
+                    cpo : coachDate.cpo ? coachDate.cpo : null,
+                    cpoId : coachDate.cpo.cpoId ? coachDate.cpo.cpoId  : null,
+                    students : coachDate.studentArr,
+                    checked : false,
+                  })
                 }
               }
             }
+            
             coach.datesList = datesList.sort(function(a, b) {
               var dateA = new Date(a.date);
               var dateB = new Date(b.date);
