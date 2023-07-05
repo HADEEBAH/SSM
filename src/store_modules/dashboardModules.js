@@ -91,8 +91,8 @@ const dashboardModules = {
       context.commit("SetGetLoading", true)
 
       try {
-        // let { data } = await axios.get(`http://localhost:3002/api/v1/order/dashboard/payment?type=${item.type}&value=${item.key}`)
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/dashboard/payment?type=${item.type}&value=${item.key}`)
+        let { data } = await axios.get(` http://localhost:3002/api/v1/order/dashboard/payment?type=${item.type}&value=${item.key}`)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/dashboard/payment?type=${item.type}&value=${item.key}`)
         if (data.statusCode === 200) {
           context.commit("SetGetDonut", data.data)
           console.log("SetGetDonut", data.data);
@@ -112,8 +112,8 @@ const dashboardModules = {
       context.commit("SetGetLoading", true)
 
       try {
-        // var { data } = await axios.get(`http://localhost:3002/api/v1/order/dashboard/payment-income?type=${item.type}&value=${item.key}`)
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/dashboard/payment-income?type=${item.type}&value=${item.key}`)
+        var { data } = await axios.get(`http://localhost:3002/api/v1/order/dashboard/payment-income?type=${item.type}&value=${item.key}`)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/dashboard/payment-income?type=${item.type}&value=${item.key}`)
 
 
         if (data.statusCode === 200) {

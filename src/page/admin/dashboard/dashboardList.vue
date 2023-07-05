@@ -1,6 +1,6 @@
 <template >
   <v-app class="background-color">
-    <v-container class="overflow-y: hidden; overflow-x: hidden;">
+    <v-container class="overflow-x: hidden;">
       <loading-overlay :loading="dashboard_loading"> </loading-overlay>
 
       <headerPage title="แดชบอร์ด"></headerPage>
@@ -175,11 +175,8 @@
       <v-card style="background-color: #ffdde2" class="my-5 rounded-lg">
         <v-row dense class="pa-2">
           <!-- รายได้ GRAF -->
-          <v-col cols="12" sm="6">
-            <v-card
-              style="background-color: #ffffff; max-height: 500px; height: 100%"
-              class="rounded-lg"
-            >
+          <v-col cols="12" sm="12" md="12" lg="6">
+            <v-card style="background-color: #ffffff" class="rounded-lg">
               <v-card-title>
                 <v-row dense>
                   <v-col
@@ -220,13 +217,13 @@
               </v-card-title>
               <v-card-title>
                 <v-row dense>
-                  <v-badge color="green" content="6">
-                    {{
-                      get_graf.sumSuccess
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                    }}
-                  </v-badge>
+                  <!-- <v-badge color="green" content="6"> -->
+                  {{
+                    get_graf.sumSuccess
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }}
+                  <!-- </v-badge> -->
                 </v-row>
               </v-card-title>
               <v-card-text>
@@ -237,6 +234,7 @@
                         type="line"
                         :options="chartOptions"
                         :series="series"
+                        :height="heightGraf()"
                       >
                       </apexchart>
                     </v-col>
@@ -246,7 +244,7 @@
             </v-card>
           </v-col>
           <!-- สัดส่วนรายได้ DONUT -->
-          <v-col cols="12" sm="6">
+          <v-col cols="12" sm="12" md="12" lg="6">
             <v-card class="bg-white rounded-lg" style="height: 100%">
               <!-- TITLE -->
               <v-card-title>
@@ -290,24 +288,23 @@
 
               <v-row dense>
                 <!-- DOnut -->
-                <v-col cols="12" sm="12" md="12" lg="6">
+                <v-col cols="12" sm="12" md="12" lg="12" align="center">
                   <!-- <v-card color="pink">
                     <v-col cols="12" sm="12" md="12" lg="6" align="start"> -->
                   <apexchart
-                    style="width: 100%; height: 100%"
                     type="donut"
                     :options="donutOptions"
-                    :series="donutSeries"
+                    :series="donutSerieses"
                     :width="widthDonut()"
                   ></apexchart>
                   <!-- </v-col>
                   </v-card> -->
                 </v-col>
                 <!-- Dot Data -->
-                <!-- <v-col cols="12" sm="12" md="12" lg="6">
-                  <v-row dense class="mb-2">
-                    ชำระแล้ว
-                    <v-col cols="12" sm="12" class="mx-10">
+                <v-col cols="12" sm="12" md="12" lg="12" align="start">
+                  <v-row dense class="my-2">
+                    <!-- ชำระแล้ว -->
+                    <v-col cols="6" align="center">
                       <div>
                         <v-icon color="#ff6b81">mdi-circle-medium</v-icon>
                         <span class="font-bold text-xl">ชำระแล้ว</span>
@@ -316,7 +313,8 @@
                         style="font-weight: bold; color: #58a144"
                         class="mx-5"
                       >
-                        {{ get_donut.sumSuccess.toLocaleString() }}
+                        <!-- {{ totalSuccessDonut.toLocaleString() }} -->
+                        {{ get_graf.sumSuccess.toLocaleString() }}
                         <span
                           style="
                             font-weight: normal;
@@ -324,12 +322,19 @@
                             font-size: small;
                           "
                         >
-                          บาท({{ get_donut.sumSuccessPercentage }}%)
+                          บาท({{
+                            (
+                              (totalSuccessDonut * 100) /
+                              totalPriceDonut
+                            ).toLocaleString("us-us", {
+                              maximumFractionDigits: 2,
+                            })
+                          }}%)
                         </span>
                       </div>
                     </v-col>
-                    รอดำเนินการ
-                    <v-col cols="12" sm="12" class="mx-10">
+                    <!-- รอดำเนินการ -->
+                    <v-col cols="6" align="center">
                       <div>
                         <v-icon color="#E8E7E7">mdi-circle-medium</v-icon>
                         <span class="font-bold text-xl">รอดำเนินการ</span>
@@ -338,11 +343,7 @@
                         style="font-weight: bold; color: #fcc419"
                         class="mx-5"
                       >
-                        {{
-                          get_donut.sumPending
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                        }}
+                        {{ totalPendingDonut.toLocaleString() }}
 
                         <span
                           style="
@@ -350,12 +351,19 @@
                             color: #999999;
                             font-size: small;
                           "
-                          >บาท ({{ get_donut.sumPendingPercentage }}%)
+                          >บาท ({{
+                            (
+                              (totalPendingDonut * 100) /
+                              totalPriceDonut
+                            ).toLocaleString("us-us", {
+                              maximumFractionDigits: 2,
+                            })
+                          }}%)
                         </span>
                       </div>
                     </v-col>
                   </v-row>
-                </v-col> -->
+                </v-col>
               </v-row>
             </v-card>
           </v-col>
@@ -553,6 +561,9 @@ export default {
     loadingOverlay,
   },
   data: () => ({
+    totalSuccessDonut: 0,
+    totalPendingDonut: 0,
+    totalPriceDonut: 0,
     course_close_options: [
       {
         label: "คอร์สเต็ม",
@@ -593,32 +604,8 @@ export default {
     donut_mounth: "",
     selected_years: "",
     donut_years: "",
-    total: 9999999,
-    // donutOptions: {
-    //   labels: ["คอร์ส 1", "คอร์ส 2"],
-    //   chart: {
-    //     width: 380,
-    //     type: "donut",
-    //   },
-    //   plotOptions: {
-    //     pie: {
-    //       startAngle: -90,
-    //       endAngle: 270,
-    //     },
-    //   },
-    //   dataLabels: {
-    //     // labels: ["คอร์ส 1", "คอร์ส 2", "คอร์ส 3", "คอร์ส 4", "คอร์ส 5"],
-    //     enabled: true,
-    //   },
-    //   fill: {
-    //     type: "gradient",
-    //   },
-    //   legend: {
-    //     // formatter: function (val, opts) {
-    //     //   return val + " - " + opts.w.globals.series[opts.seriesIndex];
-    //     // },
-    //   },
-    // },
+    data_year: "",
+    data_month: "",
   }),
   created() {
     this.selectMunth();
@@ -653,6 +640,8 @@ export default {
     this.GetPotential();
     this.GetDonut();
     this.GetGraf();
+    this.donutSeries();
+    // this.dataType()
   },
   methods: {
     ...mapActions({
@@ -682,17 +671,22 @@ export default {
       console.log("707", this.donut_years);
       this.GetDonut(this.donut_years);
     },
-
+    heightGraf() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "sm":
+          return 250;
+        case "md":
+          return 250;
+      }
+    },
     widthDonut() {
       switch (this.$vuetify.breakpoint.name) {
-        // case "xs":
-        //   return 400;
-        // case "sm":
-        //   return 550;
-        // case "md":
-        //   return 400;
+        case "sm":
+          return 480;
+        case "md":
+          return 450;
         case "lg":
-          return 500;
+          return 390;
       }
     },
 
@@ -700,13 +694,30 @@ export default {
       switch (this.$vuetify.breakpoint.name) {
         // case "xs":
         //   return 400;
-        // case "sm":
-        //   return 550;
-        // case "md":
-        //   return 400;
+        case "sm":
+          return 400;
+        case "md":
+          return 350;
         case "lg":
-          return 500;
+          return 380;
       }
+    },
+
+    donutSeries() {
+      for (const items of this.get_donut.datas) {
+        this.totalSuccessDonut =
+          this.totalSuccessDonut + parseFloat(items.sumSuccess);
+        this.totalPendingDonut =
+          this.totalPendingDonut + parseFloat(items.sumPending);
+        this.totalPriceDonut =
+          this.totalPriceDonut + parseFloat(items.totalPrice);
+      }
+      this.totalSuccessDonut =
+        this.totalSuccessDonut + this.get_donut.otherTotal.sumSuccess;
+      this.totalPendingDonut =
+        this.totalPendingDonut + this.get_donut.otherTotal.sumPending;
+      this.totalPriceDonut =
+        this.totalPriceDonut + this.get_donut.otherTotal.totalPrice;
     },
   },
   computed: {
@@ -740,7 +751,11 @@ export default {
           categories:
             this.get_graf.length !== 0
               ? this.get_graf.orderData.map((item) => {
-                  return item.date;
+                  if (this.get_graf.type == "month") {
+                    return item.date;
+                  } else {
+                    return item.month;
+                  }
                 })
               : "",
         },
@@ -763,6 +778,16 @@ export default {
       return lineChart;
     },
 
+    donutLabels() {
+      let labels = [];
+      for (const items of this.get_donut.datas) {
+        labels.push(items.courseNameTh);
+      }
+      labels.push(this.get_donut.otherTotal.courseNameTh);
+
+      return labels;
+    },
+
     donutOptions() {
       const donutdata = {
         colors: [
@@ -776,21 +801,10 @@ export default {
           "#90ff6b",
           "#6bff6b",
           "#6bff90",
-          "#6bffb5",
+          "#999999",
         ],
-        labels: [
-          "คอร์ส 1",
-          "คอร์ส 2",
-          "คอร์ส 3",
-          "คอร์ส 4",
-          "คอร์ส 5",
-          "คอร์ส 6",
-          "คอร์ส 7",
-          "คอร์ส 8",
-          "คอร์ส 9",
-          "คอร์ส 10",
-          "คอร์ส อื่นๆ",
-        ],
+        labels: this.donutLabels,
+
         chart: {
           type: "donut",
         },
@@ -798,6 +812,25 @@ export default {
           pie: {
             startAngle: -90,
             endAngle: 270,
+            donut: {
+              labels: {
+                show: true,
+                total: {
+                  show: true,
+                  label: "Total",
+                  color: "#373d3f",
+                  fontSize: "18px",
+                  // formatter: function () {
+                  //   return "444";
+                  // },
+                  formatter: function (w) {
+                    return w.globals.seriesTotals.reduce((a, b) => {
+                      return a + b;
+                    }, 0);
+                  },
+                },
+              },
+            },
           },
         },
         dataLabels: {
@@ -807,32 +840,46 @@ export default {
           type: "gradient",
         },
         legend: {
-          formatter: function (val, opts) {
-            return val + " - " + opts.w.globals.series[opts.seriesIndex];
+          // formatter: function (val, opts) {
+          //   return val + " - " + opts.w.globals.series[opts.seriesIndex];
+          // },
+          // position: "bottom",
+          show: false,
+        },
+        tooltip: {
+          enabled: true,
+          y: {
+            formatter: function (val) {
+              return (
+                "รวมทั้งหมด" +
+                " " +
+                val +
+                " " +
+                "ชำระแล้ว" +
+                " " +
+                " รอดำเนินการ"
+              );
+            },
+            // title: {
+            //   formatter: function (seriesName) {
+            //     return ''
+            //   }
+            // }
           },
-          position: "bottom",
         },
       };
       return donutdata;
     },
+    donutSerieses() {
+      let totalPrice = [];
 
-    donutSeries() {
-      // let success = this.get_empty_course.countOpen;
-      // let pending = this.get_donut.sumPending;
-      // const donut = [success, pending];
-      // return donut;
+      for (const items of this.get_donut.datas) {
+        totalPrice.push(parseFloat(items.totalPrice));
+      }
+      totalPrice.push(this.get_donut.otherTotal.totalPrice);
 
-      const donut = [
-        1000000, 900000, 800000, 700000, 600000, 500000, 400000, 300000, 200000,
-        100000, 2558,
-      ];
-      return donut;
+      return totalPrice;
     },
-
-    // donutSeries() {
-    //   const donut = ["1000000", "pending"];
-    //   return donut;
-    // },
 
     pieSeries() {
       let Open = this.get_empty_course.countOpen;
@@ -852,19 +899,19 @@ export default {
           enabled: false,
         },
         labels: [`คอร์สว่าง ${Open} คอร์ส`, `คอร์สเต็ม ${Close} คอร์ส`],
-        responsive: [
-          {
-            breakpoint: 480,
-            options: {
-              chart: {
-                width: 200,
-              },
-              legend: {
-                position: "bottom",
-              },
-            },
-          },
-        ],
+        // responsive: [
+        //   {
+        //     breakpoint: 480,
+        //     options: {
+        //       chart: {
+        //         width: 200,
+        //       },
+        //     },
+        //   },
+        // ],
+        legend: {
+          position: "bottom",
+        },
       };
       return pieChartOptions;
     },
