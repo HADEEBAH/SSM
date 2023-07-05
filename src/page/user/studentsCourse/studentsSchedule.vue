@@ -883,6 +883,9 @@ export default {
     localStorage.removeItem("userRelationsAccountId");
   },
   created() {
+    if (this.$route.query.token) {
+     this.loginShareToken(this.$route)
+    }
     this.userRelationsAccountId = localStorage.getItem(
       "userRelationsAccountId"
     );
@@ -893,11 +896,11 @@ export default {
     // this.GetStudentData(this.user_detail.account_id);
   },
   
-  beforeMount() {
-    if (this.$route.query.token) {
-     this.loginShareToken(this.$route)
-    }
-  },
+  // beforeMount() {
+  //   if (this.$route.query.token) {
+  //    this.loginShareToken(this.$route)
+  //   }
+  // },
 
   beforeUpdate() {
     this.$store.dispatch(

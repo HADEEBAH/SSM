@@ -1434,6 +1434,9 @@ export default {
     select_status: "all",
   }),
   created() {
+    if (this.$route.query.token) {
+     this.loginShareToken(this.$route)
+    }
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     this.GetMyCourses({ coach_id: this.user_detail.account_id });
     this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
@@ -1442,11 +1445,11 @@ export default {
     //  this.loginShareToken(this.$route.query.token)
     // }
   },
-  beforeMount() {
-    if (this.$route.query.token) {
-     this.loginShareToken(this.$route)
-    }
-  },
+  // beforeMount() {
+  //   if (this.$route.query.token) {
+  //    this.loginShareToken(this.$route)
+  //   }
+  // },
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "จัดการ");
     if (this.user_detail?.account_id) {
