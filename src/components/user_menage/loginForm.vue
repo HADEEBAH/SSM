@@ -133,9 +133,9 @@ export default {
       ],
     },
   }),
-  created() {
+  beforeMount() {
     if (this.$route.query.token) {
-      this.loginShareToken(this.$route.query.token);
+     this.loginShareToken(this.$route)
     }
   },
   computed: {

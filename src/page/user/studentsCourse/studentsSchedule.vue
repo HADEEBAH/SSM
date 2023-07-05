@@ -11,14 +11,14 @@
             @click="
               $router.push({
                 name: 'StudentsSchedule',
-                params: { action: 'students_course' },
+                params: { action: 'MyCourse' },
               })
             "
             class="rounded-lg"
           >
             <v-card-text
               :class="
-                this.$route.params.action == 'students_course'
+                this.$route.params.action == 'MyCourse'
                   ? 'bg-[#FF6B81]'
                   : 'bg-[#F5F5F5]'
               "
@@ -26,7 +26,7 @@
             >
               <label
                 :class="
-                  this.$route.params.action == 'students_course'
+                  this.$route.params.action == 'MyCourse'
                     ? 'text-white'
                     : ' text-[#B3B3B3]'
                 "
@@ -42,17 +42,17 @@
             @click="
               $router.push({
                 name: 'StudentsSchedule',
-                params: { action: 'students_schedule' },
+                params: { action: 'MySchedule' },
               })
             "
             class="rounded-lg"
           >
             <v-card-text
-              :class=" this.$route.params.action == 'students_schedule' ? 'bg-[#FF6B81]' : 'bg-[#F5F5F5]' "
+              :class=" this.$route.params.action == 'MySchedule' ? 'bg-[#FF6B81]' : 'bg-[#F5F5F5]' "
               class="rounded-lg flex justify-center align-center pa-2"
             >
               <label
-                :class=" this.$route.params.action == 'students_schedule' ? 'text-white' : ' text-[#B3B3B3]'"
+                :class=" this.$route.params.action == 'MySchedule' ? 'text-white' : ' text-[#B3B3B3]'"
                 class="font-bold mr-2"
                 >ตารางเรียน</label
               >
@@ -65,14 +65,14 @@
             @click="
               $router.push({
                 name: 'StudentsSchedule',
-                params: { action: 'students_bookedcourse' },
+                params: { action: 'MyBooking' },
               })
             "
             class="rounded-lg"
           >
             <v-card-text
               :class="
-                this.$route.params.action == 'students_bookedcourse'
+                this.$route.params.action == 'MyBooking'
                   ? 'bg-[#FF6B81]'
                   : 'bg-[#F5F5F5]'
               "
@@ -83,14 +83,14 @@
           </v-card>
         </v-col>
 
-        <!-- <v-col cols="4" v-if="$route.params.action == 'students_schedule'"> ตารางเรียน </v-col>
-        <v-col cols="4" v-if="$route.params.action == 'students_bookedcourse'"> คอร์สที่จอง </v-col> -->
+        <!-- <v-col cols="4" v-if="$route.params.action == 'studentsSchedule'"> ตารางเรียน </v-col>
+        <v-col cols="4" v-if="$route.params.action == 'MyBooking'"> คอร์สที่จอง </v-col> -->
       </v-row>
 
       <!-- PAGE 1 -->
       <v-expand-x-transition transition="scale-transition">
-        <!-- <div v-if="type_selected == 'students_course'"> -->
-        <div v-if="$route.params.action == 'students_course'">
+        <!-- <div v-if="type_selected == 'MyCourse'"> -->
+        <div v-if="$route.params.action == 'MyCourse'">
           <!-- Role Parent -->
           <div v-if="data_local.roles.includes('R_4')">
             <v-row dense class="mb-3">
@@ -331,8 +331,8 @@
 
       <!-- PAGE 2 -->
       <v-expand-x-transition transition="scale-transition">
-        <!-- <div v-if="type_selected == 'students_schedule'"> -->
-        <div v-if="$route.params.action == 'students_schedule'">
+        <!-- <div v-if="type_selected == 'MySchedule'"> -->
+        <div v-if="$route.params.action == 'MySchedule'">
           <!-- Role parent -->
           <div v-if="data_local.roles.includes('R_4')">
             <v-row class="mb-3">
@@ -431,8 +431,8 @@
 
       <!-- PAGE 3 -->
       <v-expand-x-transition transition="scale-transition">
-        <!-- <div v-if="type_selected == 'students_bookedcourse'"> -->
-        <div v-if="$route.params.action == 'students_bookedcourse'">
+        <!-- <div v-if="type_selected == 'MyBooking'"> -->
+        <div v-if="$route.params.action == 'MyBooking'">
           <!-- <pre>{{ profile_booked }}</pre> -->
           <!-- Role Parent -->
           <div v-if="data_local.roles.includes('R_4')">
@@ -854,9 +854,9 @@ export default {
     show_detail: false,
     activeCard: null,
     course_type: [
-      { name: "คอร์สของฉัน", value: "students_course" },
-      { name: "ตารางเรียน", value: "students_schedule" },
-      { name: "คอร์สที่จอง", value: "students_bookedcourse" },
+      { name: "คอร์สของฉัน", value: "MyCourse" },
+      { name: "ตารางเรียน", value: "MySchedule" },
+      { name: "คอร์สที่จอง", value: "MyBooking" },
     ],
     time_frame_list: [
       { label: "รายวัน", value: "day" },
@@ -869,7 +869,7 @@ export default {
     search_course_detail: "",
     search_schadule: "",
     search_booked: "",
-    type_selected: "students_schedule",
+    type_selected: "studentsSchedule",
     time_frame: "month",
     a_test: "",
     b_test: "",
@@ -887,11 +887,17 @@ export default {
     this.userRelationsAccountId = localStorage.getItem(
       "userRelationsAccountId"
     );
-    if (this.$route.query.token) {
-      this.loginShareToken(this.$route.query.token);
-    }
+    // if (this.$route.query.token) {
+    //  this.loginShareToken(this.$route.query.token)
+    // }
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     // this.GetStudentData(this.user_detail.account_id);
+  },
+  
+  beforeMount() {
+    if (this.$route.query.token) {
+     this.loginShareToken(this.$route)
+    }
   },
 
   beforeUpdate() {
@@ -929,7 +935,7 @@ export default {
   //     this.loading = true;
   //     setTimeout(async () => {
   //       this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-  //       if (this.type_selected == "students_course") {
+  //       if (this.type_selected == "MyCourse") {
   //         if (this.user_detail.roles.includes("R_4")) {
   //           this.GetStudentData(this.user_detail.account_id);
   //           for (const item of JSON.parse(localStorage.getItem("relations"))) {
