@@ -45,7 +45,7 @@
         @click="
           $router.push({
             name: 'StudentsSchedule',
-            params: { action: 'students_course' },
+            params: { action: 'MyCourse' },
           })
         "
       >
@@ -814,7 +814,7 @@ export default {
     // this.user_relation = JSON.parse(localStorage.getItem("relations"));
     // setTimeout(async () => {
     //   this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-    //   if (this.type_selected == "students_course") {
+    //   if (this.type_selected == "MyCourse") {
     //     if (this.user_detail.roles.includes("R_4")) {
     //       this.GetStudentData(this.user_detail.account_id);
     //       for (const item of JSON.parse(localStorage.getItem("relations"))) {
@@ -875,7 +875,7 @@ export default {
     //   this.loading = true;
     //   setTimeout(async () => {
     //     this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-    //     if (this.type_selected == "students_course") {
+    //     if (this.type_selected == "MyCourse") {
     //     if (this.user_detail.roles.includes("R_4")) {
     //     this.GetStudentData(this.user_detail.account_id);
     //     for (const item of JSON.parse(localStorage.getItem("relations"))) {

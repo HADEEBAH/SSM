@@ -416,7 +416,7 @@ export default {
         icon: "mdi-calendar-month",
         title: "ตารางเรียน",
         to: "StudentsSchedule",
-        params: { action: "students_schedule" },
+        params: { action: "MySchedule" },
         roles: ["R_4", "R_5"],
       },
       {
