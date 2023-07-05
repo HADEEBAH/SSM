@@ -19,15 +19,12 @@ router.beforeEach((to, from, next) => {
   }
   if (to.name !== "Login" && to.name !== "Register") {
     console.log("name", to);
+    console.log("cookie", VueCookie.get("token"));
     if (to.name === "callback") {
       next()
     } else if (to.matched[0].name !== "NavBarUser" && !VueCookie.get("token")) {
       next({ name: 'Login' })
     } else if (to.name === 'userCourseOrder' && !VueCookie.get("token")) {
-      next({ name: 'Login' })
-    } else if (to.name === 'menageCourse' && !VueCookie.get("token")) {
-      next({ name: 'Login' })
-    } else if (to.name === 'studentsSchedule' && !VueCookie.get("token")) {
       next({ name: 'Login' })
     } else if (VueCookie.get("token")) {
       let order = JSON.parse(localStorage.getItem("Order"))
