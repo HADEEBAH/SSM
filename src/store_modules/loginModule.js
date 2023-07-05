@@ -298,6 +298,9 @@ const loginModules = {
                             roles.push(role.roleId)
                         });
                     }
+                    console.log("token<>", data.data.token);
+                    VueCookie.set("token", data.data.token)
+
                     let payload = {
                         account_id: data.data.account_id,
                         email: data.data.email,
@@ -312,12 +315,14 @@ const loginModules = {
                         tel: data.data.tel,
                         image: data.data.image !== "" ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}` : ""
                     }
-                    VueCookie.set("token", data.data.token, 1)
+
                     localStorage.setItem("userDetail", JSON.stringify(payload))
                     if (route.name === "Login") {
                       router.replace({ name: "UserKingdom" })
                     } else {
-                      router.replace({name:route.name})
+                      // router.replace({name:route.name})
+                      // window.location.href = `http://localhost:8080${route.path}` 
+                      window.location.href = `${process.env.VUE_APP_URL}${route.path}` 
                     }
                     // if (route.name) {
                     //   console.log("router", router);

@@ -327,6 +327,9 @@
         </v-list>
       </v-navigation-drawer>
       <v-main class="bg-admin">
+        <v-overlay :value="loading">
+          <v-progress-circular indeterminate size="64"></v-progress-circular>
+        </v-overlay>
         <router-view />
       </v-main>
     </v-layout>
@@ -510,6 +513,7 @@ export default {
       get_notifications: "NotificationsModules/getNotifications",
       get_notifications_all: "NotificationsModules/getNotificationsAll",
       notifications_read: "NotificationsModules/readNotifications",
+      loading: "LoadingModules/getLoading"
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;

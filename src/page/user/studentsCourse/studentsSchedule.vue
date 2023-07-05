@@ -835,6 +835,7 @@ import { mapActions, mapGetters } from "vuex";
 import calendarStudent from "../../../components/calendar/calendarStudent.vue";
 import labelCustom from "@/components/label/labelCustom.vue";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+import router from "@/router";
 
 export default {
   components: {
@@ -886,29 +887,16 @@ export default {
     if (this.$route.query.token) {
      this.loginShareToken(this.$route)
     }
-    this.userRelationsAccountId = localStorage.getItem(
-      "userRelationsAccountId"
-    );
-    // if (this.$route.query.token) {
-    //  this.loginShareToken(this.$route.query.token)
-    // }
+  },
+
+  beforeMount() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    // this.GetStudentData(this.user_detail.account_id);
   },
   
-  // beforeMount() {
-  //   if (this.$route.query.token) {
-  //    this.loginShareToken(this.$route)
-  //   }
-  // },
-
-  beforeUpdate() {
-    this.$store.dispatch(
-      "NavberUserModules/changeTitleNavber",
-      "ข้อมูลตารางเรียน"
-    );
-  },
   mounted() {
+    if (this.user_detail?.roles?.filter((val)=> val === "R_4" || val === "R_5").length === 0) {
+      router.replace({name:"UserKingdom"})
+    }
     this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
 
     if (localStorage.getItem("userRelationsAccountId")) {
@@ -919,6 +907,13 @@ export default {
       // this.GetStudentData(null);
       this.GetStudentData(this.user_detail.account_id);
     }
+  },
+
+  beforeUpdate() {
+    this.$store.dispatch(
+      "NavberUserModules/changeTitleNavber",
+      "ข้อมูลตารางเรียน"
+    );
   },
 
   // watch: {
