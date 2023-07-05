@@ -1,5 +1,8 @@
 <template>
-  <loading-overlay v-if=" get_all_course_is_loading && get_all_holidays_is_loading" :loading="get_all_course_is_loading && get_all_holidays_is_loading"></loading-overlay>
+  <loading-overlay
+    v-if="get_all_course_is_loading && get_all_holidays_is_loading"
+    :loading="get_all_course_is_loading && get_all_holidays_is_loading"
+  ></loading-overlay>
   <v-container v-else>
     <headerPage title="จัดการตาราง"></headerPage>
     <v-row class="py-2">
@@ -380,7 +383,7 @@
                   </v-col>
                 </v-row>
                 <v-row v-if="!holidaySwitch" dense>
-                  <v-col cols="12" sm="6">
+                  <v-col cols="6">
                     <label class="font-weight-bold">เวลาเริ่ม</label>
                     <br />
                     <vue-timepicker
@@ -391,7 +394,7 @@
                     >
                     </vue-timepicker>
                   </v-col>
-                  <v-col cols="12" sm="6">
+                  <v-col cols="6">
                     <label class="font-weight-bold">เวลาสิ้นสุด</label>
                     <br />
                     <vue-timepicker
@@ -559,7 +562,7 @@
                   <v-col cols="12" sm="6" align="center">
                     <v-btn
                       @click="
-                          GetDataInSchedule(),
+                        GetDataInSchedule(),
                           (filter_dialog = false),
                           (selectedCourseType = []),
                           (selectedCourse = []),
@@ -642,7 +645,7 @@ export default {
     dialogCard,
     VueTimepicker,
     headerPage,
-    loadingOverlay
+    loadingOverlay,
   },
   data: () => ({
     dialog: true,
@@ -740,7 +743,6 @@ export default {
   created() {
     this.GetAllHolidays();
     this.GetAllCourse();
-
   },
   beforeMount() {
     // const events = [];
@@ -1063,7 +1065,8 @@ export default {
       date_arr: "ManageScheduleModules/getDateArray",
       get_coachs: "CourseModules/getCoachs",
       get_all_holidays: "ManageScheduleModules/getAllHolidays",
-      get_all_holidays_is_loading: "ManageScheduleModules/getAllHolidaysIsLoading",
+      get_all_holidays_is_loading:
+        "ManageScheduleModules/getAllHolidaysIsLoading",
       get_holidays_by_id: "ManageScheduleModules/getHolidaysById",
       data_in_schedule: "ManageScheduleModules/getdataInSchadule",
       data_filter_schedule: "ManageScheduleModules/getFilterSchedule",
