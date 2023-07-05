@@ -1850,13 +1850,12 @@ export default {
       let dow = [];
       this.dow_option = [];
       if (selected_coach >= 0) {
-        for await (const coach of this.coach_list[selected_coach].allDates) {
-          for await (const day of coach.dates.day) {
-            if (dow.length === 0) {
-              dow.push(this.day_option.filter((v) => v.value == day)[0]);
-            } else if (dow.filter((v) => v.value == day).length === 0) {
-              dow.push(this.day_option.filter((v) => v.value == day)[0]);
-            }
+        let coach = this.coach_list[selected_coach].allDates
+        for await (const day of coach.dates.day) {
+          if (dow.length === 0) {
+            dow.push(this.day_option.filter((v) => v.value == day)[0]);
+          } else if (dow.filter((v) => v.value == day).length === 0) {
+            dow.push(this.day_option.filter((v) => v.value == day)[0]);
           }
         }
       }
@@ -1867,7 +1866,8 @@ export default {
       this.package_option = [];
       if (selected_coach >= 0) {
         console.log("coach_list => ", this.coach_list[selected_coach]);
-        for await (const coach of this.coach_list[selected_coach].allDates) {
+        // for await (const coach of this.coach_list[selected_coach].allDates.dates) {
+          let coach = this.coach_list[selected_coach].allDates
           if (this.package_option.length === 0) {
             this.package_option.push(coach.cpo);
           } else if (
@@ -1876,14 +1876,15 @@ export default {
           ) {
             this.package_option.push(coach.cpo);
           }
-        }
+        // }
       }
     },
     //FILTER DATE COACH LIST
     async filterTimeCoach(selected_coach) {
       this.time_option = [];
       if (selected_coach >= 0) {
-        for await (const coach of this.coach_list[selected_coach].allDates) {
+        // for await (const coach of this.coach_list[selected_coach].allDates) {
+          let coach = this.coach_list[selected_coach].allDates
           if (this.time_option.length > 0) {
             this.time_option.push(coach.time);
           } else if (
@@ -1892,7 +1893,7 @@ export default {
           ) {
             this.time_option.push(coach.time);
           }
-        }
+        // }
       }
     },
     //EXPORT STUDENT
