@@ -177,12 +177,28 @@
               v-model="filter_course"
               item-text="name"
               item-value="course_id"
-              :items="my_courses"
+              :items="my_courses.filter(v => !v.type)"
               outlined
               dense
-            ></v-autocomplete>
+            >
+              <template v-slot:no-data>
+                <v-row dense>
+                  <v-col align="center">ไม่พบข้อมูล</v-col>
+                </v-row>
+              </template>
+            </v-autocomplete>
           </v-col>
         </v-row>
+        <div  v-if="filterMycourse().length == 0">
+          <v-card flat>
+            <v-card-text class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg" >
+              <span class="text-lg font-bold">
+                <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                ไม่พบข้อมูลการสอน
+              </span>
+            </v-card-text>
+          </v-card>
+        </div>
         <v-card
           dense
           class="mb-3"
@@ -1478,6 +1494,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      GetAllHolidays: "ManageScheduleModules/GetAllHolidays",
       GetMyCourses: "CoachModules/GetMyCourses",
       GetCoachs: "CourseModules/GetCoachs",
       SaveCoachLeave: "CoachModules/SaveCoachLeave",
@@ -1696,10 +1713,10 @@ export default {
     filterMycourse() {
       if (this.filter_course) {
         return this.my_courses.filter(
-          (v) => v.course_id === this.filter_course
+          (v) => v.course_id === this.filter_course && !v.type
         );
       } else {
-        return this.my_courses;
+        return this.my_courses.filter( v => !v.type);
       }
     },
   },

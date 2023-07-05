@@ -379,7 +379,6 @@
               </v-col>
             </v-row>
             <div>
-              <per>{{ itemTime.dates }}</per>
               <template>
                 <calendarStudent
                   :events="itemTime.dates"
@@ -910,17 +909,7 @@ export default {
     this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
 
     if (localStorage.getItem("userRelationsAccountId")) {
-      // localStorage.getItem("userRelationsAccountId");
-      // localStorage.getItem("userRelationsAccountId");
-      // console.log(
-      //   "object----userRelationsAccountId",
-      //   this.userRelationsAccountId
-      // );
-      // this.GetStudentData(this.userRelationsAccountId);
-      // for (const item of JSON.parse(localStorage.getItem("relations"))) {
-      //   this.GetStudentData(item.student.studentId);
-      //   console.log("student");
-      // }
+      console.log(localStorage.getItem("userRelationsAccountId"))
     } else if (this.user_detail.roles.includes("R_5")) {
       this.GetStudentData(this.user_detail.account_id);
     } else {

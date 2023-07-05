@@ -252,7 +252,7 @@
                     </v-text-field>
                   </v-col>
 
-                  <v-col cols="12" sm="6" v-if="details.package !== 'leave'">
+                  <v-col cols="12" sm="6" v-if="details.package && details.package !== 'leave'">
                     <label class="font-weight-bold">แพ็กเกจ</label>
                     <v-text-field
                       dense

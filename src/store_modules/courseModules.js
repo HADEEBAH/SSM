@@ -674,8 +674,6 @@ const CourseModules = {
                 "students": parseInt(class_date_data.students)
               })
             } 
-            console.log(`${date.day_of_week_id} => `,class_date)
-            console.log("///////////////////////////")
             if(date.day_of_week_id){
               if(teach_day_data.filter((v)=> v.dayOfWeekId === date.day_of_week_id && v.courseCoachId === date.course_coach_id).length === 0){
                 teach_day_data.push({
@@ -1213,195 +1211,207 @@ const CourseModules = {
             days : []
           }
           console.log("payload 1192",payload)
+          console.log("1216",data.data.coachs)
           let teach_day_data = []
-          for await (let coach of data.data.coachs){
-            // console.log("payload 1194",payload)
-            for await (let coach_date of data.data.dayOfWeek.filter(v => v.courseCoachId === coach.courseCoachId)){
-              // DAY OF CLASS
-              if(payload.days_of_class.filter(v => v.day_of_week_id === coach_date.times[0].dayOfWeekId).length === 0){
-                let dayName = dayOfWeekArray(coach_date.dayOfWeekName)
-                payload.days_of_class.push({
-                  day_of_week_id :coach_date.times[0].dayOfWeekId,  
-                  course_coach_id: [coach_date.courseCoachId],
-                  day: coach_date.dayOfWeekName,
-                  dayName : dayName,
-                  times: coach_date.times,
+          if(data.data.coachs){
+            for await (let coach of data.data.coachs){
+              // console.log("payload 1194",payload)
+              for await (let coach_date of data.data.dayOfWeek.filter(v => v.courseCoachId === coach.courseCoachId)){
+                // DAY OF CLASS
+                if(payload.days_of_class.filter(v => v.day_of_week_id === coach_date.times[0].dayOfWeekId).length === 0){
+                  let dayName = dayOfWeekArray(coach_date.dayOfWeekName)
+                  payload.days_of_class.push({
+                    day_of_week_id :coach_date.times[0].dayOfWeekId,  
+                    course_coach_id: [coach_date.courseCoachId],
+                    day: coach_date.dayOfWeekName,
+                    dayName : dayName,
+                    times: coach_date.times,
+                  })
+                }
+                let class_dates = []
+                for await (const time of coach_date.times) {
+                  
+                  // console.log(time.start, time.end)
+                  let startTimePart = time.start.split(":")
+                  let endTimePart = time.end.split(":")
+                  let startTime = {
+                    "HH": startTimePart[0].padStart(2, '0'),
+                    "mm": startTimePart[1] ? startTimePart[1].padStart(2, '0') : "00"
+                  }
+                  let endTime = {
+                    "HH": endTimePart[0].padStart(2, '0'),
+                    "mm": endTimePart[1]? endTimePart[1].padStart(2, '0') : "00"
+                  }
+                  class_dates.push({
+                    class_date_range: {
+                      time_id : time.timeId ? time.timeId : null,
+                      day_of_week_id :time.dayOfWeekId ? time.dayOfWeekId : null,  
+                      start_time: time.start,
+                      start_time_object : time.start ? startTime : null,
+                      menu_start_time: false,
+                      end_time: time.end ,
+                      end_time_object : time.end ? endTime : null,
+                      menu_end_time: false,
+                    },
+                    students: time.maximumStudent,
+                  },)
+                }
+                // console.log("payload => 1236", payload)
+                // TEACH DAY
+                teach_day_data.push({
+                  day_of_week_id :coach_date.times[0].dayOfWeekId ? coach_date.times[0].dayOfWeekId : null,
+                  class_open: coach_date.status === 'Active' ? true : false,
+                  teach_day: coach_date.dayOfWeekName.map(v => parseInt(v)),
+                  course_coach_id: coach_date.courseCoachId,
+                  class_date: class_dates,
                 })
               }
-              let class_dates = []
-              for await (const time of coach_date.times) {
-                
-                // console.log(time.start, time.end)
-                let startTimePart = time.start.split(":")
-                let endTimePart = time.end.split(":")
-                let startTime = {
-                  "HH": startTimePart[0].padStart(2, '0'),
-                  "mm": startTimePart[1] ? startTimePart[1].padStart(2, '0') : "00"
-                }
-                let endTime = {
-                  "HH": endTimePart[0].padStart(2, '0'),
-                  "mm": endTimePart[1]? endTimePart[1].padStart(2, '0') : "00"
-                }
-                class_dates.push({
+              let startTimePart =  data.data.coursePeriodStartDate?  data.data.coursePeriodStartDate.split(":") : null
+              let endTimePart =  data.data.coursePeriodStartDate? data.data.coursePeriodEndDate.split(":") : null
+              let startTime = startTimePart ? {
+                "HH": startTimePart[0],
+                "mm": startTimePart[1] ? startTimePart[1] : "00"
+              } : null
+              let endTime = endTimePart ? {
+                "HH": endTimePart[0],
+                "mm": endTimePart[1]? endTimePart[1] : "00"
+              } : null
+              // console.log("payload => 1256", payload)
+              payload.coachs.push(
+                {
+                  coach_id: coach.accountId,
+                  course_coach_id: coach.courseCoachId,
+                  coach_name: `${coach.coachFirstNameTh} ${coach.coachLastNameTh}`,
+                  teach_day_data: [],
+                  teach_days_used: [],
                   class_date_range: {
-                    time_id : time.timeId ? time.timeId : null,
-                    day_of_week_id :time.dayOfWeekId ? time.dayOfWeekId : null,  
-                    start_time: time.start,
-                    start_time_object : time.start ? startTime : null,
-                    menu_start_time: false,
-                    end_time: time.end ,
-                    end_time_object : time.end ? endTime : null,
-                    menu_end_time: false,
+                    start_date: data.data.courseStudyStartDate ? moment(data.data.courseStudyStartDate).format("YYYY-MM-DD") : null,
+                    menu_start_date: false,
+                    end_date: data.data.courseStudyStartDate ? moment(data.data.courseStudyEndDate).format("YYYY-MM-DD") : null,
+                    menu_end_date: false,
                   },
-                  students: time.maximumStudent,
-                },)
-              }
-              // console.log("payload => 1236", payload)
-              // TEACH DAY
-              teach_day_data.push({
-                day_of_week_id :coach_date.times[0].dayOfWeekId ? coach_date.times[0].dayOfWeekId : null,
-                class_open: coach_date.status === 'Active' ? true : false,
-                teach_day: coach_date.dayOfWeekName.map(v => parseInt(v)),
-                course_coach_id: coach_date.courseCoachId,
-                class_date: class_dates,
-              })
+                  class_date_range_str: {
+                    start_date: data.data.courseStudyStartDate ? new Date(data.data.courseStudyStartDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : null,
+                    end_date: data.data.courseStudyStartDate ? new Date(data.data.courseStudyEndDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : null,
+                  },
+                  register_date_range: {
+                    start_date: data.data.courseRegisterStartDate ? moment(data.data.courseRegisterStartDate).format("YYYY-MM-DD") : null,
+                    menu_start_date: false,
+                    end_date: data.data.courseRegisterStartDate ? moment(data.data.courseRegisterEndDate).format("YYYY-MM-DD") : null,
+                    menu_end_date: false,
+                  },
+                  register_date_range_str: {
+                    start_date: data.data.courseRegisterEndDate ? new Date(data.data.courseRegisterStartDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : "",
+                    end_date: data.data.courseRegisterEndDate ? new Date(data.data.courseRegisterEndDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : "",
+                  },
+                  period: {
+                    start_time: data.data.coursePeriodStartDate ? data.data.coursePeriodStartDate : null,
+                    start_time_object : data.data.coursePeriodStartDate ? startTime : null,
+                    end_time: data.data.coursePeriodEndDate ? data.data.coursePeriodEndDate : null,
+                    end_time_object :data.data.coursePeriodEndDate ? endTime : null,
+                  },
+                },
+              )
+              console.log("payload 1292",payload)
             }
-            let startTimePart =  data.data.coursePeriodStartDate?  data.data.coursePeriodStartDate.split(":") : null
-            let endTimePart =  data.data.coursePeriodStartDate? data.data.coursePeriodEndDate.split(":") : null
-            let startTime = startTimePart ? {
-              "HH": startTimePart[0],
-              "mm": startTimePart[1] ? startTimePart[1] : "00"
-            } : null
-            let endTime = endTimePart ? {
-              "HH": endTimePart[0],
-              "mm": endTimePart[1]? endTimePart[1] : "00"
-            } : null
-            // console.log("payload => 1256", payload)
-            payload.coachs.push(
-              {
-                coach_id: coach.accountId,
-                course_coach_id: coach.courseCoachId,
-                coach_name: `${coach.coachFirstNameTh} ${coach.coachLastNameTh}`,
-                teach_day_data: [],
-                teach_days_used: [],
-                class_date_range: {
-                  start_date: data.data.courseStudyStartDate ? moment(data.data.courseStudyStartDate).format("YYYY-MM-DD") : null,
-                  menu_start_date: false,
-                  end_date: data.data.courseStudyStartDate ? moment(data.data.courseStudyEndDate).format("YYYY-MM-DD") : null,
-                  menu_end_date: false,
-                },
-                class_date_range_str: {
-                  start_date: data.data.courseStudyStartDate ? new Date(data.data.courseStudyStartDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : null,
-                  end_date: data.data.courseStudyStartDate ? new Date(data.data.courseStudyEndDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : null,
-                },
-                register_date_range: {
-                  start_date: data.data.courseRegisterStartDate ? moment(data.data.courseRegisterStartDate).format("YYYY-MM-DD") : null,
-                  menu_start_date: false,
-                  end_date: data.data.courseRegisterStartDate ? moment(data.data.courseRegisterEndDate).format("YYYY-MM-DD") : null,
-                  menu_end_date: false,
-                },
-                register_date_range_str: {
-                  start_date: data.data.courseRegisterEndDate ? new Date(data.data.courseRegisterStartDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : "",
-                  end_date: data.data.courseRegisterEndDate ? new Date(data.data.courseRegisterEndDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : "",
-                },
-                period: {
-                  start_time: data.data.coursePeriodStartDate ? data.data.coursePeriodStartDate : null,
-                  start_time_object : data.data.coursePeriodStartDate ? startTime : null,
-                  end_time: data.data.coursePeriodEndDate ? data.data.coursePeriodEndDate : null,
-                  end_time_object :data.data.coursePeriodEndDate ? endTime : null,
-                },
-              },
-            )
-            // console.log("payload 1292",payload)
           }
-          // console.log("payload 1294",payload)
+          
+          console.log("payload 1321",data.data.dayOfWeek)
           // console.log("teach_day_data",teach_day_data)
-          for(let coach_date of data.data.dayOfWeek.filter(v => v.status === 'Active')){
-            // console.log(coach_date)
-            // DAYS
-            let dayName = dayOfWeekArray(coach_date.dayOfWeekName)
-            if(payload.days.filter(v => v.dayName === dayName).length === 0){
-              // console.log("payload 1129",coach_date.times)
-              let times = []
-              for await (let time of coach_date.times){
-                // console.log("payload 1132",time)
-                if(times.filter(v => v.start ===  time.start && v.end ===  time.end).length === 0){
-                  times.push({
-                    start : time.start,
-                    end : time.end,
-                    timeData : []
-                  })
-                  for await (let t of times){
-                    // console.log("payload 1140", t.courseCoachId !== coach_date.courseCoachId)
-                    if(t.timeData.filter(v => v.courseCoachId == coach_date.courseCoachId).length === 0){
-                      t.timeData.push({
-                        maximumStudent: time.maximumStudent,
-                        dayOfWeekId: time.dayOfWeekId,
-                        timeId:  time.timeId,
-                        courseCoachId: coach_date.courseCoachId,
-                        coach_name : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachFirstNameTh +" "+data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachLastNameTh,
-                        coach_id : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].accountId
-                     })
+          if(data.data.dayOfWeek){
+            for await (let coach_date of data.data.dayOfWeek.filter(v => v.status === 'Active')){
+              // console.log(coach_date)
+              // DAYS
+              let dayName = dayOfWeekArray(coach_date.dayOfWeekName)
+              if(payload.days.filter(v => v.dayName === dayName).length === 0){
+                // console.log("payload 1129",coach_date.times)
+                let times = []
+                for await (let time of coach_date.times){
+                  // console.log("payload 1132",time)
+                  if(times.filter(v => v.start ===  time.start && v.end ===  time.end).length === 0){
+                    times.push({
+                      start : time.start,
+                      end : time.end,
+                      timeData : []
+                    })
+                    for await (let t of times){
+                      // console.log("payload 1140", t.courseCoachId !== coach_date.courseCoachId)
+                      if(t.timeData.filter(v => v.courseCoachId == coach_date.courseCoachId).length === 0){
+                        t.timeData.push({
+                          maximumStudent: time.maximumStudent,
+                          dayOfWeekId: time.dayOfWeekId,
+                          timeId:  time.timeId,
+                          courseCoachId: coach_date.courseCoachId,
+                          coach_name : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachFirstNameTh +" "+data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachLastNameTh,
+                          coach_id : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].accountId
+                        })
+                      }
+                      // console.log("payload 1151", t)
                     }
-                    // console.log("payload 1151", t)
                   }
                 }
-              }
-              // console.log("payload 1147", times)
-              payload.days.push({
-                day: coach_date.dayOfWeekName,
-                dayName : dayName,
-                times: times,
-              }) 
-            
-            }else{
-              for await (let day of payload.days.filter(v => v.dayName === dayName)){
-                for (let time of coach_date.times){
-                  if (day.times.filter(v => v.start == time.start && v.end == time.end).length > 0){
-                    for await (let day_time of day.times.filter(v => v.start == time.start && v.end == time.end)){
-                      if(day_time.timeData.filter(v => v.courseCoachId === coach_date.courseCoachId ).length === 0){
-                        day_time.timeData.push(
-                          {
-                            maximumStudent: time.maximumStudent,
-                            dayOfWeekId: time.dayOfWeekId,
-                            timeId:  time.timeId,
-                            courseCoachId: coach_date.courseCoachId,
-                            coach_name : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachFirstNameTh +" "+data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachLastNameTh,
-                            coach_id : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].accountId
-                          }
-                        )
-                      }
-                    }
-                  }else{
-                    let times = []
-                    for await (let time of coach_date.times){
-                      times.push({
-                        start : time.start,
-                        end : time.end,
-                        timeData : []
-                      })
-                      for await (let t of times){
-                        if(t.timeData.filter(v => v.courseCoachId == coach_date.courseCoachId).length === 0){
-                          t.timeData.push({
-                            maximumStudent: time.maximumStudent,
-                            dayOfWeekId: time.dayOfWeekId,
-                            timeId:  time.timeId,
-                            courseCoachId: coach_date.courseCoachId, 
-                            coach_name : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachFirstNameTh +" "+data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachLastNameTh,
-                            coach_id : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].accountId
-                          })
+                // console.log("payload 1147", times)
+                payload.days.push({
+                  day: coach_date.dayOfWeekName,
+                  dayName : dayName,
+                  times: times,
+                }) 
+              
+              }else{
+                for await (let day of payload.days.filter(v => v.dayName === dayName)){
+                  for (let time of coach_date.times){
+                    if (day.times.filter(v => v.start == time.start && v.end == time.end).length > 0){
+                      for await (let day_time of day.times.filter(v => v.start == time.start && v.end == time.end)){
+                        if(day_time.timeData.filter(v => v.courseCoachId === coach_date.courseCoachId ).length === 0){
+                          day_time.timeData.push(
+                            {
+                              maximumStudent: time.maximumStudent,
+                              dayOfWeekId: time.dayOfWeekId,
+                              timeId:  time.timeId,
+                              courseCoachId: coach_date.courseCoachId,
+                              coach_name : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachFirstNameTh +" "+data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachLastNameTh,
+                              coach_id : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].accountId
+                            }
+                          )
                         }
                       }
+                    }else{
+                      let times = []
+                      for await (let time of coach_date.times){
+                        times.push({
+                          start : time.start,
+                          end : time.end,
+                          timeData : []
+                        })
+                        for await (let t of times){
+                          if(t.timeData.filter(v => v.courseCoachId == coach_date.courseCoachId).length === 0){
+                            t.timeData.push({
+                              maximumStudent: time.maximumStudent,
+                              dayOfWeekId: time.dayOfWeekId,
+                              timeId:  time.timeId,
+                              courseCoachId: coach_date.courseCoachId, 
+                              coach_name : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachFirstNameTh +" "+data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].coachLastNameTh,
+                              coach_id : data.data.coachs.filter(v=>v.courseCoachId === coach_date.courseCoachId)[0].accountId
+                            })
+                          }
+                        }
+                      }
+                      day.times.push(...times)
                     }
-                    day.times.push(...times)
                   }
                 }
               }
             }
           }
-          for await (let coach of payload.coachs){
-            coach.teach_day_data = teach_day_data.filter(v => v.course_coach_id === coach.course_coach_id)
+          // console.log("payload 1408o",payload.coachs.length)
+          if(payload.coachs.length > 0){
+            for await (let coach of payload.coachs){
+              coach.teach_day_data = teach_day_data.filter(v => v.course_coach_id === coach.course_coach_id)
+            }
+            
           }
+        
+          // console.log("1416 :",data.data.courseTypeId)
           if (data.data.courseTypeId === "CT_1") {
             let options = []
             data.data.coursePackageOption.forEach((package_data) => {
@@ -1443,7 +1453,7 @@ const CourseModules = {
               'Authorization': `Bearer ${VueCookie.get("token")}`
             }
           }
-          // console.log("payload :",payload)
+          console.log("1458 :",payload)
           if(payload.course_type_id === "CT_1"){
             console.log("payload :",payload)
             await context.commit("SetCourseData", payload)

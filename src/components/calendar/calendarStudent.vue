@@ -93,7 +93,10 @@
               <v-card flat>
                 <v-card-text class="border-2 border-[#ff6b81]">
                   <v-row dense>
-                    <v-col cols="auto" class="text-sm text-[#999999]">
+                    <v-col v-if="event.type"  cols="auto" class="text-sm text-[#999999]">
+                      -
+                    </v-col>
+                    <v-col v-else cols="auto" class="text-sm text-[#999999]">
                       {{ `${event.start_time}` }}<br />{{ `${event.end_time}` }}
                     </v-col>
                     <v-col cols="auto">
@@ -104,9 +107,10 @@
                         <label class="font-bold">{{ event.timed }} </label>
                       </v-row>
                       <v-row dense>
-                        <v-col> เรียนโดย: {{ event.name }} </v-col>
+                        <v-col v-if="!event.type"> เรียนโดย: {{ event.name }} </v-col>
+                        <v-col v-else>{{ event.name }} </v-col>
                       </v-row>
-                      <v-row dense>
+                      <v-row dense  v-if="!event.type">
                         <v-col class="text-sm">
                           โค้ช: {{ event.subtitle }} <br />
                           <div>
@@ -231,16 +235,12 @@ export default {
     }),
     selectedDate(data) {
       console.log(data.event);
-      for (const item in this.student_data) {
-        this.test_course_id = item.courseId;
+      if(!data.event.type){
+        this.$router.push({
+          name: "StudentCourse",
+          params: { course_id: data.event.courseId },
+        });
       }
-
-      this.$router.push({
-        name: "StudentCourse",
-        params: { course_id: data.event.courseId },
-      });
-      // this.$router.push({ name: 'StudentsSchedule' })
-      // $router.push({ name: 'StudentCourse' })
     },
     selectDate(date) {
       this.event_date = [];
@@ -249,19 +249,32 @@ export default {
         let [start, start_time] = event.start.split(" ");
         let [end, end_time] = event.end.split(" ");
         if (start_time !== "Invalid date" && end_time !== "Invalid date") {
-          if (start === end && start === date) {
-            this.event_date.push({
-              timed: event.timed,
-              name: event.name,
-              subtitle: event.subtitle,
-              coach: event.coach,
-              start_time: start_time,
-              end_time: end_time,
-              color: event.color,
-              courseId: event.courseId,
-            });
-            console.log("-->", this.event_date);
+          if(!event.type){
+            if (start === end && start === date) {
+              this.event_date.push({
+                timed: event.timed,
+                name: event.name,
+                subtitle: event.subtitle,
+                coach: event.coach,
+                start_time: start_time,
+                end_time: end_time,
+                color: event.color,
+                courseId: event.courseId,
+              });
+            }
+          }else{
+            if (start === end && start === date) {
+              this.event_date.push({
+                name: event.name,
+                start_time: start_time,
+                end_time: end_time,
+                color: event.color,
+                type : event.type,
+                courseId: event.courseId,
+              });
+            }
           }
+          
         }
       });
     },

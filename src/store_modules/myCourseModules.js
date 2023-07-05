@@ -205,12 +205,24 @@ const myCourseModules = {
                 }
                 //     this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
                 //   let user_account_id = this.user_detail.account_id
+                // let localhost = "http://localhost:3000"
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
                 if (data.statusCode === 200) {
                     console.log("176=>",data.data)
-                    context.commit("SetStudentsLoading", false)
-                     
                     const dataCourseSchedule = { dates: [] };
+                    let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
+                    if(holidays.data.statusCode === 200){
+                        for(let holiday of holidays.data.data){
+                            dataCourseSchedule.dates.push({
+                                type : 'holiday',
+                                name: holiday.holidayName,
+                                start_date:`${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`, 
+                                start: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
+                                end: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
+                            })
+                        }
+                    }
+                   
                     for (const course of data.data) {
                         console.log("course", course);
                         course.day_name = course.dates.day ? dayOfWeekArray(course.dates.day) : course.dates.day
@@ -240,7 +252,6 @@ const myCourseModules = {
                         context.commit("SetMyCourse", MyCourse)
                         context.commit("SetMyCourseStudentId", '')
                     } else {
-
                         context.commit("SetStudentData", data.data)
                         console.log("SetStudentData", data.data)
                     }
