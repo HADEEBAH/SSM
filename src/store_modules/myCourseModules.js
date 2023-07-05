@@ -313,8 +313,9 @@ const myCourseModules = {
 
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/by/${account_id}`, config);
                 if (data.statusCode === 200) {
-
                     for await (const item of data.data) {
+                        let arrayNumbers = item.dayOfWeekName.split(",").map(String);
+                        item.day_name = item.dayOfWeekName ? dayOfWeekArray(arrayNumbers) : item.dayOfWeekName
                         item.createdByData = item.createdBy ? await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${item.createdBy}`, config) : null
                         item.StudentData = item.studentId ? await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${item.studentId}`, config) : null
                         item.coachData = item.coachId ? await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${item.coachId}`, config) : null
