@@ -70,6 +70,9 @@ import StudentList from '../src/page/admin/dashboard/studentList.vue'
 // admin course reserve
 import manageCourseReserve from '@/page/admin/courseReserve/manageCourseReserve.vue'
 
+//PageNotFound
+import PageNotFound from '@/page/pageNotFound.vue'
+
 const routes = [
   {
     path: '/auth',
@@ -85,6 +88,11 @@ const routes = [
         path: '/register',
         name: 'Register',
         component: RegisterPage,
+      },
+      {
+        path: '/pageNotFound',
+        name: 'PageNotFound',
+        component: PageNotFound,
       },
     ]
   },
