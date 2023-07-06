@@ -384,7 +384,6 @@ const CourseModules = {
           for await (let coach of data.data) {
             let coach_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${coach.coachId}`)
             if (coach_data.data.statusCode === 200) {
-              // console.log(coach_data.data.data)
               coach.firstNameTh = coach_data.data.data.firstNameTh
               coach.firstNameEn = coach_data.data.data.firstNameEng
               coach.lastNameTh = coach_data.data.data.lastNameTh

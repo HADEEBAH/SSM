@@ -130,8 +130,8 @@ const manageScheduleModules = {
           },
         };
 
-        let { data } = await axios.get(`http://localhost:3000/api/v1/admincourse/`, config)
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/admincourse/`, config)
+        // let { data } = await axios.get(`http://localhost:3000/api/v1/admincourse/`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/admincourse/`, config)
 
         if (data.statusCode === 200) {
           let arr_tmp = [];
@@ -175,8 +175,8 @@ const manageScheduleModules = {
           },
         };
 
-        let { data } = await axios.get(`http://localhost:3000/api/v1/holiday/all`, config);
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
+        // let { data } = await axios.get(`http://localhost:3000/api/v1/holiday/all`, config);
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
         if (data.statusCode === 200) {
           // let event = []
           data.data.map((item) => {

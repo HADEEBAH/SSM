@@ -1317,6 +1317,7 @@ import Swal from "sweetalert2";
 import { dateFormatter } from "@/functions/functions";
 import { mapActions, mapGetters } from "vuex";
 import coachLeaveForm from "../../../components/coach_leave/coachLeaveForm.vue";
+import router from "@/router";
 // import LoadingOverlay from '../../../components/loading/loadingOverlay.vue';
 export default {
   name: "menageCourse",
@@ -1433,25 +1434,47 @@ export default {
     show_potential_data: {},
     select_status: "all",
   }),
+  
   created() {
-    this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    this.GetMyCourses({ coach_id: this.user_detail.account_id });
-    this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
-    this.GetCoachs();
-    // if (this.$route.query.token) {
-    //  this.loginShareToken(this.$route.query.token)
-    // }
-  },
-  beforeMount() {
+    this.GetLoading(true)
+    console.log("route", this.$route);
     if (this.$route.query.token) {
      this.loginShareToken(this.$route)
     }
+    
+
+
+    
+    // this.GetMyCourses({ coach_id: this.user_detail.account_id });
+    // this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
+    // this.GetCoachs();
   },
+  beforeMount() {
+    this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+    console.log("user_detail", this.user_detail);
+
+    // this.GetMyCourses({ coach_id: this.user_detail.account_id });
+    // this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
+    // this.GetCoachs();
+  },
+
   mounted() {
+    console.log("valid", this.user_detail?.roles?.filter((val)=> val === "R_3").length === 0);
+    if (this.user_detail?.roles?.filter((val)=> val === "R_3" || val === "R_2" || val === "R_1").length === 0) {
+      router.replace({name:"UserKingdom"})
+    }
+
+    this.GetMyCourses({ coach_id: this.user_detail.account_id });
+    this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
+    this.GetCoachs();
+
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "จัดการ");
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail.account_id);
     }
+
+
+    this.GetLoading(false)
   },
   watch: {
     tab: function () {
@@ -1506,6 +1529,7 @@ export default {
       loginShareToken: "loginModules/loginShareToken",
       GetProfileDetail: "ProfileModules/GetProfileDetail",
       ShowDialogCoachLeaveForm: "CoachModules/ShowDialogCoachLeaveForm",
+      GetLoading: "LoadingModules/GetLoading",
     }),
     SelectedStatus(status) {
       console.log(status);
