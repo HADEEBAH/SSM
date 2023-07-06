@@ -420,14 +420,14 @@ export default {
         title: "ตารางเรียน",
         to: "StudentsSchedule",
         params: { action: "MySchedule" },
-        roles: [],
+        roles: ["R_3"],
       },
       {
         icon: "mdi-book-cog-outline",
         title: "การจัดการ",
         to: "menageCourse",
         params: null,
-        roles: ["R_1", "R_2", "R_3"],
+        roles: ["R_3"],
       },
       {
         icon: "mdi-history",
@@ -439,7 +439,8 @@ export default {
       {
         icon: "mdi-swap-horizontal-bold",
         title: "หน้าผู้ดูแลระบบ",
-        to: "DashboardList",
+        to: "Admin",
+        // to: "Dashboard",
         params: null,
         roles: ["R_1", "R_2"],
       },
