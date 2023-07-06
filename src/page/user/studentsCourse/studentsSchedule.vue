@@ -8,11 +8,13 @@
         <v-col cols="4">
           <v-card
             flat
-            @click=" data_local.roles.length > 0 ?
-              $router.push({
-                name: 'StudentsSchedule',
-                params: { action: 'MyCourse' },
-              }) : ''
+            @click="
+              data_local.roles.length > 0
+                ? $router.push({
+                    name: 'StudentsSchedule',
+                    params: { action: 'MyCourse' },
+                  })
+                : ''
             "
             class="rounded-lg"
           >
@@ -39,20 +41,30 @@
         <v-col cols="4">
           <v-card
             flat
-            @click=" data_local.roles.length > 0 ?
-              $router.push({
-                name: 'StudentsSchedule',
-                params: { action: 'MySchedule' },
-              }) : ''
+            @click="
+              data_local.roles.length > 0
+                ? $router.push({
+                    name: 'StudentsSchedule',
+                    params: { action: 'MySchedule' },
+                  })
+                : ''
             "
             class="rounded-lg"
           >
             <v-card-text
-              :class=" this.$route.params.action == 'MySchedule' ? 'bg-[#FF6B81]' : 'bg-[#F5F5F5]' "
+              :class="
+                this.$route.params.action == 'MySchedule'
+                  ? 'bg-[#FF6B81]'
+                  : 'bg-[#F5F5F5]'
+              "
               class="rounded-lg flex justify-center align-center pa-2"
             >
               <label
-                :class=" this.$route.params.action == 'MySchedule' ? 'text-white' : ' text-[#B3B3B3]'"
+                :class="
+                  this.$route.params.action == 'MySchedule'
+                    ? 'text-white'
+                    : ' text-[#B3B3B3]'
+                "
                 class="font-bold mr-2"
                 >ตารางเรียน</label
               >
@@ -183,7 +195,9 @@
                       <v-row dense>
                         <v-col>
                           <v-chip color="#F9B320" dark>
-                            {{ `${item.day_name} ${item.period.start} - ${ item.period.end}น.` }}
+                            {{
+                              `${item.day_name} ${item.period.start} - ${item.period.end}น.`
+                            }}
                           </v-chip>
                         </v-col>
                       </v-row>
@@ -224,7 +238,11 @@
                 </span>
               </v-card-text>
             </v-card>
-            <div v-else v-for="(item, index) in student_data.filter(v => !v.comp)" :key="index">
+            <div
+              v-else
+              v-for="(item, index) in student_data.filter((v) => !v.comp)"
+              :key="index"
+            >
               <v-card
                 outlined
                 @click="
@@ -237,8 +255,8 @@
               >
                 <v-row dense>
                   <!-- img -->
-                  <v-col cols="12" sm="2">
-                    <v-col
+                  <v-col cols="12" sm="5" align="center">
+                    <!-- <v-col
                       style="
                         display: block;
                         margin-left: auto;
@@ -246,18 +264,21 @@
                         width: 100%;
                         margin-top: 10%;
                       "
-                    >
-                      <v-img
-                        :src="
-                          item.courseImg
-                            ? showImg(item.courseImg)
-                            : require(`@/assets/course/default_course_img.svg`)
-                        "
-                      ></v-img>
-                    </v-col>
+                    > -->
+                    <v-img
+                      :src="
+                        item.courseImg
+                          ? showImg(item.courseImg)
+                          : require(`@/assets/course/default_course_img.svg`)
+                      "
+                      class="w-full h-full rounded-lg"
+                      cover
+                      height="200"
+                    ></v-img>
+                    <!-- </v-col> -->
                   </v-col>
                   <!-- detail -->
-                  <v-col cols="12" sm="7">
+                  <v-col cols="12" sm="3">
                     <v-row dense>
                       <v-col class="text-lg font-bold">
                         {{ item.courseNameTh == "" ? "-" : item.courseNameTh }}
@@ -298,17 +319,15 @@
                     <v-row dense>
                       <v-col>
                         <v-chip color="#F9B320" dark>
-                          {{ `${item.day_name} ${item.period.start} - ${ item.period.end}น.` }}
+                          {{
+                            `${item.day_name} ${item.period.start} - ${item.period.end}น.`
+                          }}
                         </v-chip>
                       </v-col>
                     </v-row>
                   </v-col>
                   <!-- circle -->
-                  <v-col
-                    cols="12"
-                    sm="3"
-                    class="d-flex align-center justify-center"
-                  >
+                  <v-col cols="12" sm="4" class="d-flex align-end justify-end">
                     <!-- {{ item.courseNameEn }} -->
                     <v-progress-circular
                       :rotate="-90"
@@ -450,16 +469,15 @@
                 ></v-autocomplete>
               </v-col>
             </v-row>
-            <v-card flat v-if="ReserveList().length == 0">
-              <v-card-text
-                class="pa-2 text-center border-2 border-[#ff6b81] rounded-lg"
-              >
-                <span class="text-lg font-bold">
-                  <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                  ไม่พบข้อมูลการจอง
-                </span>
-              </v-card-text>
-            </v-card>
+            <v-card-text
+              class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
+              v-if="ReserveList().length == 0"
+            >
+              <span class="text-lg font-bold">
+                <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                ไม่พบข้อมูลการจอง
+              </span>
+            </v-card-text>
             <div v-else>
               <v-card
                 v-for="(item_booked, index_booked) in ReserveList()"
@@ -471,7 +489,7 @@
                   <div>
                     <v-row dense>
                       <!-- img -->
-                      <v-col cols="12" sm="2" >
+                      <v-col cols="12" sm="2">
                         <img
                           :src="
                             item_booked.courseImg
@@ -538,9 +556,7 @@
 
                         <v-col>
                           <v-chip color="#F9B320" dark>
-                            {{
-                              item_booked.day_name
-                            }}
+                            {{ item_booked.day_name }}
                             {{ item_booked.start }} - {{ item_booked.end }} น.
                           </v-chip>
                         </v-col>
@@ -595,7 +611,7 @@
                             class="mdi mdi-calendar-today"
                             style="color: #ff6b81"
                           ></span>
-                            {{ item_booked.day_name }}
+                          {{ item_booked.day_name }}
                         </v-col>
 
                         <v-col cols="12" md="12" sm="12">
@@ -637,7 +653,7 @@
             </div>
           </div>
           <!-- Role student -->
-          <div>
+          <div v-if="data_local.roles.includes('R_5')">
             <v-card-text
               class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
               v-if="ReserveList().length == 0"
@@ -647,6 +663,16 @@
                 ไม่พบข้อมูลการจอง
               </span>
             </v-card-text>
+            <!-- <v-card flat v-if="ReserveList().length == 0">
+              <v-card-text
+                class="pa-2 text-center border-2 border-[#ff6b81] rounded-lg"
+              >
+                <span class="text-lg font-bold">
+                  <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                  ไม่พบข้อมูลการจอง
+                </span>
+              </v-card-text>
+            </v-card> -->
             <div v-else>
               <v-card
                 v-for="(item_booked, index_booked) in ReserveList()"
@@ -725,7 +751,8 @@
 
                         <v-col>
                           <v-chip color="#F9B320" dark>
-                            {{item_booked.day_name}} {{ item_booked.start }} - {{ item_booked.end }} น.
+                            {{ item_booked.day_name }} {{ item_booked.start }} -
+                            {{ item_booked.end }} น.
                           </v-chip>
                         </v-col>
                       </v-col>
@@ -881,10 +908,10 @@ export default {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     // this.GetStudentData(this.user_detail.account_id);
   },
-  
+
   beforeMount() {
     if (this.$route.query.token) {
-     this.loginShareToken(this.$route)
+      this.loginShareToken(this.$route);
     }
   },
 
@@ -898,10 +925,10 @@ export default {
     this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
 
     if (localStorage.getItem("userRelationsAccountId")) {
-      console.log(localStorage.getItem("userRelationsAccountId"))
+      console.log(localStorage.getItem("userRelationsAccountId"));
     } else if (this.user_detail.roles.includes("R_5")) {
       this.GetStudentData(this.user_detail.account_id);
-    } 
+    }
     // else {
     //   // this.GetStudentData(null);
     //   this.GetStudentData(this.user_detail.account_id);
@@ -1042,7 +1069,7 @@ export default {
     //   },
     // },
     setFunctions() {
-      if(this.user_detail.roles.includes("R_5")){
+      if (this.user_detail.roles.includes("R_5")) {
         // this.GetStudentReserve(this.user_detail.account_id);
         this.GetAll(this.user_detail.account_id);
       }

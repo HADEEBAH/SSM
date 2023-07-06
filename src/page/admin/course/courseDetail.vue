@@ -1727,7 +1727,7 @@ export default {
     selected_coach_potential: null,
   }),
   created() {
-    console.log("Now ",new Date())
+    console.log("Now ", new Date());
   },
   mounted() {},
   watch: {
