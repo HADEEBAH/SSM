@@ -34,6 +34,13 @@
           >
             ( ขนาดไฟล์งานไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
           </v-col>
+          <v-col
+            cols="12"
+            class="flex align-center justify-center text-caption"
+          >
+            <!-- <span class="font-weight-bold">คำแนะนำ</span> :
+            ควรอัปโหลดรูปที่มีขนาด 1280 x 500px -->
+          </v-col>
           <v-col cols="12" class="flex align-center justify-center">
             <v-btn outlined color="blue" @click="openFileSelector"
               >เลือกไฟล์</v-btn
@@ -194,7 +201,12 @@
                 advanced-keyboard
                 :style="`width:${widthfull()}px;`"
                 v-model="course_data.course_hours_obj"
-                @change="ChangeHours( course_data.course_hours_obj, course_data.course_hours) "
+                @change="
+                  ChangeHours(
+                    course_data.course_hours_obj,
+                    course_data.course_hours
+                  )
+                "
               >
               </VueTimepicker>
             </div>
