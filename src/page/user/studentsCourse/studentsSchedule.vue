@@ -824,6 +824,7 @@ import { mapActions, mapGetters } from "vuex";
 import calendarStudent from "../../../components/calendar/calendarStudent.vue";
 import labelCustom from "@/components/label/labelCustom.vue";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+import router from "@/router";
 
 export default {
   components: {
@@ -872,29 +873,19 @@ export default {
     localStorage.removeItem("userRelationsAccountId");
   },
   created() {
-    this.userRelationsAccountId = localStorage.getItem(
-      "userRelationsAccountId"
-    );
-    // if (this.$route.query.token) {
-    //  this.loginShareToken(this.$route.query.token)
-    // }
-    this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    // this.GetStudentData(this.user_detail.account_id);
-  },
-  
-  beforeMount() {
     if (this.$route.query.token) {
      this.loginShareToken(this.$route)
     }
   },
 
-  beforeUpdate() {
-    this.$store.dispatch(
-      "NavberUserModules/changeTitleNavber",
-      "ข้อมูลตารางเรียน"
-    );
+  beforeMount() {
+    this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
   },
+  
   mounted() {
+    if (this.user_detail?.roles?.filter((val)=> val === "R_4" || val === "R_5").length === 0) {
+      router.replace({name:"UserKingdom"})
+    }
     this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
 
     if (localStorage.getItem("userRelationsAccountId")) {
@@ -908,6 +899,37 @@ export default {
     // }
   },
 
+  beforeUpdate() {
+    this.$store.dispatch(
+      "NavberUserModules/changeTitleNavber",
+      "ข้อมูลตารางเรียน"
+    );
+  },
+
+  // watch: {
+  //   type_selected: function () {
+  //     console.log("type_selected", this.type_selected);
+  //     this.loading = true;
+  //     setTimeout(async () => {
+  //       this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
+  //       if (this.type_selected == "MyCourse") {
+  //         if (this.user_detail.roles.includes("R_4")) {
+  //           this.GetStudentData(this.user_detail.account_id);
+  //           for (const item of JSON.parse(localStorage.getItem("relations"))) {
+  //             this.GetStudentData(item.student.studentId);
+  //             console.log("student");
+  //           }
+  //         } else if (this.user_detail.roles.includes("R_5")) {
+  //           this.GetStudentData(this.user_detail.account_id);
+  //         } else {
+  //           this.GetStudentData(null);
+  //         }
+  //       }
+
+  //       this.loading = false;
+  //     }, 200);
+  //   },
+  // },
   methods: {
     ...mapActions({
       GetStudentData: "MyCourseModules/GetStudentData",
