@@ -410,7 +410,7 @@ export default {
   },
   data: () => ({
     breadcrumbs: [
-      { text: "แดชบอร์ด", to: "DashboardList" },
+      { text: "แดชบอร์ด", to: "Dashboard" },
       { text: "รายชื่อนักเรียน", to: "" },
     ],
     search: "",

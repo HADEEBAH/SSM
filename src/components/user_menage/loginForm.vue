@@ -174,7 +174,7 @@ export default {
     },
 
     forgot_password() {
-      window.location.href = `https://testoneid.inet.co.th/type_forgot_password?oauth_pass=true`;
+      window.location.href = `${process.env.VUE_APP_ONE}/type_forgot_password`;
     },
   },
 };
