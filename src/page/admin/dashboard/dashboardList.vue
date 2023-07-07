@@ -289,7 +289,6 @@
                   </v-col>
                 </v-row>
               </v-card-title>
-              {{ totalPrice }}
               <v-row dense>
                 <!-- DOnut -->
                 <v-col cols="12" sm="12" md="12" lg="12" align="center">
@@ -313,7 +312,7 @@
                         style="font-weight: bold; color: #58a144"
                         class="mx-5"
                       >
-                        <!-- {{ totalSuccessDonut.toLocaleString() }} -->
+                        {{ totalSuccessDonut.toLocaleString() }}
                         <!-- {{ get_graf.sumSuccess.toLocaleString() }} -->
                         <span
                           style="
@@ -322,14 +321,14 @@
                             font-size: small;
                           "
                         >
-                          <!-- บาท({{
+                          บาท({{
                             (
                               (totalSuccessDonut * 100) /
                               totalPriceDonut
                             ).toLocaleString("us-us", {
                               maximumFractionDigits: 2,
                             })
-                          }}%) -->
+                          }}%)
                         </span>
                       </div>
                     </v-col>
@@ -343,7 +342,7 @@
                         style="font-weight: bold; color: #fcc419"
                         class="mx-5"
                       >
-                        <!-- {{ totalPendingDonut.toLocaleString() }} -->
+                        {{ totalPendingDonut.toLocaleString() }}
 
                         <span
                           style="
@@ -352,14 +351,14 @@
                             font-size: small;
                           "
                         >
-                          <!-- บาท ({{
+                          บาท ({{
                             (
                               (totalPendingDonut * 100) /
                               totalPriceDonut
                             ).toLocaleString("us-us", {
                               maximumFractionDigits: 2,
                             })
-                          }}%) -->
+                          }}%)
                         </span>
                       </div>
                     </v-col>
@@ -616,6 +615,7 @@ export default {
     mapyears: "",
     mapMonth: "",
     totalPrice: [],
+    box: [],
   }),
   created() {
     // this.donutSerieses();
@@ -657,7 +657,6 @@ export default {
     // this.GetDonut({ year: "2023", month: "07" });
     this.GetDonut(this.dashboard_graf);
     this.GetGraf(this.dashboard_graf);
-
     // this.donutSeries();
     // this.dataType()
     // this.donutSerieses();
@@ -731,14 +730,30 @@ export default {
           return 380;
       }
     },
-    // seriesOfDonut
     donutSerieses() {
+      this.totalPrice = [];
+      this.totalSuccessDonut = 0;
+      this.totalPendingDonut = 0;
+      this.totalPriceDonut = 0;
+
+      let price = 0;
       for (let items of this.get_donut.datas) {
-        // console.log("918", items);
-        this.totalPrice.push(parseFloat(items.totalPrice));
-        // console.log("738", this.totalPrice);
+        price = parseFloat(items.totalPrice);
+        this.totalPrice.push(price);
+        this.totalSuccessDonut =
+          this.totalSuccessDonut + parseFloat(items.sumSuccess);
+        this.totalPendingDonut =
+          this.totalPendingDonut + parseFloat(items.sumPending);
+        this.totalPriceDonut =
+          this.totalPriceDonut + parseFloat(items.totalPrice);
       }
       this.totalPrice.push(this.get_donut.otherTotal.totalPrice);
+      this.totalSuccessDonut =
+        this.totalSuccessDonut + this.get_donut.otherTotal.sumSuccess;
+      this.totalPendingDonut =
+        this.totalPendingDonut + this.get_donut.otherTotal.sumPending;
+      this.totalPriceDonut =
+        this.totalPriceDonut + this.get_donut.otherTotal.totalPrice;
     },
 
     donutSeries() {
@@ -831,19 +846,21 @@ export default {
       return lineChart;
     },
 
-    // donutLabels() {
-    //   let labels = [];
-    //   for (const items of this.get_donut.datas) {
-    //     labels.push(items.courseNameTh);
-    //   }
-    //   labels.push(this.get_donut.otherTotal.courseNameTh);
+    donutLabels() {
+      let labels = [];
+      for (const items of this.get_donut.datas) {
+        labels.push(items.courseNameTh);
+      }
+      labels.push(this.get_donut.otherTotal.courseNameTh);
 
-    //   return labels;
-    // },
+      return labels;
+    },
 
     seriesOfDonut() {
-      return this.donutSerieses();
+      this.donutSerieses();
+      return this.totalPrice;
     },
+
     donutOptions() {
       const donutdata = {
         colors: [
@@ -861,7 +878,6 @@ export default {
         ],
         labels: this.donutLabels,
         // labels: ["a", "b", "c", "d"],
-
         chart: {
           type: "donut",
         },
@@ -874,17 +890,17 @@ export default {
                 show: true,
                 total: {
                   show: true,
-                  label: "Total",
+                  label: "รวมทั้งหมด",
                   color: "#373d3f",
                   fontSize: "18px",
                   // formatter: function () {
                   //   return "444";
                   // },
-                  formatter: function (w) {
-                    return w.globals.seriesTotals.reduce((a, b) => {
-                      return a + b;
-                    }, 0);
-                  },
+                  // formatter: function (w) {
+                  //   return w.globals.seriesTotals.reduce((a, b) => {
+                  //     return a + b;
+                  //   }, 0);
+                  // },
                 },
               },
             },
@@ -897,10 +913,6 @@ export default {
           type: "gradient",
         },
         legend: {
-          // formatter: function (val, opts) {
-          //   return val + " - " + opts.w.globals.series[opts.seriesIndex];
-          // },
-          // position: "bottom",
           show: false,
         },
         tooltip: {
@@ -908,24 +920,25 @@ export default {
           y: {
             formatter: function (val) {
               return (
-                "รวมทั้งหมด" +
-                " " +
-                val +
-                " " +
-                "ชำระแล้ว" +
-                " " +
-                " รอดำเนินการ"
+                "รวมทั้งหมด" + " " + val
+                // +
+                // " " +
+                // "ชำระแล้ว" +
+                // " " +
+                // " รอดำเนินการ"
               );
             },
-            // title: {
-            //   formatter: function (seriesName) {
-            //     return ''
-            //   }
-            // }
           },
         },
       };
       return donutdata;
+    },
+
+    donutsuccess() {
+      this.donutSerieses();
+      return (
+        this.totalSuccessDonut && this.totalPendingDonut && this.totalPriceDonut
+      );
     },
 
     pieSeries() {
@@ -963,12 +976,7 @@ export default {
       return pieChartOptions;
     },
   },
-  // watch: {
-  //   currentMonthThai(newValue) {
-  //     console.log("newValue", newValue);
-  //     this.selected_mounth = newValue;
-  //   },
-  // },
+
 };
 </script>
   
