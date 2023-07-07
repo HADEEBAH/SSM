@@ -91,7 +91,7 @@
                 <v-row>
                   <v-col class="pa-4" align="right">
                     <v-chip color="#F9B320" text-color="white">{{
-                      `${course.period}  ชั่วโมง`
+                      `${GerPeriod(course.period)}  ชั่วโมง`
                     }}</v-chip></v-col
                   >
                 </v-row>
@@ -212,6 +212,16 @@ export default {
       GetCoursesFilter: "CourseModules/GetCoursesFilter",
       GetPotential: "CourseModules/GetPotential",
     }),
+    GerPeriod(period){
+      let str = period.toString()
+      let part_period = str.split(".")
+      if(part_period.length > 1){
+        // console.log("219 => ",period.toLocaleString("en-US",{minimumFractionDigits : 2}))
+        return period.toLocaleString("en-US",{minimumFractionDigits : 2})
+      }else{
+        return period
+      }
+    },
     searchCourse(event) {
       const searchQuery = event.toLowerCase();
       console.log(this.type_selected);
