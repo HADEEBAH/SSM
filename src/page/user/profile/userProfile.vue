@@ -945,7 +945,7 @@ export default {
       this.$router.push({ name: "ProfileCertificate" });
     },
     show_password() {
-      window.location.href = `https://testoneid.inet.co.th/type_forgot_password?oauth_pass=true`;
+      window.location.href = `${process.env.VUE_APP_ONE}/type_forgot_password`;
     },
     show_policy() {
       this.$router.push({ name: "ProfilePolicy" });
