@@ -93,11 +93,15 @@
               <v-card flat>
                 <v-card-text class="border-2 border-[#ff6b81]">
                   <v-row dense>
-                    <v-col v-if="event.type"  cols="auto" class="text-sm text-[#999999]">
+                    <v-col
+                      v-if="event.type"
+                      cols="auto"
+                      class="text-sm text-[#999999]"
+                    >
                       -
                     </v-col>
-                    <v-col v-else cols="auto" class="text-sm text-[#999999]">
-                      {{ `${event.start_time}` }}<br />{{ `${event.end_time}` }}
+                    <v-col v-else cols="12" class="text-sm text-[#999999]">
+                      {{ `${event.start_time}` }} - {{ `${event.end_time}` }}
                     </v-col>
                     <v-col cols="auto">
                       <v-icon small :color="event.color">mdi-circle</v-icon>
@@ -107,10 +111,12 @@
                         <label class="font-bold">{{ event.timed }} </label>
                       </v-row>
                       <v-row dense>
-                        <v-col v-if="!event.type"> เรียนโดย: {{ event.name }} </v-col>
+                        <v-col v-if="!event.type">
+                          คอร์ส: {{ event.name }}
+                        </v-col>
                         <v-col v-else>{{ event.name }} </v-col>
                       </v-row>
-                      <v-row dense  v-if="!event.type">
+                      <v-row dense v-if="!event.type">
                         <v-col class="text-sm">
                           โค้ช: {{ event.subtitle }} <br />
                           <div>
@@ -235,7 +241,7 @@ export default {
     }),
     selectedDate(data) {
       console.log(data.event);
-      if(!data.event.type){
+      if (!data.event.type) {
         this.$router.push({
           name: "StudentCourse",
           params: { course_id: data.event.courseId },
@@ -249,7 +255,7 @@ export default {
         let [start, start_time] = event.start.split(" ");
         let [end, end_time] = event.end.split(" ");
         if (start_time !== "Invalid date" && end_time !== "Invalid date") {
-          if(!event.type){
+          if (!event.type) {
             if (start === end && start === date) {
               this.event_date.push({
                 timed: event.timed,
@@ -262,19 +268,18 @@ export default {
                 courseId: event.courseId,
               });
             }
-          }else{
+          } else {
             if (start === end && start === date) {
               this.event_date.push({
                 name: event.name,
                 start_time: start_time,
                 end_time: end_time,
                 color: event.color,
-                type : event.type,
+                type: event.type,
                 courseId: event.courseId,
               });
             }
           }
-          
         }
       });
     },
