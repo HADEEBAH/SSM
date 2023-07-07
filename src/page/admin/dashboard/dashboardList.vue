@@ -195,6 +195,7 @@
                       v-model="selected_years"
                       :items="thaiyears"
                       item-text="name"
+                      item-value="key"
                       return-object
                       dense
                       outlined
@@ -220,8 +221,10 @@
                   <!-- <v-badge color="green" content="6"> -->
                   {{
                     get_graf.sumSuccess
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                      ? get_graf.sumSuccess
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                      : "ยังไม่มีข้อมูล"
                   }}
                   <!-- </v-badge> -->
                 </v-row>
@@ -233,7 +236,7 @@
                       <apexchart
                         type="line"
                         :options="chartOptions"
-                        :series="series"
+                        :series="chartSeries"
                         :height="heightGraf()"
                       >
                       </apexchart>
@@ -265,6 +268,7 @@
                       v-model="donut_years"
                       :items="thaiyears"
                       item-text="name"
+                      item-value="key"
                       return-object
                       dense
                       outlined
@@ -285,20 +289,16 @@
                   </v-col>
                 </v-row>
               </v-card-title>
-
+              {{ totalPrice }}
               <v-row dense>
                 <!-- DOnut -->
                 <v-col cols="12" sm="12" md="12" lg="12" align="center">
-                  <!-- <v-card color="pink">
-                    <v-col cols="12" sm="12" md="12" lg="6" align="start"> -->
                   <apexchart
                     type="donut"
                     :options="donutOptions"
-                    :series="donutSerieses"
+                    :series="seriesOfDonut"
                     :width="widthDonut()"
                   ></apexchart>
-                  <!-- </v-col>
-                  </v-card> -->
                 </v-col>
                 <!-- Dot Data -->
                 <v-col cols="12" sm="12" md="12" lg="12" align="start">
@@ -314,7 +314,7 @@
                         class="mx-5"
                       >
                         <!-- {{ totalSuccessDonut.toLocaleString() }} -->
-                        {{ get_graf.sumSuccess.toLocaleString() }}
+                        <!-- {{ get_graf.sumSuccess.toLocaleString() }} -->
                         <span
                           style="
                             font-weight: normal;
@@ -322,14 +322,14 @@
                             font-size: small;
                           "
                         >
-                          บาท({{
+                          <!-- บาท({{
                             (
                               (totalSuccessDonut * 100) /
                               totalPriceDonut
                             ).toLocaleString("us-us", {
                               maximumFractionDigits: 2,
                             })
-                          }}%)
+                          }}%) -->
                         </span>
                       </div>
                     </v-col>
@@ -343,7 +343,7 @@
                         style="font-weight: bold; color: #fcc419"
                         class="mx-5"
                       >
-                        {{ totalPendingDonut.toLocaleString() }}
+                        <!-- {{ totalPendingDonut.toLocaleString() }} -->
 
                         <span
                           style="
@@ -351,14 +351,15 @@
                             color: #999999;
                             font-size: small;
                           "
-                          >บาท ({{
+                        >
+                          <!-- บาท ({{
                             (
                               (totalPendingDonut * 100) /
                               totalPriceDonut
                             ).toLocaleString("us-us", {
                               maximumFractionDigits: 2,
                             })
-                          }}%)
+                          }}%) -->
                         </span>
                       </div>
                     </v-col>
@@ -578,6 +579,7 @@ export default {
     ],
 
     thaiMonths: [
+      { name: "ทั้งปี", key: null, type: "month" },
       { name: "มกราคม", key: "01", type: "month" },
       { name: "กุมภาพันธ์", key: "02", type: "month" },
       { name: "มีนาคม", key: "03", type: "month" },
@@ -606,42 +608,59 @@ export default {
     donut_years: "",
     data_year: "",
     data_month: "",
+    dashboard_graf: {
+      year: "",
+      month: "",
+    },
+    thai_day_name: [],
+    mapyears: "",
+    mapMonth: "",
+    totalPrice: [],
   }),
   created() {
-    this.selectMunth();
-    this.selectDonutMounth();
-    this.selectYears();
+    // this.donutSerieses();
+    // this.donutSeries();
+    // this.donutSerieses();
   },
   beforeMount() {
     const month = new Date().getMonth() + 1;
-    const mapMonth = this.thaiMonths.filter(
+    this.mapMonth = this.thaiMonths.filter(
       (item) => parseInt(item.key) === month
     )[0];
-    console.log("mapMonth", mapMonth);
-    this.selected_mounth = mapMonth;
-    this.selectMunth();
-    this.donut_mounth = mapMonth;
-    this.selectDonutMounth();
+    console.log("mapMonth", this.mapMonth);
+    this.selected_mounth = this.mapMonth;
+    // this.selectMunth();
+    this.donut_mounth = this.mapMonth;
+    // this.selectDonutMounth();
 
     const currentYear = new Date().getFullYear();
     console.log("646", currentYear);
-    const mapyears = this.thaiyears.filter(
+    this.mapyears = this.thaiyears.filter(
       (item) => parseInt(item.key) === currentYear
     )[0];
-    console.log("mapyears", mapyears);
-    this.selected_years = mapyears;
-    this.selectYears();
-    this.donut_years = mapyears;
-    this.selectDonutYears();
+    console.log("mapyears", this.mapyears);
+    this.selected_years = this.mapyears;
+    // this.selectYears();
+    this.donut_years = this.mapyears;
+    // this.selectDonutYears();
+
+    this.dashboard_graf = {
+      year: this.mapyears.key,
+      month: this.mapMonth.key,
+    };
+    // this.GetGraf(this.dashboard_graf);
   },
   mounted() {
     this.GetEmptyCourse();
     this.GetCourseType();
     this.GetPotential();
-    this.GetDonut();
-    this.GetGraf();
-    this.donutSeries();
+    // this.GetDonut({ year: "2023", month: "07" });
+    this.GetDonut(this.dashboard_graf);
+    this.GetGraf(this.dashboard_graf);
+
+    // this.donutSeries();
     // this.dataType()
+    // this.donutSerieses();
   },
   methods: {
     ...mapActions({
@@ -652,25 +671,36 @@ export default {
       GetGraf: "DashboardModules/GetGraf",
     }),
 
-    selectMunth() {
-      console.log("thaiMonths", this.selected_mounth);
-      this.GetGraf(this.selected_mounth);
-    },
-
-    selectDonutMounth() {
-      console.log("thaiMonthsD", this.donut_mounth);
-      this.GetDonut(this.donut_mounth);
-    },
-
     selectYears() {
-      console.log("688", this.selected_years);
-      this.GetGraf(this.selected_years);
+      this.dashboard_graf.year = this.selected_years.key;
+      console.log("688", this.dashboard_graf);
+      this.GetGraf(this.dashboard_graf);
+    },
+
+    selectMunth() {
+      this.dashboard_graf.month = this.selected_mounth.key;
+      console.log("679", this.dashboard_graf);
+      this.GetGraf(this.dashboard_graf);
     },
 
     selectDonutYears() {
-      console.log("707", this.donut_years);
-      this.GetDonut(this.donut_years);
+      // console.log("707", this.donut_years);
+      // this.GetDonut(this.donut_years);
+
+      this.dashboard_graf.year = this.donut_years.key;
+      console.log("691", this.dashboard_graf);
+      this.GetDonut(this.dashboard_graf);
     },
+
+    selectDonutMounth() {
+      // console.log("thaiMonthsD", this.donut_mounth);
+      // this.GetDonut(this.donut_mounth);
+
+      this.dashboard_graf.month = this.donut_mounth.key;
+      console.log("686", this.dashboard_graf);
+      this.GetDonut(this.dashboard_graf);
+    },
+
     heightGraf() {
       switch (this.$vuetify.breakpoint.name) {
         case "sm":
@@ -689,7 +719,6 @@ export default {
           return 390;
       }
     },
-
     widthPie() {
       switch (this.$vuetify.breakpoint.name) {
         // case "xs":
@@ -701,6 +730,15 @@ export default {
         case "lg":
           return 380;
       }
+    },
+    // seriesOfDonut
+    donutSerieses() {
+      for (let items of this.get_donut.datas) {
+        // console.log("918", items);
+        this.totalPrice.push(parseFloat(items.totalPrice));
+        // console.log("738", this.totalPrice);
+      }
+      this.totalPrice.push(this.get_donut.otherTotal.totalPrice);
     },
 
     donutSeries() {
@@ -730,6 +768,16 @@ export default {
       dashboard_loading: "DashboardModules/getloading",
     }),
 
+    lineChartLabels() {
+      let labelsLine = [];
+
+      for (const items of this.get_graf.orderData) {
+        labelsLine.push(items.thaiDayName);
+      }
+      console.log("805", labelsLine);
+      return labelsLine;
+    },
+
     chartOptions() {
       const lineChartOptions = {
         chart: {
@@ -746,6 +794,7 @@ export default {
           text: "รายได้",
           align: "left",
         },
+
         grid: {},
         xaxis: {
           categories:
@@ -753,20 +802,24 @@ export default {
               ? this.get_graf.orderData.map((item) => {
                   if (this.get_graf.type == "month") {
                     return item.date;
+                    // labels: this.lineChartLabels,
+                    // this.lineChartLabels
                   } else {
-                    return item.month;
+                    return item.date;
                   }
                 })
               : "",
+
+          // labels: this.lineChartLabels,
         },
       };
 
       return lineChartOptions;
     },
-    series() {
+    chartSeries() {
       const lineChart = [
         {
-          name: "Desktops",
+          name: "ชำระแล้ว",
           data:
             this.get_graf.length !== 0
               ? this.get_graf.orderData.map((item) => {
@@ -778,16 +831,19 @@ export default {
       return lineChart;
     },
 
-    donutLabels() {
-      let labels = [];
-      for (const items of this.get_donut.datas) {
-        labels.push(items.courseNameTh);
-      }
-      labels.push(this.get_donut.otherTotal.courseNameTh);
+    // donutLabels() {
+    //   let labels = [];
+    //   for (const items of this.get_donut.datas) {
+    //     labels.push(items.courseNameTh);
+    //   }
+    //   labels.push(this.get_donut.otherTotal.courseNameTh);
 
-      return labels;
+    //   return labels;
+    // },
+
+    seriesOfDonut() {
+      return this.donutSerieses();
     },
-
     donutOptions() {
       const donutdata = {
         colors: [
@@ -804,6 +860,7 @@ export default {
           "#999999",
         ],
         labels: this.donutLabels,
+        // labels: ["a", "b", "c", "d"],
 
         chart: {
           type: "donut",
@@ -869,16 +926,6 @@ export default {
         },
       };
       return donutdata;
-    },
-    donutSerieses() {
-      let totalPrice = [];
-
-      for (const items of this.get_donut.datas) {
-        totalPrice.push(parseFloat(items.totalPrice));
-      }
-      totalPrice.push(this.get_donut.otherTotal.totalPrice);
-
-      return totalPrice;
     },
 
     pieSeries() {
