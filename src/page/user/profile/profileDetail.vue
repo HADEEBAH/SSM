@@ -340,7 +340,14 @@ export default {
     mobileNo: "",
     email: "",
   }),
-
+  beforeRouteLeave(to, from, next) {
+    console.log(to, from)
+    if(this.profile_detail.firstNameTh && this.profile_detail.lastNameTh && !this.isEnabled){
+      next()
+    }else{
+      this.changeProfileFail(true)
+    }
+  },
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
   },
@@ -426,10 +433,13 @@ export default {
                   title: "แก้ไขโปรไฟล์สำเร็จ",
                   timer: 3000,
                 });
-
+                console.log(data.data.firstNameTh, data.data.lastNameTh)
                 let data_storage = JSON.parse(
                   localStorage.getItem("userDetail")
                 );
+                // console.log(data_storage)
+                data_storage.first_name_th = data.data.firstNameTh
+                data_storage.last_name_th = data.data.lastNameTh
                 data_storage.image = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}`;
                 localStorage.setItem(
                   "userDetail",
