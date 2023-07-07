@@ -433,10 +433,13 @@ export default {
                   title: "แก้ไขโปรไฟล์สำเร็จ",
                   timer: 3000,
                 });
-
+                console.log(data.data.firstNameTh, data.data.lastNameTh)
                 let data_storage = JSON.parse(
                   localStorage.getItem("userDetail")
                 );
+                // console.log(data_storage)
+                data_storage.first_name_th = data.data.firstNameTh
+                data_storage.last_name_th = data.data.lastNameTh
                 data_storage.image = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}`;
                 localStorage.setItem(
                   "userDetail",
