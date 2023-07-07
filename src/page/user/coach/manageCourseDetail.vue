@@ -8,7 +8,11 @@
             <v-col cols="auto">
               <v-img
                 class="rounded-lg"
-                :src="course_data.course_img || course_data.course_img !== '' ? course_data.course_img : require(`@/assets/course/default_course_img.svg`)"
+                :src="
+                  course_data.course_img || course_data.course_img !== ''
+                    ? course_data.course_img
+                    : require(`@/assets/course/default_course_img.svg`)
+                "
                 max-height="120"
                 max-width="120"
               ></v-img>
@@ -28,13 +32,17 @@
               </v-row>
               <v-row dense>
                 <v-col cols="12" sm class="pa-0">
-                  <rowData mini icon="mdi-bookshelf">คอร์สเรียน : {{ course_data.course_name_th }}</rowData>
+                  <rowData mini icon="mdi-bookshelf"
+                    >คอร์สเรียน : {{ course_data.course_name_th }}</rowData
+                  >
                 </v-col>
                 <!-- <v-col cols="12" sm="4"  class="pa-0"> 
                     <rowData mini  icon=" mdi-account-box-multiple">แพ็คเกจ : Family</rowData>
                 </v-col> -->
                 <v-col cols="12" sm class="pa-0">
-                  <rowData mini icon="mdi-clock-outline">เวลาสอน {{ course_data.course_hours }} ชั่วโมง</rowData>
+                  <rowData mini icon="mdi-clock-outline"
+                    >เวลาสอน {{ course_data.course_hours }} ชั่วโมง</rowData
+                  >
                 </v-col>
               </v-row>
             </v-col>
@@ -54,7 +62,9 @@
             :color="coach_check_in.checkInCoachId ? '#E6E6E6' : '#ff6b81'"
             class="w-full rounded-lg"
             :loading="coach_check_in_is_loading"
-            :class="coach_check_in.checkInCoachId ? 'green--text' : 'white--text'"
+            :class="
+              coach_check_in.checkInCoachId ? 'green--text' : 'white--text'
+            "
           >
             <template v-if="coach_check_in.checkInCoachId">
               <v-icon class="mr-2">mdi-check-circle</v-icon> เข้าสอน
@@ -69,10 +79,18 @@
       <!-- <pre>{{student_check_in}}</pre> -->
       <v-tabs class="mb-3" v-model="tab" color="#ff6b81" grow>
         <v-tab class="border-b-2" href="#check in"> เช็คชื่อ </v-tab>
-        <v-tab :disabled="student_check_in.length == 0" class="border-b-2" href="#assess students">
+        <v-tab
+          :disabled="student_check_in.length == 0"
+          class="border-b-2"
+          href="#assess students"
+        >
           ประเมินนักเรียน
         </v-tab>
-        <v-tab :disabled="student_check_in.length == 0" class="border-b-2" href="#teaching summary">
+        <v-tab
+          :disabled="student_check_in.length == 0"
+          class="border-b-2"
+          href="#teaching summary"
+        >
           บันทึกสรุปการสอน
         </v-tab>
       </v-tabs>
@@ -100,7 +118,13 @@
             <!-- <pre>{{ student_check_in }}</pre> -->
             <v-data-table
               class="header-table border"
-              :items=" student_check_in.filter((v) => v.cpo?.packageName ? v.cpo.packageName === package_name_filter  : true ) "
+              :items="
+                student_check_in.filter((v) =>
+                  v.cpo?.packageName
+                    ? v.cpo.packageName === package_name_filter
+                    : true
+                )
+              "
               item-key="no"
               :expanded.sync="expanded_index"
               :headers="headers"
@@ -131,7 +155,9 @@
                 </v-select>
               </template>
               <template v-slot:[`item.package`]="{ item }">
-                <span class="font-semibold" v-if="item?.cpo?.packageName"> {{ `${item.cpo.packageName}` }}</span >
+                <span class="font-semibold" v-if="item?.cpo?.packageName">
+                  {{ `${item.cpo.packageName}` }}</span
+                >
                 <span class="font-semibold" v-else> - </span>
               </template>
               <template v-slot:[`item.class_time`]="{ item }">
@@ -354,7 +380,7 @@
                     </v-col>
                   </v-row>
                   <v-row class="d-flex align-center">
-                    <v-col cols="12" sm="4" >
+                    <v-col cols="12" sm="4">
                       <labelCustom text="ระดับพัฒนาการ"></labelCustom>
                       <v-select
                         outlined
@@ -415,7 +441,7 @@
                         </template>
                         <template v-slot:selection="{ item }">
                           <v-rating
-                              readonly
+                            readonly
                             :length="item.num_value"
                             :value="item.num_value"
                             color="#ff6b81"
@@ -486,7 +512,9 @@
               class="mb-2"
               flat
               style="border: 1px solid #999"
-              v-for="(student, index_student) in student_check_in.filter((v) => v.potential)"
+              v-for="(student, index_student) in student_check_in.filter(
+                (v) => v.potential
+              )"
               :key="`${index_student}-student`"
             >
               <v-card-text>
@@ -502,11 +530,25 @@
                         <v-chip
                           class="font-bold"
                           :color="
-                            check_in_status_options.filter((v) => v.value === student.status )[0].bg_color
+                            check_in_status_options.filter(
+                              (v) => v.value === student.status
+                            )[0].bg_color
                           "
-                          :style="`color:${ check_in_status_options.filter((v) => v.value === student.status)[0].color}`"
-                          v-if=" check_in_status_options.filter((v) => v.value === student.status).length > 0"
-                          >{{ check_in_status_options.filter((v) => v.value === student.status)[0].label }}
+                          :style="`color:${
+                            check_in_status_options.filter(
+                              (v) => v.value === student.status
+                            )[0].color
+                          }`"
+                          v-if="
+                            check_in_status_options.filter(
+                              (v) => v.value === student.status
+                            ).length > 0
+                          "
+                          >{{
+                            check_in_status_options.filter(
+                              (v) => v.value === student.status
+                            )[0].label
+                          }}
                         </v-chip>
                       </v-col>
                     </v-row>
@@ -517,32 +559,32 @@
                     <!-- {{student.potential}} -->
                     <labelCustom text="ระดับพัฒนาการ"></labelCustom>
                     <v-select
-                        outlined
-                        dense
-                        v-model="student.potential.evolution"
-                        :items="evolution_options"
-                      >
-                        <template v-slot:item="{ item }">
-                          <v-list-item-content>
-                            <v-list-item-title>
-                              <v-rating
-                                readonly
-                                :length="item.num_value"
-                                :value="item.num_value"
-                                color="#ff6b81"
-                              ></v-rating>
-                            </v-list-item-title>
-                          </v-list-item-content>
-                        </template>
-                        <template v-slot:selection="{ item }">
-                          <v-rating
+                      outlined
+                      dense
+                      v-model="student.potential.evolution"
+                      :items="evolution_options"
+                    >
+                      <template v-slot:item="{ item }">
+                        <v-list-item-content>
+                          <v-list-item-title>
+                            <v-rating
                               readonly
-                            :length="item.num_value"
-                            :value="item.num_value"
-                            color="#ff6b81"
-                          ></v-rating>
-                        </template>
-                      </v-select>
+                              :length="item.num_value"
+                              :value="item.num_value"
+                              color="#ff6b81"
+                            ></v-rating>
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </template>
+                      <template v-slot:selection="{ item }">
+                        <v-rating
+                          readonly
+                          :length="item.num_value"
+                          :value="item.num_value"
+                          color="#ff6b81"
+                        ></v-rating>
+                      </template>
+                    </v-select>
                     <!-- <v-rating
                       v-model="student.potential.rating_evolution"
                       background-color="pink lighten-3"
@@ -637,8 +679,14 @@
           </v-row>
           <!-- Upload file -->
           <v-card flat class="mb-3">
-            <v-card-text class="border-dashed border-2 border-pink-600 rounded-lg">
-              <v-row v-if=" preview_summary_files && preview_summary_files?.length > 0">
+            <v-card-text
+              class="border-dashed border-2 border-pink-600 rounded-lg"
+            >
+              <v-row
+                v-if="
+                  preview_summary_files && preview_summary_files?.length > 0
+                "
+              >
                 <v-col
                   cols="3"
                   align="center"
@@ -654,7 +702,8 @@
                           class="bg-[#f00]"
                           dark
                           @click="removeSummaryFile(index)"
-                        > <v-icon>mdi-close</v-icon>
+                        >
+                          <v-icon>mdi-close</v-icon>
                         </v-btn>
                       </div>
                       <video
@@ -665,16 +714,18 @@
                       ></video>
                     </v-card>
                   </template>
-                  <template v-if="file.attId && file.filesType.search('video') > -1">
+                  <template
+                    v-if="file.attId && file.filesType.search('video') > -1"
+                  >
                     <v-card flat>
                       <div class="flex justify-end">
-                          <v-btn
-                            icon
-                            class="bg-[#f00]"
-                            dark
-                            @click="removeSummaryFileInbase(file, index)"
-                            ><v-icon>mdi-close</v-icon></v-btn
-                          >
+                        <v-btn
+                          icon
+                          class="bg-[#f00]"
+                          dark
+                          @click="removeSummaryFileInbase(file, index)"
+                          ><v-icon>mdi-close</v-icon></v-btn
+                        >
                       </div>
                       <video
                         :src="file.url"
@@ -756,7 +807,8 @@
                     accept="image/* ,video/*"
                     multiple
                     @change="previewSummaryFile"
-                    style="display: none" />
+                    style="display: none"
+                  />
                 </v-col>
               </v-row>
             </v-card-text>
@@ -797,7 +849,14 @@
         <v-card class="pa-1">
           <v-row dense>
             <v-col class="pa-1" cols="12" align="right">
-              <v-btn icon v-if="!student_check_in[selected_student].assessment.assessmentStudentsId" @click="closeStudentComment(selected_student)">
+              <v-btn
+                icon
+                v-if="
+                  !student_check_in[selected_student].assessment
+                    .assessmentStudentsId
+                "
+                @click="closeStudentComment(selected_student)"
+              >
                 <v-icon color="#ff6b81">mdi-close</v-icon>
               </v-btn>
             </v-col>
@@ -902,7 +961,8 @@
                 </v-row>
               </v-card-text>
             </v-card>
-            <div v-if="student_check_in[selected_student].files.length > 0"
+            <div
+              v-if="student_check_in[selected_student].files.length > 0"
               class="mb-3"
             >
               <v-row dense>
@@ -989,7 +1049,14 @@
           <!-- <pre>{{student_check_in[selected_student].potential.checkInPotentialId}}</pre> -->
           <v-row dense>
             <v-col class="pa-1" cols="12" align="right">
-              <v-btn v-if="!student_check_in[selected_student].potential.checkInPotentialId"  icon @click="closeDialogPotential(selected_student)">
+              <v-btn
+                v-if="
+                  !student_check_in[selected_student].potential
+                    .checkInPotentialId
+                "
+                icon
+                @click="closeDialogPotential(selected_student)"
+              >
                 <v-icon color="#ff6b81">mdi-close</v-icon>
               </v-btn>
             </v-col>
@@ -1063,9 +1130,14 @@
             <v-card
               flat
               class="mb-3"
-              v-if=" student_check_in[selected_student].potential.type ==='potential'"
+              v-if="
+                student_check_in[selected_student].potential.type ===
+                'potential'
+              "
             >
-              <v-card-text class="border-dashed border-2 border-pink-600 rounded-lg">
+              <v-card-text
+                class="border-dashed border-2 border-pink-600 rounded-lg"
+              >
                 <v-row>
                   <v-col cols="12" class="flex align-center justify-center">
                     <v-img
@@ -1149,7 +1221,10 @@
                   @click="clearDialogPotential(selected_student)"
                   text
                   color="#ff6b81"
-                  :disabled="student_check_in[selected_student].potential.checkInPotentialId"
+                  :disabled="
+                    student_check_in[selected_student].potential
+                      .checkInPotentialId
+                  "
                 >
                   ล้างข้อมูล
                 </v-btn>
@@ -1192,14 +1267,14 @@ export default {
     fileURL: null,
     filename: "",
     evolution_options: [
-      { label: "ดีมาก", value: "very good", num_value : 5, },
-      { label: "ดี", value: "good", num_value : 4, },
-      { label: "ปรับปรุง", value: "adjust", num_value : 3, },
+      { label: "ดีมาก", value: "very good", num_value: 5 },
+      { label: "ดี", value: "good", num_value: 4 },
+      { label: "ปรับปรุง", value: "adjust", num_value: 3 },
     ],
     interest_options: [
-      { label: "ดีมาก", value: "very good", num_value : 5, },
-      { label: "ดี", value: "good", num_value : 4, },
-      { label: "ปรับปรุง", value: "adjust", num_value : 3, },
+      { label: "ดีมาก", value: "very good", num_value: 5 },
+      { label: "ดี", value: "good", num_value: 4 },
+      { label: "ปรับปรุง", value: "adjust", num_value: 3 },
     ],
     expanded_index: [],
     check_in: false,
@@ -1268,12 +1343,12 @@ export default {
       if (this.coach_check_in.attachment) {
         if (this.coach_check_in?.attachment.length > 0) {
           for (const img_url of this.coach_check_in.attachment) {
-            console.log(img_url)
+            console.log(img_url);
             this.preview_summary_files.push({
               url: img_url.attFilesUrl,
               attId: img_url.sumAttId,
-              originalFilesName : img_url.originalFilesName,
-              filesType : img_url.filesType
+              originalFilesName: img_url.originalFilesName,
+              filesType: img_url.filesType,
             });
           }
         }
@@ -1308,7 +1383,6 @@ export default {
         course_id: this.$route.params.courseId,
         date: this.$route.params.date,
       });
-    
     },
   },
   computed: {
@@ -1325,7 +1399,7 @@ export default {
         course_id: this.$route.params.courseId,
         date: this.$route.params.date,
       });
-      
+
       return "";
     },
   },
@@ -1345,23 +1419,28 @@ export default {
       DeleteAssessmentPotentialFile:
         "CoachModules/DeleteAssessmentPotentialFile",
     }),
-    CheckRating(rating_data, checkInId, type){
-        if(this.student_check_in.filter(v => v.checkInStudentId === checkInId).length > 0){
-        this.student_check_in.filter(v => v.checkInStudentId === checkInId).forEach((student) => {
-          if(type === "assessment_evolution"){
-            if(student.assessment.rating_evolution < 3){
-              student.assessment.rating_evolution = 3
+    CheckRating(rating_data, checkInId, type) {
+      if (
+        this.student_check_in.filter((v) => v.checkInStudentId === checkInId)
+          .length > 0
+      ) {
+        this.student_check_in
+          .filter((v) => v.checkInStudentId === checkInId)
+          .forEach((student) => {
+            if (type === "assessment_evolution") {
+              if (student.assessment.rating_evolution < 3) {
+                student.assessment.rating_evolution = 3;
+              }
+            } else if (type === "assessment_interest") {
+              if (student.assessment.rating_interest < 3) {
+                student.assessment.rating_interest = 3;
+              }
+            } else if (type === "potential_evolution") {
+              if (student.assessment.rating_evolution < 3) {
+                student.assessment.rating_evolution = 3;
+              }
             }
-          }else if(type === "assessment_interest"){
-            if(student.assessment.rating_interest < 3){
-              student.assessment.rating_interest = 3
-            }
-          }else if(type === "potential_evolution"){
-            if(student.assessment.rating_evolution < 3){
-              student.assessment.rating_evolution = 3
-            }
-          }
-        })
+          });
       }
     },
     FilterStatusCheckIn(selected_data) {
@@ -1407,7 +1486,7 @@ export default {
     },
     confirmDialogPotential(selected_student) {
       this.selected_files = [];
-      this.student_check_in[selected_student].potential.confirm = true
+      this.student_check_in[selected_student].potential.confirm = true;
       this.show_comment_potential_dialog = false;
     },
     showDialogPotential(id) {
@@ -1416,20 +1495,28 @@ export default {
           this.selected_student = i;
         }
       }
-      if (this.student_check_in[this.selected_student].potential.checkInPotentialId) {
-        this.student_check_in[this.selected_student].potential.remark_old = this.student_check_in[this.selected_student].potential.remark;
+      if (
+        this.student_check_in[this.selected_student].potential
+          .checkInPotentialId
+      ) {
+        this.student_check_in[this.selected_student].potential.remark_old =
+          this.student_check_in[this.selected_student].potential.remark;
       }
       this.show_comment_potential_dialog = true;
     },
-    clearDialogPotential(selected_student){
-      if(!this.student_check_in[selected_student].potential.checkInPotentialId){
+    clearDialogPotential(selected_student) {
+      if (
+        !this.student_check_in[selected_student].potential.checkInPotentialId
+      ) {
         this.student_check_in[selected_student].potential.remark = "";
         this.student_check_in[selected_student].potentialfiles = [];
       }
     },
     closeDialogPotential(selected_student) {
-      if(!this.student_check_in[selected_student].potential.confirm){
-        if (!this.student_check_in[selected_student].potential.checkInPotentialId) {
+      if (!this.student_check_in[selected_student].potential.confirm) {
+        if (
+          !this.student_check_in[selected_student].potential.checkInPotentialId
+        ) {
           this.student_check_in[selected_student].potential.remark = "";
           this.student_check_in[selected_student].potentialfiles = [];
         }
@@ -1460,7 +1547,7 @@ export default {
             files: this.coach_check_in.summary_files,
             course_id: this.$route.params.courseId,
             date: this.$route.params.date,
-          })
+          });
         }
       });
     },
@@ -1480,7 +1567,7 @@ export default {
             course_id: this.$route.params.courseId,
             date: this.$route.params.date,
             time_id: this.$route.params.timeId,
-          })
+          });
         }
       });
     },
@@ -1516,7 +1603,7 @@ export default {
             course_id: this.$route.params.courseId,
             date: this.$route.params.date,
             time_id: this.$route.params.timeId,
-          })
+          });
         }
       });
     },
@@ -1530,7 +1617,7 @@ export default {
         confirmButtonText: "ตกลง",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          this.UpdateCheckInStudent({ 
+          this.UpdateCheckInStudent({
             students: this.student_check_in,
             course_id: this.$route.params.courseId,
             date: this.$route.params.date,
@@ -1583,19 +1670,22 @@ export default {
     confirmStudentComment(selected_student) {
       this.selected_files = [];
       this.show_comment_dialog = false;
-      this.student_check_in[selected_student].assessment.confrim = true
+      this.student_check_in[selected_student].assessment.confrim = true;
     },
     clearStudentComment(selected_student) {
-      if (!this.student_check_in[selected_student].assessment.assessmentStudentsId) {
-          this.student_check_in[selected_student].assessment.remark = [];
-          this.student_check_in[selected_student].files = [];
-        
+      if (
+        !this.student_check_in[selected_student].assessment.assessmentStudentsId
+      ) {
+        this.student_check_in[selected_student].assessment.remark = [];
+        this.student_check_in[selected_student].files = [];
       }
     },
     closeStudentComment(selected_student) {
       console.log(selected_student);
-      if (!this.student_check_in[selected_student].assessment.assessmentStudentsId) {
-        if(!this.student_check_in[selected_student].assessment.confrim){
+      if (
+        !this.student_check_in[selected_student].assessment.assessmentStudentsId
+      ) {
+        if (!this.student_check_in[selected_student].assessment.confrim) {
           this.student_check_in[selected_student].assessment.remark = [];
           this.student_check_in[selected_student].files = [];
         }
@@ -1758,7 +1848,7 @@ export default {
       const fileUrls = [];
       for (let i = 0; i < selectedFiles.length; i++) {
         if (CheckFileSize(selectedFiles[i]) === true) {
-          console.log(selectedFiles[i])
+          console.log(selectedFiles[i]);
           this.coach_check_in.summary_files.push(selectedFiles[i]);
           const file = selectedFiles[i];
           const reader = new FileReader();

@@ -286,7 +286,7 @@
         </v-card-title>
 
         <v-card-title>
-          <pre>{{ detail_dialog_end }}</pre>
+          <!-- <pre>{{ detail_dialog_end }}</pre> -->
           <v-row dense>
             <v-col cols="12" class="my-2">
               <span class="font-bold"> ชื่อคอร์ส: </span>
@@ -410,7 +410,7 @@ export default {
   },
   data: () => ({
     breadcrumbs: [
-      { text: "แดชบอร์ด", to: "DashboardList" },
+      { text: "แดชบอร์ด", to: "Dashboard" },
       { text: "รายชื่อนักเรียน", to: "" },
     ],
     search: "",

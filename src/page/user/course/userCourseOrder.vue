@@ -512,8 +512,12 @@
           <v-checkbox
             color=pink
             v-model="policy"
-            :label="`ยอมรับ policy`"
-          ></v-checkbox>
+            class="inline-block"
+          >
+            <template v-slot:label>
+              ยอมรับ <a class="mx-2 font-weight-bold"> ข้อกำหนดการใช้บริการ </a> และ <a class="mx-2 font-weight-bold" >นโยบายความคุ้มครองข้อมูลส่วนบุคคล</a>
+            </template>
+        </v-checkbox>
         </v-col>
       </v-row>
       <v-row dense>
@@ -794,17 +798,17 @@
             </v-btn>
           </v-col>
         </v-row>
-        <v-card-title >
+        <!-- <v-card-title >
           <v-row dense>
             <v-col align="center">
               policy
             </v-col>
           </v-row>
-        </v-card-title>
+        </v-card-title> -->
         <v-card-text>
           <v-row dense>
-            <v-col>
-              รอทางทีมกฏหมาย ดำเนินการ
+            <v-col cols="12">
+              <TermOfUse/>
             </v-col>
           </v-row>
           <v-row dense>
@@ -813,10 +817,15 @@
                 hide-details
                 color="pink"
                 v-model="policy"
-                :label="`ยอมรับ policy`"
-              ></v-checkbox>
+              >
+              <template v-slot:label>
+                ยอมรับ <a class="mx-2 font-weight-bold"> ข้อกำหนดการใช้บริการ </a> และ <a class="mx-2 font-weight-bold" >นโยบายความคุ้มครองข้อมูลส่วนบุคคล</a>
+              </template>
+            </v-checkbox>
             </v-col>
           </v-row>
+        </v-card-text>
+        <v-card-actions>
           <v-row dense>
             <v-col align="right">
               <v-btn outlined color="#ff6b81" text-color="#ff6b81" @click="closePolicy()">
@@ -829,7 +838,7 @@
               </v-btn>
             </v-col>
           </v-row>
-        </v-card-text>
+        </v-card-actions>
       </v-card>
     </v-dialog>
   </v-app>
@@ -843,6 +852,7 @@ import labelCustom from "@/components/label/labelCustom.vue";
 import registerDialogForm from "@/components/user_menage/registerDialogForm.vue";
 import dialogCard from "@/components/dialog/dialogCard.vue";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+import TermOfUse from '@/components/termOfUse.vue'
 import Swal from "sweetalert2";
 import { mapActions, mapGetters } from "vuex";
 import { inputValidation } from "@/functions/functions";
@@ -857,6 +867,7 @@ export default {
     registerDialogForm,
     dialogCard,
     loadingOverlay,
+    TermOfUse
   },
   data: () => ({
     policy : false,
