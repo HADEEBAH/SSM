@@ -521,11 +521,13 @@
                         <v-col cols="auto">
                           <v-text-field
                             class="bg-white rounded-lg"
+                            v-model="search_student_list"
                             dense
                             outlined
                             hide-details
                             placeholder="ค้นหาชื่อนักเรียน, ชื่อโค้ช"
                             prepend-inner-icon="mdi-magnify"
+                            @input="searchStudentList(search_student_list)"
                           ></v-text-field>
                         </v-col>
                       </v-row>
@@ -1689,6 +1691,7 @@ export default {
     },
     time_option: [],
     dow_option: [],
+    search_student_list: "",
     package_option: [],
     day_option: [
       { label: "วันอาทิตย์", value: 0 },
@@ -1802,6 +1805,10 @@ export default {
       RemovePrivilageByCourseID: "CourseModules/RemovePrivilageByCourseID",
       ExportStudentList: "CourseModules/ExportStudentList",
     }),
+    searchStudentList(search){
+      console.log(search)
+      console.log(this.coach_list)
+    },
     resetFilter() {
       this.filter = {
         dow: "",
