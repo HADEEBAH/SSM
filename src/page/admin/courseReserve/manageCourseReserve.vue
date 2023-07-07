@@ -49,6 +49,34 @@
               </v-col>
             </v-row>
           </template>
+          <template v-slot:[`item.course_name`]="{ item }">
+            <v-row dense>
+              <v-col>
+                {{ `${item.courseName}(${item.courseNameEn})` }}
+              </v-col>
+            </v-row>
+          </template>
+          <template v-slot:[`item.student_name`]="{ item }">
+            <v-row dense>
+              <v-col>
+                {{ `${item.studentData.firstNameTh} ${item.studentData.lastNameTh}` }}
+              </v-col>
+            </v-row>
+          </template>
+          <template v-slot:[`item.created_by`]="{ item }">
+            <v-row dense>
+              <v-col>
+                {{ `${item.createdByData.firstNameTh} ${item.createdByData.lastNameTh}` }}
+              </v-col>
+            </v-row>
+          </template>
+          <template v-slot:[`item.tel`]="{ item }">
+            <v-row dense>
+              <v-col>
+                {{ `${item.createdByData.tel}` }}
+              </v-col>
+            </v-row>
+          </template>
           <template v-slot:[`item.status`]="{ item }">
             <v-autocomplete
               dense
@@ -92,7 +120,7 @@ import { mapActions, mapGetters } from 'vuex';
         { label: "ยกเลิกการจอง", value: "cancel" },
       ],
       columns: [
-      {
+        { 
           text: "วันที่จอง",
           align: "center",
           sortable: false,
@@ -102,7 +130,7 @@ import { mapActions, mapGetters } from 'vuex';
           text: "ชื่อคอร์ส",
           align: "center",
           sortable: false,
-          value: "courseName",
+          value: "course_name",
         },
         {
           text: "ชื่อ-นามสกุลผู้เรียน",
@@ -111,7 +139,7 @@ import { mapActions, mapGetters } from 'vuex';
           value: "student_name",
         },
         { text: "ชื่อ-นามสกุลผู้จอง", align: "center", sortable: false, value: "created_by" },
-        { text: "เบอร์ติดต่อ", align: "center", sortable: false, value: "created_by" },
+        { text: "เบอร์ติดต่อ", align: "center", sortable: false, value: "tel" },
         {
           text: "สถานะการจอง",
           align: "center",

@@ -13,7 +13,7 @@
         <v-card-text>
           <div class="w-full" align="center" v-if="image">
             <v-img
-              src="../../assets/login/login.jpg"
+              :src="logo"
               style="width: 50%; height: 50%"
             ></v-img>
           </div>
@@ -109,6 +109,7 @@ export default {
   },
   data: () => ({
     show_password: false,
+    logo: `${process.env.VUE_APP_URL}/logo.svg`,
     rules: {
       usernameRules: [
         (val) =>
@@ -173,7 +174,7 @@ export default {
     },
 
     forgot_password() {
-      window.location.href = `https://testoneid.inet.co.th/type_forgot_password?oauth_pass=true`;
+      window.location.href = `${process.env.VUE_APP_ONE}/type_forgot_password`;
     },
   },
 };

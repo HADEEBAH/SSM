@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <!-- {{ $route.params.action }} -->
-    <pre>{{profile_user}}</pre>
+    <!-- <pre>{{profile_user}}</pre> -->
   <div v-for="(profile, index) in profile_user" :key="`${index}-profile`">
   {{ profile.length }}
     

@@ -9,10 +9,12 @@
           <v-card
             flat
             @click="
-              $router.push({
-                name: 'StudentsSchedule',
-                params: { action: 'MyCourse' },
-              })
+              data_local.roles.length > 0
+                ? $router.push({
+                    name: 'StudentsSchedule',
+                    params: { action: 'MyCourse' },
+                  })
+                : ''
             "
             class="rounded-lg"
           >
@@ -40,19 +42,29 @@
           <v-card
             flat
             @click="
-              $router.push({
-                name: 'StudentsSchedule',
-                params: { action: 'MySchedule' },
-              })
+              data_local.roles.length > 0
+                ? $router.push({
+                    name: 'StudentsSchedule',
+                    params: { action: 'MySchedule' },
+                  })
+                : ''
             "
             class="rounded-lg"
           >
             <v-card-text
-              :class=" this.$route.params.action == 'MySchedule' ? 'bg-[#FF6B81]' : 'bg-[#F5F5F5]' "
+              :class="
+                this.$route.params.action == 'MySchedule'
+                  ? 'bg-[#FF6B81]'
+                  : 'bg-[#F5F5F5]'
+              "
               class="rounded-lg flex justify-center align-center pa-2"
             >
               <label
-                :class=" this.$route.params.action == 'MySchedule' ? 'text-white' : ' text-[#B3B3B3]'"
+                :class="
+                  this.$route.params.action == 'MySchedule'
+                    ? 'text-white'
+                    : ' text-[#B3B3B3]'
+                "
                 class="font-bold mr-2"
                 >ตารางเรียน</label
               >
@@ -76,7 +88,7 @@
                   ? 'bg-[#FF6B81]'
                   : 'bg-[#F5F5F5]'
               "
-              class="rounded-lg flex justify-center align-center pa-2"
+              class="rounded-lg font-bold flex justify-center align-center pa-2"
             >
               คอร์สที่จอง
             </v-card-text>
@@ -123,18 +135,20 @@
                 <v-card-text>
                   <v-row dense>
                     <!-- img -->
-                    <v-col cols="12" sm="2">
+                    <v-col cols="12" sm="5">
                       <v-img
-                        max-height="180"
                         :src="
                           item.courseImg
                             ? showImg(item.courseImg)
                             : require(`@/assets/course/default_course_img.svg`)
                         "
+                        class="w-full h-full rounded-lg"
+                        cover
+                        height="200"
                       ></v-img>
                     </v-col>
                     <!-- detail -->
-                    <v-col cols="12" sm="7">
+                    <v-col cols="12" sm="3">
                       <v-row dense>
                         <v-col class="text-lg font-bold">
                           {{
@@ -183,7 +197,9 @@
                       <v-row dense>
                         <v-col>
                           <v-chip color="#F9B320" dark>
-                            {{ `${item.day_name} ${item.period.start} - ${ item.period.end}น.` }}
+                            {{
+                              `${item.day_name} ${item.period.start} - ${item.period.end}น.`
+                            }}
                           </v-chip>
                         </v-col>
                       </v-row>
@@ -192,7 +208,7 @@
                     <!-- circle -->
                     <v-col
                       cols="12"
-                      sm="3"
+                      sm="4"
                       class="d-flex align-center justify-center"
                     >
                       <!-- {{ item.courseNameEn }} -->
@@ -224,7 +240,11 @@
                 </span>
               </v-card-text>
             </v-card>
-            <div v-else v-for="(item, index) in student_data.filter(v => !v.comp)" :key="index">
+            <div
+              v-else
+              v-for="(item, index) in student_data.filter((v) => !v.comp)"
+              :key="index"
+            >
               <v-card
                 outlined
                 @click="
@@ -237,8 +257,8 @@
               >
                 <v-row dense>
                   <!-- img -->
-                  <v-col cols="12" sm="2">
-                    <v-col
+                  <v-col cols="12" sm="5" align="center">
+                    <!-- <v-col
                       style="
                         display: block;
                         margin-left: auto;
@@ -246,18 +266,21 @@
                         width: 100%;
                         margin-top: 10%;
                       "
-                    >
-                      <v-img
-                        :src="
-                          item.courseImg
-                            ? showImg(item.courseImg)
-                            : require(`@/assets/course/default_course_img.svg`)
-                        "
-                      ></v-img>
-                    </v-col>
+                    > -->
+                    <v-img
+                      :src="
+                        item.courseImg
+                          ? showImg(item.courseImg)
+                          : require(`@/assets/course/default_course_img.svg`)
+                      "
+                      class="w-full h-full rounded-lg"
+                      cover
+                      height="200"
+                    ></v-img>
+                    <!-- </v-col> -->
                   </v-col>
                   <!-- detail -->
-                  <v-col cols="12" sm="7">
+                  <v-col cols="12" sm="3">
                     <v-row dense>
                       <v-col class="text-lg font-bold">
                         {{ item.courseNameTh == "" ? "-" : item.courseNameTh }}
@@ -298,17 +321,15 @@
                     <v-row dense>
                       <v-col>
                         <v-chip color="#F9B320" dark>
-                          {{ `${item.day_name} ${item.period.start} - ${ item.period.end}น.` }}
+                          {{
+                            `${item.day_name} ${item.period.start} - ${item.period.end}น.`
+                          }}
                         </v-chip>
                       </v-col>
                     </v-row>
                   </v-col>
                   <!-- circle -->
-                  <v-col
-                    cols="12"
-                    sm="3"
-                    class="d-flex align-center justify-center"
-                  >
+                  <v-col cols="12" sm="4" class="d-flex align-end justify-end">
                     <!-- {{ item.courseNameEn }} -->
                     <v-progress-circular
                       :rotate="-90"
@@ -450,16 +471,15 @@
                 ></v-autocomplete>
               </v-col>
             </v-row>
-            <v-card flat v-if="ReserveList().length == 0">
-              <v-card-text
-                class="pa-2 text-center border-2 border-[#ff6b81] rounded-lg"
-              >
-                <span class="text-lg font-bold">
-                  <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                  ไม่พบข้อมูลการจอง
-                </span>
-              </v-card-text>
-            </v-card>
+            <v-card-text
+              class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
+              v-if="ReserveList().length == 0"
+            >
+              <span class="text-lg font-bold">
+                <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                ไม่พบข้อมูลการจอง
+              </span>
+            </v-card-text>
             <div v-else>
               <v-card
                 v-for="(item_booked, index_booked) in ReserveList()"
@@ -537,14 +557,10 @@
                         </v-col>
 
                         <v-col>
-                          <v-card color="yellow" class="rounded-lg text-center">
-                            {{
-                              dayOfWeekName(
-                                item_booked.dayOfWeekName.split(",")
-                              )
-                            }}
+                          <v-chip color="#F9B320" dark>
+                            {{ item_booked.day_name }}
                             {{ item_booked.start }} - {{ item_booked.end }} น.
-                          </v-card>
+                          </v-chip>
                         </v-col>
 
                         <v-row dense>
@@ -597,9 +613,7 @@
                             class="mdi mdi-calendar-today"
                             style="color: #ff6b81"
                           ></span>
-                          {{
-                            dayOfWeekName(item_booked.dayOfWeekName.split(","))
-                          }}
+                          {{ item_booked.day_name }}
                         </v-col>
 
                         <v-col cols="12" md="12" sm="12">
@@ -651,6 +665,16 @@
                 ไม่พบข้อมูลการจอง
               </span>
             </v-card-text>
+            <!-- <v-card flat v-if="ReserveList().length == 0">
+              <v-card-text
+                class="pa-2 text-center border-2 border-[#ff6b81] rounded-lg"
+              >
+                <span class="text-lg font-bold">
+                  <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                  ไม่พบข้อมูลการจอง
+                </span>
+              </v-card-text>
+            </v-card> -->
             <div v-else>
               <v-card
                 v-for="(item_booked, index_booked) in ReserveList()"
@@ -728,14 +752,10 @@
                         </v-col>
 
                         <v-col>
-                          <v-card color="yellow" class="rounded-lg text-center">
-                            {{
-                              dayOfWeekName(
-                                item_booked.dayOfWeekName.split(",")
-                              )
-                            }}
-                            {{ item_booked.start }} - {{ item_booked.end }} น.
-                          </v-card>
+                          <v-chip color="#F9B320" dark>
+                            {{ item_booked.day_name }} {{ item_booked.start }} -
+                            {{ item_booked.end }} น.
+                          </v-chip>
                         </v-col>
                       </v-col>
                       <!-- circle -->
@@ -780,9 +800,7 @@
                             class="mdi mdi-calendar-today"
                             style="color: #ff6b81"
                           ></span>
-                          {{
-                            dayOfWeekName(item_booked.dayOfWeekName.split(","))
-                          }}
+                          {{ item_booked.day_name }}
                         </v-col>
 
                         <v-col cols="12" md="12" sm="12">
@@ -835,6 +853,7 @@ import { mapActions, mapGetters } from "vuex";
 import calendarStudent from "../../../components/calendar/calendarStudent.vue";
 import labelCustom from "@/components/label/labelCustom.vue";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+import router from "@/router";
 
 export default {
   components: {
@@ -883,20 +902,33 @@ export default {
     localStorage.removeItem("userRelationsAccountId");
   },
   created() {
-    this.userRelationsAccountId = localStorage.getItem(
-      "userRelationsAccountId"
-    );
-    // if (this.$route.query.token) {
-    //  this.loginShareToken(this.$route.query.token)
-    // }
-    this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    // this.GetStudentData(this.user_detail.account_id);
-  },
-  
-  beforeMount() {
     if (this.$route.query.token) {
-     this.loginShareToken(this.$route)
+      this.loginShareToken(this.$route);
     }
+  },
+
+  beforeMount() {
+    this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+  },
+
+  mounted() {
+    if (
+      this.user_detail?.roles?.filter((val) => val === "R_4" || val === "R_5")
+        .length === 0
+    ) {
+      router.replace({ name: "UserKingdom" });
+    }
+    this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
+
+    if (localStorage.getItem("userRelationsAccountId")) {
+      console.log(localStorage.getItem("userRelationsAccountId"));
+    } else if (this.user_detail.roles.includes("R_5")) {
+      this.GetStudentData(this.user_detail.account_id);
+    }
+    // else {
+    //   // this.GetStudentData(null);
+    //   this.GetStudentData(this.user_detail.account_id);
+    // }
   },
 
   beforeUpdate() {
@@ -904,18 +936,6 @@ export default {
       "NavberUserModules/changeTitleNavber",
       "ข้อมูลตารางเรียน"
     );
-  },
-  mounted() {
-    this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-
-    if (localStorage.getItem("userRelationsAccountId")) {
-      console.log(localStorage.getItem("userRelationsAccountId"))
-    } else if (this.user_detail.roles.includes("R_5")) {
-      this.GetStudentData(this.user_detail.account_id);
-    } else {
-      // this.GetStudentData(null);
-      this.GetStudentData(this.user_detail.account_id);
-    }
   },
 
   // watch: {
@@ -1009,21 +1029,21 @@ export default {
           reserveList.push(reserve);
         }
       });
-      this.student_reserve.forEach((reserve) => {
-        if (
-          reserveList.filter(
-            (v) =>
-              v.coachId == reserve.coachId &&
-              v.courseId == reserve.courseId &&
-              v.dayOfWeekId === reserve.dayOfWeekId &&
-              v.timeId === reserve.timeId &&
-              v.studentId === reserve.studentId
-          ).length === 0
-        ) {
-          reserveList.push(reserve);
-        }
-      });
-      console.log("student_reserve :", this.student_reserve);
+      // this.student_reserve.forEach((reserve) => {
+      //   if (
+      //     reserveList.filter(
+      //       (v) =>
+      //         v.coachId == reserve.coachId &&
+      //         v.courseId == reserve.courseId &&
+      //         v.dayOfWeekId === reserve.dayOfWeekId &&
+      //         v.timeId === reserve.timeId &&
+      //         v.studentId === reserve.studentId
+      //     ).length === 0
+      //   ) {
+      //     reserveList.push(reserve);
+      //   }
+      // });
+      // console.log("student_reserve :", this.student_reserve);
       return reserveList;
     },
     dayOfWeekName(days) {
@@ -1076,9 +1096,11 @@ export default {
     //   },
     // },
     setFunctions() {
+      if (this.user_detail.roles.includes("R_5")) {
+        // this.GetStudentReserve(this.user_detail.account_id);
+        this.GetAll(this.user_detail.account_id);
+      }
       this.GetProfileBooked(this.user_detail.account_id);
-      this.GetStudentReserve(this.user_detail.account_id);
-      this.GetAll(this.user_detail.account_id);
       return "";
     },
     MobileSize() {

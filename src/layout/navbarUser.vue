@@ -327,6 +327,9 @@
         </v-list>
       </v-navigation-drawer>
       <v-main class="bg-admin">
+        <v-overlay :value="loading">
+          <v-progress-circular indeterminate size="64"></v-progress-circular>
+        </v-overlay>
         <router-view />
       </v-main>
     </v-layout>
@@ -424,7 +427,7 @@ export default {
         title: "การจัดการ",
         to: "menageCourse",
         params: null,
-        roles: ["R_1", "R_2", "R_3"],
+        roles: ["R_3"],
       },
       {
         icon: "mdi-history",
@@ -436,7 +439,8 @@ export default {
       {
         icon: "mdi-swap-horizontal-bold",
         title: "หน้าผู้ดูแลระบบ",
-        to: "DashboardList",
+        to: "Admin",
+        // to: "Dashboard",
         params: null,
         roles: ["R_1", "R_2"],
       },
@@ -510,6 +514,7 @@ export default {
       get_notifications: "NotificationsModules/getNotifications",
       get_notifications_all: "NotificationsModules/getNotificationsAll",
       notifications_read: "NotificationsModules/readNotifications",
+      loading: "LoadingModules/getLoading"
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;

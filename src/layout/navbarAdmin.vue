@@ -7,8 +7,9 @@
         dark
         fixed
         elevation="0"
-        src="../assets/navbar/bg-nav-bar.png"
+        :src="navbar_img"
       >
+      <!-- {{ navbar_img }} -->
         <v-app-bar-nav-icon @click="drawer = !drawer">
           <v-icon>{{
             drawer ? "mdi-chevron-double-left" : "mdi-dots-vertical"
@@ -33,7 +34,7 @@
                 <div v-else>
                   <v-avatar class="mr-2" size="24">
                     <v-img
-                      src="../assets/navbar_user/default_image_profile.svg"
+                      :src="logo"
                       size="24"
                     />
                   </v-avatar>
@@ -65,7 +66,7 @@
         <v-row>
           <v-col class="flex align-center justify-center">
             <v-img
-              src="../assets/navbar/drawer_img.png"
+              :src="logo"
               max-height="115"
               max-width="115"
             ></v-img>
@@ -130,6 +131,9 @@ import { mapActions } from "vuex";
 export default {
   name: "navbarAdmin",
   data: () => ({
+    // navbar_img: `http://localhost:8080/navbar_img.svg`,
+    navbar_img: `${process.env.VUE_APP_URL}/navbar_img.svg`,
+    logo: `${process.env.VUE_APP_URL}/logo.svg`,
     menu: false,
     drawer: false,
     active_menu: "",
@@ -140,7 +144,7 @@ export default {
     },
     user_detail: null,
     menu_drawer_list: [
-      { title: "แดชบอร์ด", to: "DashboardList", child: [] }, // to ให้ใส่ name ของ router
+      // { title: "แดชบอร์ด", to: "Dashboard", child: [] }, // to ให้ใส่ name ของ router
       // { title: "แดชบอร์ด", to: "", child: [] }, // to ให้ใส่ name ของ router
       { title: "ตารางเรียน", to: "ManageSchedule", child: [] },
       // { title: "เพิ่มผู้เรียน", to: "Student", child: [] },

@@ -521,11 +521,13 @@
                         <v-col cols="auto">
                           <v-text-field
                             class="bg-white rounded-lg"
+                            v-model="search_student_list"
                             dense
                             outlined
                             hide-details
                             placeholder="ค้นหาชื่อนักเรียน, ชื่อโค้ช"
                             prepend-inner-icon="mdi-magnify"
+                            @input="searchStudentList(search_student_list)"
                           ></v-text-field>
                         </v-col>
                       </v-row>
@@ -1689,6 +1691,7 @@ export default {
     },
     time_option: [],
     dow_option: [],
+    search_student_list: "",
     package_option: [],
     day_option: [
       { label: "วันอาทิตย์", value: 0 },
@@ -1727,7 +1730,7 @@ export default {
     selected_coach_potential: null,
   }),
   created() {
-    console.log("Now ",new Date())
+    console.log("Now ", new Date());
   },
   mounted() {},
   watch: {
@@ -1802,6 +1805,10 @@ export default {
       RemovePrivilageByCourseID: "CourseModules/RemovePrivilageByCourseID",
       ExportStudentList: "CourseModules/ExportStudentList",
     }),
+    searchStudentList(search){
+      console.log(search)
+      console.log(this.coach_list)
+    },
     resetFilter() {
       this.filter = {
         dow: "",
@@ -1850,13 +1857,12 @@ export default {
       let dow = [];
       this.dow_option = [];
       if (selected_coach >= 0) {
-        for await (const coach of this.coach_list[selected_coach].allDates) {
-          for await (const day of coach.dates.day) {
-            if (dow.length === 0) {
-              dow.push(this.day_option.filter((v) => v.value == day)[0]);
-            } else if (dow.filter((v) => v.value == day).length === 0) {
-              dow.push(this.day_option.filter((v) => v.value == day)[0]);
-            }
+        let coach = this.coach_list[selected_coach].allDates
+        for await (const day of coach.dates.day) {
+          if (dow.length === 0) {
+            dow.push(this.day_option.filter((v) => v.value == day)[0]);
+          } else if (dow.filter((v) => v.value == day).length === 0) {
+            dow.push(this.day_option.filter((v) => v.value == day)[0]);
           }
         }
       }
@@ -1867,7 +1873,8 @@ export default {
       this.package_option = [];
       if (selected_coach >= 0) {
         console.log("coach_list => ", this.coach_list[selected_coach]);
-        for await (const coach of this.coach_list[selected_coach].allDates) {
+        // for await (const coach of this.coach_list[selected_coach].allDates.dates) {
+          let coach = this.coach_list[selected_coach].allDates
           if (this.package_option.length === 0) {
             this.package_option.push(coach.cpo);
           } else if (
@@ -1876,14 +1883,15 @@ export default {
           ) {
             this.package_option.push(coach.cpo);
           }
-        }
+        // }
       }
     },
     //FILTER DATE COACH LIST
     async filterTimeCoach(selected_coach) {
       this.time_option = [];
       if (selected_coach >= 0) {
-        for await (const coach of this.coach_list[selected_coach].allDates) {
+        // for await (const coach of this.coach_list[selected_coach].allDates) {
+          let coach = this.coach_list[selected_coach].allDates
           if (this.time_option.length > 0) {
             this.time_option.push(coach.time);
           } else if (
@@ -1892,7 +1900,7 @@ export default {
           ) {
             this.time_option.push(coach.time);
           }
-        }
+        // }
       }
     },
     //EXPORT STUDENT

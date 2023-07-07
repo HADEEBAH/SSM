@@ -505,8 +505,9 @@ export default {
       let end_date = this.coach_leave_data.end_date ? true : false;
       let period = this.coach_leave_data.period ? true : false;
       let leave_type = this.coach_leave_data.leave_type ? true : false;
+      let course = this.coach_leave_data.courses.filter(v => v.course_id).length > 0 ? true : false;
       // console.log(start_date && end_date && period && leave_type);
-      return !(start_date && end_date && period && leave_type);
+      return !(start_date && end_date && period && leave_type && course);
     },
   },
   methods: {
@@ -783,6 +784,7 @@ export default {
     },
     saveCoachLeave() {
       this.$refs.form_coach_leave.validate()
+      
       if(this.form_coach_leave){
         Swal.fire({
           icon: "question",

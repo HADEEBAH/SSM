@@ -239,15 +239,16 @@
             <v-row>
               <v-col
                 cols="12"
-                sm="4"
+                :sm="course_artwork.length > 3 ? '4' : ''"
                 v-for="(artwork, index) in course_artwork"
                 :key="`${index}-artwork`"
               >
                 <v-img
+                  @click="SelectedImg(artwork.attachmentUrl)"
                   :src="artwork.attachmentUrl"
                   aspect-ratio="1"
                   contain
-                  class="bg-grey-lighten-2"
+                  class="bg-grey-lighten-2 cursor-pointer"
                 >
                   <template v-slot:placeholder>
                     <v-row
@@ -267,6 +268,36 @@
           </v-card-text>
         </v-card>
       </v-dialog>
+      <v-dialog v-if="show_full_img" v-model="show_full_img"  persistent class="w-full">
+        <v-card class="pa-2">
+          <v-row dense>
+            <v-col cols="12" align="right">
+              <v-btn icon @click="CloseImgFull()"
+                ><v-icon color="#ff6b81">mdi-close</v-icon></v-btn
+              >
+            </v-col>
+          </v-row>
+          <v-img
+            :src="img_selected"
+            aspect-ratio="1"
+            contain
+            class="bg-grey-lighten-2"
+          >
+            <template v-slot:placeholder>
+              <v-row
+                class="fill-height ma-0"
+                align="center"
+                justify="center"
+              >
+                <v-progress-circular
+                  indeterminate
+                  color="#ff6b81"
+                ></v-progress-circular>
+              </v-row>
+            </template>
+          </v-img>
+        </v-card>
+      </v-dialog>
     </v-container>
   </v-app>
 </template>
@@ -282,6 +313,8 @@ export default {
     show_dialog_artwork: false,
     show_dialog_privilege: false,
     selected_package: {},
+    show_full_img : false,
+    img_selected : ""
   }),
   created() {
     this.order_data = JSON.parse(localStorage.getItem("Order"));
@@ -314,7 +347,14 @@ export default {
       changeOrderData: "OrderModules/changeOrderData",
       GetArtworkByCourse: "CourseModules/GetArtworkByCourse",
     }),
-
+    SelectedImg(img){
+      this.img_selected = img
+      this.show_full_img = true
+    },
+    CloseImgFull(){
+      this.img_selected = ""
+      this.show_full_img = false
+    },
     selectedPackage(option) {
       console.log("Options :", option);
       console.log("Select :", this.selected_package);
