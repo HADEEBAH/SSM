@@ -283,10 +283,8 @@
           <div v-for="(list, list_index) in menu_drawer_list" :key="list_index">
             <template v-if="list.to !== 'logOut'">
               <v-list-item
-                v-if="
-                  list.to == 'StudentsSchedule' ?  list.roles.length > 0 
-                  ? list.roles.filter((v) => user_detail?.roles.includes(v)).length === 0 : true : 
-                  list.roles.length > 0 ? list.roles.filter((v) => user_detail?.roles.includes(v)).length > 0 : true
+                v-if=" list.to == 'StudentsSchedule' ?  checkrole(user_detail?.roles, list.roles) : 
+                list.roles.length > 0 ? list.roles.filter((v) => user_detail?.roles.includes(v)).length > 0 : true
                 "
                 @click="nextpage(list)"
                 :class="
@@ -419,7 +417,7 @@ export default {
         title: "ตารางเรียน",
         to: "StudentsSchedule",
         params: { action: "MySchedule" },
-        roles: ["R1", "R2", "R3"],
+        roles: ["R_1", "R_2", "R_3"],
       },
       {
         icon: "mdi-book-cog-outline",
@@ -483,6 +481,7 @@ export default {
     }
   },
   mounted() {
+   
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail.account_id);
     }
@@ -529,6 +528,17 @@ export default {
       GetNotificationsAll: "NotificationsModules/GetNotificationsAll",
       ReadNotifications: "NotificationsModules/ReadNotifications",
     }),
+    checkrole(a,b){
+      // console.log("535 => ",b)
+      let notFound = true; 
+      if(a.length > 0){
+        if (b.includes(a[0])) {
+          notFound = false;
+        }
+      }
+      console.log("------", notFound);
+      return notFound
+    },
     selectMenu(type, to, head) {
       if (type === "child" && head === this.active_menu) {
         this.active_menu_child = to;
