@@ -340,7 +340,14 @@ export default {
     mobileNo: "",
     email: "",
   }),
-
+  beforeRouteLeave(to, from, next) {
+    console.log(to, from)
+    if(this.profile_detail.firstNameTh && this.profile_detail.lastNameTh && !this.isEnabled){
+      next()
+    }else{
+      this.changeProfileFail(true)
+    }
+  },
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
   },

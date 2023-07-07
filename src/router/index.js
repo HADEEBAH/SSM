@@ -20,7 +20,6 @@ router.beforeEach((to, from, next) => {
   if (!to.name) {
     next({ name: 'PageNotFound' })
   } else {
-
     if (to.name !== "Login" && to.name !== "Register" && to.name !== "PageNotFound") {
       console.log("name", to);
       console.log("cookie", VueCookie.get("token"));
@@ -31,9 +30,12 @@ router.beforeEach((to, from, next) => {
       } else if (to.name === 'userCourseOrder' && !VueCookie.get("token")) {
         next({ name: 'Login' })
       } else if (VueCookie.get("token")) {
+        
         let order = JSON.parse(localStorage.getItem("Order"))
         let user_detail = JSON.parse(localStorage.getItem("userDetail"))
-        console.log(from.name)
+        if(from.name !== 'ProfileDetail' && !user_detail.first_name_th && !user_detail.last_name_th && to.name!=='ProfileDetail'){
+          next({ name: 'ProfileDetail', params: {profile_id: user_detail.account_id}})
+        }
         if (to.name == "userCourseDetail_courseId" || to.name == "userCoursePackage_courseId" || to.name == "userCourseOrder") {
           console.log("order", order)
           if (order) {
