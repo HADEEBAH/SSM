@@ -155,7 +155,7 @@
             "
           >
             <v-icon>mdi-text-box-search-outline</v-icon>
-            ดูรายละเอียด
+            ดูรายละเอียดผู้เรียน
           </v-btn>
         </template>
       </v-data-table>
@@ -189,7 +189,7 @@
             "
           >
             <v-icon>mdi-text-box-search-outline</v-icon>
-            ดูรายละเอียด
+            ดูรายละเอียดผู้เรียน
           </v-btn>
         </template>
       </v-data-table>
@@ -226,7 +226,7 @@
             "
           >
             <v-icon>mdi-text-box-search-outline</v-icon>
-            ดูรายละเอียด
+            ดูรายละเอียดผู้เรียน
           </v-btn>
         </template>
       </v-data-table>
@@ -263,7 +263,7 @@
             "
           >
             <v-icon>mdi-text-box-search-outline</v-icon>
-            ดูรายละเอียด
+            ดูรายละเอียดผู้เรียน
           </v-btn>
         </template>
       </v-data-table>
