@@ -284,10 +284,9 @@
             <template v-if="list.to !== 'logOut'">
               <v-list-item
                 v-if="
-                  list.roles.length > 0
-                    ? list.roles.filter((v) => user_detail?.roles.includes(v))
-                        .length > 0
-                    : true
+                  list.to == 'StudentsSchedule' ?  list.roles.length > 0 
+                  ? list.roles.filter((v) => user_detail?.roles.includes(v)).length === 0 : true : 
+                  list.roles.length > 0 ? list.roles.filter((v) => user_detail?.roles.includes(v)).length > 0 : true
                 "
                 @click="nextpage(list)"
                 :class="
@@ -420,7 +419,7 @@ export default {
         title: "ตารางเรียน",
         to: "StudentsSchedule",
         params: { action: "MySchedule" },
-        roles: ["R_4", "R_5"],
+        roles: ["R1", "R2", "R3"],
       },
       {
         icon: "mdi-book-cog-outline",
