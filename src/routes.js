@@ -69,15 +69,12 @@ import StudentList from '../src/page/admin/dashboard/studentList.vue'
 
 // admin course reserve
 import manageCourseReserve from '@/page/admin/courseReserve/manageCourseReserve.vue'
-<<<<<<< HEAD
 // portfolio
 import FrontPortfolio from '@/page/pdf/FrontPortfolio.vue'
-=======
 
 //PageNotFound
 import PageNotFound from '@/page/pageNotFound.vue'
 
->>>>>>> develop
 const routes = [
   {
     path: '/auth',
