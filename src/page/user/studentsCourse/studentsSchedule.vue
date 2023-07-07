@@ -121,7 +121,7 @@
                 ></v-autocomplete>
               </v-col>
             </v-row>
-            <div v-for="(item, index) in my_course" :key="index">
+            <div v-for="(item, index) in my_course" :key="`${index}-my_course`">
               <v-card
                 outlined
                 class="mb-3 pa-2"
@@ -243,7 +243,7 @@
             <div
               v-else
               v-for="(item, index) in student_data.filter((v) => !v.comp)"
-              :key="index"
+              :key="`${index}-student_data`"
             >
               <v-card
                 outlined
@@ -420,7 +420,7 @@
                       <v-col
                         cols="auto"
                         v-for="(time, time_index) in time_frame_list"
-                        :key="`${time_index}-time`"
+                        :key="`${time_index}-time-r5`"
                       >
                         <v-btn
                           @click="time_frame = time.value"
@@ -480,7 +480,7 @@
                 ไม่พบข้อมูลการจอง
               </span>
             </v-card-text>
-            <div v-else>
+            <div v-if="ReserveList().length > 0">
               <v-card
                 v-for="(item_booked, index_booked) in ReserveList()"
                 :key="`${index_booked}-reserve`"
@@ -655,7 +655,7 @@
             </div>
           </div>
           <!-- Role student -->
-          <div v-if="data_local.roles.includes('R_5')">
+          <div v-if="!data_local.roles.includes('R_4')">
             <v-card-text
               class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
               v-if="ReserveList().length == 0"
@@ -853,7 +853,6 @@ import { mapActions, mapGetters } from "vuex";
 import calendarStudent from "../../../components/calendar/calendarStudent.vue";
 import labelCustom from "@/components/label/labelCustom.vue";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
-import router from "@/router";
 
 export default {
   components: {
@@ -912,12 +911,12 @@ export default {
   },
 
   mounted() {
-    if (
-      this.user_detail?.roles?.filter((val) => val === "R_4" || val === "R_5")
-        .length === 0
-    ) {
-      router.replace({ name: "UserKingdom" });
-    }
+    // if (
+    //   this.user_detail?.roles?.filter((val) => val === "R_4" || val === "R_5")
+    //     .length === 0
+    // ) {
+    //   router.replace({ name: "UserKingdom" });
+    // }
     this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
 
     if (localStorage.getItem("userRelationsAccountId")) {
