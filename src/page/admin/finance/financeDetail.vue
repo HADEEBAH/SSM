@@ -394,6 +394,8 @@ import Swal from "sweetalert2";
 import mixin from "../../../mixin";
 import pdfMake from 'pdfmake'
 import pdfFonts from '../../../assets/custom-fonts.js'
+import {convertToThaiBaht} from '@/functions/functions.js'
+import moment from 'moment';
 export default {
   name: "financeDetail",
   components: { headerPage, rowData },
@@ -450,6 +452,11 @@ export default {
       },
       {
         text: "โอนเงินเข้าบัญชีโรงเรียน",
+        img: "../../../assets/finance/card.png",
+        value: "QR Code Payment",
+      },
+      {
+        text: "โอนเงินเข้าบัญชีโรงเรียน",
         img: "../../../assets/finance/mobile_cash.png",
         value: "transfer",
       },
@@ -483,12 +490,13 @@ export default {
       console.log("exportBill")
       // Define the image paths
       var headerImagePath = require('../../../assets/FrontPortfolio/Logo.png');
-
+      var logoLightImagePath = require('../../../assets/FrontPortfolio/logo_light.png');
       // Load the images using the file loader
       var headerImageData = await this.loadImageFromFile(headerImagePath);
+      var logoLightImageData = await this.loadImageFromFile(logoLightImagePath)
       // Convert image URLs to data URLs directly
       var headerImageDataUrl = await this.convertImageToDataFile(headerImageData);
-      console.log(headerImageDataUrl)
+      var logoLightImageDataUrl = await this.convertImageToDataFile(logoLightImageData)
       pdfMake.vfs = pdfFonts.pdfMake.vfs
       pdfMake.fonts = {
           Kanit: {
@@ -502,6 +510,9 @@ export default {
               bold: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Medium.ttf',
               italics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Italic.ttf',
               bolditalics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-MediumItalic.ttf'
+          },
+          Symbol: {
+            normal: 'Symbol'
           },
       }
       var docDefinition = {
@@ -519,10 +530,10 @@ export default {
                 stack: [
                   {
                     margin: [0, -20, 0, -20],
-                    alignment: 'center',
                     image: headerImageDataUrl,
-                    width: 120,
-                    height: 120,
+                    alignment: 'center',
+                    width: 100,
+                    height: 100,
                     arguments:'justify'
                   },
                   {
@@ -620,72 +631,10 @@ export default {
           {
             table: {
               headerRows: 1,
-              widths: ['auto', '*', 'auto'],
-              body: [
-                // Table headers
-                [
-                  {
-                    text: 'ลำดับ',
-                    fillColor: '#dedede',
-                    alignment: 'center'
-                  },
-                  {
-                    text: 'รายละเอียด',
-                    fillColor: '#dedede',
-                    alignment: 'center'
-                  },
-                  {
-                    text: 'ราคา',
-                    fillColor: '#dedede',
-                    alignment: 'center'
-                  }
-                ],
-                // Table data
-                [
-                  {
-                    text: '1',
-                    alignment: 'center'
-                  },
-                  {
-                    text: 'Item 1',
-                    alignment: 'left'
-                  },
-                  {
-                    text: '$20',
-                    alignment: 'right'
-                  }
-                ],
-                [
-                  {
-                    text: '2',
-                    alignment: 'center'
-                  },
-                  {
-                    text: 'Item 2',
-                    alignment: 'left'
-                  },
-                  {
-                    text: '$15',
-                    alignment: 'right'
-                  }
-                ],
-                [
-                  {
-                    text: '3',
-                    alignment: 'center'
-                  },
-                  {
-                    text: 'Item 3',
-                    alignment: 'left'
-                  },
-                  {
-                    text: '$15',
-                    alignment: 'right'
-                  }
-                ]
-              ]
+              widths: ['auto', '*', 'auto','auto'],
+              body: this.GenCourseItem()
             },
-            margin: [0, 20, 0, 20]
+            margin: [0, 0, 0, 20]
           },
           // Total
           {
@@ -707,7 +656,7 @@ export default {
             columns: [
               {
                 width: '40%',
-                text: '( เจ็ดพันบาทถ้วน )'
+                text: `( ${convertToThaiBaht(this.order_detail.totalPrice)}  )`
               },
               {
                 columns: [
@@ -743,11 +692,11 @@ export default {
                 ]
               },
             ],
-            margin: [0, 20, 0, 20],
-          
+            margin: [0, 20, 0, 20],  
           },
           {
-            text : 'การชำระเงินจะสมบูรณ์เมือบริษัทได้รับเงินเรียบร้อยแล้ว',
+            text : ['การชำระเงินจะสมบูรณ์เมือบริษัทได้รับเงินเรียบร้อยแล้ว\t','☐ เงินสด\t','☐ เช็ค\t','☐ โอนเงิน\t','☐ ช่องทางอื่นๆ'],
+            fontSize: 12
           },
           {
             columns: [
@@ -781,9 +730,80 @@ export default {
                 margin: [0, 5],
                 alignment : "center"
               },
-            ]
+            ],
+            margin: [0, 0, 0, 40],
           },
-        // Footer
+          { 
+            columns :[
+              {
+                stack: [
+                  {
+                    text: `${this.order_detail.created_by_data.firstNameTh} ${this.order_detail.created_by_data.lastNameTh}`,
+                    margin: [0, 5],
+                    alignment : "center"
+                  },
+                  {
+                    text: `ผู้จ่ายเงิน`,
+                    margin: [0, 5],
+                    alignment : "center"
+                  },
+                ],
+                margin: [0, 30, 0, 0],
+              },
+              {
+                stack: [
+                  {
+                    text: `${moment(this.order_detail.payment.paid_date).format("DD/MM/YYYY")} ${this.order_detail.payment.paid_date.slice(11, 16)}น.`,
+                    margin: [0, 5],
+                    alignment : "center"
+                  },
+                  {
+                    text: `วันที่`,
+                    margin: [0, 5],
+                    alignment : "center"
+                  },
+                ],
+                margin: [0, 30, 0, 0],
+              },
+              {
+                image : logoLightImageDataUrl,
+                alignment: 'center',
+                width: 140,
+                height: 140,
+                arguments:'justify'
+              },
+              {
+                stack: [
+                  {
+                    text: `${this.order_detail.created_by_data.firstNameTh} ${this.order_detail.created_by_data.lastNameTh}`,//ต้องแก้
+                    margin: [0, 5],
+                    alignment : "center"
+                  },
+                  {
+                    text: `ผู้รับเงิน`,
+                    margin: [0, 5],
+                    alignment : "center"
+                  },
+                ],
+                margin: [0, 30, 0, 0],
+              },
+              {
+                stack: [
+                  {
+                    text: `${moment(this.order_detail.payment.paid_date).format("DD/MM/YYYY")} ${this.order_detail.payment.paid_date.slice(11, 16)}น.`,//ต้องแก้
+                    margin: [0, 5],
+                    alignment : "center"
+                  },
+                  {
+                    text: `วันที่`,
+                    margin: [0, 5],
+                    alignment : "center"
+                  },
+                ],
+                margin: [0, 30, 0, 0],
+              },
+            ]
+          }
           
         ],
         defaultStyle:{
@@ -797,7 +817,59 @@ export default {
         window.open(url);
       });
     },
-    GenCourseItem(){},
+    GenCourseItem(){
+      console.log("order_detail => ",this.order_detail)
+      let row = [
+        [
+          {
+            text: 'ลำดับ',
+            fillColor: '#dedede',
+            alignment: 'center'
+          },
+          {
+            text: 'รายละเอียด',
+            fillColor: '#dedede',
+            alignment: 'center'
+          },
+          {
+            text: 'จำนวน',
+            fillColor: '#dedede',
+            alignment: 'center'
+          },
+          {
+            text: 'ราคา',
+            fillColor: '#dedede',
+            alignment: 'center'
+          }
+        ],
+      ]
+      this.order_detail.orderItem.forEach((course, index) => {
+        console.log("802 => ",course)
+        row.push([
+          {
+            text: `${index + 1}`,
+            alignment: 'center'
+          },
+          {
+            stack: [  
+              {text:`${course.course.categoryNameTh}(${this.dayOfWeekArray(course.course.dayOfWeekName)} (${ course.course.start} - ${course.course.end}))`},
+              {text:`${course.cpo.packageName}`},
+              {text:`${course.cpo.optionName}`}
+          ],
+            alignment: 'left'
+          },
+          {
+            text: `${course.students.length}`,
+            alignment: 'right'
+          },
+          {
+            text: `${(parseFloat(course.price)*course.students.length).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2,})} บาท`,
+            alignment: 'right'
+          }
+        ])
+      })
+      return row
+    },
     loadImageFromFile(filePath) {
       return new Promise((resolve, reject) => {
         var img = new Image();
