@@ -5,35 +5,35 @@ function dayOfWeekArray(day) {
     // let day_arr = day
     let days = day
     console.log(day)
-    const weekdays =[
-      "วันอาทิตย์",
-      "วันจันทร์",
-      "วันอังคาร",
-      "วันพุธ",
-      "วันพฤหัสบดี",
-      "วันศุกร์",
-      "วันเสาร์",
+    const weekdays = [
+        "วันอาทิตย์",
+        "วันจันทร์",
+        "วันอังคาร",
+        "วันพุธ",
+        "วันพฤหัสบดี",
+        "วันศุกร์",
+        "วันเสาร์",
     ];
     days.sort();
     let ranges = [];
-    if(days[0]){
-      let rangeStart =  parseInt(days[0]);
-      let prevDay = rangeStart;
-      for (let i = 1; i < days.length; i++) {
-        const day = parseInt(days[i]);
-        if (day === prevDay + 1) {
-          prevDay = day;
-        } else {
-          const rangeEnd = prevDay;
-          ranges.push({ start: rangeStart, end: rangeEnd });
-          rangeStart = day;
-          prevDay = day;
+    if (days[0]) {
+        let rangeStart = parseInt(days[0]);
+        let prevDay = rangeStart;
+        for (let i = 1; i < days.length; i++) {
+            const day = parseInt(days[i]);
+            if (day === prevDay + 1) {
+                prevDay = day;
+            } else {
+                const rangeEnd = prevDay;
+                ranges.push({ start: rangeStart, end: rangeEnd });
+                rangeStart = day;
+                prevDay = day;
+            }
         }
-      }
-      ranges.push({ start: rangeStart, end: prevDay });
-      return ranges.map(({ start, end }) => start === end ? weekdays[start] : `${weekdays[start]} - ${weekdays[end]}`).join(', ')
+        ranges.push({ start: rangeStart, end: prevDay });
+        return ranges.map(({ start, end }) => start === end ? weekdays[start] : `${weekdays[start]} - ${weekdays[end]}`).join(', ')
     }
-  }
+}
 const myCourseModules = {
     namespaced: true,
     state: {
@@ -208,21 +208,23 @@ const myCourseModules = {
                 // let localhost = "http://localhost:3000"
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
                 if (data.statusCode === 200) {
-                    console.log("176=>",data.data)
+                    console.log("176=>", data.data)
                     const dataCourseSchedule = { dates: [] };
                     let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
-                    if(holidays.data.statusCode === 200){
-                        for(let holiday of holidays.data.data){
+                    if (holidays.data.statusCode === 200) {
+                        for (let holiday of holidays.data.data) {
                             dataCourseSchedule.dates.push({
-                                type : 'holiday',
+                                type: 'holiday',
                                 name: holiday.holidayName,
-                                start_date:`${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`, 
+                                start_date: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
                                 start: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
                                 end: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
+
                             })
+
                         }
                     }
-                   
+
                     for (const course of data.data) {
                         console.log("course", course);
                         course.day_name = course.dates.day ? dayOfWeekArray(course.dates.day) : course.dates.day
