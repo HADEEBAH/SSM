@@ -194,6 +194,7 @@
                   <!-- วันที่ -->
                   <v-col cols="12" sm="8">
                     <label class="font-weight-bold">วันที่</label>
+                    {{ selectEditHolidaydates }} {{ holidaydatesTh }} {{ editHolidayDates }}
                     <v-menu
                       v-model="selectEditHolidaydates"
                       :close-on-content-click="false"
@@ -220,7 +221,7 @@
                       </template>
 
                       <v-date-picker
-                        :v-model="`2023-06-27`"
+                        v-model="editHolidayDates"
                         @input="
                           setHolidaydates(editHolidayDates),
                             (selectEditHolidaydates = false)
@@ -775,6 +776,7 @@ export default {
     }),
 
     setHolidaydates(item) {
+      console.log("item", item);
       const thaiMonths = [
         "มกราคม",
         "กุมภาพันธ์",
