@@ -15,7 +15,9 @@
     data: () => ({
       user_profile : null,
     }),
-    created() {},
+    created() {
+      this.user_profile = JSON.parse(localStorage.getItem("userDetail"))
+    },
     mounted() {
       this.exportPdf()
     },
@@ -59,33 +61,79 @@
               {text:''},
               { 
                 image: headerImageDataUrl,
-                width: 80,
-                height: 80,
+                width: 100,
+                height: 100,
                 alignment: 'right',
               }, 
             ],
           },
-          footer: {
-            columns: [
-              'Left part',
-              { text: 'Right part', alignment: 'right' }
-            ]
-          },
-          content: [
-            {text:"Portfolio", style:['header']},
-            {text:[
-              'โรงเรียนวรพัฒน์ Warraphat School'
-            ],style:['subheader']}
+          content: [{
+              stack: [
+                {text:"Portfolio", style:['header']},
+                {text:[
+                  'โรงเรียนวรพัฒน์ Warraphat School'
+                ],style:['subheader']},
+              ]
+            },
+            {
+              margin: [0, 30, 0, 30],
+              alignment: 'center',
+              image:'profile',
+              width:400,
+              height:450,
+            },
+            {
+              margin: [40, 0, 0, 0],
+              columns:[
+                {
+                  margin: [0, 0, 0, 0],
+                  qr: `${process.env.VUE_APP_URL}/portfolio/${this.user_profile.account_id}`,
+                  width:'25%',
+                  fit:120
+                },
+                {
+                  margin: [0, 0, 10, 0],
+                  width:'auto',
+                  canvas: [
+                    {
+                      type: 'line',
+                      x1: 0,
+                      y1: 0,
+                      x2: 0,
+                      y2: 105,
+                      lineWidth: 10,
+                      color: '#573e33'
+                    }
+                  ]
+                },
+                {
+                  stack: [
+                    {
+                      text: [ {text:`${this.user_profile.first_name_th} ${this.user_profile.last_name_th}`,fontSize: 30, bold: true}],
+                      color: '#573e33',
+                      margin: [0, 0]
+                    },
+                    {
+                      text: [ {text:`${this.user_profile.first_name_en} ${this.user_profile.last_name_en}`,fontSize: 21}],
+                      color: '#ff6b81',
+                      margin: [0, 0]
+                    },
+                  ],
+                }
+              ]
+            }
           ],
           defaultStyle: {
             font: 'Kanit'
           },
           styles: {
             header: {
+              margin: [0, 0, 0, 0],
               fontSize: 82.4,
               color:"#573e33"
             },
             subheader: {
+              margin: [0,-20, 0, 0],
               fontSize: 21.5,
               color:"#ffa8ae"
             },
@@ -93,8 +141,12 @@
               italics: true,
               alignment: 'right'
             }
+          },
+          images: {
+            profile : this.user_profile.image
           }
         }
+        
         console.log(docDefinition)
         let pdfDoc = pdfMake.createPdf(docDefinition)
         pdfDoc.getBlob((blob) => {

@@ -505,6 +505,12 @@ export default {
             italics: 'Kanit-Italic.ttf',
             bolditalics: 'Kanit-BoldItalic.ttf'          
           },
+          Fontello: {
+            normal: 'fontello.ttf',
+            bold: 'fontello.ttf',
+            italics: 'fontello.ttf',
+            bolditalics: 'fontello.ttf'
+          },
           Roboto: {
               normal: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf',
               bold: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Medium.ttf',
@@ -555,11 +561,13 @@ export default {
                   {
                     text: 'ใบเสร็จรับเงิน',
                     fontSize: 24,
+                    color:'#318ce7',
                     bold: false,
                     alignment: 'center',
                   },
                   {
                     text: 'ต้นฉบับ',
+                    color:'#318ce7',
                     fontSize: 10,
                     bold: false,
                     alignment: 'center',
@@ -580,11 +588,13 @@ export default {
                   {
                     text: `เลขที่: ${this.$route.params.order_id}`,
                     margin: [0, 5],
+                    color:'#318ce7',
                     fontSize: 10,
                   },
                   {
                     text: `วันที่: ${new Date().toLocaleDateString("th-TH",{year: 'numeric', month: 'short', day: 'numeric'})} ${new Date().toLocaleTimeString("en-GB")}น.`,
                     margin: [0, 5],
+                    color:'#318ce7',
                     fontSize: 10,
                   },
                   {
@@ -612,6 +622,7 @@ export default {
                 stack: [
                   {
                     text: 'ชื่อ-สกุล:',
+                    color:'#318ce7',
                     margin: [0, 5]
                   },
                  
@@ -621,6 +632,7 @@ export default {
                 stack: [
                   {
                     text: `${this.order_detail.student_name_list}`,
+                    color:'#318ce7',
                     margin: [0, 5]
                   },
                 ]
@@ -656,7 +668,8 @@ export default {
             columns: [
               {
                 width: '40%',
-                text: `( ${convertToThaiBaht(this.order_detail.totalPrice)}  )`
+                text: `(${convertToThaiBaht(this.order_detail.totalPrice)})`,
+                color:'#ff6b81',
               },
               {
                 columns: [
@@ -666,11 +679,13 @@ export default {
                       {
                         text: 'รวมเป็นเงิน',
                         margin: [0, 5],
+                        color:'#ff6b81',
                         alignment : "right"
                       },
                       {
                         text: 'จำนวนเงินรวมทั้งสิ้น',
                         margin: [0, 5],
+                        color:'#ff6b81',
                         alignment : "right"
                       },
                     ]
@@ -680,11 +695,13 @@ export default {
                       {
                         text: `${this.order_detail.totalPrice.toLocaleString("en-US",{minimumFractionDigits : 2})} บาท`,
                         margin: [0, 5],
+                        color:'#ff6b81',
                         alignment : "right"
                       },
                       {
                         text: `${this.order_detail.totalPrice.toLocaleString("en-US",{minimumFractionDigits : 2})} บาท`,
                         margin: [0, 5],
+                        color:'#ff6b81',
                         alignment : "right"
                       },
                     ]
@@ -695,7 +712,11 @@ export default {
             margin: [0, 20, 0, 20],  
           },
           {
-            text : ['การชำระเงินจะสมบูรณ์เมือบริษัทได้รับเงินเรียบร้อยแล้ว\t','☐ เงินสด\t','☐ เช็ค\t','☐ โอนเงิน\t','☐ ช่องทางอื่นๆ'],
+            text : ['การชำระเงินจะสมบูรณ์เมือบริษัทได้รับเงินเรียบร้อยแล้ว\t',
+            {text:'\uF096',style:'icon'},' เงินสด\t', 
+            {text:'\uF096',style:'icon'},' เช็ค\t',
+            {text:'\uF096',style:'icon'},' โอนเงิน\t',
+            {text:'\uF096',style:'icon'},' ช่องทางอื่นๆ'],
             fontSize: 12
           },
           {
@@ -708,6 +729,7 @@ export default {
               {
                 text: `${this.payment_status.filter(v => v.value == this.order_detail.paymentType)[0].text}`,
                 margin: [0, 5],
+                color:'#ff6b81',
                 alignment : "center"
               },
               { 
@@ -718,6 +740,7 @@ export default {
               {
                 text: `${new Date( this.order_detail.payment.paid_date ).toLocaleDateString("th-TH", { year: "numeric", month: "long", day: "numeric"})}`,
                 margin: [0, 5],
+                color:'#ff6b81',
                 alignment : "center"
               },
               {
@@ -728,6 +751,7 @@ export default {
               {
                 text: `${this.order_detail.totalPrice.toLocaleString("en-US",{minimumFractionDigits : 2})} บาท`,
                 margin: [0, 5],
+                color:'#ff6b81',
                 alignment : "center"
               },
             ],
@@ -808,6 +832,12 @@ export default {
         ],
         defaultStyle:{
           font:'Kanit'
+        },
+        styles: {
+          icon: {
+            font: 'Fontello',
+            fontSize: 14,
+          },
         }
       };
       let pdfDoc = pdfMake.createPdf(docDefinition)
@@ -848,22 +878,25 @@ export default {
         row.push([
           {
             text: `${index + 1}`,
-            alignment: 'center'
+            alignment: 'center',
+            color:'#ff6b81',
           },
           {
             stack: [  
-              {text:`${course.course.categoryNameTh}(${this.dayOfWeekArray(course.course.dayOfWeekName)} (${ course.course.start} - ${course.course.end}))`},
-              {text:`${course.cpo.packageName}`},
-              {text:`${course.cpo.optionName}`}
+              {text:`${course.course.categoryNameTh}(${this.dayOfWeekArray(course.course.dayOfWeekName)} (${ course.course.start} - ${course.course.end}))`, color:'#ff6b81',},
+              {text:`${course?.cpo?.packageName ? course.cpo.packageName : ''}`, color:'#ff6b81',},
+              {text:`${course?.cpo?.optionName ?  course.cpo.optionName : ''}`, color:'#ff6b81',}
           ],
             alignment: 'left'
           },
           {
             text: `${course.students.length}`,
+            color:'#ff6b81',
             alignment: 'right'
           },
           {
             text: `${(parseFloat(course.price)*course.students.length).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2,})} บาท`,
+            color:'#ff6b81',
             alignment: 'right'
           }
         ])
