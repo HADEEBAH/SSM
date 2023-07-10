@@ -106,9 +106,22 @@
                     <v-col cols="auto">
                       <v-icon small :color="event.color">mdi-circle</v-icon>
                     </v-col>
+                    <v-col cols="10" class="text-sm text-[#999999]">
+                      {{ `${event.start_time}` }} - {{ `${event.end_time}` }}
+                    </v-col>
+
                     <v-col>
+                      เรียนโดย:
+                      <span class="font-bold">{{ event.timed }}</span>
+
                       <v-row dense>
-                        <label class="font-bold">{{ event.timed }} </label>
+                        <v-col v-if="!event.type">
+                          คอร์ส: <span class="font-bold">{{ event.name }}</span>
+                        </v-col>
+                        <v-col v-else
+                          >คอร์ส:
+                          <span class="font-bold">{{ event.name }}</span>
+                        </v-col>
                       </v-row>
                       <v-row dense>
                         <v-col v-if="!event.type">
@@ -118,7 +131,9 @@
                       </v-row>
                       <v-row dense v-if="!event.type">
                         <v-col class="text-sm">
-                          โค้ช: {{ event.subtitle }} <br />
+                          โค้ช:
+                          <span class="font-bold">{{ event.subtitle }} </span
+                          ><br />
                           <div>
                             <v-btn
                               small

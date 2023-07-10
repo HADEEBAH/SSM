@@ -384,7 +384,7 @@
                   </v-col>
                 </v-row>
                 <v-row v-if="!holidaySwitch" dense>
-                  <v-col cols="12" sm="6">
+                  <v-col cols="6">
                     <label class="font-weight-bold">เวลาเริ่ม</label>
                     <br />
                     <vue-timepicker
@@ -395,7 +395,7 @@
                     >
                     </vue-timepicker>
                   </v-col>
-                  <v-col cols="12" sm="6">
+                  <v-col cols="6">
                     <label class="font-weight-bold">เวลาสิ้นสุด</label>
                     <br />
                     <vue-timepicker

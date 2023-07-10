@@ -1,15 +1,8 @@
 <template>
   <v-app>
     <v-layout>
-      <v-app-bar
-        clipped-left
-        app
-        dark
-        fixed
-        elevation="0"
-        :src="navbar_img"
-      >
-      <!-- {{ navbar_img }} -->
+      <v-app-bar clipped-left app dark fixed elevation="0" :src="navbar_img">
+        <!-- {{ navbar_img }} -->
         <v-app-bar-nav-icon @click="drawer = !drawer">
           <v-icon>{{
             drawer ? "mdi-chevron-double-left" : "mdi-dots-vertical"
@@ -33,10 +26,7 @@
                 </div>
                 <div v-else>
                   <v-avatar class="mr-2" size="24">
-                    <v-img
-                      :src="logo"
-                      size="24"
-                    />
+                    <v-img :src="logo" size="24" />
                   </v-avatar>
                 </div>
 
@@ -65,11 +55,7 @@
       >
         <v-row>
           <v-col class="flex align-center justify-center">
-            <v-img
-              :src="logo"
-              max-height="115"
-              max-width="115"
-            ></v-img>
+            <v-img :src="logo" max-height="115" max-width="115"></v-img>
           </v-col>
         </v-row>
         <v-list class="pr-0" nav flat>
@@ -144,7 +130,7 @@ export default {
     },
     user_detail: null,
     menu_drawer_list: [
-      // { title: "แดชบอร์ด", to: "Dashboard", child: [] }, // to ให้ใส่ name ของ router
+      { title: "แดชบอร์ด", to: "Dashboard", child: [] }, // to ให้ใส่ name ของ router
       // { title: "แดชบอร์ด", to: "", child: [] }, // to ให้ใส่ name ของ router
       { title: "ตารางเรียน", to: "ManageSchedule", child: [] },
       // { title: "เพิ่มผู้เรียน", to: "Student", child: [] },
