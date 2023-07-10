@@ -49,7 +49,7 @@
                     </v-col>
                     <v-col cols="12" align="center">
                       <div style="color: #1876d1; font-size: 30px">
-                        {{ get_potential.currentStudent.length }}
+                        {{ get_potential.currentStudent?.countStudentCurrent }}
                       </div>
                     </v-col>
                     <v-col cols="12" align="center">
@@ -67,7 +67,9 @@
                     </v-col>
                     <v-col cols="12" align="center">
                       <div style="color: #1876d1; font-size: 30px">
-                        {{ get_potential.potencialsStudent.length }}
+                        {{
+                          get_potential.potencialsStudent.countStudentPotencials
+                        }}
                       </div>
                     </v-col>
                     <v-col cols="12" align="center">
@@ -288,6 +290,17 @@
                     ></v-select>
                   </v-col>
                 </v-row>
+                <!-- <div>
+                  <v-select
+                    v-model="donut_years"
+                    :items="get_graf.yearName"
+                    return-object
+                    dense
+                    outlined
+                    @input="selectDonutYears()"
+                  ></v-select>
+                  <v-btn @click="choseYear()"></v-btn>
+                </div> -->
               </v-card-title>
               <v-row dense>
                 <!-- DOnut -->
@@ -578,7 +591,7 @@ export default {
     ],
 
     thaiMonths: [
-      { name: "ทั้งปี", key: null, type: "month" },
+      { name: "ทั้งปี", key: "", type: "month" },
       { name: "มกราคม", key: "01", type: "month" },
       { name: "กุมภาพันธ์", key: "02", type: "month" },
       { name: "มีนาคม", key: "03", type: "month" },
@@ -598,7 +611,37 @@ export default {
       { name: "2567", key: "2024", type: "year" },
       { name: "2568", key: "2025", type: "year" },
       { name: "2569", key: "2026", type: "year" },
-      { name: "2580", key: "2027", type: "year" },
+      { name: "2570", key: "2027", type: "year" },
+      { name: "2571", key: "2028", type: "year" },
+      { name: "2572", key: "2029", type: "year" },
+      { name: "2573", key: "2030", type: "year" },
+      { name: "2574", key: "2031", type: "year" },
+      { name: "2575", key: "2032", type: "year" },
+      { name: "2576", key: "2033", type: "year" },
+      { name: "2577", key: "2034", type: "year" },
+      { name: "2578", key: "2035", type: "year" },
+      { name: "2579", key: "2036", type: "year" },
+      { name: "2580", key: "2037", type: "year" },
+      { name: "2581", key: "2038", type: "year" },
+      { name: "2582", key: "2039", type: "year" },
+      { name: "2583", key: "2040", type: "year" },
+      { name: "2584", key: "2041", type: "year" },
+      { name: "2585", key: "2042", type: "year" },
+      { name: "2586", key: "2043", type: "year" },
+      { name: "2587", key: "2044", type: "year" },
+      { name: "2588", key: "2045", type: "year" },
+      { name: "2589", key: "2046", type: "year" },
+      { name: "2590", key: "2047", type: "year" },
+      { name: "2591", key: "2048", type: "year" },
+      { name: "2592", key: "2049", type: "year" },
+      { name: "2593", key: "2050", type: "year" },
+      { name: "2594", key: "2051", type: "year" },
+      { name: "2595", key: "2052", type: "year" },
+      { name: "2596", key: "2053", type: "year" },
+      { name: "2597", key: "2054", type: "year" },
+      { name: "2598", key: "2055", type: "year" },
+      { name: "2599", key: "2056", type: "year" },
+      { name: "2600", key: "2057", type: "year" },
     ],
 
     selected_mounth: "",
@@ -616,6 +659,9 @@ export default {
     mapMonth: "",
     totalPrice: [],
     box: [],
+    selectedYear: null,
+    currentYear: "",
+    year_data: "",
   }),
   created() {
     // this.donutSerieses();
@@ -648,6 +694,8 @@ export default {
       year: this.mapyears.key,
       month: this.mapMonth.key,
     };
+
+    this.choseYear();
     // this.GetGraf(this.dashboard_graf);
   },
   mounted() {
@@ -660,6 +708,7 @@ export default {
     // this.donutSeries();
     // this.dataType()
     // this.donutSerieses();
+    this.choseYear();
   },
   methods: {
     ...mapActions({
@@ -669,6 +718,12 @@ export default {
       GetDonut: "DashboardModules/GetDonut",
       GetGraf: "DashboardModules/GetGraf",
     }),
+
+    choseYear() {
+      this.year_data = this.get_graf.console.log("720", this.get_graf);
+      // get_donut = yearName
+      //get_graf = yearName
+    },
 
     selectYears() {
       this.dashboard_graf.year = this.selected_years.key;
@@ -816,11 +871,11 @@ export default {
             this.get_graf.length !== 0
               ? this.get_graf.orderData.map((item) => {
                   if (this.get_graf.type == "month") {
-                    return item.date;
-                    // labels: this.lineChartLabels,
-                    // this.lineChartLabels
-                  } else {
-                    return item.date;
+                    return item.thaiDayName;
+                  } else if (this.get_graf.type == "year") {
+                    console.log("821", item.month);
+                    return item.month;
+                    // return item.month;
                   }
                 })
               : "",
@@ -893,8 +948,10 @@ export default {
                   label: "รวมทั้งหมด",
                   color: "#373d3f",
                   fontSize: "18px",
+
                   // formatter: function () {
-                  //   return "444";
+                  //   console.log("944", this.abc);
+                  //   return this.abc;
                   // },
                   // formatter: function (w) {
                   //   return w.globals.seriesTotals.reduce((a, b) => {
@@ -918,9 +975,9 @@ export default {
         tooltip: {
           enabled: true,
           y: {
-            formatter: function (val) {
+            formatter: function (val, get_graf) {
               return (
-                "รวมทั้งหมด" + " " + val
+                "รวมทั้งหมด" + " " + val + get_graf.sumAll
                 // +
                 // " " +
                 // "ชำระแล้ว" +
@@ -976,7 +1033,6 @@ export default {
       return pieChartOptions;
     },
   },
-
 };
 </script>
   

@@ -73,8 +73,8 @@ const dashboardModules = {
       context.commit("SetGetLoading", true)
 
       try {
-        // let { data } = await axios.get(`http://localhost:3000/api/v1/dashboard/potencial/`)
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potencial/`)
+        let { data } = await axios.get(`http://localhost:3000/api/v1/dashboard/potencial/`)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potencial/`)
         if (data.statusCode === 200) {
           context.commit("SetGetLoading", false)
           context.commit("SetGetPotential", data.data)
@@ -133,9 +133,9 @@ const dashboardModules = {
             // console.log("133", dayName);
             // let dayNames = ["วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"];
             items.date = newDate.split("-")[2]
-            items.month = newDate.split("-")[1]
+            items.month = `เดือน ${newDate.split("-")[1]}`
             items.year = newDate.split("-")[0]
-            items.thaiDayName = dayName
+            items.thaiDayName = `${items.date} ${dayName}`
           })
           context.commit("SetGetLoading", false)
 
