@@ -329,7 +329,7 @@
                     </v-row>
                   </v-col>
                   <!-- circle -->
-                  <v-col cols="12" sm="4" class="d-flex align-end justify-end">
+                  <v-col cols="12" sm="4" class="d-flex align-center justify-center">
                     <!-- {{ item.courseNameEn }} -->
                     <v-progress-circular
                       :rotate="-90"

@@ -148,7 +148,24 @@
         <!-- รายสัปดาห์ -->
         <template v-else>
           <!-- COURSE LIST -->
-          <div align="center">
+          <v-row class="justify-center">
+            <v-col cols="12" class="align-center text-center">
+              <v-progress-circular
+                color="#ff6b81"
+                v-if="my_courses_is_loading"
+                indeterminate
+                size="64"
+              ></v-progress-circular>
+
+              <calendarCoach
+                v-if="!my_courses_is_loading"
+                class="w-full"
+                :events="my_courses"
+                :type="time_frame"
+              ></calendarCoach>
+            </v-col>
+          </v-row>
+          <!-- <div align="center">
             <v-progress-circular
               color="#ff6b81"
               v-if="my_courses_is_loading"
@@ -160,7 +177,7 @@
             v-if="!my_courses_is_loading"
             :events="my_courses"
             :type="time_frame"
-          ></calendarCoach>
+          ></calendarCoach> -->
         </template>
       </div>
       <div v-if="tab === 'my teaching'">

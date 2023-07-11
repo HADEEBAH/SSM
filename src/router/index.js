@@ -11,6 +11,7 @@ const router = new VueRouter({
   routes
 })
 router.beforeEach((to, from, next) => {
+  // console.log("to.name", to.name);
   window.scrollTo({
     top: 0,
   })
@@ -21,7 +22,7 @@ router.beforeEach((to, from, next) => {
     next({ name: 'PageNotFound' })
   } else {
     if (to.name !== "Login" && to.name !== "Register" && to.name !== "PageNotFound") {
-      console.log("name", to);
+      // console.log("name=>", to);
       console.log("cookie", VueCookie.get("token"));
       if (to.name === "callback") {
         next()
@@ -36,7 +37,7 @@ router.beforeEach((to, from, next) => {
         if(from.name !== 'ProfileDetail' && !user_detail.first_name_th && !user_detail.last_name_th && to.name!=='ProfileDetail'){
           next({ name: 'ProfileDetail', params: {profile_id: user_detail.account_id}})
         }
-        if (to.name == "userCourseDetail_courseId" || to.name == "userCoursePackage_courseId" || to.name == "userCourseOrder") {
+        if (to.name === "userCourseDetail_courseId" || to.name === "userCoursePackage_courseId" || to.name === "userCourseOrder") {
           console.log("order", order)
           if (order) {
             if (from.name === "Login" && order.course_id && order.category_id) {
@@ -55,13 +56,21 @@ router.beforeEach((to, from, next) => {
             next({ name: 'UserKingdom' })
           }
         } else {
-          next()
+          if (!to.name || to.name === "PageNotFound") {
+            next({ name: 'PageNotFound' })
+          } else {
+            next()
+          }
         }
       } else {
         next()
       }
     } else {
-      next()
+      if (VueCookie.get("token")) {
+        next({ name: 'UserKingdom' })
+      } else {
+        next()
+      }
     }
   }
 })

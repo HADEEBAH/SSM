@@ -177,6 +177,10 @@ export default {
       window.location.href = `${process.env.VUE_APP_ONE}/type_forgot_password`;
     },
   },
+
+  beforeDestroy() {
+    this.$store.commit("loginModules/SetIsLoading", false)
+  }
 };
 </script>
 
