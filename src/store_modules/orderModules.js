@@ -283,8 +283,8 @@ const orderModules = {
                         'Authorization' : `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                let localhost = "http://192.168.74.25:3000"
-                let {data} = await axios.get(`${localhost}/api/v1/adminpayment/${order_number}`, config)
+                // let localhost = "http://192.168.74.25:3000"
+                let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/${order_number}`, config)
                 console.log("288 =>",data)
                 if(data.statusCode == 200){
                     let student_name_list = []
