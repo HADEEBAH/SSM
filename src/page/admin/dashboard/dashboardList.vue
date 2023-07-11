@@ -948,16 +948,6 @@ export default {
                   label: "รวมทั้งหมด",
                   color: "#373d3f",
                   fontSize: "18px",
-
-                  // formatter: function () {
-                  //   console.log("944", this.abc);
-                  //   return this.abc;
-                  // },
-                  // formatter: function (w) {
-                  //   return w.globals.seriesTotals.reduce((a, b) => {
-                  //     return a + b;
-                  //   }, 0);
-                  // },
                 },
               },
             },
@@ -973,20 +963,24 @@ export default {
           show: false,
         },
         tooltip: {
-          enabled: true,
-          y: {
-            formatter: function (val, get_graf) {
-              return (
-                "รวมทั้งหมด" + " " + val + get_graf.sumAll
-                // +
-                // " " +
-                // "ชำระแล้ว" +
-                // " " +
-                // " รอดำเนินการ"
-              );
-            },
-          },
-        },
+          custom: function({series, seriesIndex, dataPointIndex, w}) {
+            console.log("series", series);
+            console.log("seriesIndex", seriesIndex);
+            console.log("dataPointIndex", dataPointIndex);
+            console.log("w", w);
+            let item = w.globals
+            let color = item.colors[seriesIndex]
+            
+            return (`
+              <div class="pa-3 ml-auto" style='background-color: ${color}'>
+                <h3 class="font-weight-bold">${item.seriesNames[seriesIndex]}</h3>
+                <i class="mdi mdi-circle " style="font-size:10px; color: #8cd977"></i> <span class="font-weight-bold">ที่ชำระแล้ว : </span>${series[seriesIndex]}<br/>
+                <i class="mdi mdi-circle " style="font-size:10px; color: #a1a1a1"></i> <span class="font-weight-bold">รอชำระ : </span>${series[seriesIndex]}<br/>
+                <span class="font-weight-bold">รวม : </span>${series[seriesIndex]}
+              </div>
+            `)
+          }
+        }
       };
       return donutdata;
     },
