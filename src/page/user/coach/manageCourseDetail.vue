@@ -119,11 +119,12 @@
             <v-data-table
               class="header-table border"
               :items="
+              coach_check_in.checkInCoachId ? 
                 student_check_in.filter((v) =>
                   v.cpo?.packageName
                     ? v.cpo.packageName === package_name_filter
                     : true
-                )
+                ): []
               "
               item-key="no"
               :expanded.sync="expanded_index"
@@ -1627,7 +1628,7 @@ export default {
       });
     },
     checkIn() {
-      if (this.student_check_in.length === 0) {
+      if (!this.coach_check_in.checkInCoachId) {
         Swal.fire({
           icon: "question",
           title: "ต้องการลงเวลาเข้าสอนใช่หรือไม่",

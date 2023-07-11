@@ -397,16 +397,16 @@ const coachModules = {
         };
         let count = 0
         for await (const student of students) {
-          const now = new Date(student.compensationDate);
-          const utcOffset = 7 * 60; // UTC+7 is 7 hours ahead of UTC
-          const localOffset = now.getTimezoneOffset();
-          const targetOffset = utcOffset + localOffset;
-          const targetTime = now.getTime() + targetOffset * 60 * 1000;
-          const utcPlus7Date = new Date(targetTime);
-          console.log(moment(utcPlus7Date).format("YYYY-MM-DD HH:mm"))
+          // const now = new Date(student.compensationDate);
+          // const utcOffset = 7 * 60; // UTC+7 is 7 hours ahead of UTC
+          // const localOffset = now.getTimezoneOffset();
+          // const targetOffset = utcOffset + localOffset;
+          // const targetTime = now.getTime() + targetOffset * 60 * 1000;
+          // const utcPlus7Date = new Date(targetTime);
+          // console.log(moment(utcPlus7Date).format("YYYY-MM-DD HH:mm"))
           let payload = {
             status: student.status, // punctual, late,  leave, emergency leave, absent,
-            compensationDate: student.compensationDate ? moment(utcPlus7Date).format("YYYY-MM-DD HH:mm") : '',
+            compensationDate: student.compensationDate ? moment(new Date(student.compensationDate)).format("YYYY-MM-DD") : '',
             compensationStartTime: student.compensationStartTime ? moment(student.compensationStartTime).format("HH:mm") : '',
             compensationEndTime: student.compensationEndTime ? moment(student.compensationEndTime).format("HH:mm") : '',
           }
