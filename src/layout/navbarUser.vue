@@ -464,7 +464,7 @@ export default {
 
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    console.log("object", this.user_detail.account_id);
+    // console.log("object", this.user_detail.account_id);
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail.account_id);
     }
@@ -487,8 +487,8 @@ export default {
     }
     if (this.user_detail?.account_id) {
       this.GetCartList(this.user_detail.account_id);
+      this.GetNotificationsAll(this.user_detail.account_id);
     }
-    this.GetNotificationsAll(this.user_detail.account_id);
 
     setTimeout(() => {
       this.alertVisible = false;
