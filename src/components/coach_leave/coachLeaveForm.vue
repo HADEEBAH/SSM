@@ -16,6 +16,7 @@
                 item-text="fullNameTh"
                 @change="SelectedCoach()"
                 v-model="coach_leave_data.coach_id"
+                
               ></v-select>
             </v-col>
           </v-row>
@@ -54,6 +55,7 @@
                     <v-date-picker
                       :min="today.toISOString()"
                       @input="inputDate($event, 'start')"
+                      @change="validateCoachLeave"
                       v-model="coach_leave_data.start_date"
                     ></v-date-picker>
                   </v-menu>
@@ -94,6 +96,7 @@
                           : today.toISOString()
                       "
                       @input="inputDate($event, 'end')"
+                      @change="validateCoachLeave"
                       v-model="coach_leave_data.end_date"
                     ></v-date-picker>
                   </v-menu>
@@ -129,6 +132,7 @@
                 item-text="label"
                 item-value="value"
                 v-model="coach_leave_data.leave_type"
+                @change="validateCoachLeave"
               ></v-select>
             </v-col>
           </v-row>
@@ -191,6 +195,7 @@
                               )
                             )
                           "
+                          @change="validateCoachLeave"
                           item-value="my_course_id"
                           item-text="course_name"
                         ></v-select>
@@ -505,7 +510,8 @@ export default {
       let end_date = this.coach_leave_data.end_date ? true : false;
       let period = this.coach_leave_data.period ? true : false;
       let leave_type = this.coach_leave_data.leave_type ? true : false;
-      let course = this.coach_leave_data.courses.filter(v => v.course_id).length > 0 ? true : false;
+      console.log("508 => ",this.coach_leave_data.dates.filter(v => v.course_id))
+      let course = this.coach_leave_data.dates.length > 0 
       // console.log(start_date && end_date && period && leave_type);
       return !(start_date && end_date && period && leave_type && course);
     },
@@ -554,6 +560,7 @@ export default {
             return hrs   
         }
       }
+      this.validateCoachLeave()
     },
     getDatesBetween(startDate, endDate) {
       console.log("549 => ",startDate, endDate)
@@ -619,6 +626,7 @@ export default {
       this.coach_leave_data.leave_type = "";
       this.coach_leave_data.dates = [];
       this.coach_leave_data.courses = [];
+      this.validateCoachLeave
     },
     GenCourseLeaveOptions(courses) {
       let my_course_data = [];

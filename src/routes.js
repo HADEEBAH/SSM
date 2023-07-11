@@ -69,7 +69,9 @@ import StudentList from '../src/page/admin/dashboard/studentList.vue'
 
 // admin course reserve
 import manageCourseReserve from '@/page/admin/courseReserve/manageCourseReserve.vue'
-
+// portfolio
+import FrontPortfolio from '@/page/pdf/FrontPortfolio.vue'
+import PortfolioDetail from '@/page/pdf/portfolioDetail.vue'
 //PageNotFound
 import PageNotFound from '@/page/pageNotFound.vue'
 
@@ -205,7 +207,16 @@ const routes = [
     name: 'callback',
     component: callback,
   },
-
+  {
+    path: '/frontPortfolio',
+    name: 'FrontPortfolio',
+    component: FrontPortfolio,
+  },
+  {
+    path: '/portfolio/:account_id',
+    name: 'portfolio_account_Id',
+    component: PortfolioDetail,
+  },
   // user
   {
     path: '/',

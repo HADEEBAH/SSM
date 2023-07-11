@@ -132,3 +132,41 @@ export const CheckFileSizeType = (file, id) => { //check file รอ merge ก�
   }
   return true
 }
+
+export const  convertToThaiBaht = (number) => {
+    const digits = ['', 'หนึ่ง', 'สอง', 'สาม', 'สี่', 'ห้า', 'หก', 'เจ็ด', 'แปด', 'เก้า'];
+    const positions = ['', 'สิบ', 'ร้อย', 'พัน', 'หมื่น', 'แสน', 'ล้าน'];
+    const unit = 'บาท';
+    const decimal_separator = 'สตางค์';
+    const no_decimal_part = 'ถ้วน';
+    const [integer_part, decimal_part] = number.toFixed(2).split('.');
+    let thai_baht = '';
+    for (let i = 0; i < integer_part.length; i++) {
+    const digit = parseInt(integer_part[i]);
+    const position = integer_part.length - i - 1;
+
+    if (digit !== 0) {
+        if (digit === 1 && position === 1) {
+        thai_baht += positions[position];
+        } else if (digit === 2 && position === 1) {
+            thai_baht += 'ยี่' + positions[position];
+        } else {
+            thai_baht += digits[digit] + positions[position];
+        }
+    }
+    }
+    thai_baht += unit;
+    if (decimal_part && parseInt(decimal_part) !== 0) {
+    const decimal_digits = decimal_part.split('');
+
+    if (decimal_digits.length === 1) {
+        thai_baht += digits[parseInt(decimal_digits[0])] + decimal_separator;
+    } else {
+        thai_baht += digits[parseInt(decimal_digits[0])] + 'สิบ' + digits[parseInt(decimal_digits[1])] + decimal_separator;
+    }
+    }else{
+        thai_baht += no_decimal_part;
+    }
+
+    return thai_baht;
+}
