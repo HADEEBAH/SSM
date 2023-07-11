@@ -197,7 +197,6 @@ export default {
 
   watch: {
     events(val) {
-      // console.log("val ->>>", val);
       this.event_date.push(val);
     },
   },
@@ -255,7 +254,6 @@ export default {
       GetStudentData: "MyCourseModules/GetStudentData",
     }),
     selectedDate(data) {
-      console.log(data.event);
       if (!data.event.type) {
         this.$router.push({
           name: "StudentCourse",
@@ -359,7 +357,6 @@ export default {
           month: month,
           day: day,
         });
-        // console.log(this.events_data, "<----");
       });
 
       let color = "";
@@ -432,7 +429,6 @@ export default {
       return color ? color : false;
     },
     ToStudentCourse(data) {
-      console.log(data);
 
       this.$router.push({
         name: "StudentCourse",

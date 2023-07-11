@@ -927,13 +927,13 @@ export default {
   },
   watch: {
     "course_order.time": function () {
-      // console.log(this.course_order)
+      // // console.log(this.course_order)
       this.course_order.coach_id = null;
       this.coachSelect = false;
     },
     "course_order.apply_for_yourself": function () {
       if (this.course_order.apply_for_yourself) {
-        // console.log("user_login => ",this.user_login.username)
+        // // console.log("user_login => ",this.user_login.username)
         this.course_order.students.push({
           account_id: this.user_login.account_id,
           student_name: `${this.user_login.first_name_th} ${this.user_login.last_name_th}`,
@@ -1041,7 +1041,7 @@ export default {
       this.dialog_parent = false;
     },
     "course_order.coach_id": function () {
-      console.log("course_order.coach_id :", this.course_order.coach_id);
+      // console.log("course_order.coach_id :", this.course_order.coach_id);
     },
   },
   computed: {
@@ -1093,7 +1093,7 @@ export default {
         this.GenMonitors();
         this.ValidateReserve();
       }
-      // console.log(this.course_order.coach_id)
+      // // console.log(this.course_order.coach_id)
       if (this.course_order.course_type_id === "CT_1") {
         let time = this.course_order.time ? true : false;
         let day = this.course_order.day ? true : false;
@@ -1109,7 +1109,7 @@ export default {
             student = true;
           }
         }
-        // console.log(time && day && coach && student);
+        // // console.log(time && day && coach && student);
         return !(time && day && coach && student);
       } else {
         let student = true;
@@ -1153,8 +1153,8 @@ export default {
       inputValidation(e, lang);
     },
     ValidateReserve() {
-      // console.log(this.reserve_list)
-      // console.log("ValidateReserve",this.reserve_list.filter(v => v.courseId === this.course_order.course_id && v.coachId === this.course_order.coach_id))
+      // // console.log(this.reserve_list)
+      // // console.log("ValidateReserve",this.reserve_list.filter(v => v.courseId === this.course_order.course_id && v.coachId === this.course_order.coach_id))
       if (
         this.reserve_list.filter(
           (v) =>
@@ -1169,10 +1169,10 @@ export default {
     },
     GenCoachNumberStudent(coach_id, dayOfWeekId, timeId) {
       // let time_data = this.course_order.time;
-      console.log(coach_id, dayOfWeekId, timeId);
+      // console.log(coach_id, dayOfWeekId, timeId);
       let current_student = 0;
       let maximum_student = 0;
-      console.log(coach_id);
+      // console.log(coach_id);
       let course_monitors_filter = this.course_monitors.filter(
         (v) =>
           v.m_coach_id == coach_id &&
@@ -1186,7 +1186,7 @@ export default {
           maximum_student = monitor.m_maximum_student;
         }
       } else {
-        console.log(this.course_order);
+        // console.log(this.course_order);
         maximum_student = this.course_order.package_data.students;
       }
       return `(${current_student}/${maximum_student})`;
@@ -1195,7 +1195,7 @@ export default {
       if (this.course_monitors) {
         if (this.course_order.time && this.course_order.coach_id) {
           let time_data = this.course_order.time;
-          // console.log(time_data.timeData)
+          // // console.log(time_data.timeData)
           let dayOfWeekId = time_data?.timeData
             ? time_data.timeData.filter(
                 (v) => v.coach_id === this.course_order.coach_id
@@ -1222,24 +1222,24 @@ export default {
                 if ( this.course_order.option.course_package_option_id === course_monitors_filter[0].m_course_package_options_id) {
                   return course_monitors_filter[0]?.m_status;
                 } else if(course_monitors_filter[0]?.m_status === "Open" && course_monitors_filter[0]?.m_current_student <= course_monitors_filter[0].m_maximum_student){
-                  // console.log("1167");
+                  // // console.log("1167");
                   return "Open"
                 }else{
-                  // console.log("1169");
+                  // // console.log("1169");
                   return "Close";
                 }
               } else {
-                // console.log("1174")
+                // // console.log("1174")
                 return "Close";
               }
             } else {
-              // console.log("1178")
+              // // console.log("1178")
               return "Open";
             }
           }
         }
       } else {
-        console.log("1184")
+        // console.log("1184")
         return "Open";
       }
     },
@@ -1287,7 +1287,7 @@ export default {
           }
           this.order.created_by = this.user_login.account_id;
           this.changeOrderData(this.order);
-          console.log(this.course_order);
+          // console.log(this.course_order);
           this.CreateReserveCourse({ course_data: this.course_order });
         }
       });
@@ -1525,7 +1525,7 @@ export default {
           type: type,
           course_id : this.course_data.course_id
           }).then(() => {
-            // console.log(this.course_order.students.filter((v) => v.username === username))
+            // // console.log(this.course_order.students.filter((v) => v.username === username))
               if (type === "student") {
                 if(this.course_order.students.filter((v) => v.username === username).length === 1){
                     let student = this.course_order.students.filter((v) => v.username === username)[0]
@@ -1549,7 +1549,7 @@ export default {
                         student.username = ""
                         student.account_id = ""
                       }else{
-                        console.log(student)
+                        // console.log(student)
                       }
                     }
                   }else if(this.course_order.students.filter((v) => v.username === username).length > 1){
@@ -1567,9 +1567,9 @@ export default {
           type: type,
           course_id : this.course_data.course_id
           }).then(() => {
-            // console.log(this.course_order.students.filter((v) => v.username === username))
+            // // console.log(this.course_order.students.filter((v) => v.username === username))
             if(this.course_order.students.filter((v) => v.username === username).length === 0){
-              console.log(this.user_data)
+              // console.log(this.user_data)
               if (this.user_data.length > 0) {
                 if (this.edit_parent) {
                   this.edit_parent = false;

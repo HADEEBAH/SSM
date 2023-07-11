@@ -147,12 +147,8 @@ export default {
       disabled: false,
     };
   },
-  created() {},
   beforeMount() {
     this.GetBannerList();
-  },
-  mounted() {
-    console.log("banner_list", this.banner_list);
   },
   methods: {
     ...mapActions({
@@ -232,7 +228,7 @@ export default {
     },
 
     async removeBannerFiles(id) {
-      console.log("id", id);
+      // console.log("id", id);
       Swal.fire({
         icon: "question",
         text: "คุณต้องการลบแบรนเนอร์ใช่หรือไม่",

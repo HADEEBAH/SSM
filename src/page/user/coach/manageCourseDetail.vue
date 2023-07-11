@@ -1339,12 +1339,12 @@ export default {
   mounted() {},
   watch: {
     coach_check_in: function () {
-      console.log(this.coach_check_in);
+      // console.log(this.coach_check_in);
       this.preview_summary_files = [];
       if (this.coach_check_in.attachment) {
         if (this.coach_check_in?.attachment.length > 0) {
           for (const img_url of this.coach_check_in.attachment) {
-            console.log(img_url);
+            // console.log(img_url);
             this.preview_summary_files.push({
               url: img_url.attFilesUrl,
               attId: img_url.sumAttId,
@@ -1446,7 +1446,7 @@ export default {
     },
     FilterStatusCheckIn(selected_data) {
       if (this.course_data.course_type_id === "CT_1") {
-        // console.log(`Total :${ parseInt(selected_data.totalDay/4) } count : ${selected_data.countCheckInleave}`)
+        // // console.log(`Total :${ parseInt(selected_data.totalDay/4) } count : ${selected_data.countCheckInleave}`)
         if (
           parseInt(selected_data.totalDay / 4) > selected_data.countCheckInleave
         ) {
@@ -1476,7 +1476,7 @@ export default {
       return `${process.env.VUE_APP_URL}/api/v1/files/${part}`;
     },
     openFile(file) {
-      console.log(file);
+      // console.log(file);
       if (file.attId) {
         let url = `${process.env.VUE_APP_URL}/api/v1/files/${file.attFiles}`;
         window.open(url, "_blank");
@@ -1553,7 +1553,7 @@ export default {
       });
     },
     async saveUpdateAssessmentPotential() {
-      // console.log(this.student_check_in)
+      // // console.log(this.student_check_in)
       Swal.fire({
         icon: "question",
         title: "ต้องการบันทึกใช่หรือไม่ ?",
@@ -1682,7 +1682,7 @@ export default {
       }
     },
     closeStudentComment(selected_student) {
-      console.log(selected_student);
+      // console.log(selected_student);
       if (
         !this.student_check_in[selected_student].assessment.assessmentStudentsId
       ) {
@@ -1694,16 +1694,13 @@ export default {
       this.selected_files = [];
       this.show_comment_dialog = false;
     },
-    onChange(date, dateString) {
-      console.log(date, dateString);
-    },
     timeRange(item) {
       item.time = `${item.start_time || "Start time"} - ${
         item.end_time || "End time"
       }`;
     },
     selectCheckInStatus(item, status) {
-      console.log(item);
+      // console.log(item);
       if (status === "leave" || status === "special case") {
         // const index = this.students.filter((d) => d.no === item.no)
         this.expanded_index.push(item);
@@ -1736,7 +1733,7 @@ export default {
       this.student_check_in[selected_student].files.splice(index, 1);
     },
     removePotentialFileInBase(file, selected_student) {
-      console.log(file);
+      // console.log(file);
       Swal.fire({
         icon: "question",
         title: "ต้องการลบใช่หรือไม่",
@@ -1763,7 +1760,7 @@ export default {
       });
     },
     removeAccessmentFileInBase(file, selected_student) {
-      console.log(file);
+      // console.log(file);
       Swal.fire({
         icon: "question",
         title: "ต้องการลบใช่หรือไม่",
@@ -1818,7 +1815,7 @@ export default {
     //   reader.readAsDataURL(this.file);
     // },
     uploadGeneralFile(selected_student) {
-      console.log("selected_student", this.selected_student);
+      // console.log("selected_student", this.selected_student);
       const files = this.$refs.generalfileInput.files;
       if (files.length > 0) {
         for (let i = 0; i < files.length; i++) {
@@ -1849,7 +1846,7 @@ export default {
       const fileUrls = [];
       for (let i = 0; i < selectedFiles.length; i++) {
         if (CheckFileSize(selectedFiles[i]) === true) {
-          console.log(selectedFiles[i]);
+          // console.log(selectedFiles[i]);
           this.coach_check_in.summary_files.push(selectedFiles[i]);
           const file = selectedFiles[i];
           const reader = new FileReader();
@@ -1871,7 +1868,7 @@ export default {
       this.coach_check_in.summary_files.splice(index, 1);
     },
     removeSummaryFileInbase(file, index) {
-      console.log(this.coach_check_in);
+      // console.log(this.coach_check_in);
       Swal.fire({
         icon: "question",
         title: "ต้องการลบใช่หรือไม่",

@@ -173,7 +173,7 @@
             }
           }
           
-          console.log(docDefinition)
+          // console.log(docDefinition)
           let pdfDoc = pdfMake.createPdf(docDefinition)
           pdfDoc.getBlob((blob) => {
             var url = URL.createObjectURL(blob);

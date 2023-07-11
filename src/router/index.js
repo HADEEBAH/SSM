@@ -11,7 +11,7 @@ const router = new VueRouter({
   routes
 })
 router.beforeEach((to, from, next) => {
-  // console.log("to.name", to.name);
+  // // console.log("to.name", to.name);
   window.scrollTo({
     top: 0,
   })
@@ -22,8 +22,8 @@ router.beforeEach((to, from, next) => {
     next({ name: 'PageNotFound' })
   } else {
     if (to.name !== "Login" && to.name !== "Register" && to.name !== "PageNotFound") {
-      // console.log("name=>", to);
-      console.log("cookie", VueCookie.get("token"));
+      // // console.log("name=>", to);
+      // console.log("cookie", VueCookie.get("token"));
       if (to.name === "callback") {
         next()
       } else if (to.matched[0].name !== "NavBarUser" && !VueCookie.get("token")) {
@@ -38,7 +38,7 @@ router.beforeEach((to, from, next) => {
           next({ name: 'ProfileDetail', params: {profile_id: user_detail.account_id}})
         }
         if (to.name === "userCourseDetail_courseId" || to.name === "userCoursePackage_courseId" || to.name === "userCourseOrder") {
-          console.log("order", order)
+          // console.log("order", order)
           if (order) {
             if (from.name === "Login" && order.course_id && order.category_id) {
               next()
@@ -49,7 +49,7 @@ router.beforeEach((to, from, next) => {
             next({ name: 'UserKingdom' })
           }
         } else if (to.matched[0].name === "Admin") {
-          console.log("user_detail", user_detail)
+          // console.log("user_detail", user_detail)
           if (user_detail?.roles.includes("R_2") || user_detail?.roles.includes("R_1")) {
             next()
           } else {

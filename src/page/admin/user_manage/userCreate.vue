@@ -251,7 +251,6 @@
                           placeholder="เลือกบทบาทผู้ใช้งาน"
                           item-color="#ff6b81"
                           color="#ff6b81"
-                          @change="selectRole(seledtedRole)"
                         >
                           <template v-slot:item="{ item }">
                             <v-list-item-content>
@@ -750,17 +749,17 @@ export default {
   }),
 
   beforeMount() {
-    console.log("show_by_id=>", this.show_by_id);
+    // console.log("show_by_id=>", this.show_by_id);
     if (this.show_by_id.userRoles.length > 0) {
       for (const items of this.show_by_id.userRoles) {
-        console.log("items=>", items);
+        // console.log("items=>", items);
         this.seledtedRole = items.roleId;
       }
     }
   },
 
   mounted() {
-    console.log("relation.account_id", this.relation.account_id);
+    // console.log("relation.account_id", this.relation.account_id);
     this.GetShowById(this.relation.account_id);
     // this.GetDataRelationsManagement(this.data_user_by_id);
   },
@@ -777,16 +776,16 @@ export default {
     }),
 
     checkUsername(username, type) {
-      console.log("username=>", username);
-      console.log("type=>", type);
+      // console.log("username=>", username);
+      // console.log("type=>", type);
       if (username != "") {
         this.checkUsernameOneid({
           username: username,
           status: null,
           type: type,
         }).then(() => {
-          console.log("user_data", this.user_data);
-          console.log("user_student_data", this.user_student_data);
+          // console.log("user_data", this.user_data);
+          // console.log("user_student_data", this.user_student_data);
           this.global_data_relation =
             type == "student" ? this.user_student_data[0] : this.user_data[0];
           this.relation.account_id = this.global_data_relation.userOneId;
@@ -803,8 +802,8 @@ export default {
     },
 
     async checkDataRelation(username, type) {
-      console.log("username=>", username);
-      console.log("type=>", type);
+      // console.log("username=>", username);
+      // console.log("type=>", type);
       if (username != "") {
         this.checkUsernameOneid({
           username: username,
@@ -815,7 +814,7 @@ export default {
           this.preview_img = "";
           this.global_data_relation_checked =
             type == "" ? this.user_student_data[0] : this.user_data[0];
-          console.log("show_by_id", this.show_by_id);
+          // console.log("show_by_id", this.show_by_id);
           this.checkData.account_id =
             this.global_data_relation_checked.userOneId;
           this.checkData.firstname_en =
@@ -844,10 +843,10 @@ export default {
 
           this.global_data_relation_checked.userRoles =
             this.global_data_relation_checked.roles;
-          console.log(
-            "global_data_relation_checked",
-            this.global_data_relation_checked
-          );
+          // console.log(
+          //   "global_data_relation_checked",
+          //   this.global_data_relation_checked
+          // );
           await this.GetDataRelationsManagement(
             this.global_data_relation_checked
           );
@@ -905,19 +904,19 @@ export default {
     checkPhoneNumber() {
       let x = this.user_data.phone_num.replace(/\D/g, "");
       x = x.match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
-      console.log(x);
+      // console.log(x);
       this.user_data.phone_num = !x[2]
         ? x[1]
         : x[1] + "-" + x[2] + (x[3] ? "-" + x[3] : "");
     },
 
     // selectRole(roleName) {
-    //   console.log("test", roleName);
+    //   // console.log("test", roleName);
     // },
 
     openAddRelationsDialog(username, role_id) {
-      console.log("username", username);
-      console.log("role_id", role_id);
+      // console.log("username", username);
+      // console.log("role_id", role_id);
       this.global_username = username;
       this.global_role_id = role_id;
       this.add_relations = true;
@@ -954,7 +953,7 @@ export default {
             };
 
             for (const testRole of this.global_data_relation_checked.roles) {
-              console.log("testRole", testRole.roleNameTh);
+              // console.log("testRole", testRole.roleNameTh);
               this.payloadSend = {
                 parentId:
                   testRole.roleNameTh === "ผู้ปกครอง"
@@ -978,7 +977,7 @@ export default {
             //       ? this.checkData.account_id
             //       : this.relation.account_id,
             // };
-            console.log("payload :", this.payloadSend);
+            // console.log("payload :", this.payloadSend);
 
             let { data } = await axios.post(
               `${process.env.VUE_APP_URL}/api/v1/relations/user`,
@@ -988,7 +987,7 @@ export default {
 
             if (data.statusCode === 201) {
               if (data.data && data.data.message !== "Duplicate relation.") {
-                console.log("succes");
+                // console.log("succes");
                 Swal.fire({
                   icon: "success",
                   title: " เพิ่มข้อมูลสำเร็จ",
@@ -1033,7 +1032,7 @@ export default {
                   tel: "",
                 };
               } else if (error.response.data.message == "Duplicate relation.") {
-                console.log(error);
+                // console.log(error);
                 Swal.fire({
                   icon: "error",
                   title: "Duplicate relation",
@@ -1063,8 +1062,8 @@ export default {
     },
 
     submitData(account_id) {
-      console.log("object--01", this.seledtedRole);
-      console.log("object--02", account_id);
+      // console.log("object--01", this.seledtedRole);
+      // console.log("object--02", account_id);
 
       Swal.fire({
         icon: "question",
@@ -1094,7 +1093,7 @@ export default {
               roles:
                 this.seledtedRole != "" ? [{ roleId: this.seledtedRole }] : [],
             };
-            console.log(payload, "payload");
+            // console.log(payload, "payload");
             let bodyFormData = new FormData();
             bodyFormData.append(
               "image",
@@ -1145,7 +1144,7 @@ export default {
               throw { message: data.data };
             }
           } catch (error) {
-            console.log(error);
+            // console.log(error);
             Swal.fire({
               icon: "error",
               title: "ข้อมูลผิดพลาด",
@@ -1156,9 +1155,9 @@ export default {
         }
       });
     },
-    selectRole(roles) {
-      console.log("roles", roles);
-    },
+    // selectRole(roles) {
+    //   console.log("roles", roles);
+    // },
   },
   computed: {
     ...mapGetters({
@@ -1188,8 +1187,8 @@ export default {
     //   this.add_parent = false;
     //   this.add_student = false;
 
-    //   console.log(this.last_user_registered);
-    //   console.log("val", val);
+    //   // console.log(this.last_user_registered);
+    //   // console.log("val", val);
     //   if (this.last_user_registered.type === "parent") {
     //     this.AddRelations({
     //       studentId: this.$route.params.account_id,
@@ -1208,7 +1207,7 @@ export default {
     //   this.dialog_parent = false;
     // },
     last_user_registered: async function () {
-      console.log("last_user_registered", this.last_user_registered);
+      // console.log("last_user_registered", this.last_user_registered);
       this.checkData.username = this.last_user_registered.username;
       this.checkDataRelation(this.last_user_registered.username);
     },
@@ -1216,11 +1215,11 @@ export default {
     "data_user_relation_management.length": function () {
       // for (const item_relation of this.data_user_relation_management) {
       //   this.GetStudentSchedule(item_relation.studentId);
-      //   console.log("test", item_relation.studentId);
+      //   // console.log("test", item_relation.studentId);
       // }
 
       for (const show_data of this.show_by_id.userRoles) {
-        console.log("show_data", show_data);
+        // console.log("show_data", show_data);
         if (show_data.roleId == "R_4") {
           if (this.data_user_relation_management.length > 0) {
             this.isOpenParent = true;
@@ -1240,7 +1239,7 @@ export default {
             this.data_user_relation_management = [];
           }
         } else {
-          console.log("show_data", show_data.roleId);
+          // console.log("show_data", show_data.roleId);
         }
       }
     },
@@ -1248,7 +1247,7 @@ export default {
     "show_by_id.userRoles.length": function () {
       if (this.show_by_id.userRoles.length > 0) {
         for (const items of this.show_by_id.userRoles) {
-          console.log("items=>", items);
+          // console.log("items=>", items);
           this.seledtedRole = items?.roleId ? items.roleId : "abc";
         }
       }

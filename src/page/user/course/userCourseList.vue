@@ -216,7 +216,7 @@ export default {
       let str = period.toString()
       let part_period = str.split(".")
       if(part_period.length > 1){
-        // console.log("219 => ",period.toLocaleString("en-US",{minimumFractionDigits : 2}))
+        // // console.log("219 => ",period.toLocaleString("en-US",{minimumFractionDigits : 2}))
         return period.toLocaleString("en-US",{minimumFractionDigits : 2})
       }else{
         return period
@@ -224,7 +224,7 @@ export default {
     },
     searchCourse(event) {
       const searchQuery = event.toLowerCase();
-      console.log(this.type_selected);
+      // console.log(this.type_selected);
       this.search_results = this.courses.filter((course) => {
         const courseNameTh = course.course_name_th.toLowerCase();
         const courseNameEn = course.course_name_en.toLowerCase();
@@ -233,13 +233,13 @@ export default {
           courseNameEn.includes(searchQuery)
         );
       });
-      console.log(this.search_results);
+      // console.log(this.search_results);
     },
     sumCouserPotential(courseData) {
       if (!this.course_potential) {
         this.GetPotential({ course_id: courseData.course_id });
       }
-      console.log(this.course_potential);
+      // console.log(this.course_potential);
     },
     CutWold(course) {
       return course.course_detail.slice(0, 122) + "...";

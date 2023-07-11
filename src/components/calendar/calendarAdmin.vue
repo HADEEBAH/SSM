@@ -371,7 +371,6 @@ export default {
 
     selectedDate(data) {
       this.details = data.event;
-      console.log("details", this.details);
       this.dialog_detail = true;
     },
     selectDate(date) {
@@ -392,7 +391,6 @@ export default {
               color: event.color,
               courseId: event.courseId,
             });
-            console.log("-->", this.event_date);
           }
         }
       });
@@ -423,7 +421,6 @@ export default {
           month: month,
           day: day,
         });
-        // console.log(this.events_data, "<----");
       });
 
       let color = "";
@@ -496,7 +493,6 @@ export default {
       return color ? color : false;
     },
     ToStudentCourse(data) {
-      console.log(data);
 
       this.$router.push({
         name: "StudentCourse",

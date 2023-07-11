@@ -324,7 +324,7 @@ export default {
   },
   created() {
     this.GetUserList();
-    this.initialize();
+    // this.initialize();
   },
 
   methods: {
@@ -334,11 +334,6 @@ export default {
       FilterGetUserList: "UserModules/FilterGetUserList",
     }),
 
-    initialize() {
-      for (const data in this.GetUserList) {
-        console.log("data", data);
-      }
-    },
     editItem(item) {
       this.editedIndex = this.datausers.indexOf(item);
       this.editedItem = Object.assign({}, item);
@@ -398,7 +393,7 @@ export default {
           config
         );
       } catch (error) {
-        console.log("err", error);
+        // console.log("err", error);
       }
     },
 
@@ -411,19 +406,19 @@ export default {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        console.log("role-role", role);
+        // console.log("role-role", role);
         await axios.get(
           // `http://localhost:3000/api/v1/getrole/query?roleId=${role}&roleId=${role}`,
           `${process.env.VUE_APP_URL}/api/v1/usermanagement/search?role=${role}`,
           config
         );
       } catch (error) {
-        console.log("err", error);
+        // console.log("err", error);
       }
     },
 
     deleteAccount(account_id) {
-      console.log("accountId", account_id);
+      // console.log("accountId", account_id);
       Swal.fire({
         icon: "question",
         title: "คุณต้องลบข้อมูลหรือไม่",
@@ -461,7 +456,7 @@ export default {
               throw { message: data.message };
             }
           } catch (error) {
-            console.log(error);
+            // console.log(error);
             Swal.fire({
               icon: "error",
               title: "ลบข้อมูลไม่สำเร็จ",
@@ -472,7 +467,7 @@ export default {
         }
       });
     },
-    async selectedAll(params) {
+    async selectedAll() {
       // this.$nextTick(() => {
       //     if (this.likesAllFruit) {
       //       this.selectedFruits = []
@@ -489,20 +484,20 @@ export default {
       }
       for await (let item of this.searchQuery) {
         search_arr.push(item.roleNumber);
-        console.log("ITEM", item);
+        // console.log("ITEM", item);
       }
-      console.log("searchQuery", params);
+      // console.log("searchQuery", params);
       this.FilterGetUserList(
         search_arr.length > 0 ? search_arr : this.searchQuery
       );
     },
     async selectedRoles(role) {
-      console.log("objectROLE", role);
+      // console.log("objectROLE", role);
       this.query_roles = "";
       role.map((val) => {
         this.query_roles += `roleId=${val}&`;
       });
-      console.log("options_temp", this.query_roles);
+      // console.log("options_temp", this.query_roles);
       try {
         let config = {
           headers: {
@@ -520,9 +515,9 @@ export default {
         // if (data.data.length > 0) {
         // } else {
         // }
-        console.log("data=>", data);
+        // console.log("data=>", data);
       } catch (error) {
-        console.log("err", error);
+        // console.log("err", error);
       }
     },
   },
@@ -535,16 +530,16 @@ export default {
     }),
     // filterUserList() {
     //   if (this.searchQuery.length > 0) {
-    //     console.log(
+    //     // console.log(
     //       this.searchQuery.includes(this.user_list[0].userRoles[0].roleId)
     //     );
-    //     console.log(
+    //     // console.log(
     //       this.user_list.filter((v) => {
     //         this.searchQuery.includes(v.userRoles[0].roleId);
     //       })
     //     );
     //     return this.user_list.filter((v) => {
-    //       console.log(v.userRoles[0].roleId);
+    //       // console.log(v.userRoles[0].roleId);
     //       this.searchQuery.includes(v.userRoles[0].roleId);
     //     });
     //   } else {

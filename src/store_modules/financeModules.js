@@ -15,10 +15,10 @@ const financeModules = {
       try{
         let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/${order_number}`)
         if(data.stateCode == 200){
-          console.log(data)
+          // console.log(data)
         }
       }catch(error){
-        console.log(error)
+        // console.log(error)
       }
     }
   },

@@ -465,7 +465,6 @@ export default {
 
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    // console.log("object", this.user_detail.account_id);
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail.account_id);
     }
@@ -530,14 +529,12 @@ export default {
       ReadNotifications: "NotificationsModules/ReadNotifications",
     }),
     checkrole(a,b){
-      // console.log("535 => ",b)
       let notFound = true; 
       if(a.length > 0){
         if (b.includes(a[0])) {
           notFound = false;
         }
       }
-      console.log("------", notFound);
       return notFound
     },
     selectMenu(type, to, head) {

@@ -776,7 +776,7 @@ export default {
     }),
 
     setHolidaydates(item) {
-      console.log("item", item);
+      // console.log("item", item);
       const thaiMonths = [
         "มกราคม",
         "กุมภาพันธ์",
@@ -801,11 +801,11 @@ export default {
     },
 
     // searchSchedule() {
-    //   console.log("search", this.search);
+    //   // console.log("search", this.search);
     //   if (this.search !== "") {
     //     if (this.data_filter_schedule) {
     //       let res = this.data_filter_schedule.filter((items)=> this.search === items.name || this.search === items.coach || items.search === items.package || items.name.indexOf(this.search) !== -1 || items.coach.indexOf(this.search) !== -1 || items.package.indexOf(this.search) !== -1)
-    //       console.log("res=>", res);
+    //       // console.log("res=>", res);
     //       this.resultSearchSchedule = res
     //     }
     //   }
@@ -813,16 +813,16 @@ export default {
 
     async filterSchedules(courseId, coachId, status) {
       this.GetFilterSchedule({ courseId, coachId, status });
-      console.log({
-        courseId: courseId,
-        coach_id: coachId,
-        status: status,
-      });
+      // console.log({
+      //   courseId: courseId,
+      //   coach_id: coachId,
+      //   status: status,
+      // });
       this.filter_dialog = false;
     },
 
     async deleteHoliday() {
-      console.log("del", this.setDataEditDialog);
+      // console.log("del", this.setDataEditDialog);
       Swal.fire({
         icon: "question",
         title: "คุณต้องการลบวันหยุดใช่หรือไม่ ?",
@@ -857,7 +857,7 @@ export default {
               });
             }
           } catch (error) {
-            console.log("SetDeleteHoliday", error);
+            // console.log("SetDeleteHoliday", error);
           }
         }
       });
@@ -926,7 +926,7 @@ export default {
               }
             }
           } catch (error) {
-            console.log(error);
+            // console.log(error);
             if (error.response.data.statusCode === 400) {
               if (
                 error.response.data.message ==
@@ -963,20 +963,20 @@ export default {
 
     editHolidays(holiday) {
       this.show_dialog_edit_holoday = true;
-      console.log("holiday", holiday);
-      console.log(
-        "++++",
-        new Date(
-          `${holiday.holidayDate}/${holiday.holidayMonth}/${holiday.holidayYears}`
-        )
-      );
+      // console.log("holiday", holiday);
+      // console.log(
+      //   "++++",
+      //   new Date(
+      //     `${holiday.holidayDate}/${holiday.holidayMonth}/${holiday.holidayYears}`
+      //   )
+      // );
       // this.editHolidayDates = `${holiday.holidayDate}/${holiday.holidayMonth}/${holiday.holidayYears}`
       // this.editHolidayDates = new Date(`${holiday.holidayDate}/${holiday.holidayMonth}/${holiday.holidayYears}`)
       this.setDataEditDialog = { ...holiday };
     },
 
     async editHolidaysData() {
-      console.log("setDataEditDialog", this.setDataEditDialog);
+      // console.log("setDataEditDialog", this.setDataEditDialog);
       this.setDataEditDialog.holidayDate = this.editHolidayDates
         ? this.editHolidayDates.split("-")[2]
         : this.setDataEditDialog.holidayDate;
@@ -1019,7 +1019,7 @@ export default {
             this.editHolidayDates = null;
             this.setDataEditDialog = {};
           } catch (error) {
-            console.log(error);
+            // console.log(error);
           }
         }
       });

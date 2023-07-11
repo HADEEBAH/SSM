@@ -20,7 +20,6 @@
               sm="11"
               align="left"
               class="mt-1 cursor-pointer pink--text underline underline-offer4"
-              @click="downloadCertificate(certificate.certificate_card)"
               >{{ certificate.certificate_card }}
             </v-col>
           </v-row>
@@ -45,9 +44,6 @@ export default {
     ...mapActions({
       ChangeCertificateData: "ProfileModules/ChangeCertificateData",
     }),
-    downloadCertificate(url) {
-console.log(url);
-      },
   },
   computed: {
     ...mapGetters({
