@@ -432,6 +432,7 @@ const manageScheduleModules = {
         const res = data.data;
 
         if (data.statusCode === 200) {
+          console.log(data.data)
           res.map((item) => {
             let times = null;
             let colors;
@@ -462,7 +463,7 @@ const manageScheduleModules = {
               }
             }
             eventSchadule.push({
-              name: item.courseNameTh,
+              name: item.name,
               start: item.startDate,
               timed: times,
               color: colors,

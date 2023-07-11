@@ -307,7 +307,7 @@
                 <v-col cols="12" sm="12" md="12" lg="12" align="center">
                   <apexchart
                     type="donut"
-                    :options="donutOptions"
+                    :options="donutOptions()"
                     :series="seriesOfDonut"
                     :width="widthDonut()"
                   ></apexchart>
@@ -827,6 +827,96 @@ export default {
       this.totalPriceDonut =
         this.totalPriceDonut + this.get_donut.otherTotal.totalPrice;
     },
+    donutOptions() {
+      const donutdata = {
+        colors: [
+          "#ff6b6b",
+          "#ff906b",
+          "#ffb56b",
+          "#ffda6b",
+          "#ffff6b",
+          "#daff6b",
+          "#b5ff6b",
+          "#90ff6b",
+          "#6bff6b",
+          "#6bff90",
+          "#999999",
+        ],
+        labels: this.donutLabels,
+        // labels: ["a", "b", "c", "d"],
+        chart: {
+          type: "donut",
+        },
+        plotOptions: {
+          pie: {
+            startAngle: -90,
+            endAngle: 270,
+            donut: {
+              labels: {
+                show: true,
+                total: {
+                  show: true,
+                  label: "รวมทั้งหมด",
+                  color: "#373d3f",
+                  fontSize: "18px",
+
+                  // formatter: function () {
+                  //   console.log("944", this.abc);
+                  //   return this.abc;
+                  // },
+                  // formatter: function (w) {
+                  //   return w.globals.seriesTotals.reduce((a, b) => {
+                  //     return a + b;
+                  //   }, 0);
+                  // },
+                },
+              },
+            },
+          },
+        },
+        dataLabels: {
+          enabled: true,
+        },
+        fill: {
+          type: "gradient",
+        },
+        legend: {
+          show: false,
+        },
+        tooltip: {
+          enabled: true,
+          y: {
+            formatter: function (val) {
+              return val
+            },
+          },
+          custom: ({series, seriesIndex, w}) => {
+            return this.customTooltip(series, seriesIndex, w)
+          }
+        },
+      };
+      return donutdata;
+    },
+    customTooltip(series, seriesIndex, w) {
+      // console.log(this.get_donut.datas[seriesIndex])
+      let item = w.globals
+      let color = item.colors[seriesIndex]
+      return this.get_donut?.datas[seriesIndex] ? (`
+        <div class="pa-3 ml-auto" style='background-color: ${color}'>
+          <h3 class="font-weight-bold">${item.seriesNames[seriesIndex]}</h3>
+          <i class="mdi mdi-circle " style="font-size:10px; color: #8cd977"></i> <span class="font-weight-bold">ที่ชำระแล้ว : </span>${this.get_donut?.datas[seriesIndex].sumSuccess}<br/>
+          <i class="mdi mdi-circle " style="font-size:10px; color: #a1a1a1"></i> <span class="font-weight-bold">รอชำระ : </span>${this.get_donut?.datas[seriesIndex].sumPending}<br/>
+          <span class="font-weight-bold">รวม : </span>${series[seriesIndex]}
+        </div>
+      `) :  (`
+        <div class="pa-3 ml-auto" style='background-color: ${color}'>
+          <h3 class="font-weight-bold">${item.seriesNames[seriesIndex]}</h3>
+          <i class="mdi mdi-circle " style="font-size:10px; color: #8cd977"></i> <span class="font-weight-bold">ที่ชำระแล้ว : </span>${this.get_donut?.otherTotal.sumSuccess}<br/>
+          <i class="mdi mdi-circle " style="font-size:10px; color: #a1a1a1"></i> <span class="font-weight-bold">รอชำระ : </span>${this.get_donut?.otherTotal.sumPending}<br/>
+          <span class="font-weight-bold">รวม : </span>${series[seriesIndex]}
+        </div>
+        `)
+    }
   },
   computed: {
     ...mapGetters({
@@ -915,76 +1005,6 @@ export default {
       this.donutSerieses();
       return this.totalPrice;
     },
-
-    donutOptions() {
-      const donutdata = {
-        colors: [
-          "#ff6b6b",
-          "#ff906b",
-          "#ffb56b",
-          "#ffda6b",
-          "#ffff6b",
-          "#daff6b",
-          "#b5ff6b",
-          "#90ff6b",
-          "#6bff6b",
-          "#6bff90",
-          "#999999",
-        ],
-        labels: this.donutLabels,
-        // labels: ["a", "b", "c", "d"],
-        chart: {
-          type: "donut",
-        },
-        plotOptions: {
-          pie: {
-            startAngle: -90,
-            endAngle: 270,
-            donut: {
-              labels: {
-                show: true,
-                total: {
-                  show: true,
-                  label: "รวมทั้งหมด",
-                  color: "#373d3f",
-                  fontSize: "18px",
-                },
-              },
-            },
-          },
-        },
-        dataLabels: {
-          enabled: true,
-        },
-        fill: {
-          type: "gradient",
-        },
-        legend: {
-          show: false,
-        },
-        tooltip: {
-          custom: function({series, seriesIndex, dataPointIndex, w}) {
-            console.log("series", series);
-            console.log("seriesIndex", seriesIndex);
-            console.log("dataPointIndex", dataPointIndex);
-            console.log("w", w);
-            let item = w.globals
-            let color = item.colors[seriesIndex]
-            
-            return (`
-              <div class="pa-3 ml-auto" style='background-color: ${color}'>
-                <h3 class="font-weight-bold">${item.seriesNames[seriesIndex]}</h3>
-                <i class="mdi mdi-circle " style="font-size:10px; color: #8cd977"></i> <span class="font-weight-bold">ที่ชำระแล้ว : </span>${series[seriesIndex]}<br/>
-                <i class="mdi mdi-circle " style="font-size:10px; color: #a1a1a1"></i> <span class="font-weight-bold">รอชำระ : </span>${series[seriesIndex]}<br/>
-                <span class="font-weight-bold">รวม : </span>${series[seriesIndex]}
-              </div>
-            `)
-          }
-        }
-      };
-      return donutdata;
-    },
-
     donutsuccess() {
       this.donutSerieses();
       return (
