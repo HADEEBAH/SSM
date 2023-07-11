@@ -1330,6 +1330,7 @@
                                                 text
                                                 class="px-1"
                                                 color="#ff6b81"
+                                                @click="showDialogAssessment( potential )"
                                               >
                                                 <v-icon
                                                   >mdi-check-decagram-outline
@@ -1375,6 +1376,7 @@
         v-model="show_dialog_assessmet"
       >
         <v-card>
+          <!-- <pre>{{ student_data_assessment }}</pre> -->
           <v-card-text class="pa-2">
             <v-row dense>
               <v-col></v-col>
@@ -1570,6 +1572,15 @@
                       height="89"
                       :src="readFile(file.attFiles)"
                     ></v-img>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+            <v-card outlined class="mb-3" v-if="!student_data_assessment?.potential && !student_data_assessment?.assessment?.assessmentStudentsId">
+              <v-card-text>
+                <v-row dense>
+                  <v-col align="center">
+                      ไม่พบการประเมิน
                   </v-col>
                 </v-row>
               </v-card-text>
@@ -2011,6 +2022,7 @@ export default {
       }
     },
     showDialogAssessment(student_data, date) {
+      console.log("2015 =>", student_data)
       this.show_dialog_assessmet = true;
       this.student_data_assessment = student_data;
       this.student_data_assessment.time = date.time;
