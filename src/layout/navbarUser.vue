@@ -436,8 +436,8 @@ export default {
       {
         icon: "mdi-swap-horizontal-bold",
         title: "หน้าผู้ดูแลระบบ",
-        // to: "Admin",
-        to: "Dashboard",
+        to: "Admin",
+        // to: "Dashboard",
         params: null,
         roles: ["R_1", "R_2"],
       },
