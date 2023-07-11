@@ -27,35 +27,21 @@
             <v-col  cols="12" sm="7">
               <v-row dense>
                 <v-col class="text-lg font-bold">
-                  {{
-                    !my_course_detail.courseNameTh
-                      ? "-"
-                      : my_course_detail.courseNameTh
-                  }}({{ my_course_detail.courseNameEng }})
+                  {{!my_course_detail.courseNameTh ? "-" : my_course_detail.courseNameTh }}
+                  ({{ my_course_detail.courseNameEng }})
                 </v-col>
               </v-row>
               <v-row dense>
                 <v-col class="text-slate-400">
                   <span class="mdi mdi-account">โค้ช :</span>
-                  {{
-                    !my_course_detail.coachName ? "-" : my_course_detail.coachName
-                  }}
+                  {{ !my_course_detail.coachName ? "-" : my_course_detail.coachName }}
                 </v-col>
               </v-row>
               <v-row dense>
                 <v-col class="text-slate-400">
                   <span class="mdi mdi-account">ผู้เรียน :</span>
-
-                  {{
-                    !my_course_detail.student
-                      ? "-"
-                      : my_course_detail.student.firstNameTh
-                  }}
-                  {{
-                    !my_course_detail.student
-                      ? "-"
-                      : my_course_detail.student.lastNameTh
-                  }}
+                  {{!my_course_detail.student? "-" : my_course_detail.student.firstNameTh }}
+                  {{!my_course_detail.student ? "-" : my_course_detail.student.lastNameTh }}
                 </v-col>
               </v-row>
               <v-row dense>
@@ -118,8 +104,8 @@
           <div class="text-lg font-bold">ข้อมูลการเรียน</div>
         </v-col>
       </v-row>
-      <div class="mb-3" v-for="(item_data, index) in my_course_detail.checkIn" :key="index">
-        <v-card class="rounded-lg" v-if=" item_data.potential !== null && my_course_detail.checkIn.length >= 1 " >
+      <div class="mb-3" v-for="(potential, index) in my_course_detail.potential" :key="index">
+        <v-card class="rounded-lg" outlined>
           <v-card-text>
             <v-row dense class="mb-2">
               <v-col cols="2" sm="1" align="center">
@@ -132,14 +118,14 @@
                 <v-row dense>                 
                   <v-col>
                     <b>ระดับพัฒนาการ:</b>
-                    <span :class="`text-[${evolution_options.filter((v) => v.value === item_data.potential.evolution )[0]}]`"
+                    <span :class="`text-[${evolution_options.filter((v) => v.value === potential.evolution )[0]}]`"
                     >
                       {{
                         evolution_options.filter(
-                          (v) => v.value === item_data.potential.evolution
+                          (v) => v.value === potential.evolution
                         ).length > 0
                           ? evolution_options.filter(
-                              (v) => v.value === item_data.potential.evolution
+                              (v) => v.value === potential.evolution
                             )[0].label
                           : "-"
                       }}
@@ -149,13 +135,13 @@
                 <v-row dense>
                   <v-col >
                     <b>ระดับความสนใจ:</b>
-                    {{ item_data.potential.interest }}
+                    {{ potential.interest }}
                   </v-col>
                 </v-row>
                 <v-row dense>
                   <v-col cols="12" align="start">
                       <b>ความคิดเห็นจากโค้ช:</b>
-                      {{ item_data.potential.remark }}
+                      {{ potential.remark }}
                   </v-col>
                 </v-row>
                 <v-row dense>
@@ -165,7 +151,7 @@
                       @click="openFile(file.attachmentFiles)"
                       flat
                       class="mb-3"
-                      v-for="(file, index_file) in item_data.potential
+                      v-for="(file, index_file) in potential
                         .attachmentPotential"
                       :key="index_file"
                     >
@@ -204,6 +190,7 @@
        
         </v-card>
       </div>
+      <!-- <pre>{{ my_course_detail.checkIn }}</pre> -->
       <div
         v-for="(day_list, index_day) in my_course_detail.checkIn"
         :key="index_day"

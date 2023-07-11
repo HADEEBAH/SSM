@@ -337,7 +337,6 @@ const myCourseModules = {
             }
         },
         async GetMyCourseDetail(context, { account_id, course_id }) {
-            console.log("GetMyCourseDetail")
             context.commit("SetCourseListIsLoading", true)
             try {
                 let config = {
@@ -347,15 +346,18 @@ const myCourseModules = {
                         'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-
                 // let { data } = await axios.get(`http://localhost:3000/api/v1/mycourse/checkin/student/${account_id}/course/${course_id}`, config);
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/checkin/student/${account_id}/course/${course_id}`, config);
-
                 if (data.statusCode === 200) {
-
                     if (data.data && data.statusCode === 200) {
+                        let potential = []
+                        for(let course of data.data.checkIn){
+                            if(course.potential && !potential.some(v => v.checkInPotentialId == course.potential.checkInPotentialId)){
+                                potential.push(course.potential)
+                            }
+                        }
+                        data.data.potential = potential
                         context.commit("SetMyCourseDetail", data.data)
-                        console.log("SetMyCourseDetail ---->", data.data);
                         context.commit("SetCourseListIsLoading", false)
                     }
                     else {
@@ -364,8 +366,6 @@ const myCourseModules = {
                     }
 
                 }
-                context.commit("SetCourseListIsLoading", false)
-
             } catch (error) {
                 context.commit("SetCourseListIsLoading", false)
                 console.log("GetMyCourseDetail_err", error);
