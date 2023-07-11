@@ -48,6 +48,9 @@
                       >
                     </v-chip>
                   </template>
+                  <template v-slot:item="{ item }">
+                    {{ `${item.firstNameTh} ${item.lastNameTh}` }}  
+                  </template>
                 </v-autocomplete>
               </v-col>
               <v-col cols="12" sm="auto">
@@ -857,7 +860,7 @@ export default {
       }
     },
     search(val) {
-      console.log(val);
+      // console.log(val);
       if (val.length > 3) {
         this.loading = true;
         this.searchNameUser({ search_name: val }).then(() => {
@@ -888,7 +891,7 @@ export default {
     CalTotalPrice() {
       this.order.total_price = 0;
       for (let course of this.order.courses) {
-        console.log(course);
+        // console.log(course);
         if (course.price) {
           this.order.total_price =
             this.order.total_price + parseInt(course.price);
@@ -965,7 +968,7 @@ export default {
     },
     openDialog() {
       this.dialog_show = true;
-      console.log(this.dialog_show, "<---");
+      // console.log(this.dialog_show, "<---");
     },
     removeCourse(index) {
       // this.$delete(this.short_course)
@@ -973,10 +976,10 @@ export default {
     },
     selectTime(time, course) {
       course.coach = {};
-      console.log(time);
+      // console.log(time);
     },
     selectCategory(categoryId, course_type_id, course) {
-      console.log(categoryId, course_type_id);
+      // console.log(categoryId, course_type_id);
       course.course_id = "";
       course.package_data = {};
       course.package = "";
@@ -1007,7 +1010,7 @@ export default {
       });
     },
     selectCourse(courseId, course) {
-      console.log("course_id", courseId);
+      // console.log("course_id", courseId);
       course.package_data = {};
       course.package = "";
       course.option = {};
@@ -1060,8 +1063,8 @@ export default {
         if (this.validate_form && this.course_monitors.length > 0) {
           for (let course of this.order.courses) {
             if (course.package_data.students < this.students.length) {
-              console.log("912 =>", course.package_data.students);
-              console.log("913 =>", this.students.length);
+              // console.log("912 =>", course.package_data.students);
+              // console.log("913 =>", this.students.length);
               studentFail = true;
             } else {
               if (
@@ -1091,7 +1094,7 @@ export default {
                 ) {
                   isValiDateCourse.push(true);
                 } else {
-                  // console.log( this.course_monitors)
+                  // // console.log( this.course_monitors)
                   isValiDateCourse.push(false);
                 }
               } else {
@@ -1131,23 +1134,27 @@ export default {
                 if (this.order.payment_status === "warn") {
                   let account = [];
                   this.order.courses.forEach((course) => {
+                    course.students = []
+                    // console.log("1136",this.students)
                     course.coach_id = course.coach.coach_id;
                     course.coach_name = course.coach.coach_name;
                     for (const student of this.students) {
-                      account.push({
-                        studentId: student,
-                      });
-                      course.students.push({
-                        account_id: student,
-                        student_name: null,
-                        username: null,
-                        firstname_en: null,
-                        lastname_en: null,
-                        tel: null,
-                        parents: [],
-                        is_account: false,
-                        is_other: false,
-                      });
+                      if(student){
+                        account.push({
+                          studentId: student,
+                        });
+                        course.students.push({
+                          account_id: student,
+                          student_name: null,
+                          username: null,
+                          firstname_en: null,
+                          lastname_en: null,
+                          tel: null,
+                          parents: [],
+                          is_account: false,
+                          is_other: false,
+                        });
+                      }
                     }
                   });
                   this.order.type = "addStudent";
@@ -1157,25 +1164,30 @@ export default {
                     notificationDescription: this.notification_description,
                     accountId: account,
                   };
-                  console.log(payload);
+                  // console.log(payload);
                   this.sendNotification(payload);
                   this.saveOrder();
                 } else {
                   this.order.courses.forEach((course) => {
+                    course.students = []
+                    // console.log("1136",this.students)
                     course.coach_id = course.coach.coach_id;
                     course.coach_name = course.coach.coach_name;
                     for (const student of this.students) {
-                      course.students.push({
-                        account_id: student,
-                        student_name: null,
-                        username: null,
-                        firstname_en: null,
-                        lastname_en: null,
-                        tel: null,
-                        parents: [],
-                        is_account: false,
-                        is_other: false,
-                      });
+                      if(student){
+                        course.students.push({
+                          account_id: student,
+                          student_name: null,
+                          username: null,
+                          firstname_en: null,
+                          lastname_en: null,
+                          tel: null,
+                          parents: [],
+                          is_account: false,
+                          is_other: false,
+                        });
+                      }
+                     
                     }
                   });
                   this.order.type = "addStudent";

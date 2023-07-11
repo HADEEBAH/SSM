@@ -147,12 +147,8 @@ export default {
       disabled: false,
     };
   },
-  created() {},
   beforeMount() {
     this.GetBannerList();
-  },
-  mounted() {
-    console.log("banner_list", this.banner_list);
   },
   methods: {
     ...mapActions({
@@ -172,7 +168,7 @@ export default {
         const file = this.$refs.fileInput.files[i];
         this.files_input.push(this.$refs.fileInput.files[i]);
         if (!CheckFileSizeType(file, event.target.id)) return;
-        if (CheckFileSizeV2(file, event.target.id) ) {
+        if (CheckFileSizeV2(file, event.target.id)) {
           const reader = new FileReader();
           reader.onload = () => {
             this.files_preview.push(reader.result);
@@ -232,10 +228,10 @@ export default {
     },
 
     async removeBannerFiles(id) {
-      console.log("id", id);
+      // console.log("id", id);
       Swal.fire({
         icon: "question",
-        text: "คุณต้องการลบรูปใช่หรือไม่",
+        text: "คุณต้องการลบแบรนเนอร์ใช่หรือไม่",
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: "ตกลง",
@@ -247,7 +243,7 @@ export default {
 
           Swal.fire({
             icon: "success",
-            text: "ลบรูปสำเร็จ",
+            text: "ลบแบรนเนอร์สำเร็จ",
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,

@@ -58,7 +58,7 @@
           <template v-slot:detail>
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
-                {{ get_potential.currentStudent.length }}
+                {{ get_potential.currentStudent.countStudentCurrent }}
               </v-col>
               <v-col class="text-sm">คน</v-col>
             </v-row>
@@ -91,7 +91,7 @@
           <template v-slot:detail>
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
-                {{ get_potential.potencialsStudent.length }}
+                {{ get_potential.potencialsStudent.countStudentPotencials }}
               </v-col>
               <v-col class="text-sm">คน</v-col>
             </v-row>
@@ -155,7 +155,7 @@
             "
           >
             <v-icon>mdi-text-box-search-outline</v-icon>
-            ดูรายละเอียด
+            ดูรายละเอียดผู้เรียน
           </v-btn>
         </template>
       </v-data-table>
@@ -167,7 +167,7 @@
         :headers="data_tab_two"
         @page-count="pageCount = $event"
         class="elevation-1 header-table"
-        :items="get_potential.currentStudent"
+        :items="get_potential.currentStudent.studentList"
         :search="search"
       >
         <template v-slot:[`item.course`]="{ item }">
@@ -189,7 +189,7 @@
             "
           >
             <v-icon>mdi-text-box-search-outline</v-icon>
-            ดูรายละเอียด
+            ดูรายละเอียดผู้เรียน
           </v-btn>
         </template>
       </v-data-table>
@@ -201,7 +201,7 @@
         :headers="data_tab_three"
         @page-count="pageCount = $event"
         class="elevation-1 header-table"
-        :items="get_potential.potencialsStudent"
+        :items="get_potential.potencialsStudent.potencials"
         :search="search"
       >
         <template v-slot:[`item.courseDetail`]="{ item }">
@@ -226,7 +226,7 @@
             "
           >
             <v-icon>mdi-text-box-search-outline</v-icon>
-            ดูรายละเอียด
+            ดูรายละเอียดผู้เรียน
           </v-btn>
         </template>
       </v-data-table>
@@ -263,7 +263,7 @@
             "
           >
             <v-icon>mdi-text-box-search-outline</v-icon>
-            ดูรายละเอียด
+            ดูรายละเอียดผู้เรียน
           </v-btn>
         </template>
       </v-data-table>
@@ -286,7 +286,7 @@
         </v-card-title>
 
         <v-card-title>
-          <pre>{{ detail_dialog_end }}</pre>
+          <!-- <pre>{{ detail_dialog_end }}</pre> -->
           <v-row dense>
             <v-col cols="12" class="my-2">
               <span class="font-bold"> ชื่อคอร์ส: </span>
@@ -410,7 +410,7 @@ export default {
   },
   data: () => ({
     breadcrumbs: [
-      { text: "แดชบอร์ด", to: "DashboardList" },
+      { text: "แดชบอร์ด", to: "Dashboard" },
       { text: "รายชื่อนักเรียน", to: "" },
     ],
     search: "",
@@ -515,7 +515,7 @@ export default {
     dialogDetailEnd(items) {
       this.course_detail_dialog_end = true;
       this.detail_dialog_end = items;
-      console.log("detail_dialog_end", this.detail_dialog_end);
+      // console.log("detail_dialog_end", this.detail_dialog_end);
     },
 
     dialogDetailBooked(items) {

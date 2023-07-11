@@ -41,8 +41,13 @@
       <!-- COURSE -->
       <v-row
         dense
-        class="mt-3"
-        @click="$router.push({ name: 'StudentsSchedule' })"
+        class="mt-3 cursor-pointer"
+        @click="
+          $router.push({
+            name: 'StudentsSchedule',
+            params: { action: 'MyCourse' },
+          })
+        "
       >
         <v-col cols="2" sm="1">
           <img src="../../../assets/profile/cource.png" />
@@ -809,12 +814,12 @@ export default {
     // this.user_relation = JSON.parse(localStorage.getItem("relations"));
     // setTimeout(async () => {
     //   this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-    //   if (this.type_selected == "students_course") {
+    //   if (this.type_selected == "MyCourse") {
     //     if (this.user_detail.roles.includes("R_4")) {
     //       this.GetStudentData(this.user_detail.account_id);
     //       for (const item of JSON.parse(localStorage.getItem("relations"))) {
     //         this.GetStudentData(item.student.studentId);
-    //         console.log("student");
+    //         // console.log("student");
     //       }
     //     } else if (this.user_detail.roles.includes("R_5")) {
     //       this.GetStudentData(this.user_detail.account_id);
@@ -827,7 +832,7 @@ export default {
     // }, 200);
   },
   beforeMount() {
-    console.log("========");
+    // console.log("========");
     // alert(this.user_login.account_id)
     this.GetRelationDataV2(this.user_login.account_id);
     this.GetProfileDetail(this.user_login.account_id);
@@ -853,7 +858,7 @@ export default {
           }
         });
       } else if (this.last_user_registered.type === "student") {
-        console.log(this.last_user_registered);
+        // console.log(this.last_user_registered);
         this.AddRelations({
           studentId: this.last_user_registered.account_id,
           parentId: this.user_login.account_id,
@@ -866,16 +871,16 @@ export default {
       this.add_relation = false;
     },
     // type_selected: function () {
-    //   console.log("type_selected", this.type_selected);
+    //   // console.log("type_selected", this.type_selected);
     //   this.loading = true;
     //   setTimeout(async () => {
     //     this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-    //     if (this.type_selected == "students_course") {
+    //     if (this.type_selected == "MyCourse") {
     //     if (this.user_detail.roles.includes("R_4")) {
     //     this.GetStudentData(this.user_detail.account_id);
     //     for (const item of JSON.parse(localStorage.getItem("relations"))) {
     //     this.GetStudentData(item.student.studentId);
-    //     console.log("student");
+    //     // console.log("student");
     //   }
     //   } else if (this.user_detail.roles.includes("R_5")) {
     //   this.GetStudentData(this.user_detail.account_id);
@@ -908,8 +913,8 @@ export default {
 
     async getStudentData(order_item_id) {
       await this.$store.dispatch("getStudentData", order_item_id);
-      const studentData = this.$store.state.studentData;
-      console.log(studentData);
+      // const studentData = this.$store.state.studentData;
+      // console.log(studentData);
     },
 
     validate(e, type) {
@@ -940,7 +945,7 @@ export default {
       this.$router.push({ name: "ProfileCertificate" });
     },
     show_password() {
-      window.location.href = `https://testoneid.inet.co.th/type_forgot_password?oauth_pass=true`;
+      window.location.href = `${process.env.VUE_APP_ONE}/type_forgot_password`;
     },
     show_policy() {
       this.$router.push({ name: "ProfilePolicy" });
@@ -977,7 +982,7 @@ export default {
       this.changeDialogRegisterOneId(true);
     },
     async removeRelation(relations) {
-      console.log(relations);
+      // console.log(relations);
       Swal.fire({
         icon: "question",
         title: "คุณต้องการลบรายการนี้ใช่หรือไม่ ?",
@@ -1024,7 +1029,7 @@ export default {
           type: type,
         }).then(() => {
           if (type === "student") {
-            console.log("user_student_data", this.course_order.students.filter);
+            // console.log("user_student_data", this.course_order.students.filter);
             if (this.user_student_data.length > 0) {
               this.course_order.students.filter(
                 (v) => v.username === username
@@ -1082,7 +1087,7 @@ export default {
                 lastname_en: this.user_data[0].lastNameEng,
                 tel: this.user_data[0].mobileNo,
               };
-              console.log("course_order", this.course_order);
+              // console.log("course_order", this.course_order);
 
               if (
                 this.course_order.students.filter(
@@ -1143,11 +1148,11 @@ export default {
             };
             // this.user_login = JSON.parse(localStorage.getItem("userDetail"));
 
-            // console.log("object", this.user_data);
+            // // console.log("object", this.user_data);
             // for (const data of this.user_data) {
-            //   console.log("data", data);
+            //   // console.log("data", data);
             //   this.set_parent_id = data.userOneId;
-            //   console.log("userOneId", this.set_parent_id);
+            //   // console.log("userOneId", this.set_parent_id);
             // }
 
             let payload = {};
@@ -1170,7 +1175,7 @@ export default {
               config
             );
 
-            console.log("data+++++++++++", data);
+            // console.log("data+++++++++++", data);
 
             if (data.statusCode === 201) {
               if (data.data.message !== "Duplicate relation.") {
@@ -1212,7 +1217,7 @@ export default {
             } else {
               this.error_message = "เกิดข้อผิดพลาด";
             }
-            console.log("response", response);
+            // console.log("response", response);
             Swal.fire({
               icon: `${
                 this.error_message === "เกิดข้อผิดพลาด" ? "error" : "warning"
@@ -1245,7 +1250,7 @@ export default {
     },
 
     myCourseStudent(item) {
-      console.log("ITEM", item);
+      // console.log("ITEM", item);
       this.userRelationsAccountId = item;
       this.$store.dispatch(
         "MyCourseModules/GetMyCourseStudentId",
@@ -1253,7 +1258,7 @@ export default {
       );
       this.$router.push({ name: "StudentsSchedule" });
       this.GetStudentData(this.userRelationsAccountId);
-      console.log("userRelationsAccountId", this.userRelationsAccountId);
+      // console.log("userRelationsAccountId", this.userRelationsAccountId);
     },
   },
   beforeDestroy() {

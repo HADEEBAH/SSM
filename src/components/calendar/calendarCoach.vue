@@ -57,6 +57,7 @@
       :event-color="(date) => (date[9] % 2 ? 'red' : 'yellow')"
       :events="functionEvents"
       @input="selectDate(focus)"
+      class="w-full"
     ></v-date-picker>
     <v-bottom-sheet v-model="showModal">
       <div class="bg-white rounded-t-lg pa-4">
@@ -77,7 +78,10 @@
               <!-- {{ event }} -->
               <v-card-text class="border-2 border-[#ff6b81]">
                 <v-row dense>
-                  <v-col cols="auto" class="text-sm text-[#999999]">
+                  <v-col  v-if="event.type" cols="auto" class="text-sm text-[#999999]" >
+                    -
+                  </v-col>
+                  <v-col v-else cols="auto" class="text-sm text-[#999999]">
                     {{ `${event.start_time}` }}<br />{{ `${event.end_time}` }}
                   </v-col>
                   <v-col cols="auto">
@@ -92,7 +96,7 @@
                         >
                       </v-col>
                     </v-row>
-                    <v-row dense>
+                    <v-row dense v-if="!event.type">
                       <v-col class="text-sm">
                         โค้ช: {{ event.coach }} <br />
                         <v-btn
@@ -199,38 +203,50 @@ export default {
   },
   methods: {
     selectedDate(data) {
-      console.log(data.event);
-      this.$router.push({
-        name: "menageCourseDetail",
-        params: {
-          courseId: data.event.course_id,
-          timeId: data.event.time_id,
-          dayOfWeekId: data.event.day_of_week_id,
-          date: data.event.start_date,
-        },
-      });
+      if(!data.event.type){
+        this.$router.push({
+          name: "menageCourseDetail",
+          params: {
+            courseId: data.event.course_id,
+            timeId: data.event.time_id,
+            dayOfWeekId: data.event.day_of_week_id,
+            date: data.event.start_date,
+          },
+        });
+      }
     },
     selectDate(date) {
       this.event_date = [];
       this.showModal = true;
       this.events.forEach((event) => {
-        let [start, start_time] = event.start.split(" ");
-        let [end, end_time] = event.end.split(" ");
-        if (start === end && start === date) {
-          this.event_date.push({
-            name: event.name,
-            subtitle: event.subtitle,
-            coach: event.coach,
-            start_time: start_time,
-            end_time: end_time,
-            color: event.color,
-            course_id: event.course_id,
-            time_id: event.time_id,
-            day_of_week_id: event.day_of_week_id,
-            start_date: event.start_date,
-          });
+        if(event?.coach){
+          let [start, start_time] = event.start.split(" ");
+          let [end, end_time] = event.end.split(" ");
+          if (start === end && start === date) {
+            this.event_date.push({
+              name: event.name,
+              subtitle: event.subtitle,
+              coach: event.coach,
+              start_time: start_time,
+              end_time: end_time,
+              color: event.color,
+              course_id: event.course_id,
+              time_id: event.time_id,
+              day_of_week_id: event.day_of_week_id,
+              start_date: event.start_date,
+            });
+          }
+        }else{
+          let [start] = event.start.split(" ");
+          if (start === date) {
+            this.event_date.push({
+              name: event.name,
+              start_date: event.start_date,
+              type: event.type
+            });
+          }
         }
-      });
+      });        
     },
     colorOfDay() {
       this.events.forEach((event) => {
@@ -288,11 +304,21 @@ export default {
       this.events.forEach((event) => {
         let [date_event] = event.start.split(" ");
         let [year, month, day] = date_event.split("-");
-        events_data.push({
-          year: year,
-          month: month,
-          day: day,
-        });
+        if(event?.type){
+          events_data.push({
+            year: year,
+            month: month,
+            day: day,
+            type : event.type
+          });
+        }else{
+          events_data.push({
+            year: year,
+            month: month,
+            day: day,
+          });
+        }
+        
       });
 
       let color = "";

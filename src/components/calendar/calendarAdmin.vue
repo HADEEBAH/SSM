@@ -14,6 +14,7 @@
         </v-col>
       </v-row>
     </v-card-title>
+    <!-- <pre>{{ data_filter_schedule }}</pre> -->
     <!-- data_filter_schedule : {{ data_filter_schedule }} <br/>
     data_in_schedule : {{ data_in_schedule }} -->
     <v-calendar
@@ -252,14 +253,24 @@
                     </v-text-field>
                   </v-col>
 
-                  <v-col cols="12" sm="6" v-if="details.package">
-
+                  <v-col cols="12" sm="6" v-if="details.package && details.package !== 'leave'">
                     <label class="font-weight-bold">แพ็กเกจ</label>
                     <v-text-field
                       dense
                       outlined
                       readonly
                       :value="details.package"
+                      hide-details
+                    >
+                    </v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" v-if="details.package == 'leave'">
+                    <label class="font-weight-bold">ชดเชยจาก</label>
+                    <v-text-field
+                      dense
+                      outlined
+                      readonly
+                      :value="details.selectedDate"
                       hide-details
                     >
                     </v-text-field>
@@ -325,7 +336,7 @@ export default {
   created() {},
   beforeMount() {},
   mounted() {
-    this.GetDataInSchedule();
+    // this.GetDataInSchedule();
     let today = new Date();
     this.start_of_week = new Date(
       today.getFullYear(),
@@ -360,7 +371,6 @@ export default {
 
     selectedDate(data) {
       this.details = data.event;
-      console.log("details", this.details);
       this.dialog_detail = true;
     },
     selectDate(date) {
@@ -381,7 +391,6 @@ export default {
               color: event.color,
               courseId: event.courseId,
             });
-            console.log("-->", this.event_date);
           }
         }
       });
@@ -412,7 +421,6 @@ export default {
           month: month,
           day: day,
         });
-        // console.log(this.events_data, "<----");
       });
 
       let color = "";
@@ -485,7 +493,6 @@ export default {
       return color ? color : false;
     },
     ToStudentCourse(data) {
-      console.log(data);
 
       this.$router.push({
         name: "StudentCourse",

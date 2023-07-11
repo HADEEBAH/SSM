@@ -34,6 +34,13 @@
           >
             ( ขนาดไฟล์งานไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
           </v-col>
+          <v-col
+            cols="12"
+            class="flex align-center justify-center text-caption"
+          >
+            <!-- <span class="font-weight-bold">คำแนะนำ</span> :
+            ควรอัปโหลดรูปที่มีขนาด 1280 x 500px -->
+          </v-col>
           <v-col cols="12" class="flex align-center justify-center">
             <v-btn outlined color="blue" @click="openFileSelector"
               >เลือกไฟล์</v-btn
@@ -823,10 +830,8 @@ export default {
     },
   }),
   created() {
-    console.log("809 => ", this.edited);
     if (this.edited) {
       this.preview_url = this.course_data?.course_img;
-      console.log(" this.course_data =>", this.course_data?.coachs[0]);
       this.class_date_range_str = {
         start_date: dateFormatter(
           this.course_data?.coachs[0].class_date_range.start_date,
@@ -881,7 +886,6 @@ export default {
         .focus();
     },
     ChangeHours(hours, course_hours) {
-      console.log("hours", hours);
       console.log("couser_hours", course_hours);
       if (hours) {
         this.course_data.course_hours =
@@ -893,7 +897,6 @@ export default {
         date.start_time_object.mm = "00";
       }
       this.course_data.course_period_start_date = `${date.start_time_object.HH}:${date.start_time_object.mm}`;
-      console.log(date);
       if (
         parseInt(date.start_time_object.HH) +
           parseInt(this.course_data.course_hours_obj.HH) >=
@@ -989,7 +992,6 @@ export default {
       inputValidation(e, lang);
     },
     inputDate(e, data) {
-      console.log(e);
       switch (data) {
         case "course open":
           this.course_data.course_open_date_str = dateFormatter(
@@ -1028,7 +1030,6 @@ export default {
       if (!this.file) return;
       if (CheckFileSize(this.file) === true) {
         const fileType = this.file.type;
-        console.log(fileType);
         if (fileType === "image/png" || fileType === "image/jpeg") {
           this.course_data.course_img = this.file;
           this.ChangeCourseData(this.course_data);

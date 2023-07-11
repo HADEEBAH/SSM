@@ -1,5 +1,39 @@
 import axios from "axios";
 import VueCookie from "vue-cookie"
+function dayOfWeekArray(day) {
+    // // console.log
+    // let day_arr = day
+    let days = day
+    // console.log(day)
+    const weekdays = [
+        "วันอาทิตย์",
+        "วันจันทร์",
+        "วันอังคาร",
+        "วันพุธ",
+        "วันพฤหัสบดี",
+        "วันศุกร์",
+        "วันเสาร์",
+    ];
+    days.sort();
+    let ranges = [];
+    if (days[0]) {
+        let rangeStart = parseInt(days[0]);
+        let prevDay = rangeStart;
+        for (let i = 1; i < days.length; i++) {
+            const day = parseInt(days[i]);
+            if (day === prevDay + 1) {
+                prevDay = day;
+            } else {
+                const rangeEnd = prevDay;
+                ranges.push({ start: rangeStart, end: rangeEnd });
+                rangeStart = day;
+                prevDay = day;
+            }
+        }
+        ranges.push({ start: rangeStart, end: prevDay });
+        return ranges.map(({ start, end }) => start === end ? weekdays[start] : `${weekdays[start]} - ${weekdays[end]}`).join(', ')
+    }
+}
 const myCourseModules = {
     namespaced: true,
     state: {
@@ -171,13 +205,29 @@ const myCourseModules = {
                 }
                 //     this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
                 //   let user_account_id = this.user_detail.account_id
+                // let localhost = "http://localhost:3000"
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
                 if (data.statusCode === 200) {
-                    console.log(data)
-                    context.commit("SetStudentsLoading", false)
+                    // console.log("176=>", data.data)
                     const dataCourseSchedule = { dates: [] };
+                    let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
+                    if (holidays.data.statusCode === 200) {
+                        for (let holiday of holidays.data.data) {
+                            dataCourseSchedule.dates.push({
+                                type: 'holiday',
+                                name: holiday.holidayName,
+                                start_date: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
+                                start: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
+                                end: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
+
+                            })
+
+                        }
+                    }
+
                     for (const course of data.data) {
-                        console.log("course", course);
+                        // console.log("course", course);
+                        course.day_name = course.dates.day ? dayOfWeekArray(course.dates.day) : course.dates.day
                         for (const date of course.dates.date) {
                             if (course.period.start !== "Invalid date" && course.period.end !== "Invalid date") {
                                 dataCourseSchedule.dates.push({
@@ -194,7 +244,7 @@ const myCourseModules = {
                         }
                     }
                     if (data_local.roles.includes('R_4')) {
-                        console.log("data.data", data.data)
+                        // console.log("data.data", data.data)
                         let MyCourse = []
                         for await (const item of data.data) {
                             if (MyCourse.filter(v => v.orderItemId === item.orderItemId).length === 0) {
@@ -204,9 +254,8 @@ const myCourseModules = {
                         context.commit("SetMyCourse", MyCourse)
                         context.commit("SetMyCourseStudentId", '')
                     } else {
-
                         context.commit("SetStudentData", data.data)
-                        console.log("SetStudentData", data.data)
+                        // console.log("SetStudentData", data.data)
                     }
                     context.commit("SetcourseSchedule", dataCourseSchedule);
                     context.commit("SetStudentsLoading", false)
@@ -216,12 +265,12 @@ const myCourseModules = {
                 }
             } catch (error) {
                 context.commit("SetStudentsLoading", false)
-                console.log(error);
+                // console.log(error);
             }
         },
 
         async GetStudentReserve(context, account_id) {
-            console.log("GetStudentReserve", account_id);
+            // console.log("GetStudentReserve", account_id);
             try {
                 let config = {
                     headers: {
@@ -243,18 +292,18 @@ const myCourseModules = {
                     for (const booked of data.data) {
                         booked.courseImg = booked.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${booked.courseImg}` : null
                     }
-                    console.log("SetStudentReserve", data.data);
+                    // console.log("SetStudentReserve", data.data);
                     context.commit("SetStudentReserve", data.data)
                 } else {
                     throw { error: data };
                 }
 
             } catch (error) {
-                console.log("err", error);
+                // console.log("err", error);
             }
         },
         async GetProfileBooked(context, account_id) {
-            console.log("GetProfileBooked", account_id);
+            // console.log("GetProfileBooked", account_id);
             try {
                 let config = {
                     headers: {
@@ -266,8 +315,9 @@ const myCourseModules = {
 
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/by/${account_id}`, config);
                 if (data.statusCode === 200) {
-
                     for await (const item of data.data) {
+                        let arrayNumbers = item.dayOfWeekName.split(",").map(String);
+                        item.day_name = item.dayOfWeekName ? dayOfWeekArray(arrayNumbers) : item.dayOfWeekName
                         item.createdByData = item.createdBy ? await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${item.createdBy}`, config) : null
                         item.StudentData = item.studentId ? await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${item.studentId}`, config) : null
                         item.coachData = item.coachId ? await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${item.coachId}`, config) : null
@@ -276,18 +326,17 @@ const myCourseModules = {
                     for (const booked of data.data) {
                         booked.courseImg = booked.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${booked.courseImg}` : null
                     }
-                    console.log("SetProfileBooked", data.data);
+                    // console.log("SetProfileBooked", data.data);
                     context.commit("SetProfileBooked", data.data)
                 } else {
                     throw { error: data };
                 }
 
             } catch (error) {
-                console.log("err", error);
+                // console.log("err", error);
             }
         },
         async GetMyCourseDetail(context, { account_id, course_id }) {
-            console.log("GetMyCourseDetail")
             context.commit("SetCourseListIsLoading", true)
             try {
                 let config = {
@@ -297,15 +346,18 @@ const myCourseModules = {
                         'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-
                 // let { data } = await axios.get(`http://localhost:3000/api/v1/mycourse/checkin/student/${account_id}/course/${course_id}`, config);
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/checkin/student/${account_id}/course/${course_id}`, config);
-
                 if (data.statusCode === 200) {
-
                     if (data.data && data.statusCode === 200) {
+                        let potential = []
+                        for(let course of data.data.checkIn){
+                            if(course.potential && !potential.some(v => v.checkInPotentialId == course.potential.checkInPotentialId)){
+                                potential.push(course.potential)
+                            }
+                        }
+                        data.data.potential = potential
                         context.commit("SetMyCourseDetail", data.data)
-                        console.log("SetMyCourseDetail ---->", data.data);
                         context.commit("SetCourseListIsLoading", false)
                     }
                     else {
@@ -314,11 +366,9 @@ const myCourseModules = {
                     }
 
                 }
-                context.commit("SetCourseListIsLoading", false)
-
             } catch (error) {
                 context.commit("SetCourseListIsLoading", false)
-                console.log("GetMyCourseDetail_err", error);
+                // console.log("GetMyCourseDetail_err", error);
             }
         },
         async GetMyCourseStudentId(context, account_id) {
@@ -347,13 +397,13 @@ const myCourseModules = {
                     }
                 }
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
-                console.log("data", data);
+                // console.log("data", data);
                 if (data.statusCode === 200) {
                     context.commit("SetStudentCourse", data.data)
                     // context.commit("SetStudentsLoading", false)
                     // const dataCourseSchedule = { dates: [] };
                     // for (const course of data.data) {
-                    // console.log("course", course);
+                    // // console.log("course", course);
                     // for (const date of course.dates.date) {
                     // if(course.period.start !== "Invalid date" && course.period.end !== "Invalid date"){
                     // dataCourseSchedule.dates.push({
@@ -369,7 +419,7 @@ const myCourseModules = {
                     // }
                     // }
                     // if (data_local.roles.includes('R_4')) {
-                    // console.log(data.data)
+                    // // console.log(data.data)
                     // let MyCourse = []
                     // for await (const item of data.data) {
                     // if (MyCourse.filter(v => v.orderItemId === item.orderItemId).length === 0) {
@@ -380,7 +430,7 @@ const myCourseModules = {
                     // context.commit("SetMyCourseStudentId", '')
                     // } else {
                     // context.commit("SetStudentData", data.data)
-                    // console.log("SetStudentData", data.data)
+                    // // console.log("SetStudentData", data.data)
                     // }
                     // context.commit("SetcourseSchedule", dataCourseSchedule);
                     // context.commit("SetStudentsLoading", false)
@@ -390,7 +440,7 @@ const myCourseModules = {
                 }
             } catch (error) {
                 // context.commit("SetStudentsLoading", false)
-                console.log(error);
+                // console.log(error);
             }
         },
 

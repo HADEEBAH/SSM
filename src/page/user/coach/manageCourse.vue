@@ -87,14 +87,16 @@
                       :max-width="$vuetify.breakpoint.smAndUp ? 160 : ''"
                     ></v-img>
                   </v-col>
-                  <v-col >
-                    <v-row  dense>
+                  <v-col>
+                    <v-row dense>
                       <v-col class="text-lg font-bold">{{
                         `${course.name}(${course.subtitle})`
                       }}</v-col>
                       <v-col cols="auto">
                         <v-chip small color="#F9B320" dark
-                          >{{ `${course.start_time}-${course.end_time}` }}น.</v-chip
+                          >{{
+                            `${course.start_time}-${course.end_time}`
+                          }}น.</v-chip
                         >
                       </v-col>
                     </v-row>
@@ -122,7 +124,6 @@
                       }}</v-col>
                     </v-row>
                   </v-col>
-                  
                 </v-row>
               </v-card-text>
             </v-card>
@@ -147,7 +148,24 @@
         <!-- รายสัปดาห์ -->
         <template v-else>
           <!-- COURSE LIST -->
-          <div align="center">
+          <v-row class="justify-center">
+            <v-col cols="12" class="align-center text-center">
+              <v-progress-circular
+                color="#ff6b81"
+                v-if="my_courses_is_loading"
+                indeterminate
+                size="64"
+              ></v-progress-circular>
+
+              <calendarCoach
+                v-if="!my_courses_is_loading"
+                class="w-full"
+                :events="my_courses"
+                :type="time_frame"
+              ></calendarCoach>
+            </v-col>
+          </v-row>
+          <!-- <div align="center">
             <v-progress-circular
               color="#ff6b81"
               v-if="my_courses_is_loading"
@@ -159,7 +177,7 @@
             v-if="!my_courses_is_loading"
             :events="my_courses"
             :type="time_frame"
-          ></calendarCoach>
+          ></calendarCoach> -->
         </template>
       </div>
       <div v-if="tab === 'my teaching'">
@@ -176,12 +194,28 @@
               v-model="filter_course"
               item-text="name"
               item-value="course_id"
-              :items="my_courses"
+              :items="my_courses.filter(v => !v.type)"
               outlined
               dense
-            ></v-autocomplete>
+            >
+              <template v-slot:no-data>
+                <v-row dense>
+                  <v-col align="center">ไม่พบข้อมูล</v-col>
+                </v-row>
+              </template>
+            </v-autocomplete>
           </v-col>
         </v-row>
+        <div  v-if="filterMycourse().length == 0">
+          <v-card flat>
+            <v-card-text class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg" >
+              <span class="text-lg font-bold">
+                <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                ไม่พบข้อมูลการสอน
+              </span>
+            </v-card-text>
+          </v-card>
+        </div>
         <v-card
           dense
           class="mb-3"
@@ -626,7 +660,7 @@
               :class="$vuetify.breakpoint.smAndUp ? '' : 'w-full'"
               outlined
               color="#ff6b81"
-              ><v-icon>mdi-plus-circle-outline</v-icon>แบบฟอร์มการลา</v-btn
+              ><v-icon>mdi-plus-circle-outline</v-icon>แบบฟอร์มขอลา</v-btn
             >
           </v-col>
         </v-row>
@@ -645,7 +679,7 @@
                 ></v-img>
               </template>
               <template v-slot:header>
-                <div class="font-bold text-center">คอร์สทั้งหมด</div>
+                <div class="font-bold text-center">ทั้งหมด</div>
               </template>
               <template v-slot:detail>
                 <v-row class="d-flex align-end">
@@ -799,6 +833,9 @@
               item-key="coachLeaveId"
               show-expand
             >
+            <template v-slot:no-data>
+                ไม่พบข้อมูลใบลา
+            </template>
               <template v-slot:[`item.date`]="{ item }">
                 {{
                   item.startDate === item.endDate
@@ -847,7 +884,7 @@
                   @click="showDialogDetail(item)"
                   ><v-icon>mdi-eye-outline</v-icon>
                 </v-btn>
-                <v-btn icon color="#ff6b81" @click="cancelCoachLeave(item)"
+                <v-btn :disabled="item.status !== 'pending'" icon color="#ff6b81" @click="cancelCoachLeave(item)"
                   ><v-icon>mdi-file-cancel-outline</v-icon>
                 </v-btn>
               </template>
@@ -1297,6 +1334,7 @@ import Swal from "sweetalert2";
 import { dateFormatter } from "@/functions/functions";
 import { mapActions, mapGetters } from "vuex";
 import coachLeaveForm from "../../../components/coach_leave/coachLeaveForm.vue";
+import router from "@/router";
 // import LoadingOverlay from '../../../components/loading/loadingOverlay.vue';
 export default {
   name: "menageCourse",
@@ -1309,6 +1347,7 @@ export default {
     coachLeaveForm,
   },
   data: () => ({
+    form_coach_leave: false,
     singleExpand: false,
     expanded: [],
     filter_course: "",
@@ -1412,15 +1451,47 @@ export default {
     show_potential_data: {},
     select_status: "all",
   }),
+  
   created() {
-    this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    this.GetMyCourses({ coach_id: this.user_detail.account_id });
+    this.GetLoading(true)
+    // console.log("route", this.$route);
+    if (this.$route.query.token) {
+     this.loginShareToken(this.$route)
+    }
+    
+
+
+    
+    // this.GetMyCourses({ coach_id: this.user_detail.account_id });
+    // this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
+    // this.GetCoachs();
   },
+  beforeMount() {
+    this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+    // console.log("user_detail", this.user_detail);
+
+    // this.GetMyCourses({ coach_id: this.user_detail.account_id });
+    // this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
+    // this.GetCoachs();
+  },
+
   mounted() {
+    // console.log("valid", this.user_detail?.roles?.filter((val)=> val === "R_3").length === 0);
+    if (this.user_detail?.roles?.filter((val)=> val === "R_3" || val === "R_2" || val === "R_1").length === 0) {
+      router.replace({name:"UserKingdom"})
+    }
+
+    this.GetMyCourses({ coach_id: this.user_detail.account_id });
+    this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
+    this.GetCoachs();
+
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "จัดการ");
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail.account_id);
     }
+
+
+    this.GetLoading(false)
   },
   watch: {
     tab: function () {
@@ -1440,8 +1511,6 @@ export default {
       show_dialog_coach_leave_form: "CoachModules/getShowDialogCoachLeaveForm",
     }),
     SetFunctionsComputed() {
-      this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
-      this.GetCoachs();
       return "";
     },
     genToday() {
@@ -1459,12 +1528,13 @@ export default {
             ? true
             : false
           : false;
-      console.log(start_date && end_date && period && leave_type && course);
+      // console.log(start_date && end_date && period && leave_type && course);
       return !(start_date && end_date && period && leave_type && course);
     },
   },
   methods: {
     ...mapActions({
+      GetAllHolidays: "ManageScheduleModules/GetAllHolidays",
       GetMyCourses: "CoachModules/GetMyCourses",
       GetCoachs: "CourseModules/GetCoachs",
       SaveCoachLeave: "CoachModules/SaveCoachLeave",
@@ -1476,9 +1546,10 @@ export default {
       loginShareToken: "loginModules/loginShareToken",
       GetProfileDetail: "ProfileModules/GetProfileDetail",
       ShowDialogCoachLeaveForm: "CoachModules/ShowDialogCoachLeaveForm",
+      GetLoading: "LoadingModules/GetLoading",
     }),
     SelectedStatus(status) {
-      console.log(status);
+      // console.log(status);
       this.select_status = status;
     },
     GenDateStr(date) {
@@ -1492,7 +1563,7 @@ export default {
       return date.toLocaleDateString("th-TH", options);
     },
     openFileSummary(file) {
-      // console.log(file)
+      // // console.log(file)
       window.open(file.attFilesUrl, "_blank");
     },
     openFile(file) {
@@ -1557,7 +1628,7 @@ export default {
       course.show_assessment_pantential = !course.show_assessment_pantential;
     },
     genDate(date) {
-      // console.log(date)
+      // // console.log(date)
       return dateFormatter(new Date(date), "DD MT YYYYT");
     },
     RemoveCourse(index) {
@@ -1591,34 +1662,9 @@ export default {
       });
     },
     dowloadFile(file) {
-      console.log(file.attachmentFile);
+      // console.log(file.attachmentFile);
       let url = `${process.env.VUE_APP_URL}/api/v1/files/${file.attachmentFile}`;
       window.open(url, "_blank");
-    },
-    saveCoachLeave() {
-      Swal.fire({
-        icon: "question",
-        title: "ต้องการส่งใบลาใช่หรือไม่ ?",
-        showDenyButton: false,
-        showCancelButton: true,
-        cancelButtonText: "ยกเลิก",
-        confirmButtonText: "ตกลง",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          this.coach_leave_data.courses.forEach((course) => {
-            let my_course_id_part = course.my_course_id.split("|");
-            course.course_id = my_course_id_part[0];
-            course.day_of_week_id = my_course_id_part[1];
-            course.time_id = my_course_id_part[2];
-          });
-          this.coach_leave_data.coach_id = this.user_detail.account_id;
-          this.SaveCoachLeave({
-            coach_leave_data: this.coach_leave_data,
-            files: this.selected_files,
-          });
-          this.closeDialogLeaveForm();
-        }
-      });
     },
     GenCourseLeaveOptions() {
       let my_course_data = [];
@@ -1680,7 +1726,7 @@ export default {
       };
     },
     showDialogDetail(leave_data) {
-      console.log(leave_data);
+      // console.log(leave_data);
       this.show_leave_detail = true;
       this.edited_coach_leave_data = leave_data;
       this.GetAttachmentLeave({ coach_leave_id: leave_data.coachLeaveId });
@@ -1698,7 +1744,7 @@ export default {
     },
     uploadFile() {
       const files = this.$refs.fileInput.files;
-      console.log(files);
+      // console.log(files);
       if (files.length > 0) {
         for (let i = 0; i < files.length; i++) {
           this.selected_files.push(files[i]);
@@ -1708,10 +1754,10 @@ export default {
     filterMycourse() {
       if (this.filter_course) {
         return this.my_courses.filter(
-          (v) => v.course_id === this.filter_course
+          (v) => v.course_id === this.filter_course && !v.type
         );
       } else {
-        return this.my_courses;
+        return this.my_courses.filter( v => !v.type);
       }
     },
   },

@@ -1,14 +1,8 @@
 <template>
   <v-app>
     <v-layout>
-      <v-app-bar
-        clipped-left
-        app
-        dark
-        fixed
-        elevation="0"
-        src="../assets/navbar/bg-nav-bar.png"
-      >
+      <v-app-bar clipped-left app dark fixed elevation="0" :src="navbar_img">
+        <!-- {{ navbar_img }} -->
         <v-app-bar-nav-icon @click="drawer = !drawer">
           <v-icon>{{
             drawer ? "mdi-chevron-double-left" : "mdi-dots-vertical"
@@ -32,10 +26,7 @@
                 </div>
                 <div v-else>
                   <v-avatar class="mr-2" size="24">
-                    <v-img
-                      src="../assets/navbar_user/default_image_profile.svg"
-                      size="24"
-                    />
+                    <v-img :src="logo" size="24" />
                   </v-avatar>
                 </div>
 
@@ -64,11 +55,7 @@
       >
         <v-row>
           <v-col class="flex align-center justify-center">
-            <v-img
-              src="../assets/navbar/drawer_img.png"
-              max-height="115"
-              max-width="115"
-            ></v-img>
+            <v-img :src="logo" max-height="115" max-width="115"></v-img>
           </v-col>
         </v-row>
         <v-list class="pr-0" nav flat>
@@ -130,6 +117,9 @@ import { mapActions } from "vuex";
 export default {
   name: "navbarAdmin",
   data: () => ({
+    // navbar_img: `http://localhost:8080/navbar_img.svg`,
+    navbar_img: `${process.env.VUE_APP_URL}/navbar_img.svg`,
+    logo: `${process.env.VUE_APP_URL}/logo.svg`,
     menu: false,
     drawer: false,
     active_menu: "",
@@ -140,8 +130,8 @@ export default {
     },
     user_detail: null,
     menu_drawer_list: [
-      // { title: "แดชบอร์ด", to: "DashboardList", child: [] }, // to ให้ใส่ name ของ router
-      { title: "แดชบอร์ด", to: "", child: [] }, // to ให้ใส่ name ของ router
+      // { title: "แดชบอร์ด", to: "Dashboard", child: [] }, // to ให้ใส่ name ของ router
+      // { title: "แดชบอร์ด", to: "", child: [] }, // to ให้ใส่ name ของ router
       { title: "ตารางเรียน", to: "ManageSchedule", child: [] },
       // { title: "เพิ่มผู้เรียน", to: "Student", child: [] },
       // { title: "ตารางเรียน", to: "Schedule", child: [] },
@@ -150,7 +140,7 @@ export default {
         title: "คอร์สเรียน",
         to: "",
         child: [
-          // { title: "จัดการการจอง", to: "CourseReserveList" },
+          { title: "จัดการการจอง", to: "CourseReserveList" },
           { title: "จัดการคอร์สทั้งหมด", to: "CourseList" },
           { title: "สร้างคอร์สเรียน", to: "CourseCreate" },
         ],

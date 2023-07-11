@@ -5,35 +5,104 @@
     <div>
       <label class="text-xl font-bold">ข้อมูลตารางเรียน</label>
       <v-row dense class="my-3">
-        <v-col
-          cols="4"
-          v-for="(type, type_index) in course_type"
-          :key="type_index"
-        >
-          <v-card flat @click="type_selected = type.value" class="rounded-lg">
+        <v-col cols="4">
+          <v-card
+            flat
+            @click="
+              data_local.roles.length > 0
+                ? $router.push({
+                    name: 'StudentsSchedule',
+                    params: { action: 'MyCourse' },
+                  })
+                : ''
+            "
+            class="rounded-lg"
+          >
             <v-card-text
               :class="
-                type_selected === type.value ? 'bg-[#FF6B81]' : 'bg-[#F5F5F5]'
+                this.$route.params.action == 'MyCourse'
+                  ? 'bg-[#FF6B81]'
+                  : 'bg-[#F5F5F5]'
               "
               class="rounded-lg flex justify-center align-center pa-2"
             >
               <label
                 :class="
-                  type_selected === type.value
+                  this.$route.params.action == 'MyCourse'
                     ? 'text-white'
                     : ' text-[#B3B3B3]'
                 "
                 class="font-bold mr-2"
-                >{{ type.name }}</label
+                >คอร์สของฉัน</label
               >
             </v-card-text>
           </v-card>
         </v-col>
+        <v-col cols="4">
+          <v-card
+            flat
+            @click="
+              data_local.roles.length > 0
+                ? $router.push({
+                    name: 'StudentsSchedule',
+                    params: { action: 'MySchedule' },
+                  })
+                : ''
+            "
+            class="rounded-lg"
+          >
+            <v-card-text
+              :class="
+                this.$route.params.action == 'MySchedule'
+                  ? 'bg-[#FF6B81]'
+                  : 'bg-[#F5F5F5]'
+              "
+              class="rounded-lg flex justify-center align-center pa-2"
+            >
+              <label
+                :class="
+                  this.$route.params.action == 'MySchedule'
+                    ? 'text-white'
+                    : ' text-[#B3B3B3]'
+                "
+                class="font-bold mr-2"
+                >ตารางเรียน</label
+              >
+            </v-card-text>
+          </v-card>
+        </v-col>
+        <v-col cols="4">
+          <v-card
+            flat
+            @click="
+              $router.push({
+                name: 'StudentsSchedule',
+                params: { action: 'MyBooking' },
+              })
+            "
+            class="rounded-lg"
+          >
+            <v-card-text
+              :class="
+                this.$route.params.action == 'MyBooking'
+                  ? 'bg-[#FF6B81]'
+                  : 'bg-[#F5F5F5]'
+              "
+              class="rounded-lg font-bold flex justify-center align-center pa-2"
+            >
+              คอร์สที่จอง
+            </v-card-text>
+          </v-card>
+        </v-col>
+
+        <!-- <v-col cols="4" v-if="$route.params.action == 'studentsSchedule'"> ตารางเรียน </v-col>
+        <v-col cols="4" v-if="$route.params.action == 'MyBooking'"> คอร์สที่จอง </v-col> -->
       </v-row>
 
       <!-- PAGE 1 -->
       <v-expand-x-transition transition="scale-transition">
-        <div v-if="type_selected == 'students_course'">
+        <!-- <div v-if="type_selected == 'MyCourse'"> -->
+        <div v-if="$route.params.action == 'MyCourse'">
           <!-- Role Parent -->
           <div v-if="data_local.roles.includes('R_4')">
             <v-row dense class="mb-3">
@@ -52,10 +121,10 @@
                 ></v-autocomplete>
               </v-col>
             </v-row>
-            <div v-for="(item, index) in my_course" :key="index">
+            <div v-for="(item, index) in my_course" :key="`${index}-my_course`">
               <v-card
                 outlined
-                class="mb-3"
+                class="mb-3 pa-2"
                 @click="
                   $router.push({
                     name: 'StudentCourse',
@@ -66,18 +135,20 @@
                 <v-card-text>
                   <v-row dense>
                     <!-- img -->
-                    <v-col cols="12" sm="2">
+                    <v-col cols="12" sm="5">
                       <v-img
-                        max-height="180"
                         :src="
                           item.courseImg
                             ? showImg(item.courseImg)
                             : require(`@/assets/course/default_course_img.svg`)
                         "
+                        class="w-full h-full rounded-lg"
+                        cover
+                        height="200"
                       ></v-img>
                     </v-col>
                     <!-- detail -->
-                    <v-col cols="12" sm="7">
+                    <v-col cols="12" sm="3">
                       <v-row dense>
                         <v-col class="text-lg font-bold">
                           {{
@@ -127,11 +198,8 @@
                         <v-col>
                           <v-chip color="#F9B320" dark>
                             {{
-                              dayOfWeekName(item.dates.day) == ""
-                                ? "-"
-                                : dayOfWeekName(item.dates.day)
+                              `${item.day_name} ${item.period.start} - ${item.period.end}น.`
                             }}
-                            {{ item.period.start }} - {{ item.period.end }} น.
                           </v-chip>
                         </v-col>
                       </v-row>
@@ -140,7 +208,7 @@
                     <!-- circle -->
                     <v-col
                       cols="12"
-                      sm="3"
+                      sm="4"
                       class="d-flex align-center justify-center"
                     >
                       <!-- {{ item.courseNameEn }} -->
@@ -172,7 +240,11 @@
                 </span>
               </v-card-text>
             </v-card>
-            <div v-else v-for="(item, index) in student_data" :key="index">
+            <div
+              v-else
+              v-for="(item, index) in student_data.filter((v) => !v.comp)"
+              :key="`${index}-student_data`"
+            >
               <v-card
                 outlined
                 @click="
@@ -181,12 +253,12 @@
                     params: { course_id: item.courseId },
                   })
                 "
-                class="mb-3"
+                class="mb-3 pa-2"
               >
                 <v-row dense>
                   <!-- img -->
-                  <v-col cols="12" sm="2">
-                    <v-col
+                  <v-col cols="12" sm="5" align="center">
+                    <!-- <v-col
                       style="
                         display: block;
                         margin-left: auto;
@@ -194,18 +266,21 @@
                         width: 100%;
                         margin-top: 10%;
                       "
-                    >
-                      <v-img
-                        :src="
-                          item.courseImg
-                            ? showImg(item.courseImg)
-                            : require(`@/assets/course/default_course_img.svg`)
-                        "
-                      ></v-img>
-                    </v-col>
+                    > -->
+                    <v-img
+                      :src="
+                        item.courseImg
+                          ? showImg(item.courseImg)
+                          : require(`@/assets/course/default_course_img.svg`)
+                      "
+                      class="w-full h-full rounded-lg"
+                      cover
+                      height="200"
+                    ></v-img>
+                    <!-- </v-col> -->
                   </v-col>
                   <!-- detail -->
-                  <v-col cols="12" sm="7">
+                  <v-col cols="12" sm="3">
                     <v-row dense>
                       <v-col class="text-lg font-bold">
                         {{ item.courseNameTh == "" ? "-" : item.courseNameTh }}
@@ -247,21 +322,14 @@
                       <v-col>
                         <v-chip color="#F9B320" dark>
                           {{
-                            dayOfWeekName(item.dates.day) == ""
-                              ? "-"
-                              : dayOfWeekName(item.dates.day)
+                            `${item.day_name} ${item.period.start} - ${item.period.end}น.`
                           }}
-                          {{ item.period.start }} - {{ item.period.end }} น.
                         </v-chip>
                       </v-col>
                     </v-row>
                   </v-col>
                   <!-- circle -->
-                  <v-col
-                    cols="12"
-                    sm="3"
-                    class="d-flex align-center justify-center"
-                  >
+                  <v-col cols="12" sm="4" class="d-flex align-center justify-center">
                     <!-- {{ item.courseNameEn }} -->
                     <v-progress-circular
                       :rotate="-90"
@@ -284,7 +352,8 @@
 
       <!-- PAGE 2 -->
       <v-expand-x-transition transition="scale-transition">
-        <div v-if="type_selected == 'students_schedule'">
+        <!-- <div v-if="type_selected == 'MySchedule'"> -->
+        <div v-if="$route.params.action == 'MySchedule'">
           <!-- Role parent -->
           <div v-if="data_local.roles.includes('R_4')">
             <v-row class="mb-3">
@@ -351,7 +420,7 @@
                       <v-col
                         cols="auto"
                         v-for="(time, time_index) in time_frame_list"
-                        :key="`${time_index}-time`"
+                        :key="`${time_index}-time-r5`"
                       >
                         <v-btn
                           @click="time_frame = time.value"
@@ -382,7 +451,8 @@
 
       <!-- PAGE 3 -->
       <v-expand-x-transition transition="scale-transition">
-        <div v-if="type_selected == 'students_bookedcourse'">
+        <!-- <div v-if="type_selected == 'MyBooking'"> -->
+        <div v-if="$route.params.action == 'MyBooking'">
           <!-- <pre>{{ profile_booked }}</pre> -->
           <!-- Role Parent -->
           <div v-if="data_local.roles.includes('R_4')">
@@ -401,17 +471,16 @@
                 ></v-autocomplete>
               </v-col>
             </v-row>
-            <v-card flat v-if="ReserveList().length == 0">
-              <v-card-text
-                class="pa-2 text-center border-2 border-[#ff6b81] rounded-lg"
-              >
-                <span class="text-lg font-bold">
-                  <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                  ไม่พบข้อมูลการจอง
-                </span>
-              </v-card-text>
-            </v-card>
-            <div v-else>
+            <v-card-text
+              class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
+              v-if="ReserveList().length == 0"
+            >
+              <span class="text-lg font-bold">
+                <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                ไม่พบข้อมูลการจอง
+              </span>
+            </v-card-text>
+            <div v-if="ReserveList().length > 0">
               <v-card
                 v-for="(item_booked, index_booked) in ReserveList()"
                 :key="`${index_booked}-reserve`"
@@ -488,14 +557,10 @@
                         </v-col>
 
                         <v-col>
-                          <v-card color="yellow" class="rounded-lg text-center">
-                            {{
-                              dayOfWeekName(
-                                item_booked.dayOfWeekName.split(",")
-                              )
-                            }}
+                          <v-chip color="#F9B320" dark>
+                            {{ item_booked.day_name }}
                             {{ item_booked.start }} - {{ item_booked.end }} น.
-                          </v-card>
+                          </v-chip>
                         </v-col>
 
                         <v-row dense>
@@ -548,9 +613,7 @@
                             class="mdi mdi-calendar-today"
                             style="color: #ff6b81"
                           ></span>
-                          {{
-                            dayOfWeekName(item_booked.dayOfWeekName.split(","))
-                          }}
+                          {{ item_booked.day_name }}
                         </v-col>
 
                         <v-col cols="12" md="12" sm="12">
@@ -592,7 +655,7 @@
             </div>
           </div>
           <!-- Role student -->
-          <div v-if="data_local.roles.includes('R_5')">
+          <div v-if="!data_local.roles.includes('R_4')">
             <v-card-text
               class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
               v-if="ReserveList().length == 0"
@@ -602,6 +665,16 @@
                 ไม่พบข้อมูลการจอง
               </span>
             </v-card-text>
+            <!-- <v-card flat v-if="ReserveList().length == 0">
+              <v-card-text
+                class="pa-2 text-center border-2 border-[#ff6b81] rounded-lg"
+              >
+                <span class="text-lg font-bold">
+                  <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                  ไม่พบข้อมูลการจอง
+                </span>
+              </v-card-text>
+            </v-card> -->
             <div v-else>
               <v-card
                 v-for="(item_booked, index_booked) in ReserveList()"
@@ -679,14 +752,10 @@
                         </v-col>
 
                         <v-col>
-                          <v-card color="yellow" class="rounded-lg text-center">
-                            {{
-                              dayOfWeekName(
-                                item_booked.dayOfWeekName.split(",")
-                              )
-                            }}
-                            {{ item_booked.start }} - {{ item_booked.end }} น.
-                          </v-card>
+                          <v-chip color="#F9B320" dark>
+                            {{ item_booked.day_name }} {{ item_booked.start }} -
+                            {{ item_booked.end }} น.
+                          </v-chip>
                         </v-col>
                       </v-col>
                       <!-- circle -->
@@ -731,9 +800,7 @@
                             class="mdi mdi-calendar-today"
                             style="color: #ff6b81"
                           ></span>
-                          {{
-                            dayOfWeekName(item_booked.dayOfWeekName.split(","))
-                          }}
+                          {{ item_booked.day_name }}
                         </v-col>
 
                         <v-col cols="12" md="12" sm="12">
@@ -804,9 +871,9 @@ export default {
     show_detail: false,
     activeCard: null,
     course_type: [
-      { name: "คอร์สของฉัน", value: "students_course" },
-      { name: "ตารางเรียน", value: "students_schedule" },
-      { name: "คอร์สที่จอง", value: "students_bookedcourse" },
+      { name: "คอร์สของฉัน", value: "MyCourse" },
+      { name: "ตารางเรียน", value: "MySchedule" },
+      { name: "คอร์สที่จอง", value: "MyBooking" },
     ],
     time_frame_list: [
       { label: "รายวัน", value: "day" },
@@ -819,7 +886,7 @@ export default {
     search_course_detail: "",
     search_schadule: "",
     search_booked: "",
-    type_selected: "students_schedule",
+    type_selected: "studentsSchedule",
     time_frame: "month",
     a_test: "",
     b_test: "",
@@ -834,14 +901,33 @@ export default {
     localStorage.removeItem("userRelationsAccountId");
   },
   created() {
-    this.userRelationsAccountId = localStorage.getItem(
-      "userRelationsAccountId"
-    );
     if (this.$route.query.token) {
-      this.loginShareToken(this.$route.query.token);
+      this.loginShareToken(this.$route);
     }
+  },
+
+  beforeMount() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    // this.GetStudentData(this.user_detail.account_id);
+  },
+
+  mounted() {
+    // if (
+    //   this.user_detail?.roles?.filter((val) => val === "R_4" || val === "R_5")
+    //     .length === 0
+    // ) {
+    //   router.replace({ name: "UserKingdom" });
+    // }
+    this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
+
+    if (localStorage.getItem("userRelationsAccountId")) {
+      // console.log(localStorage.getItem("userRelationsAccountId"));
+    } else if (this.user_detail.roles.includes("R_5")) {
+      this.GetStudentData(this.user_detail.account_id);
+    }
+    // else {
+    //   // this.GetStudentData(null);
+    //   this.GetStudentData(this.user_detail.account_id);
+    // }
   },
 
   beforeUpdate() {
@@ -850,53 +936,31 @@ export default {
       "ข้อมูลตารางเรียน"
     );
   },
-  mounted() {
-    this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
 
-    if (localStorage.getItem("userRelationsAccountId")) {
-      // localStorage.getItem("userRelationsAccountId");
-      // localStorage.getItem("userRelationsAccountId");
-      // console.log(
-      //   "object----userRelationsAccountId",
-      //   this.userRelationsAccountId
-      // );
-      // this.GetStudentData(this.userRelationsAccountId);
-      // for (const item of JSON.parse(localStorage.getItem("relations"))) {
-      //   this.GetStudentData(item.student.studentId);
-      //   console.log("student");
-      // }
-    } else if (this.user_detail.roles.includes("R_5")) {
-      this.GetStudentData(this.user_detail.account_id);
-    } else {
-      // this.GetStudentData(null);
-      this.GetStudentData(this.user_detail.account_id);
-    }
-  },
+  // watch: {
+  //   type_selected: function () {
+  //     // console.log("type_selected", this.type_selected);
+  //     this.loading = true;
+  //     setTimeout(async () => {
+  //       this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
+  //       if (this.type_selected == "MyCourse") {
+  //         if (this.user_detail.roles.includes("R_4")) {
+  //           this.GetStudentData(this.user_detail.account_id);
+  //           for (const item of JSON.parse(localStorage.getItem("relations"))) {
+  //             this.GetStudentData(item.student.studentId);
+  //             // console.log("student");
+  //           }
+  //         } else if (this.user_detail.roles.includes("R_5")) {
+  //           this.GetStudentData(this.user_detail.account_id);
+  //         } else {
+  //           this.GetStudentData(null);
+  //         }
+  //       }
 
-  watch: {
-    type_selected: function () {
-      console.log("type_selected", this.type_selected);
-      this.loading = true;
-      setTimeout(async () => {
-        this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-        if (this.type_selected == "students_course") {
-          if (this.user_detail.roles.includes("R_4")) {
-            this.GetStudentData(this.user_detail.account_id);
-            for (const item of JSON.parse(localStorage.getItem("relations"))) {
-              this.GetStudentData(item.student.studentId);
-              console.log("student");
-            }
-          } else if (this.user_detail.roles.includes("R_5")) {
-            this.GetStudentData(this.user_detail.account_id);
-          } else {
-            this.GetStudentData(null);
-          }
-        }
-
-        this.loading = false;
-      }, 200);
-    },
-  },
+  //       this.loading = false;
+  //     }, 200);
+  //   },
+  // },
   methods: {
     ...mapActions({
       GetStudentData: "MyCourseModules/GetStudentData",
@@ -909,7 +973,7 @@ export default {
     }),
     prev() {
       this.$refs.calendar.prev();
-      console.log(this.$refs.calendar.title);
+      // console.log(this.$refs.calendar.title);
     },
     next() {
       this.$refs.calendar.next();
@@ -928,11 +992,11 @@ export default {
     async searchStudentCourse(studentId) {
       if (studentId !== null) {
         this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-        console.log("item1", studentId);
+        // console.log("item1", studentId);
         await this.GetStudentData(studentId);
-        console.log("mycourse1", this.student_data);
+        // console.log("mycourse1", this.student_data);
       } else {
-        console.log("this.user_detail.account_id", this.user_detail.account_id);
+        // console.log("this.user_detail.account_id", this.user_detail.account_id);
         this.GetStudentData(this.user_detail.account_id);
       }
     },
@@ -940,12 +1004,12 @@ export default {
     async searchStudentSchadule(studentId) {
       this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
 
-      console.log("item", studentId);
+      // console.log("item", studentId);
       await this.GetStudentData(studentId);
     },
 
     async searchStudentBooked(studentId) {
-      console.log("item", studentId);
+      // console.log("item", studentId);
       await this.GetProfileBooked(studentId);
     },
     ReserveList() {
@@ -964,21 +1028,21 @@ export default {
           reserveList.push(reserve);
         }
       });
-      this.student_reserve.forEach((reserve) => {
-        if (
-          reserveList.filter(
-            (v) =>
-              v.coachId == reserve.coachId &&
-              v.courseId == reserve.courseId &&
-              v.dayOfWeekId === reserve.dayOfWeekId &&
-              v.timeId === reserve.timeId &&
-              v.studentId === reserve.studentId
-          ).length === 0
-        ) {
-          reserveList.push(reserve);
-        }
-      });
-      console.log("student_reserve :", this.student_reserve);
+      // this.student_reserve.forEach((reserve) => {
+      //   if (
+      //     reserveList.filter(
+      //       (v) =>
+      //         v.coachId == reserve.coachId &&
+      //         v.courseId == reserve.courseId &&
+      //         v.dayOfWeekId === reserve.dayOfWeekId &&
+      //         v.timeId === reserve.timeId &&
+      //         v.studentId === reserve.studentId
+      //     ).length === 0
+      //   ) {
+      //     reserveList.push(reserve);
+      //   }
+      // });
+      // // console.log("student_reserve :", this.student_reserve);
       return reserveList;
     },
     dayOfWeekName(days) {
@@ -1031,9 +1095,11 @@ export default {
     //   },
     // },
     setFunctions() {
+      if (this.user_detail.roles.includes("R_5")) {
+        // this.GetStudentReserve(this.user_detail.account_id);
+        this.GetAll(this.user_detail.account_id);
+      }
       this.GetProfileBooked(this.user_detail.account_id);
-      this.GetStudentReserve(this.user_detail.account_id);
-      this.GetAll(this.user_detail.account_id);
       return "";
     },
     MobileSize() {

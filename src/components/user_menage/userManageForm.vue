@@ -306,7 +306,7 @@
                           outlined
                           item-color="#ff6b81"
                           color="#ff6b81"
-                          @change="selectRole(seledtedRole)"
+                          @change="selectRole()"
                         >
                           <template v-slot:item="{ item }">
                             <v-list-item-content>
@@ -519,7 +519,6 @@
                   value="Jacob"
                   color="pink"
                   item-color="pink"
-                  @change="onCheckboxChange(item.roleId)"
                 ></v-checkbox>
               </v-col>
               <!-- </v-row> -->
@@ -1055,91 +1054,24 @@ export default {
     ],
     error_message: "",
   }),
-  // bef
-  created() {
-    // if (this.show_by_id.userRoles.length > 0) {
-    //   for (const items of this.show_by_id.userRoles) {
-    //     console.log("items=>", items);
-    //     this.seledtedRole = items.roleId;
-    //   }
-    // }
-  },
 
   beforeMount() {
     this.params = this.$route.params.account_id;
     for (const item_relation of this.data_user_relation_management) {
-      console.log("test", item_relation.studentId);
       this.student_id = item_relation.studentId;
     }
 
-    console.log("show_by_id=>", this.show_by_id);
     if (this.show_by_id.userRoles.length > 0) {
       for (const items of this.show_by_id.userRoles) {
-        console.log("items=>", items);
         this.seledtedRole = items.roleId;
       }
     }
 
     this.GetDataRelationsManagement(this.show_by_id);
-    // this.GetDataRelationsManagement(this.data_user_by_id);
-    console.log(
-      "before mounted data_user_relation_management",
-      this.data_user_relation_management
-    );
   },
 
   mounted() {
-    // if (this.$route.params.action == "edit") {
-    //   this.isMatch = true;
-    //   if (
-    //     this.user_data.selectedbox ==
-    //     this.user_data.privilege.includes("นักเรียน")
-    //   ) {
-    //     console.log("นักเรียน");
-    //     this.user_data.isCardOpen = true;
-    //   }
-    //   if (this.user_data.selectedbox == false) {
-    //     console.log("ปิดนักเรียน");
-    //     this.user_data.isCardOpen = false;
-    //   } else if (
-    //     this.user_data.selectedbox ==
-    //     this.user_data.privilege.includes("ผู้ปกครอง")
-    //   ) {
-    //     this.user_data.isCardParentOpen = true;
-    //   }
-    // }
-
     this.GetDataRelationsManagement(this.show_by_id);
-    console.log(
-      "mounted data_user_relation_management",
-      this.data_user_relation_management
-    );
-    // this.GetDataRelationsManagement(this.data_user_by_id);
-
-    // for (const show_data of this.show_by_id.userRoles) {
-    //   console.log("show_data", show_data);
-    //   if (show_data.roleId == "R_4") {
-    //     if (this.data_user_relation_management.length > 0) {
-    //       this.isOpenParent = true;
-    //       for (const item_relation of this.data_user_relation_management) {
-    //         this.GetStudentSchedule(item_relation.studentId);
-    //       }
-    //     } else {
-    //       this.data_user_relation_management = [];
-    //     }
-    //   } else if (show_data.roleId == "R_5") {
-    //     if (this.data_user_relation_management.length > 0) {
-    //       this.isOpenStudent = true;
-    //       for (const item_relation of this.data_user_relation_management) {
-    //         this.GetStudentSchedule(item_relation.studentId);
-    //       }
-    //     } else {
-    //       this.data_user_relation_management = [];
-    //     }
-    //   } else {
-    //     console.log("show_data", show_data.roleId);
-    //   }
-    // }
   },
   methods: {
     ...mapActions({
@@ -1159,10 +1091,8 @@ export default {
     openFileSelector() {
       this.$refs.fileInput.click();
     },
-    selectRole(roles) {
+    selectRole() {
       this.selectRoles;
-      console.log("roles", roles);
-      console.log("selectRoles", this.selectRoles);
     },
 
     showImg(item) {
@@ -1181,7 +1111,6 @@ export default {
 
     // uploadFile() {
     //   this.file = this.$refs.fileInput.files[0];
-    //   console.log("file=>", this.file);
     //   if (!this.file) return;
     //   const reader = new FileReader();
     //   reader.onload = (e) => {
@@ -1239,7 +1168,6 @@ export default {
         this.isMatch = false;
         this.isNotMatch = true;
         this.username_alert = "ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบใหม่อีกครั้ง ";
-        console.log(this.username_alert, "--> false");
       }
     },
 
@@ -1249,7 +1177,6 @@ export default {
     checkPhoneNumber() {
       let x = this.user_data.phone_num.replace(/\D/g, "");
       x = x.match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
-      console.log(x);
       this.user_data.phone_num = !x[2]
         ? x[1]
         : x[1] + "-" + x[2] + (x[3] ? "-" + x[3] : "");
@@ -1292,17 +1219,6 @@ export default {
       }
     },
 
-    onCheckboxChange(role_id) {
-      console.log("role_id=>", role_id);
-      // if (this.user_data.selectedbox) {
-      //   // Checkbox is selected, open the card
-      //   this.user_data.isCardOpen = true;
-      // } else {
-      //   // Checkbox is unselected, close the card
-      //   this.user_data.isCardOpen = false;
-      // }
-    },
-
     addStudentsCard() {
       this.students.students_detail.push({
         username: "",
@@ -1318,24 +1234,18 @@ export default {
       this.ChangeCardStudens(this.students);
     },
     remove(item) {
-      console.log(item, "dddd");
       const index = this.selectRoles.indexOf(item.role);
       this.selectRoles.splice(index, 1);
 
-      // console.log(index, "sss");
-      // if (index >= 0) this.roles.splice(index, 1);
     },
 
     checkUsername(username, type) {
-      console.log("username=>", username);
-      console.log("type=>", type);
       if (username != "") {
         this.checkUsernameOneid({
           username: username,
           status: null,
           type: type,
         }).then(() => {
-          console.log("global_data_relation", this.global_data_relation);
           this.global_data_relation =
             type == "student" ? this.user_student_data[0] : this.user_data[0];
           this.relation.account_id = this.global_data_relation.userOneId;
@@ -1343,11 +1253,6 @@ export default {
           this.relation.lastname_en = this.global_data_relation.lastNameEng;
           this.relation.tel = this.global_data_relation.mobileNo;
 
-          // if (type === "student") {
-          //   console.log("data_student=>", this.user_student_data);
-          // } else {
-          //   console.log("data_user=>",this.user_student_data);
-          // }
         });
       } else {
         Swal.fire({
@@ -1376,11 +1281,8 @@ export default {
               },
             };
 
-            console.log("object", this.user_data);
             for (const data of this.user_data) {
-              console.log("data", data);
               this.set_parent_id = data.userOneId;
-              console.log("userOneId", this.set_parent_id);
             }
             let payload = {
               studentId:
@@ -1391,10 +1293,7 @@ export default {
                 this.global_role_id === "R_4"
                   ? this.$route.params.account_id
                   : this.relation.account_id,
-              // parentId: this.set_parent_id,
-              // this.$route.params.account_id
             };
-            console.log("payload :", payload);
             let { data } = await axios.post(
               `${process.env.VUE_APP_URL}/api/v1/relations/user`,
               payload,
@@ -1418,7 +1317,6 @@ export default {
                     };
                     this.GetDataRelationsManagement(this.show_by_id);
                     // this.GetDataRelationsManagement(this.data_user_by_id);
-                    console.log("tset", this.data_user_relation_management);
                   }
                 });
               } else {
@@ -1456,7 +1354,6 @@ export default {
               this.error_message = "เกิดข้อผิดพลาด";
             }
 
-            console.log("error=>", response);
             Swal.fire({
               icon: "error",
               title: this.error_message,
@@ -1479,10 +1376,7 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.dialog_show = false;
-          console.log("remove");
           for (const role of this.show_by_id.userRoles) {
-            console.log("role.roleId", role.roleId);
-            console.log("relations", relations);
 
             this.RemoveRelation({
               parentId:
@@ -1504,7 +1398,6 @@ export default {
     },
 
     openAddRelationsDialog(username, role_id) {
-      console.log("username", username);
       this.global_username = username;
       this.global_role_id = role_id;
       this.add_relations = true;
@@ -1516,7 +1409,6 @@ export default {
       this.changeDialogRegisterOneId(true);
     },
     updateData(account_id) {
-      console.log("user_account_id", account_id);
       Swal.fire({
         icon: "question",
         title: "คุณต้องการแก้ไขข้อมูลหรือไม่",
@@ -1545,7 +1437,6 @@ export default {
               roles:
                 this.seledtedRole != "" ? [{ roleId: this.seledtedRole }] : [],
             };
-            console.log("payload", payload);
             let bodyFormData = new FormData();
             bodyFormData.append(
               "image",
@@ -1556,7 +1447,6 @@ export default {
               //   : null
             );
             bodyFormData.append("payload", JSON.stringify(payload));
-            console.log("bodyFormData", bodyFormData);
 
             let { data } = await axios.patch(
               //`http://localhost:3000/api/v1/usermanagement/update/${account_id}`,
@@ -1579,64 +1469,14 @@ export default {
                       },
                     });
                   }
-                  console.log("data", data.data);
                 });
                 this.GetShowById(this.$route.params.account_id);
               }
-              // else if (
-              //   data.data === "Can not change role relations is already."
-              // ) {
-              //   Swal.fire({
-              //     icon: "error",
-              //     title: "เกิดข้อผิดพลาด",
-              //     text: "เนื่องจากไม่สามารถเปลี่ยนบทบาทได้!",
-              //   }).then(async (result) => {
-              //     if (result.isConfirmed) {
-              //       this.$router.push({
-              //         name: "UserDetail",
-              //         params: {
-              //           action: "view",
-              //           account_id: this.$route.params.account_id,
-              //         },
-              //       });
-              //     }
-              //   });
-              //   this.GetShowById(this.$route.params.account_id);
-              // }
             } else {
-              // console.log("error", error);
 
               throw { message: data.data };
             }
           } catch ({ response }) {
-            // catch (error) {
-            //   console.log("catch", error);
-            //   if (
-            //         data.data === "Can not change role relations is already."
-            //       ) {
-            //         Swal.fire({
-            //           icon: "error",
-            //           title: "เกิดข้อผิดพลาด",
-            //           text: "เนื่องจากไม่สามารถเปลี่ยนบทบาทได้!",
-            //         }).then(async (result) => {
-            //           if (result.isConfirmed) {
-            //             this.$router.push({
-            //               name: "UserDetail",
-            //               params: {
-            //                 action: "view",
-            //                 account_id: this.$route.params.account_id,
-            //               },
-            //             });
-            //           }
-            //         });
-            //         this.GetShowById(this.$route.params.account_id);
-            //       }
-
-            //   Swal.fire({
-            //     icon: "error",
-            //     title: error.data.data.message,
-            //   });
-            // }
             if (
               response?.data?.message ===
               "Can not change role relations is already."
@@ -1729,12 +1569,10 @@ export default {
     },
   },
   watch: {
-    last_user_registered: async function (val) {
+    last_user_registered: async function () {
       this.add_parent = false;
       this.add_student = false;
 
-      console.log(this.last_user_registered);
-      console.log("val", val);
       if (this.last_user_registered.type === "parent") {
         this.AddRelations({
           studentId: this.$route.params.account_id,
@@ -1759,7 +1597,6 @@ export default {
       this.GetDataRelationsManagement(this.show_by_id);
       // this.GetDataRelationsManagement(this.data_user_by_id);
       for (const show_data of this.show_by_id.userRoles) {
-        console.log("show_data", show_data);
         if (show_data.roleId == "R_4") {
           if (this.data_user_relation_management.length > 0) {
             this.isOpenParent = true;
@@ -1778,8 +1615,6 @@ export default {
           } else {
             this.data_user_relation_management = [];
           }
-        } else {
-          console.log("show_data", show_data.roleId);
         }
       }
     },
@@ -1787,14 +1622,12 @@ export default {
     "show_by_id.userRoles.length": function () {
       if (this.show_by_id.userRoles.length > 0) {
         for (const items of this.show_by_id.userRoles) {
-          console.log("items=>", items);
           this.seledtedRole = items?.roleId ? items.roleId : "abc";
         }
       }
     },
 
     show_by_id: function () {
-      console.log("len", this.show_by_id.userRoles.length);
       if (this.show_by_id.userRoles.length > 0) {
         this.show_by_id.userRoles.map((val) => {
           this.seledtedRole = val.roleId;
@@ -1802,7 +1635,6 @@ export default {
       } else {
         this.seledtedRole = "";
       }
-      console.log("this.seledtedRole", this.seledtedRole);
     },
   },
 };

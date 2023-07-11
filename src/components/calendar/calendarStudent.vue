@@ -93,22 +93,47 @@
               <v-card flat>
                 <v-card-text class="border-2 border-[#ff6b81]">
                   <v-row dense>
-                    <v-col cols="auto" class="text-sm text-[#999999]">
-                      {{ `${event.start_time}` }}<br />{{ `${event.end_time}` }}
+                    <v-col
+                      v-if="event.type"
+                      cols="auto"
+                      class="text-sm text-[#999999]"
+                    >
+                      -
+                    </v-col>
+                    <v-col v-else cols="12" class="text-sm text-[#999999]">
+                      {{ `${event.start_time}` }} - {{ `${event.end_time}` }}
                     </v-col>
                     <v-col cols="auto">
                       <v-icon small :color="event.color">mdi-circle</v-icon>
                     </v-col>
+                    <v-col cols="10" class="text-sm text-[#999999]">
+                      {{ `${event.start_time}` }} - {{ `${event.end_time}` }}
+                    </v-col>
+
                     <v-col>
+                      เรียนโดย:
+                      <span class="font-bold">{{ event.timed }}</span>
+
                       <v-row dense>
-                        <label class="font-bold">{{ event.timed }} </label>
+                        <v-col v-if="!event.type">
+                          คอร์ส: <span class="font-bold">{{ event.name }}</span>
+                        </v-col>
+                        <v-col v-else
+                          >คอร์ส:
+                          <span class="font-bold">{{ event.name }}</span>
+                        </v-col>
                       </v-row>
                       <v-row dense>
-                        <v-col> เรียนโดย: {{ event.name }} </v-col>
+                        <v-col v-if="!event.type">
+                          คอร์ส: {{ event.name }}
+                        </v-col>
+                        <v-col v-else>{{ event.name }} </v-col>
                       </v-row>
-                      <v-row dense>
+                      <v-row dense v-if="!event.type">
                         <v-col class="text-sm">
-                          โค้ช: {{ event.subtitle }} <br />
+                          โค้ช:
+                          <span class="font-bold">{{ event.subtitle }} </span
+                          ><br />
                           <div>
                             <v-btn
                               small
@@ -172,7 +197,6 @@ export default {
 
   watch: {
     events(val) {
-      // console.log("val ->>>", val);
       this.event_date.push(val);
     },
   },
@@ -230,17 +254,12 @@ export default {
       GetStudentData: "MyCourseModules/GetStudentData",
     }),
     selectedDate(data) {
-      console.log(data.event);
-      for (const item in this.student_data) {
-        this.test_course_id = item.courseId;
+      if (!data.event.type) {
+        this.$router.push({
+          name: "StudentCourse",
+          params: { course_id: data.event.courseId },
+        });
       }
-
-      this.$router.push({
-        name: "StudentCourse",
-        params: { course_id: data.event.courseId },
-      });
-      // this.$router.push({ name: 'StudentsSchedule' })
-      // $router.push({ name: 'StudentCourse' })
     },
     selectDate(date) {
       this.event_date = [];
@@ -249,18 +268,30 @@ export default {
         let [start, start_time] = event.start.split(" ");
         let [end, end_time] = event.end.split(" ");
         if (start_time !== "Invalid date" && end_time !== "Invalid date") {
-          if (start === end && start === date) {
-            this.event_date.push({
-              timed: event.timed,
-              name: event.name,
-              subtitle: event.subtitle,
-              coach: event.coach,
-              start_time: start_time,
-              end_time: end_time,
-              color: event.color,
-              courseId: event.courseId,
-            });
-            console.log("-->", this.event_date);
+          if (!event.type) {
+            if (start === end && start === date) {
+              this.event_date.push({
+                timed: event.timed,
+                name: event.name,
+                subtitle: event.subtitle,
+                coach: event.coach,
+                start_time: start_time,
+                end_time: end_time,
+                color: event.color,
+                courseId: event.courseId,
+              });
+            }
+          } else {
+            if (start === end && start === date) {
+              this.event_date.push({
+                name: event.name,
+                start_time: start_time,
+                end_time: end_time,
+                color: event.color,
+                type: event.type,
+                courseId: event.courseId,
+              });
+            }
           }
         }
       });
@@ -326,7 +357,6 @@ export default {
           month: month,
           day: day,
         });
-        // console.log(this.events_data, "<----");
       });
 
       let color = "";
@@ -399,7 +429,6 @@ export default {
       return color ? color : false;
     },
     ToStudentCourse(data) {
-      console.log(data);
 
       this.$router.push({
         name: "StudentCourse",

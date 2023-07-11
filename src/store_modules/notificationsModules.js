@@ -35,7 +35,7 @@ const notificatiosModules = {
                     context.commit("setgetNotificationsAll", data.data)
                 }
             } catch (error) {
-                console.log("GetNotificationsAll", error);
+                // console.log("GetNotificationsAll", error);
             }
         },
 
@@ -48,7 +48,7 @@ const notificatiosModules = {
                   context.dispatch("GetNotificationsAll",item.account_id)
                 }
             } catch (error) {
-                console.log("setgetNotificationsRead", error);
+                // console.log("setgetNotificationsRead", error);
             }
         }
 

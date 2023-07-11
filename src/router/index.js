@@ -11,50 +11,67 @@ const router = new VueRouter({
   routes
 })
 router.beforeEach((to, from, next) => {
+  // // console.log("to.name", to.name);
   window.scrollTo({
     top: 0,
   })
   if (!VueCookie.get("token")) {
     localStorage.removeItem("userDetail")
   }
-  if (to.name !== "Login" && to.name !== "Register") {
-    if (to.name === "callback") {
-      next()
-    } else if (to.matched[0].name !== "NavBarUser" && !VueCookie.get("token")) {
-      next({ name: 'Login' })
-    } else if (to.name === 'userCourseOrder' && !VueCookie.get("token")) {
-      next({ name: 'Login' })
-    } else if (VueCookie.get("token")) {
-      let order = JSON.parse(localStorage.getItem("Order"))
-      let user_detail = JSON.parse(localStorage.getItem("userDetail"))
-      console.log(from.name)
-      if (to.name == "userCourseDetail_courseId" || to.name == "userCoursePackage_courseId" || to.name == "userCourseOrder") {
-        console.log("order", order)
-        if (order) {
-          if (from.name === "Login" && order.course_id && order.category_id) {
+  if (!to.name) {
+    next({ name: 'PageNotFound' })
+  } else {
+    if (to.name !== "Login" && to.name !== "Register" && to.name !== "PageNotFound") {
+      // // console.log("name=>", to);
+      // console.log("cookie", VueCookie.get("token"));
+      if (to.name === "callback") {
+        next()
+      } else if (to.matched[0].name !== "NavBarUser" && !VueCookie.get("token")) {
+        next({ name: 'Login' })
+      } else if (to.name === 'userCourseOrder' && !VueCookie.get("token")) {
+        next({ name: 'Login' })
+      } else if (VueCookie.get("token")) {
+        
+        let order = JSON.parse(localStorage.getItem("Order"))
+        let user_detail = JSON.parse(localStorage.getItem("userDetail"))
+        if(from.name !== 'ProfileDetail' && !user_detail.first_name_th && !user_detail.last_name_th && to.name!=='ProfileDetail'){
+          next({ name: 'ProfileDetail', params: {profile_id: user_detail.account_id}})
+        }
+        if (to.name === "userCourseDetail_courseId" || to.name === "userCoursePackage_courseId" || to.name === "userCourseOrder") {
+          // console.log("order", order)
+          if (order) {
+            if (from.name === "Login" && order.course_id && order.category_id) {
+              next()
+            } else {
+              next()
+            }
+          } else {
+            next({ name: 'UserKingdom' })
+          }
+        } else if (to.matched[0].name === "Admin") {
+          // console.log("user_detail", user_detail)
+          if (user_detail?.roles.includes("R_2") || user_detail?.roles.includes("R_1")) {
             next()
+          } else {
+            next({ name: 'UserKingdom' })
+          }
+        } else {
+          if (!to.name || to.name === "PageNotFound") {
+            next({ name: 'PageNotFound' })
           } else {
             next()
           }
-        } else {
-          next({ name: 'UserKingdom' })
-        }
-      } else if (to.matched[0].name === "Admin") {
-        console.log("user_detail", user_detail)
-        // console.log('next to DashboardList')
-        if (user_detail?.roles.includes("R_2") || user_detail?.roles.includes("R_1")) {
-          next()
-        } else {
-          next({ name: 'UserKingdom' })
         }
       } else {
         next()
       }
     } else {
-      next()
+      if (VueCookie.get("token")) {
+        next({ name: 'UserKingdom' })
+      } else {
+        next()
+      }
     }
-  } else {
-    next()
   }
 })
 

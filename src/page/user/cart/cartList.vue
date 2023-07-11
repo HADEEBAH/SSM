@@ -141,10 +141,14 @@
         <v-row dense>
           <v-col>
             <v-checkbox
-              color=pink
-              v-model="policy"
-              :label="`ยอมรับ policy`"
-            ></v-checkbox>
+                hide-details
+                color="pink"
+                v-model="policy"
+              >
+              <template v-slot:label>
+                ยอมรับ <a class="mx-2 font-weight-bold"> ข้อกำหนดการใช้บริการ </a> และ <a class="mx-2 font-weight-bold" >นโยบายความคุ้มครองข้อมูลส่วนบุคคล</a>
+              </template>
+            </v-checkbox>
           </v-col>
         </v-row>
         <v-row dense>
@@ -199,8 +203,8 @@
         </v-card-title>
         <v-card-text>
           <v-row dense>
-            <v-col>
-              รอทางทีมกฏหมาย ดำเนินการ
+            <v-col cols="12">
+              <TermOfUse/>
             </v-col>
           </v-row>
           <v-row dense>
@@ -209,10 +213,15 @@
                 hide-details
                 color="pink"
                 v-model="policy"
-                :label="`ยอมรับ policy`"
-              ></v-checkbox>
+              >
+                <template v-slot:label>
+                  ยอมรับ <a class="mx-2 font-weight-bold"> ข้อกำหนดการใช้บริการ </a> และ <a class="mx-2 font-weight-bold" >นโยบายความคุ้มครองข้อมูลส่วนบุคคล</a>
+                </template>
+              </v-checkbox>
             </v-col>
           </v-row>
+        </v-card-text>
+        <v-card-actions>
           <v-row dense>
             <v-col align="right">
               <v-btn outlined color="#ff6b81" text-color="#ff6b81" @click="closePolicy()">
@@ -225,7 +234,7 @@
               </v-btn>
             </v-col>
           </v-row>
-        </v-card-text>
+        </v-card-actions>
       </v-card>
     </v-dialog>
   </v-app>
@@ -234,9 +243,11 @@
 import Swal from "sweetalert2";
 import { mapActions, mapGetters } from "vuex";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+import TermOfUse from '@/components/termOfUse.vue'
 export default {
   components: {
     loadingOverlay,
+    TermOfUse
   },
   data: () => ({
     policy: false,
@@ -257,8 +268,8 @@ export default {
   }),
   created() {},
   mounted() {
-    // console.log(this.user_login.account_id)
-    // console.log(this.carts)
+    // // console.log(this.user_login.account_id)
+    // // console.log(this.carts)
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "รถเข็น");
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
     // this.carts = JSON.parse(localStorage.getItem(this.user_login.account_id))
@@ -281,7 +292,7 @@ export default {
       this.policy_show = false
     },
     removeCart(cart_id) {
-      console.log(cart_id);
+      // console.log(cart_id);
       Swal.fire({
         icon: "question",
         title: "ต้องการลบรายการนี้หรือไม่ ?",
@@ -316,8 +327,8 @@ export default {
       });
     },
     selectOne(bool, key) {
-      let result = this.cart_list.map((element, index) => {
-        console.log("index", index);
+      let result = this.cart_list.map((element) => {
+        // console.log("index", index);
 
         if (element.category_id == key) {
           element.checked = bool;
@@ -337,15 +348,15 @@ export default {
       this.sumtotal();
     },
     selectAll(bool) {
-      // console.log("bool", bool);
-      let result = this.cart_list.map((element) => {
-        // console.log("element", element);
+      // // console.log("bool", bool);
+      this.cart_list.map((element) => {
+        // // console.log("element", element);
         element.checked = bool;
 
         return element;
       });
 
-      console.log("result", result);
+      // console.log("result", result);
 
       this.sumtotal();
       // this.cart_list = result;
@@ -363,10 +374,10 @@ export default {
           this.order.type = "cart"
           this.changeOrderData(this.order);
           this.GetAllCourseMonitor().then(() => {
-            console.log("course_monitors", this.course_monitors);
-            // console.log("courses",this.order.courses)
+            // console.log("course_monitors", this.course_monitors);
+            // // console.log("courses",this.order.courses)
             this.order.courses.forEach((course) => {
-              console.log("courses", course);
+              // console.log("courses", course);
               if ( this.course_monitors.filter( (v) => v.courseMonitorEntity_coach_id === course.coach &&
                     v.courseMonitorEntity_course_id === course.course_id &&
                     v.courseMonitorEntity_day_of_week_id ===
@@ -388,14 +399,14 @@ export default {
                 ) {
                   isValiDateCourse.push(true);
                 } else {
-                  console.log( this.course_monitors)
+                  // console.log( this.course_monitors)
                   isValiDateCourse.push(false);
                 }
               } else {
                 isValiDateCourse.push(true);
               }
             });
-            console.log(isValiDateCourse);
+            // console.log(isValiDateCourse);
             if (isValiDateCourse.includes(false)) {
               Swal.fire({
                 icon: "error",

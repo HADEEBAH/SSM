@@ -521,11 +521,13 @@
                         <v-col cols="auto">
                           <v-text-field
                             class="bg-white rounded-lg"
+                            v-model="search_student_list"
                             dense
                             outlined
                             hide-details
                             placeholder="ค้นหาชื่อนักเรียน, ชื่อโค้ช"
                             prepend-inner-icon="mdi-magnify"
+                            @input="searchStudentList(search_student_list)"
                           ></v-text-field>
                         </v-col>
                       </v-row>
@@ -1328,6 +1330,7 @@
                                                 text
                                                 class="px-1"
                                                 color="#ff6b81"
+                                                @click="showDialogAssessment( potential )"
                                               >
                                                 <v-icon
                                                   >mdi-check-decagram-outline
@@ -1373,6 +1376,7 @@
         v-model="show_dialog_assessmet"
       >
         <v-card>
+          <!-- <pre>{{ student_data_assessment }}</pre> -->
           <v-card-text class="pa-2">
             <v-row dense>
               <v-col></v-col>
@@ -1572,6 +1576,15 @@
                 </v-row>
               </v-card-text>
             </v-card>
+            <v-card outlined class="mb-3" v-if="!student_data_assessment?.potential && !student_data_assessment?.assessment?.assessmentStudentsId">
+              <v-card-text>
+                <v-row dense>
+                  <v-col align="center">
+                      ไม่พบการประเมิน
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
             <v-row dense>
               <v-col align="center">
                 <v-btn
@@ -1689,6 +1702,7 @@ export default {
     },
     time_option: [],
     dow_option: [],
+    search_student_list: "",
     package_option: [],
     day_option: [
       { label: "วันอาทิตย์", value: 0 },
@@ -1726,7 +1740,6 @@ export default {
     selected_all_coach: false,
     selected_coach_potential: null,
   }),
-  created() {},
   mounted() {},
   watch: {
     student_tab: function () {
@@ -1800,6 +1813,10 @@ export default {
       RemovePrivilageByCourseID: "CourseModules/RemovePrivilageByCourseID",
       ExportStudentList: "CourseModules/ExportStudentList",
     }),
+    searchStudentList(search){
+      console.log(search)
+      // console.log(this.coach_list)
+    },
     resetFilter() {
       this.filter = {
         dow: "",
@@ -1811,7 +1828,7 @@ export default {
       };
     },
     filterDateByCoach(coach_index) {
-      console.log("datesList =>", this.coach_list[coach_index].datesList);
+      // console.log("datesList =>", this.coach_list[coach_index].datesList);
       let filterCoachList = this.coach_list[coach_index].datesList;
       if (this.filter.dow) {
         filterCoachList = filterCoachList.filter(
@@ -1848,24 +1865,24 @@ export default {
       let dow = [];
       this.dow_option = [];
       if (selected_coach >= 0) {
-        for await (const coach of this.coach_list[selected_coach].allDates) {
-          for await (const day of coach.dates.day) {
-            if (dow.length === 0) {
-              dow.push(this.day_option.filter((v) => v.value == day)[0]);
-            } else if (dow.filter((v) => v.value == day).length === 0) {
-              dow.push(this.day_option.filter((v) => v.value == day)[0]);
-            }
+        let coach = this.coach_list[selected_coach].allDates
+        for await (const day of coach.dates.day) {
+          if (dow.length === 0) {
+            dow.push(this.day_option.filter((v) => v.value == day)[0]);
+          } else if (dow.filter((v) => v.value == day).length === 0) {
+            dow.push(this.day_option.filter((v) => v.value == day)[0]);
           }
         }
       }
-      // console.log("dow =>",dow)
+      // // console.log("dow =>",dow)
       this.dow_option = dow;
     },
     async filterPackageCoach(selected_coach) {
       this.package_option = [];
       if (selected_coach >= 0) {
-        console.log("coach_list => ", this.coach_list[selected_coach]);
-        for await (const coach of this.coach_list[selected_coach].allDates) {
+        // console.log("coach_list => ", this.coach_list[selected_coach]);
+        // for await (const coach of this.coach_list[selected_coach].allDates.dates) {
+          let coach = this.coach_list[selected_coach].allDates
           if (this.package_option.length === 0) {
             this.package_option.push(coach.cpo);
           } else if (
@@ -1874,14 +1891,15 @@ export default {
           ) {
             this.package_option.push(coach.cpo);
           }
-        }
+        // }
       }
     },
     //FILTER DATE COACH LIST
     async filterTimeCoach(selected_coach) {
       this.time_option = [];
       if (selected_coach >= 0) {
-        for await (const coach of this.coach_list[selected_coach].allDates) {
+        // for await (const coach of this.coach_list[selected_coach].allDates) {
+          let coach = this.coach_list[selected_coach].allDates
           if (this.time_option.length > 0) {
             this.time_option.push(coach.time);
           } else if (
@@ -1890,12 +1908,12 @@ export default {
           ) {
             this.time_option.push(coach.time);
           }
-        }
+        // }
       }
     },
     //EXPORT STUDENT
     exportStudents() {
-      console.log(this.course_data);
+      // console.log(this.course_data);
       this.ExportStudentList({
         coach_list: this.coach_list,
         course_id: this.$route.params.course_id,
@@ -1908,14 +1926,14 @@ export default {
     },
     seletedCoachPotential(coach, index) {
       this.selected_coach_potential = index;
-      console.log(coach);
+      // console.log(coach);
       this.GetStudentPotentialByCoach({
         course_id: this.$route.params.course_id,
         coach_id: coach.coachId,
       });
     },
     getDateFormattor(date, format) {
-      // console.log(date, format)
+      // // console.log(date, format)
       return dateFormatter(date, format);
     },
     genDate(date) {
@@ -1937,7 +1955,7 @@ export default {
       data.checked = !data.checked;
     },
     dayOfWeekArray(day) {
-      // console.log(day)
+      // // console.log(day)
       const daysOfWeek = [
         "วันอาทิตย์",
         "วันจันทร์",
@@ -1972,7 +1990,7 @@ export default {
       const allowedTypes = ["image/png", "image/jpeg"];
       if (CheckFileSize(this.privilege_file) === true) {
         const fileType = this.privilege_file.type;
-        // console.log(fileType)
+        // // console.log(fileType)
         if (fileType === "image/png" || fileType === "image/jpeg") {
           this.course_data.privilege_file =
             this.$refs.fileInputPrivilege.files[0];
@@ -2001,6 +2019,7 @@ export default {
       }
     },
     showDialogAssessment(student_data, date) {
+      // console.log("2015 =>", student_data)
       this.show_dialog_assessmet = true;
       this.student_data_assessment = student_data;
       this.student_data_assessment.time = date.time;
@@ -2122,7 +2141,7 @@ export default {
     },
     CourseUpdateCoach() {
       this.$refs.coach_form.validate();
-      console.log(this.coachValidate);
+      // console.log(this.coachValidate);
       if (this.coachValidate) {
         Swal.fire({
           icon: "question",

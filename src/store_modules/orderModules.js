@@ -136,9 +136,9 @@ const orderModules = {
                 //  let localhost = "http://localhost:3002"
                 const { data } = await axios.get( `${process.env.VUE_APP_URL}/api/v1/order/history`, config );
                 if(data.statusCode === 200 ){
-                    console.log("data", data);
+                    // console.log("data", data);
                   for (const item of data.data) {
-                    // console.log("item =>", data.data.filter(v => v.orderNumber == item.orderNumber))
+                    // // console.log("item =>", data.data.filter(v => v.orderNumber == item.orderNumber))
                     if (item.courseImg && item.courseImg !== "") {
                       item.courseImg = process.env.VUE_APP_URL.concat(
                         `/api/v1/files/${item.courseImg}`
@@ -169,19 +169,19 @@ const orderModules = {
                 context.commit("SetOrderHistory",mapHistory)
                 context.commit("SetOrderHistoryIsLoading",false)
             }catch(error){
-                console.log(error)
+                // console.log(error)
             }
         },
         resetCourseData(context) {
             context.commit("SetResetCourseData")
         },
         changeCourseOrderData(context, courseData) {
-            // console.log("changeCourseOrderData :",courseData)
+            // // console.log("changeCourseOrderData :",courseData)
             context.commit("SetOrderCourse", courseData)
         },
         changeOrderData(context, orderData) {
             context.commit("SetOrder", orderData)
-            // console.log(orderData)
+            // // console.log(orderData)
         },
         async GetRelations(context,{student_id,}){
             try{
@@ -193,7 +193,7 @@ const orderModules = {
                     }
                 }
                 let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user?student_id=${student_id}`,config)
-                console.log(data)
+                // console.log(data)
                 if(data.statusCode === 200){
                     if( data.data && !data.data.message){
                         context.commit("SetRelation",data.data )
@@ -202,7 +202,7 @@ const orderModules = {
                     throw {error : data}
                 }
             }catch(error){
-                console.log(error)
+                // console.log(error)
             }
         },
         async GetOrders(context){
@@ -230,10 +230,10 @@ const orderModules = {
                                     })
                                 }
                             }
-                            let inputDate = order.payment_status === "success" ? order.payment.paymentDate : '';
-                            const year = parseInt(inputDate.substring(0, 4)) + 543;
-                            const month = parseInt(inputDate.substring(4, 6));
-                            const day = inputDate.substring(6, 8);
+                            let inputDate = order.payment_status === "success" ? order.payment?.paymentDate : '';
+                            const year = parseInt(inputDate?.substring(0, 4)) + 543;
+                            const month = parseInt(inputDate?.substring(4, 6));
+                            const day = inputDate?.substring(6, 8);
 
                             const monthNames = [
                                 "",
@@ -252,14 +252,14 @@ const orderModules = {
                             ];
                             
                             const formatted = `${day} ${monthNames[month]} ${year}`;
-                            // console.log("267", formatted);
+                            // // console.log("267", formatted);
                             
-                            let cutTime = order.payment_status === "success" ? order.payment.paymentTime : '';
-                            let HH = cutTime.slice(0, 2);
-                            let mm = cutTime.slice(2, 4); 
+                            let cutTime = order.payment_status === "success" ? order.payment?.paymentTime : '';
+                            let HH = cutTime?.slice(0, 2);
+                            let mm = cutTime?.slice(2, 4); 
                             order.paid_date = order.payment_status === "success" ? `${formatted} ${HH + ":" + mm }`:""
-                            // console.log(order.paid_date)
-                            order.course_name = `${order.course.courseNameTh}(${order.course.courseNameEn})`
+                            // // console.log(order.paid_date)
+                            order.course_name = `${order.course?.courseNameTh}(${order.course?.courseNameEn})`
                             order.student_name = `${order.user?.firstNameTh} ${order.user?.lastNameTh}`
                         }
                     }
@@ -271,7 +271,7 @@ const orderModules = {
                     throw {error : data}
                 }
             }catch(error){
-                console.log(error)
+                // console.log(error)
             }
         },
         async GetOrderDetail(context,{order_number}){
@@ -283,8 +283,9 @@ const orderModules = {
                         'Authorization' : `Bearer ${VueCookie.get("token")}`
                     }
                 }
+                // let localhost = "http://192.168.74.25:3000"
                 let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/${order_number}`, config)
-                console.log(data)
+                // console.log("288 =>",data)
                 if(data.statusCode == 200){
                     let student_name_list = []
                     let student_list = []
@@ -318,13 +319,13 @@ const orderModules = {
                 }
             }
             catch(error){
-                console.log(error)
+                // console.log(error)
             }
         },
         async saveCart(context, {cart_data}) {
             try{
                 let order = cart_data
-                console.log(order)
+                // console.log(order)
                 let payload = {
                     order_id : "",
                     courses : {},
@@ -336,9 +337,9 @@ const orderModules = {
                 let total_price = 0
                 await order.courses.forEach((course)=>{
                     let students = []
-                    console.log("course",course)
+                    // console.log("course",course)
                     course.students.forEach((student)=>{
-                        console.log("student",student.parents[0])
+                        // console.log("student",student.parents[0])
                         if(student.parents[0]){   
                             students.push({
                                 "accountId": student.account_id ? student.account_id : "",
@@ -385,7 +386,7 @@ const orderModules = {
                         "student": students
                     }
                     let price = course.option?.net_price ? course.option.net_price : course.price
-                    console.log(price, course.students.length)
+                    // console.log(price, course.students.length)
                     total_price = total_price + (price * course.students.length )
                 })
                 payload.totalPrice = total_price
@@ -396,7 +397,7 @@ const orderModules = {
                       'Authorization' : `Bearer ${VueCookie.get("token")}`
                   }
                 }
-                // console.log(payload)
+                // // console.log(payload)
                 // let localhost = "http://localhost:3002"
                 let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/cart`,payload, config)
                 if(data.statusCode === 201){
@@ -413,7 +414,7 @@ const orderModules = {
                     })
                 }
             }catch(error){
-                console.log(error)
+                // console.log(error)
             }
         },
         async saveOrder(context) {
@@ -427,7 +428,7 @@ const orderModules = {
                         'Authorization' : `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                console.log(order)
+                // console.log(order)
                 // let localhost = "http://localhost:3000"
                 if(order.type !== "addStudent"){
                     for await (const course of order.courses){
@@ -447,7 +448,7 @@ const orderModules = {
                 }
                 let total_price = 0
                 await order.courses.forEach((course)=>{
-                    console.log("course = >",course)
+                    // console.log("course = >",course)
                     let students = []
                     course.students.forEach((student)=>{
                         if(student.parents[0]){   
@@ -479,11 +480,11 @@ const orderModules = {
                             })
                         }
                     })
-                    console.log(course)
+                    // console.log(course.day.day)
                     payload.courses.push({
                         "courseId" :  course.course_id ,
                         "coursePackageOptionId": course.option.course_package_option_id,
-                        "dayName" : course.day?.dayName ? course.day.dayName : course.day,
+                        "dayName" : course.day?.dayName ? course.day.dayName : course.day.day ,
                         "dayOfWeekId": course?.time?.timeData ? course.time.timeData.filter(v => v.coach_id === course.coach_id)[0].dayOfWeekId : course.time.dayOfWeekId,
                         "timeId":  course?.time?.timeData ? course.time.timeData.filter(v => v.coach_id === course.coach_id)[0].timeId : course.time.timeId,
                         "time": course.time,
@@ -496,19 +497,19 @@ const orderModules = {
                         },
                         "student": students
                     })
-                    console.log("course.students.lenght ",course.students.length )
-                    console.log("course.price ",course.price )
+                    // console.log("course.students.lenght ",course.students.length )
+                    // console.log("course.price ",course.price )
                     let price = course.option?.net_price ? course.option.net_price : course.price
-                    // console.log("price ",price )
+                    // // console.log("price ",price )
                     if((course.price * course.students.length) !== price ){
                         total_price =  total_price + (price * course.students.length )
                     }else{
-                        console.log("course.students.lenght => ",course.students.length )
-                        console.log("course.price =>",course.price )
+                        // console.log("course.students.lenght => ",course.students.length )
+                        // console.log("course.price =>",course.price )
                         total_price =  total_price + price
                     }
                    
-                    // console.log("total_price =>",total_price)
+                    // // console.log("total_price =>",total_price)
                 })
                 payload.totalPrice = total_price
                 let config = {
@@ -518,10 +519,10 @@ const orderModules = {
                         'Authorization' : `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                console.log("payload =>",payload)
+                // console.log("payload =>",payload)
                 // let localhost = "http://localhost:3002"
                 let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/regis/course`,payload , config)
-                console.log(data)
+                // console.log(data)
                 if(data.statusCode === 201){
                     let payment_payload = {
                         "orderId": data.data.orderNumber,
@@ -558,10 +559,10 @@ const orderModules = {
                         localStorage.setItem("userDetail", JSON.stringify(payload))
                     }
                     if(order.type !== "addStudent"){
-                        console.log("370 addStudent :",data.data.orderNumber)
+                        // console.log("370 addStudent :",data.data.orderNumber)
                         let payment = await axios.post(`${process.env.VUE_APP_URL}/api/v1/payment/code`,payment_payload)
-                        console.log("payment",payment)
-                        console.log("payment statusCode",payment.data.statusCode)
+                        // console.log("payment",payment)
+                        // console.log("payment statusCode",payment.data.statusCode)
                         if(payment.data.statusCode === 201){
                             window.location.href = payment.data.data
                             setTimeout(()=>{
@@ -587,9 +588,10 @@ const orderModules = {
                                 "paymentType": order.payment_type,
                                 "total": data.data.totalPrice,
                             }
-                            console.log(payment_payload)
+                            // console.log(payment_payload)
                             // let localhost = "http://localhost:3003"
-                            let  payment = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/payment/data/${data.data.orderNumber}`,payment_payload)
+                            let endpoint = process.env.VUE_APP_URL
+                            let  payment = await axios.patch(`${endpoint}/api/v1/payment/data/${data.data.orderNumber}`,payment_payload)
                             if(payment.data.statusCode === 200){
                                 Swal.fire({
                                     icon:"success",
@@ -646,13 +648,13 @@ const orderModules = {
                 }    
             }catch(error){
                 context.commit("SetOrderIsLoading", false)
-                console.log(error)
+                // console.log(error)
 
                 if(error.response.data.message === "duplicate pending order"){
                     Swal.fire({
                         icon: "error",
                         title: "ไม่สามารถลงทะเบียนได้",
-                        text: "ไม่สามารถลงทะเบียนได้ เนื่องจากหลักสูตรนี้อยู่ในรายการรอชำระเงินของคุณแล้ว",
+                        text: "ไม่สามารถลงทะเบียนได้ เนื่องจากหลักสูตรนี้อยู่ในรายการของคุณแล้ว",
                         showCancelButton: false,
                         confirmButtonText: "ตกลง",
                     })
@@ -737,7 +739,7 @@ const orderModules = {
                     })        
                 }
             }catch(error){
-                console.log(error)
+                // console.log(error)
             }
         },
         async savePayment(context, {paymnet_data}){
@@ -755,7 +757,7 @@ const orderModules = {
                     window.location.href = data.data
                 }
             }catch(error){
-                console.log(error)
+                // console.log(error)
                 Swal.fire({
                     icon:"error",
                     text: `เกิดข้อผิดพลาด ${error.message}`,
@@ -766,7 +768,7 @@ const orderModules = {
             }
         },
         async GetCartList(context, account_id) {
-            // console.log("account_id", account_id);
+            // // console.log("account_id", account_id);
             try {
                 let config = {
                     headers:{
@@ -778,17 +780,17 @@ const orderModules = {
                 // let endpoint = "http://localhost:3002"
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/cart/${account_id}`,config)
                 if (data.statusCode === 200) {
-                    console.log("Cart List =>",data.data)
+                    // console.log("Cart List =>",data.data)
                     for await (const item of data.data) {
-                        console.log("discount =>",item.option.discount)
+                        // console.log("discount =>",item.option.discount)
                         item.course_img = `${process.env.VUE_APP_URL}/api/v1/files/${item.course_img}`
                       
                         if(item.course_type_id === "CT_1"){
                             let discount = item.option.discount ? item.option.discount_price : 0
-                            // console.log("discount", discount)
+                            // // console.log("discount", discount)
                             // ราคา/ครั้ง
                             item.option.net_price_unit = item.option.price_unit / item.option.amount 
-                            // console.log("net_price_unit", item.option.net_price_unit)
+                            // // console.log("net_price_unit", item.option.net_price_unit)
                             // ราคา
                             item.option.net_price = (item.option.price_unit - discount)*item.students.length
                         }else{
@@ -796,12 +798,12 @@ const orderModules = {
                         }
                     }
                     context.commit("SetCartList", data.data)
-                    // console.log("SetCartList", data.data);
+                    // // console.log("SetCartList", data.data);
                 } else {
                     throw { error: data }
                 }
             } catch (error) {
-                console.log(error)
+                // console.log(error)
             }
 
         },
@@ -838,7 +840,7 @@ const orderModules = {
                             }
                         }
                         context.commit("SetCartList", carts.data.data)
-                        console.log("SetCartList",carts.data.data);
+                        // console.log("SetCartList",carts.data.data);
                     } else {
                         throw { error: carts }
                     }
@@ -846,14 +848,14 @@ const orderModules = {
                    throw {error :data }
                 }
             }catch(error){
-                console.log(error)
+                // console.log(error)
                 
             }
         },
         // RESERVE COURSE
         async CreateReserveCourse(context,{ course_data }){
             try{
-                // console.log(course_data)
+                // // console.log(course_data)
                 let count = 0
                  for await (let student of course_data.students){
                     let payload = {
@@ -871,7 +873,7 @@ const orderModules = {
                         payload.coursePackageOptionId = course_data.option.course_package_option_id
                         payload.timeId =  course_data?.time?.timeData ? course_data.time.timeData.filter(v => v.coach_id === course_data.coach_id)[0].timeId : course_data.time.timeId
                     }
-                    // console.log(course_data)
+                    // // console.log(course_data)
                     let config = {
                         headers:{
                             "Access-Control-Allow-Origin" : "*",
@@ -881,13 +883,13 @@ const orderModules = {
                       }
                     let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,payload, config)
                     if(data.statusCode === 201){
-                        console.log(data)
+                        // console.log(data)
                         count = count + 1
                     }else{
                         throw {error : data.data} 
                     }
                 }
-                console.log(count === course_data.students.length)
+                // console.log(count === course_data.students.length)
                 if (count === course_data.students.length) {
                     await Swal.fire({
                         icon:"success",
@@ -903,14 +905,14 @@ const orderModules = {
                 }
                
             }catch(error){
-                console.log(error)
+                // console.log(error)
             }
         },
         async GetReserceByCreatedBy(context,{account_id}){
             try{
                 // let localhost = "http://localhost:3002"
                 let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/byCreatedBy/${account_id}`)
-                // console.log(data.data)
+                // // console.log(data.data)
                 if(data.statusCode === 200){
                     context.commit("SetReserveList",data.data)
                 }   

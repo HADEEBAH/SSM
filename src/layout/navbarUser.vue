@@ -283,15 +283,10 @@
           <div v-for="(list, list_index) in menu_drawer_list" :key="list_index">
             <template v-if="list.to !== 'logOut'">
               <v-list-item
-                v-if="
-                  list.roles.length > 0
-                    ? list.roles.filter((v) => user_detail?.roles.includes(v))
-                        .length > 0
-                    : true
+                v-if=" list.to == 'StudentsSchedule' ?  checkrole(user_detail?.roles, list.roles) : 
+                list.roles.length > 0 ? list.roles.filter((v) => user_detail?.roles.includes(v)).length > 0 : true
                 "
-                @click="
-                  $route.name !== list.to ? $router.push({ name: list.to }) : ''
-                "
+                @click="nextpage(list)"
                 :class="
                   menu_drawer_list.length - 1 !== list_index
                     ? 'list-items-border-bottom'
@@ -329,6 +324,9 @@
         </v-list>
       </v-navigation-drawer>
       <v-main class="bg-admin">
+        <v-overlay :value="loading">
+          <v-progress-circular indeterminate size="64"></v-progress-circular>
+        </v-overlay>
         <router-view />
       </v-main>
     </v-layout>
@@ -411,30 +409,37 @@ export default {
         icon: "mdi-account-circle",
         title: "โปรไฟล์",
         to: "UserProfile",
+        params: null,
         roles: [],
       },
       {
         icon: "mdi-calendar-month",
         title: "ตารางเรียน",
         to: "StudentsSchedule",
-        roles: ["R_4", "R_5"],
+        params: { action: "MySchedule" },
+        roles: ["R_1", "R_2", "R_3"],
       },
       {
         icon: "mdi-book-cog-outline",
         title: "การจัดการ",
         to: "menageCourse",
-        roles: ["R_1", "R_2", "R_3"],
+        params: null,
+        roles: ["R_3"],
       },
       {
         icon: "mdi-history",
         title: "ประวัติการลงทะเบียน",
         to: "orderHistory",
+        params: null,
         roles: [],
       },
       {
         icon: "mdi-swap-horizontal-bold",
         title: "หน้าผู้ดูแลระบบ",
-        to: "DashboardList",
+        to: "ManageSchedule",
+        // to: "Admin",
+        // to: "Dashboard",
+        params: null,
         roles: ["R_1", "R_2"],
       },
       { icon: "mdi-logout", title: "ออกจากระบบ", to: "logOut", roles: [] },
@@ -460,7 +465,6 @@ export default {
 
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    console.log("object", this.user_detail.account_id);
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail.account_id);
     }
@@ -477,13 +481,14 @@ export default {
     }
   },
   mounted() {
+   
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail.account_id);
     }
     if (this.user_detail?.account_id) {
       this.GetCartList(this.user_detail.account_id);
+      this.GetNotificationsAll(this.user_detail.account_id);
     }
-    this.GetNotificationsAll(this.user_detail.account_id);
 
     setTimeout(() => {
       this.alertVisible = false;
@@ -507,6 +512,7 @@ export default {
       get_notifications: "NotificationsModules/getNotifications",
       get_notifications_all: "NotificationsModules/getNotificationsAll",
       notifications_read: "NotificationsModules/readNotifications",
+      loading: "LoadingModules/getLoading",
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
@@ -522,6 +528,15 @@ export default {
       GetNotificationsAll: "NotificationsModules/GetNotificationsAll",
       ReadNotifications: "NotificationsModules/ReadNotifications",
     }),
+    checkrole(a,b){
+      let notFound = true; 
+      if(a.length > 0){
+        if (b.includes(a[0])) {
+          notFound = false;
+        }
+      }
+      return notFound
+    },
     selectMenu(type, to, head) {
       if (type === "child" && head === this.active_menu) {
         this.active_menu_child = to;
@@ -542,6 +557,15 @@ export default {
         notification_id: params.notificationId,
         account_id: params.accountId,
       });
+    },
+    nextpage(list) {
+      if (this.$route.name !== list.to) {
+        if (list.params) {
+          this.$router.push({ name: list.to, params: { ...list.params } });
+        } else {
+          this.$router.push({ name: list.to });
+        }
+      }
     },
   },
 };

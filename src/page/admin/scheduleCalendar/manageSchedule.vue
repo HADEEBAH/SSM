@@ -1,7 +1,10 @@
 <template>
-  <v-container>
+  <loading-overlay
+    v-if="get_all_course_is_loading && get_all_holidays_is_loading"
+    :loading="get_all_course_is_loading && get_all_holidays_is_loading"
+  ></loading-overlay>
+  <v-container v-else>
     <headerPage title="จัดการตาราง"></headerPage>
-
     <v-row class="py-2">
       <v-col cols="12" sm="8" class="w-full">
         <v-text-field
@@ -163,7 +166,6 @@
     </v-row>
 
     <!-- แก้ไขวันหยุด -->
-
     <template>
       <v-row justify="center">
         <v-dialog
@@ -192,6 +194,7 @@
                   <!-- วันที่ -->
                   <v-col cols="12" sm="8">
                     <label class="font-weight-bold">วันที่</label>
+                    {{ selectEditHolidaydates }} {{ holidaydatesTh }} {{ editHolidayDates }}
                     <v-menu
                       v-model="selectEditHolidaydates"
                       :close-on-content-click="false"
@@ -218,7 +221,7 @@
                       </template>
 
                       <v-date-picker
-                        :v-model="`2023-06-27`"
+                        v-model="editHolidayDates"
                         @input="
                           setHolidaydates(editHolidayDates),
                             (selectEditHolidaydates = false)
@@ -381,7 +384,7 @@
                   </v-col>
                 </v-row>
                 <v-row v-if="!holidaySwitch" dense>
-                  <v-col cols="12" sm="6">
+                  <v-col cols="6">
                     <label class="font-weight-bold">เวลาเริ่ม</label>
                     <br />
                     <vue-timepicker
@@ -392,7 +395,7 @@
                     >
                     </vue-timepicker>
                   </v-col>
-                  <v-col cols="12" sm="6">
+                  <v-col cols="6">
                     <label class="font-weight-bold">เวลาสิ้นสุด</label>
                     <br />
                     <vue-timepicker
@@ -636,13 +639,14 @@ import axios from "axios";
 import { mapActions, mapGetters } from "vuex";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import headerPage from "@/components/header/headerPage.vue";
-
+import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 export default {
   components: {
     calendarAdmin,
     dialogCard,
     VueTimepicker,
     headerPage,
+    loadingOverlay,
   },
   data: () => ({
     dialog: true,
@@ -758,11 +762,6 @@ export default {
     this.GetFilterCourse();
     this.GetDataInSchedule();
   },
-
-  updated() {
-    // this.GetDataInSchedule();
-  },
-
   methods: {
     ...mapActions({
       GetFilterCourse: "ManageScheduleModules/GetFilterCourse",
@@ -777,6 +776,7 @@ export default {
     }),
 
     setHolidaydates(item) {
+      // console.log("item", item);
       const thaiMonths = [
         "มกราคม",
         "กุมภาพันธ์",
@@ -801,11 +801,11 @@ export default {
     },
 
     // searchSchedule() {
-    //   console.log("search", this.search);
+    //   // console.log("search", this.search);
     //   if (this.search !== "") {
     //     if (this.data_filter_schedule) {
     //       let res = this.data_filter_schedule.filter((items)=> this.search === items.name || this.search === items.coach || items.search === items.package || items.name.indexOf(this.search) !== -1 || items.coach.indexOf(this.search) !== -1 || items.package.indexOf(this.search) !== -1)
-    //       console.log("res=>", res);
+    //       // console.log("res=>", res);
     //       this.resultSearchSchedule = res
     //     }
     //   }
@@ -813,16 +813,16 @@ export default {
 
     async filterSchedules(courseId, coachId, status) {
       this.GetFilterSchedule({ courseId, coachId, status });
-      console.log({
-        courseId: courseId,
-        coach_id: coachId,
-        status: status,
-      });
+      // console.log({
+      //   courseId: courseId,
+      //   coach_id: coachId,
+      //   status: status,
+      // });
       this.filter_dialog = false;
     },
 
     async deleteHoliday() {
-      console.log("del", this.setDataEditDialog);
+      // console.log("del", this.setDataEditDialog);
       Swal.fire({
         icon: "question",
         title: "คุณต้องการลบวันหยุดใช่หรือไม่ ?",
@@ -857,7 +857,7 @@ export default {
               });
             }
           } catch (error) {
-            console.log("SetDeleteHoliday", error);
+            // console.log("SetDeleteHoliday", error);
           }
         }
       });
@@ -926,7 +926,7 @@ export default {
               }
             }
           } catch (error) {
-            console.log(error);
+            // console.log(error);
             if (error.response.data.statusCode === 400) {
               if (
                 error.response.data.message ==
@@ -963,20 +963,20 @@ export default {
 
     editHolidays(holiday) {
       this.show_dialog_edit_holoday = true;
-      console.log("holiday", holiday);
-      console.log(
-        "++++",
-        new Date(
-          `${holiday.holidayDate}/${holiday.holidayMonth}/${holiday.holidayYears}`
-        )
-      );
+      // console.log("holiday", holiday);
+      // console.log(
+      //   "++++",
+      //   new Date(
+      //     `${holiday.holidayDate}/${holiday.holidayMonth}/${holiday.holidayYears}`
+      //   )
+      // );
       // this.editHolidayDates = `${holiday.holidayDate}/${holiday.holidayMonth}/${holiday.holidayYears}`
       // this.editHolidayDates = new Date(`${holiday.holidayDate}/${holiday.holidayMonth}/${holiday.holidayYears}`)
       this.setDataEditDialog = { ...holiday };
     },
 
     async editHolidaysData() {
-      console.log("setDataEditDialog", this.setDataEditDialog);
+      // console.log("setDataEditDialog", this.setDataEditDialog);
       this.setDataEditDialog.holidayDate = this.editHolidayDates
         ? this.editHolidayDates.split("-")[2]
         : this.setDataEditDialog.holidayDate;
@@ -1019,7 +1019,7 @@ export default {
             this.editHolidayDates = null;
             this.setDataEditDialog = {};
           } catch (error) {
-            console.log(error);
+            // console.log(error);
           }
         }
       });
@@ -1063,9 +1063,12 @@ export default {
       itemTime: "MyCourseModules/getcourseSchedule",
       get_filter_course: "ManageScheduleModules/getFilterCourse", //get all course
       get_all_course: "ManageScheduleModules/getAllCourse",
+      get_all_course_is_loading: "ManageScheduleModules/getAllCourseIsLoading",
       date_arr: "ManageScheduleModules/getDateArray",
       get_coachs: "CourseModules/getCoachs",
       get_all_holidays: "ManageScheduleModules/getAllHolidays",
+      get_all_holidays_is_loading:
+        "ManageScheduleModules/getAllHolidaysIsLoading",
       get_holidays_by_id: "ManageScheduleModules/getHolidaysById",
       data_in_schedule: "ManageScheduleModules/getdataInSchadule",
       data_filter_schedule: "ManageScheduleModules/getFilterSchedule",

@@ -24,7 +24,7 @@ const dashboardModules = {
     SetGetDonut(state, payload) {
       state.get_donut = payload
     },
-    SetGetGrat(state, payload) {
+    SetGetGraf(state, payload) {
       state.get_graf = payload
     },
     SetGetLoading(state, value) {
@@ -40,13 +40,13 @@ const dashboardModules = {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/course-status`)
         if (data.statusCode === 200) {
           context.commit("SetGetEmptyCourse", data.data)
-          console.log("SetGetEmptyCourse", data.data);
+          // console.log("SetGetEmptyCourse", data.data);
           context.commit("SetGetLoading", false)
 
         }
       } catch (error) {
         context.commit("SetGetLoading", false)
-        console.log("SetGetEmptyCourse", error);
+        // console.log("SetGetEmptyCourse", error);
       }
     },
 
@@ -58,14 +58,14 @@ const dashboardModules = {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/course-type`)
         if (data.statusCode === 200) {
           context.commit("SetGetCourseType", data.data)
-          console.log("SetGetCourseType", data.data);
+          // console.log("SetGetCourseType", data.data);
           context.commit("SetGetLoading", false)
 
         }
       } catch (error) {
         context.commit("SetGetLoading", false)
 
-        console.log("SetGetCourseType", error);
+        // console.log("SetGetCourseType", error);
       }
     },
 
@@ -78,63 +78,71 @@ const dashboardModules = {
         if (data.statusCode === 200) {
           context.commit("SetGetLoading", false)
           context.commit("SetGetPotential", data.data)
-          console.log("SetGetPotential", data.data);
+          // console.log("SetGetPotential", data.data);
         }
 
       } catch (error) {
         context.commit("SetGetLoading", false)
-        console.log("SetGetPotential", error);
+        // console.log("SetGetPotential", error);
       }
     },
 
     async GetDonut(context, item) {
       context.commit("SetGetLoading", true)
-
+      // console.log("92", item);
       try {
-        // let { data } = await axios.get(`http://localhost:3002/api/v1/order/dashboard/payment?type=${item.type}&value=${item.key}`)
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/dashboard/payment?type=${item.type}&value=${item.key}`)
+        // let { data } = await axios.get(` http://localhost:3002/api/v1/order/dashboard/payment?month=${item.month}&year=${item.year}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/dashboard/payment?month=${item.month}&year=${item.year}`)
         if (data.statusCode === 200) {
           context.commit("SetGetDonut", data.data)
-          console.log("SetGetDonut", data.data);
-          data.data.sumSuccessPercentage = ((data.data.sumSuccess / 100000) * 100).toString().split(".")[0]
-          data.data.sumPendingPercentage = ((data.data.sumPending / 100000) * 100).toString().split(".")[0]
+          // console.log("SetGetDonut", data.data);
+
+          // data.data.sumSuccessPercentage = ((data.data.sumSuccess / 100000) * 100).toString().split(".")[0]
+          // data.data.sumPendingPercentage = ((data.data.sumPending / 100000) * 100).toString().split(".")[0]
           context.commit("SetGetLoading", false)
 
         }
       } catch (error) {
         context.commit("SetGetLoading", false)
 
-        console.log("SetGetDonut", error);
+        // console.log("SetGetDonut", error);
       }
     },
 
     async GetGraf(context, item) {
       context.commit("SetGetLoading", true)
-
+      // console.log("113", item);
       try {
-        // var { data } = await axios.get(`http://localhost:3002/api/v1/order/dashboard/payment-income?type=${item.type}&value=${item.key}`)
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/dashboard/payment-income?type=${item.type}&value=${item.key}`)
+        // var { data } = await axios.get(`http://localhost:3002/api/v1/order/dashboard/payment-income?month=${item.month}&year=${item.year}`)
+        // var { data } = await axios.get(`https://waraphat.alldemics.com/api/v1/order/dashboard/payment-income?month=${item.month}&year=${item.year}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/dashboard/payment-income?month=${item.month}&year=${item.year}`)
 
 
         if (data.statusCode === 200) {
-          // let data = data.data
-          context.commit("SetGetGrat", data.data)
-          console.log("SetGetGrat", data);
+          context.commit("SetGetGraf", data.data)
+          // console.log("SetGetGraf", data);
 
 
           data.data.orderData.map((items) => {
-            let newDate = new Date(items.createdDate).toLocaleDateString("en-CA")
+            let newDate = new Date(items.date).toLocaleDateString("en-CA")
+            // const day = newDate?.getDay();
+            const date = new Date(items.date);
+            const options = { weekday: 'long', timeZone: 'Asia/Bangkok', locale: 'th-TH' };
+            const dayName = date.toLocaleString('th-TH', options);
 
+            // // console.log("133", dayName);
+            // let dayNames = ["วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"];
             items.date = newDate.split("-")[2]
-            items.month = newDate.split("-")[1]
+            items.month = `เดือน ${newDate.split("-")[1]}`
             items.year = newDate.split("-")[0]
+            items.thaiDayName = `${items.date} ${dayName}`
           })
           context.commit("SetGetLoading", false)
 
         }
       } catch (error) {
         context.commit("SetGetLoading", false)
-        console.log("SetGetGrat", error);
+        // console.log("SetGetGraf", error);
       }
     },
 

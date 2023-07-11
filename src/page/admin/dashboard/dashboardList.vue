@@ -1,6 +1,6 @@
 <template >
   <v-app class="background-color">
-    <v-container class="overflow-y: hidden; overflow-x: hidden;">
+    <v-container class="overflow-x: hidden;">
       <loading-overlay :loading="dashboard_loading"> </loading-overlay>
 
       <headerPage title="แดชบอร์ด"></headerPage>
@@ -49,7 +49,7 @@
                     </v-col>
                     <v-col cols="12" align="center">
                       <div style="color: #1876d1; font-size: 30px">
-                        {{ get_potential.currentStudent.length }}
+                        {{ get_potential.currentStudent?.countStudentCurrent }}
                       </div>
                     </v-col>
                     <v-col cols="12" align="center">
@@ -67,7 +67,9 @@
                     </v-col>
                     <v-col cols="12" align="center">
                       <div style="color: #1876d1; font-size: 30px">
-                        {{ get_potential.potencialsStudent.length }}
+                        {{
+                          get_potential.potencialsStudent.countStudentPotencials
+                        }}
                       </div>
                     </v-col>
                     <v-col cols="12" align="center">
@@ -175,22 +177,35 @@
       <v-card style="background-color: #ffdde2" class="my-5 rounded-lg">
         <v-row dense class="pa-2">
           <!-- รายได้ GRAF -->
-          <v-col cols="12" sm="6">
-            <v-card
-              style="background-color: #ffffff; max-height: 500px; height: 100%"
-              class="rounded-lg"
-            >
+          <v-col cols="12" sm="12" md="12" lg="6">
+            <v-card style="background-color: #ffffff" class="rounded-lg">
               <v-card-title>
                 <v-row dense>
                   <v-col
-                    cols="6"
-                    sm="6"
+                    cols="12"
+                    sm="12"
+                    md="12"
+                    lg="4"
                     style="color: #ff6b81; font-weight: bold"
                   >
-                    <v-icon color="#ff6b81">mdi-currency-usd</v-icon>
+                    <v-icon color="#ff6b81">mdi-currency-thb</v-icon>
                     รายได้
                   </v-col>
-                  <v-col cols="6" sm="6">
+                  <!-- Year -->
+                  <v-col cols="6" sm="6" md="6" lg="4">
+                    <v-select
+                      v-model="selected_years"
+                      :items="thaiyears"
+                      item-text="name"
+                      item-value="key"
+                      return-object
+                      dense
+                      outlined
+                      @input="selectYears()"
+                    ></v-select>
+                  </v-col>
+                  <!-- Month -->
+                  <v-col cols="6" sm="6" md="6" lg="4">
                     <v-select
                       v-model="selected_mounth"
                       :items="thaiMonths"
@@ -205,9 +220,15 @@
               </v-card-title>
               <v-card-title>
                 <v-row dense>
-                  <v-badge color="green" content="6">
-                    {{ get_graf.sumSuccess }}
-                  </v-badge>
+                  <!-- <v-badge color="green" content="6"> -->
+                  {{
+                    get_graf.sumSuccess
+                      ? get_graf.sumSuccess
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                      : "ยังไม่มีข้อมูล"
+                  }}
+                  <!-- </v-badge> -->
                 </v-row>
               </v-card-title>
               <v-card-text>
@@ -217,7 +238,8 @@
                       <apexchart
                         type="line"
                         :options="chartOptions"
-                        :series="series"
+                        :series="chartSeries"
+                        :height="heightGraf()"
                       >
                       </apexchart>
                     </v-col>
@@ -227,20 +249,36 @@
             </v-card>
           </v-col>
           <!-- สัดส่วนรายได้ DONUT -->
-          <v-col cols="12" sm="6">
+          <v-col cols="12" sm="12" md="12" lg="6">
             <v-card class="bg-white rounded-lg" style="height: 100%">
               <!-- TITLE -->
               <v-card-title>
                 <v-row dense>
                   <v-col
-                    cols="6"
-                    sm="6"
+                    cols="12"
+                    sm="12"
+                    md="12"
+                    lg="4"
                     style="color: #ff6b81; font-weight: bold"
                   >
                     <v-icon color="#ff6b81">mdi-elevation-rise</v-icon>
                     สัดส่วนรายได้
                   </v-col>
-                  <v-col cols="6" sm="6">
+                  <!-- YEAR -->
+                  <v-col cols="6" sm="6" md="6" lg="4">
+                    <v-select
+                      v-model="donut_years"
+                      :items="thaiyears"
+                      item-text="name"
+                      item-value="key"
+                      return-object
+                      dense
+                      outlined
+                      @input="selectDonutYears()"
+                    ></v-select>
+                  </v-col>
+                  <!-- MONTH -->
+                  <v-col cols="6" sm="6" md="6" lg="4">
                     <v-select
                       v-model="donut_mounth"
                       :items="thaiMonths"
@@ -252,44 +290,33 @@
                     ></v-select>
                   </v-col>
                 </v-row>
+                <!-- <div>
+                  <v-select
+                    v-model="donut_years"
+                    :items="get_graf.yearName"
+                    return-object
+                    dense
+                    outlined
+                    @input="selectDonutYears()"
+                  ></v-select>
+                  <v-btn @click="choseYear()"></v-btn>
+                </div> -->
               </v-card-title>
-
               <v-row dense>
                 <!-- DOnut -->
-                <v-col cols="12" sm="12" md="12" lg="6" align="center">
-                  <div style="height: 100%">
-                    <!-- <v-progress-circular
-                      style="stroke-linecap: round"
-                      :rotate="-90"
-                      :size="250"
-                      :width="20"
-                      :model-value="get_donut.sumSuccess"
-                      :value="
-                        (get_donut.sumPending / get_donut.sumSuccess) * 10000
-                      "
-                      color="#ff6b81"
-                    >
-                      ทั้งหมด
-                      <br />
-                      {{
-                        `${get_donut.sumPending + get_donut.sumSuccess}`
-                          .toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                      }}
-                    </v-progress-circular> -->
-                    <apexchart
-                      type="donut"
-                      width="380"
-                      :options="donutOptions"
-                      :series="donutSeries"
-                    ></apexchart>
-                  </div>
+                <v-col cols="12" sm="12" md="12" lg="12" align="center">
+                  <apexchart
+                    type="donut"
+                    :options="donutOptions()"
+                    :series="seriesOfDonut"
+                    :width="widthDonut()"
+                  ></apexchart>
                 </v-col>
                 <!-- Dot Data -->
-                <!-- <v-col cols="12" sm="12" md="12" lg="6">
-                  <v-row dense class="mb-2">
-                    ชำระแล้ว
-                    <v-col cols="12" sm="12" class="mx-10">
+                <v-col cols="12" sm="12" md="12" lg="12" align="start">
+                  <v-row dense class="my-2">
+                    <!-- ชำระแล้ว -->
+                    <v-col cols="6" align="center">
                       <div>
                         <v-icon color="#ff6b81">mdi-circle-medium</v-icon>
                         <span class="font-bold text-xl">ชำระแล้ว</span>
@@ -298,7 +325,8 @@
                         style="font-weight: bold; color: #58a144"
                         class="mx-5"
                       >
-                        {{ get_donut.sumSuccess.toLocaleString() }}
+                        {{ totalSuccessDonut.toLocaleString() }}
+                        <!-- {{ get_graf.sumSuccess.toLocaleString() }} -->
                         <span
                           style="
                             font-weight: normal;
@@ -306,12 +334,19 @@
                             font-size: small;
                           "
                         >
-                          บาท({{ get_donut.sumSuccessPercentage }}%)
+                          บาท({{
+                            (
+                              (totalSuccessDonut * 100) /
+                              totalPriceDonut
+                            ).toLocaleString("us-us", {
+                              maximumFractionDigits: 2,
+                            })
+                          }}%)
                         </span>
                       </div>
                     </v-col>
-                    รอดำเนินการ
-                    <v-col cols="12" sm="12" class="mx-10">
+                    <!-- รอดำเนินการ -->
+                    <v-col cols="6" align="center">
                       <div>
                         <v-icon color="#E8E7E7">mdi-circle-medium</v-icon>
                         <span class="font-bold text-xl">รอดำเนินการ</span>
@@ -320,11 +355,7 @@
                         style="font-weight: bold; color: #fcc419"
                         class="mx-5"
                       >
-                        {{
-                          get_donut.sumPending
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                        }}
+                        {{ totalPendingDonut.toLocaleString() }}
 
                         <span
                           style="
@@ -332,12 +363,20 @@
                             color: #999999;
                             font-size: small;
                           "
-                          >บาท ({{ get_donut.sumPendingPercentage }}%)
+                        >
+                          บาท ({{
+                            (
+                              (totalPendingDonut * 100) /
+                              totalPriceDonut
+                            ).toLocaleString("us-us", {
+                              maximumFractionDigits: 2,
+                            })
+                          }}%)
                         </span>
                       </div>
                     </v-col>
                   </v-row>
-                </v-col> -->
+                </v-col>
               </v-row>
             </v-card>
           </v-col>
@@ -357,9 +396,11 @@
             <!-- PIE -->
             <v-col cols="12" sm="12" md="12" lg="4" align="center">
               <apexchart
+                style="width: 100%; height: 100%"
                 type="pie"
                 :options="pieChartOptions"
                 :series="pieSeries"
+                :width="widthPie()"
               ></apexchart>
             </v-col>
             <!-- COURSE CLOSE -->
@@ -533,6 +574,9 @@ export default {
     loadingOverlay,
   },
   data: () => ({
+    totalSuccessDonut: 0,
+    totalPendingDonut: 0,
+    totalPriceDonut: 0,
     course_close_options: [
       {
         label: "คอร์สเต็ม",
@@ -547,6 +591,7 @@ export default {
     ],
 
     thaiMonths: [
+      { name: "ทั้งปี", key: "", type: "month" },
       { name: "มกราคม", key: "01", type: "month" },
       { name: "กุมภาพันธ์", key: "02", type: "month" },
       { name: "มีนาคม", key: "03", type: "month" },
@@ -560,71 +605,110 @@ export default {
       { name: "พฤศจิกายน", key: "11", type: "month" },
       { name: "ธันวาคม", key: "12", type: "month" },
     ],
+
+    thaiyears: [
+      { name: "2566", key: "2023", type: "year" },
+      { name: "2567", key: "2024", type: "year" },
+      { name: "2568", key: "2025", type: "year" },
+      { name: "2569", key: "2026", type: "year" },
+      { name: "2570", key: "2027", type: "year" },
+      { name: "2571", key: "2028", type: "year" },
+      { name: "2572", key: "2029", type: "year" },
+      { name: "2573", key: "2030", type: "year" },
+      { name: "2574", key: "2031", type: "year" },
+      { name: "2575", key: "2032", type: "year" },
+      { name: "2576", key: "2033", type: "year" },
+      { name: "2577", key: "2034", type: "year" },
+      { name: "2578", key: "2035", type: "year" },
+      { name: "2579", key: "2036", type: "year" },
+      { name: "2580", key: "2037", type: "year" },
+      { name: "2581", key: "2038", type: "year" },
+      { name: "2582", key: "2039", type: "year" },
+      { name: "2583", key: "2040", type: "year" },
+      { name: "2584", key: "2041", type: "year" },
+      { name: "2585", key: "2042", type: "year" },
+      { name: "2586", key: "2043", type: "year" },
+      { name: "2587", key: "2044", type: "year" },
+      { name: "2588", key: "2045", type: "year" },
+      { name: "2589", key: "2046", type: "year" },
+      { name: "2590", key: "2047", type: "year" },
+      { name: "2591", key: "2048", type: "year" },
+      { name: "2592", key: "2049", type: "year" },
+      { name: "2593", key: "2050", type: "year" },
+      { name: "2594", key: "2051", type: "year" },
+      { name: "2595", key: "2052", type: "year" },
+      { name: "2596", key: "2053", type: "year" },
+      { name: "2597", key: "2054", type: "year" },
+      { name: "2598", key: "2055", type: "year" },
+      { name: "2599", key: "2056", type: "year" },
+      { name: "2600", key: "2057", type: "year" },
+    ],
+
     selected_mounth: "",
     donut_mounth: "",
-    setSelectedMonth: null,
-    // donutSeries: [44, 55, 41, 17, 15],
-    donutOptions: {
-      labels: ["คอร์ส 1", "คอร์ส 2"],
-      chart: {
-        width: 380,
-        type: "donut",
-      },
-      plotOptions: {
-        pie: {
-          startAngle: -90,
-          endAngle: 270,
-        },
-      },
-      dataLabels: {
-        // labels: ["คอร์ส 1", "คอร์ส 2", "คอร์ส 3", "คอร์ส 4", "คอร์ส 5"],
-        enabled: true,
-      },
-      fill: {
-        type: "gradient",
-      },
-      legend: {
-        // formatter: function (val, opts) {
-        //   return val + " - " + opts.w.globals.series[opts.seriesIndex];
-        // },
-      },
-
-      // responsive: [
-      //   {
-      //     breakpoint: 600,
-      //     options: {
-      //       chart: {
-      //         width: 500,
-      //       },
-      //       legend: {
-      //         position: "bottom",
-      //       },
-      //     },
-      //   },
-      // ],
+    selected_years: "",
+    donut_years: "",
+    data_year: "",
+    data_month: "",
+    dashboard_graf: {
+      year: "",
+      month: "",
     },
+    thai_day_name: [],
+    mapyears: "",
+    mapMonth: "",
+    totalPrice: [],
+    box: [],
+    selectedYear: null,
+    currentYear: "",
+    year_data: "",
   }),
   created() {
-    this.selectMunth();
-    this.selectDonutMounth();
+    // this.donutSerieses();
+    // this.donutSeries();
+    // this.donutSerieses();
   },
   beforeMount() {
     const month = new Date().getMonth() + 1;
-    const mapMonth = this.thaiMonths.filter(
+    this.mapMonth = this.thaiMonths.filter(
       (item) => parseInt(item.key) === month
     )[0];
-    console.log("mapMonth", mapMonth);
-    this.selected_mounth = mapMonth;
-    this.selectMunth();
-    this.donut_mounth = mapMonth;
-    this.selectDonutMounth();
+    // console.log("mapMonth", this.mapMonth);
+    this.selected_mounth = this.mapMonth;
+    // this.selectMunth();
+    this.donut_mounth = this.mapMonth;
+    // this.selectDonutMounth();
+
+    const currentYear = new Date().getFullYear();
+    // console.log("646", currentYear);
+    this.mapyears = this.thaiyears.filter(
+      (item) => parseInt(item.key) === currentYear
+    )[0];
+    // console.log("mapyears", this.mapyears);
+    this.selected_years = this.mapyears;
+    // this.selectYears();
+    this.donut_years = this.mapyears;
+    // this.selectDonutYears();
+
+    this.dashboard_graf = {
+      year: this.mapyears.key,
+      month: this.mapMonth.key,
+    };
+
+    this.choseYear();
+    // this.GetGraf(this.dashboard_graf);
   },
   mounted() {
     this.GetEmptyCourse();
     this.GetCourseType();
     this.GetPotential();
-    this.GetDonut();
-    this.GetGraf();
+    // this.GetDonut({ year: "2023", month: "07" });
+    this.GetDonut(this.dashboard_graf);
+    this.GetGraf(this.dashboard_graf);
+    // this.donutSeries();
+    // this.dataType()
+    // this.donutSerieses();
+    this.choseYear();
   },
   methods: {
     ...mapActions({
@@ -635,15 +719,205 @@ export default {
       GetGraf: "DashboardModules/GetGraf",
     }),
 
+    choseYear() {
+      this.year_data = this.get_graf
+      // console.log("720", this.get_graf);
+      // get_donut = yearName
+      //get_graf = yearName
+    },
+
+    selectYears() {
+      this.dashboard_graf.year = this.selected_years.key;
+      // console.log("688", this.dashboard_graf);
+      this.GetGraf(this.dashboard_graf);
+    },
+
     selectMunth() {
-      console.log("thaiMonths", this.selected_mounth);
-      this.GetGraf(this.selected_mounth);
+      this.dashboard_graf.month = this.selected_mounth.key;
+      // console.log("679", this.dashboard_graf);
+      this.GetGraf(this.dashboard_graf);
+    },
+
+    selectDonutYears() {
+      // // console.log("707", this.donut_years);
+      // this.GetDonut(this.donut_years);
+
+      this.dashboard_graf.year = this.donut_years.key;
+      // console.log("691", this.dashboard_graf);
+      this.GetDonut(this.dashboard_graf);
     },
 
     selectDonutMounth() {
-      console.log("thaiMonthsD", this.donut_mounth);
-      this.GetDonut(this.donut_mounth);
+      // // console.log("thaiMonthsD", this.donut_mounth);
+      // this.GetDonut(this.donut_mounth);
+
+      this.dashboard_graf.month = this.donut_mounth.key;
+      // console.log("686", this.dashboard_graf);
+      this.GetDonut(this.dashboard_graf);
     },
+
+    heightGraf() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "sm":
+          return 250;
+        case "md":
+          return 250;
+      }
+    },
+    widthDonut() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "sm":
+          return 480;
+        case "md":
+          return 450;
+        case "lg":
+          return 390;
+      }
+    },
+    widthPie() {
+      switch (this.$vuetify.breakpoint.name) {
+        // case "xs":
+        //   return 400;
+        case "sm":
+          return 400;
+        case "md":
+          return 350;
+        case "lg":
+          return 380;
+      }
+    },
+    donutSerieses() {
+      this.totalPrice = [];
+      this.totalSuccessDonut = 0;
+      this.totalPendingDonut = 0;
+      this.totalPriceDonut = 0;
+
+      let price = 0;
+      for (let items of this.get_donut.datas) {
+        price = parseFloat(items.totalPrice);
+        this.totalPrice.push(price);
+        this.totalSuccessDonut =
+          this.totalSuccessDonut + parseFloat(items.sumSuccess);
+        this.totalPendingDonut =
+          this.totalPendingDonut + parseFloat(items.sumPending);
+        this.totalPriceDonut =
+          this.totalPriceDonut + parseFloat(items.totalPrice);
+      }
+      this.totalPrice.push(this.get_donut.otherTotal.totalPrice);
+      this.totalSuccessDonut =
+        this.totalSuccessDonut + this.get_donut.otherTotal.sumSuccess;
+      this.totalPendingDonut =
+        this.totalPendingDonut + this.get_donut.otherTotal.sumPending;
+      this.totalPriceDonut =
+        this.totalPriceDonut + this.get_donut.otherTotal.totalPrice;
+    },
+
+    donutSeries() {
+      for (const items of this.get_donut.datas) {
+        this.totalSuccessDonut =
+          this.totalSuccessDonut + parseFloat(items.sumSuccess);
+        this.totalPendingDonut =
+          this.totalPendingDonut + parseFloat(items.sumPending);
+        this.totalPriceDonut =
+          this.totalPriceDonut + parseFloat(items.totalPrice);
+      }
+      this.totalSuccessDonut =
+        this.totalSuccessDonut + this.get_donut.otherTotal.sumSuccess;
+      this.totalPendingDonut =
+        this.totalPendingDonut + this.get_donut.otherTotal.sumPending;
+      this.totalPriceDonut =
+        this.totalPriceDonut + this.get_donut.otherTotal.totalPrice;
+    },
+    donutOptions() {
+      const donutdata = {
+        colors: [
+          "#ff6b6b",
+          "#ff906b",
+          "#ffb56b",
+          "#ffda6b",
+          "#ffff6b",
+          "#daff6b",
+          "#b5ff6b",
+          "#90ff6b",
+          "#6bff6b",
+          "#6bff90",
+          "#999999",
+        ],
+        labels: this.donutLabels,
+        // labels: ["a", "b", "c", "d"],
+        chart: {
+          type: "donut",
+        },
+        plotOptions: {
+          pie: {
+            startAngle: -90,
+            endAngle: 270,
+            donut: {
+              labels: {
+                show: true,
+                total: {
+                  show: true,
+                  label: "รวมทั้งหมด",
+                  color: "#373d3f",
+                  fontSize: "18px",
+
+                  // formatter: function () {
+                  //   // console.log("944", this.abc);
+                  //   return this.abc;
+                  // },
+                  // formatter: function (w) {
+                  //   return w.globals.seriesTotals.reduce((a, b) => {
+                  //     return a + b;
+                  //   }, 0);
+                  // },
+                },
+              },
+            },
+          },
+        },
+        dataLabels: {
+          enabled: true,
+        },
+        fill: {
+          type: "gradient",
+        },
+        legend: {
+          show: false,
+        },
+        tooltip: {
+          enabled: true,
+          y: {
+            formatter: function (val) {
+              return val
+            },
+          },
+          custom: ({series, seriesIndex, w}) => {
+            return this.customTooltip(series, seriesIndex, w)
+          }
+        },
+      };
+      return donutdata;
+    },
+    customTooltip(series, seriesIndex, w) {
+      // // console.log(this.get_donut.datas[seriesIndex])
+      let item = w.globals
+      let color = item.colors[seriesIndex]
+      return this.get_donut?.datas[seriesIndex] ? (`
+        <div class="pa-3 ml-auto" style='background-color: ${color}'>
+          <h3 class="font-weight-bold">${item.seriesNames[seriesIndex]}</h3>
+          <i class="mdi mdi-circle " style="font-size:10px; color: #8cd977"></i> <span class="font-weight-bold">ที่ชำระแล้ว : </span>${this.get_donut?.datas[seriesIndex].sumSuccess}<br/>
+          <i class="mdi mdi-circle " style="font-size:10px; color: #a1a1a1"></i> <span class="font-weight-bold">รอชำระ : </span>${this.get_donut?.datas[seriesIndex].sumPending}<br/>
+          <span class="font-weight-bold">รวม : </span>${series[seriesIndex]}
+        </div>
+      `) :  (`
+        <div class="pa-3 ml-auto" style='background-color: ${color}'>
+          <h3 class="font-weight-bold">${item.seriesNames[seriesIndex]}</h3>
+          <i class="mdi mdi-circle " style="font-size:10px; color: #8cd977"></i> <span class="font-weight-bold">ที่ชำระแล้ว : </span>${this.get_donut?.otherTotal.sumSuccess}<br/>
+          <i class="mdi mdi-circle " style="font-size:10px; color: #a1a1a1"></i> <span class="font-weight-bold">รอชำระ : </span>${this.get_donut?.otherTotal.sumPending}<br/>
+          <span class="font-weight-bold">รวม : </span>${series[seriesIndex]}
+        </div>
+        `)
+    }
   },
   computed: {
     ...mapGetters({
@@ -654,6 +928,16 @@ export default {
       get_graf: "DashboardModules/getGraf",
       dashboard_loading: "DashboardModules/getloading",
     }),
+
+    lineChartLabels() {
+      let labelsLine = [];
+
+      for (const items of this.get_graf.orderData) {
+        labelsLine.push(items.thaiDayName);
+      }
+      // console.log("805", labelsLine);
+      return labelsLine;
+    },
 
     chartOptions() {
       const lineChartOptions = {
@@ -671,22 +955,32 @@ export default {
           text: "รายได้",
           align: "left",
         },
+
         grid: {},
         xaxis: {
           categories:
             this.get_graf.length !== 0
               ? this.get_graf.orderData.map((item) => {
-                  return item.date;
+                  if (this.get_graf.type == "month") {
+                    return item.thaiDayName;
+                  } else if (this.get_graf.type == "year") {
+                    // console.log("821", item.month);
+                    return item.month;
+                    // return item.month;
+                  }
                 })
               : "",
+
+          // labels: this.lineChartLabels,
         },
       };
 
       return lineChartOptions;
     },
-    series() {
+    chartSeries() {
       const lineChart = [
         {
+          name: "ชำระแล้ว",
           data:
             this.get_graf.length !== 0
               ? this.get_graf.orderData.map((item) => {
@@ -697,56 +991,28 @@ export default {
       ];
       return lineChart;
     },
-    //   donutOptions() {
-    //     const donutdata = {}
-    //   return donutdata
-    // },
 
-    // donutOptions: {
-    //   labels: ["คอร์ส 1", "คอร์ส 2"],
-    //   chart: {
-    //     width: 380,
-    //     type: "donut",
-    //   },
-    //   plotOptions: {
-    //     pie: {
-    //       startAngle: -90,
-    //       endAngle: 270,
-    //     },
-    //   },
-    //   dataLabels: {
-    //     enabled: true,
-    //   },
-    //   fill: {
-    //     type: "gradient",
-    //   },
-    //   legend: {
-    //     // formatter: function (val, opts) {
-    //     //   return val + " - " + opts.w.globals.series[opts.seriesIndex];
-    //     // },
-    //   },
+    donutLabels() {
+      let labels = [];
+      for (const items of this.get_donut.datas) {
+        labels.push(items.courseNameTh);
+      }
+      labels.push(this.get_donut.otherTotal.courseNameTh);
 
-    //   // responsive: [
-    //   //   {
-    //   //     breakpoint: 600,
-    //   //     options: {
-    //   //       chart: {
-    //   //         width: 500,
-    //   //       },
-    //   //       legend: {
-    //   //         position: "bottom",
-    //   //       },
-    //   //     },
-    //   //   },
-    //   // ],
-    // },
-
-    donutSeries() {
-      let success = this.get_empty_course.countOpen;
-      let pending = this.get_donut.sumPending;
-      const donut = [success, pending];
-      return donut;
+      return labels;
     },
+
+    seriesOfDonut() {
+      this.donutSerieses();
+      return this.totalPrice;
+    },
+    donutsuccess() {
+      this.donutSerieses();
+      return (
+        this.totalSuccessDonut && this.totalPendingDonut && this.totalPriceDonut
+      );
+    },
+
     pieSeries() {
       let Open = this.get_empty_course.countOpen;
       let Close = this.get_empty_course.countClose;
@@ -759,36 +1025,29 @@ export default {
       const pieChartOptions = {
         colors: ["#7CD464", "#A1A1A1"],
         chart: {
-          width: 380,
           type: "pie",
         },
         dataLabels: {
           enabled: false,
         },
         labels: [`คอร์สว่าง ${Open} คอร์ส`, `คอร์สเต็ม ${Close} คอร์ส`],
-        responsive: [
-          {
-            breakpoint: 480,
-            options: {
-              chart: {
-                width: 200,
-              },
-              legend: {
-                position: "bottom",
-              },
-            },
-          },
-        ],
+        // responsive: [
+        //   {
+        //     breakpoint: 480,
+        //     options: {
+        //       chart: {
+        //         width: 200,
+        //       },
+        //     },
+        //   },
+        // ],
+        legend: {
+          position: "bottom",
+        },
       };
       return pieChartOptions;
     },
   },
-  // watch: {
-  //   currentMonthThai(newValue) {
-  //     console.log("newValue", newValue);
-  //     this.selected_mounth = newValue;
-  //   },
-  // },
 };
 </script>
   
