@@ -673,18 +673,18 @@ export default {
     this.mapMonth = this.thaiMonths.filter(
       (item) => parseInt(item.key) === month
     )[0];
-    console.log("mapMonth", this.mapMonth);
+    // console.log("mapMonth", this.mapMonth);
     this.selected_mounth = this.mapMonth;
     // this.selectMunth();
     this.donut_mounth = this.mapMonth;
     // this.selectDonutMounth();
 
     const currentYear = new Date().getFullYear();
-    console.log("646", currentYear);
+    // console.log("646", currentYear);
     this.mapyears = this.thaiyears.filter(
       (item) => parseInt(item.key) === currentYear
     )[0];
-    console.log("mapyears", this.mapyears);
+    // console.log("mapyears", this.mapyears);
     this.selected_years = this.mapyears;
     // this.selectYears();
     this.donut_years = this.mapyears;
@@ -720,38 +720,39 @@ export default {
     }),
 
     choseYear() {
-      this.year_data = this.get_graf.console.log("720", this.get_graf);
+      this.year_data = this.get_graf
+      // console.log("720", this.get_graf);
       // get_donut = yearName
       //get_graf = yearName
     },
 
     selectYears() {
       this.dashboard_graf.year = this.selected_years.key;
-      console.log("688", this.dashboard_graf);
+      // console.log("688", this.dashboard_graf);
       this.GetGraf(this.dashboard_graf);
     },
 
     selectMunth() {
       this.dashboard_graf.month = this.selected_mounth.key;
-      console.log("679", this.dashboard_graf);
+      // console.log("679", this.dashboard_graf);
       this.GetGraf(this.dashboard_graf);
     },
 
     selectDonutYears() {
-      // console.log("707", this.donut_years);
+      // // console.log("707", this.donut_years);
       // this.GetDonut(this.donut_years);
 
       this.dashboard_graf.year = this.donut_years.key;
-      console.log("691", this.dashboard_graf);
+      // console.log("691", this.dashboard_graf);
       this.GetDonut(this.dashboard_graf);
     },
 
     selectDonutMounth() {
-      // console.log("thaiMonthsD", this.donut_mounth);
+      // // console.log("thaiMonthsD", this.donut_mounth);
       // this.GetDonut(this.donut_mounth);
 
       this.dashboard_graf.month = this.donut_mounth.key;
-      console.log("686", this.dashboard_graf);
+      // console.log("686", this.dashboard_graf);
       this.GetDonut(this.dashboard_graf);
     },
 
@@ -861,7 +862,7 @@ export default {
                   fontSize: "18px",
 
                   // formatter: function () {
-                  //   console.log("944", this.abc);
+                  //   // console.log("944", this.abc);
                   //   return this.abc;
                   // },
                   // formatter: function (w) {
@@ -898,7 +899,7 @@ export default {
       return donutdata;
     },
     customTooltip(series, seriesIndex, w) {
-      // console.log(this.get_donut.datas[seriesIndex])
+      // // console.log(this.get_donut.datas[seriesIndex])
       let item = w.globals
       let color = item.colors[seriesIndex]
       return this.get_donut?.datas[seriesIndex] ? (`
@@ -934,7 +935,7 @@ export default {
       for (const items of this.get_graf.orderData) {
         labelsLine.push(items.thaiDayName);
       }
-      console.log("805", labelsLine);
+      // console.log("805", labelsLine);
       return labelsLine;
     },
 
@@ -963,7 +964,7 @@ export default {
                   if (this.get_graf.type == "month") {
                     return item.thaiDayName;
                   } else if (this.get_graf.type == "year") {
-                    console.log("821", item.month);
+                    // console.log("821", item.month);
                     return item.month;
                     // return item.month;
                   }

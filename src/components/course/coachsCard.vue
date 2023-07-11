@@ -410,7 +410,6 @@ export default {
             timeMinUsed.push(min);
           }
         }
-        // console.log("timeMinUsed => ",timeMinUsed)
         return timeMinUsed;
       }
     },
@@ -425,16 +424,12 @@ export default {
         };
       });
       timeused.forEach((time, index) => {
-        // console.log("timeindex", timeindex)
-        // console.log("index", index)
-        // console.log("Time :",time)
         if (timeindex !== index) {
           if (time.start_time.HH) {
             timeusedHH.push(parseInt(time.start_time.HH));
           }
         }
       });
-      // console.log(generateTimeArrayHours(timeusedHH))
       return generateTimeArrayHours(timeusedHH);
     },
     ChangeStartDate(date) {
@@ -485,16 +480,9 @@ export default {
         .getElementsByClassName("time-picker-hidden")[0]
         .getElementsByTagName("input")[0]
         .focus();
-      // console.log( timepickerElement)
     },
     checkStudyByDay(e, data) {
-      // console.log(e.target.click())
       if (!data.class_open) {
-        console.log(
-          this.course_monitors.filter(
-            (v) => v.m_day_of_week_id === data.day_of_week_id
-          )
-        );
         if (
           this.course_monitors.filter(
             (v) => v.m_day_of_week_id === data.day_of_week_id
@@ -535,7 +523,6 @@ export default {
       }
     },
     removeCoach(coach, index) {
-      console.log(coach, index);
       coach.splice(index, 1);
     },
     coachsOptions(coach_selected) {
@@ -618,13 +605,6 @@ export default {
 
       if (conflictTeachDay) {
         // If there is a conflict, show an error message and reset the selection
-        console.log(
-          `Cannot select ${selectedDays.join(
-            ", "
-          )} because it has already been selected by teach_day ${
-            conflictTeachDay.class_date[0].class_date_range.start_time
-          }`
-        );
         currentTeachDay.teach_day = currentTeachDay.teach_day.filter(
           (day) => !selectedDays.includes(day)
         );
@@ -635,14 +615,7 @@ export default {
         const current_teach_day =
           this.course_data.coachs[coachIndex].teach_day_data[teachDayIndex];
         const used_hours = [];
-        console.log("teach_days_used :", teach_days_used);
-        console.log("current_teach_day :", current_teach_day.teach_day);
         teach_days_used.forEach((teach_day) => {
-          console.log("teach_day :", teach_day);
-          console.log(
-            "current_teach_day :",
-            current_teach_day.teach_day.includes(parseInt(teach_day.date_value))
-          );
           if (
             current_teach_day.teach_day.includes(parseInt(teach_day.date_value))
           ) {
@@ -658,7 +631,6 @@ export default {
             });
           }
         });
-        console.log(used_hours);
         this.course_data.coachs[coachIndex].disabled_hours = used_hours;
         // If there is no conflict, update the selected days for the current teach_day
         currentTeachDay.teach_day = selectedDays;
@@ -667,13 +639,8 @@ export default {
     },
 
     genStartTimeEndTime(value, coach_index, teach_day_index, class_date_index) {
-      console.log(value, coach_index, teach_day_index, class_date_index);
       if (value) {
-        // console.log("course_hours =>", this.course_data.course_hours);
-        // console.log("start =>", value);
         const end = moment(value).add(this.course_data.course_hours, "hour");
-        // console.log("end =>", end);
-        // console.log("teach_day=>",this.course_data.coachs[coach_index])
         this.course_data.coachs[coach_index].teach_day_data[
           teach_day_index
         ].class_date[class_date_index].class_date_range.end_time = end;
@@ -704,7 +671,6 @@ export default {
       this.ChangeCourseData(this.course_data);
     },
     addTeachDay(data) {
-      console.log(data);
       data.teach_day_data.push({
         teach_day: [],
         course_coach_id: data.course_coach_id,
@@ -729,7 +695,6 @@ export default {
       this.ChangeCourseData(this.course_data);
     },
     addTime(data) {
-      console.log(data);
       data.class_date.push({
         class_date_range: {
           start_time: "",
@@ -767,7 +732,6 @@ export default {
       });
     },
     removeDayOfWeekData(data, day_of_week_id) {
-      console.log(data, day_of_week_id);
       Swal.fire({
         icon: "question",
         title: "ต้องการลบวันสอนนี้ใช่หรือไม่",

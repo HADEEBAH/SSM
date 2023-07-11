@@ -166,7 +166,6 @@ export default {
       }
     },
     toRegisterPage() {
-      console.log("Register");
       this.$router.replace({ name: "Register" });
     },
     validate(e, type) {

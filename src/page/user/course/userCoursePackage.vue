@@ -356,8 +356,8 @@ export default {
       this.show_full_img = false
     },
     selectedPackage(option) {
-      console.log("Options :", option);
-      console.log("Select :", this.selected_package);
+      // console.log("Options :", option);
+      // console.log("Select :", this.selected_package);
       this.course_order.option = option;
       this.course_order.price = option.total_price;
       this.course_order.time_count = option.amount;

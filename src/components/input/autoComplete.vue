@@ -46,7 +46,6 @@ import { mapActions, mapGetters } from 'vuex';
     },
     watch: {
       selected_data(){
-        console.log(this.selected_data)
         this.$emit('selected_data',this.selected_data)
       },
     },

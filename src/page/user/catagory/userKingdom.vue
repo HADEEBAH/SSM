@@ -197,7 +197,7 @@ export default {
   created() {
     this.dataStorage = JSON.parse(localStorage.getItem("userDetail"));
     if (this.dataStorage) {
-      console.log("this.dataStorage created", this.dataStorage);
+      // console.log("this.dataStorage created", this.dataStorage);
       this.GetAll(this.dataStorage.account_id);
     }
     localStorage.removeItem("Order");
@@ -236,7 +236,7 @@ export default {
       }
     },
     selectedCategory(category) {
-      console.log("category", category);
+      // console.log("category", category);
       this.course_order.kingdom = category.categoryNameTh;
       this.course_order.category_id = category.categoryId;
       this.changeCourseOrderData(this.course_order);
@@ -260,10 +260,9 @@ export default {
     showImg(item) {
       return `${process.env.VUE_APP_URL}/api/v1/files/${item}`;
     },
-    shortenedText(detail) {
-      console.log("detail", detail);
-      return this.detail.slice(0, 10);
-    },
+    // shortenedText(detail) {
+    //   return this.detail.slice(0, 10);
+    // },
   },
 
   computed: {
@@ -278,7 +277,7 @@ export default {
     setFunctions() {
       this.$store.dispatch("CategoryModules/GetCategoryCourse");
       if (this.dataStorage) {
-        console.log("this.dataStorage compute", this.dataStorage);
+        // console.log("this.dataStorage compute", this.dataStorage);
         this.GetProfileDetail(this.dataStorage.account_id);
       }
 

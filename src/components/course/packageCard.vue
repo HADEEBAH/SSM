@@ -396,7 +396,6 @@ export default {
       }
     },
     checkPackage(package_data, packages) {
-      console.log(package_data);
       let minimum_students_data = this.minimum_students;
       if (package_data === "PACK_1") {
         packages.students = 1;

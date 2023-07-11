@@ -66,8 +66,6 @@ export const dateFormatter = (date, formatter) => {
 }
 export const generateTimeArrayHours = (timedata) => {
     const startHour = timedata;
-    // console.log("timedata +> ",startHour)
-    // const endHour = parseInt(timedata.end_time.HH);
     const output = [];
     for (let hour = 0; hour <= 23; hour++) {
         if(startHour.length > 0){
@@ -78,14 +76,11 @@ export const generateTimeArrayHours = (timedata) => {
             output.push(hour.toString().padStart(2, '0'));
         }  
     }
-    // console.log(output)
     return output;
 }
 export const CheckFileSize = (file) => {
-    console.log("func File", file);
     const fileSizeInBytes = file.size;
     const fileSizeInMB = fileSizeInBytes / (1024 * 1024);
-    console.log("fileSizeInMB", fileSizeInMB);
     if (fileSizeInMB > 10) {
         Swal.fire({
             icon: "error",
@@ -101,7 +96,6 @@ export const CheckFileSizeV2 = (file, id) => { //check file รอ merge กั�
     const key = document.getElementById(id)
     const fileSizeInBytes = file.size;
     const fileSizeInMB = fileSizeInBytes / (1024 * 1024);
-    console.log("fileSizeInMB", fileSizeInMB);
     if (fileSizeInMB > 10) {
         key.value = ''
         Swal.fire({

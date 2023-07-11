@@ -229,7 +229,6 @@
       checkPhoneNumber() {
         let x = this.user_data.phone_num.replace(/\D/g, "");
         x = x.match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
-        console.log(x);
         this.user_data.phone_num = !x[2]
           ? x[1]
           : x[1] + "-" + x[2] + (x[3] ? "-" + x[3] : "");

@@ -1454,7 +1454,7 @@ export default {
   
   created() {
     this.GetLoading(true)
-    console.log("route", this.$route);
+    // console.log("route", this.$route);
     if (this.$route.query.token) {
      this.loginShareToken(this.$route)
     }
@@ -1468,7 +1468,7 @@ export default {
   },
   beforeMount() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    console.log("user_detail", this.user_detail);
+    // console.log("user_detail", this.user_detail);
 
     // this.GetMyCourses({ coach_id: this.user_detail.account_id });
     // this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
@@ -1476,7 +1476,7 @@ export default {
   },
 
   mounted() {
-    console.log("valid", this.user_detail?.roles?.filter((val)=> val === "R_3").length === 0);
+    // console.log("valid", this.user_detail?.roles?.filter((val)=> val === "R_3").length === 0);
     if (this.user_detail?.roles?.filter((val)=> val === "R_3" || val === "R_2" || val === "R_1").length === 0) {
       router.replace({name:"UserKingdom"})
     }
@@ -1528,7 +1528,7 @@ export default {
             ? true
             : false
           : false;
-      console.log(start_date && end_date && period && leave_type && course);
+      // console.log(start_date && end_date && period && leave_type && course);
       return !(start_date && end_date && period && leave_type && course);
     },
   },
@@ -1549,7 +1549,7 @@ export default {
       GetLoading: "LoadingModules/GetLoading",
     }),
     SelectedStatus(status) {
-      console.log(status);
+      // console.log(status);
       this.select_status = status;
     },
     GenDateStr(date) {
@@ -1563,7 +1563,7 @@ export default {
       return date.toLocaleDateString("th-TH", options);
     },
     openFileSummary(file) {
-      // console.log(file)
+      // // console.log(file)
       window.open(file.attFilesUrl, "_blank");
     },
     openFile(file) {
@@ -1628,7 +1628,7 @@ export default {
       course.show_assessment_pantential = !course.show_assessment_pantential;
     },
     genDate(date) {
-      // console.log(date)
+      // // console.log(date)
       return dateFormatter(new Date(date), "DD MT YYYYT");
     },
     RemoveCourse(index) {
@@ -1662,7 +1662,7 @@ export default {
       });
     },
     dowloadFile(file) {
-      console.log(file.attachmentFile);
+      // console.log(file.attachmentFile);
       let url = `${process.env.VUE_APP_URL}/api/v1/files/${file.attachmentFile}`;
       window.open(url, "_blank");
     },
@@ -1726,7 +1726,7 @@ export default {
       };
     },
     showDialogDetail(leave_data) {
-      console.log(leave_data);
+      // console.log(leave_data);
       this.show_leave_detail = true;
       this.edited_coach_leave_data = leave_data;
       this.GetAttachmentLeave({ coach_leave_id: leave_data.coachLeaveId });
@@ -1744,7 +1744,7 @@ export default {
     },
     uploadFile() {
       const files = this.$refs.fileInput.files;
-      console.log(files);
+      // console.log(files);
       if (files.length > 0) {
         for (let i = 0; i < files.length; i++) {
           this.selected_files.push(files[i]);
