@@ -10,7 +10,7 @@
       <v-row dense>
         <!-- STUDENT -->
         <v-col cols="12" sm="12" md="12" lg="7">
-          <v-card class="pa-4 rounded-lg drop-shadow-lg">
+          <v-card class="pa-4 rounded-lg drop-shadow-md">
             <v-row dense>
               <!-- ผู้เรียนทั้งหมด -->
               <v-col cols="6" sm="3">
@@ -33,7 +33,11 @@
                     style="color: #ff6b81; font-size: xx-large"
                     class="font-bold text-lg"
                   >
-                    {{ get_potential.countStudents }}
+                    {{
+                      get_potential.countStudents
+                        ? get_potential.countStudents
+                        : "0"
+                    }}
                   </div>
                   <v-col align="center">
                     <div class="my-3">คน</div>
@@ -45,17 +49,23 @@
                 <v-card class="rounded-lg">
                   <v-row dense>
                     <v-col cols="12" align="center">
-                      <div class="my-5">ผู้เรียนปัจจุบัน</div>
-                    </v-col>
-                    <v-col cols="12" align="center">
-                      <div style="color: #1876d1; font-size: 30px">
-                        {{ get_potential.currentStudent?.countStudentCurrent }}
-                      </div>
-                    </v-col>
-                    <v-col cols="12" align="center">
-                      <div class="mb-5">คน</div>
+                      <div class="my-5 text-lg">ผู้เรียนปัจจุบัน</div>
                     </v-col>
                   </v-row>
+                  <div
+                    align="center"
+                    style="color: #1876d1; font-size: xx-large"
+                    class="font-bold text-lg"
+                  >
+                    {{
+                      get_potential.currentStudent?.countStudentCurrent
+                        ? get_potential.currentStudent?.countStudentCurrent
+                        : "0"
+                    }}
+                  </div>
+                  <v-col align="center">
+                    <div class="my-3">คน</div>
+                  </v-col>
                 </v-card>
               </v-col>
               <!-- ผู้เรียนที่ใกล้จบ -->
@@ -63,19 +73,23 @@
                 <v-card class="rounded-lg">
                   <v-row dense>
                     <v-col cols="12" align="center">
-                      <div class="my-5">ผู้เรียนที่ใกล้จบ</div>
-                    </v-col>
-                    <v-col cols="12" align="center">
-                      <div style="color: #1876d1; font-size: 30px">
-                        {{
-                          get_potential.potencialsStudent.countStudentPotencials
-                        }}
-                      </div>
-                    </v-col>
-                    <v-col cols="12" align="center">
-                      <div class="mb-5">คน</div>
+                      <div class="my-5 text-lg">ผู้เรียนที่ใกล้จบ</div>
                     </v-col>
                   </v-row>
+                  <div
+                    align="center"
+                    style="color: #1876d1; font-size: xx-large"
+                    class="font-bold text-lg"
+                  >
+                    {{
+                      get_potential.potencialsStudent?.countStudentPotencials
+                        ? get_potential.potencialsStudent.countStudentPotencials
+                        : "0"
+                    }}
+                  </div>
+                  <v-col align="center">
+                    <div class="my-3">คน</div>
+                  </v-col>
                 </v-card>
               </v-col>
               <!-- ผู้เรียนจองคอร์ส -->
@@ -83,17 +97,23 @@
                 <v-card class="rounded-lg">
                   <v-row dense>
                     <v-col cols="12" align="center">
-                      <div class="my-5">ผู้เรียนจองคอร์ส</div>
-                    </v-col>
-                    <v-col cols="12" align="center">
-                      <div style="color: #1876d1; font-size: 30px">
-                        {{ get_potential.countReserve.studentList.length }}
-                      </div>
-                    </v-col>
-                    <v-col cols="12" align="center">
-                      <div class="mb-5">คน</div>
+                      <div class="my-5 text-lg">ผู้เรียนจองคอร์ส</div>
                     </v-col>
                   </v-row>
+                  <div
+                    align="center"
+                    style="color: #1876d1; font-size: xx-large"
+                    class="font-bold text-lg"
+                  >
+                    {{
+                      get_potential.countReserve?.countStudent
+                        ? get_potential.countReserve.countStudent
+                        : "0"
+                    }}
+                  </div>
+                  <v-col align="center">
+                    <div class="my-3">คน</div>
+                  </v-col>
                 </v-card>
               </v-col>
             </v-row>
@@ -101,7 +121,7 @@
         </v-col>
         <!-- COURSE -->
         <v-col cols="12" sm="6" md="6" lg="3">
-          <v-card class="rounded-lg drop-shadow-lg" height="202px">
+          <v-card class="rounded-lg drop-shadow-md" height="200px">
             <v-row dense>
               <v-col cols="6" sm="6">
                 <v-row dense>
@@ -118,7 +138,7 @@
                       class="font-bold text-lg"
                       style="color: #ff6b81; font-size: 30px"
                     >
-                      {{ get_course_type.allCourse.generalCourse }}
+                      {{ get_course_type.allCourse?.generalCourse }}
                     </div>
                   </v-col>
                   <v-col align="center">
@@ -131,7 +151,11 @@
                   <v-col cols="12" align="center">
                     <div class="font-medium my-5 text-lg">คอร์สทั่วไป</div>
                     <div class="font-medium text-lg" style="color: #1876d1">
-                      {{ get_course_type.generalCourse.generalCourse }}
+                      {{
+                        get_course_type.generalCourse?.generalCourse
+                          ? get_course_type.generalCourse.generalCourse
+                          : "0"
+                      }}
                     </div>
                   </v-col>
                 </v-row>
@@ -139,7 +163,11 @@
                   <v-col cols="12" align="center">
                     <div class="font-medium my-2 text-lg">คอร์สระยะสั้น</div>
                     <div class="font-medium text-lg" style="color: #1876d1">
-                      {{ get_course_type.shortCourse.shortCourse }}
+                      {{
+                        get_course_type.shortCourse?.shortCourse
+                          ? get_course_type.shortCourse.shortCourse
+                          : "0"
+                      }}
                     </div>
                   </v-col>
                 </v-row>
@@ -149,7 +177,7 @@
         </v-col>
         <!-- COACH -->
         <v-col cols="12" sm="6" md="6" lg="2">
-          <v-card class="rounded-lg drop-shadow-lg" height="202">
+          <v-card class="rounded-lg drop-shadow-md" height="200">
             <v-row dense>
               <!-- <v-col cols="12" sm="12"> -->
               <v-col cols="12" sm="12" align="center">
@@ -195,9 +223,9 @@
                   <v-col cols="6" sm="6" md="6" lg="4">
                     <v-select
                       v-model="selected_years"
-                      :items="thaiyears"
-                      item-text="name"
-                      item-value="key"
+                      :items="filter_years"
+                      item-text="thaiYears"
+                      item-value="usYears"
                       return-object
                       dense
                       outlined
@@ -221,13 +249,15 @@
               <v-card-title>
                 <v-row dense>
                   <!-- <v-badge color="green" content="6"> -->
-                  {{
-                    get_graf.sumSuccess
-                      ? get_graf.sumSuccess
-                          .toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                      : "ยังไม่มีข้อมูล"
-                  }}
+                  <div class="font-bold">
+                    {{
+                      get_graf.sumSuccess
+                        ? get_graf.sumSuccess
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        : "ยังไม่มีข้อมูล"
+                    }}
+                  </div>
                   <!-- </v-badge> -->
                 </v-row>
               </v-card-title>
@@ -268,10 +298,9 @@
                   <v-col cols="6" sm="6" md="6" lg="4">
                     <v-select
                       v-model="donut_years"
-                      :items="thaiyears"
-                      item-text="name"
-                      item-value="key"
-                      return-object
+                      :items="filter_years"
+                      item-text="thaiYears"
+                      item-value="usYears"
                       dense
                       outlined
                       @input="selectDonutYears()"
@@ -299,7 +328,6 @@
                     outlined
                     @input="selectDonutYears()"
                   ></v-select>
-                  <v-btn @click="choseYear()"></v-btn>
                 </div> -->
               </v-card-title>
               <v-row dense>
@@ -316,17 +344,46 @@
                 <v-col cols="12" sm="12" md="12" lg="12" align="start">
                   <v-row dense class="my-2">
                     <!-- ชำระแล้ว -->
-                    <v-col cols="6" align="center">
+                    <v-col cols="12" sm="6" align="center">
                       <div>
                         <v-icon color="#ff6b81">mdi-circle-medium</v-icon>
-                        <span class="font-bold text-xl">ชำระแล้ว</span>
+                        <span class="text-xl">
+                          ชำระแล้ว
+                          <span
+                            style="color: #58a144"
+                            class="font-bold text-xl"
+                            >{{ totalSuccessDonut.toLocaleString() }}</span
+                          >
+                          <span
+                            style="
+                              font-weight: normal;
+                              color: #999999;
+                              font-size: small;
+                            "
+                          >
+                            บาท({{
+                              (
+                                (totalSuccessDonut * 100) /
+                                totalPriceDonut
+                              ).toLocaleString("us-us", {
+                                maximumFractionDigits: 2,
+                              })
+                            }}%)
+                          </span>
+                        </span>
+                      </div>
+                    </v-col>
+
+                    <!-- <v-col cols="6" align="center">
+                      <div style="margin-right: 60px">
+                        <v-icon color="#ff6b81">mdi-circle-medium</v-icon>
+                        <span class="text-xl">ชำระแล้ว</span>
                       </div>
                       <div
                         style="font-weight: bold; color: #58a144"
-                        class="mx-5"
+                        class="mx-5 font-bold text-xl"
                       >
                         {{ totalSuccessDonut.toLocaleString() }}
-                        <!-- {{ get_graf.sumSuccess.toLocaleString() }} -->
                         <span
                           style="
                             font-weight: normal;
@@ -344,16 +401,48 @@
                           }}%)
                         </span>
                       </div>
-                    </v-col>
+                    </v-col> -->
                     <!-- รอดำเนินการ -->
-                    <v-col cols="6" align="center">
+
+                    <v-col cols="12" sm="6" align="center">
                       <div>
                         <v-icon color="#E8E7E7">mdi-circle-medium</v-icon>
-                        <span class="font-bold text-xl">รอดำเนินการ</span>
+                        <span class="text-xl">
+                          รอดำเนินการ
+                          <span
+                            style="color: #fcc419"
+                            class="font-bold text-xl"
+                          >
+                            {{ totalPendingDonut.toLocaleString() }}</span
+                          >
+                          <span
+                            style="
+                              font-weight: normal;
+                              color: #999999;
+                              font-size: small;
+                            "
+                          >
+                            บาท ({{
+                              (
+                                (totalPendingDonut * 100) /
+                                totalPriceDonut
+                              ).toLocaleString("us-us", {
+                                maximumFractionDigits: 2,
+                              })
+                            }}%)
+                          </span>
+                        </span>
+                      </div>
+                    </v-col>
+
+                    <!-- <v-col cols="6" align="center">
+                      <div style="margin-right: 60px">
+                        <v-icon color="#E8E7E7">mdi-circle-medium</v-icon>
+                        <span class="text-xl">รอดำเนินการ</span>
                       </div>
                       <div
                         style="font-weight: bold; color: #fcc419"
-                        class="mx-5"
+                        class="mx-5 font-bold text-xl"
                       >
                         {{ totalPendingDonut.toLocaleString() }}
 
@@ -374,7 +463,7 @@
                           }}%)
                         </span>
                       </div>
-                    </v-col>
+                    </v-col> -->
                   </v-row>
                 </v-col>
               </v-row>
@@ -403,6 +492,36 @@
                 :width="widthPie()"
               ></apexchart>
             </v-col>
+            <v-col cols="12" sm="12" md="12" lg="12" align="start">
+              <v-row dense class="my-2">
+                <!-- คอร์สเต็ม -->
+                <v-col cols="12" sm="6" align="center">
+                  <div style="margin-right: 60px">
+                    <v-icon color="#58a144">mdi-circle-medium</v-icon>
+                    <span class="text-xl">
+                      คอร์สเต็ม
+                      <span style="font-weight: bold; color: #58a144">{{
+                        this.get_empty_course.countClose.toLocaleString()
+                      }}</span>
+                      คอร์ส
+                    </span>
+                  </div>
+                </v-col>
+                <!-- รอดำเนินการ -->
+                <v-col cols="12" sm="6" align="center">
+                  <div style="margin-right: 60px">
+                    <v-icon color="#A1A1A1">mdi-circle-medium</v-icon>
+                    <span class="text-xl">
+                      คอร์สว่าง
+                      <span style="font-weight: bold; color: #a1a1a1">{{
+                        this.get_empty_course.countOpen.toLocaleString()
+                      }}</span>
+                      คอร์ส
+                    </span>
+                  </div>
+                </v-col>
+              </v-row>
+            </v-col>
             <!-- COURSE CLOSE -->
             <v-col cols="12" sm="6" md="6" lg="4">
               <v-card outlined style="overflow-y: scroll" height="340px">
@@ -414,11 +533,11 @@
                     z-index: 1;
                   "
                 >
-                  <span class="mr-2">คอร์สเต็ม</span>
+                  <span class="mr-2 font-bold">คอร์สเต็ม</span>
                   <v-badge
                     color="#A1A1A1"
                     :content="get_empty_course.countClose"
-                    class="indent-5"
+                    class="indent-5 font-bold"
                   >
                   </v-badge>
                 </v-card-text>
@@ -434,7 +553,55 @@
                     )"
                     :key="index"
                   >
-                    <v-card-text class="pa-2">
+                    <v-card-text class="pa-0">
+                      <v-row dense>
+                        <v-col cols="12">
+                          <v-card-title>{{ item.courseNameTh }}</v-card-title>
+                        </v-col>
+                        <v-col cols="12" sm="8" md="8" lg="8">
+                          <v-card-subtitle class="mt-n10">
+                            {{
+                              `${item.courseTypeNameTh}(${item.packageName})`
+                            }}</v-card-subtitle
+                          >
+                        </v-col>
+                        <v-col cols="12" sm="4" md="4" lg="4">
+                          <v-card-subtitle class="mt-n10">
+                            <v-chip
+                              dark
+                              :color="
+                                course_close_options.filter(
+                                  (v) => v.value === item.status
+                                )[0].color
+                              "
+                            >
+                              {{
+                                course_close_options.filter(
+                                  (v) => v.value === item.status
+                                ).length > 0
+                                  ? course_close_options.filter(
+                                      (v) => v.value === item.status
+                                    )[0].label
+                                  : "-"
+                              }}
+                            </v-chip>
+                          </v-card-subtitle>
+                        </v-col>
+
+                        <v-col cols="12">
+                          <v-card-subtitle class="mt-n10">
+                            <v-icon color="#ff6b81">
+                              mdi-sofa-single-outline
+                            </v-icon>
+                            ที่นั่ง{{
+                              ` ${item.currentStudent}/${item.maximumStudent}`
+                            }}
+                          </v-card-subtitle>
+                        </v-col>
+                      </v-row>
+                    </v-card-text>
+
+                    <!-- <v-card-text class="pa-2">
                       <v-row dense>
                         <v-col cols="12" md="4" lg="4">
                           {{ item.courseNameTh }}
@@ -473,7 +640,7 @@
                           </v-chip>
                         </v-col>
                       </v-row>
-                    </v-card-text>
+                    </v-card-text> -->
                   </v-card>
                 </v-card-text>
               </v-card>
@@ -490,10 +657,11 @@
                     z-index: 1;
                   "
                 >
-                  <span class="mr-2">คอร์สว่าง</span>
+                  <span class="mr-2 font-bold">คอร์สว่าง</span>
                   <v-badge
                     color="#8CD977"
                     :content="get_empty_course.countOpen"
+                    class="indent-5 font-bold"
                   >
                   </v-badge>
                 </v-card-text>
@@ -509,43 +677,50 @@
                     )"
                     :key="index"
                   >
-                    <v-card-text class="pa-2">
+                    <v-card-text class="pa-0">
                       <v-row dense>
-                        <v-col cols="12" md="4" lg="4">{{
-                          item.courseNameTh
-                        }}</v-col>
-                        <v-col cols="12" md="8" lg="8">{{
-                          `${item.courseTypeNameTh}(${item.packageName})`
-                        }}</v-col>
-                      </v-row>
-                      <v-row dense>
-                        <v-col cols="6">
-                          <v-icon color="#ff6b81"
-                            >mdi-sofa-single-outline</v-icon
-                          >
-                          ที่นั่ง{{
-                            `${item.currentStudent}/${item.maximumStudent}`
-                          }}</v-col
-                        >
-                        <v-col cols="6">
-                          <v-chip
-                            dark
-                            :color="
-                              course_close_options.filter(
-                                (v) => v.value === item.status
-                              )[0].color
-                            "
-                          >
+                        <v-col cols="12">
+                          <v-card-title>{{ item.courseNameTh }}</v-card-title>
+                        </v-col>
+                        <v-col cols="12" sm="8" md="8" lg="8">
+                          <v-card-subtitle class="mt-n10">
                             {{
-                              course_close_options.filter(
-                                (v) => v.value === item.status
-                              ).length > 0
-                                ? course_close_options.filter(
-                                    (v) => v.value === item.status
-                                  )[0].label
-                                : "-"
+                              `${item.courseTypeNameTh}(${item.packageName})`
+                            }}</v-card-subtitle
+                          >
+                        </v-col>
+                        <v-col cols="12" sm="4" md="4" lg="4">
+                          <v-card-subtitle class="mt-n10">
+                            <v-chip
+                              dark
+                              :color="
+                                course_close_options.filter(
+                                  (v) => v.value === item.status
+                                )[0].color
+                              "
+                            >
+                              {{
+                                course_close_options.filter(
+                                  (v) => v.value === item.status
+                                ).length > 0
+                                  ? course_close_options.filter(
+                                      (v) => v.value === item.status
+                                    )[0].label
+                                  : "-"
+                              }}
+                            </v-chip>
+                          </v-card-subtitle>
+                        </v-col>
+
+                        <v-col cols="12">
+                          <v-card-subtitle class="mt-n10">
+                            <v-icon color="#ff6b81">
+                              mdi-sofa-single-outline
+                            </v-icon>
+                            ที่นั่ง{{
+                              ` ${item.currentStudent}/${item.maximumStudent}`
                             }}
-                          </v-chip>
+                          </v-card-subtitle>
                         </v-col>
                       </v-row>
                     </v-card-text>
@@ -606,44 +781,6 @@ export default {
       { name: "ธันวาคม", key: "12", type: "month" },
     ],
 
-    thaiyears: [
-      { name: "2566", key: "2023", type: "year" },
-      { name: "2567", key: "2024", type: "year" },
-      { name: "2568", key: "2025", type: "year" },
-      { name: "2569", key: "2026", type: "year" },
-      { name: "2570", key: "2027", type: "year" },
-      { name: "2571", key: "2028", type: "year" },
-      { name: "2572", key: "2029", type: "year" },
-      { name: "2573", key: "2030", type: "year" },
-      { name: "2574", key: "2031", type: "year" },
-      { name: "2575", key: "2032", type: "year" },
-      { name: "2576", key: "2033", type: "year" },
-      { name: "2577", key: "2034", type: "year" },
-      { name: "2578", key: "2035", type: "year" },
-      { name: "2579", key: "2036", type: "year" },
-      { name: "2580", key: "2037", type: "year" },
-      { name: "2581", key: "2038", type: "year" },
-      { name: "2582", key: "2039", type: "year" },
-      { name: "2583", key: "2040", type: "year" },
-      { name: "2584", key: "2041", type: "year" },
-      { name: "2585", key: "2042", type: "year" },
-      { name: "2586", key: "2043", type: "year" },
-      { name: "2587", key: "2044", type: "year" },
-      { name: "2588", key: "2045", type: "year" },
-      { name: "2589", key: "2046", type: "year" },
-      { name: "2590", key: "2047", type: "year" },
-      { name: "2591", key: "2048", type: "year" },
-      { name: "2592", key: "2049", type: "year" },
-      { name: "2593", key: "2050", type: "year" },
-      { name: "2594", key: "2051", type: "year" },
-      { name: "2595", key: "2052", type: "year" },
-      { name: "2596", key: "2053", type: "year" },
-      { name: "2597", key: "2054", type: "year" },
-      { name: "2598", key: "2055", type: "year" },
-      { name: "2599", key: "2056", type: "year" },
-      { name: "2600", key: "2057", type: "year" },
-    ],
-
     selected_mounth: "",
     donut_mounth: "",
     selected_years: "",
@@ -662,53 +799,35 @@ export default {
     selectedYear: null,
     currentYear: "",
     year_data: "",
+    filter_data: "",
   }),
   created() {
-    // this.donutSerieses();
-    // this.donutSeries();
-    // this.donutSerieses();
-  },
-  beforeMount() {
+    this.FilterYears().then(() => {
+      if (this.filter_years.length > 0) {
+        console.log("845", this.filter_years);
+        this.selected_years = this.filter_years[0].usYears;
+        this.donut_years = this.filter_years[0].usYears;
+
+        this.dashboard_graf = {
+          year: this.filter_years[0].usYears,
+          month: this.mapMonth.key,
+        };
+        this.GetDonut(this.dashboard_graf);
+        this.GetGraf(this.dashboard_graf);
+      }
+    });
     const month = new Date().getMonth() + 1;
     this.mapMonth = this.thaiMonths.filter(
       (item) => parseInt(item.key) === month
     )[0];
-    // console.log("mapMonth", this.mapMonth);
-    this.selected_mounth = this.mapMonth;
-    // this.selectMunth();
-    this.donut_mounth = this.mapMonth;
-    // this.selectDonutMounth();
-
-    const currentYear = new Date().getFullYear();
-    // console.log("646", currentYear);
-    this.mapyears = this.thaiyears.filter(
-      (item) => parseInt(item.key) === currentYear
-    )[0];
-    // console.log("mapyears", this.mapyears);
-    this.selected_years = this.mapyears;
-    // this.selectYears();
-    this.donut_years = this.mapyears;
-    // this.selectDonutYears();
-
-    this.dashboard_graf = {
-      year: this.mapyears.key,
-      month: this.mapMonth.key,
-    };
-
-    this.choseYear();
-    // this.GetGraf(this.dashboard_graf);
   },
+  beforeMount() {},
   mounted() {
+    this.selected_mounth = this.mapMonth;
+    this.donut_mounth = this.mapMonth;
     this.GetEmptyCourse();
     this.GetCourseType();
     this.GetPotential();
-    // this.GetDonut({ year: "2023", month: "07" });
-    this.GetDonut(this.dashboard_graf);
-    this.GetGraf(this.dashboard_graf);
-    // this.donutSeries();
-    // this.dataType()
-    // this.donutSerieses();
-    this.choseYear();
   },
   methods: {
     ...mapActions({
@@ -717,42 +836,31 @@ export default {
       GetPotential: "DashboardModules/GetPotential",
       GetDonut: "DashboardModules/GetDonut",
       GetGraf: "DashboardModules/GetGraf",
+      FilterYears: "DashboardModules/FilterYears",
     }),
 
-    choseYear() {
-      this.year_data = this.get_graf
-      // console.log("720", this.get_graf);
-      // get_donut = yearName
-      //get_graf = yearName
-    },
-
     selectYears() {
-      this.dashboard_graf.year = this.selected_years.key;
-      // console.log("688", this.dashboard_graf);
+      // this.dashboard_graf.year = this.selected_years.key;
       this.GetGraf(this.dashboard_graf);
     },
 
     selectMunth() {
       this.dashboard_graf.month = this.selected_mounth.key;
-      // console.log("679", this.dashboard_graf);
       this.GetGraf(this.dashboard_graf);
     },
 
     selectDonutYears() {
-      // // console.log("707", this.donut_years);
-      // this.GetDonut(this.donut_years);
-
-      this.dashboard_graf.year = this.donut_years.key;
-      // console.log("691", this.dashboard_graf);
+      // console.log("900", this.donut_years);
+      // this.dashboard_graf.year = this.donut_years.key;
       this.GetDonut(this.dashboard_graf);
+      // for (const items of this.filter_years) {
+      //   console.log("906", items.usYears);
+      // }
+      // this.GetDonut(this.filter_years);
     },
 
     selectDonutMounth() {
-      // // console.log("thaiMonthsD", this.donut_mounth);
-      // this.GetDonut(this.donut_mounth);
-
       this.dashboard_graf.month = this.donut_mounth.key;
-      // console.log("686", this.dashboard_graf);
       this.GetDonut(this.dashboard_graf);
     },
 
@@ -797,11 +905,11 @@ export default {
         price = parseFloat(items.totalPrice);
         this.totalPrice.push(price);
         this.totalSuccessDonut =
-          this.totalSuccessDonut + parseFloat(items.sumSuccess);
+          this.totalSuccessDonut + parseFloat(items?.sumSuccess);
         this.totalPendingDonut =
-          this.totalPendingDonut + parseFloat(items.sumPending);
+          this.totalPendingDonut + parseFloat(items?.sumPending);
         this.totalPriceDonut =
-          this.totalPriceDonut + parseFloat(items.totalPrice);
+          this.totalPriceDonut + parseFloat(items?.totalPrice);
       }
       this.totalPrice.push(this.get_donut.otherTotal.totalPrice);
       this.totalSuccessDonut =
@@ -812,22 +920,32 @@ export default {
         this.totalPriceDonut + this.get_donut.otherTotal.totalPrice;
     },
 
-    donutSeries() {
-      for (const items of this.get_donut.datas) {
-        this.totalSuccessDonut =
-          this.totalSuccessDonut + parseFloat(items.sumSuccess);
-        this.totalPendingDonut =
-          this.totalPendingDonut + parseFloat(items.sumPending);
-        this.totalPriceDonut =
-          this.totalPriceDonut + parseFloat(items.totalPrice);
+    // donutSeries() {
+    //   for (const items of this.get_donut.datas) {
+    //     this.totalSuccessDonut =
+    //       this.totalSuccessDonut + parseFloat(items.sumSuccess);
+    //     this.totalPendingDonut =
+    //       this.totalPendingDonut + parseFloat(items.sumPending);
+    //     this.totalPriceDonut =
+    //       this.totalPriceDonut + parseFloat(items.totalPrice);
+    //   }
+    //   this.totalSuccessDonut =
+    //     this.totalSuccessDonut + this.get_donut.otherTotal.sumSuccess;
+    //   this.totalPendingDonut =
+    //     this.totalPendingDonut + this.get_donut.otherTotal.sumPending;
+    //   this.totalPriceDonut =
+    //     this.totalPriceDonut + this.get_donut.otherTotal.totalPrice;
+    // },
+    donutLabels() {
+      let labels = [];
+      for (const items of this.get_donut?.datas) {
+        labels.push(items.courseNameTh);
       }
-      this.totalSuccessDonut =
-        this.totalSuccessDonut + this.get_donut.otherTotal.sumSuccess;
-      this.totalPendingDonut =
-        this.totalPendingDonut + this.get_donut.otherTotal.sumPending;
-      this.totalPriceDonut =
-        this.totalPriceDonut + this.get_donut.otherTotal.totalPrice;
+      labels.push(this.get_donut.otherTotal.courseNameTh);
+
+      return labels;
     },
+
     donutOptions() {
       const donutdata = {
         colors: [
@@ -843,7 +961,7 @@ export default {
           "#6bff90",
           "#999999",
         ],
-        labels: this.donutLabels,
+        labels: this.donutLabels(),
         // labels: ["a", "b", "c", "d"],
         chart: {
           type: "donut",
@@ -860,16 +978,13 @@ export default {
                   label: "รวมทั้งหมด",
                   color: "#373d3f",
                   fontSize: "18px",
-
-                  // formatter: function () {
-                  //   // console.log("944", this.abc);
-                  //   return this.abc;
-                  // },
-                  // formatter: function (w) {
-                  //   return w.globals.seriesTotals.reduce((a, b) => {
-                  //     return a + b;
-                  //   }, 0);
-                  // },
+                  formatter: function (w) {
+                    let sumTotal = 0;
+                    for (const items of w.globals.seriesTotals) {
+                      sumTotal = sumTotal + items;
+                    }
+                    return sumTotal.toLocaleString();
+                  },
                 },
               },
             },
@@ -888,36 +1003,43 @@ export default {
           enabled: true,
           y: {
             formatter: function (val) {
-              return val
+              return val;
             },
           },
-          custom: ({series, seriesIndex, w}) => {
-            return this.customTooltip(series, seriesIndex, w)
-          }
+          custom: ({ series, seriesIndex, w }) => {
+            return this.customTooltip(series, seriesIndex, w);
+          },
         },
       };
       return donutdata;
     },
     customTooltip(series, seriesIndex, w) {
-      // // console.log(this.get_donut.datas[seriesIndex])
-      let item = w.globals
-      let color = item.colors[seriesIndex]
-      return this.get_donut?.datas[seriesIndex] ? (`
+      let item = w.globals;
+      let color = item.colors[seriesIndex];
+      return this.get_donut?.datas[seriesIndex]
+        ? `
         <div class="pa-3 ml-auto" style='background-color: ${color}'>
           <h3 class="font-weight-bold">${item.seriesNames[seriesIndex]}</h3>
-          <i class="mdi mdi-circle " style="font-size:10px; color: #8cd977"></i> <span class="font-weight-bold">ที่ชำระแล้ว : </span>${this.get_donut?.datas[seriesIndex].sumSuccess}<br/>
-          <i class="mdi mdi-circle " style="font-size:10px; color: #a1a1a1"></i> <span class="font-weight-bold">รอชำระ : </span>${this.get_donut?.datas[seriesIndex].sumPending}<br/>
-          <span class="font-weight-bold">รวม : </span>${series[seriesIndex]}
+          <i class="mdi mdi-circle " style="font-size:10px; color: #8cd977"></i> <span class="font-weight-bold">ที่ชำระแล้ว : </span>${this.get_donut?.datas[seriesIndex].stringSumSuccess}
+          <div style="margin-right:20px;"><i class="mdi mdi-circle " style="font-size:10px; color: #a1a1a1"></i> <span class="font-weight-bold">รอชำระ : </span>${this.get_donut?.datas[seriesIndex].stringSumPending}</div>
+          <span class="font-weight-bold">รวม : </span>${this.get_donut?.datas[seriesIndex].stringTotal}
         </div>
-      `) :  (`
+      `
+        : `
         <div class="pa-3 ml-auto" style='background-color: ${color}'>
           <h3 class="font-weight-bold">${item.seriesNames[seriesIndex]}</h3>
-          <i class="mdi mdi-circle " style="font-size:10px; color: #8cd977"></i> <span class="font-weight-bold">ที่ชำระแล้ว : </span>${this.get_donut?.otherTotal.sumSuccess}<br/>
-          <i class="mdi mdi-circle " style="font-size:10px; color: #a1a1a1"></i> <span class="font-weight-bold">รอชำระ : </span>${this.get_donut?.otherTotal.sumPending}<br/>
-          <span class="font-weight-bold">รวม : </span>${series[seriesIndex]}
+          <i class="mdi mdi-circle " style="font-size:10px; color: #8cd977"></i> <span class="font-weight-bold">ที่ชำระแล้ว : </span>${this.get_donut?.otherTotal.sumSuccess
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}<br/>
+          <i class="mdi mdi-circle " style="font-size:10px; color: #a1a1a1"></i> <span class="font-weight-bold">รอชำระ : </span>${this.get_donut?.otherTotal.sumPending
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}<br/>
+          <span class="font-weight-bold">รวม : </span>${series[seriesIndex]
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         </div>
-        `)
-    }
+        `;
+    },
   },
   computed: {
     ...mapGetters({
@@ -927,6 +1049,7 @@ export default {
       get_donut: "DashboardModules/getDonut",
       get_graf: "DashboardModules/getGraf",
       dashboard_loading: "DashboardModules/getloading",
+      filter_years: "DashboardModules/getFilterYears",
     }),
 
     lineChartLabels() {
@@ -935,7 +1058,6 @@ export default {
       for (const items of this.get_graf.orderData) {
         labelsLine.push(items.thaiDayName);
       }
-      // console.log("805", labelsLine);
       return labelsLine;
     },
 
@@ -980,7 +1102,7 @@ export default {
     chartSeries() {
       const lineChart = [
         {
-          name: "ชำระแล้ว",
+          name: "รายได้",
           data:
             this.get_graf.length !== 0
               ? this.get_graf.orderData.map((item) => {
@@ -990,16 +1112,6 @@ export default {
         },
       ];
       return lineChart;
-    },
-
-    donutLabels() {
-      let labels = [];
-      for (const items of this.get_donut.datas) {
-        labels.push(items.courseNameTh);
-      }
-      labels.push(this.get_donut.otherTotal.courseNameTh);
-
-      return labels;
     },
 
     seriesOfDonut() {
@@ -1020,17 +1132,18 @@ export default {
       return pieData;
     },
     pieChartOptions() {
-      let Open = this.get_empty_course.countOpen;
-      let Close = this.get_empty_course.countClose;
+      // let Open = this.get_empty_course.countOpen;
+      // let Close = this.get_empty_course.countClose;
       const pieChartOptions = {
         colors: ["#7CD464", "#A1A1A1"],
         chart: {
           type: "pie",
         },
         dataLabels: {
-          enabled: false,
+          enabled: true,
         },
-        labels: [`คอร์สว่าง ${Open} คอร์ส`, `คอร์สเต็ม ${Close} คอร์ส`],
+        labels: ["คอร์สว่าง", "คอร์สเต็ม"],
+        // labels: [`คอร์สว่าง ${Open} คอร์ส`, `คอร์สเต็ม ${Close} คอร์ส`],
         // responsive: [
         //   {
         //     breakpoint: 480,
@@ -1042,7 +1155,7 @@ export default {
         //   },
         // ],
         legend: {
-          position: "bottom",
+          show: false,
         },
       };
       return pieChartOptions;

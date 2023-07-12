@@ -10,6 +10,7 @@ const dashboardModules = {
     get_donut: {},
     get_graf: [],
     dashboard_loading: false,
+    filter_years: []
   },
   mutations: {
     SetGetEmptyCourse(state, payload) {
@@ -29,6 +30,9 @@ const dashboardModules = {
     },
     SetGetLoading(state, value) {
       state.dashboard_loading = value
+    },
+    SetFilterYears(state, value) {
+      state.filter_years = value
     },
   },
   actions: {
@@ -89,11 +93,16 @@ const dashboardModules = {
 
     async GetDonut(context, item) {
       context.commit("SetGetLoading", true)
-      // console.log("92", item);
+      console.log("GetDonut", item);
       try {
         // let { data } = await axios.get(` http://localhost:3002/api/v1/order/dashboard/payment?month=${item.month}&year=${item.year}`)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/dashboard/payment?month=${item.month}&year=${item.year}`)
         if (data.statusCode === 200) {
+          data.data.datas?.map((items) => {
+            items.stringSumSuccess = items.sumSuccess.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            items.stringSumPending = items.sumPending.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            items.stringTotal = items.totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          })
           context.commit("SetGetDonut", data.data)
           // console.log("SetGetDonut", data.data);
 
@@ -111,7 +120,7 @@ const dashboardModules = {
 
     async GetGraf(context, item) {
       context.commit("SetGetLoading", true)
-      // console.log("113", item);
+      console.log("GetGraf", item);
       try {
         // var { data } = await axios.get(`http://localhost:3002/api/v1/order/dashboard/payment-income?month=${item.month}&year=${item.year}`)
         // var { data } = await axios.get(`https://waraphat.alldemics.com/api/v1/order/dashboard/payment-income?month=${item.month}&year=${item.year}`)
@@ -123,7 +132,7 @@ const dashboardModules = {
           // console.log("SetGetGraf", data);
 
 
-          data.data.orderData.map((items) => {
+          data.data.orderData?.map((items) => {
             let newDate = new Date(items.date).toLocaleDateString("en-CA")
             // const day = newDate?.getDay();
             const date = new Date(items.date);
@@ -133,7 +142,7 @@ const dashboardModules = {
             // // console.log("133", dayName);
             // let dayNames = ["วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"];
             items.date = newDate.split("-")[2]
-            items.month = `เดือน ${newDate.split("-")[1]}`
+            items.month = `เดือน ${newDate?.split("-")[1]}`
             items.year = newDate.split("-")[0]
             items.thaiDayName = `${items.date} ${dayName}`
           })
@@ -146,9 +155,26 @@ const dashboardModules = {
       }
     },
 
+    async FilterYears(context) {
+      console.log("FilterYears");
+      try {
+        // var { data } = await axios.get(`http://localhost:3002/api/v1/order/dashboard/year-option`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/dashboard/year-option`)
 
 
-
+        if (data.statusCode === 200) {
+          data.data?.map((items) => {
+            items.thaiYears = items?.th
+            items.usYears = items?.en
+          })
+          context.commit("SetFilterYears", data.data)
+          console.log("SetFilterYears", data);
+        }
+      } catch (error) {
+        context.commit("SetFilterYears", [])
+        console.log("SetFilterYears", error);
+      }
+    }
   },
   getters: {
     getEmptyCourse(state) {
@@ -169,6 +195,10 @@ const dashboardModules = {
     getloading(state) {
       return state.dashboard_loading
     },
+    getFilterYears(state) {
+      return state.filter_years
+
+    }
   },
 };
 
