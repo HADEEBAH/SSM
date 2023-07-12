@@ -340,6 +340,7 @@ const coachModules = {
           },
         };
         let user_detail = JSON.parse(localStorage.getItem("userDetail"));
+        
         // let localhost ="http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}/date/${date}`, config)
         if (data.statusCode === 200) {
@@ -366,7 +367,8 @@ const coachModules = {
               date: check_in.date,
               summary: check_in.summary,
               homework: check_in.homework,
-              attachment: img_url
+              attachment: img_url,
+              summary_files : [],
             }
           })
           context.commit("SetCoachCheckIn", payload)
