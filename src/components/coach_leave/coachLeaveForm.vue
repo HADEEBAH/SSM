@@ -557,7 +557,7 @@ export default {
             return hrs   
         }
       }
-      this.validateCoachLeave()
+      this.validateCoachLeave
     },
     getDatesBetween(startDate, endDate) {
       const dates = [];
