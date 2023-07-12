@@ -44,13 +44,13 @@ const dashboardModules = {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/course-status`)
         if (data.statusCode === 200) {
           context.commit("SetGetEmptyCourse", data.data)
-          console.log("SetGetEmptyCourse", data.data);
+          // console.log("SetGetEmptyCourse", data.data);
           context.commit("SetGetLoading", false)
 
         }
       } catch (error) {
         context.commit("SetGetLoading", false)
-        console.log("SetGetEmptyCourse", error);
+        // console.log("SetGetEmptyCourse", error);
       }
     },
 
@@ -62,14 +62,14 @@ const dashboardModules = {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/course-type`)
         if (data.statusCode === 200) {
           context.commit("SetGetCourseType", data.data)
-          console.log("SetGetCourseType", data.data);
+          // console.log("SetGetCourseType", data.data);
           context.commit("SetGetLoading", false)
 
         }
       } catch (error) {
         context.commit("SetGetLoading", false)
 
-        console.log("SetGetCourseType", error);
+        // console.log("SetGetCourseType", error);
       }
     },
 
@@ -82,12 +82,12 @@ const dashboardModules = {
         if (data.statusCode === 200) {
           context.commit("SetGetLoading", false)
           context.commit("SetGetPotential", data.data)
-          console.log("SetGetPotential", data.data);
+          // console.log("SetGetPotential", data.data);
         }
 
       } catch (error) {
         context.commit("SetGetLoading", false)
-        console.log("SetGetPotential", error);
+        // console.log("SetGetPotential", error);
       }
     },
 
@@ -104,7 +104,7 @@ const dashboardModules = {
             items.stringTotal = items.totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
           })
           context.commit("SetGetDonut", data.data)
-          console.log("SetGetDonut", data.data);
+          // console.log("SetGetDonut", data.data);
 
           // data.data.sumSuccessPercentage = ((data.data.sumSuccess / 100000) * 100).toString().split(".")[0]
           // data.data.sumPendingPercentage = ((data.data.sumPending / 100000) * 100).toString().split(".")[0]
@@ -114,7 +114,7 @@ const dashboardModules = {
       } catch (error) {
         context.commit("SetGetLoading", false)
 
-        console.log("SetGetDonut", error);
+        // console.log("SetGetDonut", error);
       }
     },
 
@@ -129,7 +129,7 @@ const dashboardModules = {
 
         if (data.statusCode === 200) {
           context.commit("SetGetGraf", data.data)
-          console.log("SetGetGraf", data);
+          // console.log("SetGetGraf", data);
 
 
           data.data.orderData?.map((items) => {
@@ -139,7 +139,7 @@ const dashboardModules = {
             const options = { weekday: 'long', timeZone: 'Asia/Bangkok', locale: 'th-TH' };
             const dayName = date.toLocaleString('th-TH', options);
 
-            // console.log("133", dayName);
+            // // console.log("133", dayName);
             // let dayNames = ["วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"];
             items.date = newDate.split("-")[2]
             items.month = `เดือน ${newDate?.split("-")[1]}`
@@ -151,7 +151,7 @@ const dashboardModules = {
         }
       } catch (error) {
         context.commit("SetGetLoading", false)
-        console.log("SetGetGraf", error);
+        // console.log("SetGetGraf", error);
       }
     },
 

@@ -436,8 +436,9 @@ export default {
       {
         icon: "mdi-swap-horizontal-bold",
         title: "หน้าผู้ดูแลระบบ",
+        to: "ManageSchedule",
         // to: "Admin",
-        to: "Dashboard",
+        // to: "Dashboard",
         params: null,
         roles: ["R_1", "R_2"],
       },
@@ -464,7 +465,6 @@ export default {
 
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    console.log("object", this.user_detail.account_id);
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail.account_id);
     }
@@ -487,8 +487,8 @@ export default {
     }
     if (this.user_detail?.account_id) {
       this.GetCartList(this.user_detail.account_id);
+      this.GetNotificationsAll(this.user_detail.account_id);
     }
-    this.GetNotificationsAll(this.user_detail.account_id);
 
     setTimeout(() => {
       this.alertVisible = false;
@@ -529,14 +529,12 @@ export default {
       ReadNotifications: "NotificationsModules/ReadNotifications",
     }),
     checkrole(a,b){
-      // console.log("535 => ",b)
       let notFound = true; 
       if(a.length > 0){
         if (b.includes(a[0])) {
           notFound = false;
         }
       }
-      console.log("------", notFound);
       return notFound
     },
     selectMenu(type, to, head) {

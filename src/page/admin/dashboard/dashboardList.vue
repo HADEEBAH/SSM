@@ -1079,18 +1079,22 @@ export default {
         },
 
         grid: {},
-        // xaxis: {
-        //   categories:
-        //     this.get_graf.length !== 0
-        //       ? this.get_graf.orderData.map((item) => {
-        //           if (this.get_graf.type == "month") {
-        //             return item.thaiDayName;
-        //           } else if (this.get_graf.type == "year") {
-        //             return item?.month;
-        //           }
-        //         })
-        //       : "",
-        // },
+        xaxis: {
+          categories:
+            this.get_graf.length !== 0
+              ? this.get_graf.orderData.map((item) => {
+                  if (this.get_graf.type == "month") {
+                    return item.thaiDayName;
+                  } else if (this.get_graf.type == "year") {
+                    // console.log("821", item.month);
+                    return item.month;
+                    // return item.month;
+                  }
+                })
+              : "",
+
+          // labels: this.lineChartLabels,
+        },
       };
 
       return lineChartOptions;

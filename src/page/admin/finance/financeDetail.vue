@@ -487,7 +487,7 @@ export default {
       updateOrderStatus: "OrderModules/updateOrderStatus",
     }),
     async exportBill(){
-      console.log("exportBill")
+      // console.log("exportBill")
       // Define the image paths
       var headerImagePath = require('../../../assets/FrontPortfolio/Logo.png');
       var logoLightImagePath = require('../../../assets/FrontPortfolio/logo_light.png');
@@ -848,7 +848,7 @@ export default {
       });
     },
     GenCourseItem(){
-      console.log("order_detail => ",this.order_detail)
+      // console.log("order_detail => ",this.order_detail)
       let row = [
         [
           {
@@ -874,7 +874,7 @@ export default {
         ],
       ]
       this.order_detail.orderItem.forEach((course, index) => {
-        console.log("802 => ",course)
+        // console.log("802 => ",course)
         row.push([
           {
             text: `${index + 1}`,
@@ -967,7 +967,7 @@ export default {
         notificationDescription: this.notification_description,
         accountId: account,
       };
-      console.log(payload);
+      // console.log(payload);
       this.sendNotification(payload);
     },
     chengeStatus(status) {
@@ -985,7 +985,7 @@ export default {
         confirmButtonText: "ตกลง",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          // console.log(this.order_detail)
+          // // console.log(this.order_detail)
           this.updateOrderStatus({ order_detail: this.order_detail });
         }
       });
@@ -1001,7 +1001,7 @@ export default {
         confirmButtonText: "ตกลง",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          console.log(this.order_detail);
+          // console.log(this.order_detail);
           this.updatePayment({ order_data: this.order_detail });
         }
       });

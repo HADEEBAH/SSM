@@ -57,6 +57,7 @@
       :event-color="(date) => (date[9] % 2 ? 'red' : 'yellow')"
       :events="functionEvents"
       @input="selectDate(focus)"
+      class="w-full"
     ></v-date-picker>
     <v-bottom-sheet v-model="showModal">
       <div class="bg-white rounded-t-lg pa-4">
@@ -202,9 +203,7 @@ export default {
   },
   methods: {
     selectedDate(data) {
-      console.log(data)
       if(!data.event.type){
-        console.log(data.event);
         this.$router.push({
           name: "menageCourseDetail",
           params: {
@@ -217,11 +216,9 @@ export default {
       }
     },
     selectDate(date) {
-      console.log(date)
       this.event_date = [];
       this.showModal = true;
       this.events.forEach((event) => {
-        console.log(event)
         if(event?.coach){
           let [start, start_time] = event.start.split(" ");
           let [end, end_time] = event.end.split(" ");

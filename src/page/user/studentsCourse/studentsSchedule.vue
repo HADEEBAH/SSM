@@ -329,7 +329,7 @@
                     </v-row>
                   </v-col>
                   <!-- circle -->
-                  <v-col cols="12" sm="4" class="d-flex align-end justify-end">
+                  <v-col cols="12" sm="4" class="d-flex align-center justify-center">
                     <!-- {{ item.courseNameEn }} -->
                     <v-progress-circular
                       :rotate="-90"
@@ -920,7 +920,7 @@ export default {
     this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
 
     if (localStorage.getItem("userRelationsAccountId")) {
-      console.log(localStorage.getItem("userRelationsAccountId"));
+      // console.log(localStorage.getItem("userRelationsAccountId"));
     } else if (this.user_detail.roles.includes("R_5")) {
       this.GetStudentData(this.user_detail.account_id);
     }
@@ -939,7 +939,7 @@ export default {
 
   // watch: {
   //   type_selected: function () {
-  //     console.log("type_selected", this.type_selected);
+  //     // console.log("type_selected", this.type_selected);
   //     this.loading = true;
   //     setTimeout(async () => {
   //       this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
@@ -948,7 +948,7 @@ export default {
   //           this.GetStudentData(this.user_detail.account_id);
   //           for (const item of JSON.parse(localStorage.getItem("relations"))) {
   //             this.GetStudentData(item.student.studentId);
-  //             console.log("student");
+  //             // console.log("student");
   //           }
   //         } else if (this.user_detail.roles.includes("R_5")) {
   //           this.GetStudentData(this.user_detail.account_id);
@@ -973,7 +973,7 @@ export default {
     }),
     prev() {
       this.$refs.calendar.prev();
-      console.log(this.$refs.calendar.title);
+      // console.log(this.$refs.calendar.title);
     },
     next() {
       this.$refs.calendar.next();
@@ -992,11 +992,11 @@ export default {
     async searchStudentCourse(studentId) {
       if (studentId !== null) {
         this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-        console.log("item1", studentId);
+        // console.log("item1", studentId);
         await this.GetStudentData(studentId);
-        console.log("mycourse1", this.student_data);
+        // console.log("mycourse1", this.student_data);
       } else {
-        console.log("this.user_detail.account_id", this.user_detail.account_id);
+        // console.log("this.user_detail.account_id", this.user_detail.account_id);
         this.GetStudentData(this.user_detail.account_id);
       }
     },
@@ -1004,12 +1004,12 @@ export default {
     async searchStudentSchadule(studentId) {
       this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
 
-      console.log("item", studentId);
+      // console.log("item", studentId);
       await this.GetStudentData(studentId);
     },
 
     async searchStudentBooked(studentId) {
-      console.log("item", studentId);
+      // console.log("item", studentId);
       await this.GetProfileBooked(studentId);
     },
     ReserveList() {
@@ -1042,7 +1042,7 @@ export default {
       //     reserveList.push(reserve);
       //   }
       // });
-      // console.log("student_reserve :", this.student_reserve);
+      // // console.log("student_reserve :", this.student_reserve);
       return reserveList;
     },
     dayOfWeekName(days) {

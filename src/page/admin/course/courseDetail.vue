@@ -1740,9 +1740,6 @@ export default {
     selected_all_coach: false,
     selected_coach_potential: null,
   }),
-  created() {
-    console.log("Now ", new Date());
-  },
   mounted() {},
   watch: {
     student_tab: function () {
@@ -1818,7 +1815,7 @@ export default {
     }),
     searchStudentList(search){
       console.log(search)
-      console.log(this.coach_list)
+      // console.log(this.coach_list)
     },
     resetFilter() {
       this.filter = {
@@ -1831,7 +1828,7 @@ export default {
       };
     },
     filterDateByCoach(coach_index) {
-      console.log("datesList =>", this.coach_list[coach_index].datesList);
+      // console.log("datesList =>", this.coach_list[coach_index].datesList);
       let filterCoachList = this.coach_list[coach_index].datesList;
       if (this.filter.dow) {
         filterCoachList = filterCoachList.filter(
@@ -1877,13 +1874,13 @@ export default {
           }
         }
       }
-      // console.log("dow =>",dow)
+      // // console.log("dow =>",dow)
       this.dow_option = dow;
     },
     async filterPackageCoach(selected_coach) {
       this.package_option = [];
       if (selected_coach >= 0) {
-        console.log("coach_list => ", this.coach_list[selected_coach]);
+        // console.log("coach_list => ", this.coach_list[selected_coach]);
         // for await (const coach of this.coach_list[selected_coach].allDates.dates) {
           let coach = this.coach_list[selected_coach].allDates
           if (this.package_option.length === 0) {
@@ -1916,7 +1913,7 @@ export default {
     },
     //EXPORT STUDENT
     exportStudents() {
-      console.log(this.course_data);
+      // console.log(this.course_data);
       this.ExportStudentList({
         coach_list: this.coach_list,
         course_id: this.$route.params.course_id,
@@ -1929,14 +1926,14 @@ export default {
     },
     seletedCoachPotential(coach, index) {
       this.selected_coach_potential = index;
-      console.log(coach);
+      // console.log(coach);
       this.GetStudentPotentialByCoach({
         course_id: this.$route.params.course_id,
         coach_id: coach.coachId,
       });
     },
     getDateFormattor(date, format) {
-      // console.log(date, format)
+      // // console.log(date, format)
       return dateFormatter(date, format);
     },
     genDate(date) {
@@ -1958,7 +1955,7 @@ export default {
       data.checked = !data.checked;
     },
     dayOfWeekArray(day) {
-      // console.log(day)
+      // // console.log(day)
       const daysOfWeek = [
         "วันอาทิตย์",
         "วันจันทร์",
@@ -1993,7 +1990,7 @@ export default {
       const allowedTypes = ["image/png", "image/jpeg"];
       if (CheckFileSize(this.privilege_file) === true) {
         const fileType = this.privilege_file.type;
-        // console.log(fileType)
+        // // console.log(fileType)
         if (fileType === "image/png" || fileType === "image/jpeg") {
           this.course_data.privilege_file =
             this.$refs.fileInputPrivilege.files[0];
@@ -2022,7 +2019,7 @@ export default {
       }
     },
     showDialogAssessment(student_data, date) {
-      console.log("2015 =>", student_data)
+      // console.log("2015 =>", student_data)
       this.show_dialog_assessmet = true;
       this.student_data_assessment = student_data;
       this.student_data_assessment.time = date.time;
@@ -2144,7 +2141,7 @@ export default {
     },
     CourseUpdateCoach() {
       this.$refs.coach_form.validate();
-      console.log(this.coachValidate);
+      // console.log(this.coachValidate);
       if (this.coachValidate) {
         Swal.fire({
           icon: "question",

@@ -510,9 +510,7 @@ export default {
       let end_date = this.coach_leave_data.end_date ? true : false;
       let period = this.coach_leave_data.period ? true : false;
       let leave_type = this.coach_leave_data.leave_type ? true : false;
-      console.log("508 => ",this.coach_leave_data.dates.filter(v => v.course_id))
       let course = this.coach_leave_data.dates.length > 0 
-      // console.log(start_date && end_date && period && leave_type);
       return !(start_date && end_date && period && leave_type && course);
     },
   },
@@ -532,7 +530,6 @@ export default {
       const millisecondsPerDay = 24 * 60 * 60 * 1000;
       const dateRangeLength = Math.floor((endTimestamp - startTimestamp) / millisecondsPerDay);
       this.date_range_length = dateRangeLength
-      console.log(dateRangeLength)
     },
     checkHour(period, date){
       if(date){
@@ -563,7 +560,6 @@ export default {
       this.validateCoachLeave()
     },
     getDatesBetween(startDate, endDate) {
-      console.log("549 => ",startDate, endDate)
       const dates = [];
       const currentDate = new Date(startDate);
       while (currentDate <= new Date(endDate)) {
@@ -571,7 +567,6 @@ export default {
         currentDate.setDate(currentDate.getDate() + 1);
       }
       this.focusCompensationDate = dates
-      console.log(dates)
       return dates ;
     },
     allowedDates(val) {
@@ -650,7 +645,6 @@ export default {
           }
         });
       }
-      // console.log(my_course_data);
       return my_course_data;
     },
     async GenDates() {
@@ -703,7 +697,6 @@ export default {
         });
         currentDate.setDate(currentDate.getDate() + 1);
       }
-      // console.log(this.coach_leave_data.dates);
     },
     AddCourse(date) {
       date.courses.push({

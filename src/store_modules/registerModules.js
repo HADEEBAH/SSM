@@ -102,13 +102,13 @@ const RegisterModules = {
                         cancelButtonText: "ยกเลิก",
                     }).then(async (result) => {
                         if (result.isConfirmed) {
-                            console.log("success");
+                            // console.log("success");
                             // this.GetDataRelationsManagement(this.data_user_by_id);
                         }
                     })
                 }
             } catch (error) {
-                console.log(error)
+                // console.log(error)
             }
         },
         async AddRelations(context, { studentId, parentId }) {
@@ -121,15 +121,15 @@ const RegisterModules = {
                     },
                 };
                 let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/relations/user`, { studentId: studentId, parentId: parentId }, config)
-                console.log(data)
+                // console.log(data)
                 if (data.statusCode === 201) {
                     let role = await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/user`, { userId: parentId, roleId: 'R_4' }, config)
                     if (role.data.statusCode === 201) {
-                        console.log(role)
+                        // console.log(role)
                     }
                 }
             } catch (error) {
-                console.log(error)
+                // console.log(error)
             }
         },
         ResetLastUserRegistered(context) {
@@ -137,7 +137,7 @@ const RegisterModules = {
         },
         async registerParent(context, { type }) {
             context.commit("SetIsLoading", true)
-            console.log(type)
+            // console.log(type)
             try {
                 let phone_number = context.state.user_one_id.phone_number.replaceAll("-", "")
                 // let { data } = await axios.post(` http://localhost:3000/api/v1/register`, {
@@ -162,13 +162,13 @@ const RegisterModules = {
                         title: "ลงทะเบียนสำเร็จ",
                     }).then(async (result) => {
                         if (result.isConfirmed) {
-                            console.log(data.data)
+                            // console.log(data.data)
                             // let localhost = "http://192.168.74.25:3000"
                             let user = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account?username=${context.state.user_one_id.username}&status=active`)
                             // let user = await axios.get(`http://localhost:3000/api/v1/account?username=${context.state.user_one_id.username}&status=active`)
 
                             if (user.data.statusCode === 200) {
-                                console.log("user :", user.data)
+                                // console.log("user :", user.data)
                                 context.commit("SetLastUserRegistered", {
                                     firstname_th: context.state.user_one_id.firstname_th,
                                     lastname_th: context.state.user_one_id.lastname_th,
@@ -188,7 +188,7 @@ const RegisterModules = {
                 }
             } catch ({ response }) {
                 context.commit("SetIsLoading", false)
-                console.log(response)
+                // console.log(response)
                 let text = ""
                 if (response?.data.statusCode === 400) {
                     switch (response.data.message) {
@@ -211,7 +211,7 @@ const RegisterModules = {
                             text = 'รูปแบบนามสกุลภาษาอังกฤษไม่ถูกต้อง'
                             break;
                     }
-                    console.log(text)
+                    // console.log(text)
                     setTimeout(() => {
                         Swal.fire({
                             icon: 'error',
@@ -259,7 +259,7 @@ const RegisterModules = {
                                 "username": context.state.user_one_id.username,
                                 "password": context.state.user_one_id.password,
                             }).then((res) => {
-                                console.log("res : ", res)
+                                // console.log("res : ", res)
                                 if (res.data.statusCode === 200) {
                                     let roles_data = []
                                     res.data.data.roles.forEach((role) => {
@@ -280,7 +280,7 @@ const RegisterModules = {
                                     }
                                     VueCookie.set("token", res.data.data.token, 1)
                                     localStorage.setItem("userDetail", JSON.stringify(payload))
-                                    console.log("UserKingdom")
+                                    // console.log("UserKingdom")
                                     context.commit("SetIsLoading", false)
                                     router.replace({ name: "UserKingdom" });
                                     context.commit("ResetUserOneID")
@@ -291,7 +291,7 @@ const RegisterModules = {
                 }
             } catch ({ response }) {
                 context.commit("SetIsLoading", false)
-                console.log(response)
+                // console.log(response)
                 let text = ""
                 if (response?.data.statusCode === 400) {
                     switch (response.data.message) {
@@ -314,7 +314,7 @@ const RegisterModules = {
                             text = 'รูปแบบนามสกุลภาษาอังกฤษไม่ถูกต้อง'
                             break;
                     }
-                    console.log(text)
+                    // console.log(text)
                     setTimeout(() => {
                         Swal.fire({
                             icon: 'error',
@@ -339,7 +339,7 @@ const RegisterModules = {
                     "username": context.state.user_one_id.username,
                     "password": context.state.user_one_id.password,
                 })
-                console.log(data);
+                // console.log(data);
                 if (data.statusCode === 200) {
                     let roles = []
                     if (data.data.roles.length > 0) {
@@ -365,7 +365,7 @@ const RegisterModules = {
                 }
             } catch (response) {
                 context.commit("SetIsLoading", false)
-                console.log(response)
+                // console.log(response)
                 if (response.message === "Request failed with status code 401") {
                     Swal.fire({
                         icon: 'error',

@@ -1,10 +1,10 @@
 import axios from "axios";
 import VueCookie from "vue-cookie"
 function dayOfWeekArray(day) {
-    // console.log
+    // // console.log
     // let day_arr = day
     let days = day
-    console.log(day)
+    // console.log(day)
     const weekdays = [
         "วันอาทิตย์",
         "วันจันทร์",
@@ -208,7 +208,7 @@ const myCourseModules = {
                 // let localhost = "http://localhost:3000"
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
                 if (data.statusCode === 200) {
-                    console.log("176=>", data.data)
+                    // console.log("176=>", data.data)
                     const dataCourseSchedule = { dates: [] };
                     let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
                     if (holidays.data.statusCode === 200) {
@@ -226,7 +226,7 @@ const myCourseModules = {
                     }
 
                     for (const course of data.data) {
-                        console.log("course", course);
+                        // console.log("course", course);
                         course.day_name = course.dates.day ? dayOfWeekArray(course.dates.day) : course.dates.day
                         for (const date of course.dates.date) {
                             if (course.period.start !== "Invalid date" && course.period.end !== "Invalid date") {
@@ -244,7 +244,7 @@ const myCourseModules = {
                         }
                     }
                     if (data_local.roles.includes('R_4')) {
-                        console.log("data.data", data.data)
+                        // console.log("data.data", data.data)
                         let MyCourse = []
                         for await (const item of data.data) {
                             if (MyCourse.filter(v => v.orderItemId === item.orderItemId).length === 0) {
@@ -255,7 +255,7 @@ const myCourseModules = {
                         context.commit("SetMyCourseStudentId", '')
                     } else {
                         context.commit("SetStudentData", data.data)
-                        console.log("SetStudentData", data.data)
+                        // console.log("SetStudentData", data.data)
                     }
                     context.commit("SetcourseSchedule", dataCourseSchedule);
                     context.commit("SetStudentsLoading", false)
@@ -265,12 +265,12 @@ const myCourseModules = {
                 }
             } catch (error) {
                 context.commit("SetStudentsLoading", false)
-                console.log(error);
+                // console.log(error);
             }
         },
 
         async GetStudentReserve(context, account_id) {
-            console.log("GetStudentReserve", account_id);
+            // console.log("GetStudentReserve", account_id);
             try {
                 let config = {
                     headers: {
@@ -292,18 +292,18 @@ const myCourseModules = {
                     for (const booked of data.data) {
                         booked.courseImg = booked.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${booked.courseImg}` : null
                     }
-                    console.log("SetStudentReserve", data.data);
+                    // console.log("SetStudentReserve", data.data);
                     context.commit("SetStudentReserve", data.data)
                 } else {
                     throw { error: data };
                 }
 
             } catch (error) {
-                console.log("err", error);
+                // console.log("err", error);
             }
         },
         async GetProfileBooked(context, account_id) {
-            console.log("GetProfileBooked", account_id);
+            // console.log("GetProfileBooked", account_id);
             try {
                 let config = {
                     headers: {
@@ -326,14 +326,14 @@ const myCourseModules = {
                     for (const booked of data.data) {
                         booked.courseImg = booked.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${booked.courseImg}` : null
                     }
-                    console.log("SetProfileBooked", data.data);
+                    // console.log("SetProfileBooked", data.data);
                     context.commit("SetProfileBooked", data.data)
                 } else {
                     throw { error: data };
                 }
 
             } catch (error) {
-                console.log("err", error);
+                // console.log("err", error);
             }
         },
         async GetMyCourseDetail(context, { account_id, course_id }) {
@@ -368,7 +368,7 @@ const myCourseModules = {
                 }
             } catch (error) {
                 context.commit("SetCourseListIsLoading", false)
-                console.log("GetMyCourseDetail_err", error);
+                // console.log("GetMyCourseDetail_err", error);
             }
         },
         async GetMyCourseStudentId(context, account_id) {
@@ -397,13 +397,13 @@ const myCourseModules = {
                     }
                 }
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
-                console.log("data", data);
+                // console.log("data", data);
                 if (data.statusCode === 200) {
                     context.commit("SetStudentCourse", data.data)
                     // context.commit("SetStudentsLoading", false)
                     // const dataCourseSchedule = { dates: [] };
                     // for (const course of data.data) {
-                    // console.log("course", course);
+                    // // console.log("course", course);
                     // for (const date of course.dates.date) {
                     // if(course.period.start !== "Invalid date" && course.period.end !== "Invalid date"){
                     // dataCourseSchedule.dates.push({
@@ -419,7 +419,7 @@ const myCourseModules = {
                     // }
                     // }
                     // if (data_local.roles.includes('R_4')) {
-                    // console.log(data.data)
+                    // // console.log(data.data)
                     // let MyCourse = []
                     // for await (const item of data.data) {
                     // if (MyCourse.filter(v => v.orderItemId === item.orderItemId).length === 0) {
@@ -430,7 +430,7 @@ const myCourseModules = {
                     // context.commit("SetMyCourseStudentId", '')
                     // } else {
                     // context.commit("SetStudentData", data.data)
-                    // console.log("SetStudentData", data.data)
+                    // // console.log("SetStudentData", data.data)
                     // }
                     // context.commit("SetcourseSchedule", dataCourseSchedule);
                     // context.commit("SetStudentsLoading", false)
@@ -440,7 +440,7 @@ const myCourseModules = {
                 }
             } catch (error) {
                 // context.commit("SetStudentsLoading", false)
-                console.log(error);
+                // console.log(error);
             }
         },
 

@@ -14,9 +14,6 @@ export default {
       socket_id: ""
     }
   },
-  created: function () {
-    console.log('Printing from the Mixin')
-  },
   mounted() {
     // Connect Socket
     this.socket = io(
@@ -27,7 +24,7 @@ export default {
       }
     );
     this.socket.on("connect", () => {
-      console.log("[socket connected]: ", this.socket.connected);
+      console.log("socket connected: ", this.socket.connected);
     });
     this.socket.on("events", (data) => {
       this.GetNotifications(data)
@@ -35,7 +32,6 @@ export default {
         message: data.notificationName,
         description:data.notificationDescription
       });
-      console.log("[data]: ", data);
     });
     this.socket.on("disconnect", (reason) => {
       console.log("[socket disconnected]: ", reason);
@@ -53,7 +49,6 @@ export default {
     }
   },
   beforeDestroy() {
-    console.log("destroyed");
     this.socket.disconnect()
   },
 }
