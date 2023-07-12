@@ -37,8 +37,25 @@
       <div class="mt-8">
         <label-custom text="คอร์สเรียน"></label-custom>
       </div>
-      <v-divider class=""></v-divider>
+      <v-divider class="mb-3"></v-divider>
       <!-- COURSE -->
+      <v-row
+        dense
+        class="d-flex align-center cursor-pointer"
+        @click="
+          $router.push({
+            name: 'FrontPortfolio',
+            params: { account_id: user_login.account_id },
+          })
+        "
+      >
+        <v-col cols="2" sm="1"> 
+          <v-icon class="pa-2" color="#ff6b81">mdi-book-account-outline</v-icon>
+        </v-col>
+        <v-col cols="5" sm="6" >
+          คอร์สเรียนของฉัน
+        </v-col>
+      </v-row>
       <v-row
         dense
         class="mt-3 cursor-pointer"
@@ -811,25 +828,6 @@ export default {
 
   created() {
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
-    // this.user_relation = JSON.parse(localStorage.getItem("relations"));
-    // setTimeout(async () => {
-    //   this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-    //   if (this.type_selected == "MyCourse") {
-    //     if (this.user_detail.roles.includes("R_4")) {
-    //       this.GetStudentData(this.user_detail.account_id);
-    //       for (const item of JSON.parse(localStorage.getItem("relations"))) {
-    //         this.GetStudentData(item.student.studentId);
-    //         // console.log("student");
-    //       }
-    //     } else if (this.user_detail.roles.includes("R_5")) {
-    //       this.GetStudentData(this.user_detail.account_id);
-    //     } else {
-    //       this.GetStudentData(null);
-    //     }
-    //   }
-
-    //   this.loading = false;
-    // }, 200);
   },
   beforeMount() {
     // console.log("========");
@@ -870,28 +868,6 @@ export default {
       this.add_parent = false;
       this.add_relation = false;
     },
-    // type_selected: function () {
-    //   // console.log("type_selected", this.type_selected);
-    //   this.loading = true;
-    //   setTimeout(async () => {
-    //     this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-    //     if (this.type_selected == "MyCourse") {
-    //     if (this.user_detail.roles.includes("R_4")) {
-    //     this.GetStudentData(this.user_detail.account_id);
-    //     for (const item of JSON.parse(localStorage.getItem("relations"))) {
-    //     this.GetStudentData(item.student.studentId);
-    //     // console.log("student");
-    //   }
-    //   } else if (this.user_detail.roles.includes("R_5")) {
-    //   this.GetStudentData(this.user_detail.account_id);
-    //   } else {
-    //   this.GetStudentData(null);
-    //   }
-    // }
-
-    // this.loading = false;
-    // }, 200);
-    // },
   },
 
   methods: {

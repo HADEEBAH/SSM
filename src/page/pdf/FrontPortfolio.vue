@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-container>
-      Pdf test
+      <loadingOverlay :loading="true"></loadingOverlay>
     </v-container>
   </v-app>
 </template>
@@ -9,30 +9,38 @@
   // const { loadImage } = require('canvas')
   import pdfMake from 'pdfmake'
   import pdfFonts from '../../assets/custom-fonts.js'
+  import loadingOverlay from "../../components/loading/loadingOverlay.vue";
+import { mapActions, mapGetters } from 'vuex'
   export default {
     name: "FrontPortfolio",
-    components: {},
+    components: {loadingOverlay},
     data: () => ({
       user_profile : null,
     }),
     created() {
+      this.GetUserById(this.$route.params.account_id)
       this.user_profile = JSON.parse(localStorage.getItem("userDetail"))
     },
     mounted() {
       this.exportPdf()
     },
     methods: {
+      ...mapActions({
+        GetUserById : "UserModules/GetUserById",
+      }),
       async exportPdf() {
         // Define the image paths
-        var backgroundImagePath = require('../../assets/FrontPortfolio/bg-front.png');
-        var headerImagePath = require('../../assets/FrontPortfolio/Logo.png');
-
+        let backgroundImagePath = require('../../assets/FrontPortfolio/bg-front.png');
+        let headerImagePath = require('../../assets/FrontPortfolio/Logo.png');
+        let defaultProfile = require('../../assets/profile/default_profile.png')
         // Load the images using the file loader
-        var backgroundImageData = await this.loadImageFromFile(backgroundImagePath);
-        var headerImageData = await this.loadImageFromFile(headerImagePath);
+        let defaultProfileImageData = await this.loadImageFromFile(defaultProfile);
+        let backgroundImageData = await this.loadImageFromFile(backgroundImagePath);
+        let headerImageData = await this.loadImageFromFile(headerImagePath);
         // Convert image URLs to data URLs directly
-        var backgroundImageDataUrl = await this.convertImageToDataFile(backgroundImageData);
-        var headerImageDataUrl = await this.convertImageToDataFile(headerImageData);
+        let defaultProfileImageDataUrl = await this.convertImageToDataFile(defaultProfileImageData);
+        let backgroundImageDataUrl = await this.convertImageToDataFile(backgroundImageData);
+        let headerImageDataUrl = await this.convertImageToDataFile(headerImageData);
         pdfMake.vfs = pdfFonts.pdfMake.vfs
         pdfMake.fonts = {
             Kanit: {
@@ -87,7 +95,7 @@
               columns:[
                 {
                   margin: [0, 0, 0, 0],
-                  qr: `${process.env.VUE_APP_URL}/portfolio/${this.user_profile.account_id}`,
+                  qr: `${process.env.VUE_APP_URL}/portfolio/${this.data_user_by_id.userOneId}`,
                   width:'25%',
                   fit:120
                 },
@@ -109,12 +117,12 @@
                 {
                   stack: [
                     {
-                      text: [ {text:`${this.user_profile.first_name_th} ${this.user_profile.last_name_th}`,fontSize: 30, bold: true}],
+                      text: [ {text:`${this.data_user_by_id.firstNameTh} ${this.data_user_by_id.lastNameTh}`,fontSize: 30, bold: true}],
                       color: '#573e33',
                       margin: [0, 0]
                     },
                     {
-                      text: [ {text:`${this.user_profile.first_name_en} ${this.user_profile.last_name_en}`,fontSize: 21}],
+                      text: [ {text:`${this.data_user_by_id.firstNameEng} ${this.data_user_by_id.lastNameEng}`,fontSize: 21}],
                       color: '#ff6b81',
                       margin: [0, 0]
                     },
@@ -143,18 +151,19 @@
             }
           },
           images: {
-            profile : this.user_profile.image
+            profile : this.data_user_by_id.image ? this.data_user_by_id.image : defaultProfileImageDataUrl
           }
         }
         
-        // console.log(docDefinition)
-        let pdfDoc = pdfMake.createPdf(docDefinition)
-        pdfDoc.getBlob((blob) => {
-          var url = URL.createObjectURL(blob);
+        console.log(docDefinition)
+        pdfMake.createPdf(docDefinition).open({}, window);
+        // let pdfDoc = pdfMake.createPdf(docDefinition)
+        // pdfDoc.getBlob((blob) => {
+        //   var url = URL.createObjectURL(blob);
 
-          // Open the PDF in a new tab
-          window.open(url);
-        });
+        //   // Open the PDF in a new tab
+        //   window.open(url);
+        // });
       },
       loadImageFromFile(filePath) {
         return new Promise((resolve, reject) => {
@@ -215,6 +224,11 @@
         });
       },
     },
+    computed:{
+      ...mapGetters({
+        data_user_by_id : "UserModules/getUserById"
+      })
+    }
   }
   </script>
   
