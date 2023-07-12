@@ -218,6 +218,7 @@ const loginModules = {
         async loginOneId(context) {
             context.commit("SetIsLoading", true)
             try {
+                // const { data } = await axios.post(`http://localhost:3001/api/v1/auth/login`, {
                 const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login`, {
                     "username": context.state.user_one_id.username,
                     "password": context.state.user_one_id.password,

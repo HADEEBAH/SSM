@@ -587,6 +587,7 @@ const orderModules = {
                                 "orderId": data.data.orderNumber,
                                 "paymentType": order.payment_type,
                                 "total": data.data.totalPrice,
+                                "recipient" : userLogin.data.data.userOneId,
                             }
                             // console.log(payment_payload)
                             // let localhost = "http://localhost:3003"
@@ -648,9 +649,16 @@ const orderModules = {
                 }    
             }catch(error){
                 context.commit("SetOrderIsLoading", false)
-                // console.log(error)
-
-                if(error.response.data.message === "duplicate pending order"){
+                // console.log(error.response.data.message == "Cannot register , fail at course monitor , course-coach or seats are full")
+                if(error.response.data.message == "Cannot register , fail at course monitor , course-coach or seats are full"){
+                    Swal.fire({
+                        icon: "error",
+                        title: "ไม่สามารถลงทะเบียนได้",
+                        text: "ไม่สามารถลงทะเบียนได้ เนื่องจากที่นั้งไม่เพียงพอ หรือ โค้ชมีสอนในแพ็ตเกจอื่น",
+                        showCancelButton: false,
+                        confirmButtonText: "ตกลง",
+                    })
+                }else if(error.response.data.message === "duplicate pending order"){
                     Swal.fire({
                         icon: "error",
                         title: "ไม่สามารถลงทะเบียนได้",
