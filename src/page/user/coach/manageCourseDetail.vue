@@ -683,13 +683,10 @@
             <v-card-text
               class="border-dashed border-2 border-pink-600 rounded-lg"
             >
-              <v-row
-                v-if="
-                  preview_summary_files && preview_summary_files?.length > 0
-                "
-              >
+              <v-row v-if=" preview_summary_files && preview_summary_files?.length > 0 " >
                 <v-col
-                  cols="3"
+                  cols="12"
+                  sm="4"
                   align="center"
                   class="rounded-lg pa-2"
                   v-for="(file, index) in preview_summary_files"
@@ -710,8 +707,6 @@
                       <video
                         :src="file"
                         controls
-                        max-height="200"
-                        max-width="200"
                       ></video>
                     </v-card>
                   </template>
@@ -731,14 +726,12 @@
                       <video
                         :src="file.url"
                         controls
-                        max-height="200"
-                        max-width="200"
                       ></video>
                     </v-card>
                   </template>
                   <template v-else>
                     <v-img
-                      v-if="file.attId"
+                      v-if="file.attId && file.filesType.search('video') == -1"
                       :src="file.url"
                       contain
                       max-height="200"
@@ -754,7 +747,7 @@
                       >
                     </v-img>
                     <v-img
-                      v-else
+                      v-if="!file.attId && file.search('video') == -1"
                       :src="file"
                       contain
                       max-height="200"
@@ -835,7 +828,7 @@
               >
                 บันทึก
               </v-btn>
-            </v-col>
+            </v-col>  
           </v-row>
         </v-tab-item>
       </v-tabs-items>
@@ -1721,6 +1714,7 @@ export default {
       )[0].compensation_date_str = dateFormatter(e, "DD MT YYYYT");
     },
     openFileSelector() {
+      
       this.$refs.fileInput.click();
     },
     openGeneralfileInputSelector() {
@@ -1842,7 +1836,7 @@ export default {
 
     previewSummaryFile(event) {
       const selectedFiles = event.target.files;
-      this.coach_check_in.summary_files = [];
+      // this.coach_check_in.summary_files = [];
       const fileUrls = [];
       for (let i = 0; i < selectedFiles.length; i++) {
         if (CheckFileSize(selectedFiles[i]) === true) {
