@@ -21,7 +21,7 @@ router.beforeEach((to, from, next) => {
   if (!to.name) {
     next({ name: 'PageNotFound' })
   } else {
-    if (to.name !== "Login" && to.name !== "Register" && to.name !== "PageNotFound") {
+    if (to.name !== "Login" && to.name !== "Register" && to.name !== "PageNotFound" && to.name !== 'portfolio_account_Id') {
       // // console.log("name=>", to);
       // console.log("cookie", VueCookie.get("token"));
       if (to.name === "callback") {
@@ -66,11 +66,16 @@ router.beforeEach((to, from, next) => {
         next()
       }
     } else {
-      if (VueCookie.get("token")) {
-        next({ name: 'UserKingdom' })
-      } else {
+      if(to.name == 'portfolio_account_Id'){
         next()
+      }else{
+        if (VueCookie.get("token")) {
+          next({ name: 'UserKingdom' })
+        } else {
+          next()
+        }
       }
+     
     }
   }
 })

@@ -10,6 +10,7 @@
     import pdfMake from 'pdfmake'
     import pdfFonts from '../../assets/custom-fonts.js'
     import loadingOverlay from "../../components/loading/loadingOverlay.vue";
+import { mapActions, mapGetters } from 'vuex';
     export default {
       name: "FrontPortfolio",
       components: {loadingOverlay},
@@ -17,12 +18,17 @@
         user_profile : null,
       }),
       created() {
+        this.GetPortfolioData({account_id : this.$route.params.account_id})
+       
         this.user_profile = JSON.parse(localStorage.getItem("userDetail"))
       },
       mounted() {
         this.exportPdf()
       },
       methods: {
+        ...mapActions({
+          GetPortfolioData : 'portfolioModules/GetPortfolioData'
+        }),
         async exportPdf() {
             // Define the image paths
             var backgroundImagePath = require('../../assets/FrontPortfolio/bg-front-detail.png');
@@ -266,6 +272,11 @@
           });
         },
       },
+      computed: {
+        ...mapGetters({
+          portfolio_data : 'portfolioModules/portfolioData'
+        }),
+      }
     }
     </script>
     

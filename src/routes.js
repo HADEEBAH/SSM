@@ -208,7 +208,7 @@ const routes = [
     component: callback,
   },
   {
-    path: '/frontPortfolio',
+    path: '/frontPortfolio/:account_id',
     name: 'FrontPortfolio',
     component: FrontPortfolio,
   },

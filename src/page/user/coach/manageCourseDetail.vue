@@ -59,6 +59,7 @@
             @click="checkIn()"
             depressed
             dense
+            :disabled="CheckInByDate()"
             :color="coach_check_in.checkInCoachId ? '#E6E6E6' : '#ff6b81'"
             class="w-full rounded-lg"
             :loading="coach_check_in_is_loading"
@@ -1250,6 +1251,7 @@ import { Input, TimePicker } from "ant-design-vue";
 import labelCustom from "../../../components/label/labelCustom.vue";
 import { mapActions, mapGetters } from "vuex";
 import Swal from "sweetalert2";
+import moment from 'moment'
 export default {
   name: "menageCourseDetail",
   components: { rowData, loadingOverlay, TimePicker, labelCustom },
@@ -1413,6 +1415,18 @@ export default {
       DeleteAssessmentPotentialFile:
         "CoachModules/DeleteAssessmentPotentialFile",
     }),
+    //check in by date
+    CheckInByDate(CheckInData){
+      let check_in_date = moment(this.$route.params.date).format("YYYY-MM-DD")
+      let today = moment().format("YYYY-MM-DD")
+      console.log(CheckInData, today)
+      if(check_in_date == today){
+        return false
+      }else{
+        return true
+      }
+      
+    },
     CheckRating(rating_data, checkInId, type) {
       if (
         this.student_check_in.filter((v) => v.checkInStudentId === checkInId)
