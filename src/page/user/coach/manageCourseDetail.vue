@@ -1415,10 +1415,9 @@ export default {
         "CoachModules/DeleteAssessmentPotentialFile",
     }),
     //check in by date
-    CheckInByDate(CheckInData){
+    CheckInByDate(){
       let check_in_date = moment(this.$route.params.date).format("YYYY-MM-DD")
       let today = moment().format("YYYY-MM-DD")
-      console.log(CheckInData, today)
       if(check_in_date == today){
         return false
       }else{

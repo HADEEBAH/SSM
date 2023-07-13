@@ -220,7 +220,7 @@ const orderModules = {
                 let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/`,config)
                 if(data.statusCode === 200){
                     if(data.data.length > 0){
-                        // console.log("222",data.data)
+                        console.log("224",data.data)
                         for await (let order of data.data){
                             for await (const student of order.student){
                                 if(!students.some(v=>v.account_id == student.userOneId)){
@@ -252,13 +252,15 @@ const orderModules = {
                             ];
                             
                             const formatted = `${day} ${monthNames[month]} ${year}`;
-                            // // console.log("267", formatted);
-                            
+                           
+                            // if(typeof order.payment === 'o'){
+
+                            // }
                             let cutTime = order.payment_status === "success" ? order.payment?.paymentTime : '';
                             let HH = cutTime?.slice(0, 2);
                             let mm = cutTime?.slice(2, 4); 
                             order.paid_date = order.payment_status === "success" ? `${formatted} ${HH + ":" + mm }`:""
-                            // // console.log(order.paid_date)
+                            // console.log(order.paid_date)
                             order.course_name = `${order.course?.courseNameTh}(${order.course?.courseNameEn})`
                             order.student_name = `${order.user?.firstNameTh} ${order.user?.lastNameTh}`
                         }
@@ -283,12 +285,13 @@ const orderModules = {
                         'Authorization' : `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                // let localhost = "http://192.168.74.25:3000"
+                // let localhost = "http://localhost:3000"
                 let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/${order_number}`, config)
                 // console.log("288 =>",data)
                 if(data.statusCode == 200){
                     let student_name_list = []
                     let student_list = []
+                    console.log("225",data.data.payment?.paymentDate);
                     for(const order_item of  data.data.orderItem){
                         if(order_item.students.length > 0){
                             order_item.students.forEach((student)=>{
@@ -300,21 +303,23 @@ const orderModules = {
                             data.data.student_name_list = student_name_list.join(', ')
                         }
                     }
-                    if(data.data.payment.paymentDate){
-                        const timestamp =`${data.data.payment.paymentDate} ${data.data.payment.paymentTime}`;
-                        const year = timestamp.substr(0, 4);
-                        const month = timestamp.substr(4, 2);
-                        const day = timestamp.substr(6, 2);
-                        const hours = timestamp.substr(9, 2);
-                        const minutes = timestamp.substr(11, 2);
-                        const seconds = timestamp.substr(13, 2);
-    
-                        const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-                        data.data.payment.paid_date = formattedDate
+                    if(data.data.payment?.paymentDate ){
+                        if(data.data.payment.paymentDate){
+                            const timestamp =`${data.data.payment.paymentDate} ${data.data.payment.paymentTime}`;
+                            const year = timestamp.substr(0, 4);
+                            const month = timestamp.substr(4, 2);
+                            const day = timestamp.substr(6, 2);
+                            const hours = timestamp.substr(9, 2);
+                            const minutes = timestamp.substr(11, 2);
+                            const seconds = timestamp.substr(13, 2);
+        
+                            const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+                            data.data.payment.paid_date = formattedDate
+                        }
                     }
                     
-                    
                     await context.commit("SetOrderDetail",data.data)
+                   
                     await context.commit("SetStudentListOrderDetail", student_list)
                 }
             }
@@ -587,7 +592,7 @@ const orderModules = {
                                 "orderId": data.data.orderNumber,
                                 "paymentType": order.payment_type,
                                 "total": data.data.totalPrice,
-                                "recipient" : userLogin.data.data.userOneId,
+                                "recipient" : user_data.account_id,
                             }
                             // console.log(payment_payload)
                             // let localhost = "http://localhost:3003"
