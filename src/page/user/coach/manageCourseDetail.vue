@@ -211,8 +211,7 @@
                             :class="item.start_time ? 'active' : ''"
                             placeholder="เวลาเริ่มต้น"
                             format="HH:mm"
-                            v-model="item.compensationStartTime"
-                            @change="onChange"
+                            v-model="item.compensationStartTime"  
                           >
                           </TimePicker>
                         </v-col>
@@ -223,7 +222,6 @@
                             :class="item.end_time ? 'active' : ''"
                             placeholder="เวลาสิ้นสุด"
                             v-model="item.compensationEndTime"
-                            @change="onChange"
                           ></TimePicker>
                         </v-col>
                       </v-row>
