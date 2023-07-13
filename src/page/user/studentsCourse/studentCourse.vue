@@ -5,6 +5,7 @@
 <template>
   <v-container>
     <loading-overlay :loading="course_list_is_loading"></loading-overlay>
+
     <div v-if="my_course_detail.countCheckIn == 0">
       <v-card-text
         class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
@@ -21,27 +22,50 @@
           <v-row dense>
             <!-- img -->
             <v-col cols="12" sm="2">
-                <v-img max-height="180" :src="my_course_detail.courseImg ? my_course_detail.courseImg  : require(`@/assets/course/default_course_img.svg`) " ></v-img>
+              <v-img
+                max-height="180"
+                :src="
+                  my_course_detail.courseImg
+                    ? my_course_detail.courseImg
+                    : require(`@/assets/course/default_course_img.svg`)
+                "
+              ></v-img>
             </v-col>
             <!-- detail -->
-            <v-col  cols="12" sm="7">
+            <v-col cols="12" sm="7">
               <v-row dense>
                 <v-col class="text-lg font-bold">
-                  {{!my_course_detail.courseNameTh ? "-" : my_course_detail.courseNameTh }}
+                  {{
+                    !my_course_detail.courseNameTh
+                      ? "-"
+                      : my_course_detail.courseNameTh
+                  }}
                   ({{ my_course_detail.courseNameEng }})
                 </v-col>
               </v-row>
               <v-row dense>
                 <v-col class="text-slate-400">
                   <span class="mdi mdi-account">โค้ช :</span>
-                  {{ !my_course_detail.coachName ? "-" : my_course_detail.coachName }}
+                  {{
+                    !my_course_detail.coachName
+                      ? "-"
+                      : my_course_detail.coachName
+                  }}
                 </v-col>
               </v-row>
               <v-row dense>
                 <v-col class="text-slate-400">
                   <span class="mdi mdi-account">ผู้เรียน :</span>
-                  {{!my_course_detail.student? "-" : my_course_detail.student.firstNameTh }}
-                  {{!my_course_detail.student ? "-" : my_course_detail.student.lastNameTh }}
+                  {{
+                    !my_course_detail.student
+                      ? "-"
+                      : my_course_detail.student.firstNameTh
+                  }}
+                  {{
+                    !my_course_detail.student
+                      ? "-"
+                      : my_course_detail.student.lastNameTh
+                  }}
                 </v-col>
               </v-row>
               <v-row dense>
@@ -64,7 +88,8 @@
                 <v-col>
                   <v-chip dark color="#F9B320">
                     <span
-                      v-for="(day_list, index_day) in my_course_detail.dates.day"
+                      v-for="(day_list, index_day) in my_course_detail.dates
+                        .day"
                       :key="index_day"
                     >
                       {{
@@ -80,7 +105,7 @@
               </v-row>
             </v-col>
             <!-- circle -->
-            <v-col cols="12" sm="3" class="d-flex align-center justify-center" >
+            <v-col cols="12" sm="3" class="d-flex align-center justify-center">
               <v-progress-circular
                 :rotate="-90"
                 :size="90"
@@ -104,7 +129,11 @@
           <div class="text-lg font-bold">ข้อมูลการเรียน</div>
         </v-col>
       </v-row>
-      <div class="mb-3" v-for="(potential, index) in my_course_detail.potential" :key="index">
+      <div
+        class="mb-3"
+        v-for="(potential, index) in my_course_detail.potential"
+        :key="index"
+      >
         <v-card class="rounded-lg" outlined>
           <v-card-text>
             <v-row dense class="mb-2">
@@ -115,10 +144,15 @@
             </v-row>
             <v-card flat color="#FBF3F5">
               <v-card-text>
-                <v-row dense>                 
+                <v-row dense>
                   <v-col>
                     <b>ระดับพัฒนาการ:</b>
-                    <span :class="`text-[${evolution_options.filter((v) => v.value === potential.evolution )[0]}]`"
+                    <span
+                      :class="`text-[${
+                        evolution_options.filter(
+                          (v) => v.value === potential.evolution
+                        )[0]
+                      }]`"
                     >
                       {{
                         evolution_options.filter(
@@ -133,15 +167,15 @@
                   </v-col>
                 </v-row>
                 <v-row dense>
-                  <v-col >
+                  <v-col>
                     <b>ระดับความสนใจ:</b>
                     {{ potential.interest }}
                   </v-col>
                 </v-row>
                 <v-row dense>
                   <v-col cols="12" align="start">
-                      <b>ความคิดเห็นจากโค้ช:</b>
-                      {{ potential.remark }}
+                    <b>ความคิดเห็นจากโค้ช:</b>
+                    {{ potential.remark }}
                   </v-col>
                 </v-row>
                 <v-row dense>
@@ -151,8 +185,9 @@
                       @click="openFile(file.attachmentFiles)"
                       flat
                       class="mb-3"
-                      v-for="(file, index_file) in potential
-                        .attachmentPotential"
+                      v-for="(
+                        file, index_file
+                      ) in potential.attachmentPotential"
                       :key="index_file"
                     >
                       <v-card-text
@@ -183,11 +218,8 @@
                   </v-col>
                 </v-row>
               </v-card-text>
-             
             </v-card>
           </v-card-text>
-         
-       
         </v-card>
       </div>
       <!-- <pre>{{ my_course_detail.checkIn }}</pre> -->
@@ -195,7 +227,7 @@
         v-for="(day_list, index_day) in my_course_detail.checkIn"
         :key="index_day"
       >
-        <v-card outlined class="rounded-lg">
+        <v-card outlined class="rounded-lg my-5">
           <v-card-text>
             <v-row dense>
               <v-col cols="12" v-if="checked == true">
@@ -221,7 +253,8 @@
                       check_in_status_options.filter(
                         (v) => v.value === day_list.status
                       )[0].color
-                    }] bg-[${
+                    }] 
+                    bg-[${
                       check_in_status_options.filter(
                         (v) => v.value === day_list.status
                       )[0].bg_color
@@ -232,6 +265,11 @@
                         check_in_status_options.filter(
                           (v) => v.value === day_list.status
                         )[0].color
+                      }]
+                      bg-[${
+                        check_in_status_options.filter(
+                          (v) => v.value === day_list.status
+                        )[0].bg_color
                       }]`"
                     >
                       {{
@@ -251,37 +289,40 @@
             <v-row dense>
               <v-col class="text-slate-400">
                 เวลาเรียน
-                {{ !my_course_detail.time.start ? "-" : my_course_detail.time.start}}
+                {{
+                  !my_course_detail.time.start
+                    ? "-"
+                    : my_course_detail.time.start
+                }}
                 -
-                {{!my_course_detail.time.end ? "-" : my_course_detail.time.end}} น.
+                {{
+                  !my_course_detail.time.end ? "-" : my_course_detail.time.end
+                }}
+                น.
               </v-col>
             </v-row>
             <v-row dense>
               <!-- พัฒนาการ -->
               <v-col cols="12" sm="4" align="start">
-                  <div
-                    v-if="day_list.assessment.evolution"
-                  >
+                <div v-if="day_list.assessment.evolution">
                   <b>ระดับพัฒนาการ:</b>
-                    <span>
-                      {{
-                        evolution_options.filter(
-                          (v) => v.value === day_list.assessment.evolution
-                        ).length > 0
-                          ? evolution_options.filter(
-                              (v) => v.value === day_list.assessment.evolution
-                            )[0].label
-                          : "-"
-                      }}
-                    </span>
-                  </div>
+                  <span>
+                    {{
+                      evolution_options.filter(
+                        (v) => v.value === day_list.assessment.evolution
+                      ).length > 0
+                        ? evolution_options.filter(
+                            (v) => v.value === day_list.assessment.evolution
+                          )[0].label
+                        : "-"
+                    }}
+                  </span>
+                </div>
               </v-col>
               <!-- ความสนใจ -->
               <v-col cols="12" sm="auto" align="start">
-                <div
-                  v-if="day_list.assessment.interest"
-                >
-                <b> ระดับความสนใจ:</b>
+                <div v-if="day_list.assessment.interest">
+                  <b> ระดับความสนใจ:</b>
                   <span>
                     {{
                       interest_options.filter(
@@ -297,69 +338,65 @@
               </v-col>
             </v-row>
             <div align="center">
-              <v-btn
-                  color="#FF6B81"
-                  text
-                  @click="showAssessment(index_day)"
-                >
-                  ดูเพิ่มเติม
-                  <v-icon>{{
-                    day_list.show ? "mdi-chevron-up" : "mdi-chevron-down"
-                  }}</v-icon>
+              <v-btn color="#FF6B81" text @click="showAssessment(index_day)">
+                ดูเพิ่มเติม
+                <v-icon>{{
+                  day_list.show ? "mdi-chevron-up" : "mdi-chevron-down"
+                }}</v-icon>
               </v-btn>
             </div>
             <v-expand-transition>
-                <div v-show="day_list.show">
-                  <v-row dense>
-                    <v-col>
-                      <b>ความคิดเห็น:</b>
-                      {{
-                        !day_list.assessment.remark
-                          ? "ไม่มีความคิดเห็น"
-                          : day_list.assessment.remark
-                      }}
-                    </v-col>
-                  </v-row>
-                  <v-row dense>
-                    <v-col cols="12">
-                      ไฟล์แนบ :
-                      <v-card
-                        @click="openFile(file.attachmentFiles)"
-                        flat
-                        class="mb-3"
-                        v-for="(file, index_file) in day_list.assessment
-                          .attachment"
-                        :key="index_file"
+              <div v-show="day_list.show">
+                <v-row dense>
+                  <v-col>
+                    <b>ความคิดเห็น:</b>
+                    {{
+                      !day_list.assessment.remark
+                        ? "ไม่มีความคิดเห็น"
+                        : day_list.assessment.remark
+                    }}
+                  </v-col>
+                </v-row>
+                <v-row dense>
+                  <v-col cols="12">
+                    ไฟล์แนบ :
+                    <v-card
+                      @click="openFile(file.attachmentFiles)"
+                      flat
+                      class="mb-3"
+                      v-for="(file, index_file) in day_list.assessment
+                        .attachment"
+                      :key="index_file"
+                    >
+                      <v-card-text
+                        class="border border-2 border-[#ff6b81] rounded-lg"
                       >
-                        <v-card-text
-                          class="border border-2 border-[#ff6b81] rounded-lg"
-                        >
-                          <v-row dense>
-                            <v-col cols="12" sm="1" align="center">
-                              <v-img
-                                height="35"
-                                width="26"
-                                src="../../../assets/coachLeave/file-pdf.png"
-                              />
-                            </v-col>
-                            <v-col cols="12" sm="10" align="start">
-                              <span class="font-bold">{{
-                                file.originalFilesName
-                              }}</span
-                              ><br />
-                              <span class="text-caption"
-                                >ขนาดไฟล์ :
-                                {{ (file.filesSize / 1000000).toFixed(2) }}
-                                MB</span
-                              >
-                            </v-col>
-                          </v-row>
-                        </v-card-text>
-                      </v-card>
-                    </v-col>
-                  </v-row>
-                </div>
-              </v-expand-transition>
+                        <v-row dense>
+                          <v-col cols="12" sm="1" align="center">
+                            <v-img
+                              height="35"
+                              width="26"
+                              src="../../../assets/coachLeave/file-pdf.png"
+                            />
+                          </v-col>
+                          <v-col cols="12" sm="10" align="start">
+                            <span class="font-bold">{{
+                              file.originalFilesName
+                            }}</span
+                            ><br />
+                            <span class="text-caption"
+                              >ขนาดไฟล์ :
+                              {{ (file.filesSize / 1000000).toFixed(2) }}
+                              MB</span
+                            >
+                          </v-col>
+                        </v-row>
+                      </v-card-text>
+                    </v-card>
+                  </v-col>
+                </v-row>
+              </div>
+            </v-expand-transition>
           </v-card-text>
         </v-card>
       </div>
@@ -472,7 +509,7 @@ export default {
         bg_color: "#F0F9EE",
       },
       { label: "สาย", value: "late", color: "#FCC419", bg_color: "#FFF9E8" },
-      { label: "ลา", value: "leave", color: "#43A4F5", bg_color: "#CFE2F3" },
+      { label: "ลา", value: "leave", color: "", bg_color: "#FFF9E8" },
       {
         label: "ลาฉุกเฉิน",
         value: " emergency leave",
