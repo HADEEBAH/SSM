@@ -120,12 +120,13 @@
             <v-data-table
               class="header-table border"
               :items="
-              coach_check_in.checkInCoachId ? 
-                student_check_in.filter((v) =>
-                  v.cpo?.packageName
-                    ? v.cpo.packageName === package_name_filter
-                    : true
-                ): []
+                coach_check_in.checkInCoachId
+                  ? student_check_in.filter((v) =>
+                      v.cpo?.packageName
+                        ? v.cpo.packageName === package_name_filter
+                        : true
+                    )
+                  : []
               "
               item-key="no"
               :expanded.sync="expanded_index"

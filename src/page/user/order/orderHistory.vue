@@ -23,19 +23,14 @@
             <v-card-text>
               <v-row dense class="mb-3">
                 <v-col>
-                  <label class="text-caption">หมายเลขคำสั่งซื้อ:</label>
+                  <label class="text-caption">หมายเลขคำสั่งซื้อ: </label>
                   <v-row dense>
                     <v-col class="font-bold">
                       {{ order.orderNumber }}
                     </v-col>
                   </v-row>
                 </v-col>
-                <v-col
-                  cols="12"
-                  sm="6"
-                  class="align-self-center"
-                  align="right"
-                >
+                <v-col cols="12" sm="6" class="align-self-center" align="right">
                   <v-chip
                     v-if="order.paymentStatus === 'success'"
                     color="#F0F9EE"
@@ -72,13 +67,18 @@
                 :key="`${index_courses}_courses`"
               >
                 <v-row>
-                  <v-col cols="3" class="pr-0">
+                  <!-- :height="course.show_student ? '' : '160'"
+                      class="w-full h-full rounded-l-lg" 
+                      class="w-full h-full rounded-lg"
+                    -->
+                  <v-col cols="12" sm="4" md="4" lg="4" class="pa-5">
                     <v-img
                       v-if="course.courseImg"
                       :src="course.courseImg"
                       cover
-                      :height="course.show_student ? '' : '160'"
-                      class="w-full h-full rounded-l-lg"
+                      :height="heightImg()"
+                      :width="widthImg()"
+                      class="rounded-lg"
                     />
                     <img
                       v-else
@@ -86,10 +86,10 @@
                       height="160"
                     />
                   </v-col>
-                  <v-col>
+                  <v-col cols="12" sm="8" md="8" lg="8">
                     <v-card-text class="pa-2">
                       <v-row dense>
-                        <v-col>
+                        <v-col class="pa-5">
                           <v-row dense>
                             <v-col
                               cols="12"
@@ -133,7 +133,7 @@
                         :class="course.show_student ? 'mb-3' : ''"
                         class="d-flex align-center"
                       >
-                        <v-col align="center">
+                        <v-col align="center" class="my-5">
                           <v-btn
                             @click="course.show_student = !course.show_student"
                             text
@@ -276,7 +276,36 @@ export default {
           this.savePayment({ paymnet_data: payment_data });
         }
       });
-    },  
+    },
+    widthImg() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return 330;
+        case "sm":
+          return 500;
+        case "md":
+          return 500;
+        case "lg":
+          return 500;
+        case "xl":
+          return 500;
+      }
+    },
+
+    heightImg() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return 250;
+        case "sm":
+          return 300;
+        case "md":
+          return 300;
+        case "lg":
+          return 280;
+        case "xl":
+          return 405.5;
+      }
+    },
   },
 };
 </script>

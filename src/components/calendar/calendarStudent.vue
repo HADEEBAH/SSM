@@ -100,9 +100,9 @@
                     >
                       -
                     </v-col>
-                    <v-col v-else cols="12" class="text-sm text-[#999999]">
+                    <!-- <v-col v-else cols="12" class="text-sm text-[#999999]">
                       {{ `${event.start_time}` }} - {{ `${event.end_time}` }}
-                    </v-col>
+                    </v-col> -->
                     <v-col cols="auto">
                       <v-icon small :color="event.color">mdi-circle</v-icon>
                     </v-col>
@@ -123,12 +123,12 @@
                           <span class="font-bold">{{ event.name }}</span>
                         </v-col>
                       </v-row>
-                      <v-row dense>
+                      <!-- <v-row dense>
                         <v-col v-if="!event.type">
                           คอร์ส: {{ event.name }}
                         </v-col>
                         <v-col v-else>{{ event.name }} </v-col>
-                      </v-row>
+                      </v-row> -->
                       <v-row dense v-if="!event.type">
                         <v-col class="text-sm">
                           โค้ช:
@@ -429,7 +429,6 @@ export default {
       return color ? color : false;
     },
     ToStudentCourse(data) {
-
       this.$router.push({
         name: "StudentCourse",
         params: { course_id: data.courseId },

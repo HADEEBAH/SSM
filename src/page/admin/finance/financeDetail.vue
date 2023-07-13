@@ -392,10 +392,10 @@ import rowData from "@/components/label/rowData.vue";
 import { mapActions, mapGetters } from "vuex";
 import Swal from "sweetalert2";
 import mixin from "../../../mixin";
-import pdfMake from 'pdfmake'
-import pdfFonts from '../../../assets/custom-fonts.js'
-import {convertToThaiBaht} from '@/functions/functions.js'
-import moment from 'moment';
+import pdfMake from "pdfmake";
+import pdfFonts from "../../../assets/custom-fonts.js";
+import { convertToThaiBaht } from "@/functions/functions.js";
+import moment from "moment";
 export default {
   name: "financeDetail",
   components: { headerPage, rowData },
@@ -861,61 +861,79 @@ export default {
       }
       
     },
-    GenCourseItem(){
+    GenCourseItem() {
       // console.log("order_detail => ",this.order_detail)
       let row = [
         [
           {
-            text: 'ลำดับ',
-            fillColor: '#dedede',
-            alignment: 'center'
+            text: "ลำดับ",
+            fillColor: "#dedede",
+            alignment: "center",
           },
           {
-            text: 'รายละเอียด',
-            fillColor: '#dedede',
-            alignment: 'center'
+            text: "รายละเอียด",
+            fillColor: "#dedede",
+            alignment: "center",
           },
           {
-            text: 'จำนวน',
-            fillColor: '#dedede',
-            alignment: 'center'
+            text: "จำนวน",
+            fillColor: "#dedede",
+            alignment: "center",
           },
           {
-            text: 'ราคา',
-            fillColor: '#dedede',
-            alignment: 'center'
-          }
+            text: "ราคา",
+            fillColor: "#dedede",
+            alignment: "center",
+          },
         ],
-      ]
+      ];
       this.order_detail.orderItem.forEach((course, index) => {
         // console.log("802 => ",course)
         row.push([
           {
             text: `${index + 1}`,
-            alignment: 'center',
-            color:'#ff6b81',
+            alignment: "center",
+            color: "#ff6b81",
           },
           {
-            stack: [  
-              {text:`${course.course.categoryNameTh}(${this.dayOfWeekArray(course.course.dayOfWeekName)} (${ course.course.start} - ${course.course.end}))`, color:'#ff6b81',},
-              {text:`${course?.cpo?.packageName ? course.cpo.packageName : ''}`, color:'#ff6b81',},
-              {text:`${course?.cpo?.optionName ?  course.cpo.optionName : ''}`, color:'#ff6b81',}
-          ],
-            alignment: 'left'
+            stack: [
+              {
+                text: `${course.course.categoryNameTh}(${this.dayOfWeekArray(
+                  course.course.dayOfWeekName
+                )} (${course.course.start} - ${course.course.end}))`,
+                color: "#ff6b81",
+              },
+              {
+                text: `${
+                  course?.cpo?.packageName ? course.cpo.packageName : ""
+                }`,
+                color: "#ff6b81",
+              },
+              {
+                text: `${course?.cpo?.optionName ? course.cpo.optionName : ""}`,
+                color: "#ff6b81",
+              },
+            ],
+            alignment: "left",
           },
           {
             text: `${course.students.length}`,
-            color:'#ff6b81',
-            alignment: 'right'
+            color: "#ff6b81",
+            alignment: "right",
           },
           {
-            text: `${(parseFloat(course.price)*course.students.length).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2,})} บาท`,
-            color:'#ff6b81',
-            alignment: 'right'
-          }
-        ])
-      })
-      return row
+            text: `${(
+              parseFloat(course.price) * course.students.length
+            ).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })} บาท`,
+            color: "#ff6b81",
+            alignment: "right",
+          },
+        ]);
+      });
+      return row;
     },
     loadImageFromFile(filePath) {
       return new Promise((resolve, reject) => {
@@ -931,11 +949,11 @@ export default {
     },
     convertImageToDataFile(image) {
       return new Promise((resolve, reject) => {
-        var canvas = document.createElement('canvas');
+        var canvas = document.createElement("canvas");
         canvas.width = image.width;
         canvas.height = image.height;
 
-        var ctx = canvas.getContext('2d');
+        var ctx = canvas.getContext("2d");
         ctx.drawImage(image, 0, 0);
 
         canvas.toBlob((blob) => {
@@ -947,7 +965,7 @@ export default {
             reject(error);
           };
           reader.readAsDataURL(blob);
-        }, 'image/png');
+        }, "image/png");
       });
     },
     getBase64ImageFromURL(url) {
@@ -968,7 +986,7 @@ export default {
           resolve(dataURL);
         };
 
-        img.onerror = error => {
+        img.onerror = (error) => {
           reject(error);
         };
 

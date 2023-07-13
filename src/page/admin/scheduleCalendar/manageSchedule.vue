@@ -194,7 +194,6 @@
                   <!-- วันที่ -->
                   <v-col cols="12" sm="8">
                     <label class="font-weight-bold">วันที่</label>
-                    {{ selectEditHolidaydates }} {{ holidaydatesTh }} {{ editHolidayDates }}
                     <v-menu
                       v-model="selectEditHolidaydates"
                       :close-on-content-click="false"
