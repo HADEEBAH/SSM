@@ -88,9 +88,17 @@
                   ? 'bg-[#FF6B81]'
                   : 'bg-[#F5F5F5]'
               "
-              class="rounded-lg font-bold flex justify-center align-center pa-2"
+              class="rounded-lg flex justify-center align-center pa-2"
             >
-              คอร์สที่จอง
+              <label
+                :class="
+                  this.$route.params.action == 'MyBooking'
+                    ? 'text-white'
+                    : ' text-[#B3B3B3]'
+                "
+                class="font-bold mr-2"
+                >คอร์สที่จอง</label
+              >
             </v-card-text>
           </v-card>
         </v-col>
@@ -329,7 +337,11 @@
                     </v-row>
                   </v-col>
                   <!-- circle -->
-                  <v-col cols="12" sm="4" class="d-flex align-center justify-center">
+                  <v-col
+                    cols="12"
+                    sm="4"
+                    class="d-flex align-center justify-center"
+                  >
                     <!-- {{ item.courseNameEn }} -->
                     <v-progress-circular
                       :rotate="-90"

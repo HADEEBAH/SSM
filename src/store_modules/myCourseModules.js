@@ -98,37 +98,7 @@ const myCourseModules = {
             // }
         ],
 
-        my_course_detail: {
-            // courseId: "",
-            // courseNameTh: "",
-            // courseNameEng: "",
-            // coachId: "",
-            // coachName: "",
-            // dates: {
-            //     day: [],
-            //     date: [],
-            //     count: 0,
-            //     totalDay: 5,
-            //     startDate: "",
-            //     endDate: ""
-            // },
-            // realCount: '',
-            // time: {
-            //     start: "",
-            //     end: ""
-            // },
-            // checkIn: [
-            //     {
-            //         checkInStudentId: "",
-            //         orderId: "",
-            //         courseId: "",
-            //         studentId: "",
-            //         status: "",
-            //         date: ""
-            //     },
-
-            // ]
-        },
+        my_course_detail: {},
 
         my_course_student_id: '',
 
@@ -348,24 +318,29 @@ const myCourseModules = {
                 }
                 // let { data } = await axios.get(`http://localhost:3000/api/v1/mycourse/checkin/student/${account_id}/course/${course_id}`, config);
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/checkin/student/${account_id}/course/${course_id}`, config);
-                if (data.statusCode === 200) {
-                    if (data.data && data.statusCode === 200) {
+
+                if (data.data && data.statusCode === 200) {
+                    console.log("SetMyCourseDetail", data.data);
+                    if (data.data.checkIn) {
                         let potential = []
-                        for(let course of data.data.checkIn){
-                            if(course.potential && !potential.some(v => v.checkInPotentialId == course.potential.checkInPotentialId)){
+                        for (let course of data.data.checkIn) {
+                            if (course.potential && !potential.some(v => v.checkInPotentialId == course.potential.checkInPotentialId)) {
                                 potential.push(course.potential)
                             }
                         }
                         data.data.potential = potential
-                        context.commit("SetMyCourseDetail", data.data)
-                        context.commit("SetCourseListIsLoading", false)
-                    }
-                    else {
-                        context.commit("SetCourseListIsLoading", false)
-                        data.data = {}
                     }
 
+
+                    context.commit("SetMyCourseDetail", data.data)
+                    context.commit("SetCourseListIsLoading", false)
                 }
+                else {
+                    context.commit("SetCourseListIsLoading", false)
+                    data.data = {}
+                }
+
+
             } catch (error) {
                 context.commit("SetCourseListIsLoading", false)
                 // console.log("GetMyCourseDetail_err", error);
