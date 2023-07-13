@@ -20,12 +20,13 @@ import loadingModules from './store_modules/loadingModules'
 import NotificationsModules from '@/store_modules/notificationsModules'
 import reserveCourseModules from '@/store_modules/reserveCourseModules'
 import DashboardModules from '@/store_modules/dashboardModules'
-
+import portfolioModules from '@/store_modules/portfolioModules'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   modules: {
+    portfolioModules: portfolioModules,
     reserveCourseModules :reserveCourseModules,
     CoachModules: CoachModules,
     RegisterModules: RegisterModules,

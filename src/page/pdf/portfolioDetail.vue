@@ -1,7 +1,8 @@
 <template>
     <v-app>
       <v-container>
-        <loadingOverlay :loading="true"></loadingOverlay>
+        <pre>{{ portfolio_data }}</pre>
+        <!-- <loadingOverlay :loading="true"></loadingOverlay> -->
       </v-container>
     </v-app>
   </template>
@@ -9,29 +10,40 @@
     // const { loadImage } = require('canvas')
     import pdfMake from 'pdfmake'
     import pdfFonts from '../../assets/custom-fonts.js'
-    import loadingOverlay from "../../components/loading/loadingOverlay.vue";
+    // import loadingOverlay from "../../components/loading/loadingOverlay.vue";
+import { mapActions, mapGetters } from 'vuex';
     export default {
       name: "FrontPortfolio",
-      components: {loadingOverlay},
+      components: {
+        // loadingOverlay
+      },
       data: () => ({
         user_profile : null,
       }),
       created() {
+        this.GetPortfolioData({account_id : this.$route.params.account_id})
+       
         this.user_profile = JSON.parse(localStorage.getItem("userDetail"))
       },
       mounted() {
         this.exportPdf()
       },
       methods: {
+        ...mapActions({
+          GetPortfolioData : 'portfolioModules/GetPortfolioData'
+        }),
         async exportPdf() {
             // Define the image paths
             var backgroundImagePath = require('../../assets/FrontPortfolio/bg-front-detail.png');
             var backgroundDetailImagePath = require('../../assets/FrontPortfolio/bg-detail.png');
+            let defaultProfile = require('../../assets/profile/default_profile.png')
 
             // Load the images using the file loader
+            let defaultProfileImageData = await this.loadImageFromFile(defaultProfile);
             var backgroundImageData = await this.loadImageFromFile(backgroundImagePath);
             var backgroundDetailImageData = await this.loadImageFromFile(backgroundDetailImagePath);
             // Convert image URLs to data URLs directly
+            let defaultProfileImageDataUrl = await this.convertImageToDataFile(defaultProfileImageData);
             var backgroundImageDataUrl = await this.convertImageToDataFile(backgroundImageData);
             var backgroundDetailImageDataUrl = await this.convertImageToDataFile(backgroundDetailImageData);
           pdfMake.vfs = pdfFonts.pdfMake.vfs
@@ -83,45 +95,31 @@
                     height:450,
                 },
                 {
-                    margin: [40, 0, 0, 0],
-                    columns:[
+                  alignment:'left',
+                  margin: [60, 0, 0, 0],  
+                  stack: [
                     {
-                        margin: [0, 0, 0, 0],
-                        qr: `${process.env.VUE_APP_URL}/portfolio/${this.user_profile.account_id}`,
-                        width:'25%',
-                        fit:120
+                        text: [ {text:`${this.portfolio_data.firstNameTh} ${this.portfolio_data.lastNameTh}`,fontSize: 30, bold: true}],
+                        color: '#573e33',
+                        margin: [0, 0]
                     },
                     {
-                        margin: [0, 0, 10, 0],
-                        width:'auto',
-                        canvas: [
-                        {
-                            type: 'line',
-                            x1: 0,
-                            y1: 0,
-                            x2: 0,
-                            y2: 105,
-                            lineWidth: 10,
-                            color: '#573e33'
-                        }
-                        ]
+                        text: [ {text:`${this.portfolio_data.firstNameEn ? this.portfolio_data.firstNameEn : ''} ${this.portfolio_data.lastNameEn ? this.portfolio_data.lastNameEn : ''}`,fontSize: 21}],
+                        color: '#ff6b81',
+                        margin: [0, 0]
                     },
                     {
-                        stack: [
-                        {
-                            text: [ {text:`${this.user_profile.first_name_th} ${this.user_profile.last_name_th}`,fontSize: 30, bold: true}],
-                            color: '#573e33',
-                            margin: [0, 0]
-                        },
-                        {
-                            text: [ {text:`${this.user_profile.first_name_en} ${this.user_profile.last_name_en}`,fontSize: 21}],
-                            color: '#ff6b81',
-                            margin: [0, 0]
-                        },
-                        ],
+                        text: [ {text:`${this.portfolio_data.email}`,fontSize: 21}],
+                        color: '#ff6b81',
+                        margin: [0, 0]
                     },
-                    ],
-                    pageBreak: 'after' 
+                    {
+                        text: [ {text:`${this.portfolio_data.tel}`,fontSize: 21}],
+                        color: '#ff6b81',
+                        margin: [0, 0]
+                    },
+                  ],
+                  pageBreak: 'after' 
                 },
                 {
                     margin: [0, 0, 0, 10],
@@ -169,7 +167,7 @@
               }
             },
             images: {
-              profile : this.user_profile.image
+              profile : this.portfolio_data.image ? this.portfolio_data.image : defaultProfileImageDataUrl
             }
           }
           
@@ -266,6 +264,11 @@
           });
         },
       },
+      computed: {
+        ...mapGetters({
+          portfolio_data : 'portfolioModules/portfolioData'
+        }),
+      }
     }
     </script>
     
