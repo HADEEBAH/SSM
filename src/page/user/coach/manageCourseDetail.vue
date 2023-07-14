@@ -212,7 +212,7 @@
                             :class="item.start_time ? 'active' : ''"
                             placeholder="เวลาเริ่มต้น"
                             format="HH:mm"
-                            v-model="item.compensationStartTime"  
+                            v-model="item.compensationStartTime"
                           >
                           </TimePicker>
                         </v-col>
@@ -683,7 +683,11 @@
             <v-card-text
               class="border-dashed border-2 border-pink-600 rounded-lg"
             >
-              <v-row v-if=" preview_summary_files && preview_summary_files?.length > 0 " >
+              <v-row
+                v-if="
+                  preview_summary_files && preview_summary_files?.length > 0
+                "
+              >
                 <v-col
                   cols="12"
                   sm="4"
@@ -704,10 +708,7 @@
                           <v-icon>mdi-close</v-icon>
                         </v-btn>
                       </div>
-                      <video
-                        :src="file"
-                        controls
-                      ></video>
+                      <video :src="file" controls></video>
                     </v-card>
                   </template>
                   <template
@@ -723,10 +724,7 @@
                           ><v-icon>mdi-close</v-icon></v-btn
                         >
                       </div>
-                      <video
-                        :src="file.url"
-                        controls
-                      ></video>
+                      <video :src="file.url" controls></video>
                     </v-card>
                   </template>
                   <template v-else>
@@ -828,7 +826,7 @@
               >
                 บันทึก
               </v-btn>
-            </v-col>  
+            </v-col>
           </v-row>
         </v-tab-item>
       </v-tabs-items>
@@ -1250,7 +1248,7 @@ import { Input, TimePicker } from "ant-design-vue";
 import labelCustom from "../../../components/label/labelCustom.vue";
 import { mapActions, mapGetters } from "vuex";
 import Swal from "sweetalert2";
-import moment from 'moment'
+// import moment from 'moment'
 export default {
   name: "menageCourseDetail",
   components: { rowData, loadingOverlay, TimePicker, labelCustom },
@@ -1415,7 +1413,7 @@ export default {
         "CoachModules/DeleteAssessmentPotentialFile",
     }),
     //check in by date
-    CheckInByDate(){
+    CheckInByDate() {
       // let check_in_date = moment(this.$route.params.date).format("YYYY-MM-DD")
       // let today = moment().format("YYYY-MM-DD")
       // if(check_in_date == today){
@@ -1424,8 +1422,7 @@ export default {
       //   return true
       // }
 
-      return false
-      
+      return false;
     },
     CheckRating(rating_data, checkInId, type) {
       if (
@@ -1728,7 +1725,6 @@ export default {
       )[0].compensation_date_str = dateFormatter(e, "DD MT YYYYT");
     },
     openFileSelector() {
-      
       this.$refs.fileInput.click();
     },
     openGeneralfileInputSelector() {
