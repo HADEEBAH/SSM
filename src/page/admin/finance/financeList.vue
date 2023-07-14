@@ -11,7 +11,7 @@
             depressed
             color="#ff6b81"
             class="white--text"
-            @click="show_dialog = true"
+            @click="ShowDialogExport"
             >Export</v-btn
           >
         </v-col>
@@ -114,7 +114,7 @@
         :items="
           tab == 'all' ? orders : orders.filter((v) => v.payment_status === tab)
         "
-        item-key="name"
+        item-key="order_number"
         :search="search"
         show-select
         class="elevation-1 header-table"
@@ -194,23 +194,39 @@
                 <v-autocomplete
                   dense
                   v-model="export_filter.students"
-                  :items="students"
+                  :items="username_list"
+                  :search-input.sync="search_student"
+                  @input="search_student = null"
                   multiple
-                  item-text="student_name"
-                  item-value="account_id"
+                  item-text="fullname"
+                  item-value="userOneId"
                   class="py-1"
                   label="กรุณากรอกชื่อผู้เรียน"
                   outlined
                   color="#FF6B81"
                   item-color="#FF6B81"
                 >
-                  <template v-slot:selection="{ item, index }">
-                    <v-chip dark v-if="index === 0" color="#FF6B81">
-                      <span>{{ item.student_name }}</span>
+                  <template v-slot:no-data>
+                    <v-list-item>
+                      <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
+                    </v-list-item>
+                  </template>
+                  <template v-slot:selection="data">
+                    <v-chip
+                      v-bind="data.attrs"
+                      :input-value="data.selected"
+                      color="#FBF3F5"
+                    >
+                      {{ `${data.item.firstNameTh} ${data.item.lastNameTh}` }}
+                      <v-icon
+                        @click="remove(data.item.userOneId)"
+                        color="#ff6b81"
+                        >mdi-close-circle</v-icon
+                      >
                     </v-chip>
-                    <span v-if="index === 1" class="grey--text text-caption">
-                      (+{{ export_filter.students.length - 1 }} others)
-                    </span>
+                  </template>
+                  <template v-slot:item="{ item }">
+                    {{ `${item.firstNameTh} ${item.lastNameTh}` }}  
                   </template>
                 </v-autocomplete>
               </v-col>
@@ -428,6 +444,7 @@
                       <v-date-picker
                         v-model="export_filter.date_doc_start"
                         @input="export_filter.select_date_doc_start = false"
+                        
                       ></v-date-picker>
                     </v-menu>
                   </v-col>
@@ -454,11 +471,13 @@
                           v-on="on"
                           color="#FF6B81"
                           :disabled="!export_filter.date_doc_start"
+                         
                         ></v-text-field>
                       </template>
                       <v-date-picker
                         v-model="export_filter.date_doc_end"
                         @input="export_filter.select_date_doc_end = false"
+                        :min=" export_filter.date_doc_start"
                       ></v-date-picker>
                     </v-menu>
                   </v-col>
@@ -526,6 +545,7 @@
                       <v-date-picker
                         v-model="export_filter.date_pay_end"
                         @input="export_filter.select_date_pay_end = false"
+                        :min=" export_filter.date_pay_start"
                       ></v-date-picker>
                     </v-menu>
                   </v-col>
@@ -539,6 +559,7 @@
                   label="กรุณากรอกมูลค่าบริการ"
                   outlined
                   dense
+                  type="number"
                   v-model="export_filter.service_charge_start"
                 >
                 </v-text-field>
@@ -549,6 +570,7 @@
                   label="กรุณากรอกมูลค่าบริการ"
                   outlined
                   dense
+                  type="number"
                   v-model="export_filter.service_charge_end"
                 >
                 </v-text-field>
@@ -614,6 +636,7 @@ export default {
   },
   data: () => ({
     search: "",
+    search_student: null,
     itemsPerPage: 10,
     show_dialog: false,
     statusPayment: [
@@ -706,7 +729,46 @@ export default {
       GetCoursesList: "CourseModules/GetCoursesList",
       GetOptions: "CourseModules/GetOptions",
       GetPackages: "CourseModules/GetPackages",
+      financeFilter : "FinanceModules/financeFilter",
+      searchNameUser: "loginModules/searchNameUser",
     }),
+    remove(item) {
+      const index = this.export_filter.students.indexOf(item);
+      if (index >= 0){
+        const index = this.export_filter.students.splice(index, 1);
+      }
+    },
+    ShowDialogExport(){
+      this.export_filter.course_id = []
+      this.export_filter.course_type_id = []
+      this.export_filter.students = []
+      this.export_filter.payment_type = []
+      this.export_filter.payment_status = []
+      this.selected.forEach((order)=>{
+        console.log(order)
+        if(!this.export_filter.course_id.includes(order.course_id)){
+          this.export_filter.course_id.push(
+            order.course_id
+          )
+        }
+        if(!this.export_filter.course_type_id.includes(order.course_type_id)){
+          this.export_filter.course_type_id.push(
+            order.course_type_id
+          )
+        }
+        if(!this.export_filter.payment_type.includes(order.payment_type)){
+          this.export_filter.payment_type.push(
+            order.payment_type
+          )
+        }
+        if(!this.export_filter.payment_status.includes(order.payment_status)){
+          this.export_filter.payment_status.push(
+            order.payment_status
+          )
+        }
+      })
+      this.show_dialog = true
+    },
     genPrice(price) {
       return price.toLocaleString();
     },
@@ -742,67 +804,7 @@ export default {
       }
     },
     Export() {
-      let order_filter = this.orders;
-      if (this.export_filter.students.length > 0) {
-        order_filter = order_filter.filter((v) => {
-          v.student = v.student.filter((s) => {
-            const filteredStudent = this.export_filter.students.find(
-              (efs) => efs === s.userOneId
-            );
-            return filteredStudent !== undefined;
-          });
-          return v.student.length > 0;
-        });
-      }
-      if (this.export_filter.payment_status.length > 0) {
-        order_filter = order_filter.filter((v) => {
-          const filteredStudent = this.export_filter.payment_status.find(
-            (efs) => efs === v.payment_status
-          );
-          return filteredStudent !== undefined;
-        });
-      }
-      if (this.export_filter.payment_type.length > 0) {
-        order_filter = order_filter.filter((v) => {
-          const filtered = this.export_filter.payment_type.find(
-            (efs) => efs.toLowerCase() === v.payment_type.toLowerCase()
-          );
-          return filtered !== undefined;
-        });
-      }
-      if (this.export_filter.course_id.length > 0) {
-        order_filter = order_filter.filter((v) => {
-          const filtered = this.export_filter.course_id.find(
-            (efs) => efs === v.course_id
-          );
-          return filtered !== undefined;
-        });
-      }
-      if (this.export_filter.course_type_id.length > 0) {
-        order_filter = order_filter.filter((v) => {
-          const filtered = this.export_filter.course_type_id.find(
-            (efs) => efs === v.course_type_id
-          );
-          return filtered !== undefined;
-        });
-      }
-      if (this.export_filter.package_id.length > 0) {
-        order_filter = order_filter.filter((v) => {
-          const filtered = this.export_filter.package_id.find(
-            (efs) => efs === v.package_id
-          );
-          return filtered !== undefined;
-        });
-      }
-      if (this.export_filter.option_id.length > 0) {
-        order_filter = order_filter.filter((v) => {
-          const filtered = this.export_filter.option_id.find(
-            (efs) => efs === v.option_id
-          );
-          return filtered !== undefined;
-        });
-      }
-      console.log(order_filter);
+      this.financeFilter({filter : this.export_filter})
     },
     closeDialog() {
       this.show_dialog = false;
@@ -836,11 +838,23 @@ export default {
       orders_is_loading : "OrderModules/getOrdersIsLoading",
       courses: "CourseModules/getCourses",
       students: "OrderModules/getStudents",
+      username_list: "loginModules/getUsernameList",
       packages: "CourseModules/getPackages",
       options: "CourseModules/getOptions",
+      finance_filter: "financeFilter/getFinanceFilter"
     }),
   },
-  watch: {},
+  watch: {
+    search_student(val) {
+      console.log(val);
+      if (val.length > 3) {
+        this.loading = true;
+        this.searchNameUser({ search_name: val }).then(() => {
+          this.loading = false;
+        });
+      }
+    },
+  },
 };
 </script>
 <style>
