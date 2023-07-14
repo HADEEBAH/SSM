@@ -1416,13 +1416,15 @@ export default {
     }),
     //check in by date
     CheckInByDate(){
-      let check_in_date = moment(this.$route.params.date).format("YYYY-MM-DD")
-      let today = moment().format("YYYY-MM-DD")
-      if(check_in_date == today){
-        return false
-      }else{
-        return true
-      }
+      // let check_in_date = moment(this.$route.params.date).format("YYYY-MM-DD")
+      // let today = moment().format("YYYY-MM-DD")
+      // if(check_in_date == today){
+      //   return false
+      // }else{
+      //   return true
+      // }
+
+      return false
       
     },
     CheckRating(rating_data, checkInId, type) {

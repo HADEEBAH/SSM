@@ -10,8 +10,8 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
 router.beforeEach((to, from, next) => {
-  // // console.log("to.name", to.name);
   window.scrollTo({
     top: 0,
   })

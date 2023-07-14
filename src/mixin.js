@@ -4,6 +4,7 @@
 import io from "socket.io-client";
 import { mapActions } from "vuex";
 import { notification } from 'ant-design-vue';
+import Swal from "sweetalert2";
 
 export default {
   data() {
@@ -23,9 +24,11 @@ export default {
         transports: ['websocket']
       }
     );
-    this.socket.on("connect", () => {
-      console.log("socket connected: ", this.socket.connected);
-    });
+
+    // this.socket.on("connect", () => {
+    //   console.log("socket connected: ", this.socket.connected);
+    // });
+
     this.socket.on("events", (data) => {
       this.GetNotifications(data)
       notification.open({
@@ -33,19 +36,40 @@ export default {
         description:data.notificationDescription
       });
     });
-    this.socket.on("disconnect", (reason) => {
-      console.log("[socket disconnected]: ", reason);
-    });
-    this.socket.on("connect_error", (error) => {
-      console.error("[connect error]: ", error);
-    });
+    // this.socket.on("disconnect", (reason) => {
+    //   console.log("[socket disconnected]: ", reason);
+    // });
+    // this.socket.on("connect_error", (error) => {
+    //   console.error("[connect error]: ", error);
+    // });
   },
   methods: {
     ...mapActions({ GetNotifications: "NotificationsModules/GetNotifications" }),
+
     async sendNotification(params) {
       this.socket.emit("events", params, (response) => {
-        console.log("response: ", response);
+        if (response) {
+          Swal.fire({
+            icon: "success",
+            title: "ส่งการแจ้งเตือนเรียบร้อยแล้ว"
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: "ส่งการแจ้งเตือนไม่สำเร็จ"
+          })
+        }
       });
+    }
+  },
+  watch:{
+    $route (to, from){
+      if (to) {
+        this.socket.disconnect()
+      }
+      if (from) {
+        this.socket.connect()
+      }
     }
   },
   beforeDestroy() {
