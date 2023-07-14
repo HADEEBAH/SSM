@@ -133,12 +133,17 @@
                   <v-col cols="9" sm="8" md="8">
                     <div class="font-bold my-5 text-lg">คอร์สเรียน</div>
                   </v-col>
+                  <!-- คอร์สเรียน -->
                   <v-col cols="12" align="center">
                     <div
                       class="font-bold text-lg"
                       style="color: #ff6b81; font-size: 30px"
                     >
-                      {{ get_course_type.allCourse?.generalCourse }}
+                      {{
+                        get_course_type.allCourse?.generalCourse
+                          ? get_course_type.allCourse?.generalCourse
+                          : "0"
+                      }}
                     </div>
                   </v-col>
                   <v-col align="center">
@@ -146,11 +151,15 @@
                   </v-col>
                 </v-row>
               </v-col>
+              <!-- คอร์สทั่วไป -->
               <v-col cols="6" sm="6">
                 <v-row dense>
                   <v-col cols="12" align="center">
                     <div class="font-medium my-5 text-lg">คอร์สทั่วไป</div>
-                    <div class="font-medium text-lg" style="color: #1876d1">
+                    <div
+                      class="font-bold text-lg"
+                      style="color: #1876d1; font-size: xx-large"
+                    >
                       {{
                         get_course_type.generalCourse?.generalCourse
                           ? get_course_type.generalCourse.generalCourse
@@ -162,7 +171,10 @@
                 <v-row dense>
                   <v-col cols="12" align="center">
                     <div class="font-medium my-2 text-lg">คอร์สระยะสั้น</div>
-                    <div class="font-medium text-lg" style="color: #1876d1">
+                    <div
+                      class="font-bold text-lg"
+                      style="color: #1876d1; font-size: xx-large"
+                    >
                       {{
                         get_course_type.shortCourse?.shortCourse
                           ? get_course_type.shortCourse.shortCourse
@@ -179,21 +191,23 @@
         <v-col cols="12" sm="6" md="6" lg="2">
           <v-card class="rounded-lg drop-shadow-md" height="200">
             <v-row dense>
-              <!-- <v-col cols="12" sm="12"> -->
-              <v-col cols="12" sm="12" align="center">
-                <div class="my-5 mx-10 font-bold text-lg">
-                  <v-icon color="#ff6b81">mdi-account</v-icon>
-                  <span>โค้ช</span>
-                </div>
-              </v-col>
-              <!-- <v-col cols="9" sm="9" align="center">
-                <div class="font-bold my-5 text-lg ml-2">โค้ช</div>
-              </v-col> -->
+              <v-row dense>
+                <v-col cols="6" align="end">
+                  <div class="mt-5 ml-2">
+                    <v-icon color="#ff6b81">mdi-account</v-icon>
+                  </div>
+                </v-col>
+                <v-col cols="6" align="start">
+                  <div class="font-bold my-5 text-lg">โค้ช</div>
+                </v-col>
+              </v-row>
               <v-card-text
                 align="center"
                 style="color: #ff6b81; font-size: 30px; font-weight: 900"
               >
-                {{ get_potential.countCoaches }}
+                {{
+                  get_potential.countCoaches ? get_potential.countCoaches : "0"
+                }}
               </v-card-text>
               <v-card-text align="center"> คน </v-card-text>
               <!-- </v-col> -->
@@ -205,20 +219,22 @@
       <v-card style="background-color: #ffdde2" class="my-5 rounded-lg">
         <v-row dense class="pa-2">
           <!-- รายได้ GRAF -->
-          <v-col cols="12" sm="12" md="12" lg="6">
+          <v-col cols="12" md="12" lg="6">
             <v-card style="background-color: #ffffff" class="rounded-lg">
               <v-card-title>
                 <v-row dense>
                   <v-col
                     cols="12"
-                    sm="12"
                     md="12"
                     lg="4"
-                    style="color: #ff6b81; font-weight: bold"
+                    style="color: #ff6b81; font-weight: bold; margin-top: 8px"
                   >
-                    <v-icon color="#ff6b81">mdi-currency-thb</v-icon>
+                    <v-icon color="#ff6b81" class="mb-1"
+                      >mdi-currency-thb</v-icon
+                    >
                     รายได้
                   </v-col>
+
                   <!-- Year -->
                   <v-col cols="6" sm="6" md="6" lg="4">
                     <v-select
@@ -248,7 +264,6 @@
               </v-card-title>
               <v-card-title>
                 <v-row dense>
-                  <!-- <v-badge color="green" content="6"> -->
                   <div class="font-bold">
                     {{
                       get_graf.sumSuccess
@@ -286,12 +301,13 @@
                 <v-row dense>
                   <v-col
                     cols="12"
-                    sm="12"
                     md="12"
                     lg="4"
-                    style="color: #ff6b81; font-weight: bold"
+                    style="color: #ff6b81; font-weight: bold; margin-top: 8px"
                   >
-                    <v-icon color="#ff6b81">mdi-elevation-rise</v-icon>
+                    <v-icon color="#ff6b81" class="mb-2"
+                      >mdi-elevation-rise</v-icon
+                    >
                     สัดส่วนรายได้
                   </v-col>
                   <!-- YEAR -->
@@ -319,16 +335,6 @@
                     ></v-select>
                   </v-col>
                 </v-row>
-                <!-- <div>
-                  <v-select
-                    v-model="donut_years"
-                    :items="get_graf.yearName"
-                    return-object
-                    dense
-                    outlined
-                    @input="selectDonutYears()"
-                  ></v-select>
-                </div> -->
               </v-card-title>
               <v-row dense>
                 <!-- DOnut -->
@@ -344,13 +350,13 @@
                 <v-col cols="12" sm="12" md="12" lg="12" align="start">
                   <v-row dense class="my-2">
                     <!-- ชำระแล้ว -->
-                    <v-col cols="12" sm="6" align="center">
-                      <div>
+                    <v-col cols="12" sm="6" lg="12" align="center">
+                      <div class="mr-8">
                         <v-icon color="#ff6b81">mdi-circle-medium</v-icon>
                         <span class="text-xl">
                           ชำระแล้ว
                           <span
-                            style="color: #58a144"
+                            style="color: #ff6b81"
                             class="font-bold text-xl"
                             >{{ totalSuccessDonut.toLocaleString() }}</span
                           >
@@ -361,7 +367,7 @@
                               font-size: small;
                             "
                           >
-                            บาท({{
+                            บาท ({{
                               (
                                 (totalSuccessDonut * 100) /
                                 totalPriceDonut
@@ -373,44 +379,15 @@
                         </span>
                       </div>
                     </v-col>
-
-                    <!-- <v-col cols="6" align="center">
-                      <div style="margin-right: 60px">
-                        <v-icon color="#ff6b81">mdi-circle-medium</v-icon>
-                        <span class="text-xl">ชำระแล้ว</span>
-                      </div>
-                      <div
-                        style="font-weight: bold; color: #58a144"
-                        class="mx-5 font-bold text-xl"
-                      >
-                        {{ totalSuccessDonut.toLocaleString() }}
-                        <span
-                          style="
-                            font-weight: normal;
-                            color: #999999;
-                            font-size: small;
-                          "
-                        >
-                          บาท({{
-                            (
-                              (totalSuccessDonut * 100) /
-                              totalPriceDonut
-                            ).toLocaleString("us-us", {
-                              maximumFractionDigits: 2,
-                            })
-                          }}%)
-                        </span>
-                      </div>
-                    </v-col> -->
                     <!-- รอดำเนินการ -->
 
-                    <v-col cols="12" sm="6" align="center">
+                    <v-col cols="12" sm="6" lg="12" align="center">
                       <div>
-                        <v-icon color="#E8E7E7">mdi-circle-medium</v-icon>
+                        <v-icon color="#999999">mdi-circle-medium</v-icon>
                         <span class="text-xl">
                           รอดำเนินการ
                           <span
-                            style="color: #fcc419"
+                            style="color: #999999"
                             class="font-bold text-xl"
                           >
                             {{ totalPendingDonut.toLocaleString() }}</span
@@ -434,36 +411,6 @@
                         </span>
                       </div>
                     </v-col>
-
-                    <!-- <v-col cols="6" align="center">
-                      <div style="margin-right: 60px">
-                        <v-icon color="#E8E7E7">mdi-circle-medium</v-icon>
-                        <span class="text-xl">รอดำเนินการ</span>
-                      </div>
-                      <div
-                        style="font-weight: bold; color: #fcc419"
-                        class="mx-5 font-bold text-xl"
-                      >
-                        {{ totalPendingDonut.toLocaleString() }}
-
-                        <span
-                          style="
-                            font-weight: normal;
-                            color: #999999;
-                            font-size: small;
-                          "
-                        >
-                          บาท ({{
-                            (
-                              (totalPendingDonut * 100) /
-                              totalPriceDonut
-                            ).toLocaleString("us-us", {
-                              maximumFractionDigits: 2,
-                            })
-                          }}%)
-                        </span>
-                      </div>
-                    </v-col> -->
                   </v-row>
                 </v-col>
               </v-row>
@@ -480,256 +427,230 @@
             <span class="indent-5">สถานะคอร์สเรียน</span>
           </v-card-title>
         </v-row>
-        <v-card class="bg-white mx-5 pa-5 my-5">
-          <v-row dense>
-            <!-- PIE -->
-            <v-col cols="12" sm="12" md="12" lg="4" align="center">
-              <apexchart
-                style="width: 100%; height: 100%"
-                type="pie"
-                :options="pieChartOptions"
-                :series="pieSeries"
-                :width="widthPie()"
-              ></apexchart>
-            </v-col>
-            <v-col cols="12" sm="12" md="12" lg="12" align="start">
-              <v-row dense class="my-2">
-                <!-- คอร์สเต็ม -->
-                <v-col cols="12" sm="6" align="center">
-                  <div style="margin-right: 60px">
-                    <v-icon color="#58a144">mdi-circle-medium</v-icon>
-                    <span class="text-xl">
-                      คอร์สเต็ม
-                      <span style="font-weight: bold; color: #58a144">{{
-                        this.get_empty_course.countClose.toLocaleString()
-                      }}</span>
-                      คอร์ส
-                    </span>
-                  </div>
-                </v-col>
-                <!-- รอดำเนินการ -->
-                <v-col cols="12" sm="6" align="center">
-                  <div style="margin-right: 60px">
-                    <v-icon color="#A1A1A1">mdi-circle-medium</v-icon>
-                    <span class="text-xl">
-                      คอร์สว่าง
-                      <span style="font-weight: bold; color: #a1a1a1">{{
-                        this.get_empty_course.countOpen.toLocaleString()
-                      }}</span>
-                      คอร์ส
-                    </span>
-                  </div>
-                </v-col>
-              </v-row>
-            </v-col>
-            <!-- COURSE CLOSE -->
-            <v-col cols="12" sm="6" md="6" lg="4">
-              <v-card outlined style="overflow-y: scroll" height="340px">
-                <v-card-text
-                  style="
-                    background-color: #ffdde2;
-                    position: sticky;
-                    top: 0;
-                    z-index: 1;
-                  "
-                >
-                  <span class="mr-2 font-bold">คอร์สเต็ม</span>
-                  <v-badge
-                    color="#A1A1A1"
-                    :content="get_empty_course.countClose"
-                    class="indent-5 font-bold"
-                  >
-                  </v-badge>
-                </v-card-text>
 
-                <v-card-text>
-                  <v-card
-                    outlined
-                    class="mb-3"
-                    v-for="(
-                      item, index
-                    ) in get_empty_course.courseStatus.filter(
-                      (v) => v.status == 'Close'
-                    )"
-                    :key="index"
-                  >
-                    <v-card-text class="pa-0">
-                      <v-row dense>
-                        <v-col cols="12">
-                          <v-card-title>{{ item.courseNameTh }}</v-card-title>
-                        </v-col>
-                        <v-col cols="12" sm="8" md="8" lg="8">
-                          <v-card-subtitle class="mt-n10">
-                            {{
-                              `${item.courseTypeNameTh}(${item.packageName})`
-                            }}</v-card-subtitle
-                          >
-                        </v-col>
-                        <v-col cols="12" sm="4" md="4" lg="4">
-                          <v-card-subtitle class="mt-n10">
-                            <v-chip
-                              dark
-                              :color="
-                                course_close_options.filter(
-                                  (v) => v.value === item.status
-                                )[0].color
-                              "
-                            >
-                              {{
-                                course_close_options.filter(
-                                  (v) => v.value === item.status
-                                ).length > 0
-                                  ? course_close_options.filter(
-                                      (v) => v.value === item.status
-                                    )[0].label
-                                  : "-"
-                              }}
-                            </v-chip>
-                          </v-card-subtitle>
-                        </v-col>
+        <v-row dense class="pa-2">
+          <v-col cols="12">
+            <v-card class="bg-white rounded-lg" style="height: 100%">
+              <!-- PIE CHART-->
+              <v-col cols="12" align="center">
+                <apexchart
+                  style="width: 100%; height: 100%"
+                  type="pie"
+                  :options="pieChartOptions"
+                  :series="pieSeries"
+                  :width="widthPie()"
+                ></apexchart>
+              </v-col>
+              <v-col cols="12" align="start">
+                <v-row dense class="my-2 pa-2">
+                  <!-- PIE DOT DATA -->
+                  <!-- คอร์สเต็ม -->
+                  <v-col cols="12" sm="6" align="center">
+                    <div style="margin-right: 60px">
+                      <v-icon color="#999999">mdi-circle-medium</v-icon>
+                      <span class="text-xl">
+                        คอร์สเต็ม
+                        <span style="font-weight: bold; color: #999999">{{
+                          this.get_empty_course.countClose.toLocaleString()
+                        }}</span>
+                        คอร์ส
+                      </span>
+                    </div>
+                  </v-col>
+                  <!-- คอร์สว่าง -->
+                  <v-col cols="12" sm="6" align="center">
+                    <div style="margin-right: 60px">
+                      <v-icon color="#ff6b81">mdi-circle-medium</v-icon>
+                      <span class="text-xl">
+                        คอร์สว่าง
+                        <span style="font-weight: bold; color: #ff6b81">{{
+                          this.get_empty_course.countOpen.toLocaleString()
+                        }}</span>
+                        คอร์ส
+                      </span>
+                    </div>
+                  </v-col>
+                  <!-- PIE 2 CARDs -->
+                  <!-- COURSE CLOSE -->
+                  <v-col cols="12" sm="6" class="my-2" :width="pieCardWidth()">
+                    <v-card outlined style="overflow-y: scroll" height="400px">
+                      <v-card-text
+                        style="
+                          background-color: #ffdde2;
+                          position: sticky;
+                          top: 0;
+                          z-index: 1;
+                        "
+                        align="center"
+                      >
+                        <span class="mr-2 font-bold">คอร์สเต็ม</span>
+                        <v-badge
+                          color="#999999"
+                          :content="get_empty_course.countClose"
+                          class="indent-5 font-bold"
+                        >
+                        </v-badge>
+                      </v-card-text>
 
-                        <v-col cols="12">
-                          <v-card-subtitle class="mt-n10">
-                            <v-icon color="#ff6b81">
-                              mdi-sofa-single-outline
-                            </v-icon>
-                            ที่นั่ง{{
-                              ` ${item.currentStudent}/${item.maximumStudent}`
-                            }}
-                          </v-card-subtitle>
-                        </v-col>
-                      </v-row>
-                    </v-card-text>
+                      <v-card-text>
+                        <v-card
+                          outlined
+                          class="mb-3"
+                          v-for="(
+                            item, index
+                          ) in get_empty_course.courseStatus.filter(
+                            (v) => v.status == 'Close'
+                          )"
+                          :key="index"
+                        >
+                          <v-card-text class="pa-0">
+                            <v-row dense>
+                              <v-col cols="12">
+                                <v-card-title class="font-bold">{{
+                                  item.courseNameTh
+                                }}</v-card-title>
+                              </v-col>
+                              <v-col cols="12" sm="12" md="8">
+                                <v-card-subtitle class="mt-n8">
+                                  {{
+                                    `${item.courseTypeNameTh}(${item.packageName})`
+                                  }}</v-card-subtitle
+                                >
+                              </v-col>
+                              <v-col cols="12" sm="12" md="4" align="start">
+                                <v-card-subtitle class="mt-n8">
+                                  <v-chip
+                                    dark
+                                    :color="
+                                      course_close_options.filter(
+                                        (v) => v.value === item.status
+                                      )[0].color
+                                    "
+                                  >
+                                    {{
+                                      course_close_options.filter(
+                                        (v) => v.value === item.status
+                                      ).length > 0
+                                        ? course_close_options.filter(
+                                            (v) => v.value === item.status
+                                          )[0].label
+                                        : "-"
+                                    }}
+                                  </v-chip>
+                                </v-card-subtitle>
+                              </v-col>
+                              <v-col cols="12">
+                                <v-card-subtitle class="mt-n8">
+                                  <v-icon color="#ff6b81" class="mt-n2">
+                                    mdi-sofa-single-outline
+                                  </v-icon>
+                                  ที่นั่ง{{
+                                    ` ${item.currentStudent}/${item.maximumStudent}`
+                                  }}
+                                </v-card-subtitle>
+                              </v-col>
+                            </v-row>
+                          </v-card-text>
+                        </v-card>
+                      </v-card-text>
+                    </v-card>
+                  </v-col>
+                  <!-- COURSE OPEN -->
+                  <v-col cols="12" sm="6" class="my-2" :width="pieCardWidth()">
+                    <v-card outlined style="overflow-y: scroll" height="400px">
+                      <v-card-text
+                        style="
+                          background-color: #ffdde2;
+                          position: sticky;
+                          top: 0;
+                          z-index: 1;
+                        "
+                        align="center"
+                      >
+                        <span class="mr-2 font-bold">คอร์สว่าง</span>
+                        <v-badge
+                          color="#ff6b81"
+                          :content="get_empty_course.countOpen"
+                          class="indent-5 font-bold justify-center"
+                        >
+                        </v-badge>
+                      </v-card-text>
 
-                    <!-- <v-card-text class="pa-2">
-                      <v-row dense>
-                        <v-col cols="12" md="4" lg="4">
-                          {{ item.courseNameTh }}
-                        </v-col>
-                        <v-col cols="12" md="8" lg="8">
-                          {{ `${item.courseTypeNameTh}(${item.packageName})` }}
-                        </v-col>
-                      </v-row>
-                      <v-row dense>
-                        <v-col cols="6">
-                          <v-icon color="#ff6b81">
-                            mdi-sofa-single-outline
-                          </v-icon>
-                          ที่นั่ง{{
-                            `${item.currentStudent}/${item.maximumStudent}`
-                          }}
-                        </v-col>
-                        <v-col cols="6">
-                          <v-chip
-                            dark
-                            :color="
-                              course_close_options.filter(
-                                (v) => v.value === item.status
-                              )[0].color
-                            "
-                          >
-                            {{
-                              course_close_options.filter(
-                                (v) => v.value === item.status
-                              ).length > 0
-                                ? course_close_options.filter(
-                                    (v) => v.value === item.status
-                                  )[0].label
-                                : "-"
-                            }}
-                          </v-chip>
-                        </v-col>
-                      </v-row>
-                    </v-card-text> -->
-                  </v-card>
-                </v-card-text>
-              </v-card>
-              <!-- </v-card> -->
-            </v-col>
-            <!-- COURSE OPEN -->
-            <v-col cols="12" sm="6" md="6" lg="4">
-              <v-card outlined style="overflow-y: scroll" height="340px">
-                <v-card-text
-                  style="
-                    background-color: #ffdde2;
-                    position: sticky;
-                    top: 0;
-                    z-index: 1;
-                  "
-                >
-                  <span class="mr-2 font-bold">คอร์สว่าง</span>
-                  <v-badge
-                    color="#8CD977"
-                    :content="get_empty_course.countOpen"
-                    class="indent-5 font-bold"
-                  >
-                  </v-badge>
-                </v-card-text>
+                      <v-card-text>
+                        <v-card
+                          outlined
+                          class="mb-3"
+                          v-for="(
+                            item, index
+                          ) in get_empty_course.courseStatus.filter(
+                            (v) => v.status == 'Open'
+                          )"
+                          :key="index"
+                        >
+                          <v-card-text class="pa-0">
+                            <v-row dense>
+                              <v-col cols="12">
+                                <v-card-title class="font-bold">{{
+                                  item.courseNameTh
+                                }}</v-card-title>
+                              </v-col>
+                              <v-col cols="12" sm="12" md="8" lg="8">
+                                <v-card-subtitle class="mt-n8">
+                                  {{
+                                    `${item.courseTypeNameTh}(${item.packageName})`
+                                  }}</v-card-subtitle
+                                >
+                              </v-col>
+                              <v-col
+                                cols="12"
+                                sm="12"
+                                md="4"
+                                lg="4"
+                                align="start"
+                              >
+                                <v-card-subtitle class="mt-n8">
+                                  <v-chip
+                                    dark
+                                    :color="
+                                      course_close_options.filter(
+                                        (v) => v.value === item.status
+                                      )[0].color
+                                    "
+                                  >
+                                    {{
+                                      course_close_options.filter(
+                                        (v) => v.value === item.status
+                                      ).length > 0
+                                        ? course_close_options.filter(
+                                            (v) => v.value === item.status
+                                          )[0].label
+                                        : "-"
+                                    }}
+                                  </v-chip>
+                                </v-card-subtitle>
+                              </v-col>
 
-                <v-card-text>
-                  <v-card
-                    outlined
-                    class="mb-3"
-                    v-for="(
-                      item, index
-                    ) in get_empty_course.courseStatus.filter(
-                      (v) => v.status == 'Open'
-                    )"
-                    :key="index"
-                  >
-                    <v-card-text class="pa-0">
-                      <v-row dense>
-                        <v-col cols="12">
-                          <v-card-title>{{ item.courseNameTh }}</v-card-title>
-                        </v-col>
-                        <v-col cols="12" sm="8" md="8" lg="8">
-                          <v-card-subtitle class="mt-n10">
-                            {{
-                              `${item.courseTypeNameTh}(${item.packageName})`
-                            }}</v-card-subtitle
-                          >
-                        </v-col>
-                        <v-col cols="12" sm="4" md="4" lg="4">
-                          <v-card-subtitle class="mt-n10">
-                            <v-chip
-                              dark
-                              :color="
-                                course_close_options.filter(
-                                  (v) => v.value === item.status
-                                )[0].color
-                              "
-                            >
-                              {{
-                                course_close_options.filter(
-                                  (v) => v.value === item.status
-                                ).length > 0
-                                  ? course_close_options.filter(
-                                      (v) => v.value === item.status
-                                    )[0].label
-                                  : "-"
-                              }}
-                            </v-chip>
-                          </v-card-subtitle>
-                        </v-col>
-
-                        <v-col cols="12">
-                          <v-card-subtitle class="mt-n10">
-                            <v-icon color="#ff6b81">
-                              mdi-sofa-single-outline
-                            </v-icon>
-                            ที่นั่ง{{
-                              ` ${item.currentStudent}/${item.maximumStudent}`
-                            }}
-                          </v-card-subtitle>
-                        </v-col>
-                      </v-row>
-                    </v-card-text>
-                  </v-card>
-                </v-card-text>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-card>
+                              <v-col cols="12">
+                                <v-card-subtitle class="mt-n8">
+                                  <v-icon color="#ff6b81" class="mt-n2">
+                                    mdi-sofa-single-outline
+                                  </v-icon>
+                                  ที่นั่ง{{
+                                    ` ${item.currentStudent}/${item.maximumStudent}`
+                                  }}
+                                </v-card-subtitle>
+                              </v-col>
+                            </v-row>
+                          </v-card-text>
+                        </v-card>
+                      </v-card-text>
+                    </v-card>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-card>
     </v-container>
   </v-app>
@@ -756,12 +677,12 @@ export default {
       {
         label: "คอร์สเต็ม",
         value: "Close",
-        color: "#A1A1A1",
+        color: "#999999",
       },
       {
         label: "คอร์สว่าง",
         value: "Open",
-        color: "#8CD977",
+        color: "#ff6b81",
       },
     ],
 
@@ -785,21 +706,13 @@ export default {
     donut_mounth: "",
     selected_years: "",
     donut_years: "",
-    data_year: "",
-    data_month: "",
     dashboard_graf: {
       year: "",
       month: "",
     },
     thai_day_name: [],
-    mapyears: "",
     mapMonth: "",
     totalPrice: [],
-    box: [],
-    selectedYear: null,
-    currentYear: "",
-    year_data: "",
-    filter_data: "",
   }),
   created() {
     this.FilterYears().then(() => {
@@ -850,13 +763,7 @@ export default {
     },
 
     selectDonutYears() {
-      // console.log("900", this.donut_years);
-      // this.dashboard_graf.year = this.donut_years.key;
       this.GetDonut(this.dashboard_graf);
-      // for (const items of this.filter_years) {
-      //   console.log("906", items.usYears);
-      // }
-      // this.GetDonut(this.filter_years);
     },
 
     selectDonutMounth() {
@@ -866,8 +773,10 @@ export default {
 
     heightGraf() {
       switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return 350;
         case "sm":
-          return 250;
+          return 300;
         case "md":
           return 250;
       }
@@ -877,19 +786,26 @@ export default {
         case "sm":
           return 480;
         case "md":
-          return 450;
+          return 460;
         case "lg":
           return 390;
       }
     },
     widthPie() {
       switch (this.$vuetify.breakpoint.name) {
-        // case "xs":
-        //   return 400;
         case "sm":
           return 400;
         case "md":
           return 350;
+        case "lg":
+          return 380;
+      }
+    },
+
+    pieCardWidth() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "md":
+          return 400;
         case "lg":
           return 380;
       }
@@ -919,23 +835,6 @@ export default {
       this.totalPriceDonut =
         this.totalPriceDonut + this.get_donut.otherTotal.totalPrice;
     },
-
-    // donutSeries() {
-    //   for (const items of this.get_donut.datas) {
-    //     this.totalSuccessDonut =
-    //       this.totalSuccessDonut + parseFloat(items.sumSuccess);
-    //     this.totalPendingDonut =
-    //       this.totalPendingDonut + parseFloat(items.sumPending);
-    //     this.totalPriceDonut =
-    //       this.totalPriceDonut + parseFloat(items.totalPrice);
-    //   }
-    //   this.totalSuccessDonut =
-    //     this.totalSuccessDonut + this.get_donut.otherTotal.sumSuccess;
-    //   this.totalPendingDonut =
-    //     this.totalPendingDonut + this.get_donut.otherTotal.sumPending;
-    //   this.totalPriceDonut =
-    //     this.totalPriceDonut + this.get_donut.otherTotal.totalPrice;
-    // },
     donutLabels() {
       let labels = [];
       for (const items of this.get_donut?.datas) {
@@ -949,20 +848,19 @@ export default {
     donutOptions() {
       const donutdata = {
         colors: [
-          "#ff6b6b",
-          "#ff906b",
-          "#ffb56b",
-          "#ffda6b",
-          "#ffff6b",
-          "#daff6b",
-          "#b5ff6b",
-          "#90ff6b",
-          "#6bff6b",
-          "#6bff90",
+          "#ff6b81",
+          "#ff7588",
+          "#ff7e90",
+          "#ff8898",
+          "#ff929f",
+          "#ff9ca6",
+          "#ffa5ae",
+          "#ffafb6",
+          "#ffb9bd",
+          "#ffc2c4",
           "#999999",
         ],
         labels: this.donutLabels(),
-        // labels: ["a", "b", "c", "d"],
         chart: {
           type: "donut",
         },
@@ -1020,9 +918,9 @@ export default {
         ? `
         <div class="pa-3 ml-auto" style='background-color: ${color}'>
           <h3 class="font-weight-bold">${item.seriesNames[seriesIndex]}</h3>
-          <i class="mdi mdi-circle " style="font-size:10px; color: #8cd977"></i> <span class="font-weight-bold">ที่ชำระแล้ว : </span>${this.get_donut?.datas[seriesIndex].stringSumSuccess}
-          <div style="margin-right:20px;"><i class="mdi mdi-circle " style="font-size:10px; color: #a1a1a1"></i> <span class="font-weight-bold">รอชำระ : </span>${this.get_donut?.datas[seriesIndex].stringSumPending}</div>
-          <span class="font-weight-bold">รวม : </span>${this.get_donut?.datas[seriesIndex].stringTotal}
+          <i class="mdi mdi-circle " style="font-size:10px; color: #8cd977"></i> <span class="font-weight-bold">ที่ชำระแล้ว : </span>${this.get_donut?.datas[seriesIndex].stringSumSuccess} บาท<br/>
+        <i class="mdi mdi-circle " style="font-size:10px; color: #fcc419"></i> <span class="font-weight-bold">รอการชำระ : </span>${this.get_donut?.datas[seriesIndex].stringSumPending} บาท<br/>
+          <span class="font-weight-bold">รวม : </span>${this.get_donut?.datas[seriesIndex].stringTotal} บาท
         </div>
       `
         : `
@@ -1030,13 +928,13 @@ export default {
           <h3 class="font-weight-bold">${item.seriesNames[seriesIndex]}</h3>
           <i class="mdi mdi-circle " style="font-size:10px; color: #8cd977"></i> <span class="font-weight-bold">ที่ชำระแล้ว : </span>${this.get_donut?.otherTotal.sumSuccess
             .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}<br/>
-          <i class="mdi mdi-circle " style="font-size:10px; color: #a1a1a1"></i> <span class="font-weight-bold">รอชำระ : </span>${this.get_donut?.otherTotal.sumPending
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} บาท<br/>
+          <i class="mdi mdi-circle " style="font-size:10px; color: #fcc419"></i> <span class="font-weight-bold">รอการชำระ : </span>${this.get_donut?.otherTotal.sumPending
             .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}<br/>
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} บาท<br/>
           <span class="font-weight-bold">รวม : </span>${series[seriesIndex]
             .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} บาท
         </div>
         `;
     },
@@ -1086,14 +984,27 @@ export default {
                   if (this.get_graf.type == "month") {
                     return item.thaiDayName;
                   } else if (this.get_graf.type == "year") {
-                    // console.log("821", item.month);
                     return item.month;
-                    // return item.month;
                   }
                 })
               : "",
-
-          // labels: this.lineChartLabels,
+        },
+        tooltip: {
+          custom: function ({ series, seriesIndex, dataPointIndex }) {
+            return (
+              '<div class="pa-2 font-bold" style="font-size:15px; color: #000000">' +
+              "<span>" +
+              '<i class="mdi mdi-circle " style="font-size:10px; color: #ff6b81"></i>' +
+              " " +
+              "รายได้ : " +
+              series[seriesIndex][dataPointIndex]
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+              "</span>" +
+              " บาท" +
+              "</div>"
+            );
+          },
         },
       };
 
@@ -1102,13 +1013,12 @@ export default {
     chartSeries() {
       const lineChart = [
         {
-          name: "รายได้",
           data:
             this.get_graf.length !== 0
               ? this.get_graf.orderData.map((item) => {
                   return item.sumSuccess;
                 })
-              : "",
+              : "0",
         },
       ];
       return lineChart;
@@ -1135,7 +1045,7 @@ export default {
       // let Open = this.get_empty_course.countOpen;
       // let Close = this.get_empty_course.countClose;
       const pieChartOptions = {
-        colors: ["#7CD464", "#A1A1A1"],
+        colors: ["#ff6b81", "#999999"],
         chart: {
           type: "pie",
         },
