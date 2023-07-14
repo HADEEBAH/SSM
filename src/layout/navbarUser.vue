@@ -54,47 +54,15 @@
                     </v-col>
                     <v-col cols="4" align="end">
                       <v-icon size="32" color="#ff6b81">
-                        <!-- mdi-email-open -->
                         mdi-email
-                        <!-- mdi-email-outline -->
-                        <!-- mdi-email-open-outline -->
                       </v-icon>
                     </v-col>
                   </v-row>
-                  <!-- <span
-                  class="flex text-center"
-                  style="
-                    font-weight: 700;
-                    font-size: 16px;
-                    line-height: 24px;
-                    color: #2a70c3;
-                  "
-                >
-                </span>
-                <v-btn icon dark @click="closeDialog()">
-                  <v-icon color="#2A70C3">mdi-close</v-icon>
-                </v-btn> -->
                 </v-toolbar>
                 <v-divider></v-divider>
               </div>
 
-              <!-- <v-card-title style="position: sticky; top: 0; z-index: 1">
-                <v-row dense height="500">
-                  <v-col cols="8">การแจ้งเตือน</v-col>
-                  <v-col cols="4" align="end">
-                    <v-icon size="32" color="#ff6b81">
-                      mdi-email
-                    </v-icon>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col cols="12">
-                    <v-divider></v-divider>
-                  </v-col>
-                </v-row>
-              </v-card-title> -->
-
-              <v-card-text>
+              <v-card-text v-if="get_notifications_all.length > 0">
                 <v-list three-line>
                   <v-list-item
                     class="pl-0"
@@ -130,6 +98,9 @@
                     </v-list-item-action>
                   </v-list-item>
                 </v-list>
+              </v-card-text>
+              <v-card-text v-else class="text-center">
+                ไม่มีการแจ้งเตือน
               </v-card-text>
             </v-card>
           </v-menu>

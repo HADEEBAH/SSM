@@ -1415,15 +1415,16 @@ export default {
         "CoachModules/DeleteAssessmentPotentialFile",
     }),
     //check in by date
-    CheckInByDate(CheckInData){
-      let check_in_date = moment(this.$route.params.date).format("YYYY-MM-DD")
-      let today = moment().format("YYYY-MM-DD")
-      console.log(CheckInData, today)
-      if(check_in_date == today){
-        return false
-      }else{
-        return true
-      }
+    CheckInByDate(){
+      // let check_in_date = moment(this.$route.params.date).format("YYYY-MM-DD")
+      // let today = moment().format("YYYY-MM-DD")
+      // if(check_in_date == today){
+      //   return false
+      // }else{
+      //   return true
+      // }
+
+      return false
       
     },
     CheckRating(rating_data, checkInId, type) {
