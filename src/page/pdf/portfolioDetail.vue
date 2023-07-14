@@ -1,7 +1,7 @@
 <template>
     <v-app>
       <v-container>
-        <pre>{{ portfolio_data }}</pre>
+        <pre>{{  this.GenCourses() }}</pre>
         <!-- <loadingOverlay :loading="true"></loadingOverlay> -->
       </v-container>
     </v-app>
@@ -12,6 +12,7 @@
     import pdfFonts from '../../assets/custom-fonts.js'
     // import loadingOverlay from "../../components/loading/loadingOverlay.vue";
 import { mapActions, mapGetters } from 'vuex';
+import moment from 'moment';
     export default {
       name: "FrontPortfolio",
       components: {
@@ -22,16 +23,254 @@ import { mapActions, mapGetters } from 'vuex';
       }),
       created() {
         this.GetPortfolioData({account_id : this.$route.params.account_id})
-       
-        this.user_profile = JSON.parse(localStorage.getItem("userDetail"))
+        this.exportPdf()
       },
       mounted() {
-        this.exportPdf()
+        // this.GenCourses()
+        
       },
       methods: {
         ...mapActions({
           GetPortfolioData : 'portfolioModules/GetPortfolioData'
         }),
+      GenCourses(){
+          // let defaultProfile = require('../../assets/profile/default_profile.png')
+          // let defaultProfileImageData =  await this.loadImageFromFile(defaultProfile);
+          // let defaultProfileImageDataUrl = await this.convertImageToDataFile(defaultProfileImageData);
+          console.log("37=>",this.portfolio_data)
+          let courses = []
+          let course_index = []
+          for (let course of this.portfolio_data.courses){
+            course_index.push('x')
+            console.log("40=>",course)
+            // IMG 
+            let img_arr = []
+            let img_col = []
+            for(let img of course.attachmensPictureAll){
+              console.log(img)
+              img_col.push({
+                width: '50%',
+                text : "รูป"
+              })
+            }
+            if(course_index.length === this.portfolio_data.courses.length){
+              img_arr.push({
+                columns : [...img_col]
+              })
+            }else{
+              img_arr.push({
+                columns : [...img_col],
+                pageBreak: 'after', 
+              })
+            }
+           
+            let ass_arr = []
+            let assed = []
+            for(let ass of course.assessments){
+              assed.push(ass)
+              console.log("47=>",ass.assessmentRemark)
+              let ass_columns = []
+              ass_columns.push({
+                alignment : 'center',
+                width: '50%',
+                text: "รูป"
+              })
+              ass_columns.push({
+                width: '50%',
+                stack:[
+                  {text:[
+                    {text : `วันที่: ${moment(ass.assessmentCreatedDate).format("DD/MM/YYYY")}`},
+                    // {text : 'สภานะ', blod: true},
+                    // {text : '', blod: true},
+                  ]},
+                  { text : "ระดับพัฒนาการ" },
+                  { text : ass.assessmentEvolution ? ass.assessmentEvolution : '-' },
+                  { text : "ระดับความสนใจ" },
+                  { text : ass.assessmentInterest ? ass.assessmentInterest : '-' },
+                  { text : "ความคิดเห็น" },
+                  { text : ass.assessmentRemark ? ass.assessmentRemark : '-' },
+                ]
+              })
+            if(assed.length < course.assessments.length){
+                ass_arr.push({
+                  columns: [...ass_columns],
+                })
+                ass_arr.push({
+                  alignment : 'center',
+                  margin: [0, 20, 0, 20],
+                  canvas: [
+                    {
+                      
+                      type: 'line',
+                      x1: 0,
+                      y1: 0,
+                      x2: 200,
+                      y2: 0,
+                      lineWidth: 1,
+                      color:'#999'
+                    }
+                  ]
+                })
+              }else if( assed.length == course.assessments.length){
+                ass_arr.push({
+                  columns: [...ass_columns],
+                  pageBreak: 'after', 
+                })
+              }else if((assed.length % 3) === 0 ){
+                ass_arr.push({
+                  columns: [...ass_columns],
+                  pageBreak: 'after', 
+                })
+                ass_arr.push([
+                  {
+                    margin: [0, 0, 0, 10],
+                    stack: [
+                      {
+                          text : course.courseNameTh,
+                          fontSize: 26.4,
+                          margin: [0, 20, 0, 0],
+                          color:"#573e33",
+                          bold:true,
+                      },
+                      {
+                          text : course.coachNameTh,
+                          fontSize: 26.4,
+                          margin: [0, -10, 0, 0],
+                          color:"#573e33",
+                      }   
+                    ]
+                  }, 
+                  {
+                      text : "ประเมินรายครั้ง",
+                      bold:true,
+                      alignment: 'center',
+                      fontSize: 25.9,
+                      color:"#573e33",
+                  },
+                ])
+              }
+            }
+            let potential_arr = []
+            let potential_columns = []
+            if( course.assessmentPotentials.potentialAttachmentFilesUrl){
+              // columns.push({
+              //     width: '50%',
+              //     image: course.assessmentPotentials.potentialAttachmentFilesUrl 
+              //   })  
+              potential_columns.push({
+                alignment : 'center',
+                width: '50%',
+                text: "รูป"
+              })   
+            }else{
+              potential_columns.push({
+                width: '50%',
+                text: ""
+              })  
+            }
+            potential_columns.push( {
+              width: '50%',
+              stack:[
+                { text : `วันที่: ${moment(course.assessmentPotentials.potentialCreatedDate).format("DD/MM/YYYY")}`},
+                { text : "ระดับพัฒนาการ" },
+                { text : course.assessmentPotentials.potentialEvolution ? course.assessmentPotentials.potentialEvolution : '-' },
+                { text : "ระดับความสนใจ" },
+                { text : course.assessmentPotentials.potentialInterest ? course.assessmentPotentials.potentialInterest : '-' },
+              ]
+            })  
+            potential_arr.push({
+              columns: [...potential_columns],
+            })
+            potential_arr.push({
+              stack:[
+                { text : "ความคิดเห็น" },
+                { text : course.assessmentPotentials.potentialRemark ? course.assessmentPotentials.potentialRemark : '-' },
+              ],
+              pageBreak: 'after', 
+            })
+            courses.push(
+              {
+                margin: [0, 0, 0, 10],
+                stack: [
+                  {
+                      text : course.courseNameTh,
+                      fontSize: 26.4,
+                      margin: [0, 20, 0, 0],
+                      color:"#573e33",
+                      bold:true,
+                  },
+                  {
+                      text : course.coachNameTh,
+                      fontSize: 26.4,
+                      margin: [0, -10, 0, 0],
+                      color:"#573e33",
+                  }   
+                ]
+              }, 
+              {
+                  text : "ประเมินศักยภาพ",
+                  bold:true,
+                  alignment: 'center',
+                  fontSize: 25.9,
+                  color:"#573e33",
+              },
+              ...potential_arr,
+              {
+                margin: [0, 0, 0, 10],
+                stack: [
+                  {
+                      text : course.courseNameTh,
+                      fontSize: 26.4,
+                      margin: [0, 20, 0, 0],
+                      color:"#573e33",
+                      bold:true,
+                  },
+                  {
+                      text : course.coachNameTh,
+                      fontSize: 26.4,
+                      margin: [0, -10, 0, 0],
+                      color:"#573e33",
+                  }   
+                ]
+              }, 
+              {
+                  text : "ประเมินรายครั้ง",
+                  bold:true,
+                  alignment: 'center',
+                  fontSize: 25.9,
+                  color:"#573e33",
+              },
+              ...ass_arr,
+              {
+                margin: [0, 0, 0, 10],
+                stack: [
+                  {
+                      text : course.courseNameTh,
+                      fontSize: 26.4,
+                      margin: [0, 20, 0, 0],
+                      color:"#573e33",
+                      bold:true,
+                  },
+                  {
+                      text : course.coachNameTh,
+                      fontSize: 26.4,
+                      margin: [0, -10, 0, 0],
+                      color:"#573e33",
+                  }   
+                ]
+              }, 
+              {
+                  text : "ภาพกิจกรรม",
+                  bold:true,
+                  alignment: 'center',
+                  fontSize: 25.9,
+                  color:"#573e33",
+              },
+              ...img_arr
+            )
+          }
+          return courses
+        },
         async exportPdf() {
             // Define the image paths
             var backgroundImagePath = require('../../assets/FrontPortfolio/bg-front-detail.png');
@@ -121,31 +360,32 @@ import { mapActions, mapGetters } from 'vuex';
                   ],
                   pageBreak: 'after' 
                 },
-                {
-                    margin: [0, 0, 0, 10],
-                    stack: [
-                        {
-                            text : 'ว่ายน้ำท่ากันเชียง',
-                            fontSize: 26.4,
-                            margin: [0, 20, 0, 0],
-                            color:"#573e33",
-                            bold:true,
-                        },
-                        {
-                            text : 'โค้ช จิรายุท',
-                            fontSize: 26.4,
-                            margin: [0, -10, 0, 0],
-                            color:"#573e33",
-                        }   
-                    ]
-                },
-                {
-                    text : "ประเมินศักยภาพ",
-                    bold:true,
-                    alignment: 'center',
-                    fontSize: 25.9,
-                    color:"#573e33",
-                }
+                ...await this.GenCourses(),
+                // {
+                //     margin: [0, 0, 0, 10],
+                //     stack: [
+                //         {
+                //             text : 'ว่ายน้ำท่ากันเชียง',
+                //             fontSize: 26.4,
+                //             margin: [0, 20, 0, 0],
+                //             color:"#573e33",
+                //             bold:true,
+                //         },
+                //         {
+                //             text : 'โค้ช จิรายุท',
+                //             fontSize: 26.4,
+                //             margin: [0, -10, 0, 0],
+                //             color:"#573e33",
+                //         }   
+                //     ]
+                // },
+                // {
+                //     text : "ประเมินศักยภาพ",
+                //     bold:true,
+                //     alignment: 'center',
+                //     fontSize: 25.9,
+                //     color:"#573e33",
+                // }
             ],
             defaultStyle: {
               font: 'Kanit'
