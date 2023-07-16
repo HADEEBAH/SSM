@@ -604,9 +604,13 @@ const orderModules = {
                                     text: "ทำรายการสำเร็จ",
                                     showDenyButton: false,
                                     showCancelButton: false,
-                                    confirmButtonText: "ตกลง",
-                                }).then(async (result) => {
-                                    if (result.isConfirmed) {
+                                    // confirmButtonText: "ตกลง",
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    timerProgressBar: true
+                              })
+                                // .then((result) => {
+                                //     if (result.isConfirmed) {
                                         router.replace({name : "Finance"})
                                         localStorage.removeItem("Order")
                                         context.commit("SetResetCourseData")
@@ -621,8 +625,8 @@ const orderModules = {
                                             total_price: 0,
                                         })
                                         context.commit("SetOrderIsLoading", false)
-                                    }
-                                })    
+                                //     }
+                                // })    
                             }
                         }else{
                             Swal.fire({
@@ -630,9 +634,13 @@ const orderModules = {
                                 text: "ทำรายการสำเร็จ",
                                 showDenyButton: false,
                                 showCancelButton: false,
-                                confirmButtonText: "ตกลง",
-                            }).then(async (result) => {
-                                if (result.isConfirmed) {
+                                // confirmButtonText: "ตกลง",
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true
+                            })
+                            // .then((result) => {
+                            //     if (result.isConfirmed) {
                                     router.replace({name : "Finance"})
                                     localStorage.removeItem("Order")
                                     context.commit("SetResetCourseData")
@@ -647,8 +655,8 @@ const orderModules = {
                                         total_price: 0,
                                     })
                                     context.commit("SetOrderIsLoading", false)
-                                }
-                            })    
+                            //     }
+                            // })    
                         }
                     }  
                 }    

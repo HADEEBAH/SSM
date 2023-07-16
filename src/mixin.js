@@ -46,13 +46,15 @@ export default {
   methods: {
     ...mapActions({ GetNotifications: "NotificationsModules/GetNotifications" }),
 
-    async sendNotification(params) {
+    async sendNotification(params, notify = false) {
       this.socket.emit("events", params, (response) => {
         if (response) {
-          Swal.fire({
-            icon: "success",
-            title: "ส่งการแจ้งเตือนเรียบร้อยแล้ว"
-          })
+          if (notify) {
+            Swal.fire({
+              icon: "success",
+              title: "ส่งการแจ้งเตือนเรียบร้อยแล้ว"
+            })
+          }
         } else {
           Swal.fire({
             icon: "warning",
