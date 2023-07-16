@@ -753,6 +753,8 @@ import { mapActions, mapGetters } from "vuex";
 import { dateFormatter, inputValidation } from "@/functions/functions";
 import Swal from "sweetalert2";
 import mixin from "../../../mixin";
+// import router from "@/router";
+
 export default {
   name: "addlearnPage",
   components: {
@@ -765,7 +767,7 @@ export default {
   mixins: [mixin],
   props: {},
   data: () => ({
-    notification_name: "แจ้งเตือน",
+    notification_name: "แจ้งเตือนการสมัครคอร์สเรียน",
     notification_description: "แอตมินได้เพิ่มคอร์สเรียนให้คุณ",
     validate_form: null,
     user_detail: null,
@@ -1132,8 +1134,11 @@ export default {
             }).then(async (result) => {
               if (result.isConfirmed) {
                 if (this.order.payment_status === "warn") {
+                  console.log("order", this.order);
                   let account = [];
+                  let course_name_noti = []
                   this.order.courses.forEach((course) => {
+                    course_name_noti.push(course?.course_data?.course_name_th)
                     course.students = []
                     // console.log("1136",this.students)
                     course.coach_id = course.coach.coach_id;
@@ -1159,22 +1164,31 @@ export default {
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
+                  
                   let payload = {
                     notificationName: this.notification_name,
-                    notificationDescription: this.notification_description,
+                    notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(course_name_noti.length > 1 ? "และ" : "")} ให้คุณแล้ว (รอชำระเงิน)`,
                     accountId: account,
                   };
                   // console.log(payload);
                   this.sendNotification(payload);
                   this.saveOrder();
+                  // router.replace({name: "Finance"})
+
                 } else {
+                  let account = [];
+                  let course_name_noti = []
                   this.order.courses.forEach((course) => {
+                    course_name_noti.push(course?.course_data?.course_name_th)
                     course.students = []
                     // console.log("1136",this.students)
                     course.coach_id = course.coach.coach_id;
                     course.coach_name = course.coach.coach_name;
                     for (const student of this.students) {
                       if(student){
+                        account.push({
+                          studentId: student,
+                        });
                         course.students.push({
                           account_id: student,
                           student_name: null,
@@ -1192,7 +1206,15 @@ export default {
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
+                  let payload = {
+                    notificationName: this.notification_name,
+                    notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(course_name_noti.length > 1 ? "และ" : "")} ให้คุณแล้ว`,
+                    accountId: account,
+                  };
+                  this.sendNotification(payload);
                   this.saveOrder();
+                  // router.replace({name: "Finance"})
+                  // window.location.href = `${process.env.VUE_APP_URL}/admin/finance`
                 }
               }
             });

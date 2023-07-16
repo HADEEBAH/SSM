@@ -239,7 +239,7 @@
                 v-if="student_check_in.length > 0"
                 dense
                 outlined
-                @click="CheckInStudents"
+                @click="CheckInStudents(student_check_in)"
                 color="#ff6b81"
                 >บันทึก</v-btn
               >
@@ -1248,10 +1248,12 @@ import { Input, TimePicker } from "ant-design-vue";
 import labelCustom from "../../../components/label/labelCustom.vue";
 import { mapActions, mapGetters } from "vuex";
 import Swal from "sweetalert2";
+import mixin from "@/mixin";
 // import moment from 'moment'
 export default {
   name: "menageCourseDetail",
   components: { rowData, loadingOverlay, TimePicker, labelCustom },
+  mixins: [mixin],
   directives: {
     "ant-input": Input,
   },
@@ -1612,7 +1614,8 @@ export default {
         }
       });
     },
-    CheckInStudents() {
+    async CheckInStudents(item) {
+      let student_id = await item.map((val)=> {return val.studentId})
       Swal.fire({
         icon: "question",
         title: "ต้องการบันทึกใช่หรือไม่ ?",
@@ -1628,6 +1631,12 @@ export default {
             date: this.$route.params.date,
             time_id: this.$route.params.timeId,
           });
+          let payload = {
+            notificationName: "แจ้งเตือนการเช็คอิน",
+            notificationDescription: `เช็คอินเรียบร้อย`,
+            accountId: student_id,
+          };
+          this.sendNotification(payload);
         }
       });
     },
