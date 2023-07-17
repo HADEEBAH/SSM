@@ -711,17 +711,20 @@ export default {
                   ]
                 },
               ],
-              margin: [0, 20, 0, 20],  
+              margin: [0, 20, 0, 40],  
             },
+            // Footer
             {
+              absolutePosition: { x: 20, y: 600 },
               text : ['การชำระเงินจะสมบูรณ์เมือบริษัทได้รับเงินเรียบร้อยแล้ว\t',
-              {text:'\uF096',style:'icon'},' เงินสด\t', 
+              {text:`${ this.order_detail.paymentType === 'cash' ? '\uE800' : '\uF096'}`,style:'icon'},' เงินสด\t', 
               {text:'\uF096',style:'icon'},' เช็ค\t',
-              {text:'\uF096',style:'icon'},' โอนเงิน\t',
-              {text:'\uF096',style:'icon'},' ช่องทางอื่นๆ'],
+              {text:`${ ['transfer', 'QR Code Payment'].includes(this.order_detail.paymentType) ? '\uE800' : '\uF096'}`,style:'icon'},' โอนเงิน\t',
+              {text:`${ ['Credit Card'].includes(this.order_detail.paymentType) ?  '\uE800' : '\uF096'}`,style:'icon'},' ช่องทางอื่นๆ'],
               fontSize: 12
             },
             {
+              absolutePosition: { x: 20, y: 620 },
               columns: [
                 {
                   width: "auto",
@@ -757,14 +760,15 @@ export default {
                   alignment : "center"
                 },
               ],
-              margin: [0, 0, 0, 40],
+              margin: [0, 0, 0, 20],
             },
             { 
+              absolutePosition: { x: 20, y: 670 },
               columns :[
                 {
                   stack: [
                     {
-                      text: `${this.order_detail.created_by_data.firstNameTh} ${this.order_detail.created_by_data.lastNameTh}`,
+                      text: !this.order_detail.payment.recipient ? `${this.order_detail.created_by_data.firstNameTh} ${this.order_detail.created_by_data.lastNameTh}` : '\n',
                       margin: [0, 5],
                       alignment : "center"
                     },
@@ -798,8 +802,36 @@ export default {
                   height: 140,
                   arguments:'justify'
                 },
-                ...this.GenRecipient(),
-                
+                {
+                  stack: [
+                    {
+                      text: this.order_detail.payment.recipient ? `${this.order_detail.payment.recipient.firstNameTh} ${this.order_detail.payment.recipient.lastNameTh}` : '\n',//ต้องแก้
+                      margin: [0, 5],
+                      alignment : "center"
+                    },
+                    {
+                      text: `ผู้รับเงิน`,
+                      margin: [0, 5],
+                      alignment : "center"
+                    },
+                  ],
+                  margin: [0, 30, 0, 0],
+                },
+                {
+                  stack: [
+                    {
+                      text: `${moment(this.order_detail.payment.paid_date).format("DD/MM/YYYY")} ${this.order_detail.payment.paid_date.slice(11, 16)}น.`,//ต้องแก้
+                      margin: [0, 5],
+                      alignment : "center"
+                    },
+                    {
+                      text: `วันที่`,
+                      margin: [0, 5],
+                      alignment : "center"
+                    },
+                  ],
+                  margin: [0, 30, 0, 0],
+                } 
               ]
             }
             
@@ -822,45 +854,79 @@ export default {
         });
       }
     },
-    GenRecipient(){
-      if(this.order_detail.payment.recipient){
-        return [
-        {
-          stack: [
-            {
-              text: `${this.order_detail.payment.recipient.firstNameTh} ${this.order_detail.payment.recipient.lastNameTh}`,//ต้องแก้
-              margin: [0, 5],
-              alignment : "center"
-            },
-            {
-              text: `ผู้รับเงิน`,
-              margin: [0, 5],
-              alignment : "center"
-            },
-          ],
-          margin: [0, 30, 0, 0],
-        },
-        {
-          stack: [
-            {
-              text: `${moment(this.order_detail.payment.paid_date).format("DD/MM/YYYY")} ${this.order_detail.payment.paid_date.slice(11, 16)}น.`,//ต้องแก้
-              margin: [0, 5],
-              alignment : "center"
-            },
-            {
-              text: `วันที่`,
-              margin: [0, 5],
-              alignment : "center"
-            },
-          ],
-          margin: [0, 30, 0, 0],
-        }
-      ]
-      }else{
-        return [{text:''}]
-      }
-      
-    },
+    // GenRecipient(){
+    //   if(this.order_detail.payment.recipient){
+    //     return [
+    //     {
+    //       stack: [
+    //         {
+    //           text: this.order_detail.payment.recipient ? `${this.order_detail.created_by_data.firstNameTh} ${this.order_detail.created_by_data.lastNameTh}` : '',
+    //           margin: [0, 5],
+    //           alignment : "center"
+    //         },
+    //         {
+    //           text: `ผู้จ่ายเงิน`,
+    //           margin: [0, 5],
+    //           alignment : "center"
+    //         },
+    //       ],
+    //       margin: [0, 30, 0, 0],
+    //     },
+    //     {
+    //       stack: [
+    //         {
+    //           text: `${moment(this.order_detail.createdDate).format("DD/MM/YYYY HH:mm")}น.`,
+    //           margin: [0, 5],
+    //           alignment : "center"
+    //         },
+    //         {
+    //           text: `วันที่`,
+    //           margin: [0, 5],
+    //           alignment : "center"
+    //         },
+    //       ],
+    //       margin: [0, 30, 0, 0],
+    //     },
+    //     {
+    //       image : logoLightImageDataUrl,
+    //       alignment: 'center',
+    //       width: 140,
+    //       height: 140,
+    //       arguments:'justify'
+    //     },
+    //     {
+    //       stack: [
+    //         {
+    //           text: `${this.order_detail.payment.recipient.firstNameTh} ${this.order_detail.payment.recipient.lastNameTh}`,//ต้องแก้
+    //           margin: [0, 5],
+    //           alignment : "center"
+    //         },
+    //         {
+    //           text: `ผู้รับเงิน`,
+    //           margin: [0, 5],
+    //           alignment : "center"
+    //         },
+    //       ],
+    //       margin: [0, 30, 0, 0],
+    //     },
+    //     {
+    //       stack: [
+    //         {
+    //           text: `${moment(this.order_detail.payment.paid_date).format("DD/MM/YYYY")} ${this.order_detail.payment.paid_date.slice(11, 16)}น.`,//ต้องแก้
+    //           margin: [0, 5],
+    //           alignment : "center"
+    //         },
+    //         {
+    //           text: `วันที่`,
+    //           margin: [0, 5],
+    //           alignment : "center"
+    //         },
+    //       ],
+    //       margin: [0, 30, 0, 0],
+    //     }
+    //   ]
+    //   }
+    // },
     GenCourseItem() {
       // console.log("order_detail => ",this.order_detail)
       let row = [
