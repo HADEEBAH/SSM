@@ -1167,7 +1167,7 @@ export default {
                   
                   let payload = {
                     notificationName: this.notification_name,
-                    notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(course_name_noti.length > 1 ? "และ" : "")} ให้คุณแล้ว (รอชำระเงิน)`,
+                    notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(course_name_noti.length > 1 ? ", " : "")} ให้คุณแล้ว (รอชำระเงิน)`,
                     accountId: account,
                   };
                   // console.log(payload);

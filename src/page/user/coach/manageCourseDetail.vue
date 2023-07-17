@@ -1615,7 +1615,10 @@ export default {
       });
     },
     async CheckInStudents(item) {
-      let student_id = await item.map((val)=> {return val.studentId})
+      let student_id = []
+      await item.map((val)=> {
+        student_id.push(val.studentId)
+      })
       Swal.fire({
         icon: "question",
         title: "ต้องการบันทึกใช่หรือไม่ ?",
