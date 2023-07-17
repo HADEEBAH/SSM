@@ -604,7 +604,7 @@
                     ></v-col
                   >
                   <v-col cols="12" sm="4" align="end">
-                    <v-btn depressed dark color="#ff6b81" @click="Export()">
+                    <v-btn :loading="finance_filter_loading" depressed dark color="#ff6b81" @click="Export()">
                       เรียกดูทั้งหมด
                     </v-btn>
                   </v-col>
@@ -841,7 +841,8 @@ export default {
       username_list: "loginModules/getUsernameList",
       packages: "CourseModules/getPackages",
       options: "CourseModules/getOptions",
-      finance_filter: "financeFilter/getFinanceFilter"
+      finance_filter: "FinanceModules/getFinanceFilter",
+      finance_filter_loading : "FinanceModules/getFinanceLoading"
     }),
   },
   watch: {

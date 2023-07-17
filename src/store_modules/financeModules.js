@@ -8,8 +8,12 @@ const financeModules = {
   state: {
     finance_detail : {},
     finance_filter : [],
+    finance_filter_loading : false,
   },
   mutations: {
+    SetFinanceLoading (state, payload){
+      state.finance_filter_loading = payload
+    },
     SetFinanceDetail(state, payload){
       state.finance_detail = payload
     },
@@ -29,6 +33,7 @@ const financeModules = {
       }
     },
     async financeFilter(context,{filter}){
+      context.commit("SetFinanceLoading",true)
       try{
         let config = {
           headers:{
@@ -38,8 +43,8 @@ const financeModules = {
           }
         }
         console.log("37 =>",filter)
-        // let localhost = "http://localhost:3000"
-        let endpoint = `${process.env.VUE_APP_URL}/api/v1/adminpayment/filter?`
+        let localhost = "http://localhost:3000"
+        let endpoint = `${localhost}/api/v1/adminpayment/filter?`
         endpoint = endpoint + `studentName=${filter.students}&`
         endpoint = endpoint + `status=${filter.payment_status}&`
         endpoint = endpoint + `type=${filter.payment_type}&`
@@ -129,7 +134,9 @@ const financeModules = {
               link.click();
               URL.revokeObjectURL(url);
               context.commit("SetFinanceFilter",data.data)
+              context.commit("SetFinanceLoading",false)
            }else{
+            context.commit("SetFinanceLoading",false)
             Swal.fire({
               icon:"error",
               title: "ไม่พบข้อมูล",
@@ -140,6 +147,7 @@ const financeModules = {
           }
         }
       }catch(error){
+        context.commit("SetFinanceLoading",false)
         console.log(error)
       }
     }
@@ -151,6 +159,9 @@ const financeModules = {
     getFinanceFilter(state){
       return state.finance_filter
     },
+    getFinanceLoading(state){
+      return state.finance_filter_loading
+    }
   },
 };
 
