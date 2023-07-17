@@ -17,7 +17,7 @@ const portfolioModules = {
           let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/profile/portfolio/${account_id}`)
           if(data.statusCode === 200){
             context.commit("SetPortfolioData", data.data)
-            console.log(data.data)
+          
           }
         }catch(error){
             console.log(error)

@@ -20,6 +20,7 @@ import moment from 'moment';
       },
       data: () => ({
         user_profile : null,
+        images_files: [],
       }),
       created() {
         this.GetPortfolioData({account_id : this.$route.params.account_id})
@@ -34,6 +35,7 @@ import moment from 'moment';
           GetPortfolioData : 'portfolioModules/GetPortfolioData'
         }),
       GenCourses(){
+          
           // let defaultProfile = require('../../assets/profile/default_profile.png')
           // let defaultProfileImageData =  await this.loadImageFromFile(defaultProfile);
           // let defaultProfileImageDataUrl = await this.convertImageToDataFile(defaultProfileImageData);
@@ -46,13 +48,21 @@ import moment from 'moment';
             // IMG 
             let img_arr = []
             let img_col = []
-            for(let img of course.attachmensPictureAll){
-              console.log(img)
-              img_col.push({
+            if(course.attachmensPictureAll){
+              for(let img of course.attachmensPictureAll){
+                console.log("img",img)
+                img_col.push({
+                  width: '50%',
+                  text : `${img.assessmentAttachmentFilesUrl}`
+                })
+              }
+            }else{
+              img_col.push({  
                 width: '50%',
-                text : "รูป"
+                text : ''
               })
             }
+           
             if(course_index.length === this.portfolio_data.courses.length){
               img_arr.push({
                 columns : [...img_col]
@@ -68,13 +78,21 @@ import moment from 'moment';
             let assed = []
             for(let ass of course.assessments){
               assed.push(ass)
-              console.log("47=>",ass.assessmentRemark)
+              console.log("47=>",ass)
               let ass_columns = []
-              ass_columns.push({
-                alignment : 'center',
-                width: '50%',
-                text: "รูป"
-              })
+              if(ass.assessmentAttachmentFilesUrl){
+                ass_columns.push({
+                  alignment : 'center',
+                  width: '50%',
+                  image: `${ass.assessmentAttachmentFilesUrl}`
+                })
+              }else{
+                ass_columns.push({
+                  alignment : 'center',
+                  width: '50%',
+                  text: ""
+                })
+              }
               ass_columns.push({
                 width: '50%',
                 stack:[
@@ -152,15 +170,11 @@ import moment from 'moment';
             }
             let potential_arr = []
             let potential_columns = []
-            if( course.assessmentPotentials.potentialAttachmentFilesUrl){
-              // columns.push({
-              //     width: '50%',
-              //     image: course.assessmentPotentials.potentialAttachmentFilesUrl 
-              //   })  
+            if( course.assessmentPotentials.potentialAttachmentFilesUrl){ 
               potential_columns.push({
                 alignment : 'center',
                 width: '50%',
-                text: "รูป"
+                image: course.assessmentPotentials.potentialAttachmentFilesUrl
               })   
             }else{
               potential_columns.push({
