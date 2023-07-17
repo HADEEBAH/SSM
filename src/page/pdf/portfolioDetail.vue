@@ -1,8 +1,8 @@
 <template>
     <v-app>
       <v-container>
-        <pre>{{  this.GenCourses() }}</pre>
-        <!-- <loadingOverlay :loading="true"></loadingOverlay> -->
+        <!-- <pre>{{  this.GenCourses() }}</pre> -->
+        <loadingOverlay :loading="true"></loadingOverlay>
       </v-container>
     </v-app>
   </template>
