@@ -90,19 +90,9 @@
         <div v-if="event_date.length >= 0">
           <template>
             <div v-for="(event, event_index) in event_date" :key="event_index">
-              <v-card flat>
+              <v-card flat v-if="!event.type">
                 <v-card-text class="border-2 border-[#ff6b81]">
                   <v-row dense>
-                    <v-col
-                      v-if="event.type"
-                      cols="auto"
-                      class="text-sm text-[#999999]"
-                    >
-                      -
-                    </v-col>
-                    <!-- <v-col v-else cols="12" class="text-sm text-[#999999]">
-                      {{ `${event.start_time}` }} - {{ `${event.end_time}` }}
-                    </v-col> -->
                     <v-col cols="auto">
                       <v-icon small :color="event.color">mdi-circle</v-icon>
                     </v-col>
@@ -115,21 +105,11 @@
                       <span class="font-bold">{{ event.timed }}</span>
 
                       <v-row dense>
-                        <v-col v-if="!event.type">
+                        <v-col cols="12">
                           คอร์ส: <span class="font-bold">{{ event.name }}</span>
                         </v-col>
-                        <v-col v-else
-                          >คอร์ส:
-                          <span class="font-bold">{{ event.name }}</span>
-                        </v-col>
                       </v-row>
-                      <!-- <v-row dense>
-                        <v-col v-if="!event.type">
-                          คอร์ส: {{ event.name }}
-                        </v-col>
-                        <v-col v-else>{{ event.name }} </v-col>
-                      </v-row> -->
-                      <v-row dense v-if="!event.type">
+                      <v-row dense>
                         <v-col class="text-sm">
                           โค้ช:
                           <span class="font-bold">{{ event.subtitle }} </span
@@ -151,8 +131,25 @@
                   </v-row>
                 </v-card-text>
               </v-card>
+              <v-card flat v-else>
+                <v-card-text class="border-2 border-[#ff6b81]">
+                  <v-row dense v-if="event.subtitle === false">
+                    <v-col cols="auto">
+                      <v-icon small :color="event.color">mdi-circle</v-icon>
+                    </v-col>
+                    <v-col cols="10" class="text-sm text-[#999999]">
+                      {{ `${event.start_time}` }} - {{ `${event.end_time}` }}
+                    </v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col cols="12">
+                      วันหยุด: <span class="font-bold">{{ event.name }}</span>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
               <v-divider
-                v-if="event_date.length !== event_index + 1"
+                v-if="event_date.length !== event_index + 1 && !event.type"
                 class="my-2"
               ></v-divider>
             </div>
@@ -285,11 +282,12 @@ export default {
             if (start === end && start === date) {
               this.event_date.push({
                 name: event.name,
-                start_time: start_time,
-                end_time: end_time,
+                start_time: event.start_time ? event.start_time : null,
+                end_time: event.end_time ? event.end_time : null,
                 color: event.color,
                 type: event.type,
                 courseId: event.courseId,
+                subtitle: event.subtitle,
               });
             }
           }

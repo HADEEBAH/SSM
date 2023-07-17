@@ -26,9 +26,7 @@
                           outlined
                           @keypress="validate($event, 'en-number')"
                           v-model="checkData.username"
-                          @change="checkDataRelation(checkData.username)"
                           @keyup.enter="checkDataRelation(checkData.username)"
-                          @blur="checkDataRelation(checkData.username)"
                           placeholder="Username"
                         >
                           <template v-slot:append>

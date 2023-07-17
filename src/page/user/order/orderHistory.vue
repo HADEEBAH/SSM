@@ -149,36 +149,31 @@
                       <v-expand-transition>
                         <div
                           v-if="course.show_student"
-                          class="border rounded-md pa-2"
+                          class="border rounded-md pa-5"
                         >
-                          <v-row dense>
-                            <v-col class="font-bold" align="center">
-                              ชื่อ-สกุล
-                            </v-col>
-                            <v-col class="font-bold" align="center">
-                              เบอร์โทร
-                            </v-col>
-                            <v-col class="font-bold" align="center">
-                              email
-                            </v-col>
-                          </v-row>
-                          <v-divider class="my-2"></v-divider>
-                          <v-row
-                            v-for="(student, index) in course.students"
-                            :key="`${index}-student`"
-                          >
-                            <v-col align="center">
-                              {{
-                                `${student.firstNameTh} ${student.lastNameTh}`
-                              }}
-                            </v-col>
-                            <v-col align="center">
-                              {{ `${student.mobileNo}` }}
-                            </v-col>
-                            <v-col align="center">
-                              {{ `${student.email}` }}
-                            </v-col>
-                          </v-row>
+                          <v-card flat>
+                            <v-card-text class="border-2 border-[#ff6b81]">
+                              <v-row
+                                dense
+                                v-for="(student, index) in course.students"
+                                :key="`${index}-student`"
+                              >
+                                <v-col cols="12" calign="start">
+                                  <span class="font-bold"> ชื่อ-สกุล : </span>
+                                  {{
+                                    `${student.firstNameTh} ${student.lastNameTh}`
+                                  }}
+                                </v-col>
+                                <v-col cols="12" calign="start">
+                                  <span class="font-bold"> เบอร์โทร : </span>
+                                  {{ `${student.mobileNo}` }} </v-col
+                                ><v-col cols="12" calign="start">
+                                  <span class="font-bold"> email : </span>
+                                  {{ `${student.email}` }}
+                                </v-col>
+                              </v-row>
+                            </v-card-text>
+                          </v-card>
                         </div>
                       </v-expand-transition>
                     </v-card-text>
