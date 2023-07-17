@@ -815,6 +815,8 @@ export default {
             e,
             "DD MT YYYYT"
           );
+          this.coach_leave_data.end_date_str = null
+          this.coach_leave_data.end_date = null
           this.GenDates();
           break;
         case "end":
