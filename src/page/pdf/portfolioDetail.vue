@@ -98,7 +98,7 @@ import moment from 'moment';
                 stack:[
                   {text:[
                     {text : `วันที่: ${moment(ass.assessmentCreatedDate).format("DD/MM/YYYY")}`},
-                    // {text : 'สภานะ', blod: true},
+                    // {text : 'สถานะ', blod: true},
                     // {text : '', blod: true},
                   ]},
                   { text : "ระดับพัฒนาการ" },

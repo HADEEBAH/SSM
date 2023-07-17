@@ -967,7 +967,7 @@
           </v-card-title>
           <v-card-text>
             <v-row dense class="mb-3">
-              <v-col align="right"> สภานะ : </v-col>
+              <v-col align="right"> สถานะ : </v-col>
               <v-col cols="auto">
                 <div
                   class="btn-size-lg d-flex align-center pa-1 rounded-xl"
