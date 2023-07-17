@@ -115,21 +115,18 @@
             <v-container>
               <v-card-title>
                 <v-row dense>
-
-                  <v-row dense>
-                    <v-col cols="12" class="absolute right-0 top-0" align="end">
-                      <v-btn icon @click="dialog_detail = false">
-                        <v-icon color="#ff6b81">mdi-close</v-icon>
-                      </v-btn>
-                    </v-col>
-                    <v-col cols="12" align="center" class="font-weight-bold">
-                      {{
-                        details.type == "holiday"
-                          ? "ข้อมูลวันหยุด"
-                          : "ข้อมูลวันเรียน"
-                      }}
-                    </v-col>
-                  </v-row>
+                  <v-col cols="12" class="absolute right-0 top-0" align="end">
+                    <v-btn icon @click="dialog_detail = false">
+                      <v-icon color="#ff6b81">mdi-close</v-icon>
+                    </v-btn>
+                  </v-col>
+                  <v-col cols="12" align="center" class="font-weight-bold">
+                    {{
+                      details.type == "holiday"
+                        ? "ข้อมูลวันหยุด"
+                        : "ข้อมูลวันเรียน"
+                    }}
+                  </v-col>
                 </v-row>
               </v-card-title>
 
@@ -271,6 +268,19 @@
                       outlined
                       readonly
                       :value="details.selectedDate"
+                      hide-details
+                    >
+                    </v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row v-if="details?.itmeData?.subCoachName">
+                  <v-col cols="12">
+                    <label class="font-weight-bold">ผู้สอนแทน</label>
+                    <v-text-field
+                      dense
+                      outlined
+                      readonly
+                      :value="details?.itmeData?.subCoachName"
                       hide-details
                     >
                     </v-text-field>

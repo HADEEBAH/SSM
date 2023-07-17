@@ -1405,11 +1405,7 @@
                   <v-col cols="auto">
                     <v-chip
                       class="font-bold"
-                      :color="
-                        check_in_status_options.filter(
-                          (v) => v.value === student_data_assessment.status
-                        )[0].bg_color
-                      "
+                      :color="check_in_status_options.filter((v) => v.value === student_data_assessment.status)[0].bg_color"
                       :style="`color:${
                         check_in_status_options.filter(
                           (v) => v.value === student_data_assessment.status
@@ -1444,19 +1440,43 @@
                         <v-row dense>
                           <v-col>
                             ระดับพัฒนาการ:
-                            <span class="text-[#ff6b81] font-bold"
-                              >{{
-                                student_data_assessment.potential.evolution
-                                  ? student_data_assessment.potential
-                                      .evolution === "very good"
-                                    ? "ดีมาก"
-                                    : student_data_assessment.potential
-                                        .evolution === "good"
-                                    ? "ดี"
-                                    : "ปรับปรุง"
-                                  : "-"
-                              }}
-                            </span>
+                          </v-col>
+                        </v-row>
+                        <v-row dense>
+                          <v-col>
+                            <v-select
+                              outlined
+                              dense
+                              v-model="student_data_assessment.assessment.evolution"
+                              :items="evolution_options"
+                              hide-details
+                              readonly
+                            >
+                              <template v-slot:item="{ item }">
+                                <v-list-item-content>
+                                  <v-list-item-title>
+                                    <v-rating
+                                      readonly
+                                      :length="item.num_value"
+                                      :value="item.num_value"
+                                      color="#ff6b81"
+                                    ></v-rating>
+                                  </v-list-item-title>
+                                </v-list-item-content>
+                              </template>
+                              <template v-slot:selection="{ item }">
+                                <v-rating
+                                  readonly
+                                  :length="item.num_value"
+                                  :value="item.num_value"
+                                  color="#ff6b81"
+                                ></v-rating>
+                              </template>
+                            </v-select>
+                          </v-col>
+                        </v-row>
+                        <v-row dense>
+                          <v-col>
                             ระดับความสนใจ:
                             <span class="font-bold">{{
                               student_data_assessment.potential.interest
@@ -1482,17 +1502,156 @@
                 </v-row>
               </v-card-text>
             </v-card>
-            <v-card
-              class="mb-3"
-              v-if="student_data_assessment?.assessment?.assessmentStudentsId"
-            >
+            <div v-if="student_data_assessment?.assessment.length > 0">
+              <v-card
+                class="mb-3"
+                v-for="(assess, index) in student_data_assessment?.assessment"
+                :key= "`${index}-assess`"
+              >
               <v-card-text>
                 <v-row dense>
                   <v-col cols="auto">
                     <v-icon color="#ff6b81">mdi-calendar-month</v-icon>
                   </v-col>
                   <v-col class="font-bold">
-                    {{ student_data_assessment.str_date }}
+                    {{ new Date(assess.date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', }) }}
+                  </v-col>
+                  <v-col cols="auto">
+                    <v-chip
+                      class="font-bold"
+                      :color="
+                        check_in_status_options.filter(
+                          (v) => v.value === assess.status
+                        )[0].bg_color
+                      "
+                      :style="`color:${
+                        check_in_status_options.filter(
+                          (v) => v.value === assess.status
+                        )[0].color
+                      }`"
+                      v-if="
+                        check_in_status_options.filter(
+                          (v) => v.value === assess.status
+                        ).length > 0
+                      "
+                      >{{
+                        check_in_status_options.filter(
+                          (v) => v.value === assess.status
+                        )[0].label
+                      }}
+                    </v-chip>
+                  </v-col>
+                </v-row>
+                <!-- <v-row dense>
+                  <v-col cols="auto">
+                    เวลาเรียน : {{ assess.time }}
+                  </v-col>
+                </v-row> -->
+                <v-row dense>
+                  <v-col> ระดับพัฒนาการ </v-col>
+                </v-row>
+                <v-row dense>
+                  <v-col>
+                    <v-select
+                      outlined
+                      dense
+                      v-model="assess.assessment.evolution"
+                      :items="evolution_options"
+                      hide-details
+                      readonly
+                    >
+                      <template v-slot:item="{ item }">
+                        <v-list-item-content>
+                          <v-list-item-title>
+                            <v-rating
+                              readonly
+                              :length="item.num_value"
+                              :value="item.num_value"
+                              color="#ff6b81"
+                            ></v-rating>
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </template>
+                      <template v-slot:selection="{ item }">
+                        <v-rating
+                          readonly
+                          :length="item.num_value"
+                          :value="item.num_value"
+                          color="#ff6b81"
+                        ></v-rating>
+                      </template>
+                    </v-select>
+                  </v-col>
+                </v-row>
+                <v-row dense>
+                  <v-col> ระดับความสนใจ </v-col>
+                </v-row>
+                <v-row dense>
+                  <v-col>
+                    <v-select
+                      outlined
+                      dense
+                      v-model="assess.assessment.interest"
+                      :items="interest_options"
+                      hide-details
+                      readonly
+                    >
+                      <template v-slot:item="{ item }">
+                        <v-list-item-content>
+                          <v-list-item-title>
+                            <v-rating
+                              readonly
+                              :length="item.num_value"
+                              :value="item.num_value"
+                              color="#ff6b81"
+                            ></v-rating>
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </template>
+                      <template v-slot:selection="{ item }">
+                        <v-rating
+                          readonly
+                          :length="item.num_value"
+                          :value="item.num_value"
+                          color="#ff6b81"
+                        ></v-rating>
+                      </template>
+                    </v-select>
+                  </v-col>
+                </v-row>
+                <v-row dense>
+                  <v-col>
+                    <span class="text-[#999999]"> ความคิดเห็น: </span
+                    >{{ assess.assessment.remark }}
+                  </v-col>
+                </v-row>
+                <v-row dense>
+                  <v-col
+                    v-for="(file, index) in assess.assessment
+                      .attachment"
+                    :key="`${index}-attachment`"
+                  >
+                    <v-img
+                      width="89"
+                      height="89"
+                      :src="readFile(file.attFiles)"
+                    ></v-img>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+              </v-card>
+            </div>
+            <div v-else-if="student_data_assessment?.assessment">
+              <v-card
+                class="mb-3"
+              >
+              <v-card-text>
+                <v-row dense>
+                  <v-col cols="auto">
+                    <v-icon color="#ff6b81">mdi-calendar-month</v-icon>
+                  </v-col>
+                  <v-col class="font-bold">
+                    {{ new Date(student_data_assessment.date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', }) }}
                   </v-col>
                   <v-col cols="auto">
                     <v-chip
@@ -1520,39 +1679,81 @@
                     </v-chip>
                   </v-col>
                 </v-row>
-                <v-row dense>
+                <!-- <v-row dense>
                   <v-col cols="auto">
-                    เวลาเรียน : {{ student_data_assessment.time }}
+                    เวลาเรียน : {{ assess.time }}
                   </v-col>
+                </v-row> -->
+                <v-row dense>
+                  <v-col> ระดับพัฒนาการ </v-col>
                 </v-row>
                 <v-row dense>
                   <v-col>
-                    ระดับพัฒนาการ:
-                    <span class="text-[#ff6b81] font-bold"
-                      >{{
-                        student_data_assessment.assessment.evolution
-                          ? student_data_assessment.assessment.evolution ===
-                            "very good"
-                            ? "ดีมาก"
-                            : student_data_assessment.assessment.evolution ===
-                              "good"
-                            ? "ดี"
-                            : "ปรับปรุง"
-                          : "-"
-                      }}
-                    </span>
-                    ระดับความสนใจ:
-                    <span class="font-bold text-[#ff6b81]">{{
-                      student_data_assessment.assessment.interest
-                        ? student_data_assessment.assessment.interest ===
-                          "very good"
-                          ? "ดีมาก"
-                          : student_data_assessment.assessment.interest ===
-                            "good"
-                          ? "ดี"
-                          : "ปรับปรุง"
-                        : "-"
-                    }}</span>
+                    <v-select
+                      outlined
+                      dense
+                      v-model="student_data_assessment.assessment.evolution"
+                      :items="evolution_options"
+                      hide-details
+                      readonly
+                    >
+                      <template v-slot:item="{ item }">
+                        <v-list-item-content>
+                          <v-list-item-title>
+                            <v-rating
+                              readonly
+                              :length="item.num_value"
+                              :value="item.num_value"
+                              color="#ff6b81"
+                            ></v-rating>
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </template>
+                      <template v-slot:selection="{ item }">
+                        <v-rating
+                          readonly
+                          :length="item.num_value"
+                          :value="item.num_value"
+                          color="#ff6b81"
+                        ></v-rating>
+                      </template>
+                    </v-select>
+                  </v-col>
+                </v-row>
+                <v-row dense>
+                  <v-col> ระดับความสนใจ </v-col>
+                </v-row>
+                <v-row dense>
+                  <v-col>
+                    <v-select
+                      outlined
+                      dense
+                      v-model="student_data_assessment.assessment.interest"
+                      :items="interest_options"
+                      hide-details
+                      readonly
+                    >
+                      <template v-slot:item="{ item }">
+                        <v-list-item-content>
+                          <v-list-item-title>
+                            <v-rating
+                              readonly
+                              :length="item.num_value"
+                              :value="item.num_value"
+                              color="#ff6b81"
+                            ></v-rating>
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </template>
+                      <template v-slot:selection="{ item }">
+                        <v-rating
+                          readonly
+                          :length="item.num_value"
+                          :value="item.num_value"
+                          color="#ff6b81"
+                        ></v-rating>
+                      </template>
+                    </v-select>
                   </v-col>
                 </v-row>
                 <v-row dense>
@@ -1563,8 +1764,7 @@
                 </v-row>
                 <v-row dense>
                   <v-col
-                    v-for="(file, index) in student_data_assessment.assessment
-                      .attachment"
+                    v-for="(file, index) in student_data_assessment.assessment.attachment"
                     :key="`${index}-attachment`"
                   >
                     <v-img
@@ -1576,7 +1776,8 @@
                 </v-row>
               </v-card-text>
             </v-card>
-            <v-card outlined class="mb-3" v-if="!student_data_assessment?.potential && !student_data_assessment?.assessment?.assessmentStudentsId">
+            </div>
+            <v-card outlined class="mb-3" v-if="!student_data_assessment?.potential && student_data_assessment?.assessment .length == 0">
               <v-card-text>
                 <v-row dense>
                   <v-col align="center">
@@ -1634,6 +1835,16 @@ export default {
     packageValidate: false,
     slide_group: null,
     show_dialog_assessmet: false,
+    evolution_options: [
+      { label: "ดีมาก", value: "very good", num_value: 5 },
+      { label: "ดี", value: "good", num_value: 4 },
+      { label: "ปรับปรุง", value: "adjust", num_value: 3 },
+    ],
+    interest_options: [
+      { label: "ดีมาก", value: "very good", num_value: 5 },
+      { label: "ดี", value: "good", num_value: 4 },
+      { label: "ปรับปรุง", value: "adjust", num_value: 3 },
+    ],
     column: [
       {
         text: "ชื่อ - นามสกุล",
