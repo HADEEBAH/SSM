@@ -64,12 +64,12 @@
               :class="active_menu === list.to ? 'active-menu-list' : ''"
               @click="selectMenu('head', list.to)"
               link
-              v-if="list.child.length === 0"
+              v-if="list.child.length === 0 && (list.roles.length > 0 ? list.roles.filter((v) => user_detail?.roles.includes(v)).length > 0 : false)"
             >
               <v-list-item-title>{{ list.title }}</v-list-item-title>
             </v-list-item>
             <v-list-group
-              v-else
+              v-else-if="list.roles.length > 0 ? list.roles.filter((v) => user_detail?.roles.includes(v)).length > 0 : false"
               :value="active_menu === list.title"
               :active-class="
                 active_menu === list.title ? 'active-menu-list' : ''
@@ -130,38 +130,41 @@ export default {
     },
     user_detail: null,
     menu_drawer_list: [
-      // { title: "แดชบอร์ด", to: "Dashboard", child: [] }, // to ให้ใส่ name ของ router
-      // { title: "แดชบอร์ด", to: "", child: [] }, // to ให้ใส่ name ของ router
-      { title: "ตารางเรียน", to: "ManageSchedule", child: [] },
+      // { title: "แดชบอร์ด", to: "Dashboard", child: [], roles: ['R_1', 'R_2']}, // to ให้ใส่ name ของ router
+      // { title: "แดชบอร์ด", to: "", child: [], roles: ['R_1', 'R_2']}, // to ให้ใส่ name ของ router
+      { title: "ตารางเรียน", to: "ManageSchedule", child: [], roles: ['R_1', 'R_2']  },
       // { title: "เพิ่มผู้เรียน", to: "Student", child: [] },
       // { title: "ตารางเรียน", to: "Schedule", child: [] },
-      { title: "เพิ่มผู้เรียน", to: "Student", child: [] },
+      { title: "เพิ่มผู้เรียน", to: "Student", child: [], roles: ['R_1', 'R_2']  },
       {
         title: "คอร์สเรียน",
         to: "",
+        roles: ['R_1'] ,
         child: [
-          { title: "จัดการการจอง", to: "CourseReserveList" },
-          { title: "จัดการคอร์สทั้งหมด", to: "CourseList" },
-          { title: "สร้างคอร์สเรียน", to: "CourseCreate" },
+          { title: "จัดการการจอง", to: "CourseReserveList", roles: ['R_1']  },
+          { title: "จัดการคอร์สทั้งหมด", to: "CourseList" ,roles: ['R_1'] },
+          { title: "สร้างคอร์สเรียน", to: "CourseCreate" ,roles: ['R_1'] },
         ],
       },
       {
         title: "อาณาจักร",
         to: "",
+        roles: ['R_1'] ,
         child: [
-          { title: "จัดการอาณาจักร", to: "ManageKingdom" },
-          { title: "สร้างอาณาจักร", to: "Kingdom" },
+          { title: "จัดการอาณาจักร", to: "ManageKingdom" ,roles: ['R_1']},
+          { title: "สร้างอาณาจักร", to: "Kingdom" ,roles: ['R_1']},
         ],
       },
-      { title: "การเงิน", to: "Finance", child: [] },
+      { title: "การเงิน", to: "Finance", child: [], roles: ['R_1', 'R_2'] },
       {
         title: "จัดการผู้ใช้งาน",
         to: "",
-        child: [{ title: "จัดการผู้ใช้งาน", to: "UserList" }],
+        roles: ['R_1'],
+        child: [{ title: "จัดการผู้ใช้งาน", to: "UserList",roles: ['R_1'], } ],
       },
-      { title: "การอนุมัติลา", to: "LeaveList", child: [] },
+      { title: "การอนุมัติลา", to: "LeaveList", child: [], roles: ['R_1'], },
       // { title: "หน้าผู้ใช้งาน", to: "UserKingdom", child: [] },
-      { title: "จัดการแบนเนอร์", to: "Banner", child: [] },
+      { title: "จัดการแบนเนอร์", to: "Banner", child: [], roles: ['R_1', 'R_2'], },
     ],
   }),
 
