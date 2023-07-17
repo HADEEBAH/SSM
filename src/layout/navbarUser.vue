@@ -407,9 +407,9 @@ export default {
       {
         icon: "mdi-swap-horizontal-bold",
         title: "หน้าผู้ดูแลระบบ",
-        to: "ManageSchedule",
+        // to: "ManageSchedule",
         // to: "Admin",
-        // to: "Dashboard",
+        to: "Dashboard",
         params: null,
         roles: ["R_1", "R_2"],
       },
