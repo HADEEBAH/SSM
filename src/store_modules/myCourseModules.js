@@ -178,7 +178,6 @@ const myCourseModules = {
                 // let localhost = "http://localhost:3000"
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
                 if (data.statusCode === 200) {
-                    // console.log("176=>", data.data)
                     const dataCourseSchedule = { dates: [] };
                     let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
                     if (holidays.data.statusCode === 200) {
@@ -188,8 +187,10 @@ const myCourseModules = {
                                 name: holiday.holidayName,
                                 start_date: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
                                 start: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
+                                start_time: holiday.holidayStartTime ? holiday.holidayStartTime : null,
                                 end: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
-
+                                end_time: holiday.holidayEndTime ? holiday.holidayEndTime : null,
+                                subtitle: holiday.allDay
                             })
 
                         }
