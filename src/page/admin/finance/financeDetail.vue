@@ -391,9 +391,9 @@ import rowData from "@/components/label/rowData.vue";
 // import dialogCard from "@/components/dialog/dialogCard.vue";
 import { mapActions, mapGetters } from "vuex";
 import Swal from "sweetalert2";
-import mixin from "../../../mixin";
+import mixin from "@/mixin";
 import pdfMake from "pdfmake";
-import pdfFonts from "../../../assets/custom-fonts.js";
+import pdfFonts from "@/assets/custom-fonts.js";
 import { convertToThaiBaht } from "@/functions/functions.js";
 import moment from "moment";
 export default {
@@ -995,12 +995,12 @@ export default {
     },
     sendNotificationByAccount(account) {
       let payload = {
-        notificationName: this.notification_name,
-        notificationDescription: this.notification_description,
+        notificationName: "แจ้งเตือนการชำระเงิน",
+        notificationDescription: `หมายเลขออร์เดอร์ที่ ${this.$route.params.order_id} ยังไม่ชำระเงิน`,
         accountId: account,
       };
       // console.log(payload);
-      this.sendNotification(payload);
+      this.sendNotification(payload, true);
     },
     chengeStatus(status) {
       this.order_detail.paymentType = status.value;
