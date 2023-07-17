@@ -43,8 +43,8 @@ const financeModules = {
           }
         }
         console.log("37 =>",filter)
-        let localhost = "http://localhost:3000"
-        let endpoint = `${localhost}/api/v1/adminpayment/filter?`
+        // let localhost = "http://localhost:3000"
+        let endpoint = `${process.env.VUE_APP_URL}/api/v1/adminpayment/filter?`
         endpoint = endpoint + `studentName=${filter.students}&`
         endpoint = endpoint + `status=${filter.payment_status}&`
         endpoint = endpoint + `type=${filter.payment_type}&`
