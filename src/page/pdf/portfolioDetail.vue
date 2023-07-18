@@ -10,32 +10,32 @@
     // const { loadImage } = require('canvas')
     import pdfMake from 'pdfmake'
     import pdfFonts from '../../assets/custom-fonts.js'
-    // import loadingOverlay from "../../components/loading/loadingOverlay.vue";
-import { mapActions, mapGetters } from 'vuex';
-import moment from 'moment';
+    import loadingOverlay from "../../components/loading/loadingOverlay.vue";
+    import { mapActions, mapGetters } from 'vuex';
+    import moment from 'moment';
+    // import axios from "axios";
     export default {
       name: "FrontPortfolio",
       components: {
-        // loadingOverlay
+        loadingOverlay
       },
       data: () => ({
         user_profile : null,
-        images_files: [],
+        images_files: {},
       }),
-      created() {
-        this.GetPortfolioData({account_id : this.$route.params.account_id})
-        this.exportPdf()
+      async created() {
+        await this.GetPortfolioData({account_id : this.$route.params.account_id}).then(()=>{
+          if(this.portfolio_data){
+            this.exportPdf()
+          }
+        })
       },
-      mounted() {
-        // this.GenCourses()
-        
-      },
+      mounted() {},
       methods: {
         ...mapActions({
           GetPortfolioData : 'portfolioModules/GetPortfolioData'
         }),
-      GenCourses(){
-          
+        GenCourses(){
           // let defaultProfile = require('../../assets/profile/default_profile.png')
           // let defaultProfileImageData =  await this.loadImageFromFile(defaultProfile);
           // let defaultProfileImageDataUrl = await this.convertImageToDataFile(defaultProfileImageData);
@@ -49,11 +49,12 @@ import moment from 'moment';
             let img_arr = []
             let img_col = []
             if(course.attachmensPictureAll){
-              for(let img of course.attachmensPictureAll){
-                console.log("img",img)
+              for (let img of course.attachmensPictureAll){
+                // console.log(img)
+                this.images_files[img.attachmentAssessmentId] = img.assessmentAttachmentFilesUrl
                 img_col.push({
+                  text: `${img.attachmentAssessmentId}`,
                   width: '50%',
-                  text : `${img.assessmentAttachmentFilesUrl}`
                 })
               }
             }else{
@@ -73,7 +74,6 @@ import moment from 'moment';
                 pageBreak: 'after', 
               })
             }
-           
             let ass_arr = []
             let assed = []
             for(let ass of course.assessments){
@@ -81,10 +81,11 @@ import moment from 'moment';
               console.log("47=>",ass)
               let ass_columns = []
               if(ass.assessmentAttachmentFilesUrl){
+                this.images_files[ass.attachmentAssessmentId] = ass.assessmentAttachmentFilesUrl
                 ass_columns.push({
                   alignment : 'center',
                   width: '50%',
-                  image: `${ass.assessmentAttachmentFilesUrl}`
+                  text: ass.attachmentAssessmentId,
                 })
               }else{
                 ass_columns.push({
@@ -171,10 +172,12 @@ import moment from 'moment';
             let potential_arr = []
             let potential_columns = []
             if( course.assessmentPotentials.potentialAttachmentFilesUrl){ 
+              // this.images_files[course.assessmentPotentials.attachmentPotentialId] = course.assessmentPotentials.assessmentAttachmentFilesUrl
+              // console.log("179 => ",course.assessmentPotentials.attachmentPotentialId)
               potential_columns.push({
                 alignment : 'center',
                 width: '50%',
-                image: course.assessmentPotentials.potentialAttachmentFilesUrl
+                text: `${course.assessmentPotentials.attachmentPotentialId}`
               })   
             }else{
               potential_columns.push({
@@ -286,19 +289,19 @@ import moment from 'moment';
           return courses
         },
         async exportPdf() {
-            // Define the image paths
-            var backgroundImagePath = require('../../assets/FrontPortfolio/bg-front-detail.png');
-            var backgroundDetailImagePath = require('../../assets/FrontPortfolio/bg-detail.png');
-            let defaultProfile = require('../../assets/profile/default_profile.png')
+          // Define the image paths
+          var backgroundImagePath = require('../../assets/FrontPortfolio/bg-front-detail.png');
+          var backgroundDetailImagePath = require('../../assets/FrontPortfolio/bg-detail.png');
+          let defaultProfile = require('../../assets/profile/default_profile.png')
 
-            // Load the images using the file loader
-            let defaultProfileImageData = await this.loadImageFromFile(defaultProfile);
-            var backgroundImageData = await this.loadImageFromFile(backgroundImagePath);
-            var backgroundDetailImageData = await this.loadImageFromFile(backgroundDetailImagePath);
-            // Convert image URLs to data URLs directly
-            let defaultProfileImageDataUrl = await this.convertImageToDataFile(defaultProfileImageData);
-            var backgroundImageDataUrl = await this.convertImageToDataFile(backgroundImageData);
-            var backgroundDetailImageDataUrl = await this.convertImageToDataFile(backgroundDetailImageData);
+          // Load the images using the file loader
+          let defaultProfileImageData = await this.loadImageFromFile(defaultProfile);
+          var backgroundImageData = await this.loadImageFromFile(backgroundImagePath);
+          var backgroundDetailImageData = await this.loadImageFromFile(backgroundDetailImagePath);
+          // Convert image URLs to data URLs directly
+          let defaultProfileImageDataUrl = await this.convertImageToDataFile(defaultProfileImageData);
+          var backgroundImageDataUrl = await this.convertImageToDataFile(backgroundImageData);
+          var backgroundDetailImageDataUrl = await this.convertImageToDataFile(backgroundDetailImageData);
           pdfMake.vfs = pdfFonts.pdfMake.vfs
           pdfMake.fonts = {
               Kanit: {
@@ -375,31 +378,6 @@ import moment from 'moment';
                   pageBreak: 'after' 
                 },
                 ...await this.GenCourses(),
-                // {
-                //     margin: [0, 0, 0, 10],
-                //     stack: [
-                //         {
-                //             text : 'ว่ายน้ำท่ากันเชียง',
-                //             fontSize: 26.4,
-                //             margin: [0, 20, 0, 0],
-                //             color:"#573e33",
-                //             bold:true,
-                //         },
-                //         {
-                //             text : 'โค้ช จิรายุท',
-                //             fontSize: 26.4,
-                //             margin: [0, -10, 0, 0],
-                //             color:"#573e33",
-                //         }   
-                //     ]
-                // },
-                // {
-                //     text : "ประเมินศักยภาพ",
-                //     bold:true,
-                //     alignment: 'center',
-                //     fontSize: 25.9,
-                //     color:"#573e33",
-                // }
             ],
             defaultStyle: {
               font: 'Kanit'
@@ -421,15 +399,19 @@ import moment from 'moment';
               }
             },
             images: {
-              profile : this.portfolio_data.image ? this.portfolio_data.image : defaultProfileImageDataUrl
+              profile : this.portfolio_data.image ? this.portfolio_data.image : defaultProfileImageDataUrl,
+              ...this.images_files,
             }
           }
           
-          // console.log(docDefinition)
+          // pdfMake.createPdf(docDefinition)
           let pdfDoc = pdfMake.createPdf(docDefinition)
+          // pdfDoc.getBase64((data) => {
+          //   alert(data);
+          // });
           pdfDoc.getBlob((blob) => {
             var url = URL.createObjectURL(blob);
-  
+            
             // Open the PDF in a new tab
             window.open(url);
           });
@@ -494,29 +476,27 @@ import moment from 'moment';
         },
         getBase64ImageFromURL(url) {
           return new Promise((resolve, reject) => {
-            var img = new Image();
-            img.setAttribute("crossOrigin", "anonymous");
-  
-            img.onload = () => {
-              var canvas = document.createElement("canvas");
-              canvas.width = img.width;
-              canvas.height = img.height;
-  
-              var ctx = canvas.getContext("2d");
-              ctx.drawImage(img, 0, 0);
-  
-              var dataURL = canvas.toDataURL("image/png");
-  
+            const img = new Image();
+            img.onload = function () {
+              const canvas = document.createElement('canvas');
+              canvas.width = this.width;
+              canvas.height = this.height;
+
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(this, 0, 0);
+
+              const dataURL = canvas.toDataURL();
               resolve(dataURL);
             };
-  
-            img.onerror = error => {
+
+            img.onerror = function (error) {
               reject(error);
             };
-  
+
+            img.crossOrigin = 'Anonymous';
             img.src = url;
           });
-        },
+        }
       },
       computed: {
         ...mapGetters({
