@@ -404,17 +404,14 @@
             }
           }
           
-          // pdfMake.createPdf(docDefinition)
-          let pdfDoc = pdfMake.createPdf(docDefinition)
-          // pdfDoc.getBase64((data) => {
-          //   alert(data);
-          // });
-          pdfDoc.getBlob((blob) => {
-            var url = URL.createObjectURL(blob);
+          pdfMake.createPdf(docDefinition).open({}, window)
+          // let pdfDoc = pdfMake.createPdf(docDefinition)
+          // pdfDoc.getBlob((blob) => {
+          //   var url = URL.createObjectURL(blob);
             
-            // Open the PDF in a new tab
-            window.open(url);
-          });
+          //   // Open the PDF in a new tab
+          //   window.open(url);
+          // });
         },
         async currentPageBg(currentPage) {
             // Define the image paths
