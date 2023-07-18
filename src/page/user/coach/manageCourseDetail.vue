@@ -5,6 +5,7 @@
       <v-card flat>
         <v-card-text class="bg-[#FBF3F5] border">
           <v-row>
+            <!-- {{ course_data }} -->
             <v-col cols="auto">
               <v-img
                 class="rounded-lg"
@@ -1615,7 +1616,10 @@ export default {
       });
     },
     async CheckInStudents(item) {
-      let student_id = await item.map((val)=> {return val.studentId})
+      let student_id = []
+      await item.map((val)=> {
+        student_id.push({studentId: val.studentId})
+      })
       Swal.fire({
         icon: "question",
         title: "ต้องการบันทึกใช่หรือไม่ ?",

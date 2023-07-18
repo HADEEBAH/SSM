@@ -130,7 +130,7 @@ export default {
     },
     user_detail: null,
     menu_drawer_list: [
-      // { title: "แดชบอร์ด", to: "Dashboard", child: [], roles: ['R_1', 'R_2']}, // to ให้ใส่ name ของ router
+      { title: "แดชบอร์ด", to: "Dashboard", child: [], roles: ['R_1', 'R_2']}, // to ให้ใส่ name ของ router
       // { title: "แดชบอร์ด", to: "", child: [], roles: ['R_1', 'R_2']}, // to ให้ใส่ name ของ router
       { title: "ตารางเรียน", to: "ManageSchedule", child: [], roles: ['R_1', 'R_2']  },
       // { title: "เพิ่มผู้เรียน", to: "Student", child: [] },

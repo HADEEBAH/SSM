@@ -124,8 +124,11 @@
               </v-card-title>
               <v-card-text class="text-xs pa-2">
                 <div>
-                  <div v-if=" course.show" v-html="course.course_detail"></div>
-                  <div v-else v-html="course.course_detail.slice(0, 150).trim()"></div>
+                  <div v-if="course.show" v-html="course.course_detail"></div>
+                  <div
+                    v-else
+                    v-html="course.course_detail.slice(0, 150).trim()"
+                  ></div>
                   <span
                     v-if="course.course_detail.length > 150"
                     class="text-red-500 cursor-pointer"
@@ -133,7 +136,6 @@
                     >{{ course.show ? `น้อยลง` : `อ่านต่อ...` }}</span
                   >
                 </div>
-              
               </v-card-text>
             </v-card>
           </v-col>
@@ -212,14 +214,14 @@ export default {
       GetCoursesFilter: "CourseModules/GetCoursesFilter",
       GetPotential: "CourseModules/GetPotential",
     }),
-    GerPeriod(period){
-      let str = period.toString()
-      let part_period = str.split(".")
-      if(part_period.length > 1){
+    GerPeriod(period) {
+      let str = period.toString();
+      let part_period = str.split(".");
+      if (part_period.length > 1) {
         // // console.log("219 => ",period.toLocaleString("en-US",{minimumFractionDigits : 2}))
-        return period.toLocaleString("en-US",{minimumFractionDigits : 2})
-      }else{
-        return period
+        return period.toLocaleString("en-US", { minimumFractionDigits: 2 });
+      } else {
+        return period;
       }
     },
     searchCourse(event) {

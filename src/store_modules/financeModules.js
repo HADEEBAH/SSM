@@ -86,7 +86,7 @@ const financeModules = {
               reports.push({
                 "วันที่ออกเอกสาร" : moment(order.created_date).format("DD/MM/YYYY HH:mm"),
                 "หมายเลขออเดอร์" : order.order_number,
-                "สภานะ" : order.payment_status,
+                "สถานะ" : order.payment_status,
                 "วันที่ชำระ" : order.paid_date,
                 "ประเภทการชำระเงิน" : order.payment_type? order.payment_type == 'cash' ? 'เงินสด' : 
                 order.payment_type == 'Credit Card'? 'บัตเครดิต/เดบิต' : 'โอนเงินเข้าบัญชี' :'',
@@ -105,7 +105,7 @@ const financeModules = {
               reports.push({
                 "วันที่ออกเอกสาร" : 'ยอดชำระแล้ว',
                 "หมายเลขออเดอร์" : sumSuccess,
-                "สภานะ" :"ยอดรอดำเนินการ",
+                "สถานะ" :"ยอดรอดำเนินการ",
                 "วันที่ชำระ" : sumPending,
                 "ประเภทการชำระเงิน" :"ยอดยกเลิก",
                 "ราคา" : sumCancel,

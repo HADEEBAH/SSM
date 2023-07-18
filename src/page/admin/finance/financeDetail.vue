@@ -1062,7 +1062,7 @@ export default {
     sendNotificationByAccount(account) {
       let payload = {
         notificationName: "แจ้งเตือนการชำระเงิน",
-        notificationDescription: `หมายเลขออร์เดอร์ที่ ${this.$route.params.order_id} ยังไม่ชำระเงิน`,
+        notificationDescription: `หมายเลขออร์เดอร์ที่ ${this.$route.params.order_id} ของคุณ ${account.map((val)=>{return `${val.firstNameTh} ${val.lastNameTh}`}).join(account.length > 1 ? ", " : "")} ยังไม่ชำระเงิน`,
         accountId: account,
       };
       // console.log(payload);

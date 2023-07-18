@@ -596,7 +596,7 @@ export default {
     },
 
     openFile(file) {
-      // console.log(file);
+      console.log(file);
       window.open(file, "_blank");
     },
     dayOfWeekName(days) {

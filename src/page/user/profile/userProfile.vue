@@ -49,12 +49,10 @@
           })
         "
       >
-        <v-col cols="2" sm="1"> 
+        <v-col cols="2" sm="1">
           <v-icon class="pa-2" color="#ff6b81">mdi-book-account-outline</v-icon>
         </v-col>
-        <v-col cols="5" sm="6" >
-          คอร์สเรียนของฉัน
-        </v-col>
+        <v-col cols="5" sm="6"> พอร์ตโฟลิโอ</v-col>
       </v-row>
       <v-row
         dense

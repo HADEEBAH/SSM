@@ -1,4 +1,6 @@
 <template>
+  <v-container class="p-0">
+    
   <v-form ref="form" v-model="valid" lazy-validation>
     <v-card
       :flat="crad_flat"
@@ -168,6 +170,7 @@
         <v-row dense class="d-flex align-center">
           <v-col cols="auto">
             <v-checkbox
+            class="inline-block"
               v-model="user_one_id.accept_terms"
               @change="changeUserOneId(user_one_id)"
               color="pink lighten-1"
@@ -175,12 +178,16 @@
               <template v-slot:label>
                 <label>
                   การเปิดบัญชี ท่านรับทราบและตกลงตาม
-                  <label class="cursor-pointer underline text-[#FF6B81]"
-                    >เงื่อนไขการบริการ & นโยบายความเป็นส่วนตัว</label
-                  ></label
+                  <a @click="policy_show = true" class="cursor-pointer underline text-[#FF6B81]"
+                    >เงื่อนไขการบริการ & นโยบายความเป็นส่วนตัว</a
+                  >
+                  </label
                 >
               </template>
             </v-checkbox>
+            <!-- <a @click="alert('555')" class="mb-[8px] cursor-pointer underline text-[#FF6B81] inline-block font-[16px!important]"
+                    >เงื่อนไขการบริการ & นโยบายความเป็นส่วนตัว</a
+                  > -->
           </v-col>
         </v-row>
       </v-card-text>
@@ -205,11 +212,82 @@
       </v-card-actions>
     </v-card>
   </v-form>
+
+  <v-dialog 
+      v-model="policy_show" 
+      v-if="policy_show" 
+      persistent
+      :width="$vuetify.breakpoint.smAndUp ? `60vw` : ''"
+    >
+      <v-card flat class="pa-2">
+        <v-row dense>
+          <v-col class="pa-2" align="right">
+            <v-btn
+              icon
+              @click="policy_show = false"
+            >  
+              <v-icon color="red">
+                mdi-close
+              </v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+        <!-- <v-card-title >
+          <v-row dense>
+            <v-col align="center">
+              policy
+            </v-col>
+          </v-row>
+        </v-card-title> -->
+        <v-card-text>
+          <v-row dense>
+            <v-col cols="12">
+              <TermOfUse/>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col>
+              <v-checkbox
+                hide-details
+                color="pink"
+                v-model="user_one_id.accept_terms"
+              >
+              <template v-slot:label>
+                ยอมรับ <a class="mx-2 font-weight-bold"> ข้อกำหนดการใช้บริการ </a> และ <a class="mx-2 font-weight-bold" >นโยบายความคุ้มครองข้อมูลส่วนบุคคล</a>
+              </template>
+            </v-checkbox>
+            </v-col>
+          </v-row>
+        </v-card-text>
+        <v-card-actions>
+          <v-row dense>
+            <v-col align="right">
+              <v-btn outlined color="#ff6b81" text-color="#ff6b81" @click="policy_show = false, user_one_id.accept_terms = false">
+                ยกเลิก
+              </v-btn>
+            </v-col>
+            <v-col>
+              <v-btn depressed dark color="#ff6b81" @click="policy_show = false">
+                ตกลง
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+</v-container>
+
+  
 </template>  
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { inputValidation } from "@/functions/functions";
+import TermOfUse from '@/components/termOfUse.vue'
 export default {
+  components: {
+    TermOfUse
+  },
   name: "registerDialogForm",
   props: {
     title: { type: String },
@@ -218,6 +296,8 @@ export default {
     state: { type: String },
   },
   data: () => ({
+    policy_show: false,
+    policy: false,
     valid: true,
     show_password: false,
     show_confirm_password: false,

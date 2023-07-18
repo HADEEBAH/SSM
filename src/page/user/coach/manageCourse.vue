@@ -49,17 +49,19 @@
         <!-- รายวัน -->
         <template v-if="time_frame === 'day'">
           <!-- COURSE LIST -->
-          <div
-            v-for="(course, course_index) in my_courses.filter(
-              (v) => v.start_date === genToday
-            )"
-            :key="course_index"
-          >
+          <!-- <div
+            
+          > -->
             <!-- {{ new Date(course.start) }} -->
             <v-card
               outlined
               class="mb-2"
-              @click="
+              v-for="(course, course_index) in my_courses.filter(
+              (v) => v.start_date === genToday
+            )"
+            :key="course_index"
+            >
+              <v-card-text class="cursor-pointer" v-if="!course.type" @click="
                 $router.push({
                   name: 'menageCourseDetail',
                   params: {
@@ -69,9 +71,7 @@
                     date: course.start_date,
                   },
                 })
-              "
-            >
-              <v-card-text class="cursor-pointer">
+              ">
                 <v-row dense>
                   <v-col cols="12" sm="auto">
                     <v-img
@@ -126,9 +126,33 @@
                   </v-col>
                 </v-row>
               </v-card-text>
+
+              <v-card-text
+                v-else
+                class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg"
+              >
+                <span class="text-lg font-bold">
+                  <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                  ไม่พบข้อมูลการสอน
+                </span>
+              </v-card-text>
             </v-card>
-          </div>
-          <div
+
+            <v-card flat v-if="
+              my_courses.filter((v) => v.start_date === genToday).length == 0
+            ">
+              <v-card-text
+                class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg"
+              >
+                <span class="text-lg font-bold">
+                  <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                  ไม่พบข้อมูลการสอน
+                </span>
+              </v-card-text>
+            </v-card>
+
+          <!-- </div> -->
+          <!-- <div
             v-if="
               my_courses.filter((v) => v.start_date === genToday).length == 0
             "
@@ -143,7 +167,7 @@
                 </span>
               </v-card-text>
             </v-card>
-          </div>
+          </div> -->
         </template>
         <!-- รายสัปดาห์ -->
         <template v-else>
@@ -967,7 +991,7 @@
           </v-card-title>
           <v-card-text>
             <v-row dense class="mb-3">
-              <v-col align="right"> สภานะ : </v-col>
+              <v-col align="right"> สถานะ : </v-col>
               <v-col cols="auto">
                 <div
                   class="btn-size-lg d-flex align-center pa-1 rounded-xl"
