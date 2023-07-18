@@ -137,7 +137,7 @@
             :selectedRole="selectedRole"
             :page.sync="page"
             :items-per-page="itemsPerPage"
-            :page-count="(pageCount = $event)"
+            :page-count="(pageCount)"
             loading-text="Loading... Please wait"
             :loading="user_list.length < 0"
             class="elevation-1 header-table"
@@ -416,8 +416,7 @@ export default {
         // console.log("err", error);
       }
     },
-
-    deleteAccount(account_id) {
+    async deleteAccount(account_id) {
       // console.log("accountId", account_id);
       Swal.fire({
         icon: "question",
@@ -437,21 +436,21 @@ export default {
               },
             };
 
-            let { data } = await axios.delete(
-              `${process.env.VUE_APP_URL}/api/v1/usermanagement/${account_id}`,
-              // `http://localhost:3000/api/v1/usermanagement/${account_id}`,
-              config
-            );
-
+            let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/usermanagement/${account_id}`, config);
+            console.log(data)
             if (data.statusCode === 200) {
-              Swal.fire({
-                icon: "success",
-                title: "ลบข้อมูลสำเร็จ",
-              }).then(async (result) => {
-                if (result.isConfirmed) {
-                  this.$store.dispatch("UserModules/GetUserList");
-                }
-              });
+              if(typeof data.data === 'string'){
+                throw { message: data };
+              }else{
+                Swal.fire({
+                  icon: "success",
+                  title: "ลบข้อมูลสำเร็จ",
+                }).then(async (result) => {
+                  if (result.isConfirmed) {
+                    this.$store.dispatch("UserModules/GetUserList");
+                  }
+                });
+              }
             } else {
               throw { message: data.message };
             }
