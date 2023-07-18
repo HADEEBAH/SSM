@@ -480,6 +480,7 @@ const CourseModules = {
           }
         }
         // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach_id}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach_id}`, config)
         if (data.statusCode === 200) {
           // console.log("485 => ",data.data)
