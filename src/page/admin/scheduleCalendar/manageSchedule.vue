@@ -539,7 +539,7 @@
                   outlined
                   v-model="selectedCoach"
                   :items="get_coachs"
-                  item-text="firstNameTh"
+                  item-text="fullNameTh"
                   item-value="accountId"
                   multiple
                   color="#FF6B81"
@@ -550,7 +550,7 @@
                   <template v-slot:selection="{ item, index }">
                     <!-- {{ item }} -->
                     <v-chip v-if="index === 0">
-                      <span>{{ item.firstNameTh }}</span>
+                      <span>{{ item.fullNameTh }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
                       (+{{ selectedCoach.length - 1 }} others)
