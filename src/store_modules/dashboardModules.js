@@ -1,6 +1,39 @@
 import axios from "axios";
 // import VueCookie from "vue-cookie"
-
+function dayOfWeekArray(day) {
+  console.log("dayOfWeekArray", day)
+  // let day_arr = day
+  let days = day
+  // // console.log(day)
+  const weekdays = [
+    "วันอาทิตย์",
+    "วันจันทร์",
+    "วันอังคาร",
+    "วันพุธ",
+    "วันพฤหัสบดี",
+    "วันศุกร์",
+    "วันเสาร์",
+  ];
+  days.sort();
+  let ranges = [];
+  if (days[0]) {
+    let rangeStart = parseInt(days[0]);
+    let prevDay = rangeStart;
+    for (let i = 1; i < days.length; i++) {
+      const day = parseInt(days[i]);
+      if (day === prevDay + 1) {
+        prevDay = day;
+      } else {
+        const rangeEnd = prevDay;
+        ranges.push({ start: rangeStart, end: rangeEnd });
+        rangeStart = day;
+        prevDay = day;
+      }
+    }
+    ranges.push({ start: rangeStart, end: prevDay });
+    return ranges.map(({ start, end }) => start === end ? weekdays[start] : `${weekdays[start]} - ${weekdays[end]}`).join(', ')
+  }
+}
 const dashboardModules = {
   namespaced: true,
   state: {
@@ -40,17 +73,28 @@ const dashboardModules = {
       context.commit("SetGetLoading", true)
 
       try {
-        // let { data } = await axios.get(` http://localhost:3002/api/v1/dashboard/course-status`)
+        // let { data } = await axios.get(` http://localhost:3000/api/v1/dashboard/course-status`)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/course-status`)
+
         if (data.statusCode === 200) {
+          data.data.courseStatus.map((items) => {
+            items.time = `${items.start} - ${items.end}`
+            items.dayOfWeek = dayOfWeekArray(items.dayOfWeekName.split(','))
+          })
+
+          // data.data.courseStatus.map((items, index) => {
+          //   items.dayOfWeek = dayOfWeek.split(', ')[index]
+
+          // })
+          // console.log("dayOfWeek=>", dayOfWeek);
+
           context.commit("SetGetEmptyCourse", data.data)
-          // console.log("SetGetEmptyCourse", data.data);
+          console.log("SetGetEmptyCourse", data.data)
           context.commit("SetGetLoading", false)
 
         }
       } catch (error) {
         context.commit("SetGetLoading", false)
-        // console.log("SetGetEmptyCourse", error);
       }
     },
 

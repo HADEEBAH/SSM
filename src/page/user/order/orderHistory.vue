@@ -151,13 +151,13 @@
                           v-if="course.show_student"
                           class="border rounded-md pa-5"
                         >
-                          <v-card flat>
-                            <v-card-text class="border-2 border-[#ff6b81]">
-                              <v-row
-                                dense
-                                v-for="(student, index) in course.students"
-                                :key="`${index}-student`"
-                              >
+                          <v-row
+                            dense
+                            v-for="(student, index) in course.students"
+                            :key="`${index}-student`"
+                          >
+                            <v-card flat class="w-full my-2">
+                              <v-card-text class="border-2 border-[#ff6b81]">
                                 <v-col cols="12" calign="start">
                                   <span class="font-bold"> ชื่อ-สกุล : </span>
                                   {{
@@ -171,9 +171,9 @@
                                   <span class="font-bold"> email : </span>
                                   {{ `${student.email}` }}
                                 </v-col>
-                              </v-row>
-                            </v-card-text>
-                          </v-card>
+                              </v-card-text>
+                            </v-card>
+                          </v-row>
                         </div>
                       </v-expand-transition>
                     </v-card-text>
