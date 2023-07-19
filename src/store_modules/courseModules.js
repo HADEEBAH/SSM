@@ -7,7 +7,7 @@ import VueCookie from "vue-cookie"
 // import { dateFormatter } from "@/functions/functions";
 var XLSX = require("xlsx");
 function dayOfWeekArray(day) {
-  // // console.log
+  console.log("dayOfWeekArray", day)
   // let day_arr = day
   let days = day
   // // console.log(day)

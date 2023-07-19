@@ -4,8 +4,9 @@
       <loading-overlay :loading="dashboard_loading"> </loading-overlay>
 
       <headerPage title="แดชบอร์ด"></headerPage>
-      <!-- <pre>{{ get_potential }}</pre> -->
-
+      <!-- <div v-for="(items, index) in get_empty_course.courseStatus" :key="index">
+        <pre>{{ items }}</pre>
+      </div> -->
       <!-- TOP CARD -->
       <v-row dense>
         <!-- STUDENT -->
@@ -358,8 +359,9 @@
                           <span
                             style="color: #ff6b81"
                             class="font-bold text-xl"
-                            >{{ totalSuccessDonut.toLocaleString() }}</span
                           >
+                            {{ totalSuccessDonut.toLocaleString() }}
+                          </span>
                           <span
                             style="
                               font-weight: normal;
@@ -451,7 +453,9 @@
                       <span class="text-xl">
                         คอร์สเต็ม
                         <span style="font-weight: bold; color: #999999">{{
-                          this.get_empty_course.countClose.toLocaleString()
+                          this.get_empty_course.countClose
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }}</span>
                         คอร์ส
                       </span>
@@ -464,7 +468,9 @@
                       <span class="text-xl">
                         คอร์สว่าง
                         <span style="font-weight: bold; color: #ff6b81">{{
-                          this.get_empty_course.countOpen.toLocaleString()
+                          this.get_empty_course.countOpen
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }}</span>
                         คอร์ส
                       </span>
@@ -511,11 +517,20 @@
                                 }}</v-card-title>
                               </v-col>
                               <v-col cols="12" sm="12" md="8">
-                                <v-card-subtitle class="mt-n8">
-                                  {{
-                                    `${item.courseTypeNameTh}(${item.packageName})`
-                                  }}</v-card-subtitle
-                                >
+                                <v-card-subtitle class="mt-n7">
+                                  {{ `${item.courseTypeNameTh}`
+                                  }}<span
+                                    v-if="
+                                      item.courseTypeNameTh == 'คอร์สทั่วไป'
+                                    "
+                                    >({{ item.packageName }})</span
+                                  >
+                                  <span
+                                    v-if="
+                                      item.courseTypeNameTh == 'คอร์สระยะสั้น'
+                                    "
+                                  ></span>
+                                </v-card-subtitle>
                               </v-col>
                               <v-col cols="12" sm="12" md="4" align="start">
                                 <v-card-subtitle class="mt-n8">
@@ -539,8 +554,8 @@
                                   </v-chip>
                                 </v-card-subtitle>
                               </v-col>
-                              <v-col cols="12">
-                                <v-card-subtitle class="mt-n8">
+                              <v-col cols="12" sm="6">
+                                <v-card-subtitle class="mt-n6">
                                   <v-icon color="#ff6b81" class="mt-n2">
                                     mdi-sofa-single-outline
                                   </v-icon>
@@ -549,12 +564,34 @@
                                   }}
                                 </v-card-subtitle>
                               </v-col>
+                              <v-col
+                                cols="12"
+                                sm="6"
+                                align="center"
+                                v-if="item.courseTypeNameTh == 'คอร์สทั่วไป'"
+                              >
+                                <v-card-subtitle class="mt-n8">
+                                  <div>
+                                    <v-btn
+                                      text
+                                      color="#FF6B81"
+                                      @click="dialogDetail(item)"
+                                    >
+                                      <v-icon
+                                        >mdi-text-box-search-outline</v-icon
+                                      >
+                                      ดูรายละเอียด
+                                    </v-btn>
+                                  </div>
+                                </v-card-subtitle>
+                              </v-col>
                             </v-row>
                           </v-card-text>
                         </v-card>
                       </v-card-text>
                     </v-card>
                   </v-col>
+
                   <!-- COURSE OPEN -->
                   <v-col cols="12" sm="6" class="my-2" :width="pieCardWidth()">
                     <v-card outlined style="overflow-y: scroll" height="400px">
@@ -595,11 +632,20 @@
                                 }}</v-card-title>
                               </v-col>
                               <v-col cols="12" sm="12" md="8" lg="8">
-                                <v-card-subtitle class="mt-n8">
-                                  {{
-                                    `${item.courseTypeNameTh}(${item.packageName})`
-                                  }}</v-card-subtitle
-                                >
+                                <v-card-subtitle class="mt-n7">
+                                  {{ `${item.courseTypeNameTh}`
+                                  }}<span
+                                    v-if="
+                                      item.courseTypeNameTh == 'คอร์สทั่วไป'
+                                    "
+                                    >({{ item.packageName }})</span
+                                  >
+                                  <span
+                                    v-if="
+                                      item.courseTypeNameTh == 'คอร์สระยะสั้น'
+                                    "
+                                  ></span>
+                                </v-card-subtitle>
                               </v-col>
                               <v-col
                                 cols="12"
@@ -630,8 +676,8 @@
                                 </v-card-subtitle>
                               </v-col>
 
-                              <v-col cols="12">
-                                <v-card-subtitle class="mt-n8">
+                              <v-col cols="12" sm="6">
+                                <v-card-subtitle class="mt-n6">
                                   <v-icon color="#ff6b81" class="mt-n2">
                                     mdi-sofa-single-outline
                                   </v-icon>
@@ -640,12 +686,104 @@
                                   }}
                                 </v-card-subtitle>
                               </v-col>
+                              <v-col
+                                cols="12"
+                                sm="6"
+                                align="center"
+                                v-if="item.courseTypeNameTh == 'คอร์สทั่วไป'"
+                              >
+                                <v-card-subtitle class="mt-n8">
+                                  <div>
+                                    <v-btn
+                                      text
+                                      color="#FF6B81"
+                                      @click="dialogDetail(item)"
+                                    >
+                                      <v-icon
+                                        >mdi-text-box-search-outline</v-icon
+                                      >
+                                      ดูรายละเอียด
+                                    </v-btn>
+                                  </div>
+                                </v-card-subtitle>
+                              </v-col>
                             </v-row>
                           </v-card-text>
                         </v-card>
                       </v-card-text>
                     </v-card>
                   </v-col>
+                  <!-- DIALOG COURSES -->
+                  <v-dialog
+                    v-model="dialog_course"
+                    persistent
+                    max-width="600px"
+                  >
+                    <v-card>
+                      <v-container>
+                        <v-card-title>
+                          <v-row dense>
+                            <v-col
+                              cols="12"
+                              class="absolute right-0 top-0"
+                              align="end"
+                            >
+                              <v-btn icon @click="dialog_course = false">
+                                <v-icon color="#ff6b81">mdi-close</v-icon>
+                              </v-btn>
+                            </v-col>
+                            <v-col
+                              cols="12"
+                              align="center"
+                              class="font-weight-bold"
+                            >
+                              {{
+                                items_dialog.status == "Close"
+                                  ? "ข้อมูลคอร์สเต็ม"
+                                  : "ข้อมูลคอร์สว่าง"
+                              }}
+                            </v-col>
+                          </v-row>
+                        </v-card-title>
+
+                        <v-card-text class="pa-10">
+                          <v-row dense>
+                            <v-col cols="6">
+                              <v-text-field
+                                hide-details
+                                outlined
+                                readonly
+                                dense
+                                :value="items_dialog.dayOfWeek"
+                              >
+                                <template v-slot:append>
+                                  <v-icon :color="'#FF6B81'"
+                                    >mdi-calendar</v-icon
+                                  >
+                                </template>
+                              </v-text-field>
+                            </v-col>
+
+                            <v-col cols="6">
+                              <v-text-field
+                                hide-details
+                                outlined
+                                readonly
+                                dense
+                                :value="items_dialog.time"
+                              >
+                                <template v-slot:append>
+                                  <v-icon :color="'#FF6B81'"
+                                    >mdi-clock-outline</v-icon
+                                  >
+                                </template>
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                        </v-card-text>
+                      </v-container>
+                    </v-card>
+                  </v-dialog>
                 </v-row>
               </v-col>
             </v-card>
@@ -713,6 +851,10 @@ export default {
     thai_day_name: [],
     mapMonth: "",
     totalPrice: [],
+    dialog_course: false,
+    items_dialog: "",
+    day: "จันทร์",
+    time: "13.00:15.00",
   }),
   created() {
     this.FilterYears().then(() => {
@@ -937,6 +1079,11 @@ export default {
             .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} บาท
         </div>
         `;
+    },
+    dialogDetail(item) {
+      this.items_dialog = item;
+      // console.log("item", this.items_dialog);
+      this.dialog_course = true;
     },
   },
   computed: {
