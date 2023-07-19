@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- {{ events }} -->
     <template v-if="type === 'week'">
       <!-- <v-row dense>
                 <v-col>
@@ -78,7 +79,7 @@
               <!-- {{ event }} -->
               <v-card-text class="border-2 border-[#ff6b81]">
                 <v-row dense>
-                  <v-col  v-if="event.type" cols="auto" class="text-sm text-[#999999]" >
+                  <v-col  v-if="event.type == 'holiday'" cols="auto" class="text-sm text-[#999999]" >
                     -
                   </v-col>
                   <v-col v-else cols="auto" class="text-sm text-[#999999]">
@@ -96,7 +97,7 @@
                         >
                       </v-col>
                     </v-row>
-                    <v-row dense v-if="!event.type">
+                    <v-row dense v-if="event.type !== 'holiday'">
                       <v-col class="text-sm">
                         โค้ช: {{ event.coach }} <br />
                         <v-btn
@@ -108,6 +109,7 @@
                                 timeId: event.time_id,
                                 dayOfWeekId: event.day_of_week_id,
                                 date: event.start_date,
+                                typeEvent : event.type ? event.type :'null'
                               },
                             })
                           "
@@ -203,7 +205,7 @@ export default {
   },
   methods: {
     selectedDate(data) {
-      if(!data.event.type){
+      if(data.event.type !== 'holiday'){
         this.$router.push({
           name: "menageCourseDetail",
           params: {
@@ -211,6 +213,7 @@ export default {
             timeId: data.event.time_id,
             dayOfWeekId: data.event.day_of_week_id,
             date: data.event.start_date,
+            typeEvent : data.type ? data.type :'null'
           },
         });
       }
@@ -232,6 +235,7 @@ export default {
               color: event.color,
               course_id: event.course_id,
               time_id: event.time_id,
+              type: event.type,
               day_of_week_id: event.day_of_week_id,
               start_date: event.start_date,
             });

@@ -185,7 +185,7 @@
                             dense
                             outlined
                             hide-details
-                            v-model="course.compensationDate"
+                            v-model="course.compensationDate_str"
                             readonly
                             placeholder="เลือกวันที่ชดเชย"
                             v-bind="attrs"
@@ -205,6 +205,7 @@
                           :disabled="
                             coach_leave.status === 'pending' ? false : true
                           "
+                          @input="InputDate(course.compensationDate, course)"
                           :min="new Date().toISOString()"
                           v-model="course.compensationDate"
                         ></v-date-picker>
@@ -218,17 +219,51 @@
                         v-if="coach_leave.status === 'pending'"
                       >
                         <v-col class="px-2" cols="12" sm="6">
+                          <v-text-field
+                            :disabled="disable"
+                            :outlined="!disable"
+                            :filled="disable"
+                            dense
+                            :style="`width:${width()}px;`"
+                            style="position: absolute; display: block; z-index: 4"
+                            @focus="
+                              SelectedStartTime(
+                                $event,
+                                course.compensationStartTime
+                              )
+                            "
+                            v-model="course.compensationStartTime"
+                          >
+                          </v-text-field>
                           <VueTimepicker
-                            class="input-size-lg"
+                            class="time-picker-hidden"
                             advanced-keyboard
+                            hide-clear-button
                             v-model="course.compensationStartTimeObj"
                             close-on-complete
                           ></VueTimepicker>
                         </v-col>
                         <v-col class="px-2" cols="12" sm="6">
+                          <v-text-field
+                            :disabled="disable"
+                            :outlined="!disable"
+                            :filled="disable"
+                            dense
+                            :style="`width:${width()}px;`"
+                            style="position: absolute; display: block; z-index: 4"
+                            @focus="
+                              SelectedStartTime(
+                                $event,
+                                course.compensationEndTime
+                              )
+                            "
+                            v-model="course.compensationEndTime"
+                          >
+                          </v-text-field>
                           <VueTimepicker
-                            class="input-size-lg"
+                            class="time-picker-hidden"
                             advanced-keyboard
+                            hide-clear-button
                             v-model="course.compensationEndTimeObj"
                             close-on-complete
                           ></VueTimepicker>
@@ -259,32 +294,6 @@
             </v-card-text>
           </v-card>
         </div>
-        <!-- <v-card class="mb-3">
-                    <v-data-table
-                        class="elevation-1 header-table"
-                        :headers="column"
-                        :items="coach_leave.courses"
-                    >
-                        <template v-slot:[`item.coach`]="{ item }">
-                            <v-row dense>
-                                <v-col>
-                                    <v-select
-                                        dense
-                                        :disabled="coach_leave.status === 'pending' ? false: true"
-                                        v-model="item.substituteCoachId"
-                                        outlined
-                                        hide-details
-                                        item-value="accountId"
-                                        item-text="fullNameTh"
-                                        @change="selectCoach(item)"
-                                        :items="coachs.filter(v=>v.accountId !== coach_leave.coachId)"
-                                    >
-                                    </v-select>
-                                </v-col>
-                            </v-row>
-                        </template>
-                    </v-data-table>
-                </v-card> -->
         <v-card class="mb-3">
           <v-card-text>
             <v-row dense>
@@ -480,13 +489,39 @@ export default {
       updateStatusCoachLeaveAndCoach:
         "CoachModules/updateStatusCoachLeaveAndCoach",
     }),
+    width() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return 99;
+        case "sm":
+          return 147.5;
+        case "md":
+          return 180.5;
+        case "lg":
+          return 251.5;
+        case "xl":
+          return 401.75;
+      }
+    },
+    SelectedStartTime(e) {
+      e.target.parentNode.parentNode.parentNode.parentNode.parentNode
+        .getElementsByClassName("time-picker-hidden")[0]
+        .getElementsByTagName("input")[0]
+        .focus();
+    },
+    InputDate(date, course){
+      const options = {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      };
+      course.compensationDate_str = new Date(date).toLocaleDateString("th-TH", options)
+    },
     GenDateStr(date) {
       const options = {
         year: "numeric",
         month: "short",
         day: "numeric",
-        calendar: "buddhist",
-        era: "short",
       };
       return date.toLocaleDateString("th-TH", options);
     },

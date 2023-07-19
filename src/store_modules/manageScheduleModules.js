@@ -427,6 +427,7 @@ const manageScheduleModules = {
         // // console.log("params", params.join("&&"));
 
         // const endpoint = `http://localhost:3000/api/v1/admincourse/filter-schedule?${params.join("&&")}`
+        // let localhost = "http://localhost:3000"
         const endpoint = `${process.env.VUE_APP_URL}/api/v1/admincourse/filter-schedule?${params.join("&&")}`
         let { data } = await axios.get(endpoint, config);
         const res = data.data;

@@ -1590,11 +1590,10 @@ const CourseModules = {
             showDenyButton: false,
             showCancelButton: false,
             confirmButtonText: "ตกลง",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              router.replace({ name: "CourseList" })
-            }
+            timer: 3000,
+            timerProgressBar: true
           })
+          router.replace({ name: "CourseList" })
         } else {
           context.commit("SetCourseIsLoading", false)
           throw { message: data }
