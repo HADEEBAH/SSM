@@ -97,7 +97,7 @@
                         >
                       </v-col>
                     </v-row>
-                    <v-row dense v-if="!event.type == 'holiday'">
+                    <v-row dense v-if="event.type !== 'holiday'">
                       <v-col class="text-sm">
                         โค้ช: {{ event.coach }} <br />
                         <v-btn
