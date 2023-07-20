@@ -250,7 +250,7 @@
                             dense
                             outlined
                             hide-details
-                            v-model="course.compensation_date"
+                            v-model="test_date"
                             readonly
                             @focus="
                               getDatesBetween(
@@ -261,6 +261,9 @@
                             placeholder="เลือกวันที่ชดเชย"
                             v-bind="attrs"
                             v-on="on"
+                            :value="
+                              test_date ? test_date : course.compensation_date
+                            "
                           >
                             <template v-slot:append>
                               <v-icon
@@ -276,6 +279,10 @@
                           :min="new Date().toISOString()"
                           :allowed-dates="allowedDates"
                           v-model="course.compensation_date"
+                          @input="
+                            setHolidaydates(course.compensation_date),
+                              (course.menu_compensation_date = false)
+                          "
                           locale="th-TH"
                         ></v-date-picker>
                       </v-menu>
@@ -488,6 +495,7 @@ export default {
   },
   components: { VueTimepicker },
   data: () => ({
+    test_date: "",
     focusCompensationDate: "",
     today: new Date(),
     rules: {
@@ -586,6 +594,31 @@ export default {
       SearchCourseDateCoachLeave: "CoachModules/SearchCourseDateCoachLeave",
       ShowDialogCoachLeaveForm: "CoachModules/ShowDialogCoachLeaveForm",
     }),
+    setHolidaydates(item) {
+      // console.log("item", item);
+      const thaiMonths = [
+        "มกราคม",
+        "กุมภาพันธ์",
+        "มีนาคม",
+        "เมษายน",
+        "พฤษภาคม",
+        "มิถุนายน",
+        "กรกฎาคม",
+        "สิงหาคม",
+        "กันยายน",
+        "ตุลาคม",
+        "พฤศจิกายน",
+        "ธันวาคม",
+      ];
+      if (item !== "") {
+        const newDate = new Date(item).toLocaleDateString("th-TH");
+        const date = newDate.split("/")[0];
+        const month = newDate.split("/")[1];
+        const year = newDate.split("/")[2];
+        this.test_date = `${date} ${thaiMonths[month - 1]} ${year}`;
+      }
+      console.log("test_date", this.test_date);
+    },
     getDateRangeLength() {
       let startDate = new Date(this.coach_leave_data.start_date);
       let endDate = new Date(this.coach_leave_data.end_date);
@@ -731,10 +764,10 @@ export default {
       this.coach_leave_data.dates = [];
       const options = {
         year: "numeric",
-        month: "short",
+        month: "long",
         day: "numeric",
-        calendar: "buddhist",
-        era: "short",
+        // calendar: "buddhist",
+        // era: "short",
       };
       const start_date = this.coach_leave_data.start_date;
       const end_date = this.coach_leave_data.end_date;
@@ -816,7 +849,7 @@ export default {
           this.coach_leave_data.menu_start_date = false;
           this.coach_leave_data.start_date_str = dateFormatter(
             e,
-            "DD MT YYYYT"
+            "DD MMT YYYYT"
           );
           this.coach_leave_data.end_date_str = null;
           this.coach_leave_data.end_date = null;
@@ -824,7 +857,7 @@ export default {
           break;
         case "end":
           this.coach_leave_data.menu_end_date = false;
-          this.coach_leave_data.end_date_str = dateFormatter(e, "DD MT YYYYT");
+          this.coach_leave_data.end_date_str = dateFormatter(e, "DD MMT YYYYT");
           this.SearchCourseDateCoachLeave({
             account_id: this.admin
               ? this.coach_leave_data.coach_id

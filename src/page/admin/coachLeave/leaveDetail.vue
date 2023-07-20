@@ -58,15 +58,13 @@
             <v-row dense>
               <v-col>
                 <span class="text-[#999999]">วันที่ลา:</span>
-                <div class="text-[#2F3542] font-semibold">
-                  {{
-                    `${coach_leave.startDateStr} - ${coach_leave.endDateStr}`
-                  }}
+                <div class="text-[#2F3542] font-semibold mr-2">
+                  {{ `${coach_leave.startThDate} - ${coach_leave.endThDate}` }}
                 </div>
               </v-col>
               <v-col>
-                <span class="text-[#999999]">ประเภทการลา:</span>
-                <div class="text-[#2F3542] font-semibold">
+                <span class="text-[#999999] ml-2">ประเภทการลา:</span>
+                <div class="text-[#2F3542] font-semibold ml-2">
                   {{ coach_leave.leaveTypeStr }}
                 </div>
               </v-col>
@@ -85,7 +83,7 @@
               <v-col>
                 <span class="text-[#999999]">วันที่ส่งคำขอ: </span>
                 <div class="text-[#2F3542] font-semibold">
-                  {{ coach_leave.createdDateStr }}
+                  {{ coach_leave.createDateTh }}
                 </div>
               </v-col>
             </v-row>
@@ -532,7 +530,7 @@ export default {
     GenDateStr(date) {
       const options = {
         year: "numeric",
-        month: "short",
+        month: "long",
         day: "numeric",
       };
       return date.toLocaleDateString("th-TH", options);

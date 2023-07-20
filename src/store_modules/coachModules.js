@@ -10,8 +10,8 @@ const coachModules = {
     coachs: {},
     my_courses: [],
     my_courses_is_loading: false,
-    my_courses_leave:[],
-    my_courses_leave_is_loading : false,
+    my_courses_leave: [],
+    my_courses_leave_is_loading: false,
     coach_check_in: {},
     student_check_in: [],
     student_check_in_is_loading: false,
@@ -19,23 +19,23 @@ const coachModules = {
     coach_leaves: [],
     coach_leaves_is_loading: false,
     attachment_leave: [],
-    coach_leave : {},
-    show_dialog_coach_leave_form : false,
+    coach_leave: {},
+    show_dialog_coach_leave_form: false,
   },
   mutations: {
-    SetMyCoursesLeave(state, payload){
+    SetMyCoursesLeave(state, payload) {
       state.my_courses_leave = payload
     },
-    SetMyCoursesLeaveIsLoading(state, value){
+    SetMyCoursesLeaveIsLoading(state, value) {
       state.my_courses_leave_is_loading = value
     },
-    SetShowDialogCoachLeaveForm(state, payload){
+    SetShowDialogCoachLeaveForm(state, payload) {
       state.show_dialog_coach_leave_form = payload
     },
     SetAttachmentLeave(state, payload) {
       state.attachment_leave = payload
     },
-    SetCoachLeave(state, payload){
+    SetCoachLeave(state, payload) {
       state.coach_leave = payload
     },
     SetCoachLeaves(state, payload) {
@@ -70,8 +70,8 @@ const coachModules = {
     },
   },
   actions: {
-    async SearchCourseDateCoachLeave(context, {account_id, start_date, end_date}){
-      context.commit("SetMyCoursesLeaveIsLoading",true)
+    async SearchCourseDateCoachLeave(context, { account_id, start_date, end_date }) {
+      context.commit("SetMyCoursesLeaveIsLoading", true)
       let config = {
         headers: {
           "Access-Control-Allow-Origin": "*",
@@ -79,21 +79,21 @@ const coachModules = {
           Authorization: `Bearer ${VueCookie.get("token")}`,
         },
       };
-      try{
+      try {
         // let localhost = "http://localhost:3000"
-        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/manage/course-filter/${account_id}/?startDate=${start_date}&endDate=${end_date}`, config)
-        if(data.statusCode  == 200){
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/manage/course-filter/${account_id}/?startDate=${start_date}&endDate=${end_date}`, config)
+        if (data.statusCode == 200) {
           // // console.log("78 =>",data.data)
-          for(let course of data.data){
-            if(course.courseTypeId === 'CT_2'){
+          for (let course of data.data) {
+            if (course.courseTypeId === 'CT_2') {
               course.dayOfWeekName = course.dayOfWeekName.split(",")
             }
           }
-          context.commit("SetMyCoursesLeave",data.data)
-          context.commit("SetMyCoursesLeaveIsLoading",false)
+          context.commit("SetMyCoursesLeave", data.data)
+          context.commit("SetMyCoursesLeaveIsLoading", false)
         }
-      }catch(error){
-        context.commit("SetMyCoursesLeaveIsLoading",false)
+      } catch (error) {
+        context.commit("SetMyCoursesLeaveIsLoading", false)
         // console.log(error)
       }
     },
@@ -124,7 +124,7 @@ const coachModules = {
       }
     },
     // ASSESSMENT POTENTIAL
-    async UpdateAssessmentPotential(context, { students, course_id, time_id, date}) {
+    async UpdateAssessmentPotential(context, { students, course_id, time_id, date }) {
       context.commit("SetStudentCheckInIsLoading", true)
       try {
         let config = {
@@ -159,7 +159,7 @@ const coachModules = {
             throw { error: data }
           }
         }
-        if(count === students.filter(v => v.potential).length) {
+        if (count === students.filter(v => v.potential).length) {
           context.commit("SetStudentCheckInIsLoading", false)
           await Swal.fire({
             icon: "success",
@@ -170,7 +170,7 @@ const coachModules = {
             confirmButtonText: "ตกลง",
           }).then(async (result) => {
             if (result.isConfirmed) {
-              context.dispatch("GetStudentByTimeId",{
+              context.dispatch("GetStudentByTimeId", {
                 course_id: course_id,
                 date: date,
                 time_id: time_id,
@@ -184,8 +184,8 @@ const coachModules = {
         // console.log(error)
       }
     },
-     // ASSESSMENT
-    async AssessmentStudent(context, { students ,  course_id, date, time_id}) {
+    // ASSESSMENT
+    async AssessmentStudent(context, { students, course_id, date, time_id }) {
       context.commit("SetStudentCheckInIsLoading", true)
       try {
         let config = {
@@ -198,18 +198,18 @@ const coachModules = {
         let count = 0
         // console.log(students.length)
         for await (const student of students) {
-          if(student.assessment.rating_evolution === 3){
+          if (student.assessment.rating_evolution === 3) {
             student.assessment.evolution = "adjust"
-          }else if(student.assessment.rating_evolution === 4){
+          } else if (student.assessment.rating_evolution === 4) {
             student.assessment.evolution = "good"
-          }else if(student.assessment.rating_evolution === 5){
+          } else if (student.assessment.rating_evolution === 5) {
             student.assessment.evolution = "very good"
           }
-          if(student.assessment.rating_interest === 3){
+          if (student.assessment.rating_interest === 3) {
             student.assessment.interest = "adjust"
-          }else if(student.assessment.rating_interest === 4){
+          } else if (student.assessment.rating_interest === 4) {
             student.assessment.interest = "good"
-          }else if(student.assessment.rating_interest === 5){
+          } else if (student.assessment.rating_interest === 5) {
             student.assessment.interest = "very good"
           }
           let payload = {
@@ -265,7 +265,7 @@ const coachModules = {
             confirmButtonText: "ตกลง",
           }).then(async (result) => {
             if (result.isConfirmed) {
-              context.dispatch("GetStudentByTimeId",{
+              context.dispatch("GetStudentByTimeId", {
                 course_id: course_id,
                 date: date,
                 time_id: time_id,
@@ -340,7 +340,7 @@ const coachModules = {
           },
         };
         let user_detail = JSON.parse(localStorage.getItem("userDetail"));
-        
+
         // let localhost ="http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}/date/${date}`, config)
         if (data.statusCode === 200) {
@@ -357,7 +357,7 @@ const coachModules = {
                   attFilesUrl: `${process.env.VUE_APP_URL}/api/v1/files/${img.attFiles}`,
                   originalFilesName: img.originalFilesName,
                   filesSize: img.filesSize,
-                  filesType : img.filesType
+                  filesType: img.filesType
                 })
               }
             }
@@ -368,7 +368,7 @@ const coachModules = {
               summary: check_in.summary,
               homework: check_in.homework,
               attachment: img_url,
-              summary_files : [],
+              summary_files: [],
             }
           })
           context.commit("SetCoachCheckIn", payload)
@@ -387,7 +387,7 @@ const coachModules = {
         })
       }
     },
-    async UpdateCheckInStudent(context, { students, course_id, date ,time_id }) {
+    async UpdateCheckInStudent(context, { students, course_id, date, time_id }) {
       try {
         context.commit("SetStudentCheckInIsLoading", true)
         let config = {
@@ -415,9 +415,9 @@ const coachModules = {
           // console.log("payload :", payload)
           let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/checkin/student/${student.check_in_student_id}`, payload, config)
           // console.log(data)
-          if(data.statusCode == 200){
+          if (data.statusCode == 200) {
             count = count + 1
-          }else{
+          } else {
             throw { error: data }
           }
         }
@@ -433,7 +433,7 @@ const coachModules = {
             confirmButtonText: "ตกลง",
           }).then(async (result) => {
             if (result.isConfirmed) {
-              context.dispatch("GetStudentByTimeId",{
+              context.dispatch("GetStudentByTimeId", {
                 course_id: course_id,
                 date: date,
                 time_id: time_id,
@@ -472,8 +472,8 @@ const coachModules = {
             student.no = i
             student.fullname = `${student.firstNameTh} ${student.lastNameTh}`
             student.check_in_student_id = student.checkInStudentId,
-            student.menu_compensation_date = false,
-            student.compensationDate = student.compensationDate ? student.compensationDate !== "Invalid date" ? moment(new Date(student.compensationDate)).format("YYYY-MM-DD") : null : null
+              student.menu_compensation_date = false,
+              student.compensationDate = student.compensationDate ? student.compensationDate !== "Invalid date" ? moment(new Date(student.compensationDate)).format("YYYY-MM-DD") : null : null
             student.compensation_date_str = student.compensationDate ? student.compensationDate !== "Invalid date" ? dateFormatter(new Date(student.compensationDate), "DD MT YYYYT") : null : null
             student.compensationStartTime = student.compensationStartTime ? moment(student.compensationStartTime, "HH:mm") : null
             student.compensationEndTime = student.compensationEndTime ? moment(student.compensationEndTime, "HH:mm") : null
@@ -487,7 +487,7 @@ const coachModules = {
         console.log(error)
       }
     },
-    async CheckInCoach(context, { course_id, time_id, date ,type }) {
+    async CheckInCoach(context, { course_id, time_id, date, type }) {
       context.commit("SetCoachCheckInIsLoading", true)
       try {
         // console.log(course_id, time_id, date)
@@ -503,7 +503,7 @@ const coachModules = {
         const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}`, {
           "date": date,
           "timeId": time_id,
-          "type" : type
+          "type": type
         }, config)
         if (data.statusCode === 201) {
           // let localhost = "http://localhost:3000"
@@ -533,8 +533,8 @@ const coachModules = {
         // console.log(error)
       }
     },
-    ShowDialogCoachLeaveForm(context,value){
-      context.commit("SetShowDialogCoachLeaveForm",value)
+    ShowDialogCoachLeaveForm(context, value) {
+      context.commit("SetShowDialogCoachLeaveForm", value)
     },
     async GetMyCourses(context, { coach_id }) {
       context.commit("SetMyCoursesIsLoading", true);
@@ -554,20 +554,20 @@ const coachModules = {
         };
         let user_detail = JSON.parse(localStorage.getItem("userDetail"));
         // let localhost = "http://localhost:3000"
-        
+
         const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${coach_id}`, config);
         console.log("GetMyCourses", data.data)
-        if (data.statusCode == 200) {  
-          let courses_task = [];       
+        if (data.statusCode == 200) {
+          let courses_task = [];
           let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
-          if(holidays.data.statusCode === 200){
+          if (holidays.data.statusCode === 200) {
             // console.log("561 => ",holidays.data.data)
-            for(let holiday of holidays.data.data){
+            for (let holiday of holidays.data.data) {
               courses_task.push({
-                type : 'holiday',
+                type: 'holiday',
                 name: holiday.holidayName,
-                start_date:`${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`, 
-                start:`${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`
+                start_date: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
+                start: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`
                 // start_time: start_time,
                 // end_time: end_time,
               });
@@ -577,7 +577,7 @@ const coachModules = {
           for await (const course of data.data) {
             const course_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course.courseId}`);
             if (course_data.data.statusCode === 200) {
-              if(course.coachLeaveCourses.length > 0){
+              if (course.coachLeaveCourses.length > 0) {
                 for (const leaveCourse of course.coachLeaveCourses) {
                   let start_time = leaveCourse.teachCompensationStartTime;
                   let end_time = leaveCourse.teachCompensationEndTime;
@@ -598,7 +598,7 @@ const coachModules = {
                       subtitle: course_data.data.data.courseNameEn,
                       course_id: course.courseId,
                       time_id: course.timeId,
-                      type : course?.compType ? course?.compType : null,
+                      type: course?.compType ? course?.compType : null,
                       day_of_week_id: course.dayOfWeekId,
                       coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
                       start_date: moment(startDate).format("YYYY-MM-DD"),
@@ -637,7 +637,7 @@ const coachModules = {
                       subtitle: course_data.data.data.courseNameEn,
                       course_id: course.courseId,
                       time_id: course.timeId,
-                      type : course?.compType ? course?.compType : null,
+                      type: course?.compType ? course?.compType : null,
                       day_of_week_id: course.dayOfWeekId,
                       coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
                       start_date: moment(startDate).format("YYYY-MM-DD"),
@@ -674,7 +674,7 @@ const coachModules = {
                       course_id: course.courseId,
                       time_id: course.timeId,
                       day_of_week_id: course.dayOfWeekId,
-                      type : course?.compType ? course?.compType : null,
+                      type: course?.compType ? course?.compType : null,
                       coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
                       start_date: moment(startDate).format("YYYY-MM-DD"),
                       start_date_str: startDate.toLocaleDateString("th-TH", options),
@@ -699,13 +699,13 @@ const coachModules = {
           }
           // let localhost = "http://localhost:3000"
           const sub_coach = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/subcoach/${coach_id}`, config);
-          if(sub_coach.data.statusCode === 200){
-            console.log("674 => ",sub_coach.data.data)
+          if (sub_coach.data.statusCode === 200) {
+            console.log("674 => ", sub_coach.data.data)
             for await (const course of sub_coach.data.data) {
               const course_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course.courseId}`);
               if (course.dates.date) {
                 for (const dates of course.dates.date) {
-                  // console.log("744",dates)
+                  console.log("744", dates)
                   let start_time = course.period.start;
                   let end_time = course.period.end;
                   const [start_hours, start_minutes] = start_time.split(":");
@@ -725,7 +725,7 @@ const coachModules = {
                       course_id: course.courseId,
                       time_id: course.timeId,
                       day_of_week_id: course.dayOfWeekId,
-                      type : course?.compType ? course?.compType : null,
+                      type: course?.compType ? course?.compType : null,
                       coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
                       start_date: moment(startDate).format("YYYY-MM-DD"),
                       start_date_str: startDate.toLocaleDateString("th-TH", options),
@@ -745,7 +745,7 @@ const coachModules = {
               }
             }
           }
-          // console.log("746",courses_task)
+          console.log("746", courses_task)
           context.commit("SetMyCourses", courses_task);
           context.commit("SetMyCoursesIsLoading", false);
         }
@@ -786,7 +786,7 @@ const coachModules = {
             confirmButtonText: "ตกลง",
           }).then(async (result) => {
             if (result.isConfirmed) {
-              context.dispatch("GetCoachCheckIn",{
+              context.dispatch("GetCoachCheckIn", {
                 course_id: course_id,
                 date: date,
               })
@@ -817,9 +817,9 @@ const coachModules = {
       }
     },
     // COACH LEAVE 
-    async GetLeavesAll(context){
-      context.commit("SetCoachLeavesIsLoading",true)
-      try{
+    async GetLeavesAll(context) {
+      context.commit("SetCoachLeavesIsLoading", true)
+      try {
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -828,17 +828,24 @@ const coachModules = {
           },
         };
         // let localhost = "http://localhost:3000"
-        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave`,config)
-        if(data.statusCode == 200){
-          context.commit("SetCoachLeaves",data.data)
-          context.commit("SetCoachLeavesIsLoading",false)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave`, config)
+        if (data.statusCode == 200) {
+          // data.data.map((items) => { 
+          //   const options = { year: "numeric", month: "long", day: "numeric" };
+          //   const thaiLocale = "th-TH";
+          //   items.thaiDate = new Date(items.createdDate).toLocaleString(thaiLocale, options);
+          //   console.log("143", items.thaiDate);
+          //   })
+
+          context.commit("SetCoachLeaves", data.data)
+          context.commit("SetCoachLeavesIsLoading", false)
         }
-      }catch(error){
-        context.commit("SetCoachLeavesIsLoading",false)
+      } catch (error) {
+        context.commit("SetCoachLeavesIsLoading", false)
         // console.log(error)
       }
     },
-    async SaveCoachLeave(context, { coach_leave_data, files ,admin}) {
+    async SaveCoachLeave(context, { coach_leave_data, files, admin }) {
       try {
         let user_detail = JSON.parse(localStorage.getItem("userDetail"))
         let config = {
@@ -858,18 +865,18 @@ const coachModules = {
           status: "pending",
           dates: []
         }
-          for await (let date of coach_leave_data.dates){
+        for await (let date of coach_leave_data.dates) {
           let cousers = []
-          for await (const course of date.courses){
+          for await (const course of date.courses) {
             cousers.push({
               courseId: course.course_id,
-              substituteCoachId: course.substitute_coach_id ? course.substitute_coach_id : null ,
+              substituteCoachId: course.substitute_coach_id ? course.substitute_coach_id : null,
               dayOfWeekId: course.day_of_week_id,
               timeId: course.time_id,
-              type : course.type,
-              compensationDate : course.compensation_date ? course.compensation_date : null,
-              compensationStartTime : course.compensation_start_time_obj.HH ? `${course.compensation_start_time_obj.HH}:${course.compensation_start_time_obj.mm}` : null,
-              compensationEndTime : course.compensation_end_time_obj.HH ? `${course.compensation_end_time_obj.HH}:${course.compensation_end_time_obj.mm}` : null,
+              type: course.type,
+              compensationDate: course.compensation_date ? course.compensation_date : null,
+              compensationStartTime: course.compensation_start_time_obj.HH ? `${course.compensation_start_time_obj.HH}:${course.compensation_start_time_obj.mm}` : null,
+              compensationEndTime: course.compensation_end_time_obj.HH ? `${course.compensation_end_time_obj.HH}:${course.compensation_end_time_obj.mm}` : null,
             })
           }
           payload.dates.push({
@@ -894,19 +901,19 @@ const coachModules = {
             confirmButtonText: "ตกลง",
           }).then(async (result) => {
             if (result.isConfirmed) {
-              if(admin){
-                let getLeavesAll = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave`,config)
-                if(getLeavesAll.data.statusCode == 200){
-                  context.commit("SetCoachLeaves",getLeavesAll.data.data)
-                  context.commit("SetCoachLeavesIsLoading",false)
+              if (admin) {
+                let getLeavesAll = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave`, config)
+                if (getLeavesAll.data.statusCode == 200) {
+                  context.commit("SetCoachLeaves", getLeavesAll.data.data)
+                  context.commit("SetCoachLeavesIsLoading", false)
                 } else {
                   throw { error: getLeavesAll }
                 }
-              }else{
+              } else {
                 let getLeaves = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${user_detail.account_id}`, config)
                 // console.log(getLeaves)
                 if (getLeaves.data.statusCode === 200) {
-                  context.commit("SetShowDialogCoachLeaveForm",false)
+                  context.commit("SetShowDialogCoachLeaveForm", false)
                   context.commit("SetCoachLeaves", getLeaves.data.data)
                 } else {
                   throw { error: getLeaves }
@@ -969,7 +976,7 @@ const coachModules = {
       }
     },
     async updateStatusCoachLeaveAndCoach(context, { coach_leave_data, coach_leave_id }) {
-      context.commit("SetCoachLeavesIsLoading",true)
+      context.commit("SetCoachLeavesIsLoading", true)
       try {
         let config = {
           headers: {
@@ -979,8 +986,8 @@ const coachModules = {
           },
         };
         // let localhost = "http://localhost:3000"
-        let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coach/leave/coach/status/${coach_leave_id}`, coach_leave_data, config)
-        if(data.statusCode == 200){
+        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coach/leave/coach/status/${coach_leave_id}`, coach_leave_data, config)
+        if (data.statusCode == 200) {
           Swal.fire({
             icon: "success",
             title: "บันทึกสำเร็จ",
@@ -990,18 +997,18 @@ const coachModules = {
             confirmButtonText: "ตกลง",
           }).then(async (result) => {
             if (result.isConfirmed) {
-              context.dispatch("GetLeavesDetail",{coach_leave_id : coach_leave_id})
+              context.dispatch("GetLeavesDetail", { coach_leave_id: coach_leave_id })
             }
           })
-          context.commit("SetCoachLeavesIsLoading",false)
+          context.commit("SetCoachLeavesIsLoading", false)
         }
       } catch (error) {
-        context.commit("SetCoachLeavesIsLoading",false)
+        context.commit("SetCoachLeavesIsLoading", false)
         // console.log(error)
       }
     },
-    async GetLeavesDetail(context,{coach_leave_id}){
-      try{
+    async GetLeavesDetail(context, { coach_leave_id }) {
+      try {
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -1010,32 +1017,38 @@ const coachModules = {
           },
         };
         // let localhost = "http://localhost:3000"
-        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/detail/${coach_leave_id}`,config)
-        if(data.statusCode == 200){
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/detail/${coach_leave_id}`, config)
+        if (data.statusCode == 200) {
           // console.log(data.data)
-          for(let date of data.data.dates){
-            for(let course of date.courses){
-              if(course.type === "date"){
-                const options = {
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                };
+          const options = {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          };
+          data.data.startThDate = new Date(data.data.startDate).toLocaleDateString("th-TH", options)
+          data.data.endThDate = new Date(data.data.endDate).toLocaleDateString("th-TH", options)
+          data.data.createDateTh = new Date(data.data.createdDate).toLocaleDateString("th-TH", options)
+          for (let date of data.data.dates) {
+            for (let course of date.courses) {
+              if (course.type === "date") {
+
                 let startPart = course.compensationStartTime.split(":")
                 let endPart = course.compensationEndTime.split(":")
                 course.menuCompensationDate = false
-                course.compensationDate = course.compensationDate  ? new Date(course.compensationDate).toISOString().split('T')[0] : null,
-                course.compensationDate_str =  new Date(course.compensationDate).toLocaleDateString("th-TH", options)
-                course.compensationStartTime = `${startPart[0]+':'+startPart[1]}`
-                course.compensationStartTimeObj = {HH : startPart[0], mm : startPart[1]}
-                course.compensationEndTime = `${endPart[0]+':'+endPart[1]}`
-                course.compensationEndTimeObj= {HH : endPart[0], mm : endPart[1]}
+                course.compensationDate = course.compensationDate ? new Date(course.compensationDate).toISOString().split('T')[0] : null,
+                  course.compensationDate_str = new Date(course.compensationDate).toLocaleDateString("th-TH", options)
+                course.compensationStartTime = `${startPart[0] + ':' + startPart[1]}`
+                course.compensationStartTimeObj = { HH: startPart[0], mm: startPart[1] }
+                course.compensationEndTime = `${endPart[0] + ':' + endPart[1]}`
+                course.compensationEndTimeObj = { HH: endPart[0], mm: endPart[1] }
               }
             }
           }
-          context.commit("SetCoachLeave",data.data)
+
+          context.commit("SetCoachLeave", data.data)
+          console.log("SetCoachLeave", data.data)
         }
-      }catch(error){
+      } catch (error) {
         // console.log(error)
       }
     },
@@ -1047,7 +1060,7 @@ const coachModules = {
     getMyCoursesLeaveIsLoading(state) {
       return state.my_courses_leave_is_loading
     },
-    getShowDialogCoachLeaveForm(state){
+    getShowDialogCoachLeaveForm(state) {
       return state.show_dialog_coach_leave_form
     },
     getStudentCheckInIsLoading(state) {
@@ -1065,14 +1078,14 @@ const coachModules = {
     getMyCoursesIsLoading(state) {
       return state.my_courses_is_loading;
     },
-    
+
     getCoachCheckIn(state) {
       return state.coach_check_in
     },
     getCoachCheckInIsLoading(state) {
       return state.coach_check_in_is_loading
     },
-    getCoachLeave(state){
+    getCoachLeave(state) {
       return state.coach_leave
     },
     getCoachLeaves(state) {
