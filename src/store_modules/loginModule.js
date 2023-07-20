@@ -178,7 +178,7 @@ const loginModules = {
             context.commit("SetUserData", [])
             try {
                 // let { data } = await axios.get(` http://localhost:3000/api/v1/account/username?username=${username}`)
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/username?username=${username}`)
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/search/username?username=${username}`)
                 // console.log(data)
                 if (data.statusCode === 200) {
                     if (data.data.userOneId) {
