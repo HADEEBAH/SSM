@@ -46,7 +46,12 @@
             บาท/คน</v-col
           >
         </v-row>
-        <rowData  v-if="course_data.course_type_id === 'CT_2'"  col_detail="5" mini icon="mdi-account-group-outline">
+        <rowData
+          v-if="course_data.course_type_id === 'CT_2'"
+          col_detail="5"
+          mini
+          icon="mdi-account-group-outline"
+        >
           {{
             course_data.course_studant_amount
               ? course_data.course_studant_amount
@@ -62,7 +67,7 @@
           >{{ course_data.course_hours }} ชม. / ครั้ง</rowData
         >
         <v-row dense>
-          <v-col  cols="12" class="text-[#999999]">
+          <v-col cols="12" class="text-[#999999]">
             <label v-html="course_data.detail"></label>
           </v-col>
         </v-row>
@@ -76,13 +81,15 @@
             </v-expansion-panel-header>
             <v-expansion-panel-content class="border-t pt-3">
               <v-row dense>
-                <v-col cols="auto">วันรับสมัคร:</v-col>
+                <v-col cols="auto" class="font-bold">วันรับสมัคร:</v-col>
                 <v-col>
                   {{
                     new Date(
                       course_data.course_register_start_date
                     ).toLocaleDateString("th-TH", date_options)
-                  }}-{{
+                  }}
+                  -
+                  {{
                     new Date(
                       course_data.course_register_end_date
                     ).toLocaleDateString("th-TH", date_options)
@@ -90,7 +97,7 @@
                 >
               </v-row>
               <v-row dense>
-                <v-col cols="auto">วันเรียน:</v-col>
+                <v-col cols="auto" class="font-bold">วันเรียน:</v-col>
                 <v-col
                   >{{
                     new Date(
@@ -119,7 +126,7 @@
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content class="border-t pt-3">
-              <label v-html=" course_data.music_performance"></label>
+              <label v-html="course_data.music_performance"></label>
             </v-expansion-panel-content>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -247,7 +254,7 @@ export default {
     show_dialog: false,
     date_options: {
       year: "numeric",
-      month: "short",
+      month: "long",
       day: "numeric",
       locale: "th-TH",
     },
