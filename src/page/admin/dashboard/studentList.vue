@@ -149,7 +149,7 @@
                 name: 'UserDetail',
                 params: {
                   action: 'view',
-                  account_id: item.userOneId,
+                  account_id: item.studentId,
                 },
               })
             "
