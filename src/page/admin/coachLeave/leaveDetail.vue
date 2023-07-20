@@ -206,6 +206,7 @@
                           @input="InputDate(course.compensationDate, course)"
                           :min="new Date().toISOString()"
                           v-model="course.compensationDate"
+                          locale="th-TH"
                         ></v-date-picker>
                       </v-menu>
                     </v-col>

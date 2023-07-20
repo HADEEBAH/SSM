@@ -1,7 +1,7 @@
 <template>
   <loading-overlay
-    v-if="get_all_course_is_loading && get_all_holidays_is_loading"
-    :loading="get_all_course_is_loading && get_all_holidays_is_loading"
+    v-if="get_all_course_is_loading || get_all_holidays_is_loading"
+    :loading="get_all_course_is_loading || get_all_holidays_is_loading"
   ></loading-overlay>
   <v-container v-else>
     <headerPage title="จัดการตาราง"></headerPage>
@@ -226,6 +226,7 @@
                             (selectEditHolidaydates = false)
                         "
                         :min="tomorrowDate()"
+                        locale="th-TH"
                       ></v-date-picker>
                     </v-menu>
                   </v-col>
@@ -368,6 +369,7 @@
                             (selectHolidaydates = false)
                         "
                         :min="tomorrowDate()"
+                        locale="th-TH"
                       ></v-date-picker>
                     </v-menu>
                   </v-col>
@@ -1066,8 +1068,7 @@ export default {
       date_arr: "ManageScheduleModules/getDateArray",
       get_coachs: "CourseModules/getCoachs",
       get_all_holidays: "ManageScheduleModules/getAllHolidays",
-      get_all_holidays_is_loading:
-        "ManageScheduleModules/getAllHolidaysIsLoading",
+      get_all_holidays_is_loading: "ManageScheduleModules/getAllHolidaysIsLoading",
       get_holidays_by_id: "ManageScheduleModules/getHolidaysById",
       data_in_schedule: "ManageScheduleModules/getdataInSchadule",
       data_filter_schedule: "ManageScheduleModules/getFilterSchedule",

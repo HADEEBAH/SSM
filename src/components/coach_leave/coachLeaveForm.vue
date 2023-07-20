@@ -56,6 +56,7 @@
                     @input="inputDate($event, 'start')"
                     @change="validateCoachLeave"
                     v-model="coach_leave_data.start_date"
+                    locale="th-TH"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
@@ -97,6 +98,7 @@
                     @input="inputDate($event, 'end')"
                     @change="validateCoachLeave"
                     v-model="coach_leave_data.end_date"
+                    locale="th-TH"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
@@ -274,6 +276,7 @@
                           :min="new Date().toISOString()"
                           :allowed-dates="allowedDates"
                           v-model="course.compensation_date"
+                          locale="th-TH"
                         ></v-date-picker>
                       </v-menu>
                     </v-col>
@@ -815,8 +818,8 @@ export default {
             e,
             "DD MT YYYYT"
           );
-          this.coach_leave_data.end_date_str = null
-          this.coach_leave_data.end_date = null
+          this.coach_leave_data.end_date_str = null;
+          this.coach_leave_data.end_date = null;
           this.GenDates();
           break;
         case "end":

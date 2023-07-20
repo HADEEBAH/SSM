@@ -73,6 +73,7 @@
       :event-color="(date) => (date[9] % 2 ? 'red' : 'yellow')"
       :events="functionEvents"
       @input="selectDate(focus)"
+      locale="th-TH"
     ></v-date-picker>
     <v-bottom-sheet v-model="showModal">
       <div class="bg-white rounded-t-lg pa-4">

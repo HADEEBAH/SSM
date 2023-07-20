@@ -202,6 +202,7 @@
                           :min="new Date($route.params.date).toISOString()"
                           @input="inputDate($event, item)"
                           v-model="item.compensationDate"
+                          locale="th-TH"
                         ></v-date-picker>
                       </v-menu>
                     </v-col>
@@ -1616,10 +1617,10 @@ export default {
       });
     },
     async CheckInStudents(item) {
-      let student_id = []
-      await item.map((val)=> {
-        student_id.push({studentId: val.studentId})
-      })
+      let student_id = [];
+      await item.map((val) => {
+        student_id.push({ studentId: val.studentId });
+      });
       Swal.fire({
         icon: "question",
         title: "ต้องการบันทึกใช่หรือไม่ ?",
@@ -1660,7 +1661,7 @@ export default {
               course_id: this.course_data.course_id,
               date: this.$route.params.date,
               time_id: this.$route.params.timeId,
-              type : this.$route.params.typeEvent
+              type: this.$route.params.typeEvent,
             }).then(async () => {
               await this.GetCoachCheckIn({
                 course_id: this.$route.params.courseId,
