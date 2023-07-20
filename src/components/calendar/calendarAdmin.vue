@@ -296,7 +296,6 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
-
 export default {
   name: "calendarCoach",
   props: {
@@ -333,7 +332,7 @@ export default {
       get_all_holidays: "ManageScheduleModules/getAllHolidays",
       data_in_schedule: "ManageScheduleModules/getdataInSchadule",
       data_filter_schedule: "ManageScheduleModules/getFilterSchedule",
-      data_search_schedule: "ManageScheduleModules/getSearchFilterSchedule"
+      data_search_schedule: "ManageScheduleModules/getSearchFilterSchedule",
     }),
     cal() {
       return this.ready ? this.$refs.calendar : null;

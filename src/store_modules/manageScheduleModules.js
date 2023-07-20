@@ -397,6 +397,7 @@ const manageScheduleModules = {
     },
 
     async GetFilterSchedule(context, query) {
+      context.commit("SetGetAllHolidaysIsLoading", true)
       let params = [];
       let eventSchadule = [];
       let dataInSchadule = [];
@@ -491,12 +492,15 @@ const manageScheduleModules = {
 
           if (query_length > 0) {
             context.commit("SetDataFilterSchedule", dataInSchadule);
+            context.commit("SetGetAllHolidaysIsLoading", false)
           } else {
             context.commit("SetDataFilterSchedule", null);
+            context.commit("SetGetAllHolidaysIsLoading", false)
           }
         }
       } catch (error) {
-        // console.log(error);
+        context.commit("SetGetAllHolidaysIsLoading", false)
+        console.log(error);
       }
     },
 
