@@ -485,6 +485,7 @@ const manageScheduleModules = {
               type: "normal",
               startTime: item.startTime,
               endTime: item.endTime,
+              itmeData: item,
             });
 
             dataInSchadule = eventSchadule;
