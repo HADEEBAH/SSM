@@ -151,8 +151,8 @@ const orderModules = {
                 if (data.statusCode === 200) {
 
                     data.data.map((items) => { 
-                        const options = { year: "numeric", month: "long", day: "numeric" };
-                const thaiLocale = "th-TH";
+                    const options = { year: "numeric", month: "long", day: "numeric" };
+                    const thaiLocale = "th-TH";
                     items.thaiDate = new Date(items.createdDate).toLocaleString(thaiLocale, options);
                     console.log("143", items.thaiDate);
                     })

@@ -218,7 +218,7 @@
           {{
             new Date(item.startDateStr).toLocaleDateString("th-TH", {
               year: "numeric",
-              month: "short",
+              month: "long",
               day: "numeric",
               calendar: "buddhist",
             })
@@ -228,7 +228,7 @@
           {{
             new Date(item.createdDateStr).toLocaleDateString("th-TH", {
               year: "numeric",
-              month: "short",
+              month: "long",
               day: "numeric",
               calendar: "buddhist",
             })

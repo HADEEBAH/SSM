@@ -58,15 +58,13 @@
             <v-row dense>
               <v-col>
                 <span class="text-[#999999]">วันที่ลา:</span>
-                <div class="text-[#2F3542] font-semibold">
-                  {{
-                    `${coach_leave.startDateStr} - ${coach_leave.endDateStr}`
-                  }}
+                <div class="text-[#2F3542] font-semibold mr-2">
+                  {{ `${coach_leave.startThDate} - ${coach_leave.endThDate}` }}
                 </div>
               </v-col>
               <v-col>
-                <span class="text-[#999999]">ประเภทการลา:</span>
-                <div class="text-[#2F3542] font-semibold">
+                <span class="text-[#999999] ml-2">ประเภทการลา:</span>
+                <div class="text-[#2F3542] font-semibold ml-2">
                   {{ coach_leave.leaveTypeStr }}
                 </div>
               </v-col>
@@ -85,7 +83,7 @@
               <v-col>
                 <span class="text-[#999999]">วันที่ส่งคำขอ: </span>
                 <div class="text-[#2F3542] font-semibold">
-                  {{ coach_leave.createdDateStr }}
+                  {{ coach_leave.createDateTh }}
                 </div>
               </v-col>
             </v-row>
@@ -225,7 +223,11 @@
                             :filled="disable"
                             dense
                             :style="`width:${width()}px;`"
-                            style="position: absolute; display: block; z-index: 4"
+                            style="
+                              position: absolute;
+                              display: block;
+                              z-index: 4;
+                            "
                             @focus="
                               SelectedStartTime(
                                 $event,
@@ -250,7 +252,11 @@
                             :filled="disable"
                             dense
                             :style="`width:${width()}px;`"
-                            style="position: absolute; display: block; z-index: 4"
+                            style="
+                              position: absolute;
+                              display: block;
+                              z-index: 4;
+                            "
                             @focus="
                               SelectedStartTime(
                                 $event,
@@ -509,18 +515,21 @@ export default {
         .getElementsByTagName("input")[0]
         .focus();
     },
-    InputDate(date, course){
+    InputDate(date, course) {
       const options = {
         year: "numeric",
         month: "short",
         day: "numeric",
       };
-      course.compensationDate_str = new Date(date).toLocaleDateString("th-TH", options)
+      course.compensationDate_str = new Date(date).toLocaleDateString(
+        "th-TH",
+        options
+      );
     },
     GenDateStr(date) {
       const options = {
         year: "numeric",
-        month: "short",
+        month: "long",
         day: "numeric",
       };
       return date.toLocaleDateString("th-TH", options);
