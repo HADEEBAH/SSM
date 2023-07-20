@@ -226,6 +226,7 @@
                             (selectEditHolidaydates = false)
                         "
                         :min="tomorrowDate()"
+                        locale="th-TH"
                       ></v-date-picker>
                     </v-menu>
                   </v-col>
@@ -368,6 +369,7 @@
                             (selectHolidaydates = false)
                         "
                         :min="tomorrowDate()"
+                        locale="th-TH"
                       ></v-date-picker>
                     </v-menu>
                   </v-col>

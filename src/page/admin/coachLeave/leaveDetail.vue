@@ -208,6 +208,7 @@
                           @input="InputDate(course.compensationDate, course)"
                           :min="new Date().toISOString()"
                           v-model="course.compensationDate"
+                          locale="th-TH"
                         ></v-date-picker>
                       </v-menu>
                     </v-col>
@@ -225,7 +226,11 @@
                             :filled="disable"
                             dense
                             :style="`width:${width()}px;`"
-                            style="position: absolute; display: block; z-index: 4"
+                            style="
+                              position: absolute;
+                              display: block;
+                              z-index: 4;
+                            "
                             @focus="
                               SelectedStartTime(
                                 $event,
@@ -250,7 +255,11 @@
                             :filled="disable"
                             dense
                             :style="`width:${width()}px;`"
-                            style="position: absolute; display: block; z-index: 4"
+                            style="
+                              position: absolute;
+                              display: block;
+                              z-index: 4;
+                            "
                             @focus="
                               SelectedStartTime(
                                 $event,
@@ -509,13 +518,16 @@ export default {
         .getElementsByTagName("input")[0]
         .focus();
     },
-    InputDate(date, course){
+    InputDate(date, course) {
       const options = {
         year: "numeric",
         month: "short",
         day: "numeric",
       };
-      course.compensationDate_str = new Date(date).toLocaleDateString("th-TH", options)
+      course.compensationDate_str = new Date(date).toLocaleDateString(
+        "th-TH",
+        options
+      );
     },
     GenDateStr(date) {
       const options = {

@@ -49,7 +49,7 @@
                     </v-chip>
                   </template>
                   <template v-slot:item="{ item }">
-                    {{ `${item.firstNameTh} ${item.lastNameTh}` }}  
+                    {{ `${item.firstNameTh} ${item.lastNameTh}` }}
                   </template>
                 </v-autocomplete>
               </v-col>
@@ -449,6 +449,7 @@
                     :min="today.toISOString()"
                     v-model="course.start_date"
                     @input="inputDate($event, 'course open', course)"
+                    locale="th-TH"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
@@ -684,7 +685,7 @@
           <v-col align="right" sm="" cols="12">
             <v-btn
               outlined
-              @click=ClearData()
+              @click="ClearData()"
               :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
               color="#ff6b81"
             >
@@ -1136,15 +1137,15 @@ export default {
                 if (this.order.payment_status === "warn") {
                   console.log("order", this.order);
                   let account = [];
-                  let course_name_noti = []
+                  let course_name_noti = [];
                   this.order.courses.forEach((course) => {
-                    course_name_noti.push(course?.course_data?.course_name_th)
-                    course.students = []
+                    course_name_noti.push(course?.course_data?.course_name_th);
+                    course.students = [];
                     // console.log("1136",this.students)
                     course.coach_id = course.coach.coach_id;
                     course.coach_name = course.coach.coach_name;
                     for (const student of this.students) {
-                      if(student){
+                      if (student) {
                         account.push({
                           studentId: student,
                         });
@@ -1164,28 +1165,29 @@ export default {
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
-                  
+
                   let payload = {
                     notificationName: this.notification_name,
-                    notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(course_name_noti.length > 1 ? ", " : "")} ให้คุณแล้ว (รอชำระเงิน)`,
+                    notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(
+                      course_name_noti.length > 1 ? ", " : ""
+                    )} ให้คุณแล้ว (รอชำระเงิน)`,
                     accountId: account,
                   };
                   // console.log(payload);
                   this.sendNotification(payload);
                   this.saveOrder();
                   // router.replace({name: "Finance"})
-
                 } else {
                   let account = [];
-                  let course_name_noti = []
+                  let course_name_noti = [];
                   this.order.courses.forEach((course) => {
-                    course_name_noti.push(course?.course_data?.course_name_th)
-                    course.students = []
+                    course_name_noti.push(course?.course_data?.course_name_th);
+                    course.students = [];
                     // console.log("1136",this.students)
                     course.coach_id = course.coach.coach_id;
                     course.coach_name = course.coach.coach_name;
                     for (const student of this.students) {
-                      if(student){
+                      if (student) {
                         account.push({
                           studentId: student,
                         });
@@ -1201,14 +1203,15 @@ export default {
                           is_other: false,
                         });
                       }
-                     
                     }
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
                   let payload = {
                     notificationName: this.notification_name,
-                    notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(course_name_noti.length > 1 ? "และ" : "")} ให้คุณแล้ว`,
+                    notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(
+                      course_name_noti.length > 1 ? "และ" : ""
+                    )} ให้คุณแล้ว`,
                     accountId: account,
                   };
                   this.sendNotification(payload);

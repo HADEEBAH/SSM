@@ -649,6 +649,7 @@
                                     no-title
                                     @change="filterDateByCoach(coach_index)"
                                     @input="filter.date_menu = false"
+                                    locale="th-TH"
                                   ></v-date-picker>
                                 </v-menu>
                               </v-col>

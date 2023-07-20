@@ -173,6 +173,7 @@
                 :min="today.toISOString()"
                 v-model="course_data.course_open_date"
                 @input="inputDate($event, 'course open')"
+                locale="th-TH"
               ></v-date-picker>
             </v-menu>
           </v-col>
@@ -441,6 +442,7 @@
                       v-model="
                         course_data.coachs[0].register_date_range.start_date
                       "
+                      locale="th-TH"
                     ></v-date-picker>
                   </v-menu>
                 </v-col>
@@ -494,6 +496,7 @@
                       v-model="
                         course_data.coachs[0].register_date_range.end_date
                       "
+                      locale="th-TH"
                     ></v-date-picker>
                   </v-menu>
                 </v-col>
@@ -590,6 +593,7 @@
                       v-model="
                         course_data.coachs[0].class_date_range.start_date
                       "
+                      locale="th-TH"
                     ></v-date-picker>
                   </v-menu>
                 </v-col>
@@ -641,6 +645,7 @@
                       "
                       @input="inputDate($event, 'class end date')"
                       v-model="course_data.coachs[0].class_date_range.end_date"
+                      locale="th-TH"
                     ></v-date-picker>
                   </v-menu>
                 </v-col>

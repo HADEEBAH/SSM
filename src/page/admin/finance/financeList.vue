@@ -226,7 +226,7 @@
                     </v-chip>
                   </template>
                   <template v-slot:item="{ item }">
-                    {{ `${item.firstNameTh} ${item.lastNameTh}` }}  
+                    {{ `${item.firstNameTh} ${item.lastNameTh}` }}
                   </template>
                 </v-autocomplete>
               </v-col>
@@ -444,7 +444,7 @@
                       <v-date-picker
                         v-model="export_filter.date_doc_start"
                         @input="export_filter.select_date_doc_start = false"
-                        
+                        locale="th-TH"
                       ></v-date-picker>
                     </v-menu>
                   </v-col>
@@ -471,13 +471,13 @@
                           v-on="on"
                           color="#FF6B81"
                           :disabled="!export_filter.date_doc_start"
-                         
                         ></v-text-field>
                       </template>
                       <v-date-picker
                         v-model="export_filter.date_doc_end"
                         @input="export_filter.select_date_doc_end = false"
-                        :min=" export_filter.date_doc_start"
+                        :min="export_filter.date_doc_start"
+                        locale="th-TH"
                       ></v-date-picker>
                     </v-menu>
                   </v-col>
@@ -513,6 +513,7 @@
                       <v-date-picker
                         v-model="export_filter.date_pay_start"
                         @input="export_filter.select_date_pay_start = false"
+                        locale="th-TH"
                       ></v-date-picker>
                     </v-menu>
                   </v-col>
@@ -545,7 +546,8 @@
                       <v-date-picker
                         v-model="export_filter.date_pay_end"
                         @input="export_filter.select_date_pay_end = false"
-                        :min=" export_filter.date_pay_start"
+                        :min="export_filter.date_pay_start"
+                        locale="th-TH"
                       ></v-date-picker>
                     </v-menu>
                   </v-col>
@@ -604,7 +606,13 @@
                     ></v-col
                   >
                   <v-col cols="12" sm="4" align="end">
-                    <v-btn :loading="finance_filter_loading" depressed dark color="#ff6b81" @click="Export()">
+                    <v-btn
+                      :loading="finance_filter_loading"
+                      depressed
+                      dark
+                      color="#ff6b81"
+                      @click="Export()"
+                    >
                       เรียกดูทั้งหมด
                     </v-btn>
                   </v-col>
@@ -729,45 +737,37 @@ export default {
       GetCoursesList: "CourseModules/GetCoursesList",
       GetOptions: "CourseModules/GetOptions",
       GetPackages: "CourseModules/GetPackages",
-      financeFilter : "FinanceModules/financeFilter",
+      financeFilter: "FinanceModules/financeFilter",
       searchNameUser: "loginModules/searchNameUser",
     }),
     remove(item) {
       const index = this.export_filter.students.indexOf(item);
-      if (index >= 0){
+      if (index >= 0) {
         const index = this.export_filter.students.splice(index, 1);
       }
     },
-    ShowDialogExport(){
-      this.export_filter.course_id = []
-      this.export_filter.course_type_id = []
-      this.export_filter.students = []
-      this.export_filter.payment_type = []
-      this.export_filter.payment_status = []
-      this.selected.forEach((order)=>{
-        console.log(order)
-        if(!this.export_filter.course_id.includes(order.course_id)){
-          this.export_filter.course_id.push(
-            order.course_id
-          )
+    ShowDialogExport() {
+      this.export_filter.course_id = [];
+      this.export_filter.course_type_id = [];
+      this.export_filter.students = [];
+      this.export_filter.payment_type = [];
+      this.export_filter.payment_status = [];
+      this.selected.forEach((order) => {
+        console.log(order);
+        if (!this.export_filter.course_id.includes(order.course_id)) {
+          this.export_filter.course_id.push(order.course_id);
         }
-        if(!this.export_filter.course_type_id.includes(order.course_type_id)){
-          this.export_filter.course_type_id.push(
-            order.course_type_id
-          )
+        if (!this.export_filter.course_type_id.includes(order.course_type_id)) {
+          this.export_filter.course_type_id.push(order.course_type_id);
         }
-        if(!this.export_filter.payment_type.includes(order.payment_type)){
-          this.export_filter.payment_type.push(
-            order.payment_type
-          )
+        if (!this.export_filter.payment_type.includes(order.payment_type)) {
+          this.export_filter.payment_type.push(order.payment_type);
         }
-        if(!this.export_filter.payment_status.includes(order.payment_status)){
-          this.export_filter.payment_status.push(
-            order.payment_status
-          )
+        if (!this.export_filter.payment_status.includes(order.payment_status)) {
+          this.export_filter.payment_status.push(order.payment_status);
         }
-      })
-      this.show_dialog = true
+      });
+      this.show_dialog = true;
     },
     genPrice(price) {
       return price.toLocaleString();
@@ -790,13 +790,22 @@ export default {
           this.open_date = dateFormatter(e, "DD MT YYYYT");
           break;
         case "register start date":
-          this.register_date_range_str.start_date = dateFormatter(e, "DD MT YYYYT" );
+          this.register_date_range_str.start_date = dateFormatter(
+            e,
+            "DD MT YYYYT"
+          );
           break;
         case "register end date":
-          this.register_date_range_str.end_date = dateFormatter( e,"DD MT YYYYT");
+          this.register_date_range_str.end_date = dateFormatter(
+            e,
+            "DD MT YYYYT"
+          );
           break;
         case "class start date":
-          this.class_date_range_str.start_date = dateFormatter( e, "DD MT YYYYT");
+          this.class_date_range_str.start_date = dateFormatter(
+            e,
+            "DD MT YYYYT"
+          );
           break;
         case "class end date":
           this.class_date_range_str.end_date = dateFormatter(e, "DD MT YYYYT");
@@ -804,7 +813,7 @@ export default {
       }
     },
     Export() {
-      this.financeFilter({filter : this.export_filter})
+      this.financeFilter({ filter: this.export_filter });
     },
     closeDialog() {
       this.show_dialog = false;
@@ -835,14 +844,14 @@ export default {
   computed: {
     ...mapGetters({
       orders: "OrderModules/getOrders",
-      orders_is_loading : "OrderModules/getOrdersIsLoading",
+      orders_is_loading: "OrderModules/getOrdersIsLoading",
       courses: "CourseModules/getCourses",
       students: "OrderModules/getStudents",
       username_list: "loginModules/getUsernameList",
       packages: "CourseModules/getPackages",
       options: "CourseModules/getOptions",
       finance_filter: "FinanceModules/getFinanceFilter",
-      finance_filter_loading : "FinanceModules/getFinanceLoading"
+      finance_filter_loading: "FinanceModules/getFinanceLoading",
     }),
   },
   watch: {
