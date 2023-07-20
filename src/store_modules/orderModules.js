@@ -2,7 +2,6 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import router from "@/router";
 import VueCookie from "vue-cookie"
-import {dateFormatter} from "../functions/functions"
 const orderModules = {
     namespaced: true,
     state: {
@@ -122,7 +121,21 @@ const orderModules = {
         }
     },
     actions: {
-        async getHistory(context){
+        async getHistory(context) {
+            // const thaiMonths = [
+            //     "มกราคม",
+            //     "กุมภาพันธ์",
+            //     "มีนาคม",
+            //     "เมษายน",
+            //     "พฤษภาคม",
+            //     "มิถุนายน",
+            //     "กรกฎาคม",
+            //     "สิงหาคม",
+            //     "กันยายน",
+            //     "ตุลาคม",
+            //     "พฤศจิกายน",
+            //     "ธันวาคม",
+            //   ];
             try{
                 context.commit("SetOrderHistoryIsLoading",true)
                 let mapHistory = [];
@@ -135,9 +148,16 @@ const orderModules = {
                 };
                 //  let localhost = "http://localhost:3002"
                 const { data } = await axios.get( `${process.env.VUE_APP_URL}/api/v1/order/history`, config );
-                if(data.statusCode === 200 ){
-                    // console.log("data", data);
-                  for (const item of data.data) {
+                if (data.statusCode === 200) {
+
+                    data.data.map((items) => { 
+                        const options = { year: "numeric", month: "long", day: "numeric" };
+                const thaiLocale = "th-TH";
+                    items.thaiDate = new Date(items.createdDate).toLocaleString(thaiLocale, options);
+                    console.log("143", items.thaiDate);
+                    })
+                    for (const item of data.data) {
+                      
                     // // console.log("item =>", data.data.filter(v => v.orderNumber == item.orderNumber))
                     if (item.courseImg && item.courseImg !== "") {
                       item.courseImg = process.env.VUE_APP_URL.concat(
@@ -151,7 +171,10 @@ const orderModules = {
                         if(!courses.some(v => v.orderItemId == course.orderItemId)){
                           courses.push(course)
                         }
-                      }
+                        }
+                        const options = { year: "numeric", month: "long", day: "numeric" };
+                        const thaiLocale = "th-TH";
+
                       if(!mapHistory.some(v => v.orderId === item.orderId)){
                         mapHistory.push({
                           orderId : item.orderId,
@@ -159,14 +182,20 @@ const orderModules = {
                           paymentStatus : item.paymentStatus,
                           courses : courses,
                           totalPrice: item.totalPrice,
-                          createdDate :  dateFormatter(new Date(item.createdDate), "DD MT YYYYT"),
-                          createdByData : item.createdByData
+                        //   createdDate :  dateFormatter(new Date(item.createdDate), "DD MT YYYYT"),
+                        createdDate : new Date(item.createdDate).toLocaleString(thaiLocale, options),
+                          
+                            createdByData: item.createdByData
+                          
+                            
+                               
                         });
                       }
                     }
                   }
                 }
                 context.commit("SetOrderHistory",mapHistory)
+                console.log("SetOrderHistory",mapHistory)
                 context.commit("SetOrderHistoryIsLoading",false)
             }catch(error){
                 // console.log(error)
