@@ -342,8 +342,8 @@
                 <v-col cols="12" sm="12" md="12" lg="12" align="center">
                   <apexchart
                     type="donut"
-                    :options="donutOptions()"
-                    :series="seriesOfDonut"
+                    :options="donutOptions"
+                    :series="get_series_chart"
                     :width="widthDonut()"
                   ></apexchart>
                 </v-col>
@@ -360,7 +360,7 @@
                             style="color: #ff6b81"
                             class="font-bold text-xl"
                           >
-                            {{ totalSuccessDonut.toLocaleString() }}
+                            {{ get_donut.sumSuccess?.toLocaleString() }}
                           </span>
                           <span
                             style="
@@ -371,9 +371,9 @@
                           >
                             บาท ({{
                               (
-                                (totalSuccessDonut * 100) /
-                                totalPriceDonut
-                              ).toLocaleString("us-us", {
+                                (get_donut.sumSuccess  * 100) /
+                                (get_donut.sumPending + get_donut.sumSuccess)
+                              )?.toLocaleString("us-us", {
                                 maximumFractionDigits: 2,
                               })
                             }}%)
@@ -392,7 +392,7 @@
                             style="color: #999999"
                             class="font-bold text-xl"
                           >
-                            {{ totalPendingDonut.toLocaleString() }}</span
+                            {{ get_donut?.sumPending?.toLocaleString() }}</span
                           >
                           <span
                             style="
@@ -403,9 +403,9 @@
                           >
                             บาท ({{
                               (
-                                (totalPendingDonut * 100) /
-                                totalPriceDonut
-                              ).toLocaleString("us-us", {
+                                (get_donut.sumPending * 100) /
+                                (get_donut.sumPending + get_donut.sumSuccess)
+                              )?.toLocaleString("us-us", {
                                 maximumFractionDigits: 2,
                               })
                             }}%)
@@ -453,9 +453,7 @@
                       <span class="text-xl">
                         คอร์สเต็ม
                         <span style="font-weight: bold; color: #999999">{{
-                          this.get_empty_course.countClose
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                          get_empty_course?.countClose
                         }}</span>
                         คอร์ส
                       </span>
@@ -468,9 +466,7 @@
                       <span class="text-xl">
                         คอร์สว่าง
                         <span style="font-weight: bold; color: #ff6b81">{{
-                          this.get_empty_course.countOpen
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                          get_empty_course?.countOpen
                         }}</span>
                         คอร์ส
                       </span>
@@ -492,7 +488,7 @@
                         <span class="mr-2 font-bold">คอร์สเต็ม</span>
                         <v-badge
                           color="#999999"
-                          :content="get_empty_course.countClose"
+                          :content="get_empty_course?.countClose"
                           class="indent-5 font-bold"
                         >
                         </v-badge>
@@ -504,9 +500,7 @@
                           class="mb-3"
                           v-for="(
                             item, index
-                          ) in get_empty_course.courseStatus.filter(
-                            (v) => v.status == 'Close'
-                          )"
+                          ) in get_empty_course_close"
                           :key="index"
                         >
                           <v-card-text class="pa-0">
@@ -619,9 +613,7 @@
                           class="mb-3"
                           v-for="(
                             item, index
-                          ) in get_empty_course.courseStatus.filter(
-                            (v) => v.status == 'Open'
-                          )"
+                          ) in get_empty_course_open"
                           :key="index"
                         >
                           <v-card-text class="pa-0">
@@ -952,107 +944,7 @@ export default {
           return 380;
       }
     },
-    donutSerieses() {
-      this.totalPrice = [];
-      this.totalSuccessDonut = 0;
-      this.totalPendingDonut = 0;
-      this.totalPriceDonut = 0;
 
-      let price = 0;
-      for (let items of this.get_donut.datas) {
-        price = parseFloat(items.totalPrice);
-        this.totalPrice.push(price);
-        this.totalSuccessDonut =
-          this.totalSuccessDonut + parseFloat(items?.sumSuccess);
-        this.totalPendingDonut =
-          this.totalPendingDonut + parseFloat(items?.sumPending);
-        this.totalPriceDonut =
-          this.totalPriceDonut + parseFloat(items?.totalPrice);
-      }
-      this.totalPrice.push(this.get_donut.otherTotal.totalPrice);
-      this.totalSuccessDonut =
-        this.totalSuccessDonut + this.get_donut.otherTotal.sumSuccess;
-      this.totalPendingDonut =
-        this.totalPendingDonut + this.get_donut.otherTotal.sumPending;
-      this.totalPriceDonut =
-        this.totalPriceDonut + this.get_donut.otherTotal.totalPrice;
-    },
-    donutLabels() {
-      let labels = [];
-      for (const items of this.get_donut?.datas) {
-        labels.push(items.courseNameTh);
-      }
-      labels.push(this.get_donut.otherTotal.courseNameTh);
-
-      return labels;
-    },
-
-    donutOptions() {
-      const donutdata = {
-        colors: [
-          "#ff6b81",
-          "#ff7588",
-          "#ff7e90",
-          "#ff8898",
-          "#ff929f",
-          "#ff9ca6",
-          "#ffa5ae",
-          "#ffafb6",
-          "#ffb9bd",
-          "#ffc2c4",
-          "#999999",
-        ],
-        labels: this.donutLabels(),
-        chart: {
-          type: "donut",
-        },
-        plotOptions: {
-          pie: {
-            startAngle: -90,
-            endAngle: 270,
-            donut: {
-              labels: {
-                show: true,
-                total: {
-                  show: true,
-                  label: "รวมทั้งหมด",
-                  color: "#373d3f",
-                  fontSize: "18px",
-                  formatter: function (w) {
-                    let sumTotal = 0;
-                    for (const items of w.globals.seriesTotals) {
-                      sumTotal = sumTotal + items;
-                    }
-                    return sumTotal.toLocaleString();
-                  },
-                },
-              },
-            },
-          },
-        },
-        dataLabels: {
-          enabled: true,
-        },
-        fill: {
-          type: "gradient",
-        },
-        legend: {
-          show: false,
-        },
-        tooltip: {
-          enabled: true,
-          y: {
-            formatter: function (val) {
-              return val;
-            },
-          },
-          custom: ({ series, seriesIndex, w }) => {
-            return this.customTooltip(series, seriesIndex, w);
-          },
-        },
-      };
-      return donutdata;
-    },
     customTooltip(series, seriesIndex, w) {
       let item = w.globals;
       let color = item.colors[seriesIndex];
@@ -1089,12 +981,16 @@ export default {
   computed: {
     ...mapGetters({
       get_empty_course: "DashboardModules/getEmptyCourse",
+      get_empty_course_open: "DashboardModules/getEmptyCourseOpen",
+      get_empty_course_close: "DashboardModules/getEmptyCourseClose",
       get_course_type: "DashboardModules/getCourseType",
       get_potential: "DashboardModules/getPotential",
       get_donut: "DashboardModules/getDonut",
       get_graf: "DashboardModules/getGraf",
       dashboard_loading: "DashboardModules/getloading",
       filter_years: "DashboardModules/getFilterYears",
+      get_series_chart: "DashboardModules/getSeriesChart",
+      get_labels_chart: "DashboardModules/getLabelsChart",
     }),
 
     lineChartLabels() {
@@ -1171,16 +1067,84 @@ export default {
       return lineChart;
     },
 
-    seriesOfDonut() {
-      this.donutSerieses();
-      return this.totalPrice;
+    donutOptions() {
+      const donutdata = {
+        colors: [
+          "#ff6b81",
+          "#ff7588",
+          "#ff7e90",
+          "#ff8898",
+          "#ff929f",
+          "#ff9ca6",
+          "#ffa5ae",
+          "#ffafb6",
+          "#ffb9bd",
+          "#ffc2c4",
+          "#999999",
+        ],
+        labels: this.get_labels_chart,
+        chart: {
+          type: "donut",
+        },
+        plotOptions: {
+          pie: {
+            startAngle: -90,
+            endAngle: 270,
+            donut: {
+              labels: {
+                show: true,
+                total: {
+                  show: true,
+                  label: "รวมทั้งหมด",
+                  color: "#373d3f",
+                  fontSize: "18px",
+                  formatter: function (w) {
+                    let sumTotal = 0;
+                    for (const items of w.globals.seriesTotals) {
+                      sumTotal = sumTotal + items;
+                    }
+                    return sumTotal.toLocaleString();
+                  },
+                },
+              },
+            },
+          },
+        },
+        dataLabels: {
+          enabled: true,
+        },
+        fill: {
+          type: "gradient",
+        },
+        legend: {
+          show: false,
+        },
+        tooltip: {
+          enabled: true,
+          y: {
+            formatter: function (val) {
+              return val;
+            },
+          },
+          custom: ({ series, seriesIndex, w }) => {
+            return this.customTooltip(series, seriesIndex, w);
+          },
+        },
+      };
+      return donutdata;
     },
-    donutsuccess() {
-      this.donutSerieses();
-      return (
-        this.totalSuccessDonut && this.totalPendingDonut && this.totalPriceDonut
-      );
-    },
+
+
+    // seriesOfDonut() {
+    //   this.donutSerieses();
+    //   return this.totalPrice;
+    // },
+    // donutsuccess() {
+    //   this.donutSerieses();
+    //   return (
+    //     this.totalSuccessDonut && this.totalPendingDonut && this.totalPriceDonut
+    //   );
+    // },
 
     pieSeries() {
       let Open = this.get_empty_course.countOpen;

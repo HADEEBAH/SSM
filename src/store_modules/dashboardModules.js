@@ -1,7 +1,7 @@
 import axios from "axios";
 // import VueCookie from "vue-cookie"
 function dayOfWeekArray(day) {
-  console.log("dayOfWeekArray", day)
+  // console.log("dayOfWeekArray", day)
   // let day_arr = day
   let days = day
   // // console.log(day)
@@ -38,16 +38,26 @@ const dashboardModules = {
   namespaced: true,
   state: {
     get_empty_course: [],
+    get_empty_course_open: [],
+    get_empty_course_close: [],
     get_course_type: {},
     get_potential: {},
     get_donut: {},
     get_graf: [],
     dashboard_loading: false,
-    filter_years: []
+    filter_years: [],
+    series_chart: [],
+    labels_chart: [],
   },
   mutations: {
     SetGetEmptyCourse(state, payload) {
       state.get_empty_course = payload
+    },
+    SetGetEmptyCourseOpen(state, payload) {
+      state.get_empty_course_open = payload
+    },
+    SetGetEmptyCourseClose(state, payload) {
+      state.get_empty_course_close = payload
     },
     SetGetCourseType(state, payload) {
       state.get_course_type = payload
@@ -67,6 +77,12 @@ const dashboardModules = {
     SetFilterYears(state, value) {
       state.filter_years = value
     },
+    SetSeriesChart(state, payload) {
+      state.series_chart = payload
+    },
+    SetLabelsChart(state, payload) {
+      state.labels_chart = payload
+    },
   },
   actions: {
     async GetEmptyCourse(context) {
@@ -76,20 +92,23 @@ const dashboardModules = {
         // let { data } = await axios.get(` http://localhost:3000/api/v1/dashboard/course-status`)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/course-status`)
 
+        let EmptyCourseOpen = []
+        let EmptyCourseClose = []
         if (data.statusCode === 200) {
           data.data.courseStatus.map((items) => {
             items.time = `${items.start} - ${items.end}`
             items.dayOfWeek = dayOfWeekArray(items.dayOfWeekName.split(','))
+            if (items.status === "Open") {
+              EmptyCourseOpen.push(items)
+            } else {
+              EmptyCourseClose.push(items)
+            }
           })
 
-          // data.data.courseStatus.map((items, index) => {
-          //   items.dayOfWeek = dayOfWeek.split(', ')[index]
+          await context.commit("SetGetEmptyCourse", data.data)
+          await context.commit("SetGetEmptyCourseOpen", EmptyCourseOpen)
+          await context.commit("SetGetEmptyCourseClose", EmptyCourseClose)
 
-          // })
-          // console.log("dayOfWeek=>", dayOfWeek);
-
-          context.commit("SetGetEmptyCourse", data.data)
-          console.log("SetGetEmptyCourse", data.data)
           context.commit("SetGetLoading", false)
 
         }
@@ -141,17 +160,38 @@ const dashboardModules = {
       try {
         // let { data } = await axios.get(` http://localhost:3002/api/v1/order/dashboard/payment?month=${item.month}&year=${item.year}`)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/dashboard/payment?month=${item.month}&year=${item.year}`)
-        if (data.statusCode === 200) {
-          data.data.datas?.map((items) => {
-            items.stringSumSuccess = items.sumSuccess.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            items.stringSumPending = items.sumPending.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            items.stringTotal = items.totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          })
-          context.commit("SetGetDonut", data.data)
-          // console.log("SetGetDonut", data.data);
+        let chart = []
+        let series_chart = []
+        let labels_chart = []
+        if (data?.statusCode === 200) {
 
-          // data.data.sumSuccessPercentage = ((data.data.sumSuccess / 100000) * 100).toString().split(".")[0]
-          // data.data.sumPendingPercentage = ((data.data.sumPending / 100000) * 100).toString().split(".")[0]
+          console.log("data=>>>>>", data.data);
+          data.data.datas?.map((items) => {
+            items.sumSuccess = parseFloat(items?.sumSuccess)
+            items.sumPending = parseFloat(items?.sumPending)
+            items.totalPrice = parseFloat(items?.totalPrice)
+
+            items.stringSumSuccess = items?.sumSuccess?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            items.stringSumPending = items?.sumPending?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            items.stringTotal = items?.totalPrice?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            chart.push(items)
+          })
+          data.data.otherTotal.stringSumSuccess = data.data.otherTotal?.sumSuccess?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          data.data.otherTotal.stringSumPending = data.data.otherTotal?.sumPending?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          data.data.otherTotal.stringTotal = data.data.otherTotal?.totalPrice?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+
+          chart.push(data.data.otherTotal)
+
+          if (chart.length > 0) {
+            chart.map((items)=>{
+              series_chart.push(items.totalPrice)
+              labels_chart.push(items.courseNameTh)
+            })
+          }
+
+          context.commit("SetSeriesChart", series_chart)
+          context.commit("SetLabelsChart", labels_chart)
+          context.commit("SetGetDonut", data.data)
           context.commit("SetGetLoading", false)
 
         }
@@ -224,6 +264,12 @@ const dashboardModules = {
     getEmptyCourse(state) {
       return state.get_empty_course
     },
+    getEmptyCourseOpen(state) {
+      return state.get_empty_course_open
+    },
+    getEmptyCourseClose(state) {
+      return state.get_empty_course_close
+    },
     getCourseType(state) {
       return state.get_course_type
     },
@@ -241,8 +287,15 @@ const dashboardModules = {
     },
     getFilterYears(state) {
       return state.filter_years
-
+    },
+    getSeriesChart(state) {
+      return state.series_chart
+    },
+    getLabelsChart(state) {
+      return state.labels_chart
     }
+    
+
   },
 };
 
