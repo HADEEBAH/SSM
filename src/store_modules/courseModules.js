@@ -1091,7 +1091,7 @@ const CourseModules = {
                 course: `${course.c_course_name_th}(${course.c_course_name_en})`,
                 status: course.c_course_status,
                 isTruncated: true,
-                course_open: course.c_course_open_date ? new Date(course.c_course_open_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : `${new Date(course.c_course_register_start_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', })} - ${new Date(course.c_course_register_end_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', })}`
+                course_open: course.c_course_open_date ? new Date(course.c_course_open_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', }) : `${new Date(course.c_course_register_start_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', })} - ${new Date(course.c_course_register_end_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', })}`
               })
             } else {
               if (category.data.statusCode === 400 && category.data.message === "Category not found.") {

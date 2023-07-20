@@ -996,29 +996,29 @@ export default {
         case "course open":
           this.course_data.course_open_date_str = dateFormatter(
             e,
-            "DD MT YYYYT"
+            "DD MMT YYYYT"
           );
           break;
         case "register start date":
           this.register_date_range_str.start_date = dateFormatter(
             e,
-            "DD MT YYYYT"
+            "DD MMT YYYYT"
           );
           break;
         case "register end date":
           this.register_date_range_str.end_date = dateFormatter(
             e,
-            "DD MT YYYYT"
+            "DD MMT YYYYT"
           );
           break;
         case "class start date":
           this.class_date_range_str.start_date = dateFormatter(
             e,
-            "DD MT YYYYT"
+            "DD MMT YYYYT"
           );
           break;
         case "class end date":
-          this.class_date_range_str.end_date = dateFormatter(e, "DD MT YYYYT");
+          this.class_date_range_str.end_date = dateFormatter(e, "DD MMT YYYYT");
           break;
       }
     },

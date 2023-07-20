@@ -22,7 +22,13 @@
       color="#ff6b81"
       type="month"
       v-model="focus"
-      :events="data_search_schedule ? data_search_schedule : (data_filter_schedule ? data_filter_schedule : data_in_schedule)"
+      :events="
+        data_search_schedule
+          ? data_search_schedule
+          : data_filter_schedule
+          ? data_filter_schedule
+          : data_in_schedule
+      "
       event-text-color="#000000"
       event-overlap-mode="column"
       :first-interval="1"
@@ -109,188 +115,185 @@
     </v-bottom-sheet>
 
     <!-- <template> -->
-      <!-- <v-row justify="center"> -->
-        <v-dialog v-model="dialog_detail" persistent max-width="600px">
-          <v-card>
-            <v-container>
-              <v-card-title>
-                <v-row dense>
-                  <v-col cols="12" class="absolute right-0 top-0" align="end">
-                    <v-btn icon @click="dialog_detail = false">
-                      <v-icon color="#ff6b81">mdi-close</v-icon>
-                    </v-btn>
-                  </v-col>
-                  <v-col cols="12" align="center" class="font-weight-bold">
-                    {{
-                      details.type == "holiday"
-                        ? "ข้อมูลวันหยุด"
-                        : "ข้อมูลวันเรียน"
-                    }}
-                  </v-col>
-                </v-row>
-              </v-card-title>
+    <!-- <v-row justify="center"> -->
+    <v-dialog v-model="dialog_detail" persistent max-width="600px">
+      <v-card>
+        <v-container>
+          <v-card-title>
+            <v-row dense>
+              <v-col cols="12" class="absolute right-0 top-0" align="end">
+                <v-btn icon @click="dialog_detail = false">
+                  <v-icon color="#ff6b81">mdi-close</v-icon>
+                </v-btn>
+              </v-col>
+              <v-col cols="12" align="center" class="font-weight-bold">
+                {{
+                  details.type == "holiday" ? "ข้อมูลวันหยุด" : "ข้อมูลวันเรียน"
+                }}
+              </v-col>
+            </v-row>
+          </v-card-title>
 
-              <v-card-text>
-                <v-row dense>
-                  <v-col cols="12">
+          <v-card-text>
+            <v-row dense>
+              <v-col cols="12">
+                <label class="font-weight-bold">{{
+                  details.type == "holiday" ? "ชื่อวันหยุด" : "ชื่อคอร์ส"
+                }}</label>
+                <v-text-field
+                  :value="details.name"
+                  outlined
+                  readonly
+                  dense
+                  hide-details
+                >
+                </v-text-field>
+              </v-col>
+              <!-- วันที่ -->
+              <v-col cols="12">
+                <label class="font-weight-bold">วันที่</label>
+                <v-text-field
+                  :value="
+                    new Date(details.start).toLocaleDateString('th-TH', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })
+                  "
+                  hide-details
+                  outlined
+                  readonly
+                  dense
+                  append-icon="mdi-calendar"
+                >
+                </v-text-field>
+              </v-col>
+            </v-row>
+          </v-card-text>
 
-                    <label class="font-weight-bold">{{ details.type == "holiday" ? "ชื่อวันหยุด" : "ชื่อคอร์ส" }}</label>
-                    <v-text-field
-                      :value="details.name"
-                      outlined
-                      readonly
-                      dense
-                      hide-details
-                    >
-                    </v-text-field>
-                  </v-col>
-                  <!-- วันที่ -->
-                  <v-col cols="12">
+          <v-card-text>
+            <v-row dense v-if="details.type == 'normal'">
+              <v-col cols="12" sm="6">
+                <label class="font-weight-bold">เวลาเริ่ม</label>
+                <v-text-field
+                  hide-details
+                  dense
+                  outlined
+                  readonly
+                  :value="details.startTime"
+                >
+                </v-text-field>
+              </v-col>
 
-                    <label class="font-weight-bold">วันที่</label>
-                    <v-text-field
-                      :value="
-                        new Date(details.start).toLocaleDateString('th-TH', {
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
-                        })
-                      "
-                      hide-details
-                      outlined
-                      readonly
-                      dense
-                      append-icon="mdi-calendar"
-                    >
-                    </v-text-field>
-                  </v-col>
-                </v-row>
-              </v-card-text>
+              <v-col cols="12" sm="6">
+                <label class="font-weight-bold">เวลาสิ้นสุด</label>
+                <v-text-field
+                  hide-details
+                  dense
+                  outlined
+                  readonly
+                  :value="details.endTime"
+                >
+                </v-text-field>
+              </v-col>
+            </v-row>
 
-              <v-card-text>
-                <v-row dense v-if="details.type == 'normal'">
-                  <v-col cols="12" sm="6">
+            <v-row dense v-if="details.type == 'holiday'">
+              <v-col cols="12" sm="6" v-if="details.allday === false">
+                <label class="font-weight-bold">เวลาเริ่ม</label>
+                <v-text-field
+                  hide-details
+                  dense
+                  outlined
+                  readonly
+                  :value="details.startTime"
+                >
+                </v-text-field>
+              </v-col>
 
-                    <label class="font-weight-bold">เวลาเริ่ม</label>
-                    <v-text-field
-                      hide-details
-                      dense
-                      outlined
-                      readonly
-                      :value="details.startTime"
-                    >
-                    </v-text-field>
-                  </v-col>
+              <v-col cols="12" sm="6" v-if="details.allday === false">
+                <label class="font-weight-bold">เวลาสิ้นสุด</label>
+                <v-text-field
+                  hide-details
+                  dense
+                  outlined
+                  readonly
+                  :value="details.endTime"
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="12" align="center" v-else>
+                <v-text-field
+                  hide-details
+                  dense
+                  outlined
+                  readonly
+                  value="หยุดทั้งวัน"
+                >
+                </v-text-field
+              ></v-col>
+            </v-row>
+          </v-card-text>
 
-                  <v-col cols="12" sm="6">
+          <v-card-text>
+            <v-row dense v-if="details.type == 'normal'">
+              <v-col cols="12" sm="6">
+                <label class="font-weight-bold">โค้ช</label>
+                <v-text-field
+                  dense
+                  outlined
+                  readonly
+                  :value="details.coach"
+                  hide-details
+                >
+                </v-text-field>
+              </v-col>
 
-                    <label class="font-weight-bold">เวลาสิ้นสุด</label>
-                    <v-text-field
-                      hide-details
-                      dense
-                      outlined
-                      readonly
-                      :value="details.endTime"
-                    >
-                    </v-text-field>
-                  </v-col>
-                </v-row>
-
-                <v-row dense v-if="details.type == 'holiday'">
-                  <v-col cols="12" sm="6" v-if="details.allday === false">
-
-                    <label class="font-weight-bold">เวลาเริ่ม</label>
-                    <v-text-field
-                      hide-details
-                      dense
-                      outlined
-                      readonly
-                      :value="details.startTime"
-                    >
-                    </v-text-field>
-                  </v-col>
-
-                  <v-col cols="12" sm="6" v-if="details.allday === false">
-
-                    <label class="font-weight-bold">เวลาสิ้นสุด</label>
-                    <v-text-field
-                      hide-details
-                      dense
-                      outlined
-                      readonly
-                      :value="details.endTime"
-                    >
-                    </v-text-field>
-                  </v-col>
-                  <v-col cols="12" align="center" v-else>
-                    <v-text-field
-                      hide-details
-                      dense
-                      outlined
-                      readonly
-                      value="หยุดทั้งวัน"
-                    >
-                    </v-text-field
-                  ></v-col>
-                </v-row>
-              </v-card-text>
-
-              <v-card-text>
-                <v-row dense v-if="details.type == 'normal'">
-                  <v-col cols="12" sm="6">
-
-                    <label class="font-weight-bold">โค้ช</label>
-                    <v-text-field
-                      dense
-                      outlined
-                      readonly
-                      :value="details.coach"
-                      hide-details
-                    >
-                    </v-text-field>
-                  </v-col>
-
-                  <v-col cols="12" sm="6" v-if="details.package && details.package !== 'leave'">
-                    <label class="font-weight-bold">แพ็กเกจ</label>
-                    <v-text-field
-                      dense
-                      outlined
-                      readonly
-                      :value="details.package"
-                      hide-details
-                    >
-                    </v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" v-if="details.package == 'leave'">
-                    <label class="font-weight-bold">ชดเชยจาก</label>
-                    <v-text-field
-                      dense
-                      outlined
-                      readonly
-                      :value="details.selectedDate"
-                      hide-details
-                    >
-                    </v-text-field>
-                  </v-col>
-                </v-row>
-                <v-row v-if="details?.itmeData?.subCoachName">
-                  <v-col cols="12">
-                    <label class="font-weight-bold">ผู้สอนแทน</label>
-                    <v-text-field
-                      dense
-                      outlined
-                      readonly
-                      :value="details?.itmeData?.subCoachName"
-                      hide-details
-                    >
-                    </v-text-field>
-                  </v-col>
-                </v-row>
-              </v-card-text>
-            </v-container>
-          </v-card>
-        </v-dialog>
-      <!-- </v-row> -->
+              <v-col
+                cols="12"
+                sm="6"
+                v-if="details.package && details.package !== 'leave'"
+              >
+                <label class="font-weight-bold">แพ็กเกจ</label>
+                <v-text-field
+                  dense
+                  outlined
+                  readonly
+                  :value="details.package"
+                  hide-details
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" v-if="details.package == 'leave'">
+                <label class="font-weight-bold">ชดเชยจาก</label>
+                <v-text-field
+                  dense
+                  outlined
+                  readonly
+                  :value="details.selectedDate"
+                  hide-details
+                >
+                </v-text-field>
+              </v-col>
+            </v-row>
+            <v-row v-if="details?.itmeData?.subCoachName">
+              <v-col cols="12">
+                <label class="font-weight-bold">ผู้สอนแทน</label>
+                <v-text-field
+                  dense
+                  outlined
+                  readonly
+                  :value="details?.itmeData?.subCoachName"
+                  hide-details
+                >
+                </v-text-field>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-container>
+      </v-card>
+    </v-dialog>
+    <!-- </v-row> -->
     <!-- </template> -->
   </v-container>
 </template>
@@ -502,7 +505,6 @@ export default {
       return color ? color : false;
     },
     ToStudentCourse(data) {
-
       this.$router.push({
         name: "StudentCourse",
         params: { course_id: data.courseId },
