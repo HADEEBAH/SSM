@@ -487,7 +487,7 @@ const coachModules = {
         // console.log(error)
       }
     },
-    async CheckInCoach(context, { course_id, time_id, date }) {
+    async CheckInCoach(context, { course_id, time_id, date ,type }) {
       context.commit("SetCoachCheckInIsLoading", true)
       try {
         // console.log(course_id, time_id, date)
@@ -502,7 +502,8 @@ const coachModules = {
         let user_detail = JSON.parse(localStorage.getItem("userDetail"));
         const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}`, {
           "date": date,
-          "timeId": time_id
+          "timeId": time_id,
+          "type" : type
         }, config)
         if (data.statusCode === 201) {
           // let localhost = "http://localhost:3000"
@@ -555,7 +556,7 @@ const coachModules = {
         // let localhost = "http://localhost:3000"
         
         const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${coach_id}`, config);
-        // console.log("GetMyCourses", data.data)
+        console.log("GetMyCourses", data.data)
         if (data.statusCode == 200) {  
           let courses_task = [];       
           let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
@@ -597,6 +598,7 @@ const coachModules = {
                       subtitle: course_data.data.data.courseNameEn,
                       course_id: course.courseId,
                       time_id: course.timeId,
+                      type : course?.compType ? course?.compType : null,
                       day_of_week_id: course.dayOfWeekId,
                       coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
                       start_date: moment(startDate).format("YYYY-MM-DD"),
@@ -635,6 +637,7 @@ const coachModules = {
                       subtitle: course_data.data.data.courseNameEn,
                       course_id: course.courseId,
                       time_id: course.timeId,
+                      type : course?.compType ? course?.compType : null,
                       day_of_week_id: course.dayOfWeekId,
                       coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
                       start_date: moment(startDate).format("YYYY-MM-DD"),
@@ -671,6 +674,7 @@ const coachModules = {
                       course_id: course.courseId,
                       time_id: course.timeId,
                       day_of_week_id: course.dayOfWeekId,
+                      type : course?.compType ? course?.compType : null,
                       coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
                       start_date: moment(startDate).format("YYYY-MM-DD"),
                       start_date_str: startDate.toLocaleDateString("th-TH", options),
@@ -721,6 +725,7 @@ const coachModules = {
                       course_id: course.courseId,
                       time_id: course.timeId,
                       day_of_week_id: course.dayOfWeekId,
+                      type : course?.compType ? course?.compType : null,
                       coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
                       start_date: moment(startDate).format("YYYY-MM-DD"),
                       start_date_str: startDate.toLocaleDateString("th-TH", options),
@@ -740,7 +745,7 @@ const coachModules = {
               }
             }
           }
-          // console.log(courses_task)
+          console.log("746",courses_task)
           context.commit("SetMyCourses", courses_task);
           context.commit("SetMyCoursesIsLoading", false);
         }
@@ -1011,11 +1016,19 @@ const coachModules = {
           for(let date of data.data.dates){
             for(let course of date.courses){
               if(course.type === "date"){
+                const options = {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                };
                 let startPart = course.compensationStartTime.split(":")
                 let endPart = course.compensationEndTime.split(":")
                 course.menuCompensationDate = false
                 course.compensationDate = course.compensationDate  ? new Date(course.compensationDate).toISOString().split('T')[0] : null,
+                course.compensationDate_str =  new Date(course.compensationDate).toLocaleDateString("th-TH", options)
+                course.compensationStartTime = `${startPart[0]+':'+startPart[1]}`
                 course.compensationStartTimeObj = {HH : startPart[0], mm : startPart[1]}
+                course.compensationEndTime = `${endPart[0]+':'+endPart[1]}`
                 course.compensationEndTimeObj= {HH : endPart[0], mm : endPart[1]}
               }
             }

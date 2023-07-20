@@ -7,7 +7,7 @@ import VueCookie from "vue-cookie"
 // import { dateFormatter } from "@/functions/functions";
 var XLSX = require("xlsx");
 function dayOfWeekArray(day) {
-  // // console.log
+  console.log("dayOfWeekArray", day)
   // let day_arr = day
   let days = day
   // // console.log(day)
@@ -1590,11 +1590,10 @@ const CourseModules = {
             showDenyButton: false,
             showCancelButton: false,
             confirmButtonText: "ตกลง",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              router.replace({ name: "CourseList" })
-            }
+            timer: 3000,
+            timerProgressBar: true
           })
+          router.replace({ name: "CourseList" })
         } else {
           context.commit("SetCourseIsLoading", false)
           throw { message: data }

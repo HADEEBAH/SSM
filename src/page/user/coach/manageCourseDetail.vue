@@ -1660,6 +1660,7 @@ export default {
               course_id: this.course_data.course_id,
               date: this.$route.params.date,
               time_id: this.$route.params.timeId,
+              type : this.$route.params.typeEvent
             }).then(async () => {
               await this.GetCoachCheckIn({
                 course_id: this.$route.params.courseId,

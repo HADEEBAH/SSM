@@ -1775,7 +1775,7 @@ export default {
               if (
                 this.course_order.students.filter(
                   (v) => v.is_other === false
-                )[0].parents.length > 0
+                )[0]?.parents?.length > 0
               ) {
                 let parents = this.course_order.students.filter(
                   (v) => v.is_other === false

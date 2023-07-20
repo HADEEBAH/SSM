@@ -1066,7 +1066,7 @@ export default {
               if (
                 this.course_order.students.filter(
                   (v) => v.is_other === false
-                )[0].parents.length > 0
+                )[0]?.parents?.length > 0
               ) {
                 let parents = this.course_order.students.filter(
                   (v) => v.is_other === false
@@ -1144,7 +1144,8 @@ export default {
             }
 
             let { data } = await axios.post(
-              `${process.env.VUE_APP_URL}/api/v1/relations/user`,
+              `http://localhost:3000/api/v1/relations/user`,
+              // `${process.env.VUE_APP_URL}/api/v1/relations/user`,
               payload,
               config
             );
