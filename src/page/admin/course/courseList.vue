@@ -102,9 +102,7 @@
       >
         <template v-slot:no-data>
           <v-row dense>
-            <v-col align="center">
-               ไม่พบข้อมูล
-            </v-col>
+            <v-col align="center"> ไม่พบข้อมูล </v-col>
           </v-row>
         </template>
         <template v-slot:[`item.status`]="{ item }">
