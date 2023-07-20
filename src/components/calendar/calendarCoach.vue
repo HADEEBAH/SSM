@@ -59,6 +59,7 @@
       :events="functionEvents"
       @input="selectDate(focus)"
       class="w-full"
+      locale="th-TH"
     ></v-date-picker>
     <v-bottom-sheet v-model="showModal">
       <div class="bg-white rounded-t-lg pa-4">
@@ -79,7 +80,11 @@
               <!-- {{ event }} -->
               <v-card-text class="border-2 border-[#ff6b81]">
                 <v-row dense>
-                  <v-col  v-if="event.type == 'holiday'" cols="auto" class="text-sm text-[#999999]" >
+                  <v-col
+                    v-if="event.type == 'holiday'"
+                    cols="auto"
+                    class="text-sm text-[#999999]"
+                  >
                     -
                   </v-col>
                   <v-col v-else cols="auto" class="text-sm text-[#999999]">
@@ -109,7 +114,7 @@
                                 timeId: event.time_id,
                                 dayOfWeekId: event.day_of_week_id,
                                 date: event.start_date,
-                                typeEvent : event.type ? event.type :'null'
+                                typeEvent: event.type ? event.type : 'null',
                               },
                             })
                           "
@@ -205,7 +210,7 @@ export default {
   },
   methods: {
     selectedDate(data) {
-      if(data.event.type !== 'holiday'){
+      if (data.event.type !== "holiday") {
         this.$router.push({
           name: "menageCourseDetail",
           params: {
@@ -213,7 +218,7 @@ export default {
             timeId: data.event.time_id,
             dayOfWeekId: data.event.day_of_week_id,
             date: data.event.start_date,
-            typeEvent : data.type ? data.type :'null'
+            typeEvent: data.type ? data.type : "null",
           },
         });
       }
@@ -222,7 +227,7 @@ export default {
       this.event_date = [];
       this.showModal = true;
       this.events.forEach((event) => {
-        if(event?.coach){
+        if (event?.coach) {
           let [start, start_time] = event.start.split(" ");
           let [end, end_time] = event.end.split(" ");
           if (start === end && start === date) {
@@ -240,17 +245,17 @@ export default {
               start_date: event.start_date,
             });
           }
-        }else{
+        } else {
           let [start] = event.start.split(" ");
           if (start === date) {
             this.event_date.push({
               name: event.name,
               start_date: event.start_date,
-              type: event.type
+              type: event.type,
             });
           }
         }
-      });        
+      });
     },
     colorOfDay() {
       this.events.forEach((event) => {
@@ -308,21 +313,20 @@ export default {
       this.events.forEach((event) => {
         let [date_event] = event.start.split(" ");
         let [year, month, day] = date_event.split("-");
-        if(event?.type){
+        if (event?.type) {
           events_data.push({
             year: year,
             month: month,
             day: day,
-            type : event.type
+            type: event.type,
           });
-        }else{
+        } else {
           events_data.push({
             year: year,
             month: month,
             day: day,
           });
         }
-        
       });
 
       let color = "";

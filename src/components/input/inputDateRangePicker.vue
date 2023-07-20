@@ -19,11 +19,15 @@
             v-on="on"
           ></v-text-field>
         </template>
-        <v-time-picker v-if="time_picker" v-model="start_date" ></v-time-picker>
-        <v-date-picker v-else v-model="start_date"></v-date-picker>
+        <v-time-picker v-if="time_picker" v-model="start_date"></v-time-picker>
+        <v-date-picker
+          v-else
+          v-model="start_date"
+          locale="th-TH"
+        ></v-date-picker>
       </v-menu>
     </v-col>
-    <v-col  cols="auto" class="mt-2 px-0"><v-icon>mdi-minus</v-icon></v-col>
+    <v-col cols="auto" class="mt-2 px-0"><v-icon>mdi-minus</v-icon></v-col>
     <v-col>
       <v-menu
         v-model="menu_end_date"
@@ -43,8 +47,8 @@
             v-on="on"
           ></v-text-field>
         </template>
-        <v-time-picker v-if="time_picker" v-model="end_date" ></v-time-picker>
-        <v-date-picker v-else v-model="end_date"></v-date-picker>
+        <v-time-picker v-if="time_picker" v-model="end_date"></v-time-picker>
+        <v-date-picker v-else v-model="end_date" locale="th-TH"></v-date-picker>
       </v-menu>
     </v-col>
   </v-row>
@@ -52,26 +56,22 @@
 
 <script>
 export default {
-  props:{
-    icon:{type : String, default:' mdi-calendar'},
-    time_picker : {type :Boolean, default:false}
+  props: {
+    icon: { type: String, default: " mdi-calendar" },
+    time_picker: { type: Boolean, default: false },
   },
-  name : "InputDateRange",
+  name: "InputDateRange",
   components: {},
   data: () => ({
-    menu_start_date : false,
+    menu_start_date: false,
     menu_end_date: false,
-    start_date:"",
+    start_date: "",
     end_date: "",
   }),
   created() {},
-  mounted() {
-    
-  },
+  mounted() {},
   watch: {},
   computed: {},
-  methods: {
-    
-  },
+  methods: {},
 };
 </script>
