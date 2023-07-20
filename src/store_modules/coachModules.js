@@ -466,25 +466,25 @@ const coachModules = {
         };
         // let localhost ="http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/${course_id}/date/${date}`, config)
-        // // console.log(data.data)
         if (data.statusCode === 200) {
-          data.data.forEach((student, index) => {
-            student.no = index + 1
+          let i = 1
+          for await (let student of data.data){
+            student.no = i
             student.fullname = `${student.firstNameTh} ${student.lastNameTh}`
             student.check_in_student_id = student.checkInStudentId,
               student.menu_compensation_date = false,
               student.compensationDate = student.compensationDate ? student.compensationDate !== "Invalid date" ? moment(new Date(student.compensationDate)).format("YYYY-MM-DD") : null : null
             student.compensation_date_str = student.compensationDate ? student.compensationDate !== "Invalid date" ? dateFormatter(new Date(student.compensationDate), "DD MT YYYYT") : null : null
-            student.compensationStartTime = student.compensationStartTime ? student.compensationStartTime !== "Invalid date" ? moment(student.compensationStartTime, "HH:mm") : null : null
-            student.compensationEndTime = student.compensationEndTime ? student.compensationStartTime !== "Invalid date" ? moment(student.compensationEndTime, "HH:mm") : null : null
+            student.compensationStartTime = student.compensationStartTime ? moment(student.compensationStartTime, "HH:mm") : null
+            student.compensationEndTime = student.compensationEndTime ? moment(student.compensationEndTime, "HH:mm") : null
             student.files = []
             student.potentialfiles = []
-          });
-
-          context.commit("SetStudentCheckIn", data.data)
+            i = i + 1
+          }
+          await context.commit("SetStudentCheckIn", data.data)
         }
       } catch (error) {
-        // console.log(error)
+        console.log(error)
       }
     },
     async CheckInCoach(context, { course_id, time_id, date, type }) {
