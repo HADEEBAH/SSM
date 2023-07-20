@@ -434,35 +434,45 @@ const manageScheduleModules = {
 
         if (data.statusCode === 200) {
           // console.log(data.data)
+          
           res.map((item) => {
             let times = null;
             let colors;
-            times = `${item.startTime} - ${item.endTime}`;
-            if (item.startDate) {
-              switch (new Date(item.startDate).getDay()) {
-                case 0:
-                  colors = "#F898A4";
-                  break;
-                case 1:
-                  colors = "#FFFACD";
-                  break;
-                case 2:
-                  colors = "#FFBBDA";
-                  break;
-                case 3:
-                  colors = "#D0F4DE";
-                  break;
-                case 4:
-                  colors = "#FFE2D1";
-                  break;
-                case 5:
-                  colors = "#C0E4F6";
-                  break;
-                case 6:
-                  colors = "#E8CFF8";
-                  break;
+            if (item.type === "holiday") {
+              colors = "#e9967a";
+              if (!item.allDay) {
+                times = `${item.startTime} - ${item.endTime}`;
+                colors = "#f19a5a";
+              }
+            } else{
+              times = `${item.startTime} - ${item.endTime}`;
+              if (item.startDate) {
+                switch (new Date(item.startDate).getDay()) {
+                  case 0:
+                    colors = "#F898A4";
+                    break;
+                  case 1:
+                    colors = "#FFFACD";
+                    break;
+                  case 2:
+                    colors = "#FFBBDA";
+                    break;
+                  case 3:
+                    colors = "#D0F4DE";
+                    break;
+                  case 4:
+                    colors = "#FFE2D1";
+                    break;
+                  case 5:
+                    colors = "#C0E4F6";
+                    break;
+                  case 6:
+                    colors = "#E8CFF8";
+                    break;
+                }
               }
             }
+          
             eventSchadule.push({
               name: item.name,
               start: item.startDate,
