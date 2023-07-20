@@ -117,110 +117,137 @@
             </v-col>
           </v-row>
           <v-card elevation="1" class="mb-2">
-            <!-- <pre>{{ student_check_in }}</pre> -->
-            <v-data-table
-              class="header-table border"
-              :items="
-                coach_check_in.checkInCoachId
-                  ? student_check_in.filter((v) =>
-                      v.cpo?.packageName
-                        ? v.cpo.packageName === package_name_filter
-                        : true
-                    )
-                  : []
-              "
-              item-key="no"
-              :expanded.sync="expanded_index"
-              :headers="headers"
-            >
-              <template v-slot:[`item.actions`]="{ item }">
-                <v-select
-                  :items="FilterStatusCheckIn(item)"
-                  outlined
-                  dense
-                  item-text="label"
-                  item-value="value"
-                  hide-details
-                  v-model="item.status"
-                  @change="selectCheckInStatus(item, $event)"
+            <v-form v-model="validate_form" ref="validate_form">
+                <v-data-table
+                  class="header-table border"
+                  :items=" coach_check_in.checkInCoachId  ? student_check_in.filter((v) => v.cpo?.packageName ? v.cpo.packageName === package_name_filter: true ) : []"
+                  item-key="no"
+                  :expanded.sync="expanded_index"
+                  :headers="headers"
                 >
-                  <template #item="{ item }">
-                    <v-list-item-content>
-                      <v-list-item-title :style="`color:${item.color}`">{{
-                        item.label
-                      }}</v-list-item-title>
-                    </v-list-item-content>
-                  </template>
-                  <template #selection="{ item }">
-                    <v-list-item-title :style="`color:${item.color}`">{{
-                      item.label
-                    }}</v-list-item-title>
-                  </template>
-                </v-select>
-              </template>
-              <template v-slot:[`item.package`]="{ item }">
-                <span class="font-semibold" v-if="item?.cpo?.packageName">
-                  {{ `${item.cpo.packageName}` }}</span
-                >
-                <span class="font-semibold" v-else> - </span>
-              </template>
-              <template v-slot:[`item.class_time`]="{ item }">
-                {{ `${item.countCheckIn}/${item.totalDay}` }}
-              </template>
-              <template v-slot:expanded-item="{ headers, item }">
-                <!-- <pre>{{ item }}</pre> -->
-                <td class="pa-2" :colspan="headers.length" align="center">
-                  <v-row dense class="d-flex align-center">
-                    <v-col cols="12" sm="2">วันเรียนชดเชย</v-col>
-                    <v-col cols="12" sm="4">
-                      <v-menu
-                        v-model="item.menu_compensation_date"
-                        :close-on-content-click="false"
-                        transition="scale-transition"
-                        min-width="auto"
+                  <template v-slot:[`item.actions`]="{ item }">
+                    <div class="pt-5">
+                      <v-select
+                        v-model="item.status"
+                        required
+                        :rules="rules.status_text"
+                        :items="FilterStatusCheckIn(item)"
+                        outlined
+                        dense
+                        item-text="label"
+                        item-value="value"
+                        @change="selectCheckInStatus(item, $event)"
                       >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                            dense
-                            outlined
-                            hide-details
-                            v-model="item.compensation_date_str"
-                            readonly
-                            placeholder="เลือกวันที่ชดเชย"
-                            v-bind="attrs"
-                            v-on="on"
-                          >
-                            <template v-slot:append>
-                              <v-icon
-                                :color="item.compensationDate ? '#FF6B81' : ''"
-                                >mdi-calendar</v-icon
-                              >
-                            </template>
-                          </v-text-field>
+                        <template #item="{ item }">
+                          <v-list-item-content>
+                            <v-list-item-title :style="`color:${item.color}`">{{
+                              item.label
+                            }}</v-list-item-title>
+                          </v-list-item-content>
                         </template>
-                        <v-date-picker
-                          :min="new Date($route.params.date).toISOString()"
-                          @input="inputDate($event, item)"
-                          v-model="item.compensationDate"
-                          locale="th-TH"
-                        ></v-date-picker>
-                      </v-menu>
-                    </v-col>
-                    <v-col cols="12" sm class="">
-                      <v-row dense class="d-flex alicn-center">
+                        <template #selection="{ item }">
+                          <v-list-item-title :style="`color:${item.color}`">{{
+                            item.label
+                          }}</v-list-item-title>
+                        </template>
+                      </v-select>
+                    </div>
+                  </template>
+                  <template v-slot:[`item.package`]="{ item }">
+                    <span class="font-semibold" v-if="item?.cpo?.packageName">
+                      {{ `${item.cpo.packageName}` }}</span
+                    >
+                    <span class="font-semibold" v-else> - </span>
+                  </template>
+                  <template v-slot:[`item.class_time`]="{ item }">
+                    {{ `${item.countCheckIn}/${item.totalDay}` }}
+                  </template>
+                  <template v-slot:expanded-item="{ headers, item }">
+                    <!-- <pre>{{ item }}</pre> -->
+                    <td class="pa-2" :colspan="headers.length" align="center">
+                      <v-row dense >
+                        <v-col cols="12" sm="2">วันเรียนชดเชย</v-col>
+                        <v-col cols="12" sm="4">
+                          <v-menu
+                            v-model="item.menu_compensation_date"
+                            :close-on-content-click="false"
+                            transition="scale-transition"
+                            min-width="auto"
+                          >
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-text-field
+                                dense
+                                outlined
+                                :rules="rules.compensation_date"
+                                v-model="item.compensation_date_str"
+                                readonly
+                                placeholder="เลือกวันที่ชดเชย"
+                                v-bind="attrs"
+                                v-on="on"
+                              >
+                                <template v-slot:append>
+                                  <v-icon
+                                    :color="item.compensationDate ? '#FF6B81' : ''"
+                                    >mdi-calendar</v-icon
+                                  >
+                                </template>
+                              </v-text-field>
+                            </template>
+                            <v-date-picker
+                              :min="new Date($route.params.date).toISOString()"
+                              @input="inputDate($event, item)"
+                              v-model="item.compensationDate"
+                              locale="th-TH"
+                            ></v-date-picker>
+                          </v-menu>
+                        </v-col>
                         <v-col cols="auto" class="pr-2">
+                          <v-text-field
+                            outlined
+                            dense
+                            :style="`width:${width()}px;`"
+                            style="position: absolute; display: block; z-index: 4"
+                            @focus="
+                              SelectedStartDate(
+                                $event,
+                                item.compensationStartTime
+                              )
+                            "
+                            :rules="rules.start_time"
+                            :value="genTime(item.compensationStartTime)"
+                          >
+                          </v-text-field>
                           <TimePicker
+                            class="time-picker-hidden"
                             :minuteStep="30"
+                            placeholder="เวลาเริ่ม"
+                            :style="`width:${width()}px;`"
                             :class="item.start_time ? 'active' : ''"
-                            placeholder="เวลาเริ่มต้น"
                             format="HH:mm"
                             v-model="item.compensationStartTime"
                           >
                           </TimePicker>
                         </v-col>
                         <v-col cols="auto" class="pl-2">
+                          <v-text-field
+                            outlined
+                            dense
+                            :style="`width:${width()}px;`"
+                            style="position: absolute; display: block; z-index: 4"
+                            @focus="
+                              SelectedStartDate(
+                                $event,
+                                item.compensationEndTime
+                              )
+                            "
+                            :rules="rules.end_time"
+                            :value="genTime(item.compensationEndTime)"
+                          >
+                          </v-text-field>
                           <TimePicker
+                            class="time-picker-hidden"
                             :minuteStep="30"
+                            :style="`width:${width()}px;`"
                             format="HH:mm"
                             :class="item.end_time ? 'active' : ''"
                             placeholder="เวลาสิ้นสุด"
@@ -228,11 +255,11 @@
                           ></TimePicker>
                         </v-col>
                       </v-row>
-                    </v-col>
-                  </v-row>
-                </td>
-              </template>
-            </v-data-table>
+                    </td>
+                  </template>
+                </v-data-table>
+            </v-form>
+          
           </v-card>
           <v-row>
             <v-col align="right">
@@ -1246,23 +1273,26 @@
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 import { dateFormatter, CheckFileSize } from "@/functions/functions";
 import rowData from "@/components/label/rowData.vue";
-import { Input, TimePicker } from "ant-design-vue";
 import labelCustom from "../../../components/label/labelCustom.vue";
 import { mapActions, mapGetters } from "vuex";
+import { Input, TimePicker } from "ant-design-vue";
 import Swal from "sweetalert2";
 import mixin from "@/mixin";
-// import moment from 'moment'
+// import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
+import moment from 'moment'
 export default {
   name: "menageCourseDetail",
-  components: { rowData, loadingOverlay, TimePicker, labelCustom },
+  components: { rowData, loadingOverlay, labelCustom, TimePicker },
   mixins: [mixin],
   directives: {
     "ant-input": Input,
   },
+
   data: () => ({
     tab: "check in",
     fileURL: null,
     filename: "",
+    validate_form : false,
     evolution_options: [
       { label: "ดีมาก", value: "very good", num_value: 5 },
       { label: "ดี", value: "good", num_value: 4 },
@@ -1318,6 +1348,16 @@ export default {
         value: "actions",
       },
     ],
+    rules: {
+      status_text: [(val) => !!val || "โปรดระบุสถานะการเข้าเรียน"],
+      compensation_date : [(val) => !!val || "โปรดระบุวันชดเชย"],
+      start_time : [(val) => !!val || "โปรดระบุเวลาเริ่ม"],
+      end_time : [(val) => !!val || "โปรดระบุเวลาสิ้นสุด"]
+    },
+    ant_rules:{
+      time_start: [{ required: true, message: 'โปรดระบุเวลาเริ่มสอน', trigger: 'change' }],
+      time_end: [{ required: true, message: 'โปรดระบุเวลาสิ้นสุด', trigger: 'change' }],
+    },
     selected_student: null,
     preview_summary_files: [],
     selected_files: [],
@@ -1361,10 +1401,7 @@ export default {
             this.cpo_options.push(check_in_data.cpo.packageName);
           }
         }
-        if (
-          check_in_data.status === "leave" ||
-          check_in_data.status === "special case"
-        ) {
+        if (check_in_data.status === "leave" ||  check_in_data.status === "special case" ) {
           this.selectCheckInStatus(check_in_data, check_in_data.status);
           this.expanded_index.push(check_in_data);
         }
@@ -1427,6 +1464,28 @@ export default {
       // }
 
       return false;
+    },
+    genTime(time){
+      if(time){
+        return moment(time).format("HH:mm")
+      }else{
+        return ""
+      }
+     
+    },
+    width() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return 99;
+        case "sm":
+          return 147.5;
+        case "md":
+          return 180.5;
+        case "lg":
+          return 251.5;
+        case "xl":
+          return 401.75;
+      }
     },
     CheckRating(rating_data, checkInId, type) {
       if (
@@ -1621,29 +1680,42 @@ export default {
       await item.map((val) => {
         student_id.push({ studentId: val.studentId });
       });
-      Swal.fire({
-        icon: "question",
-        title: "ต้องการบันทึกใช่หรือไม่ ?",
-        showDenyButton: false,
-        showCancelButton: true,
-        cancelButtonText: "ยกเลิก",
-        confirmButtonText: "ตกลง",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          this.UpdateCheckInStudent({
-            students: this.student_check_in,
-            course_id: this.$route.params.courseId,
-            date: this.$route.params.date,
-            time_id: this.$route.params.timeId,
-          });
-          let payload = {
-            notificationName: "แจ้งเตือนการเช็คอิน",
-            notificationDescription: `เช็คอินเรียบร้อย`,
-            accountId: student_id,
-          };
-          this.sendNotification(payload);
-        }
-      });
+      this.$refs.validate_form.validate();
+      if(this.validate_form){
+        Swal.fire({
+          icon: "question",
+          title: "ต้องการบันทึกใช่หรือไม่ ?",
+          showDenyButton: false,
+          showCancelButton: true,
+          cancelButtonText: "ยกเลิก",
+          confirmButtonText: "ตกลง",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            this.UpdateCheckInStudent({
+              students: this.student_check_in,
+              course_id: this.$route.params.courseId,
+              date: this.$route.params.date,
+              time_id: this.$route.params.timeId,
+            });
+            let payload = {
+              notificationName: "แจ้งเตือนการเช็คอิน",
+              notificationDescription: `เช็คอินเรียบร้อย`,
+              accountId: student_id,
+            };
+            this.sendNotification(payload);
+          }
+        });
+      }
+    },
+    SelectedStartDate(e) {
+      e.target.parentNode.parentNode.parentNode.parentNode.parentNode
+        .getElementsByClassName("time-picker-hidden")[0]
+        .getElementsByTagName("input")[0]
+        .focus()
+      e.target.parentNode.parentNode.parentNode.parentNode.parentNode
+        .getElementsByClassName("time-picker-hidden")[0]
+        .getElementsByTagName("input")[0]
+        .click()
     },
     checkIn() {
       if (!this.coach_check_in.checkInCoachId) {
