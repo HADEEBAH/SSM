@@ -352,7 +352,8 @@
           </v-card>
           <!-- DETAIL :: EVALUATE -->
           <div v-if="tab_evaluate === 'evaluate_students'">
-            <template
+            <v-form ref="learners_form" v-model="learners_form">
+              <template
               v-if="
                 student_check_in.filter(
                   (v) =>
@@ -415,6 +416,7 @@
                       <v-select
                         outlined
                         dense
+                        :rules="rules.evolution"
                         v-model="student.assessment.evolution"
                         :items="evolution_options"
                       >
@@ -454,6 +456,7 @@
                       <v-select
                         outlined
                         dense
+                        :rules="rules.interest"
                         v-model="student.assessment.interest"
                         :items="interest_options"
                       >
@@ -500,45 +503,47 @@
                   </v-row>
                 </v-card-text>
               </v-card>
-            </template>
-            <v-card v-else outlined class="my-3">
-              <v-card-text class="text-lg font-bold" align="center">
-                ไม่พบข้อมูล
-              </v-card-text>
-            </v-card>
-            <v-row>
-              <v-col cols="12" sm align="right">
-                <v-btn
-                  color="#ff6b81"
-                  @click="clearAssessment()"
-                  outlined
-                  dense
-                  :class="
-                    $vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'
-                  "
-                >
-                  ล้างข้อมูล
-                </v-btn>
-              </v-col>
-              <v-col cols="12" sm="auto">
-                <v-btn
-                  color="#ff6b81"
-                  @click="saveAssessmentStudent()"
-                  dark
-                  depressed
-                  dense
-                  :class="
-                    $vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'
-                  "
-                >
-                  ส่งข้อมูล
-                </v-btn>
-              </v-col>
-            </v-row>
+              </template>
+              <v-card v-else outlined class="my-3">
+                <v-card-text class="text-lg font-bold" align="center">
+                  ไม่พบข้อมูล
+                </v-card-text>
+              </v-card>
+              <v-row>
+                <v-col cols="12" sm align="right">
+                  <v-btn
+                    color="#ff6b81"
+                    @click="clearAssessment()"
+                    outlined
+                    dense
+                    :class="
+                      $vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'
+                    "
+                  >
+                    ล้างข้อมูล
+                  </v-btn>
+                </v-col>
+                <v-col cols="12" sm="auto">
+                  <v-btn
+                    color="#ff6b81"
+                    @click="saveAssessmentStudent()"
+                    dark
+                    depressed
+                    dense
+                    :class="
+                      $vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'
+                    "
+                  >
+                    บันทึก
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-form>
           </div>
           <!-- DETAIL :: POTENTIAl -->
           <div v-else>
-            <v-card
+            <v-form ref="potential_form" v-model="potential_form">
+              <v-card
               class="mb-2"
               flat
               style="border: 1px solid #999"
@@ -591,6 +596,7 @@
                     <v-select
                       outlined
                       dense
+                      :rules="rules.evolution"
                       v-model="student.potential.evolution"
                       :items="evolution_options"
                     >
@@ -615,23 +621,6 @@
                         ></v-rating>
                       </template>
                     </v-select>
-                    <!-- <v-rating
-                      v-model="student.potential.rating_evolution"
-                      background-color="pink lighten-3"
-                      @input="CheckRating($event, student.checkInStudentId, 'potential_evolution')"
-                      color="pink"
-                      large
-                      length="5"
-                    ></v-rating> -->
-                    <!-- <v-select
-                      outlined
-                      dense
-                      hide-details
-                      :items="evolution_options"
-                      item-text="label"
-                      item-value="value"
-                      v-model="student.potential.evolution"
-                    ></v-select> -->
                   </v-col>
                   <v-col cols="12" sm="auto">
                     <v-btn
@@ -649,64 +638,70 @@
                     <labelCustom text="ระดับความสนใจ"></labelCustom>
                     <v-textarea
                       outlined
+                      :rules="rules.interest_text"
                       v-model="student.potential.interest"
                     ></v-textarea>
                   </v-col>
                 </v-row>
               </v-card-text>
-            </v-card>
-            <v-row>
-              <v-col cols="12" sm align="right">
-                <v-btn
-                  color="#ff6b81"
-                  @click="clearPotentialAssessment()"
-                  outlined
-                  dense
-                  :class="
-                    $vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'
-                  "
-                >
-                  ล้างข้อมูล
-                </v-btn>
-              </v-col>
-              <v-col cols="12" sm="auto">
-                <v-btn
-                  color="#ff6b81"
-                  @click="saveUpdateAssessmentPotential()"
-                  dark
-                  depressed
-                  dense
-                  :class="
-                    $vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'
-                  "
-                >
-                  ส่งข้อมูล
-                </v-btn>
-              </v-col>
-            </v-row>
+              </v-card>
+              <v-row>
+                <v-col cols="12" sm align="right">
+                  <v-btn
+                    color="#ff6b81"
+                    @click="clearPotentialAssessment()"
+                    outlined
+                    dense
+                    :class="
+                      $vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'
+                    "
+                  >
+                    ล้างข้อมูล
+                  </v-btn>
+                </v-col>
+                <v-col cols="12" sm="auto">
+                  <v-btn
+                    color="#ff6b81"
+                    @click="saveUpdateAssessmentPotential()"
+                    dark
+                    depressed
+                    dense
+                    :class="
+                      $vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'
+                    "
+                  >
+                    บันทึก
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-form>
           </div>
         </v-tab-item>
         <v-tab-item value="teaching summary">
-          <v-row dense>
-            <v-col>
-              <labelCustom text="บันทึกการสอน"></labelCustom>
-              <v-textarea
-                outlined
-                placeholder="ระบุความคิดเห็น..."
-                v-model="coach_check_in.summary"
-              ></v-textarea>
-            </v-col>
-          </v-row>
-          <v-row dense>
-            <v-col>
-              <labelCustom text="พัฒนาการ / การบ้าน"></labelCustom>
-              <v-textarea
-                outlined
-                placeholder="ระบุความคิดเห็น..."
-                v-model="coach_check_in.homework"
-              ></v-textarea>
-            </v-col>
-          </v-row>
+          <v-form ref="summary_form" v-model="summary_form">
+            <v-row dense>
+              <v-col>
+                <labelCustom text="บันทึกการสอน"></labelCustom>
+                <v-textarea
+                  outlined
+                  :rules="rules.summary"
+                  placeholder="ระบุความคิดเห็น..."
+                  v-model="coach_check_in.summary"
+                ></v-textarea>
+              </v-col>
+            </v-row>
+            <v-row dense>
+              <v-col>
+                <labelCustom text="พัฒนาการ / การบ้าน"></labelCustom>
+                <v-textarea
+                  outlined
+                  :rules="rules.homework"
+                  placeholder="ระบุความคิดเห็น..."
+                  v-model="coach_check_in.homework"
+                ></v-textarea>
+              </v-col>
+            </v-row>
+          </v-form>
           <!-- Upload file -->
           <v-card flat class="mb-3">
             <v-card-text
@@ -851,7 +846,7 @@
                 depressed
                 color="#ff6b81"
                 dark
-                @click="saveSummary"
+                @click="saveSummary()"
               >
                 บันทึก
               </v-btn>
@@ -872,11 +867,7 @@
             <v-col class="pa-1" cols="12" align="right">
               <v-btn
                 icon
-                v-if="
-                  !student_check_in[selected_student].assessment
-                    .assessmentStudentsId
-                "
-                @click="closeStudentComment(selected_student)"
+                @click="closeStudentComment()"
               >
                 <v-icon color="#ff6b81">mdi-close</v-icon>
               </v-btn>
@@ -893,29 +884,21 @@
                 <labelCustom text="เพิ่มความคิดเห็น"></labelCustom>
                 <v-textarea
                   outlined
-                  v-model="student_check_in[selected_student].assessment.remark"
+                  v-model="comment_dialog_tmp.remark"
                 ></v-textarea>
               </v-col>
             </v-row>
-            <div
-              v-if="
-                student_check_in[selected_student].assessment.attachment
-                  .length > 0
-              "
-            >
+            <div v-if="comment_dialog_tmp.attachment.length > 0">
               <v-row dense>
                 <v-col class="font-bold text-lg"> ไฟล์แนบ </v-col>
               </v-row>
               <v-card
                 flat
                 class="mb-3"
-                v-for="(file, index) of student_check_in[selected_student]
-                  .assessment.attachment"
+                v-for="(file, index) of comment_dialog_tmp.attachment"
                 :key="`${index}-fileattachment`"
               >
-                <v-card-text
-                  class="border border-2 border-[#ff6b81] rounded-lg"
-                >
+                <v-card-text class="border border-2 border-[#ff6b81] rounded-lg" >
                   <v-row>
                     <v-col cols="auto" class="pr-2">
                       <v-img
@@ -935,13 +918,11 @@
                     </v-col>
                     <v-col cols="auto" class="pl-2">
                       <v-btn
-                        @click="
-                          removeAccessmentFileInBase(file, selected_student)
-                        "
+                        @click=" removeAccessmentFileInBase(file, selected_student)"
                         icon
                         color="#ff6b81"
-                        ><v-icon>mdi-close</v-icon></v-btn
-                      >
+                        ><v-icon>mdi-close</v-icon>
+                      </v-btn>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -975,7 +956,7 @@
                       ref="generalfileInput"
                       type="file"
                       multiple
-                      @change="uploadGeneralFile(selected_student)"
+                      @change="uploadGeneralFile()"
                       style="display: none"
                     />
                   </v-col>
@@ -983,7 +964,7 @@
               </v-card-text>
             </v-card>
             <div
-              v-if="student_check_in[selected_student].files.length > 0"
+              v-if="comment_dialog_tmp.files.length > 0"
               class="mb-3"
             >
               <v-row dense>
@@ -994,8 +975,7 @@
                 @click="openFile(file)"
                 flat
                 class="mb-3"
-                v-for="(file, index) of student_check_in[selected_student]
-                  .files"
+                v-for="(file, index) of comment_dialog_tmp.files"
                 :key="`${index}-file`"
               >
                 <v-card-text
@@ -1032,12 +1012,8 @@
             <v-row dense>
               <v-col cols="12" sm="6">
                 <v-btn
-                  :disabled="
-                    student_check_in[selected_student].assessment
-                      .assessmentStudentsId
-                  "
                   class="w-full"
-                  @click="clearStudentComment(selected_student)"
+                  @click="clearStudentComment()"
                   text
                   color="#ff6b81"
                 >
@@ -1071,10 +1047,6 @@
           <v-row dense>
             <v-col class="pa-1" cols="12" align="right">
               <v-btn
-                v-if="
-                  !student_check_in[selected_student].potential
-                    .checkInPotentialId
-                "
                 icon
                 @click="closeDialogPotential(selected_student)"
               >
@@ -1093,13 +1065,13 @@
                 <labelCustom text="เพิ่มความคิดเห็น"></labelCustom>
                 <v-textarea
                   outlined
-                  v-model="student_check_in[selected_student].potential.remark"
+                  v-model="comment_potential_dialog_tmp.remark"
                 ></v-textarea>
               </v-col>
             </v-row>
             <div
               v-if="
-                student_check_in[selected_student].potential.attachmentPotential
+                comment_potential_dialog_tmp.attachmentPotential
                   .length > 0
               "
             >
@@ -1109,8 +1081,7 @@
               <v-card
                 flat
                 class="mb-3"
-                v-for="(file, index) of student_check_in[selected_student]
-                  .potential.attachmentPotential"
+                v-for="(file, index) of comment_potential_dialog_tmp.attachmentPotential"
                 :key="`${index}-fileattachment`"
               >
                 <v-card-text
@@ -1179,7 +1150,7 @@
                       ref="potentialfileInput"
                       type="file"
                       multiple
-                      @change="uploadPotentialFile(selected_student)"
+                      @change="uploadPotentialFile()"
                       style="display: none"
                     />
                   </v-col>
@@ -1189,7 +1160,7 @@
 
             <div
               v-if="
-                student_check_in[selected_student].potentialfiles.length > 0
+                comment_potential_dialog_tmp.files.length > 0
               "
               class="mb-3"
             >
@@ -1200,8 +1171,7 @@
               <v-card
                 flat
                 class="mb-3"
-                v-for="(file, index) of student_check_in[selected_student]
-                  .potentialfiles"
+                v-for="(file, index) of comment_potential_dialog_tmp.files"
                 :key="`${index}-file`"
               >
                 <v-card-text
@@ -1242,10 +1212,6 @@
                   @click="clearDialogPotential(selected_student)"
                   text
                   color="#ff6b81"
-                  :disabled="
-                    student_check_in[selected_student].potential
-                      .checkInPotentialId
-                  "
                 >
                   ล้างข้อมูล
                 </v-btn>
@@ -1348,15 +1314,32 @@ export default {
         value: "actions",
       },
     ],
+    learners_form: false,
+    potential_form: false,
+    summary_form : false,
     rules: {
       status_text: [(val) => !!val || "โปรดระบุสถานะการเข้าเรียน"],
       compensation_date : [(val) => !!val || "โปรดระบุวันชดเชย"],
       start_time : [(val) => !!val || "โปรดระบุเวลาเริ่ม"],
-      end_time : [(val) => !!val || "โปรดระบุเวลาสิ้นสุด"]
+      end_time : [(val) => !!val || "โปรดระบุเวลาสิ้นสุด"],
+      evolution : [(val) => !!val || "โปรดเลือกระดับพัฒนาการ"],
+      interest : [(val) => !!val || "โปรดเลือกระดับความสนใจ"],
+      interest_text : [ 
+        (val) =>  !!val > 0 || "โปรดระบุระดับความสนใจ",
+      ],
+      summary : [(val) =>  !!val > 0 || "โปรดระบุบันทึกการสอน"],
+      homework : [(val) =>  !!val > 0 || "โปรดระบุพัฒนาการ / การบ้าน"],
     },
-    ant_rules:{
-      time_start: [{ required: true, message: 'โปรดระบุเวลาเริ่มสอน', trigger: 'change' }],
-      time_end: [{ required: true, message: 'โปรดระบุเวลาสิ้นสุด', trigger: 'change' }],
+    comment_dialog_tmp :{
+      id : '',
+      remark : '',
+      files : []
+    },
+    comment_potential_dialog_tmp :{
+      id : '',
+      remark : '',
+      files : [],
+
     },
     selected_student: null,
     preview_summary_files: [],
@@ -1555,6 +1538,8 @@ export default {
     confirmDialogPotential(selected_student) {
       this.selected_files = [];
       this.student_check_in[selected_student].potential.confirm = true;
+      this.student_check_in[selected_student].potential.remark = this.comment_potential_dialog_tmp.remark
+      this.student_check_in[selected_student].potentialfiles = this.comment_potential_dialog_tmp.files
       this.show_comment_potential_dialog = false;
     },
     showDialogPotential(id) {
@@ -1563,32 +1548,27 @@ export default {
           this.selected_student = i;
         }
       }
-      if (
-        this.student_check_in[this.selected_student].potential
-          .checkInPotentialId
-      ) {
-        this.student_check_in[this.selected_student].potential.remark_old =
-          this.student_check_in[this.selected_student].potential.remark;
+      console.log(this.student_check_in[this.selected_student].potential.attachmentPotential)
+      this.selected_files = [];
+      this.comment_potential_dialog_tmp = {
+        id : this.student_check_in[this.selected_student].potential.checkInPotentialId,
+        remark : this.student_check_in[this.selected_student].potential.remark,
+        files : this.student_check_in[this.selected_student].potentialfiles ? this.student_check_in[this.selected_student].potentialfiles : [],
+        attachmentPotential : this.student_check_in[this.selected_student].potential.attachmentPotential
       }
       this.show_comment_potential_dialog = true;
     },
-    clearDialogPotential(selected_student) {
-      if (
-        !this.student_check_in[selected_student].potential.checkInPotentialId
-      ) {
-        this.student_check_in[selected_student].potential.remark = "";
-        this.student_check_in[selected_student].potentialfiles = [];
-      }
+    clearDialogPotential() {
+      this.comment_potential_dialog_tmp.id = ""
+      this.comment_potential_dialog_tmp.remark = ""
+      this.comment_potential_dialog_tmp.files = []
+      this.selected_files = [];
     },
-    closeDialogPotential(selected_student) {
-      if (!this.student_check_in[selected_student].potential.confirm) {
-        if (
-          !this.student_check_in[selected_student].potential.checkInPotentialId
-        ) {
-          this.student_check_in[selected_student].potential.remark = "";
-          this.student_check_in[selected_student].potentialfiles = [];
-        }
-      }
+    closeDialogPotential() {
+      this.comment_potential_dialog_tmp.id = ""
+      this.comment_potential_dialog_tmp.remark = ""
+      this.comment_potential_dialog_tmp.files = []
+      this.comment_potential_dialog_tmp.attachmentPotential = []
       this.selected_files = [];
       this.show_comment_potential_dialog = false;
     },
@@ -1601,43 +1581,49 @@ export default {
       });
     },
     async saveSummary() {
-      Swal.fire({
-        icon: "question",
-        title: "ต้องการบันทึกใช่หรือไม่ ?",
-        showDenyButton: false,
-        showCancelButton: true,
-        cancelButtonText: "ยกเลิก",
-        confirmButtonText: "ตกลง",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          await this.UploadFileSummary({
-            checkInCoach: this.coach_check_in,
-            files: this.coach_check_in.summary_files,
-            course_id: this.$route.params.courseId,
-            date: this.$route.params.date,
-          });
-        }
-      });
+      this.$refs.summary_form.validate()
+      if(this.summary_form){
+        Swal.fire({
+          icon: "question",
+          title: "ต้องการบันทึกใช่หรือไม่ ?",
+          showDenyButton: false,
+          showCancelButton: true,
+          cancelButtonText: "ยกเลิก",
+          confirmButtonText: "ตกลง",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            await this.UploadFileSummary({
+              checkInCoach: this.coach_check_in,
+              files: this.coach_check_in.summary_files,
+              course_id: this.$route.params.courseId,
+              date: this.$route.params.date,
+            });
+          }
+        });
+      }
     },
     async saveUpdateAssessmentPotential() {
       // // console.log(this.student_check_in)
-      Swal.fire({
-        icon: "question",
-        title: "ต้องการบันทึกใช่หรือไม่ ?",
-        showDenyButton: false,
-        showCancelButton: true,
-        cancelButtonText: "ยกเลิก",
-        confirmButtonText: "ตกลง",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          await this.UpdateAssessmentPotential({
-            students: this.student_check_in,
-            course_id: this.$route.params.courseId,
-            date: this.$route.params.date,
-            time_id: this.$route.params.timeId,
-          });
-        }
-      });
+      this.$refs.potential_form.validate()
+      if(this.potential_form){
+        Swal.fire({
+          icon: "question",
+          title: "ต้องการบันทึกใช่หรือไม่ ?",
+          showDenyButton: false,
+          showCancelButton: true,
+          cancelButtonText: "ยกเลิก",
+          confirmButtonText: "ตกลง",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            await this.UpdateAssessmentPotential({
+              students: this.student_check_in,
+              course_id: this.$route.params.courseId,
+              date: this.$route.params.date,
+              time_id: this.$route.params.timeId,
+            });
+          }
+        });
+      }
     },
     saveCreateTeachingNotes() {
       Swal.fire({
@@ -1657,23 +1643,26 @@ export default {
       });
     },
     async saveAssessmentStudent() {
-      Swal.fire({
-        icon: "question",
-        title: "ต้องการบันทึกใช่หรือไม่ ?",
-        showDenyButton: false,
-        showCancelButton: true,
-        cancelButtonText: "ยกเลิก",
-        confirmButtonText: "ตกลง",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          await this.AssessmentStudent({
-            students: this.student_check_in,
-            course_id: this.$route.params.courseId,
-            date: this.$route.params.date,
-            time_id: this.$route.params.timeId,
-          });
-        }
-      });
+      this.$refs.learners_form.validate()
+      if(this.learners_form){
+        Swal.fire({
+          icon: "question",
+          title: "ต้องการบันทึกใช่หรือไม่ ?",
+          showDenyButton: false,
+          showCancelButton: true,
+          cancelButtonText: "ยกเลิก",
+          confirmButtonText: "ตกลง",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            await this.AssessmentStudent({
+              students: this.student_check_in,
+              course_id: this.$route.params.courseId,
+              date: this.$route.params.date,
+              time_id: this.$route.params.timeId,
+            });
+          }
+        });
+      }
     },
     async CheckInStudents(item) {
       let student_id = [];
@@ -1750,38 +1739,40 @@ export default {
           this.selected_student = i;
         }
       }
-      if (
-        !this.student_check_in[this.selected_student].assessment
-          .assessmentStudentsId
-      ) {
-        this.student_check_in[this.selected_student].assessment.oldremark =
-          this.student_check_in[this.selected_student].assessment.remark;
-      }
+      console.log( this.student_check_in[this.selected_student].assessment.attachment)
+      this.comment_dialog_tmp = {
+          id: this.student_check_in[this.selected_student].assessment.assessmentStudentsId ?  this.student_check_in[this.selected_student].assessment.assessmentStudentsId : '',
+          remark : this.student_check_in[this.selected_student].assessment.remark,
+          attachment : this.student_check_in[this.selected_student].assessment.attachment,
+          files : this.student_check_in[this.selected_student].files ? this.student_check_in[this.selected_student].files : [] ,
+        }
+      // if (!this.student_check_in[this.selected_student].assessment.assessmentStudentsId ) {
+      //   this.student_check_in[this.selected_student].assessment.oldremark =
+      //     this.student_check_in[this.selected_student].assessment.remark;
+      // }
       this.show_comment_dialog = true;
     },
     confirmStudentComment(selected_student) {
       this.selected_files = [];
       this.show_comment_dialog = false;
       this.student_check_in[selected_student].assessment.confrim = true;
+      this.student_check_in[selected_student].assessment.remark  = this.comment_dialog_tmp.remark
+      this.student_check_in[selected_student].files = this.comment_dialog_tmp.files
+      this.student_check_in[selected_student].assessment.attachment  = this.comment_dialog_tmp.attachment
     },
-    clearStudentComment(selected_student) {
-      if (
-        !this.student_check_in[selected_student].assessment.assessmentStudentsId
-      ) {
-        this.student_check_in[selected_student].assessment.remark = [];
-        this.student_check_in[selected_student].files = [];
-      }
+    clearStudentComment() {
+      // this.comment_dialog_tmp.evolution = "";
+      this.comment_dialog_tmp.remark = "";
+      this.comment_dialog_tmp.files = [];
+      // this.comment_dialog_tmp.attachment = []
+      this.selected_files = [];
     },
-    closeStudentComment(selected_student) {
+    closeStudentComment() {
       // console.log(selected_student);
-      if (
-        !this.student_check_in[selected_student].assessment.assessmentStudentsId
-      ) {
-        if (!this.student_check_in[selected_student].assessment.confrim) {
-          this.student_check_in[selected_student].assessment.remark = [];
-          this.student_check_in[selected_student].files = [];
-        }
-      }
+      this.comment_dialog_tmp.id = ""
+      this.comment_dialog_tmp.remark = "";
+      this.comment_dialog_tmp.files = [];
+      this.comment_dialog_tmp.attachment = []
       this.selected_files = [];
       this.show_comment_dialog = false;
     },
@@ -1881,6 +1872,7 @@ export default {
       this.student_check_in[selected_student].potentialfiles.splice(index, 1);
     },
     clearAssessment() {
+      console.log("1184 => ",this.student_check_in)
       for (const student of this.student_check_in) {
         student.assessment.evolution = "";
         student.assessment.interest = "";
@@ -1905,27 +1897,25 @@ export default {
     //   };
     //   reader.readAsDataURL(this.file);
     // },
-    uploadGeneralFile(selected_student) {
+    uploadGeneralFile() {
       // console.log("selected_student", this.selected_student);
       const files = this.$refs.generalfileInput.files;
       if (files.length > 0) {
         for (let i = 0; i < files.length; i++) {
           if (CheckFileSize(files[i]) === true) {
             this.selected_files.push(files[i]);
-            this.student_check_in[selected_student].files.push(files[i]);
+            this.comment_dialog_tmp.files.push(files[i]);
           }
         }
       }
     },
-    uploadPotentialFile(selected_student) {
+    uploadPotentialFile() {
       const files = this.$refs.potentialfileInput.files;
       if (files.length > 0) {
         for (let i = 0; i < files.length; i++) {
           if (CheckFileSize(files[i]) === true) {
             this.selected_files.push(files[i]);
-            this.student_check_in[selected_student].potentialfiles.push(
-              files[i]
-            );
+            this.comment_potential_dialog_tmp.files.push(files[i]);
           }
         }
       }

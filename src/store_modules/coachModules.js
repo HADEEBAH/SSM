@@ -167,16 +167,16 @@ const coachModules = {
             showDenyButton: false,
             showCancelButton: false,
             cancelButtonText: "ยกเลิก",
+            timer : 3000,
             confirmButtonText: "ตกลง",
-          }).then(async (result) => {
-            if (result.isConfirmed) {
-              context.dispatch("GetStudentByTimeId", {
-                course_id: course_id,
-                date: date,
-                time_id: time_id,
-              })
-            }
           })
+          setTimeout(()=>{
+            context.dispatch("GetStudentByTimeId", {
+              course_id: course_id,
+              date: date,
+              time_id: time_id,
+            })
+          },200) 
         }
 
       } catch (error) {
@@ -231,7 +231,7 @@ const coachModules = {
             }
           }
           if (!student.assessment.assessmentStudentsId) {
-            // console.log("post", payload)
+            console.log("post", payload)
             payloadData.append("payload", JSON.stringify(payload))
             // let localhost = "http://localhost:3000"
             let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`, payloadData, config)
