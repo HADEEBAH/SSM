@@ -1,7 +1,9 @@
 <template>
   <div>
     <!-- {{ events }} -->
+    {{ colorOfDay }}
     <template v-if="type === 'week'">
+      
       <!-- <v-row dense>
                 <v-col>
                {{ start_of_week }} -  {{ end_of_week }}
@@ -168,6 +170,35 @@ export default {
     event_date: [],
   }),
   computed: {
+    colorOfDay() {
+    
+      this.events.forEach((event) => {
+        switch (new Date(event.start).getDay()) {
+          case 0:
+            event.color = "#F898A4";
+            break;
+          case 1:
+            event.color = "#FFFACD";
+            break;
+          case 2:
+            event.color = "#FFBBDA";
+            break;
+          case 3:
+            event.color = "#D0F4DE";
+            break;
+          case 4:
+            event.color = "#FFE2D1";
+            break;
+          case 5:
+            event.color = "#C0E4F6";
+            break;
+          case 6:
+            event.color = "#E8CFF8";
+            break;
+        }
+      });
+      return ''
+    },
     cal() {
       return this.ready ? this.$refs.calendar : null;
     },
@@ -175,13 +206,9 @@ export default {
       return this.cal ? this.cal.timeToY(this.cal.times.now) + "px" : "-10px";
     },
   },
-
-  beforeMount() {
-    this.colorOfDay();
-  },
-
   mounted() {
     let today = new Date();
+    this.focus = new Date()
     this.start_of_week = new Date(
       today.getFullYear(),
       today.getMonth(),
@@ -257,33 +284,7 @@ export default {
         }
       });
     },
-    colorOfDay() {
-      this.events.forEach((event) => {
-        switch (new Date(event.start).getDay()) {
-          case 0:
-            event.color = "#F898A4";
-            break;
-          case 1:
-            event.color = "#FFFACD";
-            break;
-          case 2:
-            event.color = "#FFBBDA";
-            break;
-          case 3:
-            event.color = "#D0F4DE";
-            break;
-          case 4:
-            event.color = "#FFE2D1";
-            break;
-          case 5:
-            event.color = "#C0E4F6";
-            break;
-          case 6:
-            event.color = "#E8CFF8";
-            break;
-        }
-      });
-    },
+   
     goToday() {
       this.focus = new Date();
     },

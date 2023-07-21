@@ -1482,10 +1482,7 @@ export default {
     if (this.$route.query.token) {
      this.loginShareToken(this.$route)
     }
-    
-
-
-    
+  
     // this.GetMyCourses({ coach_id: this.user_detail.account_id });
     // this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
     // this.GetCoachs();
@@ -1500,20 +1497,16 @@ export default {
   },
 
   mounted() {
+  
     // console.log("valid", this.user_detail?.roles?.filter((val)=> val === "R_3").length === 0);
     if (this.user_detail?.roles?.filter((val)=> val === "R_3" || val === "R_2" || val === "R_1").length === 0) {
       router.replace({name:"UserKingdom"})
     }
-
-    this.GetMyCourses({ coach_id: this.user_detail.account_id });
-    this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
-    this.GetCoachs();
-
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "จัดการ");
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail.account_id);
     }
-
+    // this.$refs.calendar.click()
 
     this.GetLoading(false)
   },
@@ -1535,6 +1528,9 @@ export default {
       show_dialog_coach_leave_form: "CoachModules/getShowDialogCoachLeaveForm",
     }),
     SetFunctionsComputed() {
+      this.GetMyCourses({ coach_id: this.user_detail.account_id });
+      this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
+      this.GetCoachs();
       return "";
     },
     genToday() {
@@ -1574,6 +1570,7 @@ export default {
     }),
     SelectedStatus(status) {
       // console.log(status);
+      
       this.select_status = status;
     },
     GenDateStr(date) {
