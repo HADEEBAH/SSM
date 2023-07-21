@@ -371,7 +371,7 @@
                           >
                             บาท ({{
                               (
-                                (get_donut.sumSuccess  * 100) /
+                                (get_donut.sumSuccess * 100) /
                                 (get_donut.sumPending + get_donut.sumSuccess)
                               )?.toLocaleString("us-us", {
                                 maximumFractionDigits: 2,
@@ -498,9 +498,7 @@
                         <v-card
                           outlined
                           class="mb-3"
-                          v-for="(
-                            item, index
-                          ) in get_empty_course_close"
+                          v-for="(item, index) in get_empty_course_close"
                           :key="index"
                         >
                           <v-card-text class="pa-0">
@@ -611,9 +609,7 @@
                         <v-card
                           outlined
                           class="mb-3"
-                          v-for="(
-                            item, index
-                          ) in get_empty_course_open"
+                          v-for="(item, index) in get_empty_course_open"
                           :key="index"
                         >
                           <v-card-text class="pa-0">
@@ -851,7 +847,6 @@ export default {
   created() {
     this.FilterYears().then(() => {
       if (this.filter_years.length > 0) {
-        console.log("845", this.filter_years);
         this.selected_years = this.filter_years[0].usYears;
         this.donut_years = this.filter_years[0].usYears;
 
@@ -974,7 +969,6 @@ export default {
     },
     dialogDetail(item) {
       this.items_dialog = item;
-      // console.log("item", this.items_dialog);
       this.dialog_course = true;
     },
   },
@@ -991,18 +985,20 @@ export default {
       filter_years: "DashboardModules/getFilterYears",
       get_series_chart: "DashboardModules/getSeriesChart",
       get_labels_chart: "DashboardModules/getLabelsChart",
+      get_series_line_chart: "DashboardModules/getSeriesLineChart",
+      get_labels_line_chart: "DashboardModules/getLabelsLineChart",
+      get_labels_line_chart_month: "DashboardModules/getLabelsLineChartMonth",
     }),
 
-    lineChartLabels() {
-      let labelsLine = [];
-
-      for (const items of this.get_graf.orderData) {
-        labelsLine.push(items.thaiDayName);
-      }
-      return labelsLine;
-    },
-
     chartOptions() {
+      let labels = [];
+      if (this.get_graf.length !== 0) {
+        if (this.get_graf.type == "month") {
+          labels = this.get_labels_line_chart;
+        } else if (this.get_graf.type == "year") {
+          labels = this.get_labels_line_chart_month;
+        }
+      }
       const lineChartOptions = {
         chart: {
           type: "line",
@@ -1021,16 +1017,7 @@ export default {
 
         grid: {},
         xaxis: {
-          categories:
-            this.get_graf.length !== 0
-              ? this.get_graf.orderData.map((item) => {
-                  if (this.get_graf.type == "month") {
-                    return item.thaiDayName;
-                  } else if (this.get_graf.type == "year") {
-                    return item.month;
-                  }
-                })
-              : "",
+          categories: labels,
         },
         tooltip: {
           custom: function ({ series, seriesIndex, dataPointIndex }) {
@@ -1056,14 +1043,10 @@ export default {
     chartSeries() {
       const lineChart = [
         {
-          data:
-            this.get_graf.length !== 0
-              ? this.get_graf.orderData.map((item) => {
-                  return item.sumSuccess;
-                })
-              : "0",
+          data: this.get_series_line_chart,
         },
       ];
+
       return lineChart;
     },
 
@@ -1134,18 +1117,6 @@ export default {
       return donutdata;
     },
 
-
-    // seriesOfDonut() {
-    //   this.donutSerieses();
-    //   return this.totalPrice;
-    // },
-    // donutsuccess() {
-    //   this.donutSerieses();
-    //   return (
-    //     this.totalSuccessDonut && this.totalPendingDonut && this.totalPriceDonut
-    //   );
-    // },
-
     pieSeries() {
       let Open = this.get_empty_course.countOpen;
       let Close = this.get_empty_course.countClose;
@@ -1153,8 +1124,6 @@ export default {
       return pieData;
     },
     pieChartOptions() {
-      // let Open = this.get_empty_course.countOpen;
-      // let Close = this.get_empty_course.countClose;
       const pieChartOptions = {
         colors: ["#ff6b81", "#999999"],
         chart: {
@@ -1164,17 +1133,6 @@ export default {
           enabled: true,
         },
         labels: ["คอร์สว่าง", "คอร์สเต็ม"],
-        // labels: [`คอร์สว่าง ${Open} คอร์ส`, `คอร์สเต็ม ${Close} คอร์ส`],
-        // responsive: [
-        //   {
-        //     breakpoint: 480,
-        //     options: {
-        //       chart: {
-        //         width: 200,
-        //       },
-        //     },
-        //   },
-        // ],
         legend: {
           show: false,
         },
