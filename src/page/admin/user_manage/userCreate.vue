@@ -744,6 +744,7 @@ export default {
 
     payloadSend: "",
     global_role_code: "",
+    user_data_temp: {},
   }),
 
   beforeMount() {
@@ -758,7 +759,7 @@ export default {
 
   mounted() {
     // console.log("relation.account_id", this.relation.account_id);
-    this.GetShowById(this.relation.account_id);
+    // this.GetShowById(this.relation.account_id);
     // this.GetDataRelationsManagement(this.data_user_by_id);
   },
 
@@ -771,6 +772,7 @@ export default {
         "UserManageModules/GetDataRelationsManagement",
       GetUserById: "UserModules/GetUserById",
       GetShowById: "UserModules/GetShowById",
+      ChangeUserOneTemp: "UserModules/ChangeUserOneTemp",
     }),
 
     checkUsername(username, type) {
@@ -808,6 +810,8 @@ export default {
           status: null,
           type: type,
         }).then(async () => {
+          console.log("user_data", this.user_data);
+          this.user_data_temp = this.user_data[0];
           this.seledtedRole = "";
           this.preview_img = "";
           this.global_data_relation_checked =
@@ -1250,6 +1254,11 @@ export default {
         }
       }
     },
+  },
+
+  beforeDestroy() {
+    console.log("beforeDestroy", this.user_data_temp);
+    this.ChangeUserOneTemp(this.user_data_temp);
   },
 };
 </script>

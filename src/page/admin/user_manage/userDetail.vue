@@ -1913,6 +1913,7 @@ export default {
         "UserManageModules/getDataRelationsManagement",
       student_schedule: "UserModules/getStudentSchedule",
       relations_detail: "UserManageModules/getRelationData",
+      user_one_temp: "UserModules/getUserOneTemp",
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;

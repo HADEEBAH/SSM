@@ -1087,6 +1087,7 @@ export default {
       checkUsernameOneid: "loginModules/checkUsernameOneid",
       AddRelations: "RegisterModules/AddRelations",
       RemoveRelation: "RegisterModules/RemoveRelation",
+      registerUserOneId: "RegisterModules/registerUserOneId",
     }),
     openFileSelector() {
       this.$refs.fileInput.click();
@@ -1236,7 +1237,6 @@ export default {
     remove(item) {
       const index = this.selectRoles.indexOf(item.role);
       this.selectRoles.splice(index, 1);
-
     },
 
     checkUsername(username, type) {
@@ -1252,7 +1252,6 @@ export default {
           this.relation.firstname_en = this.global_data_relation.firstNameEng;
           this.relation.lastname_en = this.global_data_relation.lastNameEng;
           this.relation.tel = this.global_data_relation.mobileNo;
-
         });
       } else {
         Swal.fire({
@@ -1377,7 +1376,6 @@ export default {
         if (result.isConfirmed) {
           this.dialog_show = false;
           for (const role of this.show_by_id.userRoles) {
-
             this.RemoveRelation({
               parentId:
                 role.roleId === "R_4"
@@ -1473,7 +1471,6 @@ export default {
                 this.GetShowById(this.$route.params.account_id);
               }
             } else {
-
               throw { message: data.data };
             }
           } catch ({ response }) {
@@ -1489,8 +1486,32 @@ export default {
                   account_id: this.$route.params.account_id,
                 },
               });
-            } else if (response?.data?.message === "Can not change Coach role, because Coach is teaching the course.") {
-              this.error_message = "ไม่สามารถเปลี่ยนบทบาทได้ เนื่องจากโค้ชกำลังอยู่ในสถานะการสอน";
+            } else if (
+              response?.data?.message ===
+              "Can not change Coach role, because Coach is teaching the course."
+            ) {
+              this.error_message =
+                "ไม่สามารถเปลี่ยนบทบาทได้ เนื่องจากโค้ชกำลังอยู่ในสถานะการสอน";
+            } else if (response?.data?.message === "User not found.") {
+              if (this.user_one_temp.userName !== "") {
+                this.error_message =
+                  "ชื่อผู้ใช้ OneId ของคุณยังไม่มีอยู่ในระบบ";
+                this.checkUsernameOneid({
+                  username: this.user_one_temp.userName,
+                  status: null,
+                  type: null,
+                });
+                setTimeout(() => {
+                  console.log("========>>>>", this.user_data[0]);
+                  if (this.user_data[0]?.userOneId) {
+                    this.registerUserOneId(this.user_data[0]);
+                  }
+                }, 1000);
+                // this.user_data
+              } else {
+                this.error_message = "ไม่พบผู้ใช้";
+              }
+              console.log("555555", this.user_one_temp);
             } else {
               this.error_message = "เกิดข้อผิดพลาด";
             }
@@ -1557,6 +1578,7 @@ export default {
       is_loading: "loginModules/getIsLoading",
       user_student_data: "loginModules/getUserStudentData",
       last_user_registered: "RegisterModules/getLastUserRegistered",
+      user_one_temp: "UserModules/getUserOneTemp",
     }),
 
     MobileSize() {

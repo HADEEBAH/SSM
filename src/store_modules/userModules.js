@@ -27,6 +27,7 @@ const userModules = {
         show_by_id: [],
         data_user_by_id: [],
         student_schedule: [],
+        user_one_temp: {}
     },
     mutations: {
         SetUserList(state, payload) {
@@ -44,8 +45,28 @@ const userModules = {
         SetfilterGetUserList(state, payload) {
             state.user_list = payload
         },
+        SetUserOneTemp(state, payload) {
+            state.user_one_temp = payload
+        },
+        SetShowByOne(state) {
+            // console.log("payload", payload);
+            state.show_by_id = state.user_one_temp
+            // try {
+            //     if (payload) {
+            //         throw { error: payload }
+            //     }
+            //     state.show_by_id = state.user_one_temp
+            // } catch (err) {
+            //     console.log("err=>", err);
+            // }
+
+        },
     },
     actions: {
+        async ChangeUserOneTemp(context, user_one_data) {
+            context.commit("SetUserOneTemp", user_one_data)
+        },
+
         async GetUserList(context) {
             try {
                 let config = {
@@ -149,12 +170,16 @@ const userModules = {
                     data.data.image = data.data.image && data.data.image != "" ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}` : ""
                     context.commit("SetShowById", [])
                     context.commit("SetShowById", data.data)
+                    console.log("SetShowById", data.data)
+                    console.log("if");
                 } else {
-                    context.commit("SetShowById", [])
-
-                    throw { error: data }
+                    // console.log("else");
+                    // context.commit("SetShowByOne", data)
+                    // context.commit("SetShowById", [])
+                    // throw { error: data }
                 }
             } catch (error) {
+                context.commit("SetShowByOne")
                 // console.log("err", error);
             }
         },
@@ -222,7 +247,9 @@ const userModules = {
         },
         getfilterGetUserList(state) {
             return state.filter_role
-
+        },
+        getUserOneTemp(state) {
+            return state.user_one_temp
         }
     },
 };
