@@ -48,6 +48,10 @@ const dashboardModules = {
     filter_years: [],
     series_chart: [],
     labels_chart: [],
+    series_line_chart: [],
+    labels_line_chart: [],
+    labels_line_chart_month: []
+
   },
   mutations: {
     SetGetEmptyCourse(state, payload) {
@@ -83,6 +87,16 @@ const dashboardModules = {
     SetLabelsChart(state, payload) {
       state.labels_chart = payload
     },
+    SetSeriesLineChart(state, payload) {
+      state.series_line_chart = payload
+    },
+    SetLabelsLineChart(state, payload) {
+      state.labels_line_chart = payload
+    },
+    SetLabelsLineCharMonth(state, payload) {
+      state.labels_line_chart_month = payload
+    },
+
   },
   actions: {
     async GetEmptyCourse(context) {
@@ -158,7 +172,6 @@ const dashboardModules = {
       context.commit("SetGetLoading", true)
       console.log("GetDonut", item);
       try {
-        // let { data } = await axios.get(` http://localhost:3002/api/v1/order/dashboard/payment?month=${item.month}&year=${item.year}`)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/dashboard/payment?month=${item.month}&year=${item.year}`)
         let chart = []
         let series_chart = []
@@ -183,7 +196,7 @@ const dashboardModules = {
           chart.push(data.data.otherTotal)
 
           if (chart.length > 0) {
-            chart.map((items)=>{
+            chart.map((items) => {
               series_chart.push(items.totalPrice)
               labels_chart.push(items.courseNameTh)
             })
@@ -204,34 +217,44 @@ const dashboardModules = {
 
     async GetGraf(context, item) {
       context.commit("SetGetLoading", true)
-      console.log("GetGraf", item);
       try {
-        // var { data } = await axios.get(`http://localhost:3002/api/v1/order/dashboard/payment-income?month=${item.month}&year=${item.year}`)
-        // var { data } = await axios.get(`https://waraphat.alldemics.com/api/v1/order/dashboard/payment-income?month=${item.month}&year=${item.year}`)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/dashboard/payment-income?month=${item.month}&year=${item.year}`)
-
+        let lineChart = []
+        let series_line_chart = []
+        let labels_line_chart = []
+        let labels_line_chart_month = []
 
         if (data.statusCode === 200) {
-          context.commit("SetGetGraf", data.data)
-          // console.log("SetGetGraf", data);
-
 
           data.data.orderData?.map((items) => {
+            items.sumSuccess = parseFloat(items?.sumSuccess)
             let newDate = new Date(items.date).toLocaleDateString("en-CA")
-            // const day = newDate?.getDay();
             const date = new Date(items.date);
             const options = { weekday: 'long', timeZone: 'Asia/Bangkok', locale: 'th-TH' };
             const dayName = date.toLocaleString('th-TH', options);
-
-            // // console.log("133", dayName);
-            // let dayNames = ["วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"];
             items.date = newDate.split("-")[2]
             items.month = `เดือน ${newDate?.split("-")[1]}`
             items.year = newDate.split("-")[0]
             items.thaiDayName = `${items.date} ${dayName}`
-          })
-          context.commit("SetGetLoading", false)
+            lineChart.push(items)
 
+
+
+          })
+
+          if (lineChart.length > 0) {
+            lineChart.map((items) => {
+              series_line_chart.push(items.sumSuccess)
+              labels_line_chart.push(items.thaiDayName)
+              labels_line_chart_month.push(items.month)
+            })
+          }
+
+          context.commit("SetSeriesLineChart", series_line_chart)
+          context.commit("SetLabelsLineChart", labels_line_chart)
+          context.commit("SetLabelsLineCharMonth", labels_line_chart_month)
+          context.commit("SetGetGraf", data.data)
+          context.commit("SetGetLoading", false)
         }
       } catch (error) {
         context.commit("SetGetLoading", false)
@@ -240,9 +263,7 @@ const dashboardModules = {
     },
 
     async FilterYears(context) {
-      console.log("FilterYears");
       try {
-        // var { data } = await axios.get(`http://localhost:3002/api/v1/order/dashboard/year-option`)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/dashboard/year-option`)
 
 
@@ -252,11 +273,9 @@ const dashboardModules = {
             items.usYears = items?.en
           })
           context.commit("SetFilterYears", data.data)
-          console.log("SetFilterYears", data);
         }
       } catch (error) {
         context.commit("SetFilterYears", [])
-        console.log("SetFilterYears", error);
       }
     }
   },
@@ -293,8 +312,17 @@ const dashboardModules = {
     },
     getLabelsChart(state) {
       return state.labels_chart
-    }
-    
+    },
+    getSeriesLineChart(state) {
+      return state.series_line_chart
+    },
+    getLabelsLineChart(state) {
+      return state.labels_line_chart
+    },
+    getLabelsLineChartMonth(state) {
+      return state.labels_line_chart_month
+    },
+
 
   },
 };
