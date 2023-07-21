@@ -7,7 +7,7 @@
           <v-btn icon @click="prev"><v-icon>mdi-chevron-left</v-icon></v-btn>
         </v-col>
         <v-col align="center" v-if="$refs.calendar">{{
-          $refs.calendar.title
+          genTitleCalender($refs.calendar.title)
         }}</v-col>
         <v-col cols="auto">
           <v-btn icon @click="next"><v-icon>mdi-chevron-right</v-icon></v-btn>
@@ -35,6 +35,7 @@
       :interval-count="24"
       :event-overlap-threshold="30"
       @click:event="selectedDate($event)"
+      locale="th-TH"
     >
       <template v-slot:event="{ event }">
         <!-- {{ event.timed }} -->
@@ -349,6 +350,7 @@ export default {
   beforeMount() {},
   mounted() {
     // this.GetDataInSchedule();
+    this.focus = new Date()
     let today = new Date();
     this.start_of_week = new Date(
       today.getFullYear(),
@@ -380,7 +382,10 @@ export default {
       GetAllHolidays: "ManageScheduleModules/GetAllHolidays",
       GetDataInSchedule: "ManageScheduleModules/GetDataInSchedule",
     }),
-
+    genTitleCalender(title){
+      let title_part = title.split(" ")
+      return `${title_part[0]} ${ parseFloat(title_part[1])+543 }`
+    },
     selectedDate(data) {
       this.details = data.event;
       this.dialog_detail = true;
@@ -422,7 +427,7 @@ export default {
     //     ? this.cal.times.now.hour * 60 + this.cal.times.now.minute
     //     : 0;
     // },
-
+    
     functionEvents(date) {
       let events_data = [];
       this.events.forEach((event) => {

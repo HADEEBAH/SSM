@@ -24,7 +24,7 @@
             <v-btn icon @click="prev"><v-icon>mdi-chevron-left</v-icon></v-btn>
           </v-col>
           <v-col align="center" v-if="$refs.calendar">{{
-            $refs.calendar.title
+            genTitleCalender($refs.calendar.title)
           }}</v-col>
           <v-col cols="auto">
             <v-btn icon @click="next"><v-icon>mdi-chevron-right</v-icon></v-btn>
@@ -43,6 +43,7 @@
         :interval-count="12"
         :event-overlap-threshold="30"
         @click:event="selectedDate($event)"
+        locale="th-TH"
       >
         <template v-if="type === 'week'" v-slot:day-body="{ date, week }">
           <div
@@ -171,7 +172,6 @@ export default {
   }),
   computed: {
     colorOfDay() {
-    
       this.events.forEach((event) => {
         switch (new Date(event.start).getDay()) {
           case 0:
@@ -236,6 +236,10 @@ export default {
     this.updateTime();
   },
   methods: {
+    genTitleCalender(title){
+      let title_part = title.split(" ")
+      return `${title_part[0]} ${ parseFloat(title_part[1])+543 }`
+    },
     selectedDate(data) {
       if (data.event.type !== "holiday") {
         this.$router.push({
