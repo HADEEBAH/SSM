@@ -228,7 +228,7 @@
           </v-container>
 
           <!-- การจัดการสิทธิ์ ไม่มี Role-->
-          <v-container fluid v-if="show_by_id.userRoles.length <= 0">
+          <v-container fluid v-if="show_by_id?.userRoles?.length <= 0">
             <v-row>
               <v-col cols="12">
                 <headerCard
@@ -350,7 +350,7 @@
                 <v-divider></v-divider>
 
                 <v-card
-                  v-if="data_user_relation_management.length <= 0"
+                  v-if="data_user_relation_management?.length <= 0"
                   class="rounded-lg my-3"
                 >
                   <v-card-text
@@ -382,7 +382,7 @@
                         larg
                         color="#FF6B81"
                         @click="removeRelations(relations)"
-                        v-if="data_user_relation_management.length >= 1"
+                        v-if="data_user_relation_management?.length >= 1"
                       >
                         mdi-delete
                       </v-icon>
@@ -1061,7 +1061,7 @@ export default {
       this.student_id = item_relation.studentId;
     }
 
-    if (this.show_by_id.userRoles.length > 0) {
+    if (this.show_by_id?.userRoles?.length > 0) {
       for (const items of this.show_by_id.userRoles) {
         this.seledtedRole = items.roleId;
       }
@@ -1088,6 +1088,7 @@ export default {
       AddRelations: "RegisterModules/AddRelations",
       RemoveRelation: "RegisterModules/RemoveRelation",
       registerUserOneId: "RegisterModules/registerUserOneId",
+      registerHaveOneId: "RegisterModules/registerHaveOneId",
     }),
     openFileSelector() {
       this.$refs.fileInput.click();
@@ -1439,10 +1440,6 @@ export default {
             bodyFormData.append(
               "image",
               this.send_image_profile
-              // "image",
-              // this.send_image_profile?.length != 0
-              //   ? this.send_image_profile
-              //   : null
             );
             bodyFormData.append("payload", JSON.stringify(payload));
 
@@ -1503,8 +1500,12 @@ export default {
                 });
                 setTimeout(() => {
                   console.log("========>>>>", this.user_data[0]);
+                  console.log("show_by_id", this.show_by_id);
+                  let payload = {
+                    ...this.show_by_id, passWord: null, roles:this.seledtedRole != "" ? [{ roleId: this.seledtedRole }] : []
+                  }
                   if (this.user_data[0]?.userOneId) {
-                    this.registerUserOneId(this.user_data[0]);
+                    this.registerHaveOneId(payload);
                   }
                 }, 1000);
                 // this.user_data
