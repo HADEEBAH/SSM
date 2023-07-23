@@ -898,7 +898,7 @@
                 v-for="(file, index) of comment_dialog_tmp.attachment"
                 :key="`${index}-fileattachment`"
               >
-                <v-card-text class="border border-2 border-[#ff6b81] rounded-lg" >
+                <v-card-text class="border-2 border-[#ff6b81] rounded-lg" >
                   <v-row>
                     <v-col cols="auto" class="pr-2">
                       <v-img
@@ -979,7 +979,7 @@
                 :key="`${index}-file`"
               >
                 <v-card-text
-                  class="border border-2 border-[#ff6b81] rounded-lg"
+                  class="border-2 border-[#ff6b81] rounded-lg"
                 >
                   <v-row>
                     <v-col cols="auto" class="pr-2">
@@ -1085,7 +1085,7 @@
                 :key="`${index}-fileattachment`"
               >
                 <v-card-text
-                  class="border border-2 border-[#ff6b81] rounded-lg"
+                  class="border-2 border-[#ff6b81] rounded-lg"
                 >
                   <v-row>
                     <v-col cols="auto" class="pr-2">
@@ -1175,7 +1175,7 @@
                 :key="`${index}-file`"
               >
                 <v-card-text
-                  class="border border-2 border-[#ff6b81] rounded-lg"
+                  class="border-2 border-[#ff6b81] rounded-lg"
                 >
                   <v-row>
                     <v-col cols="auto" class="pr-2">
