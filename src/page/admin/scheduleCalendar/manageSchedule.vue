@@ -1,9 +1,9 @@
 <template>
-  <loading-overlay
+  <!-- <loading-overlay
     v-if="get_all_course_is_loading || get_all_holidays_is_loading"
     :loading="get_all_course_is_loading || get_all_holidays_is_loading"
-  ></loading-overlay>
-  <v-container v-else>
+  ></loading-overlay> -->
+  <v-container >
     <headerPage title="จัดการตาราง"></headerPage>
     <v-row class="py-2">
       <v-col cols="12" sm="8" class="w-full">
@@ -43,12 +43,18 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" md="8" sm="8">
-        <template>
-          <calendarAdmin></calendarAdmin>
-        </template>
+      <v-col v-if="get_all_holidays_is_loading || get_all_course_is_loading" cols="12" md="8" sm="8" class="d-flex align-center justify-center">
+        <v-progress-circular 
+          :size="70"
+          :width="7"
+          color="#ff6b81"
+          indeterminate
+        ></v-progress-circular>
+        
       </v-col>
-
+      <v-col v-else cols="12" md="8" sm="8">
+          <calendarAdmin></calendarAdmin>
+      </v-col>
       <v-col cols="12" md="4" sm="4">
         <v-card class="my-3 pa-2 max-h-[300px] overflow-auto rounded-lg">
           <!-- วันที่ -->
@@ -640,14 +646,13 @@ import axios from "axios";
 import { mapActions, mapGetters } from "vuex";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import headerPage from "@/components/header/headerPage.vue";
-import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+// import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 export default {
   components: {
     calendarAdmin,
     dialogCard,
     VueTimepicker,
     headerPage,
-    loadingOverlay,
   },
   data: () => ({
     dialog: true,
