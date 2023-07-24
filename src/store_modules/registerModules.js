@@ -2,6 +2,7 @@ import axios from "axios"
 import Swal from "sweetalert2"
 import VueCookie from "vue-cookie"
 import router from "@/router";
+// import userModule from "@/store_modules/userModules"
 
 const RegisterModules = {
     namespaced: true,
@@ -330,6 +331,23 @@ const RegisterModules = {
                     })
                 }
             }
+        },
+
+        async registerHaveOneId (dispatch, context, payload) {
+          try {
+            console.log("payload", payload);
+            let { data } = await axios.post(`http://localhost:3000/api/v1/register`,payload)
+            console.log("data", data);
+            if (data.statusCode === 201) {
+              dispatch("UserModules/GetShowById", payload)
+            }
+            // let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/register`
+          } catch (error) {
+            Swal.fire({
+              icon: 'error',
+              title: "เกิดข้อผิดพลาด",
+            })
+          }
         },
 
         async loginOneId(context) {

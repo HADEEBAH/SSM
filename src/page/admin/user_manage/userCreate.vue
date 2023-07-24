@@ -748,19 +748,11 @@ export default {
   }),
 
   beforeMount() {
-    // console.log("show_by_id=>", this.show_by_id);
-    if (this.show_by_id.userRoles.length > 0) {
+    if (this.show_by_id?.userRoles?.length > 0) {
       for (const items of this.show_by_id.userRoles) {
-        // console.log("items=>", items);
         this.seledtedRole = items.roleId;
       }
     }
-  },
-
-  mounted() {
-    // console.log("relation.account_id", this.relation.account_id);
-    // this.GetShowById(this.relation.account_id);
-    // this.GetDataRelationsManagement(this.data_user_by_id);
   },
 
   methods: {
