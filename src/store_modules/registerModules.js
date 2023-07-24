@@ -2,6 +2,7 @@ import axios from "axios"
 import Swal from "sweetalert2"
 import VueCookie from "vue-cookie"
 import router from "@/router";
+// import userModule from "@/store_modules/userModules"
 
 const RegisterModules = {
     namespaced: true,
@@ -29,6 +30,7 @@ const RegisterModules = {
             account_id: "",
         },
         is_loading: false,
+        register_by_one: false
     },
     // change state
     mutations: {
@@ -79,7 +81,15 @@ const RegisterModules = {
                 type: "",
                 account_id: "",
             }
+        },
+
+        SetRegisterByOne(state, value) {
+            state.register_by_one = value
         }
+
+
+
+
     },
     actions: {
         async RemoveRelation(context, { studentId, parentId }) {
@@ -331,7 +341,6 @@ const RegisterModules = {
                 }
             }
         },
-
         async loginOneId(context) {
             context.commit("SetIsLoading", true)
             try {
@@ -402,6 +411,21 @@ const RegisterModules = {
         changeUserOneId(context, data) {
             context.state.user_one_id = data
         },
+        async SetRegisterOneId(context, payload) {
+            console.log("context", context);
+            console.log("payload", payload);
+
+            try {
+                // const { data } = await axios.post(`http://localhost:3000/api/v1/register-by-oneid`, payload)
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/register-by-oneid`, payload)
+                console.log("data=>>>>>>", data.data);
+                if (data.statusCode === 201) {
+                    context.commit("SetRegisterByOne", true)
+                }
+            } catch (error) {
+                console.log("error", error);
+            }
+        }
     },
     getters: {
         getIsLoading(state) {
@@ -415,7 +439,11 @@ const RegisterModules = {
         },
         getLastUserRegistered(state) {
             return state.last_user_registered
+        },
+        setRegisterOneId(state) {
+            return state.register_by_one
         }
+
     }
 }
 

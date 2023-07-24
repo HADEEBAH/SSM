@@ -13,14 +13,14 @@ const loginModules = {
         user_data: [],
         user_student_data: [],
         is_loading: false,
-        username_list :[],
-        profile_fail : false,
+        username_list: [],
+        profile_fail: false,
     },
     mutations: {
-        SetProfileFail(state, payload){
-            state.profile_fail =  payload
+        SetProfileFail(state, payload) {
+            state.profile_fail = payload
         },
-        SetUsernameList(state, payload){
+        SetUsernameList(state, payload) {
             state.username_list = payload
         },
         UserOneId(state, payload) {
@@ -47,25 +47,25 @@ const loginModules = {
         }
     },
     actions: {
-        async searchNameUser(context, {search_name}){
-            context.commit("SetUsernameList",[])
-            try{
+        async searchNameUser(context, { search_name }) {
+            context.commit("SetUsernameList", [])
+            try {
                 let config = {
-                    headers:{
-                        "Access-Control-Allow-Origin" : "*",
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
                         "Content-type": "Application/json",
-                        'Authorization' : `Bearer ${VueCookie.get("token")}`
+                        'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
                 // console.log(search_name)
-                let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/student?firstNameTh=${search_name}`, config)
-                if(data.statusCode == 200){
-                    for(const user of data.data){
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/student?firstNameTh=${search_name}`, config)
+                if (data.statusCode == 200) {
+                    for (const user of data.data) {
                         user.fullname = `${user.firstNameTh} ${user.lastNameTh}(${user.firstNameEng} ${user.lastNameEng})|${user.userName}`
                     }
-                    context.commit("SetUsernameList",data.data)
+                    context.commit("SetUsernameList", data.data)
                 }
-            }catch(error){
+            } catch (error) {
                 // console.log(error)
             }
         },
@@ -75,10 +75,10 @@ const loginModules = {
                 context.commit("SetUserStudentData", [])
                 context.commit("SetUserData", [])
                 let config = {
-                    headers:{
-                        "Access-Control-Allow-Origin" : "*",
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
                         "Content-type": "Application/json",
-                        'Authorization' : `Bearer ${VueCookie.get("token")}`
+                        'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
                 // let localhost = " http://localhost:3000"
@@ -88,12 +88,12 @@ const loginModules = {
                     if (data.data.userOneId) {
                         // console.log("85 =>",data.data)
                         if (type === 'student') {
-                            let roles = ["R_1","R_2","R_3"]
-                            if(!data.data.roles || !roles.includes(data.data.roles?.roleId)){
+                            let roles = ["R_1", "R_2", "R_3"]
+                            if (!data.data.roles || !roles.includes(data.data.roles?.roleId)) {
                                 let student = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/username-potencial/${data.data.userOneId}`)
-                                if(student.data.statusCode === 200){
-                                    if(student.data.message === "study"){
-                                        if(student.data.data.data.some(v => v.courseId === course_id)){
+                                if (student.data.statusCode === 200) {
+                                    if (student.data.message === "study") {
+                                        if (student.data.data.data.some(v => v.courseId === course_id)) {
                                             Swal.fire({
                                                 icon: "error",
                                                 title: "ผู้ใช้ซ้ำกันในหลักสูตรนี้ ไม่สามารถลงทะเบียนได้",
@@ -105,18 +105,18 @@ const loginModules = {
                                             } else {
                                                 context.commit("SetUserData", [])
                                             }
-                                        }else{
+                                        } else {
                                             context.commit("SetUserStudentData", [data.data])
                                         }
-                                    }else{
+                                    } else {
                                         context.commit("SetUserStudentData", [data.data])
                                     }
                                 }
-                            }else{
+                            } else {
                                 Swal.fire({
                                     icon: "error",
                                     title: "ไม่สามารถสมัครได้",
-                                    text : "เนื่องจากผู้สมัครมีตำแหน่งอื่นๆ อยู่แล้ว",
+                                    text: "เนื่องจากผู้สมัครมีตำแหน่งอื่นๆ อยู่แล้ว",
                                     showDenyButton: false,
                                     showCancelButton: true,
                                     confirmButtonText: "ตกลง",
@@ -157,12 +157,12 @@ const loginModules = {
             } catch (error) {
                 // console.log(error.response.data)
                 context.commit("SetIsLoading", false)
-                if(error.response.data.message === "This username not found."){
+                if (error.response.data.message === "This username not found.") {
                     Swal.fire({
                         icon: "error",
-                        title : "ไม่พบผู้ใช้นี้"
+                        title: "ไม่พบผู้ใช้นี้"
                     })
-                }else{
+                } else {
                     Swal.fire({
                         icon: "error",
                         title: error.message
@@ -173,20 +173,22 @@ const loginModules = {
         },
         async checkUsernameOneid(context, { username, status, type }) {
             context.commit("SetIsLoading", true)
+            console.log("username", username);
             console.log("status", status);
+            console.log("type", type);
             context.commit("SetUserStudentData", [])
             context.commit("SetUserData", [])
             let config = {
-              headers:{
-                  "Access-Control-Allow-Origin" : "*",
-                  "Content-type": "Application/json",
-                  'Authorization' : `Bearer ${VueCookie.get("token")}`
-              }
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Content-type": "Application/json",
+                    'Authorization': `Bearer ${VueCookie.get("token")}`
+                }
             }
             try {
                 // let { data } = await axios.get(` http://localhost:3000/api/v1/account/username?username=${username}`)
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/search/username?username=${username}`, config)
-                // console.log(data)
+                console.log("checkUsernameOneid", data)
                 if (data.statusCode === 200) {
                     if (data.data.userOneId) {
                         if (type === 'student') {
@@ -219,8 +221,8 @@ const loginModules = {
                 // console.log(error)
             }
         },
-        changeProfileFail(context, value){
-            context.commit("SetProfileFail",value)
+        changeProfileFail(context, value) {
+            context.commit("SetProfileFail", value)
         },
         async loginOneId(context) {
             context.commit("SetIsLoading", true)
@@ -257,10 +259,10 @@ const loginModules = {
                     let order = JSON.parse(localStorage.getItem("Order"))
                     context.commit("SetIsLoading", false)
                     // console.log("SetProfileFail")
-                    if(!payload.first_name_th || !payload.last_name_th){
-                        router.replace({ name: "ProfileDetail",params : {profile_id: payload.account_id}})
-                        context.commit("SetProfileFail",true)
-                    }else{
+                    if (!payload.first_name_th || !payload.last_name_th) {
+                        router.replace({ name: "ProfileDetail", params: { profile_id: payload.account_id } })
+                        context.commit("SetProfileFail", true)
+                    } else {
                         if (order?.category_id && order?.course_id) {
                             if (order.course_type_id === "CT_1") {
                                 router.replace({ name: "userCoursePackage_courseId", params: { course_id: order.course_id } })
@@ -296,7 +298,7 @@ const loginModules = {
             try {
                 // const { data } = await axios.post(`http://localhost:3001/api/v1/auth/login/sharedToken`, {
                 const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login/sharedToken`, {
-                    "shared_token":route.query.token,
+                    "shared_token": route.query.token,
                 })
                 // console.log(data);
                 if (data.statusCode === 200) {
@@ -326,11 +328,11 @@ const loginModules = {
 
                     localStorage.setItem("userDetail", JSON.stringify(payload))
                     if (route.name === "Login") {
-                      router.replace({ name: "UserKingdom" })
+                        router.replace({ name: "UserKingdom" })
                     } else {
-                      // router.replace({name:route.name})
-                      // window.location.href = `http://localhost:8080${route.path}` 
-                      window.location.href = `${process.env.VUE_APP_URL}${route.path}` 
+                        // router.replace({name:route.name})
+                        // window.location.href = `http://localhost:8080${route.path}` 
+                        window.location.href = `${process.env.VUE_APP_URL}${route.path}`
                     }
                     // if (route.name) {
                     //   // console.log("router", router);
@@ -377,10 +379,10 @@ const loginModules = {
         }
     },
     getters: {
-        getProfileFail(state){
+        getProfileFail(state) {
             return state.profile_fail
         },
-        getUsernameList(state){
+        getUsernameList(state) {
             return state.username_list
         },
         getUserOneId(state) {
