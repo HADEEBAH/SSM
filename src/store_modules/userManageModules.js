@@ -151,6 +151,12 @@ const UserManageModules = {
       }
     },
 
+    async updateUserData(context, payload) {
+      console.log("context=>", context);
+      console.log("payload=>", payload);
+
+    }
+
   },
 
   getters: {

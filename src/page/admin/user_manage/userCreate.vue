@@ -473,15 +473,7 @@
                   depressed
                   class="white--text"
                   color="#ff6b81"
-                  @click="
-                    $router.push({
-                      name: 'UserDetail',
-                      params: {
-                        action: 'edit',
-                        account_id: checkData.account_id,
-                      },
-                    })
-                  "
+                  @click="toUserDetail()"
                 >
                   แก้ไข
                 </v-btn>
@@ -765,7 +757,21 @@ export default {
       GetUserById: "UserModules/GetUserById",
       GetShowById: "UserModules/GetShowById",
       ChangeUserOneTemp: "UserModules/ChangeUserOneTemp",
+      SetRegisterOneId: "RegisterModules/SetRegisterOneId",
     }),
+
+    async toUserDetail() {
+      const items = this.user_data[0];
+
+      await this.SetRegisterOneId(items);
+      this.$router.push({
+        name: "UserDetail",
+        params: {
+          action: "edit",
+          account_id: items.userOneId,
+        },
+      });
+    },
 
     checkUsername(username, type) {
       // console.log("username=>", username);
@@ -1165,6 +1171,7 @@ export default {
       data_user_by_id: "UserModules/getUserById",
       show_by_id: "UserModules/getShowById",
       last_user_registered: "RegisterModules/getLastUserRegistered",
+      register_by_one: "RegisterModules/setRegisterOneId",
     }),
 
     MobileSize() {

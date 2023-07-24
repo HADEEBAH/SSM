@@ -61,6 +61,8 @@ const userModules = {
             // }
 
         },
+
+
     },
     actions: {
         async ChangeUserOneTemp(context, user_one_data) {

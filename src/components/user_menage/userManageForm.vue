@@ -1408,6 +1408,8 @@ export default {
       this.changeDialogRegisterOneId(true);
     },
     updateData(account_id) {
+      console.log("account_id", account_id);
+
       Swal.fire({
         icon: "question",
         title: "คุณต้องการแก้ไขข้อมูลหรือไม่",
@@ -1425,7 +1427,6 @@ export default {
                 Authorization: `Bearer ${VueCookie.get("token")}`,
               },
             };
-
             let payload = {
               firstNameTh: this.show_by_id.firstNameTh,
               lastNameTh: this.show_by_id.lastNameTh,
@@ -1437,12 +1438,8 @@ export default {
                 this.seledtedRole != "" ? [{ roleId: this.seledtedRole }] : [],
             };
             let bodyFormData = new FormData();
-            bodyFormData.append(
-              "image",
-              this.send_image_profile
-            );
+            bodyFormData.append("image", this.send_image_profile);
             bodyFormData.append("payload", JSON.stringify(payload));
-
             let { data } = await axios.patch(
               //`http://localhost:3000/api/v1/usermanagement/update/${account_id}`,
               `${process.env.VUE_APP_URL}/api/v1/usermanagement/update/${account_id}`,
@@ -1502,8 +1499,13 @@ export default {
                   console.log("========>>>>", this.user_data[0]);
                   console.log("show_by_id", this.show_by_id);
                   let payload = {
-                    ...this.show_by_id, passWord: null, roles:this.seledtedRole != "" ? [{ roleId: this.seledtedRole }] : []
-                  }
+                    ...this.show_by_id,
+                    passWord: null,
+                    roles:
+                      this.seledtedRole != ""
+                        ? [{ roleId: this.seledtedRole }]
+                        : [],
+                  };
                   if (this.user_data[0]?.userOneId) {
                     this.registerHaveOneId(payload);
                   }
@@ -1516,7 +1518,6 @@ export default {
             } else {
               this.error_message = "เกิดข้อผิดพลาด";
             }
-
             Swal.fire({
               icon: `${
                 this.error_message === "เกิดข้อผิดพลาด" ? "error" : "warning"
