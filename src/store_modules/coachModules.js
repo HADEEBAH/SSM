@@ -167,16 +167,16 @@ const coachModules = {
             showDenyButton: false,
             showCancelButton: false,
             cancelButtonText: "ยกเลิก",
-            timer : 3000,
+            timer: 3000,
             confirmButtonText: "ตกลง",
           })
-          setTimeout(()=>{
+          setTimeout(() => {
             context.dispatch("GetStudentByTimeId", {
               course_id: course_id,
               date: date,
               time_id: time_id,
             })
-          },200) 
+          }, 200)
         }
 
       } catch (error) {
@@ -468,7 +468,7 @@ const coachModules = {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/${course_id}/date/${date}`, config)
         if (data.statusCode === 200) {
           let i = 1
-          for await (let student of data.data){
+          for await (let student of data.data) {
             student.no = i
             student.fullname = `${student.firstNameTh} ${student.lastNameTh}`
             student.check_in_student_id = student.checkInStudentId,
