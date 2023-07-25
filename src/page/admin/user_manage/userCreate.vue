@@ -473,15 +473,7 @@
                   depressed
                   class="white--text"
                   color="#ff6b81"
-                  @click="
-                    $router.push({
-                      name: 'UserDetail',
-                      params: {
-                        action: 'edit',
-                        account_id: checkData.account_id,
-                      },
-                    })
-                  "
+                  @click="toUserDetail()"
                 >
                   แก้ไข
                 </v-btn>
@@ -744,22 +736,15 @@ export default {
 
     payloadSend: "",
     global_role_code: "",
+    user_data_temp: {},
   }),
 
   beforeMount() {
-    // console.log("show_by_id=>", this.show_by_id);
-    if (this.show_by_id.userRoles.length > 0) {
+    if (this.show_by_id?.userRoles?.length > 0) {
       for (const items of this.show_by_id.userRoles) {
-        // console.log("items=>", items);
         this.seledtedRole = items.roleId;
       }
     }
-  },
-
-  mounted() {
-    // console.log("relation.account_id", this.relation.account_id);
-    this.GetShowById(this.relation.account_id);
-    // this.GetDataRelationsManagement(this.data_user_by_id);
   },
 
   methods: {
@@ -771,7 +756,22 @@ export default {
         "UserManageModules/GetDataRelationsManagement",
       GetUserById: "UserModules/GetUserById",
       GetShowById: "UserModules/GetShowById",
+      ChangeUserOneTemp: "UserModules/ChangeUserOneTemp",
+      SetRegisterOneId: "RegisterModules/SetRegisterOneId",
     }),
+
+    async toUserDetail() {
+      const items = this.user_data[0];
+
+      await this.SetRegisterOneId(items);
+      this.$router.push({
+        name: "UserDetail",
+        params: {
+          action: "edit",
+          account_id: items.userOneId,
+        },
+      });
+    },
 
     checkUsername(username, type) {
       // console.log("username=>", username);
@@ -808,6 +808,8 @@ export default {
           status: null,
           type: type,
         }).then(async () => {
+          console.log("user_data", this.user_data);
+          this.user_data_temp = this.user_data[0];
           this.seledtedRole = "";
           this.preview_img = "";
           this.global_data_relation_checked =
@@ -1169,6 +1171,7 @@ export default {
       data_user_by_id: "UserModules/getUserById",
       show_by_id: "UserModules/getShowById",
       last_user_registered: "RegisterModules/getLastUserRegistered",
+      register_by_one: "RegisterModules/setRegisterOneId",
     }),
 
     MobileSize() {
@@ -1250,6 +1253,11 @@ export default {
         }
       }
     },
+  },
+
+  beforeDestroy() {
+    console.log("beforeDestroy", this.user_data_temp);
+    this.ChangeUserOneTemp(this.user_data_temp);
   },
 };
 </script>

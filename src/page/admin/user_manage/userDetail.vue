@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="overflow-x-hidden overflow-y-hidden">
-    <v-row v-if="$route.params.action == 'view'" dense class="mt-5">
+    <v-row v-if="$route?.params?.action == 'view'" dense class="mt-5">
       <!-- <pre>{{ show_by_id }}</pre> -->
       <v-col cols="12">
         <headerPage :breadcrumbs="breadcrumbs"></headerPage>
@@ -1185,9 +1185,9 @@
     </v-row>
     <!-- </div> -->
 
-    <row v-else>
+    <v-row v-else>
       <userManageForm></userManageForm>
-    </row>
+    </v-row>
 
     <!-- DIALOG -->
     <v-dialog
@@ -1344,7 +1344,6 @@ export default {
     LabelCustom,
   },
   data: () => ({
-    data_local: JSON.parse(localStorage.getItem("userDetail")),
     tab: null,
     items: ["ข้อมูลทั่วไป", "คอร์สเรียน"],
     // items: ["ข้อมูลทั่วไป", "คอร์สเรียน", "การแข่งขันและเกียรติบัตร"],
@@ -1437,25 +1436,14 @@ export default {
     relations: [],
   }),
   created() {
-    // this.GetAll(this.$route.params.account_id);
-    // for (const item of JSON.parse(localStorage.getItem("relations"))) {
-    //   this.GetStudentData(item.student.studentId);
-    //   // console.log("student");
-    // }
-  },
-  beforeMount() {
-    // console.log("this.$route.params.account_id", this.$route.params.account_id);
-    this.params = this.$route.params.account_id;
+    this.params = this.$route?.params?.account_id;
   },
   mounted() {
-    this.GetUserById(this.params);
+    this.GetUserById(this.params);this.show_by_id.userRoles
     setTimeout(() => {
       this.GetDataRelationsManagement(this.show_by_id);
-      // this.GetDataRelationsManagement(this.data_user_by_id);
     }, 500);
-    // console.log("object=>", this.profile_user);
     this.relations = localStorage.getItem("relations");
-    // console.log("this.relations", this.relations);
 
     this.GetShowById(this.$route.params.account_id);
 
@@ -1468,7 +1456,6 @@ export default {
         this.user_data.isCardParentOpen = true;
       }
     } else {
-      // console.log("object");
       this.user_data.isCardOpen = false;
       this.user_data.isCardParentOpen = false;
     }
@@ -1479,11 +1466,6 @@ export default {
     for (const item of JSON.parse(localStorage.getItem("relations"))) {
       this.GetStudentSchedule(item.student.studentId);
     }
-    // this.GetAll(this.$route.params.account_id);
-    // for (const item of this.relations) {
-    //   this.GetStudentData(item.student.studentId);
-    //   // console.log("student");
-    // }
   },
   methods: {
     ...mapActions({
@@ -1913,6 +1895,7 @@ export default {
         "UserManageModules/getDataRelationsManagement",
       student_schedule: "UserModules/getStudentSchedule",
       relations_detail: "UserManageModules/getRelationData",
+      user_one_temp: "UserModules/getUserOneTemp",
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
@@ -1935,7 +1918,7 @@ export default {
       // );
       await this.GetDataRelationsManagement(this.show_by_id);
       // this.GetDataRelationsManagement(this.data_user_by_id);
-      for await (const show_data of this.show_by_id.userRoles) {
+      for await (const show_data of this.show_by_id?.userRoles) {
         // console.log("show_data", show_data);
         if (show_data.roleId == "R_4") {
           if (this.data_user_relation_management.length > 0) {

@@ -228,7 +228,7 @@
           </v-container>
 
           <!-- การจัดการสิทธิ์ ไม่มี Role-->
-          <v-container fluid v-if="show_by_id.userRoles.length <= 0">
+          <v-container fluid v-if="show_by_id?.userRoles?.length <= 0">
             <v-row>
               <v-col cols="12">
                 <headerCard
@@ -350,7 +350,7 @@
                 <v-divider></v-divider>
 
                 <v-card
-                  v-if="data_user_relation_management.length <= 0"
+                  v-if="data_user_relation_management?.length <= 0"
                   class="rounded-lg my-3"
                 >
                   <v-card-text
@@ -382,7 +382,7 @@
                         larg
                         color="#FF6B81"
                         @click="removeRelations(relations)"
-                        v-if="data_user_relation_management.length >= 1"
+                        v-if="data_user_relation_management?.length >= 1"
                       >
                         mdi-delete
                       </v-icon>
@@ -1061,7 +1061,7 @@ export default {
       this.student_id = item_relation.studentId;
     }
 
-    if (this.show_by_id.userRoles.length > 0) {
+    if (this.show_by_id?.userRoles?.length > 0) {
       for (const items of this.show_by_id.userRoles) {
         this.seledtedRole = items.roleId;
       }
@@ -1087,6 +1087,8 @@ export default {
       checkUsernameOneid: "loginModules/checkUsernameOneid",
       AddRelations: "RegisterModules/AddRelations",
       RemoveRelation: "RegisterModules/RemoveRelation",
+      registerUserOneId: "RegisterModules/registerUserOneId",
+      registerHaveOneId: "RegisterModules/registerHaveOneId",
     }),
     openFileSelector() {
       this.$refs.fileInput.click();
@@ -1236,7 +1238,6 @@ export default {
     remove(item) {
       const index = this.selectRoles.indexOf(item.role);
       this.selectRoles.splice(index, 1);
-
     },
 
     checkUsername(username, type) {
@@ -1252,7 +1253,6 @@ export default {
           this.relation.firstname_en = this.global_data_relation.firstNameEng;
           this.relation.lastname_en = this.global_data_relation.lastNameEng;
           this.relation.tel = this.global_data_relation.mobileNo;
-
         });
       } else {
         Swal.fire({
@@ -1377,7 +1377,6 @@ export default {
         if (result.isConfirmed) {
           this.dialog_show = false;
           for (const role of this.show_by_id.userRoles) {
-
             this.RemoveRelation({
               parentId:
                 role.roleId === "R_4"
@@ -1409,6 +1408,8 @@ export default {
       this.changeDialogRegisterOneId(true);
     },
     updateData(account_id) {
+      console.log("account_id", account_id);
+
       Swal.fire({
         icon: "question",
         title: "คุณต้องการแก้ไขข้อมูลหรือไม่",
@@ -1426,7 +1427,6 @@ export default {
                 Authorization: `Bearer ${VueCookie.get("token")}`,
               },
             };
-
             let payload = {
               firstNameTh: this.show_by_id.firstNameTh,
               lastNameTh: this.show_by_id.lastNameTh,
@@ -1438,16 +1438,8 @@ export default {
                 this.seledtedRole != "" ? [{ roleId: this.seledtedRole }] : [],
             };
             let bodyFormData = new FormData();
-            bodyFormData.append(
-              "image",
-              this.send_image_profile
-              // "image",
-              // this.send_image_profile?.length != 0
-              //   ? this.send_image_profile
-              //   : null
-            );
+            bodyFormData.append("image", this.send_image_profile);
             bodyFormData.append("payload", JSON.stringify(payload));
-
             let { data } = await axios.patch(
               //`http://localhost:3000/api/v1/usermanagement/update/${account_id}`,
               `${process.env.VUE_APP_URL}/api/v1/usermanagement/update/${account_id}`,
@@ -1473,7 +1465,6 @@ export default {
                 this.GetShowById(this.$route.params.account_id);
               }
             } else {
-
               throw { message: data.data };
             }
           } catch ({ response }) {
@@ -1489,12 +1480,44 @@ export default {
                   account_id: this.$route.params.account_id,
                 },
               });
-            } else if (response?.data?.message === "Can not change Coach role, because Coach is teaching the course.") {
-              this.error_message = "ไม่สามารถเปลี่ยนบทบาทได้ เนื่องจากโค้ชกำลังอยู่ในสถานะการสอน";
+            } else if (
+              response?.data?.message ===
+              "Can not change Coach role, because Coach is teaching the course."
+            ) {
+              this.error_message =
+                "ไม่สามารถเปลี่ยนบทบาทได้ เนื่องจากโค้ชกำลังอยู่ในสถานะการสอน";
+            } else if (response?.data?.message === "User not found.") {
+              if (this.user_one_temp.userName !== "") {
+                this.error_message =
+                  "ชื่อผู้ใช้ OneId ของคุณยังไม่มีอยู่ในระบบ";
+                this.checkUsernameOneid({
+                  username: this.user_one_temp.userName,
+                  status: null,
+                  type: null,
+                });
+                setTimeout(() => {
+                  console.log("========>>>>", this.user_data[0]);
+                  console.log("show_by_id", this.show_by_id);
+                  let payload = {
+                    ...this.show_by_id,
+                    passWord: null,
+                    roles:
+                      this.seledtedRole != ""
+                        ? [{ roleId: this.seledtedRole }]
+                        : [],
+                  };
+                  if (this.user_data[0]?.userOneId) {
+                    this.registerHaveOneId(payload);
+                  }
+                }, 1000);
+                // this.user_data
+              } else {
+                this.error_message = "ไม่พบผู้ใช้";
+              }
+              console.log("555555", this.user_one_temp);
             } else {
               this.error_message = "เกิดข้อผิดพลาด";
             }
-
             Swal.fire({
               icon: `${
                 this.error_message === "เกิดข้อผิดพลาด" ? "error" : "warning"
@@ -1557,6 +1580,7 @@ export default {
       is_loading: "loginModules/getIsLoading",
       user_student_data: "loginModules/getUserStudentData",
       last_user_registered: "RegisterModules/getLastUserRegistered",
+      user_one_temp: "UserModules/getUserOneTemp",
     }),
 
     MobileSize() {
