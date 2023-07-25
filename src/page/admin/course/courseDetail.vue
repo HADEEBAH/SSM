@@ -542,7 +542,7 @@
                     </v-col>
                   </v-row>
                   <template v-else>
-                    <div v-if="coach_list.length === 0">
+                    <div v-if="search_student_list ? search_student_datas.length === 0 : coach_list.length === 0 ">
                       <v-card dense outlined>
                         <v-card-text>
                           <v-row>
@@ -555,10 +555,11 @@
                     </div>
                     <template v-else>
                       <div
-                        v-for="(coach, coach_index) in coach_list"
+                        v-for="(coach, coach_index) in search_student_list ? search_student_datas :coach_list"
                         :key="`${coach_index}-coach_index`"
                       >
-                        <v-card
+                        <v-card 
+                          v-if="coach.allDates.studentArr.length > 0"
                           outlined
                           dense
                           class="rounded-lg cursor-pointer mb-3 bg-[#FCFCFC]"
@@ -699,7 +700,7 @@
                               </v-col>
                             </v-row>
                             <!-- Herder -->
-                            <v-row dense class="mb-3 font-bold">
+                            <v-row dense class="mb-3 font-bold" v-if="coach.datesList.length > 0 && coach.allDates.studentArr.length > 0">
                               <v-col cols="auto">
                                 <div style="width: 44px"></div>
                               </v-col>
@@ -715,8 +716,9 @@
                               >
                               <v-col align="right"></v-col>
                             </v-row>
+                            <!-- {{  coach.allDates }} -->
                             <v-card
-                              v-if="coach.datesList.length === 0"
+                              v-if="coach.datesList.length === 0 || coach.allDates.studentArr.length === 0"
                               outlined
                               class="my-3"
                             >
@@ -727,7 +729,7 @@
                                 ไม่พบข้อมูลนักเรียน
                               </v-card-text>
                             </v-card>
-                            <div v-if="coach.datesList.length > 0">
+                            <div v-if="coach.datesList.length > 0 && coach.allDates.studentArr.length > 0">
                               <div
                                 v-for="(date, index_date) in filterDateByCoach(
                                   coach_index
@@ -1170,12 +1172,14 @@
                         >
                         <v-col cols="auto">
                           <v-text-field
+                            v-model="search_student_potential"
                             class="bg-white rounded-lg"
                             dense
                             outlined
                             hide-details
                             placeholder="ค้นหาชื่อนักเรียน, ชื่อโค้ช"
                             prepend-inner-icon="mdi-magnify"
+                            @input="searchStudentPotential(search_student_potential)"
                           ></v-text-field>
                         </v-col>
                       </v-row>
@@ -1190,7 +1194,7 @@
                     </v-col>
                   </v-row>
                   <template v-else>
-                    <div v-if="coach_list.length === 0">
+                    <div v-if=" search_student_potential ? search_student_potential_datas.length === 0 : coach_list.filter(v => v.allDates.studentPotentialArr.length > 0).length === 0 ">
                       <v-card dense outlined>
                         <v-card-text>
                           <v-row>
@@ -1202,8 +1206,9 @@
                       </v-card>
                     </div>
                     <template v-else>
+                      <!-- <pre>{{ coach_list }}</pre> -->
                       <div
-                        v-for="(coach, coach_index) in coach_list"
+                        v-for="(coach, coach_index) in search_student_potential ? search_student_potential_datas :  coach_list.filter(v => v.allDates.studentPotentialArr.length > 0)"
                         :key="`${coach_index}-potential_index`"
                       >
                         <v-card
@@ -1397,7 +1402,7 @@
               </v-col>
             </v-row>
             <v-card
-              v-if="student_data_assessment?.type == 'potential'"
+              v-if="student_data_assessment?.potential"
               class="mb-3"
             >
               <v-card-text>
@@ -1423,7 +1428,7 @@
                             <v-select
                               outlined
                               dense
-                              v-model="student_data_assessment.evolution"
+                              v-model="student_data_assessment.potential.evolution"
                               :items="evolution_options"
                               hide-details
                               readonly
@@ -1455,8 +1460,8 @@
                           <v-col>
                             <span class="text-[#999999]"> ระดับความสนใจ: </span>
                             {{
-                              student_data_assessment.Interest
-                                ? student_data_assessment.Interest
+                              student_data_assessment.potential.Interest
+                                ? student_data_assessment.potential.Interest
                                 : "-"
                             }}
                           </v-col>
@@ -1465,8 +1470,8 @@
                           <v-col>
                             <span class="text-[#999999]"> ความคิดเห็น: </span>
                             {{
-                              student_data_assessment.remark
-                                ? student_data_assessment.remark
+                              student_data_assessment.potential.remark
+                                ? student_data_assessment.potential.remark
                                 : "-"
                             }}
                           </v-col>
@@ -1480,7 +1485,7 @@
                               class="mb-3"
                               v-for="(
                                 file, index_file
-                              ) in student_data_assessment.attachmentPotential"
+                              ) in student_data_assessment.potential.attachmentPotential"
                               :key="index_file"
                             >
                               <v-card-text
@@ -1775,18 +1780,50 @@
                       >{{ assess.assessment.remark }}
                     </v-col>
                   </v-row>
-                  <v-row dense>
+                  <v-card
+                    @click="openFile(file.attachmentFiles)"
+                    flat
+                    class="mb-3"
+                    v-for="(
+                      file, index_file
+                    ) in assess.assessment.attachment"
+                    :key="index_file"
+                  >
+                    <v-card-text
+                      class="border border-2 border-[#ff6b81] rounded-lg"
+                    >
+                      <v-row>
+                        <v-col align="center">
+                          <v-img
+                            height="35"
+                            width="26"
+                            src="../../../assets/coachLeave/file-pdf.png"
+                          />
+                        </v-col>
+                        <v-col cols="12" sm="10" align="start">
+                          <span class="font-bold">{{
+                            file.originalFilesName
+                          }}</span
+                          ><br />
+                          <span class="text-caption"
+                            >ขนาดไฟล์ :
+                            {{
+                              (file.filesSize / 1000000).toFixed(2)
+                            }}
+                            MB</span
+                          >
+                        </v-col>
+                      </v-row>
+                    </v-card-text>
+                  </v-card>
+                  <!-- <v-row dense>
                     <v-col
                       v-for="(file, index) in assess.assessment.attachment"
                       :key="`${index}-attachment`"
                     >
-                      <v-img
-                        width="89"
-                        height="89"
-                        :src="readFile(file.attFiles)"
-                      ></v-img>
+                    
                     </v-col>
-                  </v-row>
+                  </v-row> -->
                 </v-card-text>
               </v-card>
             </div>
@@ -1917,7 +1954,43 @@
                       >{{ student_data_assessment.assessment.remark }}
                     </v-col>
                   </v-row>
-                  <v-row dense>
+                  <v-card
+                    @click="openFile(file.attFiles)"
+                    flat
+                    class="mb-3"
+                    v-for="(
+                      file, index_file
+                    ) in student_data_assessment.assessment.attachment"
+                    :key="index_file"
+                  >
+                    <v-card-text
+                      class="border border-2 border-[#ff6b81] rounded-lg"
+                    >
+                      <v-row>
+                        <v-col align="center">
+                          <v-img
+                            height="35"
+                            width="26"
+                            src="../../../assets/coachLeave/file-pdf.png"
+                          />
+                        </v-col>
+                        <v-col cols="12" sm="10" align="start">
+                          <span class="font-bold">{{
+                            file.originalFilesName
+                          }}</span
+                          ><br />
+                          <span class="text-caption"
+                            >ขนาดไฟล์ :
+                            {{
+                              (file.filesSize / 1000000).toFixed(2)
+                            }}
+                            MB</span
+                          >
+                        </v-col>
+                      </v-row>
+                    </v-card-text>
+                  </v-card>
+                  <!-- <v-row dense>
                     <v-col
                       v-for="(file, index) in student_data_assessment.assessment
                         .attachment"
@@ -1929,7 +2002,7 @@
                         :src="readFile(file.attFiles)"
                       ></v-img>
                     </v-col>
-                  </v-row>
+                  </v-row> -->
                 </v-card-text>
               </v-card>
             </div>
@@ -2111,6 +2184,10 @@ export default {
     ],
     selected_all_coach: false,
     selected_coach_potential: null,
+    search_coach_list :[],
+    search_student_datas:[],
+    search_student_potential : "",
+    search_student_potential_datas: [],
   }),
   mounted() {},
   watch: {
@@ -2185,9 +2262,62 @@ export default {
       RemovePrivilageByCourseID: "CourseModules/RemovePrivilageByCourseID",
       ExportStudentList: "CourseModules/ExportStudentList",
     }),
+    searchStudentPotential(search){
+       // this.coach_list = this.filteredData;
+       console.log("2267=>",this.coach_list)
+      let coach_list_search = []
+      const regex = new RegExp(search.trim(), 'i');
+      for (let coach of this.coach_list.filter(v => v.allDates.studentPotentialArr.length > 0)) {
+        const coach_full_name = `${coach.firstNameTh} ${coach.lastNameTh}`;
+        console.log("2272=>",coach_full_name.search(regex))
+        if(coach_full_name.search(regex) > -1){
+          coach_list_search.push(coach)
+        }
+        for (let student of coach.allDates.studentPotentialArr){
+          const student_full_name = `${student.firstNameTh} ${student.lastNameTh}`;
+          console.log("2278",student_full_name)
+          console.log("2279=>",coach_full_name.search(regex))
+          if(student_full_name.search(regex) > -1){
+            if(coach_list_search.filter(v => v.coachId === coach.coachId).length === 0){
+              coach_list_search.push(coach)
+            }
+          }
+        }
+      }
+      this.selected_coach = "",
+      this.selected_schedule = "",
+      this.selected_coach_potential = null
+      console.log("2287=>", coach_list_search)
+      this.search_student_potential_datas = coach_list_search
+    },
     searchStudentList(search) {
       console.log(search);
-      // console.log(this.coach_list)
+      // this.coach_list = this.filteredData;
+      console.log("2190=>",this.coach_list)
+      let coach_list_search = []
+      const regex = new RegExp(search.trim(), 'i');
+      for (let coach of this.coach_list.filter(v => v.allDates.studentArr.length > 0)) {
+        const coach_full_name = `${coach.firstNameTh} ${coach.lastNameTh}`;
+        console.log("2197=>",coach_full_name.search(regex))
+        if(coach_full_name.search(regex) > -1){
+          coach_list_search.push(coach)
+        }
+        for (let student of coach.allDates.studentArr){
+          const student_full_name = `${student.firstNameTh} ${student.lastNameTh}`;
+          console.log("student",student_full_name)
+          console.log("2204=>",coach_full_name.search(regex))
+          if(student_full_name.search(regex) > -1){
+            if(coach_list_search.filter(v => v.coachId === coach.coachId).length === 0){
+              coach_list_search.push(coach)
+            }
+          }
+        }
+      }
+      this.selected_coach = "",
+      this.selected_schedule = "",
+      this.selected_coach_potential = null
+      console.log("2202=>", coach_list_search)
+      this.search_student_datas = coach_list_search
     },
     resetFilter() {
       this.filter = {
@@ -2297,12 +2427,16 @@ export default {
       return `${process.env.VUE_APP_URL}/api/v1/files/${file}`;
     },
     seletedCoachPotential(coach, index) {
-      this.selected_coach_potential = index;
-      // console.log(coach);
-      this.GetStudentPotentialByCoach({
-        course_id: this.$route.params.course_id,
-        coach_id: coach.coachId,
-      });
+      if(index == this.selected_coach_potential ){
+        this.selected_coach_potential = null
+      }else{
+        this.selected_coach_potential = index;
+        this.GetStudentPotentialByCoach({
+          course_id: this.$route.params.course_id,
+          coach_id: coach.coachId,
+        });
+      }
+     
     },
     getDateFormattor(date, format) {
       // // console.log(date, format)

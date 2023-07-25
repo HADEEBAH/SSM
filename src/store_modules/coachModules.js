@@ -700,12 +700,12 @@ const coachModules = {
           // let localhost = "http://localhost:3000"
           const sub_coach = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/subcoach/${coach_id}`, config);
           if (sub_coach.data.statusCode === 200) {
-            console.log("674 => ", sub_coach.data.data)
+            // console.log("674 => ", sub_coach.data.data)
             for await (const course of sub_coach.data.data) {
               const course_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course.courseId}`);
               if (course.dates.date) {
                 for (const dates of course.dates.date) {
-                  console.log("744", dates)
+                  // console.log("744", dates)
                   let start_time = course.period.start;
                   let end_time = course.period.end;
                   const [start_hours, start_minutes] = start_time.split(":");
@@ -745,7 +745,7 @@ const coachModules = {
               }
             }
           }
-          console.log("746", courses_task)
+          // console.log("746", courses_task) 
           context.commit("SetMyCourses", courses_task);
           context.commit("SetMyCoursesIsLoading", false);
         }
