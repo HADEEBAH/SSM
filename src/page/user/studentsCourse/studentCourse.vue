@@ -190,7 +190,7 @@
                       ) in potential.attachmentPotential"
                       :key="index_file"
                     >
-                      <pre>{{ file }}</pre>
+                      <!-- <pre>{{ file }}</pre> -->
                       <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                         <v-row>
                           <v-col align="center">
@@ -375,7 +375,7 @@
                       :key="index_file"
                     >
                       <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
-                        <pre>{{ file }}</pre>
+                        <!-- <pre>{{ file }}</pre> -->
                         <v-row dense>
                           <v-col cols="12" sm="1" align="center">
                             <v-img
