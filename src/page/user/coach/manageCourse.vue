@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- {{ SetFunctionsComputed }} -->
     <v-container>
       <header-page title="เลือกข้อมูลการสอน"></header-page>
       <v-row dense class="mb-3">
@@ -185,7 +186,7 @@
                 indeterminate
                 size="64"
               ></v-progress-circular>
-
+              
               <calendarCoach
                 v-if="!my_courses_is_loading"
                 class="w-full"
@@ -194,6 +195,7 @@
               ></calendarCoach>
             </v-col>
           </v-row>
+          <!-- <pre>{{ my_courses }}</pre> -->
           <!-- <div align="center">
             <v-progress-circular
               color="#ff6b81"
@@ -1353,7 +1355,7 @@
         </v-card>
       </v-dialog>
     </v-container>
-    {{ SetFunctionsComputed }}
+   
   </div>
 </template>
   <script>
@@ -1491,21 +1493,23 @@ export default {
     if (this.$route.query.token) {
       this.loginShareToken(this.$route);
     }
-
+    this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+    this.GetMyCourses({ coach_id: this.user_detail.account_id });
+    this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
+    this.GetCoachs();
     // this.GetMyCourses({ coach_id: this.user_detail.account_id });
     // this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
     // this.GetCoachs();
   },
   beforeMount() {
-    this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     // console.log("user_detail", this.user_detail);
-
     // this.GetMyCourses({ coach_id: this.user_detail.account_id });
     // this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
     // this.GetCoachs();
   },
 
   mounted() {
+    
     // console.log("valid", this.user_detail?.roles?.filter((val)=> val === "R_3").length === 0);
     if (
       this.user_detail?.roles?.filter(
