@@ -377,8 +377,8 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        // let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/course/${course_id}`, config)
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${localhost}/api/v1/studentlist/course/${course_id}`, config)
         // // console.log("studentlist",data.data)
         if (data.statusCode === 200) {
           for await (let coach of data.data) {
@@ -479,9 +479,9 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        // let localhost = "http://localhost:3000"
+        let localhost = "http://localhost:3000"
         // let { data } = await axios.get(`${localhost}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach_id}`, config)
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach_id}`, config)
+        let { data } = await axios.get(`${localhost}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach_id}`, config)
         if (data.statusCode === 200) {
           // console.log("485 => ",data.data)
           context.commit("SetStudentPotentialList", data.data)
