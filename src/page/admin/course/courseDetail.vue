@@ -542,7 +542,7 @@
                     </v-col>
                   </v-row>
                   <template v-else>
-                    <div v-if="search_student_list ? search_student_datas.length === 0 : coach_list.length === 0 ">
+                    <div v-if="search_student_list ? search_student_datas.length === 0 : coach_list.filter(v => v.allDates.studentArr.length > 0).length === 0 ">
                       <v-card dense outlined>
                         <v-card-text>
                           <v-row>
@@ -555,7 +555,7 @@
                     </div>
                     <template v-else>
                       <div
-                        v-for="(coach, coach_index) in search_student_list ? search_student_datas :coach_list"
+                        v-for="(coach, coach_index) in search_student_list ? search_student_datas : coach_list"
                         :key="`${coach_index}-coach_index`"
                       >
                         <v-card 
@@ -1402,7 +1402,7 @@
               </v-col>
             </v-row>
             <v-card
-              v-if="student_data_assessment?.potential"
+              v-if="student_data_assessment?.checkInPotentialId"
               class="mb-3"
             >
               <v-card-text>
@@ -1428,7 +1428,7 @@
                             <v-select
                               outlined
                               dense
-                              v-model="student_data_assessment.potential.evolution"
+                              v-model="student_data_assessment.evolution"
                               :items="evolution_options"
                               hide-details
                               readonly
@@ -1460,8 +1460,8 @@
                           <v-col>
                             <span class="text-[#999999]"> ระดับความสนใจ: </span>
                             {{
-                              student_data_assessment.potential.Interest
-                                ? student_data_assessment.potential.Interest
+                              student_data_assessment.Interest
+                                ? student_data_assessment.Interest
                                 : "-"
                             }}
                           </v-col>
@@ -1470,8 +1470,8 @@
                           <v-col>
                             <span class="text-[#999999]"> ความคิดเห็น: </span>
                             {{
-                              student_data_assessment.potential.remark
-                                ? student_data_assessment.potential.remark
+                              student_data_assessment.remark
+                                ? student_data_assessment.remark
                                 : "-"
                             }}
                           </v-col>
@@ -1485,7 +1485,7 @@
                               class="mb-3"
                               v-for="(
                                 file, index_file
-                              ) in student_data_assessment.potential.attachmentPotential"
+                              ) in student_data_assessment.attachmentPotential"
                               :key="index_file"
                             >
                               <v-card-text
@@ -1537,119 +1537,6 @@
                   </v-col>
                 </v-row>
               </v-card-text>
-              <!-- <v-card-text>
-                <v-row>
-                  <v-col cols="auto">
-                    <v-img
-                      width="40"
-                      height="40"
-                      src="../../../assets/course/potential.png"
-                    ></v-img>
-                  </v-col>
-                  <v-col cols class="font-bold text-lg"> ประเมินภาพรวม </v-col>
-                  <v-col cols="auto">
-                    <v-chip
-                      class="font-bold"
-                      :color="
-                        check_in_status_options.filter(
-                          (v) => v.value === student_data_assessment.status
-                        )[0].bg_color
-                      "
-                      :style="`color:${
-                        check_in_status_options.filter(
-                          (v) => v.value === student_data_assessment.status
-                        )[0].color
-                      }`"
-                      v-if="
-                        check_in_status_options.filter(
-                          (v) => v.value === student_data_assessment.status
-                        ).length > 0
-                      "
-                      >{{
-                        check_in_status_options.filter(
-                          (v) => v.value === student_data_assessment.status
-                        )[0].label
-                      }}
-                    </v-chip>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <v-card flat>
-                      <v-card-text class="bg-[#FBF3F5]">
-                        <v-row dense>
-                          <v-col>
-                            {{
-                              student_data_assessment.potential.remark
-                                ? student_data_assessment.potential.remark
-                                : "-"
-                            }}
-                          </v-col>
-                        </v-row>
-                        <v-row dense>
-                          <v-col> ระดับพัฒนาการ: </v-col>
-                        </v-row>
-                        <v-row dense>
-                          <v-col>
-                            <v-select
-                              outlined
-                              dense
-                              v-model="
-                                student_data_assessment.assessment.evolution
-                              "
-                              :items="evolution_options"
-                              hide-details
-                              readonly
-                            >
-                              <template v-slot:item="{ item }">
-                                <v-list-item-content>
-                                  <v-list-item-title>
-                                    <v-rating
-                                      readonly
-                                      :length="item.num_value"
-                                      :value="item.num_value"
-                                      color="#ff6b81"
-                                    ></v-rating>
-                                  </v-list-item-title>
-                                </v-list-item-content>
-                              </template>
-                              <template v-slot:selection="{ item }">
-                                <v-rating
-                                  readonly
-                                  :length="item.num_value"
-                                  :value="item.num_value"
-                                  color="#ff6b81"
-                                ></v-rating>
-                              </template>
-                            </v-select>
-                          </v-col>
-                        </v-row>
-                        <v-row dense>
-                          <v-col>
-                            ระดับความสนใจ:
-                            <span class="font-bold">{{
-                              student_data_assessment.potential.interest
-                            }}</span>
-                          </v-col>
-                        </v-row>
-                        <v-row dense>
-                          <v-col
-                            v-for="(file, index) in student_data_assessment
-                              .potential.attachmentPotential"
-                            :key="`${index}-attachment`"
-                          >
-                            <v-img
-                              width="89"
-                              height="89"
-                              :src="readFile(file.attFiles)"
-                            ></v-img>
-                          </v-col>
-                        </v-row>
-                      </v-card-text>
-                    </v-card>
-                  </v-col>
-                </v-row>
-              </v-card-text> -->
             </v-card>
             <div v-if="student_data_assessment?.assessment.length > 0">
               <v-card
@@ -1781,7 +1668,7 @@
                     </v-col>
                   </v-row>
                   <v-card
-                    @click="openFile(file.attachmentFiles)"
+                    @click="openFile(file.attFiles)"
                     flat
                     class="mb-3"
                     v-for="(
