@@ -31,6 +31,7 @@
           </v-col>
         </v-row>
       </v-card-title>
+      <!-- <pre>{{ events }}</pre> -->
       <v-calendar
         ref="calendar"
         color="#ff6b81"
@@ -146,6 +147,7 @@
         </div>
       </div>
     </v-bottom-sheet>
+    
   </div>
 </template>
 
