@@ -40,7 +40,7 @@
           </v-btn>
         </template>
         <template v-slot:[`no-results`]>
-          <div class="font-bold">ไม่พบข้อมูล</div>
+          <div class="font-bold">ไม่พบข้อมูลในตาราง</div>
         </template>
       </v-data-table>
     </div>

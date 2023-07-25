@@ -137,7 +137,7 @@
             :selectedRole="selectedRole"
             :page.sync="page"
             :items-per-page="itemsPerPage"
-            :page-count="(pageCount)"
+            :page-count="pageCount"
             loading-text="Loading... Please wait"
             :loading="user_list.length < 0"
             class="elevation-1 header-table"
@@ -201,7 +201,7 @@
             </template>
 
             <template v-slot:[`no-results`]>
-              <div class="font-bold">ไม่พบข้อมูล</div>
+              <div class="font-bold">ไม่พบข้อมูลในตาราง</div>
             </template>
 
             <!-- </div> -->
@@ -436,12 +436,15 @@ export default {
               },
             };
 
-            let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/usermanagement/${account_id}`, config);
-            console.log(data)
+            let { data } = await axios.delete(
+              `${process.env.VUE_APP_URL}/api/v1/usermanagement/${account_id}`,
+              config
+            );
+            console.log(data);
             if (data.statusCode === 200) {
-              if(typeof data.data === 'string'){
+              if (typeof data.data === "string") {
                 throw { message: data };
-              }else{
+              } else {
                 Swal.fire({
                   icon: "success",
                   title: "ลบข้อมูลสำเร็จ",
