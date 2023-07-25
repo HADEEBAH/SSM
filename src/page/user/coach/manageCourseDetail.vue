@@ -264,8 +264,10 @@
                     </v-row>
                   </td>
                 </template>
-                <template v-slot:[`no-results`]>
-                  <div class="font-bold">ไม่พบข้อมูลในตาราง</div>
+                <template v-slot:no-data>
+                  <v-row dense>
+                    <v-col align="center"> ไม่พบข้อมูลในตาราง </v-col>
+                  </v-row>
                 </template>
               </v-data-table>
             </v-form>
@@ -1820,7 +1822,7 @@ export default {
     inputDate(e, item) {
       this.student_check_in.filter(
         (v) => v.no === item.no
-      )[0].compensation_date_str = dateFormatter(e, "DD MT YYYYT");
+      )[0].compensation_date_str = dateFormatter(e, "DD MMT YYYYT");
     },
     openFileSelector() {
       this.$refs.fileInput.click();
