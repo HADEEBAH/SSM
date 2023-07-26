@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- {{ events }} -->
+    <!-- <pre> {{ events }}</pre>     -->
     {{ colorOfDay }}
     <template v-if="type === 'week'">
       
@@ -40,7 +40,7 @@
         :events="events"
         event-text-color="#000000"
         event-overlap-mode="column"
-        :first-interval="9"
+        :first-interval="8"
         :interval-count="12"
         :event-overlap-threshold="30"
         @click:event="selectedDate($event)"
