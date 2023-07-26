@@ -516,7 +516,7 @@ const CourseModules = {
     // COURSE :: UPDATE COURSE DETAIL
     async UpdateCouserDetail(context, { course_id, course_data }) {
       try {
-        // console.log(course_data)
+        console.log(course_data)
         // let localhost = "http://localhost:3000"
         let config = {
           headers: {
@@ -542,13 +542,13 @@ const CourseModules = {
           "courseMusicPerformance": course_data.music_performance,
           "courseCertification": course_data.catification,
           "coursePrice": parseInt(course_data.price_course),
-          "courseRegisterStartDate": course_data.course_register_start_date && course_data.course_register_start_date !== "Invalid date" ? course_data.course_register_start_date : null,
-          "courseRegisterEndDate": course_data.course_register_end_date ? course_data.course_register_end_date : null,
+          "courseRegisterStartDate": course_data?.coachs[0]?.register_date_range?.start_date  ? course_data.coachs[0].register_date_range.start_date : null,
+          "courseRegisterEndDate": course_data?.coachs[0]?.register_date_range?.end_date ? course_data.coachs[0].register_date_range.end_date : null,
           "coursePeriodStartDate": course_data.coachs[0].period.start_time ? course_data.coachs[0].period.start_time : null,
           "coursePeriodEndDate": course_data.coachs[0].period.end_time ? course_data.coachs[0].period.end_time : null,
           "courseStudentRecived": course_data.student_recived,
-          "courseStudyEndDate": course_data.course_study_end_date,
-          "courseStudyStartDate": course_data.course_study_start_date,
+          "courseStudyEndDate": course_data?.coachs[0]?.class_date_range?.end_date,
+          "courseStudyStartDate": course_data?.coachs[0]?.class_date_range?.start_date,
           "coachs": [],
           "dayOfweek": [],
         }
