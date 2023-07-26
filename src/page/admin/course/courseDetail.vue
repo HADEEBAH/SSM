@@ -502,6 +502,7 @@
               </v-row>
               <v-tabs-items v-model="student_tab" class="rounded-lg">
                 <v-tab-item valus="students in course">
+
                   <!-- <pre>{{coach_list}}</pre> -->
                   <v-card flat dent class="mb-3 rounded-lg">
                     <v-card-text class="py-2 bg-[#FCE0E7] rounded-lg">
@@ -546,9 +547,7 @@
                       v-if="
                         search_student_list
                           ? search_student_datas.length === 0
-                          : coach_list.filter(
-                              (v) => v.allDates.studentArr.length > 0
-                            ).length === 0
+                          : coach_list?.filter((v) => v.allDates?.studentArr.length > 0).length === 0
                       "
                     >
                       <v-card dense outlined>
@@ -565,11 +564,11 @@
                       <div
                         v-for="(coach, coach_index) in search_student_list
                           ? search_student_datas
-                          : coach_list"
+                          : coach_list?.filter((v) => v.allDates?.studentArr.length > 0)"
                         :key="`${coach_index}-coach_index`"
                       >
                         <v-card
-                          v-if="coach.allDates.studentArr.length > 0"
+                          v-if="coach.allDates?.studentArr.length > 0"
                           outlined
                           dense
                           class="rounded-lg cursor-pointer mb-3 bg-[#FCFCFC]"
@@ -1137,6 +1136,13 @@
                     :headers="column"
                     :items="student_reserve_list"
                   >
+                    <template v-slot:no-data>
+                      <v-row dense>
+                        <v-col align='center'>
+                          ไม่พบข้อมูล
+                        </v-col>
+                      </v-row>
+                    </template>
                     <template v-slot:[`item.fullname`]="{ item }">
                       {{ `${item.firstNameTh} ${item.lastNameTh}` }}
                     </template>
@@ -1736,14 +1742,6 @@
                       </v-row>
                     </v-card-text>
                   </v-card>
-                  <!-- <v-row dense>
-                    <v-col
-                      v-for="(file, index) in assess.assessment.attachment"
-                      :key="`${index}-attachment`"
-                    >
-                    
-                    </v-col>
-                  </v-row> -->
                 </v-card-text>
               </v-card>
             </div>
