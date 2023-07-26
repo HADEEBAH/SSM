@@ -55,15 +55,7 @@
             :style="{ top: nowY }"
           ></div>
         </template>
-        <!-- <template v-else v-slot:day-header="{ present }">
-              <template
-                v-if="present"
-              >
-                Today
-              </template>
-            </template> -->
       </v-calendar>
-      <!-- </v-sheet> -->
     </v-card>
     <!-- MONTH -->
     <v-date-picker
@@ -210,12 +202,7 @@ export default {
       return this.cal ? this.cal.timeToY(this.cal.times.now) + "px" : "-10px";
     },
   },
-
-  beforeMount() {
-    this.colorOfDay();
-  },
   mounted() {
-    
     let today = new Date();
     this.start_of_week = new Date(
       today.getFullYear(),
@@ -240,10 +227,6 @@ export default {
       weekday: "long",
     });
     this.ready = true;
-    // this.scrollToTime();
-
-    // this.updateTime();
-    // this.colorOfDay();
   },
   beforeUpdate() {
     this.colorOfDay();
@@ -253,9 +236,9 @@ export default {
     ...mapActions({
       GetStudentData: "MyCourseModules/GetStudentData",
     }),
-    genTitleCalender(title){
-      let title_part = title.split(" ")
-      return `${title_part[0]} ${ parseFloat(title_part[1])+543 }`
+    genTitleCalender(title) {
+      let title_part = title.split(" ");
+      return `${title_part[0]} ${parseFloat(title_part[1]) + 543}`;
     },
     selectedDate(data) {
       if (!data.event.type) {
@@ -268,6 +251,7 @@ export default {
     selectDate(date) {
       this.event_date = [];
       this.showModal = true;
+      console.log("calendar", this.events);
       this.events.forEach((event) => {
         let [start, start_time] = event.start.split(" ");
         let [end, end_time] = event.end.split(" ");
@@ -342,16 +326,6 @@ export default {
         ? this.cal.times.now.hour * 60 + this.cal.times.now.minute
         : 0;
     },
-    // scrollToTime() {
-    //     const time = this.getCurrentTime();
-    //     const first = Math.max(0, time - (time % 30) - 30);
-
-    //     this.cal.scrollToTime(first);
-    // },
-
-    // updateTime() {
-    //   setInterval(() => this.cal.updateTimes(), 60 * 1000);
-    // },
     functionEvents(date) {
       let events_data = [];
       this.events.forEach((event) => {

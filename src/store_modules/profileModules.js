@@ -177,7 +177,7 @@ const profileModules = {
     },
 
     async GetAll(context, account_id) {
-      // console.log("account_id", account_id);
+      console.log("account_id", account_id);
       try {
         let config = {
           headers: {
@@ -187,6 +187,7 @@ const profileModules = {
           }
         }
         let data_local = JSON.parse(localStorage.getItem("userDetail"))
+        console.log(data_local.roles);
         if (data_local.roles.includes('R_5')) {
           let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?student_id=${account_id}`, config)
           // console.log("data_parent", data)
@@ -204,7 +205,7 @@ const profileModules = {
           }
         } else if (data_local.roles.includes('R_4')) {
           let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?parent_id=${account_id}`, config)
-          // console.log("data_student", data)
+          console.log("data_student", data)
           if (data.statusCode === 200) {
             if (data?.data?.message !== "relation not found.") {
               let students = []
