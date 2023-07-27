@@ -554,7 +554,7 @@
                         <v-card-text>
                           <v-row>
                             <v-col class="font-bold" align="center">
-                              ไม่พบข้อมูลนักเรียน
+                              ไม่พบข้อมูล
                             </v-col>
                           </v-row>
                         </v-card-text>
@@ -1240,7 +1240,7 @@
                         <v-card-text>
                           <v-row>
                             <v-col class="font-bold" align="center">
-                              ไม่พบข้อมูลนักเรียน
+                              ไม่พบข้อมูล
                             </v-col>
                           </v-row>
                         </v-card-text>
