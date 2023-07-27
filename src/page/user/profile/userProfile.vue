@@ -828,7 +828,6 @@ export default {
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
   },
   beforeMount() {
-    // console.log("========");
     // alert(this.user_login.account_id)
     this.GetRelationDataV2(this.user_login.account_id);
     this.GetProfileDetail(this.user_login.account_id);
@@ -854,7 +853,6 @@ export default {
           }
         });
       } else if (this.last_user_registered.type === "student") {
-        // console.log(this.last_user_registered);
         this.AddRelations({
           studentId: this.last_user_registered.account_id,
           parentId: this.user_login.account_id,
@@ -887,8 +885,6 @@ export default {
 
     async getStudentData(order_item_id) {
       await this.$store.dispatch("getStudentData", order_item_id);
-      // const studentData = this.$store.state.studentData;
-      // console.log(studentData);
     },
 
     validate(e, type) {
@@ -919,7 +915,8 @@ export default {
       this.$router.push({ name: "ProfileCertificate" });
     },
     show_password() {
-      window.location.href = `${process.env.VUE_APP_ONE}/type_forgot_password`;
+      this.$router.push({ name: "ForgotPassword" });
+
     },
     show_policy() {
       this.$router.push({ name: "ProfilePolicy" });
@@ -956,7 +953,6 @@ export default {
       this.changeDialogRegisterOneId(true);
     },
     async removeRelation(relations) {
-      // console.log(relations);
       Swal.fire({
         icon: "question",
         title: "คุณต้องการลบรายการนี้ใช่หรือไม่ ?",
@@ -1003,7 +999,6 @@ export default {
           type: type,
         }).then(() => {
           if (type === "student") {
-            // console.log("user_student_data", this.course_order.students.filter);
             if (this.user_student_data.length > 0) {
               this.course_order.students.filter(
                 (v) => v.username === username
@@ -1061,7 +1056,6 @@ export default {
                 lastname_en: this.user_data[0].lastNameEng,
                 tel: this.user_data[0].mobileNo,
               };
-              // console.log("course_order", this.course_order);
 
               if (
                 this.course_order.students.filter(
@@ -1120,14 +1114,6 @@ export default {
                 Authorization: `Bearer ${VueCookie.get("token")}`,
               },
             };
-            // this.user_login = JSON.parse(localStorage.getItem("userDetail"));
-
-            // // console.log("object", this.user_data);
-            // for (const data of this.user_data) {
-            //   // console.log("data", data);
-            //   this.set_parent_id = data.userOneId;
-            //   // console.log("userOneId", this.set_parent_id);
-            // }
 
             let payload = {};
 
@@ -1150,7 +1136,6 @@ export default {
               config
             );
 
-            // console.log("data+++++++++++", data);
 
             if (data.statusCode === 201) {
               if (data.data.message !== "Duplicate relation.") {
@@ -1192,7 +1177,6 @@ export default {
             } else {
               this.error_message = "เกิดข้อผิดพลาด";
             }
-            // console.log("response", response);
             Swal.fire({
               icon: `${
                 this.error_message === "เกิดข้อผิดพลาด" ? "error" : "warning"
@@ -1225,7 +1209,6 @@ export default {
     },
 
     myCourseStudent(item) {
-      // console.log("ITEM", item);
       this.userRelationsAccountId = item;
       this.$store.dispatch(
         "MyCourseModules/GetMyCourseStudentId",
@@ -1233,7 +1216,6 @@ export default {
       );
       this.$router.push({ name: "StudentsSchedule" });
       this.GetStudentData(this.userRelationsAccountId);
-      // console.log("userRelationsAccountId", this.userRelationsAccountId);
     },
   },
   beforeDestroy() {

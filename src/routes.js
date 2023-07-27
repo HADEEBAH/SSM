@@ -74,6 +74,8 @@ import FrontPortfolio from '@/page/pdf/FrontPortfolio.vue'
 import PortfolioDetail from '@/page/pdf/portfolioDetail.vue'
 //PageNotFound
 import PageNotFound from '@/page/pageNotFound.vue'
+import ForgotPassword from './page/forgotPassword.vue'
+import ResetPassword from './page/resetPassword.vue'
 
 const routes = [
   {
@@ -95,6 +97,16 @@ const routes = [
         path: '/pageNotFound',
         name: 'PageNotFound',
         component: PageNotFound,
+      },
+      {
+        path: '/forgot-password',
+        name: 'ForgotPassword',
+        component: ForgotPassword,
+      },
+      {
+        path: '/reset-password',
+        name: 'ResetPassword',
+        component: ResetPassword,
       },
     ]
   },

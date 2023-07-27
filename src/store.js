@@ -21,6 +21,7 @@ import NotificationsModules from '@/store_modules/notificationsModules'
 import reserveCourseModules from '@/store_modules/reserveCourseModules'
 import DashboardModules from '@/store_modules/dashboardModules'
 import portfolioModules from '@/store_modules/portfolioModules'
+import ResetPasswordModules from '@/store_modules/resetPasswordModules'
 
 Vue.use(Vuex)
 
@@ -46,7 +47,8 @@ const store = new Vuex.Store({
     ManageScheduleModules: ManageScheduleModules,
     BannerModules: BannerModules,
     NotificationsModules: NotificationsModules,
-    DashboardModules: DashboardModules
+    DashboardModules: DashboardModules,
+    ResetPasswordModules: ResetPasswordModules
   }
 })
 
