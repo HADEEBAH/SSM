@@ -696,7 +696,7 @@
                     </div>
                     <!-- <v-row>
                       <v-col
-                        >ไฟล์แนบ : 555
+                        >ไฟล์แนบ :
                         <template v-if="coach_check_in.attachment.length > 0">
                           <label
                             class="mr-2 text-[#ff6b81] underline underline-offset-1 cursor-pointer"
