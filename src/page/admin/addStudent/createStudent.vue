@@ -31,7 +31,7 @@
                 >
                   <template v-slot:no-data>
                     <v-list-item>
-                      <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
+                      <v-list-item-title> {{ search ? 'ไม่พบข้อมูล' : 'กรุณากรอกชื่อผู้เรียน' }} </v-list-item-title>
                     </v-list-item>
                   </template>
                   <template v-slot:selection="data">
