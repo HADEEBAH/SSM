@@ -3,7 +3,6 @@
     <!-- <pre> {{ events }}</pre>     -->
     {{ colorOfDay }}
     <template v-if="type === 'week'">
-      
       <!-- <v-row dense>
                 <v-col>
                {{ start_of_week }} -  {{ end_of_week }}
@@ -147,11 +146,12 @@
         </div>
       </div>
     </v-bottom-sheet>
-    
   </div>
 </template>
 
 <script>
+import { shortMonthToLongMonth } from "@/functions/functions";
+
 export default {
   name: "calendarCoach",
   props: {
@@ -199,7 +199,7 @@ export default {
             break;
         }
       });
-      return ''
+      return "";
     },
     cal() {
       return this.ready ? this.$refs.calendar : null;
@@ -210,7 +210,7 @@ export default {
   },
   mounted() {
     let today = new Date();
-    this.focus = new Date()
+    this.focus = new Date();
     this.start_of_week = new Date(
       today.getFullYear(),
       today.getMonth(),
@@ -238,9 +238,23 @@ export default {
     this.updateTime();
   },
   methods: {
-    genTitleCalender(title){
-      let title_part = title.split(" ")
-      return `${title_part[0]} ${ parseFloat(title_part[1])+543 }`
+    genTitleCalender(title) {
+      let title_part = title.split(" ");
+
+      if (title_part.length == 2) {
+        return `${title_part[0]} ${parseFloat(title_part[1]) + 543}`;
+      } else if (title_part.length == 4) {
+        return `${shortMonthToLongMonth(
+          title_part[0]
+        )} - ${shortMonthToLongMonth(title_part[2])} ${
+          parseFloat(title_part[3]) + 543
+        }`;
+      } else if (title_part.length == 5) {
+        return `${shortMonthToLongMonth(title_part[0])}  
+        ${parseFloat(title_part[1]) + 543} -
+        ${shortMonthToLongMonth(title_part[3])} 
+        ${parseFloat(title_part[4]) + 543}`;
+      }
     },
     selectedDate(data) {
       if (data.event.type !== "holiday") {
@@ -290,7 +304,7 @@ export default {
         }
       });
     },
-   
+
     goToday() {
       this.focus = new Date();
     },

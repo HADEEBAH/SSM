@@ -68,13 +68,13 @@ export const generateTimeArrayHours = (timedata) => {
     const startHour = timedata;
     const output = [];
     for (let hour = 0; hour <= 23; hour++) {
-        if(startHour.length > 0){
+        if (startHour.length > 0) {
             if (!startHour.some(v => v === hour)) {
                 output.push(hour.toString().padStart(2, '0'));
             }
-        }else{
+        } else {
             output.push(hour.toString().padStart(2, '0'));
-        }  
+        }
     }
     return output;
 }
@@ -109,25 +109,25 @@ export const CheckFileSizeV2 = (file, id) => { //check file รอ merge กั�
 }
 
 export const CheckFileSizeType = (file, id) => { //check file รอ merge กับ พี่น๊อต
-  const format = [
-    "image/png",
-    "image/jpeg"
-  ]
-  const key = document.getElementById(id)
-  if (!format.includes(file.type)) {
-    key.value = ""
-    Swal.fire({
-      icon: "error",
-      title: "รูปแบบไฟล์ไม่ถูกต้อง",
-      text: "( กรุณาแนบไฟล์นามสกุล jpg, jpeg, png )",
-      confirmButtonText: "ตกลง"
-    })
-    return false
-  }
-  return true
+    const format = [
+        "image/png",
+        "image/jpeg"
+    ]
+    const key = document.getElementById(id)
+    if (!format.includes(file.type)) {
+        key.value = ""
+        Swal.fire({
+            icon: "error",
+            title: "รูปแบบไฟล์ไม่ถูกต้อง",
+            text: "( กรุณาแนบไฟล์นามสกุล jpg, jpeg, png )",
+            confirmButtonText: "ตกลง"
+        })
+        return false
+    }
+    return true
 }
 
-export const  convertToThaiBaht = (number) => {
+export const convertToThaiBaht = (number) => {
     const digits = ['', 'หนึ่ง', 'สอง', 'สาม', 'สี่', 'ห้า', 'หก', 'เจ็ด', 'แปด', 'เก้า'];
     const positions = ['', 'สิบ', 'ร้อย', 'พัน', 'หมื่น', 'แสน', 'ล้าน'];
     const unit = 'บาท';
@@ -136,31 +136,50 @@ export const  convertToThaiBaht = (number) => {
     const [integer_part, decimal_part] = number.toFixed(2).split('.');
     let thai_baht = '';
     for (let i = 0; i < integer_part.length; i++) {
-    const digit = parseInt(integer_part[i]);
-    const position = integer_part.length - i - 1;
+        const digit = parseInt(integer_part[i]);
+        const position = integer_part.length - i - 1;
 
-    if (digit !== 0) {
-        if (digit === 1 && position === 1) {
-        thai_baht += positions[position];
-        } else if (digit === 2 && position === 1) {
-            thai_baht += 'ยี่' + positions[position];
-        } else {
-            thai_baht += digits[digit] + positions[position];
+        if (digit !== 0) {
+            if (digit === 1 && position === 1) {
+                thai_baht += positions[position];
+            } else if (digit === 2 && position === 1) {
+                thai_baht += 'ยี่' + positions[position];
+            } else {
+                thai_baht += digits[digit] + positions[position];
+            }
         }
-    }
     }
     thai_baht += unit;
     if (decimal_part && parseInt(decimal_part) !== 0) {
-    const decimal_digits = decimal_part.split('');
+        const decimal_digits = decimal_part.split('');
 
-    if (decimal_digits.length === 1) {
-        thai_baht += digits[parseInt(decimal_digits[0])] + decimal_separator;
+        if (decimal_digits.length === 1) {
+            thai_baht += digits[parseInt(decimal_digits[0])] + decimal_separator;
+        } else {
+            thai_baht += digits[parseInt(decimal_digits[0])] + 'สิบ' + digits[parseInt(decimal_digits[1])] + decimal_separator;
+        }
     } else {
-        thai_baht += digits[parseInt(decimal_digits[0])] + 'สิบ' + digits[parseInt(decimal_digits[1])] + decimal_separator;
-    }
-    }else{
         thai_baht += no_decimal_part;
     }
 
     return thai_baht;
 }
+
+export const shortMonthToLongMonth = (shortMonth) => {
+    const thaiMonths = {
+        'ม.ค.': 'มกราคม',
+        'ก.พ.': 'กุมภาพันธ์',
+        'มี.ค.': 'มีนาคม',
+        'เม.ย.': 'เมษายน',
+        'พ.ค.': 'พฤษภาคม',
+        'มิ.ย.': 'มิถุนายน',
+        'ก.ค.': 'กรกฎาคม',
+        'ส.ค.': 'สิงหาคม',
+        'ก.ย.': 'กันยายน',
+        'ต.ค.': 'ตุลาคม',
+        'พ.ย.': 'พฤศจิกายน',
+        'ธ.ค.': 'ธันวาคม',
+    };
+
+    return thaiMonths[shortMonth] || shortMonth;
+};
