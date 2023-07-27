@@ -464,7 +464,7 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // let localhost ="http://localhost:3000"
+        // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/${course_id}/date/${date}`, config)
         if (data.statusCode === 200) {
           let i = 1
@@ -579,24 +579,24 @@ const coachModules = {
             if (course_data.data.statusCode === 200) {
               // console.log("579=>",course)
               if (course.coachLeaveCourses.length > 0) {
-                for await(const leaveCourse of course.coachLeaveCourses) {
+                for await (const leaveCourse of course.coachLeaveCourses) {
                   let startDate = null
                   let endDate = null
                   let start_time = null
                   let end_time = null
-                  if(leaveCourse.teachCompensationDate && leaveCourse.teachCompensationStartTime && leaveCourse.teachCompensationEndTime){
-                      start_time = leaveCourse.teachCompensationStartTime;
-                      end_time = leaveCourse.teachCompensationEndTime;
-                      const [start_hours, start_minutes] = start_time.split(":");
-                      const [end_hours, end_minutes] = end_time.split(":");
-                      // console.log(leaveCourse.teachCompensationDate)
-                      startDate = new Date(leaveCourse.teachCompensationDate);
-                      startDate.setHours(start_hours);
-                      startDate.setMinutes(start_minutes);
-                      endDate = new Date(leaveCourse.teachCompensationDate);
-                      endDate.setHours(end_hours);
-                      endDate.setMinutes(end_minutes);
-                    
+                  if (leaveCourse.teachCompensationDate && leaveCourse.teachCompensationStartTime && leaveCourse.teachCompensationEndTime) {
+                    start_time = leaveCourse.teachCompensationStartTime;
+                    end_time = leaveCourse.teachCompensationEndTime;
+                    const [start_hours, start_minutes] = start_time.split(":");
+                    const [end_hours, end_minutes] = end_time.split(":");
+                    // console.log(leaveCourse.teachCompensationDate)
+                    startDate = new Date(leaveCourse.teachCompensationDate);
+                    startDate.setHours(start_hours);
+                    startDate.setMinutes(start_minutes);
+                    endDate = new Date(leaveCourse.teachCompensationDate);
+                    endDate.setHours(end_hours);
+                    endDate.setMinutes(end_minutes);
+
                     if (courses_task.filter(v => v.course_id === course.courseId && v.time_id === course.timeId && v.day_of_week_id === course.dayOfWeekId && v.start_date === moment(startDate).format("YYYY-MM-DD")).length === 0) {
                       courses_task.push({
                         course_package_name: course.packageName,
@@ -608,12 +608,12 @@ const coachModules = {
                         type: course?.compType ? course?.compType : null,
                         day_of_week_id: course.dayOfWeekId,
                         coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
-                        start_date:moment(startDate).format("YYYY-MM-DD"),
-                        start_date_str:startDate.toLocaleDateString("th-TH", options),
+                        start_date: moment(startDate).format("YYYY-MM-DD"),
+                        start_date_str: startDate.toLocaleDateString("th-TH", options),
                         start: moment(startDate).format("YYYY-MM-DD HH:mm"),
-                        end:moment(endDate).format("YYYY-MM-DD HH:mm"),
+                        end: moment(endDate).format("YYYY-MM-DD HH:mm"),
                         start_time: start_time,
-                        end_time: end_time, 
+                        end_time: end_time,
                         category_name: course_data.data.data.categoryNameTh,
                         course_img: course_data.data.data.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}` : "",
                         course_per_time: course_data.data.data.coursePerTime,
@@ -714,7 +714,7 @@ const coachModules = {
             for await (const course of sub_coach.data.data) {
               const course_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course.courseId}`);
               if (course.dates.date) {
-                for await(const dates of course.dates.date) {
+                for await (const dates of course.dates.date) {
                   // console.log("744", dates)
                   let start_time = course.period.start;
                   let end_time = course.period.end;

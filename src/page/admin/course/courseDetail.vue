@@ -502,7 +502,6 @@
               </v-row>
               <v-tabs-items v-model="student_tab" class="rounded-lg">
                 <v-tab-item valus="students in course">
-
                   <!-- <pre>{{coach_list}}</pre> -->
                   <v-card flat dent class="mb-3 rounded-lg">
                     <v-card-text class="py-2 bg-[#FCE0E7] rounded-lg">
@@ -547,7 +546,9 @@
                       v-if="
                         search_student_list
                           ? search_student_datas.length === 0
-                          : coach_list?.filter((v) => v.allDates?.studentArr.length > 0).length === 0
+                          : coach_list?.filter(
+                              (v) => v.allDates?.studentArr.length > 0
+                            ).length === 0
                       "
                     >
                       <v-card dense outlined>
@@ -564,7 +565,9 @@
                       <div
                         v-for="(coach, coach_index) in search_student_list
                           ? search_student_datas
-                          : coach_list?.filter((v) => v.allDates?.studentArr.length > 0)"
+                          : coach_list?.filter(
+                              (v) => v.allDates?.studentArr.length > 0
+                            )"
                         :key="`${coach_index}-coach_index`"
                       >
                         <v-card
@@ -1138,9 +1141,7 @@
                   >
                     <template v-slot:no-data>
                       <v-row dense>
-                        <v-col align='center'>
-                          ไม่พบข้อมูล
-                        </v-col>
+                        <v-col align="center"> ไม่พบข้อมูล </v-col>
                       </v-row>
                     </template>
                     <template v-slot:[`item.fullname`]="{ item }">
@@ -1538,11 +1539,9 @@
                               >
                                 <v-row>
                                   <v-col align="center">
-                                    <v-img
-                                      height="35"
-                                      width="26"
-                                      src="../../../assets/coachLeave/file.svg"
-                                    />
+                                    <imgFileType
+                                      :mime_type="file.filesType"
+                                    ></imgFileType>
                                   </v-col>
                                   <v-col cols="12" sm="10" align="start">
                                     <span class="font-bold">{{
@@ -1562,21 +1561,6 @@
                             </v-card>
                           </v-col>
                         </v-row>
-
-                        <!-- <v-row dense>
-                          <v-col
-                            v-for="(
-                              file, index
-                            ) in student_data_assessment.attachmentPotential"
-                            :key="`${index}-attachment`"
-                          >
-                            <v-img
-                              width="89"
-                              height="89"
-                              :src="readFile(file.attachmentFiles)"
-                            ></v-img>
-                          </v-col>
-                        </v-row> -->
                       </v-card-text>
                     </v-card>
                   </v-col>
@@ -1635,7 +1619,7 @@
                   </v-col>
                 </v-row> -->
                   <v-row dense>
-                    <v-col> ระดับพัฒนาการ </v-col>
+                    <v-col> ระดับพัฒนาการ</v-col>
                   </v-row>
                   <v-row dense>
                     <v-col>
@@ -1671,7 +1655,7 @@
                     </v-col>
                   </v-row>
                   <v-row dense>
-                    <v-col> ระดับความสนใจ </v-col>
+                    <v-col> ระดับความสนใจ</v-col>
                   </v-row>
                   <v-row dense>
                     <v-col>
@@ -1722,11 +1706,9 @@
                     <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                       <v-row>
                         <v-col align="center">
-                          <v-img
-                            height="35"
-                            width="26"
-                            src="../../../assets/coachLeave/file-pdf.png"
-                          />
+                          <imgFileType
+                            :mime_type="file.filesType"
+                          ></imgFileType>
                         </v-col>
                         <v-col cols="12" sm="10" align="start">
                           <span class="font-bold">{{
@@ -1883,11 +1865,9 @@
                     <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                       <v-row>
                         <v-col align="center">
-                          <v-img
-                            height="35"
-                            width="26"
-                            src="../../../assets/coachLeave/file-pdf.png"
-                          />
+                          <imgFileType
+                            :mime_type="file.filesType"
+                          ></imgFileType>
                         </v-col>
                         <v-col cols="12" sm="10" align="start">
                           <span class="font-bold">{{
@@ -1903,19 +1883,6 @@
                       </v-row>
                     </v-card-text>
                   </v-card>
-                  <!-- <v-row dense>
-                    <v-col
-                      v-for="(file, index) in student_data_assessment.assessment
-                        .attachment"
-                      :key="`${index}-attachment`"
-                    >
-                      <v-img
-                        width="89"
-                        height="89"
-                        :src="readFile(file.attFiles)"
-                      ></v-img>
-                    </v-col>
-                  </v-row> -->
                 </v-card-text>
               </v-card>
             </div>
@@ -1962,6 +1929,8 @@ import ImgCard from "@/components/course/imgCard.vue";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 import Swal from "sweetalert2";
 import { CheckFileSize, dateDMY, dateFormatter } from "@/functions/functions";
+import imgFileType from "../../../components/file_type/imgFileType.vue";
+
 // import rowData from '@/components/label/rowData.vue';
 import { mapGetters, mapActions } from "vuex";
 
@@ -1975,6 +1944,7 @@ export default {
     packageCard,
     headerCard,
     loadingOverlay,
+    imgFileType,
   },
   data: () => ({
     courseValidate: false,

@@ -904,7 +904,7 @@
             </v-row>
             <div v-if="comment_dialog_tmp.attachment.length > 0">
               <v-row dense>
-                <v-col class="font-bold text-lg"> ไฟล์แนบ </v-col>
+                <v-col class="font-bold text-lg"> ไฟล์แนบ</v-col>
               </v-row>
               <v-card
                 flat
@@ -915,11 +915,7 @@
                 <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                   <v-row>
                     <v-col cols="auto" class="pr-2">
-                      <v-img
-                        height="35"
-                        width="26"
-                        src="../../../assets/coachLeave/file-pdf.png"
-                      />
+                      <imgFileType :mime_type="file.filesType"></imgFileType>
                     </v-col>
                     <v-col @click="openFile(file)" class="px-2 cursor-pointer">
                       <span class="font-bold">
@@ -981,7 +977,7 @@
             </v-card>
             <div v-if="comment_dialog_tmp.files.length > 0" class="mb-3">
               <v-row dense>
-                <v-col class="font-bold text-lg"> ไฟล์แนบ </v-col>
+                <v-col class="font-bold text-lg"> ไฟล์แนบ</v-col>
               </v-row>
               <v-divider class="my-2"></v-divider>
               <v-card
@@ -994,11 +990,7 @@
                 <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                   <v-row>
                     <v-col cols="auto" class="pr-2">
-                      <v-img
-                        height="35"
-                        width="26"
-                        src="../../../assets/coachLeave/file-pdf.png"
-                      />
+                      <imgFileType :mime_type="file.filesType"></imgFileType>
                     </v-col>
                     <v-col class="px-2">
                       <span class="font-bold">{{ file.name }}</span
@@ -1094,11 +1086,7 @@
                 <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                   <v-row>
                     <v-col cols="auto" class="pr-2">
-                      <v-img
-                        height="35"
-                        width="26"
-                        src="../../../assets/coachLeave/file-pdf.png"
-                      />
+                      <imgFileType :mime_type="file.filesType"></imgFileType>
                     </v-col>
                     <v-col @click="openFile(file)" class="px-2 cursor-pointer">
                       <!-- {{ file }} -->
@@ -1168,7 +1156,7 @@
               class="mb-3"
             >
               <v-row dense>
-                <v-col class="font-bold text-lg"> ไฟล์แนบ </v-col>
+                <v-col class="font-bold text-lg"> ไฟล์แนบ</v-col>
               </v-row>
               <v-divider class="my-2"></v-divider>
               <v-card
@@ -1177,14 +1165,12 @@
                 v-for="(file, index) of comment_potential_dialog_tmp.files"
                 :key="`${index}-file`"
               >
+                <!-- <pre>{{ file }}</pre> -->
+
                 <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                   <v-row>
                     <v-col cols="auto" class="pr-2">
-                      <v-img
-                        height="35"
-                        width="26"
-                        src="../../../assets/coachLeave/file-pdf.png"
-                      />
+                      <imgFileType :mime_type="file.filesType"></imgFileType>
                     </v-col>
                     <v-col class="px-2">
                       <span class="font-bold">{{ file.name }}</span
@@ -1245,11 +1231,13 @@ import { mapActions, mapGetters } from "vuex";
 import { Input, TimePicker } from "ant-design-vue";
 import Swal from "sweetalert2";
 import mixin from "@/mixin";
+import imgFileType from "../../../components/file_type/imgFileType.vue";
+
 // import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import moment from "moment";
 export default {
   name: "menageCourseDetail",
-  components: { rowData, loadingOverlay, labelCustom, TimePicker },
+  components: { rowData, loadingOverlay, labelCustom, TimePicker, imgFileType },
   mixins: [mixin],
   directives: {
     "ant-input": Input,

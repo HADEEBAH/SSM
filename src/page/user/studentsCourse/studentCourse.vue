@@ -194,7 +194,10 @@
                       <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                         <v-row>
                           <v-col align="center">
-                            <v-icon
+                            <imgFileType
+                              :mime_type="file.filesType"
+                            ></imgFileType>
+                            <!-- <v-icon
                               color="#ff6b81"
                               size="60px"
                               v-if="file.filesType.includes('pdf')"
@@ -205,7 +208,7 @@
                               height="35"
                               width="26"
                               src="../../../assets/coachLeave/file.svg"
-                            />
+                            /> -->
                           </v-col>
                           <v-col cols="12" sm="10" align="start">
                             <span class="font-bold">{{
@@ -378,24 +381,9 @@
                         <!-- <pre>{{ file }}</pre> -->
                         <v-row dense>
                           <v-col cols="12" sm="1" align="center">
-                            <v-img
-                              v-if="file.originalFilesName.includes('jpg')"
-                              height="35"
-                              width="26"
-                              src="../../../assets/coachLeave/file-pdf.png"
-                            />
-                            <v-img
-                              v-if="file.originalFilesName.includes('MOV')"
-                              height="35"
-                              width="26"
-                              src="../../../assets/coachLeave/file.svg"
-                            />
-                            <v-img
-                              v-if="file.originalFilesName.includes('mp4')"
-                              height="35"
-                              width="26"
-                              src="../../../assets/coachLeave/file.svg"
-                            />
+                            <imgFileType
+                              :mime_type="file.filesType"
+                            ></imgFileType>
                           </v-col>
                           <v-col cols="12" sm="10" align="start">
                             <span class="font-bold">{{
@@ -478,10 +466,12 @@
 import { mapActions, mapGetters } from "vuex";
 import { dateFormatter } from "../../../functions/functions";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+import imgFileType from "../../../components/file_type/imgFileType.vue";
 
 export default {
   components: {
     loadingOverlay,
+    imgFileType,
   },
   data: () => ({
     show: false,
