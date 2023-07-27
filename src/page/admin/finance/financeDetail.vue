@@ -152,7 +152,7 @@
                     </v-col>
                     <v-col>
                       <rowData col_header="12" col_detail="12" title="ราคา">
-                        {{ parseInt(data.price) }} บาท</rowData
+                        {{ parseInt(data.price).toLocaleString(undefined,{minimumFractionDigits:2}) }} บาท</rowData
                       >
                     </v-col>
                   </v-row>
@@ -169,7 +169,7 @@
                   <rowData col_header="4" col_detail="8" title="ราคารวม"
                     >:
                     <span class="w-full font-bold">{{
-                      order_detail.totalPrice
+                      order_detail.totalPrice.toLocaleString(undefined,{minimumFractionDigits:2})
                     }}</span>
                     บาท
                   </rowData>
@@ -366,21 +366,6 @@
           </v-card>
         </v-col>
       </v-row>
-      <!-- DIALOG -->
-      <!-- <v-dialog class="pa-2" width="50vw" v-model="dialog_show" persistent>
-        <v-card>
-          <v-card-title>
-            <v-row>
-              <v-col cols="12" align="right">
-                <v-btn icon @click="dialog_show = false">
-                  <v-icon color="#ff6b81">mdi-close</v-icon>
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-card-title>
-          <dialogCard text="ยืนยันการชำระเงินเรียบร้อย"></dialogCard>
-        </v-card>
-      </v-dialog> -->
     </v-container>
   </v-app>
 </template>
@@ -407,38 +392,6 @@ export default {
       { text: "การเงิน", to: "Finance" },
       { text: "รายละเอียดเพิ่มเติม", to: "" },
     ],
-    course: [
-      {
-        course_type: "general_course",
-        course_name: "เปียโนสากล ",
-        category: "ศิลปะดนตรีสมัยใหม่",
-        coach: "อาทิตย์ แย้มยิ้มเบิกบาน",
-        package_name: "Family Package",
-        period_name: "รายเดือน (4 ครั้ง)",
-        class_data: "วันเสาร์ (10.00-11.00)",
-        course_open: "16 กรกฎาคม 2564",
-        price: 2000,
-      },
-      {
-        course_type: "short_course",
-        course_name: "ไวโลลินเวิร์กช้อป ",
-        category: "ศิลปะดนตรีสมัยใหม่",
-        coach: "อาทิตย์ แย้มยิ้มเบิกบาน",
-        package_name: "Family Package",
-        period_name: "รายเดือน (4 ครั้ง)",
-        class_data: "10.00-11.00",
-        course_open: "20 กรกฎาคม 2564",
-        price: 1500,
-      },
-    ],
-    payment: {
-      total_price: 3500,
-      remark: "",
-      paid_at: "",
-      status: "unpaid",
-      payment_type: "",
-      payee: "",
-    },
     payment_status: [
       {
         text: "ยังไม่ชำระเงิน",

@@ -556,7 +556,7 @@ const coachModules = {
         // let localhost = "http://localhost:3000"
 
         const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${coach_id}`, config);
-        console.log("GetMyCourses", data.data)
+        // console.log("GetMyCourses", data.data)
         if (data.statusCode == 200) {
           let courses_task = [];
           let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
@@ -610,8 +610,8 @@ const coachModules = {
                         coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
                         start_date: moment(startDate).format("YYYY-MM-DD"),
                         start_date_str: startDate.toLocaleDateString("th-TH", options),
-                        start: moment(startDate).format("YYYY-MM-DD"),
-                        end: moment(endDate).format("YYYY-MM-DD"),
+                        start: moment(startDate).format("YYYY-MM-DD HH:mm"),
+                        end: moment(endDate).format("YYYY-MM-DD HH:mm"),
                         start_time: start_time,
                         end_time: end_time,
                         category_name: course_data.data.data.categoryNameTh,

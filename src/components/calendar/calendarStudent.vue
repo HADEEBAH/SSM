@@ -162,6 +162,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { shortMonthToLongMonth } from "@/functions/functions";
 
 export default {
   name: "calendarCoach",
@@ -238,7 +239,21 @@ export default {
     }),
     genTitleCalender(title) {
       let title_part = title.split(" ");
-      return `${title_part[0]} ${parseFloat(title_part[1]) + 543}`;
+
+      if (title_part.length == 2) {
+        return `${title_part[0]} ${parseFloat(title_part[1]) + 543}`;
+      } else if (title_part.length == 4) {
+        return `${shortMonthToLongMonth(
+          title_part[0]
+        )} - ${shortMonthToLongMonth(title_part[2])} ${
+          parseFloat(title_part[3]) + 543
+        }`;
+      } else if (title_part.length == 5) {
+        return `${shortMonthToLongMonth(title_part[0])}  
+        ${parseFloat(title_part[1]) + 543} -
+        ${shortMonthToLongMonth(title_part[3])} 
+        ${parseFloat(title_part[4]) + 543}`;
+      }
     },
     selectedDate(data) {
       if (!data.event.type) {
