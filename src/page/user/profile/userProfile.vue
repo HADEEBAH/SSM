@@ -543,7 +543,21 @@
           <v-divider class=""></v-divider>
 
           <!-- COURSE -->
-
+          <v-row
+            dense
+            class="mt-3 d-flex align-center cursor-pointer"
+            @click="
+              $router.push({
+                name: 'FrontPortfolio',
+                params: { account_id: dialogGetStudentData.studentId },
+              })
+            "
+          >
+            <v-col cols="2" sm="1">
+              <v-icon class="pa-2" color="#ff6b81">mdi-book-account-outline</v-icon>
+            </v-col>
+            <v-col cols="5" sm="6"> พอร์ตโฟลิโอ</v-col>
+          </v-row>
           <v-row
             dense
             class="mt-3 cursor-pointer"

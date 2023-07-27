@@ -15,11 +15,11 @@ import { mapActions, mapGetters } from 'vuex'
     name: "FrontPortfolio",
     components: {loadingOverlay},
     data: () => ({
-      user_profile : null,
+      // user_profile : null,
     }),
     created() {
       this.GetUserById(this.$route.params.account_id)
-      this.user_profile = JSON.parse(localStorage.getItem("userDetail"))
+      // this.user_profile = JSON.parse(localStorage.getItem("userDetail"))
     },
     mounted() {
       this.exportPdf()
@@ -151,7 +151,7 @@ import { mapActions, mapGetters } from 'vuex'
             }
           },
           images: {
-            profile : this.data_user_by_id.image ? this.data_user_by_id.image : defaultProfileImageDataUrl
+            profile : this.data_user_by_id.image ? this.data_user_by_id.imageUrl : defaultProfileImageDataUrl
           }
         }
         
