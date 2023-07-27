@@ -1,234 +1,229 @@
 <template>
   <v-container class="p-0">
-    
-  <v-form ref="form" v-model="valid" lazy-validation>
-    <v-card
-      :flat="crad_flat"
-      :class="
-        $vuetify.breakpoint.mdAndUp ? (dialog ? '' : 'card-padding') : 'py-2'
-      "
-    >
-      <v-card-title>
-        <v-row dense v-if="dialog">
-          <v-col class="text-right">
-            <v-btn icon @click="changeDialogRegisterOneId(false)"
-              ><v-icon>mdi-close</v-icon></v-btn
-            >
-          </v-col>
-        </v-row>
-      </v-card-title>
-      <v-card-text>
-        <v-row dense>
-          <v-col class="text-center text-lg font-bold">{{ title }}</v-col>
-        </v-row>
-        <v-row dense>
-          <v-col cols="12" sm="6">
-            <label>ชื่อ(ภาษาไทย)</label>
-            <v-text-field
-              dense
-              ref="firstname_th"
-              :rules="rules.firstNameThRules"
-              required
-              v-model="user_one_id.firstname_th"
-              placeholder="ระบุชื่อ(ภาษาไทย)"
-              @change="changeUserOneId(user_one_id)"
-              @keypress="Validation($event, 'th-special')"
-              outlined
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" sm="6">
-            <label>นามสกุล(ภาษาไทย)</label>
-            <v-text-field
-              dense
-              ref="lastname_th"
-              :rules="rules.lastNameThRules"
-              required
-              v-model="user_one_id.lastname_th"
-              placeholder="ระบุนามสกุล(ภาษาไทย)"
-              @change="changeUserOneId(user_one_id)"
-              @keypress="Validation($event, 'th-special')"
-              outlined
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col cols="12" sm="6">
-            <label>ชื่อ(ภาษาอังกฤษ)</label>
-            <v-text-field
-              dense
-              ref="firstname_en"
-              :rules="rules.firstNameEnRules"
-              required
-              v-model="user_one_id.firstname_en"
-              placeholder="ระบุชื่อ(ภาษาอังกฤษ)"
-              @change="changeUserOneId(user_one_id)"
-              @keypress="Validation($event, 'en-special')"
-              outlined
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" sm="6">
-            <label>นามสกุล(ภาษาอังกฤษ)</label>
-            <v-text-field
-              dense
-              ref="lastname_en"
-              :rules="rules.lastNameEnRules"
-              required
-              v-model="user_one_id.lastname_en"
-              placeholder="ระบุนามสกุล(ภาษาอังกฤษ)"
-              @change="changeUserOneId(user_one_id)"
-              @keypress="Validation($event, 'en-special')"
-              outlined
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col>
-            <label>เบอร์โทรศัพท์</label>
-            <v-text-field
-              dense
-              ref="phone_number"
-              maxlength="12"
-              :rules="rules.phone_number"
-              required
-              v-model="user_one_id.phone_number"
-              @input="checkPhoneNumber"
-              @keypress="Validation($event, 'number')"
-              placeholder="ระบุเบอร์โทรศัพท์"
-              @change="changeUserOneId(user_one_id)"
-              outlined
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col>
-            <!-- <label>ผู้ใช้งาน/OneID(ภาษาอังกฤษ)</label> -->
-            <label>Username</label>
-            <v-text-field
-              autocomplete="off-autofill"
-              dense
-              ref="username_rig"
-              :rules="rules.usernameRules"
-              required
-              v-model="user_one_id.username"
-              placeholder="ระบุชื่อผู้ใช้งาน"
-              @keypress="Validation($event, 'en-number')"
-              @change="changeUserOneId(user_one_id)"
-              outlined
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col>
-            <label>รหัสผ่าน</label>
-            <v-text-field
-              dense
-              autocomplete="off-autofill"
-              ref="password_rig"
-              @keypress="Validation($event, 'en')"
-              :type="show_password ? 'text' : 'password'"
-              :rules="rules.passwordRules"
-              required
-              v-model="user_one_id.password"
-              :append-icon="
-                show_password ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
-              "
-              @click:append="show_password = !show_password"
-              placeholder="ระบุรหัสผ่าน"
-              @change="changeUserOneId(user_one_id)"
-              outlined
-            >
-            </v-text-field>
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col>
-            <label>ยืนยันรหัสผ่าน</label>
-            <v-text-field
-              dense
-              ref="confirm_password"
-              :type="show_confirm_password ? 'text' : 'password'"
-              :rules="[
-                rules.confirm_password,
-                rules.match(user_one_id.password),
-              ]"
-              required
-              v-model="user_one_id.confirm_password"
-              placeholder="ยืนยันรหัสผ่าน"
-              :append-icon="
-                show_confirm_password
-                  ? 'mdi-eye-outline'
-                  : 'mdi-eye-off-outline'
-              "
-              @click:append="show_confirm_password = !show_confirm_password"
-              @change="changeUserOneId(user_one_id)"
-              outlined
-              @keypress="Validation($event, 'en')"
-            >
-            </v-text-field>
-          </v-col>
-        </v-row>
-        <v-row dense class="d-flex align-center">
-          <v-col cols="auto">
-            <v-checkbox
-            class="inline-block"
-              v-model="user_one_id.accept_terms"
-              @change="changeUserOneId(user_one_id)"
-              color="pink lighten-1"
-            >
-              <template v-slot:label>
-                <label>
-                  การเปิดบัญชี ท่านรับทราบและตกลงตาม
-                  <a @click="policy_show = true" class="cursor-pointer underline text-[#FF6B81]"
-                    >เงื่อนไขการบริการ & นโยบายความเป็นส่วนตัว</a
-                  >
-                  </label
-                >
-              </template>
-            </v-checkbox>
-            <!-- <a @click="alert('555')" class="mb-[8px] cursor-pointer underline text-[#FF6B81] inline-block font-[16px!important]"
+    <v-form ref="form" v-model="valid" lazy-validation>
+      <v-card
+        :flat="crad_flat"
+        :class="
+          $vuetify.breakpoint.mdAndUp ? (dialog ? '' : 'card-padding') : 'py-2'
+        "
+      >
+        <v-card-title>
+          <v-row dense v-if="dialog">
+            <v-col class="text-right">
+              <v-btn icon @click="changeDialogRegisterOneId(false)"
+                ><v-icon>mdi-close</v-icon></v-btn
+              >
+            </v-col>
+          </v-row>
+        </v-card-title>
+        <v-card-text>
+          <v-row dense>
+            <v-col class="text-center text-lg font-bold">{{ title }}</v-col>
+          </v-row>
+          <v-row dense>
+            <v-col cols="12" sm="6">
+              <label>ชื่อ(ภาษาไทย)</label>
+              <v-text-field
+                dense
+                ref="firstname_th"
+                :rules="rules.firstNameThRules"
+                required
+                v-model="user_one_id.firstname_th"
+                placeholder="ระบุชื่อ(ภาษาไทย)"
+                @change="changeUserOneId(user_one_id)"
+                @keypress="Validation($event, 'th-special')"
+                outlined
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" sm="6">
+              <label>นามสกุล(ภาษาไทย)</label>
+              <v-text-field
+                dense
+                ref="lastname_th"
+                :rules="rules.lastNameThRules"
+                required
+                v-model="user_one_id.lastname_th"
+                placeholder="ระบุนามสกุล(ภาษาไทย)"
+                @change="changeUserOneId(user_one_id)"
+                @keypress="Validation($event, 'th-special')"
+                outlined
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col cols="12" sm="6">
+              <label>ชื่อ(ภาษาอังกฤษ)</label>
+              <v-text-field
+                dense
+                ref="firstname_en"
+                :rules="rules.firstNameEnRules"
+                required
+                v-model="user_one_id.firstname_en"
+                placeholder="ระบุชื่อ(ภาษาอังกฤษ)"
+                @change="changeUserOneId(user_one_id)"
+                @keypress="Validation($event, 'en-special')"
+                outlined
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" sm="6">
+              <label>นามสกุล(ภาษาอังกฤษ)</label>
+              <v-text-field
+                dense
+                ref="lastname_en"
+                :rules="rules.lastNameEnRules"
+                required
+                v-model="user_one_id.lastname_en"
+                placeholder="ระบุนามสกุล(ภาษาอังกฤษ)"
+                @change="changeUserOneId(user_one_id)"
+                @keypress="Validation($event, 'en-special')"
+                outlined
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col>
+              <label>เบอร์โทรศัพท์</label>
+              <v-text-field
+                dense
+                ref="phone_number"
+                maxlength="12"
+                :rules="rules.phone_number"
+                required
+                v-model="user_one_id.phone_number"
+                @input="checkPhoneNumber"
+                @keypress="Validation($event, 'number')"
+                placeholder="ระบุเบอร์โทรศัพท์"
+                @change="changeUserOneId(user_one_id)"
+                outlined
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col>
+              <!-- <label>ผู้ใช้งาน/OneID(ภาษาอังกฤษ)</label> -->
+              <label>Username</label>
+              <v-text-field
+                autocomplete="off-autofill"
+                dense
+                ref="username_rig"
+                :rules="rules.usernameRules"
+                required
+                v-model="user_one_id.username"
+                placeholder="ระบุชื่อผู้ใช้งาน"
+                @keypress="Validation($event, 'en-number')"
+                @change="changeUserOneId(user_one_id)"
+                outlined
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col>
+              <label>รหัสผ่าน</label>
+              <v-text-field
+                dense
+                autocomplete="off-autofill"
+                ref="password_rig"
+                @keypress="Validation($event, 'en')"
+                :type="show_password ? 'text' : 'password'"
+                :rules="rules.passwordRules"
+                required
+                v-model="user_one_id.password"
+                :append-icon="
+                  show_password ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
+                "
+                @click:append="show_password = !show_password"
+                placeholder="ระบุรหัสผ่าน"
+                @change="changeUserOneId(user_one_id)"
+                outlined
+              >
+              </v-text-field>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col>
+              <label>ยืนยันรหัสผ่าน</label>
+              <v-text-field
+                dense
+                ref="confirm_password"
+                :type="show_confirm_password ? 'text' : 'password'"
+                :rules="[
+                  rules.confirm_password,
+                  rules.match(user_one_id.password),
+                ]"
+                required
+                v-model="user_one_id.confirm_password"
+                placeholder="ยืนยันรหัสผ่าน"
+                :append-icon="
+                  show_confirm_password
+                    ? 'mdi-eye-outline'
+                    : 'mdi-eye-off-outline'
+                "
+                @click:append="show_confirm_password = !show_confirm_password"
+                @change="changeUserOneId(user_one_id)"
+                outlined
+                @keypress="Validation($event, 'en')"
+              >
+              </v-text-field>
+            </v-col>
+          </v-row>
+          <v-row dense class="d-flex align-center">
+            <v-col cols="auto">
+              <v-checkbox
+                class="inline-block"
+                v-model="user_one_id.accept_terms"
+                @change="changeUserOneId(user_one_id)"
+                color="pink lighten-1"
+              >
+                <template v-slot:label>
+                  <label>
+                    การเปิดบัญชี ท่านรับทราบและตกลงตาม
+                    <a
+                      @click="policy_show = true"
+                      class="cursor-pointer underline text-[#FF6B81]"
+                      >เงื่อนไขการบริการ & นโยบายความเป็นส่วนตัว</a
+                    >
+                  </label>
+                </template>
+              </v-checkbox>
+              <!-- <a @click="alert('555')" class="mb-[8px] cursor-pointer underline text-[#FF6B81] inline-block font-[16px!important]"
                     >เงื่อนไขการบริการ & นโยบายความเป็นส่วนตัว</a
                   > -->
-          </v-col>
-        </v-row>
-      </v-card-text>
-      <v-card-actions>
-        <v-row dense>
-          <v-col class="text-center">
-            <v-btn
-              :loading="is_loading"
-              :disabled="!user_one_id.accept_terms"
-              depressed
-              class="white--text"
-              :class="
-                $vuetify.breakpoint.mdAndUp
-                  ? 'btn-register'
-                  : 'w-full btn-register'
-              "
-              @click="save"
-              >ลงทะเบียน</v-btn
-            >
-          </v-col>
-        </v-row>
-      </v-card-actions>
-    </v-card>
-  </v-form>
+            </v-col>
+          </v-row>
+        </v-card-text>
+        <v-card-actions>
+          <v-row dense>
+            <v-col class="text-center">
+              <v-btn
+                :loading="is_loading"
+                :disabled="!user_one_id.accept_terms"
+                depressed
+                class="white--text"
+                :class="
+                  $vuetify.breakpoint.mdAndUp
+                    ? 'btn-register'
+                    : 'w-full btn-register'
+                "
+                @click="save"
+                >ลงทะเบียน</v-btn
+              >
+            </v-col>
+          </v-row>
+        </v-card-actions>
+      </v-card>
+    </v-form>
 
-  <v-dialog 
-      v-model="policy_show" 
-      v-if="policy_show" 
+    <v-dialog
+      v-model="policy_show"
+      v-if="policy_show"
       persistent
       :width="$vuetify.breakpoint.smAndUp ? `60vw` : ''"
     >
       <v-card flat class="pa-2">
         <v-row dense>
           <v-col class="pa-2" align="right">
-            <v-btn
-              icon
-              @click="policy_show = false"
-            >  
-              <v-icon color="red">
-                mdi-close
-              </v-icon>
+            <v-btn icon @click="policy_show = false">
+              <v-icon color="red"> mdi-close </v-icon>
             </v-btn>
           </v-col>
         </v-row>
@@ -242,7 +237,7 @@
         <v-card-text>
           <v-row dense>
             <v-col cols="12">
-              <TermOfUse/>
+              <TermOfUse />
             </v-col>
           </v-row>
           <v-row dense>
@@ -252,22 +247,50 @@
                 color="pink"
                 v-model="user_one_id.accept_terms"
               >
-              <template v-slot:label>
-                ยอมรับ <a class="mx-2 font-weight-bold"> ข้อกำหนดการใช้บริการ </a> และ <a class="mx-2 font-weight-bold" >นโยบายความคุ้มครองข้อมูลส่วนบุคคล</a>
-              </template>
-            </v-checkbox>
+                <!-- <template v-slot:label>
+                  ยอมรับ
+                  <a class="mx-2 font-weight-bold"> ข้อกำหนดการใช้บริการ </a>
+                  และ
+                  <a class="mx-2 font-weight-bold"
+                    >นโยบายความคุ้มครองข้อมูลส่วนบุคคล</a
+                  >
+                      @click="policy_show = true"
+
+                </template> -->
+                <template v-slot:label>
+                  <label>
+                    ยอมรับ
+                    <a class="cursor-pointer underline text-[#FF6B81]"
+                      >ข้อกำหนดการใช้บริการ &
+                      นโยบายความคุ้มครองข้อมูลส่วนบุคคล</a
+                    >
+                  </label>
+                </template>
+              </v-checkbox>
             </v-col>
           </v-row>
         </v-card-text>
         <v-card-actions>
           <v-row dense>
             <v-col align="right">
-              <v-btn outlined color="#ff6b81" text-color="#ff6b81" @click="policy_show = false, user_one_id.accept_terms = false">
+              <v-btn
+                outlined
+                color="#ff6b81"
+                text-color="#ff6b81"
+                @click="
+                  (policy_show = false), (user_one_id.accept_terms = false)
+                "
+              >
                 ยกเลิก
               </v-btn>
             </v-col>
             <v-col>
-              <v-btn depressed dark color="#ff6b81" @click="policy_show = false">
+              <v-btn
+                depressed
+                dark
+                color="#ff6b81"
+                @click="policy_show = false"
+              >
                 ตกลง
               </v-btn>
             </v-col>
@@ -275,18 +298,15 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
-</v-container>
-
-  
+  </v-container>
 </template>  
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { inputValidation } from "@/functions/functions";
-import TermOfUse from '@/components/termOfUse.vue'
+import TermOfUse from "@/components/termOfUse.vue";
 export default {
   components: {
-    TermOfUse
+    TermOfUse,
   },
   name: "registerDialogForm",
   props: {
@@ -304,8 +324,8 @@ export default {
     phone_number: "",
     rules: {
       phone_number: [
-      (val) =>
-          ((val || "").length > 0 && val[0] === '0') ||
+        (val) =>
+          ((val || "").length > 0 && val[0] === "0") ||
           "โปรดระบุเบอร์โทรขึ้นต้นด้วยเลข 0",
         (val) =>
           ((val || "").length > 0 && val.length === 12) ||
