@@ -173,7 +173,7 @@ export default {
     },
 
     forgot_password() {
-      window.location.href = `${process.env.VUE_APP_ONE}/type_forgot_password`;
+      this.$router.push({ name: "ForgotPassword" });
     },
   },
 
