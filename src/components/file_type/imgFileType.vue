@@ -34,6 +34,13 @@
   />
 
   <v-img
+    v-else-if="mime_type === 'image/png'"
+    height="35"
+    width="26"
+    src="@/assets/coachLeave/file-jpg.svg"
+  />
+
+  <v-img
     v-else-if="mime_type === 'video/mp4'"
     height="35"
     width="26"

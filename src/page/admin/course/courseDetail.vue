@@ -1542,11 +1542,6 @@
                                     <imgFileType
                                       :mime_type="file.filesType"
                                     ></imgFileType>
-                                    <!-- <v-img
-                                      height="35"
-                                      width="26"
-                                      src="../../../assets/coachLeave/file.svg"
-                                    /> -->
                                   </v-col>
                                   <v-col cols="12" sm="10" align="start">
                                     <span class="font-bold">{{
@@ -1566,21 +1561,6 @@
                             </v-card>
                           </v-col>
                         </v-row>
-
-                        <!-- <v-row dense>
-                          <v-col
-                            v-for="(
-                              file, index
-                            ) in student_data_assessment.attachmentPotential"
-                            :key="`${index}-attachment`"
-                          >
-                            <v-img
-                              width="89"
-                              height="89"
-                              :src="readFile(file.attachmentFiles)"
-                            ></v-img>
-                          </v-col>
-                        </v-row> -->
                       </v-card-text>
                     </v-card>
                   </v-col>
@@ -1639,7 +1619,7 @@
                   </v-col>
                 </v-row> -->
                   <v-row dense>
-                    <v-col> ระดับพัฒนาการ </v-col>
+                    <v-col> ระดับพัฒนาการ</v-col>
                   </v-row>
                   <v-row dense>
                     <v-col>
@@ -1675,7 +1655,7 @@
                     </v-col>
                   </v-row>
                   <v-row dense>
-                    <v-col> ระดับความสนใจ </v-col>
+                    <v-col> ระดับความสนใจ</v-col>
                   </v-row>
                   <v-row dense>
                     <v-col>
@@ -1726,11 +1706,9 @@
                     <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                       <v-row>
                         <v-col align="center">
-                          <v-img
-                            height="35"
-                            width="26"
-                            src="../../../assets/coachLeave/file-pdf.png"
-                          />
+                          <imgFileType
+                            :mime_type="file.filesType"
+                          ></imgFileType>
                         </v-col>
                         <v-col cols="12" sm="10" align="start">
                           <span class="font-bold">{{
@@ -1887,11 +1865,9 @@
                     <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                       <v-row>
                         <v-col align="center">
-                          <v-img
-                            height="35"
-                            width="26"
-                            src="../../../assets/coachLeave/file-pdf.png"
-                          />
+                          <imgFileType
+                            :mime_type="file.filesType"
+                          ></imgFileType>
                         </v-col>
                         <v-col cols="12" sm="10" align="start">
                           <span class="font-bold">{{
@@ -1907,19 +1883,6 @@
                       </v-row>
                     </v-card-text>
                   </v-card>
-                  <!-- <v-row dense>
-                    <v-col
-                      v-for="(file, index) in student_data_assessment.assessment
-                        .attachment"
-                      :key="`${index}-attachment`"
-                    >
-                      <v-img
-                        width="89"
-                        height="89"
-                        :src="readFile(file.attFiles)"
-                      ></v-img>
-                    </v-col>
-                  </v-row> -->
                 </v-card-text>
               </v-card>
             </div>
