@@ -199,6 +199,7 @@ const userModules = {
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${account_id}`, config)
                 if (data.statusCode === 200) {
                     // console.log("SetUserById=>>>>>>>>>", data.data);
+                    data.data.imageUrl = data.data.image ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}` : null
                     context.commit("SetUserById", data.data)
                 } else {
                     throw { error: data }
