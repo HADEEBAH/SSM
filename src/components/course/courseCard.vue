@@ -992,6 +992,8 @@ export default {
     },
     removeFile() {
       this.preview_url = null;
+      this.course_data.course_img = null;
+      this.ChangeCourseData(this.course_data);
     },
     inputName(e, lang) {
       inputValidation(e, lang);
