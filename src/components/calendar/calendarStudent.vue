@@ -170,6 +170,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { shortMonthToLongMonth } from "@/functions/functions";
 
 export default {
   name: "calendarCoach",
@@ -215,7 +216,6 @@ export default {
     this.colorOfDay();
   },
   mounted() {
-    
     let today = new Date();
     this.start_of_week = new Date(
       today.getFullYear(),
@@ -253,9 +253,23 @@ export default {
     ...mapActions({
       GetStudentData: "MyCourseModules/GetStudentData",
     }),
-    genTitleCalender(title){
-      let title_part = title.split(" ")
-      return `${title_part[0]} ${ parseFloat(title_part[1])+543 }`
+    genTitleCalender(title) {
+      let title_part = title.split(" ");
+
+      if (title_part.length == 2) {
+        return `${title_part[0]} ${parseFloat(title_part[1]) + 543}`;
+      } else if (title_part.length == 4) {
+        return `${shortMonthToLongMonth(
+          title_part[0]
+        )} - ${shortMonthToLongMonth(title_part[2])} ${
+          parseFloat(title_part[3]) + 543
+        }`;
+      } else if (title_part.length == 5) {
+        return `${shortMonthToLongMonth(title_part[0])}  
+        ${parseFloat(title_part[1]) + 543} -
+        ${shortMonthToLongMonth(title_part[3])} 
+        ${parseFloat(title_part[4]) + 543}`;
+      }
     },
     selectedDate(data) {
       if (!data.event.type) {

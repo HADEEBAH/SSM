@@ -122,7 +122,6 @@
               "
               item-text="label"
               item-value="value"
-              @change="checkHour(coach_leave_data.period)"
               v-model="coach_leave_data.period"
             ></v-select>
           </v-col>
@@ -250,20 +249,11 @@
                             dense
                             outlined
                             hide-details
-                            v-model="test_date"
                             readonly
-                            @focus="
-                              getDatesBetween(
-                                coach_leave_data.start_date,
-                                coach_leave_data.end_date
-                              )
-                            "
                             placeholder="เลือกวันที่ชดเชย"
                             v-bind="attrs"
                             v-on="on"
-                            :value="
-                              test_date ? test_date : course.compensation_date
-                            "
+                            :value="course.compensation_date_str"
                           >
                             <template v-slot:append>
                               <v-icon
@@ -279,10 +269,7 @@
                           :min="new Date().toISOString()"
                           :allowed-dates="allowedDates"
                           v-model="course.compensation_date"
-                          @input="
-                            setHolidaydates(course.compensation_date),
-                              (course.menu_compensation_date = false)
-                          "
+                          @input="inputDateArr(course.compensation_date, course)"
                           locale="th-TH"
                         ></v-date-picker>
                       </v-menu>
@@ -324,7 +311,9 @@
                             :hour-range="
                               checkHour(
                                 coach_leave_data.period,
-                                course.compensation_date
+                                course.compensation_date,
+                                course,
+                                'start'
                               )
                             "
                             close-on-complete
@@ -363,7 +352,9 @@
                             :hour-range="
                               checkHour(
                                 coach_leave_data.period,
-                                course.compensation_date
+                                course.compensation_date,
+                                course,
+                                'end'
                               )
                             "
                             close-on-complete
@@ -594,6 +585,9 @@ export default {
       SearchCourseDateCoachLeave: "CoachModules/SearchCourseDateCoachLeave",
       ShowDialogCoachLeaveForm: "CoachModules/ShowDialogCoachLeaveForm",
     }),
+    inputDateArr(date, course){
+      course.compensation_date_str = new Date(date).toLocaleDateString("th-TH", { year: 'numeric', month: 'long', day: 'numeric' })
+    },
     setHolidaydates(item) {
       // console.log("item", item);
       const thaiMonths = [
@@ -638,7 +632,7 @@ export default {
       );
       this.date_range_length = dateRangeLength;
     },
-    checkHour(period, date) {
+    checkHour(period, date, course, type) {
       if (date) {
         if (
           new Date(date) >= new Date(this.coach_leave_data.start_date) &&
@@ -648,22 +642,39 @@ export default {
             let hrs = [];
             let start = this.periods.filter((v) => v.value === period)[0].start;
             let end = this.periods.filter((v) => v.value === period)[0].end;
-            for (let hr = 0; hr < 24; hr++) {
-              if (hr >= start && hr <= end) {
-                hrs.push(hr);
+            // console.log("647 => ",course.compensation_start_time_obj.HH)
+            if(type && type === 'end'){
+              if(course.compensation_start_time_obj.HH){
+                for (let hr = 0; hr < 24; hr++) {
+                  if (hr > parseInt(course.compensation_start_time_obj.HH) && hr <= end) {
+                    hrs.push(hr);
+                  }
+                }
+              }
+            }else{
+              for (let hr = 0; hr < 24; hr++) {
+                if (hr >= start && hr <= end) {
+                  hrs.push(hr);
+                }
               }
             }
             return hrs;
           }
         } else {
           let hrs = [];
-          let start = this.periods.filter((v) => v.value === period)[0].start;
-          let end = this.periods.filter((v) => v.value === period)[0].end;
-          for (let hr = 0; hr < 24; hr++) {
-            if (hr >= start && hr <= end) {
-              hrs.push(hr);
+          if(type && type === 'end'){
+            if(course.compensation_start_time_obj.HH){
+                for (let hr = 0; hr < 24; hr++) {
+                  if (hr > parseInt(course.compensation_start_time_obj.HH)) {
+                    hrs.push(hr);
+                  }
+                }
+              }
+            }else{
+              for (let hr = 0; hr < 24; hr++) {
+                hrs.push(hr);
+              }
             }
-          }
           return hrs;
         }
       }
@@ -694,6 +705,7 @@ export default {
         this.coach_leave_data.dates[index_date].courses[
           index_course
         ].compensation_start_time = `${time.HH}:${time.mm}`;
+
       } else {
         this.coach_leave_data.dates[index_date].courses[
           index_course

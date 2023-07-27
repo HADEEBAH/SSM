@@ -118,148 +118,159 @@
           </v-row>
           <v-card elevation="1" class="mb-2">
             <v-form v-model="validate_form" ref="validate_form">
-                <v-data-table
-                  class="header-table border"
-                  :items=" coach_check_in.checkInCoachId  ? student_check_in.filter((v) => v.cpo?.packageName ? v.cpo.packageName === package_name_filter: true ) : []"
-                  item-key="no"
-                  :expanded.sync="expanded_index"
-                  :headers="headers"
-                >
-                  <template v-slot:[`item.actions`]="{ item }">
-                    <div class="pt-5">
-                      <v-select
-                        v-model="item.status"
-                        required
-                        :rules="rules.status_text"
-                        :items="FilterStatusCheckIn(item)"
-                        outlined
-                        dense
-                        item-text="label"
-                        item-value="value"
-                        @change="selectCheckInStatus(item, $event)"
-                      >
-                        <template #item="{ item }">
-                          <v-list-item-content>
-                            <v-list-item-title :style="`color:${item.color}`">{{
-                              item.label
-                            }}</v-list-item-title>
-                          </v-list-item-content>
-                        </template>
-                        <template #selection="{ item }">
+              <v-data-table
+                class="header-table border"
+                :items="
+                  coach_check_in.checkInCoachId
+                    ? student_check_in.filter((v) =>
+                        v.cpo?.packageName
+                          ? v.cpo.packageName === package_name_filter
+                          : true
+                      )
+                    : []
+                "
+                item-key="no"
+                :expanded.sync="expanded_index"
+                :headers="headers"
+              >
+                <template v-slot:[`item.actions`]="{ item }">
+                  <div class="pt-5">
+                    <v-select
+                      v-model="item.status"
+                      required
+                      :rules="rules.status_text"
+                      :items="FilterStatusCheckIn(item)"
+                      outlined
+                      dense
+                      item-text="label"
+                      item-value="value"
+                      @change="selectCheckInStatus(item, $event)"
+                    >
+                      <template #item="{ item }">
+                        <v-list-item-content>
                           <v-list-item-title :style="`color:${item.color}`">{{
                             item.label
                           }}</v-list-item-title>
-                        </template>
-                      </v-select>
-                    </div>
-                  </template>
-                  <template v-slot:[`item.package`]="{ item }">
-                    <span class="font-semibold" v-if="item?.cpo?.packageName">
-                      {{ `${item.cpo.packageName}` }}</span
-                    >
-                    <span class="font-semibold" v-else> - </span>
-                  </template>
-                  <template v-slot:[`item.class_time`]="{ item }">
-                    {{ `${item.countCheckIn}/${item.totalDay}` }}
-                  </template>
-                  <template v-slot:expanded-item="{ headers, item }">
-                    <!-- <pre>{{ item }}</pre> -->
-                    <td class="pa-2" :colspan="headers.length" align="center">
-                      <v-row dense >
-                        <v-col cols="12" sm="2">วันเรียนชดเชย</v-col>
-                        <v-col cols="12" sm="4">
-                          <v-menu
-                            v-model="item.menu_compensation_date"
-                            :close-on-content-click="false"
-                            transition="scale-transition"
-                            min-width="auto"
-                          >
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-text-field
-                                dense
-                                outlined
-                                :rules="rules.compensation_date"
-                                v-model="item.compensation_date_str"
-                                readonly
-                                placeholder="เลือกวันที่ชดเชย"
-                                v-bind="attrs"
-                                v-on="on"
-                              >
-                                <template v-slot:append>
-                                  <v-icon
-                                    :color="item.compensationDate ? '#FF6B81' : ''"
-                                    >mdi-calendar</v-icon
-                                  >
-                                </template>
-                              </v-text-field>
-                            </template>
-                            <v-date-picker
-                              :min="new Date($route.params.date).toISOString()"
-                              @input="inputDate($event, item)"
-                              v-model="item.compensationDate"
-                              locale="th-TH"
-                            ></v-date-picker>
-                          </v-menu>
-                        </v-col>
-                        <v-col cols="auto" class="pr-2">
-                          <v-text-field
-                            outlined
-                            dense
-                            :style="`width:${width()}px;`"
-                            style="position: absolute; display: block; z-index: 4"
-                            @focus="
-                              SelectedStartDate(
-                                $event,
-                                item.compensationStartTime
-                              )
-                            "
-                            :rules="rules.start_time"
-                            :value="genTime(item.compensationStartTime)"
-                          >
-                          </v-text-field>
-                          <TimePicker
-                            class="time-picker-hidden"
-                            :minuteStep="30"
-                            placeholder="เวลาเริ่ม"
-                            :style="`width:${width()}px;`"
-                            :class="item.start_time ? 'active' : ''"
-                            format="HH:mm"
-                            v-model="item.compensationStartTime"
-                          >
-                          </TimePicker>
-                        </v-col>
-                        <v-col cols="auto" class="pl-2">
-                          <v-text-field
-                            outlined
-                            dense
-                            :style="`width:${width()}px;`"
-                            style="position: absolute; display: block; z-index: 4"
-                            @focus="
-                              SelectedStartDate(
-                                $event,
-                                item.compensationEndTime
-                              )
-                            "
-                            :rules="rules.end_time"
-                            :value="genTime(item.compensationEndTime)"
-                          >
-                          </v-text-field>
-                          <TimePicker
-                            class="time-picker-hidden"
-                            :minuteStep="30"
-                            :style="`width:${width()}px;`"
-                            format="HH:mm"
-                            :class="item.end_time ? 'active' : ''"
-                            placeholder="เวลาสิ้นสุด"
-                            v-model="item.compensationEndTime"
-                          ></TimePicker>
-                        </v-col>
-                      </v-row>
-                    </td>
-                  </template>
-                </v-data-table>
+                        </v-list-item-content>
+                      </template>
+                      <template #selection="{ item }">
+                        <v-list-item-title :style="`color:${item.color}`">{{
+                          item.label
+                        }}</v-list-item-title>
+                      </template>
+                    </v-select>
+                  </div>
+                </template>
+                <template v-slot:[`item.package`]="{ item }">
+                  <span class="font-semibold" v-if="item?.cpo?.packageName">
+                    {{ `${item.cpo.packageName}` }}</span
+                  >
+                  <span class="font-semibold" v-else> - </span>
+                </template>
+                <template v-slot:[`item.class_time`]="{ item }">
+                  {{ `${item.countCheckIn}/${item.totalDay}` }}
+                </template>
+                <template v-slot:expanded-item="{ headers, item }">
+                  <!-- <pre>{{ item }}</pre> -->
+                  <td class="pa-2" :colspan="headers.length" align="center">
+                    <v-row dense>
+                      <v-col cols="12" sm="2">วันเรียนชดเชย</v-col>
+                      <v-col cols="12" sm="4">
+                        <v-menu
+                          v-model="item.menu_compensation_date"
+                          :close-on-content-click="false"
+                          transition="scale-transition"
+                          min-width="auto"
+                        >
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-text-field
+                              dense
+                              outlined
+                              :rules="rules.compensation_date"
+                              v-model="item.compensation_date_str"
+                              readonly
+                              placeholder="เลือกวันที่ชดเชย"
+                              v-bind="attrs"
+                              v-on="on"
+                            >
+                              <template v-slot:append>
+                                <v-icon
+                                  :color="
+                                    item.compensationDate ? '#FF6B81' : ''
+                                  "
+                                  >mdi-calendar</v-icon
+                                >
+                              </template>
+                            </v-text-field>
+                          </template>
+                          <v-date-picker
+                            :min="new Date($route.params.date).toISOString()"
+                            @input="inputDate($event, item)"
+                            v-model="item.compensationDate"
+                            locale="th-TH"
+                          ></v-date-picker>
+                        </v-menu>
+                      </v-col>
+                      <v-col cols="auto" class="pr-2">
+                        <v-text-field
+                          outlined
+                          dense
+                          :style="`width:${width()}px;`"
+                          style="position: absolute; display: block; z-index: 4"
+                          @focus="
+                            SelectedStartDate(
+                              $event,
+                              item.compensationStartTime
+                            )
+                          "
+                          :rules="rules.start_time"
+                          :value="genTime(item.compensationStartTime)"
+                        >
+                        </v-text-field>
+                        <TimePicker
+                          class="time-picker-hidden"
+                          :minuteStep="30"
+                          placeholder="เวลาเริ่ม"
+                          :style="`width:${width()}px;`"
+                          :class="item.start_time ? 'active' : ''"
+                          format="HH:mm"
+                          v-model="item.compensationStartTime"
+                        >
+                        </TimePicker>
+                      </v-col>
+                      <v-col cols="auto" class="pl-2">
+                        <v-text-field
+                          outlined
+                          dense
+                          :style="`width:${width()}px;`"
+                          style="position: absolute; display: block; z-index: 4"
+                          @focus="
+                            SelectedStartDate($event, item.compensationEndTime)
+                          "
+                          :rules="rules.end_time"
+                          :value="genTime(item.compensationEndTime)"
+                        >
+                        </v-text-field>
+                        <TimePicker
+                          class="time-picker-hidden"
+                          :minuteStep="30"
+                          :style="`width:${width()}px;`"
+                          format="HH:mm"
+                          :class="item.end_time ? 'active' : ''"
+                          placeholder="เวลาสิ้นสุด"
+                          v-model="item.compensationEndTime"
+                        ></TimePicker>
+                      </v-col>
+                    </v-row>
+                  </td>
+                </template>
+                <template v-slot:no-data>
+                  <v-row dense>
+                    <v-col align="center"> ไม่พบข้อมูลในตาราง </v-col>
+                  </v-row>
+                </template>
+              </v-data-table>
             </v-form>
-          
           </v-card>
           <v-row>
             <v-col align="right">
@@ -354,94 +365,98 @@
           <div v-if="tab_evaluate === 'evaluate_students'">
             <v-form ref="learners_form" v-model="learners_form">
               <template
-              v-if="
-                student_check_in.filter(
-                  (v) =>
-                    v.type === 'general' &&
-                    (v.status == 'punctual' || v.status == 'late')
-                ).length > 0
-              "
-            >
-              <v-card
-                class="mb-2"
-                flat
-                style="border: 1px solid #999"
-                v-for="(student, index_student) in student_check_in.filter(
-                  (v) =>
-                    v.type === 'general' &&
-                    (v.status == 'punctual' || v.status == 'late')
-                )"
-                :key="`${index_student}-student`"
+                v-if="
+                  student_check_in.filter(
+                    (v) =>
+                      v.type === 'general' &&
+                      (v.status == 'punctual' || v.status == 'late')
+                  ).length > 0
+                "
               >
-                <!-- <pre>{{ student.checkInStudentId }}</pre> -->
-                <v-card-text>
-                  <v-row class="d-flex align-center">
-                    <v-col cols="12" sm class="text-lg font-bold">
-                      {{ student.no }} {{ student.fullname }}
-                    </v-col>
-                    <v-col cols="12" sm="5" class="pa-1 text-md text-[#999999]">
-                      <v-row dense class="d-flex aling-center">
-                        <v-col align="right"> การเข้าเรียน: </v-col>
-                        <v-col cols="auto">
-                          <v-chip
-                            class="font-bold"
-                            :color="
-                              check_in_status_options.filter(
-                                (v) => v.value === student.status
-                              )[0].bg_color
-                            "
-                            :style="`color:${
-                              check_in_status_options.filter(
-                                (v) => v.value === student.status
-                              )[0].color
-                            }`"
-                            v-if="
-                              check_in_status_options.filter(
-                                (v) => v.value === student.status
-                              ).length > 0
-                            "
-                            >{{
-                              check_in_status_options.filter(
-                                (v) => v.value === student.status
-                              )[0].label
-                            }}
-                          </v-chip>
-                        </v-col>
-                      </v-row>
-                    </v-col>
-                  </v-row>
-                  <v-row class="d-flex align-center">
-                    <v-col cols="12" sm="4">
-                      <labelCustom text="ระดับพัฒนาการ"></labelCustom>
-                      <v-select
-                        outlined
-                        dense
-                        :rules="rules.evolution"
-                        v-model="student.assessment.evolution"
-                        :items="evolution_options"
+                <v-card
+                  class="mb-2"
+                  flat
+                  style="border: 1px solid #999"
+                  v-for="(student, index_student) in student_check_in.filter(
+                    (v) =>
+                      v.type === 'general' &&
+                      (v.status == 'punctual' || v.status == 'late')
+                  )"
+                  :key="`${index_student}-student`"
+                >
+                  <!-- <pre>{{ student.checkInStudentId }}</pre> -->
+                  <v-card-text>
+                    <v-row class="d-flex align-center">
+                      <v-col cols="12" sm class="text-lg font-bold">
+                        {{ student.no }} {{ student.fullname }}
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        sm="5"
+                        class="pa-1 text-md text-[#999999]"
                       >
-                        <template v-slot:item="{ item }">
-                          <v-list-item-content>
-                            <v-list-item-title>
-                              <v-rating
-                                readonly
-                                :length="item.num_value"
-                                :value="item.num_value"
-                                color="#ff6b81"
-                              ></v-rating>
-                            </v-list-item-title>
-                          </v-list-item-content>
-                        </template>
-                        <template v-slot:selection="{ item }">
-                          <v-rating
-                            readonly
-                            :length="item.num_value"
-                            :value="item.num_value"
-                            color="#ff6b81"
-                          ></v-rating>
-                        </template>
-                      </v-select>
-                      <!-- <v-rating
+                        <v-row dense class="d-flex aling-center">
+                          <v-col align="right"> การเข้าเรียน: </v-col>
+                          <v-col cols="auto">
+                            <v-chip
+                              class="font-bold"
+                              :color="
+                                check_in_status_options.filter(
+                                  (v) => v.value === student.status
+                                )[0].bg_color
+                              "
+                              :style="`color:${
+                                check_in_status_options.filter(
+                                  (v) => v.value === student.status
+                                )[0].color
+                              }`"
+                              v-if="
+                                check_in_status_options.filter(
+                                  (v) => v.value === student.status
+                                ).length > 0
+                              "
+                              >{{
+                                check_in_status_options.filter(
+                                  (v) => v.value === student.status
+                                )[0].label
+                              }}
+                            </v-chip>
+                          </v-col>
+                        </v-row>
+                      </v-col>
+                    </v-row>
+                    <v-row class="d-flex align-center">
+                      <v-col cols="12" sm="4">
+                        <labelCustom text="ระดับพัฒนาการ"></labelCustom>
+                        <v-select
+                          outlined
+                          dense
+                          :rules="rules.evolution"
+                          v-model="student.assessment.evolution"
+                          :items="evolution_options"
+                        >
+                          <template v-slot:item="{ item }">
+                            <v-list-item-content>
+                              <v-list-item-title>
+                                <v-rating
+                                  readonly
+                                  :length="item.num_value"
+                                  :value="item.num_value"
+                                  color="#ff6b81"
+                                ></v-rating>
+                              </v-list-item-title>
+                            </v-list-item-content>
+                          </template>
+                          <template v-slot:selection="{ item }">
+                            <v-rating
+                              readonly
+                              :length="item.num_value"
+                              :value="item.num_value"
+                              color="#ff6b81"
+                            ></v-rating>
+                          </template>
+                        </v-select>
+                        <!-- <v-rating
                         v-model="student.assessment.rating_evolution"
                         background-color="pink lighten-3"
                         @input="CheckRating($event, student.checkInStudentId, 'assessment_evolution')"
@@ -450,38 +465,38 @@
                         length="5"
                         :min="2"
                       ></v-rating> -->
-                    </v-col>
-                    <v-col cols="12" sm="4">
-                      <labelCustom text="ระดับความสนใจ"></labelCustom>
-                      <v-select
-                        outlined
-                        dense
-                        :rules="rules.interest"
-                        v-model="student.assessment.interest"
-                        :items="interest_options"
-                      >
-                        <template v-slot:item="{ item }">
-                          <v-list-item-content>
-                            <v-list-item-title>
-                              <v-rating
-                                readonly
-                                :length="item.num_value"
-                                :value="item.num_value"
-                                color="#ff6b81"
-                              ></v-rating>
-                            </v-list-item-title>
-                          </v-list-item-content>
-                        </template>
-                        <template v-slot:selection="{ item }">
-                          <v-rating
-                            readonly
-                            :length="item.num_value"
-                            :value="item.num_value"
-                            color="#ff6b81"
-                          ></v-rating>
-                        </template>
-                      </v-select>
-                      <!-- <v-rating
+                      </v-col>
+                      <v-col cols="12" sm="4">
+                        <labelCustom text="ระดับความสนใจ"></labelCustom>
+                        <v-select
+                          outlined
+                          dense
+                          :rules="rules.interest"
+                          v-model="student.assessment.interest"
+                          :items="interest_options"
+                        >
+                          <template v-slot:item="{ item }">
+                            <v-list-item-content>
+                              <v-list-item-title>
+                                <v-rating
+                                  readonly
+                                  :length="item.num_value"
+                                  :value="item.num_value"
+                                  color="#ff6b81"
+                                ></v-rating>
+                              </v-list-item-title>
+                            </v-list-item-content>
+                          </template>
+                          <template v-slot:selection="{ item }">
+                            <v-rating
+                              readonly
+                              :length="item.num_value"
+                              :value="item.num_value"
+                              color="#ff6b81"
+                            ></v-rating>
+                          </template>
+                        </v-select>
+                        <!-- <v-rating
                         v-model="student.assessment.rating_interest"
                         background-color="pink lighten-3" 
                         @input="CheckRating($event, student.checkInStudentId, 'assessment_interest')"
@@ -489,20 +504,22 @@
                         large
                         length="5"
                       ></v-rating> -->
-                    </v-col>
-                    <v-col cols="12" sm="auto">
-                      <v-btn
-                        outlined
-                        class="text-sm w-full"
-                        color="#ff6b81"
-                        @click="selectStudentComment(student.checkInStudentId)"
-                      >
-                        แสดงความคิดเห็น
-                      </v-btn>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-card>
+                      </v-col>
+                      <v-col cols="12" sm="auto">
+                        <v-btn
+                          outlined
+                          class="text-sm w-full"
+                          color="#ff6b81"
+                          @click="
+                            selectStudentComment(student.checkInStudentId)
+                          "
+                        >
+                          แสดงความคิดเห็น
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
               </template>
               <v-card v-else outlined class="my-3">
                 <v-card-text class="text-lg font-bold" align="center">
@@ -544,106 +561,106 @@
           <div v-else>
             <v-form ref="potential_form" v-model="potential_form">
               <v-card
-              class="mb-2"
-              flat
-              style="border: 1px solid #999"
-              v-for="(student, index_student) in student_check_in.filter(
-                (v) => v.potential
-              )"
-              :key="`${index_student}-student`"
-            >
-              <v-card-text>
-                <!-- <pre>{{ student.potential }}</pre> -->
-                <v-row class="d-flex align-center">
-                  <v-col cols="12" sm class="text-lg font-bold">
-                    {{ student.no }} {{ student.fullname }}
-                  </v-col>
-                  <v-col cols="12" sm="5" class="pa-1 text-md text-[#999999]">
-                    <v-row dense class="d-flex aling-center">
-                      <v-col align="right"> การเข้าเรียน: </v-col>
-                      <v-col cols="auto">
-                        <v-chip
-                          class="font-bold"
-                          :color="
-                            check_in_status_options.filter(
-                              (v) => v.value === student.status
-                            )[0].bg_color
-                          "
-                          :style="`color:${
-                            check_in_status_options.filter(
-                              (v) => v.value === student.status
-                            )[0].color
-                          }`"
-                          v-if="
-                            check_in_status_options.filter(
-                              (v) => v.value === student.status
-                            ).length > 0
-                          "
-                          >{{
-                            check_in_status_options.filter(
-                              (v) => v.value === student.status
-                            )[0].label
-                          }}
-                        </v-chip>
-                      </v-col>
-                    </v-row>
-                  </v-col>
-                </v-row>
-                <v-row class="d-flex align-center">
-                  <v-col cols="12" sm>
-                    <!-- {{student.potential}} -->
-                    <labelCustom text="ระดับพัฒนาการ"></labelCustom>
-                    <v-select
-                      outlined
-                      dense
-                      :rules="rules.evolution"
-                      v-model="student.potential.evolution"
-                      :items="evolution_options"
-                    >
-                      <template v-slot:item="{ item }">
-                        <v-list-item-content>
-                          <v-list-item-title>
-                            <v-rating
-                              readonly
-                              :length="item.num_value"
-                              :value="item.num_value"
-                              color="#ff6b81"
-                            ></v-rating>
-                          </v-list-item-title>
-                        </v-list-item-content>
-                      </template>
-                      <template v-slot:selection="{ item }">
-                        <v-rating
-                          readonly
-                          :length="item.num_value"
-                          :value="item.num_value"
-                          color="#ff6b81"
-                        ></v-rating>
-                      </template>
-                    </v-select>
-                  </v-col>
-                  <v-col cols="12" sm="auto">
-                    <v-btn
-                      outlined
-                      class="text-sm w-full"
-                      color="#ff6b81"
-                      @click="showDialogPotential(student.checkInStudentId)"
-                    >
-                      แสดงความคิดเห็น
-                    </v-btn>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col cols="12">
-                    <labelCustom text="ระดับความสนใจ"></labelCustom>
-                    <v-textarea
-                      outlined
-                      :rules="rules.interest_text"
-                      v-model="student.potential.interest"
-                    ></v-textarea>
-                  </v-col>
-                </v-row>
-              </v-card-text>
+                class="mb-2"
+                flat
+                style="border: 1px solid #999"
+                v-for="(student, index_student) in student_check_in.filter(
+                  (v) => v.potential
+                )"
+                :key="`${index_student}-student`"
+              >
+                <v-card-text>
+                  <!-- <pre>{{ student.potential }}</pre> -->
+                  <v-row class="d-flex align-center">
+                    <v-col cols="12" sm class="text-lg font-bold">
+                      {{ student.no }} {{ student.fullname }}
+                    </v-col>
+                    <v-col cols="12" sm="5" class="pa-1 text-md text-[#999999]">
+                      <v-row dense class="d-flex aling-center">
+                        <v-col align="right"> การเข้าเรียน: </v-col>
+                        <v-col cols="auto">
+                          <v-chip
+                            class="font-bold"
+                            :color="
+                              check_in_status_options.filter(
+                                (v) => v.value === student.status
+                              )[0].bg_color
+                            "
+                            :style="`color:${
+                              check_in_status_options.filter(
+                                (v) => v.value === student.status
+                              )[0].color
+                            }`"
+                            v-if="
+                              check_in_status_options.filter(
+                                (v) => v.value === student.status
+                              ).length > 0
+                            "
+                            >{{
+                              check_in_status_options.filter(
+                                (v) => v.value === student.status
+                              )[0].label
+                            }}
+                          </v-chip>
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                  </v-row>
+                  <v-row class="d-flex align-center">
+                    <v-col cols="12" sm>
+                      <!-- {{student.potential}} -->
+                      <labelCustom text="ระดับพัฒนาการ"></labelCustom>
+                      <v-select
+                        outlined
+                        dense
+                        :rules="rules.evolution"
+                        v-model="student.potential.evolution"
+                        :items="evolution_options"
+                      >
+                        <template v-slot:item="{ item }">
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              <v-rating
+                                readonly
+                                :length="item.num_value"
+                                :value="item.num_value"
+                                color="#ff6b81"
+                              ></v-rating>
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </template>
+                        <template v-slot:selection="{ item }">
+                          <v-rating
+                            readonly
+                            :length="item.num_value"
+                            :value="item.num_value"
+                            color="#ff6b81"
+                          ></v-rating>
+                        </template>
+                      </v-select>
+                    </v-col>
+                    <v-col cols="12" sm="auto">
+                      <v-btn
+                        outlined
+                        class="text-sm w-full"
+                        color="#ff6b81"
+                        @click="showDialogPotential(student.checkInStudentId)"
+                      >
+                        แสดงความคิดเห็น
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12">
+                      <labelCustom text="ระดับความสนใจ"></labelCustom>
+                      <v-textarea
+                        outlined
+                        :rules="rules.interest_text"
+                        v-model="student.potential.interest"
+                      ></v-textarea>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
               </v-card>
               <v-row>
                 <v-col cols="12" sm align="right">
@@ -865,10 +882,7 @@
         <v-card class="pa-1">
           <v-row dense>
             <v-col class="pa-1" cols="12" align="right">
-              <v-btn
-                icon
-                @click="closeStudentComment()"
-              >
+              <v-btn icon @click="closeStudentComment()">
                 <v-icon color="#ff6b81">mdi-close</v-icon>
               </v-btn>
             </v-col>
@@ -898,7 +912,7 @@
                 v-for="(file, index) of comment_dialog_tmp.attachment"
                 :key="`${index}-fileattachment`"
               >
-                <v-card-text class="border-2 border-[#ff6b81] rounded-lg" >
+                <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                   <v-row>
                     <v-col cols="auto" class="pr-2">
                       <v-img
@@ -918,7 +932,9 @@
                     </v-col>
                     <v-col cols="auto" class="pl-2">
                       <v-btn
-                        @click=" removeAccessmentFileInBase(file, selected_student)"
+                        @click="
+                          removeAccessmentFileInBase(file, selected_student)
+                        "
                         icon
                         color="#ff6b81"
                         ><v-icon>mdi-close</v-icon>
@@ -963,10 +979,7 @@
                 </v-row>
               </v-card-text>
             </v-card>
-            <div
-              v-if="comment_dialog_tmp.files.length > 0"
-              class="mb-3"
-            >
+            <div v-if="comment_dialog_tmp.files.length > 0" class="mb-3">
               <v-row dense>
                 <v-col class="font-bold text-lg"> ไฟล์แนบ </v-col>
               </v-row>
@@ -978,9 +991,7 @@
                 v-for="(file, index) of comment_dialog_tmp.files"
                 :key="`${index}-file`"
               >
-                <v-card-text
-                  class="border-2 border-[#ff6b81] rounded-lg"
-                >
+                <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                   <v-row>
                     <v-col cols="auto" class="pr-2">
                       <v-img
@@ -1046,10 +1057,7 @@
           <!-- <pre>{{student_check_in[selected_student].potential.checkInPotentialId}}</pre> -->
           <v-row dense>
             <v-col class="pa-1" cols="12" align="right">
-              <v-btn
-                icon
-                @click="closeDialogPotential(selected_student)"
-              >
+              <v-btn icon @click="closeDialogPotential(selected_student)">
                 <v-icon color="#ff6b81">mdi-close</v-icon>
               </v-btn>
             </v-col>
@@ -1070,10 +1078,7 @@
               </v-col>
             </v-row>
             <div
-              v-if="
-                comment_potential_dialog_tmp.attachmentPotential
-                  .length > 0
-              "
+              v-if="comment_potential_dialog_tmp.attachmentPotential.length > 0"
             >
               <v-row dense>
                 <v-col class="font-bold text-lg"> ไฟล์แนบ </v-col>
@@ -1081,12 +1086,12 @@
               <v-card
                 flat
                 class="mb-3"
-                v-for="(file, index) of comment_potential_dialog_tmp.attachmentPotential"
+                v-for="(
+                  file, index
+                ) of comment_potential_dialog_tmp.attachmentPotential"
                 :key="`${index}-fileattachment`"
               >
-                <v-card-text
-                  class="border-2 border-[#ff6b81] rounded-lg"
-                >
+                <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                   <v-row>
                     <v-col cols="auto" class="pr-2">
                       <v-img
@@ -1159,9 +1164,7 @@
             </v-card>
 
             <div
-              v-if="
-                comment_potential_dialog_tmp.files.length > 0
-              "
+              v-if="comment_potential_dialog_tmp.files.length > 0"
               class="mb-3"
             >
               <v-row dense>
@@ -1174,9 +1177,7 @@
                 v-for="(file, index) of comment_potential_dialog_tmp.files"
                 :key="`${index}-file`"
               >
-                <v-card-text
-                  class="border-2 border-[#ff6b81] rounded-lg"
-                >
+                <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                   <v-row>
                     <v-col cols="auto" class="pr-2">
                       <v-img
@@ -1245,7 +1246,7 @@ import { Input, TimePicker } from "ant-design-vue";
 import Swal from "sweetalert2";
 import mixin from "@/mixin";
 // import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
-import moment from 'moment'
+import moment from "moment";
 export default {
   name: "menageCourseDetail",
   components: { rowData, loadingOverlay, labelCustom, TimePicker },
@@ -1258,7 +1259,7 @@ export default {
     tab: "check in",
     fileURL: null,
     filename: "",
-    validate_form : false,
+    validate_form: false,
     evolution_options: [
       { label: "ดีมาก", value: "very good", num_value: 5 },
       { label: "ดี", value: "good", num_value: 4 },
@@ -1316,30 +1317,27 @@ export default {
     ],
     learners_form: false,
     potential_form: false,
-    summary_form : false,
+    summary_form: false,
     rules: {
       status_text: [(val) => !!val || "โปรดระบุสถานะการเข้าเรียน"],
-      compensation_date : [(val) => !!val || "โปรดระบุวันชดเชย"],
-      start_time : [(val) => !!val || "โปรดระบุเวลาเริ่ม"],
-      end_time : [(val) => !!val || "โปรดระบุเวลาสิ้นสุด"],
-      evolution : [(val) => !!val || "โปรดเลือกระดับพัฒนาการ"],
-      interest : [(val) => !!val || "โปรดเลือกระดับความสนใจ"],
-      interest_text : [ 
-        (val) =>  !!val > 0 || "โปรดระบุระดับความสนใจ",
-      ],
-      summary : [(val) =>  !!val > 0 || "โปรดระบุบันทึกการสอน"],
-      homework : [(val) =>  !!val > 0 || "โปรดระบุพัฒนาการ / การบ้าน"],
+      compensation_date: [(val) => !!val || "โปรดระบุวันชดเชย"],
+      start_time: [(val) => !!val || "โปรดระบุเวลาเริ่ม"],
+      end_time: [(val) => !!val || "โปรดระบุเวลาสิ้นสุด"],
+      evolution: [(val) => !!val || "โปรดเลือกระดับพัฒนาการ"],
+      interest: [(val) => !!val || "โปรดเลือกระดับความสนใจ"],
+      interest_text: [(val) => !!val > 0 || "โปรดระบุระดับความสนใจ"],
+      summary: [(val) => !!val > 0 || "โปรดระบุบันทึกการสอน"],
+      homework: [(val) => !!val > 0 || "โปรดระบุพัฒนาการ / การบ้าน"],
     },
-    comment_dialog_tmp :{
-      id : '',
-      remark : '',
-      files : []
+    comment_dialog_tmp: {
+      id: "",
+      remark: "",
+      files: [],
     },
-    comment_potential_dialog_tmp :{
-      id : '',
-      remark : '',
-      files : [],
-
+    comment_potential_dialog_tmp: {
+      id: "",
+      remark: "",
+      files: [],
     },
     selected_student: null,
     preview_summary_files: [],
@@ -1384,7 +1382,10 @@ export default {
             this.cpo_options.push(check_in_data.cpo.packageName);
           }
         }
-        if (check_in_data.status === "leave" ||  check_in_data.status === "special case" ) {
+        if (
+          check_in_data.status === "leave" ||
+          check_in_data.status === "special case"
+        ) {
           this.selectCheckInStatus(check_in_data, check_in_data.status);
           this.expanded_index.push(check_in_data);
         }
@@ -1448,13 +1449,12 @@ export default {
 
       return false;
     },
-    genTime(time){
-      if(time){
-        return moment(time).format("HH:mm")
-      }else{
-        return ""
+    genTime(time) {
+      if (time) {
+        return moment(time).format("HH:mm");
+      } else {
+        return "";
       }
-     
     },
     width() {
       switch (this.$vuetify.breakpoint.name) {
@@ -1538,8 +1538,10 @@ export default {
     confirmDialogPotential(selected_student) {
       this.selected_files = [];
       this.student_check_in[selected_student].potential.confirm = true;
-      this.student_check_in[selected_student].potential.remark = this.comment_potential_dialog_tmp.remark
-      this.student_check_in[selected_student].potentialfiles = this.comment_potential_dialog_tmp.files
+      this.student_check_in[selected_student].potential.remark =
+        this.comment_potential_dialog_tmp.remark;
+      this.student_check_in[selected_student].potentialfiles =
+        this.comment_potential_dialog_tmp.files;
       this.show_comment_potential_dialog = false;
     },
     showDialogPotential(id) {
@@ -1548,27 +1550,35 @@ export default {
           this.selected_student = i;
         }
       }
-      console.log(this.student_check_in[this.selected_student].potential.attachmentPotential)
+      console.log(
+        this.student_check_in[this.selected_student].potential
+          .attachmentPotential
+      );
       this.selected_files = [];
       this.comment_potential_dialog_tmp = {
-        id : this.student_check_in[this.selected_student].potential.checkInPotentialId,
-        remark : this.student_check_in[this.selected_student].potential.remark,
-        files : this.student_check_in[this.selected_student].potentialfiles ? this.student_check_in[this.selected_student].potentialfiles : [],
-        attachmentPotential : this.student_check_in[this.selected_student].potential.attachmentPotential
-      }
+        id: this.student_check_in[this.selected_student].potential
+          .checkInPotentialId,
+        remark: this.student_check_in[this.selected_student].potential.remark,
+        files: this.student_check_in[this.selected_student].potentialfiles
+          ? this.student_check_in[this.selected_student].potentialfiles
+          : [],
+        attachmentPotential:
+          this.student_check_in[this.selected_student].potential
+            .attachmentPotential,
+      };
       this.show_comment_potential_dialog = true;
     },
     clearDialogPotential() {
-      this.comment_potential_dialog_tmp.id = ""
-      this.comment_potential_dialog_tmp.remark = ""
-      this.comment_potential_dialog_tmp.files = []
+      this.comment_potential_dialog_tmp.id = "";
+      this.comment_potential_dialog_tmp.remark = "";
+      this.comment_potential_dialog_tmp.files = [];
       this.selected_files = [];
     },
     closeDialogPotential() {
-      this.comment_potential_dialog_tmp.id = ""
-      this.comment_potential_dialog_tmp.remark = ""
-      this.comment_potential_dialog_tmp.files = []
-      this.comment_potential_dialog_tmp.attachmentPotential = []
+      this.comment_potential_dialog_tmp.id = "";
+      this.comment_potential_dialog_tmp.remark = "";
+      this.comment_potential_dialog_tmp.files = [];
+      this.comment_potential_dialog_tmp.attachmentPotential = [];
       this.selected_files = [];
       this.show_comment_potential_dialog = false;
     },
@@ -1581,8 +1591,8 @@ export default {
       });
     },
     async saveSummary() {
-      this.$refs.summary_form.validate()
-      if(this.summary_form){
+      this.$refs.summary_form.validate();
+      if (this.summary_form) {
         Swal.fire({
           icon: "question",
           title: "ต้องการบันทึกใช่หรือไม่ ?",
@@ -1604,8 +1614,8 @@ export default {
     },
     async saveUpdateAssessmentPotential() {
       // // console.log(this.student_check_in)
-      this.$refs.potential_form.validate()
-      if(this.potential_form){
+      this.$refs.potential_form.validate();
+      if (this.potential_form) {
         Swal.fire({
           icon: "question",
           title: "ต้องการบันทึกใช่หรือไม่ ?",
@@ -1643,8 +1653,8 @@ export default {
       });
     },
     async saveAssessmentStudent() {
-      this.$refs.learners_form.validate()
-      if(this.learners_form){
+      this.$refs.learners_form.validate();
+      if (this.learners_form) {
         Swal.fire({
           icon: "question",
           title: "ต้องการบันทึกใช่หรือไม่ ?",
@@ -1670,7 +1680,7 @@ export default {
         student_id.push({ studentId: val.studentId });
       });
       this.$refs.validate_form.validate();
-      if(this.validate_form){
+      if (this.validate_form) {
         Swal.fire({
           icon: "question",
           title: "ต้องการบันทึกใช่หรือไม่ ?",
@@ -1700,11 +1710,11 @@ export default {
       e.target.parentNode.parentNode.parentNode.parentNode.parentNode
         .getElementsByClassName("time-picker-hidden")[0]
         .getElementsByTagName("input")[0]
-        .focus()
+        .focus();
       e.target.parentNode.parentNode.parentNode.parentNode.parentNode
         .getElementsByClassName("time-picker-hidden")[0]
         .getElementsByTagName("input")[0]
-        .click()
+        .click();
     },
     checkIn() {
       if (!this.coach_check_in.checkInCoachId) {
@@ -1739,13 +1749,22 @@ export default {
           this.selected_student = i;
         }
       }
-      console.log( this.student_check_in[this.selected_student].assessment.attachment)
+      console.log(
+        this.student_check_in[this.selected_student].assessment.attachment
+      );
       this.comment_dialog_tmp = {
-          id: this.student_check_in[this.selected_student].assessment.assessmentStudentsId ?  this.student_check_in[this.selected_student].assessment.assessmentStudentsId : '',
-          remark : this.student_check_in[this.selected_student].assessment.remark,
-          attachment : this.student_check_in[this.selected_student].assessment.attachment,
-          files : this.student_check_in[this.selected_student].files ? this.student_check_in[this.selected_student].files : [] ,
-        }
+        id: this.student_check_in[this.selected_student].assessment
+          .assessmentStudentsId
+          ? this.student_check_in[this.selected_student].assessment
+              .assessmentStudentsId
+          : "",
+        remark: this.student_check_in[this.selected_student].assessment.remark,
+        attachment:
+          this.student_check_in[this.selected_student].assessment.attachment,
+        files: this.student_check_in[this.selected_student].files
+          ? this.student_check_in[this.selected_student].files
+          : [],
+      };
       // if (!this.student_check_in[this.selected_student].assessment.assessmentStudentsId ) {
       //   this.student_check_in[this.selected_student].assessment.oldremark =
       //     this.student_check_in[this.selected_student].assessment.remark;
@@ -1756,9 +1775,12 @@ export default {
       this.selected_files = [];
       this.show_comment_dialog = false;
       this.student_check_in[selected_student].assessment.confrim = true;
-      this.student_check_in[selected_student].assessment.remark  = this.comment_dialog_tmp.remark
-      this.student_check_in[selected_student].files = this.comment_dialog_tmp.files
-      this.student_check_in[selected_student].assessment.attachment  = this.comment_dialog_tmp.attachment
+      this.student_check_in[selected_student].assessment.remark =
+        this.comment_dialog_tmp.remark;
+      this.student_check_in[selected_student].files =
+        this.comment_dialog_tmp.files;
+      this.student_check_in[selected_student].assessment.attachment =
+        this.comment_dialog_tmp.attachment;
     },
     clearStudentComment() {
       // this.comment_dialog_tmp.evolution = "";
@@ -1769,10 +1791,10 @@ export default {
     },
     closeStudentComment() {
       // console.log(selected_student);
-      this.comment_dialog_tmp.id = ""
+      this.comment_dialog_tmp.id = "";
       this.comment_dialog_tmp.remark = "";
       this.comment_dialog_tmp.files = [];
-      this.comment_dialog_tmp.attachment = []
+      this.comment_dialog_tmp.attachment = [];
       this.selected_files = [];
       this.show_comment_dialog = false;
     },
@@ -1800,7 +1822,7 @@ export default {
     inputDate(e, item) {
       this.student_check_in.filter(
         (v) => v.no === item.no
-      )[0].compensation_date_str = dateFormatter(e, "DD MT YYYYT");
+      )[0].compensation_date_str = dateFormatter(e, "DD MMT YYYYT");
     },
     openFileSelector() {
       this.$refs.fileInput.click();
@@ -1872,7 +1894,7 @@ export default {
       this.student_check_in[selected_student].potentialfiles.splice(index, 1);
     },
     clearAssessment() {
-      console.log("1184 => ",this.student_check_in)
+      console.log("1184 => ", this.student_check_in);
       for (const student of this.student_check_in) {
         student.assessment.evolution = "";
         student.assessment.interest = "";

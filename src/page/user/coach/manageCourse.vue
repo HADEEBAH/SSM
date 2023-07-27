@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- {{ SetFunctionsComputed }} -->
     <v-container>
       <header-page title="เลือกข้อมูลการสอน"></header-page>
       <v-row dense class="mb-3">
@@ -52,16 +53,19 @@
           <!-- <div
             
           > -->
-            <!-- {{ new Date(course.start) }} -->
-            <v-card
-              outlined
-              class="mb-2"
-              v-for="(course, course_index) in my_courses.filter(
+          <!-- {{ new Date(course.start) }} -->
+          <v-card
+            outlined
+            class="mb-2"
+            v-for="(course, course_index) in my_courses.filter(
               (v) => v.start_date === genToday
             )"
             :key="course_index"
-            >
-              <v-card-text class="cursor-pointer" v-if="!course.type" @click="
+          >
+            <v-card-text
+              class="cursor-pointer"
+              v-if="!course.type"
+              @click="
                 $router.push({
                   name: 'menageCourseDetail',
                   params: {
@@ -71,85 +75,87 @@
                     date: course.start_date,
                   },
                 })
-              ">
-                <v-row dense>
-                  <v-col cols="12" sm="auto">
-                    <v-img
-                      :contain="$vuetify.breakpoint.smAndUp"
-                      :cover="$vuetify.breakpoint.smAndUp"
-                      class="rounded-lg"
-                      :src="
-                        course.course_img || course.course_img !== ''
-                          ? course.course_img
-                          : require(`@/assets/course/default_course_img.svg`)
-                      "
-                      max-height="160"
-                      :max-width="$vuetify.breakpoint.smAndUp ? 160 : ''"
-                    ></v-img>
-                  </v-col>
-                  <v-col>
-                    <v-row dense>
-                      <v-col class="text-lg font-bold">{{
-                        `${course.name}(${course.subtitle})`
-                      }}</v-col>
-                      <v-col cols="auto">
-                        <v-chip small color="#F9B320" dark
-                          >{{
-                            `${course.start_time}-${course.end_time}`
-                          }}น.</v-chip
-                        >
-                      </v-col>
-                    </v-row>
-                    <v-row dense>
-                      <v-col cols="auto"
-                        ><v-icon color="#ff6b81">mdi-bookshelf</v-icon></v-col
+              "
+            >
+              <v-row dense>
+                <v-col cols="12" sm="auto">
+                  <v-img
+                    :contain="$vuetify.breakpoint.smAndUp"
+                    :cover="$vuetify.breakpoint.smAndUp"
+                    class="rounded-lg"
+                    :src="
+                      course.course_img || course.course_img !== ''
+                        ? course.course_img
+                        : require(`@/assets/course/default_course_img.svg`)
+                    "
+                    max-height="160"
+                    :max-width="$vuetify.breakpoint.smAndUp ? 160 : ''"
+                  ></v-img>
+                </v-col>
+                <v-col>
+                  <v-row dense>
+                    <v-col class="text-lg font-bold">{{
+                      `${course.name}(${course.subtitle})`
+                    }}</v-col>
+                    <v-col cols="auto">
+                      <v-chip small color="#F9B320" dark
+                        >{{
+                          `${course.start_time}-${course.end_time}`
+                        }}น.</v-chip
                       >
-                      <v-col>{{ `อาณาจักร :${course.category_name}` }}</v-col>
-                    </v-row>
-                    <v-row dense>
-                      <v-col cols="12" v-if="course.course_package_name">
-                        <rowData mini icon="mdi-account-box-multiple"
-                          >แพ็คเกจ : {{ course.course_package_name }}</rowData
-                        >
-                      </v-col>
-                    </v-row>
-                    <v-row dense>
-                      <v-col cols="auto"
-                        ><v-icon color="#ff6b81"
-                          >mdi-clock-outline</v-icon
-                        ></v-col
+                    </v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col cols="auto"
+                      ><v-icon color="#ff6b81">mdi-bookshelf</v-icon></v-col
+                    >
+                    <v-col>{{ `อาณาจักร :${course.category_name}` }}</v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col cols="12" v-if="course.course_package_name">
+                      <rowData mini icon="mdi-account-box-multiple"
+                        >แพ็คเกจ : {{ course.course_package_name }}</rowData
                       >
-                      <v-col>{{
-                        `เวลาสอน :${course.course_per_time} ชั่วโมง`
-                      }}</v-col>
-                    </v-row>
-                  </v-col>
-                </v-row>
-              </v-card-text>
+                    </v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col cols="auto"
+                      ><v-icon color="#ff6b81">mdi-clock-outline</v-icon></v-col
+                    >
+                    <v-col>{{
+                      `เวลาสอน :${course.course_per_time} ชั่วโมง`
+                    }}</v-col>
+                  </v-row>
+                </v-col>
+              </v-row>
+            </v-card-text>
 
-              <v-card-text
-                v-else
-                class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg"
-              >
-                <span class="text-lg font-bold">
-                  <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                  ไม่พบข้อมูลการสอน
-                </span>
-              </v-card-text>
-            </v-card>
+            <v-card-text
+              v-else
+              class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg"
+            >
+              <span class="text-lg font-bold">
+                <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                ไม่พบข้อมูลการสอน
+              </span>
+            </v-card-text>
+          </v-card>
 
-            <v-card flat v-if="
+          <v-card
+            flat
+            v-if="
               my_courses.filter((v) => v.start_date === genToday).length == 0
-            ">
-              <v-card-text
-                class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg"
-              >
-                <span class="text-lg font-bold">
-                  <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                  ไม่พบข้อมูลการสอน
-                </span>
-              </v-card-text>
-            </v-card>
+            "
+          >
+            <v-card-text
+              class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg"
+            >
+              <span class="text-lg font-bold">
+                <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                ไม่พบข้อมูลการสอน
+              </span>
+            </v-card-text>
+          </v-card>
 
           <!-- </div> -->
           <!-- <div
@@ -180,7 +186,7 @@
                 indeterminate
                 size="64"
               ></v-progress-circular>
-
+              
               <calendarCoach
                 v-if="!my_courses_is_loading"
                 class="w-full"
@@ -189,6 +195,7 @@
               ></calendarCoach>
             </v-col>
           </v-row>
+          <!-- <pre>{{ my_courses }}</pre> -->
           <!-- <div align="center">
             <v-progress-circular
               color="#ff6b81"
@@ -218,7 +225,7 @@
               v-model="filter_course"
               item-text="name"
               item-value="course_id"
-              :items="my_courses.filter(v => !v.type)"
+              :items="my_courses.filter((v) => !v.type)"
               outlined
               dense
             >
@@ -230,9 +237,11 @@
             </v-autocomplete>
           </v-col>
         </v-row>
-        <div  v-if="filterMycourse().length == 0">
+        <div v-if="filterMycourse().length == 0">
           <v-card flat>
-            <v-card-text class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg" >
+            <v-card-text
+              class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg"
+            >
               <span class="text-lg font-bold">
                 <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
                 ไม่พบข้อมูลการสอน
@@ -857,9 +866,7 @@
               item-key="coachLeaveId"
               show-expand
             >
-            <template v-slot:no-data>
-                ไม่พบข้อมูลใบลา
-            </template>
+              <template v-slot:no-data> ไม่พบข้อมูลใบลา </template>
               <template v-slot:[`item.date`]="{ item }">
                 {{
                   item.startDate === item.endDate
@@ -908,7 +915,11 @@
                   @click="showDialogDetail(item)"
                   ><v-icon>mdi-eye-outline</v-icon>
                 </v-btn>
-                <v-btn :disabled="item.status !== 'pending'" icon color="#ff6b81" @click="cancelCoachLeave(item)"
+                <v-btn
+                  :disabled="item.status !== 'pending'"
+                  icon
+                  color="#ff6b81"
+                  @click="cancelCoachLeave(item)"
                   ><v-icon>mdi-file-cancel-outline</v-icon>
                 </v-btn>
               </template>
@@ -1344,7 +1355,7 @@
         </v-card>
       </v-dialog>
     </v-container>
-    {{ SetFunctionsComputed }}
+   
   </div>
 </template>
   <script>
@@ -1421,14 +1432,14 @@ export default {
       new Date().getMonth() + 1
     }-${new Date().getDate()}`,
     column: [
-      { text: "วันที่", align: "center", sortable: false, value: "date" },
+      { text: "วันที่", align: "start", sortable: false, value: "date" },
       {
         text: "ประเภทการลา",
-        align: "center",
+        align: "start",
         sortable: false,
         value: "leaveType",
       },
-      { text: "สถานะ", align: "center", sortable: false, value: "status" },
+      { text: "สถานะ", align: "start", sortable: false, value: "status" },
       { text: "", align: "right", sortable: false, value: "action" },
     ],
     previewUrl: null,
@@ -1475,32 +1486,37 @@ export default {
     show_potential_data: {},
     select_status: "all",
   }),
-  
+
   created() {
-    this.GetLoading(true)
+    this.GetLoading(true);
     // console.log("route", this.$route);
     if (this.$route.query.token) {
-     this.loginShareToken(this.$route)
+      this.loginShareToken(this.$route);
     }
-  
+    this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+    this.GetMyCourses({ coach_id: this.user_detail.account_id });
+    this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
+    this.GetCoachs();
     // this.GetMyCourses({ coach_id: this.user_detail.account_id });
     // this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
     // this.GetCoachs();
   },
   beforeMount() {
-    this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     // console.log("user_detail", this.user_detail);
-
     // this.GetMyCourses({ coach_id: this.user_detail.account_id });
     // this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
     // this.GetCoachs();
   },
 
   mounted() {
-  
+    
     // console.log("valid", this.user_detail?.roles?.filter((val)=> val === "R_3").length === 0);
-    if (this.user_detail?.roles?.filter((val)=> val === "R_3" || val === "R_2" || val === "R_1").length === 0) {
-      router.replace({name:"UserKingdom"})
+    if (
+      this.user_detail?.roles?.filter(
+        (val) => val === "R_3" || val === "R_2" || val === "R_1"
+      ).length === 0
+    ) {
+      router.replace({ name: "UserKingdom" });
     }
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "จัดการ");
     if (this.user_detail?.account_id) {
@@ -1508,7 +1524,7 @@ export default {
     }
     // this.$refs.calendar.click()
 
-    this.GetLoading(false)
+    this.GetLoading(false);
   },
   watch: {
     tab: function () {
@@ -1534,7 +1550,7 @@ export default {
       return "";
     },
     genToday() {
-      return moment(new Date()).format("YYYY-MM-DD");
+      return moment(new Date()).format("YYYY-MMT-DD");
     },
 
     validateCoachLeave() {
@@ -1570,16 +1586,16 @@ export default {
     }),
     SelectedStatus(status) {
       // console.log(status);
-      
+
       this.select_status = status;
     },
     GenDateStr(date) {
       const options = {
         year: "numeric",
-        month: "short",
+        month: "long",
         day: "numeric",
         calendar: "buddhist",
-        era: "short",
+        // era: "short",
       };
       return date.toLocaleDateString("th-TH", options);
     },
@@ -1650,7 +1666,7 @@ export default {
     },
     genDate(date) {
       // // console.log(date)
-      return dateFormatter(new Date(date), "DD MT YYYYT");
+      return dateFormatter(new Date(date), "DD MMT YYYYT");
     },
     RemoveCourse(index) {
       this.coach_leave_data.courses.splice(index, 1);
@@ -1778,7 +1794,7 @@ export default {
           (v) => v.course_id === this.filter_course && !v.type
         );
       } else {
-        return this.my_courses.filter( v => !v.type);
+        return this.my_courses.filter((v) => !v.type);
       }
     },
   },

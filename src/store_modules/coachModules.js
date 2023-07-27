@@ -167,16 +167,16 @@ const coachModules = {
             showDenyButton: false,
             showCancelButton: false,
             cancelButtonText: "ยกเลิก",
-            timer : 3000,
+            timer: 3000,
             confirmButtonText: "ตกลง",
           })
-          setTimeout(()=>{
+          setTimeout(() => {
             context.dispatch("GetStudentByTimeId", {
               course_id: course_id,
               date: date,
               time_id: time_id,
             })
-          },200) 
+          }, 200)
         }
 
       } catch (error) {
@@ -468,7 +468,7 @@ const coachModules = {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/${course_id}/date/${date}`, config)
         if (data.statusCode === 200) {
           let i = 1
-          for await (let student of data.data){
+          for await (let student of data.data) {
             student.no = i
             student.fullname = `${student.firstNameTh} ${student.lastNameTh}`
             student.check_in_student_id = student.checkInStudentId,
@@ -556,13 +556,13 @@ const coachModules = {
         // let localhost = "http://localhost:3000"
 
         const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${coach_id}`, config);
-        console.log("GetMyCourses", data.data)
+        // console.log("GetMyCourses", data.data)
         if (data.statusCode == 200) {
           let courses_task = [];
           let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
           if (holidays.data.statusCode === 200) {
             // console.log("561 => ",holidays.data.data)
-            for (let holiday of holidays.data.data) {
+            for await (let holiday of holidays.data.data) {
               courses_task.push({
                 type: 'holiday',
                 name: holiday.holidayName,
@@ -577,43 +577,51 @@ const coachModules = {
           for await (const course of data.data) {
             const course_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course.courseId}`);
             if (course_data.data.statusCode === 200) {
+              // console.log("579=>",course)
               if (course.coachLeaveCourses.length > 0) {
-                for (const leaveCourse of course.coachLeaveCourses) {
-                  let start_time = leaveCourse.teachCompensationStartTime;
-                  let end_time = leaveCourse.teachCompensationEndTime;
-                  const [start_hours, start_minutes] = start_time.split(":");
-                  const [end_hours, end_minutes] = end_time.split(":");
-                  // console.log(leaveCourse.teachCompensationDate)
-                  const startDate = new Date(leaveCourse.teachCompensationDate);
-                  startDate.setHours(start_hours);
-                  startDate.setMinutes(start_minutes);
-                  const endDate = new Date(leaveCourse.teachCompensationDate);
-                  endDate.setHours(end_hours);
-                  endDate.setMinutes(end_minutes);
-                  if (courses_task.filter(v => v.course_id === course.courseId && v.time_id === course.timeId && v.day_of_week_id === course.dayOfWeekId && v.start_date === moment(startDate).format("YYYY-MM-DD")).length === 0) {
-                    courses_task.push({
-                      course_package_name: course.packageName,
-                      course_option_name: course.optionName,
-                      name: course_data.data.data.courseNameTh,
-                      subtitle: course_data.data.data.courseNameEn,
-                      course_id: course.courseId,
-                      time_id: course.timeId,
-                      type: course?.compType ? course?.compType : null,
-                      day_of_week_id: course.dayOfWeekId,
-                      coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
-                      start_date: moment(startDate).format("YYYY-MM-DD"),
-                      start_date_str: startDate.toLocaleDateString("th-TH", options),
-                      start: moment(startDate).format("YYYY-MM-DD"),
-                      end: moment(endDate).format("YYYY-MM-DD"),
-                      start_time: start_time,
-                      end_time: end_time,
-                      category_name: course_data.data.data.categoryNameTh,
-                      course_img: course_data.data.data.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}` : "",
-                      course_per_time: course_data.data.data.coursePerTime,
-                      show_summary: false,
-                      show_assessment: false,
-                      show_assessment_pantential: false,
-                    });
+                for await(const leaveCourse of course.coachLeaveCourses) {
+                  let startDate = null
+                  let endDate = null
+                  let start_time = null
+                  let end_time = null
+                  if(leaveCourse.teachCompensationDate && leaveCourse.teachCompensationStartTime && leaveCourse.teachCompensationEndTime){
+                      start_time = leaveCourse.teachCompensationStartTime;
+                      end_time = leaveCourse.teachCompensationEndTime;
+                      const [start_hours, start_minutes] = start_time.split(":");
+                      const [end_hours, end_minutes] = end_time.split(":");
+                      // console.log(leaveCourse.teachCompensationDate)
+                      startDate = new Date(leaveCourse.teachCompensationDate);
+                      startDate.setHours(start_hours);
+                      startDate.setMinutes(start_minutes);
+                      endDate = new Date(leaveCourse.teachCompensationDate);
+                      endDate.setHours(end_hours);
+                      endDate.setMinutes(end_minutes);
+                    
+                    if (courses_task.filter(v => v.course_id === course.courseId && v.time_id === course.timeId && v.day_of_week_id === course.dayOfWeekId && v.start_date === moment(startDate).format("YYYY-MM-DD")).length === 0) {
+                      courses_task.push({
+                        course_package_name: course.packageName,
+                        course_option_name: course.optionName,
+                        name: course.courseNameTh,
+                        subtitle: course.courseNameEn,
+                        course_id: course.courseId,
+                        time_id: course.timeId,
+                        type: course?.compType ? course?.compType : null,
+                        day_of_week_id: course.dayOfWeekId,
+                        coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
+                        start_date:moment(startDate).format("YYYY-MM-DD"),
+                        start_date_str:startDate.toLocaleDateString("th-TH", options),
+                        start: moment(startDate).format("YYYY-MM-DD HH:mm"),
+                        end:moment(endDate).format("YYYY-MM-DD HH:mm"),
+                        start_time: start_time,
+                        end_time: end_time, 
+                        category_name: course_data.data.data.categoryNameTh,
+                        course_img: course_data.data.data.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}` : "",
+                        course_per_time: course_data.data.data.coursePerTime,
+                        show_summary: false,
+                        show_assessment: false,
+                        show_assessment_pantential: false,
+                      });
+                    }
                   }
                 }
               }
@@ -656,7 +664,8 @@ const coachModules = {
                   }
                 }
               } else if (course.dates.dates) {
-                for (const dates of course.dates.dates) {
+                for await (const dates of course.dates.dates) {
+                  // console.log("562 =>",dates)
                   let start_time = course.period.start;
                   let end_time = course.period.end;
                   const [start_hours, start_minutes] = start_time.split(":");
@@ -668,9 +677,10 @@ const coachModules = {
                   endDate.setHours(end_hours);
                   endDate.setMinutes(end_minutes);
                   if (courses_task.filter(v => v.course_id === course.courseId && v.time_id === course.timeId && v.day_of_week_id === course.dayOfWeekId && v.start_date === moment(startDate).format("YYYY-MM-DD")).length === 0) {
+                    // console.log("674 =>",dates)
                     courses_task.push({
-                      name: course_data.data.data.courseNameTh,
-                      subtitle: course_data.data.data.courseNameEn,
+                      name: course.courseNameTh,
+                      subtitle: course.courseNameEn,
                       course_id: course.courseId,
                       time_id: course.timeId,
                       day_of_week_id: course.dayOfWeekId,
@@ -700,12 +710,12 @@ const coachModules = {
           // let localhost = "http://localhost:3000"
           const sub_coach = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/subcoach/${coach_id}`, config);
           if (sub_coach.data.statusCode === 200) {
-            console.log("674 => ", sub_coach.data.data)
+            // console.log("674 => ", sub_coach.data.data)
             for await (const course of sub_coach.data.data) {
               const course_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course.courseId}`);
               if (course.dates.date) {
-                for (const dates of course.dates.date) {
-                  console.log("744", dates)
+                for await(const dates of course.dates.date) {
+                  // console.log("744", dates)
                   let start_time = course.period.start;
                   let end_time = course.period.end;
                   const [start_hours, start_minutes] = start_time.split(":");
@@ -745,7 +755,7 @@ const coachModules = {
               }
             }
           }
-          console.log("746", courses_task)
+          // console.log("749", courses_task) 
           context.commit("SetMyCourses", courses_task);
           context.commit("SetMyCoursesIsLoading", false);
         }

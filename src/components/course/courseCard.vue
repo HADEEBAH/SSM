@@ -840,21 +840,21 @@ export default {
       this.class_date_range_str = {
         start_date: dateFormatter(
           this.course_data?.coachs[0].class_date_range.start_date,
-          "DD MT YYYYT"
+          "DD MMT YYYYT"
         ),
         end_date: dateFormatter(
           this.course_data?.coachs[0].class_date_range.end_date,
-          "DD MT YYYYT"
+          "DD MMT YYYYT"
         ),
       };
       this.register_date_range_str = {
         start_date: dateFormatter(
           this.course_data?.coachs[0].register_date_range.start_date,
-          "DD MT YYYYT"
+          "DD MMT YYYYT"
         ),
         end_date: dateFormatter(
           this.course_data?.coachs[0].register_date_range.end_date,
-          "DD MT YYYYT"
+          "DD MMT YYYYT"
         ),
       };
     }

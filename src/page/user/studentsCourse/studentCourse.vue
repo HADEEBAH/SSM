@@ -190,15 +190,21 @@
                       ) in potential.attachmentPotential"
                       :key="index_file"
                     >
-                      <v-card-text
-                        class="border border-2 border-[#ff6b81] rounded-lg"
-                      >
+                      <!-- <pre>{{ file }}</pre> -->
+                      <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                         <v-row>
                           <v-col align="center">
+                            <v-icon
+                              color="#ff6b81"
+                              size="60px"
+                              v-if="file.filesType.includes('pdf')"
+                              >mdi-file-eye-outline</v-icon
+                            >
                             <v-img
+                              v-if="file.filesType.includes('text')"
                               height="35"
                               width="26"
-                              src="../../../assets/coachLeave/file-pdf.png"
+                              src="../../../assets/coachLeave/file.svg"
                             />
                           </v-col>
                           <v-col cols="12" sm="10" align="start">
@@ -368,15 +374,27 @@
                         .attachment"
                       :key="index_file"
                     >
-                      <v-card-text
-                        class="border border-2 border-[#ff6b81] rounded-lg"
-                      >
+                      <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
+                        <!-- <pre>{{ file }}</pre> -->
                         <v-row dense>
                           <v-col cols="12" sm="1" align="center">
                             <v-img
+                              v-if="file.originalFilesName.includes('jpg')"
                               height="35"
                               width="26"
                               src="../../../assets/coachLeave/file-pdf.png"
+                            />
+                            <v-img
+                              v-if="file.originalFilesName.includes('MOV')"
+                              height="35"
+                              width="26"
+                              src="../../../assets/coachLeave/file.svg"
+                            />
+                            <v-img
+                              v-if="file.originalFilesName.includes('mp4')"
+                              height="35"
+                              width="26"
+                              src="../../../assets/coachLeave/file.svg"
                             />
                           </v-col>
                           <v-col cols="12" sm="10" align="start">
