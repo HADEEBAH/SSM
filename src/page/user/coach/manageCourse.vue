@@ -186,7 +186,7 @@
                 indeterminate
                 size="64"
               ></v-progress-circular>
-              
+
               <calendarCoach
                 v-if="!my_courses_is_loading"
                 class="w-full"
@@ -602,7 +602,7 @@
                         </v-col>
                       </v-row>
                       <v-row>
-                        <v-col> ระดับความสนใจ </v-col>
+                        <v-col> ระดับความสนใจ</v-col>
                       </v-row>
                       <v-row>
                         <v-col class="font-semibold">
@@ -657,7 +657,44 @@
                         }}</span>
                       </v-col>
                     </v-row>
-                    <v-row>
+                    <div v-if="coach_check_in.attachment.length > 0">
+                      <v-row dense>
+                        <v-col class="font-bold"> ไฟล์แนบ :</v-col>
+                      </v-row>
+
+                      <v-card
+                        @click="openFileSummary(file)"
+                        flat
+                        class="mb-3"
+                        v-for="(file, index) of coach_check_in.attachment"
+                        :key="`${index}-fileattachment`"
+                      >
+                        <!-- <pre>{{ file }}</pre> -->
+                        <v-card-text
+                          class="border-2 border-[#ff6b81] rounded-lg"
+                        >
+                          <v-row dense>
+                            <v-col cols="auto" class="pr-2">
+                              <imgFileType
+                                :mime_type="file.filesType"
+                              ></imgFileType>
+                            </v-col>
+                            <v-col class="px-2">
+                              <span class="font-bold">{{
+                                file.originalFilesName
+                              }}</span
+                              ><br />
+                              <span class="text-caption"
+                                >ขนาดไฟล์ :
+                                {{ (file.filesSize / 1000000).toFixed(2) }}
+                                MB</span
+                              >
+                            </v-col>
+                          </v-row>
+                        </v-card-text>
+                      </v-card>
+                    </div>
+                    <!-- <v-row>
                       <v-col
                         >ไฟล์แนบ :
                         <template v-if="coach_check_in.attachment.length > 0">
@@ -677,7 +714,7 @@
                           <span> - </span>
                         </template>
                       </v-col>
-                    </v-row>
+                    </v-row> -->
                   </v-card-text>
                 </v-card>
               </v-card-text>
@@ -1250,7 +1287,7 @@
             </v-row>
             <div v-if="show_comment_data.assessment.attachment.length > 0">
               <v-row dense>
-                <v-col class="font-bold"> ไฟล์แนบ </v-col>
+                <v-col class="font-bold"> ไฟล์แนบ :</v-col>
               </v-row>
               <v-card
                 @click="openFile(file)"
@@ -1259,14 +1296,11 @@
                 v-for="(file, index) of show_comment_data.assessment.attachment"
                 :key="`${index}-fileattachment`"
               >
+                <!-- <pre>{{ file }}</pre> -->
                 <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                   <v-row dense>
                     <v-col cols="auto" class="pr-2">
-                      <v-img
-                        height="35"
-                        width="26"
-                        src="../../../assets/coachLeave/file-pdf.png"
-                      />
+                      <imgFileType :mime_type="file.filesType"></imgFileType>
                     </v-col>
                     <v-col class="px-2">
                       <span class="font-bold">{{ file.originalFilesName }}</span
@@ -1305,8 +1339,8 @@
           <v-card-text>
             <v-row dense>
               <v-col align="center" class="text-lg font-bold"
-                >ความคิดเห็นเพิ่มเติม</v-col
-              >
+                >ความคิดเห็นเพิ่มเติม
+              </v-col>
             </v-row>
             <v-row class="mb-3" dense>
               <v-col>
@@ -1320,7 +1354,7 @@
               "
             >
               <v-row dense>
-                <v-col class="font-bold text-lg"> ไฟล์แนบ </v-col>
+                <v-col class="font-bold text-lg"> ไฟล์แนบ : </v-col>
               </v-row>
               <v-card
                 @click="openFile(file)"
@@ -1333,11 +1367,7 @@
                 <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                   <v-row>
                     <v-col cols="auto" class="pr-2">
-                      <v-img
-                        height="35"
-                        width="26"
-                        src="../../../assets/coachLeave/file-pdf.png"
-                      />
+                      <imgFileType :mime_type="file.filesType"></imgFileType>
                     </v-col>
                     <v-col class="px-2">
                       <span class="font-bold">{{ file.originalFilesName }}</span
@@ -1355,7 +1385,6 @@
         </v-card>
       </v-dialog>
     </v-container>
-   
   </div>
 </template>
   <script>
@@ -1370,6 +1399,8 @@ import { dateFormatter } from "@/functions/functions";
 import { mapActions, mapGetters } from "vuex";
 import coachLeaveForm from "../../../components/coach_leave/coachLeaveForm.vue";
 import router from "@/router";
+import imgFileType from "../../../components/file_type/imgFileType.vue";
+
 // import LoadingOverlay from '../../../components/loading/loadingOverlay.vue';
 export default {
   name: "menageCourse",
@@ -1380,6 +1411,7 @@ export default {
     imgCard,
     labelCustom,
     coachLeaveForm,
+    imgFileType,
   },
   data: () => ({
     form_coach_leave: false,
@@ -1509,7 +1541,6 @@ export default {
   },
 
   mounted() {
-    
     // console.log("valid", this.user_detail?.roles?.filter((val)=> val === "R_3").length === 0);
     if (
       this.user_detail?.roles?.filter(

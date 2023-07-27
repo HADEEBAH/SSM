@@ -367,6 +367,7 @@
         <!-- <div v-if="type_selected == 'MySchedule'"> -->
         <div v-if="$route.params.action == 'MySchedule'">
           <!-- Role parent -->
+          <!-- <pre>{{ students }}</pre> -->
           <div v-if="data_local.roles.includes('R_4')">
             <v-row class="mb-3">
               <v-col cols="12">
@@ -411,6 +412,7 @@
                 </v-card>
               </v-col>
             </v-row>
+            <!-- <pre>{{ itemTime.dates }}</pre> -->
             <div>
               <template>
                 <calendarStudent
@@ -1026,20 +1028,23 @@ export default {
     },
     ReserveList() {
       let reserveList = [];
-      this.profile_booked.forEach((reserve) => {
-        if (
-          reserveList.filter(
-            (v) =>
-              v.coachId == reserve.coachId &&
-              v.courseId == reserve.courseId &&
-              v.dayOfWeekId === reserve.dayOfWeekId &&
-              v.timeId === reserve.timeId &&
-              v.studentId === reserve.studentId
-          ).length === 0
-        ) {
-          reserveList.push(reserve);
-        }
-      });
+      if (this.profile_booked) {
+        this.profile_booked.forEach((reserve) => {
+          if (
+            reserveList.filter(
+              (v) =>
+                v.coachId == reserve.coachId &&
+                v.courseId == reserve.courseId &&
+                v.dayOfWeekId === reserve.dayOfWeekId &&
+                v.timeId === reserve.timeId &&
+                v.studentId === reserve.studentId
+            ).length === 0
+          ) {
+            reserveList.push(reserve);
+          }
+        });
+      }
+
       // this.student_reserve.forEach((reserve) => {
       //   if (
       //     reserveList.filter(
@@ -1110,7 +1115,10 @@ export default {
       if (this.user_detail.roles.includes("R_5")) {
         // this.GetStudentReserve(this.user_detail.account_id);
         this.GetAll(this.user_detail.account_id);
+      } else if (this.user_detail.roles.includes("R_4")) {
+        this.GetAll(this.user_detail.account_id);
       }
+
       this.GetProfileBooked(this.user_detail.account_id);
       return "";
     },
