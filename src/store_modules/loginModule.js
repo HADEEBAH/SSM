@@ -196,28 +196,35 @@ const loginModules = {
                         } else {
                             context.commit("SetUserData", [data.data])
                         }
-                    } else {
-                        Swal.fire({
-                            icon: "error",
-                            title: "ไม่พบผู้ใช้"
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                if (type === 'student') {
-                                    context.commit("SetUserStudentData", [])
-                                } else {
-                                    context.commit("SetUserData", [])
-                                }
-                            }
-                        })
                     }
                     context.commit("SetIsLoading", false)
                 }
             } catch (error) {
                 context.commit("SetIsLoading", false)
-                Swal.fire({
-                    icon: "error",
-                    title: error.message
-                })
+                if (error.response.data.message === "This username not found.") {
+                    Swal.fire({
+                        icon: "error",
+                        title: "ไม่พบผู้ใช้"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            if (type === 'student') {
+                                context.commit("SetUserStudentData", [])
+                            } else {
+                                context.commit("SetUserData", [])
+                            }
+                        }
+                    })
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: error.message
+                    })
+                }
+               
+                // Swal.fire({
+                //     icon: "error",
+                //     title: error.message
+                // })
                 // console.log(error)
             }
         },

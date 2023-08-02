@@ -647,8 +647,6 @@
                 outlined
                 v-model="relation_user.username"
                 @change="checkUsername(relation_user.username)"
-                @keyup.enter="checkUsername(relation_user.username)"
-                @blur="checkUsername(relation_user.username)"
                 placeholder="Username"
               >
                 <template v-slot:append>
