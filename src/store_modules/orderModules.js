@@ -46,6 +46,7 @@ const orderModules = {
         orders_is_loading : false,
         relations:[],
         cart_list :[],
+        cart_list_is_loading: false,
         reserve_list:[],
         student_list:[],
         students : [],
@@ -79,6 +80,9 @@ const orderModules = {
         },
         SetCartList(state, payload) {
             state.cart_list = payload
+        },
+        SetCartListIsLoading(state, payload){
+            state.cart_list_is_loading = payload
         },
         SetOrderDetail(state, payload){
             state.order_detail = payload
@@ -819,6 +823,7 @@ const orderModules = {
         },
         async GetCartList(context, account_id) {
             // // console.log("account_id", account_id);
+            context.commit("SetCartListIsLoading",true)
             try {
                 let config = {
                     headers:{
@@ -848,16 +853,22 @@ const orderModules = {
                         }
                     }
                     context.commit("SetCartList", data.data)
+                    setTimeout(()=>{
+                        context.commit("SetCartListIsLoading",false)
+                    },200)
+                   
                     // // console.log("SetCartList", data.data);
                 } else {
                     throw { error: data }
                 }
             } catch (error) {
+                context.commit("SetCartListIsLoading",false)
                 // console.log(error)
             }
 
         },
         async DeleteCart(context, {cart_id, account_id}){
+            context.commit("SetCartListIsLoading",true)
             try{
                 let config = {
                     headers:{
@@ -890,6 +901,7 @@ const orderModules = {
                             }
                         }
                         context.commit("SetCartList", carts.data.data)
+                        context.commit("SetCartListIsLoading",false)
                         // console.log("SetCartList",carts.data.data);
                     } else {
                         throw { error: carts }
@@ -898,6 +910,7 @@ const orderModules = {
                    throw {error :data }
                 }
             }catch(error){
+                context.commit("SetCartListIsLoading",false)
                 // console.log(error)
                 
             }
@@ -1020,6 +1033,9 @@ const orderModules = {
         getStudentList(state){
           return state.student_list
         },
+        getCartListIsLoading(state){
+            return state.cart_list_is_loading
+        }
     },
 };
 

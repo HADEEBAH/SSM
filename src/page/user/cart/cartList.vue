@@ -3,176 +3,179 @@
   <v-app class="overflow-x-hidden overflaow-y-hidden">
     {{ setFunctions }}
     <v-container>
-      <loading-overlay :loading="categorys_is_loading"></loading-overlay>
+      <loading-overlay :loading="cart_list_is_loading"></loading-overlay>
       <!-- <pre>{{ cart_list }}</pre> -->
-      <v-row v-if="cart_list.length == 0">
-        <v-col cols="12" class="text-xl font-bold text-center my-5 pink--text">
-          ไม่พบข้อมูลในตะกร้า
-        </v-col>
-        <v-col cols="12">
-          <v-img src="../../../assets/cart/noCart.png"> </v-img>
-        </v-col>
-      </v-row>
-      <div v-else>
-        <v-row class="mb-16">
-          <v-col
-            cols="12"
-            v-for="(item, index_item) in cart_list"
-            :key="`${index_item}-cart`"
-          >
-            <!-- <pre>{{item}}</pre> -->
-            <v-card class="rounded-lg mt-5">
-              <v-row dense>
-                <v-col cols="3">
-                  <v-img
-                    :src="item.course_img"
-                    cover
-                    height="270"
-                    class="w-full h-full rounded-l-lg"
-                  />
-                </v-col>
-                <v-col>
-                  <v-card-text>
-                    <v-row dense>
-                      <v-col cols="12">
-                        <v-row dense>
-                          <v-col>
-                            <v-row dense>
-                              <v-col class="text-lg font-bold">
-                                {{ item.course_name_th }}({{ item.course_name_en }})
-                              </v-col>
-                              <v-col cols="auto">
-                                <v-checkbox
-                                  class="card_checkbox"
-                                  color="error"
-                                  hide-details
-                                  @change="selectOne($event, item.course_id)"
-                                  v-model="item.checked"
+      <div v-if="!cart_list_is_loading">
+        <v-row v-if="cart_list.length == 0">
+          <v-col cols="12" class="text-xl font-bold text-center my-5 pink--text">
+            ไม่พบข้อมูลในตะกร้า
+          </v-col>
+          <v-col cols="12">
+            <v-img src="../../../assets/cart/noCart.png"> </v-img>
+          </v-col>
+        </v-row>
+        <div v-if="cart_list.length > 0">
+          <v-row class="mb-16">
+            <v-col
+              cols="12"
+              v-for="(item, index_item) in cart_list"
+              :key="`${index_item}-cart`"
+            >
+              <!-- <pre>{{item}}</pre> -->
+              <v-card class="rounded-lg mt-5">
+                <v-row dense>
+                  <v-col cols="3">
+                    <v-img
+                      :src="item.course_img"
+                      cover
+                      height="270"
+                      class="w-full h-full rounded-l-lg"
+                    />
+                  </v-col>
+                  <v-col>
+                    <v-card-text>
+                      <v-row dense>
+                        <v-col cols="12">
+                          <v-row dense>
+                            <v-col>
+                              <v-row dense>
+                                <v-col class="text-lg font-bold">
+                                  {{ item.course_name_th }}({{ item.course_name_en }})
+                                </v-col>
+                                <v-col cols="auto">
+                                  <v-checkbox
+                                    class="card_checkbox"
+                                    color="error"
+                                    hide-details
+                                    @change="selectOne($event, item.course_id)"
+                                    v-model="item.checked"
+                                  >
+                                  </v-checkbox>
+                                  <!-- {{ item.checked }} -->
+                                </v-col>
+                              </v-row>
+                              <v-row dense>
+                                <v-col
+                                  cols="12"
+                                  sm="6"
+                                  class="text-md font-semibold"
                                 >
-                                </v-checkbox>
-                                <!-- {{ item.checked }} -->
-                              </v-col>
-                            </v-row>
-                            <v-row dense>
-                              <v-col
-                                cols="12"
-                                sm="6"
-                                class="text-md font-semibold"
-                              >
-                                โค้ช : {{ item.coach_name }}
-                              </v-col>
-                              <v-col
-                                cols="12"
-                                sm="6"
-                                class="text-md font-semibold"
-                              >
-                                <!-- เวลา : {{ item.time.start }}-{{ item.time.end }} -->
-                              </v-col>
-                            </v-row>
-                            <v-row dense>
-                              <v-col>
-                                {{ item.detail }}
-                              </v-col>
-                            </v-row>
-                          </v-col>
-                        </v-row>
-                      </v-col>
-                    </v-row>
-                    <v-row dense v-if="item.course_type_id === 'CT_1'">
-                      <v-col align="right" cols="8"> จำนวนครั้งที่เรียน</v-col>
-                      <v-col
-                        align="right"
-                        cols="4"
-                        class="text-md font-semibold text-[#FF6B81]"
-                      >
-                        {{ item.option.amount }} ครั้ง</v-col
-                      >
-                    </v-row>
-                    <v-row dense>
-                      <v-col align="right" cols="8"> จำนวนนักเรียน</v-col>
-                      <v-col
-                        align="right"
-                        cols="4"
-                        class="text-md font-semibold text-[#FF6B81]"
-                      >
-                        {{ item.students.length }} คน</v-col
-                      >
-                    </v-row>
-                    <v-row dense v-if="item.course_type_id === 'CT_1' ">
-                      <v-col align="right" cols="8"> ส่วนลด</v-col>
-                      <v-col
-                        align="right"
-                        cols="4"
-                        class="text-md font-semibold text-[#FF6B81]"
-                      >
-                        {{ item.option.discount_price }} บาท</v-col
-                      >
-                    </v-row>
-                    <v-row dense class="mb-3">
-                      <v-col align="right" cols="8"> ราคาชำระ</v-col>
-                      <v-col
-                        align="right"
-                        cols="4"
-                        class="text-md font-semibold text-[#FF6B81]"
-                      >
-                        {{
-                          item.course_type_id === "CT_1"
-                            ? item.option.net_price.toLocaleString()
-                            : item.net_price.toLocaleString()
-                        }}
-                        บาท</v-col
-                      >
-                    </v-row>
-                    <!-- <pre>{{ item }}</pre> -->
-                    <div align="right">
-                      <v-btn
-                        outlined
-                        color="red"
-                        @click="removeCart(item.order_tmp_id)"
-                        ><v-icon> mdi-delete</v-icon> ลบรายการ</v-btn
-                      >
-                    </div>
-                  </v-card-text>
-                </v-col>
-              </v-row>
-            </v-card>
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col>
-            <v-checkbox
+                                  โค้ช : {{ item.coach_name }}
+                                </v-col>
+                                <v-col
+                                  cols="12"
+                                  sm="6"
+                                  class="text-md font-semibold"
+                                >
+                                  <!-- เวลา : {{ item.time.start }}-{{ item.time.end }} -->
+                                </v-col>
+                              </v-row>
+                              <v-row dense>
+                                <v-col>
+                                  {{ item.detail }}
+                                </v-col>
+                              </v-row>
+                            </v-col>
+                          </v-row>
+                        </v-col>
+                      </v-row>
+                      <v-row dense v-if="item.course_type_id === 'CT_1'">
+                        <v-col align="right" cols="8"> จำนวนครั้งที่เรียน</v-col>
+                        <v-col
+                          align="right"
+                          cols="4"
+                          class="text-md font-semibold text-[#FF6B81]"
+                        >
+                          {{ item.option.amount }} ครั้ง</v-col
+                        >
+                      </v-row>
+                      <v-row dense>
+                        <v-col align="right" cols="8"> จำนวนนักเรียน</v-col>
+                        <v-col
+                          align="right"
+                          cols="4"
+                          class="text-md font-semibold text-[#FF6B81]"
+                        >
+                          {{ item.students.length }} คน</v-col
+                        >
+                      </v-row>
+                      <v-row dense v-if="item.course_type_id === 'CT_1' ">
+                        <v-col align="right" cols="8"> ส่วนลด</v-col>
+                        <v-col
+                          align="right"
+                          cols="4"
+                          class="text-md font-semibold text-[#FF6B81]"
+                        >
+                          {{ item.option.discount_price }} บาท</v-col
+                        >
+                      </v-row>
+                      <v-row dense class="mb-3">
+                        <v-col align="right" cols="8"> ราคาชำระ</v-col>
+                        <v-col
+                          align="right"
+                          cols="4"
+                          class="text-md font-semibold text-[#FF6B81]"
+                        >
+                          {{
+                            item.course_type_id === "CT_1"
+                              ? item.option.net_price.toLocaleString()
+                              : item.net_price.toLocaleString()
+                          }}
+                          บาท</v-col
+                        >
+                      </v-row>
+                      <!-- <pre>{{ item }}</pre> -->
+                      <div align="right">
+                        <v-btn
+                          outlined
+                          color="red"
+                          @click="removeCart(item.order_tmp_id)"
+                          ><v-icon> mdi-delete</v-icon> ลบรายการ</v-btn
+                        >
+                      </div>
+                    </v-card-text>
+                  </v-col>
+                </v-row>
+              </v-card>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col>
+              <v-checkbox
+                  hide-details
+                  color="pink"
+                  v-model="policy"
+                >
+                <template v-slot:label>
+                  ยอมรับ <a class="mx-2 font-weight-bold"> ข้อกำหนดการใช้บริการ </a> และ <a class="mx-2 font-weight-bold" >นโยบายความคุ้มครองข้อมูลส่วนบุคคล</a>
+                </template>
+              </v-checkbox>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col cols="12" sm="4">
+              <v-checkbox
+                class="card_checkbox"
+                color="error"
                 hide-details
-                color="pink"
-                v-model="policy"
-              >
-              <template v-slot:label>
-                ยอมรับ <a class="mx-2 font-weight-bold"> ข้อกำหนดการใช้บริการ </a> และ <a class="mx-2 font-weight-bold" >นโยบายความคุ้มครองข้อมูลส่วนบุคคล</a>
-              </template>
-            </v-checkbox>
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col cols="12" sm="4">
-            <v-checkbox
-              class="card_checkbox"
-              color="error"
-              hide-details
-              label="ทั้งหมด"
-              @change="selectAll($event)"
-              v-model="selected_all"
-            ></v-checkbox>
-          </v-col>
-          <v-col cols="6" sm="4">
-            รวมทั้งหมด
-            <b class="text-[#ff6b81]">{{ total_price.toLocaleString() }} บาท</b>
-          </v-col>
-          <v-col cols="6" sm="4" align="end">
-            <v-btn depressed dark color="#ff6b81" @click="savePayment">
-              ชำระเงิน ({{ count_selected_cart }})
-            </v-btn>
-          </v-col>
-        </v-row>
+                label="ทั้งหมด"
+                @change="selectAll($event)"
+                v-model="selected_all"
+              ></v-checkbox>
+            </v-col>
+            <v-col cols="6" sm="4">
+              รวมทั้งหมด
+              <b class="text-[#ff6b81]">{{ total_price.toLocaleString() }} บาท</b>
+            </v-col>
+            <v-col cols="6" sm="4" align="end">
+              <v-btn depressed dark color="#ff6b81" @click="savePayment">
+                ชำระเงิน ({{ count_selected_cart }})
+              </v-btn>
+            </v-col>
+          </v-row>
+        </div>
       </div>
+     
       <!-- <v-btn depressed dark color="#ff6b81" @click="saveCartData"> ชำระเงิน  </v-btn> -->
     </v-container>
     <v-dialog 
@@ -438,6 +441,7 @@ export default {
   computed: {
     ...mapGetters({
       cart_list: "OrderModules/getCartList",
+      cart_list_is_loading: "OrderModules/getCartListIsLoading",
       course_order: "OrderModules/getCourseOrder",
       categorys_is_loading: "CategoryModules/getCategorysIsLoading",
       course_monitors: "CourseMonitorModules/getCourseMonitor",
