@@ -451,7 +451,7 @@
                 >
                 <v-col>
                   <v-menu
-                    :disabled="disable"
+                    :disabled="disable || !course_data.coachs[0].register_date_range.start_date"
                     v-model="
                       course_data.coachs[0].register_date_range.menu_end_date
                     "
@@ -463,7 +463,7 @@
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
                         dense
-                        :disabled="disable"
+                        :disabled="disable || !course_data.coachs[0].register_date_range.start_date"
                         :outlined="!disable"
                         :filled="disable"
                         @change="ChangeCourseData(course_data)"
@@ -492,6 +492,7 @@
                           ? course_data.coachs[0].register_date_range.start_date
                           : today.toISOString()
                       "
+                      
                       @input="inputDate($event, 'register end date')"
                       v-model="
                         course_data.coachs[0].register_date_range.end_date
@@ -605,7 +606,7 @@
                     v-model="
                       course_data.coachs[0].class_date_range.menu_end_date
                     "
-                    :disabled="disable"
+                    :disabled="disable || !course_data.coachs[0].class_date_range.start_date"
                     :close-on-content-click="false"
                     transition="scale-transition"
                     offset-y
@@ -614,7 +615,7 @@
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
                         dense
-                        :disabled="disable"
+                        :disabled="disable || !course_data.coachs[0].class_date_range.start_date"
                         :outlined="!disable"
                         :filled="disable"
                         @change="ChangeCourseData(course_data)"
