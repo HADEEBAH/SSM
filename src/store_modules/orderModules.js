@@ -210,7 +210,7 @@ const orderModules = {
         },
         changeOrderData(context, orderData) {
             context.commit("SetOrder", orderData)
-            // // console.log(orderData)
+            console.log(orderData)
         },
         async GetRelations(context,{student_id,}){
             try{
