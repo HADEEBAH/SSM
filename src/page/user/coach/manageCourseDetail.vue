@@ -794,7 +794,6 @@
                       align="right"
                     >
                       <v-btn
-                        v-if="coach_check_in.attachment.length == 0"
                         icon
                         class="bg-[#f00]"
                         dark
@@ -1955,8 +1954,12 @@ export default {
       }
     },
     removeSummaryFile(index) {
+      let index_att = 0
+      if(this.coach_check_in.attachment.length > 0){
+        index_att = this.coach_check_in.attachment.length 
+      }
+      this.coach_check_in.summary_files.splice(index - index_att, 1);
       this.preview_summary_files.splice(index, 1);
-      this.coach_check_in.summary_files.splice(index, 1);
     },
     removeSummaryFileInbase(file, index) {
       // console.log(this.coach_check_in);
