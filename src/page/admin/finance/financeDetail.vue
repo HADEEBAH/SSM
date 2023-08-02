@@ -1038,6 +1038,8 @@ export default {
         if (result.isConfirmed) {
           // // console.log(this.order_detail)
           this.updateOrderStatus({ order_detail: this.order_detail });
+        }else{
+          this.GetOrderDetail({ order_number: this.$route.params.order_id });
         }
       });
     },
@@ -1054,6 +1056,8 @@ export default {
         if (result.isConfirmed) {
           // console.log(this.order_detail);
           this.updatePayment({ order_data: this.order_detail });
+        }else{
+          this.GetOrderDetail({ order_number: this.$route.params.order_id });
         }
       });
       // this.payment.status = "paid";
