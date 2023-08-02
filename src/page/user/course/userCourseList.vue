@@ -10,7 +10,7 @@
             prepend-inner-icon="mdi-magnify"
             placeholder="ค้นหาคอร์สการเรียนรู้ที่คุณสนใจได้ที่นี่"
             v-model="search_course"
-            @change="searchCourse($event)"
+            @input="searchCourse($event)"
           ></v-text-field>
         </v-col>
       </v-row>
