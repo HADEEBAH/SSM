@@ -95,7 +95,7 @@ import { mapActions, mapGetters } from 'vuex'
               columns:[
                 {
                   margin: [0, 0, 0, 0],
-                  qr: `${process.env.VUE_APP_URL}/portfolio/${this.data_user_by_id.userOneId}`,
+                  qr: `${process.env.VUE_APP_URL}/api/v1/profile/download-portfolio/${this.data_user_by_id.userOneId}`,
                   width:'25%',
                   fit:120
                 },
