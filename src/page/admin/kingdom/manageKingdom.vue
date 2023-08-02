@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <!-- <label class="text-xl font-bold">จัดการอาณาจักรทั้งหมด</label> -->
-    <header-page slot_tag title="จัดการคอร์สทั้งหมด">
+    <header-page slot_tag title="จัดการอาณาจักรทั้งหมด">
       <v-text-field
         class="w-full"
         outlined
