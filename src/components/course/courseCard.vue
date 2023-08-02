@@ -418,7 +418,7 @@
                         :rules="rules.start_date"
                         v-model="register_date_range_str.start_date"
                         readonly
-                        @change="StartDateRegisCourse(course_data)"
+                       
                         placeholder="เลือกวันที่เริ่ม"
                         v-bind="attrs"
                         v-on="on"
@@ -438,6 +438,7 @@
                     </template>
                     <v-date-picker
                       @input="inputDate($event, 'register start date')"
+                      @change="StartDateRegisCourse(course_data)"
                       :min="today.toISOString()"
                       v-model="
                         course_data.coachs[0].register_date_range.start_date
@@ -561,8 +562,6 @@
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
                         dense
-                        
-                        @change="StartDateStudyCourse(course_data)"
                         :disabled="disable"
                         :outlined="!disable"
                         :filled="disable"
@@ -591,6 +590,7 @@
                           ? course_data.coachs[0].register_date_range.end_date
                           : today.toISOString()
                       "
+                      @change="StartDateStudyCourse(course_data)"
                       @input="inputDate($event, 'class start date')"
                       v-model="
                         course_data.coachs[0].class_date_range.start_date
@@ -887,11 +887,13 @@ export default {
       value.splice(value.indexOf(item), 1);
     },
     StartDateRegisCourse(course_data){
+      console.log("StartDateRegisCourse")
       this.course_data.coachs[0].register_date_range.end_date = ""
       this.register_date_range_str.end_date = ""
       this.ChangeCourseData(course_data)
     },
     StartDateStudyCourse(course_data){
+      console.log("StartDateStudyCourse")
       this.course_data.coachs[0].class_date_range.end_date = "" 
       this.class_date_range_str.end_date = ""
       this.ChangeCourseData(course_data)
