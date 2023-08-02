@@ -887,14 +887,14 @@ export default {
       value.splice(value.indexOf(item), 1);
     },
     StartDateRegisCourse(course_data){
-      this.ChangeCourseData(course_data)
       this.course_data.coachs[0].register_date_range.end_date = ""
       this.register_date_range_str.end_date = ""
+      this.ChangeCourseData(course_data)
     },
     StartDateStudyCourse(course_data){
-      this.ChangeCourseData(course_data)
       this.course_data.coachs[0].class_date_range.end_date = "" 
       this.class_date_range_str.end_date = ""
+      this.ChangeCourseData(course_data)
     },
     SelectedStartDate(e) {
       e.target.parentNode.parentNode.parentNode.parentNode.parentNode
