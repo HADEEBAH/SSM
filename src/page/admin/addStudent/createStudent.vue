@@ -31,7 +31,9 @@
                 >
                   <template v-slot:no-data>
                     <v-list-item>
-                      <v-list-item-title> {{ search ? 'ไม่พบข้อมูล' : 'กรุณากรอกชื่อผู้เรียน' }} </v-list-item-title>
+                      <v-list-item-title>
+                        {{ search ? "ไม่พบข้อมูล" : "กรุณากรอกชื่อผู้เรียน" }}
+                      </v-list-item-title>
                     </v-list-item>
                   </template>
                   <template v-slot:selection="data">
@@ -965,7 +967,7 @@ export default {
     inputDate(e, type, data) {
       switch (type) {
         case "course open":
-          data.start_date_str = dateFormatter(e, "DD MT YYYYT");
+          data.start_date_str = dateFormatter(e, "DD MMT YYYYT");
           break;
       }
     },
@@ -1035,8 +1037,15 @@ export default {
           }
           if (this.course_data.course_type_id === "CT_2") {
             course.start_date = this.course_data.course_study_start_date;
-            course.start_date_str =
-              this.course_data.course_study_start_date_str;
+            // course.start_date_str = this.course_data.course_study_start_date_str;
+            course.start_date_str = new Date(
+              course.start_date
+            ).toLocaleDateString("th-TH", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            });
+
             course.coach = this.course_data.coachs[0];
             let startTimePart =
               this.course_data.course_period_start_date.split(":");
