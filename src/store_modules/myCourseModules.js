@@ -176,28 +176,12 @@ const myCourseModules = {
                 //     this.user_detail = JSON.parse(localStorage.getItem("userDetail"))
                 //   let user_account_id = this.user_detail.account_id
                 // let localhost = "http://localhost:3000"
+                // console.log("179 =>")
+                const dataCourseSchedule = { dates: [] };
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
                 if (data.statusCode === 200) {
-                    const dataCourseSchedule = { dates: [] };
-                    let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
-                    if (holidays.data.statusCode === 200) {
-                        for (let holiday of holidays.data.data) {
-                            dataCourseSchedule.dates.push({
-                                type: 'holiday',
-                                name: holiday.holidayName,
-                                start_date: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
-                                start: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
-                                start_time: holiday.holidayStartTime ? holiday.holidayStartTime : null,
-                                end: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
-                                end_time: holiday.holidayEndTime ? holiday.holidayEndTime : null,
-                                subtitle: holiday.allDay
-                            })
-
-                        }
-                    }
-
-                    for (const course of data.data) {
-                        // console.log("course", course);
+                    // console.log("182 =>")
+                    for await(let course of data.data) {
                         course.day_name = course.dates.day ? dayOfWeekArray(course.dates.day) : course.dates.day
                         for (const date of course.dates.date) {
                             if (course.period.start !== "Invalid date" && course.period.end !== "Invalid date") {
@@ -210,7 +194,41 @@ const myCourseModules = {
                                     subtitle: course.coachName,
                                     courseId: course.courseId,
                                 })
+                                // console.log("229 =>",dataCourseSchedule)
                             }
+
+                        }
+                        for(let coachLaeve of course.coachLeave){
+                            // console.log("202 =>",coachLaeve)
+                            if (coachLaeve.teachCompensationStartTime && coachLaeve.teachCompensationEndTime) {
+                                dataCourseSchedule.dates.push({
+                                    start: coachLaeve.teachCompensationDate+" "+coachLaeve.teachCompensationStartTime,
+                                    end: coachLaeve.teachCompensationDate+" "+coachLaeve.teachCompensationEndTime,
+                                    name: data_local.roles.includes('R_5') ? `${course.courseNameTh}(${course.courseNameEng})` : course.student.firstNameTh,
+                                    // name: `${course.courseNameTh}(${course.courseNameEng})`,
+                                    timed: course.student.firstNameTh,
+                                    subtitle: course.coachName,
+                                    courseId: course.courseId,
+                                })
+                            }
+                        }
+                        // console.log("219 =>",course)
+                    }
+                   
+                    let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
+                    if (holidays.data.statusCode === 200) {
+                        // console.log("185 =>")
+                        for (let holiday of holidays.data.data) {
+                            dataCourseSchedule.dates.push({
+                                type: 'holiday',
+                                name: holiday.holidayName,
+                                start_date: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
+                                start: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
+                                start_time: holiday.holidayStartTime ? holiday.holidayStartTime : null,
+                                end: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
+                                end_time: holiday.holidayEndTime ? holiday.holidayEndTime : null,
+                                subtitle: holiday.allDay
+                            })
 
                         }
                     }
@@ -228,6 +246,7 @@ const myCourseModules = {
                         context.commit("SetStudentData", data.data)
                         // console.log("SetStudentData", data.data)
                     }
+                    console.log("246 => data", dataCourseSchedule)
                     context.commit("SetcourseSchedule", dataCourseSchedule);
                     context.commit("SetStudentsLoading", false)
                 } else {
