@@ -1931,25 +1931,43 @@ export default {
     },
 
     previewSummaryFile(event) {
+      let accept = event.target.accept.split(",")
+      console.log(accept)
       const selectedFiles = event.target.files;
       // this.coach_check_in.summary_files = [];
       const fileUrls = [];
+      let type_file = []
+      for(let type of accept){
+        type_file.push(type.split('/')[0])
+      }
       for (let i = 0; i < selectedFiles.length; i++) {
-        if (CheckFileSize(selectedFiles[i]) === true) {
-          // console.log(selectedFiles[i]);
-          this.coach_check_in.summary_files.push(selectedFiles[i]);
-          const file = selectedFiles[i];
-          const reader = new FileReader();
-          reader.onload = () => {
-            fileUrls.push(reader.result);
-            if (fileUrls.length == selectedFiles.length) {
-              this.preview_summary_files = [
-                ...this.preview_summary_files,
-                ...fileUrls,
-              ];
-            }
-          };
-          reader.readAsDataURL(file);
+        let file_type = selectedFiles[i].type.split("/")
+        if(type_file.includes(file_type[0])){
+          if (CheckFileSize(selectedFiles[i]) === true) {
+            // console.log(selectedFiles[i]);
+            this.coach_check_in.summary_files.push(selectedFiles[i]);
+            const file = selectedFiles[i];
+            const reader = new FileReader();
+            reader.onload = () => {
+              fileUrls.push(reader.result);
+              if (fileUrls.length == selectedFiles.length) {
+                this.preview_summary_files = [
+                  ...this.preview_summary_files,
+                  ...fileUrls,
+                ];
+              }
+            };
+            reader.readAsDataURL(file);
+          }
+        }else{
+          Swal.fire({
+            icon: "error",
+            title: "กรุณาอัพโหลดเฉพาะไฟล์รูปและวีดีโอเท่านั้น",
+            showDenyButton: false,
+            showCancelButton: false,
+            confirmButtonText: "ตกลง",
+            cancelButtonText: "ยกเลิก",
+          })
         }
       }
     },
