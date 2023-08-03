@@ -451,14 +451,10 @@
                 </v-card>
               </v-col>
             </v-row>
-            <diV>
-              <template>
-                <calendarStudent
-                  :events="itemTime.dates"
-                  :type="time_frame"
-                ></calendarStudent>
-              </template>
-            </diV>
+            <calendarStudent
+              :events="itemTime.dates"
+              :type="time_frame"
+            ></calendarStudent>
           </div>
         </div>
       </v-expand-x-transition>

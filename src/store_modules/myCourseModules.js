@@ -194,30 +194,33 @@ const myCourseModules = {
                                     subtitle: course.coachName,
                                     courseId: course.courseId,
                                 })
-                                // console.log("229 =>",dataCourseSchedule)
-                            }
-
-                        }
-                        for(let coachLaeve of course.coachLeave){
-                            // console.log("202 =>",coachLaeve)
-                            if (coachLaeve.teachCompensationStartTime && coachLaeve.teachCompensationEndTime) {
-                                dataCourseSchedule.dates.push({
-                                    start: coachLaeve.teachCompensationDate+" "+coachLaeve.teachCompensationStartTime,
-                                    end: coachLaeve.teachCompensationDate+" "+coachLaeve.teachCompensationEndTime,
-                                    name: data_local.roles.includes('R_5') ? `${course.courseNameTh}(${course.courseNameEng})` : course.student.firstNameTh,
-                                    // name: `${course.courseNameTh}(${course.courseNameEng})`,
-                                    timed: course.student.firstNameTh,
-                                    subtitle: course.coachName,
-                                    courseId: course.courseId,
-                                })
+                                // console.log("197 =>",dataCourseSchedule)
                             }
                         }
+                        // console.log("200",course.coachLeave)
+                        if(course?.coachLeave){
+                            for(let coachLaeve of course?.coachLeave){
+                                // console.log("202 =>",coachLaeve)
+                                if (coachLaeve.teachCompensationStartTime && coachLaeve.teachCompensationEndTime) {
+                                    dataCourseSchedule.dates.push({
+                                        start: coachLaeve.teachCompensationDate+" "+coachLaeve.teachCompensationStartTime,
+                                        end: coachLaeve.teachCompensationDate+" "+coachLaeve.teachCompensationEndTime,
+                                        name: data_local.roles.includes('R_5') ? `${course.courseNameTh}(${course.courseNameEng})` : course.student.firstNameTh,
+                                        // name: `${course.courseNameTh}(${course.courseNameEng})`,
+                                        timed: course.student.firstNameTh,
+                                        subtitle: course.coachName,
+                                        courseId: course.courseId,
+                                    })
+                                }
+                            }
+                        }
+                       
                         // console.log("219 =>",course)
                     }
                    
                     let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
+                    // console.log("185 =>")
                     if (holidays.data.statusCode === 200) {
-                        // console.log("185 =>")
                         for (let holiday of holidays.data.data) {
                             dataCourseSchedule.dates.push({
                                 type: 'holiday',
