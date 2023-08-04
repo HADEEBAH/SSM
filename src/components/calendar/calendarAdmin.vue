@@ -88,8 +88,7 @@
                               class="underline pa-0"
                               color="#ff6b81"
                               @click="ToStudentCourse(event)"
-                            >
-                              ดูรายละเอียดคอร์สเรียน
+                              >genTitleCalender ดูรายละเอียดคอร์สเรียน
                             </v-btn>
                           </div>
                         </v-col>
@@ -271,7 +270,7 @@
                   dense
                   outlined
                   readonly
-                  :value="details.selectedDate"
+                  :value="convertDate(details.selectedDate)"
                   hide-details
                 >
                 </v-text-field>
@@ -350,7 +349,7 @@ export default {
   beforeMount() {},
   mounted() {
     // this.GetDataInSchedule();
-    this.focus = new Date()
+    this.focus = new Date();
     let today = new Date();
     this.start_of_week = new Date(
       today.getFullYear(),
@@ -382,9 +381,20 @@ export default {
       GetAllHolidays: "ManageScheduleModules/GetAllHolidays",
       GetDataInSchedule: "ManageScheduleModules/GetDataInSchedule",
     }),
-    genTitleCalender(title){
-      let title_part = title.split(" ")
-      return `${title_part[0]} ${ parseFloat(title_part[1])+543 }`
+
+    convertDate(item) {
+      const oriDate = new Date(item);
+      const fullDate = oriDate.toLocaleDateString("th-TH", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+      return fullDate;
+    },
+
+    genTitleCalender(title) {
+      let title_part = title.split(" ");
+      return `${title_part[0]} ${parseFloat(title_part[1]) + 543}`;
     },
     selectedDate(data) {
       this.details = data.event;
@@ -427,7 +437,7 @@ export default {
     //     ? this.cal.times.now.hour * 60 + this.cal.times.now.minute
     //     : 0;
     // },
-    
+
     functionEvents(date) {
       let events_data = [];
       this.events.forEach((event) => {
