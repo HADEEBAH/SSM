@@ -78,7 +78,7 @@
           </v-form>
         </v-stepper-content>
         <!-- Step 2 -->
-        <v-stepper-content class="overflow-none pa-2" step="2" >
+        <v-stepper-content class="overflow-none pa-2" step="2">
           <v-form ref="coach_form" v-model="steps[step - 1]">
             <v-card flat>
               <headerCard title="รายละเอียดเวลาและโค้ช">
@@ -107,7 +107,7 @@
                   outlined
                   color="#FF6B81"
                   @click="addPackage(course_data.packages)"
-                  ><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มแพ็คเกจ</v-btn
+                  ><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มแพ็กเกจ</v-btn
                 >
               </v-col>
             </v-row>
@@ -117,7 +117,7 @@
         <v-stepper-content step="4" class="pa-2">
           <v-form ref="privilege_form" v-model="steps[step - 1]">
             <v-card class="mx-3" flat>
-              <headerCard title="สิทธิพิเศษ"></headerCard>
+              <headerCard title="สิทธิ์พิเศษ"></headerCard>
               <v-card-text
                 class="border-dashed border-2 border-blue-600 rounded-lg"
               >
@@ -151,7 +151,7 @@
                     cols="12"
                     class="flex align-center justify-center text-h5"
                   >
-                    อัพโหลดภาพสิทธิพิเศษ
+                    อัพโหลดภาพสิทธิ์พิเศษ
                   </v-col>
                   <v-col
                     cols="12"
@@ -346,8 +346,8 @@ export default {
     step_header_data: [
       "คอร์สเรียน",
       "ช่วงเวลาและโค้ช",
-      "แพ็คเกจ",
-      "สิทธิพิเศษ",
+      "แพ็กเกจ",
+      "สิทธิ์พิเศษ",
     ],
     courses: ["โค้ชหนุ่ม", "โค้ชพอล"],
     kingdoms: ["อาณาจักรศิลปะสมัยใหม่", "อาณาจักร P.E."],
@@ -492,10 +492,10 @@ export default {
               {
                 class_date_range: {
                   start_time: "",
-                  start_time_object : {HH:"",mm:""},
+                  start_time_object: { HH: "", mm: "" },
                   menu_start_time: false,
                   end_time: "",
-                  end_time_object : {HH:"",mm:""},
+                  end_time_object: { HH: "", mm: "" },
                   menu_end_time: false,
                 },
                 students: 0,
@@ -517,9 +517,9 @@ export default {
         },
         period: {
           start_time: "",
-          start_time_object : {HH:"",mm:""},
+          start_time_object: { HH: "", mm: "" },
           end_time: "",
-          end_time_object : {HH:"",mm:""},
+          end_time_object: { HH: "", mm: "" },
         },
       });
       this.ChangeCourseData(this.course_data);

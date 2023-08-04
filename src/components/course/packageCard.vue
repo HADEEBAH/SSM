@@ -8,7 +8,7 @@
       <headerCard
         :icon="'mdi-card-account-details-outline'"
         :icon_color="'#FF6B81'"
-        :title="`แพ็คเกจที่ ${index + 1}`"
+        :title="`แพ็กเกจที่ ${index + 1}`"
       >
         <template slot="actions">
           <v-btn
@@ -26,20 +26,20 @@
           <v-card-text>
             <v-row dense>
               <v-col cols="12" sm="6">
-                <label-custom required text="แพ็คเกจ"></label-custom>
-                <v-autocomplete 
-                    dense
-                    :disabled="disable"
-                    :outlined="!disable"
-                    :filled="disable"
-                    v-model="package_data.package_id"
-                    color="#FF6B81"
-                    :rules="rules.packages"
-                    :items="packageList(index)"
-                    item-value="packageId"
-                    item-text="packageName"
-                    item-color="pink"
-                    @change="checkPackage(package_data.package_id, package_data)"
+                <label-custom required text="แพ็กเกจ"></label-custom>
+                <v-autocomplete
+                  dense
+                  :disabled="disable"
+                  :outlined="!disable"
+                  :filled="disable"
+                  v-model="package_data.package_id"
+                  color="#FF6B81"
+                  :rules="rules.packages"
+                  :items="packageList(index)"
+                  item-value="packageId"
+                  item-text="packageName"
+                  item-color="pink"
+                  @change="checkPackage(package_data.package_id, package_data)"
                 >
                   <template v-slot:no-data>
                     <v-list-item>
@@ -300,7 +300,7 @@ export default {
       return {
         packages: [
           function (val) {
-            return (val || "").length > 0 || "โปรดเลือกแพ็คเกจ";
+            return (val || "").length > 0 || "โปรดเลือกแพ็กเกจ";
           },
         ],
         packages_student: [
@@ -363,19 +363,18 @@ export default {
       );
     },
     calNetPrice(data) {
-      if(data.discount_price < 0){
-        data.discount_price = 0
+      if (data.discount_price < 0) {
+        data.discount_price = 0;
       }
       if (data.discount) {
-        if(data.price_unit - data.discount_price < 0){
-          data.discount_price = data.price_unit - 1
+        if (data.price_unit - data.discount_price < 0) {
+          data.discount_price = data.price_unit - 1;
           data.net_price = data.price_unit - data.discount_price;
           data.net_price_unit = data.net_price / data.amount;
-        }else{
+        } else {
           data.net_price = data.price_unit - data.discount_price;
           data.net_price_unit = data.net_price / data.amount;
         }
-       
       }
     },
     checkOption(option_data) {
@@ -387,11 +386,11 @@ export default {
         option_data.amount = 12;
       } else if (option_data.period_package === "OP_4") {
         option_data.amount = 24;
-      }else if (option_data.period_package === "OP_5") {
+      } else if (option_data.period_package === "OP_5") {
         option_data.amount = 4;
-      }else if (option_data.period_package === "OP_6") {
+      } else if (option_data.period_package === "OP_6") {
         option_data.amount = 8;
-      }else if (option_data.period_package === "OP_7") {
+      } else if (option_data.period_package === "OP_7") {
         option_data.amount = 10;
       }
     },

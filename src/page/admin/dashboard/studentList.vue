@@ -360,7 +360,7 @@
             </v-col>
 
             <v-col cols="6" class="my-2">
-              <span class="font-bold">แพ็คเกจ:</span> {{ item.optionName }}
+              <span class="font-bold">แพ็กเกจ:</span> {{ item.optionName }}
               <span
                 :style="`color:${
                   course_type_options.filter(

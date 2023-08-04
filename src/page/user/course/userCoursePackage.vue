@@ -44,11 +44,11 @@
         </template>
       </ImgCard>
       <v-row dense>
-        <v-col cols="12" class="text-lg font-bold">เลือกแพ็คเกจ</v-col>
+        <v-col cols="12" class="text-lg font-bold">เลือกแพ็กเกจ</v-col>
       </v-row>
       <v-row dense class="d-flex align-center">
         <v-col cols="8" sm class="text-sm text-[#ff6b81]"
-          >*มีสิทธิพิเศษสำหรับการสมัครรายเดือน / รายเทอม / รายปี</v-col
+          >*มีสิทธิ์พิเศษสำหรับการสมัครรายเดือน / รายเทอม / รายปี</v-col
         >
         <v-col cols="auto" sm="auto">
           <v-btn
@@ -57,7 +57,7 @@
             @click="show_dialog_privilege = true"
             class="white--text rounded-xl"
             depressed
-            >ดูสิทธิพิเศษ</v-btn
+            >ดูสิทธิ์พิเศษ</v-btn
           >
         </v-col>
       </v-row>
@@ -182,7 +182,7 @@
         <v-card>
           <v-card-title>
             <v-row>
-              <v-col class="font-bold w-3">สิทธิพิเศษ</v-col>
+              <v-col class="font-bold w-3">สิทธิ์พิเศษ</v-col>
               <v-col cols="auto" align="right">
                 <v-btn icon @click="show_dialog_privilege = false"
                   ><v-icon color="#ff6b81">mdi-close</v-icon></v-btn
@@ -268,7 +268,12 @@
           </v-card-text>
         </v-card>
       </v-dialog>
-      <v-dialog v-if="show_full_img" v-model="show_full_img"  persistent class="w-full">
+      <v-dialog
+        v-if="show_full_img"
+        v-model="show_full_img"
+        persistent
+        class="w-full"
+      >
         <v-card class="pa-2">
           <v-row dense>
             <v-col cols="12" align="right">
@@ -284,11 +289,7 @@
             class="bg-grey-lighten-2"
           >
             <template v-slot:placeholder>
-              <v-row
-                class="fill-height ma-0"
-                align="center"
-                justify="center"
-              >
+              <v-row class="fill-height ma-0" align="center" justify="center">
                 <v-progress-circular
                   indeterminate
                   color="#ff6b81"
@@ -313,8 +314,8 @@ export default {
     show_dialog_artwork: false,
     show_dialog_privilege: false,
     selected_package: {},
-    show_full_img : false,
-    img_selected : ""
+    show_full_img: false,
+    img_selected: "",
   }),
   created() {
     this.order_data = JSON.parse(localStorage.getItem("Order"));
@@ -322,7 +323,7 @@ export default {
   mounted() {
     this.changeCourseOrderData(this.order_data);
     this.GetCourse(this.$route.params.course_id);
-    this.$store.dispatch("NavberUserModules/changeTitleNavber", "แพ็คเกจ");
+    this.$store.dispatch("NavberUserModules/changeTitleNavber", "แพ็กเกจ");
     if (this.course_data) {
       this.selected_package = this.course_data.packages[0];
     }
@@ -347,13 +348,13 @@ export default {
       changeOrderData: "OrderModules/changeOrderData",
       GetArtworkByCourse: "CourseModules/GetArtworkByCourse",
     }),
-    SelectedImg(img){
-      this.img_selected = img
-      this.show_full_img = true
+    SelectedImg(img) {
+      this.img_selected = img;
+      this.show_full_img = true;
     },
-    CloseImgFull(){
-      this.img_selected = ""
-      this.show_full_img = false
+    CloseImgFull() {
+      this.img_selected = "";
+      this.show_full_img = false;
     },
     selectedPackage(option) {
       // console.log("Options :", option);

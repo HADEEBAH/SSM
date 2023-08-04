@@ -396,8 +396,8 @@ const CourseModules = {
             // // console.log(coachDate)
             if (!coachDate.cpo?.cpoId) {
               // console.log("ระยะสั้น => ", coachDate)
-              if(coachDate?.coachLeaveDate){
-                for await(const dateLeave of coachDate?.coachLeaveDate){
+              if (coachDate?.coachLeaveDate) {
+                for await (const dateLeave of coachDate?.coachLeaveDate) {
                   datesList.push({
                     date: dateLeave.teachCompensationDate,
                     timeId: null,
@@ -431,9 +431,9 @@ const CourseModules = {
                 }
               }
             } else {
-              if(coachDate?.coachLeaveDate){
-                for await(const dateLeave of coachDate?.coachLeaveDate){
-                  if (datesList.filter(v => v.date === dateLeave.teachCompensationDate && v.start === dateLeave.teachCompensationStartTime && v.end ===dateLeave.teachCompensationEndTime && v.cpo.packageName === coachDate.cpo.packageName).length === 0) {
+              if (coachDate?.coachLeaveDate) {
+                for await (const dateLeave of coachDate?.coachLeaveDate) {
+                  if (datesList.filter(v => v.date === dateLeave.teachCompensationDate && v.start === dateLeave.teachCompensationStartTime && v.end === dateLeave.teachCompensationEndTime && v.cpo.packageName === coachDate.cpo.packageName).length === 0) {
                     datesList.push({
                       date: dateLeave.teachCompensationDate,
                       timeId: null,
@@ -578,7 +578,7 @@ const CourseModules = {
           "courseMusicPerformance": course_data.music_performance,
           "courseCertification": course_data.catification,
           "coursePrice": parseInt(course_data.price_course),
-          "courseRegisterStartDate": course_data?.coachs[0]?.register_date_range?.start_date  ? course_data.coachs[0].register_date_range.start_date : null,
+          "courseRegisterStartDate": course_data?.coachs[0]?.register_date_range?.start_date ? course_data.coachs[0].register_date_range.start_date : null,
           "courseRegisterEndDate": course_data?.coachs[0]?.register_date_range?.end_date ? course_data.coachs[0].register_date_range.end_date : null,
           "coursePeriodStartDate": course_data.coachs[0].period.start_time ? course_data.coachs[0].period.start_time : null,
           "coursePeriodEndDate": course_data.coachs[0].period.end_time ? course_data.coachs[0].period.end_time : null,
@@ -1842,7 +1842,7 @@ const CourseModules = {
                         "เวลาเรียน": date.time,
                         "ชืี่อโค้ช": `${coach.firstNameTh} ${coach.lastNameTh}`,
                         "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
-                        "แพ็คเกจ": date.cpo.packageName,
+                        "แพ็กเกจ": date.cpo.packageName,
                         "ระยะเวลา": student.cpo?.optionName,
                         "จำนวนครั้ง": `${student.countCheckIn}/${student.totalDay}`,
                         "การเขาเรียน": student.status === "punctual" ? "ตรงเวลา" : student.status === "late" ? "สาย" : student.status === "leave" ? "ลา" : student.status === "emergency leave" ? 'ลาฉุกเฉิน' : student.status === "absent" ? 'ขาด' : '-',
@@ -1873,7 +1873,7 @@ const CourseModules = {
                         "เวลาเรียน": date.time,
                         "ชืี่อโค้ช": `${coach.firstNameTh} ${coach.lastNameTh}`,
                         "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
-                        "แพ็คเกจ": date.cpo.packageName,
+                        "แพ็กเกจ": date.cpo.packageName,
                         "ระยะเวลา": date.cpo?.optionName,
                         "จำนวนครั้ง": "",
                         "การเขาเรียน": "",
