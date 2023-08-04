@@ -260,11 +260,15 @@
                   <v-col cols="12" sm="6">
                     <label class="font-weight-bold">เวลาเริ่ม</label>
                     <br />
-                    <!-- <pre>{{ setDataEditDialog.ob_holidayStartTime }}</pre> -->
                     <v-text-field
                       outlined
                       dense
-                      style="position: absolute; z-index: 4"
+                      style="
+                        position: absolute;
+                        display: block;
+                        z-index: 4;
+                        max-width: 141.5px;
+                      "
                       @focus="SelectedStartDate($event)"
                       :rules="rules.start_time"
                       :value="setDataEditDialog.holidayStartTime"
@@ -274,21 +278,11 @@
                       hide-clear-button
                       input-class="input-size-lg"
                       advanced-keyboard
-                      @change="
-                        setDataEditDialog.holidayStartTime = `${setDataEditDialog.ob_holidayStartTime.HH} : ${setDataEditDialog.ob_holidayStartTime.mm}`
-                      "
+                      @change="resetTimeEdit()"
                       v-model="setDataEditDialog.ob_holidayStartTime"
                       close-on-complete
                     >
                     </VueTimepicker>
-                    <!-- <vue-timepicker
-                      v-model="setDataEditDialog.ob_holidayStartTime"
-                      color="#FF6B81"
-                      item-color="#FF6B81"
-                      hide-clear-button
-                      dense
-                    >
-                    </vue-timepicker> -->
                   </v-col>
                   <!-- เวลาสิ้นสุด -->
                   <v-col cols="12" sm="6">
@@ -298,7 +292,12 @@
                     <v-text-field
                       outlined
                       dense
-                      style="position: absolute; z-index: 4"
+                      style="
+                        position: absolute;
+                        display: block;
+                        z-index: 4;
+                        max-width: 141.5px;
+                      "
                       @focus="SelectedStartDate($event)"
                       :rules="rules.start_time"
                       :value="setDataEditDialog.holidayEndTime"
@@ -313,6 +312,9 @@
                       "
                       v-model="setDataEditDialog.ob_holidayEndTime"
                       close-on-complete
+                      :hour-range="
+                        checkHourEdit(setDataEditDialog.ob_holidayStartTime)
+                      "
                     >
                     </VueTimepicker>
 
@@ -442,7 +444,9 @@
                     ></v-switch>
                   </v-col>
                 </v-row>
+                <!-- เวลา -->
                 <v-row v-if="!holidaySwitch" dense>
+                  <!-- เวลาเริ่ม -->
                   <v-col cols="6">
                     <label class="font-weight-bold">เวลาเริ่ม</label>
                     <br />
@@ -450,7 +454,12 @@
                       readonly
                       outlined
                       dense
-                      style="position: absolute; display: block; z-index: 4"
+                      style="
+                        position: absolute;
+                        display: block;
+                        z-index: 4;
+                        max-width: 141.5px;
+                      "
                       @focus="SelectedStartDate($event)"
                       :rules="rules.compensation_start_time"
                       v-model="holidayStartTime"
@@ -463,16 +472,10 @@
                       advanced-keyboard
                       v-model="holidayStartTime"
                       close-on-complete
+                      @change="resetTime()"
                     ></VueTimepicker>
-
-                    <!-- <vue-timepicker
-                      v-model="holidayStartTime"
-                      color="#FF6B81"
-                      item-color="#FF6B81"
-                      dense
-                    >
-                    </vue-timepicker> -->
                   </v-col>
+                  <!-- เวลาสิ้นสุด -->
                   <v-col cols="6">
                     <label class="font-weight-bold">เวลาสิ้นสุด</label>
                     <br />
@@ -480,7 +483,12 @@
                       readonly
                       outlined
                       dense
-                      style="position: absolute; display: block; z-index: 4"
+                      style="
+                        position: absolute;
+                        display: block;
+                        z-index: 4;
+                        max-width: 141.5px;
+                      "
                       @focus="SelectedStartDate($event)"
                       :rules="rules.compensation_end_time"
                       v-model="holidayEndTime"
@@ -494,15 +502,8 @@
                       advanced-keyboard
                       v-model="holidayEndTime"
                       close-on-complete
+                      :hour-range="checkHour(holidayStartTime)"
                     ></VueTimepicker>
-                    <!-- <vue-timepicker
-                      v-model="holidayEndTime"
-                      :disabled="!holidayStartTime"
-                      color="#FF6B81"
-                      item-color="#FF6B81"
-                      dense
-                    >
-                    </vue-timepicker> -->
                   </v-col>
                 </v-row>
 
@@ -877,6 +878,39 @@ export default {
       GetSearchSchedule: "ManageScheduleModules/GetSearchSchedule",
     }),
 
+    checkHour(startTime) {
+      console.log("startTime", startTime);
+      let hour = [];
+      let h = startTime.split(":")[0];
+      console.log("object", h);
+      for (let hr = h; hr < 24; hr++) {
+        if (hr > h) {
+          hour.push(hr);
+        }
+        // hour.push(hr);
+      }
+      return hour;
+    },
+
+    resetTime() {
+      this.holidayEndTime = "";
+    },
+
+    checkHourEdit(ob_holidayStartTime) {
+      let hour = [];
+      for (let hr = ob_holidayStartTime.HH; hr < 24; hr++) {
+        if (hr > ob_holidayStartTime.HH) {
+          hour.push(hr);
+        }
+      }
+      return hour;
+    },
+
+    resetTimeEdit() {
+      this.setDataEditDialog.holidayStartTime = `${this.setDataEditDialog.ob_holidayStartTime.HH} : ${this.setDataEditDialog.ob_holidayStartTime.mm}`;
+      this.setDataEditDialog.holidayEndTime = "";
+    },
+
     SelectedStartDate(e) {
       e.target.parentNode.parentNode.parentNode.parentNode.parentNode
         .getElementsByClassName("time-picker-hidden")[0]
@@ -888,6 +922,8 @@ export default {
       if (!item.allDay) {
         this.setDataEditDialog.ob_holidayStartTime = { HH: "", mm: "" };
         this.setDataEditDialog.ob_holidayEndTime = { HH: "", mm: "" };
+        this.setDataEditDialog.holidayStartTime = "";
+        this.setDataEditDialog.holidayEndTime = "";
       }
     },
 
