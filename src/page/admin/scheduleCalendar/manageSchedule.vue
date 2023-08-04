@@ -3,7 +3,7 @@
     v-if="get_all_course_is_loading || get_all_holidays_is_loading"
     :loading="get_all_course_is_loading || get_all_holidays_is_loading"
   ></loading-overlay> -->
-  <v-container >
+  <v-container>
     <headerPage title="จัดการตาราง"></headerPage>
     <v-row class="py-2">
       <v-col cols="12" sm="8" class="w-full">
@@ -43,17 +43,22 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col v-if="get_all_holidays_is_loading || get_all_course_is_loading" cols="12" md="8" sm="8" class="d-flex align-center justify-center">
-        <v-progress-circular 
+      <v-col
+        v-if="get_all_holidays_is_loading || get_all_course_is_loading"
+        cols="12"
+        md="8"
+        sm="8"
+        class="d-flex align-center justify-center"
+      >
+        <v-progress-circular
           :size="70"
           :width="7"
           color="#ff6b81"
           indeterminate
         ></v-progress-circular>
-        
       </v-col>
       <v-col v-else cols="12" md="8" sm="8">
-          <calendarAdmin></calendarAdmin>
+        <calendarAdmin></calendarAdmin>
       </v-col>
       <v-col cols="12" md="4" sm="4">
         <v-card class="my-3 pa-2 max-h-[300px] overflow-auto rounded-lg">
@@ -200,6 +205,7 @@
                   <!-- วันที่ -->
                   <v-col cols="12" sm="8">
                     <label class="font-weight-bold">วันที่</label>
+
                     <v-menu
                       v-model="selectEditHolidaydates"
                       :close-on-content-click="false"
@@ -243,37 +249,83 @@
                       :label="`ทั้งวัน`"
                       color="#FF6B81"
                       inset
+                      @change="changeSwish(setDataEditDialog)"
                     ></v-switch>
                   </v-col>
                 </v-row>
 
                 <v-row dense v-if="setDataEditDialog.allDay === false">
                   <!-- เวลาเริ่ม -->
+
                   <v-col cols="12" sm="6">
                     <label class="font-weight-bold">เวลาเริ่ม</label>
                     <br />
-                    <vue-timepicker
+                    <!-- <pre>{{ setDataEditDialog.ob_holidayStartTime }}</pre> -->
+                    <v-text-field
+                      outlined
+                      dense
+                      style="position: absolute; z-index: 4"
+                      @focus="SelectedStartDate($event)"
+                      :rules="rules.start_time"
+                      :value="setDataEditDialog.holidayStartTime"
+                    ></v-text-field>
+                    <VueTimepicker
+                      class="time-picker-hidden"
+                      hide-clear-button
+                      input-class="input-size-lg"
+                      advanced-keyboard
+                      @change="
+                        setDataEditDialog.holidayStartTime = `${setDataEditDialog.ob_holidayStartTime.HH} : ${setDataEditDialog.ob_holidayStartTime.mm}`
+                      "
+                      v-model="setDataEditDialog.ob_holidayStartTime"
+                      close-on-complete
+                    >
+                    </VueTimepicker>
+                    <!-- <vue-timepicker
                       v-model="setDataEditDialog.ob_holidayStartTime"
                       color="#FF6B81"
                       item-color="#FF6B81"
                       hide-clear-button
                       dense
                     >
-                    </vue-timepicker>
+                    </vue-timepicker> -->
                   </v-col>
                   <!-- เวลาสิ้นสุด -->
                   <v-col cols="12" sm="6">
                     <label class="font-weight-bold">เวลาสิ้นสุด</label>
                     <br />
-                    <vue-timepicker
+
+                    <v-text-field
+                      outlined
+                      dense
+                      style="position: absolute; z-index: 4"
+                      @focus="SelectedStartDate($event)"
+                      :rules="rules.start_time"
+                      :value="setDataEditDialog.holidayEndTime"
+                    ></v-text-field>
+                    <VueTimepicker
+                      class="time-picker-hidden"
+                      hide-clear-button
+                      input-class="input-size-lg"
+                      advanced-keyboard
+                      @change="
+                        setDataEditDialog.holidayEndTime = `${setDataEditDialog.ob_holidayEndTime.HH} : ${setDataEditDialog.ob_holidayEndTime.mm}`
+                      "
+                      v-model="setDataEditDialog.ob_holidayEndTime"
+                      close-on-complete
+                    >
+                    </VueTimepicker>
+
+                    <!-- <vue-timepicker
                       v-model="setDataEditDialog.ob_holidayEndTime"
                       color="#FF6B81"
                       item-color="#FF6B81"
                       hide-clear-button
                       dense
+                      outlined
                       class=""
                     >
-                    </vue-timepicker>
+                    </vue-timepicker> -->
                   </v-col>
                 </v-row>
 
@@ -394,25 +446,63 @@
                   <v-col cols="6">
                     <label class="font-weight-bold">เวลาเริ่ม</label>
                     <br />
-                    <vue-timepicker
+                    <v-text-field
+                      readonly
+                      outlined
+                      dense
+                      style="position: absolute; display: block; z-index: 4"
+                      @focus="SelectedStartDate($event)"
+                      :rules="rules.compensation_start_time"
+                      v-model="holidayStartTime"
+                    >
+                    </v-text-field>
+                    <VueTimepicker
+                      class="time-picker-hidden"
+                      hide-clear-button
+                      input-class="input-size-lg"
+                      advanced-keyboard
+                      v-model="holidayStartTime"
+                      close-on-complete
+                    ></VueTimepicker>
+
+                    <!-- <vue-timepicker
                       v-model="holidayStartTime"
                       color="#FF6B81"
                       item-color="#FF6B81"
                       dense
                     >
-                    </vue-timepicker>
+                    </vue-timepicker> -->
                   </v-col>
                   <v-col cols="6">
                     <label class="font-weight-bold">เวลาสิ้นสุด</label>
                     <br />
-                    <vue-timepicker
+                    <v-text-field
+                      readonly
+                      outlined
+                      dense
+                      style="position: absolute; display: block; z-index: 4"
+                      @focus="SelectedStartDate($event)"
+                      :rules="rules.compensation_end_time"
+                      v-model="holidayEndTime"
+                    >
+                    </v-text-field>
+                    <VueTimepicker
+                      :disabled="!holidayStartTime"
+                      class="time-picker-hidden"
+                      hide-clear-button
+                      input-class="input-size-lg"
+                      advanced-keyboard
+                      v-model="holidayEndTime"
+                      close-on-complete
+                    ></VueTimepicker>
+                    <!-- <vue-timepicker
                       v-model="holidayEndTime"
                       :disabled="!holidayStartTime"
                       color="#FF6B81"
                       item-color="#FF6B81"
                       dense
                     >
-                    </vue-timepicker>
+                    </vue-timepicker> -->
                   </v-col>
                 </v-row>
 
@@ -739,6 +829,12 @@ export default {
         (val) =>
           (val || "").length > 0 || "กรุณาเลือกอย่างน้อย 1 วันก่อนวันหยุด",
       ],
+      compensation_start_time: [
+        (val) => (val || "").length > 0 || "โปรดเลือกเวลาเริ่ม",
+      ],
+      compensation_end_time: [
+        (val) => (val || "").length > 0 || "โปรดเลือกเวลาสิ้นสุด",
+      ],
     },
 
     // events: [],
@@ -780,6 +876,20 @@ export default {
       GetFilterSchedule: "ManageScheduleModules/GetFilterSchedule",
       GetSearchSchedule: "ManageScheduleModules/GetSearchSchedule",
     }),
+
+    SelectedStartDate(e) {
+      e.target.parentNode.parentNode.parentNode.parentNode.parentNode
+        .getElementsByClassName("time-picker-hidden")[0]
+        .getElementsByTagName("input")[0]
+        .focus();
+    },
+
+    changeSwish(item) {
+      if (!item.allDay) {
+        this.setDataEditDialog.ob_holidayStartTime = { HH: "", mm: "" };
+        this.setDataEditDialog.ob_holidayEndTime = { HH: "", mm: "" };
+      }
+    },
 
     setHolidaydates(item) {
       // console.log("item", item);
