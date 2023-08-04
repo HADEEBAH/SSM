@@ -453,7 +453,7 @@
             <template v-if="student.account_id">
               <v-row dense>
                 <v-col cols="12" sm="6">
-                  <labelCustom required text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
+                  <labelCustom required text="ชื่อ(ภาษาอังกฤษ)"></labelCustom>
                   <v-text-field
                     :disabled="student.account_id ? true : false"
                     dense
@@ -463,7 +463,7 @@
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <labelCustom required text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
+                  <labelCustom required text="นามสกุล(ภาษาอังกฤษ)"></labelCustom>
                   <v-text-field
                     :disabled="student.account_id ? true : false"
                     dense
@@ -673,7 +673,7 @@
           <template>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom required text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
+                <labelCustom required text="ชื่อ(ภาษาอังกฤษ)"></labelCustom>
                 <v-text-field
                   disabled
                   dense
@@ -685,7 +685,7 @@
             </v-row>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom required text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
+                <labelCustom required text="นามสกุล(ภาษาอังกฤษ)"></labelCustom>
                 <v-text-field
                   disabled
                   dense

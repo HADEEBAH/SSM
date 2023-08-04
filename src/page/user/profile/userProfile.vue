@@ -679,7 +679,7 @@
           <template>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
+                <labelCustom text="ชื่อ(ภาษาอังกฤษ)"></labelCustom>
                 <v-text-field
                   disabled
                   dense
@@ -691,7 +691,7 @@
             </v-row>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
+                <labelCustom text="นามสกุล(ภาษาอังกฤษ)"></labelCustom>
                 <v-text-field
                   disabled
                   dense
