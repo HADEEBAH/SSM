@@ -51,7 +51,7 @@
                   >
                 </v-col>
                 <!-- <v-col cols="12" sm="4"  class="pa-0"> 
-                    <rowData mini  icon=" mdi-account-box-multiple">แพ็คเกจ : Family</rowData>
+                    <rowData mini  icon=" mdi-account-box-multiple">แพ็กเกจ : Family</rowData>
                 </v-col> -->
                 <v-col cols="12" sm class="pa-0">
                   <rowData mini icon="mdi-clock-outline"
@@ -1409,7 +1409,7 @@ export default {
         sortable: false,
         value: "fullname",
       },
-      { text: "แพ็คเกจ", align: "center", sortable: false, value: "package" },
+      { text: "แพ็กเกจ", align: "center", sortable: false, value: "package" },
       {
         text: "จำนวนครั้ง",
         align: "center",
@@ -1549,7 +1549,7 @@ export default {
         "CoachModules/DeleteAssessmentPotentialFile",
     }),
     showAttachmentDialog(item) {
-      this.files_attachment_dialog = item.url ? item.url : item
+      this.files_attachment_dialog = item.url ? item.url : item;
       this.show_attachment_dialog = true;
     },
     //check in by date

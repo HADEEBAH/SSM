@@ -114,7 +114,7 @@
                   <v-row dense>
                     <v-col cols="12" v-if="course.course_package_name">
                       <rowData mini icon="mdi-account-box-multiple"
-                        >แพ็คเกจ : {{ course.course_package_name }}</rowData
+                        >แพ็กเกจ : {{ course.course_package_name }}</rowData
                       >
                     </v-col>
                   </v-row>
@@ -285,7 +285,7 @@
 
                   <v-col cols="12" v-if="course.course_package_name">
                     <rowData mini icon="mdi-account-box-multiple"
-                      >แพ็คเกจ : {{ course.course_package_name }}</rowData
+                      >แพ็กเกจ : {{ course.course_package_name }}</rowData
                     >
                   </v-col>
                   <v-col cols="12">

@@ -347,9 +347,9 @@
               </v-col>
               <v-col cols="12" sm="6">
                 <v-row dense>
-                  <!-- แพ็คเกจ -->
+                  <!-- แพ็กเกจ -->
                   <v-col cols="12" sm="6" md="6">
-                    <label-custom text="แพ็คเกจ"></label-custom>
+                    <label-custom text="แพ็กเกจ"></label-custom>
                     <v-autocomplete
                       dense
                       :items="packages"
@@ -357,7 +357,7 @@
                       item-value="packageId"
                       v-model="export_filter.package_id"
                       class="py-1"
-                      label="กรุณาเลือกแพ็คเกจ"
+                      label="กรุณาเลือกแพ็กเกจ"
                       outlined
                       multiple
                       color="#FF6B81"
