@@ -425,7 +425,7 @@
       </v-row> -->
 
       <!-- <v-row v-else> -->
-      <v-row>
+      <!-- <v-row>
         <v-col cols="12" class="text-center">
           <v-btn
             disabled
@@ -436,17 +436,10 @@
             ดาวน์โหลดผลการประเมิน
           </v-btn>
         </v-col>
-      </v-row>
+      </v-row> -->
     </div>
   </v-container>
 </template>
-
-          <!-- <v-card v-for="(data, index) in items" :key="index" class="pa-2 my-5">
-            <v-icon color="#FF6B81">mdi-calendar-plus-outline</v-icon>
-              <span class="text-lg">{{ data.title }}</span>
-          </v-card> -->
-
-  
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { dateFormatter } from "../../../functions/functions";
@@ -463,36 +456,6 @@ export default {
     checked: false,
     dialog_show: false,
     show_id: "",
-    return: {
-      pdfUrl:
-        "https://example.com/assessment/2a0e9e91-88e7-4ce4-b8cd-1a22d5603d20/2a0e9e91-88e7-4ce4-b8cd-1a22d5603d20.pdf",
-    },
-    // check_in_detail: [],
-    defaultImageUrl:
-      "https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg",
-    check: [],
-    items: [
-      {
-        id: 1,
-        title: "Card 1",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        imageUrl: "https://picsum.photos/id/1/200/200",
-      },
-      {
-        id: 2,
-        title: "Card 2",
-        description:
-          "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        imageUrl: "https://picsum.photos/id/2/200/200",
-      },
-      {
-        id: 3,
-        title: "Card 3",
-        description:
-          "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-        imageUrl: "https://picsum.photos/id/3/200/200",
-      },
-    ],
     item_data: "",
     check_in_status_options: [
       {
