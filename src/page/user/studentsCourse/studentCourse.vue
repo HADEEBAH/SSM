@@ -250,7 +250,6 @@
                 <v-icon color="#FF6B81">mdi-calendar-month-outline</v-icon>
               </v-col>
               <v-col class="text-lg font-bold">
-                {{ genDate(day_list.date) }}
               </v-col>
               <!-- ตรงเวลา -->
               <v-col cols="2">
@@ -258,28 +257,14 @@
                   <v-card-text
                     v-if="day_list.status"
                     class="pa-1 rounded-xl text-center"
-                    :class="`text-[${
-                      check_in_status_options.filter(
+                    :class="check_in_status_options.filter(
                         (v) => v.value === day_list.status
-                      )[0].color
-                    }] 
-                    bg-[${
-                      check_in_status_options.filter(
-                        (v) => v.value === day_list.status
-                      )[0].bg_color
-                    }]`"
+                      )[0].class"
                   >
                     <span
-                      :class="`text-[${
-                        check_in_status_options.filter(
-                          (v) => v.value === day_list.status
-                        )[0].color
-                      }]
-                      bg-[${
-                        check_in_status_options.filter(
-                          (v) => v.value === day_list.status
-                        )[0].bg_color
-                      }]`"
+                      :class="check_in_status_options.filter(
+                        (v) => v.value === day_list.status
+                      )[0].class"
                     >
                       {{
                         check_in_status_options.filter(
@@ -440,7 +425,7 @@
       </v-row> -->
 
       <!-- <v-row v-else> -->
-      <v-row>
+      <!-- <v-row>
         <v-col cols="12" class="text-center">
           <v-btn
             disabled
@@ -451,17 +436,10 @@
             ดาวน์โหลดผลการประเมิน
           </v-btn>
         </v-col>
-      </v-row>
+      </v-row> -->
     </div>
   </v-container>
 </template>
-
-          <!-- <v-card v-for="(data, index) in items" :key="index" class="pa-2 my-5">
-            <v-icon color="#FF6B81">mdi-calendar-plus-outline</v-icon>
-              <span class="text-lg">{{ data.title }}</span>
-          </v-card> -->
-
-  
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { dateFormatter } from "../../../functions/functions";
@@ -478,53 +456,39 @@ export default {
     checked: false,
     dialog_show: false,
     show_id: "",
-    return: {
-      pdfUrl:
-        "https://example.com/assessment/2a0e9e91-88e7-4ce4-b8cd-1a22d5603d20/2a0e9e91-88e7-4ce4-b8cd-1a22d5603d20.pdf",
-    },
-    // check_in_detail: [],
-    defaultImageUrl:
-      "https://cdn.vectorstock.com/i/preview-1x/82/99/no-image-available-like-missing-picture-vector-43938299.jpg",
-    check: [],
-    items: [
-      {
-        id: 1,
-        title: "Card 1",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        imageUrl: "https://picsum.photos/id/1/200/200",
-      },
-      {
-        id: 2,
-        title: "Card 2",
-        description:
-          "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        imageUrl: "https://picsum.photos/id/2/200/200",
-      },
-      {
-        id: 3,
-        title: "Card 3",
-        description:
-          "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-        imageUrl: "https://picsum.photos/id/3/200/200",
-      },
-    ],
     item_data: "",
     check_in_status_options: [
       {
         label: "ตรงเวลา",
         value: "punctual",
+        class: 'text-[#58A144] bg-[#F0F9EE]',
         color: "#58A144",
         bg_color: "#F0F9EE",
       },
-      { label: "สาย", value: "late", color: "#FCC419", bg_color: "#FFF9E8" },
-      { label: "ลา", value: "leave", color: "", bg_color: "#FFF9E8" },
+      { 
+        label: "สาย", 
+        value: "late",
+        class: 'text-[#FCC419] bg-[#FFF9E8]', 
+        color: "#FCC419", 
+        bg_color: "#FFF9E8" },
+      { label: "ลา", 
+        value: "leave", 
+        class: 'text-[#43A4F5] bg-[#F0F6FB]', 
+        color: "#43A4F5",
+        bg_color: "#F0F6FB",
+      },
       {
         label: "ลาฉุกเฉิน",
         value: " emergency leave",
+        class: 'text-[#43A4F5] bg-[#CFE2F3]', 
         color: "#43A4F5",
         bg_color: "#CFE2F3",
       },
-      { label: "ขาด", value: "absent", color: "#F03D3E", bg_color: "#F4CCCC" },
+      { label: "ขาด", 
+        value: "absent", 
+        class: 'text-[#F03D3E] bg-[#faeaea]',
+        color: "#F03D3E", 
+        bg_color: "#faeaea" },
     ],
     evolution_options: [
       { label: "⭐⭐⭐⭐⭐", value: "very good", color: "#ff6b81" },
