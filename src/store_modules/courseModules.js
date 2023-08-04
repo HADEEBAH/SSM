@@ -396,6 +396,23 @@ const CourseModules = {
             // // console.log(coachDate)
             if (!coachDate.cpo?.cpoId) {
               // console.log("ระยะสั้น => ", coachDate)
+              if(coachDate?.coachLeaveDate){
+                for await(const dateLeave of coachDate?.coachLeaveDate){
+                  datesList.push({
+                    date: dateLeave.teachCompensationDate,
+                    timeId: null,
+                    start: dateLeave.teachCompensationStartTime,
+                    end: dateLeave.teachCompensationEndTime,
+                    startDate: coachDate.dates.startDate ? new Date(coachDate.dates.startDate).toLocaleDateString("th-TH") : '',
+                    endDate: coachDate.dates.endDate ? new Date(coachDate.dates.endDate).toLocaleDateString("th-TH") : '',
+                    time: `${dateLeave.teachCompensationStartTime}น.-${dateLeave.teachCompensationEndTime}น.`,
+                    cpo: coachDate.cpo ? coachDate.cpo : null,
+                    cpoId: coachDate.cpo?.cpoId ? coachDate.cpo?.cpoId : null,
+                    students: coachDate.studentArr,
+                    checked: false,
+                  })
+                }
+              }
               for await (const date of coachDate.dates.date) {
                 if (datesList.filter(v => v.date === date).length === 0) {
                   datesList.push({
@@ -414,6 +431,25 @@ const CourseModules = {
                 }
               }
             } else {
+              if(coachDate?.coachLeaveDate){
+                for await(const dateLeave of coachDate?.coachLeaveDate){
+                  if (datesList.filter(v => v.date === dateLeave.teachCompensationDate && v.start === dateLeave.teachCompensationStartTime && v.end ===dateLeave.teachCompensationEndTime && v.cpo.packageName === coachDate.cpo.packageName).length === 0) {
+                    datesList.push({
+                      date: dateLeave.teachCompensationDate,
+                      timeId: null,
+                      start: dateLeave.teachCompensationStartTime,
+                      end: dateLeave.teachCompensationEndTime,
+                      // startDate: coachDate.dates.startDate ? new Date(coachDate.dates.startDate).toLocaleDateString("th-TH") : '',
+                      // endDate: coachDate.dates.endDate ? new Date(coachDate.dates.endDate).toLocaleDateString("th-TH") : '',
+                      time: `${dateLeave.teachCompensationStartTime}น.-${dateLeave.teachCompensationEndTime}น.`,
+                      cpo: coachDate.cpo ? coachDate.cpo : null,
+                      cpoId: coachDate.cpo?.cpoId ? coachDate.cpo?.cpoId : null,
+                      students: coachDate.studentArr,
+                      checked: false,
+                    })
+                  }
+                }
+              }
               for await (const date of coachDate.dates.date) {
                 if (datesList.filter(v => v.date === date && v.start === coachDate.time.start && v.end === coachDate.time.end && v.cpo.packageName === coachDate.cpo.packageName).length === 0) {
                   datesList.push({
