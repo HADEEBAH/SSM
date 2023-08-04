@@ -60,7 +60,7 @@
                 width="72"
                 src="../../../assets/course/package.png"
               ></v-img>
-              <span class="text-lg font-bold"> แพ็คเกจ </span>
+              <span class="text-lg font-bold"> แพ็กเกจ </span>
             </template>
           </img-card>
         </v-col>
@@ -223,7 +223,7 @@
                     outlined
                     color="#ff6b81"
                     @click="addPackage(course_data.packages)"
-                    ><v-icon>mdi-plus</v-icon>เพิ่มแพ็คเกจ</v-btn
+                    ><v-icon>mdi-plus</v-icon>เพิ่มแพ็กเกจ</v-btn
                   >
                 </v-col>
               </v-row>
@@ -263,7 +263,7 @@
             <!-- ARKWORk -->
             <v-tab-item value="arkwork">
               <v-card class="mx-3 mb-3" flat>
-                <headerCard title="สิทธิพิเศษ"></headerCard>
+                <headerCard title="สิทธิ์พิเศษ"></headerCard>
                 <v-card-text
                   class="border-dashed border-2 border-blue-600 rounded-lg"
                 >
@@ -319,7 +319,7 @@
                       cols="12"
                       class="flex align-center justify-center text-h5"
                     >
-                      อัพโหลดภาพสิทธิพิเศษ
+                      อัพโหลดภาพสิทธิ์พิเศษ
                     </v-col>
                     <v-col
                       cols="12"
@@ -698,7 +698,7 @@
                                   item-text="packageName"
                                   item-value="packageId"
                                   :items="package_option"
-                                  placeholder="แพ็คเกจ"
+                                  placeholder="แพ็กเกจ"
                                   @change="filterDateByCoach(coach_index)"
                                 ></v-autocomplete>
                               </v-col>
@@ -731,7 +731,7 @@
                                 cols="3"
                                 align="center"
                                 v-if="course_data.course_type_id === 'CT_1'"
-                                >แพ็คเกจ</v-col
+                                >แพ็กเกจ</v-col
                               >
                               <v-col align="right"></v-col>
                             </v-row>
@@ -1976,7 +1976,7 @@ export default {
         sortable: false,
         value: "course_name",
       },
-      { text: "แพ็คเกจ", align: "center", sortable: false, value: "package" },
+      { text: "แพ็กเกจ", align: "center", sortable: false, value: "package" },
       { text: "โค้ช", align: "center", sortable: false, value: "coach" },
       {
         text: "วันที่จอง",
@@ -2005,7 +2005,7 @@ export default {
         img: "../../../assets/course/time_and_coach.png",
       },
       {
-        label: "แพ็คเกจ",
+        label: "แพ็กเกจ",
         value: "package",
         img: "../../../assets/course/package.png",
       },

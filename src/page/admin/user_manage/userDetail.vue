@@ -1359,7 +1359,7 @@ export default {
       { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
       { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
       { text: "ชื่อคอร์ส", value: "courseNameTh", sortable: false },
-      { text: "แพ็คเกจ", value: "package", sortable: false },
+      { text: "แพ็กเกจ", value: "package", sortable: false },
       { text: "โค้ช", value: "coachName", sortable: false },
       { text: "ประเภท", value: "courseType", sortable: false },
       { text: "ระยะเวลา", value: "timeLine", sortable: false },
@@ -1371,7 +1371,7 @@ export default {
       { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
       { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
       { text: "ชื่อคอร์ส", value: "courseNameTh", sortable: false },
-      { text: "แพ็คเกจ", value: "package", sortable: false },
+      { text: "แพ็กเกจ", value: "package", sortable: false },
       { text: "โค้ช", value: "coachName", sortable: false },
       { text: "ประเภท", value: "courseType", sortable: false },
       { text: "ระยะเวลา", value: "timeLine", sortable: false },
@@ -1439,7 +1439,8 @@ export default {
     this.params = this.$route?.params?.account_id;
   },
   mounted() {
-    this.GetUserById(this.params);this.show_by_id.userRoles
+    this.GetUserById(this.params);
+    this.show_by_id.userRoles;
     setTimeout(() => {
       this.GetDataRelationsManagement(this.show_by_id);
     }, 500);

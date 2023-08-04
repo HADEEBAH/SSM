@@ -220,7 +220,7 @@
               "
             >
               <v-col cols="12" sm="4">
-                <label-custom text="แพ็คเกจ"></label-custom>
+                <label-custom text="แพ็กเกจ"></label-custom>
                 <v-autocomplete
                   item-value="package_id"
                   item-text="package"
@@ -230,7 +230,7 @@
                   :rules="rules.package"
                   v-model="course.package"
                   :items="course.course_data.packages"
-                  placeholder="เลือกแพ็คเกจ"
+                  placeholder="เลือกแพ็กเกจ"
                   outlined
                   @change="selectPackage(course)"
                 >
@@ -798,7 +798,7 @@ export default {
       student: [(val) => (val || "").length > 0 || "โปรดเลือกผู้เรียน"],
       category: [(val) => (val || "").length > 0 || "โปรดเลือกอาณาจักร"],
       course: [(val) => (val || "").length > 0 || "โปรดเลือกคอร์สเรียน"],
-      package: [(val) => (val || "").length > 0 || "โปรดเลือกแพ็คเกจ"],
+      package: [(val) => (val || "").length > 0 || "โปรดเลือกแพ็กเกจ"],
       option: [(val) => (val.option_id ? true : false) || "โปรดเลือกระยะเวลา"],
       day: [(val) => (val || "").length > 0 || "โปรดเลือกวันเรียน"],
       time: [(val) => (val ? true : false) || "โปรดเลือกเวลาเรียน"],
