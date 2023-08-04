@@ -22,9 +22,9 @@
           <v-icon>mdi-home</v-icon>
         </v-app-bar-nav-icon>
         <v-spacer></v-spacer>
-        <v-app-bar-title class="font-bold flex align-center justify-center">{{
-          titel_navber
-        }}</v-app-bar-title>
+        <v-app-bar-title class="font-bold">
+          {{titel_navber}} 
+        </v-app-bar-title>
         <v-spacer></v-spacer>
         <template v-if="user_detail">
           <v-menu v-model="notify" :close-on-content-click="false" offset-y>

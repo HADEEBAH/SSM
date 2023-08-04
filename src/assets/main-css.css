@@ -89,3 +89,7 @@
 .display-none{
     display: none;
 }
+.v-app-bar-title__content{
+    width: 300px !important;
+    /* border: 1px solid red !important; */
+}
