@@ -250,7 +250,6 @@
                 <v-icon color="#FF6B81">mdi-calendar-month-outline</v-icon>
               </v-col>
               <v-col class="text-lg font-bold">
-                {{ genDate(day_list.date) }}
               </v-col>
               <!-- ตรงเวลา -->
               <v-col cols="2">
@@ -258,28 +257,14 @@
                   <v-card-text
                     v-if="day_list.status"
                     class="pa-1 rounded-xl text-center"
-                    :class="`text-[${
-                      check_in_status_options.filter(
+                    :class="check_in_status_options.filter(
                         (v) => v.value === day_list.status
-                      )[0].color
-                    }] 
-                    bg-[${
-                      check_in_status_options.filter(
-                        (v) => v.value === day_list.status
-                      )[0].bg_color
-                    }]`"
+                      )[0].class"
                   >
                     <span
-                      :class="`text-[${
-                        check_in_status_options.filter(
-                          (v) => v.value === day_list.status
-                        )[0].color
-                      }]
-                      bg-[${
-                        check_in_status_options.filter(
-                          (v) => v.value === day_list.status
-                        )[0].bg_color
-                      }]`"
+                      :class="check_in_status_options.filter(
+                        (v) => v.value === day_list.status
+                      )[0].class"
                     >
                       {{
                         check_in_status_options.filter(
@@ -513,18 +498,34 @@ export default {
       {
         label: "ตรงเวลา",
         value: "punctual",
+        class: 'text-[#58A144] bg-[#F0F9EE]',
         color: "#58A144",
         bg_color: "#F0F9EE",
       },
-      { label: "สาย", value: "late", color: "#FCC419", bg_color: "#FFF9E8" },
-      { label: "ลา", value: "leave", color: "", bg_color: "#FFF9E8" },
+      { 
+        label: "สาย", 
+        value: "late",
+        class: 'text-[#FCC419] bg-[#FFF9E8]', 
+        color: "#FCC419", 
+        bg_color: "#FFF9E8" },
+      { label: "ลา", 
+        value: "leave", 
+        class: 'text-[#43A4F5] bg-[#F0F6FB]', 
+        color: "#43A4F5",
+        bg_color: "#F0F6FB",
+      },
       {
         label: "ลาฉุกเฉิน",
         value: " emergency leave",
+        class: 'text-[#43A4F5] bg-[#CFE2F3]', 
         color: "#43A4F5",
         bg_color: "#CFE2F3",
       },
-      { label: "ขาด", value: "absent", color: "#F03D3E", bg_color: "#F4CCCC" },
+      { label: "ขาด", 
+        value: "absent", 
+        class: 'text-[#F03D3E] bg-[#faeaea]',
+        color: "#F03D3E", 
+        bg_color: "#faeaea" },
     ],
     evolution_options: [
       { label: "⭐⭐⭐⭐⭐", value: "very good", color: "#ff6b81" },
