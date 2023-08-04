@@ -510,9 +510,9 @@ export default {
         bg_color: "#FFF9E8" },
       { label: "ลา", 
         value: "leave", 
-        class: 'text-[#43A4F5] bg-[#CFE2F3]', 
+        class: 'text-[#43A4F5] bg-[#F0F6FB]', 
         color: "#43A4F5",
-        bg_color: "#CFE2F3",
+        bg_color: "#F0F6FB",
       },
       {
         label: "ลาฉุกเฉิน",
