@@ -334,7 +334,7 @@
               </v-row>
               <v-row dense>
                 <v-col cols="12" sm="4">
-                  <labelCustom required text="ชื่อ(ภาษาอักฤษ)"></labelCustom>
+                  <labelCustom required text="ชื่อ(ภาษาอังกฤษ)"></labelCustom>
                   <v-text-field
                     :disabled="user_data.length > 0 || !edit_parent"
                     dense
@@ -344,7 +344,7 @@
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="4">
-                  <labelCustom required text="นามสกุล(ภาษาอักฤษ)"></labelCustom>
+                  <labelCustom required text="นามสกุล(ภาษาอังกฤษ)"></labelCustom>
                   <v-text-field
                     :disabled="user_data.length > 0 || !edit_parent"
                     dense
