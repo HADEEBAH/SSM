@@ -417,7 +417,7 @@ const RegisterModules = {
 
             try {
                 // const { data } = await axios.post(`http://localhost:3000/api/v1/register-by-oneid`, payload)
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/register-by-oneid`, payload)
+                let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/register-by-oneid`, payload)
                 console.log("data=>>>>>>", data.data);
                 if (data.statusCode === 201) {
                     context.commit("SetRegisterByOne", true)
