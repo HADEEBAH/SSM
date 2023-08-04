@@ -16,7 +16,20 @@
                 "
                 max-height="120"
                 max-width="120"
-              ></v-img>
+              >
+                <template v-slot:placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular
+                      indeterminate
+                      color="#ff6b81"
+                    ></v-progress-circular>
+                  </v-row>
+                </template>
+              </v-img>
             </v-col>
             <v-col>
               <v-row>
@@ -739,68 +752,129 @@
                 >
                   <template v-if="!file.attId && file.search('video') > -1">
                     <v-card flat>
-                      <div class="flex justify-end">
-                        <v-btn
-                          icon
-                          class="bg-[#f00]"
-                          dark
-                          @click="removeSummaryFile(index)"
-                        >
-                          <v-icon>mdi-close</v-icon>
-                        </v-btn>
-                      </div>
-                      <video :src="file" controls></video>
+                      <v-btn
+                        icon
+                        small
+                        class="bg-[#ff6b81] absolute top-0 right-0 z-[4]"
+                        dark
+                        @click="removeSummaryFile(index)"
+                      >
+                        <v-icon>mdi-close</v-icon>
+                      </v-btn>
+                      <video width="100%" :src="file" controls></video>
                     </v-card>
                   </template>
                   <template
                     v-if="file.attId && file.filesType.search('video') > -1"
                   >
                     <v-card flat>
-                      <div class="flex justify-end">
-                        <v-btn
-                          icon
-                          class="bg-[#f00]"
-                          dark
-                          @click="removeSummaryFileInbase(file, index)"
-                          ><v-icon>mdi-close</v-icon></v-btn
-                        >
-                      </div>
-                      <video :src="file.url" controls></video>
-                    </v-card>
-                  </template>
-                  <template v-else>
-                    <v-img
-                      v-if="file.attId && file.filesType.search('video') == -1"
-                      :src="file.url"
-                      contain
-                      max-height="200"
-                      max-width="200"
-                      align="right"
-                    >
+                      <!-- <div class="flex justify-end"> -->
                       <v-btn
                         icon
-                        class="bg-[#f00]"
+                        small
+                        class="bg-[#ff6b81] absolute top-0 right-0 z-[4]"
                         dark
                         @click="removeSummaryFileInbase(file, index)"
                         ><v-icon>mdi-close</v-icon></v-btn
                       >
-                    </v-img>
-                    <v-img
-                      v-if="!file.attId && file.search('video') == -1"
-                      :src="file"
-                      contain
-                      max-height="200"
-                      max-width="200"
-                      align="right"
+                      <!-- </div> -->
+                      <video width="100%" :src="file.url" controls></video>
+                    </v-card>
+                  </template>
+                  <template v-else>
+                    <v-card
+                      width="100%"
+                      flat
+                      v-if="file.attId && file.filesType.search('video') == -1"
                     >
                       <v-btn
+                        icon
+                        small
+                        class="bg-[#cdcdcd] absolute top-0 right-8 z-[4]"
+                        dark
+                        @click="showAttachmentDialog(file)"
+                        ><v-icon>mdi-eye</v-icon></v-btn
+                      >
+                      <v-btn
+                        icon
+                        small
+                        class="bg-[#ff6b81] absolute top-0 right-0 z-[4]"
+                        dark
+                        @click="removeSummaryFileInbase(file, index)"
+                        ><v-icon>mdi-close</v-icon>
+                      </v-btn>
+                      <v-img
+                        :src="file.url"
+                        cover
+                        max-height="200"
+                        width="100%"
+                        align="center"
+                      >
+                        <template v-slot:placeholder>
+                          <v-row
+                            class="fill-height ma-0"
+                            align="center"
+                            justify="center"
+                          >
+                            <v-progress-circular
+                              indeterminate
+                              color="#ff6b81"
+                            ></v-progress-circular>
+                          </v-row>
+                        </template>
+                      </v-img>
+                    </v-card>
+
+                    <v-card
+                      width="100%"
+                      flat
+                      v-if="!file.attId && file.search('video') == -1"
+                    >
+                      <v-btn
+                        icon
+                        small
+                        class="bg-[#cdcdcd] absolute top-0 right-8 z-[4]"
+                        dark
+                        @click="showAttachmentDialog(file)"
+                        ><v-icon>mdi-eye</v-icon></v-btn
+                      >
+                      <v-btn
+                        icon
+                        small
+                        class="bg-[#ff6b81] absolute top-0 right-0 z-[4]"
+                        dark
+                        @click="removeSummaryFile(index)"
+                        ><v-icon>mdi-close</v-icon></v-btn
+                      >
+                      <v-img
+                        :src="file"
+                        cover
+                        max-height="200"
+                        width="100%"
+                        align="center"
+                      >
+                        <template v-slot:placeholder>
+                          <v-row
+                            class="fill-height ma-0"
+                            align="center"
+                            justify="center"
+                          >
+                            <v-progress-circular
+                              indeterminate
+                              color="#ff6b81"
+                            ></v-progress-circular>
+                          </v-row>
+                        </template>
+
+                        <!-- <v-btn
                         icon
                         class="bg-[#f00]"
                         dark
                         @click="removeSummaryFile(index)"
                         ><v-icon>mdi-close</v-icon></v-btn
-                      >
-                    </v-img>
+                      > -->
+                      </v-img>
+                    </v-card>
                   </template>
                 </v-col>
               </v-row>
@@ -1217,6 +1291,54 @@
           </v-card-text>
         </v-card>
       </v-dialog>
+
+      <v-dialog
+        persistent
+        :width="$vuetify.breakpoint.smAndUp ? '60vw' : ''"
+        v-model="show_attachment_dialog"
+      >
+        <v-card>
+          <!-- <v-card-text> -->
+          <v-container grid-list-xs>
+            <v-row>
+              <v-col cols="12" class="text-center">
+                <v-btn
+                  icon
+                  class="bg-[#cdcdcd] absolute top-1 right-1"
+                  dark
+                  @click="show_attachment_dialog = !show_attachment_dialog"
+                  ><v-icon>mdi-close</v-icon></v-btn
+                >
+                <span class="font-weight-bold"> ตัวอย่างภาพ </span>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12">
+                <v-img
+                  contain
+                  :src="files_attachment_dialog"
+                  class="max-h-[400px] max-w-400px"
+                >
+                  <template v-slot:placeholder>
+                    <v-row
+                      class="fill-height ma-0"
+                      align="center"
+                      justify="center"
+                    >
+                      <v-progress-circular
+                        indeterminate
+                        color="#ff6b81"
+                      ></v-progress-circular>
+                    </v-row>
+                  </template>
+                </v-img>
+              </v-col>
+            </v-row>
+          </v-container>
+          <!-- </v-card-text> -->
+        </v-card>
+      </v-dialog>
+
       <loading-overlay :loading="student_check_in_is_loading"></loading-overlay>
     </v-container>
   </v-app>
@@ -1332,6 +1454,8 @@ export default {
     cpo_options: [],
     show_comment_potential_dialog: false,
     package_name_filter: null,
+    show_attachment_dialog: false,
+    files_attachment_dialog: null,
   }),
   created() {
     this.GetStudentByTimeId({
@@ -1424,6 +1548,10 @@ export default {
       DeleteAssessmentPotentialFile:
         "CoachModules/DeleteAssessmentPotentialFile",
     }),
+    showAttachmentDialog(item) {
+      this.files_attachment_dialog = item.url ? item.url : item
+      this.show_attachment_dialog = true;
+    },
     //check in by date
     CheckInByDate() {
       // let check_in_date = moment(this.$route.params.date).format("YYYY-MM-DD")
@@ -1931,18 +2059,18 @@ export default {
     },
 
     previewSummaryFile(event) {
-      let accept = event.target.accept.split(",")
-      console.log(accept)
+      let accept = event.target.accept.split(",");
+      console.log(accept);
       const selectedFiles = event.target.files;
       // this.coach_check_in.summary_files = [];
       const fileUrls = [];
-      let type_file = []
-      for(let type of accept){
-        type_file.push(type.split('/')[0])
+      let type_file = [];
+      for (let type of accept) {
+        type_file.push(type.split("/")[0]);
       }
       for (let i = 0; i < selectedFiles.length; i++) {
-        let file_type = selectedFiles[i].type.split("/")
-        if(type_file.includes(file_type[0])){
+        let file_type = selectedFiles[i].type.split("/");
+        if (type_file.includes(file_type[0])) {
           if (CheckFileSize(selectedFiles[i]) === true) {
             // console.log(selectedFiles[i]);
             this.coach_check_in.summary_files.push(selectedFiles[i]);
@@ -1959,7 +2087,7 @@ export default {
             };
             reader.readAsDataURL(file);
           }
-        }else{
+        } else {
           Swal.fire({
             icon: "error",
             title: "กรุณาอัพโหลดเฉพาะไฟล์รูปและวีดีโอเท่านั้น",
@@ -1967,14 +2095,14 @@ export default {
             showCancelButton: false,
             confirmButtonText: "ตกลง",
             cancelButtonText: "ยกเลิก",
-          })
+          });
         }
       }
     },
     removeSummaryFile(index) {
-      let index_att = 0
-      if(this.coach_check_in.attachment.length > 0){
-        index_att = this.coach_check_in.attachment.length 
+      let index_att = 0;
+      if (this.coach_check_in.attachment.length > 0) {
+        index_att = this.coach_check_in.attachment.length;
       }
       this.coach_check_in.summary_files.splice(index - index_att, 1);
       this.preview_summary_files.splice(index, 1);
@@ -2041,5 +2169,4 @@ export default {
   },
 };
 </script>
-<style>
-</style>
+<style></style>
