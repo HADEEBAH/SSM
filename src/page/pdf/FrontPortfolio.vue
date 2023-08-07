@@ -155,7 +155,7 @@ import { mapActions, mapGetters } from 'vuex'
           }
         }
         
-        console.log(docDefinition)
+        // console.log(docDefinition)
         pdfMake.createPdf(docDefinition).open({}, window);
         // let pdfDoc = pdfMake.createPdf(docDefinition)
         // pdfDoc.getBlob((blob) => {

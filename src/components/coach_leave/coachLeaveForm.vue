@@ -589,7 +589,7 @@ export default {
       course.compensation_date_str = new Date(date).toLocaleDateString("th-TH", { year: 'numeric', month: 'long', day: 'numeric' })
     },
     setHolidaydates(item) {
-      // console.log("item", item);
+      // // console.log("item", item);
       const thaiMonths = [
         "มกราคม",
         "กุมภาพันธ์",
@@ -611,7 +611,7 @@ export default {
         const year = newDate.split("/")[2];
         this.test_date = `${date} ${thaiMonths[month - 1]} ${year}`;
       }
-      console.log("test_date", this.test_date);
+      // console.log("test_date", this.test_date);
     },
     getDateRangeLength() {
       let startDate = new Date(this.coach_leave_data.start_date);
@@ -642,7 +642,7 @@ export default {
             let hrs = [];
             let start = this.periods.filter((v) => v.value === period)[0].start;
             let end = this.periods.filter((v) => v.value === period)[0].end;
-            // console.log("647 => ",course.compensation_start_time_obj.HH)
+            // // console.log("647 => ",course.compensation_start_time_obj.HH)
             if(type && type === 'end'){
               if(course.compensation_start_time_obj.HH){
                 for (let hr = 0; hr < 24; hr++) {

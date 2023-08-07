@@ -266,7 +266,7 @@ export default {
     selectDate(date) {
       this.event_date = [];
       this.showModal = true;
-      console.log("calendar", this.events);
+      // console.log("calendar", this.events);
       this.events.forEach((event) => {
         let [start, start_time] = event.start.split(" ");
         let [end, end_time] = event.end.split(" ");

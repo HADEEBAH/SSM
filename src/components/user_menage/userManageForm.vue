@@ -1413,8 +1413,8 @@ export default {
       this.changeDialogRegisterOneId(true);
     },
     updateData(account_id) {
-      console.log("account_id", account_id);
-      console.log("ghdsc", this.user_form);
+      // console.log("account_id", account_id);
+      // console.log("ghdsc", this.user_form);
 
       this.$refs.user_form.validate();
       if (this.user_form) {
@@ -1506,8 +1506,8 @@ export default {
                     type: null,
                   });
                   setTimeout(() => {
-                    console.log("========>>>>", this.user_data[0]);
-                    console.log("show_by_id", this.show_by_id);
+                    // console.log("========>>>>", this.user_data[0]);
+                    // console.log("show_by_id", this.show_by_id);
                     let payload = {
                       ...this.show_by_id,
                       passWord: null,
@@ -1524,7 +1524,7 @@ export default {
                 } else {
                   this.error_message = "ไม่พบผู้ใช้";
                 }
-                console.log("555555", this.user_one_temp);
+                // console.log("555555", this.user_one_temp);
               } else {
                 this.error_message = "เกิดข้อผิดพลาด";
               }

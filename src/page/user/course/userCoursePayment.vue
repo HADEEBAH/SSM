@@ -118,7 +118,7 @@ export default {
     const base64Str = this.$route.query.payload;
     const objStr = Buffer.from(base64Str, "base64").toString("utf-8");
     this.payload = JSON.parse(objStr);
-    // console.log(this.payload)
+    // // console.log(this.payload)
   },
   beforeDestroy() {
     window.removeEventListener("beforeunload", this.preventNavigation);

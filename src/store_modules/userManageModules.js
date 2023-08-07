@@ -66,7 +66,7 @@ const UserManageModules = {
     },
 
     SetCertificate(state, payload) {
-      // console.log(555, payload);
+      // // console.log(555, payload);
       state.students.certificates = payload
     },
     SetDataUserRelationsManagement(state, payload) {
@@ -78,26 +78,26 @@ const UserManageModules = {
   actions: {
     changeStudentsData(context, studentData) {
       context.commit("studentData", studentData)
-      // console.log(studentData)
+      // // console.log(studentData)
     },
 
     changeUserData(context, userData) {
       context.commit("userData", userData)
-      // console.log(userData)
+      // // console.log(userData)
     },
 
     changeParentData(context, ParentData) {
       context.commit("ParentData", ParentData)
-      // console.log(ParentData)
+      // // console.log(ParentData)
     },
 
     ChangeCardStudens(context, studentcardData) {
       context.commit("SetStudent", studentcardData)
-      // console.log(studentcardData)
+      // // console.log(studentcardData)
     },
     changeStudentsCertificate(context, students) {
       context.commit("SetCertificate", students)
-      // console.log(555, students)
+      // // console.log(555, students)
     },
 
     async GetDataRelationsManagement(context, data_account) {
@@ -110,12 +110,12 @@ const UserManageModules = {
           }
         }
 
-        // console.log("data_account=======>", data_account);
+        // // console.log("data_account=======>", data_account);
 
         if (data_account?.userRoles?.map((val) => { return val.roleId }).includes("R_5")) {
           let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?student_id=${data_account.userOneId}`, config)
           if (data.statusCode === 200) {
-            // console.log("data=> st", data);
+            // // console.log("data=> st", data);
             if (data?.data?.message !== "relation not found.") {
 
               context.commit("SetDataUserRelationsManagement", data.data)
@@ -132,7 +132,7 @@ const UserManageModules = {
         } else if (data_account?.userRoles?.map((val) => { return val.roleId }).includes("R_4")) {
           let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?parent_id=${data_account.userOneId}`, config)
           if (data.statusCode === 200) {
-            // console.log("data=> pa", data);
+            // // console.log("data=> pa", data);
             if (data?.data?.message !== "relation not found.") {
 
               context.commit("SetDataUserRelationsManagement", data.data)
@@ -147,15 +147,15 @@ const UserManageModules = {
           }
         }
       } catch (error) {
-        // console.log(error)
+        // // console.log(error)
       }
     },
 
-    async updateUserData(context, payload) {
-      console.log("context=>", context);
-      console.log("payload=>", payload);
+    // async updateUserData(context, payload) {
+      // console.log("context=>", context);
+      // console.log("payload=>", payload);
 
-    }
+    // }
 
   },
 
@@ -170,7 +170,7 @@ const UserManageModules = {
       return state.user_data
     },
     getCertificate(state) {
-      // console.log(555);
+      // // console.log(555);
       return state.students.certificates
     },
     getDataRelationsManagement(state) {

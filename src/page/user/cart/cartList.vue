@@ -277,8 +277,8 @@ export default {
   }),
   created() {},
   mounted() {
-    // // console.log(this.user_login.account_id)
-    // // console.log(this.carts)
+    // // // console.log(this.user_login.account_id)
+    // // // console.log(this.carts)
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "รถเข็น");
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
     // this.carts = JSON.parse(localStorage.getItem(this.user_login.account_id))
@@ -301,7 +301,7 @@ export default {
       this.policy_show = false;
     },
     removeCart(cart_id) {
-      // console.log(cart_id);
+      // // console.log(cart_id);
       Swal.fire({
         icon: "question",
         title: "ต้องการลบรายการนี้หรือไม่ ?",
@@ -337,7 +337,7 @@ export default {
     },
     selectOne(bool, key) {
       let result = this.cart_list.map((element) => {
-        // console.log("index", index);
+        // // console.log("index", index);
 
         if (element.category_id == key) {
           element.checked = bool;
@@ -357,15 +357,15 @@ export default {
       this.sumtotal();
     },
     selectAll(bool) {
-      // // console.log("bool", bool);
+      // // // console.log("bool", bool);
       this.cart_list.map((element) => {
-        // // console.log("element", element);
+        // // // console.log("element", element);
         element.checked = bool;
 
         return element;
       });
 
-      // console.log("result", result);
+      // // console.log("result", result);
 
       this.sumtotal();
       // this.cart_list = result;
@@ -383,10 +383,10 @@ export default {
           this.order.type = "cart";
           this.changeOrderData(this.order);
           this.GetAllCourseMonitor().then(() => {
-            // console.log("course_monitors", this.course_monitors);
-            // // console.log("courses",this.order.courses)
+            // // console.log("course_monitors", this.course_monitors);
+            // // // console.log("courses",this.order.courses)
             this.order.courses.forEach((course) => {
-              // console.log("courses", course);
+              // // console.log("courses", course);
               if (
                 this.course_monitors.filter(
                   (v) =>
@@ -413,14 +413,14 @@ export default {
                 ) {
                   isValiDateCourse.push(true);
                 } else {
-                  // console.log( this.course_monitors)
+                  // // console.log( this.course_monitors)
                   isValiDateCourse.push(false);
                 }
               } else {
                 isValiDateCourse.push(true);
               }
             });
-            // console.log(isValiDateCourse);
+            // // console.log(isValiDateCourse);
             if (isValiDateCourse.includes(false)) {
               Swal.fire({
                 icon: "error",

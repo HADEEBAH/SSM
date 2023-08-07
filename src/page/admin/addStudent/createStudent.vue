@@ -865,7 +865,7 @@ export default {
       }
     },
     search(val) {
-      // console.log(val);
+      // // console.log(val);
       if (val.length > 3) {
         this.loading = true;
         this.searchNameUser({ search_name: val }).then(() => {
@@ -896,7 +896,7 @@ export default {
     CalTotalPrice() {
       this.order.total_price = 0;
       for (let course of this.order.courses) {
-        // console.log(course);
+        // // console.log(course);
         if (course.price) {
           this.order.total_price =
             this.order.total_price + parseInt(course.price);
@@ -973,7 +973,7 @@ export default {
     },
     openDialog() {
       this.dialog_show = true;
-      // console.log(this.dialog_show, "<---");
+      // // console.log(this.dialog_show, "<---");
     },
     removeCourse(index) {
       // this.$delete(this.short_course)
@@ -981,10 +981,10 @@ export default {
     },
     selectTime(time, course) {
       course.coach = {};
-      // console.log(time);
+      // // console.log(time);
     },
     selectCategory(categoryId, course_type_id, course) {
-      // console.log(categoryId, course_type_id);
+      // // console.log(categoryId, course_type_id);
       course.course_id = "";
       course.package_data = {};
       course.package = "";
@@ -1015,7 +1015,7 @@ export default {
       });
     },
     selectCourse(courseId, course) {
-      // console.log("course_id", courseId);
+      // // console.log("course_id", courseId);
       course.package_data = {};
       course.package = "";
       course.option = {};
@@ -1075,8 +1075,8 @@ export default {
         if (this.validate_form && this.course_monitors.length > 0) {
           for (let course of this.order.courses) {
             if (course.package_data.students < this.students.length) {
-              // console.log("912 =>", course.package_data.students);
-              // console.log("913 =>", this.students.length);
+              // // console.log("912 =>", course.package_data.students);
+              // // console.log("913 =>", this.students.length);
               studentFail = true;
             } else {
               if (
@@ -1106,7 +1106,7 @@ export default {
                 ) {
                   isValiDateCourse.push(true);
                 } else {
-                  // // console.log( this.course_monitors)
+                  // // // console.log( this.course_monitors)
                   isValiDateCourse.push(false);
                 }
               } else {
@@ -1144,13 +1144,13 @@ export default {
             }).then(async (result) => {
               if (result.isConfirmed) {
                 if (this.order.payment_status === "warn") {
-                  console.log("order", this.order);
+                  // console.log("order", this.order);
                   let account = [];
                   let course_name_noti = [];
                   this.order.courses.forEach((course) => {
                     course_name_noti.push(course?.course_data?.course_name_th);
                     course.students = [];
-                    // console.log("1136",this.students)
+                    // // console.log("1136",this.students)
                     course.coach_id = course.coach.coach_id;
                     course.coach_name = course.coach.coach_name;
                     for (const student of this.students) {
@@ -1182,7 +1182,7 @@ export default {
                     )} ให้คุณแล้ว (รอชำระเงิน)`,
                     accountId: account,
                   };
-                  // console.log(payload);
+                  // // console.log(payload);
                   this.sendNotification(payload);
                   this.saveOrder();
                   // router.replace({name: "Finance"})
@@ -1192,7 +1192,7 @@ export default {
                   this.order.courses.forEach((course) => {
                     course_name_noti.push(course?.course_data?.course_name_th);
                     course.students = [];
-                    // console.log("1136",this.students)
+                    // // console.log("1136",this.students)
                     course.coach_id = course.coach.coach_id;
                     course.coach_name = course.coach.coach_name;
                     for (const student of this.students) {

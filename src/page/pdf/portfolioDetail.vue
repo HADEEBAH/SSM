@@ -39,18 +39,18 @@
           // let defaultProfile = require('../../assets/profile/default_profile.png')
           // let defaultProfileImageData =  await this.loadImageFromFile(defaultProfile);
           // let defaultProfileImageDataUrl = await this.convertImageToDataFile(defaultProfileImageData);
-          console.log("37=>",this.portfolio_data)
+          // console.log("37=>",this.portfolio_data)
           let courses = []
           let course_index = []
           for (let course of this.portfolio_data.courses){
             course_index.push('x')
-            console.log("40=>",course)
+            // console.log("40=>",course)
             // IMG 
             let img_arr = []
             let img_col = []
             if(course.attachmensPictureAll){
               for (let img of course.attachmensPictureAll){
-                // console.log(img)
+                // // console.log(img)
                 this.images_files[img.attachmentAssessmentId] = img.assessmentAttachmentFilesUrl
                 img_col.push({
                   text: `${img.attachmentAssessmentId}`,
@@ -78,7 +78,7 @@
             let assed = []
             for(let ass of course.assessments){
               assed.push(ass)
-              console.log("47=>",ass)
+              // console.log("47=>",ass)
               let ass_columns = []
               if(ass.assessmentAttachmentFilesUrl){
                 this.images_files[ass.attachmentAssessmentId] = ass.assessmentAttachmentFilesUrl
@@ -173,7 +173,7 @@
             let potential_columns = []
             if( course.assessmentPotentials.potentialAttachmentFilesUrl){ 
               // this.images_files[course.assessmentPotentials.attachmentPotentialId] = course.assessmentPotentials.assessmentAttachmentFilesUrl
-              // console.log("179 => ",course.assessmentPotentials.attachmentPotentialId)
+              // // console.log("179 => ",course.assessmentPotentials.attachmentPotentialId)
               potential_columns.push({
                 alignment : 'center',
                 width: '50%',

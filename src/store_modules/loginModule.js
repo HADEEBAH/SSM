@@ -57,7 +57,7 @@ const loginModules = {
                         'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                // console.log(search_name)
+                // // console.log(search_name)
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/student?firstNameTh=${search_name}`, config)
                 if (data.statusCode == 200) {
                     for (const user of data.data) {
@@ -66,7 +66,7 @@ const loginModules = {
                     context.commit("SetUsernameList", data.data)
                 }
             } catch (error) {
-                // console.log(error)
+                // // console.log(error)
             }
         },
         async checkUsernameOneidByOrder(context, { username, type, course_id }) {
@@ -86,7 +86,7 @@ const loginModules = {
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/search/username/one?username=${username}`, config)
                 if (data.statusCode === 200) {
                     if (data.data.userOneId) {
-                        // console.log("85 =>",data.data)
+                        // // console.log("85 =>",data.data)
                         if (type === 'student') {
                             let roles = ["R_1", "R_2", "R_3"]
                             if (!data.data.roles || !roles.includes(data.data.roles?.roleId)) {
@@ -155,7 +155,7 @@ const loginModules = {
                     context.commit("SetIsLoading", false)
                 }
             } catch (error) {
-                // console.log(error.response.data)
+                // // console.log(error.response.data)
                 context.commit("SetIsLoading", false)
                 if (error.response.data.message === "This username not found.") {
                     Swal.fire({
@@ -168,14 +168,14 @@ const loginModules = {
                         title: error.message
                     })
                 }
-                // // console.log(error)
+                // // // console.log(error)
             }
         },
         async checkUsernameOneid(context, { username, status, type }) {
             context.commit("SetIsLoading", true)
-            console.log("username", username);
-            console.log("status", status);
-            console.log("type", type);
+            // console.log("username", username);
+            // console.log("status", status);
+            // console.log("type", type);
             context.commit("SetUserStudentData", [])
             context.commit("SetUserData", [])
             let config = {
@@ -188,7 +188,7 @@ const loginModules = {
             try {
                 // let { data } = await axios.get(` http://localhost:3000/api/v1/account/username?username=${username}`)
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/search/username?username=${username}`, config)
-                console.log("checkUsernameOneid", data)
+                // console.log("checkUsernameOneid", data)
                 if (data.statusCode === 200) {
                     if (data.data.userOneId) {
                         if (type === 'student') {
@@ -225,7 +225,7 @@ const loginModules = {
                 //     icon: "error",
                 //     title: error.message
                 // })
-                // console.log(error)
+                // // console.log(error)
             }
         },
         changeProfileFail(context, value) {
@@ -239,7 +239,7 @@ const loginModules = {
                     "username": context.state.user_one_id.username,
                     "password": context.state.user_one_id.password,
                 })
-                // console.log(data);
+                // // console.log(data);
                 if (data.statusCode === 200) {
                     let roles = []
                     if (data.data.roles.length > 0) {
@@ -265,7 +265,7 @@ const loginModules = {
                     localStorage.setItem("userDetail", JSON.stringify(payload))
                     let order = JSON.parse(localStorage.getItem("Order"))
                     context.commit("SetIsLoading", false)
-                    // console.log("SetProfileFail")
+                    // // console.log("SetProfileFail")
                     if (!payload.first_name_th || !payload.last_name_th) {
                         router.replace({ name: "ProfileDetail", params: { profile_id: payload.account_id } })
                         context.commit("SetProfileFail", true)
@@ -282,7 +282,7 @@ const loginModules = {
                     }
                 }
             } catch (response) {
-                // console.log(response)
+                // // console.log(response)
                 context.commit("SetIsLoading", false)
                 if (response.message === "Request failed with status code 401") {
                     Swal.fire({
@@ -299,15 +299,15 @@ const loginModules = {
 
         },
         async loginShareToken(context, route) {
-            // console.log("token=>", route.query.token);
-            // console.log("path=>", route.name);
+            // // console.log("token=>", route.query.token);
+            // // console.log("path=>", route.name);
             context.commit("SetIsLoading", true)
             try {
                 // const { data } = await axios.post(`http://localhost:3001/api/v1/auth/login/sharedToken`, {
                 const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login/sharedToken`, {
                     "shared_token": route.query.token,
                 })
-                // console.log(data);
+                // // console.log(data);
                 if (data.statusCode === 200) {
                     let roles = []
                     if (data.data.roles.length > 0) {
@@ -315,7 +315,7 @@ const loginModules = {
                             roles.push(role.roleId)
                         });
                     }
-                    // console.log("token<>", data.data.token);
+                    // // console.log("token<>", data.data.token);
                     VueCookie.set("token", data.data.token)
 
                     let payload = {
@@ -342,7 +342,7 @@ const loginModules = {
                         window.location.href = `${process.env.VUE_APP_URL}${route.path}`
                     }
                     // if (route.name) {
-                    //   // console.log("router", router);
+                    //   // // console.log("router", router);
                     //   router.replace({name:route.name})
                     // }
                     // window.location.href = `http://localhost:8080${route.path}` 

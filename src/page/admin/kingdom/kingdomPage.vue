@@ -296,7 +296,7 @@ export default {
                 Authorization: `Bearer ${VueCookie.get("token")}`,
               },
             };
-            // console.log("preview_url", this.file);
+            // // console.log("preview_url", this.file);
             const payload = {
               category_name_th: this.kingdom.kingdom_name_th,
               category_name_en: this.kingdom.kingdom_name_eng,
@@ -323,7 +323,7 @@ export default {
               throw { message: data.message };
             }
           } catch (error) {
-            // console.log(error);
+            // // console.log(error);
             Swal.fire({
               icon: "error",
               title: error.message,
@@ -339,7 +339,7 @@ export default {
       if (!this.file) return;
       if (CheckFileSizeV2(this.file, event.target.id) === true) {
         const fileType = this.file.type;
-        // console.log("fileType", fileType);
+        // // console.log("fileType", fileType);
         if (fileType === "image/png" || fileType === "image/jpeg") {
           const reader = new FileReader();
           reader.onload = (e) => {

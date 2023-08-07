@@ -240,12 +240,12 @@ export default {
 
     cancleText() {},
     getCategory(categoryId) {
-      // console.log("category_id", categoryId);
+      // // console.log("category_id", categoryId);
       this.GetCategory(categoryId);
     },
 
     showImg(item) {
-      // console.log(item);
+      // // console.log(item);
       return item;
     },
 
@@ -255,7 +255,7 @@ export default {
 
     // uploadFile() {
     //   this.file = this.$refs.fileInput.files[0];
-    //   // console.log("file=>", this.file);
+    //   // // console.log("file=>", this.file);
     //   if (!this.file) return;
     //   const reader = new FileReader();
     //   reader.onload = (e) => {
@@ -269,7 +269,7 @@ export default {
       if (!this.file) return;
       if (CheckFileSizeV2(this.file, event.target.id) === true) {
         const fileType = this.file.type;
-        // console.log("fileType", fileType);
+        // // console.log("fileType", fileType);
         if (fileType === "image/png" || fileType === "image/jpeg") {
           const reader = new FileReader();
           reader.onload = (e) => {
@@ -314,7 +314,7 @@ export default {
         }).then(async (result) => {
           if (result.isConfirmed) {
             try {
-              // console.log("preview_url", this.file);
+              // // console.log("preview_url", this.file);
               const payload = {
                 categoryNameTh: this.category.categoryNameTh,
                 categoryNameEng: this.category.categoryNameEng,
@@ -349,7 +349,7 @@ export default {
                 throw { message: data.message };
               }
             } catch (error) {
-              // console.log(error);
+              // // console.log(error);
               Swal.fire({
                 icon: "error",
                 title: error.message,

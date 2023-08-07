@@ -83,9 +83,9 @@ export default {
     //     });
     //     if (response.data.valid) {
     //       // password is valid, do something
-    //       console.log("success");
+    //       // console.log("success");
     //     } else {
-    //       console.log("fail");
+    //       // console.log("fail");
     //       // password is not valid, do something else
     //       Swal.fire({
     //         icon: "error",
@@ -94,7 +94,7 @@ export default {
     //       });
     //     }
     //   } catch (error) {
-    //     console.error(error);
+    //     // console.error(error);
     //   }
     // },
 
