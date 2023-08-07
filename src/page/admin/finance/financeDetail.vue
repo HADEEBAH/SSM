@@ -36,7 +36,7 @@
                   order_detail.paymentStatus == "pending"
                     ? "รอดำเนินการ"
                     : order_detail.paymentStatus === "success"
-                    ? "สำเร็จ"
+                    ? "ชำระเงินแล้ว"
                     : "ยกเลิก"
                 }}
               </v-chip>
