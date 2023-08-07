@@ -218,7 +218,7 @@
         v-if="show_dialog_artwork"
         v-model="show_dialog_artwork"
         persistent
-        :width="$vuetify.breakpoint.smAndUp ? '90vw' : ''"
+        :width="$vuetify.breakpoint.smAndUp ? '60vw' : ''"
       >
         <v-card class="pa-2">
           <v-row dense>
@@ -230,25 +230,28 @@
           </v-row>
           <v-card-title>
             <v-row dense>
-              <v-col cols="12" align="center" class="font-bold w-3"
-                >Learning Journey</v-col
-              >
+              <v-col cols="12" align="center" class="font-bold w-3">
+                Learning Journey
+              </v-col>
             </v-row>
           </v-card-title>
           <v-card-text>
             <v-row>
               <v-col
                 cols="12"
-                :sm="course_artwork.length > 3 ? '4' : ''"
+                :sm="course_artwork.length > '3' ? '4' : ''"
                 v-for="(artwork, index) in course_artwork"
                 :key="`${index}-artwork`"
+                class="webkit-center"
               >
                 <v-img
                   @click="SelectedImg(artwork.attachmentUrl)"
                   :src="artwork.attachmentUrl"
                   aspect-ratio="1"
-                  contain
                   class="bg-grey-lighten-2 cursor-pointer"
+                  cover
+                  width="350px"
+                  height="300px"
                 >
                   <template v-slot:placeholder>
                     <v-row
@@ -268,35 +271,46 @@
           </v-card-text>
         </v-card>
       </v-dialog>
+
       <v-dialog
-        v-if="show_full_img"
         v-model="show_full_img"
         persistent
-        class="w-full"
+        :width="$vuetify.breakpoint.smAndUp ? `60vw` : ''"
       >
-        <v-card class="pa-2">
-          <v-row dense>
-            <v-col cols="12" align="right">
-              <v-btn icon @click="CloseImgFull()"
-                ><v-icon color="#ff6b81">mdi-close</v-icon></v-btn
-              >
-            </v-col>
-          </v-row>
-          <v-img
-            :src="img_selected"
-            aspect-ratio="1"
-            contain
-            class="bg-grey-lighten-2"
-          >
-            <template v-slot:placeholder>
-              <v-row class="fill-height ma-0" align="center" justify="center">
-                <v-progress-circular
-                  indeterminate
-                  color="#ff6b81"
-                ></v-progress-circular>
-              </v-row>
-            </template>
-          </v-img>
+        <v-card>
+          <v-container>
+            <v-row dense class="absolute right-1 top-1">
+              <v-col cols="12">
+                <v-btn icon @click="CloseImgFull()"
+                  ><v-icon color="#ff6b81">mdi-close</v-icon></v-btn
+                >
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" class="webkit-center">
+                <v-img
+                  :src="img_selected"
+                  aspect-ratio="1"
+                  contain
+                  max-width="500px"
+                  class="bg-grey-lighten-2"
+                >
+                  <template v-slot:placeholder>
+                    <v-row
+                      class="fill-height ma-0"
+                      align="center"
+                      justify="center"
+                    >
+                      <v-progress-circular
+                        indeterminate
+                        color="#ff6b81"
+                      ></v-progress-circular>
+                    </v-row>
+                  </template>
+                </v-img>
+              </v-col>
+            </v-row>
+          </v-container>
         </v-card>
       </v-dialog>
     </v-container>
@@ -396,5 +410,19 @@ export default {
   width: 218px;
   height: 4px;
   background: linear-gradient(141.48deg, #ff6b81 14.35%, #fdcb6e 85.47%);
+}
+.gallery {
+  margin: 5px;
+  float: left;
+  width: 350px;
+}
+
+.gallery img {
+  width: 100%;
+  height: auto;
+}
+
+.webkit-center {
+  text-align: -webkit-center;
 }
 </style>
