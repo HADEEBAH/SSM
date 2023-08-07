@@ -58,7 +58,9 @@
                     ? search_results.filter(
                         (v) => v.course_type_id === type.course_type_id
                       ).length
-                    : type.total_course
+                    :search_course ? search_results.filter(
+                        (v) => v.course_type_id === type.course_type_id
+                      ).length : type.total_course
                 }}
               </v-avatar>
             </v-card-text>
@@ -74,7 +76,7 @@
               (v) => v.course_type_id === type_selected
             ).length > 0
               ? search_results.filter((v) => v.course_type_id === type_selected)
-              : courses"
+              : search_course ? search_results :courses"
             :key="course_index"
           >
             <v-card class="overflow-hidden h-full rounded-lg">
@@ -136,6 +138,13 @@
                     >{{ course.show ? `น้อยลง` : `อ่านต่อ...` }}</span
                   >
                 </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col v-if="search_course ? search_results.length == 0 :courses.length == 0">
+            <v-card outlined>
+              <v-card-text align="center">
+                <span class="font-bold">ไม่พบข้อมูลคอร์ส</span>
               </v-card-text>
             </v-card>
           </v-col>
@@ -226,16 +235,15 @@ export default {
     },
     searchCourse(event) {
       const searchQuery = event.toLowerCase();
-      // console.log(this.type_selected);
       this.search_results = this.courses.filter((course) => {
         const courseNameTh = course.course_name_th.toLowerCase();
         const courseNameEn = course.course_name_en.toLowerCase();
-        return (
-          courseNameTh.includes(searchQuery) ||
-          courseNameEn.includes(searchQuery)
-        );
+        if( !courseNameTh.includes(searchQuery) || !courseNameEn.includes(searchQuery)){
+          return false
+        }else{
+          return ( courseNameTh.includes(searchQuery) || courseNameEn.includes(searchQuery) );
+        }
       });
-      // console.log(this.search_results);
     },
     sumCouserPotential(courseData) {
       if (!this.course_potential) {
