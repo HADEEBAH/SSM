@@ -1,224 +1,217 @@
 <template>
- 
-  <v-app class="overflow-x-hidden overflaow-y-hidden">
+  <!-- <v-app class="overflow-x-hidden overflaow-y-hidden"> -->
+  <v-container>
     {{ setFunctions }}
-    <v-container>
-      <loading-overlay :loading="cart_list_is_loading"></loading-overlay>
-      <!-- <pre>{{ cart_list }}</pre> -->
-      <div v-if="!cart_list_is_loading">
-        <v-row v-if="cart_list.length == 0">
-          <v-col cols="12" class="text-xl font-bold text-center my-5 pink--text">
-            ไม่พบข้อมูลในตะกร้า
-          </v-col>
-          <v-col cols="12">
-            <v-img src="../../../assets/cart/noCart.png"> </v-img>
+    <loading-overlay :loading="cart_list_is_loading"></loading-overlay>
+    <!-- <pre>{{ cart_list }}</pre> -->
+    <div v-if="!cart_list_is_loading" class="h-full">
+      <v-row v-if="cart_list.length == 0">
+        <v-col cols="12" class="text-xl font-bold text-center my-5 pink--text">
+          ไม่พบข้อมูลในตะกร้า
+        </v-col>
+        <v-col cols="12" class="webkit-center">
+          <v-img src="@/assets/cart/basket.svg" max-width="500px"> </v-img>
+        </v-col>
+      </v-row>
+      <div v-if="cart_list.length > 0">
+        <v-row class="mb-16">
+          <v-col
+            cols="12"
+            v-for="(item, index_item) in cart_list"
+            :key="`${index_item}-cart`"
+          >
+            <!-- <pre>{{item}}</pre> -->
+            <v-card class="rounded-lg mt-5">
+              <v-row dense>
+                <v-col cols="3">
+                  <v-img
+                    :src="item.course_img"
+                    cover
+                    height="270"
+                    class="w-full h-full rounded-l-lg"
+                  />
+                </v-col>
+                <v-col>
+                  <v-card-text>
+                    <v-row dense>
+                      <v-col cols="12">
+                        <v-row dense>
+                          <v-col>
+                            <v-row dense>
+                              <v-col class="text-lg font-bold">
+                                {{ item.course_name_th }}({{
+                                  item.course_name_en
+                                }})
+                              </v-col>
+                              <v-col cols="auto">
+                                <v-checkbox
+                                  class="card_checkbox"
+                                  color="error"
+                                  hide-details
+                                  @change="selectOne($event, item.course_id)"
+                                  v-model="item.checked"
+                                >
+                                </v-checkbox>
+                                <!-- {{ item.checked }} -->
+                              </v-col>
+                            </v-row>
+                            <v-row dense>
+                              <v-col
+                                cols="12"
+                                sm="6"
+                                class="text-md font-semibold"
+                              >
+                                โค้ช : {{ item.coach_name }}
+                              </v-col>
+                              <v-col
+                                cols="12"
+                                sm="6"
+                                class="text-md font-semibold"
+                              >
+                                <!-- เวลา : {{ item.time.start }}-{{ item.time.end }} -->
+                              </v-col>
+                            </v-row>
+                            <v-row dense>
+                              <v-col>
+                                {{ item.detail }}
+                              </v-col>
+                            </v-row>
+                          </v-col>
+                        </v-row>
+                      </v-col>
+                    </v-row>
+                    <v-row dense v-if="item.course_type_id === 'CT_1'">
+                      <v-col align="right" cols="8"> จำนวนครั้งที่เรียน</v-col>
+                      <v-col
+                        align="right"
+                        cols="4"
+                        class="text-md font-semibold text-[#FF6B81]"
+                      >
+                        {{ item.option.amount }} ครั้ง</v-col
+                      >
+                    </v-row>
+                    <v-row dense>
+                      <v-col align="right" cols="8"> จำนวนนักเรียน</v-col>
+                      <v-col
+                        align="right"
+                        cols="4"
+                        class="text-md font-semibold text-[#FF6B81]"
+                      >
+                        {{ item.students.length }} คน</v-col
+                      >
+                    </v-row>
+                    <v-row dense v-if="item.course_type_id === 'CT_1'">
+                      <v-col align="right" cols="8"> ส่วนลด</v-col>
+                      <v-col
+                        align="right"
+                        cols="4"
+                        class="text-md font-semibold text-[#FF6B81]"
+                      >
+                        {{ item.option.discount_price }} บาท</v-col
+                      >
+                    </v-row>
+                    <v-row dense class="mb-3">
+                      <v-col align="right" cols="8"> ราคาชำระ</v-col>
+                      <v-col
+                        align="right"
+                        cols="4"
+                        class="text-md font-semibold text-[#FF6B81]"
+                      >
+                        {{
+                          item.course_type_id === "CT_1"
+                            ? item.option.net_price.toLocaleString()
+                            : item.net_price.toLocaleString()
+                        }}
+                        บาท</v-col
+                      >
+                    </v-row>
+                    <!-- <pre>{{ item }}</pre> -->
+                    <div align="right">
+                      <v-btn
+                        outlined
+                        color="red"
+                        @click="removeCart(item.order_tmp_id)"
+                        ><v-icon> mdi-delete</v-icon> ลบรายการ</v-btn
+                      >
+                    </div>
+                  </v-card-text>
+                </v-col>
+              </v-row>
+            </v-card>
           </v-col>
         </v-row>
-        <div v-if="cart_list.length > 0">
-          <v-row class="mb-16">
-            <v-col
-              cols="12"
-              v-for="(item, index_item) in cart_list"
-              :key="`${index_item}-cart`"
-            >
-              <!-- <pre>{{item}}</pre> -->
-              <v-card class="rounded-lg mt-5">
-                <v-row dense>
-                  <v-col cols="3">
-                    <v-img
-                      :src="item.course_img"
-                      cover
-                      height="270"
-                      class="w-full h-full rounded-l-lg"
-                    />
-                  </v-col>
-                  <v-col>
-                    <v-card-text>
-                      <v-row dense>
-                        <v-col cols="12">
-                          <v-row dense>
-                            <v-col>
-                              <v-row dense>
-                                <v-col class="text-lg font-bold">
-                                  {{ item.course_name_th }}({{ item.course_name_en }})
-                                </v-col>
-                                <v-col cols="auto">
-                                  <v-checkbox
-                                    class="card_checkbox"
-                                    color="error"
-                                    hide-details
-                                    @change="selectOne($event, item.course_id)"
-                                    v-model="item.checked"
-                                  >
-                                  </v-checkbox>
-                                  <!-- {{ item.checked }} -->
-                                </v-col>
-                              </v-row>
-                              <v-row dense>
-                                <v-col
-                                  cols="12"
-                                  sm="6"
-                                  class="text-md font-semibold"
-                                >
-                                  โค้ช : {{ item.coach_name }}
-                                </v-col>
-                                <v-col
-                                  cols="12"
-                                  sm="6"
-                                  class="text-md font-semibold"
-                                >
-                                  <!-- เวลา : {{ item.time.start }}-{{ item.time.end }} -->
-                                </v-col>
-                              </v-row>
-                              <v-row dense>
-                                <v-col>
-                                  {{ item.detail }}
-                                </v-col>
-                              </v-row>
-                            </v-col>
-                          </v-row>
-                        </v-col>
-                      </v-row>
-                      <v-row dense v-if="item.course_type_id === 'CT_1'">
-                        <v-col align="right" cols="8"> จำนวนครั้งที่เรียน</v-col>
-                        <v-col
-                          align="right"
-                          cols="4"
-                          class="text-md font-semibold text-[#FF6B81]"
-                        >
-                          {{ item.option.amount }} ครั้ง</v-col
-                        >
-                      </v-row>
-                      <v-row dense>
-                        <v-col align="right" cols="8"> จำนวนนักเรียน</v-col>
-                        <v-col
-                          align="right"
-                          cols="4"
-                          class="text-md font-semibold text-[#FF6B81]"
-                        >
-                          {{ item.students.length }} คน</v-col
-                        >
-                      </v-row>
-                      <v-row dense v-if="item.course_type_id === 'CT_1' ">
-                        <v-col align="right" cols="8"> ส่วนลด</v-col>
-                        <v-col
-                          align="right"
-                          cols="4"
-                          class="text-md font-semibold text-[#FF6B81]"
-                        >
-                          {{ item.option.discount_price }} บาท</v-col
-                        >
-                      </v-row>
-                      <v-row dense class="mb-3">
-                        <v-col align="right" cols="8"> ราคาชำระ</v-col>
-                        <v-col
-                          align="right"
-                          cols="4"
-                          class="text-md font-semibold text-[#FF6B81]"
-                        >
-                          {{
-                            item.course_type_id === "CT_1"
-                              ? item.option.net_price.toLocaleString()
-                              : item.net_price.toLocaleString()
-                          }}
-                          บาท</v-col
-                        >
-                      </v-row>
-                      <!-- <pre>{{ item }}</pre> -->
-                      <div align="right">
-                        <v-btn
-                          outlined
-                          color="red"
-                          @click="removeCart(item.order_tmp_id)"
-                          ><v-icon> mdi-delete</v-icon> ลบรายการ</v-btn
-                        >
-                      </div>
-                    </v-card-text>
-                  </v-col>
-                </v-row>
-              </v-card>
-            </v-col>
-          </v-row>
-          <v-row dense>
-            <v-col>
-              <v-checkbox
-                  hide-details
-                  color="pink"
-                  v-model="policy"
+        <v-row dense>
+          <v-col>
+            <v-checkbox hide-details color="pink" v-model="policy">
+              <template v-slot:label>
+                ยอมรับ
+                <a class="mx-2 font-weight-bold"> ข้อกำหนดการใช้บริการ </a>
+                และ
+                <a class="mx-2 font-weight-bold"
+                  >นโยบายความคุ้มครองข้อมูลส่วนบุคคล</a
                 >
-                <template v-slot:label>
-                  ยอมรับ <a class="mx-2 font-weight-bold"> ข้อกำหนดการใช้บริการ </a> และ <a class="mx-2 font-weight-bold" >นโยบายความคุ้มครองข้อมูลส่วนบุคคล</a>
-                </template>
-              </v-checkbox>
-            </v-col>
-          </v-row>
-          <v-row dense>
-            <v-col cols="12" sm="4">
-              <v-checkbox
-                class="card_checkbox"
-                color="error"
-                hide-details
-                label="ทั้งหมด"
-                @change="selectAll($event)"
-                v-model="selected_all"
-              ></v-checkbox>
-            </v-col>
-            <v-col cols="6" sm="4">
-              รวมทั้งหมด
-              <b class="text-[#ff6b81]">{{ total_price.toLocaleString() }} บาท</b>
-            </v-col>
-            <v-col cols="6" sm="4" align="end">
-              <v-btn depressed dark color="#ff6b81" @click="savePayment">
-                ชำระเงิน ({{ count_selected_cart }})
-              </v-btn>
-            </v-col>
-          </v-row>
-        </div>
+              </template>
+            </v-checkbox>
+          </v-col>
+        </v-row>
+        <v-row dense>
+          <v-col cols="12" sm="4">
+            <v-checkbox
+              class="card_checkbox"
+              color="error"
+              hide-details
+              label="ทั้งหมด"
+              @change="selectAll($event)"
+              v-model="selected_all"
+            ></v-checkbox>
+          </v-col>
+          <v-col cols="6" sm="4">
+            รวมทั้งหมด
+            <b class="text-[#ff6b81]">{{ total_price.toLocaleString() }} บาท</b>
+          </v-col>
+          <v-col cols="6" sm="4" align="end">
+            <v-btn depressed dark color="#ff6b81" @click="savePayment">
+              ชำระเงิน ({{ count_selected_cart }})
+            </v-btn>
+          </v-col>
+        </v-row>
       </div>
-     
-      <!-- <v-btn depressed dark color="#ff6b81" @click="saveCartData"> ชำระเงิน  </v-btn> -->
-    </v-container>
-    <v-dialog 
-      v-model="policy_show" 
-      v-if="policy_show" 
+    </div>
+    <v-dialog
+      v-model="policy_show"
+      v-if="policy_show"
       persistent
       :width="$vuetify.breakpoint.smAndUp ? `60vw` : ''"
     >
       <v-card flat class="pa-2">
         <v-row dense>
           <v-col class="pa-2" align="right">
-            <v-btn
-              icon
-              @click="policy_show = false"
-            >  
-              <v-icon color="red">
-                mdi-close
-              </v-icon>
+            <v-btn icon @click="policy_show = false">
+              <v-icon color="red"> mdi-close </v-icon>
             </v-btn>
           </v-col>
         </v-row>
-        <v-card-title >
+        <v-card-title>
           <v-row dense>
-            <v-col align="center">
-              policy
-            </v-col>
+            <v-col align="center"> policy </v-col>
           </v-row>
         </v-card-title>
         <v-card-text>
           <v-row dense>
             <v-col cols="12">
-              <TermOfUse/>
+              <TermOfUse />
             </v-col>
           </v-row>
           <v-row dense>
             <v-col>
-              <v-checkbox
-                hide-details
-                color="pink"
-                v-model="policy"
-              >
+              <v-checkbox hide-details color="pink" v-model="policy">
                 <template v-slot:label>
-                  ยอมรับ <a class="mx-2 font-weight-bold"> ข้อกำหนดการใช้บริการ </a> และ <a class="mx-2 font-weight-bold" >นโยบายความคุ้มครองข้อมูลส่วนบุคคล</a>
+                  ยอมรับ
+                  <a class="mx-2 font-weight-bold"> ข้อกำหนดการใช้บริการ </a>
+                  และ
+                  <a class="mx-2 font-weight-bold"
+                    >นโยบายความคุ้มครองข้อมูลส่วนบุคคล</a
+                  >
                 </template>
               </v-checkbox>
             </v-col>
@@ -227,12 +220,22 @@
         <v-card-actions>
           <v-row dense>
             <v-col align="right">
-              <v-btn outlined color="#ff6b81" text-color="#ff6b81" @click="closePolicy()">
+              <v-btn
+                outlined
+                color="#ff6b81"
+                text-color="#ff6b81"
+                @click="closePolicy()"
+              >
                 ยกเลิก
               </v-btn>
             </v-col>
             <v-col>
-              <v-btn depressed dark color="#ff6b81" @click="policy_show = false">
+              <v-btn
+                depressed
+                dark
+                color="#ff6b81"
+                @click="policy_show = false"
+              >
                 ตกลง
               </v-btn>
             </v-col>
@@ -240,21 +243,24 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-app>
+
+    <!-- <v-btn depressed dark color="#ff6b81" @click="saveCartData"> ชำระเงิน  </v-btn> -->
+  </v-container>
+  <!-- </v-app> -->
 </template>
 <script>
 import Swal from "sweetalert2";
 import { mapActions, mapGetters } from "vuex";
 import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
-import TermOfUse from '@/components/termOfUse.vue'
+import TermOfUse from "@/components/termOfUse.vue";
 export default {
   components: {
     loadingOverlay,
-    TermOfUse
+    TermOfUse,
   },
   data: () => ({
     policy: false,
-    policy_show : false,
+    policy_show: false,
     search: "",
     drawer: true,
     detail: false,
@@ -290,9 +296,9 @@ export default {
       // monitor
       GetAllCourseMonitor: "CourseMonitorModules/GetAllCourseMonitor",
     }),
-    closePolicy(){
-      this.policy = false
-      this.policy_show = false
+    closePolicy() {
+      this.policy = false;
+      this.policy_show = false;
     },
     removeCart(cart_id) {
       // console.log(cart_id);
@@ -365,23 +371,26 @@ export default {
       // this.cart_list = result;
     },
     savePayment() {
-      if(!this.policy){
-        this.policy_show = true
-      }else{
+      if (!this.policy) {
+        this.policy_show = true;
+      } else {
         if (this.cart_list.filter((v) => v.checked === true).length > 0) {
           let isValiDateCourse = [];
           this.order.courses = this.cart_list.filter((v) => v.checked === true);
           this.order.total_price = this.total_price;
           this.order.payment_status = "pending";
           this.order.created_by = this.user_login.account_id;
-          this.order.type = "cart"
+          this.order.type = "cart";
           this.changeOrderData(this.order);
           this.GetAllCourseMonitor().then(() => {
             // console.log("course_monitors", this.course_monitors);
             // // console.log("courses",this.order.courses)
             this.order.courses.forEach((course) => {
               // console.log("courses", course);
-              if ( this.course_monitors.filter( (v) => v.courseMonitorEntity_coach_id === course.coach &&
+              if (
+                this.course_monitors.filter(
+                  (v) =>
+                    v.courseMonitorEntity_coach_id === course.coach &&
                     v.courseMonitorEntity_course_id === course.course_id &&
                     v.courseMonitorEntity_day_of_week_id ===
                       course.day_of_week_id &&
@@ -397,7 +406,9 @@ export default {
                         course.day_of_week_id &&
                       v.courseMonitorEntity_time_id === course.time_id &&
                       v.courseMonitorEntity_current_student +
-                        course.students.length <= v.courseMonitorEntity_maximum_student && v.courseMonitorEntity_status === "Open"
+                        course.students.length <=
+                        v.courseMonitorEntity_maximum_student &&
+                      v.courseMonitorEntity_status === "Open"
                   )
                 ) {
                   isValiDateCourse.push(true);
@@ -420,7 +431,7 @@ export default {
                 confirmButtonText: "ตกลง",
               });
             } else {
-              this.saveOrder().then(()=>{
+              this.saveOrder().then(() => {
                 for (const cart of this.cart_list) {
                   for (const id of cart.order_tmp_id) {
                     this.DeleteCart({
@@ -429,8 +440,7 @@ export default {
                     });
                   }
                 }
-              })
-              
+              });
             }
           });
         }
@@ -447,9 +457,9 @@ export default {
       course_monitors: "CourseMonitorModules/getCourseMonitor",
       order: "OrderModules/getOrder",
     }),
-    setFunctions(){
+    setFunctions() {
       this.GetCartList(this.user_login.account_id);
-      return ""
+      return "";
     },
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
@@ -483,5 +493,9 @@ export default {
 
 .alltext {
   margin-right: -50px;
+}
+
+.webkit-center {
+  text-align: -webkit-center;
 }
 </style>
