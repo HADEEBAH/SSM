@@ -238,7 +238,7 @@ export default {
       this.search_results = this.courses.filter((course) => {
         const courseNameTh = course.course_name_th.toLowerCase();
         const courseNameEn = course.course_name_en.toLowerCase();
-        if( !courseNameTh.includes(searchQuery) || !courseNameEn.includes(searchQuery)){
+        if( !courseNameTh.includes(searchQuery) && !courseNameEn.includes(searchQuery)){
           return false
         }else{
           return ( courseNameTh.includes(searchQuery) || courseNameEn.includes(searchQuery) );
