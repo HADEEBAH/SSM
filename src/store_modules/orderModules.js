@@ -472,7 +472,7 @@ const orderModules = {
                     for await (const course of order.courses){
                         for await (const student of course.students){
                             let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/add/username/one`,student, configs)
-                            // console.log(data)
+                            console.log(data)
                         }
                     }
                 }

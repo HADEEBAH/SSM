@@ -101,7 +101,7 @@ const coachModules = {
       try {
         // let localhost = "http://localhost:3000"
         let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/potential/${att_assessment_id}`)
-        // console.log(data)
+        console.log(data)
       } catch (error) {
         // // console.log(error)
       }
@@ -109,7 +109,7 @@ const coachModules = {
     async DeleteAssessmentFile(context, { att_assessment_id }) {
       try {
         let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${att_assessment_id}`)
-        // console.log(data)
+        console.log(data)
       } catch (error) {
         // // console.log(error)
       }
@@ -118,7 +118,7 @@ const coachModules = {
       try {
         // let localhost = "http://localhost:3000"
         let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/summary/${att_assessment_id}`)
-        // console.log(data)
+        console.log(data)
       } catch (error) {
         // // console.log(error)
       }

@@ -174,7 +174,7 @@ const loginModules = {
         async checkUsernameOneid(context, { username, status, type }) {
             context.commit("SetIsLoading", true)
             // console.log("username", username);
-            // console.log("status", status);
+            console.log("status", status);
             // console.log("type", type);
             context.commit("SetUserStudentData", [])
             context.commit("SetUserData", [])
