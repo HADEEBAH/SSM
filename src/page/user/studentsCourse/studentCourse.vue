@@ -250,6 +250,7 @@
                 <v-icon color="#FF6B81">mdi-calendar-month-outline</v-icon>
               </v-col>
               <v-col class="text-lg font-bold">
+                {{ genDate(day_list.date) }}
               </v-col>
               <!-- ตรงเวลา -->
               <v-col cols="2">
@@ -259,12 +260,16 @@
                     class="pa-1 rounded-xl text-center"
                     :class="check_in_status_options.filter(
                         (v) => v.value === day_list.status
-                      )[0].class"
+                    ).length > 0 ? check_in_status_options.filter(
+                        (v) => v.value === day_list.status
+                      )[0].class : ''  "
                   >
                     <span
                       :class="check_in_status_options.filter(
                         (v) => v.value === day_list.status
-                      )[0].class"
+                    ).length > 0 ? check_in_status_options.filter(
+                        (v) => v.value === day_list.status
+                      )[0].class : ''  "
                     >
                       {{
                         check_in_status_options.filter(
@@ -566,7 +571,6 @@ export default {
     closedownload() {
       this.checked = false;
     },
-
     openFile(file) {
       console.log(file);
       window.open(file, "_blank");
