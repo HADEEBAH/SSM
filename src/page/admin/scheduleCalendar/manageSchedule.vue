@@ -581,6 +581,13 @@
                   dense
                   placeholder="คอร์ส"
                 >
+                  <template v-slot:no-data>
+                    <v-list-item>
+                      <v-list-item-title>
+                        ไม่พบข้อมูลคอร์ส
+                      </v-list-item-title>
+                    </v-list-item>
+                  </template>
                   <template v-slot:selection="{ item, index }">
                     <v-chip v-if="index === 0">
                       <span>{{ item.courseNameTh }}</span>
@@ -614,6 +621,13 @@
                   dense
                   placeholder="สถานะคอร์ส"
                 >
+                  <template v-slot:no-data>
+                    <v-list-item>
+                      <v-list-item-title>
+                        ไม่พบข้อมูลสถานะคอร์ส
+                      </v-list-item-title>
+                    </v-list-item>
+                  </template>
                   <template v-slot:selection="{ item, index }">
                     <v-chip v-if="index === 0">
                       <span>{{ item.coursTypeName }}</span>
@@ -646,6 +660,13 @@
                   dense
                   placeholder="โค้ช"
                 >
+                <template v-slot:no-data>
+                    <v-list-item>
+                      <v-list-item-title>
+                        ไม่พบข้อมูลโค้ช
+                      </v-list-item-title>
+                    </v-list-item>
+                  </template>
                   <template v-slot:selection="{ item, index }">
                     <!-- {{ item }} -->
                     <v-chip v-if="index === 0">

@@ -379,17 +379,10 @@ const CourseModules = {
         }
         // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/course/${course_id}`, config)
-        // // console.log("studentlist",data.data)
+        console.log("studentlist",data.data)
         if (data.statusCode === 200) {
           for await (let coach of data.data) {
-            let coach_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${coach.coachId}`)
-            if (coach_data.data.statusCode === 200) {
-              coach.firstNameTh = coach_data.data.data.firstNameTh
-              coach.firstNameEn = coach_data.data.data.firstNameEng
-              coach.lastNameTh = coach_data.data.data.lastNameTh
-              coach.lastNameEn = coach_data.data.data.lastNameEng
-              coach.checked = false
-            }
+            coach.checked = false
             let datesList = []
             // console.log("394",coach)
             let coachDate = coach.allDates

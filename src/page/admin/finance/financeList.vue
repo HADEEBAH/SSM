@@ -141,7 +141,7 @@
               item.payment_status == "pending"
                 ? "รอดำเนินการ"
                 : item.payment_status === "success"
-                ? "สำเร็จ"
+                ? "ชำระเงินแล้ว"
                 : "ยกเลิก"
             }}</span>
           </div>
