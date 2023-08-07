@@ -487,7 +487,7 @@ export default {
       },
       {
         label: "ลาฉุกเฉิน",
-        value: " emergency leave",
+        value: "emergency leave",
         class: "text-[#43A4F5] bg-[#CFE2F3]",
         color: "#43A4F5",
         bg_color: "#CFE2F3",
