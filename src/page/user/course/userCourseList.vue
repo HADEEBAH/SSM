@@ -239,15 +239,11 @@ export default {
         const courseNameTh = course.course_name_th.toLowerCase();
         const courseNameEn = course.course_name_en.toLowerCase();
         if( !courseNameTh.includes(searchQuery) || !courseNameEn.includes(searchQuery)){
-         
           return false
         }else{
-          return ( 
-            courseNameTh.includes(searchQuery) || courseNameEn.includes(searchQuery)
-          );
+          return ( courseNameTh.includes(searchQuery) || courseNameEn.includes(searchQuery) );
         }
       });
-      console.log(this.search_results)
     },
     sumCouserPotential(courseData) {
       if (!this.course_potential) {
