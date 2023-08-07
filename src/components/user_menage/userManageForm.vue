@@ -58,169 +58,173 @@
               <v-col cols="12">
                 <v-card class="rounded-lg my-3" color="#FCFCFC">
                   <v-card-text>
-                    <v-row>
-                      <v-col
-                        class="webkit-center"
-                        cols="12"
-                        sm="5"
-                        align-self="center"
-                      >
-                        <div class="cicle">
-                          <v-img
-                            v-if="!show_by_id.image && preview_img == ''"
-                            class="image-cropper items-end"
-                            src="../../assets/userManagePage/default_img_update_profile.svg"
-                          >
-                            <v-btn
-                              v-if="preview_img == ''"
-                              color="#ff6b81"
-                              @click="openFileSelector"
-                              class="w-full white--text"
-                              >เพิ่มรูป</v-btn
+                    <v-form ref="user_form" v-model="user_form">
+                      <v-row>
+                        <v-col
+                          class="webkit-center"
+                          cols="12"
+                          sm="5"
+                          align-self="center"
+                        >
+                          <div class="cicle">
+                            <v-img
+                              v-if="!show_by_id.image && preview_img == ''"
+                              class="image-cropper items-end"
+                              src="../../assets/userManagePage/default_img_update_profile.svg"
                             >
-                            <v-btn
-                              v-if="preview_img !== ''"
-                              color="#ff6b81"
-                              @click="removeImg"
-                              class="w-full white--text"
-                            >
-                              <span class="mdi mdi-close">ยกเลิก</span>
-                            </v-btn>
-                          </v-img>
+                              <v-btn
+                                v-if="preview_img == ''"
+                                color="#ff6b81"
+                                @click="openFileSelector"
+                                class="w-full white--text"
+                                >เพิ่มรูป</v-btn
+                              >
+                              <v-btn
+                                v-if="preview_img !== ''"
+                                color="#ff6b81"
+                                @click="removeImg"
+                                class="w-full white--text"
+                              >
+                                <span class="mdi mdi-close">ยกเลิก</span>
+                              </v-btn>
+                            </v-img>
 
-                          <v-img
-                            v-else
-                            class="image-cropper items-end"
-                            :src="
-                              preview_img != ''
-                                ? preview_img
-                                : show_by_id != ''
-                                ? show_by_id.image
-                                : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU`
-                            "
-                          >
-                            <v-btn
-                              v-if="preview_img == ''"
-                              color="#ff6b81"
-                              @click="openFileSelector"
-                              class="w-full white--text"
-                              >เปลี่ยนรูป</v-btn
+                            <v-img
+                              v-else
+                              class="image-cropper items-end"
+                              :src="
+                                preview_img != ''
+                                  ? preview_img
+                                  : show_by_id != ''
+                                  ? show_by_id.image
+                                  : `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU`
+                              "
                             >
-                            <v-btn
-                              v-if="preview_img !== ''"
-                              color="#ff6b81"
-                              @click="removeImg"
-                              class="w-full white--text"
-                            >
-                              <span class="mdi mdi-close">ยกเลิก</span>
-                            </v-btn>
-                          </v-img>
-                        </div>
-                        <input
-                          id="fileInput"
-                          ref="fileInput"
-                          type="file"
-                          @change="uploadFile"
-                          accept="image/*"
-                          hidden
-                        />
-                      </v-col>
+                              <v-btn
+                                v-if="preview_img == ''"
+                                color="#ff6b81"
+                                @click="openFileSelector"
+                                class="w-full white--text"
+                                >เปลี่ยนรูป</v-btn
+                              >
+                              <v-btn
+                                v-if="preview_img !== ''"
+                                color="#ff6b81"
+                                @click="removeImg"
+                                class="w-full white--text"
+                              >
+                                <span class="mdi mdi-close">ยกเลิก</span>
+                              </v-btn>
+                            </v-img>
+                          </div>
+                          <input
+                            id="fileInput"
+                            ref="fileInput"
+                            type="file"
+                            @change="uploadFile"
+                            accept="image/*"
+                            hidden
+                          />
+                        </v-col>
 
-                      <!-- NAME DETAIL -->
-                      <v-col cols="12" sm="7">
-                        <v-row>
-                          <v-col cols="12" sm="6">
-                            <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
-                            <!-- @keypress="validate($event, 'th-special')" -->
+                        <!-- NAME DETAIL -->
+                        <v-col cols="12" sm="7">
+                          <v-row>
+                            <v-col cols="12" sm="6">
+                              <label-custom
+                                text="ชื่อ (ภาษาไทย)"
+                              ></label-custom>
+                              <!-- @keypress="validate($event, 'th-special')" -->
 
-                            <v-text-field
-                              @keypress="validate($event, 'th-special')"
-                              placeholder="-"
-                              v-model="show_by_id.firstNameTh"
-                              :rules="rules.firstNameThRules"
-                              outlined
-                              dense
-                            >
-                            </v-text-field>
-                          </v-col>
-                          <v-col cols="12" sm="6">
-                            <label-custom
-                              text="นามสกุล (ภาษาไทย)"
-                            ></label-custom>
-                            <v-text-field
-                              @keypress="validate($event, 'th-special')"
-                              placeholder="-"
-                              v-model="show_by_id.lastNameTh"
-                              :rules="rules.lastNameThRules"
-                              outlined
-                              dense
-                            >
-                            </v-text-field>
-                          </v-col>
-                        </v-row>
+                              <v-text-field
+                                @keypress="validate($event, 'th-special')"
+                                placeholder="-"
+                                v-model="show_by_id.firstNameTh"
+                                :rules="rules.firstNameThRules"
+                                outlined
+                                dense
+                              >
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                              <label-custom
+                                text="นามสกุล (ภาษาไทย)"
+                              ></label-custom>
+                              <v-text-field
+                                @keypress="validate($event, 'th-special')"
+                                placeholder="-"
+                                v-model="show_by_id.lastNameTh"
+                                :rules="rules.lastNameThRules"
+                                outlined
+                                dense
+                              >
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
 
-                        <v-row>
-                          <v-col cols="12" sm="6">
-                            <label-custom
-                              text="First Name (English)"
-                            ></label-custom>
-                            <v-text-field
-                              v-bind:disabled="isDisabled"
-                              @keypress="validate($event, 'en-special')"
-                              placeholder="-"
-                              v-model="show_by_id.firstNameEng"
-                              :rules="rules.firstNameEnRules"
-                              outlined
-                              dense
-                            >
-                            </v-text-field>
-                          </v-col>
-                          <v-col cols="12" sm="6">
-                            <label-custom
-                              text="Last Name (English)"
-                            ></label-custom>
-                            <v-text-field
-                              v-bind:disabled="isDisabled"
-                              @keypress="validate($event, 'en-special')"
-                              placeholder="-"
-                              v-model="show_by_id.lastNameEng"
-                              :rules="rules.lastNameEnRules"
-                              outlined
-                              dense
-                            >
-                            </v-text-field>
-                          </v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col cols="12" sm="6">
-                            <label-custom text="อีเมล"></label-custom>
-                            <v-text-field
-                              disabled
-                              placeholder="-"
-                              v-model="show_by_id.email"
-                              outlined
-                              dense
-                            >
-                            </v-text-field>
-                          </v-col>
-                          <v-col cols="12" sm="6">
-                            <label-custom text="เบอร์โทรศัพท์"></label-custom>
-                            <v-text-field
-                              disabled
-                              @keypress="validate($event, 'number')"
-                              v-model="show_by_id.mobileNo"
-                              :rules="rules.name"
-                              outlined
-                              dense
-                              required
-                              @input="checkPhoneNumber"
-                              maxlength="12"
-                            >
-                            </v-text-field>
-                          </v-col>
-                        </v-row>
-                      </v-col>
-                    </v-row>
+                          <v-row>
+                            <v-col cols="12" sm="6">
+                              <label-custom
+                                text="First Name (English)"
+                              ></label-custom>
+                              <v-text-field
+                                v-bind:disabled="isDisabled"
+                                @keypress="validate($event, 'en-special')"
+                                placeholder="-"
+                                v-model="show_by_id.firstNameEng"
+                                :rules="rules.firstNameEnRules"
+                                outlined
+                                dense
+                              >
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                              <label-custom
+                                text="Last Name (English)"
+                              ></label-custom>
+                              <v-text-field
+                                v-bind:disabled="isDisabled"
+                                @keypress="validate($event, 'en-special')"
+                                placeholder="-"
+                                v-model="show_by_id.lastNameEng"
+                                :rules="rules.lastNameEnRules"
+                                outlined
+                                dense
+                              >
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                          <v-row>
+                            <v-col cols="12" sm="6">
+                              <label-custom text="อีเมล"></label-custom>
+                              <v-text-field
+                                disabled
+                                placeholder="-"
+                                v-model="show_by_id.email"
+                                outlined
+                                dense
+                              >
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                              <label-custom text="เบอร์โทรศัพท์"></label-custom>
+                              <v-text-field
+                                disabled
+                                @keypress="validate($event, 'number')"
+                                v-model="show_by_id.mobileNo"
+                                :rules="rules.name"
+                                outlined
+                                dense
+                                required
+                                @input="checkPhoneNumber"
+                                maxlength="12"
+                              >
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                        </v-col>
+                      </v-row>
+                    </v-form>
                   </v-card-text>
                 </v-card>
               </v-col>
@@ -1053,6 +1057,7 @@ export default {
       "เสาร์",
     ],
     error_message: "",
+    user_form: false,
   }),
 
   beforeMount() {
@@ -1409,135 +1414,141 @@ export default {
     },
     updateData(account_id) {
       console.log("account_id", account_id);
+      console.log("ghdsc", this.user_form);
 
-      Swal.fire({
-        icon: "question",
-        title: "คุณต้องการแก้ไขข้อมูลหรือไม่",
-        showDenyButton: false,
-        showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            let config = {
-              headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Content-type": "Application/json",
-                Authorization: `Bearer ${VueCookie.get("token")}`,
-              },
-            };
-            let payload = {
-              firstNameTh: this.show_by_id.firstNameTh,
-              lastNameTh: this.show_by_id.lastNameTh,
-              firstNameEng: this.show_by_id.firstNameEng,
-              lastNameEng: this.show_by_id.lastNameEng,
-              email: this.show_by_id.email,
-              mobileNo: this.show_by_id.mobileNo,
-              roles:
-                this.seledtedRole != "" ? [{ roleId: this.seledtedRole }] : [],
-            };
-            let bodyFormData = new FormData();
-            bodyFormData.append("image", this.send_image_profile);
-            bodyFormData.append("payload", JSON.stringify(payload));
-            let { data } = await axios.patch(
-              // `http://localhost:3000/api/v1/usermanagement/update/${account_id}`,
-              `${process.env.VUE_APP_URL}/api/v1/usermanagement/update/${account_id}`,
-              bodyFormData,
-              config
-            );
-            if (data.statusCode === 200) {
-              if (data.data !== "Can not change role relations is already.") {
-                Swal.fire({
-                  icon: "success",
-                  title: "บันทึกสำเร็จ",
-                }).then(async (result) => {
-                  if (result.isConfirmed) {
-                    this.$router.push({
-                      name: "UserDetail",
-                      params: {
-                        action: "view",
-                        account_id: this.$route.params.account_id,
-                      },
-                    });
-                  }
-                });
-                this.GetShowById(this.$route.params.account_id);
-              }
-            } else {
-              throw { message: data.data };
-            }
-          } catch ({ response }) {
-            if (
-              response?.data?.message ===
-              "Can not change role relations is already."
-            ) {
-              this.error_message = "ไม่สามารถเปลี่ยนบทบาทได้!";
-              this.$router.push({
-                name: "UserDetail",
-                params: {
-                  action: "view",
-                  account_id: this.$route.params.account_id,
+      this.$refs.user_form.validate();
+      if (this.user_form) {
+        Swal.fire({
+          icon: "question",
+          title: "คุณต้องการแก้ไขข้อมูลหรือไม่",
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: "ตกลง",
+          cancelButtonText: "ยกเลิก",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+              let config = {
+                headers: {
+                  "Access-Control-Allow-Origin": "*",
+                  "Content-type": "Application/json",
+                  Authorization: `Bearer ${VueCookie.get("token")}`,
                 },
-              });
-            } else if (
-              response?.data?.message ===
-              "Can not change Coach role, because Coach is teaching the course."
-            ) {
-              this.error_message =
-                "ไม่สามารถเปลี่ยนบทบาทได้ เนื่องจากโค้ชกำลังอยู่ในสถานะการสอน";
-            } else if (response?.data?.message === "User not found.") {
-              if (this.user_one_temp.userName !== "") {
-                this.error_message =
-                  "ชื่อผู้ใช้ OneId ของคุณยังไม่มีอยู่ในระบบ";
-                this.checkUsernameOneid({
-                  username: this.user_one_temp.userName,
-                  status: null,
-                  type: null,
-                });
-                setTimeout(() => {
-                  console.log("========>>>>", this.user_data[0]);
-                  console.log("show_by_id", this.show_by_id);
-                  let payload = {
-                    ...this.show_by_id,
-                    passWord: null,
-                    roles:
-                      this.seledtedRole != ""
-                        ? [{ roleId: this.seledtedRole }]
-                        : [],
-                  };
-                  if (this.user_data[0]?.userOneId) {
-                    this.registerHaveOneId(payload);
-                  }
-                }, 1000);
-                // this.user_data
+              };
+              let payload = {
+                firstNameTh: this.show_by_id.firstNameTh,
+                lastNameTh: this.show_by_id.lastNameTh,
+                firstNameEng: this.show_by_id.firstNameEng,
+                lastNameEng: this.show_by_id.lastNameEng,
+                email: this.show_by_id.email,
+                mobileNo: this.show_by_id.mobileNo,
+                roles:
+                  this.seledtedRole != ""
+                    ? [{ roleId: this.seledtedRole }]
+                    : [],
+              };
+              let bodyFormData = new FormData();
+              bodyFormData.append("image", this.send_image_profile);
+              bodyFormData.append("payload", JSON.stringify(payload));
+              let { data } = await axios.patch(
+                // `http://localhost:3000/api/v1/usermanagement/update/${account_id}`,
+                `${process.env.VUE_APP_URL}/api/v1/usermanagement/update/${account_id}`,
+                bodyFormData,
+                config
+              );
+              if (data.statusCode === 200) {
+                if (data.data !== "Can not change role relations is already.") {
+                  Swal.fire({
+                    icon: "success",
+                    title: "บันทึกสำเร็จ",
+                  }).then(async (result) => {
+                    if (result.isConfirmed) {
+                      this.$router.push({
+                        name: "UserDetail",
+                        params: {
+                          action: "view",
+                          account_id: this.$route.params.account_id,
+                        },
+                      });
+                    }
+                  });
+                  this.GetShowById(this.$route.params.account_id);
+                }
               } else {
-                this.error_message = "ไม่พบผู้ใช้";
+                throw { message: data.data };
               }
-              console.log("555555", this.user_one_temp);
-            } else {
-              this.error_message = "เกิดข้อผิดพลาด";
+            } catch ({ response }) {
+              if (
+                response?.data?.message ===
+                "Can not change role relations is already."
+              ) {
+                this.error_message = "ไม่สามารถเปลี่ยนบทบาทได้!";
+                this.$router.push({
+                  name: "UserDetail",
+                  params: {
+                    action: "view",
+                    account_id: this.$route.params.account_id,
+                  },
+                });
+              } else if (
+                response?.data?.message ===
+                "Can not change Coach role, because Coach is teaching the course."
+              ) {
+                this.error_message =
+                  "ไม่สามารถเปลี่ยนบทบาทได้ เนื่องจากโค้ชกำลังอยู่ในสถานะการสอน";
+              } else if (response?.data?.message === "User not found.") {
+                if (this.user_one_temp.userName !== "") {
+                  this.error_message =
+                    "ชื่อผู้ใช้ OneId ของคุณยังไม่มีอยู่ในระบบ";
+                  this.checkUsernameOneid({
+                    username: this.user_one_temp.userName,
+                    status: null,
+                    type: null,
+                  });
+                  setTimeout(() => {
+                    console.log("========>>>>", this.user_data[0]);
+                    console.log("show_by_id", this.show_by_id);
+                    let payload = {
+                      ...this.show_by_id,
+                      passWord: null,
+                      roles:
+                        this.seledtedRole != ""
+                          ? [{ roleId: this.seledtedRole }]
+                          : [],
+                    };
+                    if (this.user_data[0]?.userOneId) {
+                      this.registerHaveOneId(payload);
+                    }
+                  }, 1000);
+                  // this.user_data
+                } else {
+                  this.error_message = "ไม่พบผู้ใช้";
+                }
+                console.log("555555", this.user_one_temp);
+              } else {
+                this.error_message = "เกิดข้อผิดพลาด";
+              }
+              Swal.fire({
+                icon: `${
+                  this.error_message === "เกิดข้อผิดพลาด" ? "error" : "warning"
+                }`,
+                title: `${
+                  this.error_message === "เกิดข้อผิดพลาด"
+                    ? this.error_message
+                    : "คำเตือน"
+                }`,
+                text: `${
+                  this.error_message === "เกิดข้อผิดพลาด"
+                    ? ""
+                    : `(${this.error_message})`
+                }`,
+              });
             }
-            Swal.fire({
-              icon: `${
-                this.error_message === "เกิดข้อผิดพลาด" ? "error" : "warning"
-              }`,
-              title: `${
-                this.error_message === "เกิดข้อผิดพลาด"
-                  ? this.error_message
-                  : "คำเตือน"
-              }`,
-              text: `${
-                this.error_message === "เกิดข้อผิดพลาด"
-                  ? ""
-                  : `(${this.error_message})`
-              }`,
-            });
+          } else {
+            Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
           }
-        } else {
-          Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
-        }
-      });
+        });
+      }
     },
 
     dayOfWeekName(days) {
