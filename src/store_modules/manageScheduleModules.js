@@ -83,6 +83,7 @@ const manageScheduleModules = {
               type: item.type,
               startTime: item.startTime,
               endTime: item.endTime,
+              selectedDate: item.selectedDate,
             });
 
             dataInSchadule = eventSchadule;
@@ -485,6 +486,7 @@ const manageScheduleModules = {
               type: "normal",
               startTime: item.startTime,
               endTime: item.endTime,
+              selectedDate: item.selectedDate,
               itmeData: item,
             });
 
