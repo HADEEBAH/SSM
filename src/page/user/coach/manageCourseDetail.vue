@@ -2090,7 +2090,7 @@ export default {
         } else {
           Swal.fire({
             icon: "error",
-            title: "กรุณาอัพโหลดเฉพาะไฟล์รูปและวีดีโอเท่านั้น",
+            title: "กรุณาอัพโหลดเฉพาะไฟล์รูปและวิดีโอเท่านั้น",
             showDenyButton: false,
             showCancelButton: false,
             confirmButtonText: "ตกลง",
