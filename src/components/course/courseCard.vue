@@ -897,13 +897,13 @@ export default {
       value.splice(value.indexOf(item), 1);
     },
     StartDateRegisCourse(course_data) {
-      console.log("StartDateRegisCourse");
+      // console.log("StartDateRegisCourse")
       this.course_data.coachs[0].register_date_range.end_date = "";
       this.register_date_range_str.end_date = "";
       this.ChangeCourseData(course_data);
     },
     StartDateStudyCourse(course_data) {
-      console.log("StartDateStudyCourse");
+      // console.log("StartDateStudyCourse")
       this.course_data.coachs[0].class_date_range.end_date = "";
       this.class_date_range_str.end_date = "";
       this.ChangeCourseData(course_data);

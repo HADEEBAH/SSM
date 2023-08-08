@@ -205,17 +205,17 @@ export default {
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
     }),
     updateStatusCourse(item, course_id, status) {
-      // console.log("event :", item);
+      // // console.log("event :", item);
       if (status !== "Active") {
         this.GetShortCourseMonitor({ course_id: course_id }).then(async () => {
           if (this.course_monitors) {
             let current_student = 0;
-            // console.log(this.course_monitors);
+            // // console.log(this.course_monitors);
             current_student = this.course_monitors.map(
               (v) => (current_student += v.m_current_student)
             );
-            // console.log(current_student);
-            // console.log(current_student.some((v) => v > 0));
+            // // console.log(current_student);
+            // // console.log(current_student.some((v) => v > 0));
             if (current_student.some((v) => v > 0)) {
               item.status = "Active";
               Swal.fire({

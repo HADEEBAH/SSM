@@ -519,14 +519,14 @@ export default {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     if (localStorage.getItem("relations")) {
       this.relations = JSON.parse(localStorage.getItem("relations"));
-      // // console.log("relations => ",this.relations)
+      // // // console.log("relations => ",this.relations)
     } else {
       this.relations = null;
     }
 
     this.show_id = this.$route.params.course_id;
     // this.GetAll(this.user_detail.account_id);
-    // // console.log(this.user_detail)
+    // // // console.log(this.user_detail)
     if (this.relations && this.relations.length > 0) {
       for (const item_data of this.relations) {
         this.GetMyCourseDetail({
@@ -570,14 +570,14 @@ export default {
       GetAll: "ProfileModules/GetAll",
     }),
     download() {
-      // console.log("open");
+      // // console.log("open");
       this.checked = true;
     },
     closedownload() {
       this.checked = false;
     },
     openFile(file) {
-      console.log(file);
+      // console.log(file);
       window.open(file, "_blank");
     },
     dayOfWeekName(days) {
@@ -603,13 +603,13 @@ export default {
     },
 
     genDate(date) {
-      // // console.log(dateFormatter(new Date(date)));
+      // // // console.log(dateFormatter(new Date(date)));
       return dateFormatter(new Date(date), "DW DD MMT YYYYT");
     },
 
     checkInStatusOptions(day) {
-      // console.log(day);
-      // console.log(this.my_course_detail.checkIn);
+      // // console.log(day);
+      // // console.log(this.my_course_detail.checkIn);
       for (const item of this.my_course_detail.checkIn.filter(
         (v) => new Date(v.date) === new Date(day)
       )) {
@@ -628,7 +628,7 @@ export default {
           return val;
         }
       );
-      // console.log("key", key);
+      // // console.log("key", key);
     },
   },
   computed: {

@@ -276,7 +276,7 @@ export default {
   },
   // watch: {
   //   "course_data.course_img": function () {
-  //     // console.log("=>", this.course_data.course_img);
+  //     // // console.log("=>", this.course_data.course_img);
   //   }
   // },
   computed: {
@@ -324,7 +324,7 @@ export default {
     },
     registerCourse() {
       this.order.order_step = 1;
-      // // console.log(this.course_data.price_course)
+      // // // console.log(this.course_data.price_course)
       if (this.course_order.students.length > 0) {
         (this.course_order.apply_for_yourself = false),
           (this.course_order.apply_for_others = false),
@@ -345,7 +345,7 @@ export default {
         this.changeCourseOrderData(this.course_order);
       }
       this.changeOrderData(this.order);
-      // console.log(this.course_order);
+      // // console.log(this.course_order);
       localStorage.setItem("Order", JSON.stringify(this.course_order));
       this.$router.push({ name: "userCourseOrder" });
     },

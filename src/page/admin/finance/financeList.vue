@@ -753,7 +753,7 @@ export default {
       this.export_filter.payment_type = [];
       this.export_filter.payment_status = [];
       this.selected.forEach((order) => {
-        console.log(order);
+        // console.log(order);
         if (!this.export_filter.course_id.includes(order.course_id)) {
           this.export_filter.course_id.push(order.course_id);
         }
@@ -777,10 +777,10 @@ export default {
         this.export_filter.course_type_id.length === 1 &&
         this.export_filter.course_type_id.includes("CT_2")
       ) {
-        // console.log("ปิด");
+        // // console.log("ปิด");
         this.disableExportpackage = true;
       } else {
-        // console.log("เปิด");
+        // // console.log("เปิด");
         this.disableExportpackage = false;
       }
     },
@@ -856,7 +856,7 @@ export default {
   },
   watch: {
     search_student(val) {
-      console.log(val);
+      // console.log(val);
       if (val.length > 3) {
         this.loading = true;
         this.searchNameUser({ search_name: val }).then(() => {

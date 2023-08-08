@@ -228,7 +228,7 @@ export default {
     },
 
     async removeBannerFiles(id) {
-      // console.log("id", id);
+      // // console.log("id", id);
       Swal.fire({
         icon: "question",
         text: "คุณต้องการลบแบรนเนอร์ใช่หรือไม่",

@@ -425,7 +425,7 @@ export default {
     save() {
       if (this.state === "parent" || this.state === "student") {
         if (this.$refs.form.validate()) {
-          console.log(this.registerParent({ type: this.state }));
+          // console.log(this.registerParent({ type: this.state }));
         }
       } else {
         if (this.$refs.form.validate()) {

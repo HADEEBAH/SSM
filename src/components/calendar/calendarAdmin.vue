@@ -383,7 +383,7 @@ export default {
     }),
 
     convertDate(item) {
-      // console.log(item)
+      // // console.log(item)
       const oriDate = new Date(item);
       const fullDate = oriDate.toLocaleDateString("th-TH", {
         year: "numeric",

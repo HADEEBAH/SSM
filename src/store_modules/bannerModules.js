@@ -23,7 +23,7 @@ const bannerModules = {
           context.commit("SetBannerList", data.data);
         }
       } catch (error) {
-        // console.log("error", error);
+        // // console.log("error", error);
 
       }
     },
@@ -41,12 +41,12 @@ const bannerModules = {
           // `http://localhost:3000/api/v1/banner`, payload ,config
           `${process.env.VUE_APP_URL}/api/v1/banner`, payload, config
         );
-        // console.log("data=>", data);
+        // // console.log("data=>", data);
         if (data.statusCode === 201) {
           context.dispatch("GetBannerList")
         }
       } catch (error) {
-        // console.log("error", error);
+        // // console.log("error", error);
       }
     },
 
@@ -67,7 +67,7 @@ const bannerModules = {
           context.dispatch("GetBannerList")
         }
       } catch (error) {
-        // console.log("error", error);
+        // // console.log("error", error);
       }
     },
 

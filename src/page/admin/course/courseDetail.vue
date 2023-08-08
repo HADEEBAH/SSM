@@ -2147,21 +2147,21 @@ export default {
     }),
     searchStudentPotential(search) {
       // this.coach_list = this.filteredData;
-      console.log("2267=>", this.coach_list);
+      // console.log("2267=>", this.coach_list);
       let coach_list_search = [];
       const regex = new RegExp(search.trim(), "i");
       for (let coach of this.coach_list.filter(
         (v) => v.allDates.studentPotentialArr.length > 0
       )) {
         const coach_full_name = `${coach.firstNameTh} ${coach.lastNameTh}`;
-        console.log("2272=>", coach_full_name.search(regex));
+        // console.log("2272=>", coach_full_name.search(regex));
         if (coach_full_name.search(regex) > -1) {
           coach_list_search.push(coach);
         }
         for (let student of coach.allDates.studentPotentialArr) {
           const student_full_name = `${student.firstNameTh} ${student.lastNameTh}`;
-          console.log("2278", student_full_name);
-          console.log("2279=>", coach_full_name.search(regex));
+          // console.log("2278", student_full_name);
+          // console.log("2279=>", coach_full_name.search(regex));
           if (student_full_name.search(regex) > -1) {
             if (
               coach_list_search.filter((v) => v.coachId === coach.coachId)
@@ -2175,27 +2175,27 @@ export default {
       (this.selected_coach = ""),
         (this.selected_schedule = ""),
         (this.selected_coach_potential = null);
-      console.log("2287=>", coach_list_search);
+      // console.log("2287=>", coach_list_search);
       this.search_student_potential_datas = coach_list_search;
     },
     searchStudentList(search) {
-      console.log(search);
+      // console.log(search);
       // this.coach_list = this.filteredData;
-      console.log("2190=>", this.coach_list);
+      // console.log("2190=>", this.coach_list);
       let coach_list_search = [];
       const regex = new RegExp(search.trim(), "i");
       for (let coach of this.coach_list.filter(
         (v) => v.allDates.studentArr.length > 0
       )) {
         const coach_full_name = `${coach.firstNameTh} ${coach.lastNameTh}`;
-        console.log("2197=>", coach_full_name.search(regex));
+        // console.log("2197=>", coach_full_name.search(regex));
         if (coach_full_name.search(regex) > -1) {
           coach_list_search.push(coach);
         }
         for (let student of coach.allDates.studentArr) {
           const student_full_name = `${student.firstNameTh} ${student.lastNameTh}`;
-          console.log("student", student_full_name);
-          console.log("2204=>", coach_full_name.search(regex));
+          // console.log("student", student_full_name);
+          // console.log("2204=>", coach_full_name.search(regex));
           if (student_full_name.search(regex) > -1) {
             if (
               coach_list_search.filter((v) => v.coachId === coach.coachId)
@@ -2209,7 +2209,7 @@ export default {
       (this.selected_coach = ""),
         (this.selected_schedule = ""),
         (this.selected_coach_potential = null);
-      console.log("2202=>", coach_list_search);
+      // console.log("2202=>", coach_list_search);
       this.search_student_datas = coach_list_search;
     },
     resetFilter() {
@@ -2223,7 +2223,7 @@ export default {
       };
     },
     filterDateByCoach(coach_index) {
-      // console.log("datesList =>", this.coach_list[coach_index].datesList);
+      // // console.log("datesList =>", this.coach_list[coach_index].datesList);
       let filterCoachList = this.coach_list[coach_index].datesList;
       if (this.filter.dow) {
         filterCoachList = filterCoachList.filter(
@@ -2269,13 +2269,13 @@ export default {
           }
         }
       }
-      // // console.log("dow =>",dow)
+      // // // console.log("dow =>",dow)
       this.dow_option = dow;
     },
     async filterPackageCoach(selected_coach) {
       this.package_option = [];
       if (selected_coach >= 0) {
-        // console.log("coach_list => ", this.coach_list[selected_coach]);
+        // // console.log("coach_list => ", this.coach_list[selected_coach]);
         // for await (const coach of this.coach_list[selected_coach].allDates.dates) {
         let coach = this.coach_list[selected_coach].allDates;
         if (this.package_option.length === 0) {
@@ -2308,7 +2308,7 @@ export default {
     },
     //EXPORT STUDENT
     exportStudents() {
-      // console.log(this.course_data);
+      // // console.log(this.course_data);
       this.ExportStudentList({
         coach_list: this.coach_list,
         course_id: this.$route.params.course_id,
@@ -2331,7 +2331,7 @@ export default {
       }
     },
     getDateFormattor(date, format) {
-      // // console.log(date, format)
+      // // // console.log(date, format)
       return dateFormatter(date, format);
     },
     genDate(date) {
@@ -2353,7 +2353,7 @@ export default {
       data.checked = !data.checked;
     },
     dayOfWeekArray(day) {
-      // // console.log(day)
+      // // // console.log(day)
       const daysOfWeek = [
         "วันอาทิตย์",
         "วันจันทร์",
@@ -2388,7 +2388,7 @@ export default {
       const allowedTypes = ["image/png", "image/jpeg"];
       if (CheckFileSize(this.privilege_file) === true) {
         const fileType = this.privilege_file.type;
-        // // console.log(fileType)
+        // // // console.log(fileType)
         if (fileType === "image/png" || fileType === "image/jpeg") {
           this.course_data.privilege_file =
             this.$refs.fileInputPrivilege.files[0];
@@ -2417,7 +2417,7 @@ export default {
       }
     },
     showDialogAssessment(student_data, date) {
-      // console.log("2015 =>", student_data)
+      // // console.log("2015 =>", student_data)
       this.show_dialog_assessmet = true;
       this.student_data_assessment = student_data;
       this.student_data_assessment.time = date.time;
@@ -2539,7 +2539,7 @@ export default {
     },
     CourseUpdateCoach() {
       this.$refs.coach_form.validate();
-      // console.log(this.coachValidate);
+      // // console.log(this.coachValidate);
       if (this.coachValidate) {
         Swal.fire({
           icon: "question",
@@ -2692,7 +2692,7 @@ export default {
     },
     openFile(file) {
       let fileName = `${process.env.VUE_APP_URL}/api/v1/files/${file}`;
-      console.log(fileName);
+      // console.log(fileName);
       window.open(fileName, "_blank");
     },
   },

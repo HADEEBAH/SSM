@@ -26,7 +26,7 @@ export default {
     );
 
     // this.socket.on("connect", () => {
-    //   console.log("socket connected: ", this.socket.connected);
+    //   // console.log("socket connected: ", this.socket.connected);
     // });
 
     this.socket.on("events", (data) => {
@@ -37,10 +37,10 @@ export default {
       });
     });
     // this.socket.on("disconnect", (reason) => {
-    //   console.log("[socket disconnected]: ", reason);
+    //   // console.log("[socket disconnected]: ", reason);
     // });
     // this.socket.on("connect_error", (error) => {
-    //   console.error("[connect error]: ", error);
+    //   // console.error("[connect error]: ", error);
     // });
   },
   methods: {

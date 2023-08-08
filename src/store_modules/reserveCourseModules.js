@@ -19,7 +19,7 @@ const reserveCourseModules = {
   },
   actions: {
     async GetReserveList(context) {
-      // console.log("GetReserveList")
+      // // console.log("GetReserveList")
       context.commit("SetReserveListIsLoading", true)
       try {
         // let localhost = "http://localhost:3002"
@@ -33,17 +33,17 @@ const reserveCourseModules = {
             items.ThTime = moment(items.createdDate).format("HH:mm")
           })
           context.commit("SetReserveList", data.data)
-          console.log("SetReserveList", data.data)
+          // console.log("SetReserveList", data.data)
           context.commit("SetReserveListIsLoading", false)
         }
       } catch (error) {
-        // console.log(error)
+        // // console.log(error)
         context.commit("SetReserveListIsLoading", false)
       }
     },
     async UpdateStatusReserve(context, { reserve_id, reserve_data }) {
       try {
-        // console.log(reserve_id, reserve_data)
+        // // console.log(reserve_id, reserve_data)
         const config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -63,7 +63,7 @@ const reserveCourseModules = {
           })
         }
       } catch (error) {
-        // console.log(error)
+        // // console.log(error)
       }
     }
   },

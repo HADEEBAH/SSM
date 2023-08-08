@@ -1,10 +1,10 @@
 import axios from "axios";
 // import VueCookie from "vue-cookie"
 function dayOfWeekArray(day) {
-  // console.log("dayOfWeekArray", day)
+  // // console.log("dayOfWeekArray", day)
   // let day_arr = day
   let days = day
-  // // console.log(day)
+  // // // console.log(day)
   const weekdays = [
     "วันอาทิตย์",
     "วันจันทร์",
@@ -139,14 +139,14 @@ const dashboardModules = {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/course-type`)
         if (data.statusCode === 200) {
           context.commit("SetGetCourseType", data.data)
-          // console.log("SetGetCourseType", data.data);
+          // // console.log("SetGetCourseType", data.data);
           context.commit("SetGetLoading", false)
 
         }
       } catch (error) {
         context.commit("SetGetLoading", false)
 
-        // console.log("SetGetCourseType", error);
+        // // console.log("SetGetCourseType", error);
       }
     },
 
@@ -159,18 +159,18 @@ const dashboardModules = {
         if (data.statusCode === 200) {
           context.commit("SetGetLoading", false)
           context.commit("SetGetPotential", data.data)
-          // console.log("SetGetPotential", data.data);
+          // // console.log("SetGetPotential", data.data);
         }
 
       } catch (error) {
         context.commit("SetGetLoading", false)
-        // console.log("SetGetPotential", error);
+        // // console.log("SetGetPotential", error);
       }
     },
 
     async GetDonut(context, item) {
       context.commit("SetGetLoading", true)
-      console.log("GetDonut", item);
+      // console.log("GetDonut", item);
       try {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/dashboard/payment?month=${item.month}&year=${item.year}`)
         let chart = []
@@ -178,7 +178,7 @@ const dashboardModules = {
         let labels_chart = []
         if (data?.statusCode === 200) {
 
-          console.log("data=>>>>>", data.data);
+          // console.log("data=>>>>>", data.data);
           data.data.datas?.map((items) => {
             items.sumSuccess = parseFloat(items?.sumSuccess)
             items.sumPending = parseFloat(items?.sumPending)
@@ -211,7 +211,7 @@ const dashboardModules = {
       } catch (error) {
         context.commit("SetGetLoading", false)
 
-        // console.log("SetGetDonut", error);
+        // // console.log("SetGetDonut", error);
       }
     },
 
@@ -258,7 +258,7 @@ const dashboardModules = {
         }
       } catch (error) {
         context.commit("SetGetLoading", false)
-        // console.log("SetGetGraf", error);
+        // // console.log("SetGetGraf", error);
       }
     },
 
