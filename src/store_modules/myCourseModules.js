@@ -188,7 +188,7 @@ const myCourseModules = {
                                 dataCourseSchedule.dates.push({
                                     start: date.replace(" 00:00:00", "") + ' ' + course.period.start,
                                     end: date.replace(" 00:00:00", "") + ' ' + course.period.end,
-                                    name: data_local.roles.includes('R_5') ? `${course.courseNameTh}(${course.courseNameEng})` : course.student.firstNameTh,
+                                    name: data_local.roles.includes('R_5') ? `${course.courseNameTh}(${course.courseNameEng})` : `${course.student.firstNameTh}: ${course.courseNameTh}(${course.courseNameEng})`,
                                     // name: `${course.courseNameTh}(${course.courseNameEng})`,
                                     timed: course.student.firstNameTh,
                                     subtitle: course.coachName,
@@ -205,7 +205,7 @@ const myCourseModules = {
                                     dataCourseSchedule.dates.push({
                                         start: coachLaeve.teachCompensationDate+" "+coachLaeve.teachCompensationStartTime,
                                         end: coachLaeve.teachCompensationDate+" "+coachLaeve.teachCompensationEndTime,
-                                        name: data_local.roles.includes('R_5') ? `${course.courseNameTh}(${course.courseNameEng})` : course.student.firstNameTh,
+                                        name: data_local.roles.includes('R_5') ? `${course.courseNameTh}(${course.courseNameEng})` : `${course.student.firstNameTh}: ${course.courseNameTh}(${course.courseNameEng})`,
                                         // name: `${course.courseNameTh}(${course.courseNameEng})`,
                                         timed: course.student.firstNameTh,
                                         subtitle: course.coachName,
@@ -249,7 +249,7 @@ const myCourseModules = {
                         context.commit("SetStudentData", data.data)
                         // // console.log("SetStudentData", data.data)
                     }
-                    // console.log("246 => data", dataCourseSchedule)
+                    console.log("246 => data", dataCourseSchedule)
                     context.commit("SetcourseSchedule", dataCourseSchedule);
                     context.commit("SetStudentsLoading", false)
                 } else {
