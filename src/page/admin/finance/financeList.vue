@@ -12,7 +12,7 @@
             color="#ff6b81"
             class="white--text"
             @click="ShowDialogExport"
-            >Export</v-btn
+            >นำออกข้อมูล</v-btn
           >
         </v-col>
       </v-row>

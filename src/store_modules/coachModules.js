@@ -839,12 +839,16 @@ const coachModules = {
         // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave`, config)
         if (data.statusCode == 200) {
-          // data.data.map((items) => { 
-          //   const options = { year: "numeric", month: "long", day: "numeric" };
-          //   const thaiLocale = "th-TH";
-          //   items.thaiDate = new Date(items.createdDate).toLocaleString(thaiLocale, options);
-          //   console.log("143", items.thaiDate);
-          //   })
+          data.data.map((val, i) => {
+            val.index = i + 1
+            return val
+          })
+          // data.data.map((items) => {
+          //   // const options = { year: "numeric", month: "long", day: "numeric" };
+          //   // const thaiLocale = "th-TH";
+          //   // items.thaiDate = new Date(items.createdDate).toLocaleString(thaiLocale, options);
+          //   // console.log("143", items.thaiDate);
+          // })
 
           context.commit("SetCoachLeaves", data.data)
           context.commit("SetCoachLeavesIsLoading", false)

@@ -26,7 +26,7 @@
             ></v-img>
           </v-col>
           <v-col cols="12" class="flex align-center justify-center text-h5">
-            อัพโหลดภาพหน้าปกคอร์สเรียน
+            อัปโหลดภาพหน้าปกคอร์สเรียน
           </v-col>
           <v-col
             cols="12"
@@ -418,7 +418,6 @@
                         :rules="rules.start_date"
                         v-model="register_date_range_str.start_date"
                         readonly
-                       
                         placeholder="เลือกวันที่เริ่ม"
                         v-bind="attrs"
                         v-on="on"
@@ -452,7 +451,10 @@
                 >
                 <v-col>
                   <v-menu
-                    :disabled="disable || !course_data.coachs[0].register_date_range.start_date"
+                    :disabled="
+                      disable ||
+                      !course_data.coachs[0].register_date_range.start_date
+                    "
                     v-model="
                       course_data.coachs[0].register_date_range.menu_end_date
                     "
@@ -464,7 +466,10 @@
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
                         dense
-                        :disabled="disable || !course_data.coachs[0].register_date_range.start_date"
+                        :disabled="
+                          disable ||
+                          !course_data.coachs[0].register_date_range.start_date
+                        "
                         :outlined="!disable"
                         :filled="disable"
                         @change="ChangeCourseData(course_data)"
@@ -493,7 +498,6 @@
                           ? course_data.coachs[0].register_date_range.start_date
                           : today.toISOString()
                       "
-                      
                       @input="inputDate($event, 'register end date')"
                       v-model="
                         course_data.coachs[0].register_date_range.end_date
@@ -607,7 +611,10 @@
                     v-model="
                       course_data.coachs[0].class_date_range.menu_end_date
                     "
-                    :disabled="disable || !course_data.coachs[0].class_date_range.start_date"
+                    :disabled="
+                      disable ||
+                      !course_data.coachs[0].class_date_range.start_date
+                    "
                     :close-on-content-click="false"
                     transition="scale-transition"
                     offset-y
@@ -616,7 +623,10 @@
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
                         dense
-                        :disabled="disable || !course_data.coachs[0].class_date_range.start_date"
+                        :disabled="
+                          disable ||
+                          !course_data.coachs[0].class_date_range.start_date
+                        "
                         :outlined="!disable"
                         :filled="disable"
                         @change="ChangeCourseData(course_data)"
@@ -886,17 +896,17 @@ export default {
     removeChip(item, value) {
       value.splice(value.indexOf(item), 1);
     },
-    StartDateRegisCourse(course_data){
-      console.log("StartDateRegisCourse")
-      this.course_data.coachs[0].register_date_range.end_date = ""
-      this.register_date_range_str.end_date = ""
-      this.ChangeCourseData(course_data)
+    StartDateRegisCourse(course_data) {
+      console.log("StartDateRegisCourse");
+      this.course_data.coachs[0].register_date_range.end_date = "";
+      this.register_date_range_str.end_date = "";
+      this.ChangeCourseData(course_data);
     },
-    StartDateStudyCourse(course_data){
-      console.log("StartDateStudyCourse")
-      this.course_data.coachs[0].class_date_range.end_date = "" 
-      this.class_date_range_str.end_date = ""
-      this.ChangeCourseData(course_data)
+    StartDateStudyCourse(course_data) {
+      console.log("StartDateStudyCourse");
+      this.course_data.coachs[0].class_date_range.end_date = "";
+      this.class_date_range_str.end_date = "";
+      this.ChangeCourseData(course_data);
     },
     SelectedStartDate(e) {
       e.target.parentNode.parentNode.parentNode.parentNode.parentNode
@@ -1062,7 +1072,7 @@ export default {
         } else {
           Swal.fire({
             icon: "error",
-            text: "อัพโหลดเฉพาะไฟล์รูปภาพ(png, jpeg)เท่านั้น",
+            text: "อัปโหลดเฉพาะไฟล์รูปภาพ(png, jpeg)เท่านั้น",
             showDenyButton: false,
             showCancelButton: false,
             confirmButtonText: "ตกลง",

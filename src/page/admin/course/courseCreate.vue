@@ -151,7 +151,7 @@
                     cols="12"
                     class="flex align-center justify-center text-h5"
                   >
-                    อัพโหลดภาพสิทธิ์พิเศษ
+                    อัปโหลดภาพสิทธิ์พิเศษ
                   </v-col>
                   <v-col
                     cols="12"
@@ -225,7 +225,7 @@
                     cols="12"
                     class="flex align-center justify-center text-h5"
                   >
-                    อัพโหลดภาพ Learning Journey
+                    อัปโหลดภาพ Learning Journey
                   </v-col>
                   <v-col
                     cols="12"

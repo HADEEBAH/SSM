@@ -58,7 +58,7 @@
                     cols="12"
                     class="flex align-center justify-center text-h5"
                   >
-                    อัพโหลดภาพหน้าปกอาณาจักร
+                    อัปโหลดภาพหน้าปกอาณาจักร
                   </v-col>
                   <v-col
                     cols="12"
@@ -349,7 +349,7 @@ export default {
         } else {
           Swal.fire({
             icon: "error",
-            text: "อัพโหลดเฉพาะไฟล์รูปภาพ(png, jpeg)เท่านั้น",
+            text: "อัปโหลดเฉพาะไฟล์รูปภาพ(png, jpeg)เท่านั้น",
             showDenyButton: false,
             showCancelButton: false,
             confirmButtonText: "ตกลง",

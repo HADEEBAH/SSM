@@ -269,7 +269,9 @@
                           :min="new Date().toISOString()"
                           :allowed-dates="allowedDates"
                           v-model="course.compensation_date"
-                          @input="inputDateArr(course.compensation_date, course)"
+                          @input="
+                            inputDateArr(course.compensation_date, course)
+                          "
                           locale="th-TH"
                         ></v-date-picker>
                       </v-menu>
@@ -402,7 +404,7 @@
                   class="underline"
                   color="#ff6b81"
                   @click="openFileSelector"
-                  >อัพโหลดไฟล์แนบ</v-btn
+                  >อัปโหลดไฟล์แนบ</v-btn
                 >
                 <input
                   ref="fileInput"
@@ -585,8 +587,11 @@ export default {
       SearchCourseDateCoachLeave: "CoachModules/SearchCourseDateCoachLeave",
       ShowDialogCoachLeaveForm: "CoachModules/ShowDialogCoachLeaveForm",
     }),
-    inputDateArr(date, course){
-      course.compensation_date_str = new Date(date).toLocaleDateString("th-TH", { year: 'numeric', month: 'long', day: 'numeric' })
+    inputDateArr(date, course) {
+      course.compensation_date_str = new Date(date).toLocaleDateString(
+        "th-TH",
+        { year: "numeric", month: "long", day: "numeric" }
+      );
     },
     setHolidaydates(item) {
       // console.log("item", item);
@@ -643,15 +648,18 @@ export default {
             let start = this.periods.filter((v) => v.value === period)[0].start;
             let end = this.periods.filter((v) => v.value === period)[0].end;
             // console.log("647 => ",course.compensation_start_time_obj.HH)
-            if(type && type === 'end'){
-              if(course.compensation_start_time_obj.HH){
+            if (type && type === "end") {
+              if (course.compensation_start_time_obj.HH) {
                 for (let hr = 0; hr < 24; hr++) {
-                  if (hr > parseInt(course.compensation_start_time_obj.HH) && hr <= end) {
+                  if (
+                    hr > parseInt(course.compensation_start_time_obj.HH) &&
+                    hr <= end
+                  ) {
                     hrs.push(hr);
                   }
                 }
               }
-            }else{
+            } else {
               for (let hr = 0; hr < 24; hr++) {
                 if (hr >= start && hr <= end) {
                   hrs.push(hr);
@@ -662,19 +670,19 @@ export default {
           }
         } else {
           let hrs = [];
-          if(type && type === 'end'){
-            if(course.compensation_start_time_obj.HH){
-                for (let hr = 0; hr < 24; hr++) {
-                  if (hr > parseInt(course.compensation_start_time_obj.HH)) {
-                    hrs.push(hr);
-                  }
+          if (type && type === "end") {
+            if (course.compensation_start_time_obj.HH) {
+              for (let hr = 0; hr < 24; hr++) {
+                if (hr > parseInt(course.compensation_start_time_obj.HH)) {
+                  hrs.push(hr);
                 }
               }
-            }else{
-              for (let hr = 0; hr < 24; hr++) {
-                hrs.push(hr);
-              }
             }
+          } else {
+            for (let hr = 0; hr < 24; hr++) {
+              hrs.push(hr);
+            }
+          }
           return hrs;
         }
       }
@@ -705,7 +713,6 @@ export default {
         this.coach_leave_data.dates[index_date].courses[
           index_course
         ].compensation_start_time = `${time.HH}:${time.mm}`;
-
       } else {
         this.coach_leave_data.dates[index_date].courses[
           index_course
