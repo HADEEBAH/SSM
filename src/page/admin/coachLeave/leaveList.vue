@@ -89,7 +89,7 @@
           cols="12"
           sm="6"
           :key="`${type_index}-type`"
-          @click="type_selected = type.value"
+          @click="typeSelected(type.value)"
         >
           <img-card
             class="cursor-pointer"
@@ -133,7 +133,7 @@
           cols="12"
           sm="4"
           :key="`${type_index}-type`"
-          @click="type_selected = type.value"
+          @click="typeSelected(type.value)"
         >
           <img-card
             class="cursor-pointer"
@@ -182,14 +182,13 @@
       <v-data-table
         :search="search"
         class="elevation-1 header-table"
-        :items="
-          type_selected === 'all'
-            ? coach_leaves
-            : coach_leaves.filter((v) => v.status == type_selected)
-        "
+        :items="coach_leave_arr.length > 0 ? coach_leave_arr : coach_leaves"
         :loading="coach_leaves_is_loading"
         :headers="column"
+        hide-no-data
       >
+        <template v-slot:[`item.count`]="{ item }"> {{ item.index }} </template>
+
         <template v-slot:[`item.actions`]="{ item }">
           <div
             class="d-flex align-center pa-1 rounded-lg"
@@ -305,6 +304,7 @@ export default {
       ],
     },
     column: [
+      { text: "ลำดับ", align: "start", sortable: false, value: "count" },
       { text: "รหัสโค้ช", align: "start", sortable: false, value: "accountId" },
       {
         text: "ชื่อ - นามสกุล",
@@ -362,6 +362,7 @@ export default {
         img: "../../../assets/coachLeave/all.png",
       },
     ],
+    coach_leave_arr: [],
   }),
   created() {
     this.GetLeavesAll();
@@ -410,6 +411,21 @@ export default {
           },
         ],
       };
+    },
+    typeSelected(type) {
+      this.type_selected = type;
+      this.coach_leave_arr = [];
+      if (type !== "all") {
+        this.coach_leave_arr = this.coach_leaves.filter(
+          (items) => type === items.status
+        );
+
+        this.coach_leave_arr.map((items, i) => {
+          items.index = i + 1;
+        });
+      } else {
+        this.GetLeavesAll();
+      }
     },
   },
   computed: {
