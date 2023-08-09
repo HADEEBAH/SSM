@@ -246,14 +246,20 @@
                   hide-details
                 ></v-checkbox>
               </v-col>
-              <v-col cols="2" sm="1">
+              <!-- <v-col>
                 <v-icon color="#FF6B81">mdi-calendar-month-outline</v-icon>
-              </v-col>
-              <v-col class="text-lg font-bold">
-                {{ genDate(day_list.date) }}
+              </v-col> -->
+              <v-col>
+                <v-icon color="#FF6B81" style="margin-top: -4px"
+                  >mdi-calendar-month-outline</v-icon
+                >
+
+                <span class="text-lg font-bold">
+                  {{ genDate(day_list.date) }}
+                </span>
               </v-col>
               <!-- ตรงเวลา -->
-              <v-col cols="2">
+              <v-col cols="3" align="end">
                 <v-card flat>
                   <v-card-text
                     v-if="day_list.status"
@@ -261,16 +267,23 @@
                     :class="
                       check_in_status_options.filter(
                         (v) => v.value === day_list.status
-                    ).length > 0 ? check_in_status_options.filter(
-                        (v) => v.value === day_list.status
-                      )[0].class : ''  "
+                      ).length > 0
+                        ? check_in_status_options.filter(
+                            (v) => v.value === day_list.status
+                          )[0].class
+                        : ''
+                    "
                   >
                     <span
-                      :class="check_in_status_options.filter(
-                        (v) => v.value === day_list.status
-                    ).length > 0 ? check_in_status_options.filter(
-                        (v) => v.value === day_list.status
-                      )[0].class : ''  "
+                      :class="
+                        check_in_status_options.filter(
+                          (v) => v.value === day_list.status
+                        ).length > 0
+                          ? check_in_status_options.filter(
+                              (v) => v.value === day_list.status
+                            )[0].class
+                          : ''
+                      "
                     >
                       {{
                         check_in_status_options.filter(

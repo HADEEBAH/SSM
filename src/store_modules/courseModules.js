@@ -1120,7 +1120,7 @@ const CourseModules = {
                 course: `${course.c_course_name_th}(${course.c_course_name_en})`,
                 status: course.c_course_status,
                 isTruncated: true,
-                course_open: course.c_course_open_date ? new Date(course.c_course_open_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', }) : `${new Date(course.c_course_register_start_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', })} - ${new Date(course.c_course_register_end_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', })}`
+                course_open: course.c_course_open_date ? new Date(course.c_course_open_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', }) : `${new Date(course.c_course_register_start_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', })} - ${new Date(course.c_course_register_end_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', })}`
               })
             } else {
               if (category.data.statusCode === 400 && category.data.message === "Category not found.") {
@@ -1215,7 +1215,7 @@ const CourseModules = {
             category_id: data.data.categoryId,
             category_name_th: data.data.categoryNameTh,
             course_open_date: data.data.courseOpenDate ? moment(data.data.courseOpenDate).format("YYYY-MM-DD") : "",
-            course_open_date_str: data.data.courseOpenDate ? new Date(data.data.courseOpenDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : "",
+            course_open_date_str: data.data.courseOpenDate ? new Date(data.data.courseOpenDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', }) : "",
             menu_course_open_date: false,
             course_hours: data.data.coursePerTime,
             course_hours_obj: course_hours_object,
@@ -1232,8 +1232,8 @@ const CourseModules = {
             student_recived: data.data.courseStudentRecived,
             course_study_end_date: data.data.courseStudyEndDate,
             course_study_start_date: data.data.courseStudyStartDate,
-            course_study_end_date_str: data.data.courseStudyEndDate ? new Date(data.data.courseStudyEndDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : null,
-            course_study_start_date_str: data.data.courseStudyStartDate ? new Date(data.data.courseStudyStartDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : null,
+            course_study_end_date_str: data.data.courseStudyEndDate ? new Date(data.data.courseStudyEndDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', }) : null,
+            course_study_start_date_str: data.data.courseStudyStartDate ? new Date(data.data.courseStudyStartDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', }) : null,
             coachs: [],
             packages: [],
             privilege_file: null,
@@ -1322,8 +1322,8 @@ const CourseModules = {
                     menu_end_date: false,
                   },
                   class_date_range_str: {
-                    start_date: data.data.courseStudyStartDate ? new Date(data.data.courseStudyStartDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : null,
-                    end_date: data.data.courseStudyStartDate ? new Date(data.data.courseStudyEndDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : null,
+                    start_date: data.data.courseStudyStartDate ? new Date(data.data.courseStudyStartDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', }) : null,
+                    end_date: data.data.courseStudyStartDate ? new Date(data.data.courseStudyEndDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', }) : null,
                   },
                   register_date_range: {
                     start_date: data.data.courseRegisterStartDate ? moment(data.data.courseRegisterStartDate).format("YYYY-MM-DD") : null,
@@ -1332,8 +1332,8 @@ const CourseModules = {
                     menu_end_date: false,
                   },
                   register_date_range_str: {
-                    start_date: data.data.courseRegisterEndDate ? new Date(data.data.courseRegisterStartDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : "",
-                    end_date: data.data.courseRegisterEndDate ? new Date(data.data.courseRegisterEndDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', }) : "",
+                    start_date: data.data.courseRegisterEndDate ? new Date(data.data.courseRegisterStartDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', }) : "",
+                    end_date: data.data.courseRegisterEndDate ? new Date(data.data.courseRegisterEndDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', }) : "",
                   },
                   period: {
                     start_time: data.data.coursePeriodStartDate ? data.data.coursePeriodStartDate : null,
