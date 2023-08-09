@@ -318,7 +318,6 @@
 <script>
 import LabelCustom from "../label/labelCustom.vue";
 import { mapGetters, mapActions } from "vuex";
-// import { Input, TimePicker } from "ant-design-vue";
 import moment from "moment";
 import Swal from "sweetalert2";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
@@ -383,7 +382,6 @@ export default {
       DeleteDayOfWeek: "CourseModules/DeleteDayOfWeek",
       DeleteTime: "CourseModules/DeleteTime",
       GetCourse: "CourseModules/GetCourse",
-      // monitor
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
     }),
     checkMinute(teach_day, hours) {
@@ -416,7 +414,6 @@ export default {
     checkHour(teach_day, timeindex) {
       let timeused = [];
       let timeusedHH = [];
-      // let timeInUsed = []
       timeused = teach_day.map((v) => {
         return {
           start_time: v.class_date_range.start_time_object,
@@ -452,7 +449,6 @@ export default {
           parseInt(date.start_time_object.HH) +
           parseInt(this.course_data.course_hours_obj.HH)
         }`.padStart(2, "0");
-        // date.end_time_object.mm = `${parseInt(date.start_time_object.mm) + parseInt(this.course_data.course_hours_obj.mm)}`
       }
       if (
         parseInt(date.start_time_object.mm) +
@@ -470,9 +466,7 @@ export default {
           parseInt(this.course_data.course_hours_obj.mm)
         }`.padStart(2, "0");
       }
-      // date.end_time_object.mm = date.start_time_object.mm
       date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`;
-      // this.checkHour(teach_day)
     },
 
     SelectedStartDate(e) {
@@ -542,14 +536,12 @@ export default {
         const teachDayData = this.course_data.coachs[coachIndex].teach_day_data;
         const currentTeachDay = teachDayData[teachDayIndex];
         const usedDays = [];
-        // Loop through all teach_day_data and collect used days
         teachDayData.forEach((teachDay) => {
           if (teachDay !== currentTeachDay) {
             usedDays.push(...teachDay.teach_day);
           }
         });
 
-        // Filter out used days from the available days
         return this.days_confix.filter((day) => !usedDays.includes(day.value));
       } else {
         return this.days_confix;
@@ -573,7 +565,6 @@ export default {
             const start_minute = parseInt(time.start.split(":")[1]);
             const end_hour = parseInt(time.end.split(":")[0]);
             const end_minute = parseInt(time.start.split(":")[1]);
-            // Disable all minutes within the range of this time
             if (hour === start_hour && hour === end_hour) {
               for (let i = start_minute; i <= end_minute; i += 15) {
                 used_minutes.push(i);
@@ -596,7 +587,6 @@ export default {
       const teachDayData = this.course_data.coachs[coachIndex].teach_day_data;
       const currentTeachDay = teachDayData[teachDayIndex];
 
-      // Check if the selected day has already been selected by another teach_day
       const conflictTeachDay = teachDayData.find(
         (teachDay, index) =>
           index !== teachDayIndex &&
@@ -604,7 +594,6 @@ export default {
       );
 
       if (conflictTeachDay) {
-        // If there is a conflict, show an error message and reset the selection
         currentTeachDay.teach_day = currentTeachDay.teach_day.filter(
           (day) => !selectedDays.includes(day)
         );
@@ -632,7 +621,6 @@ export default {
           }
         });
         this.course_data.coachs[coachIndex].disabled_hours = used_hours;
-        // If there is no conflict, update the selected days for the current teach_day
         currentTeachDay.teach_day = selectedDays;
       }
       this.ChangeCourseData(this.course_data);

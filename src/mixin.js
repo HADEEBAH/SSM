@@ -1,6 +1,3 @@
-// import VueCookie from "vue-cookie";
-// import Swal from "sweetalert2";
-// import axios from "axios";
 import io from "socket.io-client";
 import { mapActions } from "vuex";
 import { notification } from 'ant-design-vue';
@@ -11,12 +8,10 @@ export default {
     return {
       socket: null,
       socketioURL: process.env.VUE_APP_URL,
-      // socketioURL: 'http://localhost:3004',
       socket_id: ""
     }
   },
   mounted() {
-    // Connect Socket
     this.socket = io(
       this.socketioURL,
       {
@@ -25,10 +20,6 @@ export default {
       }
     );
 
-    // this.socket.on("connect", () => {
-    //   // console.log("socket connected: ", this.socket.connected);
-    // });
-
     this.socket.on("events", (data) => {
       this.GetNotifications(data)
       notification.open({
@@ -36,12 +27,6 @@ export default {
         description:data.notificationDescription
       });
     });
-    // this.socket.on("disconnect", (reason) => {
-    //   // console.log("[socket disconnected]: ", reason);
-    // });
-    // this.socket.on("connect_error", (error) => {
-    //   // console.error("[connect error]: ", error);
-    // });
   },
   methods: {
     ...mapActions({ GetNotifications: "NotificationsModules/GetNotifications" }),

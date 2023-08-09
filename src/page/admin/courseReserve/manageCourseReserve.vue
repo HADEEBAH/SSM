@@ -139,9 +139,8 @@
 </template>
   
   <script>
-import headerPage from "../../../components/header/headerPage.vue";
-//   import rowData from "../../../components/label/rowData.vue";
-import imgCard from "../../../components/course/imgCard.vue";
+import headerPage from "@/components/header/headerPage.vue";
+import imgCard from "@/components/course/imgCard.vue";
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "manageCourseReserve",
@@ -153,7 +152,6 @@ export default {
       { name: "ทั้งหมด", value: "all" },
       { name: "รอการติดต่อ", value: "waiting" },
       { name: "ติดต่อแล้ว", value: "contacted" },
-      // { name: "ลงทะเบียนแล้ว", value: "registered"},
       { name: "ยกเลิกการจอง", value: "cancel" },
     ],
     status: [

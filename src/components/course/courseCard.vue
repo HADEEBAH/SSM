@@ -761,7 +761,6 @@
 import LabelCustom from "@/components/label/labelCustom.vue";
 import headerCard from "@/components/header/headerCard.vue";
 import { mapGetters, mapActions } from "vuex";
-// import { Input, TimePicker } from "ant-design-vue";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import Swal from "sweetalert2";
 import {
@@ -785,9 +784,6 @@ export default {
     VueTimepicker,
     VueEditor,
   },
-  // directives: {
-  //   "ant-input": Input,
-  // },
   data: () => ({
     today: new Date(),
     preview_url: null,
@@ -897,13 +893,11 @@ export default {
       value.splice(value.indexOf(item), 1);
     },
     StartDateRegisCourse(course_data) {
-      // console.log("StartDateRegisCourse")
       this.course_data.coachs[0].register_date_range.end_date = "";
       this.register_date_range_str.end_date = "";
       this.ChangeCourseData(course_data);
     },
     StartDateStudyCourse(course_data) {
-      // console.log("StartDateStudyCourse")
       this.course_data.coachs[0].class_date_range.end_date = "";
       this.class_date_range_str.end_date = "";
       this.ChangeCourseData(course_data);

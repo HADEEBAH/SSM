@@ -15,32 +15,7 @@ const profileModules = {
 
     },
 
-    profile_user: [
-      // {
-      //   relationId: "",
-      //   studentId: "",
-      //   parentId: "",
-      //   student: {
-      //     studentId: "",
-      //     studenEmail: "",
-      //     studenFirstNameTh: "",
-      //     studenLastNameTh: "",
-      //     studenFirstNameEn: "",
-      //     studenLastNameEn: "",
-      //     studenNation: "",
-      //     studenTel: ""
-      //   },
-      //   parent: {
-      //     parentId: "",
-      //     parentFirstnameTh: "",
-      //     parentFirstnameEn: "",
-      //     parentLastnameTh: "",
-      //     parentLastnameEn: "",
-      //     parentTel: ""
-      //   }
-      // }
-
-    ],
+    profile_user: [],
 
     profile_detail: {
       createdBy: null,
@@ -77,30 +52,6 @@ const profileModules = {
           lastNameTh: ""
         }
       ],
-
-
-      // accountTitleEng: "",
-      // accountTitleTh: "",
-      // createdBy:  null,
-      // createdDate: "",
-      // deletedBy:  null,
-      // deletedDate: null,
-      // email: "",
-      // firstNameEng: "",
-      // firstNameTh : "",
-      // lastNameEng: "",
-      // lastNameTh: "",
-      // mobileNo:  "",
-      // myparents:  [],
-      // mystudents: [{ accountId: "", firstNameTh: "", lastNameTh: "" }],
-      // nation : null,
-      // passWord: "",
-      // status:  "",
-      // updatedBy:  null,
-      // updatedDate:  "",
-      // userName: "",
-      // userOneId: "",
-      // userRoles: [{roleNameEng: "", roleNameTh: "", roleId: ""}]
     },
 
 
@@ -173,11 +124,9 @@ const profileModules = {
 
     GetUserData(context, UserData) {
       context.commit("SetUserData", UserData)
-      // // console.log("SetUserData", UserData);
     },
 
     async GetAll(context, account_id) {
-      // console.log("account_id", account_id);
       try {
         let config = {
           headers: {
@@ -187,10 +136,8 @@ const profileModules = {
           }
         }
         let data_local = JSON.parse(localStorage.getItem("userDetail"))
-        // console.log(data_local.roles);
         if (data_local.roles.includes('R_5')) {
           let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?student_id=${account_id}`, config)
-          // // console.log("data_parent", data)
           if (data.statusCode === 200) {
             if (data?.data?.message !== "relation not found.") {
               localStorage.setItem("relations", JSON.stringify(data.data))
@@ -205,7 +152,6 @@ const profileModules = {
           }
         } else if (data_local.roles.includes('R_4')) {
           let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user/?parent_id=${account_id}`, config)
-          // console.log("data_student", data)
           if (data.statusCode === 200) {
             if (data?.data?.message !== "relation not found.") {
               let students = []
@@ -218,7 +164,6 @@ const profileModules = {
               await context.commit("SetStudents", students)
               localStorage.setItem("relations", JSON.stringify(data.data))
             } else {
-              // localStorage.removeItem("relations"); // clear existing data in local storage
               localStorage.setItem("relations", []);
               await context.commit("SetProfileUser", [])
 
@@ -231,7 +176,7 @@ const profileModules = {
           localStorage.setItem("relations", []);
         }
       } catch (error) {
-        // // console.log(error)
+        console.log(error)
       }
 
     },
@@ -245,7 +190,6 @@ const profileModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        // let { data } = await axios.get(`http://localhost:3000/api/v1/profile/${account_id}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/profile/${account_id}`, config)
         let roles = {
           roleId: "",
@@ -269,7 +213,7 @@ const profileModules = {
           throw { error: data }
         }
       } catch (error) {
-        // // console.log("err", error);
+        console.log(error);
       }
     },
 
@@ -293,8 +237,6 @@ const profileModules = {
         }
 
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user-v2/?account_id=${account_id}`, config)
-        // let { data } = await axios.get(`http://localhost:3000/api/v1/relations/user-v2/?account_id=${account_id}`, config)
-        // // console.log("data=>", data);
         let response = data.data
 
         if (data.statusCode === 200) {
@@ -302,7 +244,7 @@ const profileModules = {
           localStorage.setItem("relations", JSON.stringify(response))
         }
       } catch (error) {
-        // // console.log(error);
+        console.log(error);
       }
     },
 

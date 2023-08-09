@@ -76,7 +76,6 @@ const manageScheduleModules = {
             let times = null;
             times = item.allday ? null : `${item.startTime} - ${item.endTime}`;
 
-            // // // console.log("item", item);
             eventSchadule.push({
               name: item.name,
               start: item.start,
@@ -121,7 +120,7 @@ const manageScheduleModules = {
           context.commit("SetGetFilterCourse", data.data);
         }
       } catch (error) {
-        // // console.log("GetCoursError", error);
+        console.log(error);
       }
     },
 
@@ -136,7 +135,6 @@ const manageScheduleModules = {
           },
         };
 
-        // let { data } = await axios.get(`http://localhost:3000/api/v1/admincourse/`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/admincourse/`, config)
 
         if (data.statusCode === 200) {
@@ -151,7 +149,6 @@ const manageScheduleModules = {
         }
       } catch (error) {
         context.commit("SetGetAllCourseIsLoading", false)
-        // // console.log("err", error);
       }
     },
 
@@ -202,22 +199,6 @@ const manageScheduleModules = {
                 mm: item.holidayEndTime.split(":")[1],
               }
             }
-
-            // let days = item.holidayDate;
-            // let month = item.holidayMonth;
-            // let years = item.holidayYears;
-            // let startDate = new Date(years, parseInt(month) - 1, days);
-            // // // console.log("item.holidayStartTime", item.holidayStartTime);
-            // let holidayTime = !item.allDay
-            //     ? `${item.holidayStartTime}-${item.holidayEndTime}`
-            //     : null;
-            // event.push({
-            //     name: item.holidayName,
-            //     start: startDate,
-            //     color: "#f19a5a",
-            //     timed: holidayTime,
-            // });
-            // events = event;
           });
           context.commit("SetGetAllHolidays", data.data);
           context.commit("SetGetAllHolidaysIsLoading", false)
@@ -227,13 +208,11 @@ const manageScheduleModules = {
         }
       } catch (error) {
         context.commit("SetGetAllHolidaysIsLoading", false)
-        // // console.log("GetAllHolidaysError", error);
       }
     },
 
     async GetEditHolidays(context, payload) {
       try {
-        // // console.log("payload=>", payload);
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -271,7 +250,7 @@ const manageScheduleModules = {
           });
         }
       } catch (error) {
-        // // console.log("error", error);
+        console.log(error);
       }
     },
 
@@ -309,7 +288,6 @@ const manageScheduleModules = {
           data.data.map((item) => {
             item.fullDateHolidaysTh = `${item.holidayDate} ${thaiMonths[parseInt(item.holidayMonth) - 1]
               } ${parseInt(item.holidayYears) + 543}`;
-            // item.fullDateHolidays = `${item.holidayDate} ${item.holidayMonth} ${item.holidayYears}`
             item.fullDateHolidays = `${item.holidayYears}-${item.holidayMonth}-${item.holidayDate}`;
             if (item.holidayStartTime && item.holidayEndTime) {
               let startTime = item.holidayStartTime.split(":");
@@ -322,7 +300,7 @@ const manageScheduleModules = {
           context.commit("SetGetHolidaysById", data.data);
         }
       } catch (error) {
-        // // console.log("SetGetHolidaysById", error);
+        console.log(error);
       }
     },
 
@@ -337,7 +315,6 @@ const manageScheduleModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/admincourse/courseholiday`, config);
         if (data.statusCode === 200) {
           let eventSchadule = [];
@@ -378,7 +355,6 @@ const manageScheduleModules = {
                 }
               }
             }
-            // // // console.log("367 =>",item)
             eventSchadule.push({
               name: item.name,
               start: item.startDate,
@@ -396,15 +372,12 @@ const manageScheduleModules = {
 
             dataInSchadule = eventSchadule;
           });
-          // await context.commit("SetDataInSchedule", data.data)
-          // // // console.log("SetDataInSchedule", data.data);
           context.commit("SetGetAllHolidaysIsLoading", false)
           context.commit("SetDataInSchedule", dataInSchadule);
           context.commit("SetDataFilterSchedule", null);
         }
       } catch (error) {
         context.commit("SetGetAllHolidaysIsLoading", false)
-        // // console.log("error", error);
       }
     },
 
@@ -430,23 +403,14 @@ const manageScheduleModules = {
           if (query[items].length > 0) {
             query_length = query[items].length
           }
-          // // // console.log(
-          //   "object",
-          //   `${key[index]}=${query[items].join(`&&${key[index]}=`)}`
-          // );
           params.push(`${key[index]}=${query[items].join(`&&${key[index]}=`)}`);
         });
 
-        // // // console.log("params", params.join("&&"));
-
-        // const endpoint = `http://localhost:3000/api/v1/admincourse/filter-schedule?${params.join("&&")}`
-        // let localhost = "http://localhost:3000"
         const endpoint = `${process.env.VUE_APP_URL}/api/v1/admincourse/filter-schedule?${params.join("&&")}`
         let { data } = await axios.get(endpoint, config);
         const res = data.data;
 
         if (data.statusCode === 200) {
-          // // console.log(data.data)
 
           res.map((item) => {
             let times = null;
@@ -514,7 +478,6 @@ const manageScheduleModules = {
         }
       } catch (error) {
         context.commit("SetGetAllHolidaysIsLoading", false)
-        // console.log(error);
       }
     },
 

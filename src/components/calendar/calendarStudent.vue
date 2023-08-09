@@ -1,22 +1,5 @@
-// CALENDAR STUDENT
-
-
 <template>
   <div>
-    <!-- <template v-if="type === 'week'">
-            
-            <v-row dense>
-                <v-col>
-               {{ start_of_week }} -  {{ end_of_week }} 
-                </v-col>
-            </v-row>
-            <v-row dense>
-                <v-col>
-                    <v-btn text class="underline" color="#ff6b81" @click="goToday">คลิกเพื่อไปคอร์สที่ต้องสอนล่าสุด</v-btn>
-                </v-col>
-            </v-row>
-        </template> -->
-    <!-- <pre>{{ events }}</pre> -->
     <v-card
       v-if="type === 'week' || type === 'day' || $vuetify.breakpoint.smAndUp"
     >
@@ -168,7 +151,6 @@ export default {
   name: "calendarCoach",
   props: {
     type: { type: String, default: "month" },
-    // , default: () => []
     events: { type: Array },
   },
   data: () => ({
@@ -266,7 +248,6 @@ export default {
     selectDate(date) {
       this.event_date = [];
       this.showModal = true;
-      // console.log("calendar", this.events);
       this.events.forEach((event) => {
         let [start, start_time] = event.start.split(" ");
         let [end, end_time] = event.end.split(" ");
@@ -301,11 +282,6 @@ export default {
       });
     },
     colorOfDay() {
-      // if (condition) {
-
-      // } else {
-
-      // }
       this.events.forEach((event) => {
         if (event.type === "holiday") {
           event.color = "#f19a5a";

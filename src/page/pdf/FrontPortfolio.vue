@@ -6,7 +6,6 @@
   </v-app>
 </template>
   <script>
-  // const { loadImage } = require('canvas')
   import pdfMake from 'pdfmake'
   import pdfFonts from '../../assets/custom-fonts.js'
   import loadingOverlay from "../../components/loading/loadingOverlay.vue";
@@ -15,11 +14,9 @@ import { mapActions, mapGetters } from 'vuex'
     name: "FrontPortfolio",
     components: {loadingOverlay},
     data: () => ({
-      // user_profile : null,
     }),
     created() {
       this.GetUserById(this.$route.params.account_id)
-      // this.user_profile = JSON.parse(localStorage.getItem("userDetail"))
     },
     mounted() {
       this.exportPdf()
@@ -155,15 +152,7 @@ import { mapActions, mapGetters } from 'vuex'
           }
         }
         
-        // console.log(docDefinition)
         pdfMake.createPdf(docDefinition).open({}, window);
-        // let pdfDoc = pdfMake.createPdf(docDefinition)
-        // pdfDoc.getBlob((blob) => {
-        //   var url = URL.createObjectURL(blob);
-
-        //   // Open the PDF in a new tab
-        //   window.open(url);
-        // });
       },
       loadImageFromFile(filePath) {
         return new Promise((resolve, reject) => {

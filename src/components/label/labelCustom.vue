@@ -10,7 +10,6 @@ export default {
     required : {type: Boolean, default: false}
   },
   components: {
-    // registerForm
   },
   data: () => ({}),
   created() {},

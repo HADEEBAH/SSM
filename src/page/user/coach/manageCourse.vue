@@ -1401,7 +1401,6 @@ import coachLeaveForm from "../../../components/coach_leave/coachLeaveForm.vue";
 import router from "@/router";
 import imgFileType from "../../../components/file_type/imgFileType.vue";
 
-// import LoadingOverlay from '../../../components/loading/loadingOverlay.vue';
 export default {
   name: "menageCourse",
   components: {
@@ -1521,7 +1520,6 @@ export default {
 
   created() {
     this.GetLoading(true);
-    // // console.log("route", this.$route);
     if (this.$route.query.token) {
       this.loginShareToken(this.$route);
     }
@@ -1529,19 +1527,9 @@ export default {
     this.GetMyCourses({ coach_id: this.user_detail.account_id });
     this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
     this.GetCoachs();
-    // this.GetMyCourses({ coach_id: this.user_detail.account_id });
-    // this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
-    // this.GetCoachs();
-  },
-  beforeMount() {
-    // // console.log("user_detail", this.user_detail);
-    // this.GetMyCourses({ coach_id: this.user_detail.account_id });
-    // this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
-    // this.GetCoachs();
   },
 
   mounted() {
-    // // console.log("valid", this.user_detail?.roles?.filter((val)=> val === "R_3").length === 0);
     if (
       this.user_detail?.roles?.filter(
         (val) => val === "R_3" || val === "R_2" || val === "R_1"
@@ -1553,7 +1541,6 @@ export default {
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail.account_id);
     }
-    // this.$refs.calendar.click()
 
     this.GetLoading(false);
   },
@@ -1595,7 +1582,6 @@ export default {
             ? true
             : false
           : false;
-      // // console.log(start_date && end_date && period && leave_type && course);
       return !(start_date && end_date && period && leave_type && course);
     },
   },
@@ -1616,7 +1602,6 @@ export default {
       GetLoading: "LoadingModules/GetLoading",
     }),
     SelectedStatus(status) {
-      // // console.log(status);
 
       this.select_status = status;
     },
@@ -1626,12 +1611,10 @@ export default {
         month: "long",
         day: "numeric",
         calendar: "buddhist",
-        // era: "short",
       };
       return date.toLocaleDateString("th-TH", options);
     },
     openFileSummary(file) {
-      // // // console.log(file)
       window.open(file.attFilesUrl, "_blank");
     },
     openFile(file) {
@@ -1696,7 +1679,6 @@ export default {
       course.show_assessment_pantential = !course.show_assessment_pantential;
     },
     genDate(date) {
-      // // // console.log(date)
       return dateFormatter(new Date(date), "DD MMT YYYYT");
     },
     RemoveCourse(index) {
@@ -1730,7 +1712,6 @@ export default {
       });
     },
     dowloadFile(file) {
-      // // console.log(file.attachmentFile);
       let url = `${process.env.VUE_APP_URL}/api/v1/files/${file.attachmentFile}`;
       window.open(url, "_blank");
     },
@@ -1794,7 +1775,6 @@ export default {
       };
     },
     showDialogDetail(leave_data) {
-      // // console.log(leave_data);
       this.show_leave_detail = true;
       this.edited_coach_leave_data = leave_data;
       this.GetAttachmentLeave({ coach_leave_id: leave_data.coachLeaveId });
@@ -1812,7 +1792,6 @@ export default {
     },
     uploadFile() {
       const files = this.$refs.fileInput.files;
-      // // console.log(files);
       if (files.length > 0) {
         for (let i = 0; i < files.length; i++) {
           this.selected_files.push(files[i]);

@@ -13,14 +13,13 @@ const portfolioModules = {
   actions: {
     async GetPortfolioData(context,{account_id}){
         try{
-          // let localhost = "http://localhost:3000"
           let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/profile/portfolio/${account_id}`)
           if(data.statusCode === 200){
             context.commit("SetPortfolioData", data.data)
           
           }
         }catch(error){
-            // console.log(error)
+            console.log(error)
         }
     }
   },
