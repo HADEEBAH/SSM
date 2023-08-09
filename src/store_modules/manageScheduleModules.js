@@ -14,6 +14,7 @@ const manageScheduleModules = {
     delete_holiday: [],
     events: [],
     date_arr: [],
+    date_Holy_arr: [],
     data_in_schedule: [],
     data_filter_schedule: null,
     data_search_schedule: null,
@@ -34,6 +35,10 @@ const manageScheduleModules = {
     SetGetDateArray(state, payload) {
       state.date_arr = payload;
     },
+    SetGetHolidayDateArray(state, payload) {
+      state.date_Holy_arr = payload;
+    },
+
     SetGetAllHolidays(state, payload) {
       state.get_all_holidays = payload;
     },
@@ -176,12 +181,16 @@ const manageScheduleModules = {
           },
         };
 
-        // let { data } = await axios.get(`http://localhost:3000/api/v1/holiday/all`, config);
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
         if (data.statusCode === 200) {
-          // let event = []
+          let date_Holy_arr = [];
+
+          for await (let items of data.data) {
+            date_Holy_arr.push(items.dateFormat);
+          }
+          await context.commit("SetGetHolidayDateArray", date_Holy_arr);
+
           data.data.map((item) => {
-            // // // console.log("item------->", item);
             item.fullDateHolidaysTh = `${item.holidayDate} ${thaiMonths[parseInt(item.holidayMonth) - 1]} ${parseInt(item.holidayYears) + 543}`
             if (item.holidayStartTime && item.holidayEndTime) {
               item.ob_holidayStartTime = {
@@ -213,6 +222,8 @@ const manageScheduleModules = {
           context.commit("SetGetAllHolidays", data.data);
           context.commit("SetGetAllHolidaysIsLoading", false)
           context.commit("SetEvents", events);
+
+
         }
       } catch (error) {
         context.commit("SetGetAllHolidaysIsLoading", false)
@@ -436,7 +447,7 @@ const manageScheduleModules = {
 
         if (data.statusCode === 200) {
           // // console.log(data.data)
-          
+
           res.map((item) => {
             let times = null;
             let colors;
@@ -446,7 +457,7 @@ const manageScheduleModules = {
                 times = `${item.startTime} - ${item.endTime}`;
                 colors = "#f19a5a";
               }
-            } else{
+            } else {
               times = `${item.startTime} - ${item.endTime}`;
               if (item.startDate) {
                 switch (new Date(item.startDate).getDay()) {
@@ -474,7 +485,7 @@ const manageScheduleModules = {
                 }
               }
             }
-          
+
             eventSchadule.push({
               name: item.name,
               start: item.startDate,
@@ -522,6 +533,10 @@ const manageScheduleModules = {
     getDateArray(state) {
       return state.date_arr;
     },
+    getHolidayDateArray(state) {
+      return state.date_Holy_arr;
+    },
+
     getAllHolidays(state) {
       return state.get_all_holidays;
     },
