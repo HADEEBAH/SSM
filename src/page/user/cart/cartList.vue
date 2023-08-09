@@ -1,16 +1,16 @@
 <template>
   <!-- <v-app class="overflow-x-hidden overflaow-y-hidden"> -->
-  <v-container>
+  <v-container class="h-full">
     {{ setFunctions }}
     <loading-overlay :loading="cart_list_is_loading"></loading-overlay>
     <!-- <pre>{{ cart_list }}</pre> -->
     <div v-if="!cart_list_is_loading" class="h-full">
-      <v-row v-if="cart_list.length == 0">
-        <v-col cols="12" class="text-xl font-bold text-center my-5 pink--text">
-          ไม่พบข้อมูลในตะกร้า
-        </v-col>
+      <v-row class="h-full content-center" v-if="cart_list.length == 0">
         <v-col cols="12" class="webkit-center">
-          <v-img src="@/assets/cart/basket.svg" max-width="500px"> </v-img>
+          <span class="text-xl font-bold text-center my-5 pink--text">
+            ไม่พบข้อมูลในตะกร้า
+          </span>
+          <v-img src="@/assets/cart/basket.svg" max-width="300px"> </v-img>
         </v-col>
       </v-row>
       <div v-if="cart_list.length > 0">
@@ -207,11 +207,7 @@
               <v-checkbox hide-details color="pink" v-model="policy">
                 <template v-slot:label>
                   ยอมรับ
-                  <a class="mx-2 font-weight-bold"> ข้อกำหนดการใช้บริการ </a>
-                  และ
-                  <a class="mx-2 font-weight-bold"
-                    >นโยบายความคุ้มครองข้อมูลส่วนบุคคล</a
-                  >
+                  <a class="mx-2 font-weight-bold"> เงื่อนไขการใช้บริการและนโยบายการคุ้มครองข้อมูลส่วนบุคคล </a>
                 </template>
               </v-checkbox>
             </v-col>

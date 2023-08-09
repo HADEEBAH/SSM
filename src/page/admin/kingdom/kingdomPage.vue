@@ -64,7 +64,7 @@
                     cols="12"
                     class="flex align-center justify-center text-caption"
                   >
-                    ( ขนาดไฟล์งานไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
+                    ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
                   </v-col>
                   <v-col cols="12" class="flex align-center justify-center">
                     <v-btn outlined color="blue" @click="openFileSelector"
@@ -315,10 +315,21 @@ export default {
             );
             if (data.statusCode === 201) {
               this.showImg = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.categoryImg}`;
-              this.dialog_show = true;
+              // this.dialog_show = true;
               this.disable = false;
               this.enabled = false;
               this.buttonName = "แก้ไข";
+
+              Swal.fire({
+                icon: "success",
+                title: "สร้างอาณาจักรสำเร็จ",
+                timer: 3000,
+                timerProgressBar: true,
+                showCancelButton: false,
+                showConfirmButton: false
+              }).finally(()=>{
+                this.goToManageKingdomPage()
+              });
             } else {
               throw { message: data.message };
             }

@@ -33,7 +33,7 @@ import ProfileCertificate from '@/page/user/profile/profileCertificate.vue'
 import ProfilePassword from '@/page/user/profile/profilePassword.vue'
 import ProfileResetPassword from '@/page/user/profile/profileResetPassword.vue'
 import ProfileLanguages from '@/page/user/profile/profileLanguages.vue'
-import ProfilePolicy from '@/page/user/profile/profilePolicy.vue'
+// import ProfilePolicy from '@/page/user/profile/profilePolicy.vue'
 import ProfileRules from '@/page/user/profile/profileRules.vue'
 // studentCourse
 import StudentsSchedule from '@/page/user/studentsCourse/studentsSchedule.vue'
@@ -315,11 +315,11 @@ const routes = [
         name: 'ProfileLanguages',
         component: ProfileLanguages,
       },
-      {
-        path: 'profilePolicy',
-        name: 'ProfilePolicy',
-        component: ProfilePolicy,
-      },
+      // {
+      //   path: 'profilePolicy',
+      //   name: 'ProfilePolicy',
+      //   component: ProfilePolicy,
+      // },
       {
         path: 'profileRules',
         name: 'ProfileRules',
