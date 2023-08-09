@@ -931,7 +931,10 @@ export default {
 
     if (localStorage.getItem("userRelationsAccountId")) {
       // // console.log(localStorage.getItem("userRelationsAccountId"));
-    } else if (this.user_detail.roles.includes("R_5") || this.user_detail.roles.includes("R_4") ){
+    } else if (
+      this.user_detail.roles.includes("R_5") ||
+      this.user_detail.roles.includes("R_4")
+    ) {
       this.GetStudentData(this.user_detail.account_id);
     }
     // else {

@@ -905,7 +905,7 @@
                     class="underline"
                     color="#ff6b81"
                     @click="openFileSelector"
-                    >อัพโหลดไฟล์แนบ</v-btn
+                    >อัปโหลดไฟล์แนบ</v-btn
                   >
                   <input
                     ref="fileInput"
@@ -1035,7 +1035,7 @@
                       class="underline"
                       color="#ff6b81"
                       @click="openGeneralfileInputSelector"
-                      >อัพโหลดไฟล์แนบ</v-btn
+                      >อัปโหลดไฟล์แนบ</v-btn
                     >
                     <input
                       ref="generalfileInput"
@@ -1210,7 +1210,7 @@
                       class="underline"
                       color="#ff6b81"
                       @click="openPotentialfileInputSelector"
-                      >อัพโหลดไฟล์แนบ</v-btn
+                      >อัปโหลดไฟล์แนบ</v-btn
                     >
                     <input
                       ref="potentialfileInput"
@@ -2090,7 +2090,7 @@ export default {
         } else {
           Swal.fire({
             icon: "error",
-            title: "กรุณาอัพโหลดเฉพาะไฟล์รูปและวิดีโอเท่านั้น",
+            title: "กรุณาอัปโหลดเฉพาะไฟล์รูปและวิดีโอเท่านั้น",
             showDenyButton: false,
             showCancelButton: false,
             confirmButtonText: "ตกลง",
