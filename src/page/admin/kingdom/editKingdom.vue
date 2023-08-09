@@ -215,12 +215,6 @@ export default {
         (val) => val.length < 50 || "ผู้จัดสอนความยาวเกินกว่าที่กำหนด",
       ],
     },
-    // kingdom: {
-    //   kingdom_name_th: "",
-    //   kingdom_name_eng: "",
-    //   detail: "",
-    //   learning_method: "",
-    // },
   }),
   mounted() {},
   created() {
@@ -240,12 +234,10 @@ export default {
 
     cancleText() {},
     getCategory(categoryId) {
-      // // console.log("category_id", categoryId);
       this.GetCategory(categoryId);
     },
 
     showImg(item) {
-      // // console.log(item);
       return item;
     },
 
@@ -253,23 +245,11 @@ export default {
       this.$refs.fileInput.click();
     },
 
-    // uploadFile() {
-    //   this.file = this.$refs.fileInput.files[0];
-    //   // // console.log("file=>", this.file);
-    //   if (!this.file) return;
-    //   const reader = new FileReader();
-    //   reader.onload = (e) => {
-    //     this.preview_url = e.target.result;
-    //   };
-    //   reader.readAsDataURL(this.file);
-    // },
-
     uploadFile(event) {
       this.file = this.$refs.fileInput.files[0];
       if (!this.file) return;
       if (CheckFileSizeV2(this.file, event.target.id) === true) {
         const fileType = this.file.type;
-        // // console.log("fileType", fileType);
         if (fileType === "image/png" || fileType === "image/jpeg") {
           const reader = new FileReader();
           reader.onload = (e) => {
@@ -314,7 +294,6 @@ export default {
         }).then(async (result) => {
           if (result.isConfirmed) {
             try {
-              // // console.log("preview_url", this.file);
               const payload = {
                 categoryNameTh: this.category.categoryNameTh,
                 categoryNameEng: this.category.categoryNameEng,
@@ -324,12 +303,6 @@ export default {
               let bodyFormData = new FormData();
               bodyFormData.append("categoryImg", this.file ? this.file : null);
               bodyFormData.append("payload", JSON.stringify(payload));
-
-              // bodyFormData.append("categoryImg", this.file ?  this.file : null);
-              // bodyFormData.append("categoryNameTh",this.category.categoryNameTh );
-              // bodyFormData.append( "categoryNameEng", this.category.categoryNameEng );
-              // bodyFormData.append("taughtBy", this.category.taughtBy);
-              // bodyFormData.append("categoryDescription", this.category.categoryDescription  );
 
               let config = {
                 headers: {
@@ -345,7 +318,6 @@ export default {
               );
               if (data.statusCode === 200) {
 
-                // this.dialog_show = true;
                 Swal.fire({
                   icon: "success",
                   title: "แก้ไขอาณาจักรสำเร็จ",
@@ -361,7 +333,6 @@ export default {
                 throw { message: data.message };
               }
             } catch (error) {
-              // // console.log(error);
               Swal.fire({
                 icon: "error",
                 title: error.message,

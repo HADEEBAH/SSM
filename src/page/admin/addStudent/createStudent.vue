@@ -373,11 +373,6 @@
               </v-col>
               <v-col cols="12" sm="4" v-if="course.course_data && course.time">
                 <label-custom text="โค้ช"></label-custom>
-                <!-- // course.course_data.coachs.filter((v) => v.teach_day_data.some((td) => td.class_date.some(
-                      //       (cd) =>  cd.class_date_range.time_id === course.time.timeId ) )
-                      // ) -->
-                <!-- <per>{{ course.time.timeData }}</per> -->
-                <!-- <pre>{{ course.coach }}</pre> -->
                 <v-autocomplete
                   dense
                   :rules="rules.coach"
@@ -756,7 +751,6 @@ import { mapActions, mapGetters } from "vuex";
 import { dateFormatter, inputValidation } from "@/functions/functions";
 import Swal from "sweetalert2";
 import mixin from "../../../mixin";
-// import router from "@/router";
 
 export default {
   name: "addlearnPage",
@@ -779,7 +773,6 @@ export default {
     search: null,
     students: [],
     loading: false,
-    // packages: [],
     dialog_show: false,
     date: "",
     username: "",
@@ -865,7 +858,6 @@ export default {
       }
     },
     search(val) {
-      // // console.log(val);
       if (val.length > 3) {
         this.loading = true;
         this.searchNameUser({ search_name: val }).then(() => {
@@ -896,7 +888,6 @@ export default {
     CalTotalPrice() {
       this.order.total_price = 0;
       for (let course of this.order.courses) {
-        // // console.log(course);
         if (course.price) {
           this.order.total_price =
             this.order.total_price + parseInt(course.price);
@@ -973,18 +964,14 @@ export default {
     },
     openDialog() {
       this.dialog_show = true;
-      // // console.log(this.dialog_show, "<---");
     },
     removeCourse(index) {
-      // this.$delete(this.short_course)
       this.order.courses.splice(index, 1);
     },
     selectTime(time, course) {
       course.coach = {};
-      // // console.log(time);
     },
     selectCategory(categoryId, course_type_id, course) {
-      // // console.log(categoryId, course_type_id);
       course.course_id = "";
       course.package_data = {};
       course.package = "";
@@ -1015,7 +1002,6 @@ export default {
       });
     },
     selectCourse(courseId, course) {
-      // // console.log("course_id", courseId);
       course.package_data = {};
       course.package = "";
       course.option = {};
@@ -1037,7 +1023,6 @@ export default {
           }
           if (this.course_data.course_type_id === "CT_2") {
             course.start_date = this.course_data.course_study_start_date;
-            // course.start_date_str = this.course_data.course_study_start_date_str;
             course.start_date_str = new Date(
               course.start_date
             ).toLocaleDateString("th-TH", {
@@ -1075,8 +1060,6 @@ export default {
         if (this.validate_form && this.course_monitors.length > 0) {
           for (let course of this.order.courses) {
             if (course.package_data.students < this.students.length) {
-              // // console.log("912 =>", course.package_data.students);
-              // // console.log("913 =>", this.students.length);
               studentFail = true;
             } else {
               if (
@@ -1106,7 +1089,6 @@ export default {
                 ) {
                   isValiDateCourse.push(true);
                 } else {
-                  // // // console.log( this.course_monitors)
                   isValiDateCourse.push(false);
                 }
               } else {
@@ -1144,13 +1126,11 @@ export default {
             }).then(async (result) => {
               if (result.isConfirmed) {
                 if (this.order.payment_status === "warn") {
-                  // console.log("order", this.order);
                   let account = [];
                   let course_name_noti = [];
                   this.order.courses.forEach((course) => {
                     course_name_noti.push(course?.course_data?.course_name_th);
                     course.students = [];
-                    // // console.log("1136",this.students)
                     course.coach_id = course.coach.coach_id;
                     course.coach_name = course.coach.coach_name;
                     for (const student of this.students) {
@@ -1182,17 +1162,14 @@ export default {
                     )} ให้คุณแล้ว (รอชำระเงิน)`,
                     accountId: account,
                   };
-                  // // console.log(payload);
                   this.sendNotification(payload);
                   this.saveOrder();
-                  // router.replace({name: "Finance"})
                 } else {
                   let account = [];
                   let course_name_noti = [];
                   this.order.courses.forEach((course) => {
                     course_name_noti.push(course?.course_data?.course_name_th);
                     course.students = [];
-                    // // console.log("1136",this.students)
                     course.coach_id = course.coach.coach_id;
                     course.coach_name = course.coach.coach_name;
                     for (const student of this.students) {
@@ -1225,8 +1202,6 @@ export default {
                   };
                   this.sendNotification(payload);
                   this.saveOrder();
-                  // router.replace({name: "Finance"})
-                  // window.location.href = `${process.env.VUE_APP_URL}/admin/finance`
                 }
               }
             });

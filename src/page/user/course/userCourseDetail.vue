@@ -274,11 +274,6 @@ export default {
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "คอร์สเรียน");
   },
-  // watch: {
-  //   "course_data.course_img": function () {
-  //     // // console.log("=>", this.course_data.course_img);
-  //   }
-  // },
   computed: {
     ...mapGetters({
       course_data: "CourseModules/getCourseData",
@@ -290,10 +285,6 @@ export default {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;
     },
-    // setFunctions(){
-    //   this.GetCourse(this.$route.params.course_id)
-    //   return ''
-    // }
   },
   methods: {
     ...mapActions({
@@ -324,7 +315,6 @@ export default {
     },
     registerCourse() {
       this.order.order_step = 1;
-      // // // console.log(this.course_data.price_course)
       if (this.course_order.students.length > 0) {
         (this.course_order.apply_for_yourself = false),
           (this.course_order.apply_for_others = false),
@@ -345,7 +335,6 @@ export default {
         this.changeCourseOrderData(this.course_order);
       }
       this.changeOrderData(this.order);
-      // // console.log(this.course_order);
       localStorage.setItem("Order", JSON.stringify(this.course_order));
       this.$router.push({ name: "userCourseOrder" });
     },

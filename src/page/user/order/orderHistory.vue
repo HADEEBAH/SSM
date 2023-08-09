@@ -233,9 +233,6 @@ export default {
     panel: false,
     course_id_select: "",
   }),
-  created() {
-    // this.$store.dispatch("NavberUserModules/changeTitleNavber","ประวัติการซื้อ")
-  },
   mounted() {
     this.$store.dispatch(
       "NavberUserModules/changeTitleNavber",

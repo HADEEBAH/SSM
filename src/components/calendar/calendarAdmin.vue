@@ -348,7 +348,6 @@ export default {
   created() {},
   beforeMount() {},
   mounted() {
-    // this.GetDataInSchedule();
     this.focus = new Date();
     let today = new Date();
     this.start_of_week = new Date(
@@ -383,7 +382,6 @@ export default {
     }),
 
     convertDate(item) {
-      // // console.log(item)
       const oriDate = new Date(item);
       const fullDate = oriDate.toLocaleDateString("th-TH", {
         year: "numeric",
@@ -433,11 +431,6 @@ export default {
     next() {
       this.$refs.calendar.next();
     },
-    // getCurrentTime() {
-    //   return this.cal
-    //     ? this.cal.times.now.hour * 60 + this.cal.times.now.minute
-    //     : 0;
-    // },
 
     functionEvents(date) {
       let events_data = [];

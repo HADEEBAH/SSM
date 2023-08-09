@@ -384,7 +384,6 @@
   <script>
 import headerPage from "@/components/header/headerPage.vue";
 import rowData from "@/components/label/rowData.vue";
-// import dialogCard from "@/components/dialog/dialogCard.vue";
 import { mapActions, mapGetters } from "vuex";
 import Swal from "sweetalert2";
 import mixin from "@/mixin";
@@ -414,11 +413,6 @@ export default {
         img: "../../../assets/finance/card.png",
         value: "Credit Card",
       },
-      // {
-      //   text: "โอนเงินเข้าบัญชีโรงเรียน",
-      //   img: "../../../assets/finance/card.png",
-      //   value: "QR Code Payment",
-      // },
       {
         text: "โอนเงินเข้าบัญชีโรงเรียน",
         img: "../../../assets/finance/mobile_cash.png",
@@ -451,9 +445,7 @@ export default {
       updateOrderStatus: "OrderModules/updateOrderStatus",
     }),
     async exportBill() {
-      // console.log(this.order_detail);
       if (this.order_detail.paymentStatus === "success") {
-        // // console.log("exportBill")
         // Define the image paths
         var headerImagePath = require("../../../assets/FrontPortfolio/Logo.png");
         var logoLightImagePath = require("../../../assets/FrontPortfolio/logo_light.png");
@@ -891,81 +883,7 @@ export default {
         });
       }
     },
-    // GenRecipient(){
-    //   if(this.order_detail.payment.recipient){
-    //     return [
-    //     {
-    //       stack: [
-    //         {
-    //           text: this.order_detail.payment.recipient ? `${this.order_detail.created_by_data.firstNameTh} ${this.order_detail.created_by_data.lastNameTh}` : '',
-    //           margin: [0, 5],
-    //           alignment : "center"
-    //         },
-    //         {
-    //           text: `ผู้จ่ายเงิน`,
-    //           margin: [0, 5],
-    //           alignment : "center"
-    //         },
-    //       ],
-    //       margin: [0, 30, 0, 0],
-    //     },
-    //     {
-    //       stack: [
-    //         {
-    //           text: `${moment(this.order_detail.createdDate).format("DD/MM/YYYY HH:mm")}น.`,
-    //           margin: [0, 5],
-    //           alignment : "center"
-    //         },
-    //         {
-    //           text: `วันที่`,
-    //           margin: [0, 5],
-    //           alignment : "center"
-    //         },
-    //       ],
-    //       margin: [0, 30, 0, 0],
-    //     },
-    //     {
-    //       image : logoLightImageDataUrl,
-    //       alignment: 'center',
-    //       width: 140,
-    //       height: 140,
-    //       arguments:'justify'
-    //     },
-    //     {
-    //       stack: [
-    //         {
-    //           text: `${this.order_detail.payment.recipient.firstNameTh} ${this.order_detail.payment.recipient.lastNameTh}`,//ต้องแก้
-    //           margin: [0, 5],
-    //           alignment : "center"
-    //         },
-    //         {
-    //           text: `ผู้รับเงิน`,
-    //           margin: [0, 5],
-    //           alignment : "center"
-    //         },
-    //       ],
-    //       margin: [0, 30, 0, 0],
-    //     },
-    //     {
-    //       stack: [
-    //         {
-    //           text: `${moment(this.order_detail.payment.paid_date).format("DD/MM/YYYY")} ${this.order_detail.payment.paid_date.slice(11, 16)}น.`,//ต้องแก้
-    //           margin: [0, 5],
-    //           alignment : "center"
-    //         },
-    //         {
-    //           text: `วันที่`,
-    //           margin: [0, 5],
-    //           alignment : "center"
-    //         },
-    //       ],
-    //       margin: [0, 30, 0, 0],
-    //     }
-    //   ]
-    //   }
-    // },
     GenCourseItem() {
-      // // console.log("order_detail => ",this.order_detail)
       let row = [
         [
           {
@@ -991,7 +909,6 @@ export default {
         ],
       ];
       this.order_detail.orderItem.forEach((course, index) => {
-        // // console.log("802 => ",course)
         row.push([
           {
             text: `${index + 1}`,
@@ -1108,7 +1025,6 @@ export default {
           .join(account.length > 1 ? ", " : "")} ยังไม่ชำระเงิน`,
         accountId: account,
       };
-      // // console.log(payload);
       this.sendNotification(payload, true);
     },
     chengeStatus(status) {
@@ -1126,7 +1042,6 @@ export default {
         confirmButtonText: "ตกลง",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          // // // console.log(this.order_detail)
           this.updateOrderStatus({ order_detail: this.order_detail });
         } else {
           this.GetOrderDetail({ order_number: this.$route.params.order_id });
@@ -1144,14 +1059,11 @@ export default {
         confirmButtonText: "ตกลง",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          // // console.log(this.order_detail);
           this.updatePayment({ order_data: this.order_detail });
         } else {
           this.GetOrderDetail({ order_number: this.$route.params.order_id });
         }
       });
-      // this.payment.status = "paid";
-      // this.dialog_show = true
     },
     dayOfWeekArray(day) {
       const daysOfWeek = [

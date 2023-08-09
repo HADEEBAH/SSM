@@ -19,10 +19,8 @@ const reserveCourseModules = {
   },
   actions: {
     async GetReserveList(context) {
-      // // console.log("GetReserveList")
       context.commit("SetReserveListIsLoading", true)
       try {
-        // let localhost = "http://localhost:3002"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/getAll-studentDetail`)
         if (data.statusCode === 200) {
 
@@ -33,17 +31,14 @@ const reserveCourseModules = {
             items.ThTime = moment(items.createdDate).format("HH:mm")
           })
           context.commit("SetReserveList", data.data)
-          // console.log("SetReserveList", data.data)
           context.commit("SetReserveListIsLoading", false)
         }
       } catch (error) {
-        // // console.log(error)
         context.commit("SetReserveListIsLoading", false)
       }
     },
     async UpdateStatusReserve(context, { reserve_id, reserve_data }) {
       try {
-        // // console.log(reserve_id, reserve_data)
         const config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -51,7 +46,6 @@ const reserveCourseModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // let localhost = "http://localhost:3002"
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/reserve/update/${reserve_id}`, reserve_data, config)
         if (data.statusCode == 200) {
           await Swal.fire({
@@ -63,7 +57,10 @@ const reserveCourseModules = {
           })
         }
       } catch (error) {
-        // // console.log(error)
+        Swal.fire({
+          icon: "error",
+          text: "เกิดข้อผิดพลาด"
+        })
       }
     }
   },

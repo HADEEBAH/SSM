@@ -806,7 +806,6 @@ import axios from "axios";
 import { mapActions, mapGetters } from "vuex";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import headerPage from "@/components/header/headerPage.vue";
-// import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 export default {
   components: {
     calendarAdmin,
@@ -907,7 +906,6 @@ export default {
       ],
     },
 
-    // events: [],
     setDataEditDialog: {},
     courseToday: [],
     resultSearchSchedule: null,
@@ -916,18 +914,6 @@ export default {
   created() {
     this.GetAllHolidays();
     this.GetAllCourse();
-  },
-  beforeMount() {
-    // const events = [];
-    // const startDate = new Date();
-    // const endDate = new Date();
-    // events.push({
-    //   name: this.names[this.rnd(0, this.names.length - 1)],
-    //   start: startDate,
-    //   end: endDate,
-    //   color: this.colors[this.rnd(0, this.colors.length - 1)],
-    // });
-    // this.events = events;
   },
   mounted() {
     this.GetCoachs();
@@ -948,15 +934,12 @@ export default {
     }),
 
     checkHour(startTime) {
-      // console.log("startTime", startTime);
       let hour = [];
       let h = startTime.split(":")[0];
-      // console.log("object", h);
       for (let hr = h; hr < 24; hr++) {
         if (hr > h) {
           hour.push(hr);
         }
-        // hour.push(hr);
       }
       return hour;
     },
@@ -997,7 +980,6 @@ export default {
     },
 
     setHolidaydates(item) {
-      // // console.log("item", item);
       const thaiMonths = [
         "มกราคม",
         "กุมภาพันธ์",
@@ -1021,29 +1003,12 @@ export default {
       }
     },
 
-    // searchSchedule() {
-    //   // // console.log("search", this.search);
-    //   if (this.search !== "") {
-    //     if (this.data_filter_schedule) {
-    //       let res = this.data_filter_schedule.filter((items)=> this.search === items.name || this.search === items.coach || items.search === items.package || items.name.indexOf(this.search) !== -1 || items.coach.indexOf(this.search) !== -1 || items.package.indexOf(this.search) !== -1)
-    //       // // console.log("res=>", res);
-    //       this.resultSearchSchedule = res
-    //     }
-    //   }
-    // },
-
     async filterSchedules(courseId, coachId, status) {
       this.GetFilterSchedule({ courseId, coachId, status });
-      // // console.log({
-      //   courseId: courseId,
-      //   coach_id: coachId,
-      //   status: status,
-      // });
       this.filter_dialog = false;
     },
 
     async deleteHoliday() {
-      // // console.log("del", this.setDataEditDialog);
       Swal.fire({
         icon: "question",
         title: "คุณต้องการลบวันหยุดใช่หรือไม่ ?",
@@ -1078,7 +1043,10 @@ export default {
               });
             }
           } catch (error) {
-            // // console.log("SetDeleteHoliday", error);
+            Swal.fire({
+              icon: "error",
+              title: "เกิดข้อผิดพลาด",
+            })
           }
         }
       });
@@ -1147,7 +1115,6 @@ export default {
               }
             }
           } catch (error) {
-            // // console.log(error);
             if (error.response.data.statusCode === 400) {
               if (
                 error.response.data.message ==
@@ -1184,20 +1151,10 @@ export default {
 
     editHolidays(holiday) {
       this.show_dialog_edit_holoday = true;
-      // // console.log("holiday", holiday);
-      // // console.log(
-      //   "++++",
-      //   new Date(
-      //     `${holiday.holidayDate}/${holiday.holidayMonth}/${holiday.holidayYears}`
-      //   )
-      // );
-      // this.editHolidayDates = `${holiday.holidayDate}/${holiday.holidayMonth}/${holiday.holidayYears}`
-      // this.editHolidayDates = new Date(`${holiday.holidayDate}/${holiday.holidayMonth}/${holiday.holidayYears}`)
       this.setDataEditDialog = { ...holiday };
     },
 
     async editHolidaysData() {
-      // // console.log("setDataEditDialog", this.setDataEditDialog);
       this.setDataEditDialog.holidayDate = this.editHolidayDates
         ? this.editHolidayDates.split("-")[2]
         : this.setDataEditDialog.holidayDate;
@@ -1240,7 +1197,7 @@ export default {
             this.editHolidayDates = null;
             this.setDataEditDialog = {};
           } catch (error) {
-            // // console.log(error);
+            console.log(error);
           }
         }
       });
@@ -1279,8 +1236,6 @@ export default {
     },
     courseDate() {
       let courseTodayDate = new Date().toLocaleDateString("en-CA");
-      // let courseTodayDate = new Date("2023-08-05").toLocaleDateString("en-CA");
-
       let getAllCourseDate = [];
       let success = "";
       let allCourse = [];
@@ -1299,7 +1254,6 @@ export default {
     },
     AllHolidayDate() {
       let holyTodayDate = new Date().toLocaleDateString("en-CA");
-      // let holyTodayDate = new Date("2023-08-05").toLocaleDateString("en-CA");
 
       let allHolidaysData = [];
       for (let [index, item] of this.date_Holy_arr.entries()) {

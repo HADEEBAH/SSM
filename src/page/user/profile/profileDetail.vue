@@ -341,7 +341,6 @@ export default {
     email: "",
   }),
   beforeRouteLeave(to, from, next) {
-    // // console.log(to, from)
     if(this.profile_detail.firstNameTh && this.profile_detail.lastNameTh && !this.isEnabled){
       next()
     }else{
@@ -365,7 +364,6 @@ export default {
       GetAll: "ProfileModules/GetAll",
       GetProfileDetail: "ProfileModules/GetProfileDetail",
       changeProfileFail: "loginModules/changeProfileFail"
-      // GetParentData: "ProfileModules/GetParentData",
     }),
     edit() {
       this.isDisabled = false;
@@ -373,11 +371,9 @@ export default {
       this.buttonName = "บันทึก";
     },
     cancel() {
-      // if (this.$refs.form.validate()) {
       this.GetProfileDetail(this.$route.params.profile_id);
       this.isDisabled = true;
       this.isEnabled = false;
-      // }
     },
     closeDialogPorfile(value){
       this.changeProfileFail(value)
@@ -417,7 +413,6 @@ export default {
               let payloadData = new FormData();
               payloadData.append("payload", JSON.stringify(payload));
               if (this.image_profile.name) {
-                // // console.log("this.image_profile", this.image_profile);
                 payloadData.append("imageProfile", this.image_profile);
               }
 
@@ -426,18 +421,15 @@ export default {
                 payloadData,
                 config
               );
-              // // console.log("acc Font", account_id);
               if (data.statusCode === 200) {
                 Swal.fire({
                   icon: "success",
                   title: "แก้ไขโปรไฟล์สำเร็จ",
                   timer: 3000,
                 });
-                // // console.log(data.data.firstNameTh, data.data.lastNameTh)
                 let data_storage = JSON.parse(
                   localStorage.getItem("userDetail")
                 );
-                // // // console.log(data_storage)
                 data_storage.first_name_th = data.data.firstNameTh
                 data_storage.last_name_th = data.data.lastNameTh
                 data_storage.image = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}`;
@@ -458,7 +450,6 @@ export default {
                 throw { message: data.message };
               }
             } catch (error) {
-              // // console.log(error);
               Swal.fire({
                 icon: "error",
                 title: error.message,
@@ -508,19 +499,12 @@ export default {
       this.preview_file = "";
     },
 
-    // submitEdit() {
-    //   this.isDisabled = true;
-    //   this.isEnabled = false;
-    //   this.buttonName = "แก้ไข";
-    // },
-
     validate(e, type) {
       inputValidation(e, type);
     },
     checkPhoneNumber() {
       let x = this.user_data.phone_num.replace(/\D/g, "");
       x = x.match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
-      // // console.log(x);
       this.user_data.phone_num = !x[2]
         ? x[1]
         : x[1] + "-" + x[2] + (x[3] ? "-" + x[3] : "");
@@ -533,7 +517,6 @@ export default {
       profile_user: "ProfileModules/getProfileUser",
       profile_detail: "ProfileModules/getProfileDetail",
       profile_fail: "loginModules/getProfileFail",
-      // parent_data: "ProfileModules/getParentData",
     }),
     setFunctions() {
       this.GetAll(this.user_detail.account_id);

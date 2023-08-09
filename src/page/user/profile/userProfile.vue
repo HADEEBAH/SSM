@@ -1,8 +1,4 @@
-//USER profile
-
-
 <template>
-  <!-- <v-form ref="form" v-model="valid" lazy-validation> -->
   <v-container>
     <loading-overlay :loading="categorys_is_loading"></loading-overlay>
     <v-row dense>
@@ -840,12 +836,10 @@ export default {
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
   },
   beforeMount() {
-    // alert(this.user_login.account_id)
     this.GetRelationDataV2(this.user_login.account_id);
     this.GetProfileDetail(this.user_login.account_id);
     this.GetStudentCourse(this.user_login.account_id);
 
-    //get student course
   },
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "โปรไฟล์");
@@ -930,9 +924,6 @@ export default {
       this.$router.push({ name: "ForgotPassword" });
 
     },
-    // show_policy() {
-    //   this.$router.push({ name: "ProfilePolicy" });
-    // },
     show_rules() {
       this.$router.push({ name: "ProfileRules" });
     },
@@ -1108,7 +1099,6 @@ export default {
     },
 
     async addRelations() {
-      // if (this.$refs.form.validate()) {
       Swal.fire({
         icon: "question",
         title: "คุณต้องการเพิ่มผู้ปกครองหรือไม่",
@@ -1142,8 +1132,8 @@ export default {
             }
 
             let { data } = await axios.post(
-              `http://localhost:3000/api/v1/relations/user`,
-              // `${process.env.VUE_APP_URL}/api/v1/relations/user`,
+              // `http://localhost:3000/api/v1/relations/user`,
+              `${process.env.VUE_APP_URL}/api/v1/relations/user`,
               payload,
               config
             );
@@ -1155,14 +1145,6 @@ export default {
                   icon: "success",
                   title: "บันทึกสำเร็จ",
                 });
-                // .then(async (result) => {
-                // if (result.isConfirmed) {
-                // this.user_login = JSON.parse(
-                //   localStorage.getItem("userDetail")
-                // );
-                // this.GetRelationDataV2(this.user_login.account_id)
-                // }
-                // });
                 this.add_relation = false;
                 this.GetRelationDataV2(this.user_login.account_id);
               } else {
@@ -1217,7 +1199,6 @@ export default {
           Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
         }
       });
-      // }
     },
 
     myCourseStudent(item) {
@@ -1254,18 +1235,6 @@ export default {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;
     },
-
-    // setFunctions() {
-    //   this.GetAll(this.user_login.account_id);
-    //   this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-    //   this.GetProfileDetail(this.user_login.account_id);
-    //   this.GetRelations({
-    //     student_id: this.user_login.account_id,
-    //     parent_id: "",
-    //   });
-
-    //   return "";
-    // },
   },
 };
 </script>

@@ -885,7 +885,7 @@
               >
                 <v-col cols="12" class="flex align-center justify-center">
                   <v-img
-                    src="../../../assets/manage_coach/upload_file.png"
+                    src="@/assets/manage_coach/upload_file.png"
                     max-height="105"
                     max-width="122"
                   >
@@ -1024,7 +1024,7 @@
                 <v-row>
                   <v-col cols="12" class="flex align-center justify-center">
                     <v-img
-                      src="../../../assets/manage_coach/upload_file.png"
+                      src="@/assets/manage_coach/upload_file.png"
                       max-height="105"
                       max-width="122"
                     ></v-img>
@@ -1199,7 +1199,7 @@
                 <v-row>
                   <v-col cols="12" class="flex align-center justify-center">
                     <v-img
-                      src="../../../assets/manage_coach/upload_file.png"
+                      src="@/assets/manage_coach/upload_file.png"
                       max-height="105"
                       max-width="122"
                     ></v-img>
@@ -1344,17 +1344,16 @@
   </v-app>
 </template>
 <script>
-import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+import loadingOverlay from "@/components/loading/loadingOverlay.vue";
 import { dateFormatter, CheckFileSize } from "@/functions/functions";
 import rowData from "@/components/label/rowData.vue";
-import labelCustom from "../../../components/label/labelCustom.vue";
+import labelCustom from "@/components/label/labelCustom.vue";
 import { mapActions, mapGetters } from "vuex";
 import { Input, TimePicker } from "ant-design-vue";
 import Swal from "sweetalert2";
 import mixin from "@/mixin";
-import imgFileType from "../../../components/file_type/imgFileType.vue";
+import imgFileType from "@/components/file_type/imgFileType.vue";
 
-// import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import moment from "moment";
 export default {
   name: "menageCourseDetail",
@@ -1467,12 +1466,10 @@ export default {
   mounted() {},
   watch: {
     coach_check_in: function () {
-      // // console.log(this.coach_check_in);
       this.preview_summary_files = [];
       if (this.coach_check_in.attachment) {
         if (this.coach_check_in?.attachment.length > 0) {
           for (const img_url of this.coach_check_in.attachment) {
-            // // console.log(img_url);
             this.preview_summary_files.push({
               url: img_url.attFilesUrl,
               attId: img_url.sumAttId,
@@ -1611,7 +1608,6 @@ export default {
     },
     FilterStatusCheckIn(selected_data) {
       if (this.course_data.course_type_id === "CT_1") {
-        // // // console.log(`Total :${ parseInt(selected_data.totalDay/4) } count : ${selected_data.countCheckInleave}`)
         if (
           parseInt(selected_data.totalDay / 4) > selected_data.countCheckInleave
         ) {
@@ -1641,7 +1637,6 @@ export default {
       return `${process.env.VUE_APP_URL}/api/v1/files/${part}`;
     },
     openFile(file) {
-      // // console.log(file);
       if (file.attId) {
         let url = `${process.env.VUE_APP_URL}/api/v1/files/${file.attFiles}`;
         window.open(url, "_blank");
@@ -1665,10 +1660,6 @@ export default {
           this.selected_student = i;
         }
       }
-      // console.log(
-      //   this.student_check_in[this.selected_student].potential
-      //     .attachmentPotential
-      // );
       this.selected_files = [];
       this.comment_potential_dialog_tmp = {
         id: this.student_check_in[this.selected_student].potential
@@ -1728,7 +1719,6 @@ export default {
       }
     },
     async saveUpdateAssessmentPotential() {
-      // // // console.log(this.student_check_in)
       this.$refs.potential_form.validate();
       if (this.potential_form) {
         Swal.fire({
@@ -1864,9 +1854,6 @@ export default {
           this.selected_student = i;
         }
       }
-      // console.log(
-      //   this.student_check_in[this.selected_student].assessment.attachment
-      // );
       this.comment_dialog_tmp = {
         id: this.student_check_in[this.selected_student].assessment
           .assessmentStudentsId
@@ -1880,10 +1867,6 @@ export default {
           ? this.student_check_in[this.selected_student].files
           : [],
       };
-      // if (!this.student_check_in[this.selected_student].assessment.assessmentStudentsId ) {
-      //   this.student_check_in[this.selected_student].assessment.oldremark =
-      //     this.student_check_in[this.selected_student].assessment.remark;
-      // }
       this.show_comment_dialog = true;
     },
     confirmStudentComment(selected_student) {
@@ -1898,14 +1881,11 @@ export default {
         this.comment_dialog_tmp.attachment;
     },
     clearStudentComment() {
-      // this.comment_dialog_tmp.evolution = "";
       this.comment_dialog_tmp.remark = "";
       this.comment_dialog_tmp.files = [];
-      // this.comment_dialog_tmp.attachment = []
       this.selected_files = [];
     },
     closeStudentComment() {
-      // // console.log(selected_student);
       this.comment_dialog_tmp.id = "";
       this.comment_dialog_tmp.remark = "";
       this.comment_dialog_tmp.files = [];
@@ -1919,9 +1899,7 @@ export default {
       }`;
     },
     selectCheckInStatus(item, status) {
-      // // console.log(item);
       if (status === "leave" || status === "special case") {
-        // const index = this.students.filter((d) => d.no === item.no)
         this.expanded_index.push(item);
       } else {
         this.expanded_index.forEach((expanded, index) => {
@@ -1952,7 +1930,6 @@ export default {
       this.student_check_in[selected_student].files.splice(index, 1);
     },
     removePotentialFileInBase(file, selected_student) {
-      // // console.log(file);
       Swal.fire({
         icon: "question",
         title: "ต้องการลบใช่หรือไม่",
@@ -1979,7 +1956,6 @@ export default {
       });
     },
     removeAccessmentFileInBase(file, selected_student) {
-      // // console.log(file);
       Swal.fire({
         icon: "question",
         title: "ต้องการลบใช่หรือไม่",
@@ -2009,7 +1985,6 @@ export default {
       this.student_check_in[selected_student].potentialfiles.splice(index, 1);
     },
     clearAssessment() {
-      // console.log("1184 => ", this.student_check_in);
       for (const student of this.student_check_in) {
         student.assessment.evolution = "";
         student.assessment.interest = "";
@@ -2025,17 +2000,7 @@ export default {
         student.potentialfiles = [];
       }
     },
-    // uploadFile() {
-    //   this.file = this.$refs.fileInput.files[0];
-    //   if (!this.file) return;
-    //   const reader = new FileReader();
-    //   reader.onload = (e) => {
-    //     this.previewUrl = e.target.result;
-    //   };
-    //   reader.readAsDataURL(this.file);
-    // },
     uploadGeneralFile() {
-      // // console.log("selected_student", this.selected_student);
       const files = this.$refs.generalfileInput.files;
       if (files.length > 0) {
         for (let i = 0; i < files.length; i++) {
@@ -2060,9 +2025,7 @@ export default {
 
     previewSummaryFile(event) {
       let accept = event.target.accept.split(",");
-      // console.log(accept);
       const selectedFiles = event.target.files;
-      // this.coach_check_in.summary_files = [];
       const fileUrls = [];
       let type_file = [];
       for (let type of accept) {
@@ -2072,7 +2035,6 @@ export default {
         let file_type = selectedFiles[i].type.split("/");
         if (type_file.includes(file_type[0])) {
           if (CheckFileSize(selectedFiles[i]) === true) {
-            // // console.log(selectedFiles[i]);
             this.coach_check_in.summary_files.push(selectedFiles[i]);
             const file = selectedFiles[i];
             const reader = new FileReader();
@@ -2108,7 +2070,6 @@ export default {
       this.preview_summary_files.splice(index, 1);
     },
     removeSummaryFileInbase(file, index) {
-      // // console.log(this.coach_check_in);
       Swal.fire({
         icon: "question",
         title: "ต้องการลบใช่หรือไม่",
@@ -2126,8 +2087,6 @@ export default {
           );
         }
       });
-      //this.coach_check_in.summary_files.splice(index, 1)
-      //
     },
 
     handleFileChange(event) {

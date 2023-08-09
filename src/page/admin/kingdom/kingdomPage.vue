@@ -296,7 +296,6 @@ export default {
                 Authorization: `Bearer ${VueCookie.get("token")}`,
               },
             };
-            // // console.log("preview_url", this.file);
             const payload = {
               category_name_th: this.kingdom.kingdom_name_th,
               category_name_en: this.kingdom.kingdom_name_eng,
@@ -307,7 +306,6 @@ export default {
             let bodyFormData = new FormData();
             bodyFormData.append("img_url", this.file);
             bodyFormData.append("payload", JSON.stringify(payload));
-            // let localhost = "http://localhost:3000"
             let { data } = await axios.post(
               `${process.env.VUE_APP_URL}/api/v1/category`,
               bodyFormData,
@@ -315,7 +313,6 @@ export default {
             );
             if (data.statusCode === 201) {
               this.showImg = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.categoryImg}`;
-              // this.dialog_show = true;
               this.disable = false;
               this.enabled = false;
               this.buttonName = "แก้ไข";
@@ -334,7 +331,6 @@ export default {
               throw { message: data.message };
             }
           } catch (error) {
-            // // console.log(error);
             Swal.fire({
               icon: "error",
               title: error.message,
@@ -350,7 +346,6 @@ export default {
       if (!this.file) return;
       if (CheckFileSizeV2(this.file, event.target.id) === true) {
         const fileType = this.file.type;
-        // // console.log("fileType", fileType);
         if (fileType === "image/png" || fileType === "image/jpeg") {
           const reader = new FileReader();
           reader.onload = (e) => {
