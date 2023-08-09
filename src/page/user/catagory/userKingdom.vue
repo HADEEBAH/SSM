@@ -33,18 +33,26 @@
       "
     >
       <v-carousel
-        class="rounded-xl"
+        class="rounded-xl max-w-[1920px!important] max-h-[1080px!important]"
         cycle
+        height="auto"
         hide-delimiter-background
-        :height="height()"
         hide-delimiters
       >
         <v-carousel-item
           v-for="(slide, i) in banner_list"
           :key="i"
-          :src="slide.bannerPath"
-          cover
+        class="max-w-[1920px] max-h-[1080px]"
+          
+
         >
+        <v-img
+        :src="slide.bannerPath"
+        :aspect-ratio="16 / 9"
+        class="max-w-[1920px] max-h-[1080px]"
+        >
+
+        </v-img>
         </v-carousel-item>
       </v-carousel>
       <v-card-text>
@@ -84,7 +92,6 @@
               <v-img
                 @click="selectedCategory(item)"
                 :aspect-ratio="16 / 9"
-                cover
                 :src="
                   item.categoryImg && item.categoryImg !== ''
                     ? item.categoryImg

@@ -819,7 +819,7 @@
                 v-model="policy"
               >
               <template v-slot:label>
-                ยอมรับ <a class="mx-2 font-weight-bold"> ข้อกำหนดการใช้บริการ </a> และ <a class="mx-2 font-weight-bold" >นโยบายความคุ้มครองข้อมูลส่วนบุคคล</a>
+                ยอมรับ <a class="mx-2 font-weight-bold"> เงื่อนไขการใช้บริการและนโยบายการคุ้มครองข้อมูลส่วนบุคคล </a>
               </template>
             </v-checkbox>
             </v-col>

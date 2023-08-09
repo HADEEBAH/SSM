@@ -344,7 +344,19 @@ export default {
                 config
               );
               if (data.statusCode === 200) {
-                this.dialog_show = true;
+
+                // this.dialog_show = true;
+                Swal.fire({
+                  icon: "success",
+                  title: "แก้ไขอาณาจักรสำเร็จ",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false
+                }).finally(()=>{
+                  this.goToManageKingdomPage()
+                });
+
               } else {
                 throw { message: data.message };
               }

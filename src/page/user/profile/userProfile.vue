@@ -307,7 +307,7 @@
     <v-divider class=""></v-divider>
 
     <!-- policy -->
-    <v-row dense class="mt-3" @click="show_policy()">
+    <!-- <v-row dense class="mt-3" @click="show_policy()">
       <v-col cols="2" sm="1">
         <img src="@/assets/profile/policy.png" />
       </v-col>
@@ -318,14 +318,14 @@
       <v-col cols="2" sm="2" align="right">
         <span class="mdi mdi-chevron-right"></span>
       </v-col>
-    </v-row>
+    </v-row> -->
     <!-- rules -->
     <v-row dense class="mt-3" @click="show_rules()">
       <v-col cols="2" sm="1">
         <img src="@/assets/profile/rules.png" />
       </v-col>
       <v-col cols="8" sm="9" align="left" class="mt-1">
-        <label>ข้อกำหนดการและเงื่อนไขการใช้บริการ</label>
+        <label>เงื่อนไขการใช้บริการและนโยบายการคุ้มครองข้อมูลส่วนบุคคล</label>
       </v-col>
 
       <v-col cols="2" sm="2" align="right">
@@ -930,9 +930,9 @@ export default {
       this.$router.push({ name: "ForgotPassword" });
 
     },
-    show_policy() {
-      this.$router.push({ name: "ProfilePolicy" });
-    },
+    // show_policy() {
+    //   this.$router.push({ name: "ProfilePolicy" });
+    // },
     show_rules() {
       this.$router.push({ name: "ProfileRules" });
     },

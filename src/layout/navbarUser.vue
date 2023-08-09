@@ -202,11 +202,10 @@
 
       <v-navigation-drawer
         v-if="user_detail"
+        fixed
         right
-        clipped
-        app
         v-model="drawer"
-        :temporary="$vuetify.breakpoint.smAndDown"
+        temporary
       >
         <v-row class="pt-8 pb-6">
           <v-col class="flex align-center justify-center">
@@ -445,11 +444,12 @@ export default {
     }
   },
   beforeMount() {
-    if (this.MobileSize) {
-      this.drawer = false;
-    } else {
-      this.drawer = true;
-    }
+    // if (this.MobileSize) {
+    //   this.drawer = false;
+    // } else {
+    //   this.drawer = false;
+    // }
+    this.drawer = false;
   },
   mounted() {
    

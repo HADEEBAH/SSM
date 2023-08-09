@@ -242,9 +242,9 @@ export default {
         ? x[1]
         : x[1] + "-" + x[2] + (x[3] ? "-" + x[3] : "");
     },
-    show_policy() {
-      this.$router.push({ name: "ProfilePolicy" });
-    },
+    // show_policy() {
+    //   this.$router.push({ name: "ProfilePolicy" });
+    // },
     show_rules() {
       this.$router.push({ name: "ProfileRules" });
     },
