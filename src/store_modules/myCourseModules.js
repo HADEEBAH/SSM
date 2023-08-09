@@ -180,8 +180,8 @@ const myCourseModules = {
                 const dataCourseSchedule = { dates: [] };
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
                 if (data.statusCode === 200) {
-                    // // console.log("182 =>")
-                    for await(let course of data.data) {
+                    // console.log("182 =>", data.data)
+                    for await (let course of data.data) {
                         course.day_name = course.dates.day ? dayOfWeekArray(course.dates.day) : course.dates.day
                         for (const date of course.dates.date) {
                             if (course.period.start !== "Invalid date" && course.period.end !== "Invalid date") {
@@ -198,13 +198,13 @@ const myCourseModules = {
                             }
                         }
                         // // console.log("200",course.coachLeave)
-                        if(course?.coachLeave){
-                            for(let coachLaeve of course?.coachLeave){
+                        if (course?.coachLeave) {
+                            for (let coachLaeve of course?.coachLeave) {
                                 // // console.log("202 =>",coachLaeve)
                                 if (coachLaeve.teachCompensationStartTime && coachLaeve.teachCompensationEndTime) {
                                     dataCourseSchedule.dates.push({
-                                        start: coachLaeve.teachCompensationDate+" "+coachLaeve.teachCompensationStartTime,
-                                        end: coachLaeve.teachCompensationDate+" "+coachLaeve.teachCompensationEndTime,
+                                        start: coachLaeve.teachCompensationDate + " " + coachLaeve.teachCompensationStartTime,
+                                        end: coachLaeve.teachCompensationDate + " " + coachLaeve.teachCompensationEndTime,
                                         name: data_local.roles.includes('R_5') ? `${course.courseNameTh}(${course.courseNameEng})` : `${course.student.firstNameTh}: ${course.courseNameTh}(${course.courseNameEng})`,
                                         // name: `${course.courseNameTh}(${course.courseNameEng})`,
                                         timed: course.student.firstNameTh,
@@ -214,10 +214,10 @@ const myCourseModules = {
                                 }
                             }
                         }
-                       
+
                         // // console.log("219 =>",course)
                     }
-                   
+
                     let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
                     // // console.log("185 =>")
                     if (holidays.data.statusCode === 200) {
@@ -230,7 +230,8 @@ const myCourseModules = {
                                 start_time: holiday.holidayStartTime ? holiday.holidayStartTime : null,
                                 end: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
                                 end_time: holiday.holidayEndTime ? holiday.holidayEndTime : null,
-                                subtitle: holiday.allDay
+                                subtitle: holiday.allDay,
+                                colors: "#f19a5a"
                             })
 
                         }
