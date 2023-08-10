@@ -13,7 +13,7 @@
         <v-card-text>
           <div class="w-full" align="center" v-if="image">
             <v-img
-              :src="logo"
+              src="../../assets/navbar/logo.svg"
               style="width: 50%; height: 50%"
             ></v-img>
           </div>
@@ -130,7 +130,7 @@ export default {
   }),
   beforeMount() {
     if (this.$route.query.token) {
-     this.loginShareToken(this.$route)
+      this.loginShareToken(this.$route);
     }
   },
   computed: {
@@ -172,8 +172,8 @@ export default {
   },
 
   beforeDestroy() {
-    this.$store.commit("loginModules/SetIsLoading", false)
-  }
+    this.$store.commit("loginModules/SetIsLoading", false);
+  },
 };
 </script>
 
