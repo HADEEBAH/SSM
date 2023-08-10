@@ -22,6 +22,7 @@
                   :items="username_list"
                   :search-input.sync="search"
                   placeholder="ค้นหา/โปรดเลือกผู้เรียน"
+                  label="ค้นหา"
                   item-text="fullname"
                   item-value="userOneId"
                   outlined
