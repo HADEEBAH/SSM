@@ -90,7 +90,20 @@
                     "
                     max-height="160"
                     :max-width="$vuetify.breakpoint.smAndUp ? 160 : ''"
-                  ></v-img>
+                  >
+                    <template v-slot:placeholder>
+                      <v-row
+                        class="fill-height ma-0"
+                        align="center"
+                        justify="center"
+                      >
+                        <v-progress-circular
+                          indeterminate
+                          color="#ff6b81"
+                        ></v-progress-circular>
+                      </v-row>
+                    </template>
+                  </v-img>
                 </v-col>
                 <v-col>
                   <v-row dense>
@@ -268,7 +281,20 @@
                       ? course.course_img
                       : require(`@/assets/course/default_course_img.svg`)
                   "
-                />
+                >
+                <template v-slot:placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular
+                      indeterminate
+                      color="#ff6b81"
+                    ></v-progress-circular>
+                  </v-row>
+                </template>
+              </v-img>
               </v-col>
               <v-col>
                 <v-row dense>
