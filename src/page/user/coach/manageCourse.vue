@@ -839,9 +839,7 @@
                 ></v-img>
               </template>
               <template v-slot:header>
-                <div class="font-bold text-center text-[#F03D3E]">
-                  ไม่อนุมัติ
-                </div>
+                <div class="font-bold text-center text-[#F03D3E]">ปฎิเสธ</div>
               </template>
               <template v-slot:detail>
                 <v-row class="d-flex align-end">
@@ -940,7 +938,7 @@
                       ? "อนุมัติ"
                       : item.status === "cancel"
                       ? "ยกเลิก"
-                      : "ไม่อนุมัติ"
+                      : "ปฎิเสธ"
                   }}</span>
                 </div>
               </template>
@@ -1060,7 +1058,7 @@
                       ? "อนุมัติ"
                       : edited_coach_leave_data.status === "cancel"
                       ? "ยกเลิก"
-                      : "ไม่อนุมัติ"
+                      : "ปฎิเสธ"
                   }}</span>
                 </div>
               </v-col>

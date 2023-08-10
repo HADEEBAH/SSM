@@ -23,7 +23,7 @@
             dense
             prepend-inner-icon="mdi-magnify"
             outlined
-            placeholder="ค้นหาหมายเลขใบสั่งซื้อ, ชื่อผู้เรียน, ชื่อคอร์ส"
+            placeholder="ค้นหา"
             v-model="search"
           ></v-text-field>
         </v-col>

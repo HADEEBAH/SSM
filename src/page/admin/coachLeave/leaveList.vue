@@ -209,7 +209,7 @@
                 ? "อนุมัติ"
                 : item.status === "cancel"
                 ? "ยกเลิก"
-                : "ไม่อนุมัติ"
+                : "ปฎิเสธ"
             }}</span>
           </div>
         </template>
@@ -352,7 +352,7 @@ export default {
         img: "../../../assets/coachLeave/wait.png",
       },
       {
-        name: "ไม่อนุมัติ",
+        name: "ปฎิเสธ",
         value: "reject",
         img: "../../../assets/coachLeave/disaccept.png",
       },

@@ -836,7 +836,7 @@ const coachModules = {
         if (data.statusCode === 201) {
           Swal.fire({
             icon: "success",
-            title: "บันทึกสำเร็จ",
+            title: "ส่งใบลา สำเร็จ",
             showDenyButton: false,
             showCancelButton: false,
             cancelButtonText: "ยกเลิก",
@@ -896,7 +896,7 @@ const coachModules = {
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${coach_leave_id}`, { status: status }, config)
         if (data.statusCode === 200) {
           let getLeaves = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${account_id}`, config)
-          if (data.statusCode === 200) {
+          if (getLeaves.data.statusCode === 200) {
             context.commit("SetCoachLeaves", getLeaves.data.data)
             Swal.fire({
               icon: "success",
@@ -913,6 +913,8 @@ const coachModules = {
       }
     },
     async updateStatusCoachLeaveAndCoach(context, { coach_leave_data, coach_leave_id }) {
+      console.log("coach_leave_data", coach_leave_data.status);
+      console.log("coach_leave_id", coach_leave_id);
       context.commit("SetCoachLeavesIsLoading", true)
       try {
         let config = {
@@ -924,19 +926,36 @@ const coachModules = {
         };
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coach/leave/coach/status/${coach_leave_id}`, coach_leave_data, config)
         if (data.statusCode == 200) {
-          Swal.fire({
-            icon: "success",
-            title: "บันทึกสำเร็จ",
-            showDenyButton: false,
-            showCancelButton: false,
-            cancelButtonText: "ยกเลิก",
-            confirmButtonText: "ตกลง",
-          }).then(async (result) => {
-            if (result.isConfirmed) {
-              context.dispatch("GetLeavesDetail", { coach_leave_id: coach_leave_id })
-            }
-          })
-          context.commit("SetCoachLeavesIsLoading", false)
+          if (coach_leave_data.status === "reject") {
+            Swal.fire({
+              icon: "success",
+              title: "ยืนยันการปฎิเสธ",
+              showDenyButton: false,
+              showCancelButton: false,
+              cancelButtonText: "ยกเลิก",
+              confirmButtonText: "ตกลง",
+            }).then(async (result) => {
+              if (result.isConfirmed) {
+                context.dispatch("GetLeavesDetail", { coach_leave_id: coach_leave_id })
+              }
+            })
+            context.commit("SetCoachLeavesIsLoading", false)
+          } else if (coach_leave_data.status === "approved") {
+            Swal.fire({
+              icon: "success",
+              title: "ยืนยันการอนุมัติ",
+              showDenyButton: false,
+              showCancelButton: false,
+              cancelButtonText: "ยกเลิก",
+              confirmButtonText: "ตกลง",
+            }).then(async (result) => {
+              if (result.isConfirmed) {
+                context.dispatch("GetLeavesDetail", { coach_leave_id: coach_leave_id })
+              }
+            })
+            context.commit("SetCoachLeavesIsLoading", false)
+          }
+
         }
       } catch (error) {
         context.commit("SetCoachLeavesIsLoading", false)

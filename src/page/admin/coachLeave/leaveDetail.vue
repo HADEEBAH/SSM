@@ -36,7 +36,7 @@
                   ? "อนุมัติ"
                   : coach_leave.status === "cancel"
                   ? "ยกเลิก"
-                  : "ไม่อนุมัติ"
+                  : "ปฎิเสธ"
               }}
             </v-chip>
           </v-col>
@@ -360,7 +360,7 @@
               outlined
               color="#ff6b81"
             >
-              ไม่อนุมัติ
+              ปฎิเสธ
             </v-btn>
           </v-col>
           <v-col cols="auto">
@@ -383,58 +383,67 @@
       :width="$vuetify.breakpoint.smAndUp ? '60vw' : ''"
     >
       <v-card>
-        <v-row dense>
-          <v-col align="right">
-            <v-btn icon @click="closeDisapprovedDialog()"
-              ><v-icon color="#ff6b81">mdi-close</v-icon></v-btn
-            >
-          </v-col>
-        </v-row>
-        <v-card-title>
-          <v-row dense>
-            <v-col align="center">
-              <span class="text-[#D1392B] font-bold">ปฏิเสธคำขอลา</span>
-            </v-col>
-          </v-row>
-        </v-card-title>
-        <v-card-text>
-          <v-row>
-            <v-col align="center">
-              <v-img
-                width="175"
-                height="185"
-                src="../../../assets/coachLeave/disapproved.png"
-              ></v-img>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col>
-              <label-custom text="เหตุผลการปฏิเสธ"></label-custom>
-              <v-textarea
-                v-model="coach_leave.remark_reject"
-                outlined
-                dense
-                placeholder="กรอกรายระเอียด..."
-              ></v-textarea>
-            </v-col>
-          </v-row>
+        <v-container>
           <v-row dense>
             <v-col align="right">
-              <v-btn @click="closeDisapprovedDialog()" text color="#ff6b81" dark
-                >ยกเลิก</v-btn
-              >
-            </v-col>
-            <v-col>
-              <v-btn
-                depressed
-                color="#ff6b81"
-                dark
-                @click="updateStatus('reject')"
-                >ตกลง</v-btn
+              <v-btn icon @click="closeDisapprovedDialog()"
+                ><v-icon color="#ff6b81">mdi-close</v-icon></v-btn
               >
             </v-col>
           </v-row>
-        </v-card-text>
+          <v-card-title>
+            <v-row dense>
+              <v-col align="center">
+                <span class="text-[#D1392B] font-bold">ปฏิเสธคำขอลา</span>
+              </v-col>
+            </v-row>
+          </v-card-title>
+          <v-card-text>
+            <v-row>
+              <v-col align="center">
+                <v-img
+                  width="175"
+                  height="185"
+                  src="../../../assets/coachLeave/disapproved.png"
+                ></v-img>
+              </v-col>
+            </v-row>
+            <v-form ref="user_form" v-model="user_form">
+              <v-row>
+                <v-col>
+                  <label-custom text="เหตุผลการปฏิเสธ"></label-custom>
+                  <v-textarea
+                    v-model="coach_leave.remark_reject"
+                    outlined
+                    dense
+                    placeholder="กรอกรายระเอียด..."
+                  ></v-textarea>
+                </v-col>
+              </v-row>
+            </v-form>
+            <v-row dense>
+              <v-col align="right">
+                <v-btn
+                  @click="closeDisapprovedDialog()"
+                  text
+                  color="#ff6b81"
+                  dark
+                  >ยกเลิก</v-btn
+                >
+              </v-col>
+
+              <v-col>
+                <v-btn
+                  depressed
+                  color="#ff6b81"
+                  @click="updateStatus('reject')"
+                  :disabled="!coach_leave.remark_reject"
+                  >ตกลง</v-btn
+                >
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-container>
       </v-card>
     </v-dialog>
   </v-container>
@@ -449,6 +458,7 @@ export default {
   name: "leaveDetail",
   components: { headerPage, LabelCustom, VueTimepicker },
   data: () => ({
+    user_form: false,
     periods: [
       { label: "ลาเต็มวัน", value: "full" },
       { label: "ลาช่วงเช้า", value: "morning" },
@@ -553,28 +563,59 @@ export default {
       window.open(file.attachmentFileUrl, "_blank");
     },
     updateStatus(status) {
-      let text =
-        status === "reject"
-          ? "ต้องการปฏิเสธใบลานี้หรือไม่?"
-          : "ต้องการอนุมัติใบลานี้หรือไม่?";
-      Swal.fire({
-        icon: "question",
-        text: text,
-        showDenyButton: false,
-        showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          this.coach_leave.status = status;
-          this.updateStatusCoachLeaveAndCoach({
-            coach_leave_id: this.coach_leave.coachLeaveId,
-            coach_leave_data: this.coach_leave,
-          }).then(() => {
-            this.closeDisapprovedDialog();
+      if (status == "reject") {
+        this.$refs.user_form.validate();
+      } else if (status == "approved") {
+        this.user_form = true;
+        if (this.user_form) {
+          let text =
+            status === "reject"
+              ? "ต้องการปฏิเสธใบลานี้หรือไม่?"
+              : "ต้องการอนุมัติใบลานี้หรือไม่?";
+          Swal.fire({
+            icon: "question",
+            text: text,
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonText: "ตกลง",
+            cancelButtonText: "ยกเลิก",
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              this.coach_leave.status = status;
+              this.updateStatusCoachLeaveAndCoach({
+                coach_leave_id: this.coach_leave.coachLeaveId,
+                coach_leave_data: this.coach_leave,
+              }).then(() => {
+                this.closeDisapprovedDialog();
+              });
+            }
           });
         }
-      });
+      }
+      if (this.user_form) {
+        let text =
+          status === "reject"
+            ? "ต้องการปฏิเสธใบลานี้หรือไม่?"
+            : "ต้องการอนุมัติใบลานี้หรือไม่?";
+        Swal.fire({
+          icon: "question",
+          text: text,
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: "ตกลง",
+          cancelButtonText: "ยกเลิก",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            this.coach_leave.status = status;
+            this.updateStatusCoachLeaveAndCoach({
+              coach_leave_id: this.coach_leave.coachLeaveId,
+              coach_leave_data: this.coach_leave,
+            }).then(() => {
+              this.closeDisapprovedDialog();
+            });
+          }
+        });
+      }
     },
   },
 };
