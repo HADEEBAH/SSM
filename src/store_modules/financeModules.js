@@ -22,16 +22,6 @@ const financeModules = {
     }
   },
   actions: {
-    async financeDetail(context,{order_number}){
-      try{
-        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/${order_number}`)
-        if(data.stateCode == 200){
-          // // console.log(data)
-        }
-      }catch(error){
-        // // console.log(error)
-      }
-    },
     async financeFilter(context,{filter}){
       context.commit("SetFinanceLoading",true)
       try{
@@ -42,8 +32,6 @@ const financeModules = {
               'Authorization' : `Bearer ${VueCookie.get("token")}`
           }
         }
-        // console.log("37 =>",filter)
-        // let localhost = "http://localhost:3000"
         let endpoint = `${process.env.VUE_APP_URL}/api/v1/adminpayment/filter?`
         endpoint = endpoint + `studentName=${filter.students}&`
         endpoint = endpoint + `status=${filter.payment_status}&`
@@ -58,10 +46,8 @@ const financeModules = {
         endpoint = endpoint + `paymentDateEnd=${filter.date_pay_end}&`
         endpoint = endpoint + `priceMin=${filter.service_charge_start}&`
         endpoint = endpoint + `priceMax=${filter.service_charge_end}`
-        // console.log(endpoint)
         let {data} = await axios.get( endpoint, config)
         if(data.statusCode == 200){
-          // console.log(data.data)
           let reports = []
           let sumPrice = 0
           let sumPending = 0
@@ -120,7 +106,6 @@ const financeModules = {
               })
             }
           }
-           // // console.log(report);
            if(reports.length > 0){
               var workbook = XLSX.utils.book_new();
               var worksheet = XLSX.utils.json_to_sheet(reports);
@@ -148,7 +133,6 @@ const financeModules = {
         }
       }catch(error){
         context.commit("SetFinanceLoading",false)
-        // console.log(error)
       }
     }
   },

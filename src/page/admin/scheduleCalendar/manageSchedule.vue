@@ -71,77 +71,129 @@
 
           <div class="font-bold">ตารางวิชาเรียน</div>
           <!-- ตารางวิชาเรียน -->
-          <v-alert
-            class="my-2"
-            border="left"
-            colored-border
-            color="#ff6b81"
-            elevation="2"
-            v-for="(item, index) in courseDate"
-            :key="index"
+          <div
+            class="pa-2"
+            v-if="get_all_holidays_is_loading || get_all_course_is_loading"
           >
-            <!-- {{ item }} -->
-            <v-row dense class="font-bold">
-              <v-col cols="12" sm="6">
-                {{ item?.courseName?.courseNameTh }}</v-col
-              >
-              <v-col cols="12" sm="6">
-                {{ item?.time?.start }} - {{ item?.time?.end }}</v-col
-              >
-            </v-row>
-
-            <v-row dense>
-              <v-col cols="12" sm="6">โค้ช : {{ item?.coachName }} </v-col>
-              <v-col cols="12" sm="6">
-                <v-chip
-                  v-if="item?.cpo?.packageName"
-                  :color="
-                    item?.cpo?.packageName
-                      ? package_options.filter(
-                          (v) => v.value === item?.cpo?.packageName
-                        )[0]?.bg_color
-                      : ''
-                  "
-                  :style="
-                    item.cpo.packageName
-                      ? `color:${
-                          package_options.filter(
-                            (v) => v.value === item?.cpo?.packageName
-                          )[0]?.color
-                        }`
-                      : ''
-                  "
-                >
-                  {{
-                    item?.cpo?.packageName
-                      ? package_options.filter(
-                          (v) => v.value === item?.cpo?.packageName
-                        )[0]?.label
-                      : ""
-                  }}
-                </v-chip>
+            <v-row>
+              <v-col align="center">
+                <v-progress-circular
+                  :size="70"
+                  :width="7"
+                  color="#ff6b81"
+                  indeterminate
+                ></v-progress-circular>
               </v-col>
             </v-row>
-
-            <div v-if="item?.courseMonitor?.length > 0">
-              <v-row
-                dense
-                v-for="(seat, index) in item?.courseMonitor.filter(
-                  (v) => v.timeId === item.time.timeId
-                )"
-                :key="index"
-              >
-                <v-col
-                  cols="12"
-                  class="mdi mdi-account-group-outline"
-                  style="color: #ff6b81"
+          </div>
+          <div v-else-if="courseDate()">
+            <v-alert
+              class="my-2"
+              border="left"
+              colored-border
+              color="#ff6b81"
+              elevation="2"
+              v-for="(item, index) in courseDate()"
+              :key="index"
+            >
+              <!-- {{ item }} -->
+              <v-row dense class="font-bold">
+                <v-col cols="12" sm="6">
+                  {{ item?.courseName?.courseNameTh }}</v-col
                 >
-                  {{ seat?.currentStudent }} /
-                  {{ seat?.maximumStudent }} ที่นั่ง
+                <v-col cols="12" sm="6">
+                  {{ item?.time?.start }} - {{ item?.time?.end }}</v-col
+                >
+              </v-row>
+
+              <v-row dense>
+                <v-col cols="12" sm="6">โค้ช : {{ item?.coachName }} </v-col>
+                <v-col cols="12" sm="6">
+                  <v-chip
+                    v-if="item?.cpo?.packageName"
+                    :color="
+                      item?.cpo?.packageName
+                        ? package_options.filter(
+                            (v) => v.value === item?.cpo?.packageName
+                          )[0]?.bg_color
+                        : ''
+                    "
+                    :style="
+                      item.cpo.packageName
+                        ? `color:${
+                            package_options.filter(
+                              (v) => v.value === item?.cpo?.packageName
+                            )[0]?.color
+                          }`
+                        : ''
+                    "
+                  >
+                    {{
+                      item?.cpo?.packageName
+                        ? package_options.filter(
+                            (v) => v.value === item?.cpo?.packageName
+                          )[0]?.label
+                        : ""
+                    }}
+                  </v-chip>
                 </v-col>
               </v-row>
-            </div>
-          </v-alert>
+
+              <div v-if="item?.courseMonitor?.length > 0">
+                <v-row
+                  dense
+                  v-for="(seat, index) in item?.courseMonitor.filter(
+                    (v) => v.timeId === item.time.timeId
+                  )"
+                  :key="index"
+                >
+                  <v-col
+                    cols="12"
+                    class="mdi mdi-account-group-outline"
+                    style="color: #ff6b81"
+                  >
+                    {{ seat?.currentStudent }} /
+                    {{ seat?.maximumStudent }} ที่นั่ง
+                  </v-col>
+                </v-row>
+              </div>
+            </v-alert>
+          </div>
+
+          <div v-else>
+            <v-alert
+              class="my-2"
+              border="left"
+              colored-border
+              color="#ED7D2B"
+              elevation="2"
+              v-for="(item, index) in AllHolidayDate()"
+              :key="index"
+            >
+              <!-- {{ item }} -->
+
+              <v-row dense class="font-bold">
+                <v-col cols="12">
+                  วันหยุด {{ item?.fullDateHolidaysTh }}
+                </v-col>
+              </v-row>
+
+              <v-row dense class="font-bold">
+                <v-col cols="12" sm="6">
+                  {{ item?.holidayName }}
+                </v-col>
+
+                <v-col cols="12" sm="6">
+                  {{
+                    item?.allDay === true
+                      ? "ทั้งวัน"
+                      : `${item.holidayStartTime} - ${item.holidayEndTime}`
+                  }}
+                </v-col>
+              </v-row>
+            </v-alert>
+          </div>
+
           <!-- แก้ไขวันหยุด -->
         </v-card>
         <v-card class="pa-2 max-h-[300px] overflow-auto rounded-lg">
@@ -583,9 +635,7 @@
                 >
                   <template v-slot:no-data>
                     <v-list-item>
-                      <v-list-item-title>
-                        ไม่พบข้อมูลคอร์ส
-                      </v-list-item-title>
+                      <v-list-item-title> ไม่พบข้อมูลคอร์ส </v-list-item-title>
                     </v-list-item>
                   </template>
                   <template v-slot:selection="{ item, index }">
@@ -660,11 +710,9 @@
                   dense
                   placeholder="โค้ช"
                 >
-                <template v-slot:no-data>
+                  <template v-slot:no-data>
                     <v-list-item>
-                      <v-list-item-title>
-                        ไม่พบข้อมูลโค้ช
-                      </v-list-item-title>
+                      <v-list-item-title> ไม่พบข้อมูลโค้ช </v-list-item-title>
                     </v-list-item>
                   </template>
                   <template v-slot:selection="{ item, index }">
@@ -758,7 +806,6 @@ import axios from "axios";
 import { mapActions, mapGetters } from "vuex";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import headerPage from "@/components/header/headerPage.vue";
-// import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
 export default {
   components: {
     calendarAdmin,
@@ -859,7 +906,6 @@ export default {
       ],
     },
 
-    // events: [],
     setDataEditDialog: {},
     courseToday: [],
     resultSearchSchedule: null,
@@ -868,18 +914,6 @@ export default {
   created() {
     this.GetAllHolidays();
     this.GetAllCourse();
-  },
-  beforeMount() {
-    // const events = [];
-    // const startDate = new Date();
-    // const endDate = new Date();
-    // events.push({
-    //   name: this.names[this.rnd(0, this.names.length - 1)],
-    //   start: startDate,
-    //   end: endDate,
-    //   color: this.colors[this.rnd(0, this.colors.length - 1)],
-    // });
-    // this.events = events;
   },
   mounted() {
     this.GetCoachs();
@@ -900,15 +934,12 @@ export default {
     }),
 
     checkHour(startTime) {
-      // console.log("startTime", startTime);
       let hour = [];
       let h = startTime.split(":")[0];
-      // console.log("object", h);
       for (let hr = h; hr < 24; hr++) {
         if (hr > h) {
           hour.push(hr);
         }
-        // hour.push(hr);
       }
       return hour;
     },
@@ -949,7 +980,6 @@ export default {
     },
 
     setHolidaydates(item) {
-      // // console.log("item", item);
       const thaiMonths = [
         "มกราคม",
         "กุมภาพันธ์",
@@ -973,29 +1003,12 @@ export default {
       }
     },
 
-    // searchSchedule() {
-    //   // // console.log("search", this.search);
-    //   if (this.search !== "") {
-    //     if (this.data_filter_schedule) {
-    //       let res = this.data_filter_schedule.filter((items)=> this.search === items.name || this.search === items.coach || items.search === items.package || items.name.indexOf(this.search) !== -1 || items.coach.indexOf(this.search) !== -1 || items.package.indexOf(this.search) !== -1)
-    //       // // console.log("res=>", res);
-    //       this.resultSearchSchedule = res
-    //     }
-    //   }
-    // },
-
     async filterSchedules(courseId, coachId, status) {
       this.GetFilterSchedule({ courseId, coachId, status });
-      // // console.log({
-      //   courseId: courseId,
-      //   coach_id: coachId,
-      //   status: status,
-      // });
       this.filter_dialog = false;
     },
 
     async deleteHoliday() {
-      // // console.log("del", this.setDataEditDialog);
       Swal.fire({
         icon: "question",
         title: "คุณต้องการลบวันหยุดใช่หรือไม่ ?",
@@ -1030,7 +1043,10 @@ export default {
               });
             }
           } catch (error) {
-            // // console.log("SetDeleteHoliday", error);
+            Swal.fire({
+              icon: "error",
+              title: "เกิดข้อผิดพลาด",
+            })
           }
         }
       });
@@ -1099,7 +1115,6 @@ export default {
               }
             }
           } catch (error) {
-            // // console.log(error);
             if (error.response.data.statusCode === 400) {
               if (
                 error.response.data.message ==
@@ -1136,20 +1151,10 @@ export default {
 
     editHolidays(holiday) {
       this.show_dialog_edit_holoday = true;
-      // // console.log("holiday", holiday);
-      // // console.log(
-      //   "++++",
-      //   new Date(
-      //     `${holiday.holidayDate}/${holiday.holidayMonth}/${holiday.holidayYears}`
-      //   )
-      // );
-      // this.editHolidayDates = `${holiday.holidayDate}/${holiday.holidayMonth}/${holiday.holidayYears}`
-      // this.editHolidayDates = new Date(`${holiday.holidayDate}/${holiday.holidayMonth}/${holiday.holidayYears}`)
       this.setDataEditDialog = { ...holiday };
     },
 
     async editHolidaysData() {
-      // // console.log("setDataEditDialog", this.setDataEditDialog);
       this.setDataEditDialog.holidayDate = this.editHolidayDates
         ? this.editHolidayDates.split("-")[2]
         : this.setDataEditDialog.holidayDate;
@@ -1192,7 +1197,7 @@ export default {
             this.editHolidayDates = null;
             this.setDataEditDialog = {};
           } catch (error) {
-            // // console.log(error);
+            console.log(error);
           }
         }
       });
@@ -1229,38 +1234,8 @@ export default {
       this.editHolidayDates = null;
       this.holidaydatesTh = null;
     },
-  },
-
-  computed: {
-    ...mapGetters({
-      itemTime: "MyCourseModules/getcourseSchedule",
-      get_filter_course: "ManageScheduleModules/getFilterCourse", //get all course
-      get_all_course: "ManageScheduleModules/getAllCourse",
-      get_all_course_is_loading: "ManageScheduleModules/getAllCourseIsLoading",
-      date_arr: "ManageScheduleModules/getDateArray",
-      get_coachs: "CourseModules/getCoachs",
-      get_all_holidays: "ManageScheduleModules/getAllHolidays",
-      get_all_holidays_is_loading:
-        "ManageScheduleModules/getAllHolidaysIsLoading",
-      get_holidays_by_id: "ManageScheduleModules/getHolidaysById",
-      data_in_schedule: "ManageScheduleModules/getdataInSchadule",
-      data_filter_schedule: "ManageScheduleModules/getFilterSchedule",
-      data_search_schedule: "ManageScheduleModules/getSearchFilterSchedule",
-    }),
-    formattedDate() {
-      const date = new Date();
-      const day = this.thaiDaysOfWeek[date.getDay()];
-      const dateNumber = date.getDate();
-      const month = this.thaiMonths[date.getMonth()];
-      const year = date.getFullYear() + 543; // Add 543 to convert to Thai year
-
-      return `${day} ${dateNumber} ${month} ${year}`;
-    },
-
     courseDate() {
       let courseTodayDate = new Date().toLocaleDateString("en-CA");
-      // let courseTodayDate = new Date("2023-06-13").toLocaleDateString("en-CA");
-
       let getAllCourseDate = [];
       let success = "";
       let allCourse = [];
@@ -1276,6 +1251,46 @@ export default {
       }
 
       return success && allCourse;
+    },
+    AllHolidayDate() {
+      let holyTodayDate = new Date().toLocaleDateString("en-CA");
+
+      let allHolidaysData = [];
+      for (let [index, item] of this.date_Holy_arr.entries()) {
+        if (holyTodayDate == item) {
+          allHolidaysData.push(this.get_all_holidays[index]);
+        }
+      }
+      return allHolidaysData;
+    },
+  },
+
+  computed: {
+    ...mapGetters({
+      itemTime: "MyCourseModules/getcourseSchedule",
+      get_filter_course: "ManageScheduleModules/getFilterCourse", //get all course
+      get_all_course: "ManageScheduleModules/getAllCourse",
+      get_all_course_is_loading: "ManageScheduleModules/getAllCourseIsLoading",
+      date_arr: "ManageScheduleModules/getDateArray",
+      date_Holy_arr: "ManageScheduleModules/getHolidayDateArray",
+      get_coachs: "CourseModules/getCoachs",
+      get_all_holidays: "ManageScheduleModules/getAllHolidays",
+      get_all_holidays_is_loading:
+        "ManageScheduleModules/getAllHolidaysIsLoading",
+      get_holidays_by_id: "ManageScheduleModules/getHolidaysById",
+      data_in_schedule: "ManageScheduleModules/getdataInSchadule",
+      data_filter_schedule: "ManageScheduleModules/getFilterSchedule",
+      data_search_schedule: "ManageScheduleModules/getSearchFilterSchedule",
+    }),
+
+    formattedDate() {
+      const date = new Date();
+      const day = this.thaiDaysOfWeek[date.getDay()];
+      const dateNumber = date.getDate();
+      const month = this.thaiMonths[date.getMonth()];
+      const year = date.getFullYear() + 543; // Add 543 to convert to Thai year
+
+      return `${day} ${dateNumber} ${month} ${year}`;
     },
   },
 };

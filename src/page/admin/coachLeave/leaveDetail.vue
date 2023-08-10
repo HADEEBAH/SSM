@@ -560,8 +560,6 @@ export default {
       coach_selected.substitutefullNameTh = coach_detail.fullNameTh;
     },
     dowloadFile(file) {
-      // // console.log(file)
-      // let url = `${process.env.VUE_APP_URL}/api/v1/files/${file.attachmentFile}`
       window.open(file.attachmentFileUrl, "_blank");
     },
     updateStatus(status) {

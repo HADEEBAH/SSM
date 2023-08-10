@@ -112,7 +112,7 @@
         >
           ไม่มีรูปตัวอย่าง <br />
           <span class="font-weight-bold">คำแนะนำ</span> : ควรอัปโหลดรูปที่มีขนาด
-          1280 x 500px
+          1024 x 576 (16:9)
         </v-alert>
       </v-col>
     </v-row>
@@ -134,11 +134,8 @@
 import { mapActions, mapGetters } from "vuex";
 import { CheckFileSizeV2, CheckFileSizeType } from "@/functions/functions";
 import Swal from "sweetalert2";
-// import mixin from "../../../mixin";
-// import Swal from "sweetalert2";
 export default {
   components: {},
-  // mixins:[mixin],
   data() {
     return {
       files_input: [],
@@ -228,7 +225,6 @@ export default {
     },
 
     async removeBannerFiles(id) {
-      // // console.log("id", id);
       Swal.fire({
         icon: "question",
         text: "คุณต้องการลบแบรนเนอร์ใช่หรือไม่",

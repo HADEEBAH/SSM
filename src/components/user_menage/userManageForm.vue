@@ -896,9 +896,6 @@ export default {
     register_type: "",
     test: "",
     search: "",
-
-    // sortBy: [],
-    // privilege: "",
     relation: {
       account_id: "",
       firstname_en: "",
@@ -1106,26 +1103,6 @@ export default {
       return `${process.env.VUE_APP_URL}/api/v1/files/${item}`;
     },
 
-    // uploadFile() {
-    //   this.file = this.$refs.fileInput.files[0];
-    //   if (!this.file) return;
-    //   const reader = new FileReader();
-    //   reader.onload = (e) => {
-    //     this.previewUrl = e.target.result;
-    //   };
-    //   reader.readAsDataURL(this.file);
-    // },
-
-    // uploadFile() {
-    //   this.file = this.$refs.fileInput.files[0];
-    //   if (!this.file) return;
-    //   const reader = new FileReader();
-    //   reader.onload = (e) => {
-    //     this.previewUrl = e.target.result;
-    //   };
-    //   reader.readAsDataURL(this.file);
-    // },
-
     uploadFile() {
       let allowedExtension = [
         "image/jpeg",
@@ -1321,7 +1298,6 @@ export default {
                       tel: "",
                     };
                     this.GetDataRelationsManagement(this.show_by_id);
-                    // this.GetDataRelationsManagement(this.data_user_by_id);
                   }
                 });
               } else {
@@ -1392,9 +1368,7 @@ export default {
                   ? this.$route.params.account_id
                   : relations.studentId,
             }).then(() => {
-              // this.GetAll(this.user_login.account_id);
               this.GetDataRelationsManagement(this.show_by_id);
-              // this.GetDataRelationsManagement(this.data_user_by_id);
             });
           }
         }
@@ -1409,12 +1383,9 @@ export default {
     registerParent() {
       this.register_type = "parent";
       this.register_type = "student";
-      // this.changeCourseOrderData(this.course_order)
       this.changeDialogRegisterOneId(true);
     },
     updateData(account_id) {
-      // console.log("account_id", account_id);
-      // console.log("ghdsc", this.user_form);
 
       this.$refs.user_form.validate();
       if (this.user_form) {
@@ -1506,8 +1477,6 @@ export default {
                     type: null,
                   });
                   setTimeout(() => {
-                    // console.log("========>>>>", this.user_data[0]);
-                    // console.log("show_by_id", this.show_by_id);
                     let payload = {
                       ...this.show_by_id,
                       passWord: null,
@@ -1520,11 +1489,9 @@ export default {
                       this.registerHaveOneId(payload);
                     }
                   }, 1000);
-                  // this.user_data
                 } else {
                   this.error_message = "ไม่พบผู้ใช้";
                 }
-                // console.log("555555", this.user_one_temp);
               } else {
                 this.error_message = "เกิดข้อผิดพลาด";
               }
@@ -1568,18 +1535,12 @@ export default {
       }
       return dayNames.join(" , ");
     },
-
-    // getThaiDayOfWeek(date) {
-    //   const dayIndex = new Date(date).getDay();
-    //   return this.thaiDaysOfWeek[dayIndex];
-    // },
   },
 
   computed: {
     ...mapGetters({
       show_dialog_register_one_id: "RegisterModules/getShowDialogRegisterOneId",
       students: "UserManageModules/getStudent",
-      // user_data: "UserManageModules/getUserData",
       parents: "UserManageModules/getParent",
       show_by_id: "UserModules/getShowById",
       student_schedule: "UserModules/getStudentSchedule",
@@ -1614,7 +1575,6 @@ export default {
           parentId: this.last_user_registered.account_id,
         }).then(() => {
           this.GetDataRelationsManagement(this.show_by_id);
-          // this.GetDataRelationsManagement(this.data_user_by_id);
         });
       } else if (this.last_user_registered.type === "student") {
         this.AddRelations({
@@ -1622,7 +1582,6 @@ export default {
           studentId: this.last_user_registered.account_id,
         }).then(() => {
           this.GetDataRelationsManagement(this.show_by_id);
-          // this.GetDataRelationsManagement(this.data_user_by_id);
         });
       }
       this.dialog_parent = false;
@@ -1630,7 +1589,6 @@ export default {
 
     "data_user_relation_management.length": function () {
       this.GetDataRelationsManagement(this.show_by_id);
-      // this.GetDataRelationsManagement(this.data_user_by_id);
       for (const show_data of this.show_by_id.userRoles) {
         if (show_data.roleId == "R_4") {
           if (this.data_user_relation_management.length > 0) {

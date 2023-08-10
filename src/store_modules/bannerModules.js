@@ -1,5 +1,4 @@
 import axios from "axios";
-// import Swal from "sweetalert2";
 import VueCookie from "vue-cookie";
 const bannerModules = {
   namespaced: true,
@@ -19,11 +18,10 @@ const bannerModules = {
           // `http://localhost:3000/api/v1/banner`
         );
         if (data.statusCode === 200) {
-          // data.data.unshift(banner_default)
           context.commit("SetBannerList", data.data);
         }
       } catch (error) {
-        // // console.log("error", error);
+        console.log(error);
 
       }
     },
@@ -41,12 +39,11 @@ const bannerModules = {
           // `http://localhost:3000/api/v1/banner`, payload ,config
           `${process.env.VUE_APP_URL}/api/v1/banner`, payload, config
         );
-        // // console.log("data=>", data);
         if (data.statusCode === 201) {
           context.dispatch("GetBannerList")
         }
       } catch (error) {
-        // // console.log("error", error);
+        console.log(error);
       }
     },
 
@@ -67,7 +64,7 @@ const bannerModules = {
           context.dispatch("GetBannerList")
         }
       } catch (error) {
-        // // console.log("error", error);
+        console.log(error);
       }
     },
 

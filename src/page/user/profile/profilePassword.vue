@@ -49,8 +49,6 @@
 <script>
 import { inputValidation } from "@/functions/functions";
 import { mapActions, mapGetters } from "vuex";
-// import axios from "axios";
-// import Swal from "sweetalert2";
 export default {
   data: () => ({
     rules: {
@@ -74,29 +72,6 @@ export default {
     validate(e, type) {
       inputValidation(e, type);
     },
-
-    // async checkPassword() {
-
-    //   try {
-    //     const response = await axios.post("/api/check-password", {
-    //       password: this.checkPasswordtxt,
-    //     });
-    //     if (response.data.valid) {
-    //       // password is valid, do something
-    //       // console.log("success");
-    //     } else {
-    //       // console.log("fail");
-    //       // password is not valid, do something else
-    //       Swal.fire({
-    //         icon: "error",
-    //         title: "ข้อมูลผิดพลาด",
-    //         text: "รหัสผ่านไม่ตรงกัน",
-    //       });
-    //     }
-    //   } catch (error) {
-    //     // console.error(error);
-    //   }
-    // },
 
     checkPassword() {
       this.$router.push({name: "ProfileResetPassword"})

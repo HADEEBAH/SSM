@@ -117,7 +117,6 @@ import { mapActions } from "vuex";
 export default {
   name: "navbarAdmin",
   data: () => ({
-    // navbar_img: `http://localhost:8080/navbar_img.svg`,
     navbar_img: `${process.env.VUE_APP_URL}/navbar_img.svg`,
     logo: `${process.env.VUE_APP_URL}/logo.svg`,
     menu: false,
@@ -131,10 +130,7 @@ export default {
     user_detail: null,
     menu_drawer_list: [
       { title: "แดชบอร์ด", to: "Dashboard", child: [], roles: ['R_1', 'R_2']}, // to ให้ใส่ name ของ router
-      // { title: "แดชบอร์ด", to: "", child: [], roles: ['R_1', 'R_2']}, // to ให้ใส่ name ของ router
       { title: "ตารางเรียน", to: "ManageSchedule", child: [], roles: ['R_1', 'R_2']  },
-      // { title: "เพิ่มผู้เรียน", to: "Student", child: [] },
-      // { title: "ตารางเรียน", to: "Schedule", child: [] },
       { title: "เพิ่มผู้เรียน", to: "Student", child: [], roles: ['R_1', 'R_2']  },
       {
         title: "คอร์สเรียน",
@@ -163,7 +159,6 @@ export default {
         child: [{ title: "จัดการผู้ใช้งาน", to: "UserList",roles: ['R_1'], } ],
       },
       { title: "การอนุมัติลา", to: "LeaveList", child: [], roles: ['R_1'], },
-      // { title: "หน้าผู้ใช้งาน", to: "UserKingdom", child: [] },
       { title: "จัดการแบนเนอร์", to: "Banner", child: [], roles: ['R_1', 'R_2'], },
     ],
   }),

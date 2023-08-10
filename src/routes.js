@@ -33,7 +33,6 @@ import ProfileCertificate from '@/page/user/profile/profileCertificate.vue'
 import ProfilePassword from '@/page/user/profile/profilePassword.vue'
 import ProfileResetPassword from '@/page/user/profile/profileResetPassword.vue'
 import ProfileLanguages from '@/page/user/profile/profileLanguages.vue'
-import ProfilePolicy from '@/page/user/profile/profilePolicy.vue'
 import ProfileRules from '@/page/user/profile/profileRules.vue'
 // studentCourse
 import StudentsSchedule from '@/page/user/studentsCourse/studentsSchedule.vue'
@@ -42,11 +41,6 @@ import StudentBookedDetail from '@/page/user/studentsCourse/studentBookedDetail.
 //order
 import orderHistory from '@/page/user/order/orderHistory.vue'
 import callback from '@/page/callback/loginShareToken.vue'
-
-
-//auth
-// import UserLoginPage from '@/page/auth/userLoginPage'
-
 //User Course 
 import userCourseList from '@/page/user/course/userCourseList.vue'
 import userCourseDetail from '@/page/user/course/userCourseDetail.vue'
@@ -66,7 +60,6 @@ import Banner from '@/page/admin/banner/manageBanner.vue'
 // admin dashboard
 import Dashboard from '@/page/admin/dashboard/dashboardList.vue'
 import StudentList from '../src/page/admin/dashboard/studentList.vue'
-
 // admin course reserve
 import manageCourseReserve from '@/page/admin/courseReserve/manageCourseReserve.vue'
 // portfolio
@@ -314,11 +307,6 @@ const routes = [
         path: 'profileLanguages',
         name: 'ProfileLanguages',
         component: ProfileLanguages,
-      },
-      {
-        path: 'profilePolicy',
-        name: 'ProfilePolicy',
-        component: ProfilePolicy,
       },
       {
         path: 'profileRules',

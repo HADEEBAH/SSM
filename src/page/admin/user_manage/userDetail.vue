@@ -1256,7 +1256,7 @@
                 cols="12"
                 class="flex align-center justify-center text-caption"
               >
-                ( ขนาดไฟล์งานไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
+                ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
               </v-col>
               <v-col cols="12" class="flex align-center justify-center">
                 <v-btn outlined color="blue" @click="openFileSelector"
@@ -1346,9 +1346,6 @@ export default {
   data: () => ({
     tab: null,
     items: ["ข้อมูลทั่วไป", "คอร์สเรียน"],
-    // items: ["ข้อมูลทั่วไป", "คอร์สเรียน", "การแข่งขันและเกียรติบัตร"],
-    // text: "Lorem ipsum dolor",
-    // text2: "Lorem ipsum dolor2",
 
     breadcrumbs: [
       { text: "แดชบอร์ด", to: "StudentList" },
@@ -1530,11 +1527,9 @@ export default {
         this.isMatch = false;
         this.isNotMatch = true;
         this.username_alert = "ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบใหม่อีกครั้ง ";
-        // // console.log(this.username_alert, "--> false");
       }
     },
     submitEdit() {
-      // // console.log("submitEdit");
       Swal.fire({
         title: "คุณต้องการแก้ไขข้อมูลหรือไม่",
         showDenyButton: false,
@@ -1557,7 +1552,6 @@ export default {
     checkPhoneNumber() {
       let x = this.user_data.phone_num.replace(/\D/g, "");
       x = x.match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
-      // // console.log(x);
       this.user_data.phone_num = !x[2]
         ? x[1]
         : x[1] + "-" + x[2] + (x[3] ? "-" + x[3] : "");
@@ -1584,7 +1578,6 @@ export default {
       if (!this.file) return;
       if (CheckFileSizeV2(this.file, event.target.id) === true) {
         const fileType = this.file.type;
-        // // console.log("fileType", fileType);
         if (fileType === "image/png" || fileType === "image/jpeg") {
           const reader = new FileReader();
           reader.onload = (e) => {
@@ -1622,7 +1615,6 @@ export default {
     },
 
     addCertificateDialog() {
-      // // // console.log("type", type);
       this.status = "create";
       this.name_certificate = "";
       this.certificate_date = "";
@@ -1630,7 +1622,6 @@ export default {
       this.fileName = "";
       this.preview_url = null;
       this.certificate_dialog_show = true;
-      // this.certificateType = type;
     },
     editCertificateDialog(item, index) {
       this.status = "edit";
@@ -1649,11 +1640,6 @@ export default {
       this.certificate_dialog_show = true;
     },
     saveDialog() {
-      // // console.log("create success", {
-      //   name_certificate: this.name_certificate,
-      //   certificate_date: this.certificate_date,
-      //   previewUrl: this.previewUrl,
-      // });
 
       if (this.status == "create") {
         this.students.certificates.push({
@@ -1666,14 +1652,7 @@ export default {
       this.certificate_dialog_show = false;
     },
     saveEditDialog(index) {
-      // // console.log("create success", {
-      //   name_certificate: this.name_certificate,
-      //   certificate_date: this.certificate_date,
-      //   previewUrl: this.previewUrl,
-      // });
-
       if (this.status !== "create") {
-        // // console.log("edit select array", this.students.certificates[index]);
         this.students.certificates[index].name_certificate =
           this.name_certificate;
         this.students.certificates[index].certificate_date =
@@ -1695,7 +1674,6 @@ export default {
           type: type,
         }).then(() => {
           if (type === "student") {
-            // // console.log("user_student_data", this.course_order.students.filter);
             if (this.user_student_data.length > 0) {
               this.course_order.students.filter(
                 (v) => v.username === username
@@ -1753,7 +1731,6 @@ export default {
                 lastname_en: this.user_data[0].lastNameEng,
                 tel: this.user_data[0].mobileNo,
               };
-              // // console.log("course_order", this.course_order);
 
               if (
                 this.course_order.students.filter(
@@ -1778,7 +1755,6 @@ export default {
     },
     registerParent() {
       this.register_type = "parent";
-      // this.changeCourseOrderData(this.course_order)
       this.changeDialogRegisterOneId(true);
     },
     addParent() {
@@ -1801,17 +1777,13 @@ export default {
             };
             this.user_login = JSON.parse(localStorage.getItem("userDetail"));
 
-            // // console.log("object", this.user_data);
             for (const data of this.user_data) {
-              // // console.log("data", data);
               this.set_parent_id = data.userOneId;
-              // // console.log("userOneId", this.set_parent_id);
             }
             let payload = {
               studentId: this.user_login.account_id,
               parentId: this.set_parent_id,
             };
-            // // console.log("payload :", payload);
             let { data } = await axios.post(
               `${process.env.VUE_APP_URL}/api/v1/relations/user`,
               payload,
@@ -1820,7 +1792,6 @@ export default {
 
             if (data.statusCode === 201) {
               if (data.data && data.data.message !== "Duplicate relation.") {
-                // // console.log("succes");
                 this.add_parent = false;
                 this.user_login = JSON.parse(
                   localStorage.getItem("userDetail")
@@ -1833,7 +1804,6 @@ export default {
               throw { message: data.message };
             }
           } catch (error) {
-            // // console.log(error);
             Swal.fire({
               icon: "error",
               title: "Duplicate relation",
@@ -1862,7 +1832,6 @@ export default {
       return dayNames.join(" , ");
     },
     async search_data(name) {
-      // // console.log("name", name);
       try {
         let config = {
           headers: {
@@ -1876,7 +1845,7 @@ export default {
           config
         );
       } catch (error) {
-        // // console.log("err", error);
+        console.log(error);
       }
     },
   },
@@ -1902,47 +1871,28 @@ export default {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;
     },
-    // setFunc() {
-    //   // // console.log("=>");
-    //   this.GetAll(this.$route.params.account_id);
-    //   return "";
-    // },
   },
 
   watch: {
-    // "data_user_relation_management.length": function () {
     show_by_id: async function () {
-      // // console.log("=======================", this.show_by_id);
-      // // console.log(
-      //   "data_user_relation_management=>",
-      //   this.data_user_relation_management
-      // );
       await this.GetDataRelationsManagement(this.show_by_id);
-      // this.GetDataRelationsManagement(this.data_user_by_id);
       for await (const show_data of this.show_by_id?.userRoles) {
-        // // console.log("show_data", show_data);
         if (show_data.roleId == "R_4") {
           if (this.data_user_relation_management.length > 0) {
-            // this.isOpenParent = true;
             for (const item_relation of this.data_user_relation_management) {
               this.GetStudentSchedule(item_relation.studentId);
             }
           } else {
             this.GetStudentSchedule(this.show_by_id.userOneId);
-            // this.data_user_relation_management = [];
           }
         } else if (show_data.roleId == "R_5") {
           if (this.data_user_relation_management.length > 0) {
-            // this.isOpenStudent = true;
             for (const item_relation of this.data_user_relation_management) {
               this.GetStudentSchedule(item_relation.studentId);
             }
           } else {
             this.GetStudentSchedule(this.show_by_id.userOneId);
-            // this.data_user_relation_management = [];
           }
-        } else {
-          // // console.log("show_data", show_data.roleId);
         }
       }
     },

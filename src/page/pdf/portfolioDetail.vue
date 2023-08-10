@@ -1,19 +1,16 @@
 <template>
     <v-app>
       <v-container>
-        <!-- <pre>{{  this.GenCourses() }}</pre> -->
         <loadingOverlay :loading="true"></loadingOverlay>
       </v-container>
     </v-app>
   </template>
     <script>
-    // const { loadImage } = require('canvas')
     import pdfMake from 'pdfmake'
     import pdfFonts from '../../assets/custom-fonts.js'
     import loadingOverlay from "../../components/loading/loadingOverlay.vue";
     import { mapActions, mapGetters } from 'vuex';
     import moment from 'moment';
-    // import axios from "axios";
     export default {
       name: "FrontPortfolio",
       components: {
@@ -36,21 +33,15 @@
           GetPortfolioData : 'portfolioModules/GetPortfolioData'
         }),
         GenCourses(){
-          // let defaultProfile = require('../../assets/profile/default_profile.png')
-          // let defaultProfileImageData =  await this.loadImageFromFile(defaultProfile);
-          // let defaultProfileImageDataUrl = await this.convertImageToDataFile(defaultProfileImageData);
-          // console.log("37=>",this.portfolio_data)
           let courses = []
           let course_index = []
           for (let course of this.portfolio_data.courses){
             course_index.push('x')
-            // console.log("40=>",course)
             // IMG 
             let img_arr = []
             let img_col = []
             if(course.attachmensPictureAll){
               for (let img of course.attachmensPictureAll){
-                // // console.log(img)
                 this.images_files[img.attachmentAssessmentId] = img.assessmentAttachmentFilesUrl
                 img_col.push({
                   text: `${img.attachmentAssessmentId}`,
@@ -78,7 +69,6 @@
             let assed = []
             for(let ass of course.assessments){
               assed.push(ass)
-              // console.log("47=>",ass)
               let ass_columns = []
               if(ass.assessmentAttachmentFilesUrl){
                 this.images_files[ass.attachmentAssessmentId] = ass.assessmentAttachmentFilesUrl
@@ -99,8 +89,6 @@
                 stack:[
                   {text:[
                     {text : `วันที่: ${moment(ass.assessmentCreatedDate).format("DD/MM/YYYY")}`},
-                    // {text : 'สถานะ', blod: true},
-                    // {text : '', blod: true},
                   ]},
                   { text : "ระดับพัฒนาการ" },
                   { text : ass.assessmentEvolution ? ass.assessmentEvolution : '-' },
@@ -172,8 +160,6 @@
             let potential_arr = []
             let potential_columns = []
             if( course.assessmentPotentials.potentialAttachmentFilesUrl){ 
-              // this.images_files[course.assessmentPotentials.attachmentPotentialId] = course.assessmentPotentials.assessmentAttachmentFilesUrl
-              // // console.log("179 => ",course.assessmentPotentials.attachmentPotentialId)
               potential_columns.push({
                 alignment : 'center',
                 width: '50%',
@@ -405,13 +391,6 @@
           }
           
           pdfMake.createPdf(docDefinition).open({}, window)
-          // let pdfDoc = pdfMake.createPdf(docDefinition)
-          // pdfDoc.getBlob((blob) => {
-          //   var url = URL.createObjectURL(blob);
-            
-          //   // Open the PDF in a new tab
-          //   window.open(url);
-          // });
         },
         async currentPageBg(currentPage) {
             // Define the image paths

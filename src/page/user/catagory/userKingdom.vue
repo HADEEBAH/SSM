@@ -33,18 +33,26 @@
       "
     >
       <v-carousel
-        class="rounded-xl"
+        class="rounded-xl max-w-[1920px!important] max-h-[1080px!important]"
         cycle
+        height="auto"
         hide-delimiter-background
-        :height="height()"
         hide-delimiters
       >
         <v-carousel-item
           v-for="(slide, i) in banner_list"
           :key="i"
-          :src="slide.bannerPath"
-          cover
+        class="max-w-[1920px] max-h-[1080px]"
+          
+
         >
+        <v-img
+        :src="slide.bannerPath"
+        :aspect-ratio="16 / 9"
+        class="max-w-[1920px] max-h-[1080px]"
+        >
+
+        </v-img>
         </v-carousel-item>
       </v-carousel>
       <v-card-text>
@@ -84,7 +92,6 @@
               <v-img
                 @click="selectedCategory(item)"
                 :aspect-ratio="16 / 9"
-                cover
                 :src="
                   item.categoryImg && item.categoryImg !== ''
                     ? item.categoryImg
@@ -197,11 +204,9 @@ export default {
   created() {
     this.dataStorage = JSON.parse(localStorage.getItem("userDetail"));
     if (this.dataStorage) {
-      // // console.log("this.dataStorage created", this.dataStorage);
       this.GetAll(this.dataStorage.account_id);
     }
     localStorage.removeItem("Order");
-    //localStorage.setItem("Order", JSON.stringify(this.course_order));
   },
 
   beforeMount() {
@@ -236,7 +241,6 @@ export default {
       }
     },
     selectedCategory(category) {
-      // // console.log("category", category);
       this.course_order.kingdom = category.categoryNameTh;
       this.course_order.category_id = category.categoryId;
       this.changeCourseOrderData(this.course_order);
@@ -260,9 +264,6 @@ export default {
     showImg(item) {
       return `${process.env.VUE_APP_URL}/api/v1/files/${item}`;
     },
-    // shortenedText(detail) {
-    //   return this.detail.slice(0, 10);
-    // },
   },
 
   computed: {
@@ -277,7 +278,6 @@ export default {
     setFunctions() {
       this.$store.dispatch("CategoryModules/GetCategoryCourse");
       if (this.dataStorage) {
-        // // console.log("this.dataStorage compute", this.dataStorage);
         this.GetProfileDetail(this.dataStorage.account_id);
       }
 

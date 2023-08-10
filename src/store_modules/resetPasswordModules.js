@@ -47,7 +47,6 @@ const resetPasswordModules = {
         }
   
       } catch ({response}) {
-        // console.log("error", response);
         await context.commit("setSendTypeForgotPasswordMessage", response.data.message)
       }
 
@@ -74,7 +73,6 @@ const resetPasswordModules = {
         }
   
       } catch ({response}) {
-        // console.log("error", response);
         await context.commit("setSendResetPasswordMessage", response.data.message)
       }
 

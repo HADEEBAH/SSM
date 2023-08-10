@@ -296,7 +296,7 @@ export default {
       options_data: "CourseModules/getOptions",
     }),
     rules() {
-      const vm = this; // bind 'this' to the Vue component instance
+      const vm = this;
       return {
         packages: [
           function (val) {

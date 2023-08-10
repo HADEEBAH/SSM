@@ -515,7 +515,6 @@ export default {
     dialogDetailEnd(items) {
       this.course_detail_dialog_end = true;
       this.detail_dialog_end = items;
-      // // console.log("detail_dialog_end", this.detail_dialog_end);
     },
 
     dialogDetailBooked(items) {

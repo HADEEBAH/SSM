@@ -202,11 +202,10 @@
 
       <v-navigation-drawer
         v-if="user_detail"
+        fixed
         right
-        clipped
-        app
         v-model="drawer"
-        :temporary="$vuetify.breakpoint.smAndDown"
+        temporary
       >
         <v-row class="pt-8 pb-6">
           <v-col class="flex align-center justify-center">
@@ -228,7 +227,6 @@
                 style="max-width: 300px; max-height: 300px"
               />
             </div>
-            <!-- <img class="img-profile" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_N_JBXW49fAT5BDrX0izmY5Z8lx-we3Oag&usqp=CAU"/> -->
           </v-col>
         </v-row>
         <v-row dense>
@@ -407,8 +405,6 @@ export default {
       {
         icon: "mdi-swap-horizontal-bold",
         title: "หน้าผู้ดูแลระบบ",
-        // to: "ManageSchedule",
-        // to: "Admin",
         to: "Dashboard",
         params: null,
         roles: ["R_1", "R_2"],
@@ -445,11 +441,7 @@ export default {
     }
   },
   beforeMount() {
-    if (this.MobileSize) {
-      this.drawer = false;
-    } else {
-      this.drawer = true;
-    }
+    this.drawer = false;
   },
   mounted() {
    

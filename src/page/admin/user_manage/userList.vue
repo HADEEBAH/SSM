@@ -263,7 +263,6 @@ export default {
         { role: "ผู้ปกครอง", privilege: "ผู้ปกครอง", roleNumber: "R_4" },
         { role: "นักเรียน", privilege: "นักเรียน", roleNumber: "R_5" },
       ],
-      // roles: ["R_1", "R_2", "R_3", "R_4", "R_5"],
       user_data: {
         users: "",
       },
@@ -278,7 +277,6 @@ export default {
         },
         { text: "อีเมล", value: "email", sortable: false, align: "start" },
         { text: "ผู้ใช้", value: "userName", sortable: false, align: "start" },
-        // { text: "One ID", value: "oneid", sortable: false },
         { text: "บทบาท", value: "roles", sortable: false },
         { text: "จัดการ", value: "actions", sortable: false, align: "start" },
       ],
@@ -316,15 +314,11 @@ export default {
   },
 
   mounted() {
-    // this.GetUserList()
     this.$store.dispatch("UserModules/GetUserList");
     this.local_data = JSON.parse(localStorage.getItem("userDetail"));
-
-    // this.GetShowById(this.local_data.account_id);
   },
   created() {
     this.GetUserList();
-    // this.initialize();
   },
 
   methods: {
@@ -385,15 +379,12 @@ export default {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // setTimeout(() => {
-
-        // }, 1000);
         await axios.get(
           `${process.env.VUE_APP_URL}/api/v1/usermanagement/search?name=${name}`,
           config
         );
       } catch (error) {
-        // // console.log("err", error);
+        console.log(error);
       }
     },
 
@@ -406,18 +397,16 @@ export default {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // // console.log("role-role", role);
         await axios.get(
           // `http://localhost:3000/api/v1/getrole/query?roleId=${role}&roleId=${role}`,
           `${process.env.VUE_APP_URL}/api/v1/usermanagement/search?role=${role}`,
           config
         );
       } catch (error) {
-        // // console.log("err", error);
+        console.log("err", error);
       }
     },
     async deleteAccount(account_id) {
-      // // console.log("accountId", account_id);
       Swal.fire({
         icon: "question",
         title: "คุณต้องลบข้อมูลหรือไม่",
@@ -440,7 +429,6 @@ export default {
               `${process.env.VUE_APP_URL}/api/v1/usermanagement/${account_id}`,
               config
             );
-            // console.log(data);
             if (data.statusCode === 200) {
               if (typeof data.data === "string") {
                 throw { message: data };
@@ -458,7 +446,6 @@ export default {
               throw { message: data.message };
             }
           } catch (error) {
-            // // console.log(error);
             Swal.fire({
               icon: "error",
               title: "ลบข้อมูลไม่สำเร็จ",
@@ -470,13 +457,6 @@ export default {
       });
     },
     async selectedAll() {
-      // this.$nextTick(() => {
-      //     if (this.likesAllFruit) {
-      //       this.selectedFruits = []
-      //     } else {
-      //       this.selectedFruits = this.fruits.slice()
-      //     }
-      //   })
       let search_arr = [];
       this.selected_all_bool = !this.selected_all_bool;
       if (this.selected_all_bool) {
@@ -486,20 +466,16 @@ export default {
       }
       for await (let item of this.searchQuery) {
         search_arr.push(item.roleNumber);
-        // // console.log("ITEM", item);
       }
-      // // console.log("searchQuery", params);
       this.FilterGetUserList(
         search_arr.length > 0 ? search_arr : this.searchQuery
       );
     },
     async selectedRoles(role) {
-      // // console.log("objectROLE", role);
       this.query_roles = "";
       role.map((val) => {
         this.query_roles += `roleId=${val}&`;
       });
-      // // console.log("options_temp", this.query_roles);
       try {
         let config = {
           headers: {
@@ -514,12 +490,8 @@ export default {
           config
         );
         this.user_lists = data.data;
-        // if (data.data.length > 0) {
-        // } else {
-        // }
-        // // console.log("data=>", data);
       } catch (error) {
-        // // console.log("err", error);
+        console.log(error);
       }
     },
   },
@@ -530,24 +502,6 @@ export default {
       show_by_id: "UserModules/getShowById",
       filter_role: "UserModules/getfilterGetUserList",
     }),
-    // filterUserList() {
-    //   if (this.searchQuery.length > 0) {
-    //     // // console.log(
-    //       this.searchQuery.includes(this.user_list[0].userRoles[0].roleId)
-    //     );
-    //     // // console.log(
-    //       this.user_list.filter((v) => {
-    //         this.searchQuery.includes(v.userRoles[0].roleId);
-    //       })
-    //     );
-    //     return this.user_list.filter((v) => {
-    //       // // console.log(v.userRoles[0].roleId);
-    //       this.searchQuery.includes(v.userRoles[0].roleId);
-    //     });
-    //   } else {
-    //     return this.user_list;
-    //   }
-    // },
     formTitle() {
       return this.editedIndex === -1 ? "Edit" : "Edit";
     },
@@ -568,43 +522,6 @@ export default {
         return "mdi-checkbox-blank-outline";
       return "mdi-checkbox-blank-outline";
     },
-
-    // likesAllFruit() {
-    //   return this.selectedFruits.length === this.user_list.length;
-    // },
-    // likesSomeFruit() {
-    //   return this.selectedFruits.length > 0 && !this.likesAllFruit;
-    // },
-    // icon() {
-    //   if (this.likesAllFruit) return "mdi-close-box";
-    //   if (this.likesSomeFruit) return "mdi-minus-box";
-    //   return "mdi-checkbox-blank-outline";
-    // },
   },
 };
 </script>
-<!-- <style scoped>
-.card-user {
-  width: 222px;
-  height: 58px;
-  border-radius: 8px;
-}
-
-.btn-user {
-  position: absolute;
-  left: 80%;
-}
-.page {
-  position: absolute;
-  left: 80%;
-}
-
-.alluser {
-  position: absolute;
-  bottom: 25%;
-  left: 25%;
-}
-::v-deep .v-data-table-header {
-  background-color: #fce0e7;
-}
-</style> -->

@@ -157,7 +157,7 @@
                     cols="12"
                     class="flex align-center justify-center text-caption"
                   >
-                    ( ขนาดไฟล์งานไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
+                    ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
                   </v-col>
                   <v-col cols="12" class="flex align-center justify-center">
                     <v-btn
@@ -231,7 +231,7 @@
                     cols="12"
                     class="flex align-center justify-center text-caption"
                   >
-                    ( ขนาดไฟล์งานไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
+                  ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
                   </v-col>
                 </v-row>
                 <v-row dense>
@@ -404,7 +404,6 @@ export default {
       ResetCourseData: "CourseModules/ResetCourseData",
     }),
     save() {
-      // // // console.log("save")
       this.loading = true;
       this.course_data.course_file = this.file;
       this.ChangeCourseData(this.course_data);
@@ -451,7 +450,6 @@ export default {
       this.$refs.fileInputArtwork.click();
     },
     submitStep(index) {
-      // // console.log(index);
       if (this.course_data.course_type_id === "CT_1") {
         if (index === 0) {
           this.$refs.course_form.validate();
@@ -466,7 +464,6 @@ export default {
         } else if (index === 2) {
           this.$refs.package_form.validate();
           if (this.steps[index]) {
-            // this.save()
             this.step += 1;
           }
         } else if (index === 3) {
@@ -572,7 +569,6 @@ export default {
       const selectedFiles = event.target.files;
       const allowedTypes = ["image/png", "image/jpeg"];
       const fileUrls = [];
-      // // console.log(this.course_data);
       for (let i = 0; i < selectedFiles.length; i++) {
         const file = selectedFiles[i];
         if (CheckFileSize(file) === true) {

@@ -921,26 +921,14 @@ export default {
   },
 
   mounted() {
-    // if (
-    //   this.user_detail?.roles?.filter((val) => val === "R_4" || val === "R_5")
-    //     .length === 0
-    // ) {
-    //   router.replace({ name: "UserKingdom" });
-    // }
     this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
 
-    if (localStorage.getItem("userRelationsAccountId")) {
-      // // console.log(localStorage.getItem("userRelationsAccountId"));
-    } else if (
+    if (
       this.user_detail.roles.includes("R_5") ||
       this.user_detail.roles.includes("R_4")
     ) {
       this.GetStudentData(this.user_detail.account_id);
     }
-    // else {
-    //   // this.GetStudentData(null);
-    //   this.GetStudentData(this.user_detail.account_id);
-    // }
   },
 
   beforeUpdate() {
@@ -949,31 +937,6 @@ export default {
       "ข้อมูลตารางเรียน"
     );
   },
-
-  // watch: {
-  //   type_selected: function () {
-  //     // // console.log("type_selected", this.type_selected);
-  //     this.loading = true;
-  //     setTimeout(async () => {
-  //       this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-  //       if (this.type_selected == "MyCourse") {
-  //         if (this.user_detail.roles.includes("R_4")) {
-  //           this.GetStudentData(this.user_detail.account_id);
-  //           for (const item of JSON.parse(localStorage.getItem("relations"))) {
-  //             this.GetStudentData(item.student.studentId);
-  //             // // console.log("student");
-  //           }
-  //         } else if (this.user_detail.roles.includes("R_5")) {
-  //           this.GetStudentData(this.user_detail.account_id);
-  //         } else {
-  //           this.GetStudentData(null);
-  //         }
-  //       }
-
-  //       this.loading = false;
-  //     }, 200);
-  //   },
-  // },
   methods: {
     ...mapActions({
       GetStudentData: "MyCourseModules/GetStudentData",
@@ -981,12 +944,10 @@ export default {
       GetAll: "ProfileModules/GetAll",
       GetStudentReserve: "MyCourseModules/GetStudentReserve",
       loginShareToken: "loginModules/loginShareToken",
-      //COURSE
       GetCourse: "CourseModules/GetCourse",
     }),
     prev() {
       this.$refs.calendar.prev();
-      // // console.log(this.$refs.calendar.title);
     },
     next() {
       this.$refs.calendar.next();
@@ -999,17 +960,13 @@ export default {
       } else {
         this.activeCard = null;
       }
-      // set activeCard to the clicked index
     },
 
     async searchStudentCourse(studentId) {
       if (studentId !== null) {
         this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-        // // console.log("item1", studentId);
         await this.GetStudentData(studentId);
-        // // console.log("mycourse1", this.student_data);
       } else {
-        // // console.log("this.user_detail.account_id", this.user_detail.account_id);
         this.GetStudentData(this.user_detail.account_id);
       }
     },
@@ -1017,12 +974,10 @@ export default {
     async searchStudentSchadule(studentId) {
       this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
 
-      // // console.log("item", studentId);
       await this.GetStudentData(studentId);
     },
 
     async searchStudentBooked(studentId) {
-      // // console.log("item", studentId);
       await this.GetProfileBooked(studentId);
     },
     ReserveList() {
@@ -1043,22 +998,6 @@ export default {
           }
         });
       }
-
-      // this.student_reserve.forEach((reserve) => {
-      //   if (
-      //     reserveList.filter(
-      //       (v) =>
-      //         v.coachId == reserve.coachId &&
-      //         v.courseId == reserve.courseId &&
-      //         v.dayOfWeekId === reserve.dayOfWeekId &&
-      //         v.timeId === reserve.timeId &&
-      //         v.studentId === reserve.studentId
-      //     ).length === 0
-      //   ) {
-      //     reserveList.push(reserve);
-      //   }
-      // });
-      // // // console.log("student_reserve :", this.student_reserve);
       return reserveList;
     },
     dayOfWeekName(days) {
@@ -1105,14 +1044,8 @@ export default {
       student_is_loading: "MyCourseModules/getStudentsLoading",
       my_course: "MyCourseModules/getMyCourse",
     }),
-    // studentData: {
-    //   get() {
-    //     return this.student_data;
-    //   },
-    // },
     setFunctions() {
       if (this.user_detail.roles.includes("R_5")) {
-        // this.GetStudentReserve(this.user_detail.account_id);
         this.GetAll(this.user_detail.account_id);
       } else if (this.user_detail.roles.includes("R_4")) {
         this.GetAll(this.user_detail.account_id);

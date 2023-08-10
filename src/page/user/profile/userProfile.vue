@@ -1,8 +1,4 @@
-//USER profile
-
-
 <template>
-  <!-- <v-form ref="form" v-model="valid" lazy-validation> -->
   <v-container>
     <loading-overlay :loading="categorys_is_loading"></loading-overlay>
     <v-row dense>
@@ -307,7 +303,7 @@
     <v-divider class=""></v-divider>
 
     <!-- policy -->
-    <v-row dense class="mt-3" @click="show_policy()">
+    <!-- <v-row dense class="mt-3" @click="show_policy()">
       <v-col cols="2" sm="1">
         <img src="@/assets/profile/policy.png" />
       </v-col>
@@ -318,14 +314,14 @@
       <v-col cols="2" sm="2" align="right">
         <span class="mdi mdi-chevron-right"></span>
       </v-col>
-    </v-row>
+    </v-row> -->
     <!-- rules -->
     <v-row dense class="mt-3" @click="show_rules()">
       <v-col cols="2" sm="1">
         <img src="@/assets/profile/rules.png" />
       </v-col>
       <v-col cols="8" sm="9" align="left" class="mt-1">
-        <label>ข้อกำหนดการและเงื่อนไขการใช้บริการ</label>
+        <label>เงื่อนไขการใช้บริการและนโยบายการคุ้มครองข้อมูลส่วนบุคคล</label>
       </v-col>
 
       <v-col cols="2" sm="2" align="right">
@@ -840,12 +836,10 @@ export default {
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
   },
   beforeMount() {
-    // alert(this.user_login.account_id)
     this.GetRelationDataV2(this.user_login.account_id);
     this.GetProfileDetail(this.user_login.account_id);
     this.GetStudentCourse(this.user_login.account_id);
 
-    //get student course
   },
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "โปรไฟล์");
@@ -929,9 +923,6 @@ export default {
     show_password() {
       this.$router.push({ name: "ForgotPassword" });
 
-    },
-    show_policy() {
-      this.$router.push({ name: "ProfilePolicy" });
     },
     show_rules() {
       this.$router.push({ name: "ProfileRules" });
@@ -1108,7 +1099,6 @@ export default {
     },
 
     async addRelations() {
-      // if (this.$refs.form.validate()) {
       Swal.fire({
         icon: "question",
         title: "คุณต้องการเพิ่มผู้ปกครองหรือไม่",
@@ -1142,8 +1132,8 @@ export default {
             }
 
             let { data } = await axios.post(
-              `http://localhost:3000/api/v1/relations/user`,
-              // `${process.env.VUE_APP_URL}/api/v1/relations/user`,
+              // `http://localhost:3000/api/v1/relations/user`,
+              `${process.env.VUE_APP_URL}/api/v1/relations/user`,
               payload,
               config
             );
@@ -1155,14 +1145,6 @@ export default {
                   icon: "success",
                   title: "บันทึกสำเร็จ",
                 });
-                // .then(async (result) => {
-                // if (result.isConfirmed) {
-                // this.user_login = JSON.parse(
-                //   localStorage.getItem("userDetail")
-                // );
-                // this.GetRelationDataV2(this.user_login.account_id)
-                // }
-                // });
                 this.add_relation = false;
                 this.GetRelationDataV2(this.user_login.account_id);
               } else {
@@ -1217,7 +1199,6 @@ export default {
           Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
         }
       });
-      // }
     },
 
     myCourseStudent(item) {
@@ -1254,18 +1235,6 @@ export default {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;
     },
-
-    // setFunctions() {
-    //   this.GetAll(this.user_login.account_id);
-    //   this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
-    //   this.GetProfileDetail(this.user_login.account_id);
-    //   this.GetRelations({
-    //     student_id: this.user_login.account_id,
-    //     parent_id: "",
-    //   });
-
-    //   return "";
-    // },
   },
 };
 </script>

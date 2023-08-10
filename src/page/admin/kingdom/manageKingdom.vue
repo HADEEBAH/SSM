@@ -102,7 +102,6 @@ export default {
       categorys: "CategoryModules/getCategorys",
     }),
     LoadingTable() {
-      // // console.log(this.categorys);
       return !this.categorys;
     },
   },

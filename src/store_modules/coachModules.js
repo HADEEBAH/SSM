@@ -80,10 +80,8 @@ const coachModules = {
         },
       };
       try {
-        // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/manage/course-filter/${account_id}/?startDate=${start_date}&endDate=${end_date}`, config)
         if (data.statusCode == 200) {
-          // // // console.log("78 =>",data.data)
           for (let course of data.data) {
             if (course.courseTypeId === 'CT_2') {
               course.dayOfWeekName = course.dayOfWeekName.split(",")
@@ -94,16 +92,14 @@ const coachModules = {
         }
       } catch (error) {
         context.commit("SetMyCoursesLeaveIsLoading", false)
-        // // console.log(error)
       }
     },
     async DeleteAssessmentPotentialFile(context, { att_assessment_id }) {
       try {
-        // let localhost = "http://localhost:3000"
         let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/potential/${att_assessment_id}`)
         console.log(data)
       } catch (error) {
-        // // console.log(error)
+        console.log(error)
       }
     },
     async DeleteAssessmentFile(context, { att_assessment_id }) {
@@ -111,16 +107,15 @@ const coachModules = {
         let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${att_assessment_id}`)
         console.log(data)
       } catch (error) {
-        // // console.log(error)
+        console.log(error)
       }
     },
     async DeleteSummaryFile(context, { att_assessment_id }) {
       try {
-        // let localhost = "http://localhost:3000"
         let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/summary/${att_assessment_id}`)
         console.log(data)
       } catch (error) {
-        // // console.log(error)
+        console.log(error)
       }
     },
     // ASSESSMENT POTENTIAL
@@ -145,16 +140,13 @@ const coachModules = {
           let payloadData = new FormData()
           if (student.potentialfiles) {
             for (const file of student.potentialfiles) {
-              // file.fileName  = encodeURIComponent(file.name);
               payloadData.append("img_url", file);
             }
           }
           payloadData.append("payload", JSON.stringify(payload))
-          // let localhost = "http://localhost:3000"
           let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/potential/${student.potential.checkInPotentialId}`, payloadData, config)
           if (data.statusCode == 200) {
             count = count + 1
-            // // console.log("patch", data)
           } else {
             throw { error: data }
           }
@@ -181,7 +173,6 @@ const coachModules = {
 
       } catch (error) {
         context.commit("SetStudentCheckInIsLoading", false)
-        // // console.log(error)
       }
     },
     // ASSESSMENT
@@ -196,7 +187,6 @@ const coachModules = {
           },
         };
         let count = 0
-        // // console.log(students.length)
         for await (const student of students) {
           if (student.assessment.rating_evolution === 3) {
             student.assessment.evolution = "adjust"
@@ -225,30 +215,22 @@ const coachModules = {
           let payloadData = new FormData()
           if (student.files) {
             for (const file of student.files) {
-              // // // console.log(file)
-              // file.fileName  = encodeURIComponent(file.name);
               payloadData.append(`img_url`, file, file.fileName);
             }
           }
           if (!student.assessment.assessmentStudentsId) {
-            // console.log("post", payload)
             payloadData.append("payload", JSON.stringify(payload))
-            // let localhost = "http://localhost:3000"
             let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`, payloadData, config)
             if (data.statusCode == 201) {
               count = count + 1
-              // // console.log("post", data)
             } else {
               throw { error: data }
             }
           } else {
-            // // console.log("patch", payload)
             payloadData.append("payload", JSON.stringify(payload))
-            // let localhost = "http://localhost:3000"
             let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`, payloadData, config)
             if (data.statusCode == 200) {
               count = count + 1
-              // // console.log("patch", data)
             } else {
               throw { error: data }
             }
@@ -274,7 +256,6 @@ const coachModules = {
           })
         }
       } catch (error) {
-        // // console.log(error)
         await Swal.fire({
           icon: "error",
           title: "เกิดข้อผิดพลาด",
@@ -300,7 +281,6 @@ const coachModules = {
           homework: check_in_coach_data.homework,
           files: null
         }
-        // let localhost = "http://localhost:3000"
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/summary/${check_in_coach_id}`, payload, config)
         if (data.statusCode === 200) {
           Swal.fire({
@@ -313,7 +293,6 @@ const coachModules = {
           })
         }
       } catch (error) {
-        // // console.log(error)
         Swal.fire({
           icon: "error",
           title: "เกิดข้อผิดพลาด",
@@ -341,15 +320,12 @@ const coachModules = {
         };
         let user_detail = JSON.parse(localStorage.getItem("userDetail"));
 
-        // let localhost ="http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}/date/${date}`, config)
         if (data.statusCode === 200) {
-          // // console.log(data.data)
           data.data.forEach((check_in) => {
             let img_url = []
             if (check_in.attachment.length > 0) {
               for (const img of check_in.attachment) {
-                // // console.log(img)
                 img_url.push({
                   sumAttId: img.sumAttId,
                   checkInCoachId: img.checkInCoachId,
@@ -376,7 +352,6 @@ const coachModules = {
           throw { error: data }
         }
       } catch (error) {
-        // // console.log(error)
         Swal.fire({
           icon: "error",
           title: "เกิดข้อผิดพลาด",
@@ -399,29 +374,19 @@ const coachModules = {
         };
         let count = 0
         for await (const student of students) {
-          // const now = new Date(student.compensationDate);
-          // const utcOffset = 7 * 60; // UTC+7 is 7 hours ahead of UTC
-          // const localOffset = now.getTimezoneOffset();
-          // const targetOffset = utcOffset + localOffset;
-          // const targetTime = now.getTime() + targetOffset * 60 * 1000;
-          // const utcPlus7Date = new Date(targetTime);
-          // // // console.log(moment(utcPlus7Date).format("YYYY-MM-DD HH:mm"))
           let payload = {
             status: student.status, // punctual, late,  leave, emergency leave, absent,
             compensationDate: student.compensationDate ? moment(new Date(student.compensationDate)).format("YYYY-MM-DD") : '',
             compensationStartTime: student.compensationStartTime ? moment(student.compensationStartTime).format("HH:mm") : '',
             compensationEndTime: student.compensationEndTime ? moment(student.compensationEndTime).format("HH:mm") : '',
           }
-          // // console.log("payload :", payload)
           let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/checkin/student/${student.check_in_student_id}`, payload, config)
-          // // console.log(data)
           if (data.statusCode == 200) {
             count = count + 1
           } else {
             throw { error: data }
           }
         }
-        // // console.log(count, students.length )
         if (count === students.length) {
           context.commit("SetStudentCheckInIsLoading", false)
           await Swal.fire({
@@ -442,7 +407,6 @@ const coachModules = {
           })
         }
       } catch (error) {
-        // // console.log(error)
         context.commit("SetStudentCheckInIsLoading", false)
         Swal.fire({
           icon: "error",
@@ -456,7 +420,6 @@ const coachModules = {
     },
     async GetStudentByTimeId(context, { course_id, date }) {
       try {
-        // // console.log("GetStudentByTimeId")
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -464,7 +427,6 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/${course_id}/date/${date}`, config)
         if (data.statusCode === 200) {
           let i = 1
@@ -484,13 +446,12 @@ const coachModules = {
           await context.commit("SetStudentCheckIn", data.data)
         }
       } catch (error) {
-        // console.log(error)
+        console.log(error)
       }
     },
     async CheckInCoach(context, { course_id, time_id, date, type }) {
       context.commit("SetCoachCheckInIsLoading", true)
       try {
-        // // console.log(course_id, time_id, date)
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -498,7 +459,6 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // let localhost = "http://localhost:3000"
         let user_detail = JSON.parse(localStorage.getItem("userDetail"));
         const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}`, {
           "date": date,
@@ -506,7 +466,6 @@ const coachModules = {
           "type": type
         }, config)
         if (data.statusCode === 201) {
-          // let localhost = "http://localhost:3000"
           let stadentData = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/${course_id}/date/${date}`, config)
           if (stadentData.data.statusCode === 200) {
             stadentData.data.data.forEach((student, index) => {
@@ -530,7 +489,6 @@ const coachModules = {
         }
       } catch (error) {
         context.commit("SetCoachCheckInIsLoading", false)
-        // // console.log(error)
       }
     },
     ShowDialogCoachLeaveForm(context, value) {
@@ -553,30 +511,23 @@ const coachModules = {
           },
         };
         let user_detail = JSON.parse(localStorage.getItem("userDetail"));
-        // let localhost = "http://localhost:3000"
         const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${coach_id}`, config);
-        // // console.log("GetMyCourses", data.data)
         if (data.statusCode == 200) {
           let courses_task = [];
           let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
           if (holidays.data.statusCode === 200) {
-            // // console.log("561 => ",holidays.data.data)
             for await (let holiday of holidays.data.data) {
               courses_task.push({
                 type: 'holiday',
                 name: holiday.holidayName,
                 start_date: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
                 start: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`
-                // start_time: start_time,
-                // end_time: end_time,
               });
-              // // console.log("569 => ",courses_task)
             }
           }
           for await (const course of data.data) {
             const course_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course.courseId}`);
             if (course_data.data.statusCode === 200) {
-              // // console.log("579=>",course)
               if (course.coachLeaveCourses.length > 0) {
                 for await (const leaveCourse of course.coachLeaveCourses) {
                   let startDate = null
@@ -588,7 +539,6 @@ const coachModules = {
                     end_time = leaveCourse.teachCompensationEndTime;
                     const [start_hours, start_minutes] = start_time.split(":");
                     const [end_hours, end_minutes] = end_time.split(":");
-                    // // console.log(leaveCourse.teachCompensationDate)
                     startDate = new Date(leaveCourse.teachCompensationDate);
                     startDate.setHours(start_hours);
                     startDate.setMinutes(start_minutes);
@@ -664,7 +614,6 @@ const coachModules = {
                 }
               } else if (course.dates.dates) {
                 for await (const dates of course.dates.dates) {
-                  // // console.log("562 =>",dates)
                   let start_time = course.period.start;
                   let end_time = course.period.end;
                   const [start_hours, start_minutes] = start_time.split(":");
@@ -676,7 +625,6 @@ const coachModules = {
                   endDate.setHours(end_hours);
                   endDate.setMinutes(end_minutes);
                   if (courses_task.filter(v => v.course_id === course.courseId && v.time_id === course.timeId && v.day_of_week_id === course.dayOfWeekId && v.start_date === moment(startDate).format("YYYY-MM-DD")).length === 0) {
-                    // // console.log("674 =>",dates)
                     courses_task.push({
                       name: course.courseNameTh,
                       subtitle: course.courseNameEn,
@@ -706,15 +654,12 @@ const coachModules = {
               }
             }
           }
-          // let localhost = "http://localhost:3000"
           const sub_coach = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/subcoach/${coach_id}`, config);
           if (sub_coach.data.statusCode === 200) {
-            // // console.log("674 => ", sub_coach.data.data)
             for await (const course of sub_coach.data.data) {
               const course_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course.courseId}`);
               if (course.dates.date) {
                 for await (const dates of course.dates.date) {
-                  // // console.log("744", dates)
                   let start_time = course.period.start;
                   let end_time = course.period.end;
                   const [start_hours, start_minutes] = start_time.split(":");
@@ -754,19 +699,15 @@ const coachModules = {
               }
             }
           }
-          // // console.log("749", courses_task) 
           context.commit("SetMyCourses", courses_task);
           context.commit("SetMyCoursesIsLoading", false);
         }
       } catch (error) {
         context.commit("SetMyCoursesIsLoading", false);
-        // // console.log(error);
       }
     },
     async UploadFileSummary(context, { checkInCoach, files, course_id, date }) {
       try {
-        // // console.log(checkInCoach)
-        // // console.log(files)
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -782,9 +723,7 @@ const coachModules = {
             payloadData.append(`img_url`, file);
           }
         }
-        // let localhost = "http://localhost:3000"
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/summary/${checkInCoach.checkInCoachId}`, payloadData, config)
-        // // console.log(data)
         if (data.statusCode == 200) {
           await Swal.fire({
             icon: "success",
@@ -803,7 +742,7 @@ const coachModules = {
           })
         }
       } catch (error) {
-        // // console.log(error)
+        console.log(error)
       }
     },
     async GetAttachmentLeave(context, { coach_leave_id }) {
@@ -815,14 +754,13 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/attachment/${coach_leave_id}`, config)
         if (data.statusCode === 200) {
 
           context.commit("SetAttachmentLeave", data.data)
         }
       } catch (error) {
-        // // console.log(error)
+        console.log(error)
       }
     },
     // COACH LEAVE 
@@ -836,26 +774,18 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave`, config)
         if (data.statusCode == 200) {
           data.data.map((val, i) => {
             val.index = i + 1
             return val
           })
-          // data.data.map((items) => {
-          //   // const options = { year: "numeric", month: "long", day: "numeric" };
-          //   // const thaiLocale = "th-TH";
-          //   // items.thaiDate = new Date(items.createdDate).toLocaleString(thaiLocale, options);
-          //   // console.log("143", items.thaiDate);
-          // })
 
           context.commit("SetCoachLeaves", data.data)
           context.commit("SetCoachLeavesIsLoading", false)
         }
       } catch (error) {
         context.commit("SetCoachLeavesIsLoading", false)
-        // // console.log(error)
       }
     },
     async SaveCoachLeave(context, { coach_leave_data, files, admin }) {
@@ -897,7 +827,6 @@ const coachModules = {
             courses: cousers,
           })
         }
-        // let localhost = "http://localhost:3000"
         let payloadData = new FormData()
         payloadData.append("payload", JSON.stringify(payload))
         for (const file of files) {
@@ -924,7 +853,6 @@ const coachModules = {
                 }
               } else {
                 let getLeaves = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${user_detail.account_id}`, config)
-                // // console.log(getLeaves)
                 if (getLeaves.data.statusCode === 200) {
                   context.commit("SetShowDialogCoachLeaveForm", false)
                   context.commit("SetCoachLeaves", getLeaves.data.data)
@@ -936,7 +864,7 @@ const coachModules = {
           })
         }
       } catch (error) {
-        // // console.log(error)
+        console.log(error)
       }
     },
     async GetLeavesByAccountId(context, { account_id }) {
@@ -948,14 +876,12 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${account_id}`, config)
         if (data.statusCode === 200) {
-          // // console.log(data.data)
           context.commit("SetCoachLeaves", data.data)
         }
       } catch (error) {
-        // // console.log(error)
+        console.log(error)
       }
     },
     async updateStatusCoachLeave(context, { coach_leave_id, status, account_id }) {
@@ -967,10 +893,8 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // let localhost = "http://localhost:3000"
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${coach_leave_id}`, { status: status }, config)
         if (data.statusCode === 200) {
-          // let localhost = "http://localhost:3000"
           let getLeaves = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${account_id}`, config)
           if (getLeaves.data.statusCode === 200) {
             context.commit("SetCoachLeaves", getLeaves.data.data)
@@ -985,7 +909,7 @@ const coachModules = {
           }
         }
       } catch (error) {
-        // // console.log(error)
+        console.log(error)
       }
     },
     async updateStatusCoachLeaveAndCoach(context, { coach_leave_data, coach_leave_id }) {
@@ -1000,7 +924,6 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // let localhost = "http://localhost:3000"
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coach/leave/coach/status/${coach_leave_id}`, coach_leave_data, config)
         if (data.statusCode == 200) {
           if (coach_leave_data.status === "reject") {
@@ -1047,10 +970,8 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/detail/${coach_leave_id}`, config)
         if (data.statusCode == 200) {
-          // // console.log(data.data)
           const options = {
             year: "numeric",
             month: "long",
@@ -1077,10 +998,9 @@ const coachModules = {
           }
 
           context.commit("SetCoachLeave", data.data)
-          // console.log("SetCoachLeave", data.data)
         }
       } catch (error) {
-        // // console.log(error)
+        console.log(error)
       }
     },
   },

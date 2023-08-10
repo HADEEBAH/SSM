@@ -3,14 +3,9 @@ import moment from "moment";
 import Swal from "sweetalert2";
 import router from "@/router";
 import VueCookie from "vue-cookie"
-// import {dateDMY} from "../functions/functions"
-// import { dateFormatter } from "@/functions/functions";
 var XLSX = require("xlsx");
 function dayOfWeekArray(day) {
-  // // console.log("dayOfWeekArray", day)
-  // let day_arr = day
   let days = day
-  // // // console.log(day)
   const weekdays = [
     "วันอาทิตย์",
     "วันจันทร์",
@@ -317,14 +312,12 @@ const CourseModules = {
     // COURSE TYPES
     async GetCourseTypes(context, { category_id }) {
       try {
-        // // // console.log("category_id :", category_id)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/type?category_id=${category_id}`)
         if (data.statusCode === 200) {
-          // // // console.log("SetCourseTypes", data.data)
           context.commit("SetCourseTypes", data.data)
         }
       } catch (error) {
-        // // console.log(error)
+        console.log(error)
       }
     },
     // TEACH DAYS
@@ -332,38 +325,32 @@ const CourseModules = {
       try {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/coach/${coach_data.coach_id}`)
         if (data.statusCode === 200) {
-          // // // console.log(data)
           context.commit("SetTeachDays", data.data)
         } else {
           throw { message: data.message }
         }
       } catch (error) {
-        // // console.log(error)
+        console.log(error)
       }
     },
     // COACH :: LIST
     async GetCoachs(context) {
       try {
-        // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/role/R_3`)
         if (data.statusCode === 200) {
           data.data.forEach((coach) => {
-            // // // console.log("coach =>", coach)
             coach.fullNameTh = `${coach.firstNameTh} ${coach.lastNameTh}`
             coach.fullNameEh = `${coach.firstNameEng} ${coach.lastNameEng}`
           })
-          // // // console.log(data)
           context.commit("SetCoachs", data.data)
         } else {
-          // // // console.log(data)
           throw { error: data }
         }
       } catch (error) {
-        // // console.log(error)
+        console.log(error)
       }
     },
     ChangeCourseData(context, course_data) {
-      // // console.log("CourseData : ", course_data)
       context.commit("SetCourseData", course_data)
     },
     // COACH :: LIST BY COURSE
@@ -377,18 +364,13 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/course/${course_id}`, config)
-        // console.log("studentlist",data.data)
         if (data.statusCode === 200) {
           for await (let coach of data.data) {
             coach.checked = false
             let datesList = []
-            // // console.log("394",coach)
             let coachDate = coach.allDates
-            // // // console.log(coachDate)
             if (!coachDate.cpo?.cpoId) {
-              // // console.log("ระยะสั้น => ", coachDate)
               if (coachDate?.coachLeaveDate) {
                 for await (const dateLeave of coachDate?.coachLeaveDate) {
                   datesList.push({
@@ -432,8 +414,6 @@ const CourseModules = {
                       timeId: null,
                       start: dateLeave.teachCompensationStartTime,
                       end: dateLeave.teachCompensationEndTime,
-                      // startDate: coachDate.dates.startDate ? new Date(coachDate.dates.startDate).toLocaleDateString("th-TH") : '',
-                      // endDate: coachDate.dates.endDate ? new Date(coachDate.dates.endDate).toLocaleDateString("th-TH") : '',
                       time: `${dateLeave.teachCompensationStartTime}น.-${dateLeave.teachCompensationEndTime}น.`,
                       cpo: coachDate.cpo ? coachDate.cpo : null,
                       cpoId: coachDate.cpo?.cpoId ? coachDate.cpo?.cpoId : null,
@@ -465,13 +445,11 @@ const CourseModules = {
               return dateA - dateB;
             });
           }
-          // // // console.log(data.data)
           context.commit("SetCoachListIsLoading", false)
           context.commit("SetCoachList", data.data)
         }
       } catch (error) {
         context.commit("SetCoachListIsLoading", false)
-        // // console.log(error)
       }
     },
     // STUDENT :: LIST BY COACH
@@ -485,16 +463,13 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/date/${date}`, config)
         if (data.statusCode === 200) {
-          // // // console.log(data.data)
           context.commit("SetStudentList", data.data)
           context.commit("SetStudentListIsLoadIng", false)
         }
       } catch (error) {
         context.commit("SetStudentListIsLoadIng", false)
-        // // console.log(error)
       }
     },
     // STUDENT :: LIST POTENTIAL BY COACH
@@ -508,17 +483,13 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        // let localhost = "http://localhost:3000"
-        // let { data } = await axios.get(`${localhost}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach_id}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach_id}`, config)
         if (data.statusCode === 200) {
-          // // console.log("485 => ",data.data)
           context.commit("SetStudentPotentialList", data.data)
           context.commit("SetStudentPotentialListIsLoading", false)
         }
       } catch (error) {
         context.commit("SetStudentPotentialListIsLoading", false)
-        // // console.log(error)
       }
 
     },
@@ -532,21 +503,17 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/manage/reserve/course/${course_id}`, config)
         if (data.statusCode === 200) {
-          // // // console.log(data.data)
           context.commit("SetStudentReserveList", data.data)
         }
       } catch (error) {
-        // // console.log(error)
+        console.log(error)
       }
     },
     // COURSE :: UPDATE COURSE DETAIL
     async UpdateCouserDetail(context, { course_id, course_data }) {
       try {
-        // console.log(course_data)
-        // let localhost = "http://localhost:3000"
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -600,9 +567,7 @@ const CourseModules = {
               if (date.day_of_week_id) {
                 if (teach_day_data.filter((v) => v.dayOfWeekId === date.day_of_week_id && v.courseCoachId === date.course_coach_id).length === 0) {
                   teach_day_data.push({
-                    // "itmes" : day.times,
                     "dayOfWeekId": date.day_of_week_id,
-                    // "classOpen": date.class_open === true ? 'Active' : 'InActive',
                     "classOpen": date.class_open,
                     "teachDay": date.teach_day,
                     "courseCoachId": date.course_coach_id,
@@ -611,7 +576,6 @@ const CourseModules = {
                 }
               } else {
                 teach_day_data.push({
-                  // "itmes" : day.times,
                   "dayOfWeekId": null,
                   "classOpen": date.class_open === true ? 'Active' : 'InActive',
                   "teachDay": date.teach_day,
@@ -639,19 +603,15 @@ const CourseModules = {
                 "endTime": coach.period.end_time ? coach.period.end_time : null
               }
             })
-            // payload.coachs[index].teachDayData = teach_day_data
           }
         }
 
-        // // console.log("payload", payload)
         let payloadData = new FormData()
         payloadData.append("payload", JSON.stringify(payload))
         if (typeof course_data.course_img == "object") {
           payloadData.append("img_url", course_data.course_img)
         }
-        // let localhost = "http://192.168.74.25:3000"
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-course/${course_id}`, payloadData, config)
-        // // // console.log(data)
         if (data.statusCode === 200) {
           Swal.fire({
             icon: "success",
@@ -664,19 +624,19 @@ const CourseModules = {
             if (result.isConfirmed) {
               await context.dispatch("GetArtworkByCourse", { course_id: course_id })
               await context.dispatch("GetCourse", course_id)
-
-
             }
           })
         }
       } catch (error) {
-        // // console.log(error)
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด"
+        })
       }
     },
     // COURSE :: UPDATE COURSE COACH
     async UpdateCouserCoach(context, { course_id, course_data }) {
       try {
-        // // console.log(course_data)
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -708,9 +668,7 @@ const CourseModules = {
             if (date.day_of_week_id) {
               if (teach_day_data.filter((v) => v.dayOfWeekId === date.day_of_week_id && v.courseCoachId === date.course_coach_id).length === 0) {
                 teach_day_data.push({
-                  // "itmes" : day.times,
                   "dayOfWeekId": date.day_of_week_id,
-                  // "classOpen": date.class_open === true ? 'Active' : 'InActive',
                   "classOpen": date.class_open,
                   "teachDay": date.teach_day,
                   "courseCoachId": date.course_coach_id,
@@ -719,7 +677,6 @@ const CourseModules = {
               }
             } else {
               teach_day_data.push({
-                // "itmes" : day.times,
                 "dayOfWeekId": null,
                 "classOpen": date.class_open === true ? 'Active' : 'InActive',
                 "teachDay": date.teach_day,
@@ -727,12 +684,6 @@ const CourseModules = {
                 "classDate": class_date
               })
             }
-            // // // console.log(teach_day_data)
-            // if(teach_day_data[date_index]){
-            //   teach_day_data[date_index].classDate = class_date
-            // }else{
-            //   // // console.log(teach_day_data)
-            // }
           }
 
           payload.coachs.push({
@@ -753,12 +704,9 @@ const CourseModules = {
               "endTime": coach.period.end_time ? coach.period.end_time : null
             }
           })
-          // payload.coachs[index].teachDayData = teach_day_data
         }
-        // // console.log("payload", payload)
         let payloadData = new FormData()
         payloadData.append("payload", JSON.stringify(payload))
-        // let localhost = "http://localhost:3000"
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-coach/${course_id}`, payloadData, config)
         if (data.statusCode === 200) {
           Swal.fire({
@@ -775,13 +723,15 @@ const CourseModules = {
           })
         }
       } catch (error) {
-        // // console.log(error)
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
+        })
       }
     },
     // COURSE :: UPDATE COURSE PACKAGE
     async UpdateCouserPackage(context, { course_id, course_data }) {
       try {
-        // // console.log("course_data => ", course_data)
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -801,7 +751,6 @@ const CourseModules = {
             "options": []
           })
           package_data.options.forEach((option_data) => {
-            // // console.log(option_data)
             payload.packages[index].options.push({
               "coursePackageOptionId": option_data.course_package_option_id ? option_data.course_package_option_id : null,
               "packageId": payload.packages[index].packageId,
@@ -820,10 +769,8 @@ const CourseModules = {
             })
           })
         })
-        // // console.log("payload => ", payload)
         let payloadData = new FormData()
         payloadData.append("payload", JSON.stringify(payload))
-        // let localhost = "http://localhost:3000"
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-cpo/${course_id}`, payloadData, config)
         if (data.statusCode === 200) {
           Swal.fire({
@@ -836,7 +783,10 @@ const CourseModules = {
           })
         }
       } catch (error) {
-        // // console.log(error)
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
+        })
       }
     },
     // COURSE :: DELETE ARKWORK ID
@@ -849,10 +799,7 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        // let localhost = "http://localhost:3000"
-        // // console.log("artwork_data :", artwork_data)
         let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/course/artworkCourse/${artwork_data.artworkCourseId}`, config)
-        // // console.log(data)
         if (data.statusCode == 200) {
           Swal.fire({
             icon: "success",
@@ -864,7 +811,10 @@ const CourseModules = {
           })
         }
       } catch (error) {
-        // // console.log(error)
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
+        })
       }
     },
     // COURSE :: DELETA privilage
@@ -877,9 +827,7 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        // let localhost = "http://localhost:3000"
         let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/course/privilage/${course_id}`, config)
-        // // console.log(data)
         if (data.statusCode == 200) {
           Swal.fire({
             icon: "success",
@@ -891,7 +839,10 @@ const CourseModules = {
           })
         }
       } catch (error) {
-        // // console.log(error)
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
+        })
       }
     },
     // COURSE :: UPDATE ARKWORK
@@ -913,7 +864,6 @@ const CourseModules = {
             payloadData.append(`img_artwork`, course_data.artwork_file[i]);
           }
         }
-        // let localhost = "http://localhost:3000"
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-artwork/${course_id}`, payloadData, config)
         if (data.statusCode === 200) {
           Swal.fire({
@@ -931,7 +881,10 @@ const CourseModules = {
           })
         }
       } catch (error) {
-        // // console.log(error)
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
+        })
       }
     },
     // COURSE :: UPDATE * Not used
@@ -1050,7 +1003,6 @@ const CourseModules = {
           })
           payload.coachs[index].teachDayData = teach_day_data
         })
-        // // // console.log("payload : ",payload)
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -1058,21 +1010,15 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        // // // console.log(course_data)
         const data_payload = new FormData()
         data_payload.append("payload", JSON.stringify(payload))
-        // // // console.log(typeof course_data.courseImg);
         if (typeof course_data.courseImg == Object) {
           data_payload.append("img_url", course_data.courseImg)
-          // data_payload.append("img_url", null)
         }
 
-        // // console.log("endpoint :", `${process.env.VUE_APP_URL}/api/v1/manage/update/${payload.courseId}`)
-        // let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update/${payload.courseId}`, data_payload, config);
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/aaaa/${payload.courseId}`, data_payload, config);
         if (data.statusCode === 200) {
 
-          // context.commit("ChangeDataUpdate")
           context.commit("SetCourseIsLoading", false)
           Swal.fire({
             icon: "success",
@@ -1087,18 +1033,9 @@ const CourseModules = {
           })
 
         }
-        // // // console.log(data)
       } catch (error) {
-        // // console.log(error)
+        console.log(error)
       }
-
-      // router.push({ name: "CourseList" })
-
-
-      //   } else if (result.isDenied) {
-      //     Swal.fire('Changes are not saved', '', 'info')
-      //   }
-      // })
 
     },
     // COURSE :: LIST 
@@ -1126,13 +1063,12 @@ const CourseModules = {
               if (category.data.statusCode === 400 && category.data.message === "Category not found.") {
                 continue
               }
-              // throw {error : category}
             }
           }
           context.commit("SetCourses", courses)
         }
       } catch (error) {
-        // // console.log(error)
+        console.log(error)
       }
     },
     // COURSE :: STUDENT
@@ -1145,19 +1081,16 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        // let localhost = "http://localhost:3002"
         if (cpo_id) {
           let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/count/student?courseId=${course_id}&cpoId=${cpo_id}`, config)
-          // // console.log("GetCourseStudent => ", data)
           context.commit("SetCourseStudent", data.data)
         } else {
           let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/count/student?courseId=${course_id}`, config)
-          // // console.log("GetCourseStudent => ", data)
           context.commit("SetCourseStudent", data.data)
         }
 
       } catch (error) {
-        // // console.log(error)
+        console.log(error)
       }
     },
     //COURSE :: Artwork
@@ -1165,35 +1098,28 @@ const CourseModules = {
       try {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/attcahment/${course_id}`)
         if (data.statusCode === 200) {
-          // // console.log(data.data)
           if (data.data.length > 0) {
             for (const artwork of data.data) {
               artwork.attachmentUrl = artwork.attachmentCourse ? `${process.env.VUE_APP_URL}/api/v1/files/${artwork.attachmentCourse}` : null
             }
           }
           context.commit("SetCourseArtwork", data.data)
-          // // console.log(data)
         } else {
           throw { error: data }
         }
       } catch (error) {
-        // // console.log(error)
+        console.log(error)
       }
     },
     // COURSE :: DETAIL
     async GetCourse(context, course_id) {
       context.commit("SetCourseIsLoading", true)
-      // // // console.log("GetCourse")
       try {
-        // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
         if (data.statusCode === 200) {
-          // // console.log("1155 => ", data)
-          // // // console.log(data.data.coursePerTime)
           let course_hours_part = data.data.coursePerTime.toFixed(2).split(".")
           let course_hours_object = {}
           if (course_hours_part.length > 1) {
-            // // console.log(course_hours_part)
             course_hours_object = {
               HH: course_hours_part[0].padStart(2, '0'),
               mm: course_hours_part[1].padStart(2, '0')
@@ -1241,12 +1167,9 @@ const CourseModules = {
             days_of_class: [],
             days: []
           }
-          // // console.log("payload 1192", payload)
-          // // console.log("1216", data.data.coachs)
           let teach_day_data = []
           if (data.data.coachs) {
             for await (let coach of data.data.coachs) {
-              // // // console.log("payload 1194",payload)
               for await (let coach_date of data.data.dayOfWeek.filter(v => v.courseCoachId === coach.courseCoachId)) {
                 // DAY OF CLASS
                 if (payload.days_of_class.filter(v => v.day_of_week_id === coach_date.times[0].dayOfWeekId).length === 0) {
@@ -1262,7 +1185,6 @@ const CourseModules = {
                 let class_dates = []
                 for await (const time of coach_date.times) {
 
-                  // // // console.log(time.start, time.end)
                   let startTimePart = time.start.split(":")
                   let endTimePart = time.end.split(":")
                   let startTime = {
@@ -1287,7 +1209,6 @@ const CourseModules = {
                     students: time.maximumStudent,
                   },)
                 }
-                // // // console.log("payload => 1236", payload)
                 // TEACH DAY
                 teach_day_data.push({
                   day_of_week_id: coach_date.times[0].dayOfWeekId ? coach_date.times[0].dayOfWeekId : null,
@@ -1307,7 +1228,6 @@ const CourseModules = {
                 "HH": endTimePart[0],
                 "mm": endTimePart[1] ? endTimePart[1] : "00"
               } : null
-              // // // console.log("payload => 1256", payload)
               payload.coachs.push(
                 {
                   coach_id: coach.accountId,
@@ -1343,22 +1263,16 @@ const CourseModules = {
                   },
                 },
               )
-              // // console.log("payload 1292", payload)
             }
           }
 
-          // // console.log("payload 1321", data.data.dayOfWeek)
-          // // // console.log("teach_day_data",teach_day_data)
           if (data.data.dayOfWeek) {
             for await (let coach_date of data.data.dayOfWeek.filter(v => v.status === 'Active')) {
-              // // // console.log(coach_date)
               // DAYS
               let dayName = dayOfWeekArray(coach_date.dayOfWeekName)
               if (payload.days.filter(v => v.dayName === dayName).length === 0) {
-                // // // console.log("payload 1129",coach_date.times)
                 let times = []
                 for await (let time of coach_date.times) {
-                  // // // console.log("payload 1132",time)
                   if (times.filter(v => v.start === time.start && v.end === time.end).length === 0) {
                     times.push({
                       start: time.start,
@@ -1366,7 +1280,6 @@ const CourseModules = {
                       timeData: []
                     })
                     for await (let t of times) {
-                      // // // console.log("payload 1140", t.courseCoachId !== coach_date.courseCoachId)
                       if (t.timeData.filter(v => v.courseCoachId == coach_date.courseCoachId).length === 0) {
                         t.timeData.push({
                           maximumStudent: time.maximumStudent,
@@ -1377,11 +1290,9 @@ const CourseModules = {
                           coach_id: data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].accountId
                         })
                       }
-                      // // // console.log("payload 1151", t)
                     }
                   }
                 }
-                // // // console.log("payload 1147", times)
                 payload.days.push({
                   day: coach_date.dayOfWeekName,
                   dayName: dayName,
@@ -1434,7 +1345,6 @@ const CourseModules = {
               }
             }
           }
-          // // // console.log("payload 1408o",payload.coachs.length)
           if (payload.coachs.length > 0) {
             for await (let coach of payload.coachs) {
               coach.teach_day_data = teach_day_data.filter(v => v.course_coach_id === coach.course_coach_id)
@@ -1442,7 +1352,6 @@ const CourseModules = {
 
           }
 
-          // // // console.log("1416 :",data.data.courseTypeId)
           if (data.data.courseTypeId === "CT_1") {
             let options = []
             data.data.coursePackageOption.forEach((package_data) => {
@@ -1484,16 +1393,10 @@ const CourseModules = {
               'Authorization': `Bearer ${VueCookie.get("token")}`
             }
           }
-          // // console.log("1458 :", payload)
           if (payload.course_type_id === "CT_1") {
-            // // console.log("payload :", payload)
             await context.commit("SetCourseData", payload)
           } else {
-            // // console.log("payload :", payload)
-            // // // console.log("payload :",payload)
-            // let localhost = "https://192.168.74.25:3002"
             let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/count/student?courseId=${course_id}`, config)
-            // // console.log("GetCourseStudent => ", data)
             if (data.statusCode === 200) {
               for (const student_data of data.data) {
                 payload.course_studant_amount = parseInt(student_data.sum_student)
@@ -1506,7 +1409,7 @@ const CourseModules = {
         }
       } catch (error) {
         context.commit("SetCourseIsLoading", false)
-        // // // console.log(error)
+        console.log(error)
       }
     },
     // COURSE :: CREATE
@@ -1514,7 +1417,6 @@ const CourseModules = {
       context.commit("SetCourseIsLoading", true)
       try {
         let course = context.state.course_data
-        // // console.log("course =>", course)
         let payload = {
           "categoryId": course.category_id,
           "courseTypeId": course.course_type_id,
@@ -1629,7 +1531,6 @@ const CourseModules = {
         }
       } catch (error) {
         context.commit("SetCourseIsLoading", false)
-        // // console.log(error)
       }
     },
     // COURSE :: FILTER
@@ -1652,7 +1553,6 @@ const CourseModules = {
             let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/count/student?courseId=${course.course_id}`)
             if (data.statusCode === 200) {
               for (const student_data of data.data) {
-                // // // console.log("GetCourseStudent => ",student_data)
                 course_studant_amount = course_studant_amount + parseInt(student_data.sum_student)
                 course.student_course_data.push({ student_data })
               }
@@ -1670,7 +1570,6 @@ const CourseModules = {
             }
           }
           context.commit("SetCoursesIsLoading", false)
-          // // console.log(data.data)
           context.commit("SetCourses", data.data)
         } else {
           context.commit("SetCoursesIsLoading", false)
@@ -1678,7 +1577,7 @@ const CourseModules = {
         }
       } catch (error) {
         context.commit("SetCoursesIsLoading", false)
-        // // console.log(error)
+        console.log(error)
       }
 
     },
@@ -1692,7 +1591,7 @@ const CourseModules = {
           context.commit("SetCoursePotential", data.data)
         }
       } catch (error) {
-        // // console.log(error)
+        console.log(error)
       }
     },
     // COURSE :: Delete Day Of Week
@@ -1706,7 +1605,6 @@ const CourseModules = {
           }
         }
         let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/manage/dayOfWeek/${day_of_week_id}`, config)
-        // // console.log(data)
         if (data.statusCode === 200) {
           if (data.data[0] === "Delete Unsuccessfully:") {
             Swal.fire({
@@ -1723,7 +1621,10 @@ const CourseModules = {
           }
         }
       } catch (error) {
-        // // console.log(error)
+        Swal.fire({
+          icon: "error",
+          text: "เกิดข้อผิดพลาด",
+        })
       }
     },
     // COURSE :: Delete Time
@@ -1737,7 +1638,6 @@ const CourseModules = {
           }
         }
         let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/manage/time/${time_id}`, config)
-        // // console.log(data.data)
         if (data.statusCode === 200) {
           if (data.data[0] === "Delete Unsuccessfully:") {
             Swal.fire({
@@ -1754,7 +1654,7 @@ const CourseModules = {
           }
         }
       } catch (error) {
-        // // console.log(error)
+        console.log(error)
       }
     },
     async GetPackages(context) {
@@ -1767,7 +1667,7 @@ const CourseModules = {
           throw { message: data.message }
         }
       } catch (error) {
-        // // console.log(error)
+        console.log(error)
       }
     },
     async GetOptions(context) {
@@ -1779,7 +1679,7 @@ const CourseModules = {
           throw { message: data.message }
         }
       } catch (error) {
-        // // console.log(error)
+        console.log(error)
       }
     },
     ResetCourseData(context) {
@@ -1799,20 +1699,18 @@ const CourseModules = {
 
         if (data.statusCode === 200) {
           context.commit("SetStatusCourse", data.data)
-          // // // console.log("SetStatusCourse", data.data);
 
         } else {
           throw { error: data };
         }
       } catch (error) {
-        // // console.log(error);
+        console.log(error);
       }
 
     },
     // EXPORT COURSE STUDENT LIST
     async ExportStudentList(context, { coach_list, course_id, course_name, course_type_id }) {
       try {
-        // // console.log(course_name);
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -1827,7 +1725,6 @@ const CourseModules = {
               let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/date/${date.date}`, config)
               if (data.statusCode === 200) {
                 if (data.data.length > 0) {
-                  // // console.log("data=>", data.data);
                   for await (const student of data.data) {
                     if (course_type_id === "CT_1") {
                       report.push({
@@ -1860,7 +1757,6 @@ const CourseModules = {
                 } else {
                   for await (const student of date.students) {
                     if (course_type_id === "CT_1") {
-                      // // // console.log(student)
                       report.push({
                         "วันที่": date.date,
                         "เวลาเรียน": date.time,
@@ -1893,7 +1789,6 @@ const CourseModules = {
             }
           }
         }
-        // // console.log(report);
         var workbook = XLSX.utils.book_new();
         var worksheet = XLSX.utils.json_to_sheet(report);
         XLSX.utils.book_append_sheet(workbook, worksheet, course_name);
@@ -1906,7 +1801,7 @@ const CourseModules = {
         link.click();
         URL.revokeObjectURL(url);
       } catch (error) {
-        // // console.log(error)
+        console.log(error)
       }
     }
   },

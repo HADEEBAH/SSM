@@ -1,22 +1,5 @@
-// CALENDAR STUDENT
-
-
 <template>
   <div>
-    <!-- <template v-if="type === 'week'">
-            
-            <v-row dense>
-                <v-col>
-               {{ start_of_week }} -  {{ end_of_week }} 
-                </v-col>
-            </v-row>
-            <v-row dense>
-                <v-col>
-                    <v-btn text class="underline" color="#ff6b81" @click="goToday">คลิกเพื่อไปคอร์สที่ต้องสอนล่าสุด</v-btn>
-                </v-col>
-            </v-row>
-        </template> -->
-    <!-- <pre>{{ events }}</pre> -->
     <v-card
       v-if="type === 'week' || type === 'day' || $vuetify.breakpoint.smAndUp"
     >
@@ -168,7 +151,6 @@ export default {
   name: "calendarCoach",
   props: {
     type: { type: String, default: "month" },
-    // , default: () => []
     events: { type: Array },
   },
   data: () => ({
@@ -266,7 +248,6 @@ export default {
     selectDate(date) {
       this.event_date = [];
       this.showModal = true;
-      // console.log("calendar", this.events);
       this.events.forEach((event) => {
         let [start, start_time] = event.start.split(" ");
         let [end, end_time] = event.end.split(" ");
@@ -302,28 +283,32 @@ export default {
     },
     colorOfDay() {
       this.events.forEach((event) => {
-        switch (new Date(event.start).getDay()) {
-          case 0:
-            event.color = "#F898A4";
-            break;
-          case 1:
-            event.color = "#FFFACD";
-            break;
-          case 2:
-            event.color = "#FFBBDA";
-            break;
-          case 3:
-            event.color = "#D0F4DE";
-            break;
-          case 4:
-            event.color = "#FFE2D1";
-            break;
-          case 5:
-            event.color = "#C0E4F6";
-            break;
-          case 6:
-            event.color = "#E8CFF8";
-            break;
+        if (event.type === "holiday") {
+          event.color = "#f19a5a";
+        } else {
+          switch (new Date(event.start).getDay()) {
+            case 0:
+              event.color = "#F898A4";
+              break;
+            case 1:
+              event.color = "#FFFACD";
+              break;
+            case 2:
+              event.color = "#FFBBDA";
+              break;
+            case 3:
+              event.color = "#D0F4DE";
+              break;
+            case 4:
+              event.color = "#FFE2D1";
+              break;
+            case 5:
+              event.color = "#C0E4F6";
+              break;
+            case 6:
+              event.color = "#E8CFF8";
+              break;
+          }
         }
       });
     },

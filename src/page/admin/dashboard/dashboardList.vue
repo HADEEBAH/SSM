@@ -882,7 +882,6 @@ export default {
     }),
 
     selectYears() {
-      // this.dashboard_graf.year = this.selected_years.key;
       this.GetGraf(this.dashboard_graf);
     },
 

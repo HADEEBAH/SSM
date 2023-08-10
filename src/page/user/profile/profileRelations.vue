@@ -1,7 +1,5 @@
 <template>
   <v-container>
-    <!-- {{ $route.params.action }} -->
-    <!-- <pre>{{profile_user}}</pre> -->
   <div v-for="(profile, index) in profile_user" :key="`${index}-profile`">
   {{ profile.length }}
     
@@ -237,13 +235,9 @@ export default {
     checkPhoneNumber() {
       let x = this.user_data.phone_num.replace(/\D/g, "");
       x = x.match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
-      // // console.log(x);
       this.user_data.phone_num = !x[2]
         ? x[1]
         : x[1] + "-" + x[2] + (x[3] ? "-" + x[3] : "");
-    },
-    show_policy() {
-      this.$router.push({ name: "ProfilePolicy" });
     },
     show_rules() {
       this.$router.push({ name: "ProfileRules" });
