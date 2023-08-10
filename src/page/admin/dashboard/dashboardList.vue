@@ -733,16 +733,59 @@
                             </v-col>
                           </v-row>
                         </v-card-title>
-
-                        <v-card-text class="pa-10">
+                        <!-- row 1 -->
+                        <v-card-text>
                           <v-row dense>
-                            <v-col cols="6">
+                            <v-col cols="12">
+                              <v-text-field
+                                hide-details
+                                outlined
+                                readonly
+                                dense
+                                :value="items_dialog.courseNameTh"
+                                label="ชื่อคอร์ส"
+                              >
+                                <template v-slot:append>
+                                  <v-icon :color="'#FF6B81'"
+                                    >mdi-school-outline</v-icon
+                                  >
+                                </template>
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                        </v-card-text>
+                        <!-- row 2 -->
+                        <v-card-text>
+                          <v-row dense>
+                            <v-col cols="12">
+                              <v-text-field
+                                hide-details
+                                outlined
+                                readonly
+                                dense
+                                :value="`${items_dialog.courseTypeNameTh} (${items_dialog.packageName})`"
+                                label="แพ็กเกจคอร์ส"
+                              >
+                                <template v-slot:append>
+                                  <v-icon :color="'#FF6B81'">
+                                    mdi-book-multiple-outline
+                                  </v-icon>
+                                </template>
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                        </v-card-text>
+                        <!-- row 3 -->
+                        <v-card-text>
+                          <v-row dense>
+                            <v-col cols="12">
                               <v-text-field
                                 hide-details
                                 outlined
                                 readonly
                                 dense
                                 :value="items_dialog.dayOfWeek"
+                                label="วันเรียน"
                               >
                                 <template v-slot:append>
                                   <v-icon :color="'#FF6B81'"
@@ -751,18 +794,39 @@
                                 </template>
                               </v-text-field>
                             </v-col>
-
-                            <v-col cols="6">
+                          </v-row>
+                        </v-card-text>
+                        <!-- row 4 -->
+                        <v-card-text>
+                          <v-row dense>
+                            <v-col cols="12" sm="6">
                               <v-text-field
                                 hide-details
                                 outlined
                                 readonly
                                 dense
                                 :value="items_dialog.time"
+                                label="เวลาเรียน"
                               >
                                 <template v-slot:append>
                                   <v-icon :color="'#FF6B81'"
                                     >mdi-clock-outline</v-icon
+                                  >
+                                </template>
+                              </v-text-field>
+                            </v-col>
+
+                            <v-col cols="6" sm="6">
+                              <v-text-field
+                                outlined
+                                readonly
+                                dense
+                                :value="`${items_dialog.currentStudent} / ${items_dialog.maximumStudent}`"
+                                label="ที่นั่ง"
+                              >
+                                <template v-slot:append>
+                                  <v-icon :color="'#FF6B81'"
+                                    >mdi-sofa-single-outline</v-icon
                                   >
                                 </template>
                               </v-text-field>

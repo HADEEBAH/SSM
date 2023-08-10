@@ -55,7 +55,11 @@
       >
         <v-row>
           <v-col class="flex align-center justify-center">
-            <v-img :src="logo" max-height="115" max-width="115"></v-img>
+            <v-img
+              src="@/assets/navbar/logo.svg"
+              max-height="115"
+              max-width="115"
+            ></v-img>
           </v-col>
         </v-row>
         <v-list class="pr-0" nav flat>
@@ -64,12 +68,23 @@
               :class="active_menu === list.to ? 'active-menu-list' : ''"
               @click="selectMenu('head', list.to)"
               link
-              v-if="list.child.length === 0 && (list.roles.length > 0 ? list.roles.filter((v) => user_detail?.roles.includes(v)).length > 0 : false)"
+              v-if="
+                list.child.length === 0 &&
+                (list.roles.length > 0
+                  ? list.roles.filter((v) => user_detail?.roles.includes(v))
+                      .length > 0
+                  : false)
+              "
             >
               <v-list-item-title>{{ list.title }}</v-list-item-title>
             </v-list-item>
             <v-list-group
-              v-else-if="list.roles.length > 0 ? list.roles.filter((v) => user_detail?.roles.includes(v)).length > 0 : false"
+              v-else-if="
+                list.roles.length > 0
+                  ? list.roles.filter((v) => user_detail?.roles.includes(v))
+                      .length > 0
+                  : false
+              "
               :value="active_menu === list.title"
               :active-class="
                 active_menu === list.title ? 'active-menu-list' : ''
@@ -129,37 +144,52 @@ export default {
     },
     user_detail: null,
     menu_drawer_list: [
-      { title: "แดชบอร์ด", to: "Dashboard", child: [], roles: ['R_1', 'R_2']}, // to ให้ใส่ name ของ router
-      { title: "ตารางเรียน", to: "ManageSchedule", child: [], roles: ['R_1', 'R_2']  },
-      { title: "เพิ่มผู้เรียน", to: "Student", child: [], roles: ['R_1', 'R_2']  },
+      { title: "แดชบอร์ด", to: "Dashboard", child: [], roles: ["R_1", "R_2"] }, // to ให้ใส่ name ของ router
+      {
+        title: "ตารางเรียน",
+        to: "ManageSchedule",
+        child: [],
+        roles: ["R_1", "R_2"],
+      },
+      {
+        title: "เพิ่มผู้เรียน",
+        to: "Student",
+        child: [],
+        roles: ["R_1", "R_2"],
+      },
       {
         title: "คอร์สเรียน",
         to: "",
-        roles: ['R_1'] ,
+        roles: ["R_1"],
         child: [
-          { title: "จัดการการจอง", to: "CourseReserveList", roles: ['R_1']  },
-          { title: "จัดการคอร์สทั้งหมด", to: "CourseList" ,roles: ['R_1'] },
-          { title: "สร้างคอร์สเรียน", to: "CourseCreate" ,roles: ['R_1'] },
+          { title: "จัดการการจอง", to: "CourseReserveList", roles: ["R_1"] },
+          { title: "จัดการคอร์สทั้งหมด", to: "CourseList", roles: ["R_1"] },
+          { title: "สร้างคอร์สเรียน", to: "CourseCreate", roles: ["R_1"] },
         ],
       },
       {
         title: "อาณาจักร",
         to: "",
-        roles: ['R_1'] ,
+        roles: ["R_1"],
         child: [
-          { title: "จัดการอาณาจักร", to: "ManageKingdom" ,roles: ['R_1']},
-          { title: "สร้างอาณาจักร", to: "Kingdom" ,roles: ['R_1']},
+          { title: "จัดการอาณาจักร", to: "ManageKingdom", roles: ["R_1"] },
+          { title: "สร้างอาณาจักร", to: "Kingdom", roles: ["R_1"] },
         ],
       },
-      { title: "การเงิน", to: "Finance", child: [], roles: ['R_1', 'R_2'] },
+      { title: "การเงิน", to: "Finance", child: [], roles: ["R_1", "R_2"] },
       {
         title: "จัดการผู้ใช้งาน",
         to: "",
-        roles: ['R_1'],
-        child: [{ title: "จัดการผู้ใช้งาน", to: "UserList",roles: ['R_1'], } ],
+        roles: ["R_1"],
+        child: [{ title: "จัดการผู้ใช้งาน", to: "UserList", roles: ["R_1"] }],
       },
-      { title: "การอนุมัติลา", to: "LeaveList", child: [], roles: ['R_1'], },
-      { title: "จัดการแบนเนอร์", to: "Banner", child: [], roles: ['R_1', 'R_2'], },
+      { title: "การอนุมัติลา", to: "LeaveList", child: [], roles: ["R_1"] },
+      {
+        title: "จัดการแบนเนอร์",
+        to: "Banner",
+        child: [],
+        roles: ["R_1", "R_2"],
+      },
     ],
   }),
 
