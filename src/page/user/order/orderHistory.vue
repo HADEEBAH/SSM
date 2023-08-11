@@ -19,7 +19,6 @@
 
         <div v-for="(order, index) in order_history" :key="`${index}-order`">
           <v-card class="mb-3">
-            <!-- <pre>{{ order }}</pre> -->
             <v-card-text>
               <v-row dense class="mb-3">
                 <v-col>
@@ -67,10 +66,6 @@
                 :key="`${index_courses}_courses`"
               >
                 <v-row>
-                  <!-- :height="course.show_student ? '' : '160'"
-                      class="w-full h-full rounded-l-lg" 
-                      class="w-full h-full rounded-lg"
-                    -->
                   <v-col cols="12" sm="4" md="4" lg="4" class="pa-5">
                     <v-img
                       v-if="course.courseImg"
@@ -220,8 +215,8 @@
     </v-container>
   </v-app>
 </template>
-  
-  <script>
+
+<script>
 import { dateFormatter } from "../../../functions/functions";
 import { mapActions, mapGetters } from "vuex";
 import loadingOverlay from "../../../components/loading/loadingOverlay";
@@ -301,4 +296,3 @@ export default {
   },
 };
 </script>
-  

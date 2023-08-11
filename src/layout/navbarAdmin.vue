@@ -2,19 +2,12 @@
   <v-app>
     <v-layout>
       <v-app-bar clipped-left app dark fixed elevation="0" :src="navbar_img">
-        <!-- {{ navbar_img }} -->
         <v-app-bar-nav-icon @click="drawer = !drawer">
           <v-icon>{{
             drawer ? "mdi-chevron-double-left" : "mdi-dots-vertical"
           }}</v-icon>
         </v-app-bar-nav-icon>
-        <!-- <v-app-bar-title><v-img max-height="37" max-width="51" src="../assets/navbar/title_img.jpg"></v-img></v-app-bar-title> -->
         <v-spacer></v-spacer>
-        <!-- <v-badge class="mx-5" overlap color="#F03D3E" content="1" message="1">
-          <v-icon dark>mdi-bell-outline</v-icon>
-        </v-badge> -->
-
-        <!-- <div class="mx-5" v-if="$vuetify.breakpoint.smAndDown"> -->
         <div class="mx-5">
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">

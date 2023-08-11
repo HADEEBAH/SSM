@@ -5,7 +5,6 @@
       <v-card flat>
         <v-card-text class="bg-[#FBF3F5] border">
           <v-row>
-            <!-- {{ course_data }} -->
             <v-col cols="auto">
               <v-img
                 class="rounded-lg"
@@ -50,9 +49,6 @@
                     >คอร์สเรียน : {{ course_data.course_name_th }}</rowData
                   >
                 </v-col>
-                <!-- <v-col cols="12" sm="4"  class="pa-0"> 
-                    <rowData mini  icon=" mdi-account-box-multiple">แพ็กเกจ : Family</rowData>
-                </v-col> -->
                 <v-col cols="12" sm class="pa-0">
                   <rowData mini icon="mdi-clock-outline"
                     >เวลาสอน {{ course_data.course_hours }} ชั่วโมง</rowData
@@ -68,7 +64,6 @@
       </v-row>
       <v-row dense class="mb-3">
         <v-col align="center">
-          <!-- {{coach_check_in}} -->
           <v-btn
             @click="checkIn()"
             depressed
@@ -91,7 +86,6 @@
           </v-btn>
         </v-col>
       </v-row>
-      <!-- <pre>{{student_check_in}}</pre> -->
       <v-tabs class="mb-3" v-model="tab" color="#ff6b81" grow>
         <v-tab class="border-b-2" href="#check in"> เช็คชื่อ </v-tab>
         <v-tab
@@ -184,7 +178,6 @@
                   {{ `${item.countCheckIn}/${item.totalDay}` }}
                 </template>
                 <template v-slot:expanded-item="{ headers, item }">
-                  <!-- <pre>{{ item }}</pre> -->
                   <td class="pa-2" :colspan="headers.length" align="center">
                     <v-row dense>
                       <v-col cols="12" sm="2">วันเรียนชดเชย</v-col>
@@ -397,7 +390,6 @@
                   )"
                   :key="`${index_student}-student`"
                 >
-                  <!-- <pre>{{ student.checkInStudentId }}</pre> -->
                   <v-card-text>
                     <v-row class="d-flex align-center">
                       <v-col cols="12" sm class="text-lg font-bold">
@@ -469,15 +461,6 @@
                             ></v-rating>
                           </template>
                         </v-select>
-                        <!-- <v-rating
-                        v-model="student.assessment.rating_evolution"
-                        background-color="pink lighten-3"
-                        @input="CheckRating($event, student.checkInStudentId, 'assessment_evolution')"
-                        color="pink"
-                        large
-                        length="5"
-                        :min="2"
-                      ></v-rating> -->
                       </v-col>
                       <v-col cols="12" sm="4">
                         <labelCustom text="ระดับความสนใจ"></labelCustom>
@@ -509,14 +492,6 @@
                             ></v-rating>
                           </template>
                         </v-select>
-                        <!-- <v-rating
-                        v-model="student.assessment.rating_interest"
-                        background-color="pink lighten-3" 
-                        @input="CheckRating($event, student.checkInStudentId, 'assessment_interest')"
-                        color="pink"
-                        large
-                        length="5"
-                      ></v-rating> -->
                       </v-col>
                       <v-col cols="12" sm="auto">
                         <v-btn
@@ -583,7 +558,6 @@
                 :key="`${index_student}-student`"
               >
                 <v-card-text>
-                  <!-- <pre>{{ student.potential }}</pre> -->
                   <v-row class="d-flex align-center">
                     <v-col cols="12" sm class="text-lg font-bold">
                       {{ student.no }} {{ student.fullname }}
@@ -621,7 +595,6 @@
                   </v-row>
                   <v-row class="d-flex align-center">
                     <v-col cols="12" sm>
-                      <!-- {{student.potential}} -->
                       <labelCustom text="ระดับพัฒนาการ"></labelCustom>
                       <v-select
                         outlined
@@ -768,7 +741,6 @@
                     v-if="file.attId && file.filesType.search('video') > -1"
                   >
                     <v-card flat>
-                      <!-- <div class="flex justify-end"> -->
                       <v-btn
                         icon
                         small
@@ -777,7 +749,6 @@
                         @click="removeSummaryFileInbase(file, index)"
                         ><v-icon>mdi-close</v-icon></v-btn
                       >
-                      <!-- </div> -->
                       <video width="100%" :src="file.url" controls></video>
                     </v-card>
                   </template>
@@ -865,14 +836,6 @@
                             ></v-progress-circular>
                           </v-row>
                         </template>
-
-                        <!-- <v-btn
-                        icon
-                        class="bg-[#f00]"
-                        dark
-                        @click="removeSummaryFile(index)"
-                        ><v-icon>mdi-close</v-icon></v-btn
-                      > -->
                       </v-img>
                     </v-card>
                   </template>
@@ -951,7 +914,6 @@
         v-model="show_comment_dialog"
         v-if="show_comment_dialog"
       >
-        <!-- <pre>{{student_check_in[selected_student]}}</pre> -->
         <v-card class="pa-1">
           <v-row dense>
             <v-col class="pa-1" cols="12" align="right">
@@ -1119,7 +1081,6 @@
         v-if="show_comment_potential_dialog"
       >
         <v-card class="pa-1">
-          <!-- <pre>{{student_check_in[selected_student].potential.checkInPotentialId}}</pre> -->
           <v-row dense>
             <v-col class="pa-1" cols="12" align="right">
               <v-btn icon @click="closeDialogPotential(selected_student)">
@@ -1162,7 +1123,6 @@
                       <imgFileType :mime_type="file.filesType"></imgFileType>
                     </v-col>
                     <v-col @click="openFile(file)" class="px-2 cursor-pointer">
-                      <!-- {{ file }} -->
                       <span class="font-bold">
                         {{ file.originalFilesName }}</span
                       ><br />
@@ -1238,8 +1198,6 @@
                 v-for="(file, index) of comment_potential_dialog_tmp.files"
                 :key="`${index}-file`"
               >
-                <!-- <pre>{{ file }}</pre> -->
-
                 <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                   <v-row>
                     <v-col cols="auto" class="pr-2">
@@ -1298,7 +1256,6 @@
         v-model="show_attachment_dialog"
       >
         <v-card>
-          <!-- <v-card-text> -->
           <v-container grid-list-xs>
             <v-row>
               <v-col cols="12" class="text-center">
@@ -1335,7 +1292,6 @@
               </v-col>
             </v-row>
           </v-container>
-          <!-- </v-card-text> -->
         </v-card>
       </v-dialog>
 
@@ -2128,4 +2084,3 @@ export default {
   },
 };
 </script>
-<style></style>

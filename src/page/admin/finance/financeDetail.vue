@@ -2,7 +2,6 @@
   <v-app>
     <v-container>
       <headerPage :breadcrumbs="breadcrumbs"></headerPage>
-      <!-- <pre>{{ order_detail }}</pre> -->
       <v-card class="mb-3">
         <v-card-text>
           <v-row>
@@ -380,8 +379,8 @@
     </v-container>
   </v-app>
 </template>
-  
-  <script>
+
+<script>
 import headerPage from "@/components/header/headerPage.vue";
 import rowData from "@/components/label/rowData.vue";
 import { mapActions, mapGetters } from "vuex";
@@ -1087,7 +1086,7 @@ export default {
   },
 };
 </script>
-  <style>
+<style>
 .headder-card-img {
   position: relative;
   left: -23px;
@@ -1096,4 +1095,3 @@ export default {
   width: 50vw;
 }
 </style>
-  

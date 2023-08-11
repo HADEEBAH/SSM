@@ -1,5 +1,4 @@
 <template>
-  <!-- <v-app> -->
   <v-container class="h-full">
     <v-row class="h-full">
       <v-col cols="12" sm="6" :class="MobileSize ? '' : 'h-full'">
@@ -237,7 +236,6 @@
     </v-dialog>
     <loading-overlay :loading="course_is_loading"></loading-overlay>
   </v-container>
-  <!-- </v-app> -->
 </template>
 
 <script>

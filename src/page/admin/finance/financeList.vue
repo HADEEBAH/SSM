@@ -263,7 +263,6 @@
               <!-- ประเภทการชำระเงิน -->
               <v-col cols="12" sm="6">
                 <label-custom text="ประเภทการชำระเงิน"></label-custom>
-                <!-- {{ export_filter.payment_type }} -->
                 <v-autocomplete
                   dense
                   :items="typeOfPayment"
@@ -863,5 +862,3 @@ export default {
   },
 };
 </script>
-<style>
-</style>

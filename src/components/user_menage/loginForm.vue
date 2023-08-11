@@ -1,4 +1,3 @@
-
 <!-- snacbar สำหรับ popup -->
 <template>
   <div :style="MobileSize ? 'width: 90%; ' : 'width: 50%;'">
@@ -25,7 +24,6 @@
           <v-row dense>
             <v-col cols="12" class="pa-0 text-bold text-black">
               <label>ชื่อผู้ใช้งาน / OneID</label>
-              <!-- :rules="rules.username" -->
               <v-text-field
                 @keypress="validate($event, 'en-number')"
                 dense
@@ -38,7 +36,6 @@
             </v-col>
             <v-col cols="12" class="pa-0 text-bold text-black">
               <label>รหัสผ่าน</label>
-              <!-- :rules="rules.password" -->
               <v-text-field
                 @keypress="validate($event, 'en')"
                 dense
@@ -98,7 +95,7 @@
   </div>
 </template>
 
-  <script>
+<script>
 import { inputValidation } from "@/functions/functions";
 
 import { mapActions, mapGetters } from "vuex";
@@ -182,4 +179,3 @@ export default {
   color: #ff6b81;
 }
 </style>
-  

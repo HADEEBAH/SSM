@@ -186,25 +186,12 @@
                       ) in potential.attachmentPotential"
                       :key="index_file"
                     >
-                      <!-- <pre>{{ file }}</pre> -->
                       <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                         <v-row>
                           <v-col align="center">
                             <imgFileType
                               :mime_type="file.filesType"
                             ></imgFileType>
-                            <!-- <v-icon
-                              color="#ff6b81"
-                              size="60px"
-                              v-if="file.filesType.includes('pdf')"
-                              >mdi-file-eye-outline</v-icon
-                            >
-                            <v-img
-                              v-if="file.filesType.includes('text')"
-                              height="35"
-                              width="26"
-                              src="../../../assets/coachLeave/file.svg"
-                            /> -->
                           </v-col>
                           <v-col cols="12" sm="10" align="start">
                             <span class="font-bold">{{
@@ -227,7 +214,6 @@
           </v-card-text>
         </v-card>
       </div>
-      <!-- <pre>{{ my_course_detail.checkIn }}</pre> -->
       <div
         v-for="(day_list, index_day) in my_course_detail.checkIn"
         :key="index_day"
@@ -242,9 +228,6 @@
                   hide-details
                 ></v-checkbox>
               </v-col>
-              <!-- <v-col>
-                <v-icon color="#FF6B81">mdi-calendar-month-outline</v-icon>
-              </v-col> -->
               <v-col>
                 <v-icon color="#FF6B81" style="margin-top: -4px"
                   >mdi-calendar-month-outline</v-icon
@@ -378,7 +361,6 @@
                       :key="index_file"
                     >
                       <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
-                        <!-- <pre>{{ file }}</pre> -->
                         <v-row dense>
                           <v-col cols="12" sm="1" align="center">
                             <imgFileType
@@ -406,52 +388,6 @@
           </v-card-text>
         </v-card>
       </div>
-      <!-- DIALOG -->
-      <!-- <v-dialog class="pa-2" width="50vw" v-model="dialog_show" persistent>
-      <v-card>
-        <v-card-title>
-          <v-row>
-            <v-col cols="12" align="right">
-              <v-btn icon @click="dialog_show = false">
-                <v-icon color="#ff6b81">mdi-close</v-icon>
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-card-title>
-        <img src="../../../assets/student_course/download.png" class="mx-40 my-10"/>
-        <v-card-text class="text-center font-bold text-xl"> ดาวน์โหลดแบบประเมินเรียบร้อย</v-card-text>
-        <v-btn color="#FF6B81" class="white--text w-60 mx-64 my-10" @click="dialog_show = false">
-            ตกลง
-        </v-btn>
-      </v-card>
-    </v-dialog> -->
-
-      <!-- <v-row v-if="checked == true">
-        <v-col cols="12" class="text-center">
-          <v-btn  class="pink--text w-full" @click="closedownload()">
-            ยกเลิก
-          </v-btn>
-        </v-col>
-        <v-col cols="12" class="text-center">
-          <v-btn color="#FF6B81" class="white--text w-full" @click="download()">
-            ดาวน์โหลด
-          </v-btn>
-        </v-col>
-      </v-row> -->
-
-      <!-- <v-row v-else> -->
-      <!-- <v-row>
-        <v-col cols="12" class="text-center">
-          <v-btn
-            disabled
-            color="#FF6B81"
-            class="white--text w-full my-5"
-            @click="download()"
-          >
-            ดาวน์โหลดผลการประเมิน
-          </v-btn>
-        </v-col>
-      </v-row> -->
     </div>
   </v-container>
 </template>
@@ -640,6 +576,5 @@ export default {
   },
 };
 </script>
-  
-  <style scoped>
-</style>
+
+<style scoped></style>

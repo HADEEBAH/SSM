@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col align="center">
-        <img src="../../../assets/profile/profileLanguages.png"  />
+        <img src="../../../assets/profile/profileLanguages.png" />
       </v-col>
     </v-row>
     <!-- TH -->
@@ -16,8 +16,13 @@
         </v-col>
         <v-col cols="2" sm="auto">
           <v-radio-group>
-            <!-- <v-radio color="pink" value="radio1" v-model="selectedOption" ></v-radio> -->
-            <input class="form-check-input" type="radio" v-model="selectedOption" name="radioGroup" value="option2">
+            <input
+              class="form-check-input"
+              type="radio"
+              v-model="selectedOption"
+              name="radioGroup"
+              value="option2"
+            />
           </v-radio-group>
         </v-col>
       </v-row>
@@ -33,20 +38,24 @@
         </v-col>
         <v-col cols="2" sm="auto">
           <v-radio-group>
-            <!-- <v-radio color="pink" value="radio-2" v-model="selectedOption"></v-radio> -->
-            <input class="form-check-input" type="radio" v-model="selectedOption" name="radioGroup" value="option3">
+            <input
+              class="form-check-input"
+              type="radio"
+              v-model="selectedOption"
+              name="radioGroup"
+              value="option3"
+            />
           </v-radio-group>
         </v-col>
       </v-row>
     </v-card>
-    <!-- <div>Selected option: {{ selectedOption }}</div> -->
   </v-container>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
 export default {
-  data: () => ({selectedOption: ''}),
+  data: () => ({ selectedOption: "" }),
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "เลือกภาษา");
   },
@@ -63,5 +72,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

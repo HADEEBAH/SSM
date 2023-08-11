@@ -468,7 +468,6 @@
               </v-col>
               <v-col cols="12" sm="4">
                 <label-custom text="เวลา"></label-custom>
-                <!-- <pre>{{ course_data }}</pre> -->
                 <v-text-field
                   disabled
                   outlined
@@ -479,7 +478,6 @@
               </v-col>
               <v-col cols="12" sm="4">
                 <label-custom text="โค้ช"></label-custom>
-                <!-- {{ course.coach }} -->
                 <v-text-field
                   dense
                   outlined

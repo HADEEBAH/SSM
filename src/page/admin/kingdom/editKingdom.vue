@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    <!-- {{ showImg(category.categoryImg)  }} -->
     <v-form ref="category_form" v-model="category_form">
       <headerPage title="แก้ไขอาณาจักร" class="my-5"></headerPage>
       <label-custom text="อัปโหลดภาพหน้าปกอาณาจักร"></label-custom>
@@ -317,18 +316,16 @@ export default {
                 config
               );
               if (data.statusCode === 200) {
-
                 Swal.fire({
                   icon: "success",
                   title: "แก้ไขอาณาจักรสำเร็จ",
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,
-                  showConfirmButton: false
-                }).finally(()=>{
-                  this.goToManageKingdomPage()
+                  showConfirmButton: false,
+                }).finally(() => {
+                  this.goToManageKingdomPage();
                 });
-
               } else {
                 throw { message: data.message };
               }
@@ -359,5 +356,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

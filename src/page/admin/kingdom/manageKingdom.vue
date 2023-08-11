@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    <!-- <label class="text-xl font-bold">จัดการอาณาจักรทั้งหมด</label> -->
     <header-page slot_tag title="จัดการอาณาจักรทั้งหมด">
       <v-text-field
         class="w-full"
@@ -46,7 +45,7 @@
     </div>
   </v-container>
 </template>
-  <script>
+<script>
 import { mapActions, mapGetters } from "vuex";
 import Swal from "sweetalert2";
 import headerPage from "@/components/header/headerPage.vue";
@@ -107,8 +106,8 @@ export default {
   },
 };
 </script>
-  
-  <style scoped>
+
+<style scoped>
 .pink-header {
   background-color: pink;
 }

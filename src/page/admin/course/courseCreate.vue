@@ -157,7 +157,8 @@
                     cols="12"
                     class="flex align-center justify-center text-caption"
                   >
-                    ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
+                    ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ
+                    ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
                   </v-col>
                   <v-col cols="12" class="flex align-center justify-center">
                     <v-btn
@@ -231,7 +232,8 @@
                     cols="12"
                     class="flex align-center justify-center text-caption"
                   >
-                  ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
+                    ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ
+                    ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
                   </v-col>
                 </v-row>
                 <v-row dense>
@@ -309,7 +311,7 @@
       </v-stepper>
     </v-container>
   </v-app>
-</template>  
+</template>
 <script>
 import headerPage from "@/components/header/headerPage.vue";
 import headerCard from "@/components/header/headerCard.vue";
@@ -602,6 +604,3 @@ export default {
   },
 };
 </script>
-
-
-      

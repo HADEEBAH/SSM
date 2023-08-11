@@ -17,7 +17,6 @@
                 <v-card class="rounded-lg my-5" color="#FCFCFC">
                   <v-card-text>
                     <v-row>
-                      <!-- :hide-details="!checkData.account_id" -->
                       <v-col cols="12" sm="4">
                         <labelCustom text="Username"></labelCustom>
                         <v-text-field
@@ -88,35 +87,6 @@
                                 : require(`@/assets/userManagePage/default_img_update_profile.svg`)
                             "
                           >
-                            <!-- <v-btn
-                              v-if="
-                                preview_img === '' &&
-                                checkData.image &&
-                                checkData.image !== ''
-                              "
-                              color="#ff6b81"
-                              @click="openFileSelector"
-                              class="w-full white--text"
-                              >เปลี่ยนรูป</v-btn
-                            >
-                            <v-btn
-                              v-if="
-                                preview_img === '' &&
-                                (!checkData.image || checkData.image === '')
-                              "
-                              color="#fff"
-                              @click="openFileSelector"
-                              class="w-full text-[#ff6b81!important]"
-                              >เพิ่มรูป</v-btn
-                            >
-                            <v-btn
-                              v-if="preview_img !== ''"
-                              color="#ff6b81"
-                              @click="removeImg"
-                              class="w-full white--text"
-                            >
-                              <span class="mdi mdi-close">ยกเลิก</span>
-                            </v-btn> -->
                           </v-img>
                         </div>
                         <input
@@ -290,16 +260,6 @@
                   :key="index_relations"
                 >
                   <v-card-text>
-                    <!-- <v-col align="right">
-                      <v-icon
-                        larg
-                        color="#FF6B81"
-                        @click="removeRelations(relations)"
-                        v-if="data_user_relation_management.length >= 1"
-                      >
-                        mdi-delete
-                      </v-icon>
-                    </v-col> -->
                     <v-row dense align="center">
                       <v-col cols="12" sm="6">
                         <label-custom
@@ -406,65 +366,8 @@
                   </v-card-text>
                 </v-card>
               </v-col>
-
-              <!-- <v-col cols="12" sm="6">
-                <v-checkbox
-                  v-model="isCheckedRelation"
-                  :label="
-                    global_role_code === 'R_4'
-                      ? 'ต้องการเพิ่มนักเรียนในการดูแล'
-                      : 'ต้องการเพิ่มผู้ปกครอง'
-                  "
-                  value="Jacob"
-                  color="pink"
-                  item-color="pink"
-                ></v-checkbox>
-              </v-col> -->
             </v-row>
-
-            <!-- เพิ่มความสัมพันธ์ -->
-            <!-- <v-row dense v-if="isCheckedRelation">
-              <v-col cols="12" class="text-center">
-                <v-btn
-                  dense
-                  outlined
-                  color="#ff6b81"
-                  @click="
-                    openAddRelationsDialog(
-                      global_data_relation_checked.userName,
-                      global_data_relation_checked.roles
-                        .map((val) => {
-                          return val.roleId;
-                        })
-                        .join()
-                    )
-                  "
-                >
-                  <v-icon>mdi-plus-circle-outline</v-icon
-                  >{{
-                    global_role_code === 'R_4'
-                      ? "เพิ่มข้อมูลนักเรียน"
-                      : "เพิ่มข้อมูลผู้ปกครอง"
-                  }}</v-btn
-                >
-              </v-col>
-            </v-row> -->
           </v-container>
-
-          <!-- <v-container v-if="checkData.account_id" fluid>
-            <v-row>
-              <v-col class="text-right mt-5">
-                <v-btn
-                  depressed
-                  class="white--text"
-                  color="#ff6b81"
-                  @click="submitData(checkData.account_id)"
-                >
-                  บันทึก
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-container> -->
 
           <v-container v-if="checkData.account_id" fluid>
             <v-row>
@@ -505,7 +408,6 @@
         </header-card>
         <v-card-text>
           <v-row dense>
-            <!-- :hide-details="!relation.account_id" -->
             <v-col cols="9">
               <labelCustom text="Username"></labelCustom>
               <v-text-field
@@ -1026,7 +928,6 @@ export default {
     },
 
     submitData(account_id) {
-
       Swal.fire({
         icon: "question",
         title: "คุณต้องการบันทึกหรือไม่",
@@ -1056,10 +957,7 @@ export default {
                 this.seledtedRole != "" ? [{ roleId: this.seledtedRole }] : [],
             };
             let bodyFormData = new FormData();
-            bodyFormData.append(
-              "image",
-              this.send_image_profile
-            );
+            bodyFormData.append("image", this.send_image_profile);
             bodyFormData.append("payload", JSON.stringify(payload));
 
             let { data } = await axios.patch(
@@ -1143,7 +1041,6 @@ export default {
     },
 
     "data_user_relation_management.length": function () {
-
       for (const show_data of this.show_by_id.userRoles) {
         if (show_data.roleId == "R_4") {
           if (this.data_user_relation_management.length > 0) {

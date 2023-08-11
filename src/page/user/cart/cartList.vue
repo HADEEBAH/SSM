@@ -1,9 +1,7 @@
 <template>
-  <!-- <v-app class="overflow-x-hidden overflaow-y-hidden"> -->
   <v-container class="h-full">
     {{ setFunctions }}
     <loading-overlay :loading="cart_list_is_loading"></loading-overlay>
-    <!-- <pre>{{ cart_list }}</pre> -->
     <div v-if="!cart_list_is_loading" class="h-full">
       <v-row class="h-full content-center" v-if="cart_list.length == 0">
         <v-col cols="12" class="webkit-center">
@@ -20,7 +18,6 @@
             v-for="(item, index_item) in cart_list"
             :key="`${index_item}-cart`"
           >
-            <!-- <pre>{{item}}</pre> -->
             <v-card class="rounded-lg mt-5">
               <v-row dense>
                 <v-col cols="3">
@@ -52,7 +49,6 @@
                                   v-model="item.checked"
                                 >
                                 </v-checkbox>
-                                <!-- {{ item.checked }} -->
                               </v-col>
                             </v-row>
                             <v-row dense>
@@ -68,7 +64,6 @@
                                 sm="6"
                                 class="text-md font-semibold"
                               >
-                                <!-- เวลา : {{ item.time.start }}-{{ item.time.end }} -->
                               </v-col>
                             </v-row>
                             <v-row dense>
@@ -125,7 +120,6 @@
                         บาท</v-col
                       >
                     </v-row>
-                    <!-- <pre>{{ item }}</pre> -->
                     <div align="right">
                       <v-btn
                         outlined
@@ -241,10 +235,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
-    <!-- <v-btn depressed dark color="#ff6b81" @click="saveCartData"> ชำระเงิน  </v-btn> -->
   </v-container>
-  <!-- </v-app> -->
 </template>
 <script>
 import Swal from "sweetalert2";

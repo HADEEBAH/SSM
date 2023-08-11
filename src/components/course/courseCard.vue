@@ -32,14 +32,13 @@
             cols="12"
             class="flex align-center justify-center text-caption"
           >
-            ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
+            ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ
+            ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
           </v-col>
           <v-col
             cols="12"
             class="flex align-center justify-center text-caption"
           >
-            <!-- <span class="font-weight-bold">คำแนะนำ</span> :
-            ควรอัปโหลดรูปที่มีขนาด 1280 x 500px -->
           </v-col>
           <v-col cols="12" class="flex align-center justify-center">
             <v-btn outlined color="blue" @click="openFileSelector"
@@ -211,20 +210,6 @@
               >
               </VueTimepicker>
             </div>
-            <!-- <v-text-field
-              class="input-text-right"
-              suffix="ชั่วโมง"
-              dense
-              @focus="$event.target.select()"
-              type="number"
-              :disabled="disable"
-              :outlined="!disable"
-              :filled="disable"
-              @change="ChangeCourseData(course_data)"
-              :rules="rules.course_hours"
-              v-model.number="course_data.course_hours"
-              placeholder="ระบุจำนวนชั่วโมงการเรียน/ครั้ง"
-            ></v-text-field> -->
           </v-col>
           <v-col cols="12" sm="6">
             <label-custom required text="สถานที่เรียน"></label-custom>
@@ -268,14 +253,6 @@
                 @text-change="ChangeCourseData(course_data)"
                 v-model="course_data.detail"
               ></vue-editor>
-              <!-- <v-textarea
-                v-model="course_data.detail"
-                :disabled="disable"
-                :outlined="!disable"
-                :filled="disable"
-                @change="ChangeCourseData(course_data)"
-                placeholder="กรอกรายละเอียด..."
-              ></v-textarea> -->
             </v-col>
           </v-row>
           <v-row dense>
@@ -290,14 +267,6 @@
                 @text-change="ChangeCourseData(course_data)"
                 v-model="course_data.music_performance"
               ></vue-editor>
-              <!-- <v-textarea
-                v-model="course_data.music_performance"
-                :disabled="disable"
-                :outlined="!disable"
-                :filled="disable"
-                @change="ChangeCourseData(course_data)"
-                placeholder="กรอกรายละเอียด..."
-              ></v-textarea> -->
             </v-col>
           </v-row>
           <v-row dense>
@@ -312,14 +281,6 @@
                 @text-change="ChangeCourseData(course_data)"
                 v-model="course_data.catification"
               ></vue-editor>
-              <!-- <v-textarea
-                v-model="course_data.catification"
-                :disabled="disable"
-                :outlined="!disable"
-                :filled="disable"
-                @change="ChangeCourseData(course_data)"
-                placeholder="กรอกรายละเอียด..."
-              ></v-textarea> -->
             </v-col>
           </v-row>
         </template>
@@ -756,8 +717,8 @@
     </v-card>
   </div>
 </template>
-  
-  <script>
+
+<script>
 import LabelCustom from "@/components/label/labelCustom.vue";
 import headerCard from "@/components/header/headerCard.vue";
 import { mapGetters, mapActions } from "vuex";
@@ -1078,4 +1039,3 @@ export default {
   },
 };
 </script>
-  

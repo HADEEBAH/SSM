@@ -58,16 +58,17 @@
                     ? search_results.filter(
                         (v) => v.course_type_id === type.course_type_id
                       ).length
-                    :search_course ? search_results.filter(
+                    : search_course
+                    ? search_results.filter(
                         (v) => v.course_type_id === type.course_type_id
-                      ).length : type.total_course
+                      ).length
+                    : type.total_course
                 }}
               </v-avatar>
             </v-card-text>
           </v-card>
         </v-col>
       </v-row>
-      <!-- <pre>{{ search_results }}</pre> -->
       <v-row dense>
         <template v-if="!courses_is_loading">
           <v-col
@@ -76,7 +77,9 @@
               (v) => v.course_type_id === type_selected
             ).length > 0
               ? search_results.filter((v) => v.course_type_id === type_selected)
-              : search_course ? search_results :courses"
+              : search_course
+              ? search_results
+              : courses"
             :key="course_index"
           >
             <v-card class="overflow-hidden h-full rounded-lg">
@@ -141,7 +144,11 @@
               </v-card-text>
             </v-card>
           </v-col>
-          <v-col v-if="search_course ? search_results.length == 0 :courses.length == 0">
+          <v-col
+            v-if="
+              search_course ? search_results.length == 0 : courses.length == 0
+            "
+          >
             <v-card outlined>
               <v-card-text align="center">
                 <span class="font-bold">ไม่พบข้อมูลคอร์ส</span>
@@ -237,10 +244,16 @@ export default {
       this.search_results = this.courses.filter((course) => {
         const courseNameTh = course.course_name_th.toLowerCase();
         const courseNameEn = course.course_name_en.toLowerCase();
-        if( !courseNameTh.includes(searchQuery) && !courseNameEn.includes(searchQuery)){
-          return false
-        }else{
-          return ( courseNameTh.includes(searchQuery) || courseNameEn.includes(searchQuery) );
+        if (
+          !courseNameTh.includes(searchQuery) &&
+          !courseNameEn.includes(searchQuery)
+        ) {
+          return false;
+        } else {
+          return (
+            courseNameTh.includes(searchQuery) ||
+            courseNameEn.includes(searchQuery)
+          );
         }
       });
     },

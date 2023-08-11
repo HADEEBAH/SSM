@@ -28,26 +28,25 @@
                 v-if="type.value == 'all'"
                 max-height="90"
                 max-width="70"
-                src="../../../assets/coachLeave/all.png"
+                src="@/assets/coachLeave/all.png"
               ></v-img>
-              <!-- <v-img v-if="type.value== 'registered'" max-height="90" max-width="70" src="../../../assets/coachLeave/accept.png"></v-img> -->
               <v-img
                 v-if="type.value == 'contacted'"
                 max-height="90"
                 max-width="70"
-                src="../../../assets/coachLeave/accept.png"
+                src="@/assets/coachLeave/accept.png"
               ></v-img>
               <v-img
                 v-if="type.value == 'waiting'"
                 max-height="90"
                 max-width="70"
-                src="../../../assets/coachLeave/wait.png"
+                src="@/assets/coachLeave/wait.png"
               ></v-img>
               <v-img
                 v-if="type.value == 'cancel'"
                 max-height="90"
                 max-width="70"
-                src="../../../assets/coachLeave/disaccept.png"
+                src="@/assets/coachLeave/disaccept.png"
               ></v-img>
             </template>
             <template v-slot:header>

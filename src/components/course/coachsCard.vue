@@ -15,7 +15,6 @@
               :key="teach_day_index"
             ></v-divider>
             <v-row dense>
-              <!-- <pre>{{ teach_day }}</pre> -->
               <v-col cols class="d-flex align-center justify-end">
                 <v-switch
                   @click="checkStudyByDay($event, teach_day)"
@@ -42,7 +41,6 @@
             <v-row dense class="flex align-center justify-end">
               <v-col cols="12" sm="4">
                 <label-custom required text="โค้ช"></label-custom>
-                <!-- <pre>{{ coach }}</pre> -->
                 <v-autocomplete
                   dense
                   :disabled="
@@ -141,7 +139,6 @@
               </v-col>
               <v-col cols="6" sm="2">
                 <template v-if="teach_day.day_of_week_id">
-                  <!-- {{  edited +'*'+ disable}} -->
                   <v-btn
                     :disabled="disable || !edited"
                     text
@@ -173,11 +170,11 @@
               </v-col>
             </v-row>
             <!-- CLASS TIME -->
-            <template v-for="(class_date, class_date_index) in teach_day.class_date" >
+            <template
+              v-for="(class_date, class_date_index) in teach_day.class_date"
+            >
               <v-row dense :key="`${class_date_index}-class-date`">
-                <!-- <pre>{{ coach.disabled_hours }}</pre> -->
                 <v-col cols="12" sm="6">
-                  <!-- <pre>{{class_date}}</pre> -->
                   <label-custom required text="ช่วงเวลา"></label-custom>
                   <v-row dense class="mb-3">
                     <v-col class="px-2" cols="12" sm="6">
@@ -275,7 +272,6 @@
                 </v-col>
                 <v-col cols="6" sm="2" class="d-flex align-center">
                   <template v-if="class_date.class_date_range.day_of_week_id">
-                    <!-- {{ class_date.class_date_range.time_id }} -->
                     <v-btn
                       :disabled="disable"
                       v-if="teach_day.class_date.length > 1"
@@ -394,17 +390,19 @@ export default {
             end_time: v.class_date_range.end_time_object,
           };
         });
-        if(timeused.filter(v => v.end_time.HH === hours).length > 0){
-          timeused.filter(v => v.end_time.HH === hours).forEach((time) => {
-            if (hours === time.end_time.HH) {
-              let min_end = parseInt(time.end_time.mm);
-              for (let min = min_end; min < 60; min++) {
-                timeMinUsed.push(min);
+        if (timeused.filter((v) => v.end_time.HH === hours).length > 0) {
+          timeused
+            .filter((v) => v.end_time.HH === hours)
+            .forEach((time) => {
+              if (hours === time.end_time.HH) {
+                let min_end = parseInt(time.end_time.mm);
+                for (let min = min_end; min < 60; min++) {
+                  timeMinUsed.push(min);
+                }
               }
-            }
-          });
-        }else{
-          for (let min = 0 ; min < 60; min++) {
+            });
+        } else {
+          for (let min = 0; min < 60; min++) {
             timeMinUsed.push(min);
           }
         }
@@ -741,5 +739,3 @@ export default {
   },
 };
 </script>
-
-  

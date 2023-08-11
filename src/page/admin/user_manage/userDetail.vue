@@ -1,7 +1,6 @@
 <template>
   <v-container fluid class="overflow-x-hidden overflow-y-hidden">
     <v-row v-if="$route?.params?.action == 'view'" dense class="mt-5">
-      <!-- <pre>{{ show_by_id }}</pre> -->
       <v-col cols="12">
         <headerPage :breadcrumbs="breadcrumbs"></headerPage>
         <v-card class="rounded-lg">
@@ -59,33 +58,6 @@
                 <v-card class="rounded-lg my-3" color="#FCFCFC">
                   <v-card-text>
                     <v-row>
-                      <!-- <v-col cols="12" sm="4" class="align-self-center">
-                        <div class="mx-auto profileCard">
-                          <v-img
-                            v-if="!previewUrl"
-                            src="@/assets/userManagePage/imgcard.png"
-                            class="drop-shadow-md"
-                          >
-                          </v-img>
-
-                          <div
-                            style="position: absolute"
-                            v-if="show_by_id.image !== ''"
-                          >
-                            <img
-                              :src="show_by_id.image"
-                              class="profileInCard"
-                            />
-                          </div>
-
-                          <div style="position: absolute" v-else>
-                            <img
-                              src="../../../assets/userManagePage/default_img_update_profile.svg"
-                              class="profileInCard"
-                            />
-                          </div>
-                        </div>
-                      </v-col> -->
                       <v-col
                         class="webkit-center"
                         cols="12"
@@ -271,10 +243,6 @@
                         <v-row>
                           <v-col cols="12" sm="6">
                             <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
-                            <!-- <div v-if="!isEnabled">
-                              {{ show_by_id.firstNameTh }}
-                            </div>
-                            <div v-else> -->
                             <v-text-field
                               :disabled="!isEnabled"
                               @keypress="validate($event, 'th')"
@@ -284,17 +252,12 @@
                               dense
                             >
                             </v-text-field>
-                            <!-- </div> -->
                           </v-col>
 
                           <v-col cols="12" sm="6">
                             <label-custom
                               text="นามสกุล (ภาษาไทย)"
                             ></label-custom>
-                            <!-- <div v-if="!isEnabled">
-                              {{ show_by_id.lastNameTh }}
-                            </div>
-                            <div v-else> -->
                             <v-text-field
                               :disabled="!isEnabled"
                               @keypress="validate($event, 'th')"
@@ -305,7 +268,6 @@
                               dense
                             >
                             </v-text-field>
-                            <!-- </div> -->
                           </v-col>
                         </v-row>
 
@@ -314,10 +276,6 @@
                             <label-custom
                               text="First Name (English)"
                             ></label-custom>
-                            <!-- <div v-if="!isEnabled">
-                              {{ show_by_id.firstNameEng }}
-                            </div>
-                            <div v-else> -->
                             <v-text-field
                               :disabled="!isEnabled"
                               @keypress="validate($event, 'en')"
@@ -327,17 +285,11 @@
                               outlined
                               dense
                             ></v-text-field>
-                            <!-- </div> -->
                           </v-col>
                           <v-col cols="12" sm="6">
                             <label-custom
                               text="Last Name (English)"
                             ></label-custom>
-
-                            <!-- <div v-if="!isEnabled">
-                              {{ show_by_id.lastNameEng }}
-                            </div>
-                            <div v-else> -->
                             <v-text-field
                               :disabled="!isEnabled"
                               @keypress="validate($event, 'en')"
@@ -348,17 +300,12 @@
                               dense
                             >
                             </v-text-field>
-                            <!-- </div> -->
                           </v-col>
                         </v-row>
 
                         <v-row>
                           <v-col cols="12" sm="6">
                             <label-custom text="อีเมล"></label-custom>
-                            <!-- <div v-if="!isEnabled">
-                              {{ show_by_id.email }}
-                            </div>
-                            <div v-else> -->
                             <v-text-field
                               disabled
                               @keypress="validate($event, 'en', 'number')"
@@ -369,14 +316,9 @@
                               dense
                             >
                             </v-text-field>
-                            <!-- </div> -->
                           </v-col>
                           <v-col cols="12" sm="6">
                             <label-custom text="เบอร์โทรศัพท์"></label-custom>
-                            <!-- <div v-if="!isEnabled">
-                              {{ show_by_id.mobileNo }}
-                            </div>
-                            <div v-else> -->
                             <v-text-field
                               disabled
                               @keypress="validate($event, 'en', 'number')"
@@ -390,7 +332,6 @@
                               maxlength="12"
                             >
                             </v-text-field>
-                            <!-- </div> -->
                           </v-col>
                         </v-row>
                       </v-col>
@@ -439,30 +380,12 @@
                 </v-tabs>
                 <!-- TABS 1 -->
                 <v-expand-transition>
-                  <!-- <div v-if="tab === 0"> -->
                   <v-container fluid v-if="tab === 0">
                     <v-row>
                       <v-col cols="12">
                         <v-card class="rounded-lg my-3" color="#FCFCFC">
                           <v-card-text>
                             <v-row>
-                              <!-- <v-col cols="12" sm="4" class="align-self-center">
-                                <div class="profileCard mx-auto">
-                                  <v-img
-                                    v-if="!previewUrl"
-                                    src="@/assets/userManagePage/imgcard.png"
-                                    class="drop-shadow-md"
-                                  >
-                                  </v-img>
-
-                                  <div style="position: absolute">
-                                    <img
-                                      :src="show_by_id.image"
-                                      class="profileInCard mx-auto"
-                                    />
-                                  </div>
-                                </div>
-                              </v-col> -->
                               <v-col
                                 class="webkit-center"
                                 cols="12"
@@ -489,10 +412,6 @@
                                     <label-custom
                                       text="ชื่อ (ภาษาไทย)"
                                     ></label-custom>
-                                    <!-- <div v-if="!isEnabled">
-                                    {{ show_by_id.firstNameTh }}
-                                  </div>
-                                  <div v-else> -->
                                     <v-text-field
                                       :disabled="!isEnabled"
                                       @keypress="validate($event, 'th')"
@@ -502,17 +421,12 @@
                                       dense
                                     >
                                     </v-text-field>
-                                    <!-- </div> -->
                                   </v-col>
 
                                   <v-col cols="12" sm="6">
                                     <label-custom
                                       text="นามสกุล (ภาษาไทย)"
                                     ></label-custom>
-                                    <!-- <div v-if="!isEnabled">
-                                    {{ show_by_id.lastNameTh }}
-                                  </div>
-                                  <div v-else> -->
                                     <v-text-field
                                       :disabled="!isEnabled"
                                       @keypress="validate($event, 'th')"
@@ -523,7 +437,6 @@
                                       dense
                                     >
                                     </v-text-field>
-                                    <!-- </div> -->
                                   </v-col>
                                 </v-row>
 
@@ -532,10 +445,6 @@
                                     <label-custom
                                       text="First Name (English)"
                                     ></label-custom>
-                                    <!-- <div v-if="!isEnabled">
-                                    {{ show_by_id.firstNameEng }}
-                                  </div>
-                                  <div v-else> -->
                                     <v-text-field
                                       :disabled="!isEnabled"
                                       @keypress="validate($event, 'en')"
@@ -545,17 +454,11 @@
                                       outlined
                                       dense
                                     ></v-text-field>
-                                    <!-- </div> -->
                                   </v-col>
                                   <v-col cols="12" sm="6">
                                     <label-custom
                                       text="Last Name (English)"
                                     ></label-custom>
-
-                                    <!-- <div v-if="!isEnabled">
-                                    {{ show_by_id.lastNameEng }}
-                                  </div>
-                                  <div v-else> -->
                                     <v-text-field
                                       :disabled="!isEnabled"
                                       @keypress="validate($event, 'en')"
@@ -566,17 +469,12 @@
                                       dense
                                     >
                                     </v-text-field>
-                                    <!-- </div> -->
                                   </v-col>
                                 </v-row>
 
                                 <v-row>
                                   <v-col cols="12" sm="6">
                                     <label-custom text="อีเมล"></label-custom>
-                                    <!-- <div v-if="!isEnabled">
-                                    {{ show_by_id.email }}
-                                  </div>
-                                  <div v-else> -->
                                     <v-text-field
                                       disabled
                                       @keypress="
@@ -589,16 +487,11 @@
                                       dense
                                     >
                                     </v-text-field>
-                                    <!-- </div> -->
                                   </v-col>
                                   <v-col cols="12" sm="6">
                                     <label-custom
                                       text="เบอร์โทรศัพท์"
                                     ></label-custom>
-                                    <!-- <div v-if="!isEnabled">
-                                    {{ show_by_id.mobileNo }}
-                                  </div>
-                                  <div v-else> -->
                                     <v-text-field
                                       disabled
                                       @keypress="
@@ -614,7 +507,6 @@
                                       maxlength="12"
                                     >
                                     </v-text-field>
-                                    <!-- </div> -->
                                   </v-col>
                                 </v-row>
                               </v-col>
@@ -645,11 +537,6 @@
                                   disabled
                                 >
                                 </v-text-field>
-                                <!-- <v-card
-                                background-color="#FBF3F5"
-                                class="pa-2 w-1/4 text-center my-2"
-                                >{{ item.roleNameTh }}</v-card
-                              > -->
                               </v-col>
                             </v-row>
                           </v-card-text>
@@ -688,14 +575,6 @@
                                   placeholder="-"
                                 >
                                 </v-text-field>
-
-                                <!-- <div>
-                                    {{
-                                      !relations.parent.parentUsername
-                                        ? "-"
-                                        : relations.parent.parentUsername
-                                    }}
-                                  </div> -->
                               </v-col>
 
                               <v-col cols="12" sm="6">
@@ -710,14 +589,6 @@
                                   placeholder="-"
                                 >
                                 </v-text-field>
-
-                                <!-- <div>
-                                    {{
-                                      !relations.parent.parentFirstnameEn
-                                        ? "-"
-                                        : relations.parent.parentFirstnameEn
-                                    }}
-                                  </div> -->
                               </v-col>
                               <v-col cols="12" sm="6">
                                 <label-custom
@@ -731,13 +602,6 @@
                                   placeholder="-"
                                 >
                                 </v-text-field>
-                                <!-- <div>
-                                    {{
-                                      !relations.parent.parentLastnameEn
-                                        ? "-"
-                                        : relations.parent.parentLastnameEn
-                                    }}
-                                  </div> -->
                               </v-col>
                               <v-col cols="12" sm="6">
                                 <label-custom
@@ -751,13 +615,6 @@
                                   placeholder="-"
                                 >
                                 </v-text-field>
-                                <!-- <div>
-                                    {{
-                                      !relations.parent.parentTel
-                                        ? "-"
-                                        : relations.parent.parentTel
-                                    }}
-                                  </div> -->
                               </v-col>
                             </v-row>
                           </v-card-text>
@@ -821,7 +678,6 @@
                           </template>
 
                           <template v-slot:[`item.package`]="{ item }">
-                            <!-- {{ item.cpo.packageName }} -->
                             {{ item.cpo ? item.cpo.packageName : "-" }}
                           </template>
 
@@ -841,120 +697,6 @@
                     </v-row>
                   </v-container>
                 </v-expand-transition>
-
-                <!-- Tabs 3 -->
-                <!-- <v-expand-transition>
-                  <v-container fluid v-if="tab === 1">
-                    <v-row>
-                      <v-col cols="12">
-                        <headerCard
-                          :icon="'mdi-calendar-today'"
-                          :icon_color="'#FF6B81'"
-                          :title="title3"
-                        ></headerCard>
-                        <v-divider></v-divider>
-                      </v-col>
-
-                      <v-col cols="12" sm="6">
-                        <v-text-field
-                          v-model="search"
-                          prepend-inner-icon="mdi-magnify"
-                          label="ค้นหา"
-                          hide-details
-                          dense
-                          outlined
-                          color="pink"
-                        ></v-text-field>
-                      </v-col>
-
-                      <v-col cols="12" sm="6" align="right">
-                        <label
-                          class="pink--text cursor-pointer mt-5"
-                          @click="addCertificateDialog()"
-                          ><span class="mdi mdi-file-plus-outline"></span>
-                          เพิ่มการแข่งขันและเกียรติบัตร
-                        </label>
-                      </v-col>
-
-                      <v-col cols="12" sm="6">
-                        <v-card
-                          class="mb-5"
-                          v-for="(item, index) in students.certificates"
-                          :key="index"
-                        >
-                          <v-row>
-                            <v-col cols="12" sm="6" class="ml-5 front-bold">{{
-                              item.name_certificate
-                            }}</v-col>
-                            <v-col cols="12" sm=""
-                              >วันที่แข่ง:{{ item.certificate_date }}</v-col
-                            >
-                          </v-row>
-
-                          <v-row>
-                            <v-col cols="8">
-                              <v-row>
-                                <v-col cols="1">
-                                  <v-img
-                                    src="@/assets/userManagePage/certificate .png"
-                                    width="50px"
-                                    height="50px"
-                                    contain
-                                  ></v-img>
-                                </v-col>
-                                <v-col cols="" align-self="center"
-                                  ><span
-                                    class="pink--text underline underline-offset-2"
-                                    >{{ item.fileName }}</span
-                                  ></v-col
-                                >
-                              </v-row>
-                            </v-col>
-
-                            <v-col cols="4" align="end">
-                              <v-row>
-                                <v-col cols="10" align="end">
-                                  <v-btn
-                                    v-if="!item.previewUrl"
-                                    depressed
-                                    class="white--text"
-                                    color="#ff6b81"
-                                    @click="editCertificateDialog(item, index)"
-                                  >
-                                    <span class="mdi mdi-plus"></span>
-                                    เพิ่มหนังสือรับรอง
-                                  </v-btn>
-                                  <v-btn
-                                    v-else
-                                    depressed
-                                    class="white--text"
-                                    color="#ff6b81"
-                                    @click="
-                                      detailCertificateDialog(item, index)
-                                    "
-                                  >
-                                    แสดงหนังสือรับรอง
-                                  </v-btn>
-                                </v-col>
-
-                                <v-col cols="2" align="end">
-                                  <v-icon
-                                    larg
-                                    color="#FF6B81"
-                                    @click="removeCertificate(index)"
-                                    v-if="students.certificates.length >= 2"
-                                  >
-                                    mdi-delete
-                                  </v-icon>
-                                </v-col>
-                              </v-row>
-                            </v-col>
-                          </v-row>
-                        </v-card>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-expand-transition> -->
               </v-col>
 
               <v-col
@@ -964,19 +706,12 @@
                   data_user_relation_management.length > 0
                 "
               >
-                <!-- <v-container fluid> -->
                 <headerCard
                   :icon="'mdi-file-plus-outline'"
                   :icon_color="'#FF6B81'"
                   :title="student_detail"
                 ></headerCard>
                 <v-divider></v-divider>
-
-                <!-- <v-row> -->
-                <!-- <v-col
-                      cols="12"
-                      v-if="data_user_relation_management.length >= 1"
-                    > -->
                 <v-card
                   class="rounded-lg my-3"
                   color="#FCFCFC"
@@ -998,13 +733,6 @@
                           placeholder="-"
                         >
                         </v-text-field>
-                        <!-- <div>
-                                {{
-                                  !data_item.student.studentUsername
-                                    ? "-"
-                                    : data_item.student.studentUsername
-                                }}
-                              </div> -->
                       </v-col>
                       <v-col cols="12" sm="6">
                         <label-custom
@@ -1018,14 +746,6 @@
                           placeholder="-"
                         >
                         </v-text-field>
-                        <!-- <div>
-                                
-                                {{
-                                  !data_item.student.studentFirstnameEn
-                                    ? "-"
-                                    : data_item.student.studentFirstnameEn
-                                }}
-                              </div> -->
                       </v-col>
                       <v-col cols="12" sm="6">
                         <label-custom text="Last Name (English)"></label-custom>
@@ -1037,13 +757,6 @@
                           placeholder="-"
                         >
                         </v-text-field>
-                        <!-- <div>
-                                {{
-                                  !data_item.student.studentLastnameEn
-                                    ? "-"
-                                    : data_item.student.studentLastnameEn
-                                }}
-                              </div> -->
                       </v-col>
                       <v-col cols="12" sm="6">
                         <label-custom text="เบอร์โทรศัพท์"></label-custom>
@@ -1055,13 +768,6 @@
                           placeholder="-"
                         >
                         </v-text-field>
-                        <!-- <div>
-                                {{
-                                  !data_item.student.studentTel
-                                    ? "-"
-                                    : data_item.student.studentTel
-                                }}
-                              </div> -->
                       </v-col>
                     </v-row>
                   </v-card-text>
@@ -1105,13 +811,9 @@
                 >
                   <template v-slot:[`item.dates`]="{ item }">
                     {{ dayOfWeekName(item.dates.day) }}
-                    <!-- ({{
-                          getThaiDayOfWeek(item.dates.day)
-                        }}) -->
                   </template>
 
                   <template v-slot:[`item.package`]="{ item }">
-                    <!-- {{ item.cpo.packageName }} -->
                     {{ item.cpo ? item.cpo.packageName : "-" }}
                   </template>
 
@@ -1124,8 +826,6 @@
                   </template>
                 </v-data-table>
               </v-col>
-
-              <!-- </v-col> -->
             </v-row>
           </v-container>
 
@@ -1183,7 +883,6 @@
         </v-card>
       </v-col>
     </v-row>
-    <!-- </div> -->
 
     <v-row v-else>
       <userManageForm></userManageForm>
@@ -1256,7 +955,8 @@
                 cols="12"
                 class="flex align-center justify-center text-caption"
               >
-                ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
+                ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ
+                ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
               </v-col>
               <v-col cols="12" class="flex align-center justify-center">
                 <v-btn outlined color="blue" @click="openFileSelector"
@@ -1640,7 +1340,6 @@ export default {
       this.certificate_dialog_show = true;
     },
     saveDialog() {
-
       if (this.status == "create") {
         this.students.certificates.push({
           name_certificate: this.name_certificate,

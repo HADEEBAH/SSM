@@ -39,7 +39,6 @@
           :maxlength="type === 'email' ? 100 : 12"
           solo
         >
-        <!-- :rules="type === 'phone' ? rules.phone_number : rules.email" -->
       </v-text-field>
       </v-col>
       <v-col cols="12" class="text-center w-full">

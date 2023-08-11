@@ -89,7 +89,6 @@
             </v-row>
           </v-card-text>
         </v-card>
-        <!-- {{ coachs }} -->
         <div
           class="mb-3"
           v-for="(date, index_date) in coach_leave.dates"
@@ -328,7 +327,7 @@
                           <v-img
                             height="35"
                             width="26"
-                            src="../../../assets/coachLeave/file-pdf.png"
+                            src="@/assets/coachLeave/file-pdf.png"
                           />
                         </v-col>
                         <v-col class="px-2">
@@ -339,11 +338,6 @@
                             {{ (file.size / 1000000).toFixed(2) }} MB</span
                           >
                         </v-col>
-                        <!-- <v-col cols="auto" class="pl-2">
-                                                    <v-btn @click="removeFile(index)" icon color="#ff6b81"
-                                                        ><v-icon>mdi-close</v-icon></v-btn
-                                                    >
-                                                </v-col> -->
                       </v-row>
                     </v-card-text>
                   </v-card>

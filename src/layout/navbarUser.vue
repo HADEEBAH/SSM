@@ -128,19 +128,9 @@
                 <v-img :src="profile_detail.image" size="24" />
               </v-avatar>
 
-              <!-- <div v-else>
-              <v-avatar class="mx-2" size="24">
-                <v-img
-                  src="../assets/navbar_user/default_image_profile.svg"
-                  size="24"
-                />
-              </v-avatar>
-            </div> -->
-
               <span class="text-white mx-2">
                 {{ show_profile_detail.firstNameTh }}
                 {{ show_profile_detail.lastNameTh }}
-                <!-- {{ user_detail.first_name_en }} {{ user_detail.last_name_en }} -->
               </span>
             </div>
           </div>
@@ -157,23 +147,12 @@
               <span class="text-white mx-2">
                 {{ show_profile_detail.firstNameTh }}
                 {{ show_profile_detail.lastNameTh }}
-                <!-- {{ user_detail.first_name_en }} {{ user_detail.last_name_en }} -->
               </span>
             </div>
           </div>
           <v-btn icon @click="drawer = !drawer">
             <v-icon>{{ drawer ? "mdi-chevron-right" : "mdi-menu" }}</v-icon>
           </v-btn>
-          <!-- ALERT v-if="get_notifications"-->
-          <!-- <v-alert
-            v-if="alertVisible"
-            type="success"
-            dismissible
-            @input="alertVisible = false"
-          >
-            This alert will automatically close after 3 seconds.
-          </v-alert> -->
-          <!-- END ALRT -->
         </template>
         <template v-else>
           <v-btn
@@ -237,13 +216,6 @@
             {{ show_profile_detail.firstNameTh }}
             {{ show_profile_detail.lastNameTh }}
           </v-col>
-          <!-- <v-col
-            cols="12"
-            sm="6"
-            class="flex align-center justify-center font-bold text-md"
-          >
-            {{ show_profile_detail.lastNameTh }}
-          </v-col> -->
           <v-col cols="12" class="flex align-center justify-center text-sm">
             {{ show_profile_detail.email }}
           </v-col>
