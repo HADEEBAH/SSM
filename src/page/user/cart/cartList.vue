@@ -207,7 +207,9 @@
               <v-checkbox hide-details color="pink" v-model="policy">
                 <template v-slot:label>
                   ยอมรับ
-                  <a class="mx-2 font-weight-bold"> เงื่อนไขการใช้บริการและนโยบายการคุ้มครองข้อมูลส่วนบุคคล </a>
+                  <a class="mx-2 font-weight-bold">
+                    เงื่อนไขการใช้บริการและนโยบายการคุ้มครองข้อมูลส่วนบุคคล
+                  </a>
                 </template>
               </v-checkbox>
             </v-col>
@@ -327,7 +329,6 @@ export default {
     },
     selectOne(bool, key) {
       let result = this.cart_list.map((element) => {
-
         if (element.category_id == key) {
           element.checked = bool;
         }
@@ -351,7 +352,6 @@ export default {
 
         return element;
       });
-
 
       this.sumtotal();
     },

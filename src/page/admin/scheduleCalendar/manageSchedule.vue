@@ -165,20 +165,18 @@
               class="my-2"
               border="left"
               colored-border
-              color="#ED7D2B"
+              :color="item?.allDay === true ? '#e9967a' : '#f19a5a'"
               elevation="2"
               v-for="(item, index) in AllHolidayDate()"
               :key="index"
             >
-              <!-- {{ item }} -->
-
               <v-row dense class="font-bold">
                 <v-col cols="12">
                   วันหยุด {{ item?.fullDateHolidaysTh }}
                 </v-col>
               </v-row>
 
-              <v-row dense class="font-bold">
+              <v-row dense class="">
                 <v-col cols="12" sm="6">
                   {{ item?.holidayName }}
                 </v-col>
@@ -1046,7 +1044,7 @@ export default {
             Swal.fire({
               icon: "error",
               title: "เกิดข้อผิดพลาด",
-            })
+            });
           }
         }
       });
