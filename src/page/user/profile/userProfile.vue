@@ -165,16 +165,16 @@
         </v-card>
       </div>
       <div v-else>
-        <v-card>
-          <v-card-text
-            class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
-          >
-            <span class="text-lg font-bold">
-              <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-              ไม่พบข้อมูลของผู้ปกครอง
-            </span>
-          </v-card-text>
-        </v-card>
+        <!-- <v-card> -->
+        <v-card-text
+          class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
+        >
+          <span class="text-lg font-bold">
+            <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+            ไม่พบข้อมูลของผู้ปกครอง
+          </span>
+        </v-card-text>
+        <!-- </v-card> -->
       </div>
     </div>
 
@@ -328,10 +328,17 @@
         <span class="mdi mdi-chevron-right"></span>
       </v-col>
     </v-row>
-    <div class="text-center my-5">
-      <v-btn outlined color="pink" @click="logOut"> ออกจากระบบ </v-btn>
-    </div>
 
+    <div class="text-center my-5">
+      <v-btn
+        outlined
+        color="#FF6B81"
+        @click="logOut"
+        class="drop-shadow-lg border-2 border-[#ff6b81] rounded-lg font-bold"
+      >
+        ออกจากระบบ
+      </v-btn>
+    </div>
     <!-- PARENT DIALOG  -->
     <v-dialog
       v-if="dialog_show"
@@ -550,7 +557,9 @@
             "
           >
             <v-col cols="2" sm="1">
-              <v-icon class="pa-2" color="#ff6b81">mdi-book-account-outline</v-icon>
+              <v-icon class="pa-2" color="#ff6b81"
+                >mdi-book-account-outline</v-icon
+              >
             </v-col>
             <v-col cols="5" sm="6"> พอร์ตโฟลิโอ</v-col>
           </v-row>
@@ -839,7 +848,6 @@ export default {
     this.GetRelationDataV2(this.user_login.account_id);
     this.GetProfileDetail(this.user_login.account_id);
     this.GetStudentCourse(this.user_login.account_id);
-
   },
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "โปรไฟล์");
@@ -922,7 +930,6 @@ export default {
     },
     show_password() {
       this.$router.push({ name: "ForgotPassword" });
-
     },
     show_rules() {
       this.$router.push({ name: "ProfileRules" });
@@ -1137,7 +1144,6 @@ export default {
               payload,
               config
             );
-
 
             if (data.statusCode === 201) {
               if (data.data.message !== "Duplicate relation.") {
