@@ -25,7 +25,6 @@ const portfolioModules = {
           }
         }catch(error){
           context.commit("SetPortfolioIsLoading",false)
-          console.log(error)
         }
     }
   },
