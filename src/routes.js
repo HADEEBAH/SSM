@@ -217,17 +217,18 @@ const routes = [
     name: 'FrontPortfolio',
     component: FrontPortfolio,
   },
-  {
-    path: '/portfolio/:account_id',
-    name: 'portfolio_account_Id',
-    component: PortfolioDetail,
-  },
+ 
   // user
   {
     path: '/',
     name: 'NavBarUser',
     component: NavBarUser,
     children: [
+      {
+        path: '/errorPortfolio',
+        name: 'errorPortfolio',
+        component: PortfolioDetail,
+      },
       {
         path: '',
         name: 'UserKingdom',

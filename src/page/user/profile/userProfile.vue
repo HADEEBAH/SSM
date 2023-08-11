@@ -48,8 +48,9 @@
         <v-col cols="2" sm="1">
           <v-icon class="pa-2" color="#ff6b81">mdi-book-account-outline</v-icon>
         </v-col>
-        <v-col cols="5" sm="6"> พอร์ตโฟลิโอ</v-col>
+        <v-col cols="5" sm="6"> พอร์ตโฟลิโอ </v-col>
       </v-row>
+
       <v-row
         dense
         class="mt-3 cursor-pointer"
@@ -61,9 +62,9 @@
         "
       >
         <v-col cols="2" sm="1">
-          <img src="../../../assets/profile/cource.png" />
+          <v-icon class="pa-2" color="#ff6b81">mdi-school-outline</v-icon>
         </v-col>
-        <v-col cols="5" sm="6" align="left" class="mt-1">
+        <v-col cols="5" sm="6" align="left" class="mt-1" align-self="center">
           <label>คอร์สเรียนของฉัน</label>
         </v-col>
         <v-col cols="3" sm="4" align="right" class="mt-1">
@@ -72,17 +73,18 @@
             คอร์ส</label
           >
         </v-col>
-        <v-col cols="2" sm="1" align="right" class="mt2">
+        <v-col cols="2" sm="1" align="right" class="mt-2">
           <span class="mdi mdi-chevron-right"></span>
         </v-col>
       </v-row>
       <!-- CERTIFICATE -->
-      <!-- @click="show_certificate() -->
       <v-row dense class="mt-3 mb-3">
         <v-col cols="2" sm="1">
-          <img src="../../../assets/profile/certificate.png" />
+          <v-icon class="pa-2" color="#ff6b81"
+            >mdi-file-certificate-outline</v-icon
+          >
         </v-col>
-        <v-col cols="5" sm="6" align="left" class="mt-1">
+        <v-col cols="5" sm="6" align="left" class="mt-1" align-self="center">
           <label>การแข่งขันและเกียรติบัตร</label>
         </v-col>
         <v-col cols="3" sm="4" align="right" class="mt-1">
@@ -187,7 +189,7 @@
       <!-- password -->
       <v-row dense class="mt-3 cursor-pointer" @click="show_password()">
         <v-col cols="2" sm="1">
-          <img src="@/assets/profile/password.png" />
+          <v-icon class="pa-2" color="#ff6b81">mdi-lock-outline</v-icon>
         </v-col>
         <v-col cols="8" sm="9" align="left" class="mt-1">
           <label>รหัสผ่าน</label>
@@ -200,7 +202,7 @@
 
       <v-row dense class="mt-3 cursor-pointer">
         <v-col cols="2" sm="1">
-          <img src="@/assets/profile/langueges.png" />
+          <v-icon class="pa-2" color="#ff6b81">mdi mdi-earth</v-icon>
         </v-col>
         <v-col cols="8" sm="9" align="left" class="mt-1">
           <label>ภาษา</label>
@@ -316,11 +318,11 @@
       </v-col>
     </v-row> -->
     <!-- rules -->
-    <v-row dense class="mt-3" @click="show_rules()">
+    <v-row dense class="mt-3 cursor-pointer" @click="show_rules()">
       <v-col cols="2" sm="1">
-        <img src="@/assets/profile/rules.png" />
+        <v-icon class="pa-2" color="#ff6b81">mdi-file-document-outline</v-icon>
       </v-col>
-      <v-col cols="8" sm="9" align="left" class="mt-1">
+      <v-col cols="8" sm="9" align="left" class="mt-1" align-self="center">
         <label>เงื่อนไขการใช้บริการและนโยบายการคุ้มครองข้อมูลส่วนบุคคล</label>
       </v-col>
 
