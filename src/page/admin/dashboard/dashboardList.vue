@@ -1181,8 +1181,8 @@ export default {
     },
 
     pieSeries() {
-      let Open = this.get_empty_course.countOpen;
-      let Close = this.get_empty_course.countClose;
+      let Open = !this.get_empty_course.countOpen ? 0 : this.get_empty_course.countOpen;
+      let Close = !this.get_empty_course.countClose ? 0 : this.get_empty_course.countClose;
       const pieData = [Open, Close];
       return pieData;
     },
