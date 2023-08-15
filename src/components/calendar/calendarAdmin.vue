@@ -1,4 +1,3 @@
-
 <template>
   <v-container>
     <v-card-title>
@@ -14,9 +13,6 @@
         </v-col>
       </v-row>
     </v-card-title>
-    <!-- <pre>{{ data_filter_schedule }}</pre> -->
-    <!-- data_filter_schedule : {{ data_filter_schedule }} <br/>
-    data_in_schedule : {{ data_in_schedule }} -->
     <v-calendar
       ref="calendar"
       color="#ff6b81"
@@ -38,7 +34,6 @@
       locale="th-TH"
     >
       <template v-slot:event="{ event }">
-        <!-- {{ event.timed }} -->
         {{ event.timed ?? event.timed }}
         {{ event.name }}
       </template>
@@ -97,10 +92,6 @@
                   </v-row>
                 </v-card-text>
               </v-card>
-              <!-- <v-divider
-                v-if="event_date.length !== event_index + 1"
-                class="my-2"
-              ></v-divider> -->
             </div>
           </template>
         </div>
@@ -114,8 +105,6 @@
       </div>
     </v-bottom-sheet>
 
-    <!-- <template> -->
-    <!-- <v-row justify="center"> -->
     <v-dialog v-model="dialog_detail" persistent max-width="600px">
       <v-card>
         <v-container>
@@ -293,8 +282,6 @@
         </v-container>
       </v-card>
     </v-dialog>
-    <!-- </v-row> -->
-    <!-- </template> -->
   </v-container>
 </template>
 <script>

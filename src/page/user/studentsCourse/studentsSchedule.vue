@@ -102,14 +102,10 @@
             </v-card-text>
           </v-card>
         </v-col>
-
-        <!-- <v-col cols="4" v-if="$route.params.action == 'studentsSchedule'"> ตารางเรียน </v-col>
-        <v-col cols="4" v-if="$route.params.action == 'MyBooking'"> คอร์สที่จอง </v-col> -->
       </v-row>
 
       <!-- PAGE 1 -->
       <v-expand-x-transition transition="scale-transition">
-        <!-- <div v-if="type_selected == 'MyCourse'"> -->
         <div v-if="$route.params.action == 'MyCourse'">
           <!-- Role Parent -->
           <div v-if="data_local.roles.includes('R_4')">
@@ -186,14 +182,11 @@
                               ? "-"
                               : item.student.lastNameTh
                           }}
-                          <!-- {{ item.student.firstNameTh }} -->
-                          <!-- {{ !my_course_detail.coachName? '-' :  my_course_detail.coachName}} -->
                         </v-col>
                       </v-row>
                       <v-row dense>
                         <v-col class="text-slate-400">
                           <span class="mdi mdi-account">ทำรายการโดย :</span>
-                          <!-- {{ !item.createdBy.firstNameTh? "-" : item.createdBy.firstNameTh }}  {{ !item.createdBy.lastNameTh? "-" : item.createdBy.lastNameTh }}  -->
                           {{
                             !item.createdBy ? "-" : item.createdBy.firstNameTh
                           }}
@@ -219,7 +212,6 @@
                       sm="4"
                       class="d-flex align-center justify-center"
                     >
-                      <!-- {{ item.courseNameEn }} -->
                       <v-progress-circular
                         :rotate="-90"
                         :size="90"
@@ -266,15 +258,6 @@
                 <v-row dense>
                   <!-- img -->
                   <v-col cols="12" sm="5" align="center">
-                    <!-- <v-col
-                      style="
-                        display: block;
-                        margin-left: auto;
-                        margin-right: auto;
-                        width: 100%;
-                        margin-top: 10%;
-                      "
-                    > -->
                     <v-img
                       :src="
                         item.courseImg
@@ -285,7 +268,6 @@
                       cover
                       height="200"
                     ></v-img>
-                    <!-- </v-col> -->
                   </v-col>
                   <!-- detail -->
                   <v-col cols="12" sm="3">
@@ -342,7 +324,6 @@
                     sm="4"
                     class="d-flex align-center justify-center"
                   >
-                    <!-- {{ item.courseNameEn }} -->
                     <v-progress-circular
                       :rotate="-90"
                       :size="90"
@@ -355,7 +336,6 @@
                     </v-progress-circular>
                   </v-col>
                 </v-row>
-                <!-- </v-card-text> -->
               </v-card>
             </div>
           </div>
@@ -364,10 +344,8 @@
 
       <!-- PAGE 2 -->
       <v-expand-x-transition transition="scale-transition">
-        <!-- <div v-if="type_selected == 'MySchedule'"> -->
         <div v-if="$route.params.action == 'MySchedule'">
           <!-- Role parent -->
-          <!-- <pre>{{ students }}</pre> -->
           <div v-if="data_local.roles.includes('R_4')">
             <v-row class="mb-3">
               <v-col cols="12">
@@ -412,7 +390,6 @@
                 </v-card>
               </v-col>
             </v-row>
-            <!-- <pre>{{ itemTime.dates }}</pre> -->
             <div>
               <template>
                 <calendarStudent
@@ -461,9 +438,7 @@
 
       <!-- PAGE 3 -->
       <v-expand-x-transition transition="scale-transition">
-        <!-- <div v-if="type_selected == 'MyBooking'"> -->
         <div v-if="$route.params.action == 'MyBooking'">
-          <!-- <pre>{{ profile_booked }}</pre> -->
           <!-- Role Parent -->
           <div v-if="data_local.roles.includes('R_4')">
             <v-row class="mb-3">
@@ -506,7 +481,7 @@
                           :src="
                             item_booked.courseImg
                               ? item_booked.courseImg
-                              : `../../../assets/student_course/download.png`
+                              : `@/assets/student_course/download.png`
                           "
                         />
                       </v-col>
@@ -675,16 +650,6 @@
                 ไม่พบข้อมูลการจอง
               </span>
             </v-card-text>
-            <!-- <v-card flat v-if="ReserveList().length == 0">
-              <v-card-text
-                class="pa-2 text-center border-2 border-[#ff6b81] rounded-lg"
-              >
-                <span class="text-lg font-bold">
-                  <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                  ไม่พบข้อมูลการจอง
-                </span>
-              </v-card-text>
-            </v-card> -->
             <div v-else>
               <v-card
                 v-for="(item_booked, index_booked) in ReserveList()"
@@ -701,7 +666,7 @@
                           :src="
                             item_booked.courseImg
                               ? item_booked.courseImg
-                              : `../../../assets/student_course/download.png`
+                              : `@/assets/student_course/download.png`
                           "
                         />
                       </v-col>
@@ -857,12 +822,12 @@
     </div>
   </v-container>
 </template>
-  
-  <script>
+
+<script>
 import { mapActions, mapGetters } from "vuex";
-import calendarStudent from "../../../components/calendar/calendarStudent.vue";
+import calendarStudent from "@/components/calendar/calendarStudent.vue";
 import labelCustom from "@/components/label/labelCustom.vue";
-import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+import loadingOverlay from "@/components/loading/loadingOverlay.vue";
 
 export default {
   components: {
@@ -1069,8 +1034,8 @@ export default {
   },
 };
 </script>
-  
-  <style scoped>
+
+<style scoped>
 .v-progress-circular {
   margin: 1rem;
 }

@@ -20,7 +20,6 @@
                 <v-avatar size="40" color="#FBF3F5"
                   ><div class="pink--text">
                     {{ user_list.length }}
-                    <!-- {{ itemsPerPage !== 0 ? itemsPerPage : user_list.length }} -->
                   </div></v-avatar
                 >
               </v-col>
@@ -48,20 +47,6 @@
             <v-col cols="12" sm="3">
               <label-custom v-if="MobileSize" text="บทบาท"></label-custom>
               <template>
-                <!-- <v-autocomplete
-                  dense
-                  :items="roles"
-                  item-text="role"
-                  item-value="roleNumber"
-                  @input="search_Role(searchQuery)"
-                  v-model="searchQuery"
-                  placeholder="ทั้งหมด"
-                  outlined
-                  hide-details
-                  color="pink"
-                  item-color="pink"
-                >
-                </v-autocomplete> -->
                 <v-autocomplete
                   v-model="searchQuery"
                   :items="roles"
@@ -125,10 +110,7 @@
           </v-row>
         </v-card-text>
       </v-card>
-      <!-- table selectedRole == null -->
       <div>
-        <!-- :loading="filter_role_is_loading"-->
-        <!-- :items="selectedRole == null ? user_list : filter_role" -->
         <template>
           <v-data-table
             :headers="headers"
@@ -203,31 +185,12 @@
             <template v-slot:[`no-results`]>
               <div class="font-bold">ไม่พบข้อมูลในตาราง</div>
             </template>
-
-            <!-- </div> -->
           </v-data-table>
         </template>
       </div>
-
-      <!-- :loading="LoadingTable"  -->
-
-      <!-- <v-data-table
-      
-        class="elevation-1 header-table"
-        :headers="headers"
-        :items="user_list"
-      >
-        <template v-slot:[`item.actions`]="{ item }">
-          <v-btn text color="#FF6B81" @click="$router.push({name:'EditKingdom', params:{category_id : item.categoryId}})">
-            <v-icon>mdi-text-box-search-outline</v-icon>
-            ดูรายละเอียด
-          </v-btn>
-        </template>
-      </v-data-table> -->
     </v-container>
   </v-app>
 </template>
-
 
 <script>
 import headerPage from "@/components/header/headerPage.vue";

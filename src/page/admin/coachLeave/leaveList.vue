@@ -21,67 +21,6 @@
         >
       </v-col>
     </v-row>
-    <!-- <v-row class="mb-2">
-      <template v-for="(type, type_index) in course_type">
-        <v-col
-          cols="12"
-          sm="3"
-          :key="`${type_index}-type`"
-          @click="type_selected = type.value"
-        >
-          <img-card
-            class="cursor-pointer"
-            :class="type_selected === type.value ? 'img-card-active' : ''"
-          >
-            <template v-slot:img>
-              <v-img
-                v-if="type.value == 'all'"
-                max-height="90"
-                max-width="70"
-                src="../../../assets/coachLeave/all.png"
-              ></v-img>
-              <v-img
-                v-if="type.value == 'approved'"
-                max-height="90"
-                max-width="70"
-                src="../../../assets/coachLeave/accept.png"
-              ></v-img>
-              <v-img
-                v-if="type.value == 'pending'"
-                max-height="90"
-                max-width="70"
-                src="../../../assets/coachLeave/wait.png"
-              ></v-img>
-              <v-img
-                v-if="type.value == 'reject'"
-                max-height="90"
-                max-width="70"
-                src="../../../assets/coachLeave/disaccept.png"
-              ></v-img>
-              <v-img
-                v-if="type.value == 'cancel'"
-                max-height="90"
-                max-width="70"
-                src="../../../assets/coachLeave/disaccept.png"
-              ></v-img>
-            </template>
-            <template v-slot:header>
-              <div class="font-bold">{{ type.name }}</div>
-            </template>
-            <template v-slot:detail>
-              <v-row class="d-flex align-end">
-                <v-col align="center" class="text-3xl font-bold">{{
-                  type.value === "all"
-                    ? coach_leaves.length
-                    : coach_leaves.filter((v) => v.status === type.value).length
-                }}</v-col>
-                <v-col class="text-sm">รายการ</v-col>
-              </v-row>
-            </template>
-          </img-card>
-        </v-col>
-      </template>
-    </v-row> -->
 
     <v-row class="mb-2">
       <template v-for="(type, type_index) in course_type">
@@ -100,13 +39,13 @@
                 v-if="type.value == 'all'"
                 max-height="90"
                 max-width="70"
-                src="../../../assets/coachLeave/all.png"
+                src="@/assets/coachLeave/all.png"
               ></v-img>
               <v-img
                 v-if="type.value == 'approved'"
                 max-height="90"
                 max-width="70"
-                src="../../../assets/coachLeave/accept.png"
+                src="@/assets/coachLeave/accept.png"
               ></v-img>
             </template>
             <template v-slot:header>
@@ -144,19 +83,19 @@
                 v-if="type.value == 'pending'"
                 max-height="90"
                 max-width="70"
-                src="../../../assets/coachLeave/wait.png"
+                src="@/assets/coachLeave/wait.png"
               ></v-img>
               <v-img
                 v-if="type.value == 'reject'"
                 max-height="90"
                 max-width="70"
-                src="../../../assets/coachLeave/disaccept.png"
+                src="@/assets/coachLeave/disaccept.png"
               ></v-img>
               <v-img
                 v-if="type.value == 'cancel'"
                 max-height="90"
                 max-width="70"
-                src="../../../assets/coachLeave/cancel.svg"
+                src="@/assets/coachLeave/cancel.svg"
               ></v-img>
             </template>
             <template v-slot:header>
@@ -266,12 +205,12 @@
     </v-dialog>
   </v-container>
 </template>
-  
-  <script>
+
+<script>
 import headerPage from "@/components/header/headerPage.vue";
 import imgCard from "@/components/course/imgCard.vue";
 import { mapActions, mapGetters } from "vuex";
-import coachLeaveForm from "../../../components/coach_leave/coachLeaveForm.vue";
+import coachLeaveForm from "@/components/coach_leave/coachLeaveForm.vue";
 export default {
   components: {
     headerPage,
@@ -337,29 +276,29 @@ export default {
       {
         name: "ทั้งหมด",
         value: "all",
-        img: "../../../assets/coachLeave/all.png",
+        img: "@/assets/coachLeave/all.png",
       },
       {
         name: "อนุมัติ",
         value: "approved",
-        img: "../../../assets/coachLeave/accept.png",
+        img: "@/assets/coachLeave/accept.png",
       },
     ],
     course_type_two: [
       {
         name: "รออนุมัติ",
         value: "pending",
-        img: "../../../assets/coachLeave/wait.png",
+        img: "@/assets/coachLeave/wait.png",
       },
       {
         name: "ปฎิเสธ",
         value: "reject",
-        img: "../../../assets/coachLeave/disaccept.png",
+        img: "@/assets/coachLeave/disaccept.png",
       },
       {
         name: "ยกเลิก",
         value: "cancel",
-        img: "../../../assets/coachLeave/all.png",
+        img: "@/assets/coachLeave/all.png",
       },
     ],
     coach_leave_arr: [],
@@ -437,6 +376,3 @@ export default {
   },
 };
 </script>
-  
-  <style>
-</style>

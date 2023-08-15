@@ -1,10 +1,10 @@
 <template>
   <v-container>
-  <div v-for="(profile, index) in profile_user" :key="`${index}-profile`">
-  {{ profile.length }}
-    
-    <!-- Roleparent_view // จะออกข้อมูลของ นักเรียน -->
-    <div  v-if="$route.params.action == 'Roleparent_view'" class="mb-5">
+    <div v-for="(profile, index) in profile_user" :key="`${index}-profile`">
+      {{ profile.length }}
+
+      <!-- Roleparent_view // จะออกข้อมูลของ นักเรียน -->
+      <div v-if="$route.params.action == 'Roleparent_view'" class="mb-5">
         <div class="profileCard my-5 center">
           <v-img
             src="@/assets/userManagePage/imgcardafterupload.png"
@@ -24,155 +24,168 @@
           </div>
         </div>
         <v-row dense class="mx-10">
-          
           <!--TH NAME -->
           <v-col cols="12" sm="6">
             <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
-            <br/>
-            {{ profile.firstNameTh == ''? '-' : profile.firstNameTh }}
+            <br />
+            {{ profile.firstNameTh == "" ? "-" : profile.firstNameTh }}
           </v-col>
           <!-- TH LNAME -->
           <v-col cols="12" sm="6">
             <label-custom text="นามสกุล (ภาษาไทย)"></label-custom>
-            <br/>
-            {{ profile.lastNameTh == ''? '-' : profile.lastNameTh }}
+            <br />
+            {{ profile.lastNameTh == "" ? "-" : profile.lastNameTh }}
           </v-col>
           <!-- nationality -->
           <v-col cols="12" sm="6">
             <label-custom text="สัญชาติ"></label-custom>
-            <br/>
-            {{ profile.nation == null? '-' : profile.nation }}
+            <br />
+            {{ profile.nation == null ? "-" : profile.nation }}
           </v-col>
           <!-- id_card -->
           <v-col cols="12" sm="6">
             <label-custom text="เลขบัตรประชาชน"></label-custom>
-            <br/>
-            {{ profile.accountId == ''? '-' : profile.accountId }}
+            <br />
+            {{ profile.accountId == "" ? "-" : profile.accountId }}
           </v-col>
           <!-- date_of_birth -->
           <v-col cols="12" sm="6">
             <label-custom text="วันเกิด"></label-custom>
-            <br/>
-            {{ profile.accountId == ''? '-' : profile.accountId }}
+            <br />
+            {{ profile.accountId == "" ? "-" : profile.accountId }}
           </v-col>
-            <!-- tel -->
-        <v-col cols="12" sm="6">
-          <label-custom text="เบอร์โทรศัพท์"></label-custom>
-          <br/>
-            {{ profile.tel== ''? '-' : profile.tel}}
-        </v-col>
-        <!-- email -->
-        <v-col cols="12" sm="6">
-          <label-custom text="อีเมล"></label-custom>
-          <br/>
-            {{ profile.email== ''? '-' : profile.email}}
-        </v-col>
-      </v-row>
+          <!-- tel -->
+          <v-col cols="12" sm="6">
+            <label-custom text="เบอร์โทรศัพท์"></label-custom>
+            <br />
+            {{ profile.tel == "" ? "-" : profile.tel }}
+          </v-col>
+          <!-- email -->
+          <v-col cols="12" sm="6">
+            <label-custom text="อีเมล"></label-custom>
+            <br />
+            {{ profile.email == "" ? "-" : profile.email }}
+          </v-col>
+        </v-row>
 
         <div class="mt-8">
-        <label-custom text="คอร์สเรียน"></label-custom>
-      </div>
-      <v-divider class=""></v-divider>
-      <!-- COURSE -->
-      <v-row dense class="mt-3" @click="$router.push({name:'StudentsSchedule'})">
-        <v-col cols="2" sm="1">
-          <img src="../../../assets/profile/cource.png" />
-        </v-col>
-        <v-col cols="5" sm="6" align="left" class="mt-1" >
-          <label>คอร์สเรียนของฉัน</label>
-        </v-col>
-        <v-col cols="3" sm="4" align="right" class="mt-1">
-          <label class="pink--text">คอร์ส</label>
-        </v-col>
-        <v-col cols="2" sm="1" align="right" class="mt2">
-          <span class="mdi mdi-chevron-right"></span>
-        </v-col>
-      </v-row>
-      <!-- CERTIFICATE -->
-      <v-row dense class="mt-3" @click="show_certificate()">
-        <v-col cols="2" sm="1">
-          <img src="../../../assets/profile/certificate.png" />
-        </v-col>
-        <v-col cols="5" sm="6" align="left" class="mt-1">
-          <label>การแข่งขันและเกียรติบัตร</label>
-        </v-col>
-        <v-col cols="3" sm="4" align="right" class="mt-1">
-          <label class="pink--text">2 การแข่ง</label>
-        </v-col>
-        <v-col cols="2" sm="1" align="right" class="mt-2">
-          <span class="mdi mdi-chevron-right"></span>
-        </v-col>
-      </v-row>
-    </div>
-
-
-    <!-- Rolestudent_view // จะออกข้อมูลของ ผู้ปกครอง-->
-    <div v-if="$route.params.action == 'Rolestudent_view'" class="mb-5">
-      <div class="profileCard my-5 center">
-        <v-img
-          src="@/assets/userManagePage/imgcardafterupload.png"
-          class="iconInCard drop-shadow-md"
+          <label-custom text="คอร์สเรียน"></label-custom>
+        </div>
+        <v-divider class=""></v-divider>
+        <!-- COURSE -->
+        <v-row
+          dense
+          class="mt-3"
+          @click="$router.push({ name: 'StudentsSchedule' })"
         >
-        </v-img>
-        <div style="position: absolute">
-          <div>
-            <v-img
-              src="@/assets/logo.png"
-              max-height="30"
-              max-width="30"
-              class="mx-15"
-            >
-            </v-img>
+          <v-col cols="2" sm="1">
+            <img src="@/assets/profile/cource.png" />
+          </v-col>
+          <v-col cols="5" sm="6" align="left" class="mt-1">
+            <label>คอร์สเรียนของฉัน</label>
+          </v-col>
+          <v-col cols="3" sm="4" align="right" class="mt-1">
+            <label class="pink--text">คอร์ส</label>
+          </v-col>
+          <v-col cols="2" sm="1" align="right" class="mt2">
+            <span class="mdi mdi-chevron-right"></span>
+          </v-col>
+        </v-row>
+        <!-- CERTIFICATE -->
+        <v-row dense class="mt-3" @click="show_certificate()">
+          <v-col cols="2" sm="1">
+            <img src="@/assets/profile/certificate.png" />
+          </v-col>
+          <v-col cols="5" sm="6" align="left" class="mt-1">
+            <label>การแข่งขันและเกียรติบัตร</label>
+          </v-col>
+          <v-col cols="3" sm="4" align="right" class="mt-1">
+            <label class="pink--text">2 การแข่ง</label>
+          </v-col>
+          <v-col cols="2" sm="1" align="right" class="mt-2">
+            <span class="mdi mdi-chevron-right"></span>
+          </v-col>
+        </v-row>
+      </div>
+
+      <!-- Rolestudent_view // จะออกข้อมูลของ ผู้ปกครอง-->
+      <div v-if="$route.params.action == 'Rolestudent_view'" class="mb-5">
+        <div class="profileCard my-5 center">
+          <v-img
+            src="@/assets/userManagePage/imgcardafterupload.png"
+            class="iconInCard drop-shadow-md"
+          >
+          </v-img>
+          <div style="position: absolute">
+            <div>
+              <v-img
+                src="@/assets/logo.png"
+                max-height="30"
+                max-width="30"
+                class="mx-15"
+              >
+              </v-img>
+            </div>
           </div>
         </div>
+        <v-row dense class="mx-10">
+          <!--TH NAME -->
+          <v-col cols="12" sm="6">
+            <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
+            <br />
+            {{
+              profile.parent_firstname_th == ""
+                ? "-"
+                : profile.parent_firstname_th
+            }}
+          </v-col>
+          <!-- TH LNAME -->
+          <v-col cols="12" sm="6">
+            <label-custom text="นามสกุล (ภาษาไทย)"></label-custom>
+            <br />
+            {{
+              profile.parent_lastname_th == ""
+                ? "-"
+                : profile.parent_lastname_th
+            }}
+          </v-col>
+          <!-- nationality -->
+          <v-col cols="12" sm="6">
+            <label-custom text="สัญชาติ"></label-custom>
+            <br />
+            {{ profile.nation == null ? "-" : profile.nation }}
+          </v-col>
+          <!-- id_card -->
+          <v-col cols="12" sm="6">
+            <label-custom text="เลขบัตรประชาชน"></label-custom>
+            <br />
+            {{ profile.student_id == "" ? "-" : profile.student_id }}
+          </v-col>
+          <!-- date_of_birth -->
+          <v-col cols="12" sm="6">
+            <label-custom text="วันเกิด"></label-custom>
+            <br />
+            {{
+              profile.parent_firstname_th == ""
+                ? "-"
+                : profile.parent_firstname_th
+            }}
+          </v-col>
+          <!-- tel -->
+          <v-col cols="12" sm="6">
+            <label-custom text="เบอร์โทรศัพท์"></label-custom>
+            <br />
+            {{ profile.tel == "" ? "-" : profile.tel }}
+          </v-col>
+          <!-- email -->
+          <v-col cols="12" sm="6">
+            <label-custom text="อีเมล"></label-custom>
+            <br />
+            {{ profile.email == "" ? "-" : profile.email }}
+          </v-col>
+        </v-row>
       </div>
-      <v-row dense class="mx-10">
-        <!--TH NAME -->
-        <v-col cols="12" sm="6">
-          <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
-          <br/>
-            {{ profile.parent_firstname_th == ''? '-' : profile.parent_firstname_th }}
-        </v-col>
-        <!-- TH LNAME -->
-        <v-col cols="12" sm="6">
-          <label-custom text="นามสกุล (ภาษาไทย)"></label-custom>
-          <br/>
-            {{ profile.parent_lastname_th == ''? '-' : profile.parent_lastname_th }}
-        </v-col>
-        <!-- nationality -->
-        <v-col cols="12" sm="6">
-          <label-custom text="สัญชาติ"></label-custom>
-          <br/>
-            {{ profile.nation == null ? '-' : profile.nation}}
-        </v-col>
-        <!-- id_card -->
-        <v-col cols="12" sm="6">
-          <label-custom text="เลขบัตรประชาชน"></label-custom>
-          <br/>
-           {{profile.student_id == ''? '-': profile.student_id}}
-        </v-col>
-        <!-- date_of_birth -->
-        <v-col cols="12" sm="6">
-          <label-custom text="วันเกิด"></label-custom>
-          <br/>
-            {{ profile.parent_firstname_th == ''? '-' : profile.parent_firstname_th}}
-        </v-col>
-        <!-- tel -->
-        <v-col cols="12" sm="6">
-          <label-custom text="เบอร์โทรศัพท์"></label-custom>
-          <br/>
-            {{ profile.tel== ''? '-' : profile.tel}}
-        </v-col>
-        <!-- email -->
-        <v-col cols="12" sm="6">
-          <label-custom text="อีเมล"></label-custom>
-          <br/>
-            {{ profile.email== ''? '-' : profile.email}}
-        </v-col>
-      </v-row>
     </div>
-  
-  </div>
   </v-container>
 </template>
 

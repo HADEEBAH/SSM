@@ -1,8 +1,4 @@
 <template>
-  <!-- <loading-overlay
-    v-if="get_all_course_is_loading || get_all_holidays_is_loading"
-    :loading="get_all_course_is_loading || get_all_holidays_is_loading"
-  ></loading-overlay> -->
   <v-container>
     <headerPage title="จัดการตาราง"></headerPage>
     <v-row class="py-2">
@@ -96,7 +92,6 @@
               v-for="(item, index) in courseDate()"
               :key="index"
             >
-              <!-- {{ item }} -->
               <v-row dense class="font-bold">
                 <v-col cols="12" sm="6">
                   {{ item?.courseName?.courseNameTh }}</v-col
@@ -367,17 +362,6 @@
                       "
                     >
                     </VueTimepicker>
-
-                    <!-- <vue-timepicker
-                      v-model="setDataEditDialog.ob_holidayEndTime"
-                      color="#FF6B81"
-                      item-color="#FF6B81"
-                      hide-clear-button
-                      dense
-                      outlined
-                      class=""
-                    >
-                    </vue-timepicker> -->
                   </v-col>
                 </v-row>
 
@@ -647,9 +631,6 @@
                 </v-autocomplete>
 
                 <!-- สถานะคอร์ส -->
-
-                <!-- v-if="selectedCourseType != ''" -->
-                <!-- {{ selectedCourseType }} -->
                 <v-badge
                   color="#FF6B81"
                   :content="selectedCourseType.length"
@@ -687,7 +668,6 @@
                 </v-autocomplete>
 
                 <!-- โค้ช -->
-                <!-- v-if="selectedCoach != ''" -->
                 <v-badge
                   color="#FF6B81"
                   :content="selectedCoach.length"
@@ -714,7 +694,6 @@
                     </v-list-item>
                   </template>
                   <template v-slot:selection="{ item, index }">
-                    <!-- {{ item }} -->
                     <v-chip v-if="index === 0">
                       <span>{{ item.fullNameTh }}</span>
                     </v-chip>
@@ -759,7 +738,6 @@
                     </v-btn>
                   </v-col>
                 </v-row>
-                <!-- </v-container> -->
               </v-card-text>
             </v-container>
           </v-card>
@@ -775,15 +753,7 @@
       persistent
     >
       <v-card>
-        <v-card-title>
-          <!-- <v-row>
-            <v-col cols="12" align="right">
-              <v-btn icon @click="dialog_show_success = false">
-                <v-icon color="#ff6b81">mdi-close</v-icon>
-              </v-btn>
-            </v-col>
-          </v-row> -->
-        </v-card-title>
+        <v-card-title> </v-card-title>
         <dialogCard text="บันทึกข้อมูลสำเร็จ"></dialogCard>
         <div class="my-5 text-center">
           <v-btn color="#ff6b81" @click="dialog_show_success = false">
@@ -794,9 +764,9 @@
     </v-dialog>
   </v-container>
 </template>
-  
-  <script>
-import calendarAdmin from "../../../components/calendar/calendarAdmin.vue";
+
+<script>
+import calendarAdmin from "@/components/calendar/calendarAdmin.vue";
 import dialogCard from "@/components/dialog/dialogCard.vue";
 import VueCookie from "vue-cookie";
 import Swal from "sweetalert2";
@@ -1293,8 +1263,8 @@ export default {
   },
 };
 </script>
-  
-  <style scoped>
+
+<style scoped>
 ::-webkit-scrollbar {
   width: 5px;
 }

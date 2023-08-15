@@ -1,5 +1,4 @@
 <template>
-  <!--  -->
   <v-app
     class="overflow-x-hidden overflow-y-hidden bg-kingdom"
     :style="
@@ -11,7 +10,6 @@
       <v-row class="row">
         <v-col cols="12">
           <div class="text-2xl font-bold text-white">
-            <!-- สวัสดี, {{ dataStorage ? dataStorage.first_name_th : "" }} -->
             สวัสดี
             {{
               profile_detail.firstNameTh ? "," + profile_detail.firstNameTh : ""
@@ -42,17 +40,14 @@
         <v-carousel-item
           v-for="(slide, i) in banner_list"
           :key="i"
-        class="max-w-[1920px] max-h-[1080px]"
-          
-
+          class="max-w-[1920px] max-h-[1080px]"
         >
-        <v-img
-        :src="slide.bannerPath"
-        :aspect-ratio="16 / 9"
-        class="max-w-[1920px] max-h-[1080px]"
-        >
-
-        </v-img>
+          <v-img
+            :src="slide.bannerPath"
+            :aspect-ratio="16 / 9"
+            class="max-w-[1920px] max-h-[1080px]"
+          >
+          </v-img>
         </v-carousel-item>
       </v-carousel>
       <v-card-text>
@@ -88,7 +83,6 @@
             :key="index_item"
           >
             <v-card class="h-full rounded-lg box-shadows">
-              <!-- :src="item.categoryImg && item.categoryImg !== null ? showImg(item.categoryImg) : defaultImageUrl" -->
               <v-img
                 @click="selectedCategory(item)"
                 :aspect-ratio="16 / 9"
@@ -155,7 +149,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+import loadingOverlay from "@/components/loading/loadingOverlay.vue";
 export default {
   components: {
     loadingOverlay,
@@ -331,7 +325,7 @@ export default {
 } */
 
 .bg-kingdom {
-  background-image: url("../../../assets/userKingdom/kingdom_bg_img.svg");
+  background-image: url("@/assets/userKingdom/kingdom_bg_img.svg");
   background-position: top;
   background-repeat: no-repeat;
   /* background-size: contain; */

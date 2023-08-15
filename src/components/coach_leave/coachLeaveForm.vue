@@ -390,7 +390,7 @@
             <v-row dense>
               <v-col cols="12" class="flex align-center justify-center">
                 <v-img
-                  src="../../assets/manage_coach/upload_file.png"
+                  src="@/assets/manage_coach/upload_file.png"
                   max-height="80"
                   max-width="100"
                 ></v-img>
@@ -434,7 +434,7 @@
                   <v-img
                     height="35"
                     width="26"
-                    src="../../assets/coachLeave/file-pdf.png"
+                    src="@/assets/coachLeave/file-pdf.png"
                   />
                 </v-col>
                 <v-col class="px-2">

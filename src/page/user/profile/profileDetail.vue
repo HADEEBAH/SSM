@@ -3,12 +3,6 @@
     <v-container>
       <v-row dense>
         <v-col class="my-5" style="text-align: -webkit-center" cols="12">
-          <!-- <v-btn class="absolute" icon>
-            <v-icon color="#ff6b81" @click="preview_file = ''"
-              >mdi-close-circle</v-icon
-            >
-          </v-btn> -->
-          <!-- {{ profile_detail.image }} -->
           <div class="cicle">
             <v-img
               class="image-cropper items-end"
@@ -49,10 +43,6 @@
         <!--TH NAME -->
         <v-col cols="12" sm="6">
           <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
-          <!-- <div v-if="!isEnabled">
-          {{ profile_detail.firstNameTh == ''? '-' : profile_detail.firstNameTh}}
-        </div> -->
-          <!-- <div v-else> -->
           <v-text-field
             @keypress="validate($event, 'th-special')"
             placeholder="-"
@@ -64,15 +54,10 @@
             color="#ff6b81"
           >
           </v-text-field>
-          <!-- </div> -->
         </v-col>
         <!-- TH LNAME -->
         <v-col cols="12" sm="6">
           <label-custom text="นามสกุล (ภาษาไทย)"></label-custom>
-          <!-- <div v-if="!isEnabled">
-          {{ profile_detail.lastNameTh == ''? '-' : profile_detail.lastNameTh }}
-        </div> -->
-          <!-- <div v-else> -->
           <v-text-field
             @keypress="validate($event, 'th-special')"
             placeholder="-"
@@ -84,15 +69,10 @@
             color="#ff6b81"
           >
           </v-text-field>
-          <!-- </div> -->
         </v-col>
         <!-- nationality -->
         <v-col cols="12" sm="6">
           <label-custom text="สัญชาติ"></label-custom>
-          <!-- <div v-if="!isEnabled">
-          {{ profile_detail.nation == null ? '-' : profile_detail.nation }}
-        </div>
-        <div v-else> -->
           <v-text-field
             @keypress="validate($event, 'th-special')"
             placeholder="-"
@@ -102,16 +82,10 @@
             :disabled="!isEnabled"
             color="#ff6b81"
           >
-            <!-- :rules="rules.nation" -->
           </v-text-field>
-          <!-- </div> -->
         </v-col>
         <v-col cols="12" sm="6">
           <label-custom text="เบอร์โทรศัพท์"></label-custom>
-          <!-- <div v-if="!isEnabled">
-          {{ profile_detail.mobileNo == ''? '-' : profile_detail.mobileNo }}
-        </div>
-        <div v-else> -->
           <v-text-field
             @keypress="validate($event, 'th')"
             @input="checkPhoneNumber"
@@ -124,15 +98,10 @@
             disabled
           >
           </v-text-field>
-          <!-- </div> -->
         </v-col>
         <!-- email -->
         <v-col cols="12" sm="6">
           <label-custom text="อีเมล"></label-custom>
-          <!-- <div v-if="!isEnabled">
-          {{ profile_detail.email == ''? '-' : profile_detail.email}}
-        </div> -->
-          <!-- <div v-else> -->
           <v-text-field
             placeholder="-"
             v-model="profile_detail.email"
@@ -141,7 +110,6 @@
             disabled
           >
           </v-text-field>
-          <!-- </div> -->
         </v-col>
         <!-- BTN -->
       </v-row>
@@ -157,8 +125,6 @@
           </v-btn>
         </v-col>
         <v-col cols="6" v-if="isEnabled">
-          <!-- :loading="is_loading"
-            :disabled="!valid" -->
           <v-btn
             outlined
             class="my-5 w-full"

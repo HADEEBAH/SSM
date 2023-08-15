@@ -1,7 +1,6 @@
 <template>
   <v-container fluid class="overflow-x-hidden overflow-y-hidden">
     <v-row dense class="mt-5">
-      <!-- <pre>{{ show_by_id }}</pre> -->
       <v-col cols="12">
         <headerPage :breadcrumbs="breadcrumbs"></headerPage>
         <v-card class="rounded-lg">
@@ -17,7 +16,6 @@
 
                 <v-card class="rounded-lg my-3" color="#FCFCFC">
                   <v-card-text>
-                    <!-- justify="between" -->
                     <v-row>
                       <v-col cols="12" sm="6">
                         <label-custom text="Username(English)"></label-custom>
@@ -54,7 +52,6 @@
                 </v-card>
               </v-col>
 
-              <!--DETAIL -->
               <v-col cols="12">
                 <v-card class="rounded-lg my-3" color="#FCFCFC">
                   <v-card-text>
@@ -70,7 +67,7 @@
                             <v-img
                               v-if="!show_by_id.image && preview_img == ''"
                               class="image-cropper items-end"
-                              src="../../assets/userManagePage/default_img_update_profile.svg"
+                              src="@/assets/userManagePage/default_img_update_profile.svg"
                             >
                               <v-btn
                                 v-if="preview_img == ''"
@@ -134,7 +131,6 @@
                               <label-custom
                                 text="ชื่อ (ภาษาไทย)"
                               ></label-custom>
-                              <!-- @keypress="validate($event, 'th-special')" -->
 
                               <v-text-field
                                 @keypress="validate($event, 'th-special')"
@@ -262,15 +258,6 @@
                             <v-list-item-content>
                               {{ item.role }}
                             </v-list-item-content>
-                            <!-- <v-list-item-action>
-                              <v-icon color="#FF6B81">
-                                {{
-                                  selectRoles.includes(item.role)
-                                    ? "mdi-checkbox-marked"
-                                    : "mdi-checkbox-blank-circle-outline"
-                                }}</v-icon
-                              >
-                            </v-list-item-action> -->
                           </template>
                         </v-autocomplete>
                       </v-col>
@@ -316,15 +303,6 @@
                             <v-list-item-content>
                               {{ item.role }}
                             </v-list-item-content>
-                            <!-- <v-list-item-action>
-                              <v-icon color="#FF6B81">
-                                {{
-                                  seledtedRole.includes(item.role)
-                                    ? "mdi-checkbox-marked-circle"
-                                    : "mdi-checkbox-blank-circle-outline"
-                                }}</v-icon
-                              >
-                            </v-list-item-action> -->
                           </template>
                         </v-autocomplete>
                       </v-col>
@@ -332,11 +310,6 @@
                   </v-card-text>
                 </v-card>
               </v-col>
-              <!-- <v-container
-                  grid-list-xs
-                  
-                > -->
-              <!-- <v-row v-if="seledtedRole === 'R_4' || seledtedRole === 'R_5'"> -->
               <v-col
                 v-if="seledtedRole === 'R_4' || seledtedRole === 'R_5'"
                 cols="12"
@@ -414,13 +387,6 @@
                           v-else
                           :value="relations.parent.parentUsername"
                         ></v-text-field>
-                        <!-- <div>
-                          {{
-                            item.roleId === "R_4"
-                              ? relations.student.studentUsername
-                              : relations.parent.parentUsername
-                          }}
-                        </div> -->
                       </v-col>
 
                       <v-col cols="12" sm="6">
@@ -441,13 +407,6 @@
                           v-else
                           :value="relations.parent.parentFirstnameEn"
                         ></v-text-field>
-                        <!-- <div>
-                                {{
-                                  item.roleId === "R_4"
-                                    ? relations.student.studentFirstnameEn
-                                    : relations.parent.parentFirstnameEn
-                                }}
-                              </div> -->
                       </v-col>
                       <v-col cols="12" sm="6">
                         <label-custom text="Last Name (English)"></label-custom>
@@ -465,14 +424,6 @@
                           v-else
                           :value="relations.parent.parentLastnameEn"
                         ></v-text-field>
-
-                        <!-- <div>
-                                {{
-                                  item.roleId === "R_4"
-                                    ? relations.student.studentLastnameEn
-                                    : relations.parent.parentLastnameEn
-                                }}
-                              </div> -->
                       </v-col>
                       <v-col cols="12" sm="6">
                         <label-custom text="เบอร์โทรศัพท์"></label-custom>
@@ -490,24 +441,13 @@
                           v-else
                           :value="relations.parent.parentTel"
                         ></v-text-field>
-
-                        <!-- <div>
-                                {{
-                                  item.roleId === "R_4"
-                                    ? relations.student.studentTel
-                                    : relations.parent.parentTel
-                                }}
-                              </div> -->
                       </v-col>
                     </v-row>
                   </v-card-text>
                 </v-card>
               </v-col>
-              <!-- </v-row> -->
-              <!-- </v-container> -->
 
               <!-- check box In relations -->
-              <!-- <v-row v-if="item.roleId === 'R_4' || item.roleId === 'R_5'"> -->
               <v-col
                 cols="12"
                 sm="6"
@@ -525,10 +465,8 @@
                   item-color="pink"
                 ></v-checkbox>
               </v-col>
-              <!-- </v-row> -->
 
               <!-- เพิ่มความสัมพันธ์ -->
-              <!-- <v-row dense v-if="isCheckedRelation"> -->
               <v-col cols="12" class="text-center" v-if="isCheckedRelation">
                 <v-btn
                   dense
@@ -546,7 +484,6 @@
                   }}</v-btn
                 >
               </v-col>
-              <!-- </v-row> -->
               <!-- ----------------------------------------------- -->
 
               <!-- TABLE Role PARENT -->
@@ -566,9 +503,6 @@
                 >
                   <template v-slot:[`item.dates`]="{ item }">
                     {{ dayOfWeekName(item.dates.day) }}
-                    <!-- ({{
-                          getThaiDayOfWeek(item.dates.day)
-                        }}) -->
                   </template>
                 </v-data-table>
               </v-col>
@@ -590,9 +524,6 @@
                 >
                   <template v-slot:[`item.dates`]="{ item }">
                     {{ dayOfWeekName(item.dates.day) }}
-                    <!-- ({{
-                          getThaiDayOfWeek(item.dates.day)
-                        }}) -->
                   </template>
                 </v-data-table>
               </v-col>
@@ -623,16 +554,6 @@
         class="pa-2 w-full"
         :width="$vuetify.breakpoint.smAndUp ? '50vw' : ''"
       >
-        <!-- <header-card
-          icon="mdi-card-account-details-outline"
-          icon_color="#ff6b81"
-          :title="global_role_id === 'R_4' ? 'เพิ่มนักเรียน2' : 'เพิ่มผู้ปกครอง'"
-        >
-          <template #actions>
-            <v-btn icon @click="closeDialog"><v-icon>mdi-close</v-icon></v-btn>
-          </template>
-        </header-card> -->
-
         <v-app-bar flat color="white">
           <v-toolbar-title class="text-h6 pl-0">
             <v-icon class="text-[#ff6b81!important] mb-1"
@@ -652,7 +573,6 @@
           <v-row dense class="mb-5">
             <v-col cols="12">
               <labelCustom required text="Username"></labelCustom>
-              <!-- :hide-details="!relation.account_id" -->
               <v-text-field
                 :rules="rules.usernameRules"
                 dense
@@ -707,35 +627,7 @@
                 >
               </template>
             </v-col>
-
-            <!-- <v-col cols="3">
-              <v-btn
-                block
-                :loading="is_loading"
-                color="#ff6b81"
-                @click="
-                  checkUsername(
-                    relation.username,
-                    global_role_id === 'R_4' ? 'parent' : 'student'
-                  )
-                "
-                depressed
-                dark
-                >ตกลง</v-btn
-              >
-            </v-col> -->
           </v-row>
-          <!-- <v-row dense>
-            <v-col cols="12" v-if="!relation.account_id">
-                <label> หากยังไม่มีบัญชีผู้ใช้กรุณา </label>
-                <label
-                  class="text-[#ff6b81] underline cursor-pointer"
-                  @click="registerParent"
-                  >สมัคร One ID</label
-                >
-              </v-col>
-          </v-row> -->
-          <!-- <v-container> -->
           <v-row dense>
             <v-col cols="12">
               <labelCustom text="ชื่อ(ภาษาอังกฤษ)"></labelCustom>
@@ -772,7 +664,6 @@
               ></v-text-field>
             </v-col>
           </v-row>
-          <!-- </v-container> -->
         </v-card-text>
         <v-card-actions class="px-6">
           <v-row dense>
@@ -1386,7 +1277,6 @@ export default {
       this.changeDialogRegisterOneId(true);
     },
     updateData(account_id) {
-
       this.$refs.user_form.validate();
       if (this.user_form) {
         Swal.fire({

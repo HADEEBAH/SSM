@@ -1,5 +1,4 @@
 <template>
-  <!-- <v-app> -->
   <v-container class="h-full">
     <v-row class="h-full">
       <v-col cols="12" sm="6" :class="MobileSize ? '' : 'h-full'">
@@ -237,13 +236,12 @@
     </v-dialog>
     <loading-overlay :loading="course_is_loading"></loading-overlay>
   </v-container>
-  <!-- </v-app> -->
 </template>
 
 <script>
 import dialogCard from "@/components/dialog/dialogCard.vue";
 import rowData from "@/components/label/rowData.vue";
-import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+import loadingOverlay from "@/components/loading/loadingOverlay.vue";
 import Swal from "sweetalert2";
 import { mapActions, mapGetters } from "vuex";
 import moment from "moment";

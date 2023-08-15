@@ -59,7 +59,7 @@ import ManageSchedule from '@/page/admin/scheduleCalendar/manageSchedule.vue'
 import Banner from '@/page/admin/banner/manageBanner.vue'
 // admin dashboard
 import Dashboard from '@/page/admin/dashboard/dashboardList.vue'
-import StudentList from '../src/page/admin/dashboard/studentList.vue'
+import StudentList from '@/page/admin/dashboard/studentList.vue'
 // admin course reserve
 import manageCourseReserve from '@/page/admin/courseReserve/manageCourseReserve.vue'
 // portfolio

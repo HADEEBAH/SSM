@@ -130,7 +130,7 @@
               </v-col>
               <v-col cols="auto" v-else>
                 <v-img
-                  src="../../../assets/userKingdom/default_image_profile.svg"
+                  src="@/assets/userKingdom/default_image_profile.svg"
                   alt="Card image"
                   class="rounded-full ml-3 image-cropper"
                   style="max-width: 50px; max-height: 50px"
@@ -255,7 +255,7 @@
               </div>
               <div v-else>
                 <img
-                  src="../../../assets/userKingdom/default_image_profile.svg"
+                  src="@/assets/userKingdom/default_image_profile.svg"
                   alt="Card image"
                   class="rounded-full image-cropper ml-3"
                   style="max-width: 50px; max-height: 50px"
@@ -309,21 +309,6 @@
       <label-custom text="นโยบาย"></label-custom>
     </div>
     <v-divider class=""></v-divider>
-
-    <!-- policy -->
-    <!-- <v-row dense class="mt-3" @click="show_policy()">
-      <v-col cols="2" sm="1">
-        <img src="@/assets/profile/policy.png" />
-      </v-col>
-      <v-col cols="8" sm="9" align="left" class="mt-1">
-        <label>นโยบายการคุ้มครองข้อมูลส่วนบุคลล</label>
-      </v-col>
-
-      <v-col cols="2" sm="2" align="right">
-        <span class="mdi mdi-chevron-right"></span>
-      </v-col>
-    </v-row> -->
-    <!-- rules -->
     <v-row dense class="mt-3 cursor-pointer" @click="show_rules()">
       <v-col cols="2" sm="1">
         <v-icon class="pa-2" color="#ff6b81">mdi-file-document-outline</v-icon>
@@ -383,7 +368,7 @@
               </div>
               <div v-else>
                 <v-img
-                  src="../../../assets/userKingdom/default_image_profile.svg"
+                  src="@/assets/userKingdom/default_image_profile.svg"
                   class="image-cropper"
                   style="width: 190px; height: 190px"
                 >
@@ -421,7 +406,6 @@
                   ? "-"
                   : getParentDataDialog.parentNation
               }}
-              <!-- {{ getParentDataDialog.parentNation == null ? '-' : getParentDataDialog.parentNation}} -->
             </v-col>
             <!-- tel -->
             <v-col cols="12" sm="6">
@@ -442,12 +426,9 @@
                   ? "-"
                   : getParentDataDialog.parentEmail
               }}
-              <!-- {{ getParentDataDialog.parentTel== ''? '-' : getParentDataDialog.parentTel}} -->
             </v-col>
           </v-row>
           <v-row dense>
-            <!-- v-if="profile_user.length >= 1" -->
-
             <v-col align="center">
               <v-btn
                 class="white--text"
@@ -577,7 +558,7 @@
             @click="myCourseStudent(dialogGetStudentData.studentId)"
           >
             <v-col cols="2" sm="1">
-              <img src="../../../assets/profile/cource.png" />
+              <img src="@/assets/profile/cource.png" />
             </v-col>
             <v-col cols="5" sm="6" align="left" class="mt-1">
               <label>คอร์สเรียนของนักเรียน</label>
@@ -595,7 +576,7 @@
           <!-- CERTIFICATE -->
           <v-row dense class="mt-3 cursor-pointer" @click="show_certificate()">
             <v-col cols="2" sm="1">
-              <img src="../../../assets/profile/certificate.png" />
+              <img src="@/assets/profile/certificate.png" />
             </v-col>
             <v-col cols="5" sm="6" align="left" class="mt-1">
               <label>การแข่งขันและเกียรติบัตร</label>
@@ -608,8 +589,6 @@
             </v-col>
           </v-row>
           <v-row dense>
-            <!-- v-if="profile_user.length >= 1" -->
-
             <v-col align="center">
               <v-btn
                 class="white--text"
@@ -769,13 +748,12 @@
       ></registerDialogForm>
     </v-dialog>
   </v-container>
-  <!-- </v-form> -->
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
 import labelCustom from "@/components/label/labelCustom.vue";
-import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+import loadingOverlay from "@/components/loading/loadingOverlay.vue";
 import registerDialogForm from "@/components/user_menage/registerDialogForm.vue";
 import headerCard from "@/components/header/headerCard.vue";
 import VueCookie from "vue-cookie";
