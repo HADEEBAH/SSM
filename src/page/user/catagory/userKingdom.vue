@@ -149,7 +149,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+import loadingOverlay from "@/components/loading/loadingOverlay.vue";
 export default {
   components: {
     loadingOverlay,
@@ -325,7 +325,7 @@ export default {
 } */
 
 .bg-kingdom {
-  background-image: url("../../../assets/userKingdom/kingdom_bg_img.svg");
+  background-image: url("@/assets/userKingdom/kingdom_bg_img.svg");
   background-position: top;
   background-repeat: no-repeat;
   /* background-size: contain; */

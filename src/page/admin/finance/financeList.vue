@@ -41,7 +41,7 @@
               <v-img
                 max-height="90"
                 max-width="70"
-                src="../../../assets/course/all_course.png"
+                src="@/assets/course/all_course.png"
               ></v-img>
             </template>
             <template v-slot:header>
@@ -66,7 +66,7 @@
               <v-img
                 max-height="90"
                 max-width="70"
-                src="../../../assets/course/file_money.png"
+                src="@/assets/course/file_money.png"
               ></v-img>
             </template>
             <template v-slot:header>
@@ -91,7 +91,7 @@
               <v-img
                 max-height="90"
                 max-width="70"
-                src="../../../assets/course/short_course.png"
+                src="@/assets/course/short_course.png"
               ></v-img>
             </template>
             <template v-slot:header>
@@ -628,9 +628,9 @@
 import imgCard from "@/components/course/imgCard.vue";
 import headerPage from "@/components/header/headerPage.vue";
 import headerCard from "@/components/header/headerCard.vue";
-import LabelCustom from "../../../components/label/labelCustom.vue";
+import LabelCustom from "@/components/label/labelCustom.vue";
 import { dateFormatter } from "@/functions/functions";
-import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+import loadingOverlay from "@/components/loading/loadingOverlay.vue";
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "financeList",

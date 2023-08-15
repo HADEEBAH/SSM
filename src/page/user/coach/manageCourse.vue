@@ -697,7 +697,7 @@
               <v-img
                 max-height="90"
                 max-width="70"
-                src="../../../assets/leave/leave_all.png"
+                src="@/assets/leave/leave_all.png"
               ></v-img>
             </template>
             <template v-slot:header>
@@ -723,7 +723,7 @@
               <v-img
                 max-height="90"
                 max-width="70"
-                src="../../../assets/leave/approve.png"
+                src="@/assets/leave/approve.png"
               ></v-img>
             </template>
             <template v-slot:header>
@@ -751,7 +751,7 @@
               <v-img
                 max-height="90"
                 max-width="70"
-                src="../../../assets/leave/panding.png"
+                src="@/assets/leave/panding.png"
               ></v-img>
             </template>
             <template v-slot:header>
@@ -777,7 +777,7 @@
               <v-img
                 max-height="90"
                 max-width="70"
-                src="../../../assets/leave/non-approve.png"
+                src="@/assets/leave/non-approve.png"
               ></v-img>
             </template>
             <template v-slot:header>
@@ -803,7 +803,7 @@
               <v-img
                 max-height="90"
                 max-width="70"
-                src="../../../assets/leave/cancel.png"
+                src="@/assets/leave/cancel.png"
               ></v-img>
             </template>
             <template v-slot:header>
@@ -1160,7 +1160,7 @@
                       <v-img
                         height="35"
                         width="26"
-                        src="../../../assets/coachLeave/file-pdf.png"
+                        src="@/assets/coachLeave/file-pdf.png"
                       />
                     </v-col>
                     <v-col class="px-2">
@@ -1310,17 +1310,17 @@
 </template>
 <script>
 import calendarCoach from "@/components/calendar/calendarCoach.vue";
-import headerPage from "../../../components/header/headerPage.vue";
-import rowData from "../../../components/label/rowData.vue";
-import imgCard from "../../../components/course/imgCard.vue";
+import headerPage from "@/components/header/headerPage.vue";
+import rowData from "@/components/label/rowData.vue";
+import imgCard from "@/components/course/imgCard.vue";
 import moment from "moment";
-import labelCustom from "../../../components/label/labelCustom.vue";
+import labelCustom from "@/components/label/labelCustom.vue";
 import Swal from "sweetalert2";
 import { dateFormatter } from "@/functions/functions";
 import { mapActions, mapGetters } from "vuex";
-import coachLeaveForm from "../../../components/coach_leave/coachLeaveForm.vue";
+import coachLeaveForm from "@/components/coach_leave/coachLeaveForm.vue";
 import router from "@/router";
-import imgFileType from "../../../components/file_type/imgFileType.vue";
+import imgFileType from "@/components/file_type/imgFileType.vue";
 
 export default {
   name: "menageCourse",

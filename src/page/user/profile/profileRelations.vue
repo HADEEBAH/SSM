@@ -79,7 +79,7 @@
           @click="$router.push({ name: 'StudentsSchedule' })"
         >
           <v-col cols="2" sm="1">
-            <img src="../../../assets/profile/cource.png" />
+            <img src="@/assets/profile/cource.png" />
           </v-col>
           <v-col cols="5" sm="6" align="left" class="mt-1">
             <label>คอร์สเรียนของฉัน</label>
@@ -94,7 +94,7 @@
         <!-- CERTIFICATE -->
         <v-row dense class="mt-3" @click="show_certificate()">
           <v-col cols="2" sm="1">
-            <img src="../../../assets/profile/certificate.png" />
+            <img src="@/assets/profile/certificate.png" />
           </v-col>
           <v-col cols="5" sm="6" align="left" class="mt-1">
             <label>การแข่งขันและเกียรติบัตร</label>

@@ -977,7 +977,7 @@
           <v-row>
             <v-col cols="2">
               <v-img
-                src="../../../assets/userManagePage/pdfIcon.png"
+                src="@/assets/userManagePage/pdfIcon.png"
                 width="30px"
                 height="30px"
               ></v-img>

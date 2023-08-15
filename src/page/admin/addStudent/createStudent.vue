@@ -745,11 +745,11 @@ import headerPage from "@/components/header/headerPage.vue";
 import LabelCustom from "@/components/label/labelCustom.vue";
 import dialogCard from "@/components/dialog/dialogCard.vue";
 import registerDialogForm from "@/components/user_menage/registerDialogForm.vue";
-import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+import loadingOverlay from "@/components/loading/loadingOverlay.vue";
 import { mapActions, mapGetters } from "vuex";
 import { dateFormatter, inputValidation } from "@/functions/functions";
 import Swal from "sweetalert2";
-import mixin from "../../../mixin";
+import mixin from "@/mixin";
 
 export default {
   name: "addlearnPage",

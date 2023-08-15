@@ -13,7 +13,7 @@
           <div class="text-slate-400">{{ certificate.race_day }}</div>
           <v-row class="my-2">
             <v-col cols="6" sm="1">
-              <img src="../../../assets/userManagePage/certificate .png" />
+              <img src="@/assets/userManagePage/certificate .png" />
             </v-col>
             <v-col
               cols="6"

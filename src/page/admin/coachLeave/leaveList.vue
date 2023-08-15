@@ -39,13 +39,13 @@
                 v-if="type.value == 'all'"
                 max-height="90"
                 max-width="70"
-                src="../../../assets/coachLeave/all.png"
+                src="@/assets/coachLeave/all.png"
               ></v-img>
               <v-img
                 v-if="type.value == 'approved'"
                 max-height="90"
                 max-width="70"
-                src="../../../assets/coachLeave/accept.png"
+                src="@/assets/coachLeave/accept.png"
               ></v-img>
             </template>
             <template v-slot:header>
@@ -83,19 +83,19 @@
                 v-if="type.value == 'pending'"
                 max-height="90"
                 max-width="70"
-                src="../../../assets/coachLeave/wait.png"
+                src="@/assets/coachLeave/wait.png"
               ></v-img>
               <v-img
                 v-if="type.value == 'reject'"
                 max-height="90"
                 max-width="70"
-                src="../../../assets/coachLeave/disaccept.png"
+                src="@/assets/coachLeave/disaccept.png"
               ></v-img>
               <v-img
                 v-if="type.value == 'cancel'"
                 max-height="90"
                 max-width="70"
-                src="../../../assets/coachLeave/cancel.svg"
+                src="@/assets/coachLeave/cancel.svg"
               ></v-img>
             </template>
             <template v-slot:header>
@@ -210,7 +210,7 @@
 import headerPage from "@/components/header/headerPage.vue";
 import imgCard from "@/components/course/imgCard.vue";
 import { mapActions, mapGetters } from "vuex";
-import coachLeaveForm from "../../../components/coach_leave/coachLeaveForm.vue";
+import coachLeaveForm from "@/components/coach_leave/coachLeaveForm.vue";
 export default {
   components: {
     headerPage,
@@ -276,29 +276,29 @@ export default {
       {
         name: "ทั้งหมด",
         value: "all",
-        img: "../../../assets/coachLeave/all.png",
+        img: "@/assets/coachLeave/all.png",
       },
       {
         name: "อนุมัติ",
         value: "approved",
-        img: "../../../assets/coachLeave/accept.png",
+        img: "@/assets/coachLeave/accept.png",
       },
     ],
     course_type_two: [
       {
         name: "รออนุมัติ",
         value: "pending",
-        img: "../../../assets/coachLeave/wait.png",
+        img: "@/assets/coachLeave/wait.png",
       },
       {
         name: "ปฎิเสธ",
         value: "reject",
-        img: "../../../assets/coachLeave/disaccept.png",
+        img: "@/assets/coachLeave/disaccept.png",
       },
       {
         name: "ยกเลิก",
         value: "cancel",
-        img: "../../../assets/coachLeave/all.png",
+        img: "@/assets/coachLeave/all.png",
       },
     ],
     coach_leave_arr: [],

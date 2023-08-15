@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
         <v-col  align="center">
-        <img src="../../../assets/profile/rePassword.png" class="pa-10" />
+        <img src="@/assets/profile/rePassword.png" class="pa-10" />
           <div class="text-xl font-bold pa-2">เปลี่ยนรหัสผ่านใหม่</div>
           <div class="text-slate-400 pa-2">
             รหัสผ่านนี้ใช้เพื่อเข้าสู่ระบบใช้งานบัญชี One ID ของคุณ 

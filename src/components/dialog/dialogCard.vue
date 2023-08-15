@@ -5,8 +5,8 @@
                 
                 <slot v-if="hasFooterSlot" name="img"></slot>
                 <template v-else>
-                    <v-img v-if="checkmark" max-height="100" max-width="100" src="../../assets/dialog/success_user.png"></v-img>
-                    <v-img v-else max-height="206" max-width="206" src="../../assets/dialog/sucess.png"></v-img>
+                    <v-img v-if="checkmark" max-height="100" max-width="100" src="@/assets/dialog/success_user.png"></v-img>
+                    <v-img v-else max-height="206" max-width="206" src="@/assets/dialog/sucess.png"></v-img>
                 </template>
             </v-col>
             <v-col cols="12" class="d-flex align-center justify-center text-xl font-bold">

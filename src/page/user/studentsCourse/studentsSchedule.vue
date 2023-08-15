@@ -481,7 +481,7 @@
                           :src="
                             item_booked.courseImg
                               ? item_booked.courseImg
-                              : `../../../assets/student_course/download.png`
+                              : `@/assets/student_course/download.png`
                           "
                         />
                       </v-col>
@@ -666,7 +666,7 @@
                           :src="
                             item_booked.courseImg
                               ? item_booked.courseImg
-                              : `../../../assets/student_course/download.png`
+                              : `@/assets/student_course/download.png`
                           "
                         />
                       </v-col>
@@ -825,9 +825,9 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import calendarStudent from "../../../components/calendar/calendarStudent.vue";
+import calendarStudent from "@/components/calendar/calendarStudent.vue";
 import labelCustom from "@/components/label/labelCustom.vue";
-import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+import loadingOverlay from "@/components/loading/loadingOverlay.vue";
 
 export default {
   components: {

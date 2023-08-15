@@ -10,7 +10,7 @@
           <!-- img -->
           <v-col cols="4" sm="2">
             <v-col>
-              <img src="../../../assets/student_course/download.png" />
+              <img src="@/assets/student_course/download.png" />
             </v-col>
           </v-col>
           <!-- detail -->

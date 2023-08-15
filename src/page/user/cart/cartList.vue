@@ -240,7 +240,7 @@
 <script>
 import Swal from "sweetalert2";
 import { mapActions, mapGetters } from "vuex";
-import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+import loadingOverlay from "@/components/loading/loadingOverlay.vue";
 import TermOfUse from "@/components/termOfUse.vue";
 export default {
   components: {

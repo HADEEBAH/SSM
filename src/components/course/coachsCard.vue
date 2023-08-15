@@ -317,7 +317,7 @@ import { mapGetters, mapActions } from "vuex";
 import moment from "moment";
 import Swal from "sweetalert2";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
-import { generateTimeArrayHours } from "../../functions/functions";
+import { generateTimeArrayHours } from "@/functions/functions";
 export default {
   components: {
     LabelCustom,

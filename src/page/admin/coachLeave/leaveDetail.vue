@@ -398,7 +398,7 @@
                 <v-img
                   width="175"
                   height="185"
-                  src="../../../assets/coachLeave/disapproved.png"
+                  src="@/assets/coachLeave/disapproved.png"
                 ></v-img>
               </v-col>
             </v-row>
@@ -446,7 +446,7 @@
 import headerPage from "@/components/header/headerPage.vue";
 import Swal from "sweetalert2";
 import { mapActions, mapGetters } from "vuex";
-import LabelCustom from "../../../components/label/labelCustom.vue";
+import LabelCustom from "@/components/label/labelCustom.vue";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 export default {
   name: "leaveDetail",

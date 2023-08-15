@@ -423,7 +423,7 @@
         <v-row dense>
           <v-card-title>
             <v-img
-              src="../../../assets/navbar/barCourse.svg"
+              src="@/assets/navbar/barCourse.svg"
               style="max-width: 25px; margin-left: 30px"
             ></v-img>
             <span class="indent-5">สถานะคอร์สเรียน</span>
@@ -854,7 +854,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import headerPage from "@/components/header/headerPage.vue";
-import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+import loadingOverlay from "@/components/loading/loadingOverlay.vue";
 
 import chart from "vue-apexcharts";
 

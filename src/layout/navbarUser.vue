@@ -139,7 +139,7 @@
             <div v-if="!$vuetify.breakpoint.smAndDown">
               <v-avatar class="mx-2" size="24">
                 <v-img
-                  src="../assets/navbar_user/default_image_profile.svg"
+                  src="@/assets/navbar_user/default_image_profile.svg"
                   size="24"
                 />
               </v-avatar>
@@ -202,7 +202,7 @@
             <div v-else class="cicle" style="text-align: -webkit-center">
               <v-img
                 class="image-cropper"
-                src="../assets/navbar_user/default_image_profile.svg"
+                src="@/assets/navbar_user/default_image_profile.svg"
                 style="max-width: 300px; max-height: 300px"
               />
             </div>
@@ -305,7 +305,7 @@
           </v-col>
           <v-col cols="auto" class="pa-4 bg-white" align="center">
             <v-img
-              src="../assets/navbar/qr-footer.png"
+              src="@/assets/navbar/qr-footer.png"
               max-height="96"
               max-width="89"
             ></v-img>
@@ -330,7 +330,7 @@
 </template>
 
 <script>
-import mixin from "../mixin";
+import mixin from "@/mixin";
 import { mapActions, mapGetters } from "vuex";
 
 export default {

@@ -20,7 +20,7 @@
         <v-row v-if="!preview_url">
           <v-col cols="12" class="flex align-center justify-center">
             <v-img
-              src="../../assets/course/upload_file.png"
+              src="@/assets/course/upload_file.png"
               max-height="105"
               max-width="122"
             ></v-img>

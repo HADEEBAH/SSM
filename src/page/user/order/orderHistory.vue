@@ -217,9 +217,9 @@
 </template>
 
 <script>
-import { dateFormatter } from "../../../functions/functions";
+import { dateFormatter } from "@/functions/functions";
 import { mapActions, mapGetters } from "vuex";
-import loadingOverlay from "../../../components/loading/loadingOverlay";
+import loadingOverlay from "@/components/loading/loadingOverlay";
 import Swal from "sweetalert2";
 export default {
   name: "orderHistory",

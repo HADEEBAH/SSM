@@ -134,7 +134,7 @@
           <v-card-text>
             <v-row dense class="mb-2">
               <v-col cols="2" sm="1" align="center">
-                <img src="../../../assets/student_course/certificates.png" />
+                <img src="@/assets/student_course/certificates.png" />
               </v-col>
               <v-col class="text-lg font-bold" cols="6">ผลประเมินศักยภาพ</v-col>
             </v-row>
@@ -393,9 +393,9 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { dateFormatter } from "../../../functions/functions";
-import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
-import imgFileType from "../../../components/file_type/imgFileType.vue";
+import { dateFormatter } from "@/functions/functions";
+import loadingOverlay from "@/components/loading/loadingOverlay.vue";
+import imgFileType from "@/components/file_type/imgFileType.vue";
 
 export default {
   components: {

@@ -2,14 +2,14 @@
   <v-container>
     <v-row>
       <v-col align="center">
-        <img src="../../../assets/profile/profileLanguages.png" />
+        <img src="@/assets/profile/profileLanguages.png" />
       </v-col>
     </v-row>
     <!-- TH -->
     <v-card class="my-10">
       <v-row>
         <v-col cols="2" sm="1" class="mx-3 my-4">
-          <img src="../../../assets/profile/thaiFlag.png" />
+          <img src="@/assets/profile/thaiFlag.png" />
         </v-col>
         <v-col cols="7" sm="8" class="my-4 text-xl font-bold">
           <label>ภาษาไทย</label>
@@ -31,7 +31,7 @@
     <v-card>
       <v-row>
         <v-col cols="2" sm="1" class="mx-3 my-4">
-          <img src="../../../assets/profile/usaFlag.png" />
+          <img src="@/assets/profile/usaFlag.png" />
         </v-col>
         <v-col cols="7" sm="8" class="my-4 text-xl font-bold">
           <label>English</label>

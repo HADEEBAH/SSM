@@ -12,7 +12,7 @@
         <v-card-text>
           <div class="w-full" align="center" v-if="image">
             <v-img
-              src="../../assets/navbar/logo.svg"
+              src="@/assets/navbar/logo.svg"
               style="width: 50%; height: 50%"
             ></v-img>
           </div>

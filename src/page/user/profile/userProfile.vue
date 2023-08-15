@@ -130,7 +130,7 @@
               </v-col>
               <v-col cols="auto" v-else>
                 <v-img
-                  src="../../../assets/userKingdom/default_image_profile.svg"
+                  src="@/assets/userKingdom/default_image_profile.svg"
                   alt="Card image"
                   class="rounded-full ml-3 image-cropper"
                   style="max-width: 50px; max-height: 50px"
@@ -255,7 +255,7 @@
               </div>
               <div v-else>
                 <img
-                  src="../../../assets/userKingdom/default_image_profile.svg"
+                  src="@/assets/userKingdom/default_image_profile.svg"
                   alt="Card image"
                   class="rounded-full image-cropper ml-3"
                   style="max-width: 50px; max-height: 50px"
@@ -368,7 +368,7 @@
               </div>
               <div v-else>
                 <v-img
-                  src="../../../assets/userKingdom/default_image_profile.svg"
+                  src="@/assets/userKingdom/default_image_profile.svg"
                   class="image-cropper"
                   style="width: 190px; height: 190px"
                 >
@@ -558,7 +558,7 @@
             @click="myCourseStudent(dialogGetStudentData.studentId)"
           >
             <v-col cols="2" sm="1">
-              <img src="../../../assets/profile/cource.png" />
+              <img src="@/assets/profile/cource.png" />
             </v-col>
             <v-col cols="5" sm="6" align="left" class="mt-1">
               <label>คอร์สเรียนของนักเรียน</label>
@@ -576,7 +576,7 @@
           <!-- CERTIFICATE -->
           <v-row dense class="mt-3 cursor-pointer" @click="show_certificate()">
             <v-col cols="2" sm="1">
-              <img src="../../../assets/profile/certificate.png" />
+              <img src="@/assets/profile/certificate.png" />
             </v-col>
             <v-col cols="5" sm="6" align="left" class="mt-1">
               <label>การแข่งขันและเกียรติบัตร</label>
@@ -753,7 +753,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import labelCustom from "@/components/label/labelCustom.vue";
-import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+import loadingOverlay from "@/components/loading/loadingOverlay.vue";
 import registerDialogForm from "@/components/user_menage/registerDialogForm.vue";
 import headerCard from "@/components/header/headerCard.vue";
 import VueCookie from "vue-cookie";

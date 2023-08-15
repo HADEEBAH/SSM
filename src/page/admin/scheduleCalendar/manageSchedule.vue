@@ -766,7 +766,7 @@
 </template>
 
 <script>
-import calendarAdmin from "../../../components/calendar/calendarAdmin.vue";
+import calendarAdmin from "@/components/calendar/calendarAdmin.vue";
 import dialogCard from "@/components/dialog/dialogCard.vue";
 import VueCookie from "vue-cookie";
 import Swal from "sweetalert2";

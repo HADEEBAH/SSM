@@ -184,7 +184,7 @@ import axios from "axios";
 import { inputValidation } from "@/functions/functions";
 import headerPage from "@/components/header/headerPage.vue";
 import { mapActions, mapGetters } from "vuex";
-import LabelCustom from "../../../components/label/labelCustom.vue";
+import LabelCustom from "@/components/label/labelCustom.vue";
 import VueCookie from "vue-cookie";
 import { CheckFileSizeV2 } from "@/functions/functions";
 export default {

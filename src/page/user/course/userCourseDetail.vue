@@ -241,7 +241,7 @@
 <script>
 import dialogCard from "@/components/dialog/dialogCard.vue";
 import rowData from "@/components/label/rowData.vue";
-import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+import loadingOverlay from "@/components/loading/loadingOverlay.vue";
 import Swal from "sweetalert2";
 import { mapActions, mapGetters } from "vuex";
 import moment from "moment";

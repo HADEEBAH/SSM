@@ -875,7 +875,7 @@ import headerCard from "@/components/header/headerCard.vue";
 import labelCustom from "@/components/label/labelCustom.vue";
 import registerDialogForm from "@/components/user_menage/registerDialogForm.vue";
 import dialogCard from "@/components/dialog/dialogCard.vue";
-import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+import loadingOverlay from "@/components/loading/loadingOverlay.vue";
 import TermOfUse from "@/components/termOfUse.vue";
 import Swal from "sweetalert2";
 import { mapActions, mapGetters } from "vuex";
