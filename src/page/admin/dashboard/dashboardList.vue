@@ -243,6 +243,7 @@
                       dense
                       outlined
                       @input="selectYears()"
+                      color="#ff6b81"
                     ></v-select>
                   </v-col>
                   <!-- Month -->
@@ -255,6 +256,7 @@
                       dense
                       outlined
                       @input="selectMunth()"
+                      color="#ff6b81"
                     ></v-select>
                   </v-col>
                 </v-row>
@@ -317,6 +319,7 @@
                       dense
                       outlined
                       @input="selectDonutYears()"
+                      color="#ff6b81"
                     ></v-select>
                   </v-col>
                   <!-- MONTH -->
@@ -329,6 +332,7 @@
                       dense
                       outlined
                       @input="selectDonutMounth()"
+                      color="#ff6b81"
                     ></v-select>
                   </v-col>
                 </v-row>
@@ -740,6 +744,7 @@
                                 dense
                                 :value="items_dialog.courseNameTh"
                                 label="ชื่อคอร์ส"
+                                color="#FF6B81"
                               >
                                 <template v-slot:append>
                                   <v-icon :color="'#FF6B81'"
@@ -761,6 +766,7 @@
                                 dense
                                 :value="`${items_dialog.courseTypeNameTh} (${items_dialog.packageName})`"
                                 label="แพ็กเกจคอร์ส"
+                                color="#FF6B81"
                               >
                                 <template v-slot:append>
                                   <v-icon :color="'#FF6B81'">
@@ -782,6 +788,7 @@
                                 dense
                                 :value="items_dialog.dayOfWeek"
                                 label="วันเรียน"
+                                color="#FF6B81"
                               >
                                 <template v-slot:append>
                                   <v-icon :color="'#FF6B81'"
@@ -803,6 +810,7 @@
                                 dense
                                 :value="items_dialog.time"
                                 label="เวลาเรียน"
+                                color="#FF6B81"
                               >
                                 <template v-slot:append>
                                   <v-icon :color="'#FF6B81'"
@@ -819,6 +827,7 @@
                                 dense
                                 :value="`${items_dialog.currentStudent} / ${items_dialog.maximumStudent}`"
                                 label="ที่นั่ง"
+                                color="#FF6B81"
                               >
                                 <template v-slot:append>
                                   <v-icon :color="'#FF6B81'"

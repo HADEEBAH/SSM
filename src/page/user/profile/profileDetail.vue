@@ -51,6 +51,7 @@
             dense
             :rules="rules.firstNameThRules"
             :disabled="!isEnabled"
+            color="#ff6b81"
           >
           </v-text-field>
         </v-col>
@@ -65,6 +66,7 @@
             dense
             :rules="rules.lastNameThRules"
             :disabled="!isEnabled"
+            color="#ff6b81"
           >
           </v-text-field>
         </v-col>
@@ -78,6 +80,7 @@
             outlined
             dense
             :disabled="!isEnabled"
+            color="#ff6b81"
           >
           </v-text-field>
         </v-col>
