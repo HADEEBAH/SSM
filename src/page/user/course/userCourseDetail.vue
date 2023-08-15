@@ -3,10 +3,10 @@
     <v-row class="h-full">
       <v-col cols="12" sm="6" :class="MobileSize ? '' : 'h-full'">
         <v-img
-          cover
+          aspect-ratio="16/9"
           :class="`${
             MobileSize ? 'rounded-lg mb-3 max-h-[180px]' : 'rounded-lg mb-3'
-          } h-full max-h-[500px]`"
+          } max-h-[576px] max-w-[1024px]`"
           :src="
             course_data.course_img || course_data.course_img !== ''
               ? course_data.course_img

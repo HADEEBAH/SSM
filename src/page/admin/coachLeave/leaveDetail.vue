@@ -410,7 +410,7 @@
                     v-model="coach_leave.remark_reject"
                     outlined
                     dense
-                    placeholder="กรอกรายระเอียด..."
+                    placeholder="กรอกรายละเอียด..."
                   ></v-textarea>
                 </v-col>
               </v-row>
@@ -460,7 +460,7 @@ export default {
     ],
     breadcrumbs: [
       { text: "การลา", to: "LeaveList" },
-      { text: "รายระเอียด", to: "" },
+      { text: "รายละเอียด", to: "" },
     ],
     item: { status: "pending" },
     column: [

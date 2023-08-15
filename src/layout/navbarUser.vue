@@ -358,7 +358,7 @@ export default {
         title: "ตารางเรียน",
         to: "StudentsSchedule",
         params: { action: "MySchedule" },
-        roles: ["R_1", "R_2", "R_3"],
+        roles: ["R_1","R_2", "R_3"],
       },
       {
         icon: "mdi-book-cog-outline",
