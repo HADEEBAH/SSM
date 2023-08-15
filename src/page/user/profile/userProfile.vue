@@ -167,16 +167,24 @@
         </v-card>
       </div>
       <div v-else>
-        <!-- <v-card> -->
-        <v-card-text
-          class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
-        >
-          <span class="text-lg font-bold">
-            <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-            ไม่พบข้อมูลของผู้ปกครอง
-          </span>
-        </v-card-text>
-        <!-- </v-card> -->
+        <v-card class="rounded-lg my-3">
+          <v-card-text class="text-center border-2 border-[#ff6b81] rounded-lg">
+            <span class="text-lg font-bold">
+              <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+              ไม่พบข้อมูลของผู้ปกครอง
+            </span>
+          </v-card-text>
+        </v-card>
+        <!-- <v-card dense outlined>
+          <v-card-text
+            class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
+          >
+            <span class="text-lg font-bold">
+              <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+              ไม่พบข้อมูลของผู้ปกครอง
+            </span>
+          </v-card-text>
+        </v-card> -->
       </div>
     </div>
 
@@ -286,10 +294,8 @@
         </v-card>
       </div>
       <div v-else>
-        <v-card flat>
-          <v-card-text
-            class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
-          >
+        <v-card class="rounded-lg my-3">
+          <v-card-text class="text-center border-2 border-[#ff6b81] rounded-lg">
             <span class="text-lg font-bold">
               <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
               ไม่พบข้อมูลของนักเรียน
@@ -331,12 +337,12 @@
       </v-col>
     </v-row>
 
-    <div class="text-center my-5">
+    <div class="my-3 text-center">
       <v-btn
-        outlined
+        depressed
         color="#FF6B81"
+        class="white--text rounded-lg drop-shadow-lg"
         @click="logOut"
-        class="drop-shadow-lg border-2 border-[#ff6b81] rounded-lg font-bold"
       >
         ออกจากระบบ
       </v-btn>
