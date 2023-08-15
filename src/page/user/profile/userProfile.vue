@@ -167,7 +167,15 @@
         </v-card>
       </div>
       <div v-else>
-        <v-card>
+        <v-card class="rounded-lg my-3">
+          <v-card-text class="text-center border-2 border-[#ff6b81] rounded-lg">
+            <span class="text-lg font-bold">
+              <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+              ไม่พบข้อมูลของผู้ปกครอง
+            </span>
+          </v-card-text>
+        </v-card>
+        <!-- <v-card dense outlined>
           <v-card-text
             class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
           >
@@ -176,7 +184,7 @@
               ไม่พบข้อมูลของผู้ปกครอง
             </span>
           </v-card-text>
-        </v-card>
+        </v-card> -->
       </div>
     </div>
 
@@ -286,10 +294,8 @@
         </v-card>
       </div>
       <div v-else>
-        <v-card flat>
-          <v-card-text
-            class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
-          >
+        <v-card class="rounded-lg my-3">
+          <v-card-text class="text-center border-2 border-[#ff6b81] rounded-lg">
             <span class="text-lg font-bold">
               <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
               ไม่พบข้อมูลของนักเรียน
@@ -330,10 +336,17 @@
         <span class="mdi mdi-chevron-right"></span>
       </v-col>
     </v-row>
-    <div class="text-center my-5">
-      <v-btn outlined color="pink" @click="logOut"> ออกจากระบบ </v-btn>
-    </div>
 
+    <div class="my-3 text-center">
+      <v-btn
+        depressed
+        color="#FF6B81"
+        class="white--text rounded-lg drop-shadow-lg"
+        @click="logOut"
+      >
+        ออกจากระบบ
+      </v-btn>
+    </div>
     <!-- PARENT DIALOG  -->
     <v-dialog
       v-if="dialog_show"

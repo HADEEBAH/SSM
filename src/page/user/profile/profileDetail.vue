@@ -61,6 +61,7 @@
             dense
             :rules="rules.firstNameThRules"
             :disabled="!isEnabled"
+            color="#ff6b81"
           >
           </v-text-field>
           <!-- </div> -->
@@ -80,6 +81,7 @@
             dense
             :rules="rules.lastNameThRules"
             :disabled="!isEnabled"
+            color="#ff6b81"
           >
           </v-text-field>
           <!-- </div> -->
@@ -98,6 +100,7 @@
             outlined
             dense
             :disabled="!isEnabled"
+            color="#ff6b81"
           >
             <!-- :rules="rules.nation" -->
           </v-text-field>
@@ -179,34 +182,41 @@
           </v-btn>
         </v-col>
       </v-row>
-      <v-dialog 
-        v-if="profile_fail" 
-        v-model="profile_fail" 
+      <v-dialog
+        v-if="profile_fail"
+        v-model="profile_fail"
         persistent
         :width="$vuetify.breakpoint.smAndUp ? `60vw` : ''"
       >
         <v-card flat>
-          <v-card-title >
+          <v-card-title>
             <v-row dense>
-              <v-col align="center">
-                ข้อมูลไม่ครบถ้วน
-              </v-col>
+              <v-col align="center"> ข้อมูลไม่ครบถ้วน </v-col>
             </v-row>
           </v-card-title>
           <v-card-text>
             <v-row dense>
-              <v-col  align="center">
-                กรุณากรอกข้อมูลส่วนตัวให้ครบถ้วน
+              <v-col align="center"> กรุณากรอกข้อมูลส่วนตัวให้ครบถ้วน </v-col>
+            </v-row>
+            <v-row dense>
+              <v-col align="right">
+                <v-btn
+                  outlined
+                  color="#ff6b81"
+                  @click="closeDialogPorfile(false)"
+                  >ยกเลิก</v-btn
+                >
+              </v-col>
+              <v-col>
+                <v-btn
+                  depressed
+                  color="#ff6b81"
+                  dark
+                  @click="closeDialogPorfile(false)"
+                  >ตกลง</v-btn
+                >
               </v-col>
             </v-row>
-           <v-row dense>
-            <v-col align="right">
-              <v-btn outlined color="#ff6b81" @click="closeDialogPorfile(false)">ยกเลิก</v-btn>
-            </v-col>
-            <v-col>
-              <v-btn depressed color="#ff6b81" dark @click="closeDialogPorfile(false)">ตกลง</v-btn>
-            </v-col>
-           </v-row>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -341,10 +351,14 @@ export default {
     email: "",
   }),
   beforeRouteLeave(to, from, next) {
-    if(this.profile_detail.firstNameTh && this.profile_detail.lastNameTh && !this.isEnabled){
-      next()
-    }else{
-      this.changeProfileFail(true)
+    if (
+      this.profile_detail.firstNameTh &&
+      this.profile_detail.lastNameTh &&
+      !this.isEnabled
+    ) {
+      next();
+    } else {
+      this.changeProfileFail(true);
     }
   },
   created() {
@@ -363,7 +377,7 @@ export default {
       GetUserData: "ProfileModules/GetUserData",
       GetAll: "ProfileModules/GetAll",
       GetProfileDetail: "ProfileModules/GetProfileDetail",
-      changeProfileFail: "loginModules/changeProfileFail"
+      changeProfileFail: "loginModules/changeProfileFail",
     }),
     edit() {
       this.isDisabled = false;
@@ -375,8 +389,8 @@ export default {
       this.isDisabled = true;
       this.isEnabled = false;
     },
-    closeDialogPorfile(value){
-      this.changeProfileFail(value)
+    closeDialogPorfile(value) {
+      this.changeProfileFail(value);
     },
     submitEdit() {
       if (this.$refs.form.validate()) {
@@ -430,8 +444,8 @@ export default {
                 let data_storage = JSON.parse(
                   localStorage.getItem("userDetail")
                 );
-                data_storage.first_name_th = data.data.firstNameTh
-                data_storage.last_name_th = data.data.lastNameTh
+                data_storage.first_name_th = data.data.firstNameTh;
+                data_storage.last_name_th = data.data.lastNameTh;
                 data_storage.image = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}`;
                 localStorage.setItem(
                   "userDetail",
