@@ -282,19 +282,19 @@
                       : require(`@/assets/course/default_course_img.svg`)
                   "
                 >
-                <template v-slot:placeholder>
-                  <v-row
-                    class="fill-height ma-0"
-                    align="center"
-                    justify="center"
-                  >
-                    <v-progress-circular
-                      indeterminate
-                      color="#ff6b81"
-                    ></v-progress-circular>
-                  </v-row>
-                </template>
-              </v-img>
+                  <template v-slot:placeholder>
+                    <v-row
+                      class="fill-height ma-0"
+                      align="center"
+                      justify="center"
+                    >
+                      <v-progress-circular
+                        indeterminate
+                        color="#ff6b81"
+                      ></v-progress-circular>
+                    </v-row>
+                  </template>
+                </v-img>
               </v-col>
               <v-col>
                 <v-row dense>
@@ -926,7 +926,12 @@
               :expanded.sync="expanded"
               item-key="coachLeaveId"
               show-expand
+              :loading="coach_leaves_is_loading"
             >
+              <template v-slot:[`item.count`]="{ item }">
+                {{ item.index }}
+              </template>
+
               <template v-slot:no-data> ไม่พบข้อมูลใบลา </template>
               <template v-slot:[`item.date`]="{ item }">
                 {{
@@ -1487,6 +1492,8 @@ export default {
       new Date().getMonth() + 1
     }-${new Date().getDate()}`,
     column: [
+      { text: "ลำดับ", align: "center", sortable: false, value: "count" },
+
       { text: "วันที่", align: "start", sortable: false, value: "date" },
       {
         text: "ประเภทการลา",
@@ -1540,6 +1547,7 @@ export default {
     show_potential_comment: false,
     show_potential_data: {},
     select_status: "all",
+    coach_leaves_arr: [],
   }),
 
   created() {
@@ -1584,6 +1592,7 @@ export default {
       my_courses_is_loading: "CoachModules/getMyCoursesIsLoading",
       profile_detail: "ProfileModules/getProfileDetail",
       show_dialog_coach_leave_form: "CoachModules/getShowDialogCoachLeaveForm",
+      coach_leaves_is_loading: "CoachModules/getCoachLeavesIsLoading",
     }),
     SetFunctionsComputed() {
       this.GetMyCourses({ coach_id: this.user_detail.account_id });
@@ -1626,8 +1635,19 @@ export default {
       GetLoading: "LoadingModules/GetLoading",
     }),
     SelectedStatus(status) {
-
       this.select_status = status;
+      this.coach_leaves_arr = [];
+
+      if (status !== "all") {
+        this.coach_leave_arr = this.coach_leaves.filter(
+          (items) => status === items.status
+        );
+        this.coach_leave_arr.map((items, i) => {
+          items.index = i + 1;
+        });
+      } else {
+        this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
+      }
     },
     GenDateStr(date) {
       const options = {

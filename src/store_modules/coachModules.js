@@ -868,6 +868,8 @@ const coachModules = {
       }
     },
     async GetLeavesByAccountId(context, { account_id }) {
+      context.commit("SetCoachLeavesIsLoading", true)
+
       try {
         let config = {
           headers: {
@@ -878,7 +880,13 @@ const coachModules = {
         };
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${account_id}`, config)
         if (data.statusCode === 200) {
+          data.data.map((val, i) => {
+            val.index = i + 1
+            return val
+          })
           context.commit("SetCoachLeaves", data.data)
+          context.commit("SetCoachLeavesIsLoading", false)
+
         }
       } catch (error) {
         console.log(error)

@@ -215,17 +215,16 @@
         </template>
         <template v-slot:[`item.startDateStr`]="{ item }">
           {{
-            new Date(item.startDateStr).toLocaleDateString("th-TH", {
+            new Date(item.startDate).toLocaleDateString("th-TH", {
               year: "numeric",
               month: "long",
               day: "numeric",
-              calendar: "buddhist",
             })
           }}
         </template>
         <template v-slot:[`item.createdDateStr`]="{ item }">
           {{
-            new Date(item.createdDateStr).toLocaleDateString("th-TH", {
+            new Date(item.createdDate).toLocaleDateString("th-TH", {
               year: "numeric",
               month: "long",
               day: "numeric",
