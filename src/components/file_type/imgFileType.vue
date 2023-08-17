@@ -60,47 +60,8 @@
     width="26"
     src="@/assets/coachLeave/file-other.svg"
   />
-  <!-- <v-icon
-    class="mr-2"
-    :color="icon_color"
-  >
-    mdi-file-document-outline</v-icon
-  > -->
-  <!-- <v-icon
-    class="mr-2"
-    :color="icon_color"
-  >
-    mdi-file-pdf-box</v-icon
-  > -->
-
-  <!-- <v-icon
-    
-    class="mr-2"
-    :color="icon_color"
-  >
-    mdi-file-image-outline</v-icon
-  > -->
-
-  <!-- <v-icon
-    
-    class="mr-2"
-    :color="icon_color"
-  >
-    mdi-file-video-outline</v-icon
-  > -->
-
-  <!-- <v-icon
-    
-    class="mr-2"
-    :color="icon_color"
-  >
-    mdi-file-video-outline</v-icon
-  > -->
-  <!-- <v-icon v-else class="mr-2" :color="icon_color">
-    mdi-file-excel-outline</v-icon
-  > -->
 </template>
-  
+
 <script>
 export default {
   name: "imgFileType",
@@ -125,4 +86,3 @@ export default {
   methods: {},
 };
 </script>
-  

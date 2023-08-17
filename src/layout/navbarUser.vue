@@ -128,19 +128,9 @@
                 <v-img :src="profile_detail.image" size="24" />
               </v-avatar>
 
-              <!-- <div v-else>
-              <v-avatar class="mx-2" size="24">
-                <v-img
-                  src="../assets/navbar_user/default_image_profile.svg"
-                  size="24"
-                />
-              </v-avatar>
-            </div> -->
-
               <span class="text-white mx-2">
                 {{ show_profile_detail.firstNameTh }}
                 {{ show_profile_detail.lastNameTh }}
-                <!-- {{ user_detail.first_name_en }} {{ user_detail.last_name_en }} -->
               </span>
             </div>
           </div>
@@ -149,7 +139,7 @@
             <div v-if="!$vuetify.breakpoint.smAndDown">
               <v-avatar class="mx-2" size="24">
                 <v-img
-                  src="../assets/navbar_user/default_image_profile.svg"
+                  src="@/assets/navbar_user/default_image_profile.svg"
                   size="24"
                 />
               </v-avatar>
@@ -157,23 +147,12 @@
               <span class="text-white mx-2">
                 {{ show_profile_detail.firstNameTh }}
                 {{ show_profile_detail.lastNameTh }}
-                <!-- {{ user_detail.first_name_en }} {{ user_detail.last_name_en }} -->
               </span>
             </div>
           </div>
           <v-btn icon @click="drawer = !drawer">
             <v-icon>{{ drawer ? "mdi-chevron-right" : "mdi-menu" }}</v-icon>
           </v-btn>
-          <!-- ALERT v-if="get_notifications"-->
-          <!-- <v-alert
-            v-if="alertVisible"
-            type="success"
-            dismissible
-            @input="alertVisible = false"
-          >
-            This alert will automatically close after 3 seconds.
-          </v-alert> -->
-          <!-- END ALRT -->
         </template>
         <template v-else>
           <v-btn
@@ -223,7 +202,7 @@
             <div v-else class="cicle" style="text-align: -webkit-center">
               <v-img
                 class="image-cropper"
-                src="../assets/navbar_user/default_image_profile.svg"
+                src="@/assets/navbar_user/default_image_profile.svg"
                 style="max-width: 300px; max-height: 300px"
               />
             </div>
@@ -237,13 +216,6 @@
             {{ show_profile_detail.firstNameTh }}
             {{ show_profile_detail.lastNameTh }}
           </v-col>
-          <!-- <v-col
-            cols="12"
-            sm="6"
-            class="flex align-center justify-center font-bold text-md"
-          >
-            {{ show_profile_detail.lastNameTh }}
-          </v-col> -->
           <v-col cols="12" class="flex align-center justify-center text-sm">
             {{ show_profile_detail.email }}
           </v-col>
@@ -333,7 +305,7 @@
           </v-col>
           <v-col cols="auto" class="pa-4 bg-white" align="center">
             <v-img
-              src="../assets/navbar/qr-footer.png"
+              src="@/assets/navbar/qr-footer.png"
               max-height="96"
               max-width="89"
             ></v-img>
@@ -358,7 +330,7 @@
 </template>
 
 <script>
-import mixin from "../mixin";
+import mixin from "@/mixin";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
@@ -386,7 +358,7 @@ export default {
         title: "ตารางเรียน",
         to: "StudentsSchedule",
         params: { action: "MySchedule" },
-        roles: ["R_1", "R_2", "R_3"],
+        roles: ["R_1","R_2", "R_3"],
       },
       {
         icon: "mdi-book-cog-outline",

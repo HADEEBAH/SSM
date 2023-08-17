@@ -1,13 +1,7 @@
 <template>
   <div>
-    <!-- <pre> {{ events }}</pre>     -->
     {{ colorOfDay }}
     <template v-if="type === 'week'">
-      <!-- <v-row dense>
-                <v-col>
-               {{ start_of_week }} -  {{ end_of_week }}
-                </v-col>
-            </v-row> -->
       <v-row dense>
         <v-col>
           <v-btn text class="underline" color="#ff6b81" @click="goToday"
@@ -30,7 +24,6 @@
           </v-col>
         </v-row>
       </v-card-title>
-      <!-- <pre>{{ events }}</pre> -->
       <v-calendar
         ref="calendar"
         color="#ff6b81"
@@ -80,7 +73,6 @@
         <template v-if="event_date.length > 0">
           <div v-for="(event, event_index) in event_date" :key="event_index">
             <v-card flat>
-              <!-- {{ event }} -->
               <v-card-text class="border-2 border-[#ff6b81]">
                 <v-row dense>
                   <v-col
@@ -134,7 +126,6 @@
                 </v-row>
               </v-card-text>
             </v-card>
-            <!-- <v-divider v-if="event_date.length !== event_index + 1" class="my-2"></v-divider> -->
           </div>
         </template>
         <div v-else>

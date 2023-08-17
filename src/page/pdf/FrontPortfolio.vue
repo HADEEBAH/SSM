@@ -7,8 +7,8 @@
 </template>
   <script>
   import pdfMake from 'pdfmake'
-  import pdfFonts from '../../assets/custom-fonts.js'
-  import loadingOverlay from "../../components/loading/loadingOverlay.vue";
+  import pdfFonts from '@/assets/custom-fonts.js'
+  import loadingOverlay from "@/components/loading/loadingOverlay.vue";
 import { mapActions, mapGetters } from 'vuex'
   export default {
     name: "FrontPortfolio",
@@ -27,9 +27,9 @@ import { mapActions, mapGetters } from 'vuex'
       }),
       async exportPdf() {
         // Define the image paths
-        let backgroundImagePath = require('../../assets/FrontPortfolio/bg-front.png');
-        let headerImagePath = require('../../assets/FrontPortfolio/Logo.png');
-        let defaultProfile = require('../../assets/profile/default_profile.png')
+        let backgroundImagePath = require('@/assets/FrontPortfolio/bg-front.png');
+        let headerImagePath = require('@/assets/FrontPortfolio/Logo.png');
+        let defaultProfile = require('@/assets/profile/default_profile.png')
         // Load the images using the file loader
         let defaultProfileImageData = await this.loadImageFromFile(defaultProfile);
         let backgroundImageData = await this.loadImageFromFile(backgroundImagePath);

@@ -3,7 +3,7 @@
     <div class="my-5 mx-5 pa-3">
       <v-row>
         <v-col align="center">
-          <img src="../../../assets/profile/password1.png" class="" />
+          <img src="@/assets/profile/password1.png" class="" />
           <div class="text-xl font-bold pa-2">กรุณาใส่รหัสผ่านปัจจุบัน</div>
           <div class="text-slate-400 pa-2">
             ใส่รหัสผ่านปัจจุบันที่ใช้งานอยู่ เพื่อยืนยันตัวตน

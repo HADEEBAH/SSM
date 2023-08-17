@@ -37,9 +37,6 @@
                 {{ course_data.course_hours }} ชม. / ครั้ง</rowData
               >
             </v-col>
-            <!-- <v-col cols="12" sm="6"  class="pa-0"> 
-                        <rowData mini col_detail="5" icon="mdi-account-group-outline">9 / 15 ที่นั่ง</rowData> 
-                    </v-col> -->
           </v-row>
         </template>
       </ImgCard>
@@ -206,11 +203,6 @@
                 </v-row> </template
             ></v-img>
           </v-card-text>
-          <!-- <v-card-actions>
-                    <v-row dense>
-                        <v-col align="center"><v-btn @click="show_dialog_privilege = false" class="btn-size-lg" dark depressed color="#ff6b81">Close</v-btn></v-col>
-                    </v-row>
-                </v-card-actions> -->
         </v-card>
       </v-dialog>
       <!-- DIALOG :: ARTWORK -->

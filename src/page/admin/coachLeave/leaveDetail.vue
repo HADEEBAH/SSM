@@ -89,7 +89,6 @@
             </v-row>
           </v-card-text>
         </v-card>
-        <!-- {{ coachs }} -->
         <div
           class="mb-3"
           v-for="(date, index_date) in coach_leave.dates"
@@ -328,7 +327,7 @@
                           <v-img
                             height="35"
                             width="26"
-                            src="../../../assets/coachLeave/file-pdf.png"
+                            src="@/assets/coachLeave/file-pdf.png"
                           />
                         </v-col>
                         <v-col class="px-2">
@@ -339,11 +338,6 @@
                             {{ (file.size / 1000000).toFixed(2) }} MB</span
                           >
                         </v-col>
-                        <!-- <v-col cols="auto" class="pl-2">
-                                                    <v-btn @click="removeFile(index)" icon color="#ff6b81"
-                                                        ><v-icon>mdi-close</v-icon></v-btn
-                                                    >
-                                                </v-col> -->
                       </v-row>
                     </v-card-text>
                   </v-card>
@@ -404,7 +398,7 @@
                 <v-img
                   width="175"
                   height="185"
-                  src="../../../assets/coachLeave/disapproved.png"
+                  src="@/assets/coachLeave/disapproved.png"
                 ></v-img>
               </v-col>
             </v-row>
@@ -416,7 +410,7 @@
                     v-model="coach_leave.remark_reject"
                     outlined
                     dense
-                    placeholder="กรอกรายระเอียด..."
+                    placeholder="กรอกรายละเอียด..."
                   ></v-textarea>
                 </v-col>
               </v-row>
@@ -452,7 +446,7 @@
 import headerPage from "@/components/header/headerPage.vue";
 import Swal from "sweetalert2";
 import { mapActions, mapGetters } from "vuex";
-import LabelCustom from "../../../components/label/labelCustom.vue";
+import LabelCustom from "@/components/label/labelCustom.vue";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 export default {
   name: "leaveDetail",
@@ -466,7 +460,7 @@ export default {
     ],
     breadcrumbs: [
       { text: "การลา", to: "LeaveList" },
-      { text: "รายระเอียด", to: "" },
+      { text: "รายละเอียด", to: "" },
     ],
     item: { status: "pending" },
     column: [

@@ -22,7 +22,7 @@
               <v-img
                 max-height="90"
                 max-width="70"
-                src="../../../assets/course/all_course.png"
+                src="@/assets/course/all_course.png"
               ></v-img>
             </template>
             <template v-slot:header>
@@ -47,7 +47,7 @@
               <v-img
                 max-height="90"
                 max-width="70"
-                src="../../../assets/course/general_course.png"
+                src="@/assets/course/general_course.png"
               ></v-img>
             </template>
             <template v-slot:header>
@@ -72,7 +72,7 @@
               <v-img
                 max-height="90"
                 max-width="70"
-                src="../../../assets/course/short_course.png"
+                src="@/assets/course/short_course.png"
               ></v-img>
             </template>
             <template v-slot:header>

@@ -16,7 +16,7 @@
               <v-img
                 height="72"
                 width="72"
-                src="../../../assets/course/course.png"
+                src="@/assets/course/course.png"
               ></v-img>
               <span class="text-lg font-bold"> คอร์สเรียน </span>
             </template>
@@ -37,7 +37,7 @@
               <v-img
                 height="72"
                 width="72"
-                src="../../../assets/course/time_and_coach.png"
+                src="@/assets/course/time_and_coach.png"
               ></v-img>
               <span class="text-lg font-bold"> ช่วงเวลาและโค้ช </span>
             </template>
@@ -58,7 +58,7 @@
               <v-img
                 height="72"
                 width="72"
-                src="../../../assets/course/package.png"
+                src="@/assets/course/package.png"
               ></v-img>
               <span class="text-lg font-bold"> แพ็กเกจ </span>
             </template>
@@ -79,7 +79,7 @@
               <v-img
                 height="72"
                 width="72"
-                src="../../../assets/course/upload_file.png"
+                src="@/assets/course/upload_file.png"
               ></v-img>
               <span class="text-lg font-bold"> Learning Journey </span>
             </template>
@@ -96,7 +96,7 @@
               <v-img
                 height="72"
                 width="72"
-                src="../../../assets/course/student_list.png"
+                src="@/assets/course/student_list.png"
               ></v-img>
               <span class="text-lg font-bold"> รายชื่อนักเรียน </span>
             </template>
@@ -310,7 +310,7 @@
                   >
                     <v-col cols="12" class="flex align-center justify-center">
                       <v-img
-                        src="../../../assets/course/upload_file.png"
+                        src="@/assets/course/upload_file.png"
                         max-height="105"
                         max-width="122"
                       ></v-img>
@@ -325,7 +325,8 @@
                       cols="12"
                       class="flex align-center justify-center text-caption"
                     >
-                      ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
+                      ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ
+                      ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
                     </v-col>
                     <v-col cols="12" class="flex align-center justify-center">
                       <v-btn
@@ -405,7 +406,7 @@
                   >
                     <v-col cols="12" class="flex align-center justify-center">
                       <v-img
-                        src="../../../assets/course/upload_file.png"
+                        src="@/assets/course/upload_file.png"
                         max-height="105"
                         max-width="122"
                       ></v-img>
@@ -420,7 +421,8 @@
                       cols="12"
                       class="flex align-center justify-center text-caption"
                     >
-                      ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
+                      ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ
+                      ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
                     </v-col>
                   </v-row>
                   <v-row dense>
@@ -502,7 +504,6 @@
               </v-row>
               <v-tabs-items v-model="student_tab" class="rounded-lg">
                 <v-tab-item valus="students in course">
-                  <!-- <pre>{{coach_list}}</pre> -->
                   <v-card flat dent class="mb-3 rounded-lg">
                     <v-card-text class="py-2 bg-[#FCE0E7] rounded-lg">
                       <v-row dense class="d-flex align-center">
@@ -735,7 +736,6 @@
                               >
                               <v-col align="right"></v-col>
                             </v-row>
-                            <!-- {{  coach.allDates }} -->
                             <v-card
                               v-if="
                                 coach.datesList.length === 0 ||
@@ -769,7 +769,6 @@
                                   class="rounded-lg cursor-pointer mb-3"
                                   dense
                                 >
-                                  <!-- {{ student }} -->
                                   <v-card-text class="pa-2">
                                     <v-row dense class="d-flex align-center">
                                       <v-col cols="auto">
@@ -1248,7 +1247,6 @@
                       </v-card>
                     </div>
                     <template v-else>
-                      <!-- <pre>{{ coach_list }}</pre> -->
                       <div
                         v-for="(coach, coach_index) in search_student_potential
                           ? search_student_potential_datas
@@ -1353,7 +1351,6 @@
                                     ) in student_potential_list"
                                     :key="`${potential_index}-potential`"
                                   >
-                                    <!-- <pre>{{ potential }}</pre> -->
                                     <v-card-text class="pa-2">
                                       <v-row
                                         dense
@@ -1432,7 +1429,6 @@
         v-model="show_dialog_assessmet"
       >
         <v-card>
-          <!-- <pre>{{ student_data_assessment }}</pre> -->
           <v-card-text class="pa-2">
             <v-row dense>
               <v-col></v-col>
@@ -1457,7 +1453,7 @@
                     <v-img
                       width="40"
                       height="40"
-                      src="../../../assets/course/potential.png"
+                      src="@/assets/course/potential.png"
                     ></v-img>
                   </v-col>
                   <v-col cols class="font-bold text-lg"> ประเมินภาพรวม </v-col>
@@ -1613,11 +1609,6 @@
                       </v-chip>
                     </v-col>
                   </v-row>
-                  <!-- <v-row dense>
-                  <v-col cols="auto">
-                    เวลาเรียน : {{ assess.time }}
-                  </v-col>
-                </v-row> -->
                   <v-row dense>
                     <v-col> ระดับพัฒนาการ</v-col>
                   </v-row>
@@ -1771,11 +1762,6 @@
                       </v-chip>
                     </v-col>
                   </v-row>
-                  <!-- <v-row dense>
-                  <v-col cols="auto">
-                    เวลาเรียน : {{ assess.time }}
-                  </v-col>
-                </v-row> -->
                   <v-row dense>
                     <v-col> ระดับพัฒนาการ </v-col>
                   </v-row>
@@ -1995,27 +1981,27 @@ export default {
       {
         label: "คอร์สเรียน",
         value: "course",
-        img: "../../../assets/course/course.png",
+        img: "@/assets/course/course.png",
       },
       {
         label: "ช่วงเวลาและโค้ช",
         value: "time and coach",
-        img: "../../../assets/course/time_and_coach.png",
+        img: "@/assets/course/time_and_coach.png",
       },
       {
         label: "แพ็กเกจ",
         value: "package",
-        img: "../../../assets/course/package.png",
+        img: "@/assets/course/package.png",
       },
       {
         label: "Learning Journey",
         value: "arkwork",
-        img: "../../../assets/course/course.png",
+        img: "@/assets/course/course.png",
       },
       {
         label: "รายชื่อนักเรียน",
         value: "student list",
-        img: "../../../assets/course/student_list.png",
+        img: "@/assets/course/student_list.png",
       },
     ],
     filter: {
@@ -2669,6 +2655,4 @@ export default {
   },
 };
 </script>
-<style >
-</style>
-  
+<style></style>

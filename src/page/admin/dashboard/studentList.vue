@@ -27,7 +27,7 @@
           style="border-radius: 16px"
         >
           <template v-slot:img>
-            <v-img src="../../../assets/studentsList/allstudent.svg"></v-img>
+            <v-img src="@/assets/studentsList/allstudent.svg"></v-img>
           </template>
           <template v-slot:header>
             <div class="font-bold">ผู้เรียนทั้งหมด</div>
@@ -50,7 +50,7 @@
           style="border-radius: 16px"
         >
           <template v-slot:img>
-            <v-img src="../../../assets/studentsList/nowstudent.svg"></v-img>
+            <v-img src="@/assets/studentsList/nowstudent.svg"></v-img>
           </template>
           <template v-slot:header>
             <div class="font-bold">ผู้เรียนปัจจุบัน</div>
@@ -82,7 +82,7 @@
             <v-img
               max-height="90"
               max-width="70"
-              src="../../../assets/studentsList/studentgrad.svg"
+              src="@/assets/studentsList/studentgrad.svg"
             ></v-img>
           </template>
           <template v-slot:header>
@@ -106,7 +106,7 @@
           style="border-radius: 16px"
         >
           <template v-slot:img>
-            <v-img src="../../../assets/studentsList/booked.svg"></v-img>
+            <v-img src="@/assets/studentsList/booked.svg"></v-img>
           </template>
 
           <template v-slot:header>
@@ -286,7 +286,6 @@
         </v-card-title>
 
         <v-card-title>
-          <!-- <pre>{{ detail_dialog_end }}</pre> -->
           <v-row dense>
             <v-col cols="12" class="my-2">
               <span class="font-bold"> ชื่อคอร์ส: </span>
@@ -400,7 +399,7 @@
 import { mapActions, mapGetters } from "vuex";
 import headerPage from "@/components/header/headerPage.vue";
 import imgCard from "@/components/course/imgCard.vue";
-import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+import loadingOverlay from "@/components/loading/loadingOverlay.vue";
 
 export default {
   components: {

@@ -2,7 +2,6 @@
   <v-app>
     <v-container>
       <headerPage :breadcrumbs="breadcrumbs"></headerPage>
-      <!-- <pre>{{ order_detail }}</pre> -->
       <v-card class="mb-3">
         <v-card-text>
           <v-row>
@@ -59,7 +58,7 @@
                     v-if="data.course.courseTypeId === 'CT_1'"
                     max-height="36.38px"
                     max-width="176px"
-                    src="../../../assets/finance/Vector.png"
+                    src="@/assets/finance/Vector.png"
                   >
                     <span class="font-bold text-base">คอร์สทั่วไป</span>
                   </v-img>
@@ -68,7 +67,7 @@
                     v-if="data.course.courseTypeId === 'CT_2'"
                     max-height="36.38px"
                     max-width="176px"
-                    src="../../../assets/finance/Vector (1).png"
+                    src="@/assets/finance/Vector (1).png"
                   >
                     <span class="font-bold text-base">คอร์สระยะสั้น</span>
                   </v-img>
@@ -249,19 +248,19 @@
                         <v-avatar>
                           <v-img
                             v-if="status.value === 'unpaid'"
-                            src="../../../assets/finance/close.png"
+                            src="@/assets/finance/close.png"
                           ></v-img>
                           <v-img
                             v-if="status.value == 'Credit Card'"
-                            src="../../../assets/finance/card.png"
+                            src="@/assets/finance/card.png"
                           ></v-img>
                           <v-img
                             v-if="status.value === 'transfer'"
-                            src="../../../assets/finance/mobile_cash.png"
+                            src="@/assets/finance/mobile_cash.png"
                           ></v-img>
                           <v-img
                             v-if="status.value === 'cash'"
-                            src="../../../assets/finance/cash.png"
+                            src="@/assets/finance/cash.png"
                           ></v-img>
                         </v-avatar>
                       </v-col>
@@ -300,19 +299,19 @@
                         <v-avatar>
                           <v-img
                             v-if="status.value === 'unpaid'"
-                            src="../../../assets/finance/close.png"
+                            src="@/assets/finance/close.png"
                           ></v-img>
                           <v-img
                             v-if="status.value === 'Credit Card'"
-                            src="../../../assets/finance/card.png"
+                            src="@/assets/finance/card.png"
                           ></v-img>
                           <v-img
                             v-if="status.value === 'transfer'"
-                            src="../../../assets/finance/mobile_cash.png"
+                            src="@/assets/finance/mobile_cash.png"
                           ></v-img>
                           <v-img
                             v-if="status.value === 'cash'"
-                            src="../../../assets/finance/cash.png"
+                            src="@/assets/finance/cash.png"
                           ></v-img>
                         </v-avatar>
                       </v-col>
@@ -380,8 +379,8 @@
     </v-container>
   </v-app>
 </template>
-  
-  <script>
+
+<script>
 import headerPage from "@/components/header/headerPage.vue";
 import rowData from "@/components/label/rowData.vue";
 import { mapActions, mapGetters } from "vuex";
@@ -405,22 +404,22 @@ export default {
     payment_status: [
       {
         text: "ยังไม่ชำระเงิน",
-        img: "../../../assets/finance/close.png",
+        img: "@/assets/finance/close.png",
         value: "unpaid",
       },
       {
         text: "เครดิต/เดบิท",
-        img: "../../../assets/finance/card.png",
+        img: "@/assets/finance/card.png",
         value: "Credit Card",
       },
       {
         text: "โอนเงินเข้าบัญชีโรงเรียน",
-        img: "../../../assets/finance/mobile_cash.png",
+        img: "@/assets/finance/mobile_cash.png",
         value: "transfer",
       },
       {
         text: "เงินสด",
-        img: "../../../assets/finance/cash.png",
+        img: "@/assets/finance/cash.png",
         value: "cash",
       },
     ],
@@ -447,8 +446,8 @@ export default {
     async exportBill() {
       if (this.order_detail.paymentStatus === "success") {
         // Define the image paths
-        var headerImagePath = require("../../../assets/FrontPortfolio/Logo.png");
-        var logoLightImagePath = require("../../../assets/FrontPortfolio/logo_light.png");
+        var headerImagePath = require("@/assets/FrontPortfolio/Logo.png");
+        var logoLightImagePath = require("@/assets/FrontPortfolio/logo_light.png");
         // Load the images using the file loader
         var headerImageData = await this.loadImageFromFile(headerImagePath);
         var logoLightImageData = await this.loadImageFromFile(
@@ -1087,7 +1086,7 @@ export default {
   },
 };
 </script>
-  <style>
+<style>
 .headder-card-img {
   position: relative;
   left: -23px;
@@ -1096,4 +1095,3 @@ export default {
   width: 50vw;
 }
 </style>
-  

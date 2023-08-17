@@ -8,7 +8,7 @@
 </template>
   
   <script>
-import RegisterDialogForm from "../../components/user_menage/registerDialogForm.vue";
+import RegisterDialogForm from "@/components/user_menage/registerDialogForm.vue";
 export default {
   components: {
     RegisterDialogForm,

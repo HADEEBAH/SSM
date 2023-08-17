@@ -3,7 +3,7 @@
     <v-img
       v-if="$vuetify.breakpoint.smAndUp"
       class="img-header"
-      src="../../../assets/course/img_header.png"
+      src="@/assets/course/img_header.png"
     ></v-img>
     <v-container>
       <headerPage title="สร้างคอร์สเรียน"></headerPage>
@@ -15,7 +15,7 @@
                 <v-row dense>
                   <v-col cols="4" sm="12">
                     <v-img
-                      src="../../../assets/course/general_course_icon.jpg"
+                      src="@/assets/course/general_course_icon.jpg"
                       height="50"
                       max-height="80"
                       max-width="80"
@@ -34,7 +34,7 @@
                 <v-row dense>
                   <v-col cols="4" sm="12">
                     <v-img
-                      src="../../../assets/course/short_course_icon.jpg"
+                      src="@/assets/course/short_course_icon.jpg"
                       height="50"
                       max-height="80"
                       max-width="80"
@@ -142,7 +142,7 @@
                 <v-row v-if="!preview_privilege_url">
                   <v-col cols="12" class="flex align-center justify-center">
                     <v-img
-                      src="../../../assets/course/upload_file.png"
+                      src="@/assets/course/upload_file.png"
                       max-height="105"
                       max-width="122"
                     ></v-img>
@@ -157,7 +157,8 @@
                     cols="12"
                     class="flex align-center justify-center text-caption"
                   >
-                    ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
+                    ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ
+                    ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
                   </v-col>
                   <v-col cols="12" class="flex align-center justify-center">
                     <v-btn
@@ -216,7 +217,7 @@
                 >
                   <v-col cols="12" class="flex align-center justify-center">
                     <v-img
-                      src="../../../assets/course/upload_file.png"
+                      src="@/assets/course/upload_file.png"
                       max-height="105"
                       max-width="122"
                     ></v-img>
@@ -231,7 +232,8 @@
                     cols="12"
                     class="flex align-center justify-center text-caption"
                   >
-                  ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
+                    ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ
+                    ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
                   </v-col>
                 </v-row>
                 <v-row dense>
@@ -309,7 +311,7 @@
       </v-stepper>
     </v-container>
   </v-app>
-</template>  
+</template>
 <script>
 import headerPage from "@/components/header/headerPage.vue";
 import headerCard from "@/components/header/headerCard.vue";
@@ -602,6 +604,3 @@ export default {
   },
 };
 </script>
-
-
-      

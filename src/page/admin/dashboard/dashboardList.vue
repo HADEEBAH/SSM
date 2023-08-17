@@ -1,12 +1,9 @@
-<template >
+<template>
   <v-app class="background-color">
     <v-container class="overflow-x: hidden;">
       <loading-overlay :loading="dashboard_loading"> </loading-overlay>
 
       <headerPage title="แดชบอร์ด"></headerPage>
-      <!-- <div v-for="(items, index) in get_empty_course.courseStatus" :key="index">
-        <pre>{{ items }}</pre>
-      </div> -->
       <!-- TOP CARD -->
       <v-row dense>
         <!-- STUDENT -->
@@ -211,7 +208,6 @@
                 }}
               </v-card-text>
               <v-card-text align="center"> คน </v-card-text>
-              <!-- </v-col> -->
             </v-row>
           </v-card>
         </v-col>
@@ -247,6 +243,7 @@
                       dense
                       outlined
                       @input="selectYears()"
+                      color="#ff6b81"
                     ></v-select>
                   </v-col>
                   <!-- Month -->
@@ -259,6 +256,7 @@
                       dense
                       outlined
                       @input="selectMunth()"
+                      color="#ff6b81"
                     ></v-select>
                   </v-col>
                 </v-row>
@@ -321,6 +319,7 @@
                       dense
                       outlined
                       @input="selectDonutYears()"
+                      color="#ff6b81"
                     ></v-select>
                   </v-col>
                   <!-- MONTH -->
@@ -333,6 +332,7 @@
                       dense
                       outlined
                       @input="selectDonutMounth()"
+                      color="#ff6b81"
                     ></v-select>
                   </v-col>
                 </v-row>
@@ -423,7 +423,7 @@
         <v-row dense>
           <v-card-title>
             <v-img
-              src="../../../assets/navbar/barCourse.svg"
+              src="@/assets/navbar/barCourse.svg"
               style="max-width: 25px; margin-left: 30px"
             ></v-img>
             <span class="indent-5">สถานะคอร์สเรียน</span>
@@ -744,6 +744,7 @@
                                 dense
                                 :value="items_dialog.courseNameTh"
                                 label="ชื่อคอร์ส"
+                                color="#FF6B81"
                               >
                                 <template v-slot:append>
                                   <v-icon :color="'#FF6B81'"
@@ -765,6 +766,7 @@
                                 dense
                                 :value="`${items_dialog.courseTypeNameTh} (${items_dialog.packageName})`"
                                 label="แพ็กเกจคอร์ส"
+                                color="#FF6B81"
                               >
                                 <template v-slot:append>
                                   <v-icon :color="'#FF6B81'">
@@ -786,6 +788,7 @@
                                 dense
                                 :value="items_dialog.dayOfWeek"
                                 label="วันเรียน"
+                                color="#FF6B81"
                               >
                                 <template v-slot:append>
                                   <v-icon :color="'#FF6B81'"
@@ -807,6 +810,7 @@
                                 dense
                                 :value="items_dialog.time"
                                 label="เวลาเรียน"
+                                color="#FF6B81"
                               >
                                 <template v-slot:append>
                                   <v-icon :color="'#FF6B81'"
@@ -823,6 +827,7 @@
                                 dense
                                 :value="`${items_dialog.currentStudent} / ${items_dialog.maximumStudent}`"
                                 label="ที่นั่ง"
+                                color="#FF6B81"
                               >
                                 <template v-slot:append>
                                   <v-icon :color="'#FF6B81'"
@@ -845,11 +850,11 @@
     </v-container>
   </v-app>
 </template>
-  
-  <script>
+
+<script>
 import { mapActions, mapGetters } from "vuex";
 import headerPage from "@/components/header/headerPage.vue";
-import loadingOverlay from "../../../components/loading/loadingOverlay.vue";
+import loadingOverlay from "@/components/loading/loadingOverlay.vue";
 
 import chart from "vue-apexcharts";
 
@@ -1181,8 +1186,12 @@ export default {
     },
 
     pieSeries() {
-      let Open = !this.get_empty_course.countOpen ? 0 : this.get_empty_course.countOpen;
-      let Close = !this.get_empty_course.countClose ? 0 : this.get_empty_course.countClose;
+      let Open = !this.get_empty_course.countOpen
+        ? 0
+        : this.get_empty_course.countOpen;
+      let Close = !this.get_empty_course.countClose
+        ? 0
+        : this.get_empty_course.countClose;
       const pieData = [Open, Close];
       return pieData;
     },
@@ -1205,8 +1214,8 @@ export default {
   },
 };
 </script>
-  
-  <style scoped>
+
+<style scoped>
 .background-color {
   background: linear-gradient(rgba(255, 250, 251, 1), rgba(255, 250, 250, 1)),
     linear-gradient(white, white);
