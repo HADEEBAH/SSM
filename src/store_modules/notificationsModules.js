@@ -28,6 +28,7 @@ const notificatiosModules = {
 
         async GetNotificationsAll(context, account_id) {
             try {
+                // let { data } = await axios.get(`http://localhost:3004/api/v1/notification/byId/${account_id}`)
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/notification/byId/${account_id}`)
                 if (data.statusCode === 200) {
                     context.commit("setgetNotificationsAll", data.data)
@@ -39,7 +40,7 @@ const notificatiosModules = {
 
         async ReadNotifications(context, item) {
             try {
-
+                // let { data } = await axios.patch(`http://localhost:3004/api/v1/notification/read/${item.notification_id}`)
                 let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/notification/read/${item.notification_id}`)
                 if (data.statusCode === 200) {
                   context.dispatch("GetNotificationsAll",item.account_id)

@@ -438,7 +438,6 @@ export default {
     this.show_profile_detail.mobileNo = this.profile_detail.mobileNo;
     this.show_profile_detail.email = this.profile_detail.email;
   },
-  watch: {},
   computed: {
     ...mapGetters({
       cart_list: "OrderModules/getCartList",
@@ -491,7 +490,14 @@ export default {
       this.ReadNotifications({
         notification_id: params.notificationId,
         account_id: params.accountId,
+        path: params.path
       });
+      if (params.path) {
+        if (this.$route.path !== params.path) {
+          // window.location.href = `http://localhost:8080${params.path}`
+          window.location = `${process.env.VUE_APP_URL}${params.path}`
+        }
+      }
     },
     nextpage(list) {
       if (this.$route.name !== list.to) {

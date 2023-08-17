@@ -1731,6 +1731,13 @@ export default {
               date: this.$route.params.date,
               time_id: this.$route.params.timeId,
             });
+            let payload = {
+              notificationName: "แจ้งเตือนการประเมินผู้เรียน",
+              notificationDescription: "โค้ชได้ประเมินนักเรียนเรียบร้อยแล้ว",
+              accountId: this.student_check_in,
+              path: `/studentCourse/${this.$route.params.courseId}`
+            };
+            this.sendNotification(payload);
           }
         });
       }
@@ -1761,6 +1768,7 @@ export default {
               notificationName: "แจ้งเตือนการเช็คอิน",
               notificationDescription: `เช็คอินเรียบร้อย`,
               accountId: student_id,
+              path: null,
             };
             this.sendNotification(payload);
           }
