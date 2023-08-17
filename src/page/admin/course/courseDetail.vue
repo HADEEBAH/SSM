@@ -326,7 +326,7 @@
                       class="flex align-center justify-center text-caption"
                     >
                       ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ
-                      ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
+                      ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG )
                     </v-col>
                     <v-col cols="12" class="flex align-center justify-center">
                       <v-btn
@@ -337,6 +337,7 @@
                         >เลือกไฟล์</v-btn
                       >
                       <input
+                        id="fileInputPrivilege"
                         ref="fileInputPrivilege"
                         type="file"
                         @change="uploadPrivilegeFile"
@@ -422,7 +423,7 @@
                       class="flex align-center justify-center text-caption"
                     >
                       ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ
-                      ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
+                      ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG )
                     </v-col>
                   </v-row>
                   <v-row dense>
@@ -2345,10 +2346,10 @@ export default {
       this.$refs.fileInputArtwork.click();
     },
     // UPDATE FILE
-    uploadPrivilegeFile() {
+    uploadPrivilegeFile(event) {
       this.privilege_file = this.$refs.fileInputPrivilege.files[0];
       const allowedTypes = ["image/png", "image/jpeg"];
-      if (CheckFileSize(this.privilege_file) === true) {
+      if (CheckFileSize(this.privilege_file, event.target.id) === true) {
         const fileType = this.privilege_file.type;
         if (fileType === "image/png" || fileType === "image/jpeg") {
           this.course_data.privilege_file =
@@ -2396,7 +2397,7 @@ export default {
       const fileUrls = [];
       for (let i = 0; i < selectedFiles.length; i++) {
         const file = selectedFiles[i];
-        if (CheckFileSize(file) === true) {
+        if (CheckFileSize(file, event.target.id) === true) {
           if (allowedTypes.includes(file.type)) {
             this.course_data.artwork_file.push(file);
             const reader = new FileReader();

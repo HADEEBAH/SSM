@@ -64,7 +64,7 @@
                     cols="12"
                     class="flex align-center justify-center text-caption"
                   >
-                    ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
+                    ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG )
                   </v-col>
                   <v-col cols="12" class="flex align-center justify-center">
                     <v-btn outlined color="blue" @click="openFileSelector"
@@ -207,7 +207,7 @@
 import headerPage from "@/components/header/headerPage.vue";
 import LabelCustom from "@/components/label/labelCustom.vue";
 import dialogCard from "@/components/dialog/dialogCard.vue";
-import { inputValidation, CheckFileSizeV2 } from "@/functions/functions";
+import { inputValidation, CheckFileSize } from "@/functions/functions";
 import Swal from "sweetalert2";
 import axios from "axios";
 import VueCookie from "vue-cookie";
@@ -344,7 +344,7 @@ export default {
     uploadFile(event) {
       this.file = this.$refs.fileInput.files[0];
       if (!this.file) return;
-      if (CheckFileSizeV2(this.file, event.target.id) === true) {
+      if (CheckFileSize(this.file, event.target.id) === true) {
         const fileType = this.file.type;
         if (fileType === "image/png" || fileType === "image/jpeg") {
           const reader = new FileReader();

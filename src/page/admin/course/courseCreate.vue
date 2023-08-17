@@ -158,7 +158,7 @@
                     class="flex align-center justify-center text-caption"
                   >
                     ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ
-                    ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
+                    ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG )
                   </v-col>
                   <v-col cols="12" class="flex align-center justify-center">
                     <v-btn
@@ -168,6 +168,7 @@
                       >เลือกไฟล์</v-btn
                     >
                     <input
+                      id="fileInputPrivilege"
                       ref="fileInputPrivilege"
                       type="file"
                       @change="uploadPrivilegeFile"
@@ -233,12 +234,13 @@
                     class="flex align-center justify-center text-caption"
                   >
                     ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ
-                    ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
+                    ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG )
                   </v-col>
                 </v-row>
                 <v-row dense>
                   <v-col align="center">
                     <input
+                      id="fileInputArtwork"
                       ref="fileInputArtwork"
                       type="file"
                       @change="previewArtWorkFile"
@@ -547,10 +549,10 @@ export default {
       this.ChangeCourseData(this.course_data);
     },
     // UPDATE FILE
-    uploadPrivilegeFile() {
+    uploadPrivilegeFile(event) {
       this.privilege_file = this.$refs.fileInputPrivilege.files[0];
       const allowedTypes = ["image/png", "image/jpeg"];
-      if (CheckFileSize(this.privilege_file) === true) {
+      if (CheckFileSize(this.privilege_file, event.target.id) === true) {
         this.course_data.privilege_file =
           this.$refs.fileInputPrivilege.files[0];
         this.ChangeCourseData(this.course_data);
@@ -573,7 +575,7 @@ export default {
       const fileUrls = [];
       for (let i = 0; i < selectedFiles.length; i++) {
         const file = selectedFiles[i];
-        if (CheckFileSize(file) === true) {
+        if (CheckFileSize(file, event.target.id) === true) {
           if (allowedTypes.includes(file.type)) {
             this.course_data.artwork_file.push(file);
             const reader = new FileReader();
