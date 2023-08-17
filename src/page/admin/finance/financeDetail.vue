@@ -220,9 +220,9 @@
                   v-for="(status, index) in payment_status.filter(
                     (v) =>
                       v.value ===
-                      (order_detail.paymentType === 'QR Code Payment'
+                      (['QR Code Payment', 'Internet Banking', 'Corporate Banking'].some(v => v == order_detail.paymentType)
                         ? (order_detail.paymentType = 'transfer')
-                        : order_detail.paymentType)
+                        : ['Credit Card', 'Credit Card Installment'].some(v => v == order_detail.paymentType) ?  order_detail.paymentType = 'Credit Card' : order_detail.paymentType)
                   )"
                   :key="index"
                   class="cursor-pointer mb-3"
