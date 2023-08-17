@@ -834,8 +834,13 @@
             :expanded.sync="expanded"
             item-key="coachLeaveId"
             show-expand
+            :loading="coach_leaves_is_loading"
           >
             <template v-slot:no-data> ไม่พบข้อมูลใบลา </template>
+            <template v-slot:[`item.count`]="{ item }">
+              {{ item.index }}
+            </template>
+
             <template v-slot:[`item.date`]="{ item }">
               {{
                 item.startDate === item.endDate

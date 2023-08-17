@@ -884,6 +884,8 @@ const coachModules = {
             val.index = i + 1
             return val
           })
+          console.log("object", data.data);
+
           context.commit("SetCoachLeaves", data.data)
           context.commit("SetCoachLeavesIsLoading", false)
 

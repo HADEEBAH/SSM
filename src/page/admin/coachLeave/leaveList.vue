@@ -115,7 +115,6 @@
         </v-col>
       </template>
     </v-row>
-
     <!-- TABLE -->
     <v-card class="my-5">
       <v-data-table
