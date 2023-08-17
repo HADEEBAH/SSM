@@ -1321,7 +1321,6 @@ import { mapActions, mapGetters } from "vuex";
 import coachLeaveForm from "@/components/coach_leave/coachLeaveForm.vue";
 import router from "@/router";
 import imgFileType from "@/components/file_type/imgFileType.vue";
-
 export default {
   name: "menageCourse",
   components: {
@@ -1709,14 +1708,6 @@ export default {
     },
     removeFile(index) {
       this.selected_files.splice(index, 1);
-    },
-    uploadFile() {
-      const files = this.$refs.fileInput.files;
-      if (files.length > 0) {
-        for (let i = 0; i < files.length; i++) {
-          this.selected_files.push(files[i]);
-        }
-      }
     },
     filterMycourse() {
       if (this.filter_course) {

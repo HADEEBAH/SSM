@@ -407,6 +407,7 @@
                   >อัปโหลดไฟล์แนบ</v-btn
                 >
                 <input
+                  id="fileInput"
                   ref="fileInput"
                   type="file"
                   multiple
@@ -481,6 +482,9 @@ import { dateFormatter } from "@/functions/functions";
 import { mapActions, mapGetters } from "vuex";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import moment from "moment";
+import {
+  CheckFileSize,
+} from "@/functions/functions";
 export default {
   name: "coachLeaveForm",
   props: {
@@ -842,11 +846,13 @@ export default {
         time_id: "",
       });
     },
-    uploadFile() {
-      const files = this.$refs.fileInput.files;
-      if (files.length > 0) {
-        for (let i = 0; i < files.length; i++) {
-          this.selected_files.push(files[i]);
+    uploadFile(event) {
+      if (CheckFileSize(this.file,  event.target.id) === true) {
+        const files = this.$refs.fileInput.files;
+        if (files.length > 0) {
+          for (let i = 0; i < files.length; i++) {
+            this.selected_files.push(files[i]);
+          }
         }
       }
     },
