@@ -1004,11 +1004,11 @@ export default {
       ];
       let files = this.$refs.fileInput.files[0];
 
-      if (files.size > 10240 * 1024) {
+      if (files.size > (10240 * 1024)/2 ) {
         Swal.fire({
           icon: "warning",
           title: "ขนาดไฟล์ใหญ่เกินไป",
-          text: "( กำหนดขนาดไม่เกิน 10MB )",
+          text: "( กำหนดขนาดไม่เกิน 5MB )",
         });
         document.getElementById("fileInput").value = "";
       } else if (allowedExtension.indexOf(files.type) === -1) {

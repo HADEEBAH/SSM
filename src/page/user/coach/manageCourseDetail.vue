@@ -871,6 +871,7 @@
                     >อัปโหลดไฟล์แนบ</v-btn
                   >
                   <input
+                    id='fileInput'
                     ref="fileInput"
                     type="file"
                     accept="image/* ,video/*"
@@ -1001,10 +1002,11 @@
                       >อัปโหลดไฟล์แนบ</v-btn
                     >
                     <input
+                      id="generalfileInput"
                       ref="generalfileInput"
                       type="file"
                       multiple
-                      @change="uploadGeneralFile()"
+                      @change="uploadGeneralFile"
                       style="display: none"
                     />
                   </v-col>
@@ -1174,10 +1176,11 @@
                       >อัปโหลดไฟล์แนบ</v-btn
                     >
                     <input
+                      id="potentialfileInput"
                       ref="potentialfileInput"
                       type="file"
                       multiple
-                      @change="uploadPotentialFile()"
+                      @change="uploadPotentialFile"
                       style="display: none"
                     />
                   </v-col>
@@ -1960,22 +1963,22 @@ export default {
         student.potentialfiles = [];
       }
     },
-    uploadGeneralFile() {
+    uploadGeneralFile(event) {
       const files = this.$refs.generalfileInput.files;
       if (files.length > 0) {
         for (let i = 0; i < files.length; i++) {
-          if (CheckFileSize(files[i]) === true) {
+          if (CheckFileSize(files[i], event.target.id) === true) {
             this.selected_files.push(files[i]);
             this.comment_dialog_tmp.files.push(files[i]);
           }
         }
       }
     },
-    uploadPotentialFile() {
+    uploadPotentialFile(event) {
       const files = this.$refs.potentialfileInput.files;
       if (files.length > 0) {
         for (let i = 0; i < files.length; i++) {
-          if (CheckFileSize(files[i]) === true) {
+          if (CheckFileSize(files[i], event.target.id) === true) {
             this.selected_files.push(files[i]);
             this.comment_potential_dialog_tmp.files.push(files[i]);
           }
@@ -1994,7 +1997,7 @@ export default {
       for (let i = 0; i < selectedFiles.length; i++) {
         let file_type = selectedFiles[i].type.split("/");
         if (type_file.includes(file_type[0])) {
-          if (CheckFileSize(selectedFiles[i]) === true) {
+          if (CheckFileSize(selectedFiles[i],event.target.id) === true) {
             this.coach_check_in.summary_files.push(selectedFiles[i]);
             const file = selectedFiles[i];
             const reader = new FileReader();

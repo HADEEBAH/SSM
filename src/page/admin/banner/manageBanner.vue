@@ -132,7 +132,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { CheckFileSizeV2, CheckFileSizeType } from "@/functions/functions";
+import { CheckFileSize, CheckFileSizeType } from "@/functions/functions";
 import Swal from "sweetalert2";
 export default {
   components: {},
@@ -165,7 +165,7 @@ export default {
         const file = this.$refs.fileInput.files[i];
         this.files_input.push(this.$refs.fileInput.files[i]);
         if (!CheckFileSizeType(file, event.target.id)) return;
-        if (CheckFileSizeV2(file, event.target.id)) {
+        if (CheckFileSize(file, event.target.id)) {
           const reader = new FileReader();
           reader.onload = () => {
             this.files_preview.push(reader.result);
