@@ -33,7 +33,7 @@
             class="flex align-center justify-center text-caption"
           >
             ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ
-            ขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ JPG, PNG )
+            ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG )
           </v-col>
           <v-col
             cols="12"
@@ -49,6 +49,7 @@
               type="file"
               accept="image/png, image/jpeg"
               @change="uploadFile"
+              id="course_img"
               style="display: none"
             />
           </v-col>
@@ -1011,10 +1012,10 @@ export default {
     openFileSelector() {
       this.$refs.fileInput.click();
     },
-    uploadFile() {
+    uploadFile(event) {
       this.file = this.$refs.fileInput.files[0];
       if (!this.file) return;
-      if (CheckFileSize(this.file) === true) {
+      if (CheckFileSize(this.file,  event.target.id) === true) {
         const fileType = this.file.type;
         if (fileType === "image/png" || fileType === "image/jpeg") {
           this.course_data.course_img = this.file;

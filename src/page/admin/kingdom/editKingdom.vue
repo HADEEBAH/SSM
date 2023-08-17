@@ -186,7 +186,7 @@ import headerPage from "@/components/header/headerPage.vue";
 import { mapActions, mapGetters } from "vuex";
 import LabelCustom from "@/components/label/labelCustom.vue";
 import VueCookie from "vue-cookie";
-import { CheckFileSizeV2 } from "@/functions/functions";
+import { CheckFileSize } from "@/functions/functions";
 export default {
   components: {
     headerPage,
@@ -247,7 +247,7 @@ export default {
     uploadFile(event) {
       this.file = this.$refs.fileInput.files[0];
       if (!this.file) return;
-      if (CheckFileSizeV2(this.file, event.target.id) === true) {
+      if (CheckFileSize(this.file, event.target.id) === true) {
         const fileType = this.file.type;
         if (fileType === "image/png" || fileType === "image/jpeg") {
           const reader = new FileReader();
