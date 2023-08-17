@@ -268,6 +268,8 @@ const coachModules = {
       }
     },
     async CreateTeachingNotes(context, { check_in_coach_id, check_in_coach_data }) {
+
+
       try {
         let config = {
           headers: {
@@ -291,7 +293,9 @@ const coachModules = {
             cancelButtonText: "ยกเลิก",
             confirmButtonText: "ตกลง",
           })
+
         }
+
       } catch (error) {
         Swal.fire({
           icon: "error",
@@ -725,20 +729,17 @@ const coachModules = {
         }
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/summary/${checkInCoach.checkInCoachId}`, payloadData, config)
         if (data.statusCode == 200) {
-          await Swal.fire({
+          Swal.fire({
             icon: "success",
             title: "บันทึกสำเร็จ",
-            showDenyButton: false,
-            showCancelButton: false,
-            cancelButtonText: "ยกเลิก",
-            confirmButtonText: "ตกลง",
-          }).then(async (result) => {
-            if (result.isConfirmed) {
-              context.dispatch("GetCoachCheckIn", {
-                course_id: course_id,
-                date: date,
-              })
-            }
+            timer: 3000,
+            showConfirmButton: false,
+            timerProgressBar: true
+          }).finally(() => {
+            context.dispatch("GetCoachCheckIn", {
+              course_id: course_id,
+              date: date,
+            })
           })
         }
       } catch (error) {
@@ -868,6 +869,8 @@ const coachModules = {
       }
     },
     async GetLeavesByAccountId(context, { account_id }) {
+      context.commit("SetCoachLeavesIsLoading", true)
+
       try {
         let config = {
           headers: {
@@ -878,7 +881,15 @@ const coachModules = {
         };
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${account_id}`, config)
         if (data.statusCode === 200) {
+          data.data.map((val, i) => {
+            val.index = i + 1
+            return val
+          })
+          console.log("object", data.data);
+
           context.commit("SetCoachLeaves", data.data)
+          context.commit("SetCoachLeavesIsLoading", false)
+
         }
       } catch (error) {
         console.log(error)
