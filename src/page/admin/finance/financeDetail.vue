@@ -1023,6 +1023,7 @@ export default {
           })
           .join(account.length > 1 ? ", " : "")} ยังไม่ชำระเงิน`,
         accountId: account,
+        path: null,
       };
       this.sendNotification(payload, true);
     },
