@@ -68,6 +68,7 @@
     </v-row>
     <v-card outlined>
       <v-data-table
+        class="elevation-1 header-table"
         :headers="columns"
         :items="
           type_selected === 'all'

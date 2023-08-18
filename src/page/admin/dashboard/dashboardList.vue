@@ -802,6 +802,28 @@
                         <!-- row 4 -->
                         <v-card-text>
                           <v-row dense>
+                            <v-col cols="12">
+                              <v-text-field
+                                hide-details
+                                outlined
+                                readonly
+                                dense
+                                :value="`${items_dialog.firstNameTh}  ${items_dialog.lastNameTh}`"
+                                label="ชื่อ-สกุลโค้ช"
+                                color="#FF6B81"
+                              >
+                                <template v-slot:append>
+                                  <v-icon :color="'#FF6B81'"
+                                    >mdi-account-outline</v-icon
+                                  >
+                                </template>
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                        </v-card-text>
+                        <!-- row 5 -->
+                        <v-card-text>
+                          <v-row dense>
                             <v-col cols="12" sm="6">
                               <v-text-field
                                 hide-details
@@ -822,6 +844,7 @@
 
                             <v-col cols="6" sm="6">
                               <v-text-field
+                                hide-details
                                 outlined
                                 readonly
                                 dense
