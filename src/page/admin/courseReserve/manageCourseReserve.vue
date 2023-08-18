@@ -59,7 +59,7 @@
                     ? reserve_list.length
                     : reserve_list.filter((v) => v.status == type.value).length
                 }}</v-col>
-                <v-col  class="text-center text-sm">รายการ</v-col>
+                <v-col class="text-center text-sm">รายการ</v-col>
               </v-row>
             </template>
           </img-card>

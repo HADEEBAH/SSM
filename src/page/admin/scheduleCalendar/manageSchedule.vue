@@ -92,6 +92,7 @@
               v-for="(item, index) in courseDate()"
               :key="index"
             >
+              <!-- <pre>{{ item }}</pre> -->
               <v-row dense class="font-bold">
                 <v-col cols="12" sm="6">
                   {{ item?.courseName?.courseNameTh }}</v-col
@@ -1203,7 +1204,7 @@ export default {
       this.holidaydatesTh = null;
     },
     courseDate() {
-      let courseTodayDate = new Date().toLocaleDateString("en-CA");
+      let courseTodayDate = new Date("2023-09-04").toLocaleDateString("en-CA");
       let getAllCourseDate = [];
       let success = "";
       let allCourse = [];
