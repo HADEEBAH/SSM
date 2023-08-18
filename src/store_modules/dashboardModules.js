@@ -99,8 +99,8 @@ const dashboardModules = {
       context.commit("SetGetLoading", true)
 
       try {
-        let { data } = await axios.get(` http://localhost:3000/api/v1/dashboard/course-status`)
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/course-status`)
+        // let { data } = await axios.get(` http://localhost:3000/api/v1/dashboard/course-status`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/course-status`)
 
         let EmptyCourseOpen = []
         let EmptyCourseClose = []
