@@ -901,6 +901,7 @@
                 color="#ff6b81"
                 dark
                 @click="saveSummary()"
+                :loading="is_loading"
               >
                 บันทึก
               </v-btn>
@@ -1414,6 +1415,7 @@ export default {
     package_name_filter: null,
     show_attachment_dialog: false,
     files_attachment_dialog: null,
+    is_loading: false,
   }),
   created() {
     this.GetStudentByTimeId({
@@ -1667,12 +1669,14 @@ export default {
           confirmButtonText: "ตกลง",
         }).then(async (result) => {
           if (result.isConfirmed) {
-            await this.UploadFileSummary({
-              checkInCoach: this.coach_check_in,
-              files: this.coach_check_in.summary_files,
-              course_id: this.$route.params.courseId,
-              date: this.$route.params.date,
-            });
+            (this.is_loading = true),
+              await this.UploadFileSummary({
+                checkInCoach: this.coach_check_in,
+                files: this.coach_check_in.summary_files,
+                course_id: this.$route.params.courseId,
+                date: this.$route.params.date,
+              });
+            this.is_loading = false;
           }
         });
       }
@@ -1734,6 +1738,13 @@ export default {
               date: this.$route.params.date,
               time_id: this.$route.params.timeId,
             });
+            let payload = {
+              notificationName: "แจ้งเตือนการประเมินผู้เรียน",
+              notificationDescription: "โค้ชได้ประเมินนักเรียนเรียบร้อยแล้ว",
+              accountId: this.student_check_in,
+              path: `/studentCourse/${this.$route.params.courseId}`
+            };
+            this.sendNotification(payload);
           }
         });
       }
@@ -1764,6 +1775,7 @@ export default {
               notificationName: "แจ้งเตือนการเช็คอิน",
               notificationDescription: `เช็คอินเรียบร้อย`,
               accountId: student_id,
+              path: null,
             };
             this.sendNotification(payload);
           }

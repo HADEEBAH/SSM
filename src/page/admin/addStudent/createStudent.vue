@@ -1160,6 +1160,7 @@ export default {
                       course_name_noti.length > 1 ? ", " : ""
                     )} ให้คุณแล้ว (รอชำระเงิน)`,
                     accountId: account,
+                    path: null,
                   };
                   this.sendNotification(payload);
                   this.saveOrder();
@@ -1198,6 +1199,7 @@ export default {
                       course_name_noti.length > 1 ? "และ" : ""
                     )} ให้คุณแล้ว`,
                     accountId: account,
+                    path: null,
                   };
                   this.sendNotification(payload);
                   this.saveOrder();

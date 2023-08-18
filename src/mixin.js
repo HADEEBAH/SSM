@@ -7,6 +7,7 @@ export default {
   data() {
     return {
       socket: null,
+      // socketioURL: "http://localhost:3004",
       socketioURL: process.env.VUE_APP_URL,
       socket_id: ""
     }
