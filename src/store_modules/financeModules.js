@@ -75,7 +75,7 @@ const financeModules = {
                 "สถานะ" : order.payment_status,
                 "วันที่ชำระ" : order.paid_date,
                 "ประเภทการชำระเงิน" : order.payment_type? order.payment_type == 'cash' ? 'เงินสด' : 
-                order.payment_type == 'Credit Card'? 'บัตเครดิต/เดบิต' : 'โอนเงินเข้าบัญชี' :'',
+                ['Credit Card', 'Credit Card Installment'].some(v => v == order.payment_type) ? 'บัตเครดิต/เดบิต' : 'โอนเงินเข้าบัญชี' :'',
                 "ราคา" : parseFloat(order.price).toLocaleString(undefined,{minimumFractionDigits:2}),
                 "ผู้รับเงิน" : order.payment?.recipient ? `${order.accountRecipientFirstNameTh} ${order.accountRecipientLastNameTh}` : '',
                 "คอร์ส" : order.courseNameTh,
