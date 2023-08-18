@@ -23,13 +23,17 @@ const reserveCourseModules = {
       try {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/getAll-studentDetail`)
         if (data.statusCode === 200) {
-
-          data.data.map((items) => {
+          data.data.map((item) => {
             const options = { year: "numeric", month: "long", day: "numeric" };
             const thaiLocale = "th-TH";
-            items.ThDate = new Date(items.createdDate).toLocaleString(thaiLocale, options)
-            items.ThTime = moment(items.createdDate).format("HH:mm")
+            item.dateTh = new Date(item.createdDate).toLocaleString(thaiLocale, options)
+            item.timeTh = moment(item.createdDate).format("HH:mm")
+            item.courseFullName = `${item.courseName}(${item.courseNameEn})`
+            item.studentFullName = `${item.studentData.firstNameTh} ${item.studentData.lastNameTh}`
+            item.createdByFullName = `${item.createdByData.firstNameTh} ${item.createdByData.lastNameTh}`
+            item.tel = item.createdByData.tel
           })
+          console.log(data.data)
           context.commit("SetReserveList", data.data)
           context.commit("SetReserveListIsLoading", false)
         }

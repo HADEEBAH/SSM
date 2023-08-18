@@ -54,12 +54,12 @@
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
-                <v-col align="center" class="text-3xl font-bold">{{
+                <v-col cols="12" align="center" class="text-3xl font-bold">{{
                   type.value == "all"
                     ? reserve_list.length
                     : reserve_list.filter((v) => v.status == type.value).length
                 }}</v-col>
-                <v-col class="text-sm">รายการ</v-col>
+                <v-col  class="text-center text-sm">รายการ</v-col>
               </v-row>
             </template>
           </img-card>
@@ -68,6 +68,7 @@
     </v-row>
     <v-card outlined>
       <v-data-table
+        class="header-table"
         :headers="columns"
         :items="
           type_selected === 'all'
@@ -79,38 +80,6 @@
         <template v-slot:no-data>
           <v-row dense>
             <v-col align="center"> ไม่พบข้อมูล </v-col>
-          </v-row>
-        </template>
-        <template v-slot:[`item.course_name`]="{ item }">
-          <v-row dense>
-            <v-col>
-              {{ `${item.courseName}(${item.courseNameEn})` }}
-            </v-col>
-          </v-row>
-        </template>
-        <template v-slot:[`item.student_name`]="{ item }">
-          <v-row dense>
-            <v-col>
-              {{
-                `${item.studentData.firstNameTh} ${item.studentData.lastNameTh}`
-              }}
-            </v-col>
-          </v-row>
-        </template>
-        <template v-slot:[`item.created_by`]="{ item }">
-          <v-row dense>
-            <v-col>
-              {{
-                `${item.createdByData.firstNameTh} ${item.createdByData.lastNameTh}`
-              }}
-            </v-col>
-          </v-row>
-        </template>
-        <template v-slot:[`item.tel`]="{ item }">
-          <v-row dense>
-            <v-col>
-              {{ `${item.createdByData.tel}` }}
-            </v-col>
           </v-row>
         </template>
         <template v-slot:[`item.status`]="{ item }">
@@ -163,31 +132,31 @@ export default {
         text: "วันที่จอง",
         align: "start",
         sortable: false,
-        value: "ThDate",
+        value: "dateTh",
       },
       {
         text: "เวลาที่จอง",
         align: "start",
         sortable: false,
-        value: "ThTime",
+        value: "timeTh",
       },
       {
         text: "ชื่อคอร์ส",
         align: "start",
         sortable: false,
-        value: "course_name",
+        value: "courseFullName",
       },
       {
         text: "ชื่อ-นามสกุลผู้เรียน",
         align: "start",
         sortable: false,
-        value: "student_name",
+        value: "studentFullName",
       },
       {
         text: "ชื่อ-นามสกุลผู้จอง",
         align: "start",
         sortable: false,
-        value: "created_by",
+        value: "createdByFullName",
       },
       { text: "เบอร์ติดต่อ", align: "start", sortable: false, value: "tel" },
       {
