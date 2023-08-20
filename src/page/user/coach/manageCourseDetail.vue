@@ -1773,7 +1773,7 @@ export default {
             });
             let payload = {
               notificationName: "แจ้งเตือนการเช็คอิน",
-              notificationDescription: `เช็คอินเรียบร้อย`,
+              notificationDescription: `เช็คอินคอร์ส ${this.course_data.course_name_th} เรียบร้อยแล้ว`,
               accountId: student_id,
               path: null,
             };
