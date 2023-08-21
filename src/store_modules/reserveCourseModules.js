@@ -33,7 +33,7 @@ const reserveCourseModules = {
             item.createdByFullName = `${item.createdByData.firstNameTh} ${item.createdByData.lastNameTh}`
             item.tel = item.createdByData.tel
           })
-          console.log(data.data)
+          // console.log(data.data)
           context.commit("SetReserveList", data.data)
           context.commit("SetReserveListIsLoading", false)
         }
@@ -54,16 +54,17 @@ const reserveCourseModules = {
         if (data.statusCode == 200) {
           await Swal.fire({
             icon: "success",
-            text: "แก้ไขสำเร็จ",
-            showDenyButton: false,
+            title: "แก้ไขสำเร็จ",
+            timer: 3000,
+            timerProgressBar: true,
             showCancelButton: false,
-            confirmButtonText: "ตกลง",
+            showConfirmButton: false
           })
         }
       } catch (error) {
         Swal.fire({
           icon: "error",
-          text: "เกิดข้อผิดพลาด"
+          title: "เกิดข้อผิดพลาด"
         })
       }
     }
