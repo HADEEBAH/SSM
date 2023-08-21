@@ -96,24 +96,21 @@ const coachModules = {
     },
     async DeleteAssessmentPotentialFile(context, { att_assessment_id }) {
       try {
-        let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/potential/${att_assessment_id}`)
-        console.log(data)
+        await axios.delete(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/potential/${att_assessment_id}`)
       } catch (error) {
         console.log(error)
       }
     },
     async DeleteAssessmentFile(context, { att_assessment_id }) {
       try {
-        let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${att_assessment_id}`)
-        console.log(data)
+        await axios.delete(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${att_assessment_id}`)
       } catch (error) {
         console.log(error)
       }
     },
     async DeleteSummaryFile(context, { att_assessment_id }) {
       try {
-        let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/summary/${att_assessment_id}`)
-        console.log(data)
+        await axios.delete(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/summary/${att_assessment_id}`)
       } catch (error) {
         console.log(error)
       }
@@ -555,7 +552,7 @@ const coachModules = {
                         course_package_name: course.packageName,
                         course_option_name: course.optionName,
                         name: course.courseNameTh,
-                        subtitle: course.courseNameEn,
+                        subtitle: course.courseNameEng,
                         course_id: course.courseId,
                         time_id: course.timeId,
                         type: course?.compType ? course?.compType : null,
@@ -882,7 +879,6 @@ const coachModules = {
             val.index = i + 1
             return val
           })
-          // console.log("object", data.data);
 
           context.commit("SetCoachLeaves", data.data)
           context.commit("SetCoachLeavesIsLoading", false)
@@ -921,8 +917,6 @@ const coachModules = {
       }
     },
     async updateStatusCoachLeaveAndCoach(context, { coach_leave_data, coach_leave_id }) {
-      console.log("coach_leave_data", coach_leave_data.status);
-      console.log("coach_leave_id", coach_leave_id);
       context.commit("SetCoachLeavesIsLoading", true)
       try {
         let config = {

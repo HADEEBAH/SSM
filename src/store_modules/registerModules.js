@@ -108,9 +108,9 @@ const RegisterModules = {
                 }
             } catch (error) {
                 Swal.fire({
-                  icon: "error",
-                  title: "ลบข้อมูลไม่สำเร็จ"
-              })
+                    icon: "error",
+                    title: "ลบข้อมูลไม่สำเร็จ"
+                })
             }
         },
         async AddRelations(context, { studentId, parentId }) {
@@ -124,7 +124,7 @@ const RegisterModules = {
                 };
                 let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/relations/user`, { studentId: studentId, parentId: parentId }, config)
                 if (data.statusCode === 201) {
-                  await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/user`, { userId: parentId, roleId: 'R_4' }, config)
+                    await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/user`, { userId: parentId, roleId: 'R_4' }, config)
                 }
             } catch (error) {
                 console.log(error)
@@ -366,7 +366,18 @@ const RegisterModules = {
                 context.commit("ShowDialogRegisterOneId", value)
             } else {
                 context.commit("ShowDialogRegisterOneId", value)
-                localStorage.context.commit("UserOneId", {
+                // localStorage.context.commit("UserOneId", {
+                //     firstname_th: "",
+                //     lastname_th: "",
+                //     firstname_en: "",
+                //     lastname_en: "",
+                //     phone_number: "",
+                //     username: "",
+                //     password: "",
+                //     confirm_password: "",
+                //     accept_terms: false,
+                // }
+                context.commit("UserOneId", {
                     firstname_th: "",
                     lastname_th: "",
                     firstname_en: "",
@@ -376,7 +387,8 @@ const RegisterModules = {
                     password: "",
                     confirm_password: "",
                     accept_terms: false,
-                })
+                }
+                )
             }
 
         },

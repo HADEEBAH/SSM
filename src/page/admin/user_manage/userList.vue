@@ -405,6 +405,14 @@ export default {
                   showCancelButton: false,
                   showConfirmButton: false,
                 });
+                // Swal.fire({
+                //   icon: "success",
+                //   title: "ลบข้อมูลสำเร็จ",
+                // }).then(async (result) => {
+                //   if (result.isConfirmed) {
+                //     this.$store.dispatch("UserModules/GetUserList");
+                //   }
+                // });
               }
             } else {
               throw { message: data.message };
