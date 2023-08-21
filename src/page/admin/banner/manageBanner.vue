@@ -208,7 +208,7 @@ export default {
 
           Swal.fire({
             icon: "success",
-            text: "เพิ่มแบนเนอร์สำเร็จ",
+            title: "เพิ่มแบนเนอร์สำเร็จ",
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
@@ -239,12 +239,12 @@ export default {
 
           Swal.fire({
             icon: "success",
-            text: "ลบแบรนเนอร์สำเร็จ",
+            title: "ลบแบนเนอร์สำเร็จ",
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
-            timer: 1500,
             timerProgressBar: true,
+            timer: 3000,
           });
         }
       });
