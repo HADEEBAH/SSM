@@ -402,11 +402,6 @@ export default {
                 config
               );
               if (data.statusCode === 200) {
-                Swal.fire({
-                  icon: "success",
-                  title: "แก้ไขโปรไฟล์สำเร็จ",
-                  timer: 3000,
-                });
                 let data_storage = JSON.parse(
                   localStorage.getItem("userDetail")
                 );
@@ -426,6 +421,20 @@ export default {
                 this.isEnabled = false;
                 this.buttonName = "แก้ไข";
                 document.getElementById("fileInput").value = "";
+                // Swal.fire({
+                //   icon: "success",
+                //   title: "แก้ไขโปรไฟล์สำเร็จ 55",
+                //   timer: 3000,
+                // });
+                Swal.fire({
+                  icon: "success",
+                  title: "แก้ไขโปรไฟล์สำเร็จ",
+                  showDenyButton: false,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                  timerProgressBar: true,
+                  timer: 3000,
+                });
               } else {
                 throw { message: data.message };
               }
@@ -454,7 +463,7 @@ export default {
       ];
       let files = this.$refs.fileInput.files[0];
 
-      if (files.size > (10240 * 1024)/2) {
+      if (files.size > (10240 * 1024) / 2) {
         Swal.fire({
           icon: "warning",
           title: "ขนาดไฟล์ใหญ่เกินไป",

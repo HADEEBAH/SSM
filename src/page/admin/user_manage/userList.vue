@@ -396,14 +396,23 @@ export default {
               if (typeof data.data === "string") {
                 throw { message: data };
               } else {
+                this.$store.dispatch("UserModules/GetUserList");
                 Swal.fire({
                   icon: "success",
                   title: "ลบข้อมูลสำเร็จ",
-                }).then(async (result) => {
-                  if (result.isConfirmed) {
-                    this.$store.dispatch("UserModules/GetUserList");
-                  }
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
                 });
+                // Swal.fire({
+                //   icon: "success",
+                //   title: "ลบข้อมูลสำเร็จ",
+                // }).then(async (result) => {
+                //   if (result.isConfirmed) {
+                //     this.$store.dispatch("UserModules/GetUserList");
+                //   }
+                // });
               }
             } else {
               throw { message: data.message };

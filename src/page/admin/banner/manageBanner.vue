@@ -212,7 +212,7 @@ export default {
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
-            timer: 1500,
+            timer: 3000,
             timerProgressBar: true,
           });
         }

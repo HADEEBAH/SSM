@@ -551,11 +551,12 @@ const coachModules = {
                     endDate.setMinutes(end_minutes);
 
                     if (courses_task.filter(v => v.course_id === course.courseId && v.time_id === course.timeId && v.day_of_week_id === course.dayOfWeekId && v.start_date === moment(startDate).format("YYYY-MM-DD")).length === 0) {
+                      console.log("objectcourse", course);
                       courses_task.push({
                         course_package_name: course.packageName,
                         course_option_name: course.optionName,
                         name: course.courseNameTh,
-                        subtitle: course.courseNameEn,
+                        subtitle: course.courseNameEng,
                         course_id: course.courseId,
                         time_id: course.timeId,
                         type: course?.compType ? course?.compType : null,
@@ -675,6 +676,7 @@ const coachModules = {
                   endDate.setHours(end_hours);
                   endDate.setMinutes(end_minutes);
                   if (courses_task.filter(v => v.course_id === course.courseId && v.time_id === course.timeId && v.day_of_week_id === course.dayOfWeekId && v.start_date === moment(startDate).format("YYYY-MM-DD")).length === 0) {
+                    console.log("object");
                     courses_task.push({
                       course_package_name: course.packageName,
                       course_option_name: course.optionName,

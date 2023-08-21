@@ -970,11 +970,15 @@ export default {
                 : this.profile_detail.userOneId,
           })
             .then(() => {
+              this.GetRelationDataV2(this.user_login.account_id);
               Swal.fire({
                 icon: "success",
                 title: "ลบสำเร็จ",
+                timer: 3000,
+                timerProgressBar: true,
+                showCancelButton: false,
+                showConfirmButton: false,
               });
-              this.GetRelationDataV2(this.user_login.account_id);
             })
             .catch(() => {
               Swal.fire({
@@ -1133,12 +1137,17 @@ export default {
 
             if (data.statusCode === 201) {
               if (data.data.message !== "Duplicate relation.") {
+                this.add_relation = false;
+                this.GetRelationDataV2(this.user_login.account_id);
+
                 Swal.fire({
                   icon: "success",
                   title: "บันทึกสำเร็จ",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
                 });
-                this.add_relation = false;
-                this.GetRelationDataV2(this.user_login.account_id);
               } else {
                 throw { error: data };
               }
