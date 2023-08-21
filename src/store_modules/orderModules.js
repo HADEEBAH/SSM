@@ -6,17 +6,17 @@ const orderModules = {
     namespaced: true,
     state: {
         course_order: {
-            apply_for_yourself : false,
-            apply_for_others : false,
+            apply_for_yourself: false,
+            apply_for_others: false,
             course_id: "",
             kingdom: {},
             course_type: "",
-            course_type_id : "CT_1",
+            course_type_id: "CT_1",
             category_id: "",
             package: "",
-            package_data : {},
-            option : "",
-            option_data : "",
+            package_data: {},
+            option: "",
+            option_data: "",
             period: 0,
             times_in_class: 0,
             day: "",
@@ -24,91 +24,91 @@ const orderModules = {
             coach: "",
             start_day: "",
             price: 0,
-            detail : "",
+            detail: "",
             remark: "",
-            selected : true,
+            selected: true,
             parents: [],
             students: [],
         },
         order: {
-            type : "",
-            order_step : 0,
+            type: "",
+            order_step: 0,
             order_number: "",
-            courses:[],
-            created_by : "",
+            courses: [],
+            created_by: "",
             payment_status: "",
             payment_type: "",
             total_price: 0,
         },
-        orders : [],
-        order_detail : {},
-        order_is_loading : false,
-        orders_is_loading : false,
-        relations:[],
-        cart_list :[],
+        orders: [],
+        order_detail: {},
+        order_is_loading: false,
+        orders_is_loading: false,
+        relations: [],
+        cart_list: [],
         cart_list_is_loading: false,
-        reserve_list:[],
-        student_list:[],
-        students : [],
-        order_history : [],
-        order_history_is_loading : false,
+        reserve_list: [],
+        student_list: [],
+        students: [],
+        order_history: [],
+        order_history_is_loading: false,
     },
     mutations: {
-        SetOrderHistory(state, payload){
+        SetOrderHistory(state, payload) {
             state.order_history = payload
         },
-        SetOrderHistoryIsLoading(state, value){
+        SetOrderHistoryIsLoading(state, value) {
             state.order_history_is_loading = value
         },
-        SetReserveList(state, payload){
+        SetReserveList(state, payload) {
             state.reserve_list = payload
         },
-        SetOrderIsLoading(state, value){
+        SetOrderIsLoading(state, value) {
             state.order_is_loading = value
         },
-        SetOrdersIsLoading(state, value){
+        SetOrdersIsLoading(state, value) {
             state.orders_is_loading = value
         },
-        SetRelation(state, payload){
+        SetRelation(state, payload) {
             state.relations = payload
         },
         SetOrder(state, payload) {
             state.order = payload
         },
-        SetOrders(state, payload){
+        SetOrders(state, payload) {
             state.orders = payload
         },
         SetCartList(state, payload) {
             state.cart_list = payload
         },
-        SetCartListIsLoading(state, payload){
+        SetCartListIsLoading(state, payload) {
             state.cart_list_is_loading = payload
         },
-        SetOrderDetail(state, payload){
+        SetOrderDetail(state, payload) {
             state.order_detail = payload
         },
-        SetStudents(state, payload){
+        SetStudents(state, payload) {
             state.students = payload
         },
-        SetStudentListOrderDetail(state, payload){
-          state.student_list = payload
+        SetStudentListOrderDetail(state, payload) {
+            state.student_list = payload
         },
         SetOrderCourse(state, payload) {
             state.course_order = payload
         },
         SetResetCourseData(state) {
             state.course_order = {
-                apply_for_yourself : false,
-                apply_for_others : false,
+                apply_for_yourself: false,
+                apply_for_others: false,
                 kingdom: {},
                 course_id: "",
                 course_type: "",
-                course_type_id : "CT_1",
+                course_type_id: "CT_1",
                 category_id: "",
                 package: "",
-                package_data : {},
-                option : "",
-                option_data : "",
+                package_data: {},
+                option: "",
+                option_data: "",
                 period: 0,
                 times_in_class: 0,
                 day: "",
@@ -116,9 +116,9 @@ const orderModules = {
                 coach: "",
                 start_day: "",
                 price: 0,
-                detail : "",
+                detail: "",
                 remark: "",
-                selected : true,
+                selected: true,
                 parents: [],
                 students: [],
             }
@@ -126,63 +126,63 @@ const orderModules = {
     },
     actions: {
         async getHistory(context) {
-            try{
-                context.commit("SetOrderHistoryIsLoading",true)
+            try {
+                context.commit("SetOrderHistoryIsLoading", true)
                 let mapHistory = [];
                 const config = {
-                  headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Content-type": "Application/json",
-                    Authorization: `Bearer ${VueCookie.get("token")}`,
-                  },
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-type": "Application/json",
+                        Authorization: `Bearer ${VueCookie.get("token")}`,
+                    },
                 };
-                const { data } = await axios.get( `${process.env.VUE_APP_URL}/api/v1/order/history`, config );
+                const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/history`, config);
                 if (data.statusCode === 200) {
 
-                    data.data.map((items) => { 
-                    const options = { year: "numeric", month: "long", day: "numeric" };
-                    const thaiLocale = "th-TH";
-                    items.thaiDate = new Date(items.createdDate).toLocaleString(thaiLocale, options);
-                    })
-                    for (const item of data.data) {
-                      
-                    if (item.courseImg && item.courseImg !== "") {
-                      item.courseImg = process.env.VUE_APP_URL.concat(
-                        `/api/v1/files/${item.courseImg}`
-                      );
-                      item.show_student = false;
-                    }
-                    if( data.data.filter(v => v.orderNumber == item.orderNumber).length > 0){
-                      let courses = []
-                      for await (const course of data.data.filter(v => v.orderNumber == item.orderNumber)){
-                        if(!courses.some(v => v.orderItemId == course.orderItemId)){
-                          courses.push(course)
-                        }
-                        }
+                    data.data.map((items) => {
                         const options = { year: "numeric", month: "long", day: "numeric" };
                         const thaiLocale = "th-TH";
+                        items.thaiDate = new Date(items.createdDate).toLocaleString(thaiLocale, options);
+                    })
+                    for (const item of data.data) {
 
-                      if(!mapHistory.some(v => v.orderId === item.orderId)){
-                        mapHistory.push({
-                          orderId : item.orderId,
-                          orderNumber :  item.orderNumber,
-                          paymentStatus : item.paymentStatus,
-                          courses : courses,
-                          totalPrice: item.totalPrice,
-                        createdDate : new Date(item.createdDate).toLocaleString(thaiLocale, options),
-                          
-                            createdByData: item.createdByData
-                          
-                            
-                               
-                        });
-                      }
+                        if (item.courseImg && item.courseImg !== "") {
+                            item.courseImg = process.env.VUE_APP_URL.concat(
+                                `/api/v1/files/${item.courseImg}`
+                            );
+                            item.show_student = false;
+                        }
+                        if (data.data.filter(v => v.orderNumber == item.orderNumber).length > 0) {
+                            let courses = []
+                            for await (const course of data.data.filter(v => v.orderNumber == item.orderNumber)) {
+                                if (!courses.some(v => v.orderItemId == course.orderItemId)) {
+                                    courses.push(course)
+                                }
+                            }
+                            const options = { year: "numeric", month: "long", day: "numeric" };
+                            const thaiLocale = "th-TH";
+
+                            if (!mapHistory.some(v => v.orderId === item.orderId)) {
+                                mapHistory.push({
+                                    orderId: item.orderId,
+                                    orderNumber: item.orderNumber,
+                                    paymentStatus: item.paymentStatus,
+                                    courses: courses,
+                                    totalPrice: item.totalPrice,
+                                    createdDate: new Date(item.createdDate).toLocaleString(thaiLocale, options),
+
+                                    createdByData: item.createdByData
+
+
+
+                                });
+                            }
+                        }
                     }
-                  }
                 }
-                context.commit("SetOrderHistory",mapHistory)
-                context.commit("SetOrderHistoryIsLoading",false)
-            }catch(error){
+                context.commit("SetOrderHistory", mapHistory)
+                context.commit("SetOrderHistoryIsLoading", false)
+            } catch (error) {
                 console.log(error)
             }
         },
@@ -195,47 +195,47 @@ const orderModules = {
         changeOrderData(context, orderData) {
             context.commit("SetOrder", orderData)
         },
-        async GetRelations(context,{student_id,}){
-            try{
+        async GetRelations(context, { student_id, }) {
+            try {
                 let config = {
-                    headers:{
-                        "Access-Control-Allow-Origin" : "*",
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
                         "Content-type": "Application/json",
-                        'Authorization' : `Bearer ${VueCookie.get("token")}`
+                        'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user?student_id=${student_id}`,config)
-                if(data.statusCode === 200){
-                    if( data.data && !data.data.message){
-                        context.commit("SetRelation",data.data )
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/relations/user?student_id=${student_id}`, config)
+                if (data.statusCode === 200) {
+                    if (data.data && !data.data.message) {
+                        context.commit("SetRelation", data.data)
                     }
-                }else{
-                    throw {error : data}
+                } else {
+                    throw { error: data }
                 }
-            }catch(error){
+            } catch (error) {
                 console.log(error)
             }
         },
-        async GetOrders(context){
+        async GetOrders(context) {
             context.commit("SetOrdersIsLoading", true)
-            try{
+            try {
                 let config = {
-                    headers:{
-                        "Access-Control-Allow-Origin" : "*",
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
                         "Content-type": "Application/json",
-                        'Authorization' : `Bearer ${VueCookie.get("token")}`
+                        'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
                 let students = []
-                let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/`,config)
-                if(data.statusCode === 200){
-                    if(data.data.length > 0){
-                        for await (let order of data.data){
-                            for await (const student of order.student){
-                                if(!students.some(v=>v.account_id == student.userOneId)){
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/`, config)
+                if (data.statusCode === 200) {
+                    if (data.data.length > 0) {
+                        for await (let order of data.data) {
+                            for await (const student of order.student) {
+                                if (!students.some(v => v.account_id == student.userOneId)) {
                                     students.push({
-                                        student_name : `${student.firstNameTh} ${student.lastNameTh}`,
-                                        account_id : student.userOneId
+                                        student_name: `${student.firstNameTh} ${student.lastNameTh}`,
+                                        account_id: student.userOneId
                                     })
                                 }
                             }
@@ -259,45 +259,45 @@ const orderModules = {
                                 "พฤศจิกายน",
                                 "ธันวาคม"
                             ];
-                            
+
                             const formatted = `${day} ${monthNames[month]} ${year}`;
-                           
+
                             let cutTime = order.payment_status === "success" ? order.payment?.paymentTime : '';
                             let HH = cutTime?.slice(0, 2);
-                            let mm = cutTime?.slice(2, 4); 
-                            order.paid_date = order.payment_status === "success" ? `${formatted} ${HH + ":" + mm }`:""
+                            let mm = cutTime?.slice(2, 4);
+                            order.paid_date = order.payment_status === "success" ? `${formatted} ${HH + ":" + mm}` : ""
                             order.course_name = `${order.course?.courseNameTh}(${order.course?.courseNameEn})`
                             order.student_name = `${order.user?.firstNameTh} ${order.user?.lastNameTh}`
                         }
                     }
-                    context.commit("SetOrders",data.data)
-                    context.commit("SetStudents",students)
+                    context.commit("SetOrders", data.data)
+                    context.commit("SetStudents", students)
                     context.commit("SetOrdersIsLoading", false)
-                }else{
+                } else {
                     context.commit("SetOrdersIsLoading", true)
-                    throw {error : data}
+                    throw { error: data }
                 }
-            }catch(error){
+            } catch (error) {
                 console.log(error)
             }
         },
-        async GetOrderDetail(context,{order_number}){
-            try{
+        async GetOrderDetail(context, { order_number }) {
+            try {
                 let config = {
-                    headers:{
-                        "Access-Control-Allow-Origin" : "*",
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
                         "Content-type": "Application/json",
-                        'Authorization' : `Bearer ${VueCookie.get("token")}`
+                        'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/${order_number}`, config)
-                if(data.statusCode == 200){
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/${order_number}`, config)
+                if (data.statusCode == 200) {
                     let student_name_list = []
                     let student_list = []
-                    for(const order_item of  data.data.orderItem){
-                        if(order_item.students.length > 0){
-                            order_item.students.forEach((student)=>{
-                                if(!student_name_list.includes(`${student?.firstNameTh} ${student?.lastNameTh}`)){
+                    for (const order_item of data.data.orderItem) {
+                        if (order_item.students.length > 0) {
+                            order_item.students.forEach((student) => {
+                                if (!student_name_list.includes(`${student?.firstNameTh} ${student?.lastNameTh}`)) {
                                     student_name_list.push(`${student?.firstNameTh} ${student?.lastNameTh}`)
                                     student_list.push(student)
                                 }
@@ -305,46 +305,46 @@ const orderModules = {
                             data.data.student_name_list = student_name_list.join(', ')
                         }
                     }
-                    if(data.data.payment?.paymentDate ){
-                        if(data.data.payment.paymentDate){
-                            const timestamp =`${data.data.payment.paymentDate} ${data.data.payment.paymentTime}`;
+                    if (data.data.payment?.paymentDate) {
+                        if (data.data.payment.paymentDate) {
+                            const timestamp = `${data.data.payment.paymentDate} ${data.data.payment.paymentTime}`;
                             const year = timestamp.substr(0, 4);
                             const month = timestamp.substr(4, 2);
                             const day = timestamp.substr(6, 2);
                             const hours = timestamp.substr(9, 2);
                             const minutes = timestamp.substr(11, 2);
                             const seconds = timestamp.substr(13, 2);
-        
+
                             const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
                             data.data.payment.paid_date = formattedDate
                         }
                     }
-                    
-                    await context.commit("SetOrderDetail",data.data)
-                   
+
+                    await context.commit("SetOrderDetail", data.data)
+
                     await context.commit("SetStudentListOrderDetail", student_list)
                 }
             }
-            catch(error){
+            catch (error) {
                 console.log(error)
             }
         },
-        async saveCart(context, {cart_data}) {
-            try{
+        async saveCart(context, { cart_data }) {
+            try {
                 let order = cart_data
                 let payload = {
-                    order_id : "",
-                    courses : {},
-                    created_by : "",
+                    order_id: "",
+                    courses: {},
+                    created_by: "",
                     paymentStatus: "pending",
                     paymentType: "",
                     totalPrice: 0,
                 }
                 let total_price = 0
-                await order.courses.forEach((course)=>{
+                await order.courses.forEach((course) => {
                     let students = []
-                    course.students.forEach((student)=>{
-                        if(student.parents[0]){   
+                    course.students.forEach((student) => {
+                        if (student.parents[0]) {
                             students.push({
                                 "accountId": student.account_id ? student.account_id : "",
                                 "userName": student.username,
@@ -352,16 +352,16 @@ const orderModules = {
                                 "lastNameTh": student.lastname,
                                 "tel": student.tel,
                                 "isOther": student.is_other,
-                                "parent":{
+                                "parent": {
                                     "accountId": student.parents[0].account_id,
-                                    "parentFirstnameTh": student.parents[0].firstname_th ?  student.parents[0].firstname_th :"" ,
-                                    "parentLastnameTh":student.parents[0].lastname_th ?  student.parents[0].lastname_th :"" ,
-                                    "parentFirstnameEn":student.parents[0].firstname_en,
-                                    "parentLastnameEn":student.parents[0].lastname_en,
+                                    "parentFirstnameTh": student.parents[0].firstname_th ? student.parents[0].firstname_th : "",
+                                    "parentLastnameTh": student.parents[0].lastname_th ? student.parents[0].lastname_th : "",
+                                    "parentFirstnameEn": student.parents[0].firstname_en,
+                                    "parentLastnameEn": student.parents[0].lastname_en,
                                     "parentTel": student.parents[0].tel,
-                                }  
+                                }
                             })
-                        }else{
+                        } else {
                             students.push({
                                 "accountId": student.account_id ? student.account_id : "",
                                 "userName": student.username,
@@ -369,16 +369,16 @@ const orderModules = {
                                 "lastNameTh": student.lastname,
                                 "tel": student.tel,
                                 "isOther": student.is_other,
-                                "parent":{}
+                                "parent": {}
                             })
                         }
                     })
                     payload.courses = {
-                        "courseId" :  course.course_id,
-                        "courseName" : course.course_name,
+                        "courseId": course.course_id,
+                        "courseName": course.course_name,
                         "coursePackageOptionId": course.option.course_package_option_id ? course.option.course_package_option_id : "",
                         "dayOfWeekId": course?.time?.timeData ? course.time.timeData.filter(v => v.coach_id === course.coach_id)[0].dayOfWeekId : course.time.dayOfWeekId,
-                        "timeId":  course?.time?.timeData ? course.time.timeData.filter(v => v.coach_id === course.coach_id)[0].timeId : course.time.timeId,
+                        "timeId": course?.time?.timeData ? course.time.timeData.filter(v => v.coach_id === course.coach_id)[0].timeId : course.time.timeId,
                         "time": course.time ? course.time : "",
                         "startDate": "",
                         "remark": "",
@@ -390,66 +390,66 @@ const orderModules = {
                         "student": students
                     }
                     let price = course.option?.net_price ? course.option.net_price : course.price
-                    total_price = total_price + (price * course.students.length )
+                    total_price = total_price + (price * course.students.length)
                 })
                 payload.totalPrice = total_price
                 let config = {
-                  headers:{
-                      "Access-Control-Allow-Origin" : "*",
-                      "Content-type": "Application/json",
-                      'Authorization' : `Bearer ${VueCookie.get("token")}`
-                  }
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-type": "Application/json",
+                        'Authorization': `Bearer ${VueCookie.get("token")}`
+                    }
                 }
-                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/cart`,payload, config)
-                if(data.statusCode === 201){
+                let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/cart`, payload, config)
+                if (data.statusCode === 201) {
                     localStorage.removeItem("Order")
                     context.commit("SetResetCourseData")
-                    context.commit("SetOrder",{
-                        order_step : 0,
+                    context.commit("SetOrder", {
+                        order_step: 0,
                         order_number: "",
-                        courses:[],
-                        created_by : "",
+                        courses: [],
+                        created_by: "",
                         payment_status: "",
                         payment_type: "",
                         total_price: 0,
                     })
                 }
-            }catch(error){
+            } catch (error) {
                 console.log(error)
             }
         },
         async saveOrder(context) {
             context.commit("SetOrderIsLoading", true)
-            try{
+            try {
                 let order = context.state.order
                 let configs = {
-                    headers:{
-                        "Access-Control-Allow-Origin" : "*",
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
                         "Content-type": "Application/json",
-                        'Authorization' : `Bearer ${VueCookie.get("token")}`
+                        'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                if(order.type !== "addStudent"){
-                    for await (const course of order.courses){
-                        for await (const student of course.students){
-                            let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/add/username/one`,student, configs)
+                if (order.type !== "addStudent") {
+                    for await (const course of order.courses) {
+                        for await (const student of course.students) {
+                            let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/add/username/one`, student, configs)
                             console.log(data)
                         }
                     }
                 }
                 let payload = {
-                    order_id : "",
-                    courses : [],
-                    created_by : order.created_by,
+                    order_id: "",
+                    courses: [],
+                    created_by: order.created_by,
                     paymentStatus: 'pending',
                     paymentType: order.payment_type,
                     totalPrice: 0,
                 }
                 let total_price = 0
-                await order.courses.forEach((course)=>{
+                await order.courses.forEach((course) => {
                     let students = []
-                    course.students.forEach((student)=>{
-                        if(student.parents[0]){   
+                    course.students.forEach((student) => {
+                        if (student.parents[0]) {
                             students.push({
                                 "accountId": student.account_id ? student.account_id : "",
                                 "userName": student.username,
@@ -457,16 +457,16 @@ const orderModules = {
                                 "lastNameTh": student.lastname,
                                 "tel": student.tel,
                                 "isOther": student.is_other,
-                                "parent":{
+                                "parent": {
                                     "accountId": student.parents[0].account_id,
-                                    "parentFirstnameTh": student.parents[0].firstname_th ?  student.parents[0].firstname_th :"" ,
-                                    "parentLastnameTh":student.parents[0].lastname_en ?  student.parents[0].lastname_en :"" ,
-                                    "parentFirstnameEn":student.parents[0].firstname_en,
-                                    "parentLastnameEn":student.parents[0].lastname_en,
+                                    "parentFirstnameTh": student.parents[0].firstname_th ? student.parents[0].firstname_th : "",
+                                    "parentLastnameTh": student.parents[0].lastname_en ? student.parents[0].lastname_en : "",
+                                    "parentFirstnameEn": student.parents[0].firstname_en,
+                                    "parentLastnameEn": student.parents[0].lastname_en,
                                     "parentTel": student.parents[0].tel,
-                                }  
+                                }
                             })
-                        }else{
+                        } else {
                             students.push({
                                 "accountId": student.account_id ? student.account_id : "",
                                 "userName": student.username,
@@ -474,19 +474,19 @@ const orderModules = {
                                 "lastNameTh": student.lastname,
                                 "tel": student.tel,
                                 "isOther": student.is_other,
-                                "parent":{}
+                                "parent": {}
                             })
                         }
                     })
                     payload.courses.push({
-                        "courseId" :  course.course_id ,
+                        "courseId": course.course_id,
                         "coursePackageOptionId": course.option.course_package_option_id,
-                        "dayName" : course.day?.dayName ? course.day.dayName : course.day.day ,
+                        "dayName": course.day?.dayName ? course.day.dayName : course.day.day,
                         "dayOfWeekId": course?.time?.timeData ? course.time.timeData.filter(v => v.coach_id === course.coach_id)[0].dayOfWeekId : course.time.dayOfWeekId,
-                        "timeId":  course?.time?.timeData ? course.time.timeData.filter(v => v.coach_id === course.coach_id)[0].timeId : course.time.timeId,
+                        "timeId": course?.time?.timeData ? course.time.timeData.filter(v => v.coach_id === course.coach_id)[0].timeId : course.time.timeId,
                         "time": course.time,
                         "startDate": course.start_date,
-                        "remark": course.remark? course.remark : "",
+                        "remark": course.remark ? course.remark : "",
                         "price": course.option?.net_price ? course.option.net_price : course.price,
                         "coach": {
                             "accountId": course.coach_id ? course.coach_id : course.coach,
@@ -495,23 +495,23 @@ const orderModules = {
                         "student": students
                     })
                     let price = course.option?.net_price ? course.option.net_price : course.price
-                    if((course.price * course.students.length) !== price ){
-                        total_price =  total_price + (price * course.students.length )
-                    }else{
-                        total_price =  total_price + price
+                    if ((course.price * course.students.length) !== price) {
+                        total_price = total_price + (price * course.students.length)
+                    } else {
+                        total_price = total_price + price
                     }
-                   
+
                 })
                 payload.totalPrice = total_price
                 let config = {
-                    headers:{
-                        "Access-Control-Allow-Origin" : "*",
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
                         "Content-type": "Application/json",
-                        'Authorization' : `Bearer ${VueCookie.get("token")}`
+                        'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/regis/course`,payload , config)
-                if(data.statusCode === 201){
+                let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/regis/course`, payload, config)
+                if (data.statusCode === 201) {
                     let payment_payload = {
                         "orderId": data.data.orderNumber,
                         "total": data.data.totalPrice,
@@ -520,21 +520,21 @@ const orderModules = {
                         "vatRate": 0,
                         "orderDesc": ""
                     }
-                    
+
                     let user_data = JSON.parse(localStorage.getItem("userDetail"))
                     const userLogin = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${user_data.account_id}`,)
-                    if(userLogin.data.statusCode === 200){
+                    if (userLogin.data.statusCode === 200) {
                         let roles = []
                         if (userLogin.data.data.userRoles.length > 0) {
                             userLogin.data.data.userRoles.forEach((role) => {
                                 roles.push(role.roleId)
                             });
-                         }
+                        }
                         let payload = {
                             account_id: userLogin.data.data.userOneId,
                             email: userLogin.data.data.email,
-                            username : user_data.username,
-                            password :  user_data.password,
+                            username: user_data.username,
+                            password: user_data.password,
                             first_name_en: userLogin.data.data.firstNameEng,
                             first_name_th: userLogin.data.data.firstNameTh,
                             last_name_en: userLogin.data.data.lastNameEng,
@@ -545,91 +545,91 @@ const orderModules = {
                         }
                         localStorage.setItem("userDetail", JSON.stringify(payload))
                     }
-                    if(order.type !== "addStudent"){
-                        let payment = await axios.post(`${process.env.VUE_APP_URL}/api/v1/payment/code`,payment_payload)
-                        if(payment.data.statusCode === 201){
+                    if (order.type !== "addStudent") {
+                        let payment = await axios.post(`${process.env.VUE_APP_URL}/api/v1/payment/code`, payment_payload)
+                        if (payment.data.statusCode === 201) {
                             window.location.href = payment.data.data
-                            setTimeout(()=>{
+                            setTimeout(() => {
                                 localStorage.removeItem("Order")
                                 context.commit("SetResetCourseData")
-                                context.commit("SetOrder",{
-                                    type:"",
-                                    order_step : 0,
+                                context.commit("SetOrder", {
+                                    type: "",
+                                    order_step: 0,
                                     order_number: "",
-                                    courses:[],
-                                    created_by : "",
+                                    courses: [],
+                                    created_by: "",
                                     payment_status: "",
                                     payment_type: "",
                                     total_price: 0,
                                 })
                                 context.commit("SetOrderIsLoading", false)
-                            },500)
+                            }, 500)
                         }
-                    }else{
-                        if(order.payment_status === "paid"){
+                    } else {
+                        if (order.payment_status === "paid") {
                             let payment_payload = {
                                 "orderId": data.data.orderNumber,
                                 "paymentType": order.payment_type,
                                 "total": data.data.totalPrice,
-                                "recipient" : user_data.account_id,
+                                "recipient": user_data.account_id,
                             }
                             let endpoint = process.env.VUE_APP_URL
-                            let  payment = await axios.patch(`${endpoint}/api/v1/payment/data/${data.data.orderNumber}`,payment_payload)
-                            if(payment.data.statusCode === 200){
+                            let payment = await axios.patch(`${endpoint}/api/v1/payment/data/${data.data.orderNumber}`, payment_payload)
+                            if (payment.data.statusCode === 200) {
                                 Swal.fire({
-                                    icon:"success",
-                                    text: "ทำรายการสำเร็จ",
+                                    icon: "success",
+                                    title: "ทำรายการสำเร็จ",
                                     showDenyButton: false,
                                     showCancelButton: false,
                                     showConfirmButton: false,
                                     timer: 3000,
                                     timerProgressBar: true
-                              })
-                                        router.replace({name : "Finance"})
-                                        localStorage.removeItem("Order")
-                                        context.commit("SetResetCourseData")
-                                        context.commit("SetOrder",{
-                                            type:"",
-                                            order_step : 0,
-                                            order_number: "",
-                                            courses:[],
-                                            created_by : "",
-                                            payment_status: "",
-                                            payment_type: "",
-                                            total_price: 0,
-                                        })
-                                        context.commit("SetOrderIsLoading", false)
+                                })
+                                router.replace({ name: "Finance" })
+                                localStorage.removeItem("Order")
+                                context.commit("SetResetCourseData")
+                                context.commit("SetOrder", {
+                                    type: "",
+                                    order_step: 0,
+                                    order_number: "",
+                                    courses: [],
+                                    created_by: "",
+                                    payment_status: "",
+                                    payment_type: "",
+                                    total_price: 0,
+                                })
+                                context.commit("SetOrderIsLoading", false)
                             }
-                        }else{
+                        } else {
                             Swal.fire({
-                                icon:"success",
-                                text: "ทำรายการสำเร็จ",
+                                icon: "success",
+                                title: "ทำรายการสำเร็จ",
                                 showDenyButton: false,
                                 showCancelButton: false,
                                 showConfirmButton: false,
                                 timer: 3000,
                                 timerProgressBar: true
                             })
-                                    router.replace({name : "Finance"})
-                                    localStorage.removeItem("Order")
-                                    context.commit("SetResetCourseData")
-                                    context.commit("SetOrder",{
-                                        type:"",
-                                        order_step : 0,
-                                        order_number: "",
-                                        courses:[],
-                                        created_by : "",
-                                        payment_status: "",
-                                        payment_type: "",
-                                        total_price: 0,
-                                    })
-                                    context.commit("SetOrderIsLoading", false)
+                            router.replace({ name: "Finance" })
+                            localStorage.removeItem("Order")
+                            context.commit("SetResetCourseData")
+                            context.commit("SetOrder", {
+                                type: "",
+                                order_step: 0,
+                                order_number: "",
+                                courses: [],
+                                created_by: "",
+                                payment_status: "",
+                                payment_type: "",
+                                total_price: 0,
+                            })
+                            context.commit("SetOrderIsLoading", false)
                         }
-                    }  
-                }    
-            }catch(error){
+                    }
+                }
+            } catch (error) {
                 context.commit("SetOrderIsLoading", false)
-                if(error.response.data.message == "Cannot register , fail at course monitor , course-coach or seats are full"){
+                if (error.response.data.message == "Cannot register , fail at course monitor , course-coach or seats are full") {
                     Swal.fire({
                         icon: "error",
                         title: "ไม่สามารถลงทะเบียนได้",
@@ -637,7 +637,7 @@ const orderModules = {
                         showCancelButton: false,
                         confirmButtonText: "ตกลง",
                     })
-                }else if(error.response.data.message === "duplicate pending order"){
+                } else if (error.response.data.message === "duplicate pending order") {
                     Swal.fire({
                         icon: "error",
                         title: "ไม่สามารถลงทะเบียนได้",
@@ -645,21 +645,21 @@ const orderModules = {
                         showCancelButton: false,
                         confirmButtonText: "ตกลง",
                     })
-                }else if(error.response.data.message === "User is duplicate in this course. Cannot enroll again"){
+                } else if (error.response.data.message === "User is duplicate in this course. Cannot enroll again") {
                     Swal.fire({
                         icon: "error",
                         title: "ผู้ใช้ซ้ำกันในหลักสูตรนี้ ไม่สามารถลงทะเบียนได้",
                         showCancelButton: false,
                         confirmButtonText: "ตกลง",
                     })
-                }else if(error.response.data.message === "The price is not correct!!"){
+                } else if (error.response.data.message === "The price is not correct!!") {
                     Swal.fire({
                         icon: "error",
                         title: "ราคาไม่ถูกต้อง ไม่สามารถดำเนินการชำระได้",
                         showCancelButton: false,
                         confirmButtonText: "ตกลง",
                     })
-                }else{
+                } else {
                     Swal.fire({
                         icon: "error",
                         title: "เกิดข้อผิดพลาด",
@@ -669,40 +669,40 @@ const orderModules = {
                 }
             }
         },
-        async updateOrderStatus(context,{order_detail}){
+        async updateOrderStatus(context, { order_detail }) {
             let payload = {
                 paymentStatus: order_detail.paymentStatus,
                 paymentType: order_detail.paymentType,
             }
             let config = {
-                headers:{
-                    "Access-Control-Allow-Origin" : "*",
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
                     "Content-type": "Application/json",
-                    'Authorization' : `Bearer ${VueCookie.get("token")}`
+                    'Authorization': `Bearer ${VueCookie.get("token")}`
                 }
             }
-            let {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/update/${order_detail.orderNumber}`, payload, config)
-            if(data.statusCode === 200){
+            let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/update/${order_detail.orderNumber}`, payload, config)
+            if (data.statusCode === 200) {
                 await Swal.fire({
-                    icon:"success",
+                    icon: "success",
                     text: "ยกเลิกคำสั่งซื้อสำเร็จ",
                     showDenyButton: false,
                     showCancelButton: false,
                     confirmButtonText: "ตกลง",
                 }).then(async (result) => {
                     if (result.isConfirmed) {
-                        context.dispatch("GetOrderDetail",{order_number : order_detail.orderNumber})
+                        context.dispatch("GetOrderDetail", { order_number: order_detail.orderNumber })
                     }
-                })        
+                })
             }
         },
-        async updatePayment(context, {order_data}){
-            try{
+        async updatePayment(context, { order_data }) {
+            try {
                 let config = {
-                    headers:{
-                        "Access-Control-Allow-Origin" : "*",
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
                         "Content-type": "Application/json",
-                        'Authorization' : `Bearer ${VueCookie.get("token")}`
+                        'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
                 let payment_payload = {
@@ -710,44 +710,44 @@ const orderModules = {
                     "paymentType": order_data.paymentType,
                     "total": order_data.totalPrice,
                 }
-                let  {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/payment/data/${order_data.orderNumber}`, payment_payload, config)
-                if(data.statusCode === 200){
+                let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/payment/data/${order_data.orderNumber}`, payment_payload, config)
+                if (data.statusCode === 200) {
                     await Swal.fire({
-                        icon:"success",
+                        icon: "success",
                         text: "ยืนยันการชำระเงินเรียบร้อย",
                         showDenyButton: false,
                         showCancelButton: false,
                         confirmButtonText: "ตกลง",
                     }).then(async (result) => {
                         if (result.isConfirmed) {
-                            context.dispatch("GetOrderDetail",{order_number : order_data.orderNumber})
+                            context.dispatch("GetOrderDetail", { order_number: order_data.orderNumber })
                         }
-                    })        
+                    })
                 }
-            }catch(error){
+            } catch (error) {
                 Swal.fire({
-                  icon:"error",
-                  title: "เกิดข้อผิดพลาด"
-              })
+                    icon: "error",
+                    title: "เกิดข้อผิดพลาด"
+                })
             }
         },
-        async savePayment(context, {paymnet_data}){
-            try{
+        async savePayment(context, { paymnet_data }) {
+            try {
                 let payment_payload = {
                     "orderId": paymnet_data.orderNumber,
-                    "total":paymnet_data.totalPrice,
+                    "total": paymnet_data.totalPrice,
                     "subtotal": 0.00,
                     "vat": 0,
                     "vatRate": 0,
                     "orderDesc": ""
                 }
-                let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/payment/code`,payment_payload)
-                if(data.statusCode === 201){
+                let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/payment/code`, payment_payload)
+                if (data.statusCode === 201) {
                     window.location.href = data.data
                 }
-            }catch(error){
+            } catch (error) {
                 Swal.fire({
-                    icon:"error",
+                    icon: "error",
                     text: `เกิดข้อผิดพลาด ${error.message}`,
                     showDenyButton: false,
                     showCancelButton: false,
@@ -756,150 +756,150 @@ const orderModules = {
             }
         },
         async GetCartList(context, account_id) {
-            context.commit("SetCartListIsLoading",true)
+            context.commit("SetCartListIsLoading", true)
             try {
                 let config = {
-                    headers:{
-                        "Access-Control-Allow-Origin" : "*",
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
                         "Content-type": "Application/json",
-                        'Authorization' : `Bearer ${VueCookie.get("token")}`
+                        'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/cart/${account_id}`,config)
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/cart/${account_id}`, config)
                 if (data.statusCode === 200) {
                     for await (const item of data.data) {
                         item.course_img = `${process.env.VUE_APP_URL}/api/v1/files/${item.course_img}`
-                      
-                        if(item.course_type_id === "CT_1"){
+
+                        if (item.course_type_id === "CT_1") {
                             let discount = item.option.discount ? item.option.discount_price : 0
-                            item.option.net_price_unit = item.option.price_unit / item.option.amount 
-                            item.option.net_price = (item.option.price_unit - discount)*item.students.length
-                        }else{
+                            item.option.net_price_unit = item.option.price_unit / item.option.amount
+                            item.option.net_price = (item.option.price_unit - discount) * item.students.length
+                        } else {
                             item.net_price = item.price * item.students.length
                         }
                     }
                     context.commit("SetCartList", data.data)
-                    setTimeout(()=>{
-                        context.commit("SetCartListIsLoading",false)
-                    },200)
-                   
+                    setTimeout(() => {
+                        context.commit("SetCartListIsLoading", false)
+                    }, 200)
+
                 } else {
                     throw { error: data }
                 }
             } catch (error) {
-                context.commit("SetCartListIsLoading",false)
+                context.commit("SetCartListIsLoading", false)
             }
 
         },
-        async DeleteCart(context, {cart_id, account_id}){
-            context.commit("SetCartListIsLoading",true)
-            try{
+        async DeleteCart(context, { cart_id, account_id }) {
+            context.commit("SetCartListIsLoading", true)
+            try {
                 let config = {
-                    headers:{
-                        "Access-Control-Allow-Origin" : "*",
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
                         "Content-type": "Application/json",
-                        'Authorization' : `Bearer ${VueCookie.get("token")}`
+                        'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                cart_id = cart_id.replaceAll(" ","")
-                let {data} = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/order/cart/${cart_id}`,config)
-                if(data.statusCode === 200){
+                cart_id = cart_id.replaceAll(" ", "")
+                let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/order/cart/${cart_id}`, config)
+                if (data.statusCode === 200) {
                     let config = {
-                        headers:{
-                            "Access-Control-Allow-Origin" : "*",
+                        headers: {
+                            "Access-Control-Allow-Origin": "*",
                             "Content-type": "Application/json",
-                            'Authorization' : `Bearer ${VueCookie.get("token")}`
+                            'Authorization': `Bearer ${VueCookie.get("token")}`
                         }
                     }
-                    let carts = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/cart/${account_id}`,config)
+                    let carts = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/cart/${account_id}`, config)
                     if (carts.data.statusCode === 200) {
                         for (const item of carts.data.data) {
                             item.course_img = `${process.env.VUE_APP_URL}/api/v1/files/${item.course_img}`
-                            if(item.course_type_id === "CT_1"){
+                            if (item.course_type_id === "CT_1") {
                                 let discount = item.option.discount ? item.option.discount_price : 0
-                                item.option.net_price_unit = item.option.price_unit / item.option.amount 
+                                item.option.net_price_unit = item.option.price_unit / item.option.amount
                                 item.option.net_price = item.option.price_unit - discount
-                            }else{
-                                item.net_price = item.price * item.students.length 
+                            } else {
+                                item.net_price = item.price * item.students.length
                             }
                         }
                         context.commit("SetCartList", carts.data.data)
-                        context.commit("SetCartListIsLoading",false)
+                        context.commit("SetCartListIsLoading", false)
                     } else {
                         throw { error: carts }
                     }
-                }else{
-                   throw {error :data }
+                } else {
+                    throw { error: data }
                 }
-            }catch(error){
-                context.commit("SetCartListIsLoading",false)
-                
+            } catch (error) {
+                context.commit("SetCartListIsLoading", false)
+
             }
         },
         // RESERVE COURSE
-        async CreateReserveCourse(context,{ course_data }){
-            try{
+        async CreateReserveCourse(context, { course_data }) {
+            try {
                 let count = 0
-                 for await (let student of course_data.students){
+                for await (let student of course_data.students) {
                     let payload = {
                         "studentId": student.account_id,
                         "coursePackageOptionId": null,
                         "dayOfWeekId": null,
                         "timeId": null,
-                        "courseId": course_data.course_id,  
+                        "courseId": course_data.course_id,
                         "parentId": null,
                         "coachId": course_data.coach_id ? course_data.coach_id : null,
                         "orderTmpId": null,
                     }
-                    if(course_data.course_type_id === "CT_1"){
-                        payload.dayOfWeekId =  course_data?.time?.timeData ? course_data.time.timeData.filter(v => v.coach_id === course_data.coach_id)[0].dayOfWeekId : course_data.time.dayOfWeekId
+                    if (course_data.course_type_id === "CT_1") {
+                        payload.dayOfWeekId = course_data?.time?.timeData ? course_data.time.timeData.filter(v => v.coach_id === course_data.coach_id)[0].dayOfWeekId : course_data.time.dayOfWeekId
                         payload.coursePackageOptionId = course_data.option.course_package_option_id
-                        payload.timeId =  course_data?.time?.timeData ? course_data.time.timeData.filter(v => v.coach_id === course_data.coach_id)[0].timeId : course_data.time.timeId
+                        payload.timeId = course_data?.time?.timeData ? course_data.time.timeData.filter(v => v.coach_id === course_data.coach_id)[0].timeId : course_data.time.timeId
                     }
                     let config = {
-                        headers:{
-                            "Access-Control-Allow-Origin" : "*",
+                        headers: {
+                            "Access-Control-Allow-Origin": "*",
                             "Content-type": "Application/json",
-                            'Authorization' : `Bearer ${VueCookie.get("token")}`
+                            'Authorization': `Bearer ${VueCookie.get("token")}`
                         }
-                      }
-                    let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,payload, config)
-                    if(data.statusCode === 201){
+                    }
+                    let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/reserve/create`, payload, config)
+                    if (data.statusCode === 201) {
                         count = count + 1
-                    }else{
-                        throw {error : data.data} 
+                    } else {
+                        throw { error: data.data }
                     }
                 }
                 if (count === course_data.students.length) {
                     await Swal.fire({
-                        icon:"success",
+                        icon: "success",
                         text: "จองคอร์สสำเร็จ เจ้าหน้าที่จะติดต่อกลับภายหลัง",
                         showDenyButton: false,
                         showCancelButton: false,
                         confirmButtonText: "ตกลง",
                     }).then(async (result) => {
                         if (result.isConfirmed) {
-                            router.replace({name : "UserKingdom"})
+                            router.replace({ name: "UserKingdom" })
                         }
-                    })        
+                    })
                 }
-               
-            }catch(error){
+
+            } catch (error) {
                 Swal.fire({
-                  icon:"error",
-                  title: "เกิดข้อผิดพลาด"
-              })
+                    icon: "error",
+                    title: "เกิดข้อผิดพลาด"
+                })
             }
         },
-        async GetReserceByCreatedBy(context,{account_id}){
-            try{
-                let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/byCreatedBy/${account_id}`)
-                if(data.statusCode === 200){
-                    context.commit("SetReserveList",data.data)
-                }   
-            }catch(error){
+        async GetReserceByCreatedBy(context, { account_id }) {
+            try {
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/byCreatedBy/${account_id}`)
+                if (data.statusCode === 200) {
+                    context.commit("SetReserveList", data.data)
+                }
+            } catch (error) {
                 await Swal.fire({
-                    icon:"error",
+                    icon: "error",
                     text: `เกิดข้อผิดพลาด${error.message}`,
                     showDenyButton: false,
                     showCancelButton: false,
@@ -909,13 +909,13 @@ const orderModules = {
         }
     },
     getters: {
-        orderHistory(state){
+        orderHistory(state) {
             return state.order_history
         },
-        orderHistoryIsLoading(state){
+        orderHistoryIsLoading(state) {
             return state.order_history_is_loading
         },
-        getReserveList(state){
+        getReserveList(state) {
             return state.reserve_list
         },
         getOrder(state) {
@@ -924,31 +924,31 @@ const orderModules = {
         getCourseOrder(state) {
             return state.course_order
         },
-        getOrders(state){
+        getOrders(state) {
             return state.orders
         },
-        getOrderDetail(state){
+        getOrderDetail(state) {
             return state.order_detail
         },
-        getStudents(state){
+        getStudents(state) {
             return state.students
         },
-        getOrderIsLoading(state){
+        getOrderIsLoading(state) {
             return state.order_is_loading
         },
-        getOrdersIsLoading(state){
+        getOrdersIsLoading(state) {
             return state.orders_is_loading
         },
-        getRelations(state){
+        getRelations(state) {
             return state.relations
         },
         getCartList(state) {
             return state.cart_list
         },
-        getStudentList(state){
-          return state.student_list
+        getStudentList(state) {
+            return state.student_list
         },
-        getCartListIsLoading(state){
+        getCartListIsLoading(state) {
             return state.cart_list_is_loading
         }
     },

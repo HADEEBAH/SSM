@@ -1162,11 +1162,7 @@
                 <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                   <v-row>
                     <v-col cols="auto" class="pr-2">
-                      <v-img
-                        height="35"
-                        width="26"
-                        src="@/assets/coachLeave/file-pdf.png"
-                      />
+                      <imgFileType :mime_type="file.fileType"></imgFileType>
                     </v-col>
                     <v-col class="px-2">
                       <span class="font-bold">{{ file.fileName }}</span
@@ -1722,7 +1718,7 @@ export default {
     closeDialogLeaveDetail() {
       this.show_leave_detail = false;
       this.edited_coach_leave_data = {};
-      this.attachment_leave = [];
+      // this.attachment_leave = [];
     },
     openFileSelector() {
       this.$refs.fileInput.click();

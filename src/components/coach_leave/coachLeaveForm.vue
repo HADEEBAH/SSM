@@ -1,7 +1,7 @@
 <template>
   <v-form ref="form_coach_leave" v-model="form_coach_leave">
     <v-card flat class="pa-0">
-      <v-card-title class="d-flex justify-center"> แบบฟอร์มขอลา </v-card-title>
+      <v-card-title class="d-flex justify-center"> แบบฟอร์มขอลา</v-card-title>
       <v-card-text>
         <!-- DATE LEAVE AND PERIOD -->
         <v-row dense v-if="admin">
@@ -42,7 +42,6 @@
                       placeholder="เลือกวันที่เริ่มต้น"
                       v-bind="attrs"
                       v-on="on"
-                      color="#FF6B81"
                     >
                       <template v-slot:append>
                         <v-icon
@@ -81,7 +80,6 @@
                       placeholder="เลือกวันที่สิ้นสุด"
                       v-bind="attrs"
                       v-on="on"
-                      color="#FF6B81"
                     >
                       <template v-slot:append>
                         <v-icon
@@ -125,7 +123,6 @@
               item-text="label"
               item-value="value"
               v-model="coach_leave_data.period"
-              color="#FF6B81"
             ></v-select>
           </v-col>
         </v-row>
@@ -142,7 +139,6 @@
               item-value="value"
               v-model="coach_leave_data.leave_type"
               @change="validateCoachLeave"
-              color="#FF6B81"
             ></v-select>
           </v-col>
         </v-row>
@@ -212,7 +208,6 @@
                         @change="validateCoachLeave"
                         item-value="my_course_id"
                         item-text="course_name"
-                        color="#ff6b81"
                       ></v-select>
                     </v-col>
                   </v-row>
@@ -235,7 +230,6 @@
                         item-value="accountId"
                         item-text="fullNameTh"
                         v-model="course.substitute_coach_id"
-                        color="#ff6b81"
                       >
                       </v-select>
                     </v-col>
@@ -260,7 +254,6 @@
                             v-bind="attrs"
                             v-on="on"
                             :value="course.compensation_date_str"
-                            color="#ff6b81"
                           >
                             <template v-slot:append>
                               <v-icon
@@ -387,11 +380,7 @@
         <v-row dense>
           <v-col>
             รายละเอียดการลา
-            <v-textarea
-              v-model="coach_leave_data.remark"
-              outlined
-              color="#FF6B81"
-            ></v-textarea>
+            <v-textarea v-model="coach_leave_data.remark" outlined></v-textarea>
           </v-col>
         </v-row>
         <v-card flat class="mb-3">
@@ -422,7 +411,7 @@
                   ref="fileInput"
                   type="file"
                   multiple
-                  @change="uploadFile"
+                  @change="uploadFile($event)"
                   style="display: none"
                 />
               </v-col>
@@ -446,7 +435,7 @@
                   <v-img
                     height="35"
                     width="26"
-                    src="@/assets/coachLeave/file-pdf.png"
+                    src="@/assets/coachLeave/file-other.svg"
                   />
                 </v-col>
                 <v-col class="px-2">
@@ -465,6 +454,7 @@
             </v-card-text>
           </v-card>
         </div>
+
         <v-row>
           <v-col cols="12" sm align="right">
             <v-btn text color="#ff6b81" @click="closeDialogLeaveForm()"
@@ -856,14 +846,23 @@ export default {
       });
     },
     uploadFile(event) {
-      if (CheckFileSize(this.file, event.target.id) === true) {
-        const files = this.$refs.fileInput.files;
-        if (files.length > 0) {
-          for (let i = 0; i < files.length; i++) {
+      const files = this.$refs.fileInput.files;
+      if (files.length > 0) {
+        for (let i = 0; i < files.length; i++) {
+          if (CheckFileSize(files[i], event.target.id) === true) {
             this.selected_files.push(files[i]);
+            // this.comment_dialog_tmp.files.push(files[i]);
           }
         }
       }
+      // if (CheckFileSize(this.file, event.target.id) === true) {
+      //   const files = this.$refs.fileInput.files;
+      //   if (files.length > 0) {
+      //     for (let i = 0; i < files.length; i++) {
+      //       this.selected_files.push(files[i]);
+      //     }
+      //   }
+      // }
     },
     openFileSelector() {
       this.$refs.fileInput.click();
