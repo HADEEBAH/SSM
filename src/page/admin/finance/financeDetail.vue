@@ -220,9 +220,17 @@
                   v-for="(status, index) in payment_status.filter(
                     (v) =>
                       v.value ===
-                      (['QR Code Payment', 'Internet Banking', 'Corporate Banking'].some(v => v == order_detail.paymentType)
+                      ([
+                        'QR Code Payment',
+                        'Internet Banking',
+                        'Corporate Banking',
+                      ].some((v) => v == order_detail.paymentType)
                         ? (order_detail.paymentType = 'transfer')
-                        : ['Credit Card', 'Credit Card Installment'].some(v => v == order_detail.paymentType) ?  order_detail.paymentType = 'Credit Card' : order_detail.paymentType)
+                        : ['Credit Card', 'Credit Card Installment'].some(
+                            (v) => v == order_detail.paymentType
+                          )
+                        ? (order_detail.paymentType = 'Credit Card')
+                        : order_detail.paymentType)
                   )"
                   :key="index"
                   class="cursor-pointer mb-3"
@@ -560,11 +568,7 @@ export default {
                       fontSize: 10,
                     },
                     {
-                      text: `วันที่: ${new Date().toLocaleDateString("th-TH", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })} ${new Date().toLocaleTimeString("en-GB")}น.`,
+                      text: `วันที่: ${moment().format("DD/MM/YYYY")}`,
                       margin: [0, 5],
                       color: "#318ce7",
                       fontSize: 10,
@@ -749,14 +753,22 @@ export default {
                   text: "วันที่",
                   margin: [0, 5],
                 },
+                // {
+                //   text: `${new Date(
+                //     this.order_detail.payment.paid_date
+                //   ).toLocaleDateString("th-TH", {
+                //     year: "numeric",
+                //     month: "long",
+                //     day: "numeric",
+                //   })}`,
+                //   margin: [0, 5],
+                //   color: "#ff6b81",
+                //   alignment: "center",
+                // },
                 {
-                  text: `${new Date(
-                    this.order_detail.payment.paid_date
-                  ).toLocaleDateString("th-TH", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}`,
+                  text: `${moment(this.order_detail.payment.paid_date).format(
+                    "DD/MM/YYYY HH:mm"
+                  )}น.`,
                   margin: [0, 5],
                   color: "#ff6b81",
                   alignment: "center",
@@ -917,7 +929,7 @@ export default {
           {
             stack: [
               {
-                text: `${course.course.categoryNameTh}(${this.dayOfWeekArray(
+                text: `${course.course.courseNameTh}(${this.dayOfWeekArray(
                   course.course.dayOfWeekName
                 )} (${course.course.start} - ${course.course.end}))`,
                 color: "#ff6b81",
@@ -938,7 +950,7 @@ export default {
           {
             text: `${course.students.length}`,
             color: "#ff6b81",
-            alignment: "right",
+            alignment: "center",
           },
           {
             text: `${(
