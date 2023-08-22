@@ -2,6 +2,37 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import router from "@/router";
 import VueCookie from "vue-cookie"
+function dayOfWeekArray(day) {
+    let days = day
+    const weekdays = [
+        "วันอาทิตย์",
+        "วันจันทร์",
+        "วันอังคาร",
+        "วันพุธ",
+        "วันพฤหัสบดี",
+        "วันศุกร์",
+        "วันเสาร์",
+    ];
+    days.sort();
+    let ranges = [];
+    if (days[0]) {
+        let rangeStart = parseInt(days[0]);
+        let prevDay = rangeStart;
+        for (let i = 1; i < days.length; i++) {
+        const day = parseInt(days[i]);
+        if (day === prevDay + 1) {
+            prevDay = day;
+        } else {
+            const rangeEnd = prevDay;
+            ranges.push({ start: rangeStart, end: rangeEnd });
+            rangeStart = day;
+            prevDay = day;
+        }
+        }
+        ranges.push({ start: rangeStart, end: prevDay });
+        return ranges.map(({ start, end }) => start === end ? weekdays[start] : `${weekdays[start]} - ${weekdays[end]}`).join(', ')
+    }
+}
 const orderModules = {
     namespaced: true,
     state: {
@@ -481,7 +512,7 @@ const orderModules = {
                     payload.courses.push({
                         "courseId": course.course_id,
                         "coursePackageOptionId": course.option.course_package_option_id,
-                        "dayName": course.day?.dayName ? course.day.dayName : course.day.day,
+                        "dayName": course.day?.dayName ? course.day.dayName : dayOfWeekArray(course.day.day),
                         "dayOfWeekId": course?.time?.timeData ? course.time.timeData.filter(v => v.coach_id === course.coach_id)[0].dayOfWeekId : course.time.dayOfWeekId,
                         "timeId": course?.time?.timeData ? course.time.timeData.filter(v => v.coach_id === course.coach_id)[0].timeId : course.time.timeId,
                         "time": course.time,
@@ -500,7 +531,6 @@ const orderModules = {
                     } else {
                         total_price = total_price + price
                     }
-
                 })
                 payload.totalPrice = total_price
                 let config = {
@@ -510,6 +540,7 @@ const orderModules = {
                         'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
+                // console.log(payload)
                 let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/order/regis/course`, payload, config)
                 if (data.statusCode === 201) {
                     let payment_payload = {
