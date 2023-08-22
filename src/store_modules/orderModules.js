@@ -867,6 +867,37 @@ const orderModules = {
 
             }
         },
+        async userUpdateOrderCancelStatus(context,{order_id}){
+            try{
+                let config = {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-type": "Application/json",
+                        'Authorization': `Bearer ${VueCookie.get("token")}`
+                    }
+                }
+                const updateOrder = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/updateStatus/${order_id}`,{},config)
+                if (updateOrder.data.statusCode === 200) {
+                    await Swal.fire({
+                        icon: "success",
+                        title: "ทำรายการสำเร็จ",
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true
+                    })
+                    context.dispatch("getHistory")
+                }
+            }catch(error){
+                Swal.fire({
+                    icon: "error",
+                    title: "เกิดข้อผิดพลาด",
+                    showCancelButton: false,
+                    confirmButtonText: "ตกลง",
+                })
+            }
+        },
         // RESERVE COURSE
         async CreateReserveCourse(context, { course_data }) {
             try {
