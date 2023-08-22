@@ -4,7 +4,7 @@
     <v-row dense class="mb-3">
       <v-col
         cols="12"
-        sm="4"
+        sm="3"
         v-for="(tab_data, tab_index) in tabs"
         :key="tab_index"
       >
@@ -938,6 +938,47 @@
         </v-card-text>
       </v-card>
     </div>
+    <div v-if="tab === 'student lists'">
+      <v-row>
+        <v-col cols="auto"> ข้อมูลการสอนของฉัน : </v-col>
+        <v-col class="font-bold">
+          {{ profile_detail.firstNameTh }}
+        </v-col>
+      </v-row>
+      <!-- เลือกคอร์ส -->
+      <v-row dense>
+        <v-col>
+          <span class="font-bold">เลือกคอร์ส</span>
+          <v-autocomplete
+            v-model="filter_course"
+            item-text="name"
+            item-value="course_id"
+            :items="my_courses.filter((v) => !v.type)"
+            outlined
+            dense
+          >
+            <template v-slot:no-data>
+              <v-row dense>
+                <v-col align="center">ไม่พบข้อมูล</v-col>
+              </v-row>
+            </template>
+          </v-autocomplete>
+        </v-col>
+      </v-row>
+
+      <!-- TABLE -->
+      <v-card>
+        <v-card-text>
+          <v-data-table
+            class="elevation-1 header-table"
+            :headers="student_list"
+            :items="student_data"
+          >
+          </v-data-table>
+        </v-card-text>
+      </v-card>
+    </div>
+
     <!-- CREATE :: LEAVE -->
     <v-dialog
       persistent
@@ -1355,6 +1396,7 @@ export default {
       { label: "รายการสอนวันนี้", value: "teaching list" },
       { label: "การสอนของฉัน", value: "my teaching" },
       { label: "ลงเวลาเพื่อขอลา", value: "request leave" },
+      { label: "รายชื่อนักเรียน", value: "student lists" },
     ],
     time_frame_list: [
       { label: "รายวัน", value: "day" },
@@ -1395,6 +1437,43 @@ export default {
       },
       { text: "สถานะ", align: "start", sortable: false, value: "status" },
       { text: "", align: "right", sortable: false, value: "action" },
+    ],
+    student_list: [
+      { text: "ลำดับ", align: "center", sortable: false, value: "count" },
+
+      { text: "ชื่อ", align: "start", sortable: false, value: "st_name" },
+      {
+        text: "นามสกุล",
+        align: "start",
+        sortable: false,
+        value: "st_lname",
+      },
+    ],
+    student_data: [
+      {
+        st_name: "Frozen",
+        st_lname: "Yogurt",
+      },
+      {
+        st_name: "Yogurt",
+        st_lname: "Frozen",
+      },
+      {
+        st_name: "Frozen",
+        st_lname: "Yogurt",
+      },
+      {
+        st_name: "Yogurt",
+        st_lname: "Frozen",
+      },
+      {
+        st_name: "Frozen",
+        st_lname: "Yogurt",
+      },
+      {
+        st_name: "Yogurt",
+        st_lname: "Frozen",
+      },
     ],
     previewUrl: null,
     periods: [
