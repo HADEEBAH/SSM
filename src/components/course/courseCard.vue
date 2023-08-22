@@ -14,6 +14,14 @@
                 @click="removeFile"
                 ><v-icon>mdi-close</v-icon></v-btn
               >
+              <template v-slot:placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular
+                    indeterminate
+                    color="#ff6b81"
+                  ></v-progress-circular>
+                </v-row>
+              </template>
             </v-img>
           </v-col>
         </v-row>
@@ -1015,7 +1023,7 @@ export default {
     uploadFile(event) {
       this.file = this.$refs.fileInput.files[0];
       if (!this.file) return;
-      if (CheckFileSize(this.file,  event.target.id) === true) {
+      if (CheckFileSize(this.file, event.target.id) === true) {
         const fileType = this.file.type;
         if (fileType === "image/png" || fileType === "image/jpeg") {
           this.course_data.course_img = this.file;
