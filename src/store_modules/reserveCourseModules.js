@@ -61,9 +61,6 @@ const reserveCourseModules = {
             timerProgressBar: true,
             showCancelButton: false,
             showConfirmButton : false,
-            confirmButtonText: "ตกลง",
-            timer: 3000,
-            timerProgressBar: true
           })
           context.dispatch("GetReserveList")
         }
