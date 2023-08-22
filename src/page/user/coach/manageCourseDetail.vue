@@ -1751,9 +1751,15 @@ export default {
     },
     async CheckInStudents(item) {
       let student_id = [];
+      let graduate_student_id = [];
+      
       await item.map((val) => {
         student_id.push({ studentId: val.studentId });
+        if (val.totalDay - val.countCheckIn === 1) {
+          graduate_student_id.push({ studentId: val.studentId })
+        }
       });
+
       this.$refs.validate_form.validate();
       if (this.validate_form) {
         Swal.fire({
@@ -1773,11 +1779,21 @@ export default {
             });
             let payload = {
               notificationName: "แจ้งเตือนการเช็คอิน",
-              notificationDescription: `เช็คอินเรียบร้อย`,
+              notificationDescription: `เช็คอินคอร์ส ${this.course_data.course_name_th} เรียบร้อยแล้ว`,
               accountId: student_id,
               path: null,
             };
             this.sendNotification(payload);
+
+            if (graduate_student_id.length > 0) {
+              let graduate_payload = {
+                notificationName: "แจ้งเตือนการเรียน",
+                notificationDescription: `กำลังจะสำเร็จการศึกษา คอร์ส${this.course_data.course_name_th}`,
+                accountId: graduate_student_id,
+                path: null,
+              };
+              this.sendNotification(graduate_payload);
+            }
           }
         });
       }

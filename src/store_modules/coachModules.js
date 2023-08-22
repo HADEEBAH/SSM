@@ -96,24 +96,21 @@ const coachModules = {
     },
     async DeleteAssessmentPotentialFile(context, { att_assessment_id }) {
       try {
-        let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/potential/${att_assessment_id}`)
-        console.log(data)
+        await axios.delete(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/potential/${att_assessment_id}`)
       } catch (error) {
         console.log(error)
       }
     },
     async DeleteAssessmentFile(context, { att_assessment_id }) {
       try {
-        let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${att_assessment_id}`)
-        console.log(data)
+        await axios.delete(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${att_assessment_id}`)
       } catch (error) {
         console.log(error)
       }
     },
     async DeleteSummaryFile(context, { att_assessment_id }) {
       try {
-        let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/summary/${att_assessment_id}`)
-        console.log(data)
+        await axios.delete(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/summary/${att_assessment_id}`)
       } catch (error) {
         console.log(error)
       }
@@ -555,7 +552,7 @@ const coachModules = {
                         course_package_name: course.packageName,
                         course_option_name: course.optionName,
                         name: course.courseNameTh,
-                        subtitle: course.courseNameEn,
+                        subtitle: course.courseNameEng,
                         course_id: course.courseId,
                         time_id: course.timeId,
                         type: course?.compType ? course?.compType : null,
@@ -835,34 +832,31 @@ const coachModules = {
         }
         let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coach/leave`, payloadData, config)
         if (data.statusCode === 201) {
+          if (admin) {
+            let getLeavesAll = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave`, config)
+            if (getLeavesAll.data.statusCode == 200) {
+              context.commit("SetCoachLeaves", getLeavesAll.data.data)
+              context.commit("SetCoachLeavesIsLoading", false)
+            } else {
+              throw { error: getLeavesAll }
+            }
+          } else {
+            let getLeaves = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${user_detail.account_id}`, config)
+            if (getLeaves.data.statusCode === 200) {
+              context.commit("SetShowDialogCoachLeaveForm", false)
+              context.commit("SetCoachLeaves", getLeaves.data.data)
+            } else {
+              throw { error: getLeaves }
+            }
+          }
           Swal.fire({
             icon: "success",
-            title: "ส่งใบลา สำเร็จ",
-            showDenyButton: false,
+            title: "ส่งใบลาสำเร็จ",
+            timer: 3000,
+            timerProgressBar: true,
             showCancelButton: false,
-            cancelButtonText: "ยกเลิก",
-            confirmButtonText: "ตกลง",
-          }).then(async (result) => {
-            if (result.isConfirmed) {
-              if (admin) {
-                let getLeavesAll = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave`, config)
-                if (getLeavesAll.data.statusCode == 200) {
-                  context.commit("SetCoachLeaves", getLeavesAll.data.data)
-                  context.commit("SetCoachLeavesIsLoading", false)
-                } else {
-                  throw { error: getLeavesAll }
-                }
-              } else {
-                let getLeaves = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${user_detail.account_id}`, config)
-                if (getLeaves.data.statusCode === 200) {
-                  context.commit("SetShowDialogCoachLeaveForm", false)
-                  context.commit("SetCoachLeaves", getLeaves.data.data)
-                } else {
-                  throw { error: getLeaves }
-                }
-              }
-            }
-          })
+            showConfirmButton: false,
+          });
         }
       } catch (error) {
         console.log(error)
@@ -885,7 +879,6 @@ const coachModules = {
             val.index = i + 1
             return val
           })
-          console.log("object", data.data);
 
           context.commit("SetCoachLeaves", data.data)
           context.commit("SetCoachLeavesIsLoading", false)
@@ -924,8 +917,6 @@ const coachModules = {
       }
     },
     async updateStatusCoachLeaveAndCoach(context, { coach_leave_data, coach_leave_id }) {
-      console.log("coach_leave_data", coach_leave_data.status);
-      console.log("coach_leave_id", coach_leave_id);
       context.commit("SetCoachLeavesIsLoading", true)
       try {
         let config = {
@@ -952,17 +943,15 @@ const coachModules = {
             })
             context.commit("SetCoachLeavesIsLoading", false)
           } else if (coach_leave_data.status === "approved") {
+            context.dispatch("GetLeavesDetail", { coach_leave_id: coach_leave_id })
+
             Swal.fire({
               icon: "success",
               title: "ยืนยันการอนุมัติ",
-              showDenyButton: false,
+              timer: 3000,
+              timerProgressBar: true,
               showCancelButton: false,
-              cancelButtonText: "ยกเลิก",
-              confirmButtonText: "ตกลง",
-            }).then(async (result) => {
-              if (result.isConfirmed) {
-                context.dispatch("GetLeavesDetail", { coach_leave_id: coach_leave_id })
-              }
+              showConfirmButton: false,
             })
             context.commit("SetCoachLeavesIsLoading", false)
           }

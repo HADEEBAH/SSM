@@ -613,18 +613,17 @@ const CourseModules = {
         }
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-course/${course_id}`, payloadData, config)
         if (data.statusCode === 200) {
+
+          await context.dispatch("GetArtworkByCourse", { course_id: course_id })
+          await context.dispatch("GetCourse", course_id)
           Swal.fire({
             icon: "success",
             title: "แก้ไขคอร์สสำเร็จ",
             showDenyButton: false,
             showCancelButton: false,
-            confirmButtonText: "ตกลง",
-            cancelButtonText: "ยกเลิก",
-          }).then(async (result) => {
-            if (result.isConfirmed) {
-              await context.dispatch("GetArtworkByCourse", { course_id: course_id })
-              await context.dispatch("GetCourse", course_id)
-            }
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
           })
         }
       } catch (error) {
@@ -709,17 +708,15 @@ const CourseModules = {
         payloadData.append("payload", JSON.stringify(payload))
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-coach/${course_id}`, payloadData, config)
         if (data.statusCode === 200) {
+          await context.dispatch("GetCourse", course_id)
           Swal.fire({
             icon: "success",
-            title: "แก้ไขคอร์สสำเร็จ",
+            title: "แก้ไขช่วงเวลาและโค้ชสำเร็จ",
             showDenyButton: false,
             showCancelButton: false,
-            confirmButtonText: "ตกลง",
-            cancelButtonText: "ยกเลิก",
-          }).then(async (result) => {
-            if (result.isConfirmed) {
-              await context.dispatch("GetCourse", course_id)
-            }
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
           })
         }
       } catch (error) {
@@ -775,11 +772,12 @@ const CourseModules = {
         if (data.statusCode === 200) {
           Swal.fire({
             icon: "success",
-            title: "แก้ไขคอร์สสำเร็จ",
+            title: "แก้ไขแพ็กเกจสำเร็จ",
             showDenyButton: false,
             showCancelButton: false,
-            confirmButtonText: "ตกลง",
-            cancelButtonText: "ยกเลิก",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
           })
         }
       } catch (error) {
@@ -866,19 +864,20 @@ const CourseModules = {
         }
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-artwork/${course_id}`, payloadData, config)
         if (data.statusCode === 200) {
+          await context.dispatch("GetArtworkByCourse", { course_id: course_id })
+          await context.dispatch("GetCourse", course_id)
+
           Swal.fire({
             icon: "success",
-            title: "แก้ไขคอร์สสำเร็จ",
+            title: "แก้ไข Learning Journey สำเร็จ",
             showDenyButton: false,
             showCancelButton: false,
-            confirmButtonText: "ตกลง",
-            cancelButtonText: "ยกเลิก",
-          }).then(async (result) => {
-            if (result.isConfirmed) {
-              await context.dispatch("GetArtworkByCourse", { course_id: course_id })
-              await context.dispatch("GetCourse", course_id)
-            }
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
           })
+
+
         }
       } catch (error) {
         Swal.fire({
@@ -1515,16 +1514,15 @@ const CourseModules = {
         let { data } = await axios.post(process.env.VUE_APP_URL + "/api/v1/course/create", data_payload, config)
         if (data.statusCode === 201) {
           context.commit("SetCourseIsLoading", false)
+          router.replace({ name: "CourseList" })
           Swal.fire({
             icon: "success",
             title: "สร้างคอร์สสำเร็จ",
-            showDenyButton: false,
-            showCancelButton: false,
-            confirmButtonText: "ตกลง",
             timer: 3000,
-            timerProgressBar: true
-          })
-          router.replace({ name: "CourseList" })
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
         } else {
           context.commit("SetCourseIsLoading", false)
           throw { message: data }

@@ -3,6 +3,29 @@
     <v-row class="h-full">
       <v-col cols="12" sm="6" :class="MobileSize ? '' : 'h-full'">
         <v-img
+          contain
+          :class="`${
+            MobileSize ? 'rounded-lg mb-3 max-h-[180px]' : 'rounded-lg mb-3'
+          } max-h-[576px] max-w-[1024px]`"
+          :src="
+            course_data.course_img || course_data.course_img !== ''
+              ? course_data.course_img
+              : require(`@/assets/course/default_course_img.svg`)
+          "
+          max-height="500"
+          max-width="500"
+        >
+          <template v-slot:placeholder>
+            <v-row class="fill-height ma-0" align="center" justify="center">
+              <v-progress-circular
+                indeterminate
+                color="#ff6b81"
+              ></v-progress-circular>
+            </v-row>
+          </template>
+        </v-img>
+
+        <!-- <v-img
           aspect-ratio="16/9"
           :class="`${
             MobileSize ? 'rounded-lg mb-3 max-h-[180px]' : 'rounded-lg mb-3'
@@ -21,7 +44,7 @@
               ></v-progress-circular>
             </v-row>
           </template>
-        </v-img>
+        </v-img> -->
       </v-col>
       <v-col cols="12" sm="6">
         <v-row dense
@@ -245,9 +268,16 @@ import loadingOverlay from "@/components/loading/loadingOverlay.vue";
 import Swal from "sweetalert2";
 import { mapActions, mapGetters } from "vuex";
 import moment from "moment";
+// import ImgCard from "@/components/course/imgCard.vue";
+
 export default {
   name: "userCourseDetail",
-  components: { rowData, dialogCard, loadingOverlay },
+  components: {
+    rowData,
+    dialogCard,
+    loadingOverlay,
+    // ImgCard
+  },
   data: () => ({
     show_dialog: false,
     date_options: {

@@ -324,11 +324,7 @@
                     <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                       <v-row>
                         <v-col cols="auto" class="pr-2">
-                          <v-img
-                            height="35"
-                            width="26"
-                            src="@/assets/coachLeave/file-pdf.png"
-                          />
+                          <imgFileType :mime_type="file.fileType"></imgFileType>
                         </v-col>
                         <v-col class="px-2">
                           <span class="font-bold">{{ file.fileName }}</span>
@@ -448,9 +444,11 @@ import Swal from "sweetalert2";
 import { mapActions, mapGetters } from "vuex";
 import LabelCustom from "@/components/label/labelCustom.vue";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
+import imgFileType from "@/components/file_type/imgFileType.vue";
+
 export default {
   name: "leaveDetail",
-  components: { headerPage, LabelCustom, VueTimepicker },
+  components: { headerPage, LabelCustom, VueTimepicker, imgFileType },
   data: () => ({
     user_form: false,
     periods: [

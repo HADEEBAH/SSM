@@ -34,7 +34,7 @@ const reserveCourseModules = {
             item.createdByFullName = `${item.createdByData.firstNameTh} ${item.createdByData.lastNameTh}`
             item.tel = item.createdByData.tel
           })
-          console.log(data.data)
+          // console.log(data.data)
           context.commit("SetReserveList", data.data)
           context.commit("SetReserveListIsLoading", false)
         }
@@ -56,16 +56,22 @@ const reserveCourseModules = {
         if (data.statusCode == 200) {
           await Swal.fire({
             icon: "success",
-            text: "แก้ไขสำเร็จ",
-            showDenyButton: false,
+            title: "แก้ไขสำเร็จ",
+            timer: 3000,
+            timerProgressBar: true,
             showCancelButton: false,
+<<<<<<< HEAD
             confirmButtonText: "ตกลง",
             timer: 3000,
             timerProgressBar: true
+=======
+            showConfirmButton: false
+>>>>>>> develop
           })
           context.dispatch("GetReserveList")
         }
       } catch (error) {
+<<<<<<< HEAD
         // console.log(error)
         if(error.response?.data.statusCode == 400){
           if(error.response.data.message == "Cannot register , fail at course monitor , course-coach or seats are full"){
@@ -122,6 +128,12 @@ const reserveCourseModules = {
               confirmButtonText: "ตกลง",
             })
           }
+=======
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด"
+        })
+>>>>>>> develop
       }
     }
   },

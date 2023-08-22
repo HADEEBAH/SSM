@@ -135,6 +135,7 @@
                   readonly
                   dense
                   hide-details
+                  color="#ff6b81"
                 >
                 </v-text-field>
               </v-col>
@@ -153,8 +154,11 @@
                   outlined
                   readonly
                   dense
-                  append-icon="mdi-calendar"
+                  color="#ff6b81"
                 >
+                  <template v-slot:append>
+                    <v-icon :color="'#FF6B81'">mdi-calendar</v-icon>
+                  </template>
                 </v-text-field>
               </v-col>
             </v-row>
@@ -170,6 +174,7 @@
                   outlined
                   readonly
                   :value="details.startTime"
+                  color="#ff6b81"
                 >
                 </v-text-field>
               </v-col>
@@ -182,6 +187,7 @@
                   outlined
                   readonly
                   :value="details.endTime"
+                  color="#ff6b81"
                 >
                 </v-text-field>
               </v-col>
@@ -196,6 +202,7 @@
                   outlined
                   readonly
                   :value="details.startTime"
+                  color="#ff6b81"
                 >
                 </v-text-field>
               </v-col>
@@ -208,6 +215,7 @@
                   outlined
                   readonly
                   :value="details.endTime"
+                  color="#ff6b81"
                 >
                 </v-text-field>
               </v-col>
@@ -218,6 +226,7 @@
                   outlined
                   readonly
                   value="หยุดทั้งวัน"
+                  color="#ff6b81"
                 >
                 </v-text-field
               ></v-col>
@@ -234,6 +243,7 @@
                   readonly
                   :value="details.coach"
                   hide-details
+                  color="#ff6b81"
                 >
                 </v-text-field>
               </v-col>
@@ -250,6 +260,7 @@
                   readonly
                   :value="details.package"
                   hide-details
+                  color="#ff6b81"
                 >
                 </v-text-field>
               </v-col>
@@ -261,6 +272,7 @@
                   readonly
                   :value="convertDate(details.selectedDate)"
                   hide-details
+                  color="#ff6b81"
                 >
                 </v-text-field>
               </v-col>
@@ -274,6 +286,7 @@
                   readonly
                   :value="details?.itmeData?.subCoachName"
                   hide-details
+                  color="#ff6b81"
                 >
                 </v-text-field>
               </v-col>

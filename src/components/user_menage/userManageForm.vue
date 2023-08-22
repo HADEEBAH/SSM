@@ -1004,7 +1004,7 @@ export default {
       ];
       let files = this.$refs.fileInput.files[0];
 
-      if (files.size > (10240 * 1024)/2 ) {
+      if (files.size > (10240 * 1024) / 2) {
         Swal.fire({
           icon: "warning",
           title: "ขนาดไฟล์ใหญ่เกินไป",
@@ -1175,22 +1175,39 @@ export default {
 
             if (data.statusCode === 201) {
               if (data.data && data.data.message !== "Duplicate relation.") {
+                this.add_relations = false;
+                this.relation = {
+                  account_id: "",
+                  firstname_en: "",
+                  lastname_en: "",
+                  username: "",
+                  tel: "",
+                };
+                this.GetDataRelationsManagement(this.show_by_id);
                 Swal.fire({
                   icon: "success",
                   title: "บันทึกสำเร็จ",
-                }).then(async (result) => {
-                  if (result.isConfirmed) {
-                    this.add_relations = false;
-                    this.relation = {
-                      account_id: "",
-                      firstname_en: "",
-                      lastname_en: "",
-                      username: "",
-                      tel: "",
-                    };
-                    this.GetDataRelationsManagement(this.show_by_id);
-                  }
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
                 });
+                // Swal.fire({
+                //   icon: "success",
+                //   title: "บันทึกสำเร็จ",
+                // }).then(async (result) => {
+                //   if (result.isConfirmed) {
+                //     this.add_relations = false;
+                //     this.relation = {
+                //       account_id: "",
+                //       firstname_en: "",
+                //       lastname_en: "",
+                //       username: "",
+                //       tel: "",
+                //     };
+                //     this.GetDataRelationsManagement(this.show_by_id);
+                //   }
+                // });
               } else {
                 throw { error: data };
               }
@@ -1319,20 +1336,35 @@ export default {
               );
               if (data.statusCode === 200) {
                 if (data.data !== "Can not change role relations is already.") {
+                  this.$router.push({
+                    name: "UserDetail",
+                    params: {
+                      action: "view",
+                      account_id: this.$route.params.account_id,
+                    },
+                  });
                   Swal.fire({
                     icon: "success",
                     title: "บันทึกสำเร็จ",
-                  }).then(async (result) => {
-                    if (result.isConfirmed) {
-                      this.$router.push({
-                        name: "UserDetail",
-                        params: {
-                          action: "view",
-                          account_id: this.$route.params.account_id,
-                        },
-                      });
-                    }
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showCancelButton: false,
+                    showConfirmButton: false,
                   });
+                  // Swal.fire({
+                  //   icon: "success",
+                  //   title: "บันทึกสำเร็จ",
+                  // }).then(async (result) => {
+                  //   if (result.isConfirmed) {
+                  //     this.$router.push({
+                  //       name: "UserDetail",
+                  //       params: {
+                  //         action: "view",
+                  //         account_id: this.$route.params.account_id,
+                  //       },
+                  //     });
+                  //   }
+                  // });
                   this.GetShowById(this.$route.params.account_id);
                 }
               } else {

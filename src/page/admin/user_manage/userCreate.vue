@@ -763,7 +763,7 @@ export default {
       ];
       let files = this.$refs.fileInput.files[0];
 
-      if (files.size > (10240 * 1024)/2) {
+      if (files.size > (10240 * 1024) / 2) {
         Swal.fire({
           icon: "warning",
           title: "ขนาดไฟล์ใหญ่เกินไป",
@@ -856,15 +856,18 @@ export default {
 
             if (data.statusCode === 201) {
               if (data.data && data.data.message !== "Duplicate relation.") {
-                Swal.fire({
-                  icon: "success",
-                  title: " เพิ่มข้อมูลสำเร็จ",
-                }).then(async (result) => {
-                  if (result.isConfirmed) {
-                    this.$router.push({
-                      name: "UserList",
-                    });
-                  }
+                // Swal.fire({
+                //   icon: "success",
+                //   title: " เพิ่มข้อมูลสำเร็จ",
+                // }).then(async (result) => {
+                //   if (result.isConfirmed) {
+                //     this.$router.push({
+                //       name: "UserList",
+                //     });
+                //   }
+                // });
+                this.$router.push({
+                  name: "UserList",
                 });
                 this.add_relations = false;
                 this.relation = {
@@ -874,6 +877,15 @@ export default {
                   username: "",
                   tel: "",
                 };
+
+                Swal.fire({
+                  icon: "success",
+                  title: "เพิ่มข้อมูลสำเร็จ",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
               } else {
                 throw { error: data };
               }
@@ -969,16 +981,27 @@ export default {
 
             if (data.statusCode === 200) {
               if (data.data && data.message !== "Relation Already exists") {
+                this.$router.push({
+                  name: "UserList",
+                });
                 Swal.fire({
                   icon: "success",
                   title: "บันทึกสำเร็จ",
-                }).then(async (result) => {
-                  if (result.isConfirmed) {
-                    this.$router.push({
-                      name: "UserList",
-                    });
-                  }
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
                 });
+                // Swal.fire({
+                //   icon: "success",
+                //   title: "บันทึกสำเร็จ",
+                // }).then(async (result) => {
+                //   if (result.isConfirmed) {
+                //     this.$router.push({
+                //       name: "UserList",
+                //     });
+                //   }
+                // });
               } else if (
                 data.data &&
                 data.message === "Relation Already exists"

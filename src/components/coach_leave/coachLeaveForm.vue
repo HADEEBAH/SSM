@@ -1,7 +1,7 @@
 <template>
   <v-form ref="form_coach_leave" v-model="form_coach_leave">
     <v-card flat class="pa-0">
-      <v-card-title class="d-flex justify-center"> แบบฟอร์มขอลา </v-card-title>
+      <v-card-title class="d-flex justify-center"> แบบฟอร์มขอลา</v-card-title>
       <v-card-text>
         <!-- DATE LEAVE AND PERIOD -->
         <v-row dense v-if="admin">
@@ -411,7 +411,7 @@
                   ref="fileInput"
                   type="file"
                   multiple
-                  @change="uploadFile"
+                  @change="uploadFile($event)"
                   style="display: none"
                 />
               </v-col>
@@ -435,7 +435,7 @@
                   <v-img
                     height="35"
                     width="26"
-                    src="@/assets/coachLeave/file-pdf.png"
+                    src="@/assets/coachLeave/file-other.svg"
                   />
                 </v-col>
                 <v-col class="px-2">
@@ -454,6 +454,7 @@
             </v-card-text>
           </v-card>
         </div>
+
         <v-row>
           <v-col cols="12" sm align="right">
             <v-btn text color="#ff6b81" @click="closeDialogLeaveForm()"
@@ -482,9 +483,7 @@ import { dateFormatter } from "@/functions/functions";
 import { mapActions, mapGetters } from "vuex";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import moment from "moment";
-import {
-  CheckFileSize,
-} from "@/functions/functions";
+import { CheckFileSize } from "@/functions/functions";
 export default {
   name: "coachLeaveForm",
   props: {
@@ -847,14 +846,23 @@ export default {
       });
     },
     uploadFile(event) {
-      if (CheckFileSize(this.file,  event.target.id) === true) {
-        const files = this.$refs.fileInput.files;
-        if (files.length > 0) {
-          for (let i = 0; i < files.length; i++) {
+      const files = this.$refs.fileInput.files;
+      if (files.length > 0) {
+        for (let i = 0; i < files.length; i++) {
+          if (CheckFileSize(files[i], event.target.id) === true) {
             this.selected_files.push(files[i]);
+            // this.comment_dialog_tmp.files.push(files[i]);
           }
         }
       }
+      // if (CheckFileSize(this.file, event.target.id) === true) {
+      //   const files = this.$refs.fileInput.files;
+      //   if (files.length > 0) {
+      //     for (let i = 0; i < files.length; i++) {
+      //       this.selected_files.push(files[i]);
+      //     }
+      //   }
+      // }
     },
     openFileSelector() {
       this.$refs.fileInput.click();

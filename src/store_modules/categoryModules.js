@@ -76,21 +76,35 @@ const categoryModules = {
                 };
                 let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/category/${category_id}`, config)
                 if (data.statusCode === 200) {
+                    let category = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category`)
+                    if (category.data.statusCode === 200) {
+                        context.commit("SetCategorys", category.data.data)
+                    }
+
                     Swal.fire({
                         icon: "success",
                         title: "ลบรายการสำเร็จ",
-                        showDenyButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
                         showCancelButton: false,
-                        cancelButtonText: "ยกเลิก",
-                        confirmButtonText: "ตกลง",
-                    }).then(async (result) => {
-                        if (result.isConfirmed) {
-                            let category = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category`)
-                            if (category.data.statusCode === 200) {
-                                context.commit("SetCategorys", category.data.data)
-                            }
-                        }
-                    })
+                        showConfirmButton: false,
+                    });
+
+                    // Swal.fire({
+                    //     icon: "success",
+                    //     title: "ลบรายการสำเร็จ",
+                    //     showDenyButton: false,
+                    //     showCancelButton: false,
+                    //     cancelButtonText: "ยกเลิก",
+                    //     confirmButtonText: "ตกลง",
+                    // }).then(async (result) => {
+                    //     if (result.isConfirmed) {
+                    //         let category = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category`)
+                    //         if (category.data.statusCode === 200) {
+                    //             context.commit("SetCategorys", category.data.data)
+                    //         }
+                    //     }
+                    // })
                 }
             } catch (error) {
                 if (error.response.data.statusCode === 403) {

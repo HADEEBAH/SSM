@@ -316,6 +316,7 @@ export default {
                 config
               );
               if (data.statusCode === 200) {
+                this.goToManageKingdomPage();
                 Swal.fire({
                   icon: "success",
                   title: "แก้ไขอาณาจักรสำเร็จ",
@@ -323,8 +324,6 @@ export default {
                   timerProgressBar: true,
                   showCancelButton: false,
                   showConfirmButton: false,
-                }).finally(() => {
-                  this.goToManageKingdomPage();
                 });
               } else {
                 throw { message: data.message };
