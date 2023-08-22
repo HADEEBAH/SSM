@@ -60,18 +60,14 @@ const reserveCourseModules = {
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
-<<<<<<< HEAD
+            showConfirmButton : false,
             confirmButtonText: "ตกลง",
             timer: 3000,
             timerProgressBar: true
-=======
-            showConfirmButton: false
->>>>>>> develop
           })
           context.dispatch("GetReserveList")
         }
       } catch (error) {
-<<<<<<< HEAD
         // console.log(error)
         if(error.response?.data.statusCode == 400){
           if(error.response.data.message == "Cannot register , fail at course monitor , course-coach or seats are full"){
@@ -128,12 +124,6 @@ const reserveCourseModules = {
               confirmButtonText: "ตกลง",
             })
           }
-=======
-        Swal.fire({
-          icon: "error",
-          title: "เกิดข้อผิดพลาด"
-        })
->>>>>>> develop
       }
     }
   },
