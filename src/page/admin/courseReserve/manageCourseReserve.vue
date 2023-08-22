@@ -11,6 +11,7 @@
         placeholder="ค้นหา"
       ></v-text-field>
     </header-page>
+    
     <v-row class="mb-2" dense>
       <template v-for="(type, type_index) in course_type">
         <v-col
@@ -66,7 +67,8 @@
         </v-col>
       </template>
     </v-row>
-    <v-card outlined>
+    <loading-overlay v-if="reserve_list_is_loading" :loading="reserve_list_is_loading"></loading-overlay>
+    <v-card v-else outlined>
       <v-data-table
         class="header-table"
         :headers="columns"
@@ -87,12 +89,7 @@
             dense
             outlined
             hide-details
-            @change="
-              UpdateStatusReserve({
-                reserve_id: item.reserveId,
-                reserve_data: item,
-              })
-            "
+            @change=" update(item.reserveId,item )"
             item-color="pink"
             :items="status"
             item-text="label"
@@ -110,9 +107,11 @@
 import headerPage from "@/components/header/headerPage.vue";
 import imgCard from "@/components/course/imgCard.vue";
 import { mapActions, mapGetters } from "vuex";
+import LoadingOverlay from '../../../components/loading/loadingOverlay.vue';
+import Swal from "sweetalert2";
 export default {
   name: "manageCourseReserve",
-  components: { headerPage, imgCard },
+  components: { headerPage, imgCard, LoadingOverlay },
   data: () => ({
     type_selected: "all",
     search: "",
@@ -176,7 +175,7 @@ export default {
   computed: {
     ...mapGetters({
       reserve_list: "reserveCourseModules/reserveList",
-      reserve_list_is_loading: "reserveCourseModules/reserve_list_is_loading",
+      reserve_list_is_loading: "reserveCourseModules/reserveListIsLoading",
     }),
   },
   methods: {
@@ -184,6 +183,24 @@ export default {
       GetReserveList: "reserveCourseModules/GetReserveList",
       UpdateStatusReserve: "reserveCourseModules/UpdateStatusReserve",
     }),
+    update(reserve_id, reserve_data){
+      Swal.fire({
+        icon: "question",
+        title: `ต้องการเปลี่ยนสภานะใช่หรือไม่ ?`,
+        showDenyButton: false,
+        showCancelButton: true,
+        cancelButtonText: "ยกเลิก",
+        confirmButtonText: "ตกลง",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          this.UpdateStatusReserve({
+            reserve_id: reserve_id,
+            reserve_data: reserve_data,
+          })
+        }
+      })
+    
+    }
   },
 };
 </script>
