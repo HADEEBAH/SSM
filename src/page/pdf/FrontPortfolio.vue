@@ -151,8 +151,14 @@ import { mapActions, mapGetters } from 'vuex'
             profile : this.data_user_by_id.image ? this.data_user_by_id.imageUrl : defaultProfileImageDataUrl
           }
         }
-        
-        pdfMake.createPdf(docDefinition).open({}, window);
+        //  pdfMake.createPdf(docDefinition).open({}, window);
+        let pdfDoc = pdfMake.createPdf(docDefinition);
+        pdfDoc.getBlob((blob) => {
+          var url = URL.createObjectURL(blob);
+          // Open the PDF in a new tab
+          window.open(url);
+        });
+       
       },
       loadImageFromFile(filePath) {
         return new Promise((resolve, reject) => {
