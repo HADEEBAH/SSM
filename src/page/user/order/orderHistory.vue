@@ -199,7 +199,16 @@
               </v-row>
               <v-row dense>
                 <v-col
-                  cols="12"
+                  cols="auto"
+                  align="right"
+                  v-if="order.paymentStatus === 'pending' &&  (order.createdByData.userOneId == userData.account_id )"
+                >
+                  <v-btn @click="cancelOrder(order.orderId)" depressed dark color="#ff6b81"
+                    ><v-icon>mdi-close</v-icon>ยกเลิก</v-btn
+                  >
+                </v-col>
+                <v-col
+                  cols=""
                   align="right"
                   v-if="order.paymentStatus === 'pending'"
                 >
@@ -227,8 +236,10 @@ export default {
   data: () => ({
     panel: false,
     course_id_select: "",
+    userData : null
   }),
   mounted() {
+    this.userData = JSON.parse(localStorage.getItem("userDetail"))
     this.$store.dispatch(
       "NavberUserModules/changeTitleNavber",
       "ประวัติการการลงทะเบียน"
@@ -244,11 +255,28 @@ export default {
   },
   methods: {
     ...mapActions({
+      userUpdateOrderCancelStatus : "OrderModules/userUpdateOrderCancelStatus",
       savePayment: "OrderModules/savePayment",
       getHistory: "OrderModules/getHistory",
     }),
     genDate(date) {
       return dateFormatter(new Date(date), "DD MT YYYYT");
+    },
+    cancelOrder(order_id){
+      Swal.fire({
+        icon: "question",
+        title: "ต้องการยกเลิกใช่หรือไม่?",
+        showDenyButton: false,
+        showCancelButton: true,
+        cancelButtonText: "ยกเลิก",
+        confirmButtonText: "ตกลง",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          this.userUpdateOrderCancelStatus({
+            order_id : order_id
+          })
+        }
+      })
     },
     payment(payment_data) {
       Swal.fire({

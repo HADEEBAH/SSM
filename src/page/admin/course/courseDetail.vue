@@ -1173,13 +1173,11 @@
                           item.status === 'waiting' ? '#58A144' : '#FCC419'
                         "
                         :color="
-                          item.status === 'ติดต่อนักเรียน'
-                            ? '#F0F9EE'
-                            : '#FFF9E8'
+                          item.status === 'รอการติดต่อ' ? '#F0F9EE' : '#FFF9E8'
                         "
                         >{{
                           item.status === "waiting"
-                            ? "ติดต่อนักเรียน"
+                            ? "รอการติดต่อ"
                             : item.status
                         }}
                       </v-chip>
