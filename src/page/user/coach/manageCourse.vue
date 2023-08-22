@@ -966,15 +966,66 @@
         </v-col>
       </v-row>
 
+      <!-- TAB -->
+      <v-row class="mb-2">
+        <v-col cols="12" align="center">
+          <v-card flat width="340px">
+            <v-card-text class="pa-2 border-2 border-[#ff6b81] rounded-lg">
+              <v-row dense class="d-flex justify-center">
+                <v-col
+                  cols="12"
+                  sm
+                  v-for="(type, type_index) in student_type"
+                  :key="`${type_index}-time`"
+                >
+                  <v-btn
+                    class="w-full"
+                    @click="student_type_default = type.value"
+                    depressed
+                    :dark="student_type_default === type.value"
+                    :color="
+                      student_type_default === type.value
+                        ? '#ff6b81'
+                        : '#F5F5F5'
+                    "
+                    >{{ type.label }}</v-btn
+                  >
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+
       <!-- TABLE -->
       <v-card>
         <v-card-text>
           <v-data-table
+            v-if="student_type_default === 'all'"
             class="elevation-1 header-table"
             :headers="student_list"
             :items="student_data"
           >
+            <template v-slot:no-data> ไม่พบข้อมูลในตาราง </template>
+            <template v-slot:[`item.count`]="{ item }">
+              {{ item.index }}
+            </template>
           </v-data-table>
+
+          <div v-else>
+            student_type_default student_type_default student_type_default
+          </div>
+          <!-- <v-data-table
+            v-else
+            class="elevation-1 header-table"
+            :headers="student_list"
+            :items="student_data"
+          >
+            <template v-slot:no-data> ไม่พบข้อมูลในตาราง </template>
+            <template v-slot:[`item.count`]="{ item }">
+              {{ item.index }}
+            </template>
+          </v-data-table> -->
         </v-card-text>
       </v-card>
     </div>
@@ -1403,7 +1454,12 @@ export default {
       { label: "รายสัปดาห์", value: "week" },
       { label: "รายเดือน", value: "month" },
     ],
+    student_type: [
+      { label: "นักเรียนทั้งหมด", value: "all" },
+      { label: "นักเรียนจบคอร์ส", value: "potential" },
+    ],
     time_frame: "day",
+    student_type_default: "all",
     menu: false,
     check_in_status_options: [
       {
@@ -1453,26 +1509,32 @@ export default {
       {
         st_name: "Frozen",
         st_lname: "Yogurt",
+        index: "1",
       },
       {
         st_name: "Yogurt",
         st_lname: "Frozen",
+        index: "1",
       },
       {
         st_name: "Frozen",
         st_lname: "Yogurt",
+        index: "1",
       },
       {
         st_name: "Yogurt",
         st_lname: "Frozen",
+        index: "1",
       },
       {
         st_name: "Frozen",
         st_lname: "Yogurt",
+        index: "1",
       },
       {
         st_name: "Yogurt",
         st_lname: "Frozen",
+        index: "1",
       },
     ],
     previewUrl: null,
