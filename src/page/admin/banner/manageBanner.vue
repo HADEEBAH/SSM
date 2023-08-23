@@ -208,7 +208,8 @@ export default {
 
           Swal.fire({
             icon: "success",
-            title: "เพิ่มแบนเนอร์สำเร็จ",
+            title: "สำเร็จ",
+            text: "( เพิ่มแบนเนอร์เรียบร้อยแล้ว )",
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
@@ -239,7 +240,8 @@ export default {
 
           Swal.fire({
             icon: "success",
-            title: "ลบแบนเนอร์สำเร็จ",
+            title: "สำเร็จ",
+            text: "( ลบแบนเนอร์เรียบร้อยแล้ว )",
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,

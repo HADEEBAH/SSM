@@ -56,7 +56,8 @@ const reserveCourseModules = {
         if (data.statusCode == 200) {
           await Swal.fire({
             icon: "success",
-            title: "แก้ไขสำเร็จ",
+            title: "สำเร็จ",
+            text: "( แก้ไขเรียบร้อยแล้ว )",
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,

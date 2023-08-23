@@ -1401,7 +1401,7 @@ export default {
     addToCart() {
       Swal.fire({
         icon: "question",
-        title: "ต้องการเพิ่มเข้าตะกร้าใช่หรือไม่ ?",
+        title: "ต้องการเพิ่มเข้ารถเข็นใช่หรือไม่ ?",
         showDenyButton: false,
         showCancelButton: true,
         cancelButtonText: "ยกเลิก",
@@ -1431,7 +1431,19 @@ export default {
           );
           this.saveCart({ cart_data: this.order });
           this.resetCourseData();
-          this.show_dialog_cart = true;
+          // this.show_dialog_cart = true;
+          Swal.fire({
+            icon: "success",
+            title: "สำเร็จ",
+            text: "( เพิ่มคอร์สเรียนไปยังรถเข็นเรียบร้อยแล้ว )",
+            showCancelButton: false,
+            showConfirmButton: false,
+            showDenyButton: false,
+            timer: 3000,
+            timerProgressBar: true
+          }).finally(()=>{
+            this.$router.push({ name: "CartList" });
+          })
         }
       });
     },

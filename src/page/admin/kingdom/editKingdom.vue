@@ -319,7 +319,8 @@ export default {
                 this.goToManageKingdomPage();
                 Swal.fire({
                   icon: "success",
-                  title: "แก้ไขอาณาจักรสำเร็จ",
+                  title: "สำเร็จ",
+                  text: "( แก้ไขอาณาจักรเรียบร้อยแล้ว )",
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,
