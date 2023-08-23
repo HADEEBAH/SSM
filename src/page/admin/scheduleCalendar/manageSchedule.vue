@@ -1012,7 +1012,8 @@ export default {
               this.GetDataInSchedule();
               Swal.fire({
                 icon: "success",
-                title: "บันทึกเรียบร้อย",
+                title: "สำเร็จ",
+                text: "( บันทึกเรียบร้อยแล้ว )",
                 timer: 3000,
                 timerProgressBar: true,
                 showCancelButton: false,
@@ -1087,7 +1088,8 @@ export default {
                 if (data.data && data.message == "Created Sucessful") {
                   Swal.fire({
                     icon: "success",
-                    title: "บันทึกเรียบร้อย",
+                    title: "สำเร็จ",
+                    text: "( บันทึกเรียบร้อยแล้ว )",
                     timer: 3000,
                     timerProgressBar: true,
                     showCancelButton: false,

@@ -102,8 +102,14 @@ const RegisterModules = {
                 let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/relations/delete-user-role/?studentId=${studentId}&parentId=${parentId}`, config)
                 if (data.statusCode === 200) {
                     Swal.fire({
-                        icon: "success",
-                        title: "ลบข้อมูลสำเร็จ"
+                      icon: "success",
+                      title: "สำเร็จ",
+                      text: "( ลบข้อมูลเรียบร้อยแล้ว )",
+                      showDenyButton: false,
+                      showCancelButton: false,
+                      showConfirmButton: false,
+                      timer: 3000,
+                      timerProgressBar: true
                     })
                 }
             } catch (error) {
@@ -154,28 +160,32 @@ const RegisterModules = {
                 if (data.statusCode === 201) {
                     context.commit("SetIsLoading", false)
                     Swal.fire({
-                        icon: 'success',
-                        title: "ลงทะเบียนสำเร็จ",
-                    }).then(async (result) => {
-                        if (result.isConfirmed) {
-                            let user = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account?username=${context.state.user_one_id.username}&status=active`)
+                        icon: "success",
+                        title: "สำเร็จ",
+                        text: "( ลงทะเบียนเรียบร้อยแล้ว )",
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                    }).finally(async()=>{
+                      let user = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account?username=${context.state.user_one_id.username}&status=active`)
 
-                            if (user.data.statusCode === 200) {
-                                context.commit("SetLastUserRegistered", {
-                                    firstname_th: context.state.user_one_id.firstname_th,
-                                    lastname_th: context.state.user_one_id.lastname_th,
-                                    firstname_en: context.state.user_one_id.firstname_en,
-                                    lastname_en: context.state.user_one_id.lastname_en,
-                                    phone_number: phone_number,
-                                    email: user.data.data[0].email,
-                                    username: context.state.user_one_id.username,
-                                    account_id: user.data.data[0].userOneId,
-                                    type: type
-                                })
-                                context.commit("ResetUserOneID")
-                                context.commit("ShowDialogRegisterOneId", false)
-                            }
-                        }
+                      if (user.data.statusCode === 200) {
+                          context.commit("SetLastUserRegistered", {
+                              firstname_th: context.state.user_one_id.firstname_th,
+                              lastname_th: context.state.user_one_id.lastname_th,
+                              firstname_en: context.state.user_one_id.firstname_en,
+                              lastname_en: context.state.user_one_id.lastname_en,
+                              phone_number: phone_number,
+                              email: user.data.data[0].email,
+                              username: context.state.user_one_id.username,
+                              account_id: user.data.data[0].userOneId,
+                              type: type
+                          })
+                          context.commit("ResetUserOneID")
+                          context.commit("ShowDialogRegisterOneId", false)
+                      }
+
                     })
                 }
             } catch ({ response }) {
@@ -239,40 +249,44 @@ const RegisterModules = {
                     })
                 if (data.statusCode === 201) {
                     Swal.fire({
-                        icon: 'success',
-                        title: "ลงทะเบียนสำเร็จ",
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login`, {
-                                "username": context.state.user_one_id.username,
-                                "password": context.state.user_one_id.password,
-                            }).then((res) => {
-                                if (res.data.statusCode === 200) {
-                                    let roles_data = []
-                                    res.data.data.roles.forEach((role) => {
-                                        roles_data.push(role?.role_name_en)
-                                    });
-                                    let payload = {
-                                        account_id: res.data.data.account_id,
-                                        email: res.data.data.email,
-                                        username: context.state.user_one_id.username,
-                                        password: context.state.user_one_id.password,
-                                        first_name_en: res.data.data.first_name_en,
-                                        first_name_th: res.data.data.first_name_th,
-                                        last_name_en: res.data.data.last_name_en,
-                                        last_name_th: res.data.data.last_name_th,
-                                        role: res.data.data.role,
-                                        roles: roles_data,
-                                        tel: res.data.data.tel,
-                                    }
-                                    VueCookie.set("token", res.data.data.token, 1)
-                                    localStorage.setItem("userDetail", JSON.stringify(payload))
-                                    context.commit("SetIsLoading", false)
-                                    router.replace({ name: "UserKingdom" });
-                                    context.commit("ResetUserOneID")
-                                }
-                            })
-                        }
+                        icon: "success",
+                        title: "สำเร็จ",
+                        text: "( ลงทะเบียนเรียบร้อยแล้ว )",
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                    }).finally(()=>{
+                      axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login`, {
+                          "username": context.state.user_one_id.username,
+                          "password": context.state.user_one_id.password,
+                      }).then((res) => {
+                          if (res.data.statusCode === 200) {
+                              let roles_data = []
+                              res.data.data.roles.forEach((role) => {
+                                  roles_data.push(role?.role_name_en)
+                              });
+                              let payload = {
+                                  account_id: res.data.data.account_id,
+                                  email: res.data.data.email,
+                                  username: context.state.user_one_id.username,
+                                  password: context.state.user_one_id.password,
+                                  first_name_en: res.data.data.first_name_en,
+                                  first_name_th: res.data.data.first_name_th,
+                                  last_name_en: res.data.data.last_name_en,
+                                  last_name_th: res.data.data.last_name_th,
+                                  role: res.data.data.role,
+                                  roles: roles_data,
+                                  tel: res.data.data.tel,
+                              }
+                              VueCookie.set("token", res.data.data.token, 1)
+                              localStorage.setItem("userDetail", JSON.stringify(payload))
+                              context.commit("SetIsLoading", false)
+                              router.replace({ name: "UserKingdom" });
+                              context.commit("ResetUserOneID")
+                          }
+                      })
+
                     })
                 }
             } catch ({ response }) {

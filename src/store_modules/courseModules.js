@@ -618,11 +618,12 @@ const CourseModules = {
           await context.dispatch("GetCourse", course_id)
           Swal.fire({
             icon: "success",
-            title: "แก้ไขคอร์สสำเร็จ",
+            title: "สำเร็จ",
+            text: "( แก้ไขคอร์สเรียบร้อยแล้ว )",
+            timer: 3000,
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
-            timer: 3000,
             timerProgressBar: true,
           })
         }
@@ -711,7 +712,8 @@ const CourseModules = {
           await context.dispatch("GetCourse", course_id)
           Swal.fire({
             icon: "success",
-            title: "แก้ไขช่วงเวลาและโค้ชสำเร็จ",
+            title: "สำเร็จ",
+            text: "( แก้ไขช่วงเวลาและโค้ชเรียบร้อยแล้ว )",
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
@@ -772,7 +774,8 @@ const CourseModules = {
         if (data.statusCode === 200) {
           Swal.fire({
             icon: "success",
-            title: "แก้ไขแพ็กเกจสำเร็จ",
+            title: "สำเร็จ",
+            text: "( แก้ไขแพ็กเกจเรียบร้อยแล้ว )",
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
@@ -801,11 +804,13 @@ const CourseModules = {
         if (data.statusCode == 200) {
           Swal.fire({
             icon: "success",
-            title: "ลบไฟล์สำเร็จ",
+            title: "สำเร็จ",
+            text: "( ลบไฟล์เรียบร้อยแล้ว )",
             showDenyButton: false,
             showCancelButton: false,
-            confirmButtonText: "ตกลง",
-            cancelButtonText: "ยกเลิก",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
           })
         }
       } catch (error) {
@@ -829,11 +834,13 @@ const CourseModules = {
         if (data.statusCode == 200) {
           Swal.fire({
             icon: "success",
-            title: "ลบไฟล์สำเร็จ",
+            title: "สำเร็จ",
+            text: "( ลบไฟล์เรียบร้อยแล้ว )",
             showDenyButton: false,
             showCancelButton: false,
-            confirmButtonText: "ตกลง",
-            cancelButtonText: "ยกเลิก",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
           })
         }
       } catch (error) {
@@ -869,7 +876,8 @@ const CourseModules = {
 
           Swal.fire({
             icon: "success",
-            title: "แก้ไข Learning Journey สำเร็จ",
+            title: "สำเร็จ",
+            text: "( แก้ไข Learning Journey เรียบร้อยแล้ว )",
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
@@ -1021,14 +1029,15 @@ const CourseModules = {
           context.commit("SetCourseIsLoading", false)
           Swal.fire({
             icon: "success",
-            title: "แก้ไขคอร์สสำเร็จ",
+            title: "สำเร็จ",
+            text: "( แก้ไขคอร์สเรียบร้อยแล้ว )",
             showDenyButton: false,
             showCancelButton: false,
-            confirmButtonText: "ตกลง",
-          }).then(async (result) => {
-            if (result.isConfirmed) {
-              router.push({ name: "CourseList" })
-            }
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+          }).finally(()=>{
+            router.push({ name: "CourseList" })
           })
 
         }
@@ -1517,11 +1526,13 @@ const CourseModules = {
           router.replace({ name: "CourseList" })
           Swal.fire({
             icon: "success",
-            title: "สร้างคอร์สสำเร็จ",
-            timer: 3000,
-            timerProgressBar: true,
+            title: "สำเร็จ",
+            text: "( สร้างคอร์สเรียบร้อยแล้ว )",
+            showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
           });
         } else {
           context.commit("SetCourseIsLoading", false)
@@ -1613,8 +1624,13 @@ const CourseModules = {
           } else {
             Swal.fire({
               icon: "success",
-              text: "ลบวันสอนสำเร็จ",
-              confirmButtonText: "ตกลง",
+              title: "สำเร็จ",
+              text: "( ลบวันสอนเรียบร้อยแล้ว )",
+              showDenyButton: false,
+              showCancelButton: false,
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
             })
           }
         }
@@ -1646,8 +1662,13 @@ const CourseModules = {
           } else {
             Swal.fire({
               icon: "success",
-              text: "ลบเวลาสอนสำเร็จ",
-              confirmButtonText: "ตกลง",
+              title: "สำเร็จ",
+              text: "( ลบวันสอนเรียบร้อยแล้ว )",
+              showDenyButton: false,
+              showCancelButton: false,
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
             })
           }
         }

@@ -578,7 +578,8 @@ const orderModules = {
                             if (payment.data.statusCode === 200) {
                                 Swal.fire({
                                     icon: "success",
-                                    title: "ทำรายการสำเร็จ",
+                                    title: "สำเร็จ",
+                                    text: "( ทำรายการเรียบร้อยแล้ว )",
                                     showDenyButton: false,
                                     showCancelButton: false,
                                     showConfirmButton: false,
@@ -602,13 +603,14 @@ const orderModules = {
                             }
                         } else {
                             Swal.fire({
-                                icon: "success",
-                                title: "ทำรายการสำเร็จ",
-                                showDenyButton: false,
-                                showCancelButton: false,
-                                showConfirmButton: false,
-                                timer: 3000,
-                                timerProgressBar: true
+                              icon: "success",
+                              title: "สำเร็จ",
+                              text: "( ทำรายการเรียบร้อยแล้ว )",
+                              showDenyButton: false,
+                              showCancelButton: false,
+                              showConfirmButton: false,
+                              timer: 3000,
+                              timerProgressBar: true
                             })
                             router.replace({ name: "Finance" })
                             localStorage.removeItem("Order")
@@ -684,15 +686,16 @@ const orderModules = {
             let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/update/${order_detail.orderNumber}`, payload, config)
             if (data.statusCode === 200) {
                 await Swal.fire({
-                    icon: "success",
-                    text: "ยกเลิกคำสั่งซื้อสำเร็จ",
-                    showDenyButton: false,
-                    showCancelButton: false,
-                    confirmButtonText: "ตกลง",
-                }).then(async (result) => {
-                    if (result.isConfirmed) {
-                        context.dispatch("GetOrderDetail", { order_number: order_detail.orderNumber })
-                    }
+                  icon: "success",
+                  title: "สำเร็จ",
+                  text: "( ยกเลิกคำสั่งซื้อเรียบร้อยแล้ว )",
+                  showDenyButton: false,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                  timer: 3000,
+                  timerProgressBar: true
+                }).finally(()=>{
+                  context.dispatch("GetOrderDetail", { order_number: order_detail.orderNumber })
                 })
             }
         },
@@ -714,14 +717,15 @@ const orderModules = {
                 if (data.statusCode === 200) {
                     await Swal.fire({
                         icon: "success",
-                        text: "ยืนยันการชำระเงินเรียบร้อย",
+                        title: "สำเร็จ",
+                        text: "( ยืนยันการชำระเงินเรียบร้อย )",
                         showDenyButton: false,
                         showCancelButton: false,
-                        confirmButtonText: "ตกลง",
-                    }).then(async (result) => {
-                        if (result.isConfirmed) {
-                            context.dispatch("GetOrderDetail", { order_number: order_data.orderNumber })
-                        }
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true
+                    }).finally(()=>{
+                      context.dispatch("GetOrderDetail", { order_number: order_data.orderNumber })
                     })
                 }
             } catch (error) {
@@ -873,14 +877,15 @@ const orderModules = {
                 if (count === course_data.students.length) {
                     await Swal.fire({
                         icon: "success",
-                        text: "จองคอร์สสำเร็จ เจ้าหน้าที่จะติดต่อกลับภายหลัง",
+                        title: "สำเร็จ",
+                        text: "( จองคอร์สสำเร็จ เจ้าหน้าที่จะติดต่อกลับภายหลัง )",
                         showDenyButton: false,
                         showCancelButton: false,
-                        confirmButtonText: "ตกลง",
-                    }).then(async (result) => {
-                        if (result.isConfirmed) {
-                            router.replace({ name: "UserKingdom" })
-                        }
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true
+                    }).finally(()=>{
+                      router.replace({ name: "UserKingdom" })
                     })
                 }
 

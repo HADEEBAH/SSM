@@ -1186,7 +1186,8 @@ export default {
                 this.GetDataRelationsManagement(this.show_by_id);
                 Swal.fire({
                   icon: "success",
-                  title: "บันทึกสำเร็จ",
+                  title: "สำเร็จ",
+                  text: "( บันทึกเรียบร้อยแล้ว )",
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,
@@ -1345,7 +1346,8 @@ export default {
                   });
                   Swal.fire({
                     icon: "success",
-                    title: "บันทึกสำเร็จ",
+                    title: "สำเร็จ",
+                    text: "( บันทึกเรียบร้อยแล้ว )",
                     timer: 3000,
                     timerProgressBar: true,
                     showCancelButton: false,

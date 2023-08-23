@@ -150,22 +150,21 @@ const coachModules = {
         }
         if (count === students.filter(v => v.potential).length) {
           context.commit("SetStudentCheckInIsLoading", false)
-          await Swal.fire({
+          Swal.fire({
             icon: "success",
-            title: "บันทึกสำเร็จ",
-            showDenyButton: false,
-            showCancelButton: false,
-            cancelButtonText: "ยกเลิก",
+            title: "สำเร็จ",
+            text: "( บันทึกเรียบร้อยแล้ว )",
             timer: 3000,
-            confirmButtonText: "ตกลง",
-          })
-          setTimeout(() => {
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          }).finally(()=>{
             context.dispatch("GetStudentByTimeId", {
               course_id: course_id,
               date: date,
               time_id: time_id,
             })
-          }, 200)
+          })
         }
 
       } catch (error) {
@@ -235,21 +234,20 @@ const coachModules = {
         }
         if (count === students.length) {
           context.commit("SetStudentCheckInIsLoading", false)
-          await Swal.fire({
+          Swal.fire({
             icon: "success",
-            title: "บันทึกสำเร็จ",
-            showDenyButton: false,
+            title: "สำเร็จ",
+            text: "( บันทึกเรียบร้อยแล้ว )",
+            timer: 3000,
+            timerProgressBar: true,
             showCancelButton: false,
-            cancelButtonText: "ยกเลิก",
-            confirmButtonText: "ตกลง",
-          }).then(async (result) => {
-            if (result.isConfirmed) {
-              context.dispatch("GetStudentByTimeId", {
-                course_id: course_id,
-                date: date,
-                time_id: time_id,
-              })
-            }
+            showConfirmButton: false,
+          }).finally(()=>{
+            context.dispatch("GetStudentByTimeId", {
+              course_id: course_id,
+              date: date,
+              time_id: time_id,
+            })
           })
         }
       } catch (error) {
@@ -284,11 +282,12 @@ const coachModules = {
         if (data.statusCode === 200) {
           Swal.fire({
             icon: "success",
-            title: "บันทึกสำเร็จ",
-            showDenyButton: false,
+            title: "สำเร็จ",
+            text: "( บันทึกเรียบร้อยแล้ว )",
+            timer: 3000,
+            timerProgressBar: true,
             showCancelButton: false,
-            cancelButtonText: "ยกเลิก",
-            confirmButtonText: "ตกลง",
+            showConfirmButton: false,
           })
 
         }
@@ -392,19 +391,18 @@ const coachModules = {
           context.commit("SetStudentCheckInIsLoading", false)
           await Swal.fire({
             icon: "success",
-            title: "บันทึกสำเร็จ",
-            showDenyButton: false,
+            title: "สำเร็จ",
+            text: "( บันทึกเรียบร้อยแล้ว )",
+            timer: 3000,
+            timerProgressBar: true,
             showCancelButton: false,
-            cancelButtonText: "ยกเลิก",
-            confirmButtonText: "ตกลง",
-          }).then(async (result) => {
-            if (result.isConfirmed) {
-              context.dispatch("GetStudentByTimeId", {
-                course_id: course_id,
-                date: date,
-                time_id: time_id,
-              })
-            }
+            showConfirmButton: false,
+          }).finally(()=>{
+            context.dispatch("GetStudentByTimeId", {
+              course_id: course_id,
+              date: date,
+              time_id: time_id,
+            })
           })
         }
       } catch (error) {
@@ -728,10 +726,12 @@ const coachModules = {
         if (data.statusCode == 200) {
           Swal.fire({
             icon: "success",
-            title: "บันทึกสำเร็จ",
+            title: "สำเร็จ",
+            text: "( บันทึกเรียบร้อยแล้ว )",
             timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
             showConfirmButton: false,
-            timerProgressBar: true
           }).finally(() => {
             context.dispatch("GetCoachCheckIn", {
               course_id: course_id,
@@ -851,7 +851,8 @@ const coachModules = {
           }
           Swal.fire({
             icon: "success",
-            title: "ส่งใบลาสำเร็จ",
+            title: "สำเร็จ",
+            text: "( ส่งใบลาเรียบร้อยแล้ว )",
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -904,11 +905,12 @@ const coachModules = {
             context.commit("SetCoachLeaves", getLeaves.data.data)
             Swal.fire({
               icon: "success",
-              title: "แก้ไขสำเร็จ",
-              showDenyButton: false,
+              title: "สำเร็จ",
+              text: "( แก้ไขเรียบร้อยแล้ว )",
+              timer: 3000,
+              timerProgressBar: true,
               showCancelButton: false,
-              cancelButtonText: "ยกเลิก",
-              confirmButtonText: "ตกลง",
+              showConfirmButton: false,
             })
           }
         }
@@ -931,15 +933,14 @@ const coachModules = {
           if (coach_leave_data.status === "reject") {
             Swal.fire({
               icon: "success",
-              title: "ยืนยันการปฎิเสธ",
-              showDenyButton: false,
+              title: "สำเร็จ",
+              text: "( ยืนยันการปฎิเสธเรียบร้อยแล้ว )",
+              timer: 3000,
+              timerProgressBar: true,
               showCancelButton: false,
-              cancelButtonText: "ยกเลิก",
-              confirmButtonText: "ตกลง",
-            }).then(async (result) => {
-              if (result.isConfirmed) {
-                context.dispatch("GetLeavesDetail", { coach_leave_id: coach_leave_id })
-              }
+              showConfirmButton: false,
+            }).finally(()=>{
+              context.dispatch("GetLeavesDetail", { coach_leave_id: coach_leave_id })
             })
             context.commit("SetCoachLeavesIsLoading", false)
           } else if (coach_leave_data.status === "approved") {
@@ -947,7 +948,8 @@ const coachModules = {
 
             Swal.fire({
               icon: "success",
-              title: "ยืนยันการอนุมัติ",
+              title: "สำเร็จ",
+              text: "( ยืนยันการอนุมัติเรียบร้อยแล้ว )",
               timer: 3000,
               timerProgressBar: true,
               showCancelButton: false,

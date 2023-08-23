@@ -428,7 +428,8 @@ export default {
                 // });
                 Swal.fire({
                   icon: "success",
-                  title: "แก้ไขโปรไฟล์สำเร็จ",
+                  title: "สำเร็จ",
+                  text: "( แก้ไขโปรไฟล์เรียบร้อยแล้ว )",
                   showDenyButton: false,
                   showCancelButton: false,
                   showConfirmButton: false,

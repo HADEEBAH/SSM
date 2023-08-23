@@ -880,7 +880,8 @@ export default {
 
                 Swal.fire({
                   icon: "success",
-                  title: "เพิ่มข้อมูลสำเร็จ",
+                  title: "สำเร็จ",
+                  text: "( เพิ่มข้อมูลเรียบร้อยแล้ว )",
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,
@@ -986,7 +987,8 @@ export default {
                 });
                 Swal.fire({
                   icon: "success",
-                  title: "บันทึกสำเร็จ",
+                  title: "สำเร็จ",
+                  text: "( บันทึกเรียบร้อยแล้ว )",
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,

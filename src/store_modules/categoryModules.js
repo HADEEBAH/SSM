@@ -83,7 +83,8 @@ const categoryModules = {
 
                     Swal.fire({
                         icon: "success",
-                        title: "ลบรายการสำเร็จ",
+                        title: "สำเร็จ",
+                        text: "( ลบรายการเรียบร้อยแล้ว )",
                         timer: 3000,
                         timerProgressBar: true,
                         showCancelButton: false,
