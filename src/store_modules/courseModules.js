@@ -1051,15 +1051,17 @@ const CourseModules = {
       try {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/list?limit=1000&page=1`)
         let courses = []
-        let category = {}
+        // let category = {}
+        let categorys = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category`)
         if (data.statusCode === 200) {
           for await (const course of data.data) {
-            category = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category/${course.c_category_id}`)
-            if (category.data.statusCode === 200) {
+            let category = categorys.data.data.filter(v => v.categoryId == course.c_category_id)[0]
+            // console.log(category)
+            if (category) {
               courses.push({
                 course_id: course.c_course_id,
                 category_id: course.c_category_id,
-                category: category.data.data.categoryNameTh ? category.data.data.categoryNameTh : "-",
+                category: category.categoryNameTh ? category.categoryNameTh : "-",
                 course_type: course.c_course_type_id === "CT_1" ? "คอร์สทั่วไป" : "คอร์สระยะสั้น",
                 course_type_id: course.c_course_type_id,
                 course: `${course.c_course_name_th}(${course.c_course_name_en})`,
@@ -1068,7 +1070,7 @@ const CourseModules = {
                 course_open: course.c_course_open_date ? new Date(course.c_course_open_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', }) : `${new Date(course.c_course_register_start_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', })} - ${new Date(course.c_course_register_end_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', })}`
               })
             } else {
-              if (category.data.statusCode === 400 && category.data.message === "Category not found.") {
+              if (categorys.data.statusCode === 400 && categorys.data.message === "Category not found.") {
                 continue
               }
             }

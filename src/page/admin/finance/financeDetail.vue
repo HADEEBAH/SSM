@@ -913,7 +913,7 @@ export default {
             alignment: "center",
           },
           {
-            text: "ราคา",
+            text: "ราคา(บาท)",
             fillColor: "#dedede",
             alignment: "center",
           },
@@ -958,7 +958,7 @@ export default {
             ).toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
-            })} บาท`,
+            })}`,
             color: "#ff6b81",
             alignment: "right",
           },
