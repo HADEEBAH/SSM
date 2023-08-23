@@ -462,6 +462,7 @@
                         ></v-text-field>
                       </template>
                       <v-date-picker
+                        :max="today"
                         v-model="export_filter.date_doc_start"
                         @input="export_filter.select_date_doc_start = false"
                         locale="th-TH"
@@ -507,6 +508,7 @@
                         v-model="export_filter.date_doc_end"
                         @input="export_filter.select_date_doc_end = false"
                         :min="export_filter.date_doc_start"
+                        :max="today"
                         locale="th-TH"
                       ></v-date-picker>
                     </v-menu>
@@ -551,6 +553,7 @@
                         ></v-text-field>
                       </template>
                       <v-date-picker
+                        :max="today"
                         v-model="export_filter.date_pay_start"
                         @input="export_filter.select_date_pay_start = false"
                         locale="th-TH"
@@ -597,6 +600,7 @@
                         v-model="export_filter.date_pay_end"
                         @input="export_filter.select_date_pay_end = false"
                         :min="export_filter.date_pay_start"
+                        :max="today"
                         locale="th-TH"
                       ></v-date-picker>
                     </v-menu>
@@ -694,6 +698,7 @@ export default {
   },
   data: () => ({
     search: "",
+    today: new Date().toISOString(),
     search_student: null,
     itemsPerPage: 10,
     show_dialog: false,
@@ -797,10 +802,11 @@ export default {
       searchNameUser: "loginModules/searchNameUser",
     }),
     remove(item) {
-      const index = this.export_filter.students.indexOf(item);
-      if (index >= 0) {
-        const index = this.export_filter.students.splice(index, 1);
-      }
+      for(let i = 0; i < this.export_filter.students.length; i++){
+        if(this.export_filter.students[i] == item){
+          this.export_filter.students.splice(i, 1);
+        }
+      }     
     },
     ShowDialogExport() {
       this.export_filter.course_id = [];
