@@ -1088,13 +1088,17 @@ export default {
             course_id: this.course_order.course_id,
             cpo_id: this.course_order.option.course_package_option_id,
           });
-          this.GetShortCourseMonitor({
-            course_id: this.course_order.course_id,
-          });
+          if(this.course_order.course_id){
+            this.GetShortCourseMonitor({
+              course_id: this.course_order.course_id,
+            });
+          }
         } else {
-          this.GetShortCourseMonitor({
-            course_id: this.course_order.course_id,
-          });
+          if(this.course_order.course_id){
+            this.GetShortCourseMonitor({
+              course_id: this.course_order.course_id,
+            });
+          }
         }
         this.GetRelations({
           student_id: this.user_login.account_id,
