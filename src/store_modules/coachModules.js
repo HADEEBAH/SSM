@@ -21,6 +21,9 @@ const coachModules = {
     attachment_leave: [],
     coach_leave: {},
     show_dialog_coach_leave_form: false,
+    student_list: [],
+    student_list_load: false,
+
   },
   mutations: {
     SetMyCoursesLeave(state, payload) {
@@ -67,6 +70,12 @@ const coachModules = {
     },
     SetMyCoursesIsLoading(state, value) {
       state.my_courses_is_loading = value;
+    },
+    SetStudentList(state, value) {
+      state.student_list = value;
+    },
+    SetStudentListLoading(state, value) {
+      state.student_list_load = value
     },
   },
   actions: {
@@ -1019,6 +1028,46 @@ const coachModules = {
         console.log(error)
       }
     },
+
+    async GetstudentList(context, { coach_id, course_id, type }) {
+
+      context.commit("SetStudentListLoading", true)
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/student/?coachId=${coach_id}&courseId=${course_id}&type=${type}`, config)
+        if (data.statusCode == 200) {
+          data.data.map((val, i) => {
+            val.index = i + 1
+            return val
+          })
+
+        }
+        context.commit("SetStudentList", data.data)
+        context.commit("SetStudentListLoading", false)
+      } catch ({ response }) {
+        context.commit("SetStudentListLoading", false)
+        if (response.status === 400) {
+          Swal.fire({
+            icon: "warning",
+            title: "แจ้งเตือน",
+            text: "( กรุณาเลือกคอร์ส )",
+            showCancelButton: false,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+          })
+        }
+      }
+    },
+    resetStudentList(context) {
+      context.commit("SetStudentList", [])
+    },
   },
   getters: {
     getMyCoursesLeave(state) {
@@ -1066,7 +1115,13 @@ const coachModules = {
     },
     getAttachmentLeave(state) {
       return state.attachment_leave
-    }
+    },
+    getstudentList(state) {
+      return state.student_list
+    },
+    getStudentListLoading(state) {
+      return state.student_list_load
+    },
   },
 };
 

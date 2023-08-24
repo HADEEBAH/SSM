@@ -4,7 +4,7 @@
     <v-row dense class="mb-3">
       <v-col
         cols="12"
-        sm="4"
+        sm="3"
         v-for="(tab_data, tab_index) in tabs"
         :key="tab_index"
       >
@@ -840,7 +840,6 @@
             <template v-slot:[`item.count`]="{ item }">
               {{ item.index }}
             </template>
-
             <template v-slot:[`item.date`]="{ item }">
               {{
                 item.startDate === item.endDate
@@ -938,6 +937,79 @@
         </v-card-text>
       </v-card>
     </div>
+    <div v-if="tab === 'student lists'">
+      <v-row>
+        <v-col cols="auto"> ข้อมูลการสอนของฉัน :</v-col>
+        <v-col class="font-bold">
+          {{ profile_detail.firstNameTh }}
+        </v-col>
+      </v-row>
+      <!-- เลือกคอร์ส -->
+      <v-row dense>
+        <v-col>
+          <span class="font-bold">เลือกคอร์ส</span>
+          <v-autocomplete
+            v-model="filter_course_student"
+            item-text="name"
+            item-value="course_id"
+            :items="my_courses.filter((v) => !v.type)"
+            @change="filterCourseStudent(filter_course_student)"
+            outlined
+            dense
+          >
+            <template v-slot:no-data>
+              <v-row dense>
+                <v-col align="center">ไม่พบข้อมูล</v-col>
+              </v-row>
+            </template>
+          </v-autocomplete>
+        </v-col>
+      </v-row>
+
+      <!-- TAB -->
+      <v-row class="mb-2">
+        <v-col cols="12" align="center">
+          <v-card flat width="340px">
+            <v-card-text class="pa-2 border-2 border-[#ff6b81] rounded-lg">
+              <v-row dense class="d-flex justify-center">
+                <v-col
+                  cols="12"
+                  sm
+                  v-for="(type, type_index) in student_type"
+                  :key="`${type_index}-time`"
+                >
+                  <v-btn
+                    class="w-full"
+                    @click="selectStudentType(type.value)"
+                    depressed
+                    :dark="select_student_type === type.value"
+                    :color="
+                      select_student_type === type.value ? '#ff6b81' : '#F5F5F5'
+                    "
+                    >{{ type.label }}</v-btn
+                  >
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+
+      <!-- TABLE -->
+      <v-card>
+        <v-card-text>
+          <v-data-table
+            class="elevation-1 header-table"
+            :headers="student_list_header"
+            :items="student_list"
+            :loading="student_list_load"
+          >
+            <template v-slot:no-data> ไม่พบข้อมูลในตาราง </template>
+          </v-data-table>
+        </v-card-text>
+      </v-card>
+    </div>
+
     <!-- CREATE :: LEAVE -->
     <v-dialog
       persistent
@@ -1338,6 +1410,7 @@ export default {
     singleExpand: false,
     expanded: [],
     filter_course: "",
+    filter_course_student: "",
     user_detail: "",
     tab: "teaching list",
     today: new Date(),
@@ -1355,13 +1428,19 @@ export default {
       { label: "รายการสอนวันนี้", value: "teaching list" },
       { label: "การสอนของฉัน", value: "my teaching" },
       { label: "ลงเวลาเพื่อขอลา", value: "request leave" },
+      { label: "รายชื่อนักเรียน", value: "student lists" },
     ],
     time_frame_list: [
       { label: "รายวัน", value: "day" },
       { label: "รายสัปดาห์", value: "week" },
       { label: "รายเดือน", value: "month" },
     ],
+    student_type: [
+      { label: "นักเรียนทั้งหมด", value: "all" },
+      { label: "นักเรียนจบคอร์ส", value: "potential" },
+    ],
     time_frame: "day",
+    select_student_type: "all",
     menu: false,
     check_in_status_options: [
       {
@@ -1395,6 +1474,56 @@ export default {
       },
       { text: "สถานะ", align: "start", sortable: false, value: "status" },
       { text: "", align: "right", sortable: false, value: "action" },
+    ],
+    student_list_header: [
+      { text: "ลำดับ", align: "center", sortable: false, value: "index" },
+
+      { text: "ชื่อ", align: "start", sortable: false, value: "firstNameTh" },
+      {
+        text: "นามสกุล",
+        align: "start",
+        sortable: false,
+        value: "lastNameTh",
+      },
+      { text: "เบอร์โทร", align: "start", sortable: false, value: "tel" },
+      {
+        text: "อีเมล",
+        align: "start",
+        sortable: false,
+        value: "email",
+      },
+    ],
+    student_data: [
+      {
+        st_name: "Frozen",
+        st_lname: "Yogurt",
+        index: "1",
+      },
+      {
+        st_name: "Yogurt",
+        st_lname: "Frozen",
+        index: "1",
+      },
+      {
+        st_name: "Frozen",
+        st_lname: "Yogurt",
+        index: "1",
+      },
+      {
+        st_name: "Yogurt",
+        st_lname: "Frozen",
+        index: "1",
+      },
+      {
+        st_name: "Frozen",
+        st_lname: "Yogurt",
+        index: "1",
+      },
+      {
+        st_name: "Yogurt",
+        st_lname: "Frozen",
+        index: "1",
+      },
     ],
     previewUrl: null,
     periods: [
@@ -1440,9 +1569,11 @@ export default {
     show_potential_data: {},
     select_status: "all",
     coach_leaves_arr: [],
+    test: "",
   }),
 
   created() {
+    this.resetStudentList();
     this.GetLoading(true);
     if (this.$route.query.token) {
       this.loginShareToken(this.$route);
@@ -1485,6 +1616,8 @@ export default {
       profile_detail: "ProfileModules/getProfileDetail",
       show_dialog_coach_leave_form: "CoachModules/getShowDialogCoachLeaveForm",
       coach_leaves_is_loading: "CoachModules/getCoachLeavesIsLoading",
+      student_list: "CoachModules/getstudentList",
+      student_list_load: "CoachModules/getStudentListLoading",
     }),
     SetFunctionsComputed() {
       this.GetMyCourses({ coach_id: this.user_detail.account_id });
@@ -1525,7 +1658,24 @@ export default {
       GetProfileDetail: "ProfileModules/GetProfileDetail",
       ShowDialogCoachLeaveForm: "CoachModules/ShowDialogCoachLeaveForm",
       GetLoading: "LoadingModules/GetLoading",
+      GetstudentList: "CoachModules/GetstudentList",
+      resetStudentList: "CoachModules/resetStudentList",
     }),
+    filterCourseStudent(items) {
+      this.GetstudentList({
+        coach_id: this.user_detail.account_id,
+        course_id: items,
+        type: this.select_student_type,
+      });
+    },
+    selectStudentType(items) {
+      this.GetstudentList({
+        coach_id: this.user_detail.account_id,
+        course_id: this.filter_course_student,
+        type: items,
+      });
+      this.select_student_type = items;
+    },
     SelectedStatus(status) {
       this.select_status = status;
       this.coach_leaves_arr = [];
@@ -1735,6 +1885,15 @@ export default {
         return this.my_courses.filter((v) => !v.type);
       }
     },
+    // filterMycourseStudent() {
+    //   if (this.filter_course_student) {
+    //     return this.my_courses.filter(
+    //       (v) => v.course_id === this.filter_course && !v.type
+    //     );
+    //   } else {
+    //     return this.my_courses.filter((v) => !v.type);
+    //   }
+    // },
   },
 };
 </script>
