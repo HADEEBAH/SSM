@@ -840,7 +840,6 @@
             <template v-slot:[`item.count`]="{ item }">
               {{ item.index }}
             </template>
-
             <template v-slot:[`item.date`]="{ item }">
               {{
                 item.startDate === item.endDate
@@ -940,7 +939,7 @@
     </div>
     <div v-if="tab === 'student lists'">
       <v-row>
-        <v-col cols="auto"> ข้อมูลการสอนของฉัน : </v-col>
+        <v-col cols="auto"> ข้อมูลการสอนของฉัน :</v-col>
         <v-col class="font-bold">
           {{ profile_detail.firstNameTh }}
         </v-col>
@@ -950,10 +949,11 @@
         <v-col>
           <span class="font-bold">เลือกคอร์ส</span>
           <v-autocomplete
-            v-model="filter_course"
+            v-model="filter_course_student"
             item-text="name"
             item-value="course_id"
             :items="my_courses.filter((v) => !v.type)"
+            @change="filterCourseStudent(filter_course_student)"
             outlined
             dense
           >
@@ -980,13 +980,11 @@
                 >
                   <v-btn
                     class="w-full"
-                    @click="student_type_default = type.value"
+                    @click="selectStudentType(type.value)"
                     depressed
-                    :dark="student_type_default === type.value"
+                    :dark="select_student_type === type.value"
                     :color="
-                      student_type_default === type.value
-                        ? '#ff6b81'
-                        : '#F5F5F5'
+                      select_student_type === type.value ? '#ff6b81' : '#F5F5F5'
                     "
                     >{{ type.label }}</v-btn
                   >
@@ -1001,31 +999,13 @@
       <v-card>
         <v-card-text>
           <v-data-table
-            v-if="student_type_default === 'all'"
             class="elevation-1 header-table"
-            :headers="student_list"
-            :items="student_data"
+            :headers="student_list_header"
+            :items="student_list"
+            :loading="student_list_load"
           >
             <template v-slot:no-data> ไม่พบข้อมูลในตาราง </template>
-            <template v-slot:[`item.count`]="{ item }">
-              {{ item.index }}
-            </template>
           </v-data-table>
-
-          <div v-else>
-            student_type_default student_type_default student_type_default
-          </div>
-          <!-- <v-data-table
-            v-else
-            class="elevation-1 header-table"
-            :headers="student_list"
-            :items="student_data"
-          >
-            <template v-slot:no-data> ไม่พบข้อมูลในตาราง </template>
-            <template v-slot:[`item.count`]="{ item }">
-              {{ item.index }}
-            </template>
-          </v-data-table> -->
         </v-card-text>
       </v-card>
     </div>
@@ -1430,6 +1410,7 @@ export default {
     singleExpand: false,
     expanded: [],
     filter_course: "",
+    filter_course_student: "",
     user_detail: "",
     tab: "teaching list",
     today: new Date(),
@@ -1459,7 +1440,7 @@ export default {
       { label: "นักเรียนจบคอร์ส", value: "potential" },
     ],
     time_frame: "day",
-    student_type_default: "all",
+    select_student_type: "all",
     menu: false,
     check_in_status_options: [
       {
@@ -1494,15 +1475,22 @@ export default {
       { text: "สถานะ", align: "start", sortable: false, value: "status" },
       { text: "", align: "right", sortable: false, value: "action" },
     ],
-    student_list: [
-      { text: "ลำดับ", align: "center", sortable: false, value: "count" },
+    student_list_header: [
+      { text: "ลำดับ", align: "center", sortable: false, value: "index" },
 
-      { text: "ชื่อ", align: "start", sortable: false, value: "st_name" },
+      { text: "ชื่อ", align: "start", sortable: false, value: "firstNameTh" },
       {
         text: "นามสกุล",
         align: "start",
         sortable: false,
-        value: "st_lname",
+        value: "lastNameTh",
+      },
+      { text: "เบอร์โทร", align: "start", sortable: false, value: "tel" },
+      {
+        text: "อีเมล",
+        align: "start",
+        sortable: false,
+        value: "email",
       },
     ],
     student_data: [
@@ -1581,9 +1569,11 @@ export default {
     show_potential_data: {},
     select_status: "all",
     coach_leaves_arr: [],
+    test: "",
   }),
 
   created() {
+    this.resetStudentList();
     this.GetLoading(true);
     if (this.$route.query.token) {
       this.loginShareToken(this.$route);
@@ -1626,6 +1616,8 @@ export default {
       profile_detail: "ProfileModules/getProfileDetail",
       show_dialog_coach_leave_form: "CoachModules/getShowDialogCoachLeaveForm",
       coach_leaves_is_loading: "CoachModules/getCoachLeavesIsLoading",
+      student_list: "CoachModules/getstudentList",
+      student_list_load: "CoachModules/getStudentListLoading",
     }),
     SetFunctionsComputed() {
       this.GetMyCourses({ coach_id: this.user_detail.account_id });
@@ -1666,7 +1658,24 @@ export default {
       GetProfileDetail: "ProfileModules/GetProfileDetail",
       ShowDialogCoachLeaveForm: "CoachModules/ShowDialogCoachLeaveForm",
       GetLoading: "LoadingModules/GetLoading",
+      GetstudentList: "CoachModules/GetstudentList",
+      resetStudentList: "CoachModules/resetStudentList",
     }),
+    filterCourseStudent(items) {
+      this.GetstudentList({
+        coach_id: this.user_detail.account_id,
+        course_id: items,
+        type: this.select_student_type,
+      });
+    },
+    selectStudentType(items) {
+      this.GetstudentList({
+        coach_id: this.user_detail.account_id,
+        course_id: this.filter_course_student,
+        type: items,
+      });
+      this.select_student_type = items;
+    },
     SelectedStatus(status) {
       this.select_status = status;
       this.coach_leaves_arr = [];
@@ -1876,6 +1885,15 @@ export default {
         return this.my_courses.filter((v) => !v.type);
       }
     },
+    // filterMycourseStudent() {
+    //   if (this.filter_course_student) {
+    //     return this.my_courses.filter(
+    //       (v) => v.course_id === this.filter_course && !v.type
+    //     );
+    //   } else {
+    //     return this.my_courses.filter((v) => !v.type);
+    //   }
+    // },
   },
 };
 </script>

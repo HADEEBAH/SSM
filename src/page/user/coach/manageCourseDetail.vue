@@ -152,6 +152,7 @@
                       item-text="label"
                       item-value="value"
                       @change="selectCheckInStatus(item, $event)"
+                      :disabled="item.disable === true"
                     >
                       <template #item="{ item }">
                         <v-list-item-content>
@@ -871,7 +872,7 @@
                     >อัปโหลดไฟล์แนบ</v-btn
                   >
                   <input
-                    id='fileInput'
+                    id="fileInput"
                     ref="fileInput"
                     type="file"
                     accept="image/* ,video/*"
@@ -1382,6 +1383,13 @@ export default {
         sortable: false,
         value: "actions",
       },
+      // {
+      //   text: "การเข้าเรียน",
+      //   align: "center",
+      //   width: "200",
+      //   sortable: false,
+      //   value: "test",
+      // },
     ],
     learners_form: false,
     potential_form: false,
@@ -1742,7 +1750,7 @@ export default {
               notificationName: "แจ้งเตือนการประเมินผู้เรียน",
               notificationDescription: "โค้ชได้ประเมินนักเรียนเรียบร้อยแล้ว",
               accountId: this.student_check_in,
-              path: `/studentCourse/${this.$route.params.courseId}`
+              path: `/studentCourse/${this.$route.params.courseId}`,
             };
             this.sendNotification(payload);
           }
@@ -1752,11 +1760,11 @@ export default {
     async CheckInStudents(item) {
       let student_id = [];
       let graduate_student_id = [];
-      
+
       await item.map((val) => {
         student_id.push({ studentId: val.studentId });
         if (val.totalDay - val.countCheckIn === 1) {
-          graduate_student_id.push({ studentId: val.studentId })
+          graduate_student_id.push({ studentId: val.studentId });
         }
       });
 
@@ -2021,7 +2029,7 @@ export default {
       for (let i = 0; i < selectedFiles.length; i++) {
         let file_type = selectedFiles[i].type.split("/");
         if (type_file.includes(file_type[0])) {
-          if (CheckFileSize(selectedFiles[i],event.target.id) === true) {
+          if (CheckFileSize(selectedFiles[i], event.target.id) === true) {
             this.coach_check_in.summary_files.push(selectedFiles[i]);
             const file = selectedFiles[i];
             const reader = new FileReader();
