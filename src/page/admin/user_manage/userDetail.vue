@@ -16,7 +16,7 @@
 
                 <v-card class="rounded-lg my-3" color="#FCFCFC">
                   <v-card-text>
-                    <v-row justify="between">
+                    <v-row>
                       <v-col cols="12" sm="6">
                         <labelCustom text="Username"></labelCustom>
                         <v-text-field
@@ -697,6 +697,73 @@
                     </v-row>
                   </v-container>
                 </v-expand-transition>
+
+                 <!-- TABS 3 -->
+                 <v-expand-transition>
+                  <v-container fluid v-if="tab === 2">
+                    <v-row class="mb-3">
+                      <v-col>
+                        <headerCard
+                          :icon="'mdi-file-certificate-outline'"
+                          :icon_color="'#FF6B81'"
+                          title="การแข่งขันและเกียรติบัตร"
+                        ></headerCard>
+                        <v-divider></v-divider>
+                      </v-col>
+                    </v-row>
+                    <v-row dense>
+                      <v-col cols="4">
+                        <v-text-field dense outlined prepend-inner-icon="mdi-magnify"></v-text-field>
+                      </v-col>
+                      <v-col cols="8" class="text-right">
+                        <v-btn color='#ff6b81' text @click="DialogCertificate()">
+                          <v-icon>mdi-file-plus-outline</v-icon>
+                          เพิ่มการแข่งขันและเกียรติบัตร
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                    <div v-for="(certificate,index) in certificates" :key="`certificate-${index}`">
+                      <v-card outlined class="mb-3">
+                        <v-card-text>
+                          <v-row dense class="flax align-center">
+                            <v-col>
+                              <v-row dense>
+                                <v-col class="text-lg font-bold">
+                                  {{certificate.certificateName}}
+                                </v-col>
+                                <v-col>
+                                  วันที่แข่ง: {{genDate(certificate.certificateDate)}}
+                                </v-col>
+                              </v-row>
+                              <v-row dense>
+                                <v-col cols="auto">
+                                  <v-img width="32" height="32" src="@/assets/userManagePage/certificate .png"></v-img>
+                                </v-col>
+                                <v-col class="text-[#ff6b81] underline">
+                                  {{ certificate.originalFileName }}
+                                </v-col>
+                              </v-row>
+                            </v-col>
+                            <v-col cols="auto">
+                              <v-btn dark v-if="certificate.certificateAttachment" depressed color="#ff6b81" @click="DialogCertificate()">
+                                แสดงหนังสือรับรอง
+                              </v-btn>
+                              <v-btn dark v-else depressed color="#ff6b81" @click="DialogCertificate()">
+                                <v-icon>mdi-plus</v-icon>
+                                เพิ่มหนังสือรับรอง
+                              </v-btn>
+                            </v-col>
+                            <v-col cols="auto">
+                              <v-btn depressed color="#FDECEC">
+                                <v-icon color="#F03D3E">mdi-delete</v-icon>
+                              </v-btn>
+                            </v-col>
+                          </v-row>
+                        </v-card-text>
+                      </v-card>
+                    </div>
+                  </v-container>
+                 </v-expand-transition>
               </v-col>
 
               <v-col
@@ -830,7 +897,7 @@
           </v-container>
 
           <!-- Button -->
-          <v-container fluid>
+          <v-container  v-if="tab == 0" fluid>
             <v-row>
               <v-col v-if="!isEnabled" align="right" cols="12">
                 <v-btn
@@ -895,9 +962,9 @@
       v-model="certificate_dialog_show"
       persistent
     >
-      <v-card>
+    <v-form ref="certificate_form" v-model="certificate_form">
+      <v-card flat>
         <v-card-title>
-          {{ selectedIndex }}
           <v-row>
             <v-col cols="12" align="right">
               <v-btn icon @click="closeDialog">
@@ -906,33 +973,57 @@
             </v-col>
           </v-row>
         </v-card-title>
-        <div class="mx-5 text-center mb-5">
-          <label-custom text="เพิ่มการแข่งขันและเกียรติบัตร"></label-custom>
+        <div class="mx-5 text-center mb-3 font-bold text-lg">
+          เพิ่มการแข่งขันและเกียรติบัตร
         </div>
-
         <v-row dense class="ml-5 mx-5">
           <v-col cols="12">
-            <label>การแข่งขัน</label>
+            <LabelCustom required text="การแข่งขัน"></LabelCustom>
             <v-text-field
+              ref="certificate_name"
+              dense
               placeholder="กรุณาระบุชื่อการแข่งขัน"
-              v-model="name_certificate"
-              hide-details
+              v-model="certificate_data.certificate_name"
               outlined
+              :rules="rules.certificate_name"
             >
             </v-text-field>
           </v-col>
           <v-col cols="12">
-            <label>วันที่</label>
-            <v-text-field
-              placeholder="กรุณาระบุชื่อการแข่งขัน"
-              v-model="certificate_date"
-              hide-details
-              outlined
+            <LabelCustom required text="วันที่"></LabelCustom>
+             <v-menu
+              v-model="certificate_data.menu_certificate_date"
+              :close-on-content-click="false"
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
             >
-              <template #append>
-                <v-icon>mdi-calendar-today</v-icon>
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  ref="certificate_date"
+                  dense
+                  outlined
+                  v-model="certificate_data.certificate_date_src"
+                  readonly
+                  :rules="rules.certificate_date"
+                  placeholder="ระบุวันที่แข่งขัน"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  <template v-slot:append>
+                    <v-icon
+                      :color="certificate_data.certificate_date ? '#FF6B81' : ''"
+                      >mdi-calendar</v-icon
+                    >
+                  </template>
+                </v-text-field>
               </template>
-            </v-text-field>
+              <v-date-picker
+                :max="today.toISOString()"
+                v-model="certificate_data.certificate_date"
+                locale="th-TH"
+              ></v-date-picker>
+            </v-menu>
           </v-col>
         </v-row>
         <!-- Upload file -->
@@ -959,7 +1050,7 @@
                 ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG )
               </v-col>
               <v-col cols="12" class="flex align-center justify-center">
-                <v-btn outlined color="blue" @click="openFileSelector"
+                <v-btn :disabled="certificate_data.fileName ? true : false" outlined color="blue" @click="openFileSelector"
                   >เลือกไฟล์</v-btn
                 >
                 <input
@@ -973,21 +1064,23 @@
             </v-row>
           </v-card-text>
         </v-card>
-        <v-card v-if="fileName !== ''" class="pa-4 ma-4">
-          <v-row>
-            <v-col cols="2">
+        <v-card v-if="certificate_data.fileName" class="pa-4 ma-4">
+          <v-row class="align-center">
+            <v-col cols="auto">
               <v-img
-                src="@/assets/userManagePage/pdfIcon.png"
-                width="30px"
-                height="30px"
+                src="@/assets/userManagePage/certificate .png"
+                width="50px"
+                height="50px"
               ></v-img>
             </v-col>
             <v-col cols="8"
-              ><span>{{ fileName }}</span></v-col
+              ><span>{{ certificate_data.fileName }}</span></v-col
             >
-            <v-col cols="2" align="end"
-              ><v-icon @click="removeFile()">mdi-close</v-icon></v-col
-            >
+            <v-col cols="2" align="end">
+              <v-btn icon @click="removeFile()">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-col>
           </v-row>
         </v-card>
 
@@ -995,7 +1088,7 @@
           <v-btn
             v-if="status === 'create'"
             depressed
-            class="white--text"
+            class="white--text btn-size-lg"
             color="#ff6b81"
             @click="saveDialog()"
           >
@@ -1021,6 +1114,7 @@
           </v-btn>
         </div>
       </v-card>
+    </v-form>
     </v-dialog>
   </v-container>
 </template>
@@ -1045,8 +1139,37 @@ export default {
   },
   data: () => ({
     tab: null,
-    items: ["ข้อมูลทั่วไป", "คอร์สเรียน"],
-
+    items: ["ข้อมูลทั่วไป", "คอร์สเรียน", "การแข่งขันและเกียรติบัตร"],
+    show_certificates: false,
+    certificate_form : false,
+    certificate_data:{
+      certificate_name: "",
+      certificate_date: "",
+      certificate_date_src:'',
+      menu_certificate_date: false,
+      file: null,
+      fileName : null,
+      preview_url : "",
+      certificateAttachment:""
+    },
+    certificates:[
+      {
+        certificateName : 'การแข่งขันเปียโนการกุศล กลายปี 2565',
+        certificateDate : '2023-08-23',
+        certificateAttachment : "",
+        originalFileName : "ประกาศนียบัตรรับรองการเข้าแข่งขัน รางวัลการแข่งขัน.pdf",
+        fileType: "",
+        fileSize: "",
+      },
+      {
+        certificateName : 'การแข่งขันเปียโนการกุศล กลายปี 2565',
+        certificateDate : '2023-08-23',
+        certificateAttachment : "",
+        originalFileName : "ประกาศนียบัตรรับรองการเข้าแข่งขัน รางวัลการแข่งขัน.pdf",
+        fileType: "",
+        fileSize: "",
+      }
+    ],
     breadcrumbs: [
       { text: "แดชบอร์ด", to: "StudentList" },
       { text: "จัดการผู้ใช้งาน", to: "UserList" },
@@ -1079,6 +1202,11 @@ export default {
     ],
 
     rules: {
+      certificate_name:[
+        (val) => (val || "").length > 0 || "กรุณาระบุชื่อการแข่งขัน",
+        (val) => (val || "").length <= 50 || "กรุณาระบุชื่อการแข่งขันไม่เกิน 50 ตัวอักษร",
+      ],
+      certificate_date:[(val) => (val || "").length > 0 || "กรุณาระบุวันที่แข่งขัน"],
       name: [
         (val) =>
           (val || "").length > 0 ||
@@ -1099,9 +1227,6 @@ export default {
       ],
     },
     search: "",
-    name_certificate: "",
-    certificate_date: "",
-    certificateType: "",
     title: "ข้อมูลผู้ใช้งาน",
     title2: "การจัดการสิทธิ์",
     title3: "คอร์สเรียน",
@@ -1131,6 +1256,7 @@ export default {
     isOpen: false,
     params: "",
     relations: [],
+    today : new Date()
   }),
   created() {
     this.params = this.$route?.params?.account_id;
@@ -1157,13 +1283,17 @@ export default {
       this.user_data.isCardOpen = false;
       this.user_data.isCardParentOpen = false;
     }
-    for (const item of JSON.parse(localStorage.getItem("relations"))) {
-      this.GetStudentData(item.student.studentId);
-    }
+    let re = localStorage.getItem("relations")
+    if(re){
+      for (const item of JSON.parse(localStorage.getItem("relations"))) {
+        this.GetStudentData(item.student.studentId);
+      }
 
-    for (const item of JSON.parse(localStorage.getItem("relations"))) {
-      this.GetStudentSchedule(item.student.studentId);
+      for (const item of JSON.parse(localStorage.getItem("relations"))) {
+        this.GetStudentSchedule(item.student.studentId);
+      }
     }
+    
   },
   methods: {
     ...mapActions({
@@ -1183,7 +1313,10 @@ export default {
         "UserManageModules/GetDataRelationsManagement",
       GetStudentSchedule: "UserModules/GetStudentSchedule",
     }),
-
+    genDate(date){
+      let dateObj = new Date(date)
+      return dateObj.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', })
+    },
     onCheckboxChange() {
       if (this.selectedbox) {
         // Checkbox is selected, open the card
@@ -1271,14 +1404,18 @@ export default {
       this.certificate_dialog_show = false;
       this.certificate_show = false;
       this.addCertificate_dialog_show = false;
+      this.certificate_data = {
+
+      }
     },
 
     uploadFile(event) {
-      this.file = this.$refs.fileInput.files[0];
-      if (!this.file) return;
-      if (CheckFileSize(this.file, event.target.id) === true) {
-        const fileType = this.file.type;
+      this.certificate_data.file = this.$refs.fileInput.files[0];
+      if (!this.certificate_data.file) return;
+      if (CheckFileSize(this.certificate_data.file, event.target.id) === true) {
+        const fileType = this.certificate_data.file.type;
         if (fileType === "image/png" || fileType === "image/jpeg") {
+          this.certificate_data.fileName = this.certificate_data.file.name
           const reader = new FileReader();
           reader.onload = (e) => {
             this.preview_url = e.target.result;
@@ -1297,15 +1434,17 @@ export default {
       }
     },
     removeFile() {
-      this.fileName = "";
+      console.log("removeFile")
+      this.certificate_data.file = null
+      this.certificate_data.fileName = "";
     },
     showImg(item) {
       return `${process.env.VUE_APP_URL}/api/v1/files/${item}`;
     },
 
     addCertificateCard() {
-      this.students.certificates.push({
-        name_certificate: "",
+      this.certificates.push({
+        certificate_name: "",
         certificate_date: "",
         previewUrl: null,
       });
@@ -1316,44 +1455,47 @@ export default {
 
     addCertificateDialog() {
       this.status = "create";
-      this.name_certificate = "";
-      this.certificate_date = "";
-      this.file = "";
-      this.fileName = "";
-      this.preview_url = null;
+      this.certificate_data.certificate_name = "";
+      this.certificate_data.certificate_date = "";
+      this.certificate_data.file = null;
+      this.certificate_data.fileName = "";
+      this.certificate_data.preview_url = null;
       this.certificate_dialog_show = true;
     },
     editCertificateDialog(item, index) {
       this.status = "edit";
       this.selectedIndex = index;
-      this.name_certificate = item.name_certificate;
-      this.certificate_date = item.certificate_date;
-      this.previewUrl = item.previewUrl;
+      this.certificate_data.certificate_name = item.certificate_name;
+      this.certificate_data.certificate_date = item.certificate_date;
+      this.certificate_data.preview_url = item.previewUrl;
       this.certificate_dialog_show = true;
     },
     detailCertificateDialog(item, index) {
       this.status = "detail";
       this.selectedIndex = index;
-      this.name_certificate = item.name_certificate;
+      this.certificate_name = item.certificate_name;
       this.certificate_date = item.certificate_date;
       this.previewUrl = item.previewUrl;
       this.certificate_dialog_show = true;
     },
     saveDialog() {
       if (this.status == "create") {
-        this.students.certificates.push({
-          name_certificate: this.name_certificate,
-          certificate_date: this.certificate_date,
-          previewUrl: this.previewUrl,
-          fileName: this.fileName,
-        });
+        this.$refs.certificate_form.validate()
+        if(this.certificate_form){
+          this.certificates.push({
+            certificate_name: this.certificate_name,
+            certificate_date: this.certificate_date,
+            previewUrl: this.previewUrl,
+            fileName: this.fileName,
+          });
+          this.certificate_dialog_show = false;
+        }
       }
-      this.certificate_dialog_show = false;
     },
     saveEditDialog(index) {
       if (this.status !== "create") {
-        this.students.certificates[index].name_certificate =
-          this.name_certificate;
+        this.students.certificates[index].certificate_name =
+          this.certificate_name;
         this.students.certificates[index].certificate_date =
           this.certificate_date;
         this.students.certificates[index].previewUrl = this.previewUrl;

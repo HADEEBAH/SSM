@@ -78,14 +78,14 @@
         </v-col>
       </v-row>
       <!-- CERTIFICATE -->
-      <v-row dense class="mt-3 mb-3">
+      <v-row dense class="mt-3 mb-3 cursor-pointer" @click="$router.push({name:'ProfileCertificate'})">
         <v-col cols="2" sm="1">
           <v-icon class="pa-2" color="#ff6b81"
             >mdi-file-certificate-outline</v-icon
           >
         </v-col>
         <v-col cols="5" sm="6" align="left" class="mt-1" align-self="center">
-          <label>การแข่งขันและเกียรติบัตร</label>
+          การแข่งขันและเกียรติบัตร
         </v-col>
         <v-col cols="3" sm="4" align="right" class="mt-1">
           <label class="pink--text">2 การแข่ง</label>
