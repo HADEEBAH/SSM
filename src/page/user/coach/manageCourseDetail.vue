@@ -1902,6 +1902,7 @@ export default {
             this.expanded_index.splice(index, 1);
           }
         });
+        item.compensation_date_str = null
         item.compensationDate = null;
         item.compensationStartTime = null;
         item.compensationEndTime = null;
