@@ -161,6 +161,16 @@
             >เพิ่มเติม</v-btn
           >
         </template>
+        <template v-slot:[`item.created_date`]="{ item }">
+          <!-- {{ new Date(item.created_date).toLocaleDateString() }} -->
+          {{
+            new Date(item.created_date).toLocaleDateString("th-TH", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
+          }}
+        </template>
         <template v-slot:[`no-results`]>
           <div class="font-bold">ไม่พบข้อมูลในตาราง</div>
         </template>
@@ -178,7 +188,7 @@
           <v-card-title>
             <v-row dense>
               <v-col cols="12" align="center" class="font-semibold"
-                >Export</v-col
+                >นำออกข้อมูล</v-col
               >
             </v-row>
           </v-card-title>
@@ -391,6 +401,7 @@
                       multiple
                       color="#FF6B81"
                       item-color="#FF6B81"
+                      :disabled="disableExportpackage"
                     >
                       <template v-slot:selection="{ item, index }">
                         <v-chip dark v-if="index === 0" color="#FF6B81">
@@ -430,7 +441,17 @@
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
                           dense
-                          v-model="export_filter.date_doc_start"
+                          :value="
+                            !export_filter.date_doc_start
+                              ? export_filter.date_doc_start
+                              : new Date(
+                                  export_filter.date_doc_start
+                                ).toLocaleDateString('th-TH', {
+                                  year: 'numeric',
+                                  month: 'long',
+                                  day: 'numeric',
+                                })
+                          "
                           label="เลือกระยะเวลาเริ่ม"
                           outlined
                           prepend-icon="mdi-calendar"
@@ -441,6 +462,7 @@
                         ></v-text-field>
                       </template>
                       <v-date-picker
+                        :max="today"
                         v-model="export_filter.date_doc_start"
                         @input="export_filter.select_date_doc_start = false"
                         locale="th-TH"
@@ -461,7 +483,17 @@
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
                           dense
-                          v-model="export_filter.date_doc_end"
+                          :value="
+                            !export_filter.date_doc_end
+                              ? export_filter.date_doc_end
+                              : new Date(
+                                  export_filter.date_doc_end
+                                ).toLocaleDateString('th-TH', {
+                                  year: 'numeric',
+                                  month: 'long',
+                                  day: 'numeric',
+                                })
+                          "
                           label="เลือกระยะเวลาสิ้นสุด"
                           outlined
                           prepend-icon="mdi-calendar"
@@ -476,6 +508,7 @@
                         v-model="export_filter.date_doc_end"
                         @input="export_filter.select_date_doc_end = false"
                         :min="export_filter.date_doc_start"
+                        :max="today"
                         locale="th-TH"
                       ></v-date-picker>
                     </v-menu>
@@ -499,7 +532,17 @@
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
                           dense
-                          v-model="export_filter.date_pay_start"
+                          :value="
+                            !export_filter.date_pay_start
+                              ? export_filter.date_pay_start
+                              : new Date(
+                                  export_filter.date_pay_start
+                                ).toLocaleDateString('th-TH', {
+                                  year: 'numeric',
+                                  month: 'long',
+                                  day: 'numeric',
+                                })
+                          "
                           label="เลือกระยะเวลาเริ่ม"
                           outlined
                           prepend-icon="mdi-calendar"
@@ -510,6 +553,7 @@
                         ></v-text-field>
                       </template>
                       <v-date-picker
+                        :max="today"
                         v-model="export_filter.date_pay_start"
                         @input="export_filter.select_date_pay_start = false"
                         locale="th-TH"
@@ -531,7 +575,17 @@
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
                           dense
-                          v-model="export_filter.date_pay_end"
+                          :value="
+                            !export_filter.date_pay_end
+                              ? export_filter.date_pay_end
+                              : new Date(
+                                  export_filter.date_pay_end
+                                ).toLocaleDateString('th-TH', {
+                                  year: 'numeric',
+                                  month: 'long',
+                                  day: 'numeric',
+                                })
+                          "
                           label="เลือกระยะเวลาสิ้นสุด"
                           outlined
                           prepend-icon="mdi-calendar"
@@ -546,6 +600,7 @@
                         v-model="export_filter.date_pay_end"
                         @input="export_filter.select_date_pay_end = false"
                         :min="export_filter.date_pay_start"
+                        :max="today"
                         locale="th-TH"
                       ></v-date-picker>
                     </v-menu>
@@ -643,6 +698,7 @@ export default {
   },
   data: () => ({
     search: "",
+    today: new Date().toISOString(),
     search_student: null,
     itemsPerPage: 10,
     show_dialog: false,
@@ -697,30 +753,36 @@ export default {
       },
       {
         text: "ชื่อ-นามสกุลผู้เรียน",
-        align: "center",
+        align: "start",
         sortable: false,
         value: "student_name",
       },
       {
         text: "ชื่อคอร์ส",
-        align: "center",
+        align: "start",
         sortable: false,
         value: "course_name",
       },
-      { text: "ราคา", align: "center", sortable: false, value: "total_price" },
+      { text: "ราคา", align: "start", sortable: false, value: "total_price" },
       {
         text: "สถานะการชำระ",
-        align: "center",
+        align: "start",
         sortable: false,
         value: "payment_status",
       },
       {
         text: "วันที่ชำระ",
-        align: "center",
+        align: "start",
         sortable: false,
         value: "paid_date",
       },
-      { text: "", align: "center", value: "actions", sortable: false },
+      {
+        text: "วันที่สร้างเอกสาร",
+        align: "start",
+        sortable: false,
+        value: "created_date",
+      },
+      { text: "", align: "start", value: "actions", sortable: false },
     ],
   }),
   created() {
@@ -740,10 +802,11 @@ export default {
       searchNameUser: "loginModules/searchNameUser",
     }),
     remove(item) {
-      const index = this.export_filter.students.indexOf(item);
-      if (index >= 0) {
-        const index = this.export_filter.students.splice(index, 1);
-      }
+      for(let i = 0; i < this.export_filter.students.length; i++){
+        if(this.export_filter.students[i] == item){
+          this.export_filter.students.splice(i, 1);
+        }
+      }     
     },
     ShowDialogExport() {
       this.export_filter.course_id = [];

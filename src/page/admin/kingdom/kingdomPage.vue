@@ -319,7 +319,8 @@ export default {
 
               Swal.fire({
                 icon: "success",
-                title: "สร้างอาณาจักรสำเร็จ",
+                title: "สำเร็จ",
+                text: "( สร้างอาณาจักรเรียบร้อยแล้ว )",
                 timer: 3000,
                 timerProgressBar: true,
                 showCancelButton: false,

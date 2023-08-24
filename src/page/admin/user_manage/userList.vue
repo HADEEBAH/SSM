@@ -399,7 +399,8 @@ export default {
                 this.$store.dispatch("UserModules/GetUserList");
                 Swal.fire({
                   icon: "success",
-                  title: "ลบข้อมูลสำเร็จ",
+                  title: "สำเร็จ",
+                  text: "( ลบข้อมูลเรียบร้อยแล้ว )",
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,

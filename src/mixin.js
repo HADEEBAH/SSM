@@ -38,13 +38,23 @@ export default {
           if (notify) {
             Swal.fire({
               icon: "success",
-              title: "ส่งการแจ้งเตือนเรียบร้อยแล้ว"
+              title: "สำเร็จ",
+              text: "( ส่งการแจ้งเตือนเรียบร้อยแล้ว )",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
             })
           }
         } else {
           Swal.fire({
             icon: "warning",
-            title: "ส่งการแจ้งเตือนไม่สำเร็จ"
+            title: "ไม่สำเร็จ",
+            text: "( ส่งการแจ้งเตือนไม่สำเร็จ )",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
           })
         }
       });

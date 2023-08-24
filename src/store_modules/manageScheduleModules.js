@@ -229,11 +229,12 @@ const manageScheduleModules = {
         if (data.statusCode === 200) {
           Swal.fire({
             icon: "success",
-            title: "แก้ไขสำเร็จ",
+            title: "สำเร็จ",
+            text: "( แก้ไขเรียบร้อยแล้ว )",
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
-            timer: 1500,
+            timer: 3000,
             timerProgressBar: true,
           });
           context.dispatch("GetAllHolidays");
@@ -241,11 +242,12 @@ const manageScheduleModules = {
         } else {
           Swal.fire({
             icon: "warning",
-            title: "แก้ไขไม่สำเร็จ",
+            title: "ไม่สำเร็จ",
+            text: "( แก้ไขไม่สำเร็จ )",
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
-            timer: 1500,
+            timer: 3000,
             timerProgressBar: true,
           });
         }

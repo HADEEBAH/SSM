@@ -205,7 +205,8 @@ import Swal from "sweetalert2";
             
             Swal.fire({
               icon: "success",
-              title: "แก้ไขรหัสผ่านสำเร็จ",
+              title: "สำเร็จ",
+              text: "( แก้ไขรหัสผ่านเรียบร้อยแล้ว )",
               timer: 3000,
               showConfirmButton: false,
               timerProgressBar: true
