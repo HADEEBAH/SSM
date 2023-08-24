@@ -158,7 +158,7 @@ const coachModules = {
             timerProgressBar: true,
             showCancelButton: false,
             showConfirmButton: false,
-          }).finally(()=>{
+          }).finally(() => {
             context.dispatch("GetStudentByTimeId", {
               course_id: course_id,
               date: date,
@@ -242,7 +242,7 @@ const coachModules = {
             timerProgressBar: true,
             showCancelButton: false,
             showConfirmButton: false,
-          }).finally(()=>{
+          }).finally(() => {
             context.dispatch("GetStudentByTimeId", {
               course_id: course_id,
               date: date,
@@ -397,7 +397,7 @@ const coachModules = {
             timerProgressBar: true,
             showCancelButton: false,
             showConfirmButton: false,
-          }).finally(()=>{
+          }).finally(() => {
             context.dispatch("GetStudentByTimeId", {
               course_id: course_id,
               date: date,
@@ -405,16 +405,30 @@ const coachModules = {
             })
           })
         }
-      } catch (error) {
+      } catch ({ response }) {
+        console.log("error", response);
         context.commit("SetStudentCheckInIsLoading", false)
-        Swal.fire({
-          icon: "error",
-          title: "เกิดข้อผิดพลาด",
-          showDenyButton: false,
-          showCancelButton: false,
-          cancelButtonText: "ยกเลิก",
-          confirmButtonText: "ตกลง",
-        })
+        if (response.status === 400) {
+          Swal.fire({
+            icon: "warning",
+            title: "คำเตือน",
+            text: "( ไม่สามารถเรียนชดเชยวันที่ระบุได้ เนื่องจากวันที่ระบุมีเรียนอยู่แล้ว )",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          })
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "เกิดข้อผิดพลาด",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          })
+        }
+
       }
     },
     async GetStudentByTimeId(context, { course_id, date }) {
@@ -939,7 +953,7 @@ const coachModules = {
               timerProgressBar: true,
               showCancelButton: false,
               showConfirmButton: false,
-            }).finally(()=>{
+            }).finally(() => {
               context.dispatch("GetLeavesDetail", { coach_leave_id: coach_leave_id })
             })
             context.commit("SetCoachLeavesIsLoading", false)
