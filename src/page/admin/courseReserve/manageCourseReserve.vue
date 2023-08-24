@@ -186,7 +186,7 @@ export default {
     update(reserve_id, reserve_data){
       Swal.fire({
         icon: "question",
-        title: `ต้องการเปลี่ยนสภานะใช่หรือไม่ ?`,
+        title: `ต้องการเปลี่ยนสถานะใช่หรือไม่ ?`,
         showDenyButton: false,
         showCancelButton: true,
         cancelButtonText: "ยกเลิก",
