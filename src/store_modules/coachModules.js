@@ -167,7 +167,7 @@ const coachModules = {
             timerProgressBar: true,
             showCancelButton: false,
             showConfirmButton: false,
-          }).finally(()=>{
+          }).finally(() => {
             context.dispatch("GetStudentByTimeId", {
               course_id: course_id,
               date: date,
@@ -251,7 +251,7 @@ const coachModules = {
             timerProgressBar: true,
             showCancelButton: false,
             showConfirmButton: false,
-          }).finally(()=>{
+          }).finally(() => {
             context.dispatch("GetStudentByTimeId", {
               course_id: course_id,
               date: date,
@@ -371,7 +371,7 @@ const coachModules = {
         })
       }
     },
-    async UpdateCheckInStudent(context, { students, course_id, date, time_id }) {
+    async UpdateCheckInStudent(context, { students, course_id, date, time_id  }) {
       try {
         context.commit("SetStudentCheckInIsLoading", true)
         let config = {
@@ -381,22 +381,16 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let count = 0
-        for await (const student of students) {
-          let payload = {
-            status: student.status, // punctual, late,  leave, emergency leave, absent,
-            compensationDate: student.compensationDate ? moment(new Date(student.compensationDate)).format("YYYY-MM-DD") : '',
-            compensationStartTime: student.compensationStartTime ? moment(student.compensationStartTime).format("HH:mm") : '',
-            compensationEndTime: student.compensationEndTime ? moment(student.compensationEndTime).format("HH:mm") : '',
-          }
-          let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/checkin/student/${student.check_in_student_id}`, payload, config)
-          if (data.statusCode == 200) {
-            count = count + 1
-          } else {
-            throw { error: data }
-          }
-        }
-        if (count === students.length) {
+        students = students.map( v => {
+            v.compensationDate = v.compensationDate ? moment(new Date(v.compensationDate)).format("YYYY-MM-DD") : ''
+            v.compensationStartTime = v.compensationStartTime ? moment(v.compensationStartTime).format("HH:mm") : ''
+            v. compensationEndTime = v.compensationEndTime ? moment(v.compensationEndTime).format("HH:mm") : ''
+            return v
+        })
+        // let localhost = "http://localhost:3000"
+        const {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/checkin/studentall`,students ,config)
+        if(data.statusCode == 200){
+          console.log(data)
           context.commit("SetStudentCheckInIsLoading", false)
           await Swal.fire({
             icon: "success",
@@ -406,7 +400,7 @@ const coachModules = {
             timerProgressBar: true,
             showCancelButton: false,
             showConfirmButton: false,
-          }).finally(()=>{
+          }).finally(() => {
             context.dispatch("GetStudentByTimeId", {
               course_id: course_id,
               date: date,
@@ -414,16 +408,41 @@ const coachModules = {
             })
           })
         }
-      } catch (error) {
         context.commit("SetStudentCheckInIsLoading", false)
-        Swal.fire({
-          icon: "error",
-          title: "เกิดข้อผิดพลาด",
-          showDenyButton: false,
-          showCancelButton: false,
-          cancelButtonText: "ยกเลิก",
-          confirmButtonText: "ตกลง",
-        })
+      } catch ({ response }) {
+        console.log("error", response);
+        context.commit("SetStudentCheckInIsLoading", false)
+        if (response.status === 400) {
+          Swal.fire({
+            icon: "warning",
+            title: "คำเตือน",
+            text: "( ไม่สามารถเรียนชดเชยวันที่ระบุได้ เนื่องจากวันที่ระบุมีเรียนอยู่แล้ว )",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          })
+          context.dispatch("GetStudentByTimeId", {
+            course_id: course_id,
+            date: date,
+            time_id: time_id,
+          })
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "เกิดข้อผิดพลาด",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          })
+          context.dispatch("GetStudentByTimeId", {
+            course_id: course_id,
+            date: date,
+            time_id: time_id,
+          })
+        }
+
       }
     },
     async GetStudentByTimeId(context, { course_id, date }) {
@@ -948,7 +967,7 @@ const coachModules = {
               timerProgressBar: true,
               showCancelButton: false,
               showConfirmButton: false,
-            }).finally(()=>{
+            }).finally(() => {
               context.dispatch("GetLeavesDetail", { coach_leave_id: coach_leave_id })
             })
             context.commit("SetCoachLeavesIsLoading", false)
