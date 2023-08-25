@@ -149,6 +149,18 @@ const dashboardModules = {
       try {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potencial/`)
         if (data.statusCode === 200) {
+          data.data.countReserve.studentList.map((items) => {
+            for (const item of items.course) {
+              item.fullDateTh = new Date(item.createdDate).toLocaleDateString(
+                "th-TH",
+                {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                }
+              )
+            }
+          })
           context.commit("SetGetLoading", false)
           context.commit("SetGetPotential", data.data)
         }

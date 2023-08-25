@@ -287,11 +287,23 @@
 
         <v-card-title>
           <v-row dense>
-            <v-col cols="12" class="my-2">
-              <span class="font-bold"> ชื่อคอร์ส: </span>
-              {{ detail_dialog_end.courseNameTh }}
+            <v-col cols="12">
+              <v-text-field
+                hide-details
+                outlined
+                readonly
+                dense
+                :value="detail_dialog_end.courseNameTh"
+                label="ชื่อคอร์ส"
+                color="#FF6B81"
+              >
+                <template v-slot:append>
+                  <v-icon :color="'#FF6B81'">mdi-school-outline</v-icon>
+                </template>
+              </v-text-field>
             </v-col>
-            <v-col cols="12" class="my-2">
+
+            <!-- <v-col cols="12" class="my-2">
               <span class="font-bold"> ชนิดคอร์ส: </span>
               {{ detail_dialog_end.courseTypeNameTh }}
               <span
@@ -307,6 +319,21 @@
                   )[0]?.label
                 }})
               </span>
+            </v-col> -->
+            <v-col cols="12">
+              <v-text-field
+                hide-details
+                outlined
+                readonly
+                dense
+                :value="`${detail_dialog_end.courseTypeNameTh} (${detail_dialog_end.packageName})`"
+                label="ชนิดคอร์ส"
+                color="#FF6B81"
+              >
+                <template v-slot:append>
+                  <v-icon :color="'#FF6B81'">mdi-book-multiple-outline</v-icon>
+                </template>
+              </v-text-field>
             </v-col>
           </v-row>
         </v-card-title>
@@ -338,55 +365,107 @@
           :key="index"
         >
           <v-row dense>
-            <v-col cols="12" class="my-2">
-              <span class="font-bold"> ชื่อคอร์ส: </span>{{ item.courseNameTh }}
-            </v-col>
-            <v-col cols="6" class="my-2">
-              <span class="font-bold"> สถานะคอร์ส: </span>
-              <span
-                :style="`color:${
-                  course_status_options.filter(
-                    (v) => v.value === item.status
-                  )[0]?.color
-                }`"
+            <!-- ชื่อคอร์ส -->
+            <v-col cols="12">
+              <v-text-field
+                hide-details
+                outlined
+                readonly
+                dense
+                :value="item.courseNameTh"
+                label="ชื่อคอร์ส"
+                color="#FF6B81"
               >
-                ({{
+                <template v-slot:append>
+                  <v-icon :color="'#FF6B81'">mdi-school-outline</v-icon>
+                </template>
+              </v-text-field>
+            </v-col>
+            <!-- โค้ช -->
+            <v-col cols="12">
+              <v-text-field
+                hide-details
+                outlined
+                readonly
+                dense
+                :value="item.coachName"
+                label="โค้ช"
+                color="#FF6B81"
+              >
+                <template v-slot:append>
+                  <v-icon :color="'#FF6B81'">mdi-account-outline</v-icon>
+                </template>
+              </v-text-field>
+            </v-col>
+            <!-- สถานะคอร์ส -->
+            <v-col cols="12" sm="6">
+              <v-text-field
+                hide-details
+                outlined
+                readonly
+                dense
+                :value="
                   course_status_options.filter(
                     (v) => v.value === item.status
                   )[0]?.label
-                }})
-              </span>
-            </v-col>
-
-            <v-col cols="6" class="my-2">
-              <span class="font-bold">แพ็กเกจ:</span> {{ item.optionName }}
-              <span
-                :style="`color:${
-                  course_type_options.filter(
-                    (v) => v.value === item.packageName
-                  )[0]?.color
-                }`"
+                "
+                label="สถานะคอร์ส"
+                color="#FF6B81"
               >
-                ({{
-                  course_type_options.filter(
-                    (v) => v.value === item.packageName
-                  )[0]?.label
-                }})
-              </span>
+                <template v-slot:append>
+                  <v-icon :color="'#FF6B81'">mdi-book-multiple-outline</v-icon>
+                </template>
+              </v-text-field>
             </v-col>
-            <v-col cols="6" class="my-2">
-              <span class="font-bold"> ชนิดคอร์ส: </span>
-              {{ item.courseTypeNameTh }}
+            <!-- แพ็กเกจ -->
+            <v-col cols="6" sm="6">
+              <v-text-field
+                hide-details
+                outlined
+                readonly
+                dense
+                :value="`${item.optionName}  (${item.packageName})`"
+                label="แพ็กเกจ"
+                color="#FF6B81"
+              >
+                <template v-slot:append>
+                  <v-icon :color="'#FF6B81'">mdi-book-multiple-outline</v-icon>
+                </template>
+              </v-text-field>
             </v-col>
 
-            <v-col cols="6" class="my-2">
-              <span class="font-bold"> วันที่จอง: </span>
-              {{ new Date(item.createdDate).toLocaleDateString("th-TH") }}
+            <!-- ชนิดคอร์ส -->
+            <v-col cols="6" sm="6">
+              <v-text-field
+                hide-details
+                outlined
+                readonly
+                dense
+                :value="item.courseTypeNameTh"
+                label="ชนิดคอร์ส"
+                color="#FF6B81"
+              >
+                <template v-slot:append>
+                  <v-icon :color="'#FF6B81'">>mdi-school-outline</v-icon>
+                </template>
+              </v-text-field>
             </v-col>
 
-            <v-col cols="12" class="my-2">
-              <span class="font-bold"> โค้ช: </span>
-              {{ item.coachName }}
+            <!-- วันที่จอง -->
+            <v-col cols="6" sm="6">
+              <v-text-field
+                hide-details
+                outlined
+                readonly
+                dense
+                :value="item.fullDateTh"
+                label="วันที่จอง"
+                color="#FF6B81"
+              >
+                <template v-slot:append>
+                  <v-icon :color="'#FF6B81'">mdi-calendar</v-icon>
+                </template>
+              </v-text-field>
             </v-col>
           </v-row>
         </v-card-title>
@@ -502,6 +581,7 @@ export default {
         color: "#8CD977",
       },
     ],
+    date_course_booked: "",
   }),
   mounted() {
     this.GetPotential();
@@ -519,6 +599,16 @@ export default {
     dialogDetailBooked(items) {
       this.course_detail_dialog_booked = true;
       this.detail_dialog_booked = items;
+      for (const item of items.course) {
+        this.date_course_booked = new Date(item.createdDate).toLocaleDateString(
+          "th-TH",
+          {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }
+        );
+      }
     },
   },
   computed: {
