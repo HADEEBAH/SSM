@@ -25,6 +25,7 @@ const UserManageModules = {
     searchTerm: "",
     inputValue: "",
     certificates: [],
+    certificate_count : 0,
     certificate_detail: {
       name_certificate: "",
       certificate_date: "",
@@ -50,9 +51,13 @@ const UserManageModules = {
         tel: "",
       },
     ],
-    data_user_relation_management: []
+    data_user_relation_management: [],
+    
   },
   mutations: {
+    SetCertificateCount(state, payload){
+      state.certificate_count = payload
+    },
     SetCourseCoachList(state, payload){
       state.course_coach_list = payload
     },
@@ -74,12 +79,23 @@ const UserManageModules = {
   },
 
   actions: {
+    async GetCertificateCount(context, {account_id}){
+      try{
+        // let localhost = "http://localhost:3000"
+        const {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/certificate/count/${account_id}`)
+        if(data.statusCode == 200){
+          console.log(data.data)
+          context.commit("SetCertificateCount", data.data)
+        }
+      }catch(error){
+        console.log(error)
+      }
+    },
     async GetCourseCoachList(context, {account_id}){
       try{
         // let localhost = "http://localhost:3000"
         const {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/usermanagement/course-coach/list?accountId=${account_id}`)
         if(data.statusCode == 200){
-          console.log(data)
           let courseCoachList = data.data.map( v => {
             v.courseName = `${v.courseNameTh}(${v.courseNameEn})`
             v.categoryName = `${v.categoryNameTh}(${v.categoryNameEn})`
@@ -276,6 +292,9 @@ const UserManageModules = {
   },
 
   getters: {
+    certificate_count(state){
+      return state.certificate_count
+    },
     course_coach_list(state){
       return state.course_coach_list
     },
