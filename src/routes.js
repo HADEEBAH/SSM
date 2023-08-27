@@ -290,7 +290,7 @@ const routes = [
         component: UserProfile,
       },
       {
-        path: 'profileCertificate',
+        path: 'profileCertificate/:account_id',
         name: 'ProfileCertificate',
         component: ProfileCertificate,
       },

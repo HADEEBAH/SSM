@@ -1,14 +1,25 @@
 <template>
   <v-container>
-    <div class="mx-5 my-5">
+    <div  v-if="certificates.length == 0" class="mx-5 my-5">
+      <v-card>
+        <v-card-text>
+          <v-row>
+            <v-col class="text-center">
+              ไม่พบข้อมูลการแข่งขัน
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </div>
+    <div v-else class="mx-5 my-5">
       <v-card
-        v-for="(certificate, certificate_index) in certificate_data"
+        v-for="(certificate, certificate_index) in certificates"
         :key="certificate_index"
         class="my-5"
       >
         <div class="mx-5 my-2">
           <label class="text-xl font-bold">{{
-            certificate.certificate_title
+            certificate.certificateName
           }}</label>
           <div class="text-slate-400">{{ certificate.race_day }}</div>
           <v-row class="my-2">
@@ -16,15 +27,17 @@
               <img src="@/assets/userManagePage/certificate .png" />
             </v-col>
             <v-col
+              @click="openFile(certificate.certificateAttachment)"
               cols="6"
               sm="11"
               align="left"
               class="mt-1 cursor-pointer pink--text underline underline-offer4"
-              >{{ certificate.certificate_card }}
+              >{{ certificate.originalFileName}}
             </v-col>
           </v-row>
         </div>
       </v-card>
+      
     </div>
   </v-container>
 </template>
@@ -39,15 +52,19 @@ export default {
       "NavberUserModules/changeTitleNavber",
       "การแข่งขันและ..."
     );
+    this.GetCertificateListByAccount({account_id : this.$route.params.account_id})
   },
   methods: {
     ...mapActions({
-      ChangeCertificateData: "ProfileModules/ChangeCertificateData",
+      GetCertificateListByAccount: "UserManageModules/GetCertificateListByAccount",
     }),
+    openFile(url){
+      window.open(url, '_blank')
+    }
   },
   computed: {
     ...mapGetters({
-      certificate_data: "ProfileModules/getCertificateData",
+      certificates: "UserManageModules/getCertificate",
     }),
   },
 };
