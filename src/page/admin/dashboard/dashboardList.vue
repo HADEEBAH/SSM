@@ -472,7 +472,39 @@
                       </span>
                     </div>
                   </v-col>
-                  <!-- PIE 2 CARDs -->
+
+                  <v-col cols="12" sm="6" align="center">
+                    <v-text-field
+                      v-model="search_course_close"
+                      :class="`bg-white rounded-full ${
+                        !MobileSize ? 'w-3/5' : 'w-full'
+                      } `"
+                      hide-details
+                      dense
+                      outlined
+                      label="ค้นหาชื่อคอร์สเต็มได้ที่นี้"
+                      prepend-inner-icon="mdi-magnify"
+                      color="#ff6b81"
+                    >
+                    </v-text-field>
+                  </v-col>
+
+                  <v-col cols="12" sm="6" align="center">
+                    <v-text-field
+                      v-model="search_course_open"
+                      :class="`bg-white
+                    rounded-full ${!MobileSize ? 'w-3/5' : 'w-full'} `"
+                      hide-details
+                      dense
+                      outlined
+                      label="ค้นหาชื่อคอร์สว่างได้ที่นี้"
+                      prepend-inner-icon="mdi-magnify"
+                      color="#ff6b81"
+                    >
+                    </v-text-field>
+                  </v-col>
+
+                  <!-- PIE CARDs -->
                   <!-- COURSE CLOSE -->
                   <v-col cols="12" sm="6" class="my-2" :width="pieCardWidth()">
                     <v-card outlined style="overflow-y: scroll" height="400px">
@@ -498,7 +530,9 @@
                         <v-card
                           outlined
                           class="mb-3"
-                          v-for="(item, index) in get_empty_course_close"
+                          v-for="(item, index) in searchCourseClose(
+                            search_course_close
+                          )"
                           :key="index"
                         >
                           <v-card-text class="pa-0">
@@ -580,6 +614,22 @@
                             </v-row>
                           </v-card-text>
                         </v-card>
+                        <!-- ไม่พบข้อมูลของคอร์สนี้ -->
+                        <v-card
+                          v-if="
+                            searchCourseClose(search_course_close).length === 0
+                          "
+                          class="rounded-lg my-3"
+                        >
+                          <v-card-text
+                            class="text-center border-2 border-[#ff6b81] rounded-lg"
+                          >
+                            <span class="text-lg font-bold">
+                              <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                              ไม่พบข้อมูลของคอร์สเต็ม
+                            </span>
+                          </v-card-text>
+                        </v-card>
                       </v-card-text>
                     </v-card>
                   </v-col>
@@ -609,7 +659,9 @@
                         <v-card
                           outlined
                           class="mb-3"
-                          v-for="(item, index) in get_empty_course_open"
+                          v-for="(item, index) in searchCourseOpen(
+                            search_course_open
+                          )"
                           :key="index"
                         >
                           <v-card-text class="pa-0">
@@ -699,6 +751,21 @@
                           </v-card-text>
                         </v-card>
                       </v-card-text>
+
+                      <!-- ไม่พบข้อมูลของคอร์สนี้ -->
+                      <v-card
+                        v-if="searchCourseOpen(search_course_open).length === 0"
+                        class="rounded-lg my-3"
+                      >
+                        <v-card-text
+                          class="text-center border-2 border-[#ff6b81] rounded-lg"
+                        >
+                          <span class="text-lg font-bold">
+                            <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                            ไม่พบข้อมูลของคอร์สว่าง
+                          </span>
+                        </v-card-text>
+                      </v-card>
                     </v-card>
                   </v-col>
                   <!-- DIALOG COURSES -->
@@ -935,6 +1002,8 @@ export default {
     items_dialog: "",
     day: "จันทร์",
     time: "13.00:15.00",
+    search_course_close: "",
+    search_course_open: "",
   }),
   created() {
     this.FilterYears().then(() => {
@@ -1061,6 +1130,29 @@ export default {
     dialogDetail(item) {
       this.items_dialog = item;
       this.dialog_course = true;
+    },
+
+    searchCourseClose(val) {
+      if (val) {
+        return this.get_empty_course_close.filter(
+          (v) => v.courseNameTh.indexOf(val) !== -1
+          // ||
+          // v.get_empty_course_open.indexOf(val) !== -1
+        );
+      } else {
+        return this.get_empty_course_close;
+      }
+    },
+    searchCourseOpen(val) {
+      if (val) {
+        return this.get_empty_course_open.filter(
+          (v) => v.courseNameTh.indexOf(val) !== -1
+          // ||
+          // v.get_empty_course_open.indexOf(val) !== -1
+        );
+      } else {
+        return this.get_empty_course_open;
+      }
     },
   },
   computed: {
