@@ -166,30 +166,26 @@ const dashboardModules = {
         let series_chart = []
         let labels_chart = []
         if (data?.statusCode === 200) {
-
+          data.data.sumTotalSuccess = data.data.sumSuccess + data.data.otherTotal.sumSuccess
+          data.data.sumTotalPending = data.data.sumPending + data.data.otherTotal.sumPending
+          data.data.sumTotal = data.data.totalPrice + data.data.otherTotal.totalPrice
           data.data.datas?.map((items) => {
-            items.sumSuccess = parseFloat(items?.sumSuccess)
-            items.sumPending = parseFloat(items?.sumPending)
-            items.totalPrice = parseFloat(items?.totalPrice)
-
-            items.stringSumSuccess = items?.sumSuccess?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            items.stringSumPending = items?.sumPending?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            items.stringTotal = items?.totalPrice?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            items.stringSumSuccess = items?.sumSuccess.toLocaleString(undefined,{minimumFractionDigits: 2})
+            items.stringSumPending = items?.sumPending.toLocaleString(undefined,{minimumFractionDigits: 2})
+            items.stringTotal = items?.totalPrice.toLocaleString(undefined,{minimumFractionDigits: 2})
             chart.push(items)
           })
-          data.data.otherTotal.stringSumSuccess = data.data.otherTotal?.sumSuccess?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          data.data.otherTotal.stringSumPending = data.data.otherTotal?.sumPending?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          data.data.otherTotal.stringTotal = data.data.otherTotal?.totalPrice?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          data.data.otherTotal.stringSumSuccess = data.data.otherTotal?.sumSuccess.toLocaleString(undefined,{minimumFractionDigits: 2})
+          data.data.otherTotal.stringSumPending = data.data.otherTotal?.sumPending.toLocaleString(undefined,{minimumFractionDigits: 2})
+          data.data.otherTotal.stringTotal = data.data.otherTotal?.totalPrice.toLocaleString(undefined,{minimumFractionDigits: 2})
 
           chart.push(data.data.otherTotal)
-
           if (chart.length > 0) {
             chart.map((items) => {
-              series_chart.push(items.totalPrice)
+              series_chart.push(parseFloat(items.totalPrice))
               labels_chart.push(items.courseNameTh)
             })
           }
-
           context.commit("SetSeriesChart", series_chart)
           context.commit("SetLabelsChart", labels_chart)
           context.commit("SetGetDonut", data.data)

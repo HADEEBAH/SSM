@@ -360,7 +360,7 @@
                             style="color: #ff6b81"
                             class="font-bold text-xl"
                           >
-                            {{ get_donut.sumSuccess?.toLocaleString() }}
+                            {{ get_donut?.sumTotalSuccess?.toLocaleString() }}
                           </span>
                           <span
                             style="
@@ -371,8 +371,8 @@
                           >
                             บาท ({{
                               (
-                                (get_donut.sumSuccess * 100) /
-                                (get_donut.sumPending + get_donut.sumSuccess)
+                                (get_donut.sumTotalSuccess * 100) /
+                                (get_donut.sumTotalPending + get_donut.sumSuccess)
                               )?.toLocaleString("us-us", {
                                 maximumFractionDigits: 2,
                               })
@@ -392,7 +392,7 @@
                             style="color: #999999"
                             class="font-bold text-xl"
                           >
-                            {{ get_donut?.sumPending?.toLocaleString() }}</span
+                            {{ get_donut?.sumTotalPending?.toLocaleString() }}</span
                           >
                           <span
                             style="
@@ -403,8 +403,8 @@
                           >
                             บาท ({{
                               (
-                                (get_donut.sumPending * 100) /
-                                (get_donut.sumPending + get_donut.sumSuccess)
+                                (get_donut.sumTotalPending * 100) /
+                                (get_donut.sumTotalPending + get_donut.sumTotalSuccess)
                               )?.toLocaleString("us-us", {
                                 maximumFractionDigits: 2,
                               })
