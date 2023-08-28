@@ -565,7 +565,7 @@
                       >
                         <v-row>
                           <v-col>
-                            <v-chip color="#d9ead3" 
+                            <v-chip :color="item_booked.status === 'contacted' ? '#d9ead3' : item_booked.status === 'waiting' ? '#FDFBE5': '#FAD0CF'"  
                             :text-color="item_booked.status === 'contacted'? 'green' :item_booked.status === 'waiting'? 'yellow' : 'red'">
                               <span>{{
                                 item_booked.status === "waiting"
