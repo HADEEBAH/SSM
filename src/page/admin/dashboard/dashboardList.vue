@@ -1172,7 +1172,10 @@ export default {
       get_labels_line_chart: "DashboardModules/getLabelsLineChart",
       get_labels_line_chart_month: "DashboardModules/getLabelsLineChartMonth",
     }),
-
+    MobileSize() {
+      const { xs } = this.$vuetify.breakpoint;
+      return !!xs;
+    },
     chartOptions() {
       let labels = [];
       if (this.get_graf.length !== 0) {
