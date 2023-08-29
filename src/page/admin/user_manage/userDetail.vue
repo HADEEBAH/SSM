@@ -944,6 +944,7 @@
                       params: {
                         action: 'edit',
                         account_id: $route.params.account_id,
+                        from: 'userList' 
                       },
                     })
                   "
@@ -1193,11 +1194,7 @@ export default {
       state : 'create'
     },
 
-    breadcrumbs: [
-      { text: "แดชบอร์ด", to: "StudentList" },
-      { text: "จัดการผู้ใช้งาน", to: "UserList" },
-      { text: "เพิ่มผู้ใช้งาน", to: "" },
-    ],
+    breadcrumbs: [],
     roleCoachTable: [
       { text: "ชื่อคอร์ส", value: "courseName", sortable: false },
       { text: "ชื่ออาณาจักร", value: "categoryName", sortable: false },
@@ -1287,6 +1284,19 @@ export default {
     today : new Date()
   }),
   created() {
+    if( this.$route?.params?.from === "Dashboard"){
+      this.breadcrumbs = [
+        { text: "แดชบอร์ด", to: "StudentList" },
+        { text: "จัดการผู้ใช้งาน", to: "UserList" },
+        { text: "เพิ่มผู้ใช้งาน", to: "" },
+      ]
+    }else{
+      this.breadcrumbs = [
+        { text: "จัดการผู้ใช้งาน", to: "UserList" },
+        { text: "เพิ่มผู้ใช้งาน", to: "" },
+      ]
+    }
+   
     this.params = this.$route?.params?.account_id;
   },
   mounted() {
