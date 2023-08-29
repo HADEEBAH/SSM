@@ -98,6 +98,7 @@ import { mapActions, mapGetters } from "vuex";
 import router from "@/router";
 import Swal from "sweetalert2";
 import { inputValidation } from "@/functions/functions";
+import VueCookie from "vue-cookie";
 
 export default {
   data: () => ({
@@ -126,8 +127,24 @@ export default {
         });
         if (this.responseTypeForgotPassword) {
           this.loading = false;
-
-          router.push({ name: "ResetPassword" });
+          if(this.type === "phone"){
+            router.push({ name: "ResetPassword" });
+          }else{
+            Swal.fire({
+              icon: 'success',
+              title: "สำเร็จ",
+              text: `ได้ส่งลิงค์เปลี่ยนรหัสผ่านไปยัง ${this.value} แล้ว`,
+              timer: 3000,
+              timerProgressBar: true
+            });
+            if(VueCookie.get("token")){
+              router.push({ name: "UserKingdom" });
+            }else{
+              router.push({ name: "Login" });
+            }
+            
+          }
+          
         } else {
           this.loading = false;
           let error_message = "";
