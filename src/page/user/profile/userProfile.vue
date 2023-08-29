@@ -50,7 +50,6 @@
         </v-col>
         <v-col cols="5" sm="6"> พอร์ตโฟลิโอ </v-col>
       </v-row>
-
       <v-row
         dense
         class="mt-3 cursor-pointer"
@@ -77,18 +76,19 @@
           <span class="mdi mdi-chevron-right"></span>
         </v-col>
       </v-row>
+
       <!-- CERTIFICATE -->
-      <v-row dense class="mt-3 mb-3">
+      <v-row dense class="mt-3 mb-3 cursor-pointer" @click="$router.push({name:'ProfileCertificate',params:{account_id : profile_detail.userOneId}})">
         <v-col cols="2" sm="1">
           <v-icon class="pa-2" color="#ff6b81"
             >mdi-file-certificate-outline</v-icon
           >
         </v-col>
         <v-col cols="5" sm="6" align="left" class="mt-1" align-self="center">
-          <label>การแข่งขันและเกียรติบัตร</label>
+          การแข่งขันและเกียรติบัตร
         </v-col>
         <v-col cols="3" sm="4" align="right" class="mt-1">
-          <label class="pink--text">2 การแข่ง</label>
+          <label class="pink--text">{{ certificate_count.countCertificate }} การแข่ง</label>
         </v-col>
         <v-col cols="2" sm="1" align="right" class="mt-2">
           <span class="mdi mdi-chevron-right"></span>
@@ -574,7 +574,7 @@
           </v-row>
 
           <!-- CERTIFICATE -->
-          <v-row dense class="mt-3 cursor-pointer" @click="show_certificate()">
+          <v-row dense class="mt-3 cursor-pointer" @click="show_certificate(dialogGetStudentData.studentId)">
             <v-col cols="2" sm="1">
               <img src="@/assets/profile/certificate.png" />
             </v-col>
@@ -582,7 +582,7 @@
               <label>การแข่งขันและเกียรติบัตร</label>
             </v-col>
             <v-col cols="3" sm="4" align="right" class="mt-1">
-              <label class="pink--text">2 การแข่ง</label>
+              <label class="pink--text">{{ certificate_count.countCertificate }} การแข่ง</label>
             </v-col>
             <v-col cols="2" sm="1" align="right" class="mt-2">
               <span class="mdi mdi-chevron-right"></span>
@@ -837,6 +837,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "โปรไฟล์");
+    this.GetCertificateCount({account_id: this.user_login.account_id})
   },
 
   watch: {
@@ -881,6 +882,7 @@ export default {
       GetProfileDetail: "ProfileModules/GetProfileDetail",
       GetRelationDataV2: "ProfileModules/GetRelationData",
       GetStudentCourse: "MyCourseModules/GetStudentCourse",
+      GetCertificateCount : "UserManageModules/GetCertificateCount"
     }),
 
     async getStudentData(order_item_id) {
@@ -911,8 +913,8 @@ export default {
         });
       }
     },
-    show_certificate() {
-      this.$router.push({ name: "ProfileCertificate" });
+    show_certificate(account_id) {
+      this.$router.push({ name: "ProfileCertificate", params:{account_id : account_id} });
     },
     show_password() {
       this.$router.push({ name: "ForgotPassword" });
@@ -932,6 +934,7 @@ export default {
     openDialogStudent(item) {
       this.dialogGetStudentData = item;
       this.show_student_data = true;
+      this.GetCertificateCount({account_id : item.studentId})
     },
     openAddRelationDialog() {
       this.add_relation = true;
@@ -1233,6 +1236,7 @@ export default {
       profile_detail: "ProfileModules/getProfileDetail",
       relation_data: "ProfileModules/getRelationData",
       student_course: "MyCourseModules/getStudentCourse",
+      certificate_count : "UserManageModules/certificate_count",
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;

@@ -1342,7 +1342,9 @@ export default {
                     params: {
                       action: "view",
                       account_id: this.$route.params.account_id,
+                      from: 'userList'
                     },
+                    
                   });
                   Swal.fire({
                     icon: "success",

@@ -565,11 +565,12 @@
                       >
                         <v-row>
                           <v-col>
-                            <v-chip color="#d9ead3" text-color="green">
+                            <v-chip :color="item_booked.status === 'contacted' ? '#d9ead3' : item_booked.status === 'waiting' ? '#FDFBE5': '#FAD0CF'"  
+                            :text-color="item_booked.status === 'contacted'? 'green' :item_booked.status === 'waiting'? 'yellow' : 'red'">
                               <span>{{
                                 item_booked.status === "waiting"
-                                  ? "รอการติดต่อ"
-                                  : item_booked.status
+                                  ? "รอการติดต่อ" 
+                                  : item_booked.status === 'contacted' ? 'ติดต่อแล้ว' : 'ยกเลิกการจอง'
                               }}</span>
                             </v-chip>
                           </v-col>
@@ -742,11 +743,13 @@
                       >
                         <v-row>
                           <v-col>
-                            <v-chip color="#d9ead3" text-color="green">
+                            <v-chip :color="item_booked.status === 'contacted' ? '#d9ead3' : item_booked.status === 'waiting' ? '#FDFBE5': '#FAD0CF'" 
+                              :text-color="item_booked.status === 'contacted'? 'green' :item_booked.status === 'waiting'? 'yellow' : 'red'"
+                            >
                               <span>{{
                                 item_booked.status === "waiting"
                                   ? "รอการติดต่อ"
-                                  : item_booked.status
+                                  : item_booked.status === 'contacted' ? 'ติดต่อแล้ว' : 'ยกเลิกการจอง'
                               }}</span>
                             </v-chip>
                           </v-col>

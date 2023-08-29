@@ -360,7 +360,7 @@
                             style="color: #ff6b81"
                             class="font-bold text-xl"
                           >
-                            {{ get_donut.sumSuccess?.toLocaleString() }}
+                            {{ get_donut?.sumTotalSuccess?.toLocaleString() }}
                           </span>
                           <span
                             style="
@@ -371,8 +371,9 @@
                           >
                             บาท ({{
                               (
-                                (get_donut.sumSuccess * 100) /
-                                (get_donut.sumPending + get_donut.sumSuccess)
+                                (get_donut.sumTotalSuccess * 100) /
+                                (get_donut.sumTotalPending +
+                                  get_donut.sumSuccess)
                               )?.toLocaleString("us-us", {
                                 maximumFractionDigits: 2,
                               })
@@ -392,7 +393,9 @@
                             style="color: #999999"
                             class="font-bold text-xl"
                           >
-                            {{ get_donut?.sumPending?.toLocaleString() }}</span
+                            {{
+                              get_donut?.sumTotalPending?.toLocaleString()
+                            }}</span
                           >
                           <span
                             style="
@@ -403,8 +406,9 @@
                           >
                             บาท ({{
                               (
-                                (get_donut.sumPending * 100) /
-                                (get_donut.sumPending + get_donut.sumSuccess)
+                                (get_donut.sumTotalPending * 100) /
+                                (get_donut.sumTotalPending +
+                                  get_donut.sumTotalSuccess)
                               )?.toLocaleString("us-us", {
                                 maximumFractionDigits: 2,
                               })
@@ -472,10 +476,46 @@
                       </span>
                     </div>
                   </v-col>
-                  <!-- PIE 2 CARDs -->
+
+                  <v-col cols="12" sm="6" align="center">
+                    <v-text-field
+                      v-model="search_course_close"
+                      :class="`bg-white rounded-full ${
+                        !MobileSize ? 'w-3/5' : 'w-full'
+                      } `"
+                      hide-details
+                      dense
+                      outlined
+                      label="ค้นหาชื่อคอร์สเต็มได้ที่นี้"
+                      prepend-inner-icon="mdi-magnify"
+                      color="#ff6b81"
+                    >
+                    </v-text-field>
+                  </v-col>
+
+                  <v-col cols="12" sm="6" align="center">
+                    <v-text-field
+                      v-model="search_course_open"
+                      :class="`bg-white
+                    rounded-full ${!MobileSize ? 'w-3/5' : 'w-full'} `"
+                      hide-details
+                      dense
+                      outlined
+                      label="ค้นหาชื่อคอร์สว่างได้ที่นี้"
+                      prepend-inner-icon="mdi-magnify"
+                      color="#ff6b81"
+                    >
+                    </v-text-field>
+                  </v-col>
+
+                  <!-- PIE CARDs -->
                   <!-- COURSE CLOSE -->
                   <v-col cols="12" sm="6" class="my-2" :width="pieCardWidth()">
-                    <v-card outlined style="overflow-y: scroll" height="400px">
+                    <v-card
+                      outlined
+                      style="overflow-y: scroll; overflow-x: hidden"
+                      height="400px"
+                    >
                       <v-card-text
                         style="
                           background-color: #ffdde2;
@@ -498,7 +538,9 @@
                         <v-card
                           outlined
                           class="mb-3"
-                          v-for="(item, index) in get_empty_course_close"
+                          v-for="(item, index) in searchCourseClose(
+                            search_course_close
+                          )"
                           :key="index"
                         >
                           <v-card-text class="pa-0">
@@ -581,12 +623,27 @@
                           </v-card-text>
                         </v-card>
                       </v-card-text>
+                      <!-- ไม่พบข้อมูลของคอร์สนี้ -->
+                      <v-row
+                        v-if="
+                          searchCourseClose(search_course_close).length === 0
+                        "
+                      >
+                        <v-col align="center" class="text-lg font-bold">
+                          <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                          ไม่พบข้อมูลของคอร์สเต็ม
+                        </v-col>
+                      </v-row>
                     </v-card>
                   </v-col>
 
                   <!-- COURSE OPEN -->
                   <v-col cols="12" sm="6" class="my-2" :width="pieCardWidth()">
-                    <v-card outlined style="overflow-y: scroll" height="400px">
+                    <v-card
+                      outlined
+                      style="overflow-y: scroll; overflow-x: hidden"
+                      height="400px"
+                    >
                       <v-card-text
                         style="
                           background-color: #ffdde2;
@@ -609,7 +666,9 @@
                         <v-card
                           outlined
                           class="mb-3"
-                          v-for="(item, index) in get_empty_course_open"
+                          v-for="(item, index) in searchCourseOpen(
+                            search_course_open
+                          )"
                           :key="index"
                         >
                           <v-card-text class="pa-0">
@@ -699,6 +758,16 @@
                           </v-card-text>
                         </v-card>
                       </v-card-text>
+
+                      <!-- ไม่พบข้อมูลของคอร์สนี้ -->
+                      <v-row
+                        v-if="searchCourseOpen(search_course_open).length === 0"
+                      >
+                        <v-col align="center" class="text-lg font-bold">
+                          <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                          ไม่พบข้อมูลของคอร์สว่าง
+                        </v-col>
+                      </v-row>
                     </v-card>
                   </v-col>
                   <!-- DIALOG COURSES -->
@@ -935,6 +1004,8 @@ export default {
     items_dialog: "",
     day: "จันทร์",
     time: "13.00:15.00",
+    search_course_close: "",
+    search_course_open: "",
   }),
   created() {
     this.FilterYears().then(() => {
@@ -1062,6 +1133,29 @@ export default {
       this.items_dialog = item;
       this.dialog_course = true;
     },
+
+    searchCourseClose(val) {
+      if (val) {
+        return this.get_empty_course_close.filter(
+          (v) => v.courseNameTh.indexOf(val) !== -1
+          // ||
+          // v.get_empty_course_open.indexOf(val) !== -1
+        );
+      } else {
+        return this.get_empty_course_close;
+      }
+    },
+    searchCourseOpen(val) {
+      if (val) {
+        return this.get_empty_course_open.filter(
+          (v) => v.courseNameTh.indexOf(val) !== -1
+          // ||
+          // v.get_empty_course_open.indexOf(val) !== -1
+        );
+      } else {
+        return this.get_empty_course_open;
+      }
+    },
   },
   computed: {
     ...mapGetters({
@@ -1080,7 +1174,10 @@ export default {
       get_labels_line_chart: "DashboardModules/getLabelsLineChart",
       get_labels_line_chart_month: "DashboardModules/getLabelsLineChartMonth",
     }),
-
+    MobileSize() {
+      const { xs } = this.$vuetify.breakpoint;
+      return !!xs;
+    },
     chartOptions() {
       let labels = [];
       if (this.get_graf.length !== 0) {
