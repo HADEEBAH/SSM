@@ -147,8 +147,22 @@ const dashboardModules = {
       context.commit("SetGetLoading", true)
 
       try {
+
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potencial/`)
+        // let { data } = await axios.get(`http://localhost:3000/api/v1/dashboard/potencial/`)
         if (data.statusCode === 200) {
+          data.data.countReserve.studentList.map((items) => {
+            for (const item of items.course) {
+              item.fullDateTh = new Date(item.createdDate).toLocaleDateString(
+                "th-TH",
+                {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                }
+              )
+            }
+          })
           context.commit("SetGetLoading", false)
           context.commit("SetGetPotential", data.data)
         }
@@ -170,14 +184,14 @@ const dashboardModules = {
           data.data.sumTotalPending = data.data.sumPending + data.data.otherTotal.sumPending
           data.data.sumTotal = data.data.totalPrice + data.data.otherTotal.totalPrice
           data.data.datas?.map((items) => {
-            items.stringSumSuccess = items?.sumSuccess.toLocaleString(undefined,{minimumFractionDigits: 2})
-            items.stringSumPending = items?.sumPending.toLocaleString(undefined,{minimumFractionDigits: 2})
-            items.stringTotal = items?.totalPrice.toLocaleString(undefined,{minimumFractionDigits: 2})
+            items.stringSumSuccess = items?.sumSuccess.toLocaleString(undefined, { minimumFractionDigits: 2 })
+            items.stringSumPending = items?.sumPending.toLocaleString(undefined, { minimumFractionDigits: 2 })
+            items.stringTotal = items?.totalPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })
             chart.push(items)
           })
-          data.data.otherTotal.stringSumSuccess = data.data.otherTotal?.sumSuccess.toLocaleString(undefined,{minimumFractionDigits: 2})
-          data.data.otherTotal.stringSumPending = data.data.otherTotal?.sumPending.toLocaleString(undefined,{minimumFractionDigits: 2})
-          data.data.otherTotal.stringTotal = data.data.otherTotal?.totalPrice.toLocaleString(undefined,{minimumFractionDigits: 2})
+          data.data.otherTotal.stringSumSuccess = data.data.otherTotal?.sumSuccess.toLocaleString(undefined, { minimumFractionDigits: 2 })
+          data.data.otherTotal.stringSumPending = data.data.otherTotal?.sumPending.toLocaleString(undefined, { minimumFractionDigits: 2 })
+          data.data.otherTotal.stringTotal = data.data.otherTotal?.totalPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })
 
           chart.push(data.data.otherTotal)
           if (chart.length > 0) {
