@@ -120,7 +120,7 @@ const routes = [
         component: UserCreate,
       },
       {
-        path: 'userDetail/:action/:account_id',
+        path: 'userDetail/:from/:action/:account_id',
         name: 'UserDetail',
         component: UserDetail,
       },

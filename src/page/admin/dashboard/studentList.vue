@@ -150,6 +150,7 @@
                 params: {
                   action: 'view',
                   account_id: item.studentId,
+                  from: 'Dashboard'
                 },
               })
             "
@@ -184,6 +185,7 @@
                 params: {
                   action: 'view',
                   account_id: item.studentId,
+                  from: 'Dashboard' 
                 },
               })
             "
@@ -221,6 +223,7 @@
                 params: {
                   action: 'view',
                   account_id: item.studentId,
+                  from: 'Dashboard' 
                 },
               })
             "
@@ -258,6 +261,7 @@
                 params: {
                   action: 'view',
                   account_id: item.studentId,
+                  from: 'Dashboard' 
                 },
               })
             "

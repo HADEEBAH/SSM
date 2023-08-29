@@ -671,6 +671,7 @@ export default {
         params: {
           action: "edit",
           account_id: items.userOneId,
+          from: 'userList'
         },
       });
     },
