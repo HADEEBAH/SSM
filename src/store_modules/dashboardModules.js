@@ -147,7 +147,9 @@ const dashboardModules = {
       context.commit("SetGetLoading", true)
 
       try {
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potencial/`)
+
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potencial/`)
+        let { data } = await axios.get(`http://localhost:3000/api/v1/dashboard/potencial/`)
         if (data.statusCode === 200) {
           data.data.countReserve.studentList.map((items) => {
             for (const item of items.course) {

@@ -270,6 +270,7 @@
     </div>
 
     <!-- DIALOG END-->
+
     <v-dialog v-model="course_detail_dialog_end" persistent max-width="600px">
       <v-card style="border-radius: 16px">
         <v-card-title>
@@ -303,31 +304,46 @@
               </v-text-field>
             </v-col>
 
-            <!-- <v-col cols="12" class="my-2">
-              <span class="font-bold"> ชนิดคอร์ส: </span>
-              {{ detail_dialog_end.courseTypeNameTh }}
-              <span
-                :style="`color:${
-                  course_type_options.filter(
-                    (v) => v.value === detail_dialog_end.packageName
-                  )[0]?.color
-                }`"
-              >
-                ({{
-                  course_type_options.filter(
-                    (v) => v.value === detail_dialog_end.packageName
-                  )[0]?.label
-                }})
-              </span>
-            </v-col> -->
             <v-col cols="12">
               <v-text-field
                 hide-details
                 outlined
                 readonly
                 dense
-                :value="`${detail_dialog_end.courseTypeNameTh} (${detail_dialog_end.packageName})`"
+                :value="detail_dialog_end.coachName"
+                label="โค้ช"
+                color="#FF6B81"
+              >
+                <template v-slot:append>
+                  <v-icon :color="'#FF6B81'">mdi-account-outline</v-icon>
+                </template>
+              </v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="6" class="mb-5">
+              <v-text-field
+                hide-details
+                outlined
+                readonly
+                dense
+                :value="detail_dialog_end.courseTypeNameTh"
                 label="ชนิดคอร์ส"
+                color="#FF6B81"
+              >
+                <template v-slot:append>
+                  <v-icon :color="'#FF6B81'">mdi-book-multiple-outline</v-icon>
+                </template>
+              </v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="6" class="mb-5">
+              <v-text-field
+                hide-details
+                outlined
+                readonly
+                dense
+                :value="`${detail_dialog_end.optionName} (${detail_dialog_end.packageName})`"
+                label="แพ็กเกจ"
                 color="#FF6B81"
               >
                 <template v-slot:append>
@@ -435,7 +451,7 @@
             </v-col>
 
             <!-- ชนิดคอร์ส -->
-            <v-col cols="6" sm="6">
+            <v-col cols="6" sm="6" class="mb-5">
               <v-text-field
                 hide-details
                 outlined
@@ -446,13 +462,13 @@
                 color="#FF6B81"
               >
                 <template v-slot:append>
-                  <v-icon :color="'#FF6B81'">>mdi-school-outline</v-icon>
+                  <v-icon :color="'#FF6B81'">mdi-book-multiple-outline</v-icon>
                 </template>
               </v-text-field>
             </v-col>
 
             <!-- วันที่จอง -->
-            <v-col cols="6" sm="6">
+            <v-col cols="6" sm="6" class="mb-5">
               <v-text-field
                 hide-details
                 outlined
