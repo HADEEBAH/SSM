@@ -372,7 +372,8 @@
                             บาท ({{
                               (
                                 (get_donut.sumTotalSuccess * 100) /
-                                (get_donut.sumTotalPending + get_donut.sumSuccess)
+                                (get_donut.sumTotalPending +
+                                  get_donut.sumSuccess)
                               )?.toLocaleString("us-us", {
                                 maximumFractionDigits: 2,
                               })
@@ -392,7 +393,9 @@
                             style="color: #999999"
                             class="font-bold text-xl"
                           >
-                            {{ get_donut?.sumTotalPending?.toLocaleString() }}</span
+                            {{
+                              get_donut?.sumTotalPending?.toLocaleString()
+                            }}</span
                           >
                           <span
                             style="
@@ -404,7 +407,8 @@
                             บาท ({{
                               (
                                 (get_donut.sumTotalPending * 100) /
-                                (get_donut.sumTotalPending + get_donut.sumTotalSuccess)
+                                (get_donut.sumTotalPending +
+                                  get_donut.sumTotalSuccess)
                               )?.toLocaleString("us-us", {
                                 maximumFractionDigits: 2,
                               })
@@ -507,7 +511,11 @@
                   <!-- PIE CARDs -->
                   <!-- COURSE CLOSE -->
                   <v-col cols="12" sm="6" class="my-2" :width="pieCardWidth()">
-                    <v-card outlined style="overflow-y: scroll" height="400px">
+                    <v-card
+                      outlined
+                      style="overflow-y: scroll; overflow-x: hidden"
+                      height="400px"
+                    >
                       <v-card-text
                         style="
                           background-color: #ffdde2;
@@ -614,29 +622,28 @@
                             </v-row>
                           </v-card-text>
                         </v-card>
-                        <!-- ไม่พบข้อมูลของคอร์สนี้ -->
-                        <v-card
-                          v-if="
-                            searchCourseClose(search_course_close).length === 0
-                          "
-                          class="rounded-lg my-3"
-                        >
-                          <v-card-text
-                            class="text-center border-2 border-[#ff6b81] rounded-lg"
-                          >
-                            <span class="text-lg font-bold">
-                              <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                              ไม่พบข้อมูลของคอร์สเต็ม
-                            </span>
-                          </v-card-text>
-                        </v-card>
                       </v-card-text>
+                      <!-- ไม่พบข้อมูลของคอร์สนี้ -->
+                      <v-row
+                        v-if="
+                          searchCourseClose(search_course_close).length === 0
+                        "
+                      >
+                        <v-col align="center" class="text-lg font-bold">
+                          <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                          ไม่พบข้อมูลของคอร์สเต็ม
+                        </v-col>
+                      </v-row>
                     </v-card>
                   </v-col>
 
                   <!-- COURSE OPEN -->
                   <v-col cols="12" sm="6" class="my-2" :width="pieCardWidth()">
-                    <v-card outlined style="overflow-y: scroll" height="400px">
+                    <v-card
+                      outlined
+                      style="overflow-y: scroll; overflow-x: hidden"
+                      height="400px"
+                    >
                       <v-card-text
                         style="
                           background-color: #ffdde2;
@@ -753,19 +760,14 @@
                       </v-card-text>
 
                       <!-- ไม่พบข้อมูลของคอร์สนี้ -->
-                      <v-card
+                      <v-row
                         v-if="searchCourseOpen(search_course_open).length === 0"
-                        class="rounded-lg my-3"
                       >
-                        <v-card-text
-                          class="text-center border-2 border-[#ff6b81] rounded-lg"
-                        >
-                          <span class="text-lg font-bold">
-                            <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                            ไม่พบข้อมูลของคอร์สว่าง
-                          </span>
-                        </v-card-text>
-                      </v-card>
+                        <v-col align="center" class="text-lg font-bold">
+                          <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                          ไม่พบข้อมูลของคอร์สว่าง
+                        </v-col>
+                      </v-row>
                     </v-card>
                   </v-col>
                   <!-- DIALOG COURSES -->

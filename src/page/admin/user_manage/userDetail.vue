@@ -698,8 +698,8 @@
                   </v-container>
                 </v-expand-transition>
 
-                 <!-- TABS 3 -->
-                 <v-expand-transition>
+                <!-- TABS 3 -->
+                <v-expand-transition>
                   <v-container fluid v-if="tab === 2">
                     <v-row class="mb-3">
                       <v-col>
@@ -713,58 +713,110 @@
                     </v-row>
                     <v-row dense>
                       <v-col cols="4">
-                        <v-text-field v-model="certificate_search" @input="searchCertificate($event)" dense outlined prepend-inner-icon="mdi-magnify"></v-text-field>
+                        <v-text-field
+                          v-model="certificate_search"
+                          @input="searchCertificate($event)"
+                          dense
+                          outlined
+                          prepend-inner-icon="mdi-magnify"
+                        ></v-text-field>
                       </v-col>
                       <v-col cols="8" class="text-right">
-                        <v-btn color='#ff6b81' text @click="DialogCertificate('','create')">
+                        <v-btn
+                          color="#ff6b81"
+                          text
+                          @click="DialogCertificate('', 'create')"
+                        >
                           <v-icon>mdi-file-plus-outline</v-icon>
                           เพิ่มการแข่งขันและเกียรติบัตร
                         </v-btn>
                       </v-col>
                     </v-row>
-                    <v-card outlined class="mb-3" v-if="certificate_filter.length == 0">
+                    <v-card
+                      outlined
+                      class="mb-3"
+                      v-if="certificate_filter.length == 0"
+                    >
                       <v-card-text>
-                        <v-row >
+                        <v-row>
                           <v-col cols="12" class="text-center">
                             ไม่พบข้อมูลการแข่งขัน
                           </v-col>
                         </v-row>
                       </v-card-text>
                     </v-card>
-                    <div v-for="(certificate,index) in certificate_filter" :key="`certificate-${index}`">
+                    <div
+                      v-for="(certificate, index) in certificate_filter"
+                      :key="`certificate-${index}`"
+                    >
                       <v-card outlined class="mb-3">
                         <v-card-text>
                           <v-row dense class="flax align-center">
                             <v-col>
                               <v-row dense>
                                 <v-col class="text-lg font-bold">
-                                  {{certificate.certificateName}}
+                                  {{ certificate.certificateName }}
                                 </v-col>
                                 <v-col>
-                                  วันที่แข่ง: {{genDate(certificate.certificateDate)}}
+                                  วันที่แข่ง:
+                                  {{ genDate(certificate.certificateDate) }}
                                 </v-col>
                               </v-row>
                               <v-row dense>
                                 <v-col cols="auto">
-                                  <v-img width="32" height="32" src="@/assets/userManagePage/certificate .png"></v-img>
+                                  <v-img
+                                    width="32"
+                                    height="32"
+                                    src="@/assets/userManagePage/certificate .png"
+                                  ></v-img>
                                 </v-col>
-                                <v-col v-if="!certificate.certificateAttachment"></v-col>
-                                <v-col v-else class="text-[#ff6b81] underline cursor-pointer" @click="OpenFileCertificate(certificate.certificateAttachment)">
+                                <v-col
+                                  v-if="!certificate.certificateAttachment"
+                                ></v-col>
+                                <v-col
+                                  v-else
+                                  class="text-[#ff6b81] underline cursor-pointer"
+                                  @click="
+                                    OpenFileCertificate(
+                                      certificate.certificateAttachment
+                                    )
+                                  "
+                                >
                                   {{ certificate.originalFileName }}
                                 </v-col>
                               </v-row>
                             </v-col>
                             <v-col cols="auto">
-                              <v-btn dark v-if="certificate.certificateAttachment" depressed color="#ff6b81" @click="DialogCertificate(certificate,'detail')">
+                              <v-btn
+                                dark
+                                v-if="certificate.certificateAttachment"
+                                depressed
+                                color="#ff6b81"
+                                @click="
+                                  DialogCertificate(certificate, 'detail')
+                                "
+                              >
                                 แสดงหนังสือรับรอง
                               </v-btn>
-                              <v-btn dark v-else depressed color="#ff6b81" @click="DialogCertificate(certificate, 'edit')">
+                              <v-btn
+                                dark
+                                v-else
+                                depressed
+                                color="#ff6b81"
+                                @click="DialogCertificate(certificate, 'edit')"
+                              >
                                 <v-icon>mdi-plus</v-icon>
                                 เพิ่มหนังสือรับรอง
                               </v-btn>
                             </v-col>
                             <v-col cols="auto">
-                              <v-btn depressed color="#FDECEC" @click="removeCertificate(certificate.certificateId)">
+                              <v-btn
+                                depressed
+                                color="#FDECEC"
+                                @click="
+                                  removeCertificate(certificate.certificateId)
+                                "
+                              >
                                 <v-icon color="#F03D3E">mdi-delete</v-icon>
                               </v-btn>
                             </v-col>
@@ -773,7 +825,7 @@
                       </v-card>
                     </div>
                   </v-container>
-                 </v-expand-transition>
+                </v-expand-transition>
               </v-col>
               <!-- Role R 4 -->
               <v-col
@@ -917,21 +969,18 @@
                   :search="course_search"
                   :items="course_coach_list"
                 >
-                <template v-slot:no-data="">
-                  <v-row>
-                    <v-col class="text-center">
-                      ไม่พบคอร์ส
-                    </v-col>
-                  </v-row>
-                </template>  
-              </v-data-table>
+                  <template v-slot:no-data="">
+                    <v-row>
+                      <v-col class="text-center"> ไม่พบคอร์ส </v-col>
+                    </v-row>
+                  </template>
+                </v-data-table>
               </v-col>
             </v-row>
-           
           </v-container>
 
           <!-- Button -->
-          <v-container  v-if="tab == 0" fluid>
+          <v-container v-if="tab == 0" fluid>
             <v-row>
               <v-col v-if="!isEnabled" align="right" cols="12">
                 <v-btn
@@ -997,160 +1046,171 @@
       v-model="certificate_dialog_show"
       persistent
     >
-    <v-form ref="certificate_form" v-model="certificate_form">
-      <v-card flat>
-        <v-card-title>
-          <v-row>
-            <v-col cols="12" align="right">
-              <v-btn icon @click="closeDialog">
-                <v-icon color="#ff6b81">mdi-close</v-icon>
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-card-title>
-        <div class="mx-5 text-center mb-3 font-bold text-lg">
-          เพิ่มการแข่งขันและเกียรติบัตร
-        </div>
-        <v-row dense class="ml-5 mx-5">
-          <v-col cols="12">
-            <LabelCustom required text="การแข่งขัน"></LabelCustom>
-            <v-text-field
-              ref="certificate_name"
-              dense
-              :disabled="certificate_data.state == 'create'? false : true"
-              placeholder="กรุณาระบุชื่อการแข่งขัน"
-              v-model="certificate_data.certificate_name"
-              outlined
-              :rules="rules.certificate_name"
-            >
-            </v-text-field>
-          </v-col>
-          <v-col cols="12">
-            <LabelCustom required text="วันที่"></LabelCustom>
-             <v-menu
-              v-model="certificate_data.menu_certificate_date"
-              :close-on-content-click="false"
-              transition="scale-transition"
-              :disabled="certificate_data.state == 'create'? false : true"
-              offset-y
-              min-width="auto"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field
-                  ref="certificate_date"
-                  dense
-                  outlined
-                  :disabled="certificate_data.state == 'create'? false : true"
-                  v-model="certificate_data.certificate_date_src"
-                  readonly
-                  :rules="rules.certificate_date"
-                  placeholder="ระบุวันที่แข่งขัน"
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                  <template v-slot:append>
-                    <v-icon
-                      :color="certificate_data.certificate_date ? '#FF6B81' : ''"
-                      >mdi-calendar</v-icon
-                    >
-                  </template>
-                </v-text-field>
-              </template>
-              <v-date-picker
-                :max="today.toISOString()"
-                v-model="certificate_data.certificate_date"
-                locale="th-TH"
-                @change="inputDate($event)"
-              ></v-date-picker>
-            </v-menu>
-          </v-col>
-        </v-row>
-        <!-- Upload file -->
-        <template v-if="certificate_data.state !== 'detail'">
-          <v-card class="mx-5 my-5" flat>
-            <v-card-text
-              class="border-dashed border-2 border-blue-600 rounded-lg"
-            >
-              <v-row>
-                <v-col cols="12" class="flex align-center justify-center">
-                  <v-img
-                    src="@/assets/course/upload_file.png"
-                    max-height="105"
-                    max-width="122"
-                  ></v-img>
-                </v-col>
-                <v-col cols="12" class="flex align-center justify-center text-h5">
-                  อัปโหลดเกียรติบัตร
-                </v-col>
-                <v-col
-                  cols="12"
-                  class="flex align-center justify-center text-caption"
-                >
-                  ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ
-                  ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG )
-                </v-col>
-                <v-col cols="12" class="flex align-center justify-center">
-                  <v-btn :disabled="certificate_data.fileName ? true : false" outlined color="blue" @click="openFileSelector"
-                    >เลือกไฟล์</v-btn
-                  >
-                  <input
-                    id="inputFile"
-                    ref="fileInput"
-                    type="file"
-                    @change="uploadFile($event)"
-                    style="display: none"
-                  />
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </v-card>
-          <v-card outlined v-if="certificate_data.fileName" class="pa-4 ma-4">
-            <v-row class="align-center">
-              <v-col cols="auto">
-                <v-img
-                  src="@/assets/userManagePage/certificate .png"
-                  width="50px"
-                  height="50px"
-                ></v-img>
-              </v-col>
-              <v-col cols="8"
-                ><span>{{ certificate_data.fileName }}</span></v-col
-              >
-              <v-col cols="2" align="end">
-                <v-btn icon @click="removeFile()">
-                  <v-icon>mdi-close</v-icon>
+      <v-form ref="certificate_form" v-model="certificate_form">
+        <v-card flat>
+          <v-card-title>
+            <v-row>
+              <v-col cols="12" align="right">
+                <v-btn icon @click="closeDialog">
+                  <v-icon color="#ff6b81">mdi-close</v-icon>
                 </v-btn>
               </v-col>
             </v-row>
-          </v-card>
-        </template>
-        <div  v-else class="pa-3">
-          <v-card flat>
-            <v-img :src="certificate_data.certificate_attachment"></v-img>
-          </v-card>
-        </div>
-        <div class="text-center mx-5 mb-5">
-          <v-btn
-            v-if="certificate_data.state !== 'detail'"
-            depressed
-            class="white--text btn-size-lg"
-            color="#ff6b81"
-            @click="saveDialog()"
-          >
-            บันทึก
-          </v-btn>
-          <v-btn
-            v-else
-            depressed
-            class="white--text"
-            color="#ff6b81"
-            @click="certificate_dialog_show = false"
-          >
-            ปิด
-          </v-btn>
-        </div>
-      </v-card>
-    </v-form>
+          </v-card-title>
+          <div class="mx-5 text-center mb-3 font-bold text-lg">
+            เพิ่มการแข่งขันและเกียรติบัตร
+          </div>
+          <v-row dense class="ml-5 mx-5">
+            <v-col cols="12">
+              <LabelCustom required text="การแข่งขัน"></LabelCustom>
+              <v-text-field
+                ref="certificate_name"
+                dense
+                :disabled="certificate_data.state == 'create' ? false : true"
+                placeholder="กรุณาระบุชื่อการแข่งขัน"
+                v-model="certificate_data.certificate_name"
+                outlined
+                :rules="rules.certificate_name"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <LabelCustom required text="วันที่"></LabelCustom>
+              <v-menu
+                v-model="certificate_data.menu_certificate_date"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                :disabled="certificate_data.state == 'create' ? false : true"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    ref="certificate_date"
+                    dense
+                    outlined
+                    :disabled="
+                      certificate_data.state == 'create' ? false : true
+                    "
+                    v-model="certificate_data.certificate_date_src"
+                    readonly
+                    :rules="rules.certificate_date"
+                    placeholder="ระบุวันที่แข่งขัน"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <template v-slot:append>
+                      <v-icon
+                        :color="
+                          certificate_data.certificate_date ? '#FF6B81' : ''
+                        "
+                        >mdi-calendar</v-icon
+                      >
+                    </template>
+                  </v-text-field>
+                </template>
+                <v-date-picker
+                  :max="today.toISOString()"
+                  v-model="certificate_data.certificate_date"
+                  locale="th-TH"
+                  @change="inputDate($event)"
+                ></v-date-picker>
+              </v-menu>
+            </v-col>
+          </v-row>
+          <!-- Upload file -->
+          <template v-if="certificate_data.state !== 'detail'">
+            <v-card class="mx-5 my-5" flat>
+              <v-card-text
+                class="border-dashed border-2 border-blue-600 rounded-lg"
+              >
+                <v-row>
+                  <v-col cols="12" class="flex align-center justify-center">
+                    <v-img
+                      src="@/assets/course/upload_file.png"
+                      max-height="105"
+                      max-width="122"
+                    ></v-img>
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    class="flex align-center justify-center text-h5"
+                  >
+                    อัปโหลดเกียรติบัตร
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    class="flex align-center justify-center text-caption"
+                  >
+                    ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ
+                    ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG )
+                  </v-col>
+                  <v-col cols="12" class="flex align-center justify-center">
+                    <v-btn
+                      :disabled="certificate_data.fileName ? true : false"
+                      outlined
+                      color="blue"
+                      @click="openFileSelector"
+                      >เลือกไฟล์</v-btn
+                    >
+                    <input
+                      id="inputFile"
+                      ref="fileInput"
+                      type="file"
+                      @change="uploadFile($event)"
+                      style="display: none"
+                    />
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+            <v-card outlined v-if="certificate_data.fileName" class="pa-4 ma-4">
+              <v-row class="align-center">
+                <v-col cols="auto">
+                  <v-img
+                    src="@/assets/userManagePage/certificate .png"
+                    width="50px"
+                    height="50px"
+                  ></v-img>
+                </v-col>
+                <v-col cols="8"
+                  ><span>{{ certificate_data.fileName }}</span></v-col
+                >
+                <v-col cols="2" align="end">
+                  <v-btn icon @click="removeFile()">
+                    <v-icon>mdi-close</v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-card>
+          </template>
+          <div v-else class="pa-3">
+            <v-card flat>
+              <v-img :src="certificate_data.certificate_attachment"></v-img>
+            </v-card>
+          </div>
+          <div class="text-center mx-5 mb-5">
+            <v-btn
+              v-if="certificate_data.state !== 'detail'"
+              depressed
+              class="white--text btn-size-lg"
+              color="#ff6b81"
+              @click="saveDialog()"
+            >
+              บันทึก
+            </v-btn>
+            <v-btn
+              v-else
+              depressed
+              class="white--text"
+              color="#ff6b81"
+              @click="certificate_dialog_show = false"
+            >
+              ปิด
+            </v-btn>
+          </div>
+        </v-card>
+      </v-form>
     </v-dialog>
   </v-container>
 </template>
@@ -1162,7 +1222,7 @@ import LabelCustom from "@/components/label/labelCustom.vue";
 import headerPage from "@/components/header/headerPage.vue";
 import headerCard from "@/components/header/headerCard.vue";
 import userManageForm from "@/components/user_menage/userManageForm.vue";
-import { CheckFileSize,dateFormatter } from "@/functions/functions";
+import { CheckFileSize, dateFormatter } from "@/functions/functions";
 import axios from "axios";
 import VueCookie from "vue-cookie";
 import { mapActions, mapGetters } from "vuex";
@@ -1178,20 +1238,20 @@ export default {
     tab: null,
     items: ["ข้อมูลทั่วไป", "คอร์สเรียน", "การแข่งขันและเกียรติบัตร"],
     show_certificates: false,
-    course_search : '',
-    certificate_search :"",
-    certificate_filter : [],
-    certificate_form : false,
-    certificate_data:{
+    course_search: "",
+    certificate_search: "",
+    certificate_filter: [],
+    certificate_form: false,
+    certificate_data: {
       certificate_name: "",
       certificate_date: "",
-      certificate_date_src:'',
+      certificate_date_src: "",
       menu_certificate_date: false,
       file: null,
-      fileName : null,
-      preview_url : "",
-      certificate_attachment:"",
-      state : 'create'
+      fileName: null,
+      preview_url: "",
+      certificate_attachment: "",
+      state: "create",
     },
 
     breadcrumbs: [],
@@ -1227,11 +1287,15 @@ export default {
     ],
 
     rules: {
-      certificate_name:[
+      certificate_name: [
         (val) => (val || "").length > 0 || "กรุณาระบุชื่อการแข่งขัน",
-        (val) => (val || "").length <= 50 || "กรุณาระบุชื่อการแข่งขันไม่เกิน 50 ตัวอักษร",
+        (val) =>
+          (val || "").length <= 50 ||
+          "กรุณาระบุชื่อการแข่งขันไม่เกิน 50 ตัวอักษร",
       ],
-      certificate_date:[(val) => (val || "").length > 0 || "กรุณาระบุวันที่แข่งขัน"],
+      certificate_date: [
+        (val) => (val || "").length > 0 || "กรุณาระบุวันที่แข่งขัน",
+      ],
       name: [
         (val) =>
           (val || "").length > 0 ||
@@ -1281,7 +1345,7 @@ export default {
     isOpen: false,
     params: "",
     relations: [],
-    today : new Date()
+    today: new Date(),
   }),
   created() {
     if( this.$route?.params?.from === "Dashboard"){
@@ -1304,8 +1368,8 @@ export default {
     this.show_by_id.userRoles;
     setTimeout(() => {
       this.GetDataRelationsManagement(this.show_by_id);
-      if(this.show_by_id?.userRoles.some(v => v.roleId == "R_3")){
-        this.GetCourseCoachList({account_id : this.params})
+      if (this.show_by_id?.userRoles.some((v) => v.roleId == "R_3")) {
+        this.GetCourseCoachList({ account_id: this.params });
       }
     }, 500);
     this.relations = localStorage.getItem("relations");
@@ -1323,9 +1387,9 @@ export default {
       this.user_data.isCardOpen = false;
       this.user_data.isCardParentOpen = false;
     }
-    
-    let re = localStorage.getItem("relations")
-    if(re){
+
+    let re = localStorage.getItem("relations");
+    if (re) {
       for (const item of JSON.parse(localStorage.getItem("relations"))) {
         this.GetStudentData(item.student.studentId);
       }
@@ -1353,26 +1417,31 @@ export default {
         "UserManageModules/GetDataRelationsManagement",
       GetStudentSchedule: "UserModules/GetStudentSchedule",
       // Cartificate
-      UpdateCertificate : "UserManageModules/UpdateCertificate",
-      GetCertificateListByAccount : "UserManageModules/GetCertificateListByAccount",
-      CreateCertificate : "UserManageModules/CreateCertificate",
-      DeleteCertificate : "UserManageModules/DeleteCertificate",
+      UpdateCertificate: "UserManageModules/UpdateCertificate",
+      GetCertificateListByAccount:
+        "UserManageModules/GetCertificateListByAccount",
+      CreateCertificate: "UserManageModules/CreateCertificate",
+      DeleteCertificate: "UserManageModules/DeleteCertificate",
       // Course Coach List
-      GetCourseCoachList : "UserManageModules/GetCourseCoachList"
+      GetCourseCoachList: "UserManageModules/GetCourseCoachList",
     }),
     inputDate(e) {
-      this.certificate_data.menu_certificate_date = false
+      this.certificate_data.menu_certificate_date = false;
       this.certificate_data.certificate_date_src = dateFormatter(
         e,
         "DD MMT YYYYT"
       );
     },
-    OpenFileCertificate(url){
-      window.open(url,'_blank')
+    OpenFileCertificate(url) {
+      window.open(url, "_blank");
     },
-    genDate(date){
-      let dateObj = new Date(date)
-      return dateObj.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', })
+    genDate(date) {
+      let dateObj = new Date(date);
+      return dateObj.toLocaleDateString("th-TH", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
     },
     onCheckboxChange() {
       if (this.selectedbox) {
@@ -1456,42 +1525,48 @@ export default {
     },
     DialogCertificate(certificate, state) {
       // console.log(certificate)
-      if(state === 'create'){
+      if (state === "create") {
         this.certificate_data = {
           certificate_name: "",
           certificate_date: "",
-          certificate_date_src:'',
+          certificate_date_src: "",
           menu_certificate_date: false,
           file: null,
-          fileName : null,
-          preview_url : "",
-          certificate_attachment:"",
-          state : 'create'
-        }
-      }else{
+          fileName: null,
+          preview_url: "",
+          certificate_attachment: "",
+          state: "create",
+        };
+      } else {
         this.certificate_data = {
-          certificate_id : certificate.certificateId,
+          certificate_id: certificate.certificateId,
           certificate_name: certificate.certificateName,
-          certificate_date: moment(certificate.certificateDate).format("YYYY-MM-DD"),
-          certificate_date_src: new Date(certificate.certificateDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', }),
+          certificate_date: moment(certificate.certificateDate).format(
+            "YYYY-MM-DD"
+          ),
+          certificate_date_src: new Date(
+            certificate.certificateDate
+          ).toLocaleDateString("th-TH", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }),
           menu_certificate_date: false,
           file: null,
-          fileName : null,
-          preview_url : "",
-          certificate_attachment:certificate.certificateAttachment,
-          state : state
-        }
+          fileName: null,
+          preview_url: "",
+          certificate_attachment: certificate.certificateAttachment,
+          state: state,
+        };
       }
-     
+
       this.certificate_dialog_show = true;
     },
     closeDialog() {
       this.certificate_dialog_show = false;
       this.certificate_show = false;
       this.addCertificate_dialog_show = false;
-      this.certificate_data = {
-
-      }
+      this.certificate_data = {};
     },
     uploadFile(event) {
       this.certificate_data.file = this.$refs.fileInput.files[0];
@@ -1499,7 +1574,7 @@ export default {
       if (CheckFileSize(this.certificate_data.file, event.target.id) === true) {
         const fileType = this.certificate_data.file.type;
         if (fileType === "image/png" || fileType === "image/jpeg") {
-          this.certificate_data.fileName = this.certificate_data.file.name
+          this.certificate_data.fileName = this.certificate_data.file.name;
           const reader = new FileReader();
           reader.onload = (e) => {
             this.certificate_data.preview_url = e.target.result;
@@ -1518,42 +1593,44 @@ export default {
       }
     },
     removeFile() {
-      console.log("removeFile")
-      this.certificate_data.file = null
+      console.log("removeFile");
+      this.certificate_data.file = null;
       this.certificate_data.fileName = "";
     },
     showImg(item) {
       return `${process.env.VUE_APP_URL}/api/v1/files/${item}`;
     },
-    searchCertificate(search){
+    searchCertificate(search) {
       const searchQuery = search.toLowerCase();
       this.certificate_filter = this.certificates.filter((v) => {
         const certificateName = v.certificateName.toLowerCase();
-        if (
-          !certificateName.includes(searchQuery)
-        ) {
+        if (!certificateName.includes(searchQuery)) {
           return false;
         } else {
-          return (
-            certificateName.includes(searchQuery)
-          );
+          return certificateName.includes(searchQuery);
         }
       });
     },
     saveDialog() {
       if (this.certificate_data.state == "create") {
-        this.$refs.certificate_form.validate()
-        if(this.certificate_form){
+        this.$refs.certificate_form.validate();
+        if (this.certificate_form) {
           this.CreateCertificate({
-            certificate_data : {...this.certificate_data, account_id : this.params}
-          })
+            certificate_data: {
+              ...this.certificate_data,
+              account_id: this.params,
+            },
+          });
         }
-      }else if(this.certificate_data.state == "edit"){
-        console.log(this.certificate_data)
+      } else if (this.certificate_data.state == "edit") {
+        console.log(this.certificate_data);
         this.UpdateCertificate({
-          certificate_data: {...this.certificate_data, account_id : this.params},
-          certificate_id : this.certificate_data.certificate_id
-        })
+          certificate_data: {
+            ...this.certificate_data,
+            account_id: this.params,
+          },
+          certificate_id: this.certificate_data.certificate_id,
+        });
       }
       this.certificate_dialog_show = false;
     },
@@ -1568,9 +1645,12 @@ export default {
         cancelButtonText: "ยกเลิก",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          this.DeleteCertificate({cartificate_id : certificate_id, account_id : this.params})
+          this.DeleteCertificate({
+            cartificate_id: certificate_id,
+            account_id: this.params,
+          });
         }
-      })
+      });
     },
     checkUsername(username, type) {
       if (username) {
@@ -1772,7 +1852,7 @@ export default {
       student_schedule: "UserModules/getStudentSchedule",
       relations_detail: "UserManageModules/getRelationData",
       user_one_temp: "UserModules/getUserOneTemp",
-      course_coach_list : "UserManageModules/course_coach_list"
+      course_coach_list: "UserManageModules/course_coach_list",
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
@@ -1781,12 +1861,12 @@ export default {
   },
 
   watch: {
-    certificates: function(){
-      this.searchCertificate("")
+    certificates: function () {
+      this.searchCertificate("");
     },
-    tab: function(val){
-      if(val == 2){
-        this.GetCertificateListByAccount({account_id : this.params})
+    tab: function (val) {
+      if (val == 2) {
+        this.GetCertificateListByAccount({ account_id: this.params });
       }
     },
     show_by_id: async function () {
