@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 const UserManageModules = {
   namespaced: true,
   state: {
-    course_coach_list:[],
+    course_coach_list: [],
     user_data: {
       username_en: "",
       fname_th: "",
@@ -25,7 +25,7 @@ const UserManageModules = {
     searchTerm: "",
     inputValue: "",
     certificates: [],
-    certificate_count : 0,
+    certificate_count: 0,
     certificate_detail: {
       name_certificate: "",
       certificate_date: "",
@@ -52,13 +52,13 @@ const UserManageModules = {
       },
     ],
     data_user_relation_management: [],
-    
+
   },
   mutations: {
-    SetCertificateCount(state, payload){
+    SetCertificateCount(state, payload) {
       state.certificate_count = payload
     },
-    SetCourseCoachList(state, payload){
+    SetCourseCoachList(state, payload) {
       state.course_coach_list = payload
     },
     SetStudent(state, payload) {
@@ -79,32 +79,32 @@ const UserManageModules = {
   },
 
   actions: {
-    async GetCertificateCount(context, {account_id}){
-      try{
+    async GetCertificateCount(context, { account_id }) {
+      try {
         // let localhost = "http://localhost:3000"
-        const {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/certificate/count/${account_id}`)
-        if(data.statusCode == 200){
-          console.log(data.data)
+        const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/certificate/count/${account_id}`)
+        if (data.statusCode == 200) {
+          // console.log(data.data)
           context.commit("SetCertificateCount", data.data)
         }
-      }catch(error){
+      } catch (error) {
         console.log(error)
       }
     },
-    async GetCourseCoachList(context, {account_id}){
-      try{
+    async GetCourseCoachList(context, { account_id }) {
+      try {
         // let localhost = "http://localhost:3000"
-        const {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/usermanagement/course-coach/list?accountId=${account_id}`)
-        if(data.statusCode == 200){
-          let courseCoachList = data.data.map( v => {
+        const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/usermanagement/course-coach/list?accountId=${account_id}`)
+        if (data.statusCode == 200) {
+          let courseCoachList = data.data.map(v => {
             v.courseName = `${v.courseNameTh}(${v.courseNameEn})`
             v.categoryName = `${v.categoryNameTh}(${v.categoryNameEn})`
             v.courseTypeName = `${v.courseTypeNameTh}(${v.courseTypeNameEn})`
             return v
           })
-          context.commit("SetCourseCoachList",courseCoachList)
+          context.commit("SetCourseCoachList", courseCoachList)
         }
-      }catch(error){
+      } catch (error) {
         console.log(error)
       }
     },
@@ -126,20 +126,20 @@ const UserManageModules = {
     changeCertificate(context, students) {
       context.commit("SetCertificate", students)
     },
-    async GetCertificateListByAccount(context, {account_id}){
-      try{
+    async GetCertificateListByAccount(context, { account_id }) {
+      try {
         // let localhost = "http://localhost:3000"
-        const {data}  = await axios.get(`${process.env.VUE_APP_URL}/api/v1/certificate/${account_id}`)
-        if(data.statusCode == 200){
-          console.log(data)
-          context.commit("SetCertificate",data.data)
+        const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/certificate/${account_id}`)
+        if (data.statusCode == 200) {
+          // console.log(data)
+          context.commit("SetCertificate", data.data)
         }
-      }catch(error){
+      } catch (error) {
         console.log(error)
       }
     },
-    async CreateCertificate(context, {certificate_data}){
-      try{
+    async CreateCertificate(context, { certificate_data }) {
+      try {
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -148,16 +148,16 @@ const UserManageModules = {
           },
         };
         let payload = {
-          certificateName : certificate_data.certificate_name,
-          accountId : certificate_data.account_id,
-          certificateDate : certificate_data.certificate_date
+          certificateName: certificate_data.certificate_name,
+          accountId: certificate_data.account_id,
+          certificateDate: certificate_data.certificate_date
         }
         let payloadData = new FormData()
         payloadData.append("payload", JSON.stringify(payload))
         payloadData.append("img_url", certificate_data.file)
         // let localhost = "http://localhost:3000"
-        const {data}  = await axios.post(`${process.env.VUE_APP_URL}/api/v1/certificate`, payloadData, config)
-        if(data.statusCode == 201){
+        const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/certificate`, payloadData, config)
+        if (data.statusCode == 201) {
           // console.log(data)
           Swal.fire({
             icon: "success",
@@ -167,17 +167,17 @@ const UserManageModules = {
             timerProgressBar: true,
             showCancelButton: false,
             showConfirmButton: false,
-          }).finally(()=>{
-            context.dispatch("GetCertificateListByAccount",{account_id : certificate_data.account_id})
+          }).finally(() => {
+            context.dispatch("GetCertificateListByAccount", { account_id: certificate_data.account_id })
           })
-        
+
         }
-      }catch(error){
+      } catch (error) {
         console.log(error)
       }
     },
-    async UpdateCertificate(context, {certificate_data, certificate_id}){
-      try{
+    async UpdateCertificate(context, { certificate_data, certificate_id }) {
+      try {
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -186,17 +186,17 @@ const UserManageModules = {
           },
         };
         let payload = {
-          certificateName : certificate_data.certificate_name,
-          accountId : certificate_data.account_id,
-          certificateDate : certificate_data.certificate_date
+          certificateName: certificate_data.certificate_name,
+          accountId: certificate_data.account_id,
+          certificateDate: certificate_data.certificate_date
         }
-        console.log(certificate_data)
+        // console.log(certificate_data)
         let payloadData = new FormData()
         payloadData.append("payload", JSON.stringify(payload))
         payloadData.append("img_url", certificate_data.file)
         // let localhost = "http://localhost:3000"
-        const {data}  = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/certificate/${certificate_id}`, payloadData, config)
-        if(data.statusCode == 200){
+        const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/certificate/${certificate_id}`, payloadData, config)
+        if (data.statusCode == 200) {
           Swal.fire({
             icon: "success",
             title: "สำเร็จ",
@@ -205,16 +205,16 @@ const UserManageModules = {
             timerProgressBar: true,
             showCancelButton: false,
             showConfirmButton: false,
-          }).finally(()=>{
-            context.dispatch("GetCertificateListByAccount",{account_id : certificate_data.account_id})
+          }).finally(() => {
+            context.dispatch("GetCertificateListByAccount", { account_id: certificate_data.account_id })
           })
         }
-      }catch(error){
+      } catch (error) {
         console.log(error)
       }
     },
-    async DeleteCertificate(context, {cartificate_id, account_id}){
-      try{
+    async DeleteCertificate(context, { cartificate_id, account_id }) {
+      try {
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -223,8 +223,8 @@ const UserManageModules = {
           },
         };
         // let localhost = "http://localhost:3000"
-        const {data}  = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/certificate/${cartificate_id}`, config)
-        if(data.statusCode == 200){
+        const { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/certificate/${cartificate_id}`, config)
+        if (data.statusCode == 200) {
           Swal.fire({
             icon: "success",
             title: "สำเร็จ",
@@ -233,11 +233,11 @@ const UserManageModules = {
             timerProgressBar: true,
             showCancelButton: false,
             showConfirmButton: false,
-          }).finally(()=>{
-            context.dispatch("GetCertificateListByAccount",{account_id : account_id})
+          }).finally(() => {
+            context.dispatch("GetCertificateListByAccount", { account_id: account_id })
           })
         }
-      }catch(error){
+      } catch (error) {
         console.log(error)
       }
     },
@@ -292,10 +292,10 @@ const UserManageModules = {
   },
 
   getters: {
-    certificate_count(state){
+    certificate_count(state) {
       return state.certificate_count
     },
-    course_coach_list(state){
+    course_coach_list(state) {
       return state.course_coach_list
     },
     getStudent(state) {

@@ -45,6 +45,8 @@
           :maxlength="type === 'email' ? 100 : 12"
           @keypress="type === 'email' ? '' : Validation($event, 'number')"
           solo
+          @paste="preventPaste"
+          @copy="preventCopy"
         >
         </v-text-field>
       </v-col>
@@ -59,6 +61,8 @@
           label="ระบุชื่อผู้ใช้ (username)"
           solo
           @keypress="Validation($event, 'en-number')"
+          @paste="preventPaste"
+          @copy="preventCopy"
         ></v-text-field>
       </v-col>
     </v-row>
@@ -186,6 +190,13 @@ export default {
 
     Validation(e, lang) {
       inputValidation(e, lang);
+    },
+
+    preventPaste(event) {
+      event.preventDefault();
+    },
+    preventCopy(event) {
+      event.preventDefault();
     },
   },
   computed: {
