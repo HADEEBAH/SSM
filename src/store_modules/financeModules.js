@@ -117,9 +117,11 @@ const financeModules = {
               link.href = url;
               link.download = `financeReport.xlsx`;
               link.click();
-              URL.revokeObjectURL(url);
+              URL.revokeObjectURL(url); 
               context.commit("SetFinanceFilter",data.data)
               context.commit("SetFinanceLoading",false)
+              let localhost = 'http://localhost:3000'
+              let {data} = await axios.post(`${localhost}/api/v1/adminpayment/export-log`, config)
            }else{
             context.commit("SetFinanceLoading",false)
             Swal.fire({
