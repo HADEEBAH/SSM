@@ -332,7 +332,7 @@
             </v-col>
 
             <!-- ชนิดคอร์ส -->
-            <v-col cols="12" sm="6">
+            <v-col cols="12" :sm="data.optionName ? 6 : 0">
               <v-text-field
                 hide-details
                 outlined
@@ -349,7 +349,7 @@
             </v-col>
 
             <!-- แพ็กเกจ -->
-            <v-col cols="12" sm="6">
+            <v-col v-if="data.optionName" cols="12" sm="6">
               <v-text-field
                 hide-details
                 outlined
@@ -447,7 +447,7 @@
               </v-text-field>
             </v-col>
             <!-- แพ็กเกจ -->
-            <v-col cols="6" sm="6">
+            <v-col cols="12" sm="6">
               <v-text-field
                 hide-details
                 outlined
@@ -464,7 +464,7 @@
             </v-col>
 
             <!-- ชนิดคอร์ส -->
-            <v-col cols="6" sm="6" class="mb-5">
+            <v-col cols="12" sm="6" class="mb-5">
               <v-text-field
                 hide-details
                 outlined
@@ -481,7 +481,7 @@
             </v-col>
 
             <!-- วันที่จอง -->
-            <v-col cols="6" sm="6" class="mb-5">
+            <v-col cols="12" sm="6" class="mb-5">
               <v-text-field
                 hide-details
                 outlined
