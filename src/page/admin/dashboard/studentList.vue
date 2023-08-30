@@ -150,7 +150,7 @@
                 params: {
                   action: 'view',
                   account_id: item.studentId,
-                  from: 'Dashboard'
+                  from: 'Dashboard',
                 },
               })
             "
@@ -185,7 +185,7 @@
                 params: {
                   action: 'view',
                   account_id: item.studentId,
-                  from: 'Dashboard' 
+                  from: 'Dashboard',
                 },
               })
             "
@@ -223,7 +223,7 @@
                 params: {
                   action: 'view',
                   account_id: item.studentId,
-                  from: 'Dashboard' 
+                  from: 'Dashboard',
                 },
               })
             "
@@ -261,7 +261,7 @@
                 params: {
                   action: 'view',
                   account_id: item.studentId,
-                  from: 'Dashboard' 
+                  from: 'Dashboard',
                 },
               })
             "
@@ -274,9 +274,8 @@
     </div>
 
     <!-- DIALOG END-->
-
     <v-dialog v-model="course_detail_dialog_end" persistent max-width="600px">
-      <v-card style="border-radius: 16px">
+      <v-card>
         <v-card-title>
           <v-row dense>
             <v-col cols="12" align="end">
@@ -290,15 +289,22 @@
           </v-row>
         </v-card-title>
 
-        <v-card-title>
-          <v-row dense>
+        <v-card-text v-if="potential_user_course.length > 0">
+          <v-row
+            v-for="(data, data_index) in this.potential_user_course"
+            :key="data_index"
+          >
+            <label class="text-[#FF6B81] font-bold"
+              >คอร์สที่ {{ data_index + 1 }}</label
+            >
+            <!-- ชื่อคอร์ส -->
             <v-col cols="12">
               <v-text-field
                 hide-details
                 outlined
                 readonly
                 dense
-                :value="detail_dialog_end.courseNameTh"
+                :value="data.courseNameTh"
                 label="ชื่อคอร์ส"
                 color="#FF6B81"
               >
@@ -308,14 +314,15 @@
               </v-text-field>
             </v-col>
 
+            <!-- ชื่อโค้ช -->
             <v-col cols="12">
               <v-text-field
                 hide-details
                 outlined
                 readonly
                 dense
-                :value="detail_dialog_end.coachName"
-                label="โค้ช"
+                :value="data.coachName"
+                label="ชื่อโค้ช"
                 color="#FF6B81"
               >
                 <template v-slot:append>
@@ -324,13 +331,14 @@
               </v-text-field>
             </v-col>
 
-            <v-col cols="12" sm="6" class="mb-5">
+            <!-- ชนิดคอร์ส -->
+            <v-col cols="12" sm="6">
               <v-text-field
                 hide-details
                 outlined
                 readonly
                 dense
-                :value="detail_dialog_end.courseTypeNameTh"
+                :value="data.courseTypeNameTh"
                 label="ชนิดคอร์ส"
                 color="#FF6B81"
               >
@@ -340,13 +348,14 @@
               </v-text-field>
             </v-col>
 
-            <v-col cols="12" sm="6" class="mb-5">
+            <!-- แพ็กเกจ -->
+            <v-col cols="12" sm="6">
               <v-text-field
                 hide-details
                 outlined
                 readonly
                 dense
-                :value="`${detail_dialog_end.optionName} (${detail_dialog_end.packageName})`"
+                :value="`${data.optionName} (${data.packageName})`"
                 label="แพ็กเกจ"
                 color="#FF6B81"
               >
@@ -356,7 +365,7 @@
               </v-text-field>
             </v-col>
           </v-row>
-        </v-card-title>
+        </v-card-text>
       </v-card>
     </v-dialog>
 
@@ -380,11 +389,11 @@
           </v-row>
         </v-card-title>
 
-        <v-card-title
-          v-for="(item, index) in detail_dialog_booked.course"
-          :key="index"
-        >
-          <v-row dense>
+        <v-card-text v-if="detail_dialog_booked?.course?.length > 0">
+          <v-row
+            v-for="(item, index) in detail_dialog_booked.course"
+            :key="index"
+          >
             <!-- ชื่อคอร์ส -->
             <v-col cols="12">
               <v-text-field
@@ -488,7 +497,7 @@
               </v-text-field>
             </v-col>
           </v-row>
-        </v-card-title>
+        </v-card-text>
       </v-card>
     </v-dialog>
   </v-container>
@@ -602,6 +611,7 @@ export default {
       },
     ],
     date_course_booked: "",
+    potential_user_course: [],
   }),
   mounted() {
     this.GetPotential();
@@ -612,8 +622,9 @@ export default {
     }),
 
     dialogDetailEnd(items) {
+      this.potential_user_course = items.coursesDetaill;
       this.course_detail_dialog_end = true;
-      this.detail_dialog_end = items;
+      // this.detail_dialog_end = items;
     },
 
     dialogDetailBooked(items) {
