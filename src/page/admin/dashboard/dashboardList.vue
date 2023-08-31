@@ -911,7 +911,7 @@
                               </v-text-field>
                             </v-col>
 
-                            <v-col cols="6" sm="6">
+                            <v-col cols="12" sm="6">
                               <v-text-field
                                 hide-details
                                 outlined
