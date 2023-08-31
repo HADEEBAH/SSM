@@ -1249,7 +1249,7 @@ export default {
       return success && allCourse;
     },
     AllHolidayDate() {
-      let holyTodayDate = new Date().toLocaleDateString();
+      let holyTodayDate = moment(new Date()).format("YYYY-MM-DD");
 
       let allHolidaysData = [];
       for (let [index, item] of this.date_Holy_arr.entries()) {
