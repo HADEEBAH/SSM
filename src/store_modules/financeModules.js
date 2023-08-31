@@ -107,21 +107,29 @@ const financeModules = {
             }
           }
            if(reports.length > 0){
-              var workbook = XLSX.utils.book_new();
-              var worksheet = XLSX.utils.json_to_sheet(reports);
-              XLSX.utils.book_append_sheet(workbook, worksheet, 'sheet1');
-              var excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-              var blob = new Blob([excelBuffer], { type: "application/octet-stream" });
-              var url = URL.createObjectURL(blob);
-              var link = document.createElement("a");
-              link.href = url;
-              link.download = `financeReport.xlsx`;
-              link.click();
-              URL.revokeObjectURL(url); 
-              context.commit("SetFinanceFilter",data.data)
-              context.commit("SetFinanceLoading",false)
-              let localhost = 'http://localhost:3000'
-              let {data} = await axios.post(`${localhost}/api/v1/adminpayment/export-log`, config)
+            let config = {
+              headers:{
+                  "Access-Control-Allow-Origin" : "*",
+                  "Content-type": "Application/json",
+                  'Authorization' : `Bearer ${VueCookie.get("token")}`
+              }
+            }
+            // let localhost = 'http://localhost:3000'
+            let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/admincourse/export-log`,{}, config)
+            console.log(data)
+            var workbook = XLSX.utils.book_new();
+            var worksheet = XLSX.utils.json_to_sheet(reports);
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'sheet1');
+            var excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+            var blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+            var url = URL.createObjectURL(blob);
+            var link = document.createElement("a");
+            link.href = url;
+            link.download = `financeReport.xlsx`;
+            link.click();
+            URL.revokeObjectURL(url); 
+            context.commit("SetFinanceFilter",data.data)
+            context.commit("SetFinanceLoading",false)
            }else{
             context.commit("SetFinanceLoading",false)
             Swal.fire({
