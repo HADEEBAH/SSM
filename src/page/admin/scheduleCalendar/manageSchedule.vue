@@ -1238,13 +1238,10 @@ export default {
 
       for (let [index, item] of this.date_arr.entries()) {
         for (const CourseDate of item) {
-          console.log(CourseDate);
-
           getAllCourseDate.push(CourseDate);
           if (courseTodayDate == CourseDate) {
             success = true;
             allCourse.push(this.get_all_course[index]);
-            console.log("object", allCourse);
           }
         }
       }
