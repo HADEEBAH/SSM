@@ -157,6 +157,7 @@ import { mapActions, mapGetters } from 'vuex'
           var url = URL.createObjectURL(blob);
           // Open the PDF in a new tab
           window.open(url);
+          this.$router.push({name : "UserProfile"})
         });
        
       },
