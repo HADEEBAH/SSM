@@ -10,7 +10,7 @@
       <v-row class="row">
         <v-col cols="12">
           <div class="text-2xl font-bold text-white">
-            สวัสดี
+            {{ $t("hello") }}  
             {{
               profile_detail.firstNameTh ? "," + profile_detail.firstNameTh : ""
             }}
@@ -57,7 +57,7 @@
             sm="4"
             class="text-2xl align-self-center font-weight-bold"
           >
-            อาณาจักร
+          {{ $t("kingdom") }}  
           </v-col>
           <v-col cols="12" sm="8" style="text-align: -webkit-right">
             <v-text-field

@@ -26,6 +26,24 @@
           {{titel_navber}} 
         </v-app-bar-title>
         <v-spacer></v-spacer>
+        <v-menu v-model="menu_locale"  offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn text v-bind="attrs" v-on="on">
+              <label>{{ $i18n.locale == 'en' ? $t('english') : $t('thai') }}</label>
+              <v-icon dark >
+                mdi-web
+              </v-icon>
+            </v-btn>
+          </template>
+          <v-card>
+            <v-list-item @click="$i18n.locale = 'en'">
+              {{ $t('english') }}
+            </v-list-item>
+            <v-list-item  @click="$i18n.locale = 'th'">
+              {{ $t('thai') }} 
+            </v-list-item>
+          </v-card>
+        </v-menu>
         <template v-if="user_detail">
           <v-menu v-model="notify" :close-on-content-click="false" offset-y>
             <template v-slot:activator="{ on, attrs }">
@@ -393,7 +411,7 @@ export default {
       mobileNo: "",
       email: "",
     },
-
+    menu_locale : false,
     notify: false,
     hints: true,
     alert: true,
@@ -462,6 +480,9 @@ export default {
       GetNotificationsAll: "NotificationsModules/GetNotificationsAll",
       ReadNotifications: "NotificationsModules/ReadNotifications",
     }),
+    setLocale(locale) {
+      this.$i18n.locale = locale
+    },
     checkrole(a,b){
       let notFound = true; 
       if(a.length > 0){
