@@ -779,6 +779,7 @@ import { mapActions, mapGetters } from "vuex";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import headerPage from "@/components/header/headerPage.vue";
 import { inputValidation } from "@/functions/functions";
+import moment from "moment";
 
 export default {
   components: {
@@ -861,6 +862,12 @@ export default {
         value: "Group Package",
         color: "#FFFFFF",
         bg_color: "#43A4F5",
+      },
+      {
+        label: "ชดเชย",
+        value: "Student Compensation",
+        color: "#FFFFFF",
+        bg_color: "#A9A9A9",
       },
     ],
 
@@ -1224,17 +1231,20 @@ export default {
       this.holidaydatesTh = null;
     },
     courseDate() {
-      let courseTodayDate = new Date("2023-09-04").toLocaleDateString("en-CA");
+      let courseTodayDate = moment(new Date()).format("YYYY-MM-DD");
       let getAllCourseDate = [];
       let success = "";
       let allCourse = [];
 
       for (let [index, item] of this.date_arr.entries()) {
         for (const CourseDate of item) {
+          console.log(CourseDate);
+
           getAllCourseDate.push(CourseDate);
           if (courseTodayDate == CourseDate) {
             success = true;
             allCourse.push(this.get_all_course[index]);
+            console.log("object", allCourse);
           }
         }
       }
@@ -1242,7 +1252,7 @@ export default {
       return success && allCourse;
     },
     AllHolidayDate() {
-      let holyTodayDate = new Date().toLocaleDateString("en-CA");
+      let holyTodayDate = new Date().toLocaleDateString();
 
       let allHolidaysData = [];
       for (let [index, item] of this.date_Holy_arr.entries()) {
