@@ -33,7 +33,7 @@
         </template>
         <template v-slot:header>
           <div class="text-md font-bold">
-            {{ `${course_data.course_name_th}(${course_data.course_name_en})` }}
+            {{ `${ $i18n.locale == "th" ? course_data.course_name_th : course_data.course_name_en }` }}
           </div>
           <div class="text-sm">{{ course_data.location }}</div>
         </template>
@@ -41,7 +41,7 @@
           <v-row dense>
             <v-col cols="12" sm="6" class="pa-0">
               <rowData mini col_detail="5" icon="mdi-clock-outline">
-                {{ course_data.course_hours }} ชม. / ครั้ง</rowData
+                {{ course_data.course_hours }} {{$t("hrs.")}}/{{$t("time")}}</rowData
               >
             </v-col>
             <v-col
@@ -60,7 +60,7 @@
       <!-- SELECT CLASS DATE -->
       <template v-if="course_order.course_type_id == 'CT_1'">
         <v-row dense>
-          <v-col class="text-lg font-bold"> เลือกช่วงวันเรียน </v-col>
+          <v-col class="text-lg font-bold"> {{ $t('choose a course date') }} </v-col>
         </v-row>
         <v-radio-group v-model="course_order.day" @change="resetTime">
           <v-row>
@@ -79,7 +79,7 @@
         </v-radio-group>
         <template v-if="course_order.day">
           <v-row>
-            <v-col class="text-lg font-bold">เลือกช่วงเวลาเรียน</v-col>
+            <v-col class="text-lg font-bold">{{ $t('choose a class time') }}</v-col>
           </v-row>
           <v-radio-group v-model="course_order.time">
             <v-row>
@@ -103,7 +103,7 @@
         </template>
         <template v-if="course_order.time">
           <v-row>
-            <v-col class="text-lg font-bold">เลือกโค้ช</v-col>
+            <v-col class="text-lg font-bold">{{ $t('choose a coach')}}</v-col>
           </v-row>
           <v-autocomplete
             dense
@@ -115,11 +115,11 @@
             item-value="coach_id"
             item-color="pink"
             outlined
-            placeholder="เลือกโค้ช"
+            :placeholder="$t('choose a coach')"
           >
             <template v-slot:no-data>
               <v-list-item>
-                <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
+                <v-list-item-title> {{$t('no data found')}} </v-list-item-title>
               </v-list-item>
             </template>
             <template v-slot:item="{ item }">
@@ -153,7 +153,7 @@
       </template>
       <!-- REGISTER -->
       <v-row dense>
-        <v-col class="text-lg font-bold"> สมัครเรียนให้ </v-col>
+        <v-col class="text-lg font-bold"> {{ $t('register for') }} </v-col>
       </v-row>
       <v-row dense class="d-flex align-center">
         <v-col>
@@ -165,7 +165,7 @@
             "
             v-model="course_order.apply_for_yourself"
             color="#ff6B81"
-            label="สมัครเรียนให้ตัวเอง"
+            :label="$t('register for yourself')"
           ></v-checkbox>
         </v-col>
         <v-col cols="auto" v-if="course_order.apply_for_yourself">
@@ -178,7 +178,7 @@
             outlined
             color="#ff6b81"
             @click="openDialogParent"
-            ><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มข้อมูลผู้ปกครอง</v-btn
+            ><v-icon>mdi-plus-circle-outline</v-icon>{{$t('add parent information')}}</v-btn
           >
         </v-col>
       </v-row>
@@ -190,7 +190,7 @@
             "
             v-model="course_order.apply_for_others"
             color="#ff6B81"
-            label="สมัครเรียนให้ผู้อื่น"
+            :label="$t('register to study for others')"
           ></v-checkbox>
         </v-col>
       </v-row>
@@ -202,7 +202,7 @@
               >mdi-card-account-details-outline</v-icon
             ></v-col
           >
-          <v-col class="text-lg font-bold">{{ `รายชื่อผู้ปกครอง` }}</v-col>
+          <v-col class="text-lg font-bold">{{ $t('list of parents') }}</v-col>
         </v-row>
         <v-divider class="my-2"></v-divider>
         <v-row>
@@ -214,10 +214,11 @@
           >
             <v-card flat class="mb-3">
               <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
-                <div>ชื่อ-สกุล</div>
+                <div>{{$t('first name')}} - {{$t('last name')}}</div>
                 <div class="pl-2 font-semibold">
                   {{
-                    `${relation.parent.parentFirstnameTh} ${relation.parent.parentLastnameTh}`
+                    $i18n.locale == 'th' ? `${relation.parent.parentFirstnameTh} ${relation.parent.parentLastnameTh}` : 
+                    `${relation.parent.parentFirstnameEn} ${relation.parent.parentLastnameEn}`
                   }}
                 </div>
               </v-card-text>
@@ -244,7 +245,7 @@
                 >mdi-card-account-details-outline</v-icon
               ></v-col
             >
-            <v-col class="text-lg font-bold">{{ `ผู้ปกครอง` }}</v-col>
+            <v-col class="text-lg font-bold">{{ $t('parent') }}</v-col>
             <v-col cols="auto">
               <v-btn
                 @click="
@@ -264,7 +265,7 @@
             <v-card-text>
               <v-row dense class="d-flex align-center" v-if="!edit_parent">
                 <v-col cols="12" sm="6">
-                  <labelCustom text="Username (ถ้ามี)"></labelCustom>
+                  <labelCustom :text="$t('username')+' (' + $t('optional') + ')'"></labelCustom>
                   <v-text-field
                     :disabled="!edit_parent"
                     @blur="
@@ -274,11 +275,11 @@
                       parent.username > 3 ? checkUsername(parent.username) : ''
                     "
                     dense
-                    :rules="rules.usernameRules"
+                    :rules="usernameRules"
                     @keypress="Validation($event, 'en-number')"
                     outlined
                     v-model="parent.username"
-                    placeholder="Username"
+                    :placeholder="$t('username')"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6">
@@ -289,18 +290,18 @@
                     color="#ff6b81"
                     @click="edit_parent = true"
                     ><v-icon>mdi-account-edit-outline</v-icon
-                    >แก้ไขข้อมูลผู้ปกครอง</v-btn
+                    >{{ $t('edit parent information') }}</v-btn
                   >
                 </v-col>
               </v-row>
               <v-row dense v-if="edit_parent">
                 <v-col cols="6">
-                  <labelCustom text="Username (ถ้ามี)"></labelCustom>
+                  <labelCustom :text="$t('username')+' (' + $t('optional') + ')'"></labelCustom>
                   <v-text-field
                     :hide-details="!parent.account_id"
                     dense
                     outlined
-                    :rules="rules.usernameRules"
+                    :rules="usernameRules"
                     @keypress="Validation($event, 'en-number')"
                     v-model="parent.username"
                     @change="
@@ -321,11 +322,11 @@
                     </template>
                   </v-text-field>
                   <template v-if="!parent.account_id">
-                    <label> หากยังไม่มีบัญชีผู้ใช้กรุณา </label>
+                    <label> {{$t("if you don't have an account yet, please")}} </label>
                     <label
                       class="text-[#ff6b81] underline cursor-pointer mt-5"
                       @click="registerParent"
-                      >สมัคร One ID</label
+                      >{{ $t('register') }} One ID</label
                     >
                   </template>
                 </v-col>
@@ -338,42 +339,42 @@
                     color="#ff6b81"
                     @click="checkUsername(parent.username)"
                     depressed
-                    >ตกลง</v-btn
+                    >{{$t("agree")}}</v-btn
                   >
                 </v-col>
               </v-row>
               <v-row dense>
                 <v-col cols="12" sm="4">
-                  <labelCustom required text="ชื่อ(ภาษาอังกฤษ)"></labelCustom>
+                  <labelCustom required :text="$t('first name(english)')"></labelCustom>
                   <v-text-field
                     :disabled="user_data.length > 0 || !edit_parent"
                     dense
                     outlined
                     v-model="parent.firstname_en"
-                    placeholder="ชื่อภาษาอังกฤษ"
+                    :placeholder="$t('english first name')"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="4">
                   <labelCustom
                     required
-                    text="นามสกุล(ภาษาอังกฤษ)"
+                    :text="$t('last name(english)')"
                   ></labelCustom>
                   <v-text-field
                     :disabled="user_data.length > 0 || !edit_parent"
                     dense
                     outlined
                     v-model="parent.lastname_en"
-                    placeholder="นามสกุลภาษาอังกฤษ"
+                    :placeholder="$t('english last name')"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="4">
-                  <labelCustom required text="เบอร์โทรศัพท์"></labelCustom>
+                  <labelCustom required :text="$t('phone number')"></labelCustom>
                   <v-text-field
                     :disabled="user_data.length > 0 || !edit_parent"
                     dense
                     outlined
                     v-model="parent.tel"
-                    placeholder="เบอร์โทรศัพท์"
+                    :placeholder="$t('phone number')"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -395,7 +396,7 @@
             ></v-col
           >
           <v-col class="text-lg font-bold">{{
-            `ผู้เรียน ${index_student + 1}`
+            `${$t('learner')} ${index_student + 1}`
           }}</v-col>
           <v-col cols="auto">
             <v-btn @click="removeStudent(student)" small icon color="red" dark
@@ -407,11 +408,11 @@
           <v-card-text>
             <v-row dense class="d-flex align-start">
               <v-col cols="9" sm="5">
-                <labelCustom text="Username (ถ้ามี)"></labelCustom>
+                <labelCustom :text="$t('username')+' (' + $t('optional') + ')'"></labelCustom>
                 <v-text-field
                   dense
                   outlined
-                  :rules="rules.usernameRules"
+                  :rules="usernameRules"
                   @keypress="Validation($event, 'en-number')"
                   v-model="student.username"
                   @change="
@@ -432,7 +433,7 @@
                         )
                       : ''
                   "
-                  placeholder="Username"
+                  :placeholder="$t('username')"
                 >
                   <template v-slot:append>
                     <v-icon v-if="student.account_id" color="green"
@@ -441,11 +442,11 @@
                   </template>
                 </v-text-field>
                 <template v-if="!student.account_id">
-                  <label> หากยังไม่มีบัญชีผู้ใช้กรุณา </label>
+                  <label> {{$t("if you don't have an account yet, please")}} </label>
                   <label
                     class="text-[#ff6b81] underline cursor-pointer mt-5"
                     @click="registerStudent"
-                    >สมัคร One ID</label
+                    >{{$t("register")}} One ID</label
                   >
                 </template>
               </v-col>
@@ -460,45 +461,45 @@
                     checkUsername(student.username, 'student', index_student)
                   "
                   depressed
-                  >ตกลง</v-btn
+                  >{{ $t("agree") }}</v-btn
                 >
               </v-col>
             </v-row>
             <template v-if="student.account_id">
               <v-row dense>
                 <v-col cols="12" sm="6">
-                  <labelCustom required text="ชื่อ(ภาษาอังกฤษ)"></labelCustom>
+                  <labelCustom required :text="$t('first name(english)')"></labelCustom>
                   <v-text-field
                     :disabled="student.account_id ? true : false"
                     dense
                     outlined
                     v-model="student.firstname_en"
-                    placeholder="ชื่อภาษาอังกฤษ"
+                    :placeholder="$t('english first name')"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6">
                   <labelCustom
                     required
-                    text="นามสกุล(ภาษาอังกฤษ)"
+                    :text="$t('last name(english)')"
                   ></labelCustom>
                   <v-text-field
                     :disabled="student.account_id ? true : false"
                     dense
                     outlined
                     v-model="student.lastname_en"
-                    placeholder="นามสกุลภาษาอังกฤษ"
+                    :placeholder="$t('english last name')"
                   ></v-text-field>
                 </v-col>
               </v-row>
               <v-row dense>
                 <v-col cols="12" sm="6">
-                  <labelCustom required text="เบอร์โทรศัพท์"></labelCustom>
+                  <labelCustom required :text="$t('phone number')"></labelCustom>
                   <v-text-field
                     :disabled="student.account_id ? true : false"
                     dense
                     outlined
                     v-model="student.tel"
-                    placeholder="เบอร์โทรศัพท์"
+                    :placeholder="$t('phone number')"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -521,7 +522,7 @@
               dense
               color="#ff6b81"
             >
-              <v-icon>mdi-plus-circle-outline</v-icon>เพิ่มผู้เรียน
+              <v-icon>mdi-plus-circle-outline</v-icon> {{$t('add a learner')}}
             </v-btn>
           </v-col>
         </v-row>
@@ -530,8 +531,8 @@
         <v-col>
           <v-checkbox color="pink" v-model="policy" class="inline-block">
             <template v-slot:label>
-              ยอมรับ<a class="mx-2 font-weight-bold">
-                เงื่อนไขการใช้บริการและนโยบายการคุ้มครองข้อมูลส่วนบุคคล
+              {{ $t('accept') }}<a class="mx-2 font-weight-bold">
+                {{ $t('terms of service and privacy policy') }}
               </a>
             </template>
           </v-checkbox>
@@ -552,7 +553,7 @@
               dense
               color="#ff6b81"
               @click="addToCart"
-              >เพิ่มไปยังรถเข็น</v-btn
+              >{{$t('add to cart')}}</v-btn
             >
             <v-btn
               v-else
@@ -562,7 +563,7 @@
               dense
               color="#ff6b81"
               @click="addToCart"
-              >เพิ่มไปยังรถเข็น</v-btn
+              >{{$t('add to cart')}}</v-btn
             >
           </template>
           <template v-else>
@@ -573,7 +574,7 @@
               dense
               color="#ff6b81"
               @click="addToCart"
-              >เพิ่มไปยังรถเข็น</v-btn
+              >{{$t('add to cart')}}</v-btn
             >
           </template>
         </v-col>
@@ -590,7 +591,7 @@
             dense
             @click="CreateReserve"
             :color="disable_checkout ? '#C4C4C4' : '#ff6b81'"
-            >จอง</v-btn
+            >{{$t('reserve')}}</v-btn
           >
           <v-btn
             v-else-if="
@@ -605,7 +606,7 @@
             @click="checkOut"
             :color="disable_checkout ? '#C4C4C4' : '#ff6b81'"
           >
-            ชำระเงิน
+          {{ $t('cash out') }}
           </v-btn>
           <v-btn
             v-else
@@ -615,7 +616,7 @@
             dense
             @click="checkOut"
             :color="disable_checkout ? '#C4C4C4' : '#ff6b81'"
-            >ชำระเงิน</v-btn
+            >{{ $t('cash out') }}</v-btn
           >
         </v-col>
       </v-row>
@@ -640,15 +641,15 @@
         <header-card
           icon="mdi-card-account-details-outline"
           icon_color="#ff6b81"
-          title="ผู้ปกครอง"
+          :title="$t('parent')"
         >
         </header-card>
         <v-card-text class="pb-2">
           <v-row dense>
             <v-col cols="9">
-              <labelCustom text="Username (ถ้ามี)"></labelCustom>
+              <labelCustom :text="$t('username')+' (' + $t('optional') + ')'"></labelCustom>
               <v-text-field
-                :rules="rules.usernameRules"
+                :rules="usernameRules"
                 dense
                 outlined
                 v-model="parent.username"
@@ -668,7 +669,7 @@
                     ? checkUsername(parent.username)
                     : ''
                 "
-                placeholder="Username"
+                :placeholder="$t('username')"
               >
                 <template v-slot:append>
                   <v-icon v-if="parent.account_id" color="green"
@@ -677,11 +678,11 @@
                 </template>
               </v-text-field>
               <template v-if="!parent.account_id">
-                <label> หากยังไม่มีบัญชีผู้ใช้กรุณา </label>
+                <label> {{$t("if you don't have an account yet, please")}}</label>
                 <label
                   class="text-[#ff6b81] underline cursor-pointer mt-5"
                   @click="registerParent"
-                  >สมัคร One ID</label
+                  >{{ $t('register') }} One ID</label
                 >
               </template>
             </v-col>
@@ -693,44 +694,44 @@
                 color="#ff6b81"
                 @click="checkUsername(parent.username)"
                 depressed
-                >ตกลง</v-btn
+                >{{ $t('agree') }}</v-btn
               >
             </v-col>
           </v-row>
           <template>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom required text="ชื่อ(ภาษาอังกฤษ)"></labelCustom>
+                <labelCustom required :text="$t('first name(english)')"></labelCustom>
                 <v-text-field
                   disabled
                   dense
                   outlined
                   v-model="parent.firstname_en"
-                  placeholder="ชื่อภาษาอังกฤษ"
+                  :placeholder="$t('english first name')"
                 ></v-text-field>
               </v-col>
             </v-row>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom required text="นามสกุล(ภาษาอังกฤษ)"></labelCustom>
+                <labelCustom required :text="$t('last name(english)')"></labelCustom>
                 <v-text-field
                   disabled
                   dense
                   outlined
                   v-model="parent.lastname_en"
-                  placeholder="นามสกุลภาษาอังกฤษ"
+                  :placeholder="$t('english last name')"
                 ></v-text-field>
               </v-col>
             </v-row>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom required text="เบอร์โทรศัพท์"></labelCustom>
+                <labelCustom required :text="$t('phone number')"></labelCustom>
                 <v-text-field
                   disabled
                   dense
                   outlined
                   v-model="parent.tel"
-                  placeholder="เบอร์โทรศัพท์"
+                  :placeholder="$t('phone number')"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -744,7 +745,7 @@
                 class="w-full"
                 color="#ff6b81"
                 outlined
-                >ยกเลิก</v-btn
+                >{{ $t('cancel') }}</v-btn
               >
             </v-col>
             <v-col>
@@ -755,7 +756,7 @@
                 depressed
                 :disabled="!parent.account_id ? true : false"
                 @click="addParent"
-                >บันทึก</v-btn
+                >{{ $t('save') }}</v-btn
               >
             </v-col>
           </v-row>
@@ -777,7 +778,7 @@
             </v-col>
           </v-row>
         </v-card-title>
-        <dialog-card checkmark text="เพิ่มคอร์สเรียนไปยังรถเข็นเรียบร้อยแล้ว">
+        <dialog-card checkmark :text="$t('the course has been successfully added to the cart')">
           <template #btn>
             <v-btn
               depressed
@@ -786,7 +787,7 @@
               color="#ff6b81"
               dark
               @click="closeDialogCart"
-              >ตกลง</v-btn
+              >{{$t('agree')}}</v-btn
             >
           </template>
         </dialog-card>
@@ -801,7 +802,7 @@
     >
       <registerDialogForm
         dialog
-        title="สมัคร One ID"
+        :title="$t('register')+'One ID'"
         :state="register_type"
       ></registerDialogForm>
     </v-dialog>
@@ -830,9 +831,9 @@
             <v-col>
               <v-checkbox hide-details color="pink" v-model="policy">
                 <template v-slot:label>
-                  ยอมรับ
+                  {{ $t('accept') }}
                   <a class="mx-2 font-weight-bold">
-                    เงื่อนไขการใช้บริการและนโยบายการคุ้มครองข้อมูลส่วนบุคคล
+                    {{ $t('terms of service and privacy policy') }}
                   </a>
                 </template>
               </v-checkbox>
@@ -848,7 +849,7 @@
                 text-color="#ff6b81"
                 @click="closePolicy()"
               >
-                ยกเลิก
+                {{$t('cancel')}}
               </v-btn>
             </v-col>
             <v-col>
@@ -858,7 +859,7 @@
                 color="#ff6b81"
                 @click="policy_show = false"
               >
-                ตกลง
+              {{$t('agree')}}
               </v-btn>
             </v-col>
           </v-row>
@@ -914,27 +915,18 @@ export default {
     disable_checkout: false,
     coachSelect: false,
     rules: {
-      usernameRules: [
-        (val) =>
-          (val || "").length > 5 ||
-          "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => /[A-Za-z0-9 ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-        (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-          "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
-      ],
-      passwordRules: [
-        (val) =>
-          (val || "").length > 7 ||
-          "โปรดระบุรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => !/[ ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-      ],
+      // usernameRules: [
+      //   (val) =>
+      //     (val || "").length > 5 ||
+      //     "please enter a username at least 6 characters long",
+      //   (val) =>
+      //     (val || "").length < 20 ||
+      //     "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
+      //   (val) => /[A-Za-z0-9 ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+      //   (val) =>
+      //     !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+      //     "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
+      // ],
     },
   }),
   created() {
@@ -942,7 +934,7 @@ export default {
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
   },
   mounted() {
-    this.$store.dispatch("NavberUserModules/changeTitleNavber", "สมัครเรียน");
+    this.$store.dispatch("NavberUserModules/changeTitleNavber", "register");
     this.changeCourseOrderData(this.order_data);
     if (!this.course_order.course_id) {
       this.$router.replace({ name: "UserKingdom" });
@@ -1079,6 +1071,20 @@ export default {
       course_monitors: "CourseMonitorModules/getCourseMonitor",
       reserve_list: "OrderModules/getReserveList",
     }),
+    usernameRules() {
+      return  [
+        (val) =>
+          (val || "").length > 5 ||
+          this.$t("please enter a username at least 6 characters long"),
+        (val) =>
+          (val || "").length < 20 ||
+          this.$t("please enter a username no longer than 20 characters"),
+        (val) => /[A-Za-z0-9 ]/g.test(val) || this.$t("the username cannot contain special characters"),
+        (val) =>
+          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+          this.$t("username cannot contain emojis"),
+      ]
+    },
     setFunctions() {
       this.GetReserceByCreatedBy({ account_id: this.user_login.account_id });
       this.checkMaximumStudent();
@@ -1270,11 +1276,11 @@ export default {
     CreateReserve() {
       Swal.fire({
         icon: "question",
-        title: "ต้องการจองคอร์สนี้ใช่หรือไม่",
+        title: this.$t('want to book this course?'),
         showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           if (this.course_order.course_type_id == "CT_1") {
@@ -1405,11 +1411,11 @@ export default {
     addToCart() {
       Swal.fire({
         icon: "question",
-        title: "ต้องการเพิ่มเข้ารถเข็นใช่หรือไม่ ?",
+        title: this.$t('want to add to cart?'),
         showDenyButton: false,
         showCancelButton: true,
-        cancelButtonText: "ยกเลิก",
-        confirmButtonText: "ตกลง",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           if (this.course_order.course_type_id == "CT_2") {
@@ -1438,8 +1444,8 @@ export default {
           // this.show_dialog_cart = true;
           Swal.fire({
             icon: "success",
-            title: "สำเร็จ",
-            text: "( เพิ่มคอร์สเรียนไปยังรถเข็นเรียบร้อยแล้ว )",
+            title: this.$t('succeed'),
+            text: this.$t('the course has been successfully added to the cart'),
             showCancelButton: false,
             showConfirmButton: false,
             showDenyButton: false,
@@ -1479,11 +1485,11 @@ export default {
       } else {
         Swal.fire({
           icon: "question",
-          title: "ดำเนินการชำระเงินใช่หรือไม่ ?",
+          title: this.$t("proceed with payment?"),
           showDenyButton: false,
           showCancelButton: true,
-          cancelButtonText: "ยกเลิก",
-          confirmButtonText: "ตกลง",
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             if (this.course_order.course_type_id == "CT_1") {
@@ -1535,7 +1541,7 @@ export default {
               } else {
                 Swal.fire({
                   icon: "error",
-                  text: `ข้อมูลไม่ถูกต้อง ${this.course_order.day} : ${this.course_order.time}`,
+                  text: `${this.$t('invalid data')} ${this.course_order.day} : ${this.course_order.time}`,
                 });
               }
             } else {
@@ -1591,7 +1597,7 @@ export default {
               ) {
                 Swal.fire({
                   icon: "error",
-                  title: "ชื่อผู้ใช้นี้ถูกใส่ข้อมูลมาแล้ว กรุณาตรวจสอบอีกครั้ง",
+                  title: this.$t("this username has already been entered. please check again"),
                 });
               }
             }

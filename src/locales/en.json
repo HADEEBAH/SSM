@@ -1,6 +1,120 @@
-{
+{   
+    "add a learner" : "Add a learner",
+    "add parent information" : "Add parent information",
+    "add to cart" : "Add to cart",
+    "accept" : "Accept",
+    "admin page" : "Admin page",
+    "admission date" : "Admission date",
+    "agree" : "Agree",
+
+    "baht" : "Baht",
+    "by": "By",
+
+    "cancel" : "Cancel",
+    "cash out" : "Cash out",
+    "certification" : "Certification",
+    "check-in notification":"Check-in notification",
+    "choose a class time" : "Choose a class time",
+    "choose a coach" : "Choose a coach",
+    "choose a course date" : "Choose a course date",
+    "choose a package" : "Choose a package",
+    "contact us at" : "Contact us at",
+    "course" : "Course",
+    "course information not found" : "Course information not found",
+    "currently our class is full of students. thank you for your interest in our course." : "Currently our class is full of students. Thank you for your interest in our course.",
+
+
+    "date and time" : "Date and time",
+
     "english" : "English",
+    "english first name" : "English first name",
+    "english last name" : "English last name",
+    "edit parent information" : "Edit parent information",
+
+    "find the learning course that interests you here" : "Find the learning course that interests you here",
+    "find the learning kingdom that interests you here" : "Find the learning kingdom that interests you here",
+    "first name" : "First name",
+    "first name(english)" : "First name(english)",
+    "full course" : "Full course",
+
     "hello" : "Hello",
+    "hour" : "Hour",
+    "hrs." : "Hrs.",
+
+    "if you don't have an account yet, please" : "If you don't have an account yet, please",
+    "invalid data" : "Invalid data",
+
     "kingdom" : "Kingdom",
-    "thai" : "Thai"
+    "kingdom not found" : "Kingdom not found",
+
+    "last name" : "Last name",
+    "last name(english)" :"Last name(English)",
+    "learner" : "Learner",
+    "learner assessment notification":"Learner assessment notification",
+    "learning journey" : "Learning journey",
+    "lesser": "Lesser",
+    "list of parents" : "List of parents",
+    "logout" : "Logout",
+    "login" : "Login",
+
+    "management":"Management",
+
+    "no data found" : "No data found",
+    "no notifications" : "No notifications",
+    "notification of course application":"Notification of course application",
+    "notifications" : "Notifications",
+
+    "o'clock" : "O'clock",
+    "optional": "optional",
+
+    "package" : "Package",
+    "parent" : "Parent",
+    "payment notification":"Payment notification",
+    "performance" : "Performance",
+    "person" : "Person",
+    "phone number" : "Phone number",
+    "please enter a password that is at least 8 characters long" : "Please enter a password that is at least 8 characters long",
+    "please enter a password of no more than 20 characters" : "Please enter a password of no more than 20 characters",
+    "please enter a username at least 6 characters long" : "Please enter a username at least 6 characters long",
+    "please enter a username no longer than 20 characters" : "please enter a username no longer than 20 characters",
+    "profile" : "Profile",
+    "proceed with payment?" : "Proceed with payment?",
+
+    "read more":"Read more",
+    "register":"Register",
+    "register for" : "Register for",
+    "register for a course" : "Register for a course",
+    "register for yourself" : "Register for yourself",
+    "register to study for others" : "Register to study for others",
+    "registration history" : "Registration history",
+    "reserve" : "Reserve",
+
+    "save" : "Save",
+    "seat" : "Seat",
+    "see more" : "See more",
+    "special rights" : "Special rights",
+    "study date" : "Study date",
+    "study notifications":"Study notifications",
+    "study schedule":"Study schedule",
+    "succeed":"Succeed",
+
+    "thai" : "Thai",
+    "the course is full" : "The course is full",
+    "the course has been successfully added to the cart" : "The course has been successfully added to the cart",
+    "the username cannot contain special characters" : "The username cannot contain special characters",
+    "there are special privileges for monthly/term/yearly subscriptions" : "There are special privileges for monthly/term/yearly subscriptions",
+    "this username has already been entered. please check again" : "This username has already been entered. Please check again",    
+    "terms of service and privacy policy" : "Terms of Service and Privacy Policy",
+    "time" : "Time",
+
+    "username" : "Username",
+    "username cannot contain emojis" : "Username cannot contain emojis",
+
+    "view special rights" : "View special rights",
+
+    "want to add to cart?" : "Want to add to cart?",
+    "want to book this course?" : "Want to book this course??",
+
+
+    "z":"z"
 }

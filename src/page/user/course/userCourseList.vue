@@ -8,14 +8,14 @@
             hide-details
             dense
             prepend-inner-icon="mdi-magnify"
-            placeholder="ค้นหาคอร์สการเรียนรู้ที่คุณสนใจได้ที่นี่"
+            :placeholder="$t('find the learning course that interests you here')"
             v-model="search_course"
             @input="searchCourse($event)"
           ></v-text-field>
         </v-col>
       </v-row>
       <v-row dense>
-        <v-col class="text-lg font-bold">{{ category.categoryNameTh }}</v-col>
+        <v-col class="text-lg font-bold">{{ $i18n.locale == 'th' ? category.categoryNameTh : category.categoryNameEng }}</v-col>
       </v-row>
       <v-row dense>
         <v-col
@@ -39,7 +39,7 @@
                     : ' text-[#B3B3B3]'
                 "
                 class="font-bold mr-2"
-                >{{ type.course_type_name_th }}</label
+                >{{ $i18n.locale == 'th' ? type.course_type_name_th :  type.course_type_name_en }}</label
               >
               <v-avatar
                 size="32"
@@ -96,7 +96,7 @@
                 <v-row>
                   <v-col class="pa-4" align="right">
                     <v-chip color="#F9B320" text-color="white">{{
-                      `${GerPeriod(course.period)}  ชั่วโมง`
+                      `${GerPeriod(course.period)} ${$t('hour')} `
                     }}</v-chip></v-col
                   >
                 </v-row>
@@ -123,7 +123,7 @@
                   class="d-flex align-center"
                 >
                   <v-col>{{
-                    `${course.course_name_th} (${course.course_name_en})`
+                    `${$i18n.locale == 'th' ? course.course_name_th : course.course_name_en}`
                   }}</v-col>
                 </v-row>
               </v-card-title>
@@ -138,7 +138,7 @@
                     v-if="course.course_detail.length > 150"
                     class="text-red-500 cursor-pointer"
                     @click="course.show = !course.show"
-                    >{{ course.show ? `น้อยลง` : `อ่านต่อ...` }}</span
+                    >{{ course.show ? $t('lesser') : $t('read more')+`...` }}</span
                   >
                 </div>
               </v-card-text>
@@ -151,7 +151,7 @@
           >
             <v-card outlined>
               <v-card-text align="center">
-                <span class="font-bold">ไม่พบข้อมูลคอร์ส</span>
+                <span class="font-bold">{{$t('course information not found')}}</span>
               </v-card-text>
             </v-card>
           </v-col>
@@ -208,7 +208,7 @@ export default {
   },
   mounted() {
     this.GetCategory(this.$route.params.category_id);
-    this.$store.dispatch("NavberUserModules/changeTitleNavber", "คอร์สเรียน");
+    this.$store.dispatch("NavberUserModules/changeTitleNavber", "course");
   },
   watch: {},
   computed: {

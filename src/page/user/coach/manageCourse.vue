@@ -1626,7 +1626,7 @@ export default {
       return "";
     },
     genToday() {
-      return moment(new Date()).format("YYYY-MMT-DD");
+      return moment(new Date()).format("YYYY-MM-DD");
     },
 
     validateCoachLeave() {

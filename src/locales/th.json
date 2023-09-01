@@ -1,6 +1,122 @@
-{
+{   
+    "add a learner" : "เพิ่มผู้เรียน",
+    "add parent information" : "เพิ่มข้อมูลผู้ปกครอง",
+    "add to cart" : "เพิ่มไปยังรถเข็น",
+    "accept" : "ยอมรับ",
+    "admin page" : "หน้าผู้ดูแลระบบ",
+    "admission date" : "วันรับสมัคร",
+    "agree" : "ตกลง",
+
+    "baht" : "บาท",
+    "by" : "โดย",
+
+    "cancel" : "ยกเลิก",
+    "cash out" : "ชำระเงิน",
+    "certification" : "การรับรอง",
+    "check-in notification" : "แจ้งเตือนการเช็คอิน",
+    "choose a class time" : "เลือกช่วงเวลาเรียน",
+    "choose a coach" : "เลือกโค้ช",
+    "choose a course date" : "เลือกช่วงวันที่เรียน",
+    "choose a package" : "เลือกแพ็คเกจ",
+    "contact us at" : "ติดต่อเราได้ที่",
+    "course" : "คอร์สเรียน",
+    "course information not found" : "ไม่พบข้อมูลคอร์ส",
+    "currently our class is full of students. thank you for your interest in our course." : "ขณะนี้คลาสเรามีผู้เรียนเต็มจำนวนแล้ว ขอบคุณท่านที่สนใจคอร์สของเรา",
+
+    "date and time" : "วันและเวลา",
+
     "english" : "อังกฤษ",
+    "english first name" : "ชื่อภาษาอังกฤษ",
+    "english last name" : "นามสกุลภาษาอังกฤษ",
+    "edit parent information" : "แก้ไขข้อมูลผู้ปกครอง",
+
+    "find the learning course that interests you here" : "ค้นหาคอร์สการเรียนรู้ที่คุณสนใจได้ที่นี่",
+    "find the learning kingdom that interests you here" : "ค้นหาอาณาจักรการเรียนรู้ที่คุณสนใจได้ที่นี้",
+    "first name" : "ชื่อ",
+    "first name(english)" : "ชื่อ(ภาษาอังกฤษ)",
+    "full course" : "คอร์สเรียนเต็ม",
+
     "hello" : "สวัสดี",
+    "hour" : "ชั่วโมง",
+    "hrs." : "ชม.",
+
+    "if you don't have an account yet, please" : "หากยังไม่มีบัญชีผู้ใช้กรุณา",
+    "invalid data" : "ข้อมูลไม่ถูกต้อง",
+
     "kingdom" : "อาณาจักร",
-    "thai" : "ไทย"
+    "kingdom not found" : "ไม่พบอาณาจักร",
+
+    "last name" : "นามสกุล",
+    "last name(english)" : "นามสกุล(ภาษาอังกฤษ)",
+    "learner" : "ผู้เรียน",
+    "learner assessment notification":"แจ้งเตือนการประเมินผู้เรียน",
+    "learning journey" : "การเดินทางแห่งการเรียนรู้",
+    "lesser": "น้อยลง",
+    "list of parents" : "รายชื่อผู้ปกครอง",
+    "logout" : "ออกจากระบบ",
+    "login" : "เข้าสู่ระบบ",
+    
+  
+    "management":"การจัดการ",
+
+    "no data found" : "ไม่พบข้อมูล",
+    "no notifications" : "ไม่มีการแจ้งเตือน",
+    "notification of course application":"แจ้งเตือนการสมัครคอร์สเรียน",
+    "notifications" : "การแจ้งเตือน",
+    
+    "o'clock" : "น.",
+    "optional": "ถ้ามี",
+
+    "package" : "แพ็คเกจ",
+    "parent" : "ผู้ปกครอง",
+    "payment notification":"แจ้งเตือนการชำระเงิน",
+    "performance" : "ผลงาน",
+    "person" : "คน",
+    "phone number" : "เบอร์โทรศัพท์",
+    "please enter a password that is at least 8 characters long" : "โปรดระบุรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
+    "please enter a password of no more than 20 characters" : "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
+    "please enter a username at least 6 characters long" : "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
+    "please enter a username no longer than 20 characters" : "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
+    "profile" : "โปรไฟล์",
+    "proceed with payment?" : "ดำเนินการชำระเงินใช่หรือไม่?",
+
+    "read more":"อ่านต่อ",
+    "register":"ลงทะเบียน",
+    "register for" : "ลงทะเบียนให้",
+    "register for a course" : "ลงทะเบียนคอร์สเรียน",
+    "register for yourself" : "ลงทะเบียนเรียนให้ตัวเอง",
+    "register to study for others" : "ลงทะเบียนเรียนให้ผู้อื่น",
+    "registration history" : "ประวัติการลงทะเบียน",
+    
+    "reserve" : "จอง",
+
+    "save" : "บันทึก",
+    "seat" : "ที่นั้ง",
+    "see more" : "ดูเพิ่มเติม",
+    "special rights" : "สิทธิ์พิเศษ",
+    "study date" : "วันเรียน",
+    "study notifications":"แจ้งเตือนการเรียน",
+    "study schedule":"ตารางเรียน",
+    "succeed":"สำเร็จ",
+
+    "thai" : "ไทย",
+    "the course is full" : "คอร์สเต็มแล้ว",
+    "the course has been successfully added to the cart" : "เพิ่มคอร์สเรียนไปยังรถเข็นเรียบร้อยแล้ว",
+    "there are special privileges for monthly/term/yearly subscriptions" : "มีสิทธิ์พิเศษสำหรับการสมัครรายเดือน / รายเทอม / รายปี",
+    "the username cannot contain special characters" : "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+    "this username has already been entered. please check again" : "ชื่อผู้ใช้นี้ถูกใส่ข้อมูลมาแล้ว กรุณาตรวจสอบอีกครั้ง",
+    "terms of service and privacy policy" : "เงื่อนไขการใช้บริการและนโยบายการคุ้มครองข้อมูลส่วนบุคคล",
+    "time" : "ครั้ง",
+    
+    "username" : "ชื่อผู้ใช้",
+    "username cannot contain emojis" : "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
+
+    "view special rights" : "ดูสิทธิพิเศษ",
+
+    "want to add to cart?" : "ต้องการเพิ่มเข้ารถเข็นใช่หรือไม่?",
+    "want to book this course?" : "ต้องการจองคอร์สนี้ใช่หรือไม่?",
+   
+    
+    
+    "z":"z"
 }
