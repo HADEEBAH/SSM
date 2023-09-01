@@ -242,7 +242,7 @@
               </v-col>
               <!-- สถานะการชำเงิน -->
               <v-col cols="12" sm="6">
-                <label-custom text="สถานะการชำเงิน"></label-custom>
+                <label-custom text="สถานะการชำระเงิน"></label-custom>
                 <v-autocomplete
                   dense
                   class="py-1"
@@ -802,11 +802,11 @@ export default {
       searchNameUser: "loginModules/searchNameUser",
     }),
     remove(item) {
-      for(let i = 0; i < this.export_filter.students.length; i++){
-        if(this.export_filter.students[i] == item){
+      for (let i = 0; i < this.export_filter.students.length; i++) {
+        if (this.export_filter.students[i] == item) {
           this.export_filter.students.splice(i, 1);
         }
-      }     
+      }
     },
     ShowDialogExport() {
       this.export_filter.course_id = [];
