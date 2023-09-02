@@ -2,7 +2,7 @@
   <div class="flex align-center justify-center my-10" style="width: 100%; height: 100%;">
     <register-dialog-form
         :style="$vuetify.breakpoint.smAndDown ? 'width: 85vw'  : 'width: 50vw'"
-        title="ลงทะเบียน"
+        :title="$t('register')"
     ></register-dialog-form>
   </div>
 </template>

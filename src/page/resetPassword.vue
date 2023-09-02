@@ -6,7 +6,7 @@
       </v-col>
       <v-col cols="12" class="text-center">
         <label class="font-weight-bold">
-          ยืนยันรหัสผ่านใหม่
+          {{ $t("confirm new password") }}
         </label>
       </v-col>
       
@@ -15,12 +15,12 @@
           v-model="password"
           :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
           :class="MobileSize ? 'w-[100%!important] m-[auto!important]' : 'w-[50%!important] m-[auto!important]'"
-          label="รหัสผ่านใหม่"
+          :label="$t('new password')"
           :type="show_password ? 'text' : 'password'"
           @click:append="show_password = !show_password"
           color="#FF6B81"
           solo
-          :rules="rules.password"
+          :rules="RulesPassword"
         ></v-text-field>
       </v-col>
       <v-col cols="12" class="text-center w-full">
@@ -28,12 +28,12 @@
           v-model="confirm_password"
           :append-icon="show_confirm_password ? 'mdi-eye' : 'mdi-eye-off'"
           :class="MobileSize ? 'w-[100%!important] m-[auto!important]' : 'w-[50%!important] m-[auto!important]'"
-          label="ยืนยันรหัาผ่านใหม่"
+          :label="$t('confirm new password')"
           :type="show_confirm_password ? 'text' : 'password'"
           @click:append="show_confirm_password = !show_confirm_password"
           color="#FF6B81"
           solo
-          :rules="rules.password"
+          :rules="RulesPassword"
         ></v-text-field>
       </v-col>
     </v-row>
@@ -44,7 +44,7 @@
         :loading="loading"
         @click="sendResetPassword()"
         :class="MobileSize ? 'w-[100%!important] text-[#FF6B81!important] font-bold' : 'w-[50%!important] text-[#FF6B81!important] font-bold'"
-        color="#F0F2F5">ยืนยัน</v-btn>
+        color="#F0F2F5">{{ $t("confirm") }}</v-btn>
       </v-col>
     </v-row>
 
@@ -71,7 +71,7 @@
           <v-row dense>
             <v-col cols="12" class="text-center">
               <label class="font-weight-bold">
-                ยืนยัน OTP
+                {{$t("confirm")}} OTP
               </label>
             </v-col>
           </v-row>
@@ -91,12 +91,12 @@
             <v-row dense>
               <v-col align="right">
                 <v-btn outlined color="#ff6b81" text-color="#ff6b81" @click="otp_dialog = false">
-                  ยกเลิก
+                  {{ $t("cancel") }}
                 </v-btn>
               </v-col>
               <v-col>
                 <v-btn depressed dark color="#ff6b81" @click="confirmOtp()">
-                  ตกลง
+                  {{ $t("agree") }}
                 </v-btn>
               </v-col>
             </v-row>
@@ -105,7 +105,7 @@
       </v-card>
     </v-dialog>
     <v-btn @click="backToHome()" text dark :class="MobileSize ? 'absolute top-[1%] right-[2%]' : 'absolute top-[1%] right-[1%]' " color="#FF6B81">
-      <v-icon class="mr-2">mdi mdi-home</v-icon> กลับหน้าหลัก
+      <v-icon class="mr-2">mdi mdi-home</v-icon> {{ $t("return to home page") }}
     </v-btn>
   </v-container>
 </template>
@@ -125,14 +125,6 @@ import Swal from "sweetalert2";
 
       show_password: false,
       show_confirm_password: false,
-
-      rules: {
-        password: [
-          (val) =>
-            (val || "").length > 7 ||
-            "โปรดระบุรหัสผ่านความยาวไม่น้อยกว่า 8 ตัวอักษร",
-        ],
-      },
     }),
     methods: {
       ...mapActions({
@@ -151,36 +143,36 @@ import Swal from "sweetalert2";
           this.loading = false
           Swal.fire({
             icon: "warning",
-            title: "รหัสผ่านไม่ถูกต้อง",
-            text: "(กรุณาระบุรหัสผ่านใหม่อีกครั้ง)"
+            title: this.$t("the password is incorrect"),
+            text: this.$t("please enter your password again")
           })
         } else if (this.confirm_password === "") {
           this.loading = false
           Swal.fire({
             icon: "warning",
-            title: "ยืนยันรหัสผ่านไม่ถูกต้อง",
-            text: "(กรุณาระบุยืนยันรหัสผ่านใหม่อีกครั้ง)"
+            title: this.$t("confirm password is incorrect"),
+            text: this.$t("please confirm the new password again")
           })
         } else if (this.password.length < 8) {
           this.loading = false
           Swal.fire({
             icon: "warning",
-            title: "รหัสผ่านไม่ถูกต้อง",
-            text: "(กรุณาระบุรหัสผ่านมากกว่า 8 ตัวอักษร)"
+            title: this.$t("the password is incorrect"),
+            text: this.$t("please enter a password that is at least 8 characters long")
           })
         } else if (this.confirm_password.length < 8) {
           this.loading = false
           Swal.fire({
             icon: "warning",
-            title: "ยืนยันรหัสผ่านไม่ถูกต้อง",
-            text: "(กรุณาระบุยืนยันรหัสผ่านมากกว่า 8 ตัวอักษร)"
+          title:  this.$t("confirm password is incorrect"),
+            text: this.$t("please enter a password that is at least 8 characters long")
           })
         } else if (this.password !== this.confirm_password) {
           this.loading = false
           Swal.fire({
             icon: "warning",
-            title: "รหัสผ่านไม่ตรงกัน",
-            text: "(กรุณาระบุยืนยันรหัสผ่านให้ตรงกัน)"
+            title: this.$t("passwords do not match"),
+            text: this.$t("please confirm your passwords are the same")
           })
         } else {
           this.otp_dialog = true
@@ -205,8 +197,8 @@ import Swal from "sweetalert2";
             
             Swal.fire({
               icon: "success",
-              title: "สำเร็จ",
-              text: "( แก้ไขรหัสผ่านเรียบร้อยแล้ว )",
+              title: this.$t("succeed"),
+              text: this.$t("the password has been edited successfully"),
               timer: 3000,
               showConfirmButton: false,
               timerProgressBar: true
@@ -217,8 +209,8 @@ import Swal from "sweetalert2";
           } else {
             Swal.fire({
               icon: "warning",
-              title: "ยืนยัน OTP ไม่สำเร็จ",
-              text: "(กรุณาระบุ OTP ให้ถูกต้อง)"
+              title: this.$t("OTP verification failed"),
+              text: this.$t("please enter OTP correctly")
             })
           }
           this.loading_otp = false
@@ -230,7 +222,13 @@ import Swal from "sweetalert2";
         responseResetPassword: "ResetPasswordModules/responseResetPassword",
         responseResetPasswordMessage: "ResetPasswordModules/responseResetPasswordMessage",
       }),
-
+      RulesPassword(){
+        return [
+          (val) =>
+            (val || "").length > 7 ||
+           this.$t("please enter a password that is at least 8 characters long"),
+        ]
+      },
       MobileSize() {
         const { xs } = this.$vuetify.breakpoint;
         return !!xs;
