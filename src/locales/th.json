@@ -6,6 +6,8 @@
     "admin page" : "หน้าผู้ดูแลระบบ",
     "admission date" : "วันรับสมัคร",
     "agree" : "ตกลง",
+    "all students" : "ผู้เรียนทั้งหมด",
+
 
     "baht" : "บาท",
     "by" : "โดย",
@@ -21,11 +23,18 @@
     "coach" : "โค้ช",
     "contact us at" : "ติดต่อเราได้ที่",
     "course" : "คอร์สเรียน",
+    "courses" : "คอร์ส",
     "course information not found" : "ไม่พบข้อมูลคอร์ส",
     "currently our class is full of students. thank you for your interest in our course." : "ขณะนี้คลาสเรามีผู้เรียนเต็มจำนวนแล้ว ขอบคุณท่านที่สนใจคอร์สของเรา",
+    "current students" : "ผู้เรียนปัจจุบัน",
+
+
+
 
     "date and time" : "วันและเวลา",
     "details" : "รายละเอียด",
+    "dashboard" : "แดชบอร์ด",
+
 
     "english" : "อังกฤษ",
     "english first name" : "ชื่อภาษาอังกฤษ",
@@ -38,12 +47,19 @@
     "first name(english)" : "ชื่อ(ภาษาอังกฤษ)",
     "full course" : "คอร์สเรียนเต็ม",
 
+    "graduating students": "ผู้เรียนที่ใกล้จบ",
+    "general course" : "คอร์สทั่วไป",
+
+
     "hello" : "สวัสดี",
     "hour" : "ชั่วโมง",
     "hrs." : "ชม.",
 
     "if you don't have an account yet, please" : "หากยังไม่มีบัญชีผู้ใช้กรุณา",
     "invalid data" : "ข้อมูลไม่ถูกต้อง",
+    "income" : "รายได้",
+    "income proportion": "สัดส่วนรายได้",
+
 
     "kingdom" : "อาณาจักร",
     "kingdom not found" : "ไม่พบอาณาจักร",
@@ -105,6 +121,9 @@
     "study schedule":"ตารางเรียน",
     "success" : "ชำระเงินแล้ว",
     "succeed":"สำเร็จ",
+   "students reserve a course": "ผู้เรียนจองคอร์ส", 
+   "short course": "คอร์สระยะสั้น",
+
 
     "thai" : "ไทย",
     "the course is full" : "คอร์สเต็มแล้ว",

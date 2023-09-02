@@ -12,6 +12,27 @@
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-row v-bind="attrs" v-on="on">
+                <!-- <v-row class=""> -->
+                <v-menu v-model="menu_locale" offset-y>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn text v-bind="attrs" v-on="on">
+                      <label>{{
+                        $i18n.locale == "en" ? $t("english") : $t("thai")
+                      }}</label>
+                      <v-icon dark> mdi-web </v-icon>
+                    </v-btn>
+                  </template>
+                  <v-card>
+                    <v-list-item @click="$i18n.locale = 'en'">
+                      {{ $t("english") }}
+                    </v-list-item>
+                    <v-list-item @click="$i18n.locale = 'th'">
+                      {{ $t("thai") }}
+                    </v-list-item>
+                  </v-card>
+                </v-menu>
+                <!-- </v-row> -->
+
                 <div v-if="user_detail.image !== ''">
                   <v-avatar class="mr-2" size="24">
                     <v-img :src="user_detail.image" size="24" />
@@ -184,6 +205,7 @@ export default {
         roles: ["R_1", "R_2"],
       },
     ],
+    menu_locale: false,
   }),
 
   created() {

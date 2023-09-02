@@ -3,7 +3,7 @@
     <v-container class="overflow-x: hidden;">
       <loading-overlay :loading="dashboard_loading"> </loading-overlay>
 
-      <headerPage title="แดชบอร์ด"></headerPage>
+      <headerPage :title="$t('dashboard')"></headerPage>
       <!-- TOP CARD -->
       <v-row dense>
         <!-- STUDENT -->
@@ -23,7 +23,9 @@
                       </div>
                     </v-col>
                     <v-col cols="9" md="9">
-                      <div class="font-bold my-5 text-lg">ผู้เรียนทั้งหมด</div>
+                      <div class="font-bold my-5 text-lg">
+                        {{ $t("all students") }}
+                      </div>
                     </v-col>
                   </v-row>
                   <div
@@ -38,7 +40,7 @@
                     }}
                   </div>
                   <v-col align="center">
-                    <div class="my-3">คน</div>
+                    <div class="my-3">{{ $t("person") }}</div>
                   </v-col>
                 </v-card>
               </v-col>
@@ -47,7 +49,9 @@
                 <v-card class="rounded-lg">
                   <v-row dense>
                     <v-col cols="12" align="center">
-                      <div class="my-5 text-lg">ผู้เรียนปัจจุบัน</div>
+                      <div class="my-5 text-lg">
+                        {{ $t("current students") }}
+                      </div>
                     </v-col>
                   </v-row>
                   <div
@@ -62,7 +66,7 @@
                     }}
                   </div>
                   <v-col align="center">
-                    <div class="my-3">คน</div>
+                    <div class="my-3">{{ $t("person") }}</div>
                   </v-col>
                 </v-card>
               </v-col>
@@ -71,7 +75,9 @@
                 <v-card class="rounded-lg">
                   <v-row dense>
                     <v-col cols="12" align="center">
-                      <div class="my-5 text-lg">ผู้เรียนที่ใกล้จบ</div>
+                      <div class="my-5 text-lg">
+                        {{ $t("graduating students") }}
+                      </div>
                     </v-col>
                   </v-row>
                   <div
@@ -86,7 +92,7 @@
                     }}
                   </div>
                   <v-col align="center">
-                    <div class="my-3">คน</div>
+                    <div class="my-3">{{ $t("person") }}</div>
                   </v-col>
                 </v-card>
               </v-col>
@@ -95,7 +101,9 @@
                 <v-card class="rounded-lg">
                   <v-row dense>
                     <v-col cols="12" align="center">
-                      <div class="my-5 text-lg">ผู้เรียนจองคอร์ส</div>
+                      <div class="my-5 text-lg">
+                        {{ $t("students reserve a course") }}
+                      </div>
                     </v-col>
                   </v-row>
                   <div
@@ -110,7 +118,7 @@
                     }}
                   </div>
                   <v-col align="center">
-                    <div class="my-3">คน</div>
+                    <div class="my-3">{{ $t("person") }}</div>
                   </v-col>
                 </v-card>
               </v-col>
@@ -129,7 +137,7 @@
                     </div>
                   </v-col>
                   <v-col cols="9" sm="8" md="8">
-                    <div class="font-bold my-5 text-lg">คอร์สเรียน</div>
+                    <div class="font-bold my-5 text-lg">{{ $t("course") }}</div>
                   </v-col>
                   <!-- คอร์สเรียน -->
                   <v-col cols="12" align="center">
@@ -145,7 +153,7 @@
                     </div>
                   </v-col>
                   <v-col align="center">
-                    <div class="my-5">คอร์ส</div>
+                    <div class="my-5">{{ $t("courses") }}</div>
                   </v-col>
                 </v-row>
               </v-col>
@@ -153,7 +161,9 @@
               <v-col cols="6" sm="6">
                 <v-row dense>
                   <v-col cols="12" align="center">
-                    <div class="font-medium my-5 text-lg">คอร์สทั่วไป</div>
+                    <div class="font-medium my-5 text-lg">
+                      {{ $t("general course") }}
+                    </div>
                     <div
                       class="font-bold text-lg"
                       style="color: #1876d1; font-size: xx-large"
@@ -168,7 +178,9 @@
                 </v-row>
                 <v-row dense>
                   <v-col cols="12" align="center">
-                    <div class="font-medium my-2 text-lg">คอร์สระยะสั้น</div>
+                    <div class="font-medium my-2 text-lg">
+                      {{ $t("short course") }}
+                    </div>
                     <div
                       class="font-bold text-lg"
                       style="color: #1876d1; font-size: xx-large"
@@ -196,7 +208,7 @@
                   </div>
                 </v-col>
                 <v-col cols="6" align="start">
-                  <div class="font-bold my-5 text-lg">โค้ช</div>
+                  <div class="font-bold my-5 text-lg">{{ $t("coach") }}</div>
                 </v-col>
               </v-row>
               <v-card-text
@@ -207,7 +219,7 @@
                   get_potential.countCoaches ? get_potential.countCoaches : "0"
                 }}
               </v-card-text>
-              <v-card-text align="center"> คน </v-card-text>
+              <v-card-text align="center"> {{ $t("person") }} </v-card-text>
             </v-row>
           </v-card>
         </v-col>
@@ -229,7 +241,7 @@
                     <v-icon color="#ff6b81" class="mb-1"
                       >mdi-currency-thb</v-icon
                     >
-                    รายได้
+                    {{ $t("income") }}
                   </v-col>
 
                   <!-- Year -->
@@ -307,7 +319,7 @@
                     <v-icon color="#ff6b81" class="mb-2"
                       >mdi-elevation-rise</v-icon
                     >
-                    สัดส่วนรายได้
+                    {{ $t("income proportion") }}
                   </v-col>
                   <!-- YEAR -->
                   <v-col cols="6" sm="6" md="6" lg="4">

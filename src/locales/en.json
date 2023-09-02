@@ -6,6 +6,8 @@
     "admin page" : "Admin page",
     "admission date" : "Admission date",
     "agree" : "Agree",
+    "all students" : "All students",
+   
 
     "baht" : "Baht",
     "by": "By",
@@ -21,11 +23,15 @@
     "coach" : "Coach",
     "contact us at" : "Contact us at",
     "course" : "Course",
+    "courses" : "Courses",
     "course information not found" : "Course information not found",
     "currently our class is full of students. thank you for your interest in our course." : "Currently our class is full of students. Thank you for your interest in our course.",
+    "current students" : "Current students",
 
     "date and time" : "Date and time",
     "details" : "Details",
+    "dashboard" : "Dashboard",
+
 
     "english" : "English",
     "english first name" : "English first name",
@@ -38,12 +44,19 @@
     "first name(english)" : "First name(english)",
     "full course" : "Full course",
 
+    "graduating students": "Graduat Students",
+    "general course" : "General course",
+
+
     "hello" : "Hello",
     "hour" : "Hour",
     "hrs." : "Hrs.",
 
     "if you don't have an account yet, please" : "If you don't have an account yet, please",
     "invalid data" : "Invalid data",
+    "income" : "Income",
+    "income proportion": "Income proportion",
+
 
     "kingdom" : "Kingdom",
     "kingdom not found" : "Kingdom not found",
@@ -102,6 +115,9 @@
     "study schedule":"Study schedule",
     "success" : "Success",
     "succeed":"Succeed",
+   "students reserve a course": "Students reserve", 
+   "short course": "Short course",
+
     
 
     "thai" : "Thai",
