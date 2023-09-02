@@ -6,7 +6,7 @@
       <v-row class="h-full content-center" v-if="cart_list.length == 0">
         <v-col cols="12" class="webkit-center">
           <span class="text-xl font-bold text-center my-5 pink--text">
-            ไม่พบข้อมูลในตะกร้า
+            {{ $t("can't find items in the basket") }}
           </span>
           <v-img src="@/assets/cart/basket.svg" max-width="300px"> </v-img>
         </v-col>
@@ -36,9 +36,7 @@
                           <v-col>
                             <v-row dense>
                               <v-col class="text-lg font-bold">
-                                {{ item.course_name_th }}({{
-                                  item.course_name_en
-                                }})
+                                {{ $i18n.locale == "th" ? item.course_name_th : item.course_name_en }}
                               </v-col>
                               <v-col cols="auto">
                                 <v-checkbox
@@ -57,7 +55,7 @@
                                 sm="6"
                                 class="text-md font-semibold"
                               >
-                                โค้ช : {{ item.coach_name }}
+                                {{ $t("coach") }} : {{ item.coach_name }}
                               </v-col>
                               <v-col
                                 cols="12"
@@ -76,37 +74,37 @@
                       </v-col>
                     </v-row>
                     <v-row dense v-if="item.course_type_id === 'CT_1'">
-                      <v-col align="right" cols="8"> จำนวนครั้งที่เรียน</v-col>
+                      <v-col align="right" cols="8">{{ $t('number of times') }}</v-col>
                       <v-col
                         align="right"
                         cols="4"
                         class="text-md font-semibold text-[#FF6B81]"
                       >
-                        {{ item.option.amount }} ครั้ง</v-col
+                        {{ item.option.amount }} {{$t('time')}}</v-col
                       >
                     </v-row>
                     <v-row dense>
-                      <v-col align="right" cols="8"> จำนวนนักเรียน</v-col>
+                      <v-col align="right" cols="8"> {{ $t('number of students') }}</v-col>
                       <v-col
                         align="right"
                         cols="4"
                         class="text-md font-semibold text-[#FF6B81]"
                       >
-                        {{ item.students.length }} คน</v-col
+                        {{ item.students.length }} {{ $t('person') }}</v-col
                       >
                     </v-row>
                     <v-row dense v-if="item.course_type_id === 'CT_1'">
-                      <v-col align="right" cols="8"> ส่วนลด</v-col>
+                      <v-col align="right" cols="8">{{ $t('discount') }}</v-col>
                       <v-col
                         align="right"
                         cols="4"
                         class="text-md font-semibold text-[#FF6B81]"
                       >
-                        {{ item.option.discount_price }} บาท</v-col
+                        {{ item.option.discount_price }} {{$t('baht')}}</v-col
                       >
                     </v-row>
                     <v-row dense class="mb-3">
-                      <v-col align="right" cols="8"> ราคาชำระ</v-col>
+                      <v-col align="right" cols="8"> {{ $t('paid price') }}</v-col>
                       <v-col
                         align="right"
                         cols="4"
@@ -117,7 +115,7 @@
                             ? item.option.net_price.toLocaleString()
                             : item.net_price.toLocaleString()
                         }}
-                        บาท</v-col
+                         {{$t('baht')}}</v-col
                       >
                     </v-row>
                     <div align="right">
@@ -125,7 +123,7 @@
                         outlined
                         color="red"
                         @click="removeCart(item.order_tmp_id)"
-                        ><v-icon> mdi-delete</v-icon> ลบรายการ</v-btn
+                        ><v-icon> mdi-delete</v-icon> {{$t("delete item")}}</v-btn
                       >
                     </div>
                   </v-card-text>
@@ -138,12 +136,12 @@
           <v-col>
             <v-checkbox hide-details color="pink" v-model="policy">
               <template v-slot:label>
-                ยอมรับ
-                <a class="mx-2 font-weight-bold"> ข้อกำหนดการใช้บริการ </a>
-                และ
+                {{ $t('accept') }}
+                <a class="mx-2 font-weight-bold">  {{ $t('terms of service and privacy policy') }} </a>
+                <!-- และ
                 <a class="mx-2 font-weight-bold"
                   >นโยบายความคุ้มครองข้อมูลส่วนบุคคล</a
-                >
+                > -->
               </template>
             </v-checkbox>
           </v-col>
@@ -154,18 +152,18 @@
               class="card_checkbox"
               color="error"
               hide-details
-              label="ทั้งหมด"
+              :label="$t('total')"
               @change="selectAll($event)"
               v-model="selected_all"
             ></v-checkbox>
           </v-col>
           <v-col cols="6" sm="4">
-            รวมทั้งหมด
-            <b class="text-[#ff6b81]">{{ total_price.toLocaleString() }} บาท</b>
+            {{ $t('total')}}
+            <b class="text-[#ff6b81]">{{ total_price.toLocaleString() }} {{$t('baht')}}</b>
           </v-col>
           <v-col cols="6" sm="4" align="end">
             <v-btn depressed dark color="#ff6b81" @click="savePayment">
-              ชำระเงิน ({{ count_selected_cart }})
+              {{ $t('cash out') }} ({{ count_selected_cart }})
             </v-btn>
           </v-col>
         </v-row>
@@ -200,9 +198,9 @@
             <v-col>
               <v-checkbox hide-details color="pink" v-model="policy">
                 <template v-slot:label>
-                  ยอมรับ
+                  {{ $t('accept') }}
                   <a class="mx-2 font-weight-bold">
-                    เงื่อนไขการใช้บริการและนโยบายการคุ้มครองข้อมูลส่วนบุคคล
+                    {{ $t('terms of service and privacy policy') }}
                   </a>
                 </template>
               </v-checkbox>
@@ -218,7 +216,7 @@
                 text-color="#ff6b81"
                 @click="closePolicy()"
               >
-                ยกเลิก
+              {{ $t("cancel") }}
               </v-btn>
             </v-col>
             <v-col>
@@ -228,7 +226,7 @@
                 color="#ff6b81"
                 @click="policy_show = false"
               >
-                ตกลง
+              {{ $t("agree") }}
               </v-btn>
             </v-col>
           </v-row>
@@ -265,7 +263,7 @@ export default {
   }),
   created() {},
   mounted() {
-    this.$store.dispatch("NavberUserModules/changeTitleNavber", "รถเข็น");
+    this.$store.dispatch("NavberUserModules/changeTitleNavber", "cart");
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
     this.cart_list.map((val) => {
       val.checked = false;
@@ -287,11 +285,11 @@ export default {
     removeCart(cart_id) {
       Swal.fire({
         icon: "question",
-        title: "ต้องการลบรายการนี้หรือไม่ ?",
+        title: this.$t('want to delete this item?'),
         showDenyButton: false,
         showCancelButton: true,
-        cancelButtonText: "ยกเลิก",
-        confirmButtonText: "ตกลง",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           if (cart_id.length > 0) {
@@ -395,11 +393,11 @@ export default {
             if (isValiDateCourse.includes(false)) {
               Swal.fire({
                 icon: "error",
-                title: "คอร์สที่เลือกเต็มแล้วไม่สามารถชำระเงินได้",
+                title: this.$t('the selected course is full and payment cannot be made'),
                 showDenyButton: false,
                 showCancelButton: true,
-                cancelButtonText: "ยกเลิก",
-                confirmButtonText: "ตกลง",
+                confirmButtonText: this.$t("agree"),
+                cancelButtonText: this.$t("cancel"),
               });
             } else {
               this.saveOrder().then(() => {

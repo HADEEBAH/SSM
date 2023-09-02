@@ -8,7 +8,7 @@
         />
       </v-col>
       <v-col cols="12" class="text-center">
-        <label class="font-weight-bold"> เลือกวิธีการเปลี่ยนรหัสผ่าน </label>
+        <label class="font-weight-bold"> {{$t('choose a method to change your password')}}</label>
       </v-col>
       <v-col cols="12" class="text-center">
         <v-radio-group
@@ -19,13 +19,13 @@
           @change="value = ''"
         >
           <v-radio
-            label="ผ่านโทรศัพท์มือถือ (SMS)"
+            :label="$t('via mobile phone (SMS)')"
             value="phone"
             color="#aeaeae"
             class="align-self-center ml-auto"
           ></v-radio>
           <v-radio
-            label="ผ่านอีเมล"
+            :label="$t('via email')"
             value="email"
             color="#aeaeae"
             class="align-self-center mr-auto"
@@ -40,7 +40,7 @@
               ? 'w-[100%!important] m-[auto!important]'
               : 'w-[50%!important] m-[auto!important]'
           "
-          :label="type === 'email' ? 'ระบุอีเมล' : 'ระบุเบอร์โทรศัพท์'"
+          :label="type === 'email' ? $t('specify email') : $t('specify phone number')"
           @input="type === 'email' ? '' : checkPhoneNumber()"
           :maxlength="type === 'email' ? 100 : 12"
           @keypress="type === 'email' ? '' : Validation($event, 'number')"
@@ -58,7 +58,7 @@
               ? 'w-[100%!important] m-[auto!important]'
               : 'w-[50%!important] m-[auto!important]'
           "
-          label="ระบุชื่อผู้ใช้ (username)"
+          :label="$t('specify username')"
           solo
           @keypress="Validation($event, 'en-number')"
           @paste="preventPaste"
@@ -78,7 +78,7 @@
               : 'w-[50%!important] text-[#FF6B81!important] font-bold'
           "
           color="#F0F2F5"
-          >ยืนยัน</v-btn
+          >{{ $t('confirm') }}</v-btn
         >
       </v-col>
     </v-row>
@@ -93,7 +93,7 @@
       "
       color="#FF6B81"
     >
-      <v-icon class="mr-2">mdi mdi-home</v-icon> กลับหน้าหลัก
+      <v-icon class="mr-2">mdi mdi-home</v-icon> {{ $t('return to home page') }}
     </v-btn>
   </v-container>
 </template>
@@ -136,8 +136,8 @@ export default {
           }else{
             Swal.fire({
               icon: 'success',
-              title: "สำเร็จ",
-              text: `ได้ส่งลิงค์เปลี่ยนรหัสผ่านไปยัง ${this.value} แล้ว`,
+              title: this.$t('succeed'),
+              text: `${this.$t('sent a password change link to')} ${this.value}`,
               timer: 3000,
               timerProgressBar: true
             });
@@ -157,43 +157,43 @@ export default {
               this.responseTypeForgotPasswordMessage ===
               "Parameter missing. Required username parameter."
             ) {
-              error_message = "กรุณากรอก ชื่อผู้ใช้ (username)";
+              error_message = this.$t("please enter your username");
             } else if (
               this.responseTypeForgotPasswordMessage ===
               "Parameter missing. Required tel_no parameter."
             ) {
-              error_message = "กรุณากรอก เบอร์โทรศัพท์";
+              error_message = this.$t("please enter your phone number");
             } else if (
               this.responseTypeForgotPasswordMessage ===
               "username and Tel not found"
             ) {
-              error_message = "ชื่อผู้ใช้หรือเบอร์โทรศัพท์ไม่ถูกต้อง";
+              error_message = this.$t('invalid username or phone number');
             } else {
-              error_message = "เกิดข้อผิดพลาด";
+              error_message = this.$t('something went wrong');
             }
           } else {
             if (
               this.responseTypeForgotPasswordMessage ===
               "Parameter missing. Required username parameter."
             ) {
-              error_message = "กรุณากรอก ชื่อผู้ใช้ (username)";
+              error_message = this.$t("please enter your username");
             } else if (
               this.responseTypeForgotPasswordMessage ===
               "Parameter missing. Required email parameter."
             ) {
-              error_message = "กรุณากรอก เบอร์โทรศัพท์";
+              error_message = this.$t("please enter your phone number");
             } else if (
               this.responseTypeForgotPasswordMessage ===
               "username and email not found."
             ) {
-              error_message = "ชื่อผู้ใช้หรืออีเมลไม่ถูกต้อง";
+              error_message = this.$t('invalid username or phone number');
             } else {
-              error_message = "เกิดข้อผิดพลาด";
+              error_message = this.$t('something went wrong');
             }
           }
           Swal.fire({
-            icon: error_message === "เกิดข้อผิดพลาด" ? "error" : "warning",
-            title: "คำเตือน",
+            icon: error_message === this.$t("something went wrong") ? "error" : "warning",
+            title: this.$t("warning"),
             text: `${error_message}`,
           });
         }

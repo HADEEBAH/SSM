@@ -6,11 +6,14 @@
     "admin page" : "หน้าผู้ดูแลระบบ",
     "admission date" : "วันรับสมัคร",
     "agree" : "ตกลง",
+    "amount to be paid" : "ยอดที่ต้องชำระ",
 
     "baht" : "บาท",
     "by" : "โดย",
 
+    "can't find items in the basket" : "ไม่พบข้อมูลในตะกร้า",
     "cancel" : "ยกเลิก",
+    "cart" : "รถเข็น",
     "cash out" : "ชำระเงิน",
     "certification" : "การรับรอง",
     "check-in notification" : "แจ้งเตือนการเช็คอิน",
@@ -18,19 +21,24 @@
     "choose a coach" : "เลือกโค้ช",
     "choose a course date" : "เลือกช่วงวันที่เรียน",
     "choose a package" : "เลือกแพ็คเกจ",
+    "choose a method to change your password" : "เลือกวิธีการเปลี่ยนรหัสผ่าน ",
     "coach" : "โค้ช",
+    "confirm" : "ยืนยัน",
     "contact us at" : "ติดต่อเราได้ที่",
     "course" : "คอร์สเรียน",
     "course information not found" : "ไม่พบข้อมูลคอร์ส",
     "currently our class is full of students. thank you for your interest in our course." : "ขณะนี้คลาสเรามีผู้เรียนเต็มจำนวนแล้ว ขอบคุณท่านที่สนใจคอร์สของเรา",
 
     "date and time" : "วันและเวลา",
+    "delete item" : "ลบรายการ",
     "details" : "รายละเอียด",
+    "discount" : "่สวนลด",
 
+    "edit parent information" : "แก้ไขข้อมูลผู้ปกครอง",
     "english" : "อังกฤษ",
     "english first name" : "ชื่อภาษาอังกฤษ",
     "english last name" : "นามสกุลภาษาอังกฤษ",
-    "edit parent information" : "แก้ไขข้อมูลผู้ปกครอง",
+    "email" : "อีเมล",
 
     "find the learning course that interests you here" : "ค้นหาคอร์สการเรียนรู้ที่คุณสนใจได้ที่นี่",
     "find the learning kingdom that interests you here" : "ค้นหาอาณาจักรการเรียนรู้ที่คุณสนใจได้ที่นี้",
@@ -38,12 +46,15 @@
     "first name(english)" : "ชื่อ(ภาษาอังกฤษ)",
     "full course" : "คอร์สเรียนเต็ม",
 
+    "go to my course page" : "ไปหน้าคอร์สเรียนของฉัน",
+
     "hello" : "สวัสดี",
     "hour" : "ชั่วโมง",
     "hrs." : "ชม.",
 
     "if you don't have an account yet, please" : "หากยังไม่มีบัญชีผู้ใช้กรุณา",
     "invalid data" : "ข้อมูลไม่ถูกต้อง",
+    "invalid username or phone number" : "ชื่อผู้ใช้หรือเบอร์โทรศัพท์ไม่ถูกต้อง",
 
     "kingdom" : "อาณาจักร",
     "kingdom not found" : "ไม่พบอาณาจักร",
@@ -55,6 +66,7 @@
     "learning journey" : "การเดินทางแห่งการเรียนรู้",
     "lesser": "น้อยลง",
     "list of parents" : "รายชื่อผู้ปกครอง",
+    "listed by" : "ทำรายการโดย",
     "logout" : "ออกจากระบบ",
     "login" : "เข้าสู่ระบบ",
     
@@ -65,13 +77,21 @@
     "no notifications" : "ไม่มีการแจ้งเตือน",
     "notification of course application":"แจ้งเตือนการสมัครคอร์สเรียน",
     "notifications" : "การแจ้งเตือน",
+    "number of students" : "จำนวนนักเรียน",
+    "number of times" : "จำนวนครั้งที่เรียน",
     
     "o'clock" : "น.",
     "optional": "ถ้ามี",
     "order number" : "หมายเลขคำสั่งซื้อ",
 
     "package" : "แพ็คเกจ",
+    "page not found" : "ไม่พบหน้านี้",
+    "paid price" : "ราคาชำระ",
     "parent" : "ผู้ปกครอง",
+    "pay again" : "ชำระอีกครั้ง",
+    "payment amount" : "จำนวนที่ชำระ",
+    "payment date" : "วันที่ชำระเงิน",
+    "payment time" : "เวลาชำระเงิน",
     "payment notification":"แจ้งเตือนการชำระเงิน",
     "pending" : "รอชำระเงิน",
     "performance" : "ผลงาน",
@@ -81,8 +101,11 @@
     "please enter a password of no more than 20 characters" : "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
     "please enter a username at least 6 characters long" : "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
     "please enter a username no longer than 20 characters" : "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
+    "please enter your username" : "โปรดระบุ ชื่อผู้ใช้ (username)",
+    "please enter your phone number" : "โปรดระบุ เบอร์โทรศัพท์",
     "profile" : "โปรไฟล์",
     "proceed with payment?" : "ดำเนินการชำระเงินใช่หรือไม่?",
+    "proceed to payment":"ดำเนินการชำระเงิน",
 
     "read more":"อ่านต่อ",
     "register":"ลงทะเบียน",
@@ -91,39 +114,51 @@
     "register for yourself" : "ลงทะเบียนเรียนให้ตัวเอง",
     "register to study for others" : "ลงทะเบียนเรียนให้ผู้อื่น",
     "registration history" : "ประวัติการลงทะเบียน",
-    
     "reserve" : "จอง",
+    "return to home page" : "กลับสู่หน้าหลัก",
 
     "save" : "บันทึก",
     "seat" : "ที่นั้ง",
     "see more" : "ดูเพิ่มเติม",
+    "sent a password change link to" : "ได้ส่งลิงค์เปลี่ยนรหัสผ่านไปยัง",
     "show student list" : "แสดงรายการนักเรียน",
     "something went wrong" : "เกิดข้อผิดพลาด",
+    "sorry, we couldn't find the page you were looking for" : "ขออภัยเราไม่พบหน้าเว็บที่คุณกำลังมองหา",
     "special rights" : "สิทธิ์พิเศษ",
+    "specify email" : "ระบุอีเมล",
+    "specify phone number" : "ระบุเบอร์โทรศัพท์",
+    "specify username" : "ระบุชื่อผู้ใช้",
     "study date" : "วันเรียน",
     "study notifications":"แจ้งเตือนการเรียน",
     "study schedule":"ตารางเรียน",
     "success" : "ชำระเงินแล้ว",
     "succeed":"สำเร็จ",
 
+    "terms of service and privacy policy" : "เงื่อนไขการใช้บริการและนโยบายการคุ้มครองข้อมูลส่วนบุคคล",
     "thai" : "ไทย",
     "the course is full" : "คอร์สเต็มแล้ว",
     "the course has been successfully added to the cart" : "เพิ่มคอร์สเรียนไปยังรถเข็นเรียบร้อยแล้ว",
+    "the selected course is full and payment cannot be made" :"คอร์สที่เลือกเต็มแล้วไม่สามารถชำระเงินได้",
     "there are special privileges for monthly/term/yearly subscriptions" : "มีสิทธิ์พิเศษสำหรับการสมัครรายเดือน / รายเทอม / รายปี",
     "the username cannot contain special characters" : "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
     "this username has already been entered. please check again" : "ชื่อผู้ใช้นี้ถูกใส่ข้อมูลมาแล้ว กรุณาตรวจสอบอีกครั้ง",
-    "terms of service and privacy policy" : "เงื่อนไขการใช้บริการและนโยบายการคุ้มครองข้อมูลส่วนบุคคล",
+    "total" : "รวมทั้งหมด",
     "time" : "ครั้ง",
     "times" : "เวลา",
+    "transaction time" : "เวลาทำรายการ",
     
     "username" : "ชื่อผู้ใช้",
     "username cannot contain emojis" : "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
 
+    "via email" : "ผ่านอีเมล",
+    "via mobile phone (SMS)" : "ผ่านโทรศัพท์มือถือ(SMS)",
     "view special rights" : "ดูสิทธิพิเศษ",
 
     "want to add to cart?" : "ต้องการเพิ่มเข้ารถเข็นใช่หรือไม่?",
     "want to book this course?" : "ต้องการจองคอร์สนี้ใช่หรือไม่?",
-   
+    "want to cancel?" : "ต้องการยกเลิกใช่หรือไม่?",
+    "want to delete this item?" : "ต้องการลบรายการนี้หรือไม่?",
+    "warning" : "คำเตือน",
     
     
     "z":"z"
