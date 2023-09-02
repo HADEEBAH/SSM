@@ -18,13 +18,14 @@
     "choose a coach" : "Choose a coach",
     "choose a course date" : "Choose a course date",
     "choose a package" : "Choose a package",
+    "coach" : "Coach",
     "contact us at" : "Contact us at",
     "course" : "Course",
     "course information not found" : "Course information not found",
     "currently our class is full of students. thank you for your interest in our course." : "Currently our class is full of students. Thank you for your interest in our course.",
 
-
     "date and time" : "Date and time",
+    "details" : "Details",
 
     "english" : "English",
     "english first name" : "English first name",
@@ -66,10 +67,12 @@
 
     "o'clock" : "O'clock",
     "optional": "optional",
+    "order number" : "Order number",
 
     "package" : "Package",
     "parent" : "Parent",
     "payment notification":"Payment notification",
+    "pending" : "Pending",
     "performance" : "Performance",
     "person" : "Person",
     "phone number" : "Phone number",
@@ -92,11 +95,14 @@
     "save" : "Save",
     "seat" : "Seat",
     "see more" : "See more",
+    "show student list" : "Show student list",
     "special rights" : "Special rights",
     "study date" : "Study date",
     "study notifications":"Study notifications",
     "study schedule":"Study schedule",
+    "success" : "Success",
     "succeed":"Succeed",
+    
 
     "thai" : "Thai",
     "the course is full" : "The course is full",
@@ -106,6 +112,7 @@
     "this username has already been entered. please check again" : "This username has already been entered. Please check again",    
     "terms of service and privacy policy" : "Terms of Service and Privacy Policy",
     "time" : "Time",
+    "times" : "Time",
 
     "username" : "Username",
     "username cannot contain emojis" : "Username cannot contain emojis",
@@ -114,7 +121,6 @@
 
     "want to add to cart?" : "Want to add to cart?",
     "want to book this course?" : "Want to book this course??",
-
 
     "z":"z"
 }

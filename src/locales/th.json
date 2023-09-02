@@ -18,12 +18,14 @@
     "choose a coach" : "เลือกโค้ช",
     "choose a course date" : "เลือกช่วงวันที่เรียน",
     "choose a package" : "เลือกแพ็คเกจ",
+    "coach" : "โค้ช",
     "contact us at" : "ติดต่อเราได้ที่",
     "course" : "คอร์สเรียน",
     "course information not found" : "ไม่พบข้อมูลคอร์ส",
     "currently our class is full of students. thank you for your interest in our course." : "ขณะนี้คลาสเรามีผู้เรียนเต็มจำนวนแล้ว ขอบคุณท่านที่สนใจคอร์สของเรา",
 
     "date and time" : "วันและเวลา",
+    "details" : "รายละเอียด",
 
     "english" : "อังกฤษ",
     "english first name" : "ชื่อภาษาอังกฤษ",
@@ -66,10 +68,12 @@
     
     "o'clock" : "น.",
     "optional": "ถ้ามี",
+    "order number" : "หมายเลขคำสั่งซื้อ",
 
     "package" : "แพ็คเกจ",
     "parent" : "ผู้ปกครอง",
     "payment notification":"แจ้งเตือนการชำระเงิน",
+    "pending" : "รอชำระเงิน",
     "performance" : "ผลงาน",
     "person" : "คน",
     "phone number" : "เบอร์โทรศัพท์",
@@ -93,10 +97,13 @@
     "save" : "บันทึก",
     "seat" : "ที่นั้ง",
     "see more" : "ดูเพิ่มเติม",
+    "show student list" : "แสดงรายการนักเรียน",
+    "something went wrong" : "เกิดข้อผิดพลาด",
     "special rights" : "สิทธิ์พิเศษ",
     "study date" : "วันเรียน",
     "study notifications":"แจ้งเตือนการเรียน",
     "study schedule":"ตารางเรียน",
+    "success" : "ชำระเงินแล้ว",
     "succeed":"สำเร็จ",
 
     "thai" : "ไทย",
@@ -107,6 +114,7 @@
     "this username has already been entered. please check again" : "ชื่อผู้ใช้นี้ถูกใส่ข้อมูลมาแล้ว กรุณาตรวจสอบอีกครั้ง",
     "terms of service and privacy policy" : "เงื่อนไขการใช้บริการและนโยบายการคุ้มครองข้อมูลส่วนบุคคล",
     "time" : "ครั้ง",
+    "times" : "เวลา",
     
     "username" : "ชื่อผู้ใช้",
     "username cannot contain emojis" : "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",

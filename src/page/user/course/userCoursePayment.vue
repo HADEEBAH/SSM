@@ -26,7 +26,7 @@
       <div align="center">
         <div style="width: 400px">
           <v-row>
-            <v-col align="left" class="font-bold"> รายละเอียด </v-col>
+            <v-col align="left" class="font-bold"> {{ $t("details")}} </v-col>
           </v-row>
           <v-row>
             <v-col cols="6" sm="4" align="left"> หมายเลขคำสั่งชื้อ : </v-col>
