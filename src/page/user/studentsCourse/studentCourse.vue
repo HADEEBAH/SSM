@@ -368,8 +368,13 @@
                 <!-- ไฟล์แนบจากบันทึกสรุปการสอน -->
                 <v-row dense>
                   <v-col cols="12" class="indent-3">
-                    <b>ไฟล์แนบจากบันทึกสรุปการสอน :</b>
+                    <b>ไฟล์แนบจากบันทึกสรุปการสอน :</b
+                    ><span v-if="day_list.dailySummary.attachment == ''">
+                      ไม่มีไฟล์แนบจากบันทึกสรุปการสอน
+                    </span>
+
                     <v-card
+                      v-else
                       @click="openFile(file.attachmentFiles)"
                       flat
                       class="mb-3"
@@ -419,6 +424,9 @@
                 <v-row dense>
                   <v-col cols="12" class="indent-3">
                     <b>ไฟล์แนบจากประเมินนักเรียน :</b>
+                    <span v-if="day_list.assessment.attachment == ''">
+                      ไม่มีไฟล์แนบจากประเมินนักเรียน
+                    </span>
                     <v-card
                       @click="openFile(file.attachmentFiles)"
                       flat
