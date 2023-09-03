@@ -1,4 +1,5 @@
 import Swal from 'sweetalert2';
+import VueI18n from 'vue-i18n';
 export const inputValidation = (e, type) => {
     switch (type) {
         case "th":
@@ -50,13 +51,13 @@ export const dateFormatter = (date, formatter) => {
     let date_string = ""
     switch (formatter) {
         case "DD MT YYYYT":
-            date_string = date.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', })
+            date_string = date.toLocaleDateString(VueI18n.locale == 'th' ? 'th-TH' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric', })
             break;
         case "DD MMT YYYYT": //เต็มเดือน
-            date_string = date.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', })
+            date_string = date.toLocaleDateString(VueI18n.locale == 'th' ? 'th-TH' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric', })
             break;
         case "DW DD MMT YYYYT": //เต็มเดือน
-            date_string = date.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })
+            date_string = date.toLocaleDateString(VueI18n.locale == 'th' ? 'th-TH' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })
             break;
     }
     return date_string

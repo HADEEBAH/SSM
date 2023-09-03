@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <header-page title="เลือกข้อมูลการสอน"></header-page>
+    <header-page :title="$t('select teaching information')"></header-page>
     <v-row dense class="mb-3">
       <v-col
         cols="12"
@@ -15,7 +15,7 @@
           :dark="tab === tab_data.value"
           :color="tab === tab_data.value ? '#ff6b81' : '#F5F5F5'"
         >
-          {{ tab_data.label }}
+          {{ $t(tab_data.label) }}
         </v-btn>
       </v-col>
     </v-row>
@@ -37,7 +37,7 @@
                     depressed
                     :dark="time_frame === time.value"
                     :color="time_frame === time.value ? '#ff6b81' : '#F5F5F5'"
-                    >{{ time.label }}</v-btn
+                    >{{  $t(time.label) }}</v-btn
                   >
                 </v-col>
               </v-row>
@@ -67,6 +67,7 @@
                   timeId: course.time_id,
                   dayOfWeekId: course.day_of_week_id,
                   date: course.start_date,
+                  typeEvent: 'null',
                 },
               })
             "
@@ -102,7 +103,7 @@
               <v-col>
                 <v-row dense>
                   <v-col class="text-lg font-bold">{{
-                    `${course.name}(${course.subtitle})`
+                    `${$i18n.locale == "th" ? course.name : course.subtitle}`
                   }}</v-col>
                   <v-col cols="auto">
                     <v-chip small color="#F9B320" dark
@@ -114,12 +115,12 @@
                   <v-col cols="auto"
                     ><v-icon color="#ff6b81">mdi-bookshelf</v-icon></v-col
                   >
-                  <v-col>{{ `อาณาจักร :${course.category_name}` }}</v-col>
+                  <v-col>{{ `${$t("kingdom")} : ${course.category_name}` }}</v-col>
                 </v-row>
                 <v-row dense>
                   <v-col cols="12" v-if="course.course_package_name">
                     <rowData mini icon="mdi-account-box-multiple"
-                      >แพ็กเกจ : {{ course.course_package_name }}</rowData
+                      >{{ `${$t("package") } :  ${course.course_package_name}`}}</rowData
                     >
                   </v-col>
                 </v-row>
@@ -128,7 +129,7 @@
                     ><v-icon color="#ff6b81">mdi-clock-outline</v-icon></v-col
                   >
                   <v-col>{{
-                    `เวลาสอน :${course.course_per_time} ชั่วโมง`
+                    `${$t('teaching time')} : ${course.course_per_time} ${$t("hour")}`
                   }}</v-col>
                 </v-row>
               </v-col>
@@ -141,7 +142,7 @@
           >
             <span class="text-lg font-bold">
               <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-              ไม่พบข้อมูลการสอน
+              {{ $t('teaching information not found') }}
             </span>
           </v-card-text>
         </v-card>
@@ -155,7 +156,7 @@
           >
             <span class="text-lg font-bold">
               <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-              ไม่พบข้อมูลการสอน
+              {{ $t('teaching information not found') }}
             </span>
           </v-card-text>
         </v-card>
@@ -184,17 +185,17 @@
     </div>
     <div v-if="tab === 'my teaching'">
       <v-row>
-        <v-col cols="auto"> ข้อมูลการสอนของฉัน : </v-col>
+        <v-col cols="auto"> {{ $t("my teaching information") }} : </v-col>
         <v-col class="font-bold">
           {{ profile_detail.firstNameTh }}
         </v-col>
       </v-row>
       <v-row dense>
         <v-col>
-          <span class="font-bold">เลือกคอร์ส</span>
+          <span class="font-bold">{{ $t("choose a course") }}</span>
           <v-autocomplete
             v-model="filter_course"
-            item-text="name"
+            :item-text="$i18n.locale == 'th' ? 'name' : 'subtitle'"
             item-value="course_id"
             :items="my_courses.filter((v) => !v.type)"
             outlined
@@ -202,7 +203,7 @@
           >
             <template v-slot:no-data>
               <v-row dense>
-                <v-col align="center">ไม่พบข้อมูล</v-col>
+                <v-col align="center">{{ $t("no data found") }}</v-col>
               </v-row>
             </template>
           </v-autocomplete>
@@ -215,7 +216,7 @@
           >
             <span class="text-lg font-bold">
               <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-              ไม่พบข้อมูลการสอน
+              {{ $t('teaching information not found') }}
             </span>
           </v-card-text>
         </v-card>
@@ -263,30 +264,30 @@
               <v-row dense>
                 <v-col cols="12">
                   <rowData mini icon="mdi-account"
-                    >อาณาจักร : {{ course.category_name }}</rowData
+                    >{{ $t("kingdom") }} : {{ course.category_name }}</rowData
                   >
                 </v-col>
 
                 <v-col cols="12" v-if="course.course_package_name">
                   <rowData mini icon="mdi-account-box-multiple"
-                    >แพ็กเกจ : {{ course.course_package_name }}</rowData
+                    >{{ $t("package") }} : {{ course.course_package_name }}</rowData
                   >
                 </v-col>
                 <v-col cols="12">
                   <rowData mini icon="mdi-bookshelf"
-                    >คอร์สเรียน :{{
-                      `${course.name}(${course.subtitle})`
+                    >{{ $t("course") }} :{{
+                      `${ $i18n.locale== 'th' ? course.name : course.subtitle}`
                     }}</rowData
                   >
                 </v-col>
                 <v-col cols="12">
                   <rowData mini icon="mdi-clock-time-four-outline"
-                    >เวลาสอน {{ course.course_per_time }} ชั่วโมง</rowData
+                    >{{ $t("teaching time") }} {{ course.course_per_time }} {{ $t("hour") }}</rowData
                   >
                 </v-col>
                 <v-col cols="12">
                   <v-chip small color="#F9B320" dark
-                    >{{ `${course.start_time} - ${course.end_time}` }}น.</v-chip
+                    >{{ `${course.start_time} - ${course.end_time}` }} {{ $t("o'clock") }}</v-chip
                   >
                 </v-col>
               </v-row>
@@ -301,7 +302,7 @@
                   : (course.show_assessment = false)
               "
               class="cursor-pointer"
-              >ประเมินนักเรียน
+              >{{ $t('assess students') }}
               <v-icon color="#ff6b81">{{
                 course.show_assessment ? "mdi-chevron-up" : "mdi-chevron-down"
               }}</v-icon></v-col
@@ -314,7 +315,7 @@
                   : (course.show_assessment_pantential = false)
               "
               class="cursor-pointer"
-              >ประเมินศักยภาพ
+              >{{ $t("assess potential") }}
               <v-icon color="#ff6b81">{{
                 course.show_assessment_pantential
                   ? "mdi-chevron-up"
@@ -329,7 +330,7 @@
                   : (course.show_summary = false)
               "
               class="cursor-pointer"
-              >บันทึกสรุปการสอน
+              >{{$t('teaching summary notes')}}
               <v-icon color="#ff6b81">{{
                 course.show_summary ? "mdi-chevron-up" : "mdi-chevron-down"
               }}</v-icon></v-col
@@ -354,7 +355,7 @@
                 >
                   <span class="text-lg font-bold">
                     <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                    ไม่พบข้อมูลการประเมินนักเรียน
+                    {{ $t("student assessment data not found") }}
                   </span>
                 </v-card-text>
               </v-card>
@@ -375,7 +376,7 @@
                     >
                     <v-col cols="12" sm="auto">
                       <v-row dense class="d-flex aling-center">
-                        <v-col align="right"> การเข้าเรียน: </v-col>
+                        <v-col align="right"> {{ $t("attendance") }}: </v-col>
                         <v-col cols="auto">
                           <v-chip
                             class="font-bold"
@@ -395,9 +396,9 @@
                               ).length > 0
                             "
                             >{{
-                              check_in_status_options.filter(
+                              $t(check_in_status_options.filter(
                                 (v) => v.value === student.status
-                              )[0].label
+                              )[0].label)
                             }}
                           </v-chip>
                         </v-col>
@@ -406,7 +407,7 @@
                   </v-row>
                   <v-row dense>
                     <v-col cols="12" sm align="left" class="font-semibold">
-                      ระดับพัฒนาการ
+                      {{$t("developmental level")}}
                       <v-rating
                         background-color="pink lighten-3"
                         color="pink"
@@ -434,7 +435,7 @@
                       ></v-rating>
                     </v-col>
                     <v-col cols="12" sm align="left" class="font-semibold"
-                      >ระดับความสนใจ
+                      >{{ $t("interest level") }}
                       <v-rating
                         background-color="pink lighten-3"
                         color="pink"
@@ -468,7 +469,7 @@
                         @click="showComment(student)"
                         color="#ff6b81"
                         ><v-icon>mdi-message-text-outline</v-icon
-                        >ดูความคิดเห็น</v-btn
+                        >{{ $t('view comments') }}</v-btn
                       >
                     </v-col>
                   </v-row>
@@ -492,7 +493,7 @@
                   >
                     <span class="text-lg font-bold">
                       <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                      ไม่พบข้อมูลการประเมินศักยภาพ
+                      {{  $t("no potential assessment information found") }}
                     </span>
                   </v-card-text>
                 </v-card>
@@ -511,7 +512,7 @@
                       >
                       <v-col align="center">
                         <v-row dense class="d-flex aling-center">
-                          <v-col align="right"> การเข้าเรียน: </v-col>
+                          <v-col align="right"> {{$t("attendance")}}: </v-col>
                           <v-col cols="auto">
                             <v-chip
                               class="font-bold"
@@ -531,9 +532,9 @@
                                 ).length > 0
                               "
                               >{{
-                                check_in_status_options.filter(
+                                $t(check_in_status_options.filter(
                                   (v) => v.value === student.status
-                                )[0].label
+                                )[0].label)
                               }}
                             </v-chip>
                           </v-col>
@@ -542,7 +543,7 @@
                     </v-row>
                     <v-row>
                       <v-col align="left" class="font-semibold"
-                        >ระดับพัฒนาการ :
+                        >{{$t("developmental level")}}:
                         <v-rating
                           background-color="pink lighten-3"
                           color="pink"
@@ -575,12 +576,12 @@
                           @click="showPotentialComment(student)"
                           color="#ff6b81"
                           ><v-icon>mdi-message-text-outline</v-icon
-                          >ดูความคิดเห็น</v-btn
+                          >{{ $t("view comments") }}</v-btn
                         >
                       </v-col>
                     </v-row>
                     <v-row>
-                      <v-col> ระดับความสนใจ</v-col>
+                      <v-col> {{ $t("interest level") }}</v-col>
                     </v-row>
                     <v-row>
                       <v-col class="font-semibold">
@@ -611,7 +612,7 @@
                 >
                   <span class="text-lg font-bold">
                     <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                    ไม่พบข้อมูลบันทึกสรุปการสอน
+                    {{ $t("can't find teaching summaries") }}
                   </span>
                 </v-card-text>
               </v-card>
@@ -619,7 +620,7 @@
                 <v-card-text>
                   <v-row>
                     <v-col>
-                      บันทึกการสอน :
+                     {{ $t("teaching notes") }} :
                       <span class="font-semibold">{{
                         coach_check_in.summary ? coach_check_in.summary : "-"
                       }}</span></v-col
@@ -627,7 +628,7 @@
                   </v-row>
                   <v-row>
                     <v-col>
-                      พัฒนาการ / การบ้าน :
+                      {{$t("development / homework")}} :
                       <span class="font-semibold">{{
                         coach_check_in.homework ? coach_check_in.homework : "-"
                       }}</span>
@@ -635,7 +636,7 @@
                   </v-row>
                   <div v-if="coach_check_in.attachment.length > 0">
                     <v-row dense>
-                      <v-col class="font-bold"> ไฟล์แนบ :</v-col>
+                      <v-col class="font-bold"> {{ $t("attachments") }} :</v-col>
                     </v-row>
 
                     <v-card
@@ -658,7 +659,7 @@
                             }}</span
                             ><br />
                             <span class="text-caption"
-                              >ขนาดไฟล์ :
+                              >{{ $t("file size") }} :
                               {{ (file.filesSize / 1000000).toFixed(2) }}
                               MB</span
                             >
@@ -682,7 +683,7 @@
             :class="$vuetify.breakpoint.smAndUp ? '' : 'w-full'"
             outlined
             color="#ff6b81"
-            ><v-icon>mdi-plus-circle-outline</v-icon>แบบฟอร์มขอลา</v-btn
+            ><v-icon>mdi-plus-circle-outline</v-icon>{{ $t("leave request form") }}</v-btn
           >
         </v-col>
       </v-row>
@@ -701,14 +702,14 @@
               ></v-img>
             </template>
             <template v-slot:header>
-              <div class="font-bold text-center">ทั้งหมด</div>
+              <div class="font-bold text-center">{{$t("all")}}</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
                 <v-col align="end" class="text-3xl font-bold">{{
                   coach_leaves.length
                 }}</v-col>
-                <v-col class="text-sm">รายการ</v-col>
+                <v-col class="text-sm">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
@@ -727,14 +728,14 @@
               ></v-img>
             </template>
             <template v-slot:header>
-              <div class="font-bold text-center text-[#57A363]">อนุมัติ</div>
+              <div class="font-bold text-center text-[#57A363]">{{ $t("approved") }}</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end mb-1">
                 <v-col align="end" class="text-3xl font-bold text-[#57A363]">{{
                   coach_leaves.filter((v) => v.status === "approved").length
                 }}</v-col>
-                <v-col class="text-sm">รายการ</v-col>
+                <v-col class="text-sm">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
@@ -755,14 +756,14 @@
               ></v-img>
             </template>
             <template v-slot:header>
-              <div class="font-bold text-center text-[#FCC419]">รออนุมัติ</div>
+              <div class="font-bold text-center text-[#FCC419]">{{$t("waiting for approval")}}</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
                 <v-col align="end" class="text-3xl font-bold text-[#FCC419]">{{
                   coach_leaves.filter((v) => v.status === "pending").length
                 }}</v-col>
-                <v-col class="text-sm">รายการ</v-col>
+                <v-col class="text-sm">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
@@ -781,14 +782,14 @@
               ></v-img>
             </template>
             <template v-slot:header>
-              <div class="font-bold text-center text-[#F03D3E]">ปฎิเสธ</div>
+              <div class="font-bold text-center text-[#F03D3E]">{{$t("reject")}}</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
                 <v-col align="end" class="text-3xl font-bold text-[#F03D3E]">{{
                   coach_leaves.filter((v) => v.status === "reject").length
                 }}</v-col>
-                <v-col class="text-sm">รายการ</v-col>
+                <v-col class="text-sm">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
@@ -807,14 +808,14 @@
               ></v-img>
             </template>
             <template v-slot:header>
-              <div class="font-bold text-center text-[#999999]">ยกเลิก</div>
+              <div class="font-bold text-center text-[#999999]">{{ $t("cancel") }}</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
                 <v-col align="end" class="text-3xl font-bold text-[#999999]">{{
                   coach_leaves.filter((v) => v.status === "cancel").length
                 }}</v-col>
-                <v-col class="text-sm">รายการ</v-col>
+                <v-col class="text-sm">{{$t("list")}}</v-col>
               </v-row>
             </template>
           </img-card>
@@ -836,7 +837,7 @@
             show-expand
             :loading="coach_leaves_is_loading"
           >
-            <template v-slot:no-data> ไม่พบข้อมูลใบลา </template>
+            <template v-slot:no-data> {{ $t("leave information not found") }} </template>
             <template v-slot:[`item.count`]="{ item }">
               {{ item.index }}
             </template>
@@ -849,11 +850,7 @@
             </template>
             <template v-slot:[`item.leaveType`]="{ item }">
               {{
-                item.leaveType === "personal"
-                  ? "ลากิจ"
-                  : item.leaveType === "sick"
-                  ? "ลาป่วย"
-                  : "ลาพักร้อน"
+                $t(item.leaveType)
               }}
             </template>
             <template v-slot:[`item.status`]="{ item }">
@@ -870,13 +867,9 @@
                 "
               >
                 <span class="w-full text-center">{{
-                  item.status == "pending"
-                    ? "รออนุมัติ"
-                    : item.status === "approved"
-                    ? "อนุมัติ"
-                    : item.status === "cancel"
-                    ? "ยกเลิก"
-                    : "ปฎิเสธ"
+                  $t(item.status == "pending"
+                    ? "waiting for approval"
+                    : item.status )
                 }}</span>
               </div>
             </template>
@@ -910,19 +903,19 @@
                       {{ date.date ? GenDateStr(new Date(date.date)) : "-" }}
                     </v-col>
                     <v-col class="font-bold"
-                      >คอร์ส:
+                      >{{$t("course")}}:
                       {{
                         `${course.courseNameTh}(${course.courseNameEn})`
                       }}</v-col
                     >
                     <v-col cols="5" v-if="course.type !== 'date'"
-                      >ผู้สอนแทน:
+                      >{{ $t("substitute teacher") }}:
                       {{
                         `${course.substituteCoachFirstNameTh} ${course.substituteCoachLastNameTh}`
                       }}</v-col
                     >
                     <v-col cols="5" v-if="course.type === 'date'"
-                      >วันที่สอนแทน:
+                      >{{ $t("substitute teaching date") }}:
                       {{
                         `${GenDateStr(new Date(course.compensationDate))}(${
                           course.compensationStartTime
@@ -939,7 +932,7 @@
     </div>
     <div v-if="tab === 'student lists'">
       <v-row>
-        <v-col cols="auto"> ข้อมูลการสอนของฉัน :</v-col>
+        <v-col cols="auto"> {{ $t('my teaching information') }} :</v-col>
         <v-col class="font-bold">
           {{ profile_detail.firstNameTh }}
         </v-col>
@@ -947,10 +940,10 @@
       <!-- เลือกคอร์ส -->
       <v-row dense>
         <v-col>
-          <span class="font-bold">เลือกคอร์ส</span>
+          <span class="font-bold">{{ $t('choose a course') }}</span>
           <v-autocomplete
             v-model="filter_course_student"
-            item-text="name"
+            :item-text="$i18n.locale == 'th' ? 'name' : 'subtitle'"
             item-value="course_id"
             :items="my_courses.filter((v) => !v.type)"
             @change="filterCourseStudent(filter_course_student)"
@@ -959,7 +952,7 @@
           >
             <template v-slot:no-data>
               <v-row dense>
-                <v-col align="center">ไม่พบข้อมูล</v-col>
+                <v-col align="center">{{ $t('no data found') }}</v-col>
               </v-row>
             </template>
           </v-autocomplete>
@@ -986,7 +979,7 @@
                     :color="
                       select_student_type === type.value ? '#ff6b81' : '#F5F5F5'
                     "
-                    >{{ type.label }}</v-btn
+                    >{{ $t(type.label) }}</v-btn
                   >
                 </v-col>
               </v-row>
@@ -1004,7 +997,7 @@
             :items="student_list"
             :loading="student_list_load"
           >
-            <template v-slot:no-data> ไม่พบข้อมูลในตาราง </template>
+            <template v-slot:no-data> {{$t("no data found in table")}}</template>
           </v-data-table>
         </v-card-text>
       </v-card>
@@ -1044,11 +1037,11 @@
           </v-col>
         </v-row>
         <v-card-title class="d-flex justify-center">
-          แบบฟอร์มขอลา
+          {{ $t("leave request form")}}
         </v-card-title>
         <v-card-text>
           <v-row dense class="mb-3">
-            <v-col align="right"> สถานะ : </v-col>
+            <v-col align="right"> {{$t("status")}} : </v-col>
             <v-col cols="auto">
               <div
                 class="btn-size-lg d-flex align-center pa-1 rounded-xl"
@@ -1063,13 +1056,9 @@
                 "
               >
                 <span class="w-full text-center">{{
-                  edited_coach_leave_data.status == "pending"
-                    ? "รออนุมัติ"
-                    : edited_coach_leave_data.status === "approved"
-                    ? "อนุมัติ"
-                    : edited_coach_leave_data.status === "cancel"
-                    ? "ยกเลิก"
-                    : "ปฎิเสธ"
+                  
+                  $t(edited_coach_leave_data.status == "pending"
+                    ? "waiting for approval" : edited_coach_leave_data.status)
                 }}</span>
               </div>
             </v-col>
@@ -1080,7 +1069,7 @@
             class="mb-3"
           >
             <v-col>
-              หมายเหตุ:
+              {{ $t('note') }}:
               <span class="font-bold">{{
                 edited_coach_leave_data.remarkReject
               }}</span>
@@ -1090,7 +1079,7 @@
             <v-card-text class="border border-1 rounded-lg">
               <v-row>
                 <v-col>
-                  <div>วันที่ลา</div>
+                  <div>{{ $t('leave date') }}</div>
                   <div class="font-semibold pl-2">
                     {{
                       `${genDate(
@@ -1100,35 +1089,23 @@
                   </div>
                 </v-col>
                 <v-col>
-                  <div>ช่วงเวลา</div>
+                  <div>{{ $t('period') }}</div>
                   <div class="font-semibold pl-2">
-                    {{
-                      edited_coach_leave_data.period === "full"
-                        ? "ลาเต็มวัน"
-                        : edited_coach_leave_data.period === "morning"
-                        ? "ลาช่วงเช้า"
-                        : "ลาช่วงบ่าย"
-                    }}
+                    {{ $t(edited_coach_leave_data.period) }}
                   </div>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col>
-                  <div>ประเภทการลา</div>
+                  <div>{{ $t("leave type") }}</div>
                   <div class="font-semibold pl-2">
-                    {{
-                      edited_coach_leave_data.leaveType === "sick"
-                        ? "ลาป่วย"
-                        : edited_coach_leave_data.leaveType === "personal"
-                        ? "ลากิจ"
-                        : "ลาพักร้อน"
-                    }}
+                    {{$t(edited_coach_leave_data.leaveType)}}
                   </div>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col>
-                  <div>สาเหตุการลา</div>
+                  <div>{{ $t("reason for leave") }}</div>
                   <div class="font-semibold pl-2">
                     {{ edited_coach_leave_data.remark }}
                   </div>
@@ -1159,12 +1136,12 @@
                 <v-card-text class="rounded-md border">
                   <v-radio-group readonly v-model="course.type" row>
                     <v-radio
-                      label="มีผู้สอนแทน"
+                      :label="$t('have a substitute teacher')"
                       color="#ff6b81"
                       value="teach"
                     ></v-radio>
                     <v-radio
-                      label="ไม่มีผู้สอนแทน"
+                      :label="$t('there is no substitute teacher')"
                       color="#ff6b81"
                       value="date"
                     ></v-radio>
@@ -1175,34 +1152,34 @@
                         >mdi-card-account-details-outline</v-icon
                       >
                     </v-col>
-                    <v-col class="font-bold text-lg"> คอร์ส </v-col>
+                    <v-col class="font-bold text-lg"> {{$t('course')}} </v-col>
                   </v-row>
                   <v-divider class="my-2"></v-divider>
                   <v-card flat>
                     <v-card-text class="border border-1 rounded-lg">
                       <v-row dense>
                         <v-col>
-                          <div>ชื่อคอร์ส</div>
+                          <div>{{ $t("course name") }}</div>
                           <div class="font-semibold pl-2">
                             {{
-                              `${course.courseNameTh} ${course.startTime}-${course.endTime}`
+                              `${$i18n.locale == 'th' ? course.courseNameTh :course.courseNameEn } ${course.startTime}-${course.endTime}`
                             }}
                           </div>
                         </v-col>
                       </v-row>
                       <v-row dense v-if="course.type === 'teach'">
                         <v-col>
-                          <div>ผู้สอนแทน</div>
+                          <div>{{ $t("substitute teacher") }}</div>
                           <div class="font-semibold pl-2">
                             {{
-                              `${course.substituteCoachFirstNameTh} ${course.substituteCoachLastNameTh}`
+                              $i18n.locale == 'th' ? `${course.substituteCoachFirstNameTh} ${course.substituteCoachLastNameTh}` : `${course.substituteCoachFirstNameEn} ${course.substituteCoachLastNameEn}`
                             }}
                           </div>
                         </v-col>
                       </v-row>
                       <v-row dense v-if="course.type === 'date'">
                         <v-col>
-                          <div>วันที่ชดเชย</div>
+                          <div>{{ $t("compensation date") }}</div>
                           <div class="font-semibold pl-2">
                             {{
                               `${GenDateStr(
@@ -1220,7 +1197,7 @@
               </v-card>
             </div>
             <v-row dense>
-              <v-col class="font-bold text-lg"> ไฟล์แนบ </v-col>
+              <v-col class="font-bold text-lg"> {{ $t("attachments") }} </v-col>
             </v-row>
             <v-divider class="my-2"></v-divider>
             <template v-for="(file, index) of attachment_leave">
@@ -1240,7 +1217,7 @@
                       <span class="font-bold">{{ file.fileName }}</span
                       ><br />
                       <span class="text-caption"
-                        >ขนาดไฟล์ :
+                        >{{ $t("file size") }} :
                         {{ (file.size / 1000000).toFixed(2) }} MB</span
                       >
                     </v-col>
@@ -1252,7 +1229,7 @@
                   class="border-2 border-[#ff6b81] rounded-lg"
                   align="center"
                 >
-                  ไม่พบไฟล์แนบ
+                  {{ $t("attachment not found") }}
                 </v-card-text>
               </v-card>
             </template>
@@ -1278,18 +1255,18 @@
         <v-card-text>
           <v-row dense>
             <v-col align="center" class="text-lg font-bold"
-              >ความคิดเห็นเพิ่มเติม</v-col
+              >{{ $t("additional comments") }}</v-col
             >
           </v-row>
           <v-row class="mb-3" dense>
             <v-col cols="12">
-              <labelCustom text="เพิ่มความคิดเห็น"></labelCustom>
+              <labelCustom :text="$t('add a comment')"></labelCustom>
               <div>{{ show_comment_data.assessment.remark }}</div>
             </v-col>
           </v-row>
           <div v-if="show_comment_data.assessment.attachment.length > 0">
             <v-row dense>
-              <v-col class="font-bold"> ไฟล์แนบ :</v-col>
+              <v-col class="font-bold"> {{ $t("attachments") }} :</v-col>
             </v-row>
             <v-card
               @click="openFile(file)"
@@ -1307,7 +1284,7 @@
                     <span class="font-bold">{{ file.originalFilesName }}</span
                     ><br />
                     <span class="text-caption"
-                      >ขนาดไฟล์ :
+                      >{{ $t("file size") }} :
                       {{ (file.filesSize / 1000000).toFixed(2) }} MB</span
                     >
                   </v-col>
@@ -1336,12 +1313,12 @@
         <v-card-text>
           <v-row dense>
             <v-col align="center" class="text-lg font-bold"
-              >ความคิดเห็นเพิ่มเติม
+              >{{ $t("additional comments") }}
             </v-col>
           </v-row>
           <v-row class="mb-3" dense>
             <v-col>
-              <labelCustom text="เพิ่มความคิดเห็น"></labelCustom>
+              <labelCustom :text="$t('add a comment')"></labelCustom>
               <div>{{ show_potential_data.potential.remark }}</div>
             </v-col>
           </v-row>
@@ -1349,7 +1326,7 @@
             v-if="show_potential_data.potential.attachmentPotential.length > 0"
           >
             <v-row dense>
-              <v-col class="font-bold text-lg"> ไฟล์แนบ : </v-col>
+              <v-col class="font-bold text-lg"> {{ $t("attachments") }} : </v-col>
             </v-row>
             <v-card
               @click="openFile(file)"
@@ -1368,7 +1345,7 @@
                     <span class="font-bold">{{ file.originalFilesName }}</span
                     ><br />
                     <span class="text-caption"
-                      >ขนาดไฟล์ :
+                      >{{ $t("file size") }} :
                       {{ (file.filesSize / 1000000).toFixed(2) }} MB</span
                     >
                   </v-col>
@@ -1425,39 +1402,39 @@ export default {
       { label: "ปรับปรุง", value: "adjust", num_value: 3 },
     ],
     tabs: [
-      { label: "รายการสอนวันนี้", value: "teaching list" },
-      { label: "การสอนของฉัน", value: "my teaching" },
-      { label: "ลงเวลาเพื่อขอลา", value: "request leave" },
-      { label: "รายชื่อนักเรียน", value: "student lists" },
+      { label: "today's teaching program", value: "teaching list" },
+      { label: "my teaching", value: "my teaching" },
+      { label: "to request leave", value: "request leave" },
+      { label: "student list", value: "student lists" },
     ],
     time_frame_list: [
-      { label: "รายวัน", value: "day" },
-      { label: "รายสัปดาห์", value: "week" },
-      { label: "รายเดือน", value: "month" },
+      { label: "daily", value: "day" },
+      { label: "weekly", value: "week" },
+      { label: "monthly", value: "month" },
     ],
     student_type: [
-      { label: "นักเรียนทั้งหมด", value: "all" },
-      { label: "นักเรียนจบคอร์ส", value: "potential" },
+      { label: "all students", value: "all" },
+      { label: "students complete the course", value: "potential" },
     ],
     time_frame: "day",
     select_student_type: "all",
     menu: false,
     check_in_status_options: [
       {
-        label: "ตรงเวลา",
+        label: "punctual",
         value: "punctual",
         color: "#58A144",
         bg_color: "#F0F9EE",
       },
-      { label: "สาย", value: "late", color: "#FCC419", bg_color: "#FFF9E8" },
-      { label: "ลา", value: "leave", color: "#43A4F5", bg_color: "#CFE2F3" },
+      { label: "late", value: "late", color: "#FCC419", bg_color: "#FFF9E8" },
+      { label: "leave", value: "leave", color: "#43A4F5", bg_color: "#CFE2F3" },
       {
-        label: "ลาฉุกเฉิน",
+        label: "emergency leave",
         value: "emergency leave",
         color: "#43A4F5",
         bg_color: "#CFE2F3",
       },
-      { label: "ขาด", value: "absent", color: "#F03D3E", bg_color: "#F4CCCC" },
+      { label: "absent", value: "absent", color: "#F03D3E", bg_color: "#F4CCCC" },
     ],
     select_date: `${new Date().getFullYear()}-${
       new Date().getMonth() + 1
@@ -1592,7 +1569,7 @@ export default {
     ) {
       router.replace({ name: "UserKingdom" });
     }
-    this.$store.dispatch("NavberUserModules/changeTitleNavber", "จัดการ");
+    this.$store.dispatch("NavberUserModules/changeTitleNavber", "management");
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail.account_id);
     }
@@ -1698,7 +1675,7 @@ export default {
         day: "numeric",
         calendar: "buddhist",
       };
-      return date.toLocaleDateString("th-TH", options);
+      return date.toLocaleDateString(this.$i18n.locale == 'th' ? "th-TH" : "en-US", options);
     },
     openFileSummary(file) {
       window.open(file.attFilesUrl, "_blank");
