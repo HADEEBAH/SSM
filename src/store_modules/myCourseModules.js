@@ -243,6 +243,7 @@ const myCourseModules = {
                         booked.courseImg = booked.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${booked.courseImg}` : null
                     }
                     context.commit("SetProfileBooked", data.data)
+                    console.log("SetProfileBooked", data.data)
                 } else {
                     throw { error: data };
                 }

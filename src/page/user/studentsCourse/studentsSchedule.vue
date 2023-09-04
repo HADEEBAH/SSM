@@ -116,7 +116,11 @@
                 <v-autocomplete
                   v-model="search_course_detail"
                   :items="students"
-                  item-text="studentFirstnameTh"
+                  :item-text="
+                    $i18n.locale == 'th'
+                      ? 'studentFirstnameTh'
+                      : 'studentFirstnameEn'
+                  "
                   item-value="studentId"
                   dense
                   filled
@@ -480,7 +484,11 @@
                 <v-autocomplete
                   v-model="search_booked"
                   :items="students"
-                  item-text="studentFirstnameTh"
+                  :item-text="
+                    $i18n.locale == 'th'
+                      ? 'studentFirstnameTh'
+                      : 'studentFirstnameEn'
+                  "
                   item-value="studentId"
                   dense
                   filled
@@ -527,30 +535,21 @@
                               ? item_booked.courseNameTh
                               : item_booked.courseNameEn
                           }}
-                          <!-- {{
-                            item_booked.courseNameTh == ""
-                              ? "-"
-                              : item_booked.courseNameTh
-                          }}
-                          ({{
-                            item_booked.courseNameEn == ""
-                              ? "-"
-                              : item_booked.courseNameEn
-                          }}) -->
                         </v-col>
                         <v-col class="text-slate-400">
                           <span class="mdi mdi-account"
                             >{{ $t("coach") }} :</span
                           >
                           {{
-                            !item_booked.coachData.data.data.firstNameTh
-                              ? "-"
-                              : item_booked.coachData.data.data.firstNameTh
+                            $i18n.locale == "th"
+                              ? item_booked.coachData.data.data.firstNameTh
+                              : item_booked.coachData.data.data.firstNameEng
                           }}
+
                           {{
-                            !item_booked.coachData.data.data.lastNameTh
-                              ? "-"
-                              : item_booked.coachData.data.data.lastNameTh
+                            $i18n.locale == "th"
+                              ? item_booked.coachData.data.data.lastNameTh
+                              : item_booked.coachData.data.data.lastNameEng
                           }}
                         </v-col>
                         <v-col class="text-slate-400">
@@ -558,14 +557,14 @@
                             >{{ $t("learner") }} :</span
                           >
                           {{
-                            !item_booked.StudentData.data.data.firstNameTh
-                              ? "-"
-                              : item_booked.StudentData.data.data.firstNameTh
+                            $i18n.locale == "th"
+                              ? item_booked.StudentData.data.data.firstNameTh
+                              : item_booked.StudentData.data.data.firstNameEng
                           }}
                           {{
-                            !item_booked.StudentData.data.data.lastNameTh
-                              ? "-"
-                              : item_booked.StudentData.data.data.lastNameTh
+                            $i18n.locale == "th"
+                              ? item_booked.StudentData.data.data.lastNameTh
+                              : item_booked.StudentData.data.data.lastNameEng
                           }}
                         </v-col>
 
@@ -573,16 +572,15 @@
                           <span class="mdi mdi-account"
                             >{{ $t("listed by") }} :</span
                           >
-
                           {{
-                            !item_booked.createdByData.data.data.firstNameTh
-                              ? "-"
-                              : item_booked.createdByData.data.data.firstNameTh
+                            $i18n.locale == "th"
+                              ? item_booked.createdByData.data.data.firstNameTh
+                              : item_booked.createdByData.data.data.firstNameEng
                           }}
                           {{
-                            !item_booked.createdByData.data.data.lastNameTh
-                              ? "-"
-                              : item_booked.createdByData.data.data.lastNameTh
+                            $i18n.locale == "th"
+                              ? item_booked.createdByData.data.data.lastNameTh
+                              : item_booked.createdByData.data.data.lastNameEng
                           }}
                         </v-col>
 
@@ -653,7 +651,9 @@
                           class="text-lg font-bold"
                         >
                           {{
-                            `${course_data.course_name_th} (${course_data.course_name_en})`
+                            $i18n.locale == "th"
+                              ? course_data.course_name_th
+                              : course_data.course_name_en
                           }}
                         </v-col>
                         <v-col cols="12" md="12" sm="12">
@@ -741,30 +741,21 @@
                               ? item_booked.courseNameTh
                               : item_booked.courseNameEn
                           }}
-                          <!-- {{
-                            item_booked.courseNameTh == ""
-                              ? "-"
-                              : item_booked.courseNameTh
-                          }}
-                          ({{
-                            item_booked.courseNameEn == ""
-                              ? "-"
-                              : item_booked.courseNameEn
-                          }}) -->
                         </v-col>
                         <v-col class="text-slate-400">
                           <span class="mdi mdi-account"
                             >{{ $t("coach") }} :</span
                           >
                           {{
-                            !item_booked.coachData.data.data.firstNameTh
-                              ? "-"
-                              : item_booked.coachData.data.data.firstNameTh
+                            $i18n.locale == "th"
+                              ? item_booked.coachData.data.data.firstNameTh
+                              : item_booked.coachData.data.data.firstNameEng
                           }}
+
                           {{
-                            !item_booked.coachData.data.data.lastNameTh
-                              ? "-"
-                              : item_booked.coachData.data.data.lastNameTh
+                            $i18n.locale == "th"
+                              ? item_booked.coachData.data.data.lastNameTh
+                              : item_booked.coachData.data.data.lastNameEng
                           }}
                         </v-col>
                         <v-col class="text-slate-400">
@@ -772,14 +763,14 @@
                             >{{ $t("learner") }} :</span
                           >
                           {{
-                            !item_booked.StudentData.data.data.firstNameTh
-                              ? "-"
-                              : item_booked.StudentData.data.data.firstNameTh
+                            $i18n.locale == "th"
+                              ? item_booked.StudentData.data.data.firstNameTh
+                              : item_booked.StudentData.data.data.firstNameEng
                           }}
                           {{
-                            !item_booked.StudentData.data.data.lastNameTh
-                              ? "-"
-                              : item_booked.StudentData.data.data.lastNameTh
+                            $i18n.locale == "th"
+                              ? item_booked.StudentData.data.data.lastNameTh
+                              : item_booked.StudentData.data.data.lastNameEng
                           }}
                         </v-col>
 
@@ -789,14 +780,14 @@
                           >
 
                           {{
-                            !item_booked.createdByData.data.data.firstNameTh
-                              ? "-"
-                              : item_booked.createdByData.data.data.firstNameTh
+                            $i18n.locale == "th"
+                              ? item_booked.createdByData.data.data.firstNameTh
+                              : item_booked.createdByData.data.data.firstNameEng
                           }}
                           {{
-                            !item_booked.createdByData.data.data.lastNameTh
-                              ? "-"
-                              : item_booked.createdByData.data.data.lastNameTh
+                            $i18n.locale == "th"
+                              ? item_booked.createdByData.data.data.lastNameTh
+                              : item_booked.createdByData.data.data.lastNameEng
                           }}
                         </v-col>
 
@@ -858,8 +849,13 @@
                           class="text-lg font-bold"
                         >
                           {{
-                            `${course_data.course_name_th} (${course_data.course_name_en})`
+                            $i18n.locale == "th"
+                              ? course_data.course_name_th
+                              : course_data.course_name_en
                           }}
+                          <!-- {{
+                            `${course_data.course_name_th} (${course_data.course_name_en})`
+                          }} -->
                         </v-col>
                         <v-col cols="12" md="12" sm="12">
                           <span
