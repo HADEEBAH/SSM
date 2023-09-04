@@ -155,16 +155,16 @@
                             <v-card flat class="w-full my-2">
                               <v-card-text class="border-2 border-[#ff6b81]">
                                 <v-col cols="12" calign="start">
-                                  <span class="font-bold">{{ $t('first name') }}-{{$t('last name') }} : </span>
+                                  <span class="font-bold">{{ $t('first name') }} - {{$t('last name') }} : </span>
                                   {{
                                     $i18n.locale == "th" ? `${student.firstNameTh} ${student.lastNameTh}` : `${student.firstNameEng} ${student.lastNameEng}`
                                   }}
                                 </v-col>
                                 <v-col cols="12" calign="start">
-                                  <span class="font-bold"> เบอร์โทร : </span>
+                                  <span class="font-bold"> {{ $t('phone number') }} : </span>
                                   {{ `${student.mobileNo}` }} </v-col
                                 ><v-col cols="12" calign="start">
-                                  <span class="font-bold"> email : </span>
+                                  <span class="font-bold"> {{ $t('email') }} : </span>
                                   {{ `${student.email}` }}
                                 </v-col>
                               </v-card-text>
@@ -178,24 +178,24 @@
               </v-card>
               <v-row dense>
                 <v-col class="font-bold" align="right">
-                  เวลาที่ทำรายการ:
+                  {{ $t('transaction time') }}:
                 </v-col>
                 <v-col cols="5" align="right">
                   {{ order.createdDate }}
                 </v-col>
               </v-row>
               <v-row dense>
-                <v-col class="font-bold" align="right"> ทำรายการโดย: </v-col>
+                <v-col class="font-bold" align="right"> {{$t('listed by')}}: </v-col>
                 <v-col cols="5" align="right">
                   {{
-                    `${order.createdByData.firstNameTh}  ${order.createdByData.lastNameTh}`
+                    $i18n.locale == "th" ? `${order.createdByData.firstNameTh}  ${order.createdByData.lastNameTh}` : `${order.createdByData.firstNameEng}  ${order.createdByData.lastNameEng}`
                   }}
                 </v-col>
               </v-row>
               <v-row dense>
-                <v-col class="font-bold" align="right"> ราคาชำระ: </v-col>
+                <v-col class="font-bold" align="right"> {{$t('paid price')}}: </v-col>
                 <v-col cols="5" align="right">
-                  {{ order.totalPrice.toLocaleString() }} บาท
+                  {{ order.totalPrice.toLocaleString() }} {{ $t('baht') }}
                 </v-col>
               </v-row>
               <v-row dense>
@@ -205,7 +205,7 @@
                   v-if="order.paymentStatus === 'pending' &&  (order.createdByData.userOneId == userData.account_id )"
                 >
                   <v-btn @click="cancelOrder(order.orderId)" depressed dark color="#ff6b81"
-                    ><v-icon>mdi-close</v-icon>ยกเลิก</v-btn
+                    ><v-icon>mdi-close</v-icon>{{ $t('cancel') }}</v-btn
                   >
                 </v-col>
                 <v-col
@@ -214,7 +214,7 @@
                   v-if="order.paymentStatus === 'pending'"
                 >
                   <v-btn @click="payment(order)" outlined color="#ff6b81"
-                    ><v-icon>mdi-cash</v-icon>ดำเนินการชำระเงิน</v-btn
+                    ><v-icon>mdi-cash</v-icon>{{ $t('proceed to payment')}}</v-btn
                   >
                 </v-col>
               </v-row>
@@ -266,11 +266,11 @@ export default {
     cancelOrder(order_id){
       Swal.fire({
         icon: "question",
-        title: "ต้องการยกเลิกใช่หรือไม่?",
+        title:  this.$t("want to cancel?"),
         showDenyButton: false,
         showCancelButton: true,
-        cancelButtonText: "ยกเลิก",
-        confirmButtonText: "ตกลง",
+        cancelButtonText: this.$t("cancel"),
+        confirmButtonText: this.$t("agree"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.userUpdateOrderCancelStatus({
@@ -282,11 +282,11 @@ export default {
     payment(payment_data) {
       Swal.fire({
         icon: "question",
-        title: "ดำเนินการชำระเงินใช่หรือไม่?",
+        title: this.$t("proceed with payment?"),
         showDenyButton: false,
         showCancelButton: true,
-        cancelButtonText: "ยกเลิก",
-        confirmButtonText: "ตกลง",
+        cancelButtonText: this.$t("cancel"),
+        confirmButtonText: this.$t("agree"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.savePayment({ paymnet_data: payment_data });

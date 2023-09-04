@@ -20,7 +20,7 @@
               : 'text-[#e00]'
           "
         >
-          {{ paymentStatus }}
+          {{ $t(paymentStatus.toLocaleLowerCase()) }}
         </v-col>
       </v-row>
       <div align="center">
@@ -29,41 +29,41 @@
             <v-col align="left" class="font-bold"> {{ $t("details")}} </v-col>
           </v-row>
           <v-row>
-            <v-col cols="6" sm="4" align="left"> หมายเลขคำสั่งชื้อ : </v-col>
+            <v-col cols="6" sm="4" align="left"> {{$t("order number")}} : </v-col>
             <v-col align="right">{{ payload.orderId }}</v-col>
           </v-row>
           <v-row>
-            <v-col cols="6" sm="4" align="left"> วันที่ชำระเงิน : </v-col>
+            <v-col cols="6" sm="4" align="left"> {{ $t("payment date") }} : </v-col>
             <v-col align="right">{{
               formatDate(payload.transactionDate)
             }}</v-col>
           </v-row>
           <v-row>
-            <v-col cols="6" sm="4" align="left"> เวลาชำระเงิน :</v-col>
+            <v-col cols="6" sm="4" align="left"> {{ $t("payment time") }} :</v-col>
             <v-col align="right">{{
               formatTime(payload.transactionTime)
             }}</v-col>
           </v-row>
           <v-row>
-            <v-col cols="6" sm="4" align="left"> ยอดที่ต้องชำระ :</v-col>
+            <v-col cols="6" sm="4" align="left"> {{ $t('amount to be paid') }} :</v-col>
             <v-col align="right"
               >{{
                 parseFloat(payload.receiveAmount).toLocaleString(undefined, {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })
-              }}บาท</v-col
+              }} {{ $t('baht') }}</v-col
             >
           </v-row>
           <v-row>
-            <v-col cols="6" sm="4" align="left"> ชำระเงินทั้งหมด : </v-col>
+            <v-col cols="6" sm="4" align="left"> {{ $t('payment amount') }} : </v-col>
             <v-col align="right"
               >{{
                 parseFloat(payload.receiveAmount).toLocaleString(undefined, {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })
-              }}บาท</v-col
+              }}{{ $t('baht') }}</v-col
             >
           </v-row>
           <v-row dense>
@@ -75,7 +75,7 @@
               "
             >
               <v-btn class="w-full" outlined color="#ff6b81"
-                >ชำระอีกครั้ง</v-btn
+                >{{$t('pay again')}}</v-btn
               >
             </v-col>
             <v-col cols="12">
@@ -85,7 +85,7 @@
                 class="w-full"
                 outlined
                 color="#ff6b81"
-                >กลับสู่หน้าหลัก</v-btn
+                >{{ $t('return to home page')  }}</v-btn
               >
             </v-col>
             <v-col cols="12">
@@ -95,7 +95,7 @@
                 color="#ff6b81"
                 @click="$router.push({ name: 'StudentsSchedule' })"
                 depressed
-                >ไปหน้าคอร์สเรียนของฉัน</v-btn
+                >{{ $t('go to my course page') }}</v-btn
               >
             </v-col>
           </v-row>
@@ -124,12 +124,7 @@ export default {
   },
   mounted() {
     window.addEventListener("beforeunload", this.preventNavigation);
-    this.paymentStatus =
-      this.payload.responseMessage === "Success"
-        ? "ชำระเงินสำเร็จ"
-        : this.payload.responseMessage === "Cancel"
-        ? "รอการชำระ"
-        : "ชำระเงินไม่สำเร็จ";
+    this.paymentStatus = this.payload.responseMessage 
   },
   watch: {},
   computed: {},

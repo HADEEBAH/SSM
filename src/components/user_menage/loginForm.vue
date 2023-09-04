@@ -23,31 +23,31 @@
           </v-row>
           <v-row dense>
             <v-col cols="12" class="pa-0 text-bold text-black">
-              <label>ชื่อผู้ใช้งาน / OneID</label>
+              <label>{{ $t("username") }} / OneID</label>
               <v-text-field
                 @keypress="validate($event, 'en-number')"
                 dense
-                :rules="rules.usernameRules"
+                :rules="usernameRules"
                 required
                 v-model="user_one_id.username"
-                placeholder="ระบุชื่อผู้ใช้งาน"
+                :placeholder="$t('enter username')"
                 outlined
               ></v-text-field>
             </v-col>
             <v-col cols="12" class="pa-0 text-bold text-black">
-              <label>รหัสผ่าน</label>
+              <label>{{$t("password")}}</label>
               <v-text-field
                 @keypress="validate($event, 'en')"
                 dense
                 ref="password"
                 :type="show_password ? 'text' : 'password'"
-                :rules="rules.passwordRules"
+                :rules="passwordRules"
                 required
                 :append-icon="
                   show_password ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
                 "
                 v-model="user_one_id.password"
-                placeholder="ระบุรหัสผ่าน"
+                :placeholder="$t('enter password')"
                 @click:append="show_password = !show_password"
                 outlined
                 @keyup.enter="login()"
@@ -64,7 +64,7 @@
                 color="#ff6b81"
                 @click="login()"
               >
-                เข้าสู่ระบบ
+              {{ $t("login")}}
               </v-btn>
             </v-col>
             <v-col cols="12">
@@ -75,7 +75,7 @@
                 width="100%"
                 @click="toRegisterPage()"
               >
-                ลงทะเบียน
+              {{ $t("register")}}
               </v-btn>
             </v-col>
           </v-row>
@@ -84,10 +84,10 @@
             v-if="bottomtext"
             @click="forgot_password()"
           >
-            ลืมรหัสผ่านใช่หรือไม่ ?
+            {{$t("forgot your password?")}}
           </div>
           <div v-else class="text-center mt-2">
-            ยังไม่มีบัญชีใช่หรือไม่ ? <span class="text_bottom">ลงทะเบียน</span>
+            {{ $t("don't have an account yet?") }} <span class="text_bottom">{{ $t("register")}}</span>
           </div>
         </v-card-text>
       </v-card>
@@ -107,23 +107,23 @@ export default {
   data: () => ({
     show_password: false,
     logo: `${process.env.VUE_APP_URL}/logo.svg`,
-    rules: {
-      usernameRules: [
-        (val) =>
-          (val || "").length > 5 ||
-          "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
-        (val) => /[A-Za-z0-9 ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-        (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-          "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
-      ],
-      passwordRules: [
-        (val) =>
-          (val || "").length > 7 ||
-          "โปรดระบุรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
-        (val) => !/[ ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-      ],
-    },
+    // rules: {
+    //   usernameRules: [
+    //     (val) =>
+    //       (val || "").length > 5 ||
+    //       "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
+    //     (val) => /[A-Za-z0-9 ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+    //     (val) =>
+    //       !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+    //       "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
+    //   ],
+    //   passwordRules: [
+    //     (val) =>
+    //       (val || "").length > 7 ||
+    //       "โปรดระบุรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
+    //     (val) => !/[ ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+    //   ],
+    // },
   }),
   beforeMount() {
     if (this.$route.query.token) {
@@ -135,6 +135,26 @@ export default {
       user_one_id: "loginModules/getUserOneId",
       is_loading: "loginModules/getIsLoading",
     }),
+    usernameRules() {
+      return  [
+        (val) =>
+          (val || "").length > 5 ||
+          this.$t("please enter a username at least 6 characters long"),
+        (val) =>
+          (val || "").length < 20 ||
+          this.$t("please enter a username no longer than 20 characters"),
+        (val) => /[A-Za-z0-9 ]/g.test(val) || this.$t("the username cannot contain special characters"),
+        (val) =>
+          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+          this.$t("username cannot contain emojis"),
+      ]
+    },
+    passwordRules() {
+      return [ (val) =>
+          (val || "").length > 7 ||
+          this.$t("please enter a password that is at least 8 characters long"),
+      ]
+    },
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;
