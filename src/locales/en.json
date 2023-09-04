@@ -342,5 +342,103 @@
     "weekly" : "Weekly",
     "waiting for contact": "Waiting for contact",
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    "add a coach":"Add a coach",
+    "approval of leave":"Approval of leave",
+    "advice":"Advice",
+    "add a package":"Add a package",
+    "add a course":"Add a course",
+    "already paid":"Already paid",
+
+
+    "banner management":"Banner management",
+    "back":"Back",
+
+    "create a kingdom":"Create a kingdom",
+    "create a course":"Create a course",
+    "clear data":"Clear data",
+    "choose file":"Choose file",
+    "example of pictures":"Example of pictures",
+    "details of time and coach":"Details of time and coach",
+    "data not found" : "Data not found",
+
+
+    "finance":"Finance",
+    "fill in the name of the kingdom":"Fill in the name of the kingdom",
+    "fill in the details...":"Fill in the details...",
+
+
+    "kingdom details":"Kingdom details",
+    "kingdom name (Thai language)":"Kingdom name (Thai language)",
+    "kingdom name (English language)":"Kingdom name (English language)",
+    "images should be uploaded with a size of 1024 x 576 (16:9)":"Images should be uploaded with a size of 1024 x 576 (16:9)",
+
+    "manage reservations":"Manage reservations",
+    "manage all courses":"Manage all courses",
+    "manage a kingdom":"Manage a kingdom",
+    "manage user":"Manage user",
+
+    "next":"Next",
+    "please enter the student's name":"Please enter the student's name",
+    "price" : "Price",
+    "price note":"Price Note",
+
+
+    "specify the teaching institution, e.g. Manila Tamarind Music Center":"Specify the teaching institution, e.g. Manila Tamarind Music Center",
+    "suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file":"Suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file",
+    "select kingdom":"Select kingdom",
+    "select course":"Select course",
+
+    "search/Please select a student":"Search/Please select a student",
+    "sign up for One ID":"sign up for One ID",
+    "send payment notification":"Send payment notification",
+
+
+
+    "there are no preview images":"There are no preview images",
+    "time and coach":"Time and coach",
+
+    "upload the cover image of the kingdom":"Upload the cover image of the kingdom",
+    "upload the cover image of the course":"Upload the cover image of the course",
+    "upload privileged images":"upload privileged images",
+    "upload Learning Journey":"Upload Learning Journey",
+
+
+    "organized by":"Organized by",
+
     "z":"z"
 }

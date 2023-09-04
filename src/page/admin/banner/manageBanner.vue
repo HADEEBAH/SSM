@@ -1,6 +1,6 @@
 <template>
   <v-container class="h-full">
-    <label class="text-xl font-bold">จัดการแบนเนอร์</label>
+    <label class="text-xl font-bold">{{$t("banner management")}}</label>
     <v-row dense class="my-3">
       <v-col cols="12" sm="3">
         <v-card
@@ -73,7 +73,7 @@
 
     <v-row dense>
       <v-col cols="12">
-        <label class="text-xl font-bold">ตัวอย่างรูปภาพ</label>
+        <label class="text-xl font-bold">{{ $t("example of pictures") }}</label>
         <v-slide-group class="mt-3" v-if="files_preview" center-active>
           <v-slide-item
             v-for="(banner, index) in files_preview"
@@ -110,9 +110,8 @@
           border="left"
           class="mt-3"
         >
-          ไม่มีรูปตัวอย่าง <br />
-          <span class="font-weight-bold">คำแนะนำ</span> : ควรอัปโหลดรูปที่มีขนาด
-          1024 x 576 (16:9)
+          {{ $t("there are no preview images") }} <br />
+          <span class="font-weight-bold">{{ $t("advice") }}</span> : {{ $t("images should be uploaded with a size of 1024 x 576 (16:9)") }}
         </v-alert>
       </v-col>
     </v-row>
@@ -123,7 +122,7 @@
           :disabled="files_preview.length > 0 && disabled ? false : true"
           @click="insertBannerList()"
           color="success"
-          >บันทึก</v-btn
+          >{{ $t("save") }}</v-btn
         >
       </v-col>
     </v-row>
