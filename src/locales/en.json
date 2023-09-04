@@ -5,6 +5,7 @@
     "add a comment" : "Add a comment",
     "additional comments" : "Additional comments",
     "add a holiday" : "Add a holiday",
+   "add student information in charge":"Add student information in charge",
     "accept" : "Accept",
     "admin page" : "Admin page",
     "admission date" : "Admission date",
@@ -27,11 +28,17 @@
 
     "baht" : "Baht",
     "by": "By",
+<<<<<<< HEAD
     "by opening an account, you acknowledge and agree to" : "By opening an account, you acknowledge and agree to",
+=======
+    "booked course": "Booked course",
+    "booking information not found": "Booking information not found",
+>>>>>>> develop
 
     "can't find items in the basket" : "Can't find items in the basket",
     "can't find teaching summaries" : "Can't find teaching summaries",
     "cancel" : "Cancel",
+    "cancel reservation": "Cancel reservation",
     "cart" : "Cart",
     "clear":"Clear",
     "clear data" : "Clear data",
@@ -55,7 +62,11 @@
     "confirm password" : "Confirm password",
     "confirm new password" : "Confirm new password",
     "confirm password is incorrect" : "Confirm password is incorrect",
+<<<<<<< HEAD
     "comment" : "Comment",
+=======
+    "contacted": "Contacted",
+>>>>>>> develop
     "compensation date" : "Compensation date",
     "compensatory study day" : "Compensatory study day",
     "contact us at" : "Contact us at",
@@ -74,12 +85,16 @@
     "choice": "Choice",
     "course schedule": "Course schedule",
     "coach information not foun": "Coach information not foun",
+    "competition": "competition",
+    "competitions and certificates":"Competitions and certificates",
+    "class schedule information":"Class schedule information",
 
     "daily" : "Daily",
     "date" : "Date",
     "delete holiday": "Delete holiday",
     "date and time" : "Date and time",
     "delete item" : "Delete item",
+    "delete parent data": "Delete parent data",
     "details" : "Details",
     "development / homework" : "Development / homework",
     "developmental level" : "Developmental level",
@@ -120,14 +135,19 @@
     "filter":"Filter",
 
     "graduating students": "Graduat Students",
+    "general": "General",
     "general course" : "General course",
+<<<<<<< HEAD
 
+=======
+>>>>>>> develop
     "go to my course page" : "Go to my course page",
 
     "have a substitute teacher" : "Have a substitute teacher",
     "hello" : "Hello",
     "hour" : "Hour",
     "hrs." : "Hrs.",
+    "hrs./time": "Hrs./time",
     "holiday":"Holiday",
     "holiday name":"Holiday name",
 
@@ -143,10 +163,16 @@
     "kingdom" : "Kingdom",
     "kingdom not found" : "Kingdom not found",
 
+
+    "language" : "Language",
     "late" : "Late",
     "last name" : "Last name",
     "last name(english)" :"Last name(English)",
+<<<<<<< HEAD
     "last name(thai)" : "Last name(Thai)",
+=======
+    "last name(thai)" :"Last name(thai)",
+>>>>>>> develop
     "leave" : "Leave",
     "leave date" : "Leave date",
     "leave information not found" : "Leave information not found",
@@ -165,10 +191,18 @@
     "management":"Management",
     "monthly" : "Monthly",
     "morning" : "Morning",
+    "my course": "My course",
+    "mycourse": "My course",
     "my teaching" : "My teaching",
     "my teaching information" : "My teaching information",
     "manage tables" : "Manage tables",
 
+<<<<<<< HEAD
+=======
+
+
+    "nationality": "Nationality",
+>>>>>>> develop
     "new password":"New password",
     "no." : "No.",
     "no data found" : "No data found",
@@ -191,6 +225,8 @@
     "page not found" : "Page not found",
     "paid":"Paid",
     "parent" : "Parent",
+    "parent information" : "Parent information",
+    "parent information not found":"Parent information not found",
     "password" : "Password",
     "passwords do not match" : "Passwords do not match",
     "password must not contain special characters" : "Password must not contain special characters",
@@ -245,6 +281,8 @@
     "proceed to payment" : "Proceed to payment",
     "punctual" : "Punctual",
     "please select at least 1 day before the holiday":"Please select at least 1 day before the holiday",
+    "port":"Portfolio",
+    "policy":"Policy",
 
     "reason for leave" : "Reason for leave",
     "read more":"Read more",
@@ -264,6 +302,7 @@
     "seat" : "Seat",
     "see more" : "See more",
     "select teaching information" : "Select teaching information",
+    "select your students here": "Select your students here",
     "sent a password change link to" : "Sent a password change link to",
     "show student list" : "Show student list",
     "sick" : "Sick",
@@ -283,6 +322,8 @@
     "student assessment data not found" : "Student assessment data not found",
     "student list" : "Student list",
     "students complete the course" : "Students complete the course",
+    "student information":"Student information",
+   "student information not found": "Student information not found",
     "study date" : "Study date",
     "study notifications":"Study notifications",
     "study schedule":"Study schedule",
@@ -290,6 +331,7 @@
     "substitute teaching date" : "Substitute teaching date",
     "success" : "Success",
     "succeed":"Succeed",
+<<<<<<< HEAD
     "students reserve a course": "Students reserve", 
     "short course": "Short course",
     "search full course name here": "Search full course name here",
@@ -299,6 +341,20 @@
     "start time": "Start time",
     "specify the name of the holiday, such as Songkran Day": "Specify the name of the holiday, such as Songkran Day",
     
+=======
+   "students reserve a course": "Students reserve", 
+   "student information in charge":"Student information in charge",
+   "short course": "Short course",
+   "search full course name here": "Search full course name here",
+   "search available course name here": "Search available course name here", 
+   "search" : "Search", 
+   "specify the date":"Specify the date",
+   "start time": "Start time",
+   "specify the name of the holiday, such as Songkran Day": "Specify the name of the holiday, such as Songkran Day",
+
+
+
+>>>>>>> develop
     
     "take annual leave" : "Take annual leave",
     "take up teaching" : "Take up teaching",
@@ -313,6 +369,7 @@
     "the course has been successfully added to the cart" : "The course has been successfully added to the cart",
     "the password is incorrect" : "The password is incorrect",
     "the password has been edited successfully" : "The password has been edited successfully",
+    "the registration period has expired or the registration period has not yet been reached" : "The registration period has expired or the registration period has not yet been reached",
     "the selected course is full and payment cannot be made" : "The selected course is full and payment cannot be made", 
     "the username cannot contain special characters" : "The username cannot contain special characters",
     "there are special privileges for monthly/term/yearly subscriptions" : "There are special privileges for monthly/term/yearly subscriptions",
@@ -337,6 +394,8 @@
     "view special rights" : "View special rights",
     "view details": "View details",
     "view student details": "View student details",
+    "view personal information" : "View personal information",
+
 
     "waiting for approval" : "Waiting for approval",
     "want to add to cart?" : "Want to add to cart?",
@@ -347,6 +406,105 @@
     "want to save?" : "Want to save??",
     "warning" : "Warning",
     "weekly" : "Weekly",
+    "waiting for contact": "Waiting for contact",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    "add a coach":"Add a coach",
+    "approval of leave":"Approval of leave",
+    "advice":"Advice",
+    "add a package":"Add a package",
+    "add a course":"Add a course",
+    "already paid":"Already paid",
+
+
+    "banner management":"Banner management",
+    "back":"Back",
+
+    "create a kingdom":"Create a kingdom",
+    "create a course":"Create a course",
+    "clear data":"Clear data",
+    "choose file":"Choose file",
+    "example of pictures":"Example of pictures",
+    "details of time and coach":"Details of time and coach",
+    "data not found" : "Data not found",
+
+
+    "finance":"Finance",
+    "fill in the name of the kingdom":"Fill in the name of the kingdom",
+    "fill in the details...":"Fill in the details...",
+
+
+    "kingdom details":"Kingdom details",
+    "kingdom name (Thai language)":"Kingdom name (Thai language)",
+    "kingdom name (English language)":"Kingdom name (English language)",
+    "images should be uploaded with a size of 1024 x 576 (16:9)":"Images should be uploaded with a size of 1024 x 576 (16:9)",
+
+    "manage reservations":"Manage reservations",
+    "manage all courses":"Manage all courses",
+    "manage a kingdom":"Manage a kingdom",
+    "manage user":"Manage user",
+
+    "next":"Next",
+    "please enter the student's name":"Please enter the student's name",
+    "price" : "Price",
+    "price note":"Price Note",
+
+
+    "specify the teaching institution, e.g. Manila Tamarind Music Center":"Specify the teaching institution, e.g. Manila Tamarind Music Center",
+    "suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file":"Suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file",
+    "select kingdom":"Select kingdom",
+    "select course":"Select course",
+
+    "search/Please select a student":"Search/Please select a student",
+    "sign up for One ID":"sign up for One ID",
+    "send payment notification":"Send payment notification",
+
+
+
+    "there are no preview images":"There are no preview images",
+    "time and coach":"Time and coach",
+
+    "upload the cover image of the kingdom":"Upload the cover image of the kingdom",
+    "upload the cover image of the course":"Upload the cover image of the course",
+    "upload privileged images":"upload privileged images",
+    "upload Learning Journey":"Upload Learning Journey",
+
+
+    "organized by":"Organized by",
 
     "z":"z"
 }

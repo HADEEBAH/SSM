@@ -1,10 +1,10 @@
 <template>
   <v-app>
     <v-container>
-      <headerPage title="สร้างอาณาจักร"></headerPage>
+      <headerPage :title="$t(`create a kingdom`)"></headerPage>
       <v-row dense>
         <v-col>
-          <label-custom text="อัปโหลดภาพหน้าปกอาณาจักร"></label-custom>
+          <label-custom :text="$t(`upload the cover image of the kingdom`)"></label-custom>
 
           <v-card class="mx-3" flat>
             <v-card-text
@@ -58,17 +58,17 @@
                     cols="12"
                     class="flex align-center justify-center text-h5"
                   >
-                    อัปโหลดภาพหน้าปกอาณาจักร
+                  {{$t(`upload the cover image of the kingdom`)}}
                   </v-col>
                   <v-col
                     cols="12"
                     class="flex align-center justify-center text-caption"
                   >
-                    ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG )
+                    ( {{$t("suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file")}} )
                   </v-col>
                   <v-col cols="12" class="flex align-center justify-center">
                     <v-btn outlined color="blue" @click="openFileSelector"
-                      >เลือกไฟล์</v-btn
+                      >{{ $t("choose file") }}</v-btn
                     >
                     <input
                       id="inputFile"
@@ -87,28 +87,28 @@
       </v-row>
       <br />
 
-      <label-custom text="รายละเอียดอาณาจักร"></label-custom>
+      <label-custom :text="$t(`kingdom details`)"></label-custom>
       <hr />
       <br />
 
       <v-row dense>
         <v-col cols="12" sm="6">
-          <label-custom text="ชื่ออาณาจักร(ภาษาไทย)"></label-custom>
+          <label-custom :text="$t(`kingdom name (Thai language)`)"></label-custom>
 
           <v-text-field
             dense
-            placeholder="กรอกชื่ออาณาจักร"
+            :placeholder="$t(`fill in the name of the kingdom`)"
             outlined
             v-model="kingdom.kingdom_name_th"
             @keypress="validate($event, 'th')"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
-          <label-custom text="ชื่ออาณาจักร(ภาษาอังกฤษ)"></label-custom>
+          <label-custom :text="$t(`kingdom name (English language)`)"></label-custom>
 
           <v-text-field
             dense
-            placeholder="กรอกชื่ออาณาจักร"
+            :placeholder="$t(`fill in the name of the kingdom`)"
             outlined
             v-model="kingdom.kingdom_name_eng"
             @keypress="validate($event, 'en')"
@@ -118,11 +118,11 @@
 
       <v-row dense>
         <v-col cols="12" sm="6">
-          <label-custom text="จัดสอนโดย"></label-custom>
+          <label-custom :text="$t(`organized by`)"></label-custom>
 
           <v-text-field
             dense
-            placeholder="ระบุสถาบันผู้จัดสอน เช่น ศูนย์ดนตรี Manila Tamarind"
+            :placeholder="$t(`specify the teaching institution, e.g. Manila Tamarind Music Center`)"
             outlined
             v-model="kingdom.learning_method"
           ></v-text-field>
@@ -131,12 +131,12 @@
 
       <v-row dense>
         <v-col cols="12">
-          <label-custom text="รายละเอียด"></label-custom>
+          <label-custom :text="$t(`details`)"></label-custom>
 
           <v-textarea
             dense
             class="form2"
-            placeholder="กรอกรายละเอียด..."
+            :placeholder="$t(`Fill in the details...`)"
             auto-grow
             outlined
             v-model="kingdom.detail"
@@ -152,7 +152,7 @@
             color="#ff6b81"
             @click="cancleText()"
           >
-            ยกเลิก
+            {{$t("cancel")}}
           </v-btn>
         </v-col>
 
@@ -164,7 +164,7 @@
             :color="isInputValid ? '#ff6b81' : ''"
             :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
             @click="openDialog()"
-            >บันทึก
+            >{{$t("save")}}
           </v-btn>
         </v-col>
       </v-row>

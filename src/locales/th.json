@@ -5,6 +5,7 @@
     "add a comment" : "เพิ่มความคิดเห็น",
     "additional comments" : "ความคิดเห็นเพิ่มเติม",
     "add a holiday" : "เพิ่มวันหยุด",
+   "add student information in charge":"เพิ่มข้อมูลนักเรียนในความดูแล",
     "accept" : "ยอมรับ",
     "admin page" : "หน้าผู้ดูแลระบบ",
     "admission date" : "วันรับสมัคร",
@@ -28,10 +29,13 @@
     "baht" : "บาท",
     "by" : "โดย",
     "by opening an account, you acknowledge and agree to" : "การเปิดบัญชี ท่านรับทราบและตกลงตาม",
+    "booked course": "คอร์สที่จอง",
+    "booking information not found": "ไม่พบข้อมูลการจอง",
 
     "can't find items in the basket" : "ไม่พบข้อมูลในตะกร้า",
     "can't find teaching summaries" : "ไม่พบข้อมูลบันทึกสรุปการสอน",
     "cancel" : "ยกเลิก",
+    "cancel reservation": "ยกเลิกการจอง",
     "cart" : "รถเข็น",
     "clear":"ล้างค่า",
     "clear data" : "ล้างข้อมูล",
@@ -55,6 +59,7 @@
     "confirm password" : "ยืนยันรหัสผ่าน",
     "confirm new password" : "ยืนยันรหัสผ่านใหม่",
     "confirm password is incorrect" : "ยืนยันรหัสผ่านไม่ถูกต้อง",
+    "contacted": "ติดต่อแล้ว",
     "contact us at" : "ติดต่อเราได้ที่",
     "comment" : "แสดงความคิดเห็น",
     "compensation date" : "วันที่ชดเชย",
@@ -74,12 +79,17 @@
     "choice": "ตัวเลือก",
     "course schedule": "ตารางวิชาเรียน",
     "coach information not found": "ไม่พบข้อมูลโค้ช",
+    "competition": "การแข่ง",
+    "competitions and certificates": "การแข่งขันและเกียรติบัตร",
+    "class schedule information":"ข้อมูลตารางเรียน",
+
 
     "daily" : "รายวัน",
     "date" : "วันที่",
     "delete holiday": "ลบวันหยุด",
     "date and time" : "วันและเวลา",
     "delete item" : "ลบรายการ",
+    "delete parent data": "ลบข้อมูลผู้ปกครอง",
     "details" : "รายละเอียด",
     "development / homework" : "พัฒนาการ / การบ้าน",
     "developmental level" : "ระดับพัฒนาการ",
@@ -119,14 +129,15 @@
     "filter":"ตัวกรอง",
 
     "graduating students": "ผู้เรียนที่ใกล้จบ",
+    "general": "ทั่วไป",
     "general course" : "คอร์สทั่วไป",
-
     "go to my course page" : "ไปหน้าคอร์สเรียนของฉัน",
 
     "have a substitute teacher" : "มีผู้สอนแทน",
     "hello" : "สวัสดี",
     "hour" : "ชั่วโมง",
     "hrs." : "ชม.",
+    "hrs./time" : "ชม. / ครั้ง",
     "holiday": "วันหยุด",
     "holiday name": "ชื่อวันหยุด",
 
@@ -142,6 +153,7 @@
     "kingdom" : "อาณาจักร",
     "kingdom not found" : "ไม่พบอาณาจักร",
 
+    "language": "ภาษา",
     "late" : "สาย",
     "last name" : "นามสกุล",
     "last name(english)" : "นามสกุล(ภาษาอังกฤษ)",
@@ -164,10 +176,13 @@
     "management":"การจัดการ",
     "monthly" : "รายเดือน",
     "morning" : "ช่วงเช้า",
+    "my course": "คอร์สเรียนของฉัน",
+    "mycourse": "คอร์สของฉัน",
     "my teaching" : "การสอนของฉัน",
     "my teaching information" : "ข้อมูลการสอนของฉัน",
     "manage tables" : "จัดการตาราง",
 
+    "nationality": "สัญชาติ",
     "new password":"รหัสผ่านใหม่",
     "no." : "ลำดับ",
     "no data found" : "ไม่พบข้อมูล",
@@ -190,6 +205,8 @@
     "paid price" : "ราคาชำระ",
     "paid":"ชำระแล้ว",
     "parent" : "ผู้ปกครอง",
+    "parent information" : "ข้อมูลผู้ปกครอง",
+    "parent information not found": "ไม่พบข้อมูลของผู้ปกครอง",
     "password" : "รหัสผ่าน",
     "passwords do not match" : "รหัสผ่านไม่ตรงกัน",
     "password must not contain special characters" : "รหัสผ่านต้องไม่มีอักขระพิเศษ",
@@ -244,6 +261,10 @@
     "proceed to payment":"ดำเนินการชำระเงิน",
     "punctual" : "ตรงเวลา",
     "please select at least 1 day before the holiday": "กรุณาเลือกอย่างน้อย 1 วันก่อนวันหยุด",
+    "port":"พอร์ตโฟลิโอ",
+    "policy":"นโยบาย",
+
+
 
     "reason for leave" : "สาเหตุการลา",
     "read more":"อ่านต่อ",
@@ -263,6 +284,7 @@
     "seat" : "ที่นั้ง",
     "see more" : "ดูเพิ่มเติม",
     "select teaching information" : "เลือกข้อมูลการสอน",
+    "select your students here": "เลือกนักเรียนของคุณได้ที่นี้",
     "sent a password change link to" : "ได้ส่งลิงค์เปลี่ยนรหัสผ่านไปยัง",
     "show student list" : "แสดงรายการนักเรียน",
     "sick" : "ป่วย",
@@ -282,6 +304,9 @@
     "student assessment data not found" : "ไม่พบข้อมูลการประเมินนักเรียน",
     "student list" : "รายชื่อนักเรียน",
     "students complete the course" : "นักเรียนจบคอร์ส",
+    "student information":"ข้อมูลนักเรียน",
+   "student information in charge":"ข้อมูลนักเรียนในความดูแล",
+   "student information not found": "ไม่พบข้อมูลของผู้ปกครอง",
     "study date" : "วันเรียน",
     "study notifications":"แจ้งเตือนการเรียน",
     "study schedule":"ตารางเรียน",
@@ -311,6 +336,7 @@
     "the course has been successfully added to the cart" : "เพิ่มคอร์สเรียนไปยังรถเข็นเรียบร้อยแล้ว",
     "the password is incorrect" : "รหัสผ่านไม่ถูกต้อง",
     "the password has been edited successfully" : "แก้ไขรหัสผ่านเรียบร้อยแล้ว",
+    "the registration period has expired or the registration period has not yet been reached" : "ระยะเวลาการลงทะเบียนสิ้นสุดลงแล้วหรือยังไม่ถึงระยะเวลาการทะเบียน",
     "the selected course is full and payment cannot be made" :"คอร์สที่เลือกเต็มแล้วไม่สามารถชำระเงินได้",
     "there is no substitute teacher" : "ไม่มีผู้สอนแทน", 
     "there are special privileges for monthly/term/yearly subscriptions" : "มีสิทธิ์พิเศษสำหรับการสมัครรายเดือน / รายเทอม / รายปี",
@@ -335,6 +361,7 @@
     "view special rights" : "ดูสิทธิพิเศษ",
     "view details" : "ดูรายละเอียด",
     "view student details": "ดูรายละเอียดผู้เรียน",
+    "view personal information" : "ดูข้อมูลส่วนตัว",
 
     "waiting for approval" : "รออนุมัติ",
     "want to add to cart?" : "ต้องการเพิ่มเข้ารถเข็นใช่หรือไม่?",
@@ -345,6 +372,100 @@
     "want to save?" : "ต้องการบันทึกใช่หรือไม่?",
     "warning" : "คำเตือน",
     "weekly" : "รายสัปดาห์",
+    "waiting for contact": "รอการติดต่อ",
+
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    "add a coach":"เพิ่มโค้ช",
+    "advice":"คำแนะนำ",
+    "approval of leave" :"การอนุมัติลา",
+    "add a package":"เพิ่มแพ็กเกจ",
+    "add a course":"เพิ่มคอร์ส",
+    "already paid":"ชำระเงินเรียบร้อยแล้ว",
+
+
+    "banner management":"จัดการแบนเนอร์",
+    "back":"ย้อนกลับ",
+
+    
+    "create a course":"สร้างคอร์สเรียน",
+    "create a kingdom":"สร้างอาณาจักร",
+
+    "choose file":"เลือกไฟล์",
+    "clear data":"ล้างข้อมูล",
+
+    "details of time and coach":"รายละเอียดเวลาและโค้ช",
+
+    "data not found" : "ไม่พบข้อมูล",
+
+    "example of pictures":"ตัวอย่างรูปภาพ",
+
+    "finance":"การเงิน",
+    "fill in the name of the kingdom":"กรอกชื่ออาณาจักร",
+    "fill in the details..." : "กรอกรายละเอียด...",
+    "kingdom details":"รายละเอียดอาณาจักร",
+    "kingdom name (Thai language)":"ชื่ออาณาจักร(ภาษาไทย)",
+    "kingdom name (English language)":"ชื่ออาณาจักร(ภาษาอังกฤษ)",
+    "images should be uploaded with a size of 1024 x 576 (16:9)":"ควรอัปโหลดรูปที่มี ขนาด 1024 x 576 (16:9)",
+
+    "manage reservations":"จัดการการจอง",
+    "manage all courses":"จัดการคอร์สทั้งหมด",
+    "manage a kingdom":"จัดการอาณาจักร",
+    "manage user":"จัดการผู้ใช้งาน",
+
+    "next":"ถัดไป",
+    "please enter the student's name":"กรุณากรอกชื่อผู้เรียน",
+    "price" : "ราคา",
+    "price note":"หมายเหตุราคา",
+
+    "specify the teaching institution, e.g. Manila Tamarind Music Center":"ระบุสถาบันผู้จัดสอน เช่น ศูนย์ดนตรี Manila Tamarind",
+    "suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file":"คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG",
+    "select kingdom":"เลือกอาณาจักร",
+    "select course":"เลือกคอร์สเรียน",
+    "send payment notification":"ส่งแจ้งเตือนการชำระ",
+    "search/Please select a student":"ค้นหา/โปรดเลือกผู้เรียน",
+    "search full course ค้นหา/โปรดเลือกผู้เรียนname here": "ค้นหาชื่อคอร์สเต็มได้ที่นี้",
+
+    "sign up for One ID":"สมัคร One ID",
+    "time and coach":"ช่วงเวลาและโค้ช",
+
+    "there are no preview images":"ไม่มีรูปตัวอย่าง",
+    
+    "upload the cover image of the kingdom":"อัปโหลดภาพหน้าปกอาณาจักร",
+    "upload the cover image of the course.":"อัปโหลดภาพหน้าปกคอร์สเรียน",
+    "upload privileged images":"อัปโหลดภาพสิทธิ์พิเศษ",
+    "upload Learning Journey":"อัปโหลดภาพ Learning Journey",
+
+    "organized by":"จัดสอนโดย",
     "z":"z"
+
 }

@@ -2,10 +2,10 @@
   <v-app>
     <v-container>
       <v-form ref="course_form" v-model="validate_form">
-        <headerPage title="เพิ่มผู้เรียน"></headerPage>
+        <headerPage :title="$t(`add a learner`)"></headerPage>
         <v-row dense>
           <v-col cols="12" sm>
-            <label-custom text="ผู้เรียน"></label-custom>
+            <label-custom :text="$t(`learner`)"></label-custom>
             <v-row dense>
               <v-col cols="12" sm="8">
                 <v-autocomplete
@@ -21,8 +21,8 @@
                   cache-items
                   :items="username_list"
                   :search-input.sync="search"
-                  placeholder="ค้นหา/โปรดเลือกผู้เรียน"
-                  label="ค้นหา"
+                  :placeholder="$t(`search/Please select a student`)"
+                  :label="$t(`search`)"
                   item-text="fullname"
                   item-value="userOneId"
                   outlined
@@ -33,7 +33,7 @@
                   <template v-slot:no-data>
                     <v-list-item>
                       <v-list-item-title>
-                        {{ search ? "ไม่พบข้อมูล" : "กรุณากรอกชื่อผู้เรียน" }}
+                        {{ search ? $t(`data not found`) : $t(`please enter the student's name`) }}
                       </v-list-item-title>
                     </v-list-item>
                   </template>
@@ -60,7 +60,7 @@
                 <label
                   class="primary--text cursor-pointer underline"
                   @click="changeDialogRegisterOneId(true)"
-                  >สมัคร One ID</label
+                  >{{ $t("sign up for One ID") }}</label
                 >
               </v-col>
             </v-row>
@@ -101,7 +101,7 @@
                         : "mdi-radiobox-blank"
                     }}</v-icon
                   >
-                  คอร์สทั่วไป</v-btn
+                  {{$t("general course")}}</v-btn
                 >
               </v-col>
               <!-- คอร์สระยะสั้น btn -->
@@ -117,21 +117,21 @@
                       ? "mdi-radiobox-marked"
                       : "mdi-radiobox-blank"
                   }}</v-icon>
-                  คอร์สระยะสั้น</v-btn
+                  {{$t("short course")}}</v-btn
                 >
               </v-col>
             </v-row>
             <!-- คอร์สทั่วไป detail -->
             <v-row dense>
               <v-col cols="12" sm="4">
-                <label-custom text="อาณาจักร"></label-custom>
+                <label-custom :text="$t(`kingdom`)"></label-custom>
                 <v-autocomplete
                   dense
                   item-value="categoryId"
                   item-text="categoryNameTh"
                   v-model="course.category_id"
                   :items="categorys"
-                  placeholder="เลือกอาณาจักร"
+                  :placeholder="$t(`select kingdom`)"
                   :rules="rules.category"
                   outlined
                   color="pink"
@@ -169,7 +169,7 @@
                 </v-autocomplete>
               </v-col>
               <v-col cols="12" sm="4">
-                <label-custom text="คอร์สเรียน"></label-custom>
+                <label-custom :text="$t(`course`)"></label-custom>
                 <v-autocomplete
                   dense
                   item-value="course_id"
@@ -177,7 +177,7 @@
                   v-model="course.course_id"
                   :items="course.course_options"
                   :rules="rules.course"
-                  placeholder="เลือกคอร์สเรียน"
+                  :placeholder="$t(`select course`)"
                   outlined
                   color="pink"
                   item-color="pink"
@@ -185,7 +185,7 @@
                 >
                   <template v-slot:no-data>
                     <v-list-item>
-                      <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
+                      <v-list-item-title> {{ $t("no data found") }} </v-list-item-title>
                     </v-list-item>
                   </template>
                   <template v-slot:item="{ item }">
@@ -490,7 +490,7 @@
             <!-- PRICE -->
             <v-row dense>
               <v-col cols="12" sm="4">
-                <label-custom text="ราคา"></label-custom>
+                <label-custom :text="$t(`price`)"></label-custom>
                 <v-text-field
                   dense
                   :rules="rules.price"
@@ -500,12 +500,12 @@
                   @keypress="Validation($event, 'number')"
                   type="number"
                   color="pink"
-                  suffix="บาท"
+                  :suffix="$t(`baht`)"
                 >
                 </v-text-field>
               </v-col>
               <v-col cols="12">
-                <label-custom text="หมายเหตุราคา"></label-custom>
+                <label-custom :text="$t(`price note`)"></label-custom>
                 <v-textarea
                   v-model="course.remark"
                   auto-grow
@@ -520,7 +520,7 @@
           <v-col align="center">
             <v-btn outlined class="" color="#ff6b81" @click="addCourse"
               ><span class="mdi mdi-plus-circle-outline"
-                >เพิ่มคอร์ส</span
+                >{{ $t("add a course") }}</span
               ></v-btn
             >
           </v-col>
@@ -579,7 +579,7 @@
                             ></v-img>
                           </v-avatar>
                         </v-col>
-                        <v-col> ชำระเงินเรียบร้อยแล้ว </v-col>
+                        <v-col> {{$t("already paid")}} </v-col>
                       </v-row>
                       <v-row dense v-if="order.payment_status === 'paid'">
                         <v-col cols="auto">
@@ -669,7 +669,7 @@
                         ></v-img>
                       </v-avatar>
                     </v-col>
-                    <v-col> ส่งแจ้งเตือนการชำระ </v-col>
+                    <v-col> {{$t("send payment notification")}} </v-col>
                   </v-row>
                 </v-card-text>
               </v-card>
@@ -685,7 +685,7 @@
               :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
               color="#ff6b81"
             >
-              ล้างข้อมูล
+              {{ $t("clear data") }}
             </v-btn>
           </v-col>
           <v-col align="right" sm="auto" cols="12">
@@ -697,7 +697,7 @@
               color="#ff6b81"
               @click="save()"
             >
-              ยืนยัน
+              {{$t("confirm")}}
             </v-btn>
           </v-col>
         </v-row>

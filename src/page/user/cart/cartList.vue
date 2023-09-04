@@ -137,7 +137,7 @@
             <v-checkbox hide-details color="pink" v-model="policy">
               <template v-slot:label>
                 {{ $t('accept') }}
-                <a class="mx-2 font-weight-bold">  {{ $t('terms of service and privacy policy') }} </a>
+                <a class="mx-2 font-weight-bold" @click="policy_show = true">  {{ $t('terms of service and privacy policy') }} </a>
                 <!-- และ
                 <a class="mx-2 font-weight-bold"
                   >นโยบายความคุ้มครองข้อมูลส่วนบุคคล</a
@@ -171,7 +171,6 @@
     </div>
     <v-dialog
       v-model="policy_show"
-      v-if="policy_show"
       persistent
       :width="$vuetify.breakpoint.smAndUp ? `60vw` : ''"
     >
