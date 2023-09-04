@@ -531,7 +531,7 @@
         <v-col>
           <v-checkbox color="pink" v-model="policy" class="inline-block">
             <template v-slot:label>
-              {{ $t('accept') }}<a class="mx-2 font-weight-bold">
+              {{ $t('accept') }}<a class="mx-2 font-weight-bold" @click="policy_show = true">
                 {{ $t('terms of service and privacy policy') }}
               </a>
             </template>
@@ -809,7 +809,6 @@
     <!-- policy -->
     <v-dialog
       v-model="policy_show"
-      v-if="policy_show"
       persistent
       :width="$vuetify.breakpoint.smAndUp ? `60vw` : ''"
     >
