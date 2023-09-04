@@ -3,7 +3,9 @@
     {{ setFunctions }}
     <loading-overlay :loading="student_is_loading"></loading-overlay>
     <div>
-      <label class="text-xl font-bold">ข้อมูลตารางเรียน</label>
+      <label class="text-xl font-bold">{{
+        $t("class schedule information")
+      }}</label>
       <v-row dense class="my-3">
         <v-col cols="4">
           <v-card
@@ -33,7 +35,7 @@
                     : ' text-[#B3B3B3]'
                 "
                 class="font-bold mr-2"
-                >คอร์สของฉัน</label
+                >{{ $t("mycourse") }}</label
               >
             </v-card-text>
           </v-card>
@@ -66,7 +68,7 @@
                     : ' text-[#B3B3B3]'
                 "
                 class="font-bold mr-2"
-                >ตารางเรียน</label
+                >{{ $t("study schedule") }}</label
               >
             </v-card-text>
           </v-card>
@@ -97,7 +99,7 @@
                     : ' text-[#B3B3B3]'
                 "
                 class="font-bold mr-2"
-                >คอร์สที่จอง</label
+                >{{ $t("booked course") }}</label
               >
             </v-card-text>
           </v-card>
@@ -120,7 +122,7 @@
                   filled
                   hide-details
                   clearable
-                  label="เลือกนักเรียนของคุณได้ที่นี้"
+                  :label="$t('select your students here')"
                   @change="searchStudentCourse(search_course_detail)"
                 ></v-autocomplete>
               </v-col>
@@ -156,22 +158,35 @@
                       <v-row dense>
                         <v-col class="text-lg font-bold">
                           {{
-                            item.courseNameTh == "" ? "-" : item.courseNameTh
+                            $i18n.locale == "th"
+                              ? item.courseNameTh
+                              : item.courseNameEng
                           }}
-                          ({{
-                            item.courseNameEng == "" ? "-" : item.courseNameEng
-                          }})
                         </v-col>
                       </v-row>
                       <v-row dense>
                         <v-col class="text-slate-400">
-                          <span class="mdi mdi-account">โค้ช :</span>
+                          <span class="mdi mdi-account"
+                            >{{ $t("coach") }} :</span
+                          >
                           {{ item.coachName == null ? "-" : item.coachName }}
                         </v-col>
                       </v-row>
                       <v-row dense>
                         <v-col class="text-slate-400">
-                          <span class="mdi mdi-account">ผู้เรียน :</span>
+                          <span class="mdi mdi-account"
+                            >{{ $t("learner") }} :</span
+                          >
+                          <!-- {{
+                            $i18n.locale == "th"
+                              ? item.student.firstNameTh
+                              : item.student.firstNameEng
+                          }}
+                           {{
+                            $i18n.locale == "th"
+                              ? item.student.lastNameTh
+                              : item.student.lastNameEng
+                          }} -->
                           {{
                             !item.student.firstNameTh
                               ? "-"
@@ -186,7 +201,9 @@
                       </v-row>
                       <v-row dense>
                         <v-col class="text-slate-400">
-                          <span class="mdi mdi-account">ทำรายการโดย :</span>
+                          <span class="mdi mdi-account"
+                            >{{ $t("listed by") }} :</span
+                          >
                           {{
                             !item.createdBy ? "-" : item.createdBy.firstNameTh
                           }}
@@ -199,7 +216,9 @@
                         <v-col>
                           <v-chip color="#F9B320" dark>
                             {{
-                              `${item.day_name} ${item.period.start} - ${item.period.end}น.`
+                              `${item.day_name} ${item.period.start} - ${
+                                item.period.end
+                              } ${$t("o'clock")}`
                             }}
                           </v-chip>
                         </v-col>
@@ -220,7 +239,7 @@
                         color="#ff6b81"
                       >
                         {{ item.dates.count }} / {{ item.dates.totalDay }}
-                        <br />ครั้ง
+                        <br />{{ $t("time") }}
                       </v-progress-circular>
                     </v-col>
                   </v-row>
@@ -236,7 +255,7 @@
               >
                 <span class="text-lg font-bold">
                   <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                  ไม่พบข้อมูลคอร์สเรียน
+                  {{ $t("course information not found") }}
                 </span>
               </v-card-text>
             </v-card>
@@ -273,21 +292,28 @@
                   <v-col cols="12" sm="3">
                     <v-row dense>
                       <v-col class="text-lg font-bold">
-                        {{ item.courseNameTh == "" ? "-" : item.courseNameTh }}
+                        {{
+                          $i18n.locale == "th"
+                            ? item.courseNameTh
+                            : item.courseNameEng
+                        }}
+                        <!-- {{ item.courseNameTh == "" ? "-" : item.courseNameTh }}
                         ({{
                           item.courseNameEng == "" ? "-" : item.courseNameEng
-                        }})
+                        }}) -->
                       </v-col>
                     </v-row>
                     <v-row dense>
                       <v-col class="text-slate-400">
-                        <span class="mdi mdi-account">โค้ช :</span>
+                        <span class="mdi mdi-account">{{ $t("coach") }} :</span>
                         {{ item.coachName == null ? "-" : item.coachName }}
                       </v-col>
                     </v-row>
                     <v-row dense>
                       <v-col class="text-slate-400">
-                        <span class="mdi mdi-account">ผู้เรียน :</span>
+                        <span class="mdi mdi-account"
+                          >{{ $t("learner") }} :</span
+                        >
                         {{
                           !item.student.firstNameTh
                             ? "-"
@@ -302,7 +328,9 @@
                     </v-row>
                     <v-row dense>
                       <v-col class="text-slate-400">
-                        <span class="mdi mdi-account">ทำรายการโดย :</span>
+                        <span class="mdi mdi-account"
+                          >{{ $t("listed by") }} :</span
+                        >
 
                         {{ !item.createdBy ? "-" : item.createdBy.firstNameTh }}
                         {{ !item.createdBy ? "-" : item.createdBy.lastNameTh }}
@@ -312,7 +340,9 @@
                       <v-col>
                         <v-chip color="#F9B320" dark>
                           {{
-                            `${item.day_name} ${item.period.start} - ${item.period.end}น.`
+                            `${item.day_name} ${item.period.start} - ${
+                              item.period.end
+                            } ${$t("o'clock")}`
                           }}
                         </v-chip>
                       </v-col>
@@ -332,7 +362,7 @@
                       color="#ff6b81"
                     >
                       {{ item.dates.count }} / {{ item.dates.totalDay }}
-                      <br />ครั้ง
+                      <br />{{ $t("time") }}
                     </v-progress-circular>
                   </v-col>
                 </v-row>
@@ -352,13 +382,17 @@
                 <v-autocomplete
                   v-model="search_course"
                   :items="students"
-                  item-text="studentFirstnameTh"
+                  :item-text="
+                    $i18n.locale == 'th'
+                      ? 'studentFirstnameTh'
+                      : 'studentFirstnameEn'
+                  "
                   item-value="studentId"
                   dense
                   filled
                   clearable
                   hide-details
-                  label="เลือกนักเรียนของคุณได้ที่นี้"
+                  :label="$t('select your students here')"
                   @change="searchStudentCourse(search_course)"
                 ></v-autocomplete>
               </v-col>
@@ -451,7 +485,7 @@
                   dense
                   filled
                   hide-details
-                  label="เลือกนักเรียนของคุณได้ที่นี้"
+                  :label="$t('select your students here')"
                   @change="searchStudentBooked(search_booked)"
                 ></v-autocomplete>
               </v-col>
@@ -462,7 +496,7 @@
             >
               <span class="text-lg font-bold">
                 <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                ไม่พบข้อมูลการจอง
+                {{ $t("booking information not found") }}
               </span>
             </v-card-text>
             <div v-if="ReserveList().length > 0">
@@ -489,6 +523,11 @@
                       <v-col cols="12" sm="6">
                         <v-col class="text-lg font-bold">
                           {{
+                            $i18n.locale == "th"
+                              ? item_booked.courseNameTh
+                              : item_booked.courseNameEn
+                          }}
+                          <!-- {{
                             item_booked.courseNameTh == ""
                               ? "-"
                               : item_booked.courseNameTh
@@ -497,10 +536,12 @@
                             item_booked.courseNameEn == ""
                               ? "-"
                               : item_booked.courseNameEn
-                          }})
+                          }}) -->
                         </v-col>
                         <v-col class="text-slate-400">
-                          <span class="mdi mdi-account">โค้ช :</span>
+                          <span class="mdi mdi-account"
+                            >{{ $t("coach") }} :</span
+                          >
                           {{
                             !item_booked.coachData.data.data.firstNameTh
                               ? "-"
@@ -513,7 +554,9 @@
                           }}
                         </v-col>
                         <v-col class="text-slate-400">
-                          <span class="mdi mdi-account">ผู้เรียน :</span>
+                          <span class="mdi mdi-account"
+                            >{{ $t("learner") }} :</span
+                          >
                           {{
                             !item_booked.StudentData.data.data.firstNameTh
                               ? "-"
@@ -527,7 +570,9 @@
                         </v-col>
 
                         <v-col class="text-slate-400">
-                          <span class="mdi mdi-account">ทำรายการโดย :</span>
+                          <span class="mdi mdi-account"
+                            >{{ $t("listed by") }} :</span
+                          >
 
                           {{
                             !item_booked.createdByData.data.data.firstNameTh
@@ -544,7 +589,8 @@
                         <v-col>
                           <v-chip color="#F9B320" dark>
                             {{ item_booked.day_name }}
-                            {{ item_booked.start }} - {{ item_booked.end }} น.
+                            {{ item_booked.start }} - {{ item_booked.end }}
+                            {{ $t("o'clock") }}
                           </v-chip>
                         </v-col>
 
@@ -565,12 +611,28 @@
                       >
                         <v-row>
                           <v-col>
-                            <v-chip :color="item_booked.status === 'contacted' ? '#d9ead3' : item_booked.status === 'waiting' ? '#FDFBE5': '#FAD0CF'"  
-                            :text-color="item_booked.status === 'contacted'? 'green' :item_booked.status === 'waiting'? 'yellow' : 'red'">
+                            <v-chip
+                              :color="
+                                item_booked.status === 'contacted'
+                                  ? '#d9ead3'
+                                  : item_booked.status === 'waiting'
+                                  ? '#FDFBE5'
+                                  : '#FAD0CF'
+                              "
+                              :text-color="
+                                item_booked.status === 'contacted'
+                                  ? 'green'
+                                  : item_booked.status === 'waiting'
+                                  ? 'yellow'
+                                  : 'red'
+                              "
+                            >
                               <span>{{
                                 item_booked.status === "waiting"
-                                  ? "รอการติดต่อ" 
-                                  : item_booked.status === 'contacted' ? 'ติดต่อแล้ว' : 'ยกเลิกการจอง'
+                                  ? $t("waiting for contact")
+                                  : item_booked.status === "contacted"
+                                  ? $t("contacted")
+                                  : $t("cancel reservation")
                               }}</span>
                             </v-chip>
                           </v-col>
@@ -607,7 +669,7 @@
                             class="mdi mdi-clock-outline"
                             style="color: #ff6b81"
                           ></span>
-                          {{ course_data.course_hours }} ชม. / ครั้ง
+                          {{ course_data.course_hours }} {{ $t("hrs./time") }}
                         </v-col>
 
                         <v-col cols="12" md="12" sm="12" class="text-lg">
@@ -648,7 +710,7 @@
             >
               <span class="text-lg font-bold">
                 <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                ไม่พบข้อมูลการจอง
+                {{ $t("booking information not found") }}
               </span>
             </v-card-text>
             <div v-else>
@@ -675,6 +737,11 @@
                       <v-col cols="12" sm="6">
                         <v-col class="text-lg font-bold">
                           {{
+                            $i18n.locale == "th"
+                              ? item_booked.courseNameTh
+                              : item_booked.courseNameEn
+                          }}
+                          <!-- {{
                             item_booked.courseNameTh == ""
                               ? "-"
                               : item_booked.courseNameTh
@@ -683,10 +750,12 @@
                             item_booked.courseNameEn == ""
                               ? "-"
                               : item_booked.courseNameEn
-                          }})
+                          }}) -->
                         </v-col>
                         <v-col class="text-slate-400">
-                          <span class="mdi mdi-account">โค้ช :</span>
+                          <span class="mdi mdi-account"
+                            >{{ $t("coach") }} :</span
+                          >
                           {{
                             !item_booked.coachData.data.data.firstNameTh
                               ? "-"
@@ -699,7 +768,9 @@
                           }}
                         </v-col>
                         <v-col class="text-slate-400">
-                          <span class="mdi mdi-account">ผู้เรียน :</span>
+                          <span class="mdi mdi-account"
+                            >{{ $t("learner") }} :</span
+                          >
                           {{
                             !item_booked.StudentData.data.data.firstNameTh
                               ? "-"
@@ -713,7 +784,9 @@
                         </v-col>
 
                         <v-col class="text-slate-400">
-                          <span class="mdi mdi-account">ทำรายการโดย :</span>
+                          <span class="mdi mdi-account"
+                            >{{ $t("listed by") }} :</span
+                          >
 
                           {{
                             !item_booked.createdByData.data.data.firstNameTh
@@ -730,7 +803,7 @@
                         <v-col>
                           <v-chip color="#F9B320" dark>
                             {{ item_booked.day_name }} {{ item_booked.start }} -
-                            {{ item_booked.end }} น.
+                            {{ item_booked.end }} {{ $t("o'clock") }}
                           </v-chip>
                         </v-col>
                       </v-col>
@@ -743,13 +816,28 @@
                       >
                         <v-row>
                           <v-col>
-                            <v-chip :color="item_booked.status === 'contacted' ? '#d9ead3' : item_booked.status === 'waiting' ? '#FDFBE5': '#FAD0CF'" 
-                              :text-color="item_booked.status === 'contacted'? 'green' :item_booked.status === 'waiting'? 'yellow' : 'red'"
+                            <v-chip
+                              :color="
+                                item_booked.status === 'contacted'
+                                  ? '#d9ead3'
+                                  : item_booked.status === 'waiting'
+                                  ? '#FDFBE5'
+                                  : '#FAD0CF'
+                              "
+                              :text-color="
+                                item_booked.status === 'contacted'
+                                  ? 'green'
+                                  : item_booked.status === 'waiting'
+                                  ? 'yellow'
+                                  : 'red'
+                              "
                             >
                               <span>{{
                                 item_booked.status === "waiting"
-                                  ? "รอการติดต่อ"
-                                  : item_booked.status === 'contacted' ? 'ติดต่อแล้ว' : 'ยกเลิกการจอง'
+                                  ? $t("waiting for contact")
+                                  : item_booked.status === "contacted"
+                                  ? $t("contacted")
+                                  : $t("cancel reservation")
                               }}</span>
                             </v-chip>
                           </v-col>
@@ -786,7 +874,7 @@
                             class="mdi mdi-clock-outline"
                             style="color: #ff6b81"
                           ></span>
-                          {{ course_data.course_hours }} ชม. / ครั้ง
+                          {{ course_data.course_hours }} {{ $t("hrs./time") }}
                         </v-col>
 
                         <v-col cols="12" md="12" sm="12" class="text-lg">
@@ -853,11 +941,6 @@ export default {
       { name: "ตารางเรียน", value: "MySchedule" },
       { name: "คอร์สที่จอง", value: "MyBooking" },
     ],
-    time_frame_list: [
-      { label: "รายวัน", value: "day" },
-      { label: "รายสัปดาห์", value: "week" },
-      { label: "รายเดือน", value: "month" },
-    ],
     tasks: [],
     data_search_course: [],
     search_course: "",
@@ -902,7 +985,7 @@ export default {
   beforeUpdate() {
     this.$store.dispatch(
       "NavberUserModules/changeTitleNavber",
-      "ข้อมูลตารางเรียน"
+      "class schedule information"
     );
   },
   methods: {
@@ -1033,6 +1116,14 @@ export default {
 
     cal() {
       return this.ready ? this.$refs.calendar : null;
+    },
+
+    time_frame_list() {
+      return [
+        { label: this.$t("daily"), value: "day" },
+        { label: this.$t("weekly"), value: "week" },
+        { label: this.$t("monthly"), value: "month" },
+      ];
     },
   },
 };

@@ -5,6 +5,7 @@
     "add a comment" : "Add a comment",
     "additional comments" : "Additional comments",
     "add a holiday" : "Add a holiday",
+   "add student information in charge":"Add student information in charge",
     "accept" : "Accept",
     "admin page" : "Admin page",
     "admission date" : "Admission date",
@@ -26,10 +27,13 @@
 
     "baht" : "Baht",
     "by": "By",
+    "booked course": "Booked course",
+    "booking information not found": "Booking information not found",
 
     "can't find items in the basket" : "Can't find items in the basket",
     "can't find teaching summaries" : "Can't find teaching summaries",
     "cancel" : "Cancel",
+    "cancel reservation": "Cancel reservation",
     "cart" : "Cart",
     "clear":"Clear",
     "can't find full course information" :"Can't find full course information",
@@ -47,6 +51,7 @@
     "confirm" : "Confirm",
     "confirm new password" : "Confirm new password",
     "confirm password is incorrect" : "Confirm password is incorrect",
+    "contacted": "Contacted",
     "compensation date" : "Compensation date",
     "contact us at" : "Contact us at",
     "course" : "Course",
@@ -63,12 +68,16 @@
     "choice": "Choice",
     "course schedule": "Course schedule",
     "coach information not foun": "Coach information not foun",
+    "competition": "competition",
+    "competitions and certificates":"Competitions and certificates",
+    "class schedule information":"Class schedule information",
 
     "daily" : "Daily",
     "date" : "Date",
     "delete holiday": "Delete holiday",
     "date and time" : "Date and time",
     "delete item" : "Delete item",
+    "delete parent data": "Delete parent data",
     "details" : "Details",
     "development / homework" : "Development / homework",
     "developmental level" : "Developmental level",
@@ -98,6 +107,7 @@
     "find the learning kingdom that interests you here" : "Find the learning kingdom that interests you here",
     "first name" : "First name",
     "first name(english)" : "First name(english)",
+    "first name(thai)" : "First name(thai)",
     "full" : "Full",
     "full course" : "Full course",
     "full courses" : "Full courses",
@@ -106,15 +116,15 @@
     "filter":"Filter",
 
     "graduating students": "Graduat Students",
+    "general": "General",
     "general course" : "General course",
-
-
     "go to my course page" : "Go to my course page",
 
     "have a substitute teacher" : "Have a substitute teacher",
     "hello" : "Hello",
     "hour" : "Hour",
     "hrs." : "Hrs.",
+    "hrs./time": "Hrs./time",
     "holiday":"Holiday",
     "holiday name":"Holiday name",
 
@@ -129,9 +139,12 @@
     "kingdom" : "Kingdom",
     "kingdom not found" : "Kingdom not found",
 
+
+    "language" : "Language",
     "late" : "Late",
     "last name" : "Last name",
     "last name(english)" :"Last name(English)",
+    "last name(thai)" :"Last name(thai)",
     "leave" : "Leave",
     "leave date" : "Leave date",
     "leave information not found" : "Leave information not found",
@@ -150,11 +163,15 @@
     "management":"Management",
     "monthly" : "Monthly",
     "morning" : "Morning",
+    "my course": "My course",
+    "mycourse": "My course",
     "my teaching" : "My teaching",
     "my teaching information" : "My teaching information",
     "manage tables" : "Manage tables",
 
 
+
+    "nationality": "Nationality",
     "new password":"New password",
     "no." : "No.",
     "no data found" : "No data found",
@@ -177,6 +194,8 @@
     "page not found" : "Page not found",
     "paid":"Paid",
     "parent" : "Parent",
+    "parent information" : "Parent information",
+    "parent information not found":"Parent information not found",
     "password" : "Password",
     "passwords do not match" : "Passwords do not match",
     "pay again" : "Pay again", 
@@ -205,6 +224,8 @@
     "proceed to payment" : "Proceed to payment",
     "punctual" : "Punctual",
     "please select at least 1 day before the holiday":"Please select at least 1 day before the holiday",
+    "port":"Portfolio",
+    "policy":"Policy",
 
     "reason for leave" : "Reason for leave",
     "read more":"Read more",
@@ -224,6 +245,7 @@
     "seat" : "Seat",
     "see more" : "See more",
     "select teaching information" : "Select teaching information",
+    "select your students here": "Select your students here",
     "sent a password change link to" : "Sent a password change link to",
     "show student list" : "Show student list",
     "sick" : "Sick",
@@ -237,6 +259,8 @@
     "student assessment data not found" : "Student assessment data not found",
     "student list" : "Student list",
     "students complete the course" : "Students complete the course",
+    "student information":"Student information",
+   "student information not found": "Student information not found",
     "study date" : "Study date",
     "study notifications":"Study notifications",
     "study schedule":"Study schedule",
@@ -245,6 +269,7 @@
     "success" : "Success",
     "succeed":"Succeed",
    "students reserve a course": "Students reserve", 
+   "student information in charge":"Student information in charge",
    "short course": "Short course",
    "search full course name here": "Search full course name here",
    "search available course name here": "Search available course name here", 
@@ -291,6 +316,8 @@
     "view special rights" : "View special rights",
     "view details": "View details",
     "view student details": "View student details",
+    "view personal information" : "View personal information",
+
 
 
     "waiting for approval" : "Waiting for approval",
@@ -300,6 +327,7 @@
     "want to delete this item?" : "Want to delete this item?",
     "warning" : "Warning",
     "weekly" : "Weekly",
+    "waiting for contact": "Waiting for contact",
 
     "z":"z"
 }

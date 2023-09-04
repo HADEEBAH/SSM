@@ -16,7 +16,16 @@
       </v-col>
     </v-row>
     <div class="text-center text-xl font-bold">
-      {{ profile_detail.firstNameTh }} {{ profile_detail.lastNameTh }}
+      {{
+        $i18n.locale == "th"
+          ? profile_detail.firstNameTh
+          : profile_detail.firstNameEng
+      }}
+      {{
+        $i18n.locale == "th"
+          ? profile_detail.lastNameTh
+          : profile_detail.lastNameEng
+      }}
     </div>
     <div class="my-3 text-center">
       <v-btn
@@ -25,13 +34,13 @@
         class="white--text rounded-xl"
         @click="show_detail()"
       >
-        ดูข้อมูลส่วนตัว
+        {{ $t("view personal information") }}
       </v-btn>
     </div>
     <!-- ROLE STUDENT คอร์สเรียน-->
     <div v-if="profile_detail?.userRoles?.roleId === 'R_5'">
       <div class="mt-8">
-        <label-custom text="คอร์สเรียน"></label-custom>
+        <label-custom :text="$t('course')"></label-custom>
       </div>
       <v-divider class="mb-3"></v-divider>
       <!-- COURSE -->
@@ -48,7 +57,7 @@
         <v-col cols="2" sm="1">
           <v-icon class="pa-2" color="#ff6b81">mdi-book-account-outline</v-icon>
         </v-col>
-        <v-col cols="5" sm="6"> พอร์ตโฟลิโอ </v-col>
+        <v-col cols="5" sm="6"> {{ $t("port") }} </v-col>
       </v-row>
       <v-row
         dense
@@ -64,12 +73,12 @@
           <v-icon class="pa-2" color="#ff6b81">mdi-school-outline</v-icon>
         </v-col>
         <v-col cols="5" sm="6" align="left" class="mt-1" align-self="center">
-          <label>คอร์สเรียนของฉัน</label>
+          <label>{{ $t("my course") }}</label>
         </v-col>
         <v-col cols="3" sm="4" align="right" class="mt-1">
           <label class="pink--text">
             {{ student_course.length }}
-            คอร์ส</label
+            {{ $t("courses") }}</label
           >
         </v-col>
         <v-col cols="2" sm="1" align="right" class="mt-2">
@@ -94,11 +103,12 @@
           >
         </v-col>
         <v-col cols="5" sm="6" align="left" class="mt-1" align-self="center">
-          การแข่งขันและเกียรติบัตร
+          {{ $t("competitions and certificates") }}
         </v-col>
         <v-col cols="3" sm="4" align="right" class="mt-1">
           <label class="pink--text"
-            >{{ certificate_count.countCertificate }} การแข่ง</label
+            >{{ certificate_count.countCertificate }}
+            {{ $t("competition") }}</label
           >
         </v-col>
         <v-col cols="2" sm="1" align="right" class="mt-2">
@@ -111,11 +121,12 @@
     <div v-if="profile_detail?.userRoles?.roleId === 'R_5'">
       <v-row class="mb-1">
         <v-col align="start" class="d-flex align-center">
-          <label-custom text="ข้อมูลผู้ปกครอง"></label-custom>
+          <label-custom :text="$t('parent information')"></label-custom>
         </v-col>
         <v-col cols="auto" align="end">
           <v-btn dense outlined color="#ff6b81" @click="openAddRelationDialog">
-            <v-icon>mdi-plus-circle-outline</v-icon>เพิ่มข้อมูลผู้ปกครอง</v-btn
+            <v-icon>mdi-plus-circle-outline</v-icon
+            >{{ $t("add parent information") }}</v-btn
           >
         </v-col>
       </v-row>
@@ -150,20 +161,31 @@
               <!-- col name -->
               <v-col cols="8" sm="10" class="d-flex align-center pa-3">
                 <v-row dense>
-                  <v-col cols="6" sm="4"
-                    >{{
+                  <v-col cols="6" sm="4">
+                    {{
+                      $i18n.locale == "th"
+                        ? profile.parent.parentFirstnameTh
+                        : profile.parent.parentFirstnameEn
+                    }}
+                    <!-- {{
                       !profile.parent.parentFirstnameTh
                         ? "-"
                         : profile.parent.parentFirstnameTh
-                    }}
+                    }} -->
                   </v-col>
                   <v-col cols="6" sm="4">
                     {{
+                      $i18n.locale == "th"
+                        ? profile.parent.parentLastnameTh
+                        : profile.parent.parentLastnameEn
+                    }}
+
+                    <!-- {{
                       !profile.parent.parentLastnameTh
                         ? "-"
                         : profile.parent.parentLastnameTh
-                    }}</v-col
-                  >
+                    }} -->
+                  </v-col>
                   <v-col class="text-slate-400">{{
                     !profile.parent.parentTel ? "-" : profile.parent.parentTel
                   }}</v-col>
@@ -182,7 +204,7 @@
           <v-card-text class="text-center border-2 border-[#ff6b81] rounded-lg">
             <span class="text-lg font-bold">
               <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-              ไม่พบข้อมูลของผู้ปกครอง
+              {{ $t("parent information not found") }}
             </span>
           </v-card-text>
         </v-card>
@@ -202,7 +224,7 @@
     <!-- ROLE ALL ทั่วไป -->
     <div class="mb-3">
       <div class="mt-8">
-        <label-custom text="ทั่วไป"></label-custom>
+        <label-custom :text="$t('general')"></label-custom>
       </div>
       <v-divider class=""></v-divider>
       <!-- password -->
@@ -211,7 +233,7 @@
           <v-icon class="pa-2" color="#ff6b81">mdi-lock-outline</v-icon>
         </v-col>
         <v-col cols="8" sm="9" align="left" class="mt-1">
-          <label>รหัสผ่าน</label>
+          <label>{{ $t("password") }}</label>
         </v-col>
 
         <v-col cols="2" sm="2" align="right">
@@ -224,7 +246,7 @@
           <v-icon class="pa-2" color="#ff6b81">mdi mdi-earth</v-icon>
         </v-col>
         <v-col cols="8" sm="9" align="left" class="mt-1">
-          <label>ภาษา</label>
+          <label>{{ $t("language") }}</label>
         </v-col>
 
         <v-col cols="2" sm="2" align="right">
@@ -236,12 +258,14 @@
     <div v-if="profile_detail?.userRoles?.roleId === 'R_4'">
       <v-row class="mb-1">
         <v-col align="start" class="d-flex align-center">
-          <label-custom text="ข้อมูลนักเรียนในความดูแล"></label-custom>
+          <label-custom
+            :text="$t('student information in charge')"
+          ></label-custom>
         </v-col>
         <v-col cols="auto" align="end">
           <v-btn dense outlined color="#ff6b81" @click="openAddRelationDialog">
-            <v-icon>mdi-plus-circle-outline</v-icon
-            >เพิ่มข้อมูลนักเรียนในความดูแล</v-btn
+            <v-icon>mdi-plus-circle-outline</v-icon>
+            {{ $t("add student information in charge") }}</v-btn
           >
         </v-col>
       </v-row>
@@ -277,22 +301,33 @@
             <v-col cols="12" sm="10" class="d-flex align-center pa-3">
               <v-row dense>
                 <v-col cols="4">
-                  {{
+                  <!-- {{
                     !profile.student.studentFirstnameTh
                       ? "-"
                       : profile.student.studentFirstnameTh
+                  }} -->
+
+                  {{
+                    $i18n.locale == "th"
+                      ? profile.student.parentFirstnameTh
+                      : profile.student.parentFirstnameEn
                   }}
                 </v-col>
                 <v-col cols="4">
-                  {{
+                  <!-- {{
                     !profile.student.studentLastnameTh
                       ? "-"
                       : profile.student.studentLastnameTh
+                  }} -->
+                  {{
+                    $i18n.locale == "th"
+                      ? profile.student.studentLastnameTh
+                      : profile.student.studentLastnameEn
                   }}
                 </v-col>
                 <v-col class="pink--text">
                   {{ profile.student.course }}
-                  คอร์ส
+                  {{ $t("corse") }}
                 </v-col>
 
                 <!-- col arrow -->
@@ -309,7 +344,7 @@
           <v-card-text class="text-center border-2 border-[#ff6b81] rounded-lg">
             <span class="text-lg font-bold">
               <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-              ไม่พบข้อมูลของนักเรียน
+              {{ $t("student information not found") }}
             </span>
           </v-card-text>
         </v-card>
@@ -317,7 +352,7 @@
     </div>
     <!-- ROLE ALL -->
     <div class="mt-8">
-      <label-custom text="นโยบาย"></label-custom>
+      <label-custom :text="$t('policy')"></label-custom>
     </div>
     <v-divider class=""></v-divider>
     <v-row dense class="mt-3 cursor-pointer" @click="show_rules()">
@@ -325,7 +360,7 @@
         <v-icon class="pa-2" color="#ff6b81">mdi-file-document-outline</v-icon>
       </v-col>
       <v-col cols="8" sm="9" align="left" class="mt-1" align-self="center">
-        <label>เงื่อนไขการใช้บริการและนโยบายการคุ้มครองข้อมูลส่วนบุคคล</label>
+        <label>{{ $t("terms of service and privacy policy") }}</label>
       </v-col>
 
       <v-col cols="2" sm="2" align="right">
@@ -340,7 +375,7 @@
         class="white--text rounded-lg drop-shadow-lg"
         @click="logOut"
       >
-        ออกจากระบบ
+        {{ $t("logout") }}
       </v-btn>
     </div>
     <!-- PARENT DIALOG  -->
@@ -354,7 +389,9 @@
       <v-card>
         <v-card-title>
           <v-row>
-            <v-col cols="6" align="left"> ข้อมูลผู้ปกครอง </v-col>
+            <v-col cols="6" align="left">
+              {{ $t("parent information") }}
+            </v-col>
             <v-col cols="6" align="right">
               <v-btn icon @click="closeDialog">
                 <v-icon color="#ff6b81">mdi-close</v-icon>
@@ -390,27 +427,39 @@
           <v-row dense>
             <!--TH NAME -->
             <v-col cols="12" sm="6">
-              <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
+              <label-custom :text="$t('first name(thai)')"></label-custom>
               <br />
               {{
+                $i18n.locale == "th"
+                  ? getParentDataDialog.parentFirstnameTh
+                  : getParentDataDialog.parentFirstnameEn
+              }}
+
+              <!-- {{
                 !getParentDataDialog.parentFirstnameTh
                   ? "-"
                   : getParentDataDialog.parentFirstnameTh
-              }}
+              }} -->
             </v-col>
             <!-- TH LNAME -->
             <v-col cols="12" sm="6">
-              <label-custom text="นามสกุล (ภาษาไทย)"></label-custom>
+              <label-custom :text="$t('last name(thai)')"></label-custom>
               <br />
               {{
+                $i18n.locale == "th"
+                  ? getParentDataDialog.parentLastnameTh
+                  : getParentDataDialog.parentLastnameEn
+              }}
+
+              <!-- {{
                 !getParentDataDialog.parentLastnameTh
                   ? "-"
                   : getParentDataDialog.parentLastnameTh
-              }}
+              }} -->
             </v-col>
             <!-- nationality -->
             <v-col cols="12" sm="6">
-              <label-custom text="สัญชาติ"></label-custom>
+              <label-custom :text="$t('nationality')"></label-custom>
               <br />
               {{
                 !getParentDataDialog.parentNation
@@ -420,7 +469,7 @@
             </v-col>
             <!-- tel -->
             <v-col cols="12" sm="6">
-              <label-custom text="เบอร์โทรศัพท์"></label-custom>
+              <label-custom :text="$t('phone number')"></label-custom>
               <br />
               {{
                 !getParentDataDialog.parentTel
@@ -430,7 +479,7 @@
             </v-col>
             <!-- email -->
             <v-col cols="12" sm="6">
-              <label-custom text="อีเมล"></label-custom>
+              <label-custom :text="$t('email')"></label-custom>
               <br />
               {{
                 !getParentDataDialog.parentEmail
@@ -446,7 +495,7 @@
                 color="#FF6B81"
                 @click="removeRelation(getParentDataDialog)"
               >
-                ลบข้อมูลผู้ปกครอง
+                {{ $t("delete parent data") }}
               </v-btn>
             </v-col>
           </v-row>
@@ -465,7 +514,9 @@
       <v-card>
         <v-card-title>
           <v-row>
-            <v-col cols="6" align="left"> ข้อมูลนักเรียน </v-col>
+            <v-col cols="6" align="left">
+              {{ $t("student information") }}
+            </v-col>
             <v-col cols="6" align="right">
               <v-btn icon @click="closeDialog">
                 <v-icon color="#ff6b81">mdi-close</v-icon>
@@ -490,27 +541,38 @@
           <v-row dense>
             <!--TH NAME -->
             <v-col cols="12" sm="6">
-              <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
+              <label-custom :text="$t('first name(thai)')"></label-custom>
               <br />
               {{
+                i18n.locale == "th"
+                  ? dialogGetStudentData.studentFirstnameTh
+                  : dialogGetStudentData.studentFirstnameEn
+              }}
+              <!-- {{
                 !dialogGetStudentData.studentFirstnameTh
                   ? "-"
                   : dialogGetStudentData.studentFirstnameTh
-              }}
+              }} -->
             </v-col>
             <!-- TH LNAME -->
             <v-col cols="12" sm="6">
-              <label-custom text="นามสกุล (ภาษาไทย)"></label-custom>
+              <label-custom :text="$t('last name(thai)')"></label-custom>
               <br />
               {{
+                i18n.locale == "th"
+                  ? dialogGetStudentData.studentLastnameTh
+                  : dialogGetStudentData.studentLastnameEn
+              }}
+
+              <!-- {{
                 !dialogGetStudentData.studentLastnameTh
                   ? "-"
                   : dialogGetStudentData.studentLastnameTh
-              }}
+              }} -->
             </v-col>
             <!-- nationality -->
             <v-col cols="12" sm="6">
-              <label-custom text="สัญชาติ"></label-custom>
+              <label-custom :text="$t('nationality')"></label-custom>
               <br />
               {{
                 !dialogGetStudentData.studentNation
@@ -520,7 +582,7 @@
             </v-col>
             <!-- tel -->
             <v-col cols="12" sm="6">
-              <label-custom text="เบอร์โทรศัพท์"></label-custom>
+              <label-custom :text="$t('phone number')"></label-custom>
               <br />
               {{
                 !dialogGetStudentData.studentTel
@@ -530,7 +592,7 @@
             </v-col>
             <!-- email -->
             <v-col cols="12" sm="6">
-              <label-custom text="อีเมล"></label-custom>
+              <label-custom :text="$t('email')"></label-custom>
               <br />
               {{
                 !dialogGetStudentData.studentEmail
@@ -541,7 +603,7 @@
           </v-row>
 
           <div class="mt-8">
-            <label-custom text="คอร์สเรียน"></label-custom>
+            <label-custom :text="$t('course')"></label-custom>
           </div>
           <v-divider class=""></v-divider>
 
@@ -561,7 +623,7 @@
                 >mdi-book-account-outline</v-icon
               >
             </v-col>
-            <v-col cols="5" sm="6"> พอร์ตโฟลิโอ</v-col>
+            <v-col cols="5" sm="6"> {{ $t("port") }}</v-col>
           </v-row>
           <v-row
             dense
@@ -712,13 +774,13 @@
             </v-row>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom text="เบอร์โทรศัพท์"></labelCustom>
+                <labelCustom :text="$t('phone number')"></labelCustom>
                 <v-text-field
                   disabled
                   dense
                   outlined
                   v-model="relation_user.tel"
-                  placeholder="เบอร์โทรศัพท์"
+                  :placeholder="$t('phone number')"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -853,7 +915,7 @@ export default {
     this.GetStudentCourse(this.user_login.account_id);
   },
   mounted() {
-    this.$store.dispatch("NavberUserModules/changeTitleNavber", "โปรไฟล์");
+    this.$store.dispatch("NavberUserModules/changeTitleNavber", "profile");
     this.GetCertificateCount({ account_id: this.user_login.account_id });
   },
 
