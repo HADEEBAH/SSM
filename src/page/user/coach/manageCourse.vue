@@ -187,7 +187,7 @@
       <v-row>
         <v-col cols="auto"> {{ $t("my teaching information") }} : </v-col>
         <v-col class="font-bold">
-          {{ profile_detail.firstNameTh }}
+          {{ $i18n.locale == 'th' ? profile_detail.firstNameTh : profile_detail.firstNameEng }}
         </v-col>
       </v-row>
       <v-row dense>
@@ -372,7 +372,7 @@
                 <v-card-text>
                   <v-row dense>
                     <v-col cols="12" sm class="text-lg font-bold">
-                      {{ index + 1 }} . {{ student.fullname }}</v-col
+                      {{ index + 1 }} . {{ $i18n.locale == "th" ? student.fullname  : student.fullname_en}}</v-col
                     >
                     <v-col cols="12" sm="auto">
                       <v-row dense class="d-flex aling-center">
@@ -930,7 +930,7 @@
       <v-row>
         <v-col cols="auto"> {{ $t('my teaching information') }} :</v-col>
         <v-col class="font-bold">
-          {{ profile_detail.firstNameTh }}
+          {{ $i18n.locale == 'th' ? profile_detail.firstNameTh : profile_detail.firstNameEng }}
         </v-col>
       </v-row>
       <!-- เลือกคอร์ส -->
@@ -989,7 +989,7 @@
         <v-card-text>
           <v-data-table
             class="elevation-1 header-table"
-            :headers="student_list_header"
+            :headers="studentListHeader"
             :items="student_list"
             :loading="student_list_load"
           >
@@ -1435,19 +1435,19 @@ export default {
     select_date: `${new Date().getFullYear()}-${
       new Date().getMonth() + 1
     }-${new Date().getDate()}`,
-    column: [
-      { text: "ลำดับ", align: "center", sortable: false, value: "count" },
+    // column: [
+    //   { text: "ลำดับ", align: "center", sortable: false, value: "count" },
 
-      { text: "วันที่", align: "start", sortable: false, value: "date" },
-      {
-        text: "ประเภทการลา",
-        align: "start",
-        sortable: false,
-        value: "leaveType",
-      },
-      { text: "สถานะ", align: "start", sortable: false, value: "status" },
-      { text: "", align: "right", sortable: false, value: "action" },
-    ],
+    //   { text: "วันที่", align: "start", sortable: false, value: "date" },
+    //   {
+    //     text: "ประเภทการลา",
+    //     align: "start",
+    //     sortable: false,
+    //     value: "leaveType",
+    //   },
+    //   { text: "สถานะ", align: "start", sortable: false, value: "status" },
+    //   { text: "", align: "right", sortable: false, value: "action" },
+    // ],
     student_list_header: [
       { text: "ลำดับ", align: "center", sortable: false, value: "index" },
 
@@ -1464,38 +1464,6 @@ export default {
         align: "start",
         sortable: false,
         value: "email",
-      },
-    ],
-    student_data: [
-      {
-        st_name: "Frozen",
-        st_lname: "Yogurt",
-        index: "1",
-      },
-      {
-        st_name: "Yogurt",
-        st_lname: "Frozen",
-        index: "1",
-      },
-      {
-        st_name: "Frozen",
-        st_lname: "Yogurt",
-        index: "1",
-      },
-      {
-        st_name: "Yogurt",
-        st_lname: "Frozen",
-        index: "1",
-      },
-      {
-        st_name: "Frozen",
-        st_lname: "Yogurt",
-        index: "1",
-      },
-      {
-        st_name: "Yogurt",
-        st_lname: "Frozen",
-        index: "1",
       },
     ],
     previewUrl: null,
@@ -1592,6 +1560,41 @@ export default {
       student_list: "CoachModules/getstudentList",
       student_list_load: "CoachModules/getStudentListLoading",
     }),
+    column(){
+      return [
+        { text: this.$t("no."), align: "center", sortable: false, value: "count" },
+
+        { text: this.$t("date"), align: "start", sortable: false, value: "date" },
+        {
+          text: this.$t("leave type"),
+          align: "start",
+          sortable: false,
+          value: "leaveType",
+        },
+        { text: this.$t("status"), align: "start", sortable: false, value: "status" },
+        { text: "", align: "right", sortable: false, value: "action" },
+      ]
+    } ,
+    studentListHeader(){
+      return [
+        { text: this.$t("no."), align: "center", sortable: false, value: "index" },
+
+        { text: this.$t("first name"), align: "start", sortable: false, value: "firstNameTh" },
+        {
+          text: this.$t("last name"),
+          align: "start",
+          sortable: false,
+          value: "lastNameTh",
+        },
+        { text: this.$t("phone number"), align: "start", sortable: false, value: "tel" },
+        {
+          text: this.$t("email"),
+          align: "start",
+          sortable: false,
+          value: "email",
+        },
+      ]
+    }, 
     SetFunctionsComputed() {
       this.GetMyCourses({ coach_id: this.user_detail.account_id });
       this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
@@ -1755,11 +1758,11 @@ export default {
     cancelCoachLeave(data) {
       Swal.fire({
         icon: "question",
-        title: "ต้องการยกเลิกใบลาใช่หรือไม่ ?",
+        title: this.$t("do you want to cancel your leave?"),
         showDenyButton: false,
         showCancelButton: true,
-        cancelButtonText: "ยกเลิก",
-        confirmButtonText: "ตกลง",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.updateStatusCoachLeave({
