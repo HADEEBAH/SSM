@@ -4,6 +4,7 @@
     "add to cart" : "Add to cart",
     "add a comment" : "Add a comment",
     "additional comments" : "Additional comments",
+    "add a holiday" : "Add a holiday",
     "accept" : "Accept",
     "admin page" : "Admin page",
     "admission date" : "Admission date",
@@ -12,6 +13,7 @@
     "agree" : "Agree",
     "amount to be paid" : "Amount to be paid",
     "all" : "All",
+    "all days" : "All days",
     "all students" : "All students",
     "approved" : "Approved",
     "assess potential" : "Assess potential",
@@ -19,6 +21,8 @@
     "attendance" : "Attendance",
     "attachment not found" : "Attachment not found",
     "attachments" : "Attachments",
+    "available course information": "Available course information",
+   
 
     "baht" : "Baht",
     "by": "By",
@@ -27,6 +31,9 @@
     "can't find teaching summaries" : "Can't find teaching summaries",
     "cancel" : "Cancel",
     "cart" : "Cart",
+    "clear":"Clear",
+    "can't find full course information" :"Can't find full course information",
+    "can't find available course information" :"Can't find available course information",
     "cash out" : "Cash out",
     "certification" : "Certification",
     "check-in notification":"Check-in notification",
@@ -43,12 +50,23 @@
     "compensation date" : "Compensation date",
     "contact us at" : "Contact us at",
     "course" : "Course",
+    "course available" : "Course available",
     "course name" : "Course name",
+    "courses" : "Courses",
     "course information not found" : "Course information not found",
+    "course status information not found":"Course status information not found",
     "currently our class is full of students. thank you for your interest in our course." : "Currently our class is full of students. Thank you for your interest in our course.",
+    "current students" : "Current students",
+    "course status": "Course status",
+    "courses status": "Course status",
+    "class time": "Class time",
+    "choice": "Choice",
+    "course schedule": "Course schedule",
+    "coach information not foun": "Coach information not foun",
 
     "daily" : "Daily",
     "date" : "Date",
+    "delete holiday": "Delete holiday",
     "date and time" : "Date and time",
     "delete item" : "Delete item",
     "details" : "Details",
@@ -56,6 +74,10 @@
     "developmental level" : "Developmental level",
     "discount" : "Discount",
     "don't have an account yet?" : "Don't have an account yet?",
+    "dashboard" : "Dashboard",
+    "do you want to delete a holiday?" : "Do you want to delete a holiday?",
+    "do you want to create a holiday?": "Do you want to create a holiday?",
+    "do you want to edit your holiday?": "Do you want to edit your holiday?",
 
     "english" : "English",
     "english first name" : "English first name",
@@ -68,12 +90,24 @@
 
     "forgot your password?" : "Forgot your password?",
     "file size" : "File size",
+    "edit holiday": "Edit holiday",
+    "end time": "End time",
+
+   "failed to resolve":"Failed to resolve",
     "find the learning course that interests you here" : "Find the learning course that interests you here",
     "find the learning kingdom that interests you here" : "Find the learning kingdom that interests you here",
     "first name" : "First name",
     "first name(english)" : "First name(english)",
     "full" : "Full",
     "full course" : "Full course",
+    "full courses" : "Full courses",
+    "full course information" : "Full course information",
+    "first name - last name coach": "First name - last name coach",
+    "filter":"Filter",
+
+    "graduating students": "Graduat Students",
+    "general course" : "General course",
+
 
     "go to my course page" : "Go to my course page",
 
@@ -81,11 +115,16 @@
     "hello" : "Hello",
     "hour" : "Hour",
     "hrs." : "Hrs.",
+    "holiday":"Holiday",
+    "holiday name":"Holiday name",
 
     "if you don't have an account yet, please" : "If you don't have an account yet, please",
     "invalid data" : "Invalid data",
     "invalid username or phone number" : "Invalid username or phone number",
     "interest level" : "Interest level",
+    "income" : "Income",
+    "income proportion": "Income proportion",
+
 
     "kingdom" : "Kingdom",
     "kingdom not found" : "Kingdom not found",
@@ -113,6 +152,8 @@
     "morning" : "Morning",
     "my teaching" : "My teaching",
     "my teaching information" : "My teaching information",
+    "manage tables" : "Manage tables",
+
 
     "new password":"New password",
     "no." : "No.",
@@ -134,6 +175,7 @@
     "package" : "Package",
     "paid price" : "Paid price",
     "page not found" : "Page not found",
+    "paid":"Paid",
     "parent" : "Parent",
     "password" : "Password",
     "passwords do not match" : "Passwords do not match",
@@ -162,6 +204,7 @@
     "proceed with payment?" : "Proceed with payment?",
     "proceed to payment" : "Proceed to payment",
     "punctual" : "Punctual",
+    "please select at least 1 day before the holiday":"Please select at least 1 day before the holiday",
 
     "reason for leave" : "Reason for leave",
     "read more":"Read more",
@@ -176,6 +219,8 @@
     "return to home page" : "Return to home page",
 
     "save" : "Save",
+    "save data successfully": "Save data successfully",
+    "save failed": "Save failed",
     "seat" : "Seat",
     "see more" : "See more",
     "select teaching information" : "Select teaching information",
@@ -199,6 +244,17 @@
     "substitute teaching date" : "Substitute teaching date",
     "success" : "Success",
     "succeed":"Succeed",
+   "students reserve a course": "Students reserve", 
+   "short course": "Short course",
+   "search full course name here": "Search full course name here",
+   "search available course name here": "Search available course name here", 
+   "search" : "Search", 
+   "specify the date":"Specify the date",
+   "start time": "Start time",
+   "specify the name of the holiday, such as Songkran Day": "Specify the name of the holiday, such as Songkran Day",
+
+
+
     
     "take annual leave" : "Take annual leave",
     "teaching notes" : "Teaching notes",
@@ -222,14 +278,19 @@
     "time" : "Time",
     "times" : "Time",
     "transaction time" : "Transaction time",
+    "this date is already built into a holiday": "This date is already built into a holiday",
 
     "username" : "Username",
     "username cannot contain emojis" : "Username cannot contain emojis",
+    "user page": "User page",
 
     "via email" : "Via email",
     "via mobile phone (SMS)" : "Via mobile phone (SMS)",
     "view comments" : "View comments",
     "view special rights" : "View special rights",
+    "view details": "View details",
+    "view student details": "View student details",
+
 
     "waiting for approval" : "Waiting for approval",
     "want to add to cart?" : "Want to add to cart?",

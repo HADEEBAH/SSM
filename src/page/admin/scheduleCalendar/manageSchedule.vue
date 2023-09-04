@@ -1,13 +1,13 @@
 <template>
   <v-container>
-    <headerPage title="จัดการตาราง"></headerPage>
+    <headerPage :title="$t('manage tables')"></headerPage>
     <v-row class="py-2">
       <v-col cols="12" sm="8" class="w-full">
         <v-text-field
           dense
           class="w-full"
           outlined
-          label="ค้นหา"
+          :label="$t('search')"
           color="pink"
           hide-details
           v-model="search"
@@ -22,7 +22,7 @@
           class="white--text btn-size-lg w-full"
           depressed
           block
-          ><span class="mdi mdi-plus">เพิ่มวันหยุด</span>
+          ><span class="mdi mdi-plus">{{ $t("add a holiday") }}</span>
         </v-btn>
       </v-col>
       <v-col cols="6" sm="2" align="center" class="w-full">
@@ -65,7 +65,7 @@
             </div>
           </v-card-text>
 
-          <div class="font-bold">ตารางวิชาเรียน</div>
+          <div class="font-bold">{{ $t("course schedule") }}</div>
           <!-- ตารางวิชาเรียน -->
           <div
             class="pa-2"
@@ -95,15 +95,22 @@
               <!-- <pre>{{ item }}</pre> -->
               <v-row dense class="font-bold">
                 <v-col cols="12" sm="6">
-                  {{ item?.courseName?.courseNameTh }}</v-col
-                >
+                  {{ item?.courseName?.courseNameTh }}
+                  <!-- {{
+                    $i18n.locale == "th"
+                      ? item?.courseName?.courseNameTh
+                      : item?.courseName?.courseNameEng
+                  }} -->
+                </v-col>
                 <v-col cols="12" sm="6">
                   {{ item?.time?.start }} - {{ item?.time?.end }}</v-col
                 >
               </v-row>
 
               <v-row dense>
-                <v-col cols="12" sm="6">โค้ช : {{ item?.coachName }} </v-col>
+                <v-col cols="12" sm="6"
+                  >{{ $t("coach") }} : {{ item?.coachName }}
+                </v-col>
                 <v-col cols="12" sm="6">
                   <v-chip
                     v-if="item?.cpo?.packageName"
@@ -148,8 +155,8 @@
                     class="mdi mdi-account-group-outline"
                     style="color: #ff6b81"
                   >
-                    {{ seat?.currentStudent }} /
-                    {{ seat?.maximumStudent }} ที่นั่ง
+                    {{ seat?.currentStudent }} / {{ seat?.maximumStudent }}
+                    {{ $t("seat") }}
                   </v-col>
                 </v-row>
               </div>
@@ -168,7 +175,7 @@
             >
               <v-row dense class="font-bold">
                 <v-col cols="12">
-                  วันหยุด {{ item?.fullDateHolidaysTh }}
+                  {{ $t("holiday") }} {{ item?.fullDateHolidaysTh }}
                 </v-col>
               </v-row>
 
@@ -180,7 +187,7 @@
                 <v-col cols="12" sm="6">
                   {{
                     item?.allDay === true
-                      ? "ทั้งวัน"
+                      ? $t("all days")
                       : `${item.holidayStartTime} - ${item.holidayEndTime}`
                   }}
                 </v-col>
@@ -191,7 +198,7 @@
           <!-- แก้ไขวันหยุด -->
         </v-card>
         <v-card class="pa-2 max-h-[300px] overflow-auto rounded-lg">
-          <div class="font-bold">วันหยุด</div>
+          <div class="font-bold">{{ $t("holiday") }}</div>
           <v-card-text
             v-for="(getHolidays, index_holidays) in get_all_holidays"
             :key="index_holidays"
@@ -200,7 +207,7 @@
           >
             <v-row dense>
               <v-col cols="6" sm="6" class="font-bold" style="color: #f19a5a">
-                วันหยุด {{ getHolidays?.fullDateHolidaysTh }}
+                {{ $t("holiday") }} {{ getHolidays?.fullDateHolidaysTh }}
               </v-col>
               <v-col
                 cols="6"
@@ -241,7 +248,7 @@
                   </v-col>
 
                   <v-col cols="12" align="center" class="font-bold">
-                    แก้ไขวันหยุด
+                    {{ $t("edit holiday") }}
                   </v-col>
                 </v-row>
               </v-card-title>
@@ -250,7 +257,7 @@
                 <v-row dense>
                   <!-- วันที่ -->
                   <v-col cols="12" sm="8">
-                    <label class="font-weight-bold">วันที่</label>
+                    <label class="font-weight-bold">{{ $t("date") }}</label>
 
                     <v-menu
                       v-model="selectEditHolidaydates"
@@ -292,7 +299,7 @@
                   <v-col cols="12" sm="4" class="text-center align-self-center">
                     <v-switch
                       v-model="setDataEditDialog.allDay"
-                      :label="`ทั้งวัน`"
+                      :label="$t('all days')"
                       color="#FF6B81"
                       inset
                       @change="changeSwish(setDataEditDialog)"
@@ -304,7 +311,9 @@
                   <!-- เวลาเริ่ม -->
 
                   <v-col cols="12" sm="6">
-                    <label class="font-weight-bold">เวลาเริ่ม</label>
+                    <label class="font-weight-bold">{{
+                      $t("start time")
+                    }}</label>
                     <br />
                     <v-text-field
                       outlined
@@ -332,7 +341,7 @@
                   </v-col>
                   <!-- เวลาสิ้นสุด -->
                   <v-col cols="12" sm="6">
-                    <label class="font-weight-bold">เวลาสิ้นสุด</label>
+                    <label class="font-weight-bold">{{ $t("end time") }}</label>
                     <br />
 
                     <v-text-field
@@ -368,11 +377,17 @@
 
                 <v-row dense>
                   <v-col cols="12">
-                    <label class="font-weight-bold">ชื่อวันหยุด</label>
+                    <label class="font-weight-bold">{{
+                      $t("holiday name")
+                    }}</label>
                     <v-textarea
                       v-model="setDataEditDialog.holidayName"
                       outlined
-                      placeholder="ระบุชื่อวันหยุด เช่น วันสงกรานต์"
+                      :placeholder="
+                        $t(
+                          'specify the name of the holiday, such as Songkran Day'
+                        )
+                      "
                     ></v-textarea>
                   </v-col>
                 </v-row>
@@ -382,7 +397,7 @@
                 <v-row dense>
                   <v-col cols="6" align="center">
                     <v-btn class="w-full" depressed @click="deleteHoliday">
-                      ลบวันหยุด
+                      {{ $t("delete holiday") }}
                     </v-btn>
                   </v-col>
                   <v-col cols="6" align="center">
@@ -392,7 +407,7 @@
                       class="white--text w-full"
                       @click="editHolidaysData()"
                     >
-                      บันทึก
+                      {{ $t("save") }}
                     </v-btn>
                   </v-col>
                 </v-row>
@@ -423,7 +438,7 @@
                     </v-col>
 
                     <v-col cols="12" align="center" class="font-bold">
-                      เพิ่มวันหยุด
+                      {{ $t("add a holiday") }}
                     </v-col>
                   </v-row>
                 </v-card-title>
@@ -432,7 +447,7 @@
                   <v-row dense>
                     <!-- วันที่ -->
                     <v-col cols="12" sm="8">
-                      <label class="font-weight-bold">วันที่</label>
+                      <label class="font-weight-bold">{{ $t("date") }}</label>
 
                       <v-menu
                         v-model="selectHolidaydates"
@@ -445,7 +460,7 @@
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
                             dense
-                            label="ระบุวันที่"
+                            :label="$t('specify the date')"
                             outlined
                             append-icon="mdi-calendar"
                             readonly
@@ -473,7 +488,7 @@
                     <v-col cols="12" sm="4" class="align-self-center">
                       <v-switch
                         v-model="holidaySwitch"
-                        :label="`ทั้งวัน`"
+                        :label="$t('all days')"
                         color="#FF6B81"
                         inset
                         @change="changeSwitchHoliday($event)"
@@ -484,7 +499,9 @@
                   <v-row v-if="!holidaySwitch" dense>
                     <!-- เวลาเริ่ม -->
                     <v-col cols="6">
-                      <label class="font-weight-bold">เวลาเริ่ม</label>
+                      <label class="font-weight-bold">{{
+                        $t("start time")
+                      }}</label>
                       <br />
                       <v-text-field
                         readonly
@@ -513,7 +530,9 @@
                     </v-col>
                     <!-- เวลาสิ้นสุด -->
                     <v-col cols="6">
-                      <label class="font-weight-bold">เวลาสิ้นสุด</label>
+                      <label class="font-weight-bold">{{
+                        $t("end time")
+                      }}</label>
                       <br />
                       <v-text-field
                         readonly
@@ -545,11 +564,17 @@
 
                   <v-row dense>
                     <v-col cols="12">
-                      <label class="font-weight-bold">ชื่อวันหยุด</label>
+                      <label class="font-weight-bold">{{
+                        $t("holiday name")
+                      }}</label>
                       <v-textarea
                         v-model="nameHoliday"
                         outlined
-                        placeholder="ระบุชื่อวันหยุด เช่น วันสงกรานต์"
+                        :placeholder="
+                          $t(
+                            'specify the name of the holiday, such as Songkran Day'
+                          )
+                        "
                         :rules="rules.holiday_name"
                       ></v-textarea>
                     </v-col>
@@ -565,7 +590,7 @@
                         class="white--text w-full"
                         @click="CreateHolidays()"
                       >
-                        บันทึก
+                        {{ $t("save") }}
                       </v-btn>
                     </v-col>
                   </v-row>
@@ -595,7 +620,7 @@
                     </v-btn>
                   </v-col>
                   <v-col cols="12" align="center" class="font-bold">
-                    ตัวกรอง
+                    {{ $t("filter") }}
                   </v-col>
                 </v-row>
               </v-card-title>
@@ -605,7 +630,7 @@
                   :content="selectedCourse.length"
                   :value="selectedCourse.length"
                 >
-                  <label class="font-weight-bold">คอร์ส</label>
+                  <label class="font-weight-bold">{{ $t("courses") }}</label>
                 </v-badge>
                 <v-autocomplete
                   outlined
@@ -617,11 +642,13 @@
                   color="#FF6B81"
                   item-color="#FF6B81"
                   dense
-                  placeholder="คอร์ส"
+                  :placeholder="this.$t('courses')"
                 >
                   <template v-slot:no-data>
                     <v-list-item>
-                      <v-list-item-title> ไม่พบข้อมูลคอร์ส </v-list-item-title>
+                      <v-list-item-title>
+                        {{ $t("course information not found") }}
+                      </v-list-item-title>
                     </v-list-item>
                   </template>
                   <template v-slot:selection="{ item, index }">
@@ -640,7 +667,9 @@
                   :content="selectedCourseType.length"
                   :value="selectedCourseType.length"
                 >
-                  <label class="font-weight-bold">สถานะคอร์ส</label>
+                  <label class="font-weight-bold">{{
+                    $t("courses status")
+                  }}</label>
                 </v-badge>
                 <v-autocomplete
                   outlined
@@ -652,12 +681,12 @@
                   color="#FF6B81"
                   item-color="#FF6B81"
                   dense
-                  placeholder="สถานะคอร์ส"
+                  :placeholder="this.$t('courses status')"
                 >
                   <template v-slot:no-data>
                     <v-list-item>
                       <v-list-item-title>
-                        ไม่พบข้อมูลสถานะคอร์ส
+                        {{ $t("course status information not found") }}
                       </v-list-item-title>
                     </v-list-item>
                   </template>
@@ -677,7 +706,7 @@
                   :content="selectedCoach.length"
                   :value="selectedCoach.length"
                 >
-                  <label class="font-weight-bold">โค้ช</label>
+                  <label class="font-weight-bold">{{ $t("coach") }}</label>
                 </v-badge>
 
                 <v-autocomplete
@@ -690,11 +719,13 @@
                   color="#FF6B81"
                   item-color="#FF6B81"
                   dense
-                  placeholder="โค้ช"
+                  :placeholder="this.$t('coach')"
                 >
                   <template v-slot:no-data>
                     <v-list-item>
-                      <v-list-item-title> ไม่พบข้อมูลโค้ช </v-list-item-title>
+                      <v-list-item-title>
+                        {{ $t("coach information not foun") }}
+                      </v-list-item-title>
                     </v-list-item>
                   </template>
                   <template v-slot:selection="{ item, index }">
@@ -722,7 +753,7 @@
                       :color="'#ff6b81'"
                       class="w-full"
                     >
-                      ล้างค่า
+                      {{ $t("clear") }}
                     </v-btn>
                   </v-col>
                   <v-col cols="12" sm="6" align="center">
@@ -738,7 +769,7 @@
                       :color="'#ff6b81'"
                       class="white--text w-full"
                     >
-                      กรอง
+                      {{ $t("filter") }}
                     </v-btn>
                   </v-col>
                 </v-row>
@@ -758,10 +789,10 @@
     >
       <v-card>
         <v-card-title> </v-card-title>
-        <dialogCard text="บันทึกข้อมูลสำเร็จ"></dialogCard>
+        <dialogCard :text="this.$t('save data successfully')"></dialogCard>
         <div class="my-5 text-center">
           <v-btn color="#ff6b81" @click="dialog_show_success = false">
-            ตกลง
+            {{ $t("save") }}
           </v-btn>
         </div>
       </v-card>
@@ -995,11 +1026,11 @@ export default {
     async deleteHoliday() {
       Swal.fire({
         icon: "question",
-        title: "คุณต้องการลบวันหยุดใช่หรือไม่ ?",
+        title: this.$t("do you want to delete a holiday?"),
         showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
@@ -1019,8 +1050,8 @@ export default {
               this.GetDataInSchedule();
               Swal.fire({
                 icon: "success",
-                title: "สำเร็จ",
-                text: "( บันทึกเรียบร้อยแล้ว )",
+                title: this.$t("succeed"),
+                text: this.$t("save data successfully"),
                 timer: 3000,
                 timerProgressBar: true,
                 showCancelButton: false,
@@ -1030,7 +1061,7 @@ export default {
           } catch (error) {
             Swal.fire({
               icon: "error",
-              title: "เกิดข้อผิดพลาด",
+              title: this.$t("something went wrong"),
             });
           }
         }
@@ -1046,11 +1077,11 @@ export default {
       if (this.form_dialog) {
         Swal.fire({
           icon: "question",
-          title: "คุณต้องการสร้างวันหยุดใช่หรือไม่ ?",
+          title: this.$t("do you want to create a holiday?"),
           showDenyButton: false,
           showCancelButton: true,
-          confirmButtonText: "ตกลง",
-          cancelButtonText: "ยกเลิก",
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             try {
@@ -1095,8 +1126,8 @@ export default {
                 if (data.data && data.message == "Created Sucessful") {
                   Swal.fire({
                     icon: "success",
-                    title: "สำเร็จ",
-                    text: "( บันทึกเรียบร้อยแล้ว )",
+                    title: this.$t("succeed"),
+                    text: this.$t("save data successfully"),
                     timer: 3000,
                     timerProgressBar: true,
                     showCancelButton: false,
@@ -1105,7 +1136,7 @@ export default {
                 } else {
                   Swal.fire({
                     icon: "error",
-                    title: "บันทึกไม่สำเร็จ",
+                    title: this.$t("save failed"),
                   });
                 }
               }
@@ -1117,8 +1148,12 @@ export default {
                 ) {
                   Swal.fire({
                     icon: "info",
-                    title: "เกิดข้อผิดพลาด",
-                    text: "วันที่นี้ถูกสร้างลงในวันหยุดแล้ว",
+                    title: this.$t("something went wrong"),
+                    text: this.$t("this date is already built into a holiday"),
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showCancelButton: false,
+                    showConfirmButton: false,
                   }).then(async (result) => {
                     if (result.isConfirmed) {
                       this.holidaydates = "";
@@ -1177,11 +1212,12 @@ export default {
 
       Swal.fire({
         icon: "question",
-        title: "คุณต้องการแก้ไขวันหยุดใช่หรือไม่ ?",
+
+        title: this.$t("do you want to edit your holiday?"),
         showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {

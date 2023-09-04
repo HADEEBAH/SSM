@@ -12,7 +12,7 @@
           dense
           prepend-inner-icon="mdi-magnify"
           outlined
-          placeholder="ค้นหา"
+          :placeholder="$t('search')"
           v-model="search"
         ></v-text-field>
       </v-col>
@@ -30,14 +30,14 @@
             <v-img src="@/assets/studentsList/allstudent.svg"></v-img>
           </template>
           <template v-slot:header>
-            <div class="font-bold">ผู้เรียนทั้งหมด</div>
+            <div class="font-bold">{{ $t("all students") }}</div>
           </template>
           <template v-slot:detail>
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
                 {{ get_potential.countStudents }}
               </v-col>
-              <v-col class="text-sm">คน</v-col>
+              <v-col class="text-sm">{{ $t("person") }}</v-col>
             </v-row>
           </template>
         </img-card>
@@ -53,14 +53,14 @@
             <v-img src="@/assets/studentsList/nowstudent.svg"></v-img>
           </template>
           <template v-slot:header>
-            <div class="font-bold">ผู้เรียนปัจจุบัน</div>
+            <div class="font-bold">{{ $t("current students") }}</div>
           </template>
           <template v-slot:detail>
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
                 {{ get_potential.currentStudent.countStudentCurrent }}
               </v-col>
-              <v-col class="text-sm">คน</v-col>
+              <v-col class="text-sm">{{ $t("person") }}</v-col>
             </v-row>
           </template>
         </img-card>
@@ -86,14 +86,14 @@
             ></v-img>
           </template>
           <template v-slot:header>
-            <div class="font-bold">ผู้เรียนใกล้จบ</div>
+            <div class="font-bold">{{ $t("graduating students") }}</div>
           </template>
           <template v-slot:detail>
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
                 {{ get_potential.potencialsStudent.countStudentPotencials }}
               </v-col>
-              <v-col class="text-sm">คน</v-col>
+              <v-col class="text-sm">{{ $t("person") }}</v-col>
             </v-row>
           </template>
         </img-card>
@@ -110,14 +110,14 @@
           </template>
 
           <template v-slot:header>
-            <div class="font-bold">ผู้เรียนจองคอร์ส</div>
+            <div class="font-bold">{{ $t("students reserve a course") }}</div>
           </template>
           <template v-slot:detail>
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
                 {{ get_potential.countReserve.studentList.length }}
               </v-col>
-              <v-col class="text-sm">คน</v-col>
+              <v-col class="text-sm">{{ $t("person") }}</v-col>
             </v-row>
           </template>
         </img-card>
@@ -136,7 +136,7 @@
       >
         <template v-slot:[`item.course`]="{ item }">
           <div text color="#FF6B81">
-            {{ `${item.courseCount} คอร์ส` }}
+            {{ `${item.courseCount} ${$t("course")}` }}
           </div>
         </template>
 
@@ -156,7 +156,7 @@
             "
           >
             <v-icon>mdi-text-box-search-outline</v-icon>
-            ดูรายละเอียดผู้เรียน
+            {{ $t("view student details") }}
           </v-btn>
         </template>
       </v-data-table>

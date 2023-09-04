@@ -821,114 +821,110 @@
           </img-card>
         </v-col>
       </v-row>
-      <v-card>
-        <v-card-text>
-          <v-data-table
-            class="elevation-1 header-table"
-            :headers="column"
-            :items="
-              select_status == 'all'
-                ? coach_leaves
-                : coach_leaves.filter((v) => v.status === select_status)
+      <v-data-table
+        class="elevation-1 header-table"
+        :headers="column"
+        :items="
+          select_status == 'all'
+            ? coach_leaves
+            : coach_leaves.filter((v) => v.status === select_status)
+        "
+        :single-expand="singleExpand"
+        :expanded.sync="expanded"
+        item-key="coachLeaveId"
+        show-expand
+        :loading="coach_leaves_is_loading"
+      >
+        <template v-slot:no-data> {{ $t("leave information not found") }} </template>
+        <template v-slot:[`item.count`]="{ item }">
+          {{ item.index }}
+        </template>
+        <template v-slot:[`item.date`]="{ item }">
+          {{
+            item.startDate === item.endDate
+              ? genDate(item.startDate)
+              : `${genDate(item.startDate)} - ${genDate(item.endDate)}`
+          }}
+        </template>
+        <template v-slot:[`item.leaveType`]="{ item }">
+          {{
+            $t(item.leaveType)
+          }}
+        </template>
+        <template v-slot:[`item.status`]="{ item }">
+          <div
+            class="d-flex align-center pa-1 rounded-lg"
+            :class="
+              item.status === 'pending'
+                ? 'bg-[#FFF9E8] text-[#FCC419]'
+                : item.status === 'approved'
+                ? 'bg-[#F0F9EE] text-[#58A144]'
+                : item.status === 'cancel'
+                ? 'bg-[#e8e8e8] text-[#636363]'
+                : 'bg-[#ffeeee] text-[#f00808]'
             "
-            :single-expand="singleExpand"
-            :expanded.sync="expanded"
-            item-key="coachLeaveId"
-            show-expand
-            :loading="coach_leaves_is_loading"
           >
-            <template v-slot:no-data> {{ $t("leave information not found") }} </template>
-            <template v-slot:[`item.count`]="{ item }">
-              {{ item.index }}
-            </template>
-            <template v-slot:[`item.date`]="{ item }">
-              {{
-                item.startDate === item.endDate
-                  ? genDate(item.startDate)
-                  : `${genDate(item.startDate)} - ${genDate(item.endDate)}`
-              }}
-            </template>
-            <template v-slot:[`item.leaveType`]="{ item }">
-              {{
-                $t(item.leaveType)
-              }}
-            </template>
-            <template v-slot:[`item.status`]="{ item }">
-              <div
-                class="d-flex align-center pa-1 rounded-lg"
-                :class="
-                  item.status === 'pending'
-                    ? 'bg-[#FFF9E8] text-[#FCC419]'
-                    : item.status === 'approved'
-                    ? 'bg-[#F0F9EE] text-[#58A144]'
-                    : item.status === 'cancel'
-                    ? 'bg-[#e8e8e8] text-[#636363]'
-                    : 'bg-[#ffeeee] text-[#f00808]'
-                "
+            <span class="w-full text-center">{{
+              $t(item.status == "pending"
+                ? "waiting for approval"
+                : item.status )
+            }}</span>
+          </div>
+        </template>
+        <template v-slot:[`item.action`]="{ item }">
+          <v-btn
+            class="mr-3"
+            icon
+            color="#ff6b81"
+            @click="showDialogDetail(item)"
+            ><v-icon>mdi-eye-outline</v-icon>
+          </v-btn>
+          <v-btn
+            :disabled="item.status !== 'pending'"
+            icon
+            color="#ff6b81"
+            @click="cancelCoachLeave(item)"
+            ><v-icon>mdi-file-cancel-outline</v-icon>
+          </v-btn>
+        </template>
+        <template v-slot:expanded-item="{ headers, item }">
+          <td :colspan="headers.length" class="py-3">
+            <div
+              v-for="(date, index) in item.dates"
+              :key="`${index}-courses`"
+            >
+              <v-row
+                v-for="(course, index) in date.courses"
+                :key="`${index}-courses`"
               >
-                <span class="w-full text-center">{{
-                  $t(item.status == "pending"
-                    ? "waiting for approval"
-                    : item.status )
-                }}</span>
-              </div>
-            </template>
-            <template v-slot:[`item.action`]="{ item }">
-              <v-btn
-                class="mr-3"
-                icon
-                color="#ff6b81"
-                @click="showDialogDetail(item)"
-                ><v-icon>mdi-eye-outline</v-icon>
-              </v-btn>
-              <v-btn
-                :disabled="item.status !== 'pending'"
-                icon
-                color="#ff6b81"
-                @click="cancelCoachLeave(item)"
-                ><v-icon>mdi-file-cancel-outline</v-icon>
-              </v-btn>
-            </template>
-            <template v-slot:expanded-item="{ headers, item }">
-              <td :colspan="headers.length" class="py-3">
-                <div
-                  v-for="(date, index) in item.dates"
-                  :key="`${index}-courses`"
+                <v-col cols="auto" class="font-bold">
+                  {{ date.date ? GenDateStr(new Date(date.date)) : "-" }}
+                </v-col>
+                <v-col class="font-bold"
+                  >{{$t("course")}}:
+                  {{
+                    `${course.courseNameTh}(${course.courseNameEn})`
+                  }}</v-col
                 >
-                  <v-row
-                    v-for="(course, index) in date.courses"
-                    :key="`${index}-courses`"
-                  >
-                    <v-col cols="auto" class="font-bold">
-                      {{ date.date ? GenDateStr(new Date(date.date)) : "-" }}
-                    </v-col>
-                    <v-col class="font-bold"
-                      >{{$t("course")}}:
-                      {{
-                        `${course.courseNameTh}(${course.courseNameEn})`
-                      }}</v-col
-                    >
-                    <v-col cols="5" v-if="course.type !== 'date'"
-                      >{{ $t("substitute teacher") }}:
-                      {{
-                        `${course.substituteCoachFirstNameTh} ${course.substituteCoachLastNameTh}`
-                      }}</v-col
-                    >
-                    <v-col cols="5" v-if="course.type === 'date'"
-                      >{{ $t("substitute teaching date") }}:
-                      {{
-                        `${GenDateStr(new Date(course.compensationDate))}(${
-                          course.compensationStartTime
-                        }:${course.compensationEndTime})น.`
-                      }}
-                    </v-col>
-                  </v-row>
-                </div>
-              </td>
-            </template>
-          </v-data-table>
-        </v-card-text>
-      </v-card>
+                <v-col cols="5" v-if="course.type !== 'date'"
+                  >{{ $t("substitute teacher") }}:
+                  {{
+                    `${course.substituteCoachFirstNameTh} ${course.substituteCoachLastNameTh}`
+                  }}</v-col
+                >
+                <v-col cols="5" v-if="course.type === 'date'"
+                  >{{ $t("substitute teaching date") }}:
+                  {{
+                    `${GenDateStr(new Date(course.compensationDate))}(${
+                      course.compensationStartTime
+                    }:${course.compensationEndTime})น.`
+                  }}
+                </v-col>
+              </v-row>
+            </div>
+          </td>
+        </template>
+      </v-data-table>
     </div>
     <div v-if="tab === 'student lists'">
       <v-row>

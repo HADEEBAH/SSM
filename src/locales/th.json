@@ -4,6 +4,7 @@
     "add to cart" : "เพิ่มไปยังรถเข็น",
     "add a comment" : "เพิ่มความคิดเห็น",
     "additional comments" : "ความคิดเห็นเพิ่มเติม",
+    "add a holiday" : "เพิ่มวันหยุด",
     "accept" : "ยอมรับ",
     "admin page" : "หน้าผู้ดูแลระบบ",
     "admission date" : "วันรับสมัคร",
@@ -12,14 +13,18 @@
     "agree" : "ตกลง",
     "amount to be paid" : "ยอดที่ต้องชำระ",
     "all" : "ทั้งหมด",
-    "all students" : "นักเรียนทั้งหมด",
+    "all students" : "ผู้เรียนทั้งหมด",
     "approved" : "อนุมัติ",
     "assess potential" : "ประเมินศักยภาพ",
     "assess students" : "ประเมินนักเรียน",
     "attendance" : "การเข้าเรียน",
     "attachment not found" : "ไม่พบไฟล์แนบ",
     "attachments" : "ไฟล์แนบ",
-    
+    "all days" : "ทั้งวัน",
+    "available course information": "ข้อมูลคอร์สว่าง",
+
+
+
 
     "baht" : "บาท",
     "by" : "โดย",
@@ -28,6 +33,9 @@
     "can't find teaching summaries" : "ไม่พบข้อมูลบันทึกสรุปการสอน",
     "cancel" : "ยกเลิก",
     "cart" : "รถเข็น",
+    "clear":"ล้างค่า",
+    "can't find full course information" : "ไม่พบข้อมูลของคอร์สเต็ม",
+    "can't find available course information" :"ไม่พบข้อมูลของคอร์สว่าง",
     "cash out" : "ชำระเงิน",
     "certification" : "การรับรอง",
     "check-in notification" : "แจ้งเตือนการเช็คอิน",
@@ -45,11 +53,22 @@
     "compensation date" : "วันที่ชดเชย",
     "course" : "คอร์สเรียน",
     "course name" : "ชื่อคอร์ส",
+    "courses" : "คอร์ส",
     "course information not found" : "ไม่พบข้อมูลคอร์ส",
+    "course status information not found" : "ไม่พบข้อมูลสถานะคอร์ส",
     "currently our class is full of students. thank you for your interest in our course." : "ขณะนี้คลาสเรามีผู้เรียนเต็มจำนวนแล้ว ขอบคุณท่านที่สนใจคอร์สของเรา",
+    "current students" : "ผู้เรียนปัจจุบัน",
+    "course status": "สถานะคอร์สเรียน",
+    "courses status": "สถานะคอร์ส",
+    "course available" : "คอร์สว่าง",
+    "class time": "เวลาเรียน",
+    "choice": "ตัวเลือก",
+    "course schedule": "ตารางวิชาเรียน",
+    "coach information not found": "ไม่พบข้อมูลโค้ช",
 
     "daily" : "รายวัน",
     "date" : "วันที่",
+    "delete holiday": "ลบวันหยุด",
     "date and time" : "วันและเวลา",
     "delete item" : "ลบรายการ",
     "details" : "รายละเอียด",
@@ -57,9 +76,15 @@
     "developmental level" : "ระดับพัฒนาการ",
     "discount" : "่สวนลด",
     "don't have an account yet?" : "ยังไม่มีบัญชีใช่หรือไม่?",
-    
+    "dashboard" : "แดชบอร์ด",
+    "do you want to delete a holiday?" : "คุณต้องการลบวันหยุดใช่หรือไม่ ?",
+    "do you want to create a holiday?": "คุณต้องการสร้างวันหยุดใช่หรือไม่ ?",
+    "do you want to edit your holiday?": "คุณต้องการแก้ไขวันหยุดใช่หรือไม่ ?",
+
+
 
     "edit parent information" : "แก้ไขข้อมูลผู้ปกครอง",
+    "edit holiday": "แก้ไขวันหยุด",
     "english" : "อังกฤษ",
     "english first name" : "ชื่อภาษาอังกฤษ",
     "english last name" : "นามสกุลภาษาอังกฤษ",
@@ -67,15 +92,25 @@
     "enter username" : "ระบุชื่อผู้ใช้งาน",
     "email" : "อีเมล",
     "emergency leave" : "ลาฉุกเฉิน",
-    
     "forgot your password?" : "ลืมรหัสผ่านใช่หรือไม่?",
     "file size" : "ขนาดไฟล์",
+    "end time" : "เวลาสิ้นสุด",
+
+    
+    "failed to resolve":"แก้ไขไม่สำเร็จ",
     "find the learning course that interests you here" : "ค้นหาคอร์สการเรียนรู้ที่คุณสนใจได้ที่นี่",
     "find the learning kingdom that interests you here" : "ค้นหาอาณาจักรการเรียนรู้ที่คุณสนใจได้ที่นี้",
     "first name" : "ชื่อ",
     "first name(english)" : "ชื่อ(ภาษาอังกฤษ)",
     "full" : "เต็มวัน",
     "full course" : "คอร์สเรียนเต็ม",
+    "full courses" : "คอร์สเต็ม",
+    "full course information": "ข้อมูลคอร์สเต็ม",
+    "first name - last name coach": "ชื่อ-สกุลโค้ช",
+    "filter":"ตัวกรอง",
+
+    "graduating students": "ผู้เรียนที่ใกล้จบ",
+    "general course" : "คอร์สทั่วไป",
 
     "go to my course page" : "ไปหน้าคอร์สเรียนของฉัน",
 
@@ -83,11 +118,15 @@
     "hello" : "สวัสดี",
     "hour" : "ชั่วโมง",
     "hrs." : "ชม.",
+    "holiday": "วันหยุด",
+    "holiday name": "ชื่อวันหยุด",
 
     "if you don't have an account yet, please" : "หากยังไม่มีบัญชีผู้ใช้กรุณา",
     "invalid data" : "ข้อมูลไม่ถูกต้อง",
     "invalid username or phone number" : "ชื่อผู้ใช้หรือเบอร์โทรศัพท์ไม่ถูกต้อง",
     "interest level" : "ระดับความสนใจ",
+    "income" : "รายได้",
+    "income proportion": "สัดส่วนรายได้",
 
     "kingdom" : "อาณาจักร",
     "kingdom not found" : "ไม่พบอาณาจักร",
@@ -115,6 +154,7 @@
     "morning" : "ช่วงเช้า",
     "my teaching" : "การสอนของฉัน",
     "my teaching information" : "ข้อมูลการสอนของฉัน",
+    "manage tables" : "จัดการตาราง",
 
     "new password":"รหัสผ่านใหม่",
     "no." : "ลำดับ",
@@ -136,6 +176,7 @@
     "package" : "แพ็คเกจ",
     "page not found" : "ไม่พบหน้านี้",
     "paid price" : "ราคาชำระ",
+    "paid":"ชำระแล้ว",
     "parent" : "ผู้ปกครอง",
     "password" : "รหัสผ่าน",
     "passwords do not match" : "รหัสผ่านไม่ตรงกัน",
@@ -164,6 +205,7 @@
     "proceed with payment?" : "ดำเนินการชำระเงินใช่หรือไม่?",
     "proceed to payment":"ดำเนินการชำระเงิน",
     "punctual" : "ตรงเวลา",
+    "please select at least 1 day before the holiday": "กรุณาเลือกอย่างน้อย 1 วันก่อนวันหยุด",
 
     "reason for leave" : "สาเหตุการลา",
     "read more":"อ่านต่อ",
@@ -178,6 +220,8 @@
     "return to home page" : "กลับสู่หน้าหลัก",
 
     "save" : "บันทึก",
+    "save data successfully": "บันทึกข้อมูลสำเร็จ",
+    "save failed":"บันทึกไม่สำเร็จ",
     "seat" : "ที่นั้ง",
     "see more" : "ดูเพิ่มเติม",
     "select teaching information" : "เลือกข้อมูลการสอน",
@@ -201,6 +245,16 @@
     "substitute teaching date" : "วันที่สอนแทน",
     "success" : "ชำระเงินแล้ว",
     "succeed":"สำเร็จ",
+   "students reserve a course": "ผู้เรียนจองคอร์ส", 
+   "short course": "คอร์สระยะสั้น",
+   "search full course name here": "ค้นหาชื่อคอร์สเต็มได้ที่นี้",
+   "search available course name here":"ค้นหาชื่อคอร์สว่างได้ที่นี้",
+   "search" : "ค้นหา", 
+   "specify the date":"ระบุวันที่",
+   "start time": "เวลาเริ่ม",
+   "specify the name of the holiday, such as Songkran Day" : "ระบุชื่อวันหยุด เช่น วันสงกรานต์",
+
+
 
     "take annual leave" : "ลาพักร้อนประจำปี",
     "teaching notes" : "บันทึกการสอน",
@@ -224,15 +278,21 @@
     "time" : "ครั้ง",
     "times" : "เวลา",
     "transaction time" : "เวลาทำรายการ",
+    "this date is already built into a holiday":"วันที่นี้ถูกสร้างลงในวันหยุดแล้ว",
+
     
     "username" : "ชื่อผู้ใช้",
     "username cannot contain emojis" : "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
+    "user page": "หน้าผู้ใช้งาน",
+
 
     "via email" : "ผ่านอีเมล",
     "via mobile phone (SMS)" : "ผ่านโทรศัพท์มือถือ(SMS)",
     "view comments" : "ดูความคิดเห็น",
     "view special rights" : "ดูสิทธิพิเศษ",
-    
+    "view details" : "ดูรายละเอียด",
+    "view student details": "ดูรายละเอียดผู้เรียน",
+
     "waiting for approval" : "รออนุมัติ",
     "want to add to cart?" : "ต้องการเพิ่มเข้ารถเข็นใช่หรือไม่?",
     "want to book this course?" : "ต้องการจองคอร์สนี้ใช่หรือไม่?",
@@ -240,7 +300,6 @@
     "want to delete this item?" : "ต้องการลบรายการนี้หรือไม่?",
     "warning" : "คำเตือน",
     "weekly" : "รายสัปดาห์",
-    
     
     "z":"z"
 }

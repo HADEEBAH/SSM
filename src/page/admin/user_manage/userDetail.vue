@@ -702,6 +702,32 @@
                 <v-expand-transition>
                   <v-container fluid v-if="tab === 2">
                     <v-row class="mb-3">
+                      <v-col cols="12">
+                        <headerCard
+                          :icon="'mdi-book-account-outline'"
+                          :icon_color="'#FF6B81'"
+                          title="พอร์ตโฟลิโอ"
+                        ></headerCard>
+                        <v-divider></v-divider>
+                      </v-col>
+                      <v-col cols="12">
+                        <v-btn
+                          color="#ff6b81"
+                          text
+                          @click="
+                            $router.push({
+                              name: 'FrontPortfolio',
+                              params: { account_id: user_login.account_id },
+                            })
+                          "
+                        >
+                          <v-icon>mdi-book-account-outline</v-icon>
+                          <span class="indent-2">ดูพอร์ตโฟลิโอ</span>
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+
+                    <v-row class="mb-3">
                       <v-col>
                         <headerCard
                           :icon="'mdi-file-certificate-outline'"
@@ -776,6 +802,7 @@
                                 <v-col
                                   v-else
                                   class="text-[#ff6b81] underline cursor-pointer"
+                                  align-self="center"
                                   @click="
                                     OpenFileCertificate(
                                       certificate.certificateAttachment
@@ -993,7 +1020,7 @@
                       params: {
                         action: 'edit',
                         account_id: $route.params.account_id,
-                        from: 'userList' 
+                        from: 'userList',
                       },
                     })
                   "
@@ -1348,20 +1375,21 @@ export default {
     today: new Date(),
   }),
   created() {
-    if( this.$route?.params?.from === "Dashboard"){
+    if (this.$route?.params?.from === "Dashboard") {
       this.breadcrumbs = [
         { text: "แดชบอร์ด", to: "StudentList" },
         { text: "จัดการผู้ใช้งาน", to: "UserList" },
         { text: "เพิ่มผู้ใช้งาน", to: "" },
-      ]
-    }else{
+      ];
+    } else {
       this.breadcrumbs = [
         { text: "จัดการผู้ใช้งาน", to: "UserList" },
         { text: "เพิ่มผู้ใช้งาน", to: "" },
-      ]
+      ];
     }
-   
+
     this.params = this.$route?.params?.account_id;
+    this.user_login = JSON.parse(localStorage.getItem("userDetail"));
   },
   mounted() {
     this.GetUserById(this.params);

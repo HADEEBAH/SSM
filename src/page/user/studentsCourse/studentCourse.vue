@@ -339,8 +339,79 @@
             </div>
             <v-expand-transition>
               <div v-show="day_list.show">
+                <!-- <pre>{{ day_list.dailySummary }}</pre> -->
+                <label class="font-bold mb-2 text-[#FF6B81]">
+                  บันทึกสรุปการสอน
+                </label>
+                <!-- บันทึกการสอน -->
                 <v-row dense>
-                  <v-col>
+                  <v-col cols="12" class="indent-3">
+                    <b>บันทึกการสอน : </b>
+                    {{
+                      day_list.dailySummary.summary
+                        ? day_list.dailySummary.summary
+                        : "ไม่มีการบันทึก"
+                    }}
+                  </v-col>
+                </v-row>
+                <!-- พัฒนาการ / การบ้าน  -->
+                <v-row dense>
+                  <v-col cols="12" class="indent-3">
+                    <b>พัฒนาการ / การบ้าน : </b>
+                    {{
+                      day_list.dailySummary.homework
+                        ? day_list.dailySummary.homework
+                        : "ไม่มีพัฒนาการ / การบ้าน"
+                    }}
+                  </v-col>
+                </v-row>
+                <!-- ไฟล์แนบจากบันทึกสรุปการสอน -->
+                <v-row dense>
+                  <v-col cols="12" class="indent-3">
+                    <b>ไฟล์แนบจากบันทึกสรุปการสอน :</b
+                    ><span v-if="day_list.dailySummary.attachment == ''">
+                      ไม่มีไฟล์แนบจากบันทึกสรุปการสอน
+                    </span>
+
+                    <v-card
+                      v-else
+                      @click="openFile(file.attachmentFiles)"
+                      flat
+                      class="mb-3"
+                      v-for="(file, index_file) in day_list.dailySummary
+                        .attachment"
+                      :key="index_file"
+                    >
+                      <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
+                        <v-row dense>
+                          <v-col cols="12" sm="1" align="center">
+                            <imgFileType
+                              :mime_type="file.filesType"
+                            ></imgFileType>
+                          </v-col>
+                          <v-col cols="12" sm="10" align="start">
+                            <span class="font-bold">{{
+                              file.originalFilesName
+                            }}</span
+                            ><br />
+                            <span class="text-caption"
+                              >ขนาดไฟล์ :
+                              {{ (file.filesSize / 1000000).toFixed(2) }}
+                              MB</span
+                            >
+                          </v-col>
+                        </v-row>
+                      </v-card-text>
+                    </v-card>
+                  </v-col>
+                </v-row>
+
+                <label class="font-bold mb-2 text-[#FF6B81]">
+                  ประเมินนักเรียน
+                </label>
+                <v-row dense>
+                  <!-- ความคิดเห็น -->
+                  <v-col class="indent-3">
                     <b>ความคิดเห็น:</b>
                     {{
                       !day_list.assessment.remark
@@ -349,9 +420,13 @@
                     }}
                   </v-col>
                 </v-row>
+                <!-- ไฟล์แนบจากประเมินนักเรียน -->
                 <v-row dense>
-                  <v-col cols="12">
-                    ไฟล์แนบ :
+                  <v-col cols="12" class="indent-3">
+                    <b>ไฟล์แนบจากประเมินนักเรียน :</b>
+                    <span v-if="day_list.assessment.attachment == ''">
+                      ไม่มีไฟล์แนบจากประเมินนักเรียน
+                    </span>
                     <v-card
                       @click="openFile(file.attachmentFiles)"
                       flat

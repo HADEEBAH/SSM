@@ -11,7 +11,7 @@
         placeholder="ค้นหา"
       ></v-text-field>
     </header-page>
-    
+
     <v-row class="mb-2" dense>
       <template v-for="(type, type_index) in course_type">
         <v-col
@@ -67,7 +67,10 @@
         </v-col>
       </template>
     </v-row>
-    <loading-overlay v-if="reserve_list_is_loading" :loading="reserve_list_is_loading"></loading-overlay>
+    <loading-overlay
+      v-if="reserve_list_is_loading"
+      :loading="reserve_list_is_loading"
+    ></loading-overlay>
     <v-card v-else outlined>
       <v-data-table
         class="header-table"
@@ -89,7 +92,7 @@
             dense
             outlined
             hide-details
-            @change=" update(item.reserveId,item )"
+            @change="update(item.reserveId, item)"
             item-color="pink"
             :items="status"
             item-text="label"
@@ -107,7 +110,7 @@
 import headerPage from "@/components/header/headerPage.vue";
 import imgCard from "@/components/course/imgCard.vue";
 import { mapActions, mapGetters } from "vuex";
-import LoadingOverlay from '../../../components/loading/loadingOverlay.vue';
+import LoadingOverlay from "../../../components/loading/loadingOverlay.vue";
 import Swal from "sweetalert2";
 export default {
   name: "manageCourseReserve",
@@ -130,7 +133,7 @@ export default {
       {
         text: "วันที่จอง",
         align: "start",
-        sortable: false,
+        sortable: true,
         value: "dateTh",
       },
       {
@@ -183,7 +186,7 @@ export default {
       GetReserveList: "reserveCourseModules/GetReserveList",
       UpdateStatusReserve: "reserveCourseModules/UpdateStatusReserve",
     }),
-    update(reserve_id, reserve_data){
+    update(reserve_id, reserve_data) {
       Swal.fire({
         icon: "question",
         title: `ต้องการเปลี่ยนสถานะใช่หรือไม่ ?`,
@@ -196,11 +199,10 @@ export default {
           this.UpdateStatusReserve({
             reserve_id: reserve_id,
             reserve_data: reserve_data,
-          })
+          });
         }
-      })
-    
-    }
+      });
+    },
   },
 };
 </script>
