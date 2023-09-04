@@ -301,5 +301,97 @@
     "warning" : "คำเตือน",
     "weekly" : "รายสัปดาห์",
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    "add a coach":"เพิ่มโค้ช",
+    "advice":"คำแนะนำ",
+    "approval of leave" :"การอนุมัติลา",
+    "add a package":"เพิ่มแพ็กเกจ",
+    "add a course":"เพิ่มคอร์ส",
+    "already paid":"ชำระเงินเรียบร้อยแล้ว",
+
+
+    "banner management":"จัดการแบนเนอร์",
+    "back":"ย้อนกลับ",
+
+    
+    "create a course":"สร้างคอร์สเรียน",
+    "create a kingdom":"สร้างอาณาจักร",
+
+    "choose file":"เลือกไฟล์",
+    "clear data":"ล้างข้อมูล",
+
+    "details of time and coach":"รายละเอียดเวลาและโค้ช",
+
+    "data not found" : "ไม่พบข้อมูล",
+
+    "example of pictures":"ตัวอย่างรูปภาพ",
+
+    "finance":"การเงิน",
+    "fill in the name of the kingdom":"กรอกชื่ออาณาจักร",
+    "fill in the details..." : "กรอกรายละเอียด...",
+    "kingdom details":"รายละเอียดอาณาจักร",
+    "kingdom name (Thai language)":"ชื่ออาณาจักร(ภาษาไทย)",
+    "kingdom name (English language)":"ชื่ออาณาจักร(ภาษาอังกฤษ)",
+    "images should be uploaded with a size of 1024 x 576 (16:9)":"ควรอัปโหลดรูปที่มี ขนาด 1024 x 576 (16:9)",
+
+    "manage reservations":"จัดการการจอง",
+    "manage all courses":"จัดการคอร์สทั้งหมด",
+    "manage a kingdom":"จัดการอาณาจักร",
+    "manage user":"จัดการผู้ใช้งาน",
+
+    "next":"ถัดไป",
+    "please enter the student's name":"กรุณากรอกชื่อผู้เรียน",
+    "price" : "ราคา",
+    "price note":"หมายเหตุราคา",
+
+    "specify the teaching institution, e.g. Manila Tamarind Music Center":"ระบุสถาบันผู้จัดสอน เช่น ศูนย์ดนตรี Manila Tamarind",
+    "suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file":"คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG",
+    "select kingdom":"เลือกอาณาจักร",
+    "select course":"เลือกคอร์สเรียน",
+    "send payment notification":"ส่งแจ้งเตือนการชำระ",
+    "search/Please select a student":"ค้นหา/โปรดเลือกผู้เรียน",
+    "search full course ค้นหา/โปรดเลือกผู้เรียนname here": "ค้นหาชื่อคอร์สเต็มได้ที่นี้",
+
+    "sign up for One ID":"สมัคร One ID",
+    "time and coach":"ช่วงเวลาและโค้ช",
+
+    "there are no preview images":"ไม่มีรูปตัวอย่าง",
+    
+    "upload the cover image of the kingdom":"อัปโหลดภาพหน้าปกอาณาจักร",
+    "upload the cover image of the course.":"อัปโหลดภาพหน้าปกคอร์สเรียน",
+    "upload privileged images":"อัปโหลดภาพสิทธิ์พิเศษ",
+    "upload Learning Journey":"อัปโหลดภาพ Learning Journey",
+
+    "organized by":"จัดสอนโดย",
     "z":"z"
+
 }
