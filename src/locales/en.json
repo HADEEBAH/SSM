@@ -22,6 +22,8 @@
     "attendance" : "Attendance",
     "attachment not found" : "Attachment not found",
     "attachments" : "Attachments",
+    "attached file from teaching summary notes":"Attached file from teaching summary notes",
+    "attachment from student assessment": "Attachment from student assessment",
     "available course information": "Available course information",
    
 
@@ -53,9 +55,12 @@
     "confirm password is incorrect" : "Confirm password is incorrect",
     "contacted": "Contacted",
     "compensation date" : "Compensation date",
+    "comments": "Comments",
+    "comments from the coach": "Comments from the coach",
     "contact us at" : "Contact us at",
     "course" : "Course",
     "course available" : "Course available",
+    "course information": "Course information",
     "course name" : "Course name",
     "courses" : "Courses",
     "course information not found" : "Course information not found",
@@ -173,14 +178,19 @@
 
     "nationality": "Nationality",
     "new password":"New password",
+    "no attachments from teaching summary notes" : "no attachments from teaching summary notes",
     "no." : "No.",
+    "no comment": "no comment",
     "no data found" : "No data found",
     "no data found in table" : "No data found in table",
     "no notifications" : "No notifications",
     "no potential assessment information found" : "No potential assessment information found",
+    "no attachment from student assessment" : " No attachment from student assessment",
     "note" : "Note",
     "notification of course application":"Notification of course application",
     "notifications" : "Notifications",
+    "no recording": "No recording",
+    "no development/homework":"No development/homework",
     "number of students" : "Number of students",
     "number of times" : "Number of times",
 
@@ -226,6 +236,8 @@
     "please select at least 1 day before the holiday":"Please select at least 1 day before the holiday",
     "port":"Portfolio",
     "policy":"Policy",
+    "potential assessment":"Potential assessment",
+
 
     "reason for leave" : "Reason for leave",
     "read more":"Read more",
@@ -262,6 +274,7 @@
     "student information":"Student information",
    "student information not found": "Student information not found",
     "study date" : "Study date",
+    "study information": "Study information",
     "study notifications":"Study notifications",
     "study schedule":"Study schedule",
     "substitute teacher" : "Substitute teacher",
