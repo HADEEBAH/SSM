@@ -174,6 +174,7 @@
                   : 0 < course_data.student_recived
               "
               depressed
+              :disabled="validateRegistorCourse() ? true : false"
               class="w-full font-bold white--text"
               @click="registerCourse"
               color="#ff6b81"
@@ -317,6 +318,11 @@ export default {
           }
         }
       });
+    },
+    validateRegistorCourse(){
+      let tobay = moment(new Date()).format("YYYY-MM-DD")
+      // console.log(moment(tobay).isBetween( this.course_data.course_register_start_date, this.course_data.course_register_end_date, null, '[]'))
+      return !moment(tobay).isBetween( this.course_data.course_register_start_date, this.course_data.course_register_end_date, null, '[]');
     },
     registerCourse() {
       this.order.order_step = 1;
