@@ -24,6 +24,8 @@
     "attachment not found" : "ไม่พบไฟล์แนบ",
     "attachments" : "ไฟล์แนบ",
     "all days" : "ทั้งวัน",
+    "attached file from teaching summary notes":"ไฟล์แนบจากบันทึกสรุปการสอน",
+    "attachment from student assessment": "ไฟล์แนบจากประเมินนักเรียน",
     "available course information": "ข้อมูลคอร์สว่าง",
 
     "baht" : "บาท",
@@ -63,10 +65,13 @@
     "contact us at" : "ติดต่อเราได้ที่",
     "comment" : "แสดงความคิดเห็น",
     "compensation date" : "วันที่ชดเชย",
-    "compensatory study day" : "วันเรียนชดเชย",
+    "comments": "ความคิดเห็น",
+    "comments from the coach": "ความคิดเห็นจากโค้ช",
     "course" : "คอร์สเรียน",
     "course name" : "ชื่อคอร์ส",
     "courses" : "คอร์ส",
+    "course information": "ข้อมูลคอร์สเรียน",
+    "compensatory study day" : "วันเรียนชดเชย",
     "course available" : "คอร์สว่าง",
     "course check-in" : "เช็คอินคอร์ส",
     "course information not found" : "ไม่พบข้อมูลคอร์ส",
@@ -185,10 +190,15 @@
     "nationality": "สัญชาติ",
     "new password":"รหัสผ่านใหม่",
     "no." : "ลำดับ",
+    "no comment": "ไม่มีความคิดเห็น",
+    "no attachments from teaching summary notes" : "ไม่มีไฟล์แนบจากบันทึกสรุปการสอน",
     "no data found" : "ไม่พบข้อมูล",
     "no data found in table" : "ไม่พบข้อมูลในตาราง",
     "no notifications" : "ไม่มีการแจ้งเตือน",
     "no potential assessment information found" : "ไม่พบข้อมูลการประเมินศักยภาพ",
+    "no recording": "ไม่มีการบันทึก",
+    "no development/homework":"ไม่มีพัฒนาการ / การบ้าน",
+    "no attachment from student assessment" : "ไฟล์แนบจากประเมินนักเรียน",
     "note" : "หมายเหตุ",
     "notification of course application":"แจ้งเตือนการสมัครคอร์สเรียน",
     "notifications" : "การแจ้งเตือน",
@@ -263,6 +273,7 @@
     "please select at least 1 day before the holiday": "กรุณาเลือกอย่างน้อย 1 วันก่อนวันหยุด",
     "port":"พอร์ตโฟลิโอ",
     "policy":"นโยบาย",
+    "potential assessment":"ผลประเมินศักยภาพ",
 
 
 
@@ -308,6 +319,7 @@
    "student information in charge":"ข้อมูลนักเรียนในความดูแล",
    "student information not found": "ไม่พบข้อมูลของผู้ปกครอง",
     "study date" : "วันเรียน",
+    "study information": "ข้อมูลการเรียน",
     "study notifications":"แจ้งเตือนการเรียน",
     "study schedule":"ตารางเรียน",
     "substitute teacher" : "ผู้สอนแทน",
@@ -421,7 +433,6 @@
     "create a kingdom":"สร้างอาณาจักร",
 
     "choose file":"เลือกไฟล์",
-    "clear data":"ล้างข้อมูล",
 
     "details of time and coach":"รายละเอียดเวลาและโค้ช",
 

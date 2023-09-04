@@ -32,16 +32,15 @@
               <v-row dense>
                 <v-col class="text-lg font-bold">
                   {{
-                    !my_course_detail.courseNameTh
-                      ? "-"
-                      : my_course_detail.courseNameTh
+                    $i18n.locale == "th"
+                      ? my_course_detail.courseNameTh
+                      : my_course_detail.courseNameEng
                   }}
-                  ({{ my_course_detail.courseNameEng }})
                 </v-col>
               </v-row>
               <v-row dense>
                 <v-col class="text-slate-400">
-                  <span class="mdi mdi-account">โค้ช :</span>
+                  <span class="mdi mdi-account">{{ $t("coach") }}:</span>
                   {{
                     !my_course_detail.coachName
                       ? "-"
@@ -51,7 +50,7 @@
               </v-row>
               <v-row dense>
                 <v-col class="text-slate-400">
-                  <span class="mdi mdi-account">ผู้เรียน :</span>
+                  <span class="mdi mdi-account">{{ $t("learner") }} :</span>
                   {{
                     !my_course_detail.student
                       ? "-"
@@ -66,7 +65,7 @@
               </v-row>
               <v-row dense>
                 <v-col class="text-slate-400">
-                  <span class="mdi mdi-account">ทำรายการโดย :</span>
+                  <span class="mdi mdi-account">{{ $t("listed by") }} :</span>
 
                   {{
                     !my_course_detail.createdBy
@@ -95,7 +94,7 @@
                       }}
                     </span>
                     {{ my_course_detail.time.start }} -
-                    {{ my_course_detail.time.end }} น.
+                    {{ my_course_detail.time.end }} {{ $t("o'clock") }}
                   </v-chip>
                 </v-col>
               </v-row>
@@ -114,7 +113,7 @@
                 "
               >
                 {{ my_course_detail.countCheckIn }} /
-                {{ my_course_detail.dates.totalDay }} <br />ครั้ง
+                {{ my_course_detail.dates.totalDay }} <br />{{ $t("time") }}
               </v-progress-circular>
             </v-col>
           </v-row>
@@ -122,7 +121,7 @@
       </v-card>
       <v-row dense class="mb-3">
         <v-col cols="6" align="start">
-          <div class="text-lg font-bold">ข้อมูลการเรียน</div>
+          <div class="text-lg font-bold">{{ $t("study information") }}</div>
         </v-col>
       </v-row>
       <div
@@ -136,13 +135,15 @@
               <v-col cols="2" sm="1" align="center">
                 <img src="@/assets/student_course/certificates.png" />
               </v-col>
-              <v-col class="text-lg font-bold" cols="6">ผลประเมินศักยภาพ</v-col>
+              <v-col class="text-lg font-bold" cols="6">{{
+                $t("potential assessment")
+              }}</v-col>
             </v-row>
             <v-card flat color="#FBF3F5">
               <v-card-text>
                 <v-row dense>
                   <v-col>
-                    <b>ระดับพัฒนาการ:</b>
+                    <b>{{ $t("developmental level") }}:</b>
                     <span
                       :class="`text-[${
                         evolution_options.filter(
@@ -164,19 +165,19 @@
                 </v-row>
                 <v-row dense>
                   <v-col>
-                    <b>ระดับความสนใจ:</b>
+                    <b>{{ $t("interest level") }}:</b>
                     {{ potential.interest }}
                   </v-col>
                 </v-row>
                 <v-row dense>
                   <v-col cols="12" align="start">
-                    <b>ความคิดเห็นจากโค้ช:</b>
+                    <b>{{ $t("comments from the coach") }}:</b>
                     {{ potential.remark }}
                   </v-col>
                 </v-row>
                 <v-row dense>
                   <v-col cols="12">
-                    <b>ไฟล์แนบ: </b>
+                    <b>{{ $t("attachments") }}: </b>
                     <v-card
                       @click="openFile(file.attachmentFiles)"
                       flat
@@ -199,7 +200,7 @@
                             }}</span
                             ><br />
                             <span class="text-caption"
-                              >ขนาดไฟล์ :
+                              >{{ $t("file size") }} :
                               {{ (file.filesSize / 1000000).toFixed(2) }}
                               MB</span
                             >
@@ -280,7 +281,7 @@
             </v-row>
             <v-row dense>
               <v-col class="text-slate-400">
-                เวลาเรียน
+                {{ $t("class time") }}
                 {{
                   !my_course_detail.time.start
                     ? "-"
@@ -297,7 +298,7 @@
               <!-- พัฒนาการ -->
               <v-col cols="12" sm="4" align="start">
                 <div v-if="day_list.assessment.evolution">
-                  <b>ระดับพัฒนาการ:</b>
+                  <b>{{ $t("developmental level") }}:</b>
                   <span>
                     {{
                       evolution_options.filter(
@@ -314,7 +315,7 @@
               <!-- ความสนใจ -->
               <v-col cols="12" sm="auto" align="start">
                 <div v-if="day_list.assessment.interest">
-                  <b> ระดับความสนใจ:</b>
+                  <b> {{ $t("interest level") }}:</b>
                   <span>
                     {{
                       interest_options.filter(
@@ -331,7 +332,7 @@
             </v-row>
             <div align="center">
               <v-btn color="#FF6B81" text @click="showAssessment(index_day)">
-                ดูเพิ่มเติม
+                {{ $t("see more") }}
                 <v-icon>{{
                   day_list.show ? "mdi-chevron-up" : "mdi-chevron-down"
                 }}</v-icon>
@@ -341,36 +342,40 @@
               <div v-show="day_list.show">
                 <!-- <pre>{{ day_list.dailySummary }}</pre> -->
                 <label class="font-bold mb-2 text-[#FF6B81]">
-                  บันทึกสรุปการสอน
+                  {{ $t("teaching summary notes") }}
                 </label>
                 <!-- บันทึกการสอน -->
                 <v-row dense>
                   <v-col cols="12" class="indent-3">
-                    <b>บันทึกการสอน : </b>
+                    <b>{{ $t("teaching notes") }} : </b>
                     {{
                       day_list.dailySummary.summary
                         ? day_list.dailySummary.summary
-                        : "ไม่มีการบันทึก"
+                        : $t("no recording")
                     }}
                   </v-col>
                 </v-row>
                 <!-- พัฒนาการ / การบ้าน  -->
                 <v-row dense>
                   <v-col cols="12" class="indent-3">
-                    <b>พัฒนาการ / การบ้าน : </b>
+                    <b>{{ $t("development / homework") }} : </b>
                     {{
                       day_list.dailySummary.homework
                         ? day_list.dailySummary.homework
-                        : "ไม่มีพัฒนาการ / การบ้าน"
+                        : $t("no development/homework")
                     }}
                   </v-col>
                 </v-row>
                 <!-- ไฟล์แนบจากบันทึกสรุปการสอน -->
                 <v-row dense>
                   <v-col cols="12" class="indent-3">
-                    <b>ไฟล์แนบจากบันทึกสรุปการสอน :</b
+                    <b
+                      >{{
+                        $t("attached file from teaching summary notes")
+                      }}
+                      :</b
                     ><span v-if="day_list.dailySummary.attachment == ''">
-                      ไม่มีไฟล์แนบจากบันทึกสรุปการสอน
+                      {{ $t("no attachments from teaching summary notes") }}
                     </span>
 
                     <v-card
@@ -395,7 +400,7 @@
                             }}</span
                             ><br />
                             <span class="text-caption"
-                              >ขนาดไฟล์ :
+                              >{{ $t("file size") }} :
                               {{ (file.filesSize / 1000000).toFixed(2) }}
                               MB</span
                             >
@@ -407,15 +412,15 @@
                 </v-row>
 
                 <label class="font-bold mb-2 text-[#FF6B81]">
-                  ประเมินนักเรียน
+                  {{ $t("assess students") }}
                 </label>
                 <v-row dense>
                   <!-- ความคิดเห็น -->
                   <v-col class="indent-3">
-                    <b>ความคิดเห็น:</b>
+                    <b>{{ $t("comments") }}:</b>
                     {{
                       !day_list.assessment.remark
-                        ? "ไม่มีความคิดเห็น"
+                        ? $t("no comment")
                         : day_list.assessment.remark
                     }}
                   </v-col>
@@ -423,9 +428,9 @@
                 <!-- ไฟล์แนบจากประเมินนักเรียน -->
                 <v-row dense>
                   <v-col cols="12" class="indent-3">
-                    <b>ไฟล์แนบจากประเมินนักเรียน :</b>
+                    <b>{{ $t("attachment from student assessment") }} :</b>
                     <span v-if="day_list.assessment.attachment == ''">
-                      ไม่มีไฟล์แนบจากประเมินนักเรียน
+                      {{ $t("no attachment from student assessment") }}
                     </span>
                     <v-card
                       @click="openFile(file.attachmentFiles)"
@@ -448,7 +453,7 @@
                             }}</span
                             ><br />
                             <span class="text-caption"
-                              >ขนาดไฟล์ :
+                              >{{ $t("file size") }} :
                               {{ (file.filesSize / 1000000).toFixed(2) }}
                               MB</span
                             >
@@ -483,43 +488,6 @@ export default {
     dialog_show: false,
     show_id: "",
     item_data: "",
-    check_in_status_options: [
-      {
-        label: "ตรงเวลา",
-        value: "punctual",
-        class: "text-[#58A144] bg-[#F0F9EE]",
-        color: "#58A144",
-        bg_color: "#F0F9EE",
-      },
-      {
-        label: "สาย",
-        value: "late",
-        class: "text-[#FCC419] bg-[#FFF9E8]",
-        color: "#FCC419",
-        bg_color: "#FFF9E8",
-      },
-      {
-        label: "ลา",
-        value: "leave",
-        class: "text-[#43A4F5] bg-[#F0F6FB]",
-        color: "#43A4F5",
-        bg_color: "#F0F6FB",
-      },
-      {
-        label: "ลาฉุกเฉิน",
-        value: "emergency leave",
-        class: "text-[#43A4F5] bg-[#CFE2F3]",
-        color: "#43A4F5",
-        bg_color: "#CFE2F3",
-      },
-      {
-        label: "ขาด",
-        value: "absent",
-        class: "text-[#F03D3E] bg-[#faeaea]",
-        color: "#F03D3E",
-        bg_color: "#faeaea",
-      },
-    ],
     evolution_options: [
       { label: "⭐⭐⭐⭐⭐", value: "very good", color: "#ff6b81" },
       { label: "⭐⭐⭐⭐", value: "good", color: "#58A144" },
@@ -566,7 +534,7 @@ export default {
   mounted() {
     this.$store.dispatch(
       "NavberUserModules/changeTitleNavber",
-      "ข้อมูลคอร์สเรียน"
+      "course information"
     );
     if (
       this.my_course_detail.checkIn &&
@@ -647,6 +615,45 @@ export default {
 
     pdfFiles() {
       return this.attachment.filter((file) => file.attFiles.endsWith(".pdf"));
+    },
+    check_in_status_options() {
+      return [
+        {
+          label: this.$t("punctual"),
+          value: "punctual",
+          class: "text-[#58A144] bg-[#F0F9EE]",
+          color: "#58A144",
+          bg_color: "#F0F9EE",
+        },
+        {
+          label: this.$t("late"),
+          value: "late",
+          class: "text-[#FCC419] bg-[#FFF9E8]",
+          color: "#FCC419",
+          bg_color: "#FFF9E8",
+        },
+        {
+          label: this.$t("leave"),
+          value: "leave",
+          class: "text-[#43A4F5] bg-[#F0F6FB]",
+          color: "#43A4F5",
+          bg_color: "#F0F6FB",
+        },
+        {
+          label: this.$t("emergency leave"),
+          value: "emergency leave",
+          class: "text-[#43A4F5] bg-[#CFE2F3]",
+          color: "#43A4F5",
+          bg_color: "#CFE2F3",
+        },
+        {
+          label: this.$t("absent"),
+          value: "absent",
+          class: "text-[#F03D3E] bg-[#faeaea]",
+          color: "#F03D3E",
+          bg_color: "#faeaea",
+        },
+      ];
     },
   },
 };

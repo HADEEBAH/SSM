@@ -173,7 +173,12 @@
                           <span class="mdi mdi-account"
                             >{{ $t("coach") }} :</span
                           >
-                          {{ item.coachName == null ? "-" : item.coachName }}
+                          {{
+                            $i18n.locale == "th"
+                              ? item.coachName
+                              : item.coachNameEng
+                          }}
+                          <!-- {{ item.coachName == null ? "-" : item.coachName }} -->
                         </v-col>
                       </v-row>
                       <v-row dense>
@@ -181,17 +186,17 @@
                           <span class="mdi mdi-account"
                             >{{ $t("learner") }} :</span
                           >
-                          <!-- {{
+                          {{
                             $i18n.locale == "th"
                               ? item.student.firstNameTh
                               : item.student.firstNameEng
                           }}
-                           {{
+                          {{
                             $i18n.locale == "th"
                               ? item.student.lastNameTh
                               : item.student.lastNameEng
-                          }} -->
-                          {{
+                          }}
+                          <!-- {{
                             !item.student.firstNameTh
                               ? "-"
                               : item.student.firstNameTh
@@ -200,7 +205,7 @@
                             !item.student.lastNameTh
                               ? "-"
                               : item.student.lastNameTh
-                          }}
+                          }} -->
                         </v-col>
                       </v-row>
                       <v-row dense>
@@ -209,11 +214,21 @@
                             >{{ $t("listed by") }} :</span
                           >
                           {{
+                            $i18n.locale == "th"
+                              ? item.createdBy.firstNameTh
+                              : item.createdBy.firstNameEng
+                          }}
+                          {{
+                            $i18n.locale == "th"
+                              ? item.createdBy.lastNameTh
+                              : item.createdBy.lastNameEng
+                          }}
+                          <!-- {{
                             !item.createdBy ? "-" : item.createdBy.firstNameTh
                           }}
                           {{
                             !item.createdBy ? "-" : item.createdBy.lastNameTh
-                          }}
+                          }} -->
                         </v-col>
                       </v-row>
                       <v-row dense>
@@ -310,7 +325,13 @@
                     <v-row dense>
                       <v-col class="text-slate-400">
                         <span class="mdi mdi-account">{{ $t("coach") }} :</span>
-                        {{ item.coachName == null ? "-" : item.coachName }}
+                        {{
+                          $i18n.locale == "th"
+                            ? item.coachName
+                            : item.coachNameEng
+                        }}
+
+                        <!-- {{ item.coachName == null ? "-" : item.coachName }} -->
                       </v-col>
                     </v-row>
                     <v-row dense>
@@ -319,6 +340,16 @@
                           >{{ $t("learner") }} :</span
                         >
                         {{
+                          $i18n.locale == "th"
+                            ? item.student.firstNameTh
+                            : item.student.firstNameEng
+                        }}
+                        {{
+                          $i18n.locale == "th"
+                            ? item.student.lastNameTh
+                            : item.student.lastNameEng
+                        }}
+                        <!-- {{
                           !item.student.firstNameTh
                             ? "-"
                             : item.student.firstNameTh
@@ -327,7 +358,7 @@
                           !item.student.lastNameTh
                             ? "-"
                             : item.student.lastNameTh
-                        }}
+                        }} -->
                       </v-col>
                     </v-row>
                     <v-row dense>
@@ -335,9 +366,18 @@
                         <span class="mdi mdi-account"
                           >{{ $t("listed by") }} :</span
                         >
-
-                        {{ !item.createdBy ? "-" : item.createdBy.firstNameTh }}
-                        {{ !item.createdBy ? "-" : item.createdBy.lastNameTh }}
+                        {{
+                          $i18n.locale == "th"
+                            ? item.createdBy.firstNameTh
+                            : item.createdBy.firstNameEng
+                        }}
+                        {{
+                          $i18n.locale == "th"
+                            ? item.createdBy.lastNameTh
+                            : item.createdBy.lastNameEng
+                        }}
+                        <!-- {{ !item.createdBy ? "-" : item.createdBy.firstNameTh }}
+                        {{ !item.createdBy ? "-" : item.createdBy.lastNameTh }} -->
                       </v-col>
                     </v-row>
                     <v-row dense>
