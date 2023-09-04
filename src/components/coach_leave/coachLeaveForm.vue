@@ -1,12 +1,12 @@
 <template>
   <v-form ref="form_coach_leave" v-model="form_coach_leave">
     <v-card flat class="pa-0">
-      <v-card-title class="d-flex justify-center"> แบบฟอร์มขอลา</v-card-title>
+      <v-card-title class="d-flex justify-center"> {{$t("leave request form")}}</v-card-title>
       <v-card-text>
         <!-- DATE LEAVE AND PERIOD -->
         <v-row dense v-if="admin">
           <v-col>
-            โค้ชที่ต้องการลา
+            {{ $t("coach who wants leave") }}
             <v-select
               dense
               outlined
@@ -21,7 +21,7 @@
         </v-row>
         <v-row dense>
           <v-col cols="12">
-            วันที่ลา
+            {{ $t("leave date") }}
             <v-row dense>
               <v-col cols="12" sm="6">
                 <v-menu
@@ -39,7 +39,7 @@
                       :rules="rules.start_date"
                       v-model="coach_leave_data.start_date_str"
                       readonly
-                      placeholder="เลือกวันที่เริ่มต้น"
+                      :placeholder="$t('choose start date')"
                       v-bind="attrs"
                       v-on="on"
                     >
@@ -56,7 +56,7 @@
                     @input="inputDate($event, 'start')"
                     @change="validateCoachLeave"
                     v-model="coach_leave_data.start_date"
-                    locale="th-TH"
+                    :locale="$i18n.locale == 'th'  ? 'th-TH' : 'en-US'"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
@@ -77,7 +77,7 @@
                       outlined
                       v-model="coach_leave_data.end_date_str"
                       readonly
-                      placeholder="เลือกวันที่สิ้นสุด"
+                      :placeholder="$t('choose an end date')"
                       v-bind="attrs"
                       v-on="on"
                     >
@@ -98,7 +98,7 @@
                     @input="inputDate($event, 'end')"
                     @change="validateCoachLeave"
                     v-model="coach_leave_data.end_date"
-                    locale="th-TH"
+                    :locale="$i18n.locale == 'th'  ? 'th-TH' : 'en-US'"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
@@ -107,7 +107,7 @@
         </v-row>
         <v-row dense>
           <v-col cols="12">
-            ช่วงเวลา
+            {{ $t('period') }}
             <v-select
               :rules="rules.period"
               dense
@@ -129,7 +129,7 @@
         <!-- TYPE -->
         <v-row dense>
           <v-col cols="12">
-            ประเภทการลา
+            {{ $t('leave type') }}
             <v-select
               :rules="rules.type_leave"
               dense
@@ -161,7 +161,7 @@
                     >mdi-card-account-details-outline</v-icon
                   >
                 </v-col>
-                <v-col class="font-bold text-lg"> คอร์ส </v-col>
+                <v-col class="font-bold text-lg"> {{ $t('course') }} </v-col>
               </v-row>
               <v-divider class="my-2"></v-divider>
               <v-card
@@ -178,19 +178,19 @@
                   </div>
                   <v-radio-group :rules="rules.type" v-model="course.type" row>
                     <v-radio
-                      label="มีผู้สอนแทน"
+                      :label="$t('have a substitute teacher')"
                       color="#ff6b81"
                       value="teach"
                     ></v-radio>
                     <v-radio
-                      label="ไม่มีผู้สอนแทน"
+                      :label="$t('there is no substitute teacher')"
                       color="#ff6b81"
                       value="date"
                     ></v-radio>
                   </v-radio-group>
                   <v-row dense>
                     <v-col>
-                      ชื่อคอร์ส
+                      {{ $t('course name') }}
                       <v-select
                         :rules="rules.course"
                         dense
@@ -213,7 +213,7 @@
                   </v-row>
                   <v-row dense v-if="course.type === 'teach'">
                     <v-col>
-                      ผู้สอนแทน
+                      {{ $t("substitute teacher") }}
                       <v-select
                         :rules="rules.sub_coach"
                         dense
@@ -228,7 +228,7 @@
                               )
                         "
                         item-value="accountId"
-                        item-text="fullNameTh"
+                        :item-text="$i18n.locale == 'th'? 'fullNameTh' : 'fullNameEh'"
                         v-model="course.substitute_coach_id"
                       >
                       </v-select>
@@ -236,7 +236,7 @@
                   </v-row>
                   <v-row dense v-else-if="course.type === 'date'">
                     <v-col cols="12" md="6">
-                      วันที่ชดเชย
+                      {{ $t("compensation date") }}
                       <v-menu
                         v-model="course.menu_compensation_date"
                         :close-on-content-click="false"
@@ -250,7 +250,7 @@
                             outlined
                             hide-details
                             readonly
-                            placeholder="เลือกวันที่ชดเชย"
+                            :placeholder="$t('choose a compensation date')"
                             v-bind="attrs"
                             v-on="on"
                             :value="course.compensation_date_str"
@@ -272,12 +272,12 @@
                           @input="
                             inputDateArr(course.compensation_date, course)
                           "
-                          locale="th-TH"
+                          :locale="$i18n.locale== 'th'? 'th-TH' : 'en-US'"
                         ></v-date-picker>
                       </v-menu>
                     </v-col>
                     <v-col cols="12" md="6">
-                      ช่วงเวลา
+                      {{ $t('period') }}
                       <v-row dense class="mb-3">
                         <v-col class="px-2" cols="12" sm="6">
                           <v-text-field
@@ -371,7 +371,7 @@
             <v-row dense>
               <v-col align="center">
                 <v-btn outlined color="#FF6b81" @click="AddCourse(date)"
-                  ><v-icon>mdi-plus</v-icon> เพิ่มคอร์ส
+                  ><v-icon>mdi-plus</v-icon>{{ $t('add a course') }}
                 </v-btn>
               </v-col>
             </v-row>
@@ -379,7 +379,7 @@
         </template>
         <v-row dense>
           <v-col>
-            รายละเอียดการลา
+            {{ $t("leave details") }}
             <v-textarea v-model="coach_leave_data.remark" outlined></v-textarea>
           </v-col>
         </v-row>
@@ -396,7 +396,7 @@
                 ></v-img>
               </v-col>
               <v-col cols="12" class="flex align-center justify-center text-lg">
-                แนบไฟล์
+                {{ $t("attachments") }}
               </v-col>
               <v-col cols="12" class="flex align-center justify-center">
                 <v-btn
@@ -404,7 +404,7 @@
                   class="underline"
                   color="#ff6b81"
                   @click="openFileSelector"
-                  >อัปโหลดไฟล์แนบ</v-btn
+                  >{{ $t("upload attachment") }}</v-btn
                 >
                 <input
                   id="fileInput"
@@ -420,7 +420,7 @@
         </v-card>
         <div v-if="selected_files.length > 0" class="mb-3">
           <v-row dense>
-            <v-col class="font-bold text-lg"> ไฟล์แนบ </v-col>
+            <v-col class="font-bold text-lg"> {{ $t("attachments") }}</v-col>
           </v-row>
           <v-divider class="my-2"></v-divider>
           <v-card
@@ -442,7 +442,7 @@
                   <span class="font-bold">{{ file.name }}</span
                   ><br />
                   <span class="text-caption"
-                    >ขนาดไฟล์ : {{ (file.size / 1000000).toFixed(2) }} MB</span
+                    >{{$t('file size')}} : {{ (file.size / 1000000).toFixed(2) }} MB</span
                   >
                 </v-col>
                 <v-col cols="auto" class="pl-2">
@@ -458,7 +458,7 @@
         <v-row>
           <v-col cols="12" sm align="right">
             <v-btn text color="#ff6b81" @click="closeDialogLeaveForm()"
-              >ยกเลิก</v-btn
+              >{{$t('cancel')}}</v-btn
             >
           </v-col>
           <v-col cols="12" sm="auto" align="right">
@@ -468,7 +468,7 @@
               :dark="!validateCoachLeave"
               @click="saveCoachLeave()"
               color="#ff6b81"
-              >ส่งใบลา</v-btn
+              >{{ $t("send a leave letter") }}</v-btn
             >
           </v-col>
         </v-row>
@@ -592,7 +592,7 @@ export default {
     }),
     inputDateArr(date, course) {
       course.compensation_date_str = new Date(date).toLocaleDateString(
-        "th-TH",
+        this.$i18n.locale == 'th' ? "th-TH":"en-US",
         { year: "numeric", month: "long", day: "numeric" }
       );
     },

@@ -3,7 +3,7 @@ import VueCookie from "vue-cookie";
 import moment from "moment";
 import Swal from "sweetalert2";
 import { dateFormatter } from '@/functions/functions';
-import VueI18n from "vue-i18n";
+// import VueI18n from "vue-i18n";
 const coachModules = {
   namespaced: true,
   state: {
@@ -528,12 +528,6 @@ const coachModules = {
     async GetMyCourses(context, { coach_id }) {
       context.commit("SetMyCoursesIsLoading", true);
       try {
-        const options = {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        };
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -589,7 +583,7 @@ const coachModules = {
                         coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
                         coach_en: `${user_detail.first_name_en} ${user_detail.last_name_en}`,
                         start_date: moment(startDate).format("YYYY-MM-DD"),
-                        start_date_str: startDate.toLocaleDateString(VueI18n.locale == "th" ? "th-TH" : "en-US", options),
+                        start_date_str:  moment(startDate).format("YYYY-MM-DD"),
                         start: moment(startDate).format("YYYY-MM-DD HH:mm"),
                         end: moment(endDate).format("YYYY-MM-DD HH:mm"),
                         start_time: start_time,
@@ -631,7 +625,7 @@ const coachModules = {
                       coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
                       coach_en: `${user_detail.first_name_en} ${user_detail.last_name_en}`,
                       start_date: moment(startDate).format("YYYY-MM-DD"),
-                      start_date_str: startDate.toLocaleDateString(VueI18n.locale == "th" ? "th-TH" : "en-US", options),
+                      start_date_str: moment(startDate).format("YYYY-MM-DD"),
                       start: moment(startDate).format("YYYY-MM-DD HH:mm"),
                       end: moment(endDate).format("YYYY-MM-DD HH:mm"),
                       start_time: start_time,
@@ -669,7 +663,7 @@ const coachModules = {
                       coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
                       coach_en: `${user_detail.first_name_en} ${user_detail.last_name_en}`,
                       start_date: moment(startDate).format("YYYY-MM-DD"),
-                      start_date_str: startDate.toLocaleDateString(VueI18n.locale == "th" ? "th-TH" : "en-US", options),
+                      start_date_str: moment(startDate).format("YYYY-MM-DD"),
                       start: moment(startDate).format("YYYY-MM-DD HH:mm"),
                       end: moment(endDate).format("YYYY-MM-DD HH:mm"),
                       start_time: start_time,
@@ -719,7 +713,7 @@ const coachModules = {
                       coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
                       coach_en: `${user_detail.first_name_en} ${user_detail.last_name_en}`,
                       start_date: moment(startDate).format("YYYY-MM-DD"),
-                      start_date_str: startDate.toLocaleDateString(VueI18n.locale == "th" ? "th-TH" : "en-US", options),
+                      start_date_str:moment(startDate).format("YYYY-MM-DD"),
                       start: moment(startDate).format("YYYY-MM-DD HH:mm"),
                       end: moment(endDate).format("YYYY-MM-DD HH:mm"),
                       start_time: start_time,

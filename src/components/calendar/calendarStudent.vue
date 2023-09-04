@@ -77,17 +77,17 @@
                     </v-col>
 
                     <v-col>
-                      เรียนโดย:
+                      {{ $t("study by") }}:
                       <span class="font-bold">{{ event.timed }}</span>
 
                       <v-row dense>
                         <v-col cols="12">
-                          คอร์ส: <span class="font-bold">{{ event.name }}</span>
+                          {{$t("course")}}: <span class="font-bold">{{ event.name }}</span>
                         </v-col>
                       </v-row>
                       <v-row dense>
                         <v-col class="text-sm">
-                          โค้ช:
+                          {{ $t("coach")}}:
                           <span class="font-bold">{{ event.subtitle }} </span
                           ><br />
                           <div>
@@ -98,7 +98,7 @@
                               color="#ff6b81"
                               @click="ToStudentCourse(event)"
                             >
-                              ดูรายละเอียดคอร์สเรียน
+                              {{ $t("view course details") }}
                             </v-btn>
                           </div>
                         </v-col>
@@ -119,7 +119,7 @@
                   </v-row>
                   <v-row dense>
                     <v-col cols="12">
-                      วันหยุด: <span class="font-bold">{{ event.name }}</span>
+                      {{ $t("holiday") }}: <span class="font-bold">{{ event.name }}</span>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -134,7 +134,7 @@
         <div v-else>
           <v-row>
             <v-col class="text-lg font-bold" align="center">
-              ไม่พบคอร์สเรียน
+              {{ $t("course not found")  }}
             </v-col>
           </v-row>
         </div>
@@ -196,13 +196,13 @@ export default {
       today.getMonth(),
       today.getDate() - today.getDay() + 6
     );
-    this.start_of_week = this.start_of_week.toLocaleDateString("th-TH", {
+    this.start_of_week = this.start_of_week.toLocaleDateString(this.$i18n.locale == 'th'?"th-TH" : "en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",
       weekday: "long",
     });
-    this.end_of_week = this.end_of_week.toLocaleDateString("th-TH", {
+    this.end_of_week = this.end_of_week.toLocaleDateString(this.$i18n.locale == 'th'?"th-TH" : "en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",
