@@ -3,6 +3,7 @@ import VueCookie from "vue-cookie";
 import moment from "moment";
 import Swal from "sweetalert2";
 import { dateFormatter } from '@/functions/functions';
+import VueI18n from "vue-i18n";
 const coachModules = {
   namespaced: true,
   state: {
@@ -458,8 +459,10 @@ const coachModules = {
         if (data.statusCode === 200) {
           let i = 1
           for await (let student of data.data) {
+            console.log("student",student)
             student.no = i
             student.fullname = `${student.firstNameTh} ${student.lastNameTh}`
+            student.fullname_en = `${student.firstNameEn} ${student.lastNameEn}`
             student.check_in_student_id = student.checkInStudentId,
               student.menu_compensation_date = false,
               student.compensationDate = student.compensationDate ? student.compensationDate !== "Invalid date" ? moment(new Date(student.compensationDate)).format("YYYY-MM-DD") : null : null
@@ -498,6 +501,7 @@ const coachModules = {
             stadentData.data.data.forEach((student, index) => {
               student.no = index + 1
               student.fullname = `${student.firstNameTh} ${student.lastNameTh}`
+              student.fullname_en = `${student.firstNameEn} ${student.lastNameEn}`
               student.check_in_student_id = student.checkInStudentId,
                 student.menu_compensation_date = false,
                 student.compensation_date = "",
@@ -572,7 +576,6 @@ const coachModules = {
                     endDate = new Date(leaveCourse.teachCompensationDate);
                     endDate.setHours(end_hours);
                     endDate.setMinutes(end_minutes);
-
                     if (courses_task.filter(v => v.course_id === course.courseId && v.time_id === course.timeId && v.day_of_week_id === course.dayOfWeekId && v.start_date === moment(startDate).format("YYYY-MM-DD")).length === 0) {
                       courses_task.push({
                         course_package_name: course.packageName,
@@ -584,13 +587,15 @@ const coachModules = {
                         type: course?.compType ? course?.compType : null,
                         day_of_week_id: course.dayOfWeekId,
                         coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
+                        coach_en: `${user_detail.first_name_en} ${user_detail.last_name_en}`,
                         start_date: moment(startDate).format("YYYY-MM-DD"),
-                        start_date_str: startDate.toLocaleDateString("th-TH", options),
+                        start_date_str: startDate.toLocaleDateString(VueI18n.locale == "th" ? "th-TH" : "en-US", options),
                         start: moment(startDate).format("YYYY-MM-DD HH:mm"),
                         end: moment(endDate).format("YYYY-MM-DD HH:mm"),
                         start_time: start_time,
                         end_time: end_time,
                         category_name: course_data.data.data.categoryNameTh,
+                        category_name_en: course_data.data.data.categoryNameEn,
                         course_img: course_data.data.data.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}` : "",
                         course_per_time: course_data.data.data.coursePerTime,
                         show_summary: false,
@@ -624,13 +629,15 @@ const coachModules = {
                       type: course?.compType ? course?.compType : null,
                       day_of_week_id: course.dayOfWeekId,
                       coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
+                      coach_en: `${user_detail.first_name_en} ${user_detail.last_name_en}`,
                       start_date: moment(startDate).format("YYYY-MM-DD"),
-                      start_date_str: startDate.toLocaleDateString("th-TH", options),
+                      start_date_str: startDate.toLocaleDateString(VueI18n.locale == "th" ? "th-TH" : "en-US", options),
                       start: moment(startDate).format("YYYY-MM-DD HH:mm"),
                       end: moment(endDate).format("YYYY-MM-DD HH:mm"),
                       start_time: start_time,
                       end_time: end_time,
                       category_name: course_data.data.data.categoryNameTh,
+                      category_name_en: course_data.data.data.categoryNameEn,
                       course_img: course_data.data.data.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}` : "",
                       course_per_time: course_data.data.data.coursePerTime,
                       show_summary: false,
@@ -660,13 +667,15 @@ const coachModules = {
                       day_of_week_id: course.dayOfWeekId,
                       type: course?.compType ? course?.compType : null,
                       coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
+                      coach_en: `${user_detail.first_name_en} ${user_detail.last_name_en}`,
                       start_date: moment(startDate).format("YYYY-MM-DD"),
-                      start_date_str: startDate.toLocaleDateString("th-TH", options),
+                      start_date_str: startDate.toLocaleDateString(VueI18n.locale == "th" ? "th-TH" : "en-US", options),
                       start: moment(startDate).format("YYYY-MM-DD HH:mm"),
                       end: moment(endDate).format("YYYY-MM-DD HH:mm"),
                       start_time: start_time,
                       end_time: end_time,
                       category_name: course_data.data.data.categoryNameTh,
+                      category_name_en: course_data.data.data.categoryNameEn,
                       course_package_name: data.data.packageName,
                       course_img: course_data.data.data.courseImg
                         ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}`
@@ -708,13 +717,15 @@ const coachModules = {
                       day_of_week_id: course.dayOfWeekId,
                       type: course?.compType ? course?.compType : null,
                       coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
+                      coach_en: `${user_detail.first_name_en} ${user_detail.last_name_en}`,
                       start_date: moment(startDate).format("YYYY-MM-DD"),
-                      start_date_str: startDate.toLocaleDateString("th-TH", options),
+                      start_date_str: startDate.toLocaleDateString(VueI18n.locale == "th" ? "th-TH" : "en-US", options),
                       start: moment(startDate).format("YYYY-MM-DD HH:mm"),
                       end: moment(endDate).format("YYYY-MM-DD HH:mm"),
                       start_time: start_time,
                       end_time: end_time,
                       category_name: course_data.data.data.categoryNameTh,
+                      category_name_en: course_data.data.data.categoryNameEn,
                       course_img: course_data.data.data.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}` : "",
                       course_per_time: course_data.data.data.coursePerTime,
                       show_summary: false,
