@@ -28,12 +28,9 @@
 
     "baht" : "Baht",
     "by": "By",
-<<<<<<< HEAD
     "by opening an account, you acknowledge and agree to" : "By opening an account, you acknowledge and agree to",
-=======
     "booked course": "Booked course",
     "booking information not found": "Booking information not found",
->>>>>>> develop
 
     "can't find items in the basket" : "Can't find items in the basket",
     "can't find teaching summaries" : "Can't find teaching summaries",
@@ -62,11 +59,8 @@
     "confirm password" : "Confirm password",
     "confirm new password" : "Confirm new password",
     "confirm password is incorrect" : "Confirm password is incorrect",
-<<<<<<< HEAD
     "comment" : "Comment",
-=======
     "contacted": "Contacted",
->>>>>>> develop
     "compensation date" : "Compensation date",
     "compensatory study day" : "Compensatory study day",
     "contact us at" : "Contact us at",
@@ -137,10 +131,6 @@
     "graduating students": "Graduat Students",
     "general": "General",
     "general course" : "General course",
-<<<<<<< HEAD
-
-=======
->>>>>>> develop
     "go to my course page" : "Go to my course page",
 
     "have a substitute teacher" : "Have a substitute teacher",
@@ -168,11 +158,7 @@
     "late" : "Late",
     "last name" : "Last name",
     "last name(english)" :"Last name(English)",
-<<<<<<< HEAD
     "last name(thai)" : "Last name(Thai)",
-=======
-    "last name(thai)" :"Last name(thai)",
->>>>>>> develop
     "leave" : "Leave",
     "leave date" : "Leave date",
     "leave information not found" : "Leave information not found",
@@ -337,18 +323,6 @@
     "start time": "Start time",
     "specify the name of the holiday, such as Songkran Day": "Specify the name of the holiday, such as Songkran Day",
     
-   "students reserve a course": "Students reserve", 
-   "student information in charge":"Student information in charge",
-   "short course": "Short course",
-   "search full course name here": "Search full course name here",
-   "search available course name here": "Search available course name here", 
-   "search" : "Search", 
-   "specify the date":"Specify the date",
-   "start time": "Start time",
-   "specify the name of the holiday, such as Songkran Day": "Specify the name of the holiday, such as Songkran Day",
-
-
-
     
     "take annual leave" : "Take annual leave",
     "take up teaching" : "Take up teaching",
@@ -500,5 +474,5 @@
 
     "organized by":"Organized by",
 
-    "z":"z"
+    "z":"z" 
 }
