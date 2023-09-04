@@ -267,6 +267,7 @@
     "the course has been successfully added to the cart" : "เพิ่มคอร์สเรียนไปยังรถเข็นเรียบร้อยแล้ว",
     "the password is incorrect" : "รหัสผ่านไม่ถูกต้อง",
     "the password has been edited successfully" : "แก้ไขรหัสผ่านเรียบร้อยแล้ว",
+    "the registration period has expired or the registration period has not yet been reached" : "ระยะเวลาการลงทะเบียนสิ้นสุดลงแล้วหรือยังไม่ถึงระยะเวลาการทะเบียน",
     "the selected course is full and payment cannot be made" :"คอร์สที่เลือกเต็มแล้วไม่สามารถชำระเงินได้",
     "there is no substitute teacher" : "ไม่มีผู้สอนแทน", 
     "there are special privileges for monthly/term/yearly subscriptions" : "มีสิทธิ์พิเศษสำหรับการสมัครรายเดือน / รายเทอม / รายปี",
