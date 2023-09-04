@@ -90,7 +90,7 @@
                   : false)
               "
             >
-              <v-list-item-title>{{ list.title }}</v-list-item-title>
+              <v-list-item-title>{{ $t(list.title)}}</v-list-item-title>
             </v-list-item>
             <v-list-group
               v-else-if="
@@ -107,7 +107,7 @@
             >
               <template v-slot:activator>
                 <v-list-item-content>
-                  <v-list-item-title>{{ list.title }}</v-list-item-title>
+                  <v-list-item-title>{{ $t(list.title) }}</v-list-item-title>
                 </v-list-item-content>
               </template>
               <v-list-item
@@ -121,7 +121,7 @@
                 :key="index_child"
                 link
               >
-                <v-list-item-title>{{ child.title }}</v-list-item-title>
+                <v-list-item-title>{{ $t(child.title) }}</v-list-item-title>
               </v-list-item>
             </v-list-group>
           </div>
@@ -158,48 +158,48 @@ export default {
     },
     user_detail: null,
     menu_drawer_list: [
-      { title: "แดชบอร์ด", to: "Dashboard", child: [], roles: ["R_1", "R_2"] }, // to ให้ใส่ name ของ router
+      { title: "dashboard", to: "Dashboard", child: [], roles: ["R_1", "R_2"] }, // to ให้ใส่ name ของ router
       {
-        title: "ตารางเรียน",
+        title: "study schedule",
         to: "ManageSchedule",
         child: [],
         roles: ["R_1", "R_2"],
       },
       {
-        title: "เพิ่มผู้เรียน",
+        title: "add a learner",
         to: "Student",
         child: [],
         roles: ["R_1", "R_2"],
       },
       {
-        title: "คอร์สเรียน",
+        title: "course",
         to: "",
         roles: ["R_1"],
         child: [
-          { title: "จัดการการจอง", to: "CourseReserveList", roles: ["R_1"] },
-          { title: "จัดการคอร์สทั้งหมด", to: "CourseList", roles: ["R_1"] },
-          { title: "สร้างคอร์สเรียน", to: "CourseCreate", roles: ["R_1"] },
+          { title: "manage reservations", to: "CourseReserveList", roles: ["R_1"] },
+          { title: "manage all courses", to: "CourseList", roles: ["R_1"] },
+          { title: "create a course", to: "CourseCreate", roles: ["R_1"] },
         ],
       },
       {
-        title: "อาณาจักร",
+        title: "kingdom",
         to: "",
         roles: ["R_1"],
         child: [
-          { title: "จัดการอาณาจักร", to: "ManageKingdom", roles: ["R_1"] },
-          { title: "สร้างอาณาจักร", to: "Kingdom", roles: ["R_1"] },
+          { title: "manage a kingdom", to: "ManageKingdom", roles: ["R_1"] },
+          { title: "create a kingdom", to: "Kingdom", roles: ["R_1"] },
         ],
       },
-      { title: "การเงิน", to: "Finance", child: [], roles: ["R_1", "R_2"] },
+      { title: "finance", to: "Finance", child: [], roles: ["R_1", "R_2"] },
       {
-        title: "จัดการผู้ใช้งาน",
+        title: "manage user",
         to: "",
         roles: ["R_1"],
-        child: [{ title: "จัดการผู้ใช้งาน", to: "UserList", roles: ["R_1"] }],
+        child: [{ title: "manage user", to: "UserList", roles: ["R_1"] }],
       },
-      { title: "การอนุมัติลา", to: "LeaveList", child: [], roles: ["R_1"] },
+      { title: "approval of leave", to: "LeaveList", child: [], roles: ["R_1"] },
       {
-        title: "จัดการแบนเนอร์",
+        title: "banner management",
         to: "Banner",
         child: [],
         roles: ["R_1", "R_2"],

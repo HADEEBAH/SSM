@@ -6,7 +6,7 @@
       src="@/assets/course/img_header.png"
     ></v-img>
     <v-container>
-      <headerPage title="สร้างคอร์สเรียน"></headerPage>
+      <headerPage :title="$t(`create a course`)"> </headerPage>
       <v-radio-group v-model="course_data.course_type_id">
         <v-row dense>
           <v-col cols="12" sm="3">
@@ -22,7 +22,7 @@
                     ></v-img>
                   </v-col>
                   <v-col cols="8" sm="12">
-                    <label>คอร์สทั่วไป</label>
+                    <label>{{$t("general course")}}</label>
                   </v-col>
                 </v-row>
               </template>
@@ -41,7 +41,7 @@
                     ></v-img>
                   </v-col>
                   <v-col cols="8" sm="12">
-                    <label>คอร์สระยะสั้น</label>
+                    <label>{{$t("short course") }}</label>
                   </v-col>
                 </v-row>
               </template>
@@ -62,7 +62,7 @@
             >
               <label
                 :class="step == index + 1 ? 'text-[#FF6B81] font-bold' : ''"
-                >{{ header }}</label
+                >{{ $t(header) }}</label
               >
             </v-stepper-step>
             <v-divider
@@ -81,11 +81,11 @@
         <v-stepper-content class="overflow-none pa-2" step="2">
           <v-form ref="coach_form" v-model="steps[step - 1]">
             <v-card flat>
-              <headerCard title="รายละเอียดเวลาและโค้ช">
+              <headerCard :title="$t(`details of time and coach`)">
                 <template v-slot:actions>
                   <v-btn outlined color="#FF6B81" @click="addCoach">
                     <v-icon>mdi-plus-circle-outline</v-icon>
-                    เพิ่มโค้ช
+                    {{$t("add a coach")}}
                   </v-btn>
                 </template>
               </headerCard>
@@ -107,7 +107,7 @@
                   outlined
                   color="#FF6B81"
                   @click="addPackage(course_data.packages)"
-                  ><v-icon>mdi-plus-circle-outline</v-icon>เพิ่มแพ็กเกจ</v-btn
+                  ><v-icon>mdi-plus-circle-outline</v-icon>{{ $t("add a package") }}</v-btn
                 >
               </v-col>
             </v-row>
@@ -117,7 +117,7 @@
         <v-stepper-content step="4" class="pa-2">
           <v-form ref="privilege_form" v-model="steps[step - 1]">
             <v-card class="mx-3" flat>
-              <headerCard title="สิทธิ์พิเศษ"></headerCard>
+              <headerCard :title="$t(`special rights`)"></headerCard>
               <v-card-text
                 class="border-dashed border-2 border-blue-600 rounded-lg"
               >
@@ -151,14 +151,13 @@
                     cols="12"
                     class="flex align-center justify-center text-h5"
                   >
-                    อัปโหลดภาพสิทธิ์พิเศษ
+                  {{$t("upload privileged images")}}
                   </v-col>
                   <v-col
                     cols="12"
                     class="flex align-center justify-center text-caption"
-                  >
-                    ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ
-                    ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG )
+                  >                    
+                  {{$t("suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file")}}
                   </v-col>
                   <v-col cols="12" class="flex align-center justify-center">
                     <v-btn
@@ -227,14 +226,14 @@
                     cols="12"
                     class="flex align-center justify-center text-h5"
                   >
-                    อัปโหลดภาพ Learning Journey
+                    {{ $t("upload Learning Journey") }}
                   </v-col>
                   <v-col
                     cols="12"
                     class="flex align-center justify-center text-caption"
                   >
-                    ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ
-                    ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG )
+                    
+                    {{$t("suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file")}}
                   </v-col>
                 </v-row>
                 <v-row dense>
@@ -269,7 +268,7 @@
                   "
                   text
                   @click="step = step - 1"
-                  >ย้อนกลับ</v-btn
+                  >{{ $t("back") }}</v-btn
                 >
               </v-col>
               <v-col cols="12" sm="auto" v-if="step < 4">
@@ -282,7 +281,7 @@
                   class="white--text"
                   depressed
                   @click="submitStep(step - 1)"
-                  >ถัดไป</v-btn
+                  >{{ $t("next") }}</v-btn
                 >
               </v-col>
               <v-col cols="12" sm="auto" v-else>
@@ -292,7 +291,7 @@
                   depressed
                   :loading="loading"
                   @click="submitStep(step - 1)"
-                  >สร้างคอร์สเรียน</v-btn
+                  >{{ $t("create a course") }}</v-btn
                 >
               </v-col>
             </v-row>
@@ -304,7 +303,7 @@
                   depressed
                   :loading="loading"
                   @click="submitStep(step - 1)"
-                  >สร้างคอร์สเรียน</v-btn
+                  >{{ $t("create a course") }}</v-btn
                 >
               </v-col>
             </v-row>
@@ -348,10 +347,10 @@ export default {
       package: "",
     },
     step_header_data: [
-      "คอร์สเรียน",
-      "ช่วงเวลาและโค้ช",
-      "แพ็กเกจ",
-      "สิทธิ์พิเศษ",
+      "course",
+      "time and coach",
+      "package",
+      "special rights",
     ],
     courses: ["โค้ชหนุ่ม", "โค้ชพอล"],
     kingdoms: ["อาณาจักรศิลปะสมัยใหม่", "อาณาจักร P.E."],
@@ -399,7 +398,7 @@ export default {
       course_data: "CourseModules/getCourseData",
       coachs: "CourseModules/getCoachs",
       categorys: "CategoryModules/getCategorys",
-    }),
+    })
   },
   methods: {
     ...mapActions({
