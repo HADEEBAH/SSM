@@ -197,12 +197,9 @@
     "my teaching information" : "My teaching information",
     "manage tables" : "Manage tables",
 
-<<<<<<< HEAD
-=======
 
 
     "nationality": "Nationality",
->>>>>>> develop
     "new password":"New password",
     "no." : "No.",
     "no data found" : "No data found",
@@ -331,7 +328,6 @@
     "substitute teaching date" : "Substitute teaching date",
     "success" : "Success",
     "succeed":"Succeed",
-<<<<<<< HEAD
     "students reserve a course": "Students reserve", 
     "short course": "Short course",
     "search full course name here": "Search full course name here",
@@ -341,7 +337,6 @@
     "start time": "Start time",
     "specify the name of the holiday, such as Songkran Day": "Specify the name of the holiday, such as Songkran Day",
     
-=======
    "students reserve a course": "Students reserve", 
    "student information in charge":"Student information in charge",
    "short course": "Short course",
@@ -354,7 +349,6 @@
 
 
 
->>>>>>> develop
     
     "take annual leave" : "Take annual leave",
     "take up teaching" : "Take up teaching",
