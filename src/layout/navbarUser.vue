@@ -36,10 +36,10 @@
             </v-btn>
           </template>
           <v-card>
-            <v-list-item @click="$i18n.locale = 'en'">
+            <v-list-item @click="setLocale('en')">
               {{ $t('english') }}
             </v-list-item>
-            <v-list-item  @click="$i18n.locale = 'th'">
+            <v-list-item  @click="setLocale('th')">
               {{ $t('thai') }} 
             </v-list-item>
           </v-card>
@@ -402,12 +402,12 @@ export default {
     notify: false,
     hints: true,
     alert: true,
-
     alertVisible: true,
     alertNotify: true,
   }),
 
   created() {
+    this.$i18n.locale = localStorage.getItem("lang")
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail.account_id);
@@ -469,6 +469,7 @@ export default {
     }),
     setLocale(locale) {
       this.$i18n.locale = locale
+      localStorage.setItem("lang",locale)
     },
     checkrole(a,b){
       let notFound = true; 
