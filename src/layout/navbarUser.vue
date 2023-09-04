@@ -23,9 +23,27 @@
         </v-app-bar-nav-icon>
         <v-spacer></v-spacer>
         <v-app-bar-title class="font-bold">
-          {{titel_navber}} 
+          {{ $t(titel_navber)}} 
         </v-app-bar-title>
         <v-spacer></v-spacer>
+        <v-menu v-model="menu_locale"  offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn text v-bind="attrs" v-on="on">
+              <label>{{ $i18n.locale == 'en' ? $t('english') : $t('thai') }}</label>
+              <v-icon dark >
+                mdi-web
+              </v-icon>
+            </v-btn>
+          </template>
+          <v-card>
+            <v-list-item @click="$i18n.locale = 'en'">
+              {{ $t('english') }}
+            </v-list-item>
+            <v-list-item  @click="$i18n.locale = 'th'">
+              {{ $t('thai') }} 
+            </v-list-item>
+          </v-card>
+        </v-menu>
         <template v-if="user_detail">
           <v-menu v-model="notify" :close-on-content-click="false" offset-y>
             <template v-slot:activator="{ on, attrs }">
@@ -50,7 +68,7 @@
                 <v-toolbar dense elevation="0">
                   <v-row dense height="500">
                     <v-col cols="8">
-                      <div class="my-2 font-bold">การแจ้งเตือน</div>
+                      <div class="my-2 font-bold">{{ $t("notifications") }}</div>
                     </v-col>
                     <v-col cols="4" align="end">
                       <v-icon size="32" color="#ff6b81">
@@ -100,7 +118,7 @@
                 </v-list>
               </v-card-text>
               <v-card-text v-else class="text-center">
-                ไม่มีการแจ้งเตือน
+                {{ $t("no notifications") }}
               </v-card-text>
             </v-card>
           </v-menu>
@@ -122,31 +140,18 @@
             @click="$router.push({ name: 'CartList' })"
             >mdi-cart</v-icon
           >
-          <div v-if="profile_detail.image !== ''">
+          <div >
             <div v-if="!$vuetify.breakpoint.smAndDown">
-              <v-avatar class="mx-2" size="24">
+              <v-avatar class="mx-2" size="24" v-if="profile_detail.image !== ''">
                 <v-img :src="profile_detail.image" size="24" />
               </v-avatar>
-
-              <span class="text-white mx-2">
-                {{ show_profile_detail.firstNameTh }}
-                {{ show_profile_detail.lastNameTh }}
-              </span>
-            </div>
-          </div>
-
-          <div v-else>
-            <div v-if="!$vuetify.breakpoint.smAndDown">
-              <v-avatar class="mx-2" size="24">
-                <v-img
-                  src="@/assets/navbar_user/default_image_profile.svg"
-                  size="24"
-                />
+              <v-avatar class="mx-2" size="24" v-else>
+                <v-img src="@/assets/navbar_user/default_image_profile.svg" size="24" />
               </v-avatar>
 
               <span class="text-white mx-2">
-                {{ show_profile_detail.firstNameTh }}
-                {{ show_profile_detail.lastNameTh }}
+                {{ $i18n.locale == 'th' ? show_profile_detail.firstNameTh : show_profile_detail.firstNameEng }}
+                {{ $i18n.locale == 'th' ? show_profile_detail.lastNameTh : show_profile_detail.lastNameEng}}
               </span>
             </div>
           </div>
@@ -164,7 +169,7 @@
           >
             <v-icon>mdi-login</v-icon>
             <template v-if="!$vuetify.breakpoint.smAndDown"
-              >เข้าสู่ระบบ</template
+              >{{ $t("login") }}</template
             >
           </v-btn>
           <v-btn
@@ -174,7 +179,7 @@
             small
           >
             <v-icon>mdi-account-plus</v-icon>
-            <template v-if="!$vuetify.breakpoint.smAndDown">ลงทะเบียน</template>
+            <template v-if="!$vuetify.breakpoint.smAndDown">{{ $t('register')}}</template>
           </v-btn>
         </template>
       </v-app-bar>
@@ -213,8 +218,8 @@
             cols="12"
             class="flex align-center justify-center font-bold text-md"
           >
-            {{ show_profile_detail.firstNameTh }}
-            {{ show_profile_detail.lastNameTh }}
+            {{ $i18n.locale == 'th' ? show_profile_detail.firstNameTh : show_profile_detail.firstNameEng }}
+            {{ $i18n.locale == 'th' ? show_profile_detail.lastNameTh : show_profile_detail.lastNameEng}}
           </v-col>
           <v-col cols="12" class="flex align-center justify-center text-sm">
             {{ show_profile_detail.email }}
@@ -240,7 +245,7 @@
                 <v-list-item-title
                   :class="$route.name === list.to ? 'text-[#ff6b81]' : ''"
                 >
-                  {{ list.title }}
+                  {{ $t(list.title) }}
                 </v-list-item-title>
               </v-list-item>
             </template>
@@ -258,7 +263,7 @@
               </v-list-item-avatar>
               <v-list-item-title
                 :class="$route.name === list.to ? 'text-[#ff6b81]' : ''"
-                >{{ list.title }}
+                >{{ $t(list.title) }}
               </v-list-item-title>
             </v-list-item>
           </div>
@@ -276,7 +281,7 @@
         <v-row dense align="center" class="mb-2">
           <v-col cols>
             <v-row dense>
-              <v-col class="font-bold text-sm">ติดต่อเราได้ที่</v-col>
+              <v-col class="font-bold text-sm">{{$t("contact us at")}}</v-col>
             </v-row>
             <v-row dense>
               <v-col cols="auto" class="font-bold">
@@ -348,40 +353,40 @@ export default {
     menu_drawer_list: [
       {
         icon: "mdi-account-circle",
-        title: "โปรไฟล์",
+        title:"profile",
         to: "UserProfile",
         params: null,
         roles: [],
       },
       {
         icon: "mdi-calendar-month",
-        title: "ตารางเรียน",
+        title:"study schedule",
         to: "StudentsSchedule",
         params: { action: "MySchedule" },
         roles: ["R_1","R_2", "R_3"],
       },
       {
         icon: "mdi-book-cog-outline",
-        title: "การจัดการ",
+        title: "management",
         to: "menageCourse",
         params: null,
         roles: ["R_3"],
       },
       {
         icon: "mdi-history",
-        title: "ประวัติการลงทะเบียน",
+        title: "registration history",
         to: "orderHistory",
         params: null,
         roles: [],
       },
       {
         icon: "mdi-swap-horizontal-bold",
-        title: "หน้าผู้ดูแลระบบ",
+        title: "admin page",
         to: "Dashboard",
         params: null,
         roles: ["R_1", "R_2"],
       },
-      { icon: "mdi-logout", title: "ออกจากระบบ", to: "logOut", roles: [] },
+      { icon: "mdi-logout", title: "logout", to: "logOut", roles: [] },
     ],
     user_detail: null,
     show_profile_detail: {
@@ -393,7 +398,7 @@ export default {
       mobileNo: "",
       email: "",
     },
-
+    menu_locale : false,
     notify: false,
     hints: true,
     alert: true,
@@ -462,6 +467,9 @@ export default {
       GetNotificationsAll: "NotificationsModules/GetNotificationsAll",
       ReadNotifications: "NotificationsModules/ReadNotifications",
     }),
+    setLocale(locale) {
+      this.$i18n.locale = locale
+    },
     checkrole(a,b){
       let notFound = true; 
       if(a.length > 0){

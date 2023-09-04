@@ -12,7 +12,7 @@
               class="rounded-lg border-2 border-[#ff6b81] text-lg font-bold"
               align="center"
             >
-              ไม่พบข้อมูล
+            {{ $t("no data found") }}
             </v-card-text>
           </v-card>
         </div>
@@ -22,7 +22,7 @@
             <v-card-text>
               <v-row dense class="mb-3">
                 <v-col>
-                  <label class="text-caption">หมายเลขคำสั่งซื้อ: </label>
+                  <label class="text-caption">{{ $t("order number") }}: </label>
                   <v-row dense>
                     <v-col class="font-bold">
                       {{ order.orderNumber }}
@@ -35,7 +35,7 @@
                     color="#F0F9EE"
                     text-color="#58A144"
                   >
-                    ชำระเงินแล้ว
+                    {{ $t(order.paymentStatus)  }}
                   </v-chip>
 
                   <v-chip
@@ -43,7 +43,7 @@
                     color="#FFF9E8"
                     text-color="#FCC419"
                   >
-                    รอชำระเงิน
+                    {{ $t(order.paymentStatus)  }}
                   </v-chip>
 
                   <v-chip
@@ -51,11 +51,12 @@
                     color="#FDECEC"
                     text-color="#F03D3E"
                   >
-                    ยกเลิกแล้ว
+                    {{ $t(order.paymentStatus)  }}
                   </v-chip>
 
                   <v-chip v-else color="#FDECEC" text-color="#F03D3E">
                     เกิดข้อผิดพลาด
+                    {{ $t("something went wrong") }}
                   </v-chip>
                 </v-col>
               </v-row>
@@ -90,13 +91,13 @@
                               cols="12"
                               sm="6"
                               class="align-self-center text-lg font-bold"
-                              >{{ course.courseNameTh }}</v-col
+                              >{{ $i18n.locale == 'th' ? course.courseNameTh :  course.courseNameEn }}</v-col
                             >
                           </v-row>
                           <v-row dense>
                             <v-col class="text-md py-2" cols="12" sm="6">
                               <v-row dense>
-                                <v-col cols="auto">โค้ช :</v-col>
+                                <v-col cols="auto">{{ $t('coach') }} : </v-col>
                                 <v-col>{{
                                   course.coachName ? course.coachName : "-"
                                 }}</v-col>
@@ -104,7 +105,7 @@
                             </v-col>
                             <v-col class="text-md py-2" cols="12" sm="6">
                               <v-row dense>
-                                <v-col cols="auto">เวลา :</v-col>
+                                <v-col cols="auto">{{ $t('times') }} :</v-col>
                                 <v-col>{{
                                   `${
                                     course.timeStartOrder &&
@@ -116,7 +117,7 @@
                                     course.timeEndOrder !== ""
                                       ? course.timeEndOrder
                                       : "-"
-                                  } น.`
+                                  } ${ $t("o'clock") }`
                                 }}</v-col>
                               </v-row>
                             </v-col>
@@ -133,7 +134,7 @@
                             @click="course.show_student = !course.show_student"
                             text
                             class="font-bold"
-                            >แสดงรายการนักเรียน<v-icon color="#ff6b81">{{
+                            >{{$t("show student list")}}<v-icon color="#ff6b81">{{
                               course.show_student
                                 ? "mdi-chevron-up"
                                 : "mdi-chevron-down"
@@ -154,9 +155,9 @@
                             <v-card flat class="w-full my-2">
                               <v-card-text class="border-2 border-[#ff6b81]">
                                 <v-col cols="12" calign="start">
-                                  <span class="font-bold"> ชื่อ-สกุล : </span>
+                                  <span class="font-bold">{{ $t('first name') }}-{{$t('last name') }} : </span>
                                   {{
-                                    `${student.firstNameTh} ${student.lastNameTh}`
+                                    $i18n.locale == "th" ? `${student.firstNameTh} ${student.lastNameTh}` : `${student.firstNameEng} ${student.lastNameEng}`
                                   }}
                                 </v-col>
                                 <v-col cols="12" calign="start">
@@ -242,7 +243,7 @@ export default {
     this.userData = JSON.parse(localStorage.getItem("userDetail"))
     this.$store.dispatch(
       "NavberUserModules/changeTitleNavber",
-      "ประวัติการการลงทะเบียน"
+      "registration history"
     );
     this.getHistory();
   },

@@ -10,9 +10,9 @@
       <v-row class="row">
         <v-col cols="12">
           <div class="text-2xl font-bold text-white">
-            สวัสดี
+            {{ $t("hello") }}  
             {{
-              profile_detail.firstNameTh ? "," + profile_detail.firstNameTh : ""
+              profile_detail.firstNameTh ? $i18n.locale == 'th' ?  ", " + profile_detail.firstNameTh : ", " + profile_detail.firstNameEng : ''
             }}
           </div>
         </v-col>
@@ -57,7 +57,7 @@
             sm="4"
             class="text-2xl align-self-center font-weight-bold"
           >
-            อาณาจักร
+          {{ $t("kingdom") }}  
           </v-col>
           <v-col cols="12" sm="8" style="text-align: -webkit-right">
             <v-text-field
@@ -68,7 +68,7 @@
               hide-details
               dense
               outlined
-              label="ค้นหาอาณาจักรการเรียนรู้ที่คุณสนใจได้ที่นี้"
+              :label="$t('find the learning kingdom that interests you here')"
               prepend-inner-icon="mdi-magnify"
             />
           </v-col>
@@ -111,12 +111,11 @@
                 class="font-bold cursor-pointer"
                 @click="selectedCategory(item)"
               >
-                {{ item.categoryNameTh }}
-                ({{ item.categoryNameEng }})
+                {{ $i18n.locale == "th" ? item.categoryNameTh : item.categoryNameEng}}
               </v-card-title>
 
               <v-card-subtitle>
-                <div class="mb-2">โดย {{ item.taughtBy }}</div>
+                <div class="mb-2">{{$t("by")}} {{ item.taughtBy }}</div>
                 <div>
                   {{
                     item.show
@@ -127,7 +126,7 @@
                     v-if="item.categoryDescription.length > 15"
                     class="text-red-500 cursor-pointer"
                     @click="item.show = !item.show"
-                    >{{ item.show ? `น้อยลง` : `อ่านต่อ...` }}</span
+                    >{{ item.show ? $t('lesser') : $t('read more')+`...` }}</span
                   >
                 </div>
               </v-card-subtitle>
@@ -138,7 +137,7 @@
             v-if="searchKingdom(search_kingdom).length === 0"
             class="font-weight-bold text-center text-xl"
           >
-            ไม่พบอาณาจักร
+            {{$t("kingdom not found")}}
           </v-col>
         </v-row>
         <loading-overlay :loading="categorys_is_loading"></loading-overlay>
@@ -164,17 +163,6 @@ export default {
     first_name_en: "",
     drawer: true,
     user_detail: null,
-    items: [
-      { id: 1, itemName: "อาณาจักรศิลปะสมัยใหม่" },
-      { id: 2, itemName: "อาณาจักรศิลปะสมัยใหม่" },
-      { id: 3, itemName: "อาณาจักรศิลปะสมัยใหม่" },
-      { id: 4, itemName: "อาณาจักรศิลปะสมัยใหม่" },
-      { id: 5, itemName: "อาณาจักรศิลปะสมัยใหม่" },
-      { id: 6, itemName: "อาณาจักรศิลปะสมัยใหม่" },
-      { id: 7, itemName: "อาณาจักรศิลปะสมัยใหม่" },
-      { id: 8, itemName: "อาณาจักรศิลปะสมัยใหม่" },
-      { id: 9, itemName: "อาณาจักรศิลปะสมัยใหม่" },
-    ],
     slides: [
       {
         src: "https://5.imimg.com/data5/SELLER/Default/2022/5/LE/OI/YW/151848745/school-banner-designing-service-1000x1000.png",
@@ -192,7 +180,6 @@ export default {
     data_search_kingdom: [],
     item_data: "",
     showingFullText: false,
-    body: "I am some text! Instead of being on the data object, though, I would be pulled from the store.",
   }),
 
   created() {
@@ -208,7 +195,7 @@ export default {
   },
 
   mounted() {
-    this.$store.dispatch("NavberUserModules/changeTitleNavber", "อาณาจักร");
+    this.$store.dispatch("NavberUserModules/changeTitleNavber", "kingdom");
   },
 
   methods: {
