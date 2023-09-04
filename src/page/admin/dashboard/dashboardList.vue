@@ -367,7 +367,7 @@
                       <div class="mr-8">
                         <v-icon color="#ff6b81">mdi-circle-medium</v-icon>
                         <span class="text-xl">
-                          ชำระแล้ว
+                          {{ $t("paid") }}
                           <span
                             style="color: #ff6b81"
                             class="font-bold text-xl"
@@ -381,7 +381,7 @@
                               font-size: small;
                             "
                           >
-                            บาท ({{
+                            {{ $t("baht") }} ({{
                               (
                                 (get_donut.sumTotalSuccess * 100) /
                                 (get_donut.sumTotalPending +
@@ -400,7 +400,7 @@
                       <div>
                         <v-icon color="#999999">mdi-circle-medium</v-icon>
                         <span class="text-xl">
-                          รอดำเนินการ
+                          {{ $t("pending") }}
                           <span
                             style="color: #999999"
                             class="font-bold text-xl"
@@ -416,7 +416,7 @@
                               font-size: small;
                             "
                           >
-                            บาท ({{
+                            {{ $t("baht") }} ({{
                               (
                                 (get_donut.sumTotalPending * 100) /
                                 (get_donut.sumTotalPending +
@@ -442,7 +442,7 @@
               src="@/assets/navbar/barCourse.svg"
               style="max-width: 25px; margin-left: 30px"
             ></v-img>
-            <span class="indent-5">สถานะคอร์สเรียน</span>
+            <span class="indent-5">{{ $t("course status") }}</span>
           </v-card-title>
         </v-row>
 
@@ -467,11 +467,11 @@
                     <div style="margin-right: 60px">
                       <v-icon color="#999999">mdi-circle-medium</v-icon>
                       <span class="text-xl">
-                        คอร์สเต็ม
+                        {{ $t("full courses") }}
                         <span style="font-weight: bold; color: #999999">{{
                           get_empty_course?.countClose
                         }}</span>
-                        คอร์ส
+                        {{ $t("courses") }}
                       </span>
                     </div>
                   </v-col>
@@ -480,11 +480,11 @@
                     <div style="margin-right: 60px">
                       <v-icon color="#ff6b81">mdi-circle-medium</v-icon>
                       <span class="text-xl">
-                        คอร์สว่าง
+                        {{ $t("course available") }}
                         <span style="font-weight: bold; color: #ff6b81">{{
                           get_empty_course?.countOpen
                         }}</span>
-                        คอร์ส
+                        {{ $t("courses") }}
                       </span>
                     </div>
                   </v-col>
@@ -498,7 +498,7 @@
                       hide-details
                       dense
                       outlined
-                      label="ค้นหาชื่อคอร์สเต็มได้ที่นี้"
+                      :label="$t('search full course name here')"
                       prepend-inner-icon="mdi-magnify"
                       color="#ff6b81"
                     >
@@ -513,7 +513,7 @@
                       hide-details
                       dense
                       outlined
-                      label="ค้นหาชื่อคอร์สว่างได้ที่นี้"
+                      :label="$t('search available course name here')"
                       prepend-inner-icon="mdi-magnify"
                       color="#ff6b81"
                     >
@@ -537,7 +537,9 @@
                         "
                         align="center"
                       >
-                        <span class="mr-2 font-bold">คอร์สเต็ม</span>
+                        <span class="mr-2 font-bold">{{
+                          $t("full courses")
+                        }}</span>
                         <v-badge
                           color="#999999"
                           :content="get_empty_course?.countClose"
@@ -558,9 +560,10 @@
                           <v-card-text class="pa-0">
                             <v-row dense>
                               <v-col cols="12">
-                                <v-card-title class="font-bold">{{
-                                  item.courseNameTh
-                                }}</v-card-title>
+                                <v-card-title class="font-bold">
+                                  {{ item.courseNameTh }}
+                                  <!-- {{ `${$i18n.locale == 'th' ? item.courseNameTh : item.courseNameEn}`}} -->
+                                </v-card-title>
                               </v-col>
                               <v-col cols="12" sm="12" md="8">
                                 <v-card-subtitle class="mt-n7">
@@ -605,7 +608,8 @@
                                   <v-icon color="#ff6b81" class="mt-n2">
                                     mdi-sofa-single-outline
                                   </v-icon>
-                                  ที่นั่ง{{
+                                  {{ $t("seat") }}
+                                  {{
                                     ` ${item.currentStudent}/${item.maximumStudent}`
                                   }}
                                 </v-card-subtitle>
@@ -626,7 +630,7 @@
                                       <v-icon
                                         >mdi-text-box-search-outline</v-icon
                                       >
-                                      ดูรายละเอียด
+                                      {{ $t("view details") }}
                                     </v-btn>
                                   </div>
                                 </v-card-subtitle>
@@ -643,7 +647,7 @@
                       >
                         <v-col align="center" class="text-lg font-bold">
                           <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                          ไม่พบข้อมูลของคอร์สเต็ม
+                          {{ $t("can't find full course information") }}
                         </v-col>
                       </v-row>
                     </v-card>
@@ -665,7 +669,9 @@
                         "
                         align="center"
                       >
-                        <span class="mr-2 font-bold">คอร์สว่าง</span>
+                        <span class="mr-2 font-bold">{{
+                          $t("course available")
+                        }}</span>
                         <v-badge
                           color="#ff6b81"
                           :content="get_empty_course.countOpen"
@@ -740,7 +746,8 @@
                                   <v-icon color="#ff6b81" class="mt-n2">
                                     mdi-sofa-single-outline
                                   </v-icon>
-                                  ที่นั่ง{{
+                                  {{ $t("seat") }}
+                                  {{
                                     ` ${item.currentStudent}/${item.maximumStudent}`
                                   }}
                                 </v-card-subtitle>
@@ -761,7 +768,7 @@
                                       <v-icon
                                         >mdi-text-box-search-outline</v-icon
                                       >
-                                      ดูรายละเอียด
+                                      {{ $t("view details") }}
                                     </v-btn>
                                   </div>
                                 </v-card-subtitle>
@@ -777,7 +784,7 @@
                       >
                         <v-col align="center" class="text-lg font-bold">
                           <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                          ไม่พบข้อมูลของคอร์สว่าง
+                          {{ $t("can't find available course information") }}
                         </v-col>
                       </v-row>
                     </v-card>
@@ -808,8 +815,8 @@
                             >
                               {{
                                 items_dialog.status == "Close"
-                                  ? "ข้อมูลคอร์สเต็ม"
-                                  : "ข้อมูลคอร์สว่าง"
+                                  ? this.$t("full course information")
+                                  : this.$t("available course information")
                               }}
                             </v-col>
                           </v-row>
@@ -824,7 +831,7 @@
                                 readonly
                                 dense
                                 :value="items_dialog.courseNameTh"
-                                label="ชื่อคอร์ส"
+                                :label="$t('course name')"
                                 color="#FF6B81"
                               >
                                 <template v-slot:append>
@@ -846,7 +853,7 @@
                                 readonly
                                 dense
                                 :value="`${items_dialog.courseTypeNameTh} (${items_dialog.packageName})`"
-                                label="แพ็กเกจคอร์ส"
+                                :label="$t('package')"
                                 color="#FF6B81"
                               >
                                 <template v-slot:append>
@@ -868,7 +875,7 @@
                                 readonly
                                 dense
                                 :value="items_dialog.dayOfWeek"
-                                label="วันเรียน"
+                                :label="$t('study date')"
                                 color="#FF6B81"
                               >
                                 <template v-slot:append>
@@ -890,7 +897,7 @@
                                 readonly
                                 dense
                                 :value="`${items_dialog.firstNameTh}  ${items_dialog.lastNameTh}`"
-                                label="ชื่อ-สกุลโค้ช"
+                                :label="$t('first name - last name coach')"
                                 color="#FF6B81"
                               >
                                 <template v-slot:append>
@@ -912,7 +919,7 @@
                                 readonly
                                 dense
                                 :value="items_dialog.time"
-                                label="เวลาเรียน"
+                                :label="$t('class time')"
                                 color="#FF6B81"
                               >
                                 <template v-slot:append>
@@ -930,7 +937,7 @@
                                 readonly
                                 dense
                                 :value="`${items_dialog.currentStudent} / ${items_dialog.maximumStudent}`"
-                                label="ที่นั่ง"
+                                :label="$t('seat')"
                                 color="#FF6B81"
                               >
                                 <template v-slot:append>
@@ -1211,7 +1218,7 @@ export default {
         },
         title: {
           icon: "mdi-delete",
-          text: "รายได้",
+          text: this.$t("income"),
           align: "left",
         },
 
@@ -1278,7 +1285,7 @@ export default {
                 show: true,
                 total: {
                   show: true,
-                  label: "รวมทั้งหมด",
+                  label: this.$t("total"),
                   color: "#373d3f",
                   fontSize: "18px",
                   formatter: function (w) {

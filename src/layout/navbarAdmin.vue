@@ -50,12 +50,12 @@
               </v-row>
             </template>
             <v-list dense>
-              <v-subheader>ตัวเลือก</v-subheader>
+              <v-subheader>{{ $t("choice") }}</v-subheader>
               <v-list-item link @click="selectMenu('head', 'UserKingdom')">
                 <v-list-item-icon>
                   <v-icon>mdi-account</v-icon>
                 </v-list-item-icon>
-                <v-list-item-title>หน้าผู้ใช้งาน</v-list-item-title>
+                <v-list-item-title>{{ $t("user page") }}</v-list-item-title>
               </v-list-item>
             </v-list>
           </v-menu>
