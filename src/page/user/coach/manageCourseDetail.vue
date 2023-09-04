@@ -46,12 +46,12 @@
               <v-row dense>
                 <v-col cols="12" sm class="pa-0">
                   <rowData mini icon="mdi-bookshelf"
-                    >คอร์สเรียน : {{ course_data.course_name_th }}</rowData
+                    >{{$t("course")}} : {{ $i18n.locale == "th" ? course_data.course_name_th : course_data.course_name_en }}</rowData
                   >
                 </v-col>
                 <v-col cols="12" sm class="pa-0">
                   <rowData mini icon="mdi-clock-outline"
-                    >เวลาสอน {{ course_data.course_hours }} ชั่วโมง</rowData
+                    >{{ $t("teaching time") }} {{ course_data.course_hours }} {{ $t("hour") }}</rowData
                   >
                 </v-col>
               </v-row>
@@ -60,7 +60,7 @@
         </v-card-text>
       </v-card>
       <v-row dense>
-        <v-col class="text-md font-bold"> ลงเวลาเข้าสอน </v-col>
+        <v-col class="text-md font-bold"> {{$t("check in teach")}} </v-col>
       </v-row>
       <v-row dense class="mb-3">
         <v-col align="center">
@@ -77,30 +77,30 @@
             "
           >
             <template v-if="coach_check_in.checkInCoachId">
-              <v-icon class="mr-2">mdi-check-circle</v-icon> เข้าสอน
+              <v-icon class="mr-2">mdi-check-circle</v-icon> {{ $t('take up teaching')}}
             </template>
             <template v-else>
               <v-icon class="mr-2">mdi-clock-edit-outline</v-icon>
-              กดเพื่อลงเวลาเข้าสอน
+             {{ $t("press to enter the teaching time")}}
             </template>
           </v-btn>
         </v-col>
       </v-row>
       <v-tabs class="mb-3" v-model="tab" color="#ff6b81" grow>
-        <v-tab class="border-b-2" href="#check in"> เช็คชื่อ </v-tab>
+        <v-tab class="border-b-2" href="#check in">{{$t('check in student')}} </v-tab>
         <v-tab
           :disabled="student_check_in.length == 0"
           class="border-b-2"
           href="#assess students"
         >
-          ประเมินนักเรียน
+          {{  $t("assess students") }}
         </v-tab>
         <v-tab
           :disabled="student_check_in.length == 0"
           class="border-b-2"
           href="#teaching summary"
         >
-          บันทึกสรุปการสอน
+          {{ $t("teaching summary notes")}}
         </v-tab>
       </v-tabs>
       <v-tabs-items v-model="tab">
@@ -145,7 +145,7 @@
                     <v-select
                       v-model="item.status"
                       required
-                      :rules="rules.status_text"
+                      :rules="status_text"
                       :items="FilterStatusCheckIn(item)"
                       outlined
                       dense
@@ -181,7 +181,7 @@
                 <template v-slot:expanded-item="{ headers, item }">
                   <td class="pa-2" :colspan="headers.length" align="center">
                     <v-row dense>
-                      <v-col cols="12" sm="2">วันเรียนชดเชย</v-col>
+                      <v-col cols="12" sm="2">{{$t("compensatory study day")}}</v-col>
                       <v-col cols="12" sm="4">
                         <v-menu
                           v-model="item.menu_compensation_date"
@@ -193,10 +193,10 @@
                             <v-text-field
                               dense
                               outlined
-                              :rules="rules.compensation_date"
+                              :rules="compensation_date"
                               v-model="item.compensation_date_str"
                               readonly
-                              placeholder="เลือกวันที่ชดเชย"
+                              :placeholder="$t('choose a compensation date')"
                               v-bind="attrs"
                               v-on="on"
                             >
@@ -230,14 +230,14 @@
                               item.compensationStartTime
                             )
                           "
-                          :rules="rules.start_time"
+                          :rules="start_time"
                           :value="genTime(item.compensationStartTime)"
                         >
                         </v-text-field>
                         <TimePicker
                           class="time-picker-hidden"
                           :minuteStep="30"
-                          placeholder="เวลาเริ่ม"
+                          :placeholder="$t('start time')"
                           :style="`width:${width()}px;`"
                           :class="item.start_time ? 'active' : ''"
                           format="HH:mm"
@@ -254,7 +254,7 @@
                           @focus="
                             SelectedStartDate($event, item.compensationEndTime)
                           "
-                          :rules="rules.end_time"
+                          :rules="end_time"
                           :value="genTime(item.compensationEndTime)"
                         >
                         </v-text-field>
@@ -264,7 +264,7 @@
                           :style="`width:${width()}px;`"
                           format="HH:mm"
                           :class="item.end_time ? 'active' : ''"
-                          placeholder="เวลาสิ้นสุด"
+                          :placeholder="$t('end time')"
                           v-model="item.compensationEndTime"
                         ></TimePicker>
                       </v-col>
@@ -273,7 +273,7 @@
                 </template>
                 <template v-slot:no-data>
                   <v-row dense>
-                    <v-col align="center"> ไม่พบข้อมูลในตาราง </v-col>
+                    <v-col align="center"> {{ $t("no data found in table") }} </v-col>
                   </v-row>
                 </template>
               </v-data-table>
@@ -288,7 +288,7 @@
                 outlined
                 @click="CheckInStudents(student_check_in)"
                 color="#ff6b81"
-                >บันทึก</v-btn
+                >{{$t("save")}}</v-btn
               >
             </v-col>
           </v-row>
@@ -310,7 +310,7 @@
                     "
                     @click="tab_evaluate = 'evaluate_students'"
                   >
-                    ประเมินนักเรียน
+                    {{ $t('assess students')}}
                   </v-btn>
                 </v-col>
                 <v-col cols="12" sm="6" class="pl-1">
@@ -344,7 +344,7 @@
                       "
                       @click="tab_evaluate = 'learners_potential'"
                     >
-                      ประเมินศักยภาพผู้เรียน
+                      {{$t("assess the learner's potential")}}
                     </v-btn>
                   </v-badge>
                   <v-btn
@@ -362,7 +362,7 @@
                     "
                     @click="tab_evaluate = 'learners_potential'"
                   >
-                    ประเมินศักยภาพผู้เรียน
+                    {{$t("assess the learner's potential")}}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -394,7 +394,7 @@
                   <v-card-text>
                     <v-row class="d-flex align-center">
                       <v-col cols="12" sm class="text-lg font-bold">
-                        {{ student.no }} {{ student.fullname }}
+                        {{ student.no }} {{ $i18n.locale == "th" ? student.fullname : student.fullname_en}}
                       </v-col>
                       <v-col
                         cols="12"
@@ -402,7 +402,7 @@
                         class="pa-1 text-md text-[#999999]"
                       >
                         <v-row dense class="d-flex aling-center">
-                          <v-col align="right"> การเข้าเรียน: </v-col>
+                          <v-col align="right"> {{$t('attendance')}}: </v-col>
                           <v-col cols="auto">
                             <v-chip
                               class="font-bold"
@@ -422,9 +422,12 @@
                                 ).length > 0
                               "
                               >{{
-                                check_in_status_options.filter(
-                                  (v) => v.value === student.status
-                                )[0].label
+                                $t(
+                                  check_in_status_options.filter(
+                                    (v) => v.value === student.status
+                                  )[0].label
+                                )
+                              
                               }}
                             </v-chip>
                           </v-col>
@@ -433,11 +436,11 @@
                     </v-row>
                     <v-row class="d-flex align-center">
                       <v-col cols="12" sm="4">
-                        <labelCustom text="ระดับพัฒนาการ"></labelCustom>
+                        <labelCustom :text="$t('developmental level')"></labelCustom>
                         <v-select
                           outlined
                           dense
-                          :rules="rules.evolution"
+                          :rules="evolution"
                           v-model="student.assessment.evolution"
                           :items="evolution_options"
                         >
@@ -464,11 +467,11 @@
                         </v-select>
                       </v-col>
                       <v-col cols="12" sm="4">
-                        <labelCustom text="ระดับความสนใจ"></labelCustom>
+                        <labelCustom :text="$t('interest level')"></labelCustom>
                         <v-select
                           outlined
                           dense
-                          :rules="rules.interest"
+                          :rules="interest"
                           v-model="student.assessment.interest"
                           :items="interest_options"
                         >
@@ -503,7 +506,7 @@
                             selectStudentComment(student.checkInStudentId)
                           "
                         >
-                          แสดงความคิดเห็น
+                          {{ $t("comment") }}
                         </v-btn>
                       </v-col>
                     </v-row>
@@ -512,7 +515,7 @@
               </template>
               <v-card v-else outlined class="my-3">
                 <v-card-text class="text-lg font-bold" align="center">
-                  ไม่พบข้อมูล
+                  {{ $t("no data found") }}
                 </v-card-text>
               </v-card>
               <v-row>
@@ -526,7 +529,7 @@
                       $vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'
                     "
                   >
-                    ล้างข้อมูล
+                    {{$t("clear data")}}
                   </v-btn>
                 </v-col>
                 <v-col cols="12" sm="auto">
@@ -540,7 +543,7 @@
                       $vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'
                     "
                   >
-                    บันทึก
+                    {{$t("save")}}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -561,11 +564,11 @@
                 <v-card-text>
                   <v-row class="d-flex align-center">
                     <v-col cols="12" sm class="text-lg font-bold">
-                      {{ student.no }} {{ student.fullname }}
+                      {{ student.no }} {{ $i18n.locale == "th" ? student.fullname :  student.fullname_en }}
                     </v-col>
                     <v-col cols="12" sm="5" class="pa-1 text-md text-[#999999]">
                       <v-row dense class="d-flex aling-center">
-                        <v-col align="right"> การเข้าเรียน: </v-col>
+                        <v-col align="right"> {{ $t("attendance") }}: </v-col>
                         <v-col cols="auto">
                           <v-chip
                             class="font-bold"
@@ -585,9 +588,11 @@
                               ).length > 0
                             "
                             >{{
-                              check_in_status_options.filter(
-                                (v) => v.value === student.status
-                              )[0].label
+                              $t(
+                                check_in_status_options.filter(
+                                  (v) => v.value === student.status
+                                )[0].label
+                              )
                             }}
                           </v-chip>
                         </v-col>
@@ -596,11 +601,11 @@
                   </v-row>
                   <v-row class="d-flex align-center">
                     <v-col cols="12" sm>
-                      <labelCustom text="ระดับพัฒนาการ"></labelCustom>
+                      <labelCustom :text="$t('developmental level')"></labelCustom>
                       <v-select
                         outlined
                         dense
-                        :rules="rules.evolution"
+                        :rules="evolution"
                         v-model="student.potential.evolution"
                         :items="evolution_options"
                       >
@@ -633,16 +638,16 @@
                         color="#ff6b81"
                         @click="showDialogPotential(student.checkInStudentId)"
                       >
-                        แสดงความคิดเห็น
+                        {{ $t("comment") }}
                       </v-btn>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col cols="12">
-                      <labelCustom text="ระดับความสนใจ"></labelCustom>
+                      <labelCustom :text="$t('interest level')"></labelCustom>
                       <v-textarea
                         outlined
-                        :rules="rules.interest_text"
+                        :rules="interest_text"
                         v-model="student.potential.interest"
                       ></v-textarea>
                     </v-col>
@@ -660,7 +665,7 @@
                       $vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'
                     "
                   >
-                    ล้างข้อมูล
+                    {{ $t("clear data") }}
                   </v-btn>
                 </v-col>
                 <v-col cols="12" sm="auto">
@@ -674,7 +679,7 @@
                       $vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'
                     "
                   >
-                    บันทึก
+                    {{ $t('save') }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -685,22 +690,22 @@
           <v-form ref="summary_form" v-model="summary_form">
             <v-row dense>
               <v-col>
-                <labelCustom text="บันทึกการสอน"></labelCustom>
+                <labelCustom :text="$t('teaching notes')"></labelCustom>
                 <v-textarea
                   outlined
-                  :rules="rules.summary"
-                  placeholder="ระบุความคิดเห็น..."
+                  :rules="summary"
+                  :placeholder="$t('specify your opinion')+'...'"
                   v-model="coach_check_in.summary"
                 ></v-textarea>
               </v-col>
             </v-row>
             <v-row dense>
               <v-col>
-                <labelCustom text="พัฒนาการ / การบ้าน"></labelCustom>
+                <labelCustom :text="$t('development / homework')"></labelCustom>
                 <v-textarea
                   outlined
-                  :rules="rules.homework"
-                  placeholder="ระบุความคิดเห็น..."
+                  :rules="homework"
+                  :placeholder="$t('specify your opinion')+'...'"
                   v-model="coach_check_in.homework"
                 ></v-textarea>
               </v-col>
@@ -859,7 +864,7 @@
                   cols="12"
                   class="flex align-center justify-center text-h5"
                 >
-                  แนบไฟล์รูปภาพหรือวิดีโอ
+                  {{$t('attach a photo or video file')}}
                 </v-col>
               </v-row>
               <v-row>
@@ -869,7 +874,7 @@
                     class="underline"
                     color="#ff6b81"
                     @click="openFileSelector"
-                    >อัปโหลดไฟล์แนบ</v-btn
+                    >{{$t('upload attachment')}}</v-btn
                   >
                   <input
                     id="fileInput"
@@ -892,7 +897,7 @@
                 color="#ff6b81"
                 @click="clearTeachingNote"
               >
-                ล้างข้อมูล
+                {{$t('clear data')}}
               </v-btn>
             </v-col>
             <v-col cols="12" sm="6">
@@ -904,7 +909,7 @@
                 @click="saveSummary()"
                 :loading="is_loading"
               >
-                บันทึก
+                {{ $t("save") }}
               </v-btn>
             </v-col>
           </v-row>
@@ -928,12 +933,12 @@
           <v-card-text>
             <v-row dense>
               <v-col align="center" class="text-lg font-bold">
-                ความคิดเห็นเพิ่มเติม
+                {{ $t('additional comments')}}
               </v-col>
             </v-row>
             <v-row dense>
               <v-col>
-                <labelCustom text="เพิ่มความคิดเห็น"></labelCustom>
+                <labelCustom :text="$t('add a comment')"></labelCustom>
                 <v-textarea
                   outlined
                   v-model="comment_dialog_tmp.remark"
@@ -942,7 +947,7 @@
             </v-row>
             <div v-if="comment_dialog_tmp.attachment.length > 0">
               <v-row dense>
-                <v-col class="font-bold text-lg"> ไฟล์แนบ</v-col>
+                <v-col class="font-bold text-lg">{{ $t('attachments')}}</v-col>
               </v-row>
               <v-card
                 flat
@@ -960,7 +965,7 @@
                         {{ file.originalFilesName }} </span
                       ><br />
                       <span class="text-caption"
-                        >ขนาดไฟล์ :
+                        >{{ $t('file size')}} :
                         {{ (file.filesSize / 1000000).toFixed(2) }} MB</span
                       >
                     </v-col>
@@ -1000,7 +1005,7 @@
                       class="underline"
                       color="#ff6b81"
                       @click="openGeneralfileInputSelector"
-                      >อัปโหลดไฟล์แนบ</v-btn
+                      >{{$t('upload attachment')}}</v-btn
                     >
                     <input
                       id="generalfileInput"
@@ -1016,7 +1021,7 @@
             </v-card>
             <div v-if="comment_dialog_tmp.files.length > 0" class="mb-3">
               <v-row dense>
-                <v-col class="font-bold text-lg"> ไฟล์แนบ</v-col>
+                <v-col class="font-bold text-lg"> {{$t('attachments')}}</v-col>
               </v-row>
               <v-divider class="my-2"></v-divider>
               <v-card
@@ -1035,7 +1040,7 @@
                       <span class="font-bold">{{ file.name }}</span
                       ><br />
                       <span class="text-caption"
-                        >ขนาดไฟล์ :
+                        >{{ $t('file size') }} :
                         {{ (file.size / 1000000).toFixed(2) }} MB</span
                       >
                     </v-col>
@@ -1059,7 +1064,7 @@
                   text
                   color="#ff6b81"
                 >
-                  ล้างข้อมูล
+                  {{ $t("clear date") }}
                 </v-btn>
               </v-col>
               <v-col cols="12" sm="6">
@@ -1070,7 +1075,7 @@
                   color="#ff6b81"
                   dark
                 >
-                  ตกลง
+                {{ $t("agree") }}
                 </v-btn>
               </v-col>
             </v-row>
@@ -1095,12 +1100,12 @@
           <v-card-text>
             <v-row dense>
               <v-col align="center" class="text-lg font-bold">
-                ความคิดเห็นเพิ่มเติม
+                {{ $t('additional comments') }}
               </v-col>
             </v-row>
             <v-row dense>
               <v-col>
-                <labelCustom text="เพิ่มความคิดเห็น"></labelCustom>
+                <labelCustom :text="$t('add a comment')"></labelCustom>
                 <v-textarea
                   outlined
                   v-model="comment_potential_dialog_tmp.remark"
@@ -1111,7 +1116,7 @@
               v-if="comment_potential_dialog_tmp.attachmentPotential.length > 0"
             >
               <v-row dense>
-                <v-col class="font-bold text-lg"> ไฟล์แนบ </v-col>
+                <v-col class="font-bold text-lg"> {{ $t('attachments') }} </v-col>
               </v-row>
               <v-card
                 flat
@@ -1131,7 +1136,7 @@
                         {{ file.originalFilesName }}</span
                       ><br />
                       <span class="text-caption"
-                        >ขนาดไฟล์ :
+                        >{{ $t('file size') }} :
                         {{ (file.filesSize / 1000000).toFixed(2) }} MB</span
                       >
                     </v-col>
@@ -1174,7 +1179,7 @@
                       class="underline"
                       color="#ff6b81"
                       @click="openPotentialfileInputSelector"
-                      >อัปโหลดไฟล์แนบ</v-btn
+                      >{{$t("upload attachment")}}</v-btn
                     >
                     <input
                       id="potentialfileInput"
@@ -1194,7 +1199,7 @@
               class="mb-3"
             >
               <v-row dense>
-                <v-col class="font-bold text-lg"> ไฟล์แนบ</v-col>
+                <v-col class="font-bold text-lg"> {{$t('attachments')}}</v-col>
               </v-row>
               <v-divider class="my-2"></v-divider>
               <v-card
@@ -1212,7 +1217,7 @@
                       <span class="font-bold">{{ file.name }}</span
                       ><br />
                       <span class="text-caption"
-                        >ขนาดไฟล์ :
+                        >{{ $t("file size") }} :
                         {{ (file.size / 1000000).toFixed(2) }} MB</span
                       >
                     </v-col>
@@ -1236,7 +1241,7 @@
                   text
                   color="#ff6b81"
                 >
-                  ล้างข้อมูล
+                  {{ $t("clear data") }}
                 </v-btn>
               </v-col>
               <v-col cols="12" sm="6">
@@ -1247,7 +1252,7 @@
                   color="#ff6b81"
                   dark
                 >
-                  ตกลง
+                {{ $t("agree") }}
                 </v-btn>
               </v-col>
             </v-row>
@@ -1271,7 +1276,7 @@
                   @click="show_attachment_dialog = !show_attachment_dialog"
                   ><v-icon>mdi-close</v-icon></v-btn
                 >
-                <span class="font-weight-bold"> ตัวอย่างภาพ </span>
+                <span class="font-weight-bold">{{ $t('image example')}} </span>
               </v-col>
             </v-row>
             <v-row>
@@ -1346,65 +1351,24 @@ export default {
     tab_evaluate: "evaluate_students", // Evaluate students, Assess the learner's potential
     check_in_status_options: [
       {
-        label: "ตรงเวลา",
+        label: "punctual",
         value: "punctual",
         color: "#58A144",
         bg_color: "#F0F9EE",
       },
-      { label: "สาย", value: "late", color: "#FCC419", bg_color: "#FFF9E8" },
-      { label: "ลา", value: "leave", color: "#43A4F5", bg_color: "#CFE2F3" },
+      { label: "late", value: "late", color: "#FCC419", bg_color: "#FFF9E8" },
+      { label: "leave", value: "leave", color: "#43A4F5", bg_color: "#CFE2F3" },
       {
-        label: "ลาฉุกเฉิน",
+        label: "emergency leave",
         value: "emergency leave",
         color: "#43A4F5",
         bg_color: "#CFE2F3",
       },
-      { label: "ขาด", value: "absent", color: "#F03D3E", bg_color: "#F4CCCC" },
-    ],
-    headers: [
-      { text: "ลำดับ", align: "center", sortable: false, value: "no" },
-      {
-        text: "ชื่อ-สกุล",
-        align: "center",
-        sortable: false,
-        value: "fullname",
-      },
-      { text: "แพ็กเกจ", align: "center", sortable: false, value: "package" },
-      {
-        text: "จำนวนครั้ง",
-        align: "center",
-        sortable: false,
-        value: "class_time",
-      },
-      {
-        text: "การเข้าเรียน",
-        align: "center",
-        width: "200",
-        sortable: false,
-        value: "actions",
-      },
-      // {
-      //   text: "การเข้าเรียน",
-      //   align: "center",
-      //   width: "200",
-      //   sortable: false,
-      //   value: "test",
-      // },
+      { label: "absent", value: "absent", color: "#F03D3E", bg_color: "#F4CCCC" },
     ],
     learners_form: false,
     potential_form: false,
     summary_form: false,
-    rules: {
-      status_text: [(val) => !!val || "โปรดระบุสถานะการเข้าเรียน"],
-      compensation_date: [(val) => !!val || "โปรดระบุวันชดเชย"],
-      start_time: [(val) => !!val || "โปรดระบุเวลาเริ่ม"],
-      end_time: [(val) => !!val || "โปรดระบุเวลาสิ้นสุด"],
-      evolution: [(val) => !!val || "โปรดเลือกระดับพัฒนาการ"],
-      interest: [(val) => !!val || "โปรดเลือกระดับความสนใจ"],
-      interest_text: [(val) => !!val > 0 || "โปรดระบุระดับความสนใจ"],
-      summary: [(val) => !!val > 0 || "โปรดระบุบันทึกการสอน"],
-      homework: [(val) => !!val > 0 || "โปรดระบุพัฒนาการ / การบ้าน"],
-    },
     comment_dialog_tmp: {
       id: "",
       remark: "",
@@ -1432,7 +1396,9 @@ export default {
       time_id: this.$route.params.timeId,
     });
   },
-  mounted() {},
+  mounted() {
+    this.$store.dispatch("NavberUserModules/changeTitleNavber", "management");
+  } ,
   watch: {
     coach_check_in: function () {
       this.preview_summary_files = [];
@@ -1488,6 +1454,51 @@ export default {
       coach_check_in_is_loading: "CoachModules/getCoachCheckInIsLoading",
       student_check_in_is_loading: "CoachModules/getStudentCheckInIsLoading",
     }),
+    start_time(){ 
+      return [(val) => !!val || this.$t("please specify start time")]},
+    end_time(){ 
+      return [(val) => !!val || this.$t("please specify end time")]},
+    evolution(){ 
+      return [(val) => !!val || this.$t("please select developmental level")]},
+    interest(){ 
+      return [(val) => !!val || this.$t("please select your interest level")]},
+    interest_text(){ 
+      return [(val) => !!val > 0 || this.$t("please specify the level of interest")]},
+    summary(){ 
+      return [(val) => !!val > 0 || this.$t("please specify teaching notes")]},
+    homework(){ 
+      return [(val) => !!val > 0 || this.$t("please specify development / homework")]},
+    compensation_date(){ 
+      return [(val) => !!val ||  this.$t("please specify a compensation date")]
+    },
+    status_text(){
+      return [(val) => !!val || this.$t("please state your attendance status")]
+    },
+    headers() {
+      return [
+        { text: this.$t("no."), align: "center", sortable: false, value: "no" },
+        {
+          text: `${this.$t("first name")} - ${this.$t('last name')}`,
+          align: "center",
+          sortable: false,
+          value: "fullname",
+        },
+        { text: this.$t("package"), align: "center", sortable: false, value: "package" },
+        {
+          text: this.$t("number of times"),
+          align: "center",
+          sortable: false,
+          value: "class_time",
+        },
+        {
+          text: this.$t("attendance"),
+          align: "center",
+          width: "200",
+          sortable: false,
+          value: "actions",
+        },
+      ]
+    },
     setFunctios() {
       this.GetCourse(this.$route.params.courseId);
       this.GetCoachCheckIn({
@@ -1658,7 +1669,7 @@ export default {
       this.show_comment_potential_dialog = false;
     },
     GenDate(data) {
-      return new Date(data).toLocaleDateString("th-TH", {
+      return new Date(data).toLocaleDateString(this.$i18n.locale == "th" ? "th-TH" : "en-US", {
         year: "numeric",
         month: "long",
         day: "numeric",
@@ -1670,11 +1681,11 @@ export default {
       if (this.summary_form) {
         Swal.fire({
           icon: "question",
-          title: "ต้องการบันทึกใช่หรือไม่ ?",
+          title: this.$t('want to save?'),
           showDenyButton: false,
           showCancelButton: true,
-          cancelButtonText: "ยกเลิก",
-          confirmButtonText: "ตกลง",
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             (this.is_loading = true),
@@ -1694,11 +1705,11 @@ export default {
       if (this.potential_form) {
         Swal.fire({
           icon: "question",
-          title: "ต้องการบันทึกใช่หรือไม่ ?",
+          title: this.$t('want to save?'),
           showDenyButton: false,
           showCancelButton: true,
-          cancelButtonText: "ยกเลิก",
-          confirmButtonText: "ตกลง",
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             await this.UpdateAssessmentPotential({
@@ -1714,11 +1725,11 @@ export default {
     saveCreateTeachingNotes() {
       Swal.fire({
         icon: "question",
-        title: "ต้องการบันทึกใช่หรือไม่ ?",
+        title: this.$t('want to save?'),
         showDenyButton: false,
         showCancelButton: true,
-        cancelButtonText: "ยกเลิก",
-        confirmButtonText: "ตกลง",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.CreateTeachingNotes({
@@ -1733,11 +1744,11 @@ export default {
       if (this.learners_form) {
         Swal.fire({
           icon: "question",
-          title: "ต้องการบันทึกใช่หรือไม่ ?",
+          title: this.$t('want to save?'),
           showDenyButton: false,
           showCancelButton: true,
-          cancelButtonText: "ยกเลิก",
-          confirmButtonText: "ตกลง",
+          confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             await this.AssessmentStudent({
@@ -1772,11 +1783,11 @@ export default {
       if (this.validate_form) {
         Swal.fire({
           icon: "question",
-          title: "ต้องการบันทึกใช่หรือไม่ ?",
+          title: this.$t('want to save?'),
           showDenyButton: false,
           showCancelButton: true,
-          cancelButtonText: "ยกเลิก",
-          confirmButtonText: "ตกลง",
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             this.UpdateCheckInStudent({
@@ -1820,11 +1831,11 @@ export default {
       if (!this.coach_check_in.checkInCoachId) {
         Swal.fire({
           icon: "question",
-          title: "ต้องการลงเวลาเข้าสอนใช่หรือไม่",
+          title: this.$t("want to invest time in teaching?"),
           showDenyButton: false,
           showCancelButton: true,
-          confirmButtonText: "ตกลง",
-          cancelButtonText: "ยกเลิก",
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             this.check_in = true;
@@ -1928,11 +1939,11 @@ export default {
     removePotentialFileInBase(file, selected_student) {
       Swal.fire({
         icon: "question",
-        title: "ต้องการลบใช่หรือไม่",
+        title: this.$t("do you want to delete it?"),
         showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.DeleteAssessmentPotentialFile({
@@ -1954,11 +1965,11 @@ export default {
     removeAccessmentFileInBase(file, selected_student) {
       Swal.fire({
         icon: "question",
-        title: "ต้องการลบใช่หรือไม่",
+        title: this.$t("do you want to delete it?"),
         showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.DeleteAssessmentFile({ att_assessment_id: file.attId }).then(
@@ -2048,11 +2059,11 @@ export default {
         } else {
           Swal.fire({
             icon: "error",
-            title: "กรุณาอัปโหลดเฉพาะไฟล์รูปและวิดีโอเท่านั้น",
+            title: this.$t("please upload only photo and video files"),
             showDenyButton: false,
             showCancelButton: false,
-            confirmButtonText: "ตกลง",
-            cancelButtonText: "ยกเลิก",
+            confirmButtonText: this.$t("agree"),
+            cancelButtonText: this.$t("cancel"),
           });
         }
       }
@@ -2068,11 +2079,11 @@ export default {
     removeSummaryFileInbase(file, index) {
       Swal.fire({
         icon: "question",
-        title: "ต้องการลบใช่หรือไม่",
+        title: this.$t("do you want to delete it?"),
         showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           await this.DeleteSummaryFile({ att_assessment_id: file.attId }).then(

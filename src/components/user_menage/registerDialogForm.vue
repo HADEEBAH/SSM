@@ -21,28 +21,28 @@
             </v-row>
             <v-row dense>
               <v-col cols="12" sm="6">
-                <label>ชื่อ(ภาษาไทย)</label>
+                <label>{{ $t("first name(thai)") }}</label>
                 <v-text-field
                   dense
                   ref="firstname_th"
-                  :rules="rules.firstNameThRules"
+                  :rules="firstNameThRules"
                   required
                   v-model="user_one_id.firstname_th"
-                  placeholder="ระบุชื่อ(ภาษาไทย)"
+                  :placeholder="$t('specify first name(Thai)')"
                   @change="changeUserOneId(user_one_id)"
                   @keypress="Validation($event, 'th-special')"
                   outlined
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
-                <label>นามสกุล(ภาษาไทย)</label>
+                <label>{{ $t("last name(thai)") }}</label>
                 <v-text-field
                   dense
                   ref="lastname_th"
-                  :rules="rules.lastNameThRules"
+                  :rules="lastNameThRules"
                   required
                   v-model="user_one_id.lastname_th"
-                  placeholder="ระบุนามสกุล(ภาษาไทย)"
+                  :placeholder="$t('specify last name(Thai)')"
                   @change="changeUserOneId(user_one_id)"
                   @keypress="Validation($event, 'th-special')"
                   outlined
@@ -51,28 +51,28 @@
             </v-row>
             <v-row dense>
               <v-col cols="12" sm="6">
-                <label>ชื่อ(ภาษาอังกฤษ)</label>
+                <label>{{ $t("first name(english)") }}</label>
                 <v-text-field
                   dense
                   ref="firstname_en"
-                  :rules="rules.firstNameEnRules"
+                  :rules="firstNameEnRules"
                   required
                   v-model="user_one_id.firstname_en"
-                  placeholder="ระบุชื่อ(ภาษาอังกฤษ)"
+                  :placeholder="$t('specify first name(english)')"
                   @change="changeUserOneId(user_one_id)"
                   @keypress="Validation($event, 'en-special')"
                   outlined
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
-                <label>นามสกุล(ภาษาอังกฤษ)</label>
+                <label>{{ $t("last name(english)") }}</label>
                 <v-text-field
                   dense
                   ref="lastname_en"
-                  :rules="rules.lastNameEnRules"
+                  :rules="lastNameEnRules"
                   required
                   v-model="user_one_id.lastname_en"
-                  placeholder="ระบุนามสกุล(ภาษาอังกฤษ)"
+                  :placeholder="$t('specify last name(english)')"
                   @change="changeUserOneId(user_one_id)"
                   @keypress="Validation($event, 'en-special')"
                   outlined
@@ -81,17 +81,17 @@
             </v-row>
             <v-row dense>
               <v-col>
-                <label>เบอร์โทรศัพท์</label>
+                <label>{{ $t("phone number") }}</label>
                 <v-text-field
                   dense
                   ref="phone_number"
                   maxlength="12"
-                  :rules="rules.phone_number"
+                  :rules="phone_number"
                   required
                   v-model="user_one_id.phone_number"
                   @input="checkPhoneNumber"
                   @keypress="Validation($event, 'number')"
-                  placeholder="ระบุเบอร์โทรศัพท์"
+                  :placeholder="$t('specify phone number')"
                   @change="changeUserOneId(user_one_id)"
                   outlined
                 ></v-text-field>
@@ -99,15 +99,15 @@
             </v-row>
             <v-row dense>
               <v-col>
-                <label>Username</label>
+                <label>{{ $t("username") }}</label>
                 <v-text-field
                   autocomplete="off-autofill"
                   dense
                   ref="username_rig"
-                  :rules="rules.usernameRules"
+                  :rules="usernameRules"
                   required
                   v-model="user_one_id.username"
-                  placeholder="ระบุชื่อผู้ใช้งาน"
+                  :placeholder="$t('specify username')"
                   @keypress="Validation($event, 'en-number')"
                   @change="changeUserOneId(user_one_id)"
                   outlined
@@ -116,21 +116,21 @@
             </v-row>
             <v-row dense>
               <v-col>
-                <label>รหัสผ่าน</label>
+                <label>{{ $t('password') }}</label>
                 <v-text-field
                   dense
                   autocomplete="off-autofill"
                   ref="password_rig"
                   @keypress="Validation($event, 'en')"
                   :type="show_password ? 'text' : 'password'"
-                  :rules="rules.passwordRules"
+                  :rules="passwordRules"
                   required
                   v-model="user_one_id.password"
                   :append-icon="
                     show_password ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
                   "
                   @click:append="show_password = !show_password"
-                  placeholder="ระบุรหัสผ่าน"
+                  :placeholder="$t('specify password')"
                   @change="changeUserOneId(user_one_id)"
                   outlined
                 >
@@ -139,7 +139,7 @@
             </v-row>
             <v-row dense>
               <v-col>
-                <label>ยืนยันรหัสผ่าน</label>
+                <label>{{  $t('confirm password') }}</label>
                 <v-text-field
                   dense
                   ref="confirm_password"
@@ -150,7 +150,7 @@
                   ]"
                   required
                   v-model="user_one_id.confirm_password"
-                  placeholder="ยืนยันรหัสผ่าน"
+                  :placeholder="$t('confirm password')"
                   :append-icon="
                     show_confirm_password
                       ? 'mdi-eye-outline'
@@ -174,11 +174,11 @@
                 >
                   <template v-slot:label>
                     <label>
-                      การเปิดบัญชี ท่านรับทราบและตกลงตาม
+                      {{ $t('by opening an account, you acknowledge and agree to') }}
                       <a
                         @click="policy_show = true"
                         class="cursor-pointer underline text-[#FF6B81]"
-                        >เงื่อนไขการบริการ & นโยบายความเป็นส่วนตัว</a
+                        >{{ $t("terms of service and privacy policy") }}</a
                       >
                     </label>
                   </template>
@@ -200,7 +200,7 @@
                       : 'w-full btn-register'
                   "
                   @click="save"
-                  >ลงทะเบียน</v-btn
+                  >{{ $t("register") }}</v-btn
                 >
               </v-col>
             </v-row>
@@ -238,9 +238,9 @@
               >
                 <template v-slot:label>
                   <label>
-                    ยอมรับ
+                    {{ $t("accept") }}
                     <a class="cursor-pointer underline text-[#FF6B81]"
-                      >เงื่อนไขการใช้บริการและนโยบายการคุ้มครองข้อมูลส่วนบุคคล</a
+                      >{{ $t("terms of service and privacy policy") }}</a
                     >
                   </label>
                 </template>
@@ -259,7 +259,7 @@
                   (policy_show = false), (user_one_id.accept_terms = false)
                 "
               >
-                ยกเลิก
+                {{ $t("cencel") }}
               </v-btn>
             </v-col>
             <v-col>
@@ -269,7 +269,7 @@
                 color="#ff6b81"
                 @click="policy_show = false"
               >
-                ตกลง
+                {{ $t("agree") }}
               </v-btn>
             </v-col>
           </v-row>
@@ -299,7 +299,6 @@ export default {
     valid: true,
     show_password: false,
     show_confirm_password: false,
-    phone_number: "",
     rules: {
       phone_number: [
         (val) =>
@@ -372,9 +371,7 @@ export default {
           "โปรดระบุรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
         (val) => !/[ ]/g.test(val) || "รหัสผ่านต้องไม่มีอักขระพิเศษ",
       ],
-      confirm_password: (val) =>
-        (val && val.length > 7) ||
-        "โปรดระบุยืนยันรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
+      confirm_password: (val) => (val && val.length > 7) || "โปรดระบุยืนยันรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
       match: (password) => (value) => value === password || "รหัสผ่านไม่ตรงกัน",
     },
   }),
@@ -416,6 +413,88 @@ export default {
       user_one_id: "RegisterModules/getUserOneId",
       course_data: "CourseModules/getCourseData",
     }),
+    phone_number(){
+      return [
+        (val) =>
+          ((val || "").length > 0 && val[0] === "0") ||
+          this.$t("please enter a phone number starting with 0"),
+        (val) =>
+          ((val || "").length > 0 && val.length === 12) ||
+          this.$t("please enter a 10-digit phone number"),
+      ]
+    },
+    usernameRules() {
+      return [
+        (val) =>
+          (val || "").length > 5 ||
+          this.$t("please enter a username at least 6 characters long"),
+        (val) => /[A-Za-z0-9 ]/g.test(val) || this.$t("the username cannot contain special characters"),
+        (val) =>
+          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) || this.$t("username cannot contain emojis"),
+      ]
+    },
+    firstNameThRules(){
+      return [
+        (val) =>
+          (val || "").length > 1 ||
+          this.$t("please enter your name (thai) with a length of at least 2 characters"),
+        (val) =>
+          (val || "").length < 20 ||
+          this.$t( "please enter your name (thai) length not exceeding 20 characters"),
+        (val) => /[ก-๏\s]/g.test(val) || "กรุณากรอกชื่อภาษาไทย",
+        (val) =>
+          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+         this.$t("please enter your thai name"),
+      ]
+    },
+    firstNameEnRules(){
+      return [
+        (val) =>
+          (val || "").length > 1 ||
+          this.$t("please enter your name (english), at least 2 characters long"),
+        (val) =>
+          (val || "").length < 20 ||
+          this.$t("please enter your name (english) length not exceeding 20 characters"),
+        (val) => /[A-Za-z]/g.test(val) || this.$t("please enter your name in english"),
+        (val) =>
+          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+          this.$t("please enter your name in english"),
+      ]
+    },
+    lastNameThRules(){
+      return [
+        (val) =>
+          (val || "").length > 1 ||
+          this.$t("please enter your last name (Thai), at least 2 characters long"),
+        (val) =>
+          (val || "").length < 20 ||
+          this.$t("please enter your last name (Thai) not more than 20 characters"),
+        (val) => /[ก-๏\s]/g.test(val) || this.$t("please enter your last name in thai"),
+        (val) =>
+          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+          this.$t("please enter your last name in thai"),
+      ]
+    },
+    lastNameEnRules(){
+      return [
+        (val) =>
+          (val || "").length > 1 ||
+          this.$t("please enter your last name (English), at least 2 characters long"),
+        (val) =>
+          (val || "").length < 20 ||
+          this.$t("please enter your last name (English). length not exceeding 20 characters"),
+        (val) => /[A-Za-z ]/g.test(val) || this.$t("please enter your last name in English"),
+        (val) =>
+          !/[\uD800-\uDBFF][\uDC00-\uDFFF ]/g.test(val) ||
+          this.$t("please enter your last name in English"),
+      ]
+    }, 
+    passwordRules(){
+      return [
+        (val) =>(val || "").length > 7 || this.$t("please enter a password that is at least 8 characters long"),
+        (val) => !/[ ]/g.test(val) || this.$t("password must not contain special characters"),
+      ]
+    }, 
   },
   watch: {},
 };
