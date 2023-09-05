@@ -3,6 +3,7 @@ import VueCookie from "vue-cookie";
 import moment from "moment";
 import Swal from "sweetalert2";
 import { dateFormatter } from '@/functions/functions';
+import VueI18n from "vue-i18n";
 // import VueI18n from "vue-i18n";
 const coachModules = {
   namespaced: true,
@@ -162,8 +163,8 @@ const coachModules = {
           context.commit("SetStudentCheckInIsLoading", false)
           Swal.fire({
             icon: "success",
-            title: "สำเร็จ",
-            text: "( บันทึกเรียบร้อยแล้ว )",
+            title: VueI18n.$t("succeed"),
+            text: `( ${VueI18n.$t("saved")} )`,
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -246,8 +247,8 @@ const coachModules = {
           context.commit("SetStudentCheckInIsLoading", false)
           Swal.fire({
             icon: "success",
-            title: "สำเร็จ",
-            text: "( บันทึกเรียบร้อยแล้ว )",
+            title: VueI18n.$t("succeed"),
+            text: `( ${VueI18n.$t("saved")} )`,
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -263,11 +264,11 @@ const coachModules = {
       } catch (error) {
         await Swal.fire({
           icon: "error",
-          title: "เกิดข้อผิดพลาด",
+          title: VueI18n.$t("something went wrong"),
           showDenyButton: false,
           showCancelButton: false,
-          cancelButtonText: "ยกเลิก",
-          confirmButtonText: "ตกลง",
+          confirmButtonText: VueI18n.$t("agree"),
+          cancelButtonText: VueI18n.$t("cancel"),
         })
         context.commit("SetStudentCheckInIsLoading", false)
       }
@@ -292,8 +293,8 @@ const coachModules = {
         if (data.statusCode === 200) {
           Swal.fire({
             icon: "success",
-            title: "สำเร็จ",
-            text: "( บันทึกเรียบร้อยแล้ว )",
+            title: VueI18n.$t("succeed"),
+            text: `( ${VueI18n.$t("saved")} )`,
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -305,11 +306,11 @@ const coachModules = {
       } catch (error) {
         Swal.fire({
           icon: "error",
-          title: "เกิดข้อผิดพลาด",
+          title: VueI18n.$t("something went wrong"),
           showDenyButton: false,
           showCancelButton: false,
-          cancelButtonText: "ยกเลิก",
-          confirmButtonText: "ตกลง",
+          confirmButtonText: VueI18n.$t("agree"),
+          cancelButtonText: VueI18n.$t("cancel"),
         })
       }
     },
@@ -364,11 +365,11 @@ const coachModules = {
       } catch (error) {
         Swal.fire({
           icon: "error",
-          title: "เกิดข้อผิดพลาด",
+          title: VueI18n.$t("something went wrong"),
           showDenyButton: false,
           showCancelButton: false,
-          cancelButtonText: "ยกเลิก",
-          confirmButtonText: "ตกลง",
+          confirmButtonText: VueI18n.$t("agree"),
+          cancelButtonText: VueI18n.$t("cancel"),
         })
       }
     },
@@ -395,8 +396,8 @@ const coachModules = {
           context.commit("SetStudentCheckInIsLoading", false)
           await Swal.fire({
             icon: "success",
-            title: "สำเร็จ",
-            text: "( บันทึกเรียบร้อยแล้ว )",
+            title: VueI18n.$t("succeed"),
+            text: `( ${VueI18n.$t("saved")} )`,
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -416,8 +417,8 @@ const coachModules = {
         if (response.status === 400) {
           Swal.fire({
             icon: "warning",
-            title: "คำเตือน",
-            text: "( ไม่สามารถเรียนชดเชยวันที่ระบุได้ เนื่องจากวันที่ระบุมีเรียนอยู่แล้ว )",
+            title: VueI18n.$t("warning"),
+            text: `( ${VueI18n.$t('unable to study on the specified date. because there are already classes on the specified date')} )`,
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -431,7 +432,7 @@ const coachModules = {
         } else {
           Swal.fire({
             icon: "error",
-            title: "เกิดข้อผิดพลาด",
+            title: VueI18n.$t("something went wrong"),
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -759,8 +760,8 @@ const coachModules = {
         if (data.statusCode == 200) {
           Swal.fire({
             icon: "success",
-            title: "สำเร็จ",
-            text: "( บันทึกเรียบร้อยแล้ว )",
+             title: VueI18n.$t("succeed"),
+            text: `( ${VueI18n.$t("saved")} )`,
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -884,8 +885,8 @@ const coachModules = {
           }
           Swal.fire({
             icon: "success",
-            title: "สำเร็จ",
-            text: "( ส่งใบลาเรียบร้อยแล้ว )",
+            title: VueI18n.$t("succeed"),
+            text: `( ${VueI18n.$t("the resignation letter has been sent")} )`,
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,

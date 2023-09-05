@@ -55,7 +55,7 @@
                                 sm="6"
                                 class="text-md font-semibold"
                               >
-                                {{ $t("coach") }} : {{ item.coach_name }}
+                                {{ $t("coach") }} : {{ $i18n.locale =='th' ? item.coach_name : item.coach_name_en}}
                               </v-col>
                               <v-col
                                 cols="12"
