@@ -42,16 +42,33 @@
                 <v-col class="text-slate-400">
                   <span class="mdi mdi-account">{{ $t("coach") }}:</span>
                   {{
+                    $i18n.locale == "th"
+                      ? my_course_detail.coachName
+                      : my_course_detail.coachNameEng
+                  }}
+
+                  <!-- {{
                     !my_course_detail.coachName
                       ? "-"
                       : my_course_detail.coachName
-                  }}
+                  }} -->
                 </v-col>
               </v-row>
               <v-row dense>
                 <v-col class="text-slate-400">
                   <span class="mdi mdi-account">{{ $t("learner") }} :</span>
                   {{
+                    $i18n.locale == "th"
+                      ? my_course_detail.student.firstNameTh
+                      : my_course_detail.student.firstNameEng
+                  }}
+                  {{
+                    $i18n.locale == "th"
+                      ? my_course_detail.student.lastNameTh
+                      : my_course_detail.student.lastNameEng
+                  }}
+
+                  <!-- {{
                     !my_course_detail.student
                       ? "-"
                       : my_course_detail.student.firstNameTh
@@ -60,14 +77,24 @@
                     !my_course_detail.student
                       ? "-"
                       : my_course_detail.student.lastNameTh
-                  }}
+                  }} -->
                 </v-col>
               </v-row>
               <v-row dense>
                 <v-col class="text-slate-400">
                   <span class="mdi mdi-account">{{ $t("listed by") }} :</span>
-
                   {{
+                    $i18n.locale == "th"
+                      ? my_course_detail.createdBy.firstNameTh
+                      : my_course_detail.createdBy.firstNameEng
+                  }}
+                  {{
+                    $i18n.locale == "th"
+                      ? my_course_detail.createdBy.lastNameTh
+                      : my_course_detail.createdBy.lastNameEng
+                  }}
+
+                  <!-- {{
                     !my_course_detail.createdBy
                       ? "-"
                       : my_course_detail.createdBy.firstNameTh
@@ -76,7 +103,7 @@
                     !my_course_detail.createdBy
                       ? "-"
                       : my_course_detail.createdBy.lastNameTh
-                  }}
+                  }} -->
                 </v-col>
               </v-row>
               <v-row dense>
