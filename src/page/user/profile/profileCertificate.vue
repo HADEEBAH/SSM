@@ -1,11 +1,11 @@
 <template>
   <v-container>
-    <div  v-if="certificates.length == 0" class="mx-5 my-5">
+    <div v-if="certificates.length == 0" class="mx-5 my-5">
       <v-card>
         <v-card-text>
           <v-row>
             <v-col class="text-center">
-              ไม่พบข้อมูลการแข่งขัน
+              {{ $t("no match information found") }}
             </v-col>
           </v-row>
         </v-card-text>
@@ -32,12 +32,11 @@
               sm="11"
               align="left"
               class="mt-1 cursor-pointer pink--text underline underline-offer4"
-              >{{ certificate.originalFileName}}
+              >{{ certificate.originalFileName }}
             </v-col>
           </v-row>
         </div>
       </v-card>
-      
     </div>
   </v-container>
 </template>
@@ -52,15 +51,18 @@ export default {
       "NavberUserModules/changeTitleNavber",
       "การแข่งขันและ..."
     );
-    this.GetCertificateListByAccount({account_id : this.$route.params.account_id})
+    this.GetCertificateListByAccount({
+      account_id: this.$route.params.account_id,
+    });
   },
   methods: {
     ...mapActions({
-      GetCertificateListByAccount: "UserManageModules/GetCertificateListByAccount",
+      GetCertificateListByAccount:
+        "UserManageModules/GetCertificateListByAccount",
     }),
-    openFile(url){
-      window.open(url, '_blank')
-    }
+    openFile(url) {
+      window.open(url, "_blank");
+    },
   },
   computed: {
     ...mapGetters({
