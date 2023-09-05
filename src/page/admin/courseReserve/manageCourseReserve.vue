@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <header-page slot_tag title="จัดการการจอง">
+    <header-page slot_tag :title="$t(`manage reservations`)">
       <v-text-field
         class="w-full"
         outlined
@@ -8,7 +8,7 @@
         hide-details
         prepend-inner-icon="mdi-magnify"
         v-model="search"
-        placeholder="ค้นหา"
+        :placeholder="$t(`search`)"
       ></v-text-field>
     </header-page>
 

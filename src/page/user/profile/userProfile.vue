@@ -306,11 +306,12 @@
                       ? "-"
                       : profile.student.studentFirstnameTh
                   }} -->
-
+                  <!-- {{ profile.student.studentFirstnameEn }}
+                  {{ profile.student.studentFirstnameTh }} -->
                   {{
                     $i18n.locale == "th"
-                      ? profile.student.parentFirstnameTh
-                      : profile.student.parentFirstnameEn
+                      ? profile.student.studentFirstnameTh
+                      : profile.student.studentFirstnameEn
                   }}
                 </v-col>
                 <v-col cols="4">
@@ -544,7 +545,7 @@
               <label-custom :text="$t('first name(thai)')"></label-custom>
               <br />
               {{
-                i18n.locale == "th"
+                $i18n.locale == "th"
                   ? dialogGetStudentData.studentFirstnameTh
                   : dialogGetStudentData.studentFirstnameEn
               }}
@@ -559,7 +560,7 @@
               <label-custom :text="$t('last name(thai)')"></label-custom>
               <br />
               {{
-                i18n.locale == "th"
+                $i18n.locale == "th"
                   ? dialogGetStudentData.studentLastnameTh
                   : dialogGetStudentData.studentLastnameEn
               }}
