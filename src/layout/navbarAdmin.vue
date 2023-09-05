@@ -8,6 +8,7 @@
           }}</v-icon>
         </v-app-bar-nav-icon>
         <v-spacer></v-spacer>
+        <div id="google_translate_element"></div>
         <div class="mx-5">
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
@@ -210,6 +211,23 @@ export default {
 
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+     // Function called when the Google Translate Element script is loaded
+     window.googleTranslateElementInit = () => {
+      new window.google.translate.TranslateElement(
+        {
+          pageLanguage: this.$i18n.locale, // Change to the default language of your website
+          includedLanguages: 'en,th',
+        },
+        'google_translate_element'
+      );
+    };
+
+    // Load the Google Translate Element script dynamically
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src =
+      '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+    document.head.appendChild(script);
   },
   mounted() {
     this.menu_drawer_list.forEach((list) => {
