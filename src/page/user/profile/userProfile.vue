@@ -328,7 +328,7 @@
                 </v-col>
                 <v-col class="pink--text">
                   {{ profile.student.course }}
-                  {{ $t("corse") }}
+                  {{ $t("courses") }}
                 </v-col>
 
                 <!-- col arrow -->
@@ -635,11 +635,11 @@
               <img src="@/assets/profile/cource.png" />
             </v-col>
             <v-col cols="5" sm="6" align="left" class="mt-1">
-              <label>คอร์สเรียนของนักเรียน</label>
+              <label>{{ $t("student course") }}</label>
             </v-col>
             <v-col cols="3" sm="4" align="right" class="mt-1">
               <label class="pink--text"
-                >{{ dialogGetStudentData.course }} คอร์ส</label
+                >{{ dialogGetStudentData.course }} {{ $t("courses") }}</label
               >
             </v-col>
             <v-col cols="2" sm="1" align="right" class="mt2">
@@ -657,11 +657,12 @@
               <img src="@/assets/profile/certificate.png" />
             </v-col>
             <v-col cols="5" sm="6" align="left" class="mt-1">
-              <label>การแข่งขันและเกียรติบัตร</label>
+              <label>{{ $t("competitions and certificates") }}</label>
             </v-col>
             <v-col cols="3" sm="4" align="right" class="mt-1">
               <label class="pink--text"
-                >{{ certificate_count.countCertificate }} การแข่ง</label
+                >{{ certificate_count.countCertificate }}
+                {{ $t("competition") }}</label
               >
             </v-col>
             <v-col cols="2" sm="1" align="right" class="mt-2">
@@ -675,7 +676,7 @@
                 color="#FF6B81"
                 @click="removeRelation(dialogGetStudentData)"
               >
-                ลบข้อมูลนักเรียน
+                {{ $t("delete student information") }}
               </v-btn>
             </v-col>
           </v-row>
@@ -702,15 +703,15 @@
           icon_color="#ff6b81"
           :title="
             profile_detail?.userRoles?.roleId === 'R_5'
-              ? 'เพิ่มผู้ปกครอง'
-              : 'เพิ่มนักเรียน'
+              ? this.$t('add parents')
+              : this.$t('add student')
           "
         >
         </header-card>
         <v-card-text class="pa-2">
           <v-row dense>
             <v-col cols="9">
-              <labelCustom text="Username"></labelCustom>
+              <labelCustom :text="this.$t('username')"></labelCustom>
               <v-text-field
                 :rules="rules.usernameRules"
                 @keypress="validate($event, 'en')"
@@ -719,7 +720,7 @@
                 outlined
                 v-model="relation_user.username"
                 @change="checkUsername(relation_user.username)"
-                placeholder="Username"
+                :placeholder="this.$t('username')"
               >
                 <template v-slot:append>
                   <v-icon v-if="relation_user.account_id" color="green"
@@ -728,11 +729,13 @@
                 </template>
               </v-text-field>
               <template v-if="!relation_user.account_id">
-                <label> หากยังไม่มีบัญชีผู้ใช้กรุณา </label>
+                <label>
+                  {{ $t("if you don't have an account yet, please") }}
+                </label>
                 <label
                   class="text-[#ff6b81] underline cursor-pointer mt-5"
                   @click="registerRelation"
-                  >สมัคร One ID</label
+                  >{{ $t("sign up for One ID") }}</label
                 >
               </template>
             </v-col>
@@ -744,32 +747,32 @@
                 @click="checkUsername(relation_user.username)"
                 depressed
                 dark
-                >ตกลง</v-btn
+                >{{ $t("agree") }}</v-btn
               >
             </v-col>
           </v-row>
           <template>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom text="ชื่อ(ภาษาอังกฤษ)"></labelCustom>
+                <labelCustom :text="$t('first name(english)')"></labelCustom>
                 <v-text-field
                   disabled
                   dense
                   outlined
                   v-model="relation_user.firstname_en"
-                  placeholder="ชื่อภาษาอังกฤษ"
+                  :placeholder="$t('english first name')"
                 ></v-text-field>
               </v-col>
             </v-row>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom text="นามสกุล(ภาษาอังกฤษ)"></labelCustom>
+                <labelCustom :text="$t('last name(english)')"></labelCustom>
                 <v-text-field
                   disabled
                   dense
                   outlined
                   v-model="relation_user.lastname_en"
-                  placeholder="นามสกุลภาษาอังกฤษ"
+                  :placeholder="$t('english last name')"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -795,7 +798,7 @@
                 class="w-full"
                 color="#ff6b81"
                 outlined
-                >ยกเลิก</v-btn
+                >{{ $t("cancel") }}</v-btn
               >
             </v-col>
             <v-col>
@@ -806,7 +809,7 @@
                 :disabled="!valid"
                 depressed
                 @click="addRelations"
-                >บันทึก</v-btn
+                >{{ $t("save") }}</v-btn
               >
             </v-col>
           </v-row>
@@ -823,7 +826,7 @@
       {{ register_type }}
       <registerDialogForm
         dialog
-        title="สมัคร One ID"
+        :title="this.$t('sign up for One ID')"
         :state="register_type"
       ></registerDialogForm>
     </v-dialog>
@@ -880,29 +883,6 @@ export default {
     getStudentDataDialog: {},
     dialogGetStudentData: {},
     list_course_count: 0,
-    rules: {
-      usernameRules: [
-        (val) =>
-          (val || "").length > 5 ||
-          "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => /[A-Za-z0-9 ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-        (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-          "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
-      ],
-      passwordRules: [
-        (val) =>
-          (val || "").length > 7 ||
-          "โปรดระบุรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => !/[ ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-      ],
-    },
 
     userRelationsAccountId: "",
   }),
@@ -1037,11 +1017,11 @@ export default {
     async removeRelation(relations) {
       Swal.fire({
         icon: "question",
-        title: "คุณต้องการลบรายการนี้ใช่หรือไม่ ?",
+        title: this.$t("do you want to delete this item?"),
         showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.dialog_show = false;
@@ -1059,8 +1039,8 @@ export default {
               this.GetRelationDataV2(this.user_login.account_id);
               Swal.fire({
                 icon: "success",
-                title: "สำเร็จ",
-                text: "( ลบเรียบร้อยแล้ว )",
+                title: this.$t("succeed"),
+                text: this.$t("already deleted"),
                 timer: 3000,
                 timerProgressBar: true,
                 showCancelButton: false,
@@ -1070,7 +1050,7 @@ export default {
             .catch(() => {
               Swal.fire({
                 icon: "error",
-                title: "ลบไม่สำเร็จ",
+                title: this.$t("failed to delete"),
               });
             });
           this.dialog_show = false;
@@ -1185,11 +1165,11 @@ export default {
     async addRelations() {
       Swal.fire({
         icon: "question",
-        title: "คุณต้องการเพิ่มผู้ปกครองหรือไม่",
+        title: this.$t("do you want to add a parent?"),
         showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
@@ -1229,8 +1209,8 @@ export default {
 
                 Swal.fire({
                   icon: "success",
-                  title: "สำเร็จ",
-                  text: "( บันทึกเรียบร้อยแล้ว )",
+                  title: this.$t("succeed"),
+                  text: this.$t("saved successfully"),
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,
@@ -1247,30 +1227,34 @@ export default {
               response?.data?.message ===
               "Can not add relations because roles have already, Parent is not match."
             ) {
-              this.error_message =
-                "ไม่สามารถสร้างความสัมพันธ์ได้เนื่องจากอยู่ในบทบาทเดียวกัน";
+              this.error_message = this.$t(
+                "a relationship cannot be established because they are in the same role"
+              );
             } else if (response?.data?.message === "Duplicate relation.") {
-              this.error_message = "ความสัมพันธ์ซ้ำกัน";
+              this.error_message = this.$t("duplicate relationship");
             } else if (
               response?.data?.message ===
               "Can not use the same accountID to create Relations."
             ) {
-              this.error_message =
-                "ไม่สามารถสร้างความสัมพันธ์ได้เนื่องจากชื่อผู้ใช้เดียวกัน";
+              this.error_message = this.$t(
+                "the relationship could not be established because of the same username"
+              );
             } else {
-              this.error_message = "เกิดข้อผิดพลาด";
+              this.error_message = this.$t("something went wrong");
             }
             Swal.fire({
               icon: `${
-                this.error_message === "เกิดข้อผิดพลาด" ? "error" : "warning"
+                this.error_message === this.$t("something went wrong")
+                  ? "error"
+                  : "warning"
               }`,
               title: `${
-                this.error_message === "เกิดข้อผิดพลาด"
+                this.error_message === this.$t("something went wrong")
                   ? this.error_message
-                  : "คำเตือน"
+                  : this.$t("warning")
               }`,
               text: `${
-                this.error_message === "เกิดข้อผิดพลาด"
+                this.error_message === this.$t("something went wrong")
                   ? ""
                   : `(${this.error_message})`
               }`,
@@ -1285,7 +1269,7 @@ export default {
             });
           }
         } else {
-          Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
+          Swal.fire(this.$t("your data will not be saved"), "", "info");
         }
       });
     },
@@ -1324,6 +1308,38 @@ export default {
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;
+    },
+
+    rules() {
+      return {
+        usernameRules: [
+          (val) =>
+            (val || "").length > 5 ||
+            this.$t("please enter a username at least 6 characters long"),
+          (val) =>
+            (val || "").length < 20 ||
+            this.$t("please enter a username no longer than 20 characters"),
+          (val) =>
+            /[A-Za-z0-9 ]/g.test(val) ||
+            this.$t("the username cannot contain special characters"),
+          (val) =>
+            !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+            "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
+        ],
+        passwordRules: [
+          (val) =>
+            (val || "").length > 7 ||
+            this.$t(
+              "please enter a password that is at least 8 characters long"
+            ),
+          (val) =>
+            (val || "").length < 20 ||
+            this.$t("please enter a password of no more than 20 characters"),
+          (val) =>
+            !/[ ]/g.test(val) ||
+            this.$t("the username cannot contain special characters"),
+        ],
+      };
     },
   },
 };
