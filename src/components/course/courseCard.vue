@@ -34,14 +34,13 @@
             ></v-img>
           </v-col>
           <v-col cols="12" class="flex align-center justify-center text-h5">
-            อัปโหลดภาพหน้าปกคอร์สเรียน
+            {{ $t('upload the cover image of the course')}}
           </v-col>
           <v-col
             cols="12"
             class="flex align-center justify-center text-caption"
           >
-            ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ
-            ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG )
+            ( {{$t("suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file")}} )
           </v-col>
           <v-col
             cols="12"
@@ -50,7 +49,7 @@
           </v-col>
           <v-col cols="12" class="flex align-center justify-center">
             <v-btn outlined color="blue" @click="openFileSelector"
-              >เลือกไฟล์</v-btn
+              >{{ $t("select file")}}</v-btn
             >
             <input
               ref="fileInput"
@@ -66,12 +65,12 @@
     </v-card>
     <!-- Detail -->
     <v-card flat>
-      <headerCard title="รายละเอียด"></headerCard>
+      <headerCard :title="$t('details')"></headerCard>
       <v-card-text class="py-0">
         <v-divider class="mb-3"></v-divider>
         <v-row dense>
           <v-col cols="12" sm="6">
-            <label-custom required text="ชื่อคอร์ส(ภาษาไทย)"></label-custom>
+            <label-custom required :text="$t('course name (thai)')'"></label-custom>
             <v-text-field
               dense
               :disabled="disable"
@@ -82,11 +81,11 @@
               @change="ChangeCourseData(course_data)"
               @focus="$event.target.select()"
               v-model="course_data.course_name_th"
-              placeholder="ระบุชื่อคอร์ส(ภาษาไทย)"
+              :placeholder="$t('specify the course name (thai)')"
             ></v-text-field>
           </v-col>
           <v-col cols="12" sm="6">
-            <label-custom required text="ชื่อคอร์ส(ภาษาอังกฤษ)"></label-custom>
+            <label-custom required :text="$t('course name (english)')'"></label-custom>
             <v-text-field
               dense
               :disabled="disable"
@@ -97,13 +96,13 @@
               :rules="rules.course_name_en"
               v-model="course_data.course_name_en"
               @change="ChangeCourseData(course_data)"
-              placeholder="ระบุชื่อคอร์ส(ภาษาอังกฤษ)"
+              :placeholder="$t('specify the course name (english)')"
             ></v-text-field>
           </v-col>
         </v-row>
         <v-row dense>
           <v-col cols="12" sm="6">
-            <label-custom required text="ชื่ออาณาจักร"></label-custom>
+            <label-custom required :text="$t('kingdom name')"></label-custom>
             <v-autocomplete
               dense
               :rules="rules.kingdom"
@@ -117,7 +116,7 @@
               :outlined="!disable"
               :filled="disable"
               @change="ChangeCourseData(course_data)"
-              placeholder="ระบุชื่ออาณาจักร"
+              :placeholder="$t('specify kingdom name')"
             >
               <template v-slot:no-data>
                 <v-list-item>
