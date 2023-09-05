@@ -220,6 +220,7 @@
 
     "nationality": "Nationality",
     "nationality cannot contain special characters":"Nationality cannot contain special characters",
+    "nationality must not have emojis": "Nationality must not have emojis",
     "new password":"New password",
     "no attachments from teaching summary notes" : "no attachments from teaching summary notes",
     "no." : "No.",
@@ -327,7 +328,6 @@
     "reserve" : "Reserve",
     "return to home page" : "Return to home page",
 
-    "sanchat must not have emojis": "Sanchat must not have emojis",
     "save" : "Save",
     "save data successfully": "Save data successfully",
     "saved successfully": "( Saved successfully )",
