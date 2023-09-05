@@ -1807,7 +1807,8 @@ export default {
             if (graduate_student_id.length > 0) {
               let graduate_payload = {
                 notificationName: "แจ้งเตือนการเรียน",
-                notificationDescription: `กำลังจะสำเร็จการศึกษา คอร์ส${this.course_data.course_name_th}`,
+                notificationDescription: `คอร์ส${this.course_data.course_name_th} ของท่านใกล้จะครบแพ็คเกจแล้วสามารถเลือกซื้อคอร์สเพิ่มเติมได้ค่ะ`,
+                // notificationDescription: `กำลังจะสำเร็จการศึกษา คอร์ส${this.course_data.course_name_th}`,
                 accountId: graduate_student_id,
                 path: null,
               };
