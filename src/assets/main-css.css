@@ -119,3 +119,9 @@ padding: 5px 10px; /* Add padding */
     margin: 10px 0px -10px 0px !important;
     visibility: visible;
 }
+.skiptranslate iframe{
+    display: none!important;
+}
+body{
+    top: 0px !important; 
+}
