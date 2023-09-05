@@ -181,7 +181,7 @@
                   {{ $t('transaction time') }}:
                 </v-col>
                 <v-col cols="5" align="right">
-                  {{ order.createdDate }}
+                  {{ genDate(order.createdDateStr) }}
                 </v-col>
               </v-row>
               <v-row dense>
@@ -227,7 +227,6 @@
 </template>
 
 <script>
-import { dateFormatter } from "@/functions/functions";
 import { mapActions, mapGetters } from "vuex";
 import loadingOverlay from "@/components/loading/loadingOverlay";
 import Swal from "sweetalert2";
@@ -261,7 +260,8 @@ export default {
       getHistory: "OrderModules/getHistory",
     }),
     genDate(date) {
-      return dateFormatter(new Date(date), "DD MT YYYYT");
+      const options = { year: "numeric", month: "long", day: "numeric" };
+      return new Date(date).toLocaleString(this.$i18n.locale == "th" ? 'th-TH' : "en-US", options)
     },
     cancelOrder(order_id){
       Swal.fire({

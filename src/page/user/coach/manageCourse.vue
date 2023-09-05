@@ -258,13 +258,13 @@
             <v-col>
               <v-row dense>
                 <v-col class="font-bold text-md">{{
-                  course.start_date_str
+                  GenDateStr(new Date(course.start_date_str))
                 }}</v-col>
               </v-row>
               <v-row dense>
                 <v-col cols="12">
                   <rowData mini icon="mdi-account"
-                    >{{ $t("kingdom") }} : {{ course.category_name }}</rowData
+                    >{{ $t("kingdom") }} : {{ $i18n.locale == "th" ? course.category_name : course.category_name_en }}</rowData
                   >
                 </v-col>
 
