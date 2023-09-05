@@ -1,6 +1,7 @@
 import axios from "axios"
 import Swal from "sweetalert2";
 import VueCookie from "vue-cookie";
+import VueI18n from "vue-i18n";
 const categoryModules = {
     namespaced: true,
     state: {
@@ -83,40 +84,24 @@ const categoryModules = {
 
                     Swal.fire({
                         icon: "success",
-                        title: "สำเร็จ",
-                        text: "( ลบรายการเรียบร้อยแล้ว )",
+                        title: VueI18n.$t("succeed"),
+                        text: `( ${VueI18n.$t("successfully deleted item")} )`,
                         timer: 3000,
                         timerProgressBar: true,
                         showCancelButton: false,
                         showConfirmButton: false,
                     });
-
-                    // Swal.fire({
-                    //     icon: "success",
-                    //     title: "ลบรายการสำเร็จ",
-                    //     showDenyButton: false,
-                    //     showCancelButton: false,
-                    //     cancelButtonText: "ยกเลิก",
-                    //     confirmButtonText: "ตกลง",
-                    // }).then(async (result) => {
-                    //     if (result.isConfirmed) {
-                    //         let category = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category`)
-                    //         if (category.data.statusCode === 200) {
-                    //             context.commit("SetCategorys", category.data.data)
-                    //         }
-                    //     }
-                    // })
                 }
             } catch (error) {
                 if (error.response.data.statusCode === 403) {
                     if (error.response.data.message === "Cannot delete this category because of the course") {
                         Swal.fire({
                             icon: "error",
-                            title: "ไม่สามารถลบอาณาจักรนี้ได้เนื่องจากมีคอร์สเรียน",
+                            title: VueI18n.$t("this kingdom cannot be deleted because it has a course"),
                             showDenyButton: false,
                             showCancelButton: false,
-                            cancelButtonText: "ยกเลิก",
-                            confirmButtonText: "ตกลง",
+                            confirmButtonText: VueI18n.$t("agree"),
+                            cancelButtonText: VueI18n.$t("cancel"),
                         })
                     }
                 }

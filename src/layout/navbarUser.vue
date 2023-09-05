@@ -26,6 +26,7 @@
           {{ $t(titel_navber)}} 
         </v-app-bar-title>
         <v-spacer></v-spacer>
+        <div id="google_translate_element"></div>
         <v-menu v-model="menu_locale"  offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn text v-bind="attrs" v-on="on">
@@ -421,7 +422,24 @@ export default {
     this.drawer = false;
   },
   mounted() {
-   
+    // Function called when the Google Translate Element script is loaded
+    window.googleTranslateElementInit = () => {
+      new window.google.translate.TranslateElement(
+        {
+          pageLanguage: this.$i18n.locale, // Change to the default language of your website
+          includedLanguages: 'th,en',
+        },
+        'google_translate_element'
+      );
+    };
+
+    // Load the Google Translate Element script dynamically
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src =
+      '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+    document.head.appendChild(script);
+
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail.account_id);
     }
@@ -521,6 +539,7 @@ export default {
 };
 </script>
 <style scoped>
+
 .bg-navbar-user {
   background: linear-gradient(141.48deg, #ff8092 43%, #fdcb6e 85.47%);
 }

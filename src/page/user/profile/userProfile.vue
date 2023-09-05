@@ -240,7 +240,7 @@
           <span class="mdi mdi-chevron-right"></span>
         </v-col>
       </v-row>
-
+<!-- 
       <v-row dense class="mt-3 cursor-pointer">
         <v-col cols="2" sm="1">
           <v-icon class="pa-2" color="#ff6b81">mdi mdi-earth</v-icon>
@@ -252,7 +252,7 @@
         <v-col cols="2" sm="2" align="right">
           <span class="mdi mdi-chevron-right"></span>
         </v-col>
-      </v-row>
+      </v-row> -->
     </div>
     <!-- ROLE PARENT ข้อมูลนักเรียนในความดูแล-->
     <div v-if="profile_detail?.userRoles?.roleId === 'R_4'">

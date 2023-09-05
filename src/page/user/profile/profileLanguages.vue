@@ -47,7 +47,7 @@
             />
           </v-radio-group>
         </v-col>
-      </v-row>
+      </v-row>   
     </v-card>
   </v-container>
 </template>
@@ -56,9 +56,6 @@
 import { mapActions, mapGetters } from "vuex";
 export default {
   data: () => ({ selectedOption: "" }),
-  mounted() {
-    this.$store.dispatch("NavberUserModules/changeTitleNavber", "เลือกภาษา");
-  },
   methods: {
     ...mapActions({
       ChangePassword: "ProfileModules/ChangePassword",
