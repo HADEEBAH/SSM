@@ -374,6 +374,7 @@
     "times" : "Time",
     "transaction time" : "Transaction time",
     "this date is already built into a holiday": "This date is already built into a holiday",
+    "total price":"Total price",
 
     "upload attachment" : "Upload attachment",
     "username" : "Username",
@@ -450,6 +451,11 @@
     "create a kingdom":"Create a kingdom",
     "create a course":"Create a course",
     "choose file":"Choose file",
+    "choose a payment method":"Choose a payment method",
+    "cash":"Cash",
+    "credit card":"Credit card",
+
+
     "example of pictures":"Example of pictures",
     "details of time and coach":"Details of time and coach",
     "data not found" : "Data not found",
@@ -474,7 +480,8 @@
     "please enter the student's name":"Please enter the student's name",
     "price" : "Price",
     "price note":"Price Note",
-
+    "payment status":"Payment status",
+    "payee":"Payee",
 
     "specify the teaching institution, e.g. Manila Tamarind Music Center":"Specify the teaching institution, e.g. Manila Tamarind Music Center",
     "suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file":"Suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file",
@@ -489,7 +496,7 @@
 
     "there are no preview images":"There are no preview images",
     "time and coach":"Time and coach",
-
+    "transfer to account":"Transfer to account",
     "upload the cover image of the kingdom":"Upload the cover image of the kingdom",
     "upload the cover image of the course":"Upload the cover image of the course",
     "upload privileged images":"upload privileged images",

@@ -442,9 +442,10 @@
     
     "create a course":"สร้างคอร์สเรียน",
     "create a kingdom":"สร้างอาณาจักร",
-
+    "credit card":"บัตรเครดิต",
+    "cash":"เงินสด",
     "choose file":"เลือกไฟล์",
-
+    "choose a payment method":"เลือกช่องทางการชำระ",
     "details of time and coach":"รายละเอียดเวลาและโค้ช",
 
     "data not found" : "ไม่พบข้อมูล",
@@ -468,7 +469,8 @@
     "please enter the student's name":"กรุณากรอกชื่อผู้เรียน",
     "price" : "ราคา",
     "price note":"หมายเหตุราคา",
-
+    "payment status":"สถานะการชำระเงิน",
+    "payee":"ผู้รับเงิน",
     "specify the teaching institution, e.g. Manila Tamarind Music Center":"ระบุสถาบันผู้จัดสอน เช่น ศูนย์ดนตรี Manila Tamarind",
     "suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file":"คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG",
     "select kingdom":"เลือกอาณาจักร",
@@ -479,9 +481,10 @@
 
     "sign up for One ID":"สมัคร One ID",
     "time and coach":"ช่วงเวลาและโค้ช",
-
+    "total price":"ราคารวม",
     "there are no preview images":"ไม่มีรูปตัวอย่าง",
-    
+    "transfer to account":"โอนเข้าบัญชี",
+
     "upload the cover image of the kingdom":"อัปโหลดภาพหน้าปกอาณาจักร",
     "upload the cover image of the course.":"อัปโหลดภาพหน้าปกคอร์สเรียน",
     "upload privileged images":"อัปโหลดภาพสิทธิ์พิเศษ",
