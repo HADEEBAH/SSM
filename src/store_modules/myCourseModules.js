@@ -244,6 +244,7 @@ const myCourseModules = {
                         booked.courseImg = booked.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${booked.courseImg}` : null
                     }
                     context.commit("SetProfileBooked", data.data)
+                    console.log("SetProfileBooked", data.data)
                 } else {
                     throw { error: data };
                 }
@@ -262,6 +263,7 @@ const myCourseModules = {
                         'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
+                // let { data } = await axios.get(`http://localhost:3000/api/v1/mycourse/checkin/student/${account_id}/course/${course_id}`, config);
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/checkin/student/${account_id}/course/${course_id}`, config);
 
                 if (data.data && data.statusCode === 200) {
