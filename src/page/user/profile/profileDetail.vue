@@ -19,7 +19,7 @@
                 color="#ff6b81"
                 @click="openFileSelector"
                 class="w-full white--text"
-                >เปลี่ยนรูป</v-btn
+                >{{ $t("change photo") }}</v-btn
               >
               <v-btn
                 v-if="preview_file !== ''"
@@ -27,7 +27,7 @@
                 @click="removeImg"
                 class="w-full white--text"
               >
-                <span class="mdi mdi-close">ยกเลิก</span>
+                <span class="mdi mdi-close">{{ $t("cancle") }}</span>
               </v-btn>
             </v-img>
           </div>
@@ -42,7 +42,7 @@
         </v-col>
         <!--TH NAME -->
         <v-col cols="12" sm="6">
-          <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
+          <label-custom :text="$t('first name(thai)')"></label-custom>
           <v-text-field
             @keypress="validate($event, 'th-special')"
             placeholder="-"
@@ -57,7 +57,7 @@
         </v-col>
         <!-- TH LNAME -->
         <v-col cols="12" sm="6">
-          <label-custom text="นามสกุล (ภาษาไทย)"></label-custom>
+          <label-custom :text="$t('last name(thai)')"></label-custom>
           <v-text-field
             @keypress="validate($event, 'th-special')"
             placeholder="-"
@@ -72,7 +72,7 @@
         </v-col>
         <!-- nationality -->
         <v-col cols="12" sm="6">
-          <label-custom text="สัญชาติ"></label-custom>
+          <label-custom :text="$t('nationality')"></label-custom>
           <v-text-field
             @keypress="validate($event, 'th-special')"
             placeholder="-"
@@ -85,7 +85,7 @@
           </v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
-          <label-custom text="เบอร์โทรศัพท์"></label-custom>
+          <label-custom :text="$t('phone number')"></label-custom>
           <v-text-field
             @keypress="validate($event, 'th')"
             @input="checkPhoneNumber"
@@ -101,7 +101,7 @@
         </v-col>
         <!-- email -->
         <v-col cols="12" sm="6">
-          <label-custom text="อีเมล"></label-custom>
+          <label-custom :text="$t('email')"></label-custom>
           <v-text-field
             placeholder="-"
             v-model="profile_detail.email"
@@ -121,7 +121,7 @@
             color="#ff6b81"
             @click="edit()"
           >
-            <span class="mdi mdi-pencil-outline">แก้ไข</span>
+            <span class="mdi mdi-pencil-outline">{{ $t("edit") }}</span>
           </v-btn>
         </v-col>
         <v-col cols="6" v-if="isEnabled">
@@ -132,7 +132,7 @@
             color="#ff6b81"
             @click="cancel()"
           >
-            <span>ยกเลิก</span>
+            <span>{{ $t("cancle") }}</span>
           </v-btn>
         </v-col>
         <v-col cols="6" v-if="isEnabled">
@@ -144,7 +144,7 @@
             color="#ff6b81"
             @click="submitEdit()"
           >
-            <span>บันทึก</span>
+            <span>{{ $t("save") }}</span>
           </v-btn>
         </v-col>
       </v-row>
@@ -157,12 +157,14 @@
         <v-card flat>
           <v-card-title>
             <v-row dense>
-              <v-col align="center"> ข้อมูลไม่ครบถ้วน </v-col>
+              <v-col align="center"> {{ $t("incomplete information") }} </v-col>
             </v-row>
           </v-card-title>
           <v-card-text>
             <v-row dense>
-              <v-col align="center"> กรุณากรอกข้อมูลส่วนตัวให้ครบถ้วน </v-col>
+              <v-col align="center">
+                {{ $t("please complete personal information") }}
+              </v-col>
             </v-row>
             <v-row dense>
               <v-col align="right">
@@ -170,7 +172,7 @@
                   outlined
                   color="#ff6b81"
                   @click="closeDialogPorfile(false)"
-                  >ยกเลิก</v-btn
+                  >{{ $t("cancle") }}</v-btn
                 >
               </v-col>
               <v-col>
@@ -179,7 +181,7 @@
                   color="#ff6b81"
                   dark
                   @click="closeDialogPorfile(false)"
-                  >ตกลง</v-btn
+                  >{{ $t("agree") }}</v-btn
                 >
               </v-col>
             </v-row>

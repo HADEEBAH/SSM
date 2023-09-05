@@ -45,6 +45,7 @@
     "can't find available course information" :"ไม่พบข้อมูลของคอร์สว่าง",
     "cash out" : "ชำระเงิน",
     "certification" : "การรับรอง",
+    "change photo":"เปลี่ยนรูป",
     "check-in notification" : "แจ้งเตือนการเช็คอิน",
     "check-in reminder" : "แจ้งเตือนการเช็คอิน",
     "check in teach" : "ลงเวลาเข้าสอน",
@@ -113,6 +114,7 @@
     "do you want to cancel your leave?" : "ต้องการยกเลิกใบลาใช่หรือไม่?",
     "do you want to delete it?" : "ต้องการลบใช่หรือไม่?",
 
+    "edit": "แก้ไข",
     "edit parent information" : "แก้ไขข้อมูลผู้ปกครอง",
     "edit holiday": "แก้ไขวันหยุด",
     "english" : "อังกฤษ",
@@ -154,6 +156,7 @@
 
     "if you don't have an account yet, please" : "หากยังไม่มีบัญชีผู้ใช้กรุณา",
     "image example" : "ตัวอย่างภาพ",
+    "incomplete information": "ข้อมูลไม่ครบถ้วน",
     "invalid data" : "ข้อมูลไม่ถูกต้อง",
     "invalid username or phone number" : "ชื่อผู้ใช้หรือเบอร์โทรศัพท์ไม่ถูกต้อง",
     "interest level" : "ระดับความสนใจ",
@@ -238,6 +241,7 @@
     "person" : "คน",
     "personal" : "ลากิจ",
     "phone number" : "เบอร์โทรศัพท์",
+    "please complete personal information":"กรุณากรอกข้อมูลส่วนตัวให้ครบถ้วน",
     "please confirm the new password again" : "กรุณาระบุยืนยันรหัสผ่านใหม่อีกครั้ง",
     "please confirm your passwords are the same" : "กรุณาระบุยืนยันรหัสผ่านให้ตรงกัน",
     "please enter a 10-digit phone number" : "โปรดระบุเบอร์โทรศัพท์ 10 หลัก",
