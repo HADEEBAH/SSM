@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2';
-import VueI18n from 'vue-i18n';
+import VueI18n from '../i18n';
 export const inputValidation = (e, type) => {
     switch (type) {
         case "th":
