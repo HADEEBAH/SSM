@@ -3,7 +3,7 @@ import VueCookie from "vue-cookie";
 import moment from "moment";
 import Swal from "sweetalert2";
 import { dateFormatter } from '@/functions/functions';
-import VueI18n from "vue-i18n";
+import VueI18n from "../i18n";
 // import VueI18n from "vue-i18n";
 const coachModules = {
   namespaced: true,
@@ -163,8 +163,8 @@ const coachModules = {
           context.commit("SetStudentCheckInIsLoading", false)
           Swal.fire({
             icon: "success",
-            title: VueI18n.$t("succeed"),
-            text: `( ${VueI18n.$t("saved")} )`,
+            title: VueI18n.t("succeed"),
+            text: `( ${VueI18n.t("saved")} )`,
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -247,8 +247,8 @@ const coachModules = {
           context.commit("SetStudentCheckInIsLoading", false)
           Swal.fire({
             icon: "success",
-            title: VueI18n.$t("succeed"),
-            text: `( ${VueI18n.$t("saved")} )`,
+            title: VueI18n.t("succeed"),
+            text: `( ${VueI18n.t("saved")} )`,
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -264,11 +264,11 @@ const coachModules = {
       } catch (error) {
         await Swal.fire({
           icon: "error",
-          title: VueI18n.$t("something went wrong"),
+          title: VueI18n.t("something went wrong"),
           showDenyButton: false,
           showCancelButton: false,
-          confirmButtonText: VueI18n.$t("agree"),
-          cancelButtonText: VueI18n.$t("cancel"),
+          confirmButtonText: VueI18n.t("agree"),
+          cancelButtonText: VueI18n.t("cancel"),
         })
         context.commit("SetStudentCheckInIsLoading", false)
       }
@@ -293,8 +293,8 @@ const coachModules = {
         if (data.statusCode === 200) {
           Swal.fire({
             icon: "success",
-            title: VueI18n.$t("succeed"),
-            text: `( ${VueI18n.$t("saved")} )`,
+            title: VueI18n.t("succeed"),
+            text: `( ${VueI18n.t("saved")} )`,
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -306,11 +306,11 @@ const coachModules = {
       } catch (error) {
         Swal.fire({
           icon: "error",
-          title: VueI18n.$t("something went wrong"),
+          title: VueI18n.t("something went wrong"),
           showDenyButton: false,
           showCancelButton: false,
-          confirmButtonText: VueI18n.$t("agree"),
-          cancelButtonText: VueI18n.$t("cancel"),
+          confirmButtonText: VueI18n.t("agree"),
+          cancelButtonText: VueI18n.t("cancel"),
         })
       }
     },
@@ -365,11 +365,11 @@ const coachModules = {
       } catch (error) {
         Swal.fire({
           icon: "error",
-          title: VueI18n.$t("something went wrong"),
+          title: VueI18n.t("something went wrong"),
           showDenyButton: false,
           showCancelButton: false,
-          confirmButtonText: VueI18n.$t("agree"),
-          cancelButtonText: VueI18n.$t("cancel"),
+          confirmButtonText: VueI18n.t("agree"),
+          cancelButtonText: VueI18n.t("cancel"),
         })
       }
     },
@@ -396,8 +396,8 @@ const coachModules = {
           context.commit("SetStudentCheckInIsLoading", false)
           await Swal.fire({
             icon: "success",
-            title: VueI18n.$t("succeed"),
-            text: `( ${VueI18n.$t("saved")} )`,
+            title: VueI18n.t("succeed"),
+            text: `( ${VueI18n.t("saved")} )`,
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -417,8 +417,8 @@ const coachModules = {
         if (response.status === 400) {
           Swal.fire({
             icon: "warning",
-            title: VueI18n.$t("warning"),
-            text: `( ${VueI18n.$t('unable to study on the specified date. because there are already classes on the specified date')} )`,
+            title: VueI18n.t("warning"),
+            text: `( ${VueI18n.t('unable to study on the specified date. because there are already classes on the specified date')} )`,
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -432,7 +432,7 @@ const coachModules = {
         } else {
           Swal.fire({
             icon: "error",
-            title: VueI18n.$t("something went wrong"),
+            title: VueI18n.t("something went wrong"),
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -760,8 +760,8 @@ const coachModules = {
         if (data.statusCode == 200) {
           Swal.fire({
             icon: "success",
-             title: VueI18n.$t("succeed"),
-            text: `( ${VueI18n.$t("saved")} )`,
+             title: VueI18n.t("succeed"),
+            text: `( ${VueI18n.t("saved")} )`,
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -885,8 +885,8 @@ const coachModules = {
           }
           Swal.fire({
             icon: "success",
-            title: VueI18n.$t("succeed"),
-            text: `( ${VueI18n.$t("the resignation letter has been sent")} )`,
+            title: VueI18n.t("succeed"),
+            text: `( ${VueI18n.t("the resignation letter has been sent")} )`,
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,

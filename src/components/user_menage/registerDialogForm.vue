@@ -145,8 +145,8 @@
                   ref="confirm_password"
                   :type="show_confirm_password ? 'text' : 'password'"
                   :rules="[
-                    rules.confirm_password,
-                    rules.match(user_one_id.password),
+                    confirm_password,
+                    match(user_one_id.password),
                   ]"
                   required
                   v-model="user_one_id.confirm_password"
@@ -299,81 +299,6 @@ export default {
     valid: true,
     show_password: false,
     show_confirm_password: false,
-    rules: {
-      phone_number: [
-        (val) =>
-          ((val || "").length > 0 && val[0] === "0") ||
-          "โปรดระบุเบอร์โทรขึ้นต้นด้วยเลข 0",
-        (val) =>
-          ((val || "").length > 0 && val.length === 12) ||
-          "โปรดระบุเบอร์โทรศัพท์ 10 หลัก",
-      ],
-      usernameRules: [
-        (val) =>
-          (val || "").length > 5 ||
-          "โปรดระบุชื่อผู้ใช้ความยาวอย่างน้อย 6 ตัวอักษร",
-        (val) => /[A-Za-z0-9 ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-        (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-          "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
-      ],
-      firstNameThRules: [
-        (val) =>
-          (val || "").length > 1 ||
-          "โปรดระบุชื่อ (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุชื่อ (ภาษาไทย) ความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => /[ก-๏\s]/g.test(val) || "กรุณากรอกชื่อภาษาไทย",
-        (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-          "กรุณากรอกชื่อภาษาไทย",
-      ],
-      firstNameEnRules: [
-        (val) =>
-          (val || "").length > 1 ||
-          "โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => /[A-Za-z]/g.test(val) || "กรุณากรอกชื่อภาษาอังกฤษ",
-        (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-          "กรุณากรอกชื่อภาษาอังกฤษ",
-      ],
-      lastNameThRules: [
-        (val) =>
-          (val || "").length > 1 ||
-          "โปรดระบุนามสกุล (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุนามสกุล (ภาษาไทย) ความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => /[ก-๏\s]/g.test(val) || "กรุณากรอกนามสกุลภาษาไทย",
-        (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-          "กรุณากรอกสกุลภาษาไทย",
-      ],
-      lastNameEnRules: [
-        (val) =>
-          (val || "").length > 1 ||
-          "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => /[A-Za-z ]/g.test(val) || "กรุณากรอกนามสกุลภาษาอังกฤษ",
-        (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF ]/g.test(val) ||
-          "กรุณากรอกสกุลภาษาอังกฤษ",
-      ],
-      passwordRules: [
-        (val) =>
-          (val || "").length > 7 ||
-          "โปรดระบุรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
-        (val) => !/[ ]/g.test(val) || "รหัสผ่านต้องไม่มีอักขระพิเศษ",
-      ],
-      confirm_password: (val) => (val && val.length > 7) || "โปรดระบุยืนยันรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
-      match: (password) => (value) => value === password || "รหัสผ่านไม่ตรงกัน",
-    },
   }),
   created() {},
   mounted() {},
@@ -413,6 +338,12 @@ export default {
       user_one_id: "RegisterModules/getUserOneId",
       course_data: "CourseModules/getCourseData",
     }),
+    confirm_password(){
+      return (val) => (val && val.length > 7) || this.$t("please enter a confirmation password that is at least 8 characters long")
+    },
+    match(password){
+      return (value) => value === password || this.$t("passwords do not match")
+    },
     phone_number(){
       return [
         (val) =>
