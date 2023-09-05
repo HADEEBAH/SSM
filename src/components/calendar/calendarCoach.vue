@@ -5,7 +5,7 @@
       <v-row dense>
         <v-col>
           <v-btn text class="underline" color="#ff6b81" @click="goToday"
-            >คลิกเพื่อไปคอร์สที่ต้องสอนล่าสุด</v-btn
+            >{{  $t("click to go to the latest course to be taught") }}</v-btn
           >
         </v-col>
       </v-row>
@@ -36,7 +36,7 @@
         :interval-count="12"
         :event-overlap-threshold="30"
         @click:event="selectedDate($event)"
-        locale="th-TH"
+        :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
       >
         <template v-if="type === 'week'" v-slot:day-body="{ date, week }">
           <div
@@ -55,7 +55,7 @@
       :events="functionEvents"
       @input="selectDate(focus)"
       class="w-full"
-      locale="th-TH"
+      :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
     ></v-date-picker>
     <v-bottom-sheet v-model="showModal">
       <div class="bg-white rounded-t-lg pa-4">
@@ -99,7 +99,7 @@
                     </v-row>
                     <v-row dense v-if="event.type !== 'holiday'">
                       <v-col class="text-sm">
-                        โค้ช: {{ event.coach }} <br />
+                        {{ $t("coach") }}: {{ event.coach }} <br />
                         <v-btn
                           @click="
                             $router.push({
@@ -118,7 +118,7 @@
                           class="underline pa-0"
                           color="#ff6b81"
                         >
-                          ดูรายละเอียดคอร์สเรียน
+                          {{ $t("view course details") }}
                         </v-btn>
                       </v-col>
                     </v-row>
@@ -131,7 +131,7 @@
         <div v-else>
           <v-row>
             <v-col class="text-lg font-bold" align="center">
-              ไม่พบคอร์สเรียน
+              {{$t("course not found")}}
             </v-col>
           </v-row>
         </div>
@@ -169,6 +169,15 @@ export default {
         if (event.type === "holiday") {
           event.color = "#f19a5a";
         } else {
+          let eventTh = event.name
+          let eventEn = event.subtitle
+          if(this.$i18n.locale == "th"){
+            event.name = eventTh
+            event.subtitle = eventEn
+          }else{
+            event.name = eventEn
+            event.subtitle = eventTh
+          }
           switch (new Date(event.start).getDay()) {
             case 0:
               event.color = "#F898A4";
@@ -216,13 +225,13 @@ export default {
       today.getMonth(),
       today.getDate() - today.getDay() + 6
     );
-    this.start_of_week = this.start_of_week.toLocaleDateString("th-TH", {
+    this.start_of_week = this.start_of_week.toLocaleDateString(this.$i18n.locale == 'th' ? "th-TH": "en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",
       weekday: "long",
     });
-    this.end_of_week = this.end_of_week.toLocaleDateString("th-TH", {
+    this.end_of_week = this.end_of_week.toLocaleDateString(this.$i18n.locale == 'th' ? "th-TH": "en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",

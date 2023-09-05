@@ -2,6 +2,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import router from "@/router";
 import VueCookie from "vue-cookie"
+import moment from "moment";
 function dayOfWeekArray(day) {
     let days = day
     const weekdays = [
@@ -201,7 +202,7 @@ const orderModules = {
                                     courses: courses,
                                     totalPrice: item.totalPrice,
                                     createdDate: new Date(item.createdDate).toLocaleString(thaiLocale, options),
-
+                                    createdDateStr : moment(new Date(item.createdDate)).format("YYYY-MM-DD"),
                                     createdByData: item.createdByData
 
 
