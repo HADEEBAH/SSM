@@ -206,108 +206,6 @@ export default {
   data: () => ({
     isEnabled: false,
     valid: true,
-    rules: {
-      email: [
-        (value) => !!value || "Required.",
-        (value) => (value || "").length <= 20 || "Max 20 characters",
-        (value) => {
-          const pattern =
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-          return pattern.test(value) || "Invalid e-mail.";
-        },
-      ],
-      phone_number: [
-        (val) =>
-          ((val || "").length > 0 && val.length === 12) ||
-          "โปรดระบุเบอร์โทรศัพท์ 10 หลัก",
-      ],
-      nation: [
-        (val) =>
-          (val || "").length > 1 ||
-          "โปรดระบุสันชาติความยาวไม่น้อยกว่า 2 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุสันชาติความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => /[ก-๏\s]/g.test(val) || "สันชาติต้องไม่มีอักขระพิเศษ",
-        (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-          "สันชาติต้องไม่มีอิโมจิ",
-      ],
-      usernameRules: [
-        (val) =>
-          (val || "").length > 5 ||
-          "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => /[A-Za-z0-9 ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-        (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-          "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
-      ],
-      firstNameThRules: [
-        (val) =>
-          (val || "").length > 1 ||
-          "โปรดระบุชื่อ (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุชื่อ (ภาษาไทย) ความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => /[ก-๏\s]/g.test(val) || "กรุณากรอกชื่อภาษาไทย",
-        (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-          "กรุณากรอกชื่อภาษาไทย",
-      ],
-      firstNameEnRules: [
-        (val) =>
-          (val || "").length > 1 ||
-          "โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => /[A-Za-z]/g.test(val) || "กรุณากรอกชื่อภาษาอังกฤษ",
-        (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-          "กรุณากรอกชื่อภาษาอังกฤษ",
-      ],
-      lastNameThRules: [
-        (val) =>
-          (val || "").length > 1 ||
-          "โปรดระบุนามสกุล (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุนามสกุล (ภาษาไทย) ความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => /[ก-๏\s]/g.test(val) || "กรุณากรอกนามสกุลภาษาไทย",
-        (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-          "กรุณากรอกสกุลภาษาไทย",
-      ],
-      lastNameEnRules: [
-        (val) =>
-          (val || "").length > 1 ||
-          "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => /[A-Za-z]/g.test(val) || "กรุณากรอกนามสกุลภาษาอังกฤษ",
-        (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-          "กรุณากรอกสกุลภาษาอังกฤษ",
-      ],
-      passwordRules: [
-        (val) =>
-          (val || "").length > 7 ||
-          "โปรดระบุรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => !/[ ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-      ],
-      confirm_password: (val) =>
-        (val && val.length > 7) ||
-        "โปรดระบุยืนยันรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
-      match: (password) => (value) => value === password || "รหัสผ่านไม่ตรงกัน",
-    },
-
     is_loading: false,
     user_detail: {},
     image_profile: {},
@@ -335,7 +233,7 @@ export default {
   mounted() {
     this.$store.dispatch(
       "NavberUserModules/changeTitleNavber",
-      "ข้อมูลส่วนตัว"
+      "personal information"
     );
   },
 
@@ -350,7 +248,7 @@ export default {
     edit() {
       this.isDisabled = false;
       this.isEnabled = true;
-      this.buttonName = "บันทึก";
+      this.buttonName = this.$t("save");
     },
     cancel() {
       this.GetProfileDetail(this.$route.params.profile_id);
@@ -364,11 +262,11 @@ export default {
       if (this.$refs.form.validate()) {
         Swal.fire({
           icon: "question",
-          title: "คุณต้องการแก้ไขข้อมูลโปรไฟล์หรือไม่",
+          title: this.$t("do you want to edit your profile information?"),
           showDenyButton: false,
           showCancelButton: true,
-          confirmButtonText: "ตกลง",
-          cancelButtonText: "ยกเลิก",
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             try {
@@ -421,7 +319,7 @@ export default {
                 this.dialog_show = true;
                 this.isDisabled = true;
                 this.isEnabled = false;
-                this.buttonName = "แก้ไข";
+                this.buttonName = this.$t("edit");
                 document.getElementById("fileInput").value = "";
                 // Swal.fire({
                 //   icon: "success",
@@ -430,8 +328,8 @@ export default {
                 // });
                 Swal.fire({
                   icon: "success",
-                  title: "สำเร็จ",
-                  text: "( แก้ไขโปรไฟล์เรียบร้อยแล้ว )",
+                  title: this.$t("succeed"),
+                  text: this.$t("profile has been edited"),
                   showDenyButton: false,
                   showCancelButton: false,
                   showConfirmButton: false,
@@ -469,15 +367,15 @@ export default {
       if (files.size > (10240 * 1024) / 2) {
         Swal.fire({
           icon: "warning",
-          title: "ขนาดไฟล์ใหญ่เกินไป",
-          text: "( กำหนดขนาดไม่เกิน 5MB )",
+          title: this.$t("the file size is too large"),
+          text: this.$t("set the size not to exceed 5MB"),
         });
         document.getElementById("fileInput").value = "";
       } else if (allowedExtension.indexOf(files.type) === -1) {
         Swal.fire({
           icon: "warning",
-          title: "รูปแบบไฟล์ไม่ถูกต้อง",
-          text: "( กรุณาอัปโหลดไฟล์รูปภาพ )",
+          title: this.$t("invalid file format"),
+          text: this.$t("please upload an image file"),
         });
         document.getElementById("fileInput").value = "";
       } else {
@@ -524,9 +422,13 @@ export default {
           "โปรดระบุชื่อ (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
         (val) =>
           (val || "").length < 20 ||
-          "โปรดระบุชื่อ (ภาษาไทย) ความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => specialCharsRegex.test(val) || "กรุณากรอกชื่อภาษาไทย",
-        (val) => !emojiRegex.test(val) || "กรุณากรอกชื่อภาษาไทย",
+          this.$t(
+            "please enter your name (thai) length not exceeding 20 characters"
+          ),
+        (val) =>
+          specialCharsRegex.test(val) || this.$t("please enter your thai name"),
+        (val) =>
+          !emojiRegex.test(val) || this.$t("please enter your thai name"),
       ];
     },
     firstNameEnRules() {
@@ -535,12 +437,19 @@ export default {
       return [
         (val) =>
           (val || "").length > 1 ||
-          "โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
+          this.$t(
+            "please enter your name (english), at least 2 characters long"
+          ),
         (val) =>
           (val || "").length < 20 ||
-          "โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => specialCharsRegex.test(val) || "กรุณากรอกชื่อภาษาอังกฤษ",
-        (val) => !emojiRegex.test(val) || "กรุณากรอกชื่อภาษาอังกฤษ",
+          this.$t(
+            "please enter your name (english) length not exceeding 20 characters"
+          ),
+        (val) =>
+          specialCharsRegex.test(val) ||
+          this.$t("please enter your name in english"),
+        (val) =>
+          !emojiRegex.test(val) || this.$t("please enter your name in english"),
       ];
     },
     lastNameThRules() {
@@ -549,12 +458,20 @@ export default {
       return [
         (val) =>
           (val || "").length > 1 ||
-          "โปรดระบุนามสกุล (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
+          this.$t(
+            "please enter your last name (Thai), at least 2 characters long"
+          ),
         (val) =>
           (val || "").length < 20 ||
-          "โปรดระบุนามสกุล (ภาษาไทย) ความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => specialCharsRegex.test(val) || "กรุณากรอกนามสกุลภาษาไทย",
-        (val) => !emojiRegex.test(val) || "กรุณากรอกสกุลภาษาไทย",
+          this.$t(
+            "please enter your last name (Thai) not more than 20 characters"
+          ),
+        (val) =>
+          specialCharsRegex.test(val) ||
+          this.$t("please enter your last name in thai"),
+        (val) =>
+          !emojiRegex.test(val) ||
+          this.$t("please enter your last name in thai"),
       ];
     },
     lastNameEnRules() {
@@ -570,6 +487,133 @@ export default {
         (val) => specialCharsRegex.test(val) || "กรุณากรอกนามสกุลภาษาอังกฤษ",
         (val) => !emojiRegex.test(val) || "กรุณากรอกสกุลภาษาอังกฤษ",
       ];
+    },
+    rules() {
+      return {
+        email: [
+          (value) => !!value || "Required.",
+          (value) => (value || "").length <= 20 || "Max 20 characters",
+          (value) => {
+            const pattern =
+              /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return pattern.test(value) || "Invalid e-mail.";
+          },
+        ],
+        phone_number: [
+          (val) =>
+            ((val || "").length > 0 && val.length === 12) ||
+            this.$t("please enter a 10-digit phone number"),
+        ],
+        nation: [
+          (val) =>
+            (val || "").length > 1 ||
+            this.$t("please specify the length of not less than 2 characters"),
+          (val) =>
+            (val || "").length < 20 ||
+            this.$t(
+              "please specify your identity, length not exceeding 20 characters"
+            ),
+          (val) =>
+            /[ก-๏\s]/g.test(val) ||
+            this.$t("nationality cannot contain special characters"),
+          (val) =>
+            !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+            this.$t("sanchat must not have emojis"),
+        ],
+        usernameRules: [
+          (val) =>
+            (val || "").length > 5 ||
+            this.$t("please enter a username at least 6 characters long"),
+          (val) =>
+            (val || "").length < 20 ||
+            this.$t("please enter a username no longer than 20 characters"),
+          (val) =>
+            /[A-Za-z0-9 ]/g.test(val) ||
+            this.$t("the username cannot contain special characters"),
+          (val) =>
+            !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+            this.$t("username cannot contain emojis"),
+        ],
+        firstNameThRules: [
+          (val) =>
+            (val || "").length > 1 ||
+            this.$t(
+              "please enter your name (thai) with a length of at least 2 characters"
+            ),
+          (val) =>
+            (val || "").length < 20 ||
+            this.$t(
+              "please enter your name (thai) length not exceeding 20 characters"
+            ),
+          (val) =>
+            /[ก-๏\s]/g.test(val) || this.$t("please enter your thai name"),
+          (val) =>
+            !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+            this.$t("please enter your thai name"),
+        ],
+        firstNameEnRules: [
+          (val) =>
+            (val || "").length > 1 ||
+            this.$t(
+              "please enter your name (english), at least 2 characters long"
+            ),
+          (val) =>
+            (val || "").length < 20 ||
+            this.$t(
+              "please enter your name (english) length not exceeding 20 characters"
+            ),
+          (val) =>
+            /[A-Za-z]/g.test(val) ||
+            this.$t("please enter your name in english"),
+          (val) =>
+            !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+            this.$t("please enter your name in english"),
+        ],
+        lastNameThRules: [
+          (val) =>
+            (val || "").length > 1 ||
+            this.$t(
+              "please enter your last name (Thai), at least 2 characters long"
+            ),
+          (val) =>
+            (val || "").length < 20 ||
+            this.$t(
+              "please enter your last name (Thai) not more than 20 characters"
+            ),
+          (val) =>
+            /[ก-๏\s]/g.test(val) ||
+            this.$t("please enter your last name in thai"),
+          (val) =>
+            !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+            this.$t("please enter your last name in thai"),
+        ],
+        lastNameEnRules: [
+          (val) =>
+            (val || "").length > 1 ||
+            "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
+          (val) =>
+            (val || "").length < 20 ||
+            "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
+          (val) => /[A-Za-z]/g.test(val) || "กรุณากรอกนามสกุลภาษาอังกฤษ",
+          (val) =>
+            !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+            "กรุณากรอกสกุลภาษาอังกฤษ",
+        ],
+        passwordRules: [
+          (val) =>
+            (val || "").length > 7 ||
+            "โปรดระบุรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
+          (val) =>
+            (val || "").length < 20 ||
+            "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
+          (val) => !/[ ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+        ],
+        confirm_password: (val) =>
+          (val && val.length > 7) ||
+          "โปรดระบุยืนยันรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
+        match: (password) => (value) =>
+          value === password || "รหัสผ่านไม่ตรงกัน",
+      };
     },
   },
 };

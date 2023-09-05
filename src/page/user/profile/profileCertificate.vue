@@ -49,7 +49,7 @@ export default {
   mounted() {
     this.$store.dispatch(
       "NavberUserModules/changeTitleNavber",
-      "การแข่งขันและ..."
+      "competition and..."
     );
     this.GetCertificateListByAccount({
       account_id: this.$route.params.account_id,
