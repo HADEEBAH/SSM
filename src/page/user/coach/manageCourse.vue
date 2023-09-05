@@ -51,14 +51,14 @@
         <v-card
           outlined
           class="mb-2"
+
           v-for="(course, course_index) in my_courses.filter(
-            (v) => v.start_date === genToday
+            (v) => v.start_date === genToday && v?.type !== 'holiday'
           )"
           :key="course_index"
         >
           <v-card-text
             class="cursor-pointer"
-            v-if="!course.type"
             @click="
               $router.push({
                 name: 'menageCourseDetail',
@@ -135,21 +135,10 @@
               </v-col>
             </v-row>
           </v-card-text>
-
-          <v-card-text
-            v-else
-            class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg"
-          >
-            <span class="text-lg font-bold">
-              <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-              {{ $t('teaching information not found') }}
-            </span>
-          </v-card-text>
         </v-card>
-
         <v-card
           flat
-          v-if="my_courses.filter((v) => v.start_date === genToday).length == 0"
+          v-if="my_courses.filter((v) => v.start_date === genToday && v?.type !== 'holiday').length == 0"
         >
           <v-card-text
             class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg"

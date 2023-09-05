@@ -573,6 +573,43 @@ export default {
       my_courses_leave: "CoachModules/getMyCoursesLeave",
       my_courses_leave_is_loading: "CoachModules/getMyCoursesLeaveIsLoading",
     }),
+    start_date(){
+      return [(val) => (val || "").length > 0 || this.$t("please select a start date")]
+    },
+    period(){
+      return [(val) => (val || "").length > 0 || "โปรดเลือกช่วงเวลา"]
+    },
+    type_leave(){
+      return [(val) => (val || "").length > 0 || "โปรดเลือกประเภทการลา"]
+    },
+    type() {
+      return [(val) => (val || "").length > 0 || "โปรดเลือกประเภท"]
+    },
+    end_date(){
+      return [(val) => (val || "").length > 0 || "โปรดเลือกวันสิ้นสุด"]
+    },
+    course(){
+      return [(val) => (val || "").length > 0 || "โปรดเลือกคอร์ส"]
+    },
+    coach(){
+      return [(val) => (val || "").length > 0 || "โปรดเลือกโค้ช"] 
+    },
+    sub_coach(){
+      return [(val) => (val || "").length > 0 || "โปรดเลือกผู้สอนแทน"]
+    },
+    compensation_date(){
+      return [(val) => (val || "").length > 0 || "โปรดเลือกวันที่"]
+    },
+    compensation_start_time(){ 
+      return [
+        (val) => (val || "").length > 0 || "โปรดเลือกเวลาเริ่ม",
+      ]
+    },
+    compensation_end_time(){
+      return [
+        (val) => (val || "").length > 0 || "โปรดเลือกเวลาสิ้นสุด",
+      ]
+    },
     validateCoachLeave() {
       let start_date = this.coach_leave_data.start_date ? true : false;
       let end_date = this.coach_leave_data.end_date ? true : false;

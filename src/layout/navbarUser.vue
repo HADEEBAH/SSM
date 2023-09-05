@@ -417,29 +417,27 @@ export default {
     if (this.user_detail?.account_id) {
       this.GetCartList(this.user_detail.account_id);
     }
+    // window.googleTranslateElementInit = () => {
+    //   new window.google.translate.TranslateElement(
+    //     {
+    //       pageLanguage: this.$i18n.locale, // Change to the default language of your website
+    //       includedLanguages: 'th,en',
+    //     },
+    //     'google_translate_element'
+    //   );
+    // };
+
+    // // Load the Google Translate Element script dynamically
+    // const script = document.createElement('script');
+    // script.type = 'text/javascript';
+    // script.src =
+    //   '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+    // document.head.appendChild(script);
   },
   beforeMount() {
     this.drawer = false;
   },
   mounted() {
-    // Function called when the Google Translate Element script is loaded
-    window.googleTranslateElementInit = () => {
-      new window.google.translate.TranslateElement(
-        {
-          pageLanguage: this.$i18n.locale, // Change to the default language of your website
-          includedLanguages: 'th,en',
-        },
-        'google_translate_element'
-      );
-    };
-
-    // Load the Google Translate Element script dynamically
-    const script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src =
-      '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-    document.head.appendChild(script);
-
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail.account_id);
     }

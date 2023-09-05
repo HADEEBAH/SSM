@@ -211,7 +211,7 @@ export default {
 
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-     // Function called when the Google Translate Element script is loaded
+    //  Function called when the Google Translate Element script is loaded
      window.googleTranslateElementInit = () => {
       new window.google.translate.TranslateElement(
         {

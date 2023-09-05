@@ -1,7 +1,7 @@
 import axios from "axios"
 import Swal from "sweetalert2";
 import VueCookie from "vue-cookie";
-import VueI18n from "vue-i18n";
+import VueI18n from "../i18n";
 const categoryModules = {
     namespaced: true,
     state: {
@@ -84,8 +84,8 @@ const categoryModules = {
 
                     Swal.fire({
                         icon: "success",
-                        title: VueI18n.$t("succeed"),
-                        text: `( ${VueI18n.$t("successfully deleted item")} )`,
+                        title: VueI18n.t("succeed"),
+                        text: `( ${VueI18n.t("successfully deleted item")} )`,
                         timer: 3000,
                         timerProgressBar: true,
                         showCancelButton: false,
@@ -97,11 +97,11 @@ const categoryModules = {
                     if (error.response.data.message === "Cannot delete this category because of the course") {
                         Swal.fire({
                             icon: "error",
-                            title: VueI18n.$t("this kingdom cannot be deleted because it has a course"),
+                            title: VueI18n.t("this kingdom cannot be deleted because it has a course"),
                             showDenyButton: false,
                             showCancelButton: false,
-                            confirmButtonText: VueI18n.$t("agree"),
-                            cancelButtonText: VueI18n.$t("cancel"),
+                            confirmButtonText: VueI18n.t("agree"),
+                            cancelButtonText: VueI18n.t("cancel"),
                         })
                     }
                 }
