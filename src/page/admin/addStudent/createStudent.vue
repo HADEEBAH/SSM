@@ -526,14 +526,14 @@
           </v-col>
         </v-row>
         <template v-if="order.courses.length > 0">
-          <div class="text-lg font-bold">สถานะการชำระเงิน</div>
+          <div class="text-lg font-bold">{{$t("payment status")}}</div>
           <v-divider class="mb-3"></v-divider>
           <v-row dense class="mb-3">
             <v-col cols="12" sm="8">
               <v-card class="text-xl" color="#FBF3F5">
                 <v-card-text>
                   <v-row>
-                    <v-col class="text-lg font-bold">ราคารวม :</v-col>
+                    <v-col class="text-lg font-bold">{{$t("total price")}} :</v-col>
                     <v-col
                       cols="auto"
                       class="text-lg font-bold text-pink-500"
@@ -544,7 +544,7 @@
                         )
                       }}</v-col
                     >
-                    <v-col cols="auto" class="text-lg font-bold">บาท</v-col>
+                    <v-col cols="auto" class="text-lg font-bold">{{$t("baht")}}</v-col>
                   </v-row>
                 </v-card-text>
               </v-card>
@@ -594,7 +594,7 @@
                             item-value="value"
                             item-text="label"
                             :items="transfer"
-                            placeholder="เลือกช่องทางการชำระ"
+                            :placeholder="$t(`choose a payment method`)"
                             outlined
                             color="pink"
                             item-color="pink"
@@ -632,10 +632,14 @@
                           </v-autocomplete>
                         </v-col>
                         <v-col cols="auto">
-                          ผู้รับเงิน :
-                          <span class="text-pink-500 font-medium">{{
+                          {{$t('payee')}} :
+                          <span class="text-pink-500 font-medium">
+                            <!-- {{
                             `${user_detail.first_name_th} ${user_detail.last_name_th}`
-                          }}</span>
+                          }} -->
+{{ $i18n.locale === 'th' ? user_detail.first_name_th + ' ' + user_detail.last_name_th : user_detail.first_name_en + ' ' + user_detail.last_name_en }}
+  
+                        </span>
                         </v-col>
                       </v-row>
                     </v-col>
@@ -781,11 +785,6 @@ export default {
     today: new Date(),
     selected: [""],
     pay: "",
-    transfer: [
-      { label: "โอนเข้าบัญชี", value: "transfer" },
-      { label: "บัตรเครดิต", value: "Credit Card" },
-      { label: "เงินสด", value: "cash" },
-    ],
     rules: {
       student: [(val) => (val || "").length > 0 || "โปรดเลือกผู้เรียน"],
       category: [(val) => (val || "").length > 0 || "โปรดเลือกอาณาจักร"],
@@ -840,6 +839,7 @@ export default {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     this.GetCategorys();
   },
+  
   watch: {
     last_user_registered: function () {
       if (this.last_user_registered?.account_id) {
@@ -1267,6 +1267,13 @@ export default {
       order_is_loading: "OrderModules/getOrderIsLoading",
       course_monitors: "CourseMonitorModules/getCourseMonitor",
     }),
+    transfer() {
+     return [
+        { label: this.$t("transfer to account"), value: "transfer" },
+        { label: this.$t("credit card"), value: "Credit Card" },
+        { label:this.$t("cash"), value: "cash" },
+      ]
+    },
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;
