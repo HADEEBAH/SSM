@@ -2,6 +2,7 @@ import router from "@/router";
 import axios from "axios"
 import Swal from "sweetalert2"
 import VueCookie from "vue-cookie"
+import VueI18n from "../i18n";
 const loginModules = {
     namespaced: true,
     state: {
@@ -92,9 +93,9 @@ const loginModules = {
                                         if (student.data.data.data.some(v => v.courseId === course_id)) {
                                             Swal.fire({
                                                 icon: "error",
-                                                title: "ผู้ใช้ซ้ำกันในหลักสูตรนี้ ไม่สามารถลงทะเบียนได้",
+                                                title: VueI18n.t("duplicate user in this course Unable to register"),
                                                 showCancelButton: false,
-                                                confirmButtonText: "ตกลง",
+                                                confirmButtonText: VueI18n.t("agree"),
                                             })
                                             if (type === 'student') {
                                                 context.commit("SetUserStudentData", [])
@@ -111,12 +112,12 @@ const loginModules = {
                             } else {
                                 Swal.fire({
                                     icon: "error",
-                                    title: "ไม่สามารถสมัครได้",
-                                    text: "เนื่องจากผู้สมัครมีตำแหน่งอื่นๆ อยู่แล้ว",
+                                    title: VueI18n.t("can't apply"),
+                                    text: VueI18n.t("this is because the applicant already has other positions"),
                                     showDenyButton: false,
                                     showCancelButton: true,
-                                    confirmButtonText: "ตกลง",
-                                    cancelButtonText: "ยกเลิก",
+                                    confirmButtonText: VueI18n.t("agree"),
+                                    cancelButtonText: VueI18n.t("cancel"),
                                 }).then((result) => {
                                     if (result.isConfirmed) {
                                         if (type === 'student') {
@@ -133,11 +134,12 @@ const loginModules = {
                     } else {
                         Swal.fire({
                             icon: "error",
-                            title: "ไม่พบผู้ใช้",
+                            title: VueI18n.t("this user could not be found"),
+
                             showDenyButton: false,
                             showCancelButton: true,
-                            confirmButtonText: "ตกลง",
-                            cancelButtonText: "ยกเลิก",
+                            confirmButtonText: VueI18n.t("agree"),
+                            cancelButtonText: VueI18n.t("cancel"),
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 if (type === 'student') {
@@ -155,7 +157,7 @@ const loginModules = {
                 if (error.response.data.message === "This username not found.") {
                     Swal.fire({
                         icon: "error",
-                        title: "ไม่พบผู้ใช้นี้"
+                        title: VueI18n.t("this user could not be found"),
                     })
                 } else {
                     Swal.fire({
@@ -194,7 +196,7 @@ const loginModules = {
                 if (error.response.data.message === "This username not found.") {
                     Swal.fire({
                         icon: "error",
-                        title: "ไม่พบผู้ใช้"
+                        title: VueI18n.t("this user could not be found"),
                     }).then((result) => {
                         if (result.isConfirmed) {
                             if (type === 'student') {
@@ -267,12 +269,12 @@ const loginModules = {
                 if (response.message === "Request failed with status code 401") {
                     Swal.fire({
                         icon: 'error',
-                        title: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง",
+                        title: VueI18n.t("the username or password is incorrect"),
                     })
                 } else {
                     Swal.fire({
                         icon: 'error',
-                        title: "เกิดข้อผิดพลาด",
+                        title: VueI18n.t("something went wrong"),
                     })
                 }
             }
@@ -319,7 +321,8 @@ const loginModules = {
                 context.commit("SetIsLoading", false)
                 Swal.fire({
                     icon: 'error',
-                    title: "เกิดข้อผิดพลาด",
+                    title: VueI18n.t("something went wrong"),
+
                 })
                 router.replace({ name: "UserKingdom" })
             }
@@ -331,11 +334,11 @@ const loginModules = {
         logOut(context) {
             Swal.fire({
                 icon: "question",
-                title: "ต้องการออกจากระบบใช่หรือไม่ ?",
+                title: VueI18n.t("do you want to log out?"),
                 showDenyButton: false,
                 showCancelButton: true,
-                cancelButtonText: "ยกเลิก",
-                confirmButtonText: "ตกลง",
+                confirmButtonText: VueI18n.t("agree"),
+                cancelButtonText: VueI18n.t("cancel"),
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     VueCookie.delete("token")
