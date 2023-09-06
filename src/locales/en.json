@@ -1,6 +1,7 @@
 {   
     "a relationship cannot be established because they are in the same role" : "A relationship cannot be established because they are in the same role",
     "add a learner" : "Add a learner",
+    "add coach" : "Add coach",
     "add parent information" : "Add parent information",
     "add to cart" : "Add to cart",
     "add a comment" : "Add a comment",
@@ -25,6 +26,7 @@
     "all days" : "All days",
     "already deleted": "( Already deleted )",
     "already edited": "( Already edited )",
+    "all courses" : "All courses",
     "all students" : "All students",
     "already registered": "( Already registered )",
     "approved" : "Approved",
@@ -40,6 +42,7 @@
     "available course information": "Available course information",
 
     "baht" : "Baht",
+    "because there are students in the course" : "Because there are students in the course",
     "by": "By",
     "by opening an account, you acknowledge and agree to" : "By opening an account, you acknowledge and agree to",
     "booked course": "Booked course",
@@ -94,6 +97,7 @@
     "course name (english)" : "Course name (English)",
     "course name (thai)" :  "Course name (Thai)",
     "course opening date": "Course opening date",
+    "course type" : "Course type",
     "courses" : "Courses",
     "course information not found" : "Course information not found",
     "course status information not found":"Course status information not found",
@@ -264,9 +268,11 @@
 
     "o'clock" : "O'clock",
     "optional": "optional",
+    "open-close register date" : "Open-Close register date",
     "order number" : "Order number",
     "OTP verification failed" : "OTP verification failed",
     "order canceled successfully": "( Order canceled successfully )",
+
     "package" : "Package",
     "paid price" : "Paid price",
     "page not found" : "Page not found",
@@ -452,6 +458,7 @@
     "teaching information not found" : "Teaching information not found",
     "teaching summary notes" : "Teaching summary notes",
     "teaching days already deleted": "( Teaching days already deleted )",
+    "temporarily closed course" : "temporarily closed course",
     "terms of service and privacy policy" : "Terms of Service and Privacy Policy",
     "thai" : "Thai",
     "the coach has successfully assessed the students" : "The coach has successfully assessed the students",
@@ -497,12 +504,14 @@
 
     "unable to study on the specified date. because there are already classes on the specified date" : "Unable to study on the specified date. Because there are already classes on the specified date",
     "upload attachment" : "Upload attachment",
+    "upload only image files (png, jpeg) only" : "Upload only image files (png, jpeg) only",
     "username" : "Username",
     "username cannot contain emojis" : "Username cannot contain emojis",
     "username already exists": "Username already exists",
     "user page": "User page",
     "unsuccessful":"Unsuccessful",
     "unable to register": "Unable to register",
+    "unable to close course" : "Unable to close course",
     "unable to register Due to insufficient seats or the coach teaching in another package": "Unable to register Due to insufficient seats or the coach teaching in another package",
     "unable to register Because the course is already in your registration history":"Unable to register Because the course is already in your registration history",
 

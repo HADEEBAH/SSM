@@ -18,7 +18,7 @@
                 width="72"
                 src="@/assets/course/course.png"
               ></v-img>
-              <span class="text-lg font-bold"> คอร์สเรียน </span>
+              <span class="text-lg font-bold"> {{$t("course")}} </span>
             </template>
           </img-card>
         </v-col>
@@ -39,7 +39,7 @@
                 width="72"
                 src="@/assets/course/time_and_coach.png"
               ></v-img>
-              <span class="text-lg font-bold"> ช่วงเวลาและโค้ช </span>
+              <span class="text-lg font-bold"> {{$t("time and coach")}} </span>
             </template>
           </img-card>
         </v-col>
@@ -60,7 +60,7 @@
                 width="72"
                 src="@/assets/course/package.png"
               ></v-img>
-              <span class="text-lg font-bold"> แพ็กเกจ </span>
+              <span class="text-lg font-bold"> {{$t("package")}} </span>
             </template>
           </img-card>
         </v-col>
@@ -98,7 +98,7 @@
                 width="72"
                 src="@/assets/course/student_list.png"
               ></v-img>
-              <span class="text-lg font-bold"> รายชื่อนักเรียน </span>
+              <span class="text-lg font-bold"> {{ $t("student list") }} </span>
             </template>
           </img-card>
         </v-col>
@@ -125,7 +125,8 @@
                     class="white--text btn-size-lg"
                     depressed
                     @click="course_edit = true"
-                    >แก้ไข
+                    >
+                    {{ $t("edit") }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -136,7 +137,7 @@
                     class="btn-size-lg"
                     outlined
                     @click="cancelEdit()"
-                    >ยกเลิก</v-btn
+                    >{{ $t("cancel") }}</v-btn
                   >
                 </v-col>
                 <v-col cols="auto">
@@ -145,7 +146,8 @@
                     class="white--text btn-size-lg"
                     depressed
                     @click="CourseUpdateDetail()"
-                    >บันทึก
+                    >
+                    {{ $t("save") }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -162,7 +164,7 @@
                       @click="addCoach"
                     >
                       <v-icon>mdi-plus-circle-outline</v-icon>
-                      เพิ่มโค้ช
+                      {{ $t("add coach") }}
                     </v-btn>
                   </template>
                 </headerCard>
@@ -186,7 +188,8 @@
                     class="white--text btn-size-lg"
                     depressed
                     @click="course_edit = true"
-                    >แก้ไข
+                    >
+                    {{ $t("edit") }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -197,7 +200,7 @@
                     class="btn-size-lg"
                     outlined
                     @click="cancelEdit()"
-                    >ยกเลิก</v-btn
+                    > {{ $t("center") }}</v-btn
                   >
                 </v-col>
                 <v-col cols="auto">
@@ -206,7 +209,7 @@
                     class="white--text btn-size-lg"
                     depressed
                     @click="CourseUpdateCoach()"
-                    >บันทึก
+                    >{{ $t("save") }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -319,14 +322,13 @@
                       cols="12"
                       class="flex align-center justify-center text-h5"
                     >
-                      อัปโหลดภาพสิทธิ์พิเศษ
+                      {{ $t("upload privileged images") }}
                     </v-col>
                     <v-col
                       cols="12"
                       class="flex align-center justify-center text-caption"
                     >
-                      ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ
-                      ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG )
+                      ( {{$t("suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file")}} )
                     </v-col>
                     <v-col cols="12" class="flex align-center justify-center">
                       <v-btn
@@ -334,7 +336,7 @@
                         color="blue"
                         :disabled="!course_edit"
                         @click="openFilePrivilegeSelector"
-                        >เลือกไฟล์</v-btn
+                        >{{ $t("select file") }}</v-btn
                       >
                       <input
                         id="fileInputPrivilege"
@@ -416,14 +418,13 @@
                       cols="12"
                       class="flex align-center justify-center text-h5"
                     >
-                      อัปโหลดภาพ Learning Journey
+                      {{$t("upload Learning Journey")}}
                     </v-col>
                     <v-col
                       cols="12"
                       class="flex align-center justify-center text-caption"
                     >
-                      ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ
-                      ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG )
+                    ( {{$t("suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file")}} )
                     </v-col>
                   </v-row>
                   <v-row dense>
@@ -441,7 +442,7 @@
                         outlined
                         color="blue"
                         @click="openFileArtworSelector"
-                        >เลือกไฟล์</v-btn
+                        >{{ $t("select file") }}</v-btn
                       >
                     </v-col>
                   </v-row>
@@ -455,7 +456,8 @@
                     class="white--text btn-size-lg"
                     depressed
                     @click="course_edit = true"
-                    >แก้ไข
+                    >
+                    {{$t("edit")}}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -466,7 +468,7 @@
                     class="btn-size-lg"
                     outlined
                     @click="cancelEdit()"
-                    >ยกเลิก</v-btn
+                    >{{$t("center")}}</v-btn
                   >
                 </v-col>
                 <v-col cols="auto">
@@ -475,7 +477,8 @@
                     class="white--text btn-size-lg"
                     depressed
                     @click="CourseUpdateArkwork()"
-                    >บันทึก
+                    >
+                    {{ $t("save") }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -1976,33 +1979,6 @@ export default {
       { text: "รายละเอียดคอร์สเรียน", to: "" },
     ],
     tab: "course",
-    tab_menu: [
-      {
-        label: "คอร์สเรียน",
-        value: "course",
-        img: "@/assets/course/course.png",
-      },
-      {
-        label: "ช่วงเวลาและโค้ช",
-        value: "time and coach",
-        img: "@/assets/course/time_and_coach.png",
-      },
-      {
-        label: "แพ็กเกจ",
-        value: "package",
-        img: "@/assets/course/package.png",
-      },
-      {
-        label: "Learning Journey",
-        value: "arkwork",
-        img: "@/assets/course/course.png",
-      },
-      {
-        label: "รายชื่อนักเรียน",
-        value: "student list",
-        img: "@/assets/course/student_list.png",
-      },
-    ],
     filter: {
       dow: "",
       date_menu: false,

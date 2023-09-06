@@ -8,7 +8,7 @@
       <headerCard
         :icon="'mdi-card-account-details-outline'"
         :icon_color="'#FF6B81'"
-        :title="`แพ็กเกจที่ ${index + 1}`"
+        :title="`${$t('package')} ${index + 1}`"
       >
         <template slot="actions">
           <v-btn

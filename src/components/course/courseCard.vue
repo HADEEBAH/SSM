@@ -77,7 +77,7 @@
               :outlined="!disable"
               :filled="disable"
               @keypress="inputName($event, 'th')"
-              :rules="rules.course_name_th"
+              :rules="course_name_th"
               @change="ChangeCourseData(course_data)"
               @focus="$event.target.select()"
               v-model="course_data.course_name_th"
@@ -93,7 +93,7 @@
               :filled="disable"
               @focus="$event.target.select()"
               @keypress="inputName($event, 'en')"
-              :rules="rules.course_name_en"
+              :rules="course_name_en"
               v-model="course_data.course_name_en"
               @change="ChangeCourseData(course_data)"
               :placeholder="$t('specify the course name (english)')"
@@ -105,7 +105,7 @@
             <label-custom required :text="$t('kingdom name')"></label-custom>
             <v-autocomplete
               dense
-              :rules="rules.kingdom"
+              :rules="kingdom"
               v-model="course_data.category_id"
               color="#FF6B81"
               :items="categorys"
@@ -162,7 +162,7 @@
                   :filled="disable"
                   v-model="course_data.course_open_date_str"
                   readonly
-                  :rules="rules.course_open_date"
+                  :rules="course_open_date"
                   :placeholder="$t('specify the course opening date')"
                   @change="ChangeCourseData(course_data)"
                   v-bind="attrs"
@@ -199,7 +199,7 @@
                 :style="`width:${widthfull()}px;`"
                 style="position: absolute; display: block; z-index: 4"
                 @focus="SelectedStartDate($event, course_data.course_hours)"
-                :rules="rules.course_hours"
+                :rules="course_hours"
                 v-model="course_data.course_hours"
               >
               </v-text-field>
@@ -227,7 +227,7 @@
               :outlined="!disable"
               :filled="disable"
               @focus="$event.target.select()"
-              :rules="rules.location"
+              :rules="location"
               v-model="course_data.location"
               :placeholder="$t('specify the place of study')"
             ></v-text-field>
@@ -299,7 +299,7 @@
               <label-custom required :text="$t('coach')"></label-custom>
               <v-autocomplete
                 dense
-                :rules="rules.coach"
+                :rules="coach"
                 v-model="course_data.coachs[0].coach_id"
                 color="#FF6B81"
                 :items="coachs"
@@ -384,7 +384,7 @@
                         :disabled="disable"
                         :outlined="!disable"
                         :filled="disable"
-                        :rules="rules.start_date"
+                        :rules="start_date"
                         v-model="register_date_range_str.start_date"
                         readonly
                         :placeholder="$t('choose start date')"
@@ -442,7 +442,7 @@
                         :outlined="!disable"
                         :filled="disable"
                         @change="ChangeCourseData(course_data)"
-                        :rules="rules.end_date"
+                        :rules="end_date"
                         :placeholder="$t('choose an end date')"
                         v-model="register_date_range_str.end_date"
                         readonly
@@ -485,7 +485,7 @@
                 :outlined="!disable"
                 :filled="disable"
                 chips
-                :rules="rules.class_date"
+                :rules="class_date"
                 deletable-chips
                 item-color="pink"
                 multiple
@@ -538,7 +538,7 @@
                         :disabled="disable"
                         :outlined="!disable"
                         :filled="disable"
-                        :rules="rules.start_date"
+                        :rules="start_date"
                         :placeholder="$t('choose start date')"
                         v-model="class_date_range_str.start_date"
                         readonly
@@ -599,7 +599,7 @@
                         :outlined="!disable"
                         :filled="disable"
                         @change="ChangeCourseData(course_data)"
-                        :rules="rules.end_date"
+                        :rules="end_date"
                         v-model="class_date_range_str.end_date"
                         readonly
                         :placeholder="$t('choose an end date')"
@@ -649,7 +649,7 @@
                         course_data.coachs[0].period.start_time
                       )
                     "
-                    :rules="rules.start_time"
+                    :rules="start_time"
                     v-model="course_data.coachs[0].period.start_time"
                   >
                   </v-text-field>
@@ -676,7 +676,7 @@
                     dense
                     :style="`width:${width()}px;`"
                     style="position: absolute; display: block; z-index: 4"
-                    :rules="rules.end_time"
+                    :rules="end_time"
                     v-model="course_data.coachs[0].period.end_time"
                   >
                   </v-text-field>
@@ -1093,11 +1093,11 @@ export default {
         } else {
           Swal.fire({
             icon: "error",
-            text: "อัปโหลดเฉพาะไฟล์รูปภาพ(png, jpeg)เท่านั้น",
+            text: this.$t("upload only image files (png, jpeg) only"),
             showDenyButton: false,
             showCancelButton: false,
-            confirmButtonText: "ตกลง",
-            cancelButtonText: "ยกเลิก",
+            cancelButtonText: this.$t("cancel"),
+            confirmButtonText: this.$t("agree"),
           });
         }
       }
