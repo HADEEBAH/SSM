@@ -146,7 +146,7 @@
                   :type="show_confirm_password ? 'text' : 'password'"
                   :rules="[
                     confirm_password,
-                    match(user_one_id.password),
+                    confirmPasswordRule,
                   ]"
                   required
                   v-model="user_one_id.confirm_password"
@@ -299,6 +299,9 @@ export default {
     valid: true,
     show_password: false,
     show_confirm_password: false,
+    rules : {
+      match: (password) => (value) => value === password || "passwords do not match",
+    }
   }),
   created() {},
   mounted() {},
@@ -341,8 +344,8 @@ export default {
     confirm_password(){
       return (val) => (val && val.length > 7) || this.$t("please enter a confirmation password that is at least 8 characters long")
     },
-    match(password){
-      return (value) => value === password || this.$t("passwords do not match")
+    confirmPasswordRule() {
+      return (v) => v === this.user_one_id.password || this.$t("passwords do not match");
     },
     phone_number(){
       return [
