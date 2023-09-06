@@ -443,7 +443,7 @@
                         :filled="disable"
                         @change="ChangeCourseData(course_data)"
                         :rules="rules.end_date"
-                        :placeholder="$t('choose end date')"
+                        :placeholder="$t('choose an end date')"
                         v-model="register_date_range_str.end_date"
                         readonly
                         v-bind="attrs"
@@ -491,7 +491,7 @@
                 multiple
                 color="#FF6B81"
                 :items="days_confix"
-                item-text="label"
+                :item-text="$i18n.locale == 'th' ? 'label' : 'label_en'"
                 item-value="value"
                 :placeholder="$t('please select a teaching date')"
                 v-model="course_data.coachs[0].teach_day_data[0].teach_day"
@@ -511,7 +511,7 @@
                       )
                     "
                   >
-                    <strong>{{ item.label }}</strong>
+                    <strong>{{ $i18n.locale == 'th' ? item.label : item.label_en }}</strong>
                   </v-chip>
                 </template>
               </v-autocomplete>
@@ -539,7 +539,7 @@
                         :outlined="!disable"
                         :filled="disable"
                         :rules="rules.start_date"
-                        placeholder="เลือกวันที่เริ่ม"
+                        :placeholder="$t('choose start date')"
                         v-model="class_date_range_str.start_date"
                         readonly
                         v-bind="attrs"
@@ -568,7 +568,7 @@
                       v-model="
                         course_data.coachs[0].class_date_range.start_date
                       "
-                      locale="th-TH"
+                      :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
                     ></v-date-picker>
                   </v-menu>
                 </v-col>
@@ -602,7 +602,7 @@
                         :rules="rules.end_date"
                         v-model="class_date_range_str.end_date"
                         readonly
-                        placeholder="เลือกวันที่สิ้นสุด"
+                        :placeholder="$t('choose an end date')"
                         v-bind="attrs"
                         v-on="on"
                       >
@@ -626,14 +626,14 @@
                       "
                       @input="inputDate($event, 'class end date')"
                       v-model="course_data.coachs[0].class_date_range.end_date"
-                      locale="th-TH"
+                      :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
                     ></v-date-picker>
                   </v-menu>
                 </v-col>
               </v-row>
             </v-col>
             <v-col cols="12" sm="6" class="px-0">
-              <label-custom required text="เวลาเรียน"></label-custom>
+              <label-custom required :text="$t('class time')"></label-custom>
               <v-row>
                 <v-col cols="auto">
                   <v-text-field
@@ -696,27 +696,27 @@
           </v-row>
           <v-row dense>
             <v-col cols="12">
-              <label-custom text="รายละเอียดคอร์ส"></label-custom>
+              <label-custom :text="$t('course details')"></label-custom>
               <v-textarea
                 v-model="course_data.detail"
                 :disabled="disable"
                 :outlined="!disable"
                 :filled="disable"
                 @change="ChangeCourseData(course_data)"
-                placeholder="กรอกรายละเอียด..."
+                :placeholder="$t('enter course details')+'...'"
               ></v-textarea>
             </v-col>
           </v-row>
           <v-row dense>
             <v-col cols="12">
-              <label-custom text="certification"></label-custom>
+              <label-custom :text="$t('certification')"></label-custom>
               <v-textarea
                 v-model="course_data.catification"
                 :disabled="disable"
                 :outlined="!disable"
                 :filled="disable"
                 @change="ChangeCourseData(course_data)"
-                placeholder="กรอกรายละเอียด..."
+                :placeholder="$t('enter details')+'...'"
               ></v-textarea>
             </v-col>
           </v-row>
@@ -757,13 +757,13 @@ export default {
     today: new Date(),
     preview_url: null,
     days_confix: [
-      { label: "วันอาทิตย์", value: 0 },
-      { label: "วันจันทร์", value: 1 },
-      { label: "วันอังคาร", value: 2 },
-      { label: "วันพุธ", value: 3 },
-      { label: "วันพฤหัสบดี", value: 4 },
-      { label: "วันศุกร์", value: 5 },
-      { label: "วันเสาร์", value: 6 },
+      { label: "วันอาทิตย์", label_en : "Sunday", value: 0 },
+      { label: "วันจันทร์", label_en : "Monday",value: 1 },
+      { label: "วันอังคาร", label_en : "Tuesday",value: 2 },
+      { label: "วันพุธ", label_en : "Wednesday",value: 3 },
+      { label: "วันพฤหัสบดี", label_en : "Thursday",value: 4 },
+      { label: "วันศุกร์", label_en : "Friday",value: 5 },
+      { label: "วันเสาร์", label_en : "Saturday", value: 6 },
     ],
     customToolbar: [
       ["bold", "italic", "underline"],
@@ -853,6 +853,64 @@ export default {
     ...mapGetters({
       course_data: "CourseModules/getCourseData",
     }),
+    course_name_th(){
+      return [
+        (val) => (val || "").length > 0 || this.$t("please specify the course name (thai)"),
+        (val) =>
+          val.length < 256 || this.$t("the course name (thai) is longer than the specified length"),
+      ]
+    },
+    course_name_en(){ 
+      return [
+        (val) => (val || "").length > 0 || this.$t("please specify the course name (english)"),
+        (val) =>
+          val.length < 256 ||  this.$t("the course name (english) is longer than the specified length"),
+      ]
+    },
+    kingdom(){
+      return [(val) => (val || "").length > 0 || this.$t("please select a kingdom")]
+    },
+    course_open_date(){
+      return [
+        (val) => (val || "").length > 0 || this.$t("please select a course opening date"),
+      ]
+    },
+    course_hours(){ 
+      return [
+        (val) => (val || "") > 0 || this.$t("please specify class hours/time"),
+        (val) => val < 25 ||  this.$t("excessive study hours"),
+      ]
+    },
+    location(){
+      return [(val) => (val || "").length > 0 || this.$t("please specify a location")]
+    },
+    class_date(){
+      return [(val) => (val || "").length > 0 || this.$t("please select a date")]
+    },
+    coach(){
+      return [(val) => (val || "").length > 0 || this.$t("please specify a coach")]
+    },
+    start_date(){
+      return [(val) => (val || "").length > 0 || this.$t("please select a start date")]
+    },
+    end_date(){
+      return [(val) => (val || "").length > 0 || this.$t("please select an end date")]
+    },
+    start_time(){
+      return [(val) => (val || "").length > 0 || this.$t("please select a start time")]
+    },
+    end_time(){
+      return [(val) => (val || "").length > 0 || this.$t("please select an end time")]
+    },
+    student_recived(){
+      return [
+        (val) => (val || "") > 0 || this.$t("please specify students who can be accepted"),
+        (val) => val < 1000 || this.$t("students who can accept more than the limit"),
+      ]
+    },
+    price(){
+      return [(val) => (val || "") > 0 || this.$t("please specify price")]
+    },
   },
   methods: {
     ...mapActions({
