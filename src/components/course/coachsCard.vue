@@ -22,7 +22,7 @@
                   v-model="teach_day.class_open"
                   color="green"
                   hide-details
-                  label="เปิดสอน"
+                  :label="$t('teaching')"
                 ></v-switch>
               </v-col>
               <v-col cols="auto" v-if="course_data.coachs.length > 1">
@@ -40,7 +40,7 @@
             </v-row>
             <v-row dense class="flex align-center justify-end">
               <v-col cols="12" sm="4">
-                <label-custom required text="โค้ช"></label-custom>
+                <label-custom required :text="$t('coach')"></label-custom>
                 <v-autocomplete
                   dense
                   :disabled="
@@ -52,15 +52,15 @@
                   color="#FF6B81"
                   :items="coachsOptions(coach)"
                   item-value="accountId"
-                  item-text="fullNameTh"
+                  :item-text="$i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEn'"
                   item-color="pink"
                   @change="findTeachDays(coach, coach_index)"
                   :rules="rules.course"
-                  placeholder="โค้ช"
+                  :placeholder="$t('coach')"
                 >
                   <template v-slot:no-data>
                     <v-list-item>
-                      <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
+                      <v-list-item-title> {{ $t('no data found')}}</v-list-item-title>
                     </v-list-item>
                   </template>
                   <template v-slot:></template>
@@ -71,7 +71,7 @@
                           :class="
                             coach.coach_id === item.accountId ? 'font-bold' : ''
                           "
-                          >{{ item.fullNameTh }}</span
+                          >{{ $i18n.locale == 'th' ? item.fullNameTh : item.fullNameEn }}</span
                         ></v-list-item-title
                       >
                     </v-list-item-content>
@@ -84,7 +84,7 @@
                 </v-autocomplete>
               </v-col>
               <v-col cols="12" sm="4">
-                <label-custom required text="วันสอน"></label-custom>
+                <label-custom required :text="$t('teaching day')"></label-custom>
                 <v-autocomplete
                   dense
                   :disabled="disable"
@@ -99,7 +99,7 @@
                   :items="filteredDays(coach_index, teach_day_index, state)"
                   item-text="label"
                   item-value="value"
-                  placeholder="โปรดเลือกเวลา"
+                  :placeholder="$t('please select a time')"
                   v-model="teach_day.teach_day"
                   @change="
                     selectDays(
@@ -134,7 +134,7 @@
                   @click="addTeachDay(coach)"
                 >
                   <v-icon>mdi-calendar-plus-outline</v-icon>
-                  เพิ่มวันสอน
+                   {{ $t("add teaching day") }}
                 </v-btn>
               </v-col>
               <v-col cols="6" sm="2">
@@ -151,7 +151,7 @@
                       )
                     "
                     ><v-icon>mdi-calendar-plus-outline</v-icon>
-                    ลบวันสอน
+                    {{$t("delete teaching day")}}
                   </v-btn>
                 </template>
                 <template v-else>
@@ -164,7 +164,7 @@
                       removeTeachDay(coach.teach_day_data, teach_day_index)
                     "
                     ><v-icon>mdi-calendar-plus-outline</v-icon>
-                    ลบวันสอน
+                    {{$t("delete teaching day")}}
                   </v-btn>
                 </template>
               </v-col>
@@ -241,7 +241,7 @@
                 <v-col cols="12" sm="2">
                   <label-custom
                     required
-                    text="นักเรียนที่รับได้"
+                    :text="$t('acceptable students')"
                   ></label-custom>
                   <v-text-field
                     class="input-text-right"
@@ -250,12 +250,12 @@
                     :outlined="!disable"
                     :filled="disable"
                     type="number"
-                    suffix="คน"
+                    :suffix="$t('person')"
                     @focus="$event.target.select()"
                     :rules="rules.students"
                     @change="ChangeCourseData(course_data)"
                     v-model="class_date.students"
-                    placeholder="ระบุนักเรียนที่รับได้"
+                    :placeholder="$t('specify students who can accept')"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="6" sm="2" class="d-flex align-center">
@@ -267,7 +267,7 @@
                     @click="addTime(teach_day)"
                   >
                     <v-icon>mdi-timer-plus-outline</v-icon>
-                    เพิ่มเวลา
+                    {{ $t("add time") }}
                   </v-btn>
                 </v-col>
                 <v-col cols="6" sm="2" class="d-flex align-center">
@@ -285,7 +285,7 @@
                       "
                     >
                       <v-icon>mdi-timer-minus-outline</v-icon>
-                      ลบเวลา
+                      {{ $t('delete time') }}
                     </v-btn>
                   </template>
                   <template v-else>
@@ -299,7 +299,7 @@
                       "
                     >
                       <v-icon>mdi-timer-minus-outline</v-icon>
-                      ลบเวลา
+                      {{ $t('delete time') }}
                     </v-btn>
                   </template>
                 </v-col>
@@ -334,13 +334,13 @@ export default {
     select_coachs: [],
     coachs_option: [],
     days_confix: [
-      { label: "วันอาทิตย์", value: 0 },
-      { label: "วันจันทร์", value: 1 },
-      { label: "วันอังคาร", value: 2 },
-      { label: "วันพุธ", value: 3 },
-      { label: "วันพฤหัสบดี", value: 4 },
-      { label: "วันศุกร์", value: 5 },
-      { label: "วันเสาร์", value: 6 },
+      { label: "sunday", value: 0 },
+      { label: "monday", value: 1 },
+      { label: "tuesday", value: 2 },
+      { label: "wednesday", value: 3 },
+      { label: "thursday", value: 4 },
+      { label: "friday", value: 5 },
+      { label: "saturday", value: 6 },
     ],
     rules: {
       course: [(val) => (val || "").length > 0 || "โปรดเลือกโค้ช"],
