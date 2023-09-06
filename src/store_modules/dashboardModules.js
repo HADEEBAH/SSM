@@ -1,4 +1,5 @@
 import axios from "axios";
+import VueI18n from "../i18n";
 function dayOfWeekArray(day) {
   let days = day
   const weekdays = [
@@ -230,7 +231,7 @@ const dashboardModules = {
             const options = { weekday: 'long', timeZone: 'Asia/Bangkok', locale: 'th-TH' };
             const dayName = date.toLocaleString('th-TH', options);
             items.date = newDate.split("-")[2]
-            items.month = `เดือน ${newDate?.split("-")[1]}`
+            items.month = `${VueI18n.t("month")} ${newDate?.split("-")[1]}`
             items.year = newDate.split("-")[0]
             items.thaiDayName = `${items.date} ${dayName}`
             lineChart.push(items)

@@ -1,6 +1,6 @@
 <template>
   <v-container class="h-full">
-    <label class="text-xl font-bold">{{$t("banner management")}}</label>
+    <label class="text-xl font-bold">{{ $t("banner management") }}</label>
     <v-row dense class="my-3">
       <v-col cols="12" sm="3">
         <v-card
@@ -10,7 +10,9 @@
           <v-row class="h-full m-auto">
             <v-col cols="12" class="text-center align-self-center">
               <v-icon color="#ff6b81" size="84"> mdi-plus </v-icon>
-              <label class="block text-[#ff6b81]">เพิ่มรูป</label>
+              <label class="block text-[#ff6b81]">{{
+                $t("add a picture")
+              }}</label>
             </v-col>
           </v-row>
         </v-card>
@@ -111,7 +113,8 @@
           class="mt-3"
         >
           {{ $t("there are no preview images") }} <br />
-          <span class="font-weight-bold">{{ $t("advice") }}</span> : {{ $t("images should be uploaded with a size of 1024 x 576 (16:9)") }}
+          <span class="font-weight-bold">{{ $t("advice") }}</span> :
+          {{ $t("images should be uploaded with a size of 1024 x 576 (16:9)") }}
         </v-alert>
       </v-col>
     </v-row>
