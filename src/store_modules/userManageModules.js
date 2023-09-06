@@ -1,6 +1,7 @@
 import axios from "axios";
 import VueCookie from "vue-cookie"
 import Swal from "sweetalert2";
+import VueI18n from "../i18n";
 // import moment from "moment";
 const UserManageModules = {
   namespaced: true,
@@ -161,8 +162,8 @@ const UserManageModules = {
           // console.log(data)
           Swal.fire({
             icon: "success",
-            title: "สำเร็จ",
-            text: "( บันทึกเรียบร้อยแล้ว )",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("saved successfully"),
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -199,8 +200,8 @@ const UserManageModules = {
         if (data.statusCode == 200) {
           Swal.fire({
             icon: "success",
-            title: "สำเร็จ",
-            text: "( บันทึกเรียบร้อยแล้ว )",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("saved successfully"),
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -227,8 +228,8 @@ const UserManageModules = {
         if (data.statusCode == 200) {
           Swal.fire({
             icon: "success",
-            title: "สำเร็จ",
-            text: "( ลบรายการเรียบร้อยแล้ว )",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("data has been successfully deleted"),
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,

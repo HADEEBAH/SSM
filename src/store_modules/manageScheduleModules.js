@@ -1,6 +1,7 @@
 import axios from "axios";
 import VueCookie from "vue-cookie";
 import Swal from "sweetalert2";
+import VueI18n from "../i18n";
 
 const manageScheduleModules = {
   namespaced: true,
@@ -229,8 +230,8 @@ const manageScheduleModules = {
         if (data.statusCode === 200) {
           Swal.fire({
             icon: "success",
-            title: "สำเร็จ",
-            text: "( แก้ไขเรียบร้อยแล้ว )",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("already edited"),
             // title: this.$t("succeed"),
             // text: this.$t("save data successfully"),
             showDenyButton: false,
@@ -244,10 +245,8 @@ const manageScheduleModules = {
         } else {
           Swal.fire({
             icon: "warning",
-            title: "ไม่สำเร็จ",
-            text: "( แก้ไขไม่สำเร็จ )",
-            // title: this.$t("something went wrong"),
-            // text: this.$t("failed to resolve"),
+            title: VueI18n.t("unsuccessful"),
+            text: VueI18n.t("failed to resolve"),
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,

@@ -2,6 +2,8 @@ import axios from "axios"
 import Swal from "sweetalert2"
 import VueCookie from "vue-cookie"
 import router from "@/router";
+import VueI18n from "../i18n";
+
 
 const RegisterModules = {
     namespaced: true,
@@ -102,20 +104,20 @@ const RegisterModules = {
                 let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/relations/delete-user-role/?studentId=${studentId}&parentId=${parentId}`, config)
                 if (data.statusCode === 200) {
                     Swal.fire({
-                      icon: "success",
-                      title: "สำเร็จ",
-                      text: "( ลบข้อมูลเรียบร้อยแล้ว )",
-                      showDenyButton: false,
-                      showCancelButton: false,
-                      showConfirmButton: false,
-                      timer: 3000,
-                      timerProgressBar: true
+                        icon: "success",
+                        title: VueI18n.t("succeed"),
+                        text: VueI18n.t("data has been successfully deleted"),
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true
                     })
                 }
             } catch (error) {
                 Swal.fire({
                     icon: "error",
-                    title: "ลบข้อมูลไม่สำเร็จ"
+                    title: VueI18n.t("failed to delete"),
                 })
             }
         },
@@ -161,30 +163,30 @@ const RegisterModules = {
                     context.commit("SetIsLoading", false)
                     Swal.fire({
                         icon: "success",
-                        title: "สำเร็จ",
-                        text: "( ลงทะเบียนเรียบร้อยแล้ว )",
+                        title: VueI18n.t("succeed"),
+                        text: VueI18n.t("already registered"),
                         timer: 3000,
                         timerProgressBar: true,
                         showCancelButton: false,
                         showConfirmButton: false,
-                    }).finally(async()=>{
-                      let user = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account?username=${context.state.user_one_id.username}&status=active`)
+                    }).finally(async () => {
+                        let user = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account?username=${context.state.user_one_id.username}&status=active`)
 
-                      if (user.data.statusCode === 200) {
-                          context.commit("SetLastUserRegistered", {
-                              firstname_th: context.state.user_one_id.firstname_th,
-                              lastname_th: context.state.user_one_id.lastname_th,
-                              firstname_en: context.state.user_one_id.firstname_en,
-                              lastname_en: context.state.user_one_id.lastname_en,
-                              phone_number: phone_number,
-                              email: user.data.data[0].email,
-                              username: context.state.user_one_id.username,
-                              account_id: user.data.data[0].userOneId,
-                              type: type
-                          })
-                          context.commit("ResetUserOneID")
-                          context.commit("ShowDialogRegisterOneId", false)
-                      }
+                        if (user.data.statusCode === 200) {
+                            context.commit("SetLastUserRegistered", {
+                                firstname_th: context.state.user_one_id.firstname_th,
+                                lastname_th: context.state.user_one_id.lastname_th,
+                                firstname_en: context.state.user_one_id.firstname_en,
+                                lastname_en: context.state.user_one_id.lastname_en,
+                                phone_number: phone_number,
+                                email: user.data.data[0].email,
+                                username: context.state.user_one_id.username,
+                                account_id: user.data.data[0].userOneId,
+                                type: type
+                            })
+                            context.commit("ResetUserOneID")
+                            context.commit("ShowDialogRegisterOneId", false)
+                        }
 
                     })
                 }
@@ -194,28 +196,28 @@ const RegisterModules = {
                 if (response?.data.statusCode === 400) {
                     switch (response.data.message) {
                         case "The mobile no must be at least 10 characters.":
-                            text = 'หมายเลขมือถือต้องมีอย่างน้อย 10 ตัวอักษร'
+                            text = VueI18n.t("mobile number must have at least 10 characters")
                             break;
                         case "username duplicate":
-                            text = 'username นี้ถูกใช้แล้ว'
+                            text = VueI18n.t("username already exists")
                             break;
                         case "The password format is invalid.":
-                            text = 'รูปแบบรหัสผ่านไม่ถูกต้อง'
+                            text = VueI18n.t("the password format is incorrect")
                             break;
                         case "The first name eng format is invalid.":
-                            text = 'รูปแบบชื่อภาษาอังกฤษไม่ถูกต้อง'
+                            text = VueI18n.t("the English name format is invalid")
                             break;
                         case "The last name th format is invalid.":
-                            text = 'รูปแบบนามสกุลภาษาไทยไม่ถูกต้อง'
+                            text = VueI18n.t("invalid last name thai format")
                             break;
                         case "The last name en format is invalid.":
-                            text = 'รูปแบบนามสกุลภาษาอังกฤษไม่ถูกต้อง'
+                            text = VueI18n.t("invalid last name eng format")
                             break;
                     }
                     setTimeout(() => {
                         Swal.fire({
                             icon: 'error',
-                            title: `กรอกข้อมูลให้ถูกต้อง`,
+                            title: `${VueI18n.t("please fill out the information correctly")}`,
                             text: text ? text : response.data.message
                         })
                     }, 200)
@@ -223,7 +225,7 @@ const RegisterModules = {
                 } else {
                     Swal.fire({
                         icon: 'error',
-                        title: `เกิดข้อผิดพลาด`,
+                        title: VueI18n.t("something went wrong"),
                     })
                 }
             }
@@ -250,42 +252,42 @@ const RegisterModules = {
                 if (data.statusCode === 201) {
                     Swal.fire({
                         icon: "success",
-                        title: "สำเร็จ",
-                        text: "( ลงทะเบียนเรียบร้อยแล้ว )",
+                        title: VueI18n.t("succeed"),
+                        text: VueI18n.t("already registered"),
                         timer: 3000,
                         timerProgressBar: true,
                         showCancelButton: false,
                         showConfirmButton: false,
-                    }).finally(()=>{
-                      axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login`, {
-                          "username": context.state.user_one_id.username,
-                          "password": context.state.user_one_id.password,
-                      }).then((res) => {
-                          if (res.data.statusCode === 200) {
-                              let roles_data = []
-                              res.data.data.roles.forEach((role) => {
-                                  roles_data.push(role?.role_name_en)
-                              });
-                              let payload = {
-                                  account_id: res.data.data.account_id,
-                                  email: res.data.data.email,
-                                  username: context.state.user_one_id.username,
-                                  password: context.state.user_one_id.password,
-                                  first_name_en: res.data.data.first_name_en,
-                                  first_name_th: res.data.data.first_name_th,
-                                  last_name_en: res.data.data.last_name_en,
-                                  last_name_th: res.data.data.last_name_th,
-                                  role: res.data.data.role,
-                                  roles: roles_data,
-                                  tel: res.data.data.tel,
-                              }
-                              VueCookie.set("token", res.data.data.token, 1)
-                              localStorage.setItem("userDetail", JSON.stringify(payload))
-                              context.commit("SetIsLoading", false)
-                              router.replace({ name: "UserKingdom" });
-                              context.commit("ResetUserOneID")
-                          }
-                      })
+                    }).finally(() => {
+                        axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login`, {
+                            "username": context.state.user_one_id.username,
+                            "password": context.state.user_one_id.password,
+                        }).then((res) => {
+                            if (res.data.statusCode === 200) {
+                                let roles_data = []
+                                res.data.data.roles.forEach((role) => {
+                                    roles_data.push(role?.role_name_en)
+                                });
+                                let payload = {
+                                    account_id: res.data.data.account_id,
+                                    email: res.data.data.email,
+                                    username: context.state.user_one_id.username,
+                                    password: context.state.user_one_id.password,
+                                    first_name_en: res.data.data.first_name_en,
+                                    first_name_th: res.data.data.first_name_th,
+                                    last_name_en: res.data.data.last_name_en,
+                                    last_name_th: res.data.data.last_name_th,
+                                    role: res.data.data.role,
+                                    roles: roles_data,
+                                    tel: res.data.data.tel,
+                                }
+                                VueCookie.set("token", res.data.data.token, 1)
+                                localStorage.setItem("userDetail", JSON.stringify(payload))
+                                context.commit("SetIsLoading", false)
+                                router.replace({ name: "UserKingdom" });
+                                context.commit("ResetUserOneID")
+                            }
+                        })
 
                     })
                 }
@@ -295,28 +297,29 @@ const RegisterModules = {
                 if (response?.data.statusCode === 400) {
                     switch (response.data.message) {
                         case "The mobile no must be at least 10 characters.":
-                            text = 'หมายเลขมือถือต้องมีอย่างน้อย 10 ตัวอักษร'
+                            text = VueI18n.t("mobile number must have at least 10 characters")
                             break;
                         case "username duplicate":
-                            text = 'username นี้ถูกใช้แล้ว'
+                            text = VueI18n.t("username already exists")
                             break;
                         case "The password format is invalid.":
-                            text = 'รูปแบบรหัสผ่านไม่ถูกต้อง'
+                            text = VueI18n.t("the password format is incorrect")
                             break;
                         case "The first name eng format is invalid.":
-                            text = 'รูปแบบชื่อภาษาอังกฤษไม่ถูกต้อง'
+                            text = VueI18n.t("the English name format is invalid")
                             break;
                         case "The last name th format is invalid.":
-                            text = 'รูปแบบนามสกุลภาษาไทยไม่ถูกต้อง'
+                            text = VueI18n.t("invalid last name thai format")
                             break;
                         case "The last name en format is invalid.":
-                            text = 'รูปแบบนามสกุลภาษาอังกฤษไม่ถูกต้อง'
+                            text = VueI18n.t("invalid last name eng format")
+
                             break;
                     }
                     setTimeout(() => {
                         Swal.fire({
                             icon: 'error',
-                            title: `กรอกข้อมูลให้ถูกต้อง`,
+                            title: `${VueI18n.t("please fill out the information correctly")}`,
                             text: text ? text : response.data.message
                         })
                     }, 200)
@@ -324,7 +327,7 @@ const RegisterModules = {
                 } else {
                     Swal.fire({
                         icon: 'error',
-                        title: `เกิดข้อผิดพลาด`,
+                        title: VueI18n.t("something went wrong"),
                     })
                 }
             }
@@ -364,12 +367,12 @@ const RegisterModules = {
                 if (response.message === "Request failed with status code 401") {
                     Swal.fire({
                         icon: 'error',
-                        title: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง",
+                        title: VueI18n.t("the username or password is incorrect"),
                     })
                 } else {
                     Swal.fire({
                         icon: 'error',
-                        title: "เกิดข้อผิดพลาด",
+                        title: VueI18n.t("something went wrong"),
                     })
                 }
             }

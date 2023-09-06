@@ -24,10 +24,10 @@
                     </v-btn>
                   </template>
                   <v-card>
-                    <v-list-item @click="$i18n.locale = 'en'">
+                    <v-list-item @click="setLocale('en')">
                       {{ $t("english") }}
                     </v-list-item>
-                    <v-list-item @click="$i18n.locale = 'th'">
+                    <v-list-item @click="setLocale('th')">
                       {{ $t("thai") }}
                     </v-list-item>
                   </v-card>
@@ -91,7 +91,7 @@
                   : false)
               "
             >
-              <v-list-item-title>{{ $t(list.title)}}</v-list-item-title>
+              <v-list-item-title>{{ $t(list.title) }}</v-list-item-title>
             </v-list-item>
             <v-list-group
               v-else-if="
@@ -177,7 +177,11 @@ export default {
         to: "",
         roles: ["R_1"],
         child: [
-          { title: "manage reservations", to: "CourseReserveList", roles: ["R_1"] },
+          {
+            title: "manage reservations",
+            to: "CourseReserveList",
+            roles: ["R_1"],
+          },
           { title: "manage all courses", to: "CourseList", roles: ["R_1"] },
           { title: "create a course", to: "CourseCreate", roles: ["R_1"] },
         ],
@@ -198,7 +202,12 @@ export default {
         roles: ["R_1"],
         child: [{ title: "manage user", to: "UserList", roles: ["R_1"] }],
       },
-      { title: "approval of leave", to: "LeaveList", child: [], roles: ["R_1"] },
+      {
+        title: "approval of leave",
+        to: "LeaveList",
+        child: [],
+        roles: ["R_1"],
+      },
       {
         title: "banner management",
         to: "Banner",
@@ -212,22 +221,22 @@ export default {
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     //  Function called when the Google Translate Element script is loaded
-    //  window.googleTranslateElementInit = () => {
-    //   new window.google.translate.TranslateElement(
-    //     {
-    //       pageLanguage: this.$i18n.locale, // Change to the default language of your website
-    //       includedLanguages: 'en,th',
-    //     },
-    //     'google_translate_element'
-    //   );
-    // };
+    window.googleTranslateElementInit = () => {
+      new window.google.translate.TranslateElement(
+        {
+          pageLanguage: this.$i18n.locale, // Change to the default language of your website
+          includedLanguages: "en,th",
+        },
+        "google_translate_element"
+      );
+    };
 
-    // // Load the Google Translate Element script dynamically
-    // const script = document.createElement('script');
-    // script.type = 'text/javascript';
-    // script.src =
-    //   '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-    // document.head.appendChild(script);
+    // Load the Google Translate Element script dynamically
+    const script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src =
+      "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+    document.head.appendChild(script);
   },
   mounted() {
     this.menu_drawer_list.forEach((list) => {
@@ -267,6 +276,10 @@ export default {
           }
         }
       }
+    },
+    setLocale(locale) {
+      this.$i18n.locale = locale;
+      localStorage.setItem("lang", locale);
     },
   },
 };

@@ -2,6 +2,7 @@ import axios from "axios";
 import moment from "moment";
 import VueCookie from "vue-cookie";
 import Swal from "sweetalert2";
+import VueI18n from "../i18n";
 const reserveCourseModules = {
   namespaced: true,
   state: {
@@ -56,72 +57,72 @@ const reserveCourseModules = {
         if (data.statusCode == 200) {
           await Swal.fire({
             icon: "success",
-            title: "สำเร็จ",
-            text: "( แก้ไขเรียบร้อยแล้ว )",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("already edited"),
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
-            showConfirmButton : false,
+            showConfirmButton: false,
           })
           context.dispatch("GetReserveList")
         }
       } catch (error) {
         // console.log(error)
-        if(error.response?.data.statusCode == 400){
-          if(error.response.data.message == "Cannot register , fail at course monitor , course-coach or seats are full"){
-            Swal.fire({
-                    icon: "error",
-                    title: "ไม่สามารถลงทะเบียนได้",
-                    text: "ไม่สามารถลงทะเบียนได้ เนื่องจากที่นั่งไม่เพียงพอ หรือ โค้ชมีสอนในแพ็กเกจอื่น",
-                    showCancelButton: false,
-                    confirmButtonText: "ตกลง",
-                })
-            }else if(error.response.data.message === "duplicate pending order"){
-                Swal.fire({
-                    icon: "error",
-                    title: "ไม่สามารถลงทะเบียนได้",
-                    text: "ไม่สามารถลลงทะเบียนได้ เนื่องจากหลักสูตรนี้อยู่ในประวัติการลงทะเบียนของคุณแล้ว",
-                    showCancelButton: false,
-                    confirmButtonText: "ตกลง",
-                })
-            }else if(error.response.data.message === "User is duplicate in this course. Cannot enroll again"){
-                Swal.fire({
-                    icon: "error",
-                    title: "ผู้ใช้ซ้ำกันในหลักสูตรนี้ ไม่สามารถลงทะเบียนได้",
-                    showCancelButton: false,
-                    confirmButtonText: "ตกลง",
-                })
-            }else if(error.response.data.message === "The price is not correct!!"){
-                Swal.fire({
-                    icon: "error",
-                    title: "ราคาไม่ถูกต้อง ไม่สามารถดำเนินการชำระได้",
-                    showCancelButton: false,
-                    confirmButtonText: "ตกลง",
-                })
-            }else if(error.response.data.message === "Cannot cancel reserve because the status is not pending"){
-              Swal.fire({
-                  icon: "error",
-                  title: "ไม่สามารถยกเลิกการจองได้",
-                  text: "ไม่สามารถยกเลิกการจองได้ เนื่องจากหลักสูตรนี้ไม่ได้อยู่ในสถานะรอดำเนินการ",
-                  showCancelButton: false,
-                  confirmButtonText: "ตกลง",
-              })
-          }else{
-                Swal.fire({
-                    icon: "error",
-                    title: "เกิดข้อผิดพลาด",
-                    showCancelButton: false,
-                    confirmButtonText: "ตกลง",
-                })
-            }
-          }else{
+        if (error.response?.data.statusCode == 400) {
+          if (error.response.data.message == "Cannot register , fail at course monitor , course-coach or seats are full") {
             Swal.fire({
               icon: "error",
-              text: "เกิดข้อผิดพลาด",
+              title: VueI18n.t("unable to register"),
+              text: VueI18n.t("unable to register Due to insufficient seats or the coach teaching in another package"),
               showCancelButton: false,
-              confirmButtonText: "ตกลง",
+              confirmButtonText: VueI18n.t("agree"),
+            })
+          } else if (error.response.data.message === "duplicate pending order") {
+            Swal.fire({
+              icon: "error",
+              title: VueI18n.t("unable to register"),
+              text: VueI18n.t("unable to register Because the course is already in your registration history"),
+              showCancelButton: false,
+              confirmButtonText: VueI18n.t("agree"),
+            })
+          } else if (error.response.data.message === "User is duplicate in this course. Cannot enroll again") {
+            Swal.fire({
+              icon: "error",
+              title: VueI18n.t("duplicate user in this course Unable to register"),
+              showCancelButton: false,
+              confirmButtonText: VueI18n.t("agree"),
+            })
+          } else if (error.response.data.message === "The price is not correct!!") {
+            Swal.fire({
+              icon: "error",
+              title: VueI18n.t("the price is not correct payment cannot be processed"),
+              showCancelButton: false,
+              confirmButtonText: VueI18n.t("agree"),
+            })
+          } else if (error.response.data.message === "Cannot cancel reserve because the status is not pending") {
+            Swal.fire({
+              icon: "error",
+              title: VueI18n.t("reservation cannot be cancelled"),
+              text: VueI18n.t("this course is not in pending status"),
+              showCancelButton: false,
+              confirmButtonText: VueI18n.t("agree"),
+            })
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: VueI18n.t("something went wrong"),
+              showCancelButton: false,
+              confirmButtonText: VueI18n.t("agree"),
             })
           }
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("something went wrong"),
+            showCancelButton: false,
+            confirmButtonText: VueI18n.t("agree"),
+          })
+        }
       }
     }
   },
