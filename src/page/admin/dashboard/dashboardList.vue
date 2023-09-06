@@ -1046,12 +1046,12 @@ export default {
     )[0];
   },
   beforeMount() {},
-  mounted() {
+  async mounted() {
     this.selected_mounth = this.mapMonth;
     this.donut_mounth = this.mapMonth;
-    this.GetEmptyCourse();
-    this.GetCourseType();
-    this.GetPotential();
+    await this.GetEmptyCourse();
+    // await this.GetCourseType();
+    // await this.GetPotential();
   },
   methods: {
     ...mapActions({

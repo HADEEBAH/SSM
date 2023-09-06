@@ -18,7 +18,7 @@
       </v-col>
     </v-row>
     <!-- 4 TAB -->
-    <v-row dense class="mb-10" v-if="get_potential.countStudents">
+    <v-row dense class="mb-10" v-if="get_potential_student_list.countStudents">
       <!-- TAB 1  ผู้เรียนทั้งหมด-->
       <v-col cols="12" sm="6" md="6" lg="3" @click="tab = 'allLearners'">
         <img-card
@@ -35,7 +35,7 @@
           <template v-slot:detail>
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
-                {{ get_potential.countStudents }}
+                {{ get_potential_student_list.countStudents }}
               </v-col>
               <v-col class="text-sm">{{ $t("person") }}</v-col>
             </v-row>
@@ -58,7 +58,7 @@
           <template v-slot:detail>
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
-                {{ get_potential.currentStudent.countStudentCurrent }}
+                {{ get_potential_student_list.currentStudent.countStudentCurrent }}
               </v-col>
               <v-col class="text-sm">{{ $t("person") }}</v-col>
             </v-row>
@@ -91,7 +91,7 @@
           <template v-slot:detail>
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
-                {{ get_potential.potencialsStudent.countStudentPotencials }}
+                {{ get_potential_student_list.potencialsStudent.countStudentPotencials }}
               </v-col>
               <v-col class="text-sm">{{ $t("person") }}</v-col>
             </v-row>
@@ -115,7 +115,7 @@
           <template v-slot:detail>
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
-                {{ get_potential.countReserve.studentList.length }}
+                {{ get_potential_student_list.countReserve.studentList.length }}
               </v-col>
               <v-col class="text-sm">{{ $t("person") }}</v-col>
             </v-row>
@@ -125,7 +125,7 @@
     </v-row>
 
     <!-- Detail Tab 1 -->
-    <div v-for="(items, index) in get_potential.studentAll" :key="index">
+    <div v-for="(items, index) in get_potential_student_list.studentAll" :key="index">
       <v-data-table
         :headers="data_tab_one"
         @page-count="pageCount = $event"
@@ -168,7 +168,7 @@
         :headers="data_tab_two"
         @page-count="pageCount = $event"
         class="elevation-1 header-table"
-        :items="get_potential.currentStudent.studentList"
+        :items="get_potential_student_list.currentStudent.studentList"
         :search="search"
       >
         <template v-slot:[`item.course`]="{ item }">
@@ -203,7 +203,7 @@
         :headers="data_tab_three"
         @page-count="pageCount = $event"
         class="elevation-1 header-table"
-        :items="get_potential.potencialsStudent.potencials"
+        :items="get_potential_student_list.potencialsStudent.potencials"
         :search="search"
       >
         <template v-slot:[`item.courseDetail`]="{ item }">
@@ -241,7 +241,7 @@
         :headers="data_tab_four"
         @page-count="pageCount = $event"
         class="elevation-1 header-table"
-        :items="get_potential.countReserve.studentList"
+        :items="get_potential_student_list.countReserve.studentList"
         :search="search"
       >
         <template v-slot:[`item.courseDetail`]="{ item }">
@@ -614,11 +614,11 @@ export default {
     potential_user_course: [],
   }),
   mounted() {
-    this.GetPotential();
+    this.GetPotentialStudentList();
   },
   methods: {
     ...mapActions({
-      GetPotential: "DashboardModules/GetPotential",
+      GetPotentialStudentList: "DashboardModules/GetPotentialStudentList",
     }),
 
     dialogDetailEnd(items) {
@@ -644,7 +644,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      get_potential: "DashboardModules/getPotential",
+      get_potential_student_list: "DashboardModules/getPotentialStudentList",
       dashboard_loading: "DashboardModules/getloading",
     }),
   },
