@@ -492,9 +492,9 @@
               <v-row>
                 <v-col>
                   <v-tabs v-model="student_tab" color="#ff6b81" class="mb-3">
-                    <v-tab value="students in course">นักเรียนในคอร์ส</v-tab>
-                    <v-tab value="student booking">นักเรียนจองคิว</v-tab>
-                    <v-tab value="student potential">นักเรียนที่จบ</v-tab>
+                    <v-tab value="students in course">{{$t("students in the course")}}</v-tab>
+                    <v-tab value="student booking">{{$t("students reserve")}}</v-tab>
+                    <v-tab value="student potential">{{$t("students complete the course")}}</v-tab>
                   </v-tabs>
                 </v-col>
                 <v-col cols="auto">
@@ -506,7 +506,7 @@
                     :dark="coach_list.some((v) => v.checked === true)"
                     @click="exportStudents()"
                   >
-                    export
+                    {{ $t('export') }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -525,7 +525,7 @@
                           </v-btn>
                         </v-col>
                         <v-col class="text-[#ff6b81] font-bold"
-                          >รายชื่อโค้ช</v-col
+                          >{{$t("coach list")}}</v-col
                         >
                         <v-col cols="auto">
                           <v-text-field
@@ -534,7 +534,7 @@
                             dense
                             outlined
                             hide-details
-                            placeholder="ค้นหาชื่อนักเรียน, ชื่อโค้ช"
+                            :placeholder="$t('search for student name, coach name')"
                             prepend-inner-icon="mdi-magnify"
                             @input="searchStudentList(search_student_list)"
                           ></v-text-field>
@@ -564,7 +564,7 @@
                         <v-card-text>
                           <v-row>
                             <v-col class="font-bold" align="center">
-                              ไม่พบข้อมูล
+                              {{ $t('no data found')}}
                             </v-col>
                           </v-row>
                         </v-card-text>
@@ -606,7 +606,7 @@
                                 @click="selectCoach(coach, coach_index)"
                                 class="font-bold"
                               >
-                                โค้ช:
+                                {{$t("coach")}}:
                                 {{ `${coach.firstNameTh} ${coach.lastNameTh}` }}
                               </v-col>
                               <v-col
@@ -640,7 +640,7 @@
                                   item-text="label"
                                   item-value="value"
                                   :items="dow_option"
-                                  placeholder="วัน"
+                                  :placeholder="$t('day')"
                                   @change="filterDateByCoach(coach_index)"
                                 ></v-autocomplete>
                               </v-col>
@@ -659,7 +659,7 @@
                                       dense
                                       outlined
                                       v-model="filter.date"
-                                      placeholder="วันที่"
+                                      :placeholder="$t('date')"
                                       persistent-hint
                                       append-icon="mdi-calendar"
                                       v-bind="attrs"
@@ -682,17 +682,17 @@
                                   outlined
                                   item-value="timeId"
                                   dense
-                                  placeholder="เวลา"
+                                  :placeholder="$t('times')"
                                   cache-items
                                   @change="filterDateByCoach(coach_index)"
                                 >
                                   <template v-slot:selection="{ item }">
-                                    {{ `${item.start} - ${item.end}น.` }}
+                                    {{ `${item.start} - ${item.end} ${$t("o'clock")}` }}
                                   </template>
                                   <template v-slot:item="{ item }">
                                     <v-list-item-content>
                                       <v-list-item-title>
-                                        {{ `${item.start} - ${item.end}น.` }}
+                                        {{ `${item.start} - ${item.end} ${$t("o'clock")}` }}
                                       </v-list-item-title>
                                     </v-list-item-content>
                                   </template>
@@ -707,7 +707,7 @@
                                   item-text="packageName"
                                   item-value="packageId"
                                   :items="package_option"
-                                  placeholder="แพ็กเกจ"
+                                  :placeholder="$t('package')"
                                   @change="filterDateByCoach(coach_index)"
                                 ></v-autocomplete>
                               </v-col>
@@ -733,14 +733,14 @@
                                 <div style="width: 44px"></div>
                               </v-col>
                               <v-col cols="3" align="center"
-                                >วันและวันที่</v-col
+                                >{{ $t("day and date") }}</v-col
                               >
-                              <v-col cols="3" align="center">เวลาเรียน</v-col>
+                              <v-col cols="3" align="center">{{$t("class time")}}</v-col>
                               <v-col
                                 cols="3"
                                 align="center"
                                 v-if="course_data.course_type_id === 'CT_1'"
-                                >แพ็กเกจ</v-col
+                                >{{$t("package")}}</v-col
                               >
                               <v-col align="right"></v-col>
                             </v-row>
@@ -756,7 +756,7 @@
                                 class="text-lg font-bold"
                                 align="center"
                               >
-                                ไม่พบข้อมูลนักเรียน
+                                {{ $t("student information not found") }}
                               </v-card-text>
                             </v-card>
                             <div
@@ -872,7 +872,7 @@
                                                 class="font-bold"
                                                 align="center"
                                               >
-                                                ไม่พบข้อมูลนักเรียน
+                                                {{$t("student information not found")}}
                                               </v-col>
                                             </v-row>
                                           </v-card-text>
@@ -887,7 +887,9 @@
                                             <v-divider></v-divider>
                                           </v-col>
                                           <v-col cols="auto"
-                                            >ข้อมูลนักเรียน</v-col
+                                            >
+                                            {{ $t("student information") }}
+                                            </v-col
                                           >
                                           <v-col>
                                             <v-divider></v-divider>
@@ -902,10 +904,10 @@
                                               class="text-md font-bold"
                                             >
                                               <v-col cols="1" align="center"
-                                                >ลำดับ</v-col
+                                                >{{$t("no.")}}</v-col
                                               >
                                               <v-col cols align="center">
-                                                ชื่อ - นามสกุล
+                                                {{$t("first name")}} - {{$t("last name")}}
                                               </v-col>
                                               <v-col
                                                 cols="2"
@@ -915,7 +917,7 @@
                                                   'CT_1'
                                                 "
                                               >
-                                                ระยะเวลา
+                                                {{ $t("period") }}
                                               </v-col>
                                               <v-col
                                                 cols="2"
@@ -925,14 +927,14 @@
                                                   'CT_1'
                                                 "
                                               >
-                                                จำนวนครั้ง
+                                                {{ $t("number of times") }}
                                               </v-col>
                                               <v-col
                                                 cols="4"
                                                 align="center"
                                                 v-else
                                               >
-                                                วันเริ่ม - วันสิ้นสุด
+                                                {{$t("start date - end date")}}
                                               </v-col>
                                               <v-col cols="4"></v-col>
                                             </v-row>
@@ -970,7 +972,7 @@
                                                 </v-col>
                                                 <v-col cols align="center"
                                                   >{{
-                                                    `${student.firstNameTh} ${student.lastNameTh}`
+                                                    $i18n.locale == 'th' ? `${student.firstNameTh} ${student.lastNameTh}` : `${student.firstNameEn} ${student.lastNameEn}`
                                                   }}
                                                 </v-col>
                                                 <v-col
@@ -1019,7 +1021,7 @@
                                                         <v-icon
                                                           >mdi-check-decagram-outline
                                                         </v-icon>
-                                                        ดูประเมิน
+                                                        {{$t("view evaluation")}}
                                                       </v-btn>
                                                     </v-col>
                                                     <v-col class="pa-0">
@@ -1032,7 +1034,7 @@
                                                         <v-icon>
                                                           mdi-clipboard-text-search-outline
                                                         </v-icon>
-                                                        ดูโปรไฟล์
+                                                        {{$t('view profile')}}
                                                       </v-btn>
                                                     </v-col>
                                                   </v-row>
@@ -1061,7 +1063,7 @@
                                                 </v-col>
                                                 <v-col cols align="center"
                                                   >{{
-                                                    `${student.firstNameTh} ${student.lastNameTh}`
+                                                    $i18n.locale == 'th' ? `${student.firstNameTh} ${student.lastNameTh}` : `${student.firstNameEn} ${student.lastNameEn}`
                                                   }}
                                                 </v-col>
 
@@ -1106,7 +1108,7 @@
                                                         <v-icon
                                                           >mdi-check-decagram-outline
                                                         </v-icon>
-                                                        ดูประเมิน
+                                                        {{$t("view evaluation")}}
                                                       </v-btn>
                                                     </v-col>
                                                     <v-col class="pa-0">
@@ -1119,7 +1121,7 @@
                                                         <v-icon>
                                                           mdi-clipboard-text-search-outline
                                                         </v-icon>
-                                                        ดูโปรไฟล์
+                                                        {{$t('view profile')}}
                                                       </v-btn>
                                                     </v-col>
                                                   </v-row>
@@ -1148,11 +1150,11 @@
                   >
                     <template v-slot:no-data>
                       <v-row dense>
-                        <v-col align="center"> ไม่พบข้อมูล </v-col>
+                        <v-col align="center"> {{ $t("no data found") }} </v-col>
                       </v-row>
                     </template>
                     <template v-slot:[`item.fullname`]="{ item }">
-                      {{ `${item.firstNameTh} ${item.lastNameTh}` }}
+                      {{ $i18n.locale == 'th' ? `${item.firstNameTh} ${item.lastNameTh}` :  `${item.firstNameEn} ${item.lastNameEn}` }}
                     </template>
                     <template v-slot:[`item.course_name`]="{ item }">
                       {{ `${item.courseNameTh}(${item.courseNameEn})` }}
@@ -1167,7 +1169,7 @@
                       }}
                     </template>
                     <template v-slot:[`item.coach`]="{ item }">
-                      {{ `${item.coachFirstNameTh} ${item.coachLastNameTh}` }}
+                      {{ $i18n.locale == 'th' ? `${item.coachFirstNameTh} ${item.coachLastNameTh}` :  `${item.coachFirstNameEn} ${item.coachLastNameEn}` }}
                     </template>
                     <template v-slot:[`item.createdDate`]="{ item }">
                       {{ genDate(item.createdDate) }}
