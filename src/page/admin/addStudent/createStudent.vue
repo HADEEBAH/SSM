@@ -796,7 +796,7 @@ export default {
       coach: [(val) => (val.courseCoachId ? true : false) || "โปรดเลือกโค้ช"],
       start_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันเริ่ม"],
       price: [(val) => (val || "") > 0 || "โปรดเลือกระบุราคา"],
-      remark: [(val) => val.length < 256 || "หมายเหตุความยาวเกินกว่าที่กำหมด"],
+      remark: [(val) => val.length < 256 || "หมายเหตุความยาวเกินกว่าที่กำหนด"],
       payment_type: [
         (val) => (val ? true : false || "โปรดเลือกช่องทางการชำระเงิน"),
       ],
