@@ -155,7 +155,7 @@
             <!-- COACH AND TIME -->
             <v-tab-item value="time and coach">
               <v-card flat class="mb-3">
-                <headerCard title="รายละเอียดเวลาและโค้ช">
+                <headerCard :title="$t('details of time and coach')">
                   <template v-slot:actions>
                     <v-btn
                       outlined
@@ -226,7 +226,7 @@
                     outlined
                     color="#ff6b81"
                     @click="addPackage(course_data.packages)"
-                    ><v-icon>mdi-plus</v-icon>เพิ่มแพ็กเกจ</v-btn
+                    ><v-icon>mdi-plus</v-icon> {{ $t("add package") }}</v-btn
                   >
                 </v-col>
               </v-row>
@@ -238,7 +238,8 @@
                     class="white--text btn-size-lg"
                     depressed
                     @click="course_edit = true"
-                    >แก้ไข
+                    >
+                    {{ $t("edit") }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -249,7 +250,9 @@
                     class="btn-size-lg"
                     outlined
                     @click="cancelEdit()"
-                    >ยกเลิก</v-btn
+                    >
+                    {{  $t("center") }}
+                    </v-btn
                   >
                 </v-col>
                 <v-col cols="auto">
@@ -258,7 +261,8 @@
                     class="white--text btn-size-lg"
                     depressed
                     @click="CourseUpdatePackage()"
-                    >บันทึก
+                    >
+                    {{$t("save") }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -266,7 +270,7 @@
             <!-- ARKWORk -->
             <v-tab-item value="arkwork">
               <v-card class="mx-3 mb-3" flat>
-                <headerCard title="สิทธิ์พิเศษ"></headerCard>
+                <headerCard :title="$t('special rights')"></headerCard>
                 <v-card-text
                   class="border-dashed border-2 border-blue-600 rounded-lg"
                 >

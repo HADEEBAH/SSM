@@ -6,6 +6,7 @@
     "add to cart" : "Add to cart",
     "add a comment" : "Add a comment",
     "add parents": "Add parents",
+    "add package": "Add package",
     "add a picture":"Add a picture",
     "add student": "Add student",
     "additional comments" : "Additional comments",
@@ -265,6 +266,7 @@
     "no development/homework":"No development/homework",
     "number of students" : "Number of students",
     "number of times" : "Number of times",
+    "number of times/person" : "Number of times/person",
 
     "o'clock" : "O'clock",
     "optional": "optional",

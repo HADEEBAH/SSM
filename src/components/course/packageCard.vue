@@ -26,7 +26,7 @@
           <v-card-text>
             <v-row dense>
               <v-col cols="12" sm="6">
-                <label-custom required text="แพ็กเกจ"></label-custom>
+                <label-custom required :text="$t('package')"></label-custom>
                 <v-autocomplete
                   dense
                   :disabled="disable"
@@ -43,7 +43,7 @@
                 >
                   <template v-slot:no-data>
                     <v-list-item>
-                      <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
+                      <v-list-item-title> {{ $t("no data found") }}</v-list-item-title>
                     </v-list-item>
                   </template>
                   <template v-slot:item="{ item }">
@@ -68,7 +68,7 @@
                 </v-autocomplete>
               </v-col>
               <v-col cols="12" sm="6">
-                <label-custom required text="จำนวนนักเรียน (คน)"></label-custom>
+                <label-custom required :text="`${$t('number of students')} (${$t('person')})`"></label-custom>
                 <v-text-field
                   suffix="คน"
                   type="number"
@@ -96,7 +96,7 @@
           <v-card-text>
             <v-row dense class="d-flex align-center">
               <v-col cols="12" sm="4">
-                <label-custom required text="ระยะเวลา"></label-custom>
+                <label-custom required :text="$t('period')"></label-custom>
                 <v-autocomplete
                   dense
                   :disabled="disable"
@@ -113,7 +113,7 @@
                 >
                   <template v-slot:no-data>
                     <v-list-item>
-                      <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
+                      <v-list-item-title> {{$t("no data found")}}</v-list-item-title>
                     </v-list-item>
                   </template>
                   <template v-slot:item="{ item }">
@@ -138,7 +138,7 @@
                 </v-autocomplete>
               </v-col>
               <v-col cols="12" sm="4">
-                <label-custom required text="จำนวนครั้ง/คน"></label-custom>
+                <label-custom required :text="$t('number of times/person')"></label-custom>
                 <v-text-field
                   class="input-text-right"
                   dense

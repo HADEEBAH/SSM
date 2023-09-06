@@ -5,6 +5,7 @@
     "add to cart" : "เพิ่มไปยังรถเข็น",
     "add a comment" : "เพิ่มความคิดเห็น",
     "add parents": "เพิ่มผู้ปกครอง",
+    "add package": "เพิ่มแพ็กเกจ",
     "add a picture":"เพิ่มรูป",
     "add student": "เพิ่มนักเรียน",
     "additional comments" : "ความคิดเห็นเพิ่มเติม",
@@ -264,6 +265,7 @@
     "notifications" : "การแจ้งเตือน",
     "number of students" : "จำนวนนักเรียน",
     "number of times" : "จำนวนครั้งที่เรียน",
+    "number of times/person" : "จำนวนครั้ง/คน",
     
     "o'clock" : "น.",
     "open-close register date" : "วันเปิด-ปิดรับสมัคร",
