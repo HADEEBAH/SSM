@@ -906,7 +906,7 @@
                 depressed
                 color="#ff6b81"
                 dark
-                @click="saveSummary()"
+                @click="saveSummary(student_check_in)"
                 :loading="is_loading"
               >
                 {{ $t("save") }}
@@ -1676,7 +1676,13 @@ export default {
         weekday: "long",
       });
     },
-    async saveSummary() {
+    async saveSummary(items) {
+      let student_id = [];
+
+      await items.map((val) => {
+        student_id.push({ studentId: val.studentId });
+      });
+
       this.$refs.summary_form.validate();
       if (this.summary_form) {
         Swal.fire({
@@ -1688,14 +1694,25 @@ export default {
           cancelButtonText: this.$t("cancel"),
         }).then(async (result) => {
           if (result.isConfirmed) {
-            (this.is_loading = true),
-              await this.UploadFileSummary({
-                checkInCoach: this.coach_check_in,
-                files: this.coach_check_in.summary_files,
-                course_id: this.$route.params.courseId,
-                date: this.$route.params.date,
-              });
+            this.is_loading = true
+            await this.UploadFileSummary({
+              checkInCoach: this.coach_check_in,
+              files: this.coach_check_in.summary_files,
+              course_id: this.$route.params.courseId,
+              date: this.$route.params.date,
+            });
             this.is_loading = false;
+
+            if (student_id.length > 0) {
+              let payload = {
+                notificationName: "แจ้งเตือนการบันทึกสรุปการสอน",
+                notificationDescription: `โค้ชบันทึกสรุปของคอร์ส ${this.course_data.course_name_th} เรียบร้อยแล้ว`,
+                accountId: student_id,
+                path: null,
+              };
+              this.sendNotification(payload);
+
+            }
           }
         });
       }
@@ -1808,7 +1825,6 @@ export default {
               let graduate_payload = {
                 notificationName: "แจ้งเตือนการเรียน",
                 notificationDescription: `คอร์ส${this.course_data.course_name_th} ของท่านใกล้จะครบแพ็คเกจแล้วสามารถเลือกซื้อคอร์สเพิ่มเติมได้ค่ะ`,
-                // notificationDescription: `กำลังจะสำเร็จการศึกษา คอร์ส${this.course_data.course_name_th}`,
                 accountId: graduate_student_id,
                 path: null,
               };
