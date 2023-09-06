@@ -577,37 +577,37 @@ export default {
       return [(val) => (val || "").length > 0 || this.$t("please select a start date")]
     },
     period(){
-      return [(val) => (val || "").length > 0 || "โปรดเลือกช่วงเวลา"]
+      return [(val) => (val || "").length > 0 ||  this.$t("please select a time period")]
     },
     type_leave(){
-      return [(val) => (val || "").length > 0 || "โปรดเลือกประเภทการลา"]
+      return [(val) => (val || "").length > 0 || this.$t("please select leave type")]
     },
     type() {
-      return [(val) => (val || "").length > 0 || "โปรดเลือกประเภท"]
+      return [(val) => (val || "").length > 0 || this.$t("please select type")]
     },
     end_date(){
-      return [(val) => (val || "").length > 0 || "โปรดเลือกวันสิ้นสุด"]
+      return [(val) => (val || "").length > 0 ||  this.$t("please select an end date.")]
     },
     course(){
-      return [(val) => (val || "").length > 0 || "โปรดเลือกคอร์ส"]
+      return [(val) => (val || "").length > 0 || this.$t("please select a course")]
     },
     coach(){
-      return [(val) => (val || "").length > 0 || "โปรดเลือกโค้ช"] 
+      return [(val) => (val || "").length > 0 || this.$t("please select a coach")] 
     },
     sub_coach(){
-      return [(val) => (val || "").length > 0 || "โปรดเลือกผู้สอนแทน"]
+      return [(val) => (val || "").length > 0 || this.$t("please select a substitute instructor")]
     },
     compensation_date(){
-      return [(val) => (val || "").length > 0 || "โปรดเลือกวันที่"]
+      return [(val) => (val || "").length > 0 ||  this.$t("please select a date")]
     },
     compensation_start_time(){ 
       return [
-        (val) => (val || "").length > 0 || "โปรดเลือกเวลาเริ่ม",
+        (val) => (val || "").length > 0 || this.$t("please select a start time"),
       ]
     },
     compensation_end_time(){
       return [
-        (val) => (val || "").length > 0 || "โปรดเลือกเวลาสิ้นสุด",
+        (val) => (val || "").length > 0 || this.$t("please select an end time"),
       ]
     },
     validateCoachLeave() {
@@ -632,29 +632,6 @@ export default {
         this.$i18n.locale == 'th' ? "th-TH":"en-US",
         { year: "numeric", month: "long", day: "numeric" }
       );
-    },
-    setHolidaydates(item) {
-      const thaiMonths = [
-        "มกราคม",
-        "กุมภาพันธ์",
-        "มีนาคม",
-        "เมษายน",
-        "พฤษภาคม",
-        "มิถุนายน",
-        "กรกฎาคม",
-        "สิงหาคม",
-        "กันยายน",
-        "ตุลาคม",
-        "พฤศจิกายน",
-        "ธันวาคม",
-      ];
-      if (item !== "") {
-        const newDate = new Date(item).toLocaleDateString("th-TH");
-        const date = newDate.split("/")[0];
-        const month = newDate.split("/")[1];
-        const year = newDate.split("/")[2];
-        this.test_date = `${date} ${thaiMonths[month - 1]} ${year}`;
-      }
     },
     getDateRangeLength() {
       let startDate = new Date(this.coach_leave_data.start_date);

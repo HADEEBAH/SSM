@@ -34,14 +34,13 @@
             ></v-img>
           </v-col>
           <v-col cols="12" class="flex align-center justify-center text-h5">
-            อัปโหลดภาพหน้าปกคอร์สเรียน
+            {{ $t('upload the cover image of the course')}}
           </v-col>
           <v-col
             cols="12"
             class="flex align-center justify-center text-caption"
           >
-            ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ
-            ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG )
+            ( {{$t("suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file")}} )
           </v-col>
           <v-col
             cols="12"
@@ -50,7 +49,7 @@
           </v-col>
           <v-col cols="12" class="flex align-center justify-center">
             <v-btn outlined color="blue" @click="openFileSelector"
-              >เลือกไฟล์</v-btn
+              >{{ $t("select file")}}</v-btn
             >
             <input
               ref="fileInput"
@@ -66,12 +65,12 @@
     </v-card>
     <!-- Detail -->
     <v-card flat>
-      <headerCard title="รายละเอียด"></headerCard>
+      <headerCard :title="$t('details')"></headerCard>
       <v-card-text class="py-0">
         <v-divider class="mb-3"></v-divider>
         <v-row dense>
           <v-col cols="12" sm="6">
-            <label-custom required text="ชื่อคอร์ส(ภาษาไทย)"></label-custom>
+            <label-custom required :text="$t('course name (thai)')"></label-custom>
             <v-text-field
               dense
               :disabled="disable"
@@ -82,11 +81,11 @@
               @change="ChangeCourseData(course_data)"
               @focus="$event.target.select()"
               v-model="course_data.course_name_th"
-              placeholder="ระบุชื่อคอร์ส(ภาษาไทย)"
+              :placeholder="$t('specify the course name (thai)')"
             ></v-text-field>
           </v-col>
           <v-col cols="12" sm="6">
-            <label-custom required text="ชื่อคอร์ส(ภาษาอังกฤษ)"></label-custom>
+            <label-custom required :text="$t('course name (english)')"></label-custom>
             <v-text-field
               dense
               :disabled="disable"
@@ -97,31 +96,31 @@
               :rules="rules.course_name_en"
               v-model="course_data.course_name_en"
               @change="ChangeCourseData(course_data)"
-              placeholder="ระบุชื่อคอร์ส(ภาษาอังกฤษ)"
+              :placeholder="$t('specify the course name (english)')"
             ></v-text-field>
           </v-col>
         </v-row>
         <v-row dense>
           <v-col cols="12" sm="6">
-            <label-custom required text="ชื่ออาณาจักร"></label-custom>
+            <label-custom required :text="$t('kingdom name')"></label-custom>
             <v-autocomplete
               dense
               :rules="rules.kingdom"
               v-model="course_data.category_id"
               color="#FF6B81"
               :items="categorys"
-              item-text="categoryNameTh"
+              :item-text="$i18n.locale == 'th' ? 'categoryNameTh' : 'categoryNameEng'"
               item-value="categoryId"
               item-color="pink"
               :disabled="disable"
               :outlined="!disable"
               :filled="disable"
               @change="ChangeCourseData(course_data)"
-              placeholder="ระบุชื่ออาณาจักร"
+              :placeholder="$t('specify kingdom name')"
             >
               <template v-slot:no-data>
                 <v-list-item>
-                  <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
+                  <v-list-item-title>{{ $t("no data found")}} </v-list-item-title>
                 </v-list-item>
               </template>
               <template v-slot:item="{ item }">
@@ -133,7 +132,7 @@
                           ? 'font-bold'
                           : ''
                       "
-                      >{{ item.categoryNameTh }}</span
+                      >{{ $i18n.locale == 'th' ? item.categoryNameTh : item.categoryNameEng }}</span
                     ></v-list-item-title
                   >
                 </v-list-item-content>
@@ -146,7 +145,7 @@
             </v-autocomplete>
           </v-col>
           <v-col cols="12" sm="6" v-if="course_data.course_type_id === 'CT_1'">
-            <label-custom required text="วันเปิดคอร์ส"></label-custom>
+            <label-custom required :text="$t('course opening date')"></label-custom>
             <v-menu
               :disabled="disable"
               v-model="course_data.menu_course_open_date"
@@ -164,7 +163,7 @@
                   v-model="course_data.course_open_date_str"
                   readonly
                   :rules="rules.course_open_date"
-                  placeholder="ระบุวันที่เปิดคอร์ส"
+                  :placeholder="$t('specify the course opening date')"
                   @change="ChangeCourseData(course_data)"
                   v-bind="attrs"
                   v-on="on"
@@ -188,7 +187,7 @@
           <v-col cols="12" sm="6">
             <label-custom
               required
-              text="จำนวนชั่วโมงการเรียน/ครั้ง"
+              :text="$t('class hours/time')"
             ></label-custom>
             <div>
               <v-text-field
@@ -196,7 +195,7 @@
                 :outlined="!disable"
                 :filled="disable"
                 dense
-                suffix="ชั่วโมง"
+                :suffix="$t('hour')"
                 :style="`width:${widthfull()}px;`"
                 style="position: absolute; display: block; z-index: 4"
                 @focus="SelectedStartDate($event, course_data.course_hours)"
@@ -221,7 +220,7 @@
             </div>
           </v-col>
           <v-col cols="12" sm="6">
-            <label-custom required text="สถานที่เรียน"></label-custom>
+            <label-custom required :text="$t('study place')"></label-custom>
             <v-text-field
               dense
               :disabled="disable"
@@ -230,13 +229,13 @@
               @focus="$event.target.select()"
               :rules="rules.location"
               v-model="course_data.location"
-              placeholder="ระบุสถานที่เรียน"
+              :placeholder="$t('specify the place of study')"
             ></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" v-if="course_data.course_type_id === 'CT_2'">
             <label-custom
               required
-              text="จำนวนนักเรียนที่รับได้/ครั้ง"
+              :text="$t('accepted students/time')"
             ></label-custom>
             <v-text-field
               dense
@@ -246,7 +245,7 @@
               type="number"
               @focus="$event.target.select()"
               v-model="course_data.student_recived"
-              placeholder="ระบุจำนวนนักเรียนที่รับได้"
+              :placeholder="$t('specify students who can accept')"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -254,10 +253,10 @@
         <template v-if="course_data.course_type_id === 'CT_1'">
           <v-row dense>
             <v-col cols="12">
-              <label-custom text="รายละเอียดคอร์ส"></label-custom>
+              <label-custom :text="$t('course details')"></label-custom>
               <vue-editor
                 :editorToolbar="customToolbar"
-                :placeholder="course_data.detail ? '' : 'กรอกรายละเอียด...'"
+                :placeholder="course_data.detail ? '' : $t('enter course details') + '...'"
                 :disabled="disable"
                 @text-change="ChangeCourseData(course_data)"
                 v-model="course_data.detail"
@@ -266,11 +265,11 @@
           </v-row>
           <v-row dense>
             <v-col cols="12">
-              <label-custom text="performance"></label-custom>
+              <label-custom :text="$t('performance')"></label-custom>
               <vue-editor
                 :editorToolbar="customToolbar"
                 :placeholder="
-                  course_data.music_performance ? '' : 'กรอกรายละเอียด...'
+                  course_data.music_performance ? '' :$t('enter details') + '...'
                 "
                 :disabled="disable"
                 @text-change="ChangeCourseData(course_data)"
@@ -280,11 +279,11 @@
           </v-row>
           <v-row dense>
             <v-col cols="12">
-              <label-custom text="certification"></label-custom>
+              <label-custom :text="$t('certification')"></label-custom>
               <vue-editor
                 :editorToolbar="customToolbar"
                 :placeholder="
-                  course_data.catification ? '' : 'กรอกรายละเอียด...'
+                  course_data.catification ? '' :$t('enter details') + '...'
                 "
                 :disabled="disable"
                 @text-change="ChangeCourseData(course_data)"
@@ -297,7 +296,7 @@
         <template v-if="course_data.course_type_id === 'CT_2'">
           <v-row dense>
             <v-col cols="12" sm="6">
-              <label-custom required text="โค้ช"></label-custom>
+              <label-custom required :text="$t('coach')"></label-custom>
               <v-autocomplete
                 dense
                 :rules="rules.coach"
@@ -305,17 +304,17 @@
                 color="#FF6B81"
                 :items="coachs"
                 item-value="accountId"
-                item-text="fullNameTh"
+                :item-text="$i18n.locale == 'th'? 'fullNameTh' : 'fullNameEh'"
                 item-color="pink"
                 :disabled="disable"
                 :outlined="!disable"
                 :filled="disable"
-                placeholder="ระบุโค้ช"
+                :placeholder="$t('specify coach')"
                 @change="ChangeCourseData(course_data)"
               >
                 <template v-slot:no-data>
                   <v-list-item>
-                    <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
+                    <v-list-item-title> {{ $t("no data found") }} </v-list-item-title>
                   </v-list-item>
                 </template>
                 <template v-slot:item="{ item }">
@@ -327,7 +326,7 @@
                             ? 'font-bold'
                             : ''
                         "
-                        >{{ `${item.firstNameTh} ${item.lastNameTh}` }}</span
+                        >{{ $i18n.locale == 'th' ? `${item.firstNameTh} ${item.lastNameTh}` : `${item.firstNameEng} ${item.lastNameEng}` }}</span
                       ></v-list-item-title
                     >
                   </v-list-item-content>
@@ -341,9 +340,9 @@
               </v-autocomplete>
             </v-col>
             <v-col cols="12" sm="6">
-              <label-custom required text="ราคา/คน"></label-custom>
+              <label-custom required :text="`${$t('price')}/${$t('person')}`"></label-custom>
               <v-text-field
-                placeholder="ระบุราคา"
+                :placeholder="$t('specify price')"
                 dense
                 :disabled="disable"
                 :outlined="!disable"
@@ -361,12 +360,12 @@
       </v-card-text>
       <!-- Course Type  :: short course -->
       <template v-if="course_data.course_type_id === 'CT_2'">
-        <headerCard title="วันและเวลา"></headerCard>
+        <headerCard :title="$t('date and time')"></headerCard>
         <v-card-text class="py-0">
           <v-divider class="mb-3"></v-divider>
           <v-row dense>
             <v-col cols="12" sm="6">
-              <label-custom required text="วันที่รับสมัคร"></label-custom>
+              <label-custom required :text="$t('admission date')"></label-custom>
               <v-row>
                 <v-col>
                   <v-menu
@@ -388,7 +387,7 @@
                         :rules="rules.start_date"
                         v-model="register_date_range_str.start_date"
                         readonly
-                        placeholder="เลือกวันที่เริ่ม"
+                        :placeholder="$t('choose start date')"
                         v-bind="attrs"
                         v-on="on"
                       >
@@ -444,7 +443,7 @@
                         :filled="disable"
                         @change="ChangeCourseData(course_data)"
                         :rules="rules.end_date"
-                        placeholder="เลือกวันที่สิ้นสุด"
+                        :placeholder="$t('choose end date')"
                         v-model="register_date_range_str.end_date"
                         readonly
                         v-bind="attrs"
@@ -479,7 +478,7 @@
               </v-row>
             </v-col>
             <v-col cols="12" sm="6">
-              <label-custom required text="วันสอน"></label-custom>
+              <label-custom required :text="$t('teaching day')"></label-custom>
               <v-autocomplete
                 dense
                 :disabled="disable"
@@ -494,7 +493,7 @@
                 :items="days_confix"
                 item-text="label"
                 item-value="value"
-                placeholder="โปรดเลือกวันสอน"
+                :placeholder="$t('please select a teaching date')"
                 v-model="course_data.coachs[0].teach_day_data[0].teach_day"
               >
                 <template v-slot:selection="{ attrs, item, selected }">
@@ -520,7 +519,7 @@
           </v-row>
           <v-row dense>
             <v-col cols="12" sm="6" class="pr-2">
-              <label-custom required text="วันที่เรียน"></label-custom>
+              <label-custom required :text="$t('class date')"></label-custom>
               <v-row>
                 <v-col>
                   <v-menu
