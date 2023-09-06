@@ -3,33 +3,35 @@ import VueCookie from "vue-cookie"
 var XLSX = require("xlsx");
 import moment from 'moment'
 import Swal from "sweetalert2";
+import VueI18n from "../i18n";
+
 const financeModules = {
   namespaced: true,
   state: {
-    finance_detail : {},
-    finance_filter : [],
-    finance_filter_loading : false,
+    finance_detail: {},
+    finance_filter: [],
+    finance_filter_loading: false,
   },
   mutations: {
-    SetFinanceLoading (state, payload){
+    SetFinanceLoading(state, payload) {
       state.finance_filter_loading = payload
     },
-    SetFinanceDetail(state, payload){
+    SetFinanceDetail(state, payload) {
       state.finance_detail = payload
     },
-    SetFinanceFilter(state, payload){
+    SetFinanceFilter(state, payload) {
       state.finance_filter = payload
     }
   },
   actions: {
-    async financeFilter(context,{filter}){
-      context.commit("SetFinanceLoading",true)
-      try{
+    async financeFilter(context, { filter }) {
+      context.commit("SetFinanceLoading", true)
+      try {
         let config = {
-          headers:{
-              "Access-Control-Allow-Origin" : "*",
-              "Content-type": "Application/json",
-              'Authorization' : `Bearer ${VueCookie.get("token")}`
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
         let endpoint = `${process.env.VUE_APP_URL}/api/v1/adminpayment/filter?`
@@ -46,76 +48,76 @@ const financeModules = {
         endpoint = endpoint + `paymentDateEnd=${filter.date_pay_end}&`
         endpoint = endpoint + `priceMin=${filter.service_charge_start}&`
         endpoint = endpoint + `priceMax=${filter.service_charge_end}`
-        let {data} = await axios.get( endpoint, config)
-        if(data.statusCode == 200){
+        let { data } = await axios.get(endpoint, config)
+        if (data.statusCode == 200) {
           let reports = []
           let sumPrice = 0
           let sumPending = 0
           let sumSuccess = 0
           let sumCancel = 0
           let sumfail = 0
-          if(data.data.length > 0){
+          if (data.data.length > 0) {
             data.data.forEach(order => {
               sumPrice = sumPrice + parseFloat(order.price)
-              if(order.payment_status === 'success'){
+              if (order.payment_status === 'success') {
                 sumSuccess = sumSuccess + parseFloat(order.price)
               }
-              if(order.payment_status === 'pending'){
+              if (order.payment_status === 'pending') {
                 sumPending = sumPending + parseFloat(order.price)
               }
-              if(order.payment_status === 'cancel'){
+              if (order.payment_status === 'cancel') {
                 sumCancel = sumCancel + parseFloat(order.price)
               }
-              if(order.payment_status === 'fail'){
+              if (order.payment_status === 'fail') {
                 sumfail = sumfail + parseFloat(order.price)
               }
               reports.push({
-                "วันที่ออกเอกสาร" : moment(order.created_date).format("DD/MM/YYYY HH:mm"),
-                "หมายเลขออเดอร์" : order.order_number,
-                "สถานะ" : order.payment_status,
-                "วันที่ชำระ" : order.paid_date,
-                "ประเภทการชำระเงิน" : order.payment_type? order.payment_type == 'cash' ? 'เงินสด' : 
-                ['Credit Card', 'Credit Card Installment'].some(v => v == order.payment_type) ? 'บัตเครดิต/เดบิต' : 'โอนเงินเข้าบัญชี' :'',
-                "ราคา" : parseFloat(order.price).toLocaleString(undefined,{minimumFractionDigits:2}),
-                "ผู้รับเงิน" : order.payment?.recipient ? `${order.accountRecipientFirstNameTh} ${order.accountRecipientLastNameTh}` : '',
-                "คอร์ส" : order.courseNameTh,
-                "ประเภทคอร์ส" : order.courseTypeNameTh,
-                "แพคเก็จ" : order.packageName, 
-                "ระยะเวลา" : order.optionName,
-                "โค้ช" : order.coach_name,
-                "นักเรียน" : order.student_name,
-                "ผู้ซื้อ" : order.created_by_name,
+                "วันที่ออกเอกสาร": moment(order.created_date).format("DD/MM/YYYY HH:mm"),
+                "หมายเลขออเดอร์": order.order_number,
+                "สถานะ": order.payment_status,
+                "วันที่ชำระ": order.paid_date,
+                "ประเภทการชำระเงิน": order.payment_type ? order.payment_type == 'cash' ? 'เงินสด' :
+                  ['Credit Card', 'Credit Card Installment'].some(v => v == order.payment_type) ? 'บัตเครดิต/เดบิต' : 'โอนเงินเข้าบัญชี' : '',
+                "ราคา": parseFloat(order.price).toLocaleString(undefined, { minimumFractionDigits: 2 }),
+                "ผู้รับเงิน": order.payment?.recipient ? `${order.accountRecipientFirstNameTh} ${order.accountRecipientLastNameTh}` : '',
+                "คอร์ส": order.courseNameTh,
+                "ประเภทคอร์ส": order.courseTypeNameTh,
+                "แพคเก็จ": order.packageName,
+                "ระยะเวลา": order.optionName,
+                "โค้ช": order.coach_name,
+                "นักเรียน": order.student_name,
+                "ผู้ซื้อ": order.created_by_name,
               })
             });
-            if(data.data.length === reports.length){
+            if (data.data.length === reports.length) {
               reports.push({
-                "วันที่ออกเอกสาร" : 'ยอดชำระแล้ว',
-                "หมายเลขออเดอร์" : sumSuccess,
-                "สถานะ" :"ยอดรอดำเนินการ",
-                "วันที่ชำระ" : sumPending,
-                "ประเภทการชำระเงิน" :"ยอดยกเลิก",
-                "ราคา" : sumCancel,
-                "ผู้รับเงิน" : 'ยอดเกิดข้อผิดพลาด',
-                "คอร์ส" : sumfail,
-                "ประเภทคอร์ส" : 'รวม',
-                "แพคเก็จ" : sumPrice, 
-                "ระยะเวลา" : '',
-                "โค้ช" : '',
-                "นักเรียน" : '',
-                "ผู้ซื้อ" : '',
+                "วันที่ออกเอกสาร": 'ยอดชำระแล้ว',
+                "หมายเลขออเดอร์": sumSuccess,
+                "สถานะ": "ยอดรอดำเนินการ",
+                "วันที่ชำระ": sumPending,
+                "ประเภทการชำระเงิน": "ยอดยกเลิก",
+                "ราคา": sumCancel,
+                "ผู้รับเงิน": 'ยอดเกิดข้อผิดพลาด',
+                "คอร์ส": sumfail,
+                "ประเภทคอร์ส": 'รวม',
+                "แพคเก็จ": sumPrice,
+                "ระยะเวลา": '',
+                "โค้ช": '',
+                "นักเรียน": '',
+                "ผู้ซื้อ": '',
               })
             }
           }
-           if(reports.length > 0){
+          if (reports.length > 0) {
             let config = {
-              headers:{
-                  "Access-Control-Allow-Origin" : "*",
-                  "Content-type": "Application/json",
-                  'Authorization' : `Bearer ${VueCookie.get("token")}`
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-type": "Application/json",
+                'Authorization': `Bearer ${VueCookie.get("token")}`
               }
             }
             // let localhost = 'http://localhost:3000'
-            let {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/admincourse/export-log`,{}, config)
+            let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/admincourse/export-log`, {}, config)
             console.log(data)
             var workbook = XLSX.utils.book_new();
             var worksheet = XLSX.utils.json_to_sheet(reports);
@@ -127,33 +129,33 @@ const financeModules = {
             link.href = url;
             link.download = `financeReport.xlsx`;
             link.click();
-            URL.revokeObjectURL(url); 
-            context.commit("SetFinanceFilter",data.data)
-            context.commit("SetFinanceLoading",false)
-           }else{
-            context.commit("SetFinanceLoading",false)
+            URL.revokeObjectURL(url);
+            context.commit("SetFinanceFilter", data.data)
+            context.commit("SetFinanceLoading", false)
+          } else {
+            context.commit("SetFinanceLoading", false)
             Swal.fire({
-              icon:"error",
-              title: "ไม่พบข้อมูล",
+              icon: "error",
+              title: VueI18n.t("data not found"),
               showDenyButton: false,
               showCancelButton: false,
-              confirmButtonText: "ตกลง",
+              confirmButtonText: VueI18n.t("agree"),
             })
           }
         }
-      }catch(error){
-        context.commit("SetFinanceLoading",false)
+      } catch (error) {
+        context.commit("SetFinanceLoading", false)
       }
     }
   },
   getters: {
-    getFinanceDetail(state){
+    getFinanceDetail(state) {
       return state.finance_detail
     },
-    getFinanceFilter(state){
+    getFinanceFilter(state) {
       return state.finance_filter
     },
-    getFinanceLoading(state){
+    getFinanceLoading(state) {
       return state.finance_filter_loading
     }
   },

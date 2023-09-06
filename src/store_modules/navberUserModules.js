@@ -1,7 +1,7 @@
 const NavberUserModules = {
   namespaced: true,
   state: {
-    title_navber: "อาณาจักร",
+    title_navber: "kingdom",
   },
   mutations: {
     TitleNavber(state, value) {

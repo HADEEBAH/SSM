@@ -2,6 +2,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import router from "@/router";
 import VueCookie from "vue-cookie"
+import VueI18n from "../i18n";
 import moment from "moment";
 function dayOfWeekArray(day) {
     let days = day
@@ -20,15 +21,15 @@ function dayOfWeekArray(day) {
         let rangeStart = parseInt(days[0]);
         let prevDay = rangeStart;
         for (let i = 1; i < days.length; i++) {
-        const day = parseInt(days[i]);
-        if (day === prevDay + 1) {
-            prevDay = day;
-        } else {
-            const rangeEnd = prevDay;
-            ranges.push({ start: rangeStart, end: rangeEnd });
-            rangeStart = day;
-            prevDay = day;
-        }
+            const day = parseInt(days[i]);
+            if (day === prevDay + 1) {
+                prevDay = day;
+            } else {
+                const rangeEnd = prevDay;
+                ranges.push({ start: rangeStart, end: rangeEnd });
+                rangeStart = day;
+                prevDay = day;
+            }
         }
         ranges.push({ start: rangeStart, end: prevDay });
         return ranges.map(({ start, end }) => start === end ? weekdays[start] : `${weekdays[start]} - ${weekdays[end]}`).join(', ')
@@ -202,7 +203,7 @@ const orderModules = {
                                     courses: courses,
                                     totalPrice: item.totalPrice,
                                     createdDate: new Date(item.createdDate).toLocaleString(thaiLocale, options),
-                                    createdDateStr : moment(new Date(item.createdDate)).format("YYYY-MM-DD"),
+                                    createdDateStr: moment(new Date(item.createdDate)).format("YYYY-MM-DD"),
                                     createdByData: item.createdByData
 
 
@@ -610,8 +611,8 @@ const orderModules = {
                             if (payment.data.statusCode === 200) {
                                 Swal.fire({
                                     icon: "success",
-                                    title: "สำเร็จ",
-                                    text: "( ทำรายการเรียบร้อยแล้ว )",
+                                    title: VueI18n.t("succeed"),
+                                    text: VueI18n.t("the transaction has been completed"),
                                     showDenyButton: false,
                                     showCancelButton: false,
                                     showConfirmButton: false,
@@ -635,14 +636,14 @@ const orderModules = {
                             }
                         } else {
                             Swal.fire({
-                              icon: "success",
-                              title: "สำเร็จ",
-                              text: "( ทำรายการเรียบร้อยแล้ว )",
-                              showDenyButton: false,
-                              showCancelButton: false,
-                              showConfirmButton: false,
-                              timer: 3000,
-                              timerProgressBar: true
+                                icon: "success",
+                                title: VueI18n.t("succeed"),
+                                text: VueI18n.t("the transaction has been completed"),
+                                showDenyButton: false,
+                                showCancelButton: false,
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true
                             })
                             router.replace({ name: "Finance" })
                             localStorage.removeItem("Order")
@@ -666,39 +667,39 @@ const orderModules = {
                 if (error.response.data.message == "Cannot register , fail at course monitor , course-coach or seats are full") {
                     Swal.fire({
                         icon: "error",
-                        title: "ไม่สามารถลงทะเบียนได้",
-                        text: "ไม่สามารถลงทะเบียนได้ เนื่องจากที่นั่งไม่เพียงพอ หรือ โค้ชมีสอนในแพ็กเกจอื่น",
+                        title: VueI18n.t("unable to register"),
+                        text: VueI18n.t("unable to register Due to insufficient seats or the coach teaching in another package"),
                         showCancelButton: false,
-                        confirmButtonText: "ตกลง",
+                        confirmButtonText: VueI18n.t("agree"),
                     })
                 } else if (error.response.data.message === "duplicate pending order") {
                     Swal.fire({
                         icon: "error",
-                        title: "ไม่สามารถลงทะเบียนได้",
-                        text: "ไม่สามารถลลงทะเบียนได้ เนื่องจากหลักสูตรนี้อยู่ในประวัติการลงทะเบียนของคุณแล้ว",
+                        title: VueI18n.t("unable to register"),
+                        text: VueI18n.t("unable to register Because the course is already in your registration history"),
                         showCancelButton: false,
-                        confirmButtonText: "ตกลง",
+                        confirmButtonText: VueI18n.t("agree"),
                     })
                 } else if (error.response.data.message === "User is duplicate in this course. Cannot enroll again") {
                     Swal.fire({
                         icon: "error",
-                        title: "ผู้ใช้ซ้ำกันในหลักสูตรนี้ ไม่สามารถลงทะเบียนได้",
+                        title: VueI18n.t("duplicate user in this course Unable to register"),
                         showCancelButton: false,
-                        confirmButtonText: "ตกลง",
+                        confirmButtonText: VueI18n.t("agree"),
                     })
                 } else if (error.response.data.message === "The price is not correct!!") {
                     Swal.fire({
                         icon: "error",
-                        title: "ราคาไม่ถูกต้อง ไม่สามารถดำเนินการชำระได้",
+                        title: VueI18n.t("the price is not correct payment cannot be processed"),
                         showCancelButton: false,
-                        confirmButtonText: "ตกลง",
+                        confirmButtonText: VueI18n.t("agree"),
                     })
                 } else {
                     Swal.fire({
                         icon: "error",
-                        title: "เกิดข้อผิดพลาด",
+                        title: VueI18n.t("something went wrong"),
                         showCancelButton: false,
-                        confirmButtonText: "ตกลง",
+                        confirmButtonText: VueI18n.t("agree"),
                     })
                 }
             }
@@ -718,16 +719,16 @@ const orderModules = {
             let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/update/${order_detail.orderNumber}`, payload, config)
             if (data.statusCode === 200) {
                 await Swal.fire({
-                  icon: "success",
-                  title: "สำเร็จ",
-                  text: "( ยกเลิกคำสั่งซื้อเรียบร้อยแล้ว )",
-                  showDenyButton: false,
-                  showCancelButton: false,
-                  showConfirmButton: false,
-                  timer: 3000,
-                  timerProgressBar: true
-                }).finally(()=>{
-                  context.dispatch("GetOrderDetail", { order_number: order_detail.orderNumber })
+                    icon: "success",
+                    title: VueI18n.t("succeed"),
+                    text: VueI18n.t("order canceled successfully"),
+                    showDenyButton: false,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true
+                }).finally(() => {
+                    context.dispatch("GetOrderDetail", { order_number: order_detail.orderNumber })
                 })
             }
         },
@@ -749,21 +750,21 @@ const orderModules = {
                 if (data.statusCode === 200) {
                     await Swal.fire({
                         icon: "success",
-                        title: "สำเร็จ",
-                        text: "( ยืนยันการชำระเงินเรียบร้อย )",
+                        title: VueI18n.t("succeed"),
+                        text: VueI18n.t("confirmation of successful payment"),
                         showDenyButton: false,
                         showCancelButton: false,
                         showConfirmButton: false,
                         timer: 3000,
                         timerProgressBar: true
-                    }).finally(()=>{
-                      context.dispatch("GetOrderDetail", { order_number: order_data.orderNumber })
+                    }).finally(() => {
+                        context.dispatch("GetOrderDetail", { order_number: order_data.orderNumber })
                     })
                 }
             } catch (error) {
                 Swal.fire({
                     icon: "error",
-                    title: "เกิดข้อผิดพลาด"
+                    title: VueI18n.t("something went wrong")
                 })
             }
         },
@@ -784,10 +785,10 @@ const orderModules = {
             } catch (error) {
                 Swal.fire({
                     icon: "error",
-                    text: `เกิดข้อผิดพลาด ${error.message}`,
+                    text: `${VueI18n.t("something went wrong")} ${error.message}`,
                     showDenyButton: false,
                     showCancelButton: false,
-                    confirmButtonText: "ตกลง",
+                    confirmButtonText: VueI18n.t("agree"),
                 })
             }
         },
@@ -872,8 +873,8 @@ const orderModules = {
 
             }
         },
-        async userUpdateOrderCancelStatus(context,{order_id}){
-            try{
+        async userUpdateOrderCancelStatus(context, { order_id }) {
+            try {
                 let config = {
                     headers: {
                         "Access-Control-Allow-Origin": "*",
@@ -881,11 +882,12 @@ const orderModules = {
                         'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                const updateOrder = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/updateStatus/${order_id}`,{},config)
+                const updateOrder = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/updateStatus/${order_id}`, {}, config)
                 if (updateOrder.data.statusCode === 200) {
                     await Swal.fire({
                         icon: "success",
-                        title: "ทำรายการสำเร็จ",
+                        title: VueI18n.t("succeed"),
+                        text: VueI18n.t("the transaction was completed successfully"),
                         showDenyButton: false,
                         showCancelButton: false,
                         showConfirmButton: false,
@@ -894,12 +896,12 @@ const orderModules = {
                     })
                     context.dispatch("getHistory")
                 }
-            }catch(error){
+            } catch (error) {
                 Swal.fire({
                     icon: "error",
-                    title: "เกิดข้อผิดพลาด",
+                    title: VueI18n.t("something went wrong"),
                     showCancelButton: false,
-                    confirmButtonText: "ตกลง",
+                    confirmButtonText: VueI18n.t("agree"),
                 })
             }
         },
@@ -940,22 +942,22 @@ const orderModules = {
                 if (count === course_data.students.length) {
                     await Swal.fire({
                         icon: "success",
-                        title: "สำเร็จ",
-                        text: "( จองคอร์สสำเร็จ เจ้าหน้าที่จะติดต่อกลับภายหลัง )",
+                        title: VueI18n.t("succeed"),
+                        text: VueI18n.t("successfully reserved a course Staff will contact you later"),
                         showDenyButton: false,
                         showCancelButton: false,
                         showConfirmButton: false,
                         timer: 3000,
                         timerProgressBar: true
-                    }).finally(()=>{
-                      router.replace({ name: "UserKingdom" })
+                    }).finally(() => {
+                        router.replace({ name: "UserKingdom" })
                     })
                 }
 
             } catch (error) {
                 Swal.fire({
                     icon: "error",
-                    title: "เกิดข้อผิดพลาด"
+                    title: VueI18n.t("something went wrong")
                 })
             }
         },
@@ -968,10 +970,10 @@ const orderModules = {
             } catch (error) {
                 await Swal.fire({
                     icon: "error",
-                    text: `เกิดข้อผิดพลาด${error.message}`,
+                    text: `${VueI18n.t("something went wrong")} ${error.message}`,
                     showDenyButton: false,
                     showCancelButton: false,
-                    confirmButtonText: "ตกลง",
+                    confirmButtonText: VueI18n.t("agree"),
                 })
             }
         }

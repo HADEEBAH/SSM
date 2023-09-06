@@ -1,4 +1,5 @@
 import axios from "axios";
+import VueI18n from "../i18n";
 function dayOfWeekArray(day) {
   let days = day
   const weekdays = [
@@ -38,6 +39,7 @@ const dashboardModules = {
     get_empty_course_close: [],
     get_course_type: {},
     get_potential: {},
+    get_potential_student_list: {},
     get_donut: {},
     get_graf: [],
     dashboard_loading: false,
@@ -92,6 +94,9 @@ const dashboardModules = {
     SetLabelsLineCharMonth(state, payload) {
       state.labels_line_chart_month = payload
     },
+    SetGetPotentialStudentList(state, payload) {
+      state.get_potential_student_list = payload
+    }
 
   },
   actions: {
@@ -118,32 +123,52 @@ const dashboardModules = {
           await context.commit("SetGetEmptyCourse", data.data)
           await context.commit("SetGetEmptyCourseOpen", EmptyCourseOpen)
           await context.commit("SetGetEmptyCourseClose", EmptyCourseClose)
-
-          context.commit("SetGetLoading", false)
-
+          await context.dispatch("GetCourseType")
         }
       } catch (error) {
-        context.commit("SetGetLoading", false)
+        await context.commit("SetGetLoading", false)
       }
     },
 
     async GetCourseType(context) {
-      context.commit("SetGetLoading", true)
-
       try {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/course-type`)
         if (data.statusCode === 200) {
-          context.commit("SetGetCourseType", data.data)
-          context.commit("SetGetLoading", false)
-
+          await context.commit("SetGetCourseType", data.data)
+          await context.dispatch("GetPotential")
         }
       } catch (error) {
-        context.commit("SetGetLoading", false)
-
+        await context.commit("SetGetLoading", false)
       }
     },
 
     async GetPotential(context) {
+      try {
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potencial/`)
+        // let { data } = await axios.get(`http://localhost:3000/api/v1/dashboard/potencial/`)
+        if (data.statusCode === 200) {
+          data.data.countReserve.studentList.map((items) => {
+            for (const item of items.course) {
+              item.fullDateTh = new Date(item.createdDate).toLocaleDateString(
+                "th-TH",
+                {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                }
+              )
+            }
+          })
+          await context.commit("SetGetLoading", false)
+          await context.commit("SetGetPotential", data.data)
+        }
+
+      } catch (error) {
+        await context.commit("SetGetLoading", false)
+      }
+    },
+
+    async GetPotentialStudentList(context) {
       context.commit("SetGetLoading", true)
 
       try {
@@ -163,14 +188,15 @@ const dashboardModules = {
               )
             }
           })
-          context.commit("SetGetLoading", false)
-          context.commit("SetGetPotential", data.data)
+          await context.commit("SetGetLoading", false)
+          await context.commit("SetGetPotentialStudentList", data.data)
         }
 
       } catch (error) {
-        context.commit("SetGetLoading", false)
+        await context.commit("SetGetLoading", false)
       }
     },
+
 
     async GetDonut(context, item) {
       context.commit("SetGetLoading", true)
@@ -230,7 +256,7 @@ const dashboardModules = {
             const options = { weekday: 'long', timeZone: 'Asia/Bangkok', locale: 'th-TH' };
             const dayName = date.toLocaleString('th-TH', options);
             items.date = newDate.split("-")[2]
-            items.month = `เดือน ${newDate?.split("-")[1]}`
+            items.month = `${VueI18n.t("month")} ${newDate?.split("-")[1]}`
             items.year = newDate.split("-")[0]
             items.thaiDayName = `${items.date} ${dayName}`
             lineChart.push(items)
@@ -318,7 +344,9 @@ const dashboardModules = {
     getLabelsLineChartMonth(state) {
       return state.labels_line_chart_month
     },
-
+    getPotentialStudentList(state) {
+      return state.get_potential_student_list
+    },
 
   },
 };

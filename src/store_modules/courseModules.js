@@ -3,6 +3,7 @@ import moment from "moment";
 import Swal from "sweetalert2";
 import router from "@/router";
 import VueCookie from "vue-cookie"
+import VueI18n from "../i18n";
 var XLSX = require("xlsx");
 function dayOfWeekArray(day) {
   let days = day
@@ -430,7 +431,7 @@ const CourseModules = {
                     timeId: coachDate.time.timeId,
                     start: coachDate.time.start,
                     end: coachDate.time.end,
-                    time: `${coachDate.time.start}น.-${coachDate.time.end}น.`,
+                    time: `${coachDate.time.start}${VueI18n.t("o'clock")} - ${coachDate.time.end}${VueI18n.t("o'clock")}`,
                     cpo: coachDate.cpo ? coachDate.cpo : null,
                     cpoId: coachDate.cpo.cpoId ? coachDate.cpo.cpoId : null,
                     students: coachDate.studentArr,
@@ -618,8 +619,8 @@ const CourseModules = {
           await context.dispatch("GetCourse", course_id)
           Swal.fire({
             icon: "success",
-            title: "สำเร็จ",
-            text: "( แก้ไขคอร์สเรียบร้อยแล้ว )",
+            title: VueI18n.t("agree"),
+            text: VueI18n.t("the course has been edited"),
             timer: 3000,
             showDenyButton: false,
             showCancelButton: false,
@@ -630,7 +631,7 @@ const CourseModules = {
       } catch (error) {
         Swal.fire({
           icon: "error",
-          title: "เกิดข้อผิดพลาด"
+          title: VueI18n.t("something went wrong"),
         })
       }
     },
@@ -712,8 +713,8 @@ const CourseModules = {
           await context.dispatch("GetCourse", course_id)
           Swal.fire({
             icon: "success",
-            title: "สำเร็จ",
-            text: "( แก้ไขช่วงเวลาและโค้ชเรียบร้อยแล้ว )",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t(" intervals and coaches have been corrected"),
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
@@ -724,7 +725,7 @@ const CourseModules = {
       } catch (error) {
         Swal.fire({
           icon: "error",
-          title: "เกิดข้อผิดพลาด",
+          title: VueI18n.t("something went wrong"),
         })
       }
     },
@@ -774,8 +775,8 @@ const CourseModules = {
         if (data.statusCode === 200) {
           Swal.fire({
             icon: "success",
-            title: "สำเร็จ",
-            text: "( แก้ไขแพ็กเกจเรียบร้อยแล้ว )",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("the package has been edited"),
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
@@ -786,7 +787,7 @@ const CourseModules = {
       } catch (error) {
         Swal.fire({
           icon: "error",
-          title: "เกิดข้อผิดพลาด",
+          title: VueI18n.t("something went wrong"),
         })
       }
     },
@@ -804,8 +805,8 @@ const CourseModules = {
         if (data.statusCode == 200) {
           Swal.fire({
             icon: "success",
-            title: "สำเร็จ",
-            text: "( ลบไฟล์เรียบร้อยแล้ว )",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("the file has been successfully deleted"),
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
@@ -816,7 +817,7 @@ const CourseModules = {
       } catch (error) {
         Swal.fire({
           icon: "error",
-          title: "เกิดข้อผิดพลาด",
+          title: VueI18n.t("something went wrong"),
         })
       }
     },
@@ -834,8 +835,8 @@ const CourseModules = {
         if (data.statusCode == 200) {
           Swal.fire({
             icon: "success",
-            title: "สำเร็จ",
-            text: "( ลบไฟล์เรียบร้อยแล้ว )",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("the file has been successfully deleted"),
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
@@ -846,7 +847,7 @@ const CourseModules = {
       } catch (error) {
         Swal.fire({
           icon: "error",
-          title: "เกิดข้อผิดพลาด",
+          title: VueI18n.t("something went wrong"),
         })
       }
     },
@@ -876,8 +877,8 @@ const CourseModules = {
 
           Swal.fire({
             icon: "success",
-            title: "สำเร็จ",
-            text: "( แก้ไข Learning Journey เรียบร้อยแล้ว )",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("learning Journey has been edited"),
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
@@ -890,7 +891,7 @@ const CourseModules = {
       } catch (error) {
         Swal.fire({
           icon: "error",
-          title: "เกิดข้อผิดพลาด",
+          title: VueI18n.t("something went wrong"),
         })
       }
     },
@@ -911,6 +912,7 @@ const CourseModules = {
                 category_id: course.c_category_id,
                 category: category.categoryNameTh ? category.categoryNameTh : "-",
                 course_type: course.c_course_type_id === "CT_1" ? "คอร์สทั่วไป" : "คอร์สระยะสั้น",
+                course_type_en: course.c_course_type_id === "CT_1" ? VueI18n.t("general course") : VueI18n.t("short course"),
                 course_type_id: course.c_course_type_id,
                 course: `${course.c_course_name_th}(${course.c_course_name_en})`,
                 status: course.c_course_status,
@@ -1376,7 +1378,7 @@ const CourseModules = {
           router.replace({ name: "CourseList" })
           Swal.fire({
             icon: "success",
-            title: "สำเร็จ",
+            title: VueI18n.t("succeed"),
             text: "( สร้างคอร์สเรียบร้อยแล้ว )",
             showDenyButton: false,
             showCancelButton: false,
@@ -1468,14 +1470,14 @@ const CourseModules = {
           if (data.data[0] === "Delete Unsuccessfully:") {
             Swal.fire({
               icon: "error",
-              text: "ไม่สามารถลบได้ เนื่องจากที่การสมัครเรียนแล้ว",
-              confirmButtonText: "ตกลง",
+              text: VueI18n.t("can't be deleted Because the enrollment"),
+              confirmButtonText: VueI18n.t("agree"),
             })
           } else {
             Swal.fire({
               icon: "success",
-              title: "สำเร็จ",
-              text: "( ลบวันสอนเรียบร้อยแล้ว )",
+              title: VueI18n.t("succeed"),
+              text: VueI18n.t("teaching days already deleted"),
               showDenyButton: false,
               showCancelButton: false,
               showConfirmButton: false,
@@ -1487,7 +1489,7 @@ const CourseModules = {
       } catch (error) {
         Swal.fire({
           icon: "error",
-          text: "เกิดข้อผิดพลาด",
+          title: VueI18n.t("something went wrong"),
         })
       }
     },
@@ -1506,14 +1508,14 @@ const CourseModules = {
           if (data.data[0] === "Delete Unsuccessfully:") {
             Swal.fire({
               icon: "error",
-              text: "ไม่สามารถลบได้ เนื่องจากที่การสมัครเรียนแล้ว",
-              confirmButtonText: "ตกลง",
+              text: VueI18n.t("can't be deleted Because the enrollment"),
+              confirmButtonText: VueI18n.t("agree"),
             })
           } else {
             Swal.fire({
               icon: "success",
-              title: "สำเร็จ",
-              text: "( ลบวันสอนเรียบร้อยแล้ว )",
+              title: VueI18n.t("succeed"),
+              text: VueI18n.t("teaching days already deleted"),
               showDenyButton: false,
               showCancelButton: false,
               showConfirmButton: false,
