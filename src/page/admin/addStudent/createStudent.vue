@@ -811,25 +811,22 @@ export default {
     today: new Date(),
     selected: [""],
     pay: "",
-<<<<<<< HEAD
-=======
-    rules: {
-      student: [(val) => (val || "").length > 0 || "โปรดเลือกผู้เรียน"],
-      category: [(val) => (val || "").length > 0 || "โปรดเลือกอาณาจักร"],
-      course: [(val) => (val || "").length > 0 || "โปรดเลือกคอร์สเรียน"],
-      package: [(val) => (val || "").length > 0 || "โปรดเลือกแพ็กเกจ"],
-      option: [(val) => (val.option_id ? true : false) || "โปรดเลือกระยะเวลา"],
-      day: [(val) => (val || "").length > 0 || "โปรดเลือกวันเรียน"],
-      time: [(val) => (val ? true : false) || "โปรดเลือกเวลาเรียน"],
-      coach: [(val) => (val.courseCoachId ? true : false) || "โปรดเลือกโค้ช"],
-      start_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันเริ่ม"],
-      price: [(val) => (val || "") > 0 || "โปรดเลือกระบุราคา"],
-      remark: [(val) => val.length < 256 || "หมายเหตุความยาวเกินกว่าที่กำหนด"],
-      payment_type: [
-        (val) => (val ? true : false || "โปรดเลือกช่องทางการชำระเงิน"),
-      ],
-    },
->>>>>>> develop
+    // rules: {
+    //   student: [(val) => (val || "").length > 0 || "โปรดเลือกผู้เรียน"],
+    //   category: [(val) => (val || "").length > 0 || "โปรดเลือกอาณาจักร"],
+    //   course: [(val) => (val || "").length > 0 || "โปรดเลือกคอร์สเรียน"],
+    //   package: [(val) => (val || "").length > 0 || "โปรดเลือกแพ็กเกจ"],
+    //   option: [(val) => (val.option_id ? true : false) || "โปรดเลือกระยะเวลา"],
+    //   day: [(val) => (val || "").length > 0 || "โปรดเลือกวันเรียน"],
+    //   time: [(val) => (val ? true : false) || "โปรดเลือกเวลาเรียน"],
+    //   coach: [(val) => (val.courseCoachId ? true : false) || "โปรดเลือกโค้ช"],
+    //   start_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันเริ่ม"],
+    //   price: [(val) => (val || "") > 0 || "โปรดเลือกระบุราคา"],
+    //   remark: [(val) => val.length < 256 || "หมายเหตุความยาวเกินกว่าที่กำหนด"],
+    //   payment_type: [
+    //     (val) => (val ? true : false || "โปรดเลือกช่องทางการชำระเงิน"),
+    //   ],
+    // },
   }),
   created() {
     if (this.order.courses.length == 0) {

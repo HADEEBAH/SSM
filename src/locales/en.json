@@ -552,12 +552,9 @@
     "the transaction was completed successfully": "( The transaction was completed successfully )",
     "the password format is incorrect": "The password format is incorrect",
     "the English name format is invalid": "The English name format is invalid",
-<<<<<<< HEAD
     "the number of students is incorrect" : "The number of students is incorrect",
     "the number of students exceeds the number of students allowed in the package":" ( The number of students exceeds the number of students allowed in the package )",
-=======
     "there is a discount" : "There is a discount",
->>>>>>> develop
     "there are special privileges for monthly/term/yearly subscriptions" : "There are special privileges for monthly/term/yearly subscriptions",
     "there is no substitute teacher" : "There is no substitute teacher",
     "this date is already built into a holiday": "This date is already built into a holiday",
