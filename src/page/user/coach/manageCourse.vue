@@ -1513,16 +1513,16 @@ export default {
       },
     ],
     previewUrl: null,
-    periods: [
-      { label: "ลาเต็มวัน", value: "full" },
-      { label: "ลาช่วงเช้า", value: "morning" },
-      { label: "ลาช่วงบ่าย", value: "afternoon" },
-    ],
-    leaveTypes: [
-      { label: "ลาป่วย", value: "sick" },
-      { label: "ลากิจ", value: "personal" },
-      { label: "ลาพักร้อน", value: "take annual leave" },
-    ],
+    // periods: [
+    //   { label: "ลาเต็มวัน", value: "full" },
+    //   { label: "ลาช่วงเช้า", value: "morning" },
+    //   { label: "ลาช่วงบ่าย", value: "afternoon" },
+    // ],
+    // leaveTypes: [
+    //   { label: "ลาป่วย", value: "sick" },
+    //   { label: "ลากิจ", value: "personal" },
+    //   { label: "ลาพักร้อน", value: "take annual leave" },
+    // ],
     coach_leave_data: {
       menu_start_date: false,
       start_date: null,
@@ -1693,6 +1693,22 @@ export default {
             : false
           : false;
       return !(start_date && end_date && period && leave_type && course);
+    },
+
+    periods() {
+      return [
+        { label: this.$t("full day leave"), value: "full" },
+        { label: this.$t("morning leave"), value: "morning" },
+        { label: this.$t("afternoon leave"), value: "afternoon" },
+      ];
+    },
+
+    leaveTypes() {
+      return [
+        { label: this.$t("sick leave"), value: "sick" },
+        { label: this.$t("personal"), value: "personal" },
+        { label: this.$t("take annual leave"), value: "take annual leave" },
+      ];
     },
   },
   methods: {
