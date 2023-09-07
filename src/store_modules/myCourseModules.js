@@ -1,5 +1,6 @@
 import axios from "axios";
 import VueCookie from "vue-cookie"
+import VueI18n from "../i18n";
 function dayOfWeekArray(day) {
     let days = day
     const weekdays = [
