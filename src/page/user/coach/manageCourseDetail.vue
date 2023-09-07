@@ -46,12 +46,18 @@
               <v-row dense>
                 <v-col cols="12" sm class="pa-0">
                   <rowData mini icon="mdi-bookshelf"
-                    >{{$t("course")}} : {{ $i18n.locale == "th" ? course_data.course_name_th : course_data.course_name_en }}</rowData
+                    >{{ $t("course") }} :
+                    {{
+                      $i18n.locale == "th"
+                        ? course_data.course_name_th
+                        : course_data.course_name_en
+                    }}</rowData
                   >
                 </v-col>
                 <v-col cols="12" sm class="pa-0">
                   <rowData mini icon="mdi-clock-outline"
-                    >{{ $t("teaching time") }} {{ course_data.course_hours }} {{ $t("hour") }}</rowData
+                    >{{ $t("teaching time") }} {{ course_data.course_hours }}
+                    {{ $t("hour") }}</rowData
                   >
                 </v-col>
               </v-row>
@@ -60,7 +66,7 @@
         </v-card-text>
       </v-card>
       <v-row dense>
-        <v-col class="text-md font-bold"> {{$t("check in teach")}} </v-col>
+        <v-col class="text-md font-bold"> {{ $t("check in teach") }} </v-col>
       </v-row>
       <v-row dense class="mb-3">
         <v-col align="center">
@@ -77,30 +83,33 @@
             "
           >
             <template v-if="coach_check_in.checkInCoachId">
-              <v-icon class="mr-2">mdi-check-circle</v-icon> {{ $t('take up teaching')}}
+              <v-icon class="mr-2">mdi-check-circle</v-icon>
+              {{ $t("take up teaching") }}
             </template>
             <template v-else>
               <v-icon class="mr-2">mdi-clock-edit-outline</v-icon>
-             {{ $t("press to enter the teaching time")}}
+              {{ $t("press to enter the teaching time") }}
             </template>
           </v-btn>
         </v-col>
       </v-row>
       <v-tabs class="mb-3" v-model="tab" color="#ff6b81" grow>
-        <v-tab class="border-b-2" href="#check in">{{$t('check in student')}} </v-tab>
+        <v-tab class="border-b-2" href="#check in"
+          >{{ $t("check in student") }}
+        </v-tab>
         <v-tab
           :disabled="student_check_in.length == 0"
           class="border-b-2"
           href="#assess students"
         >
-          {{  $t("assess students") }}
+          {{ $t("assess students") }}
         </v-tab>
         <v-tab
           :disabled="student_check_in.length == 0"
           class="border-b-2"
           href="#teaching summary"
         >
-          {{ $t("teaching summary notes")}}
+          {{ $t("teaching summary notes") }}
         </v-tab>
       </v-tabs>
       <v-tabs-items v-model="tab">
@@ -181,7 +190,9 @@
                 <template v-slot:expanded-item="{ headers, item }">
                   <td class="pa-2" :colspan="headers.length" align="center">
                     <v-row dense>
-                      <v-col cols="12" sm="2">{{$t("compensatory study day")}}</v-col>
+                      <v-col cols="12" sm="2">{{
+                        $t("compensatory study day")
+                      }}</v-col>
                       <v-col cols="12" sm="4">
                         <v-menu
                           v-model="item.menu_compensation_date"
@@ -273,7 +284,9 @@
                 </template>
                 <template v-slot:no-data>
                   <v-row dense>
-                    <v-col align="center"> {{ $t("no data found in table") }} </v-col>
+                    <v-col align="center">
+                      {{ $t("no data found in table") }}
+                    </v-col>
                   </v-row>
                 </template>
               </v-data-table>
@@ -288,7 +301,7 @@
                 outlined
                 @click="CheckInStudents(student_check_in)"
                 color="#ff6b81"
-                >{{$t("save")}}</v-btn
+                >{{ $t("save") }}</v-btn
               >
             </v-col>
           </v-row>
@@ -310,7 +323,7 @@
                     "
                     @click="tab_evaluate = 'evaluate_students'"
                   >
-                    {{ $t('assess students')}}
+                    {{ $t("assess students") }}
                   </v-btn>
                 </v-col>
                 <v-col cols="12" sm="6" class="pl-1">
@@ -344,7 +357,7 @@
                       "
                       @click="tab_evaluate = 'learners_potential'"
                     >
-                      {{$t("assess the learner's potential")}}
+                      {{ $t("assess the learner's potential") }}
                     </v-btn>
                   </v-badge>
                   <v-btn
@@ -362,7 +375,7 @@
                     "
                     @click="tab_evaluate = 'learners_potential'"
                   >
-                    {{$t("assess the learner's potential")}}
+                    {{ $t("assess the learner's potential") }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -394,7 +407,12 @@
                   <v-card-text>
                     <v-row class="d-flex align-center">
                       <v-col cols="12" sm class="text-lg font-bold">
-                        {{ student.no }} {{ $i18n.locale == "th" ? student.fullname : student.fullname_en}}
+                        {{ student.no }}
+                        {{
+                          $i18n.locale == "th"
+                            ? student.fullname
+                            : student.fullname_en
+                        }}
                       </v-col>
                       <v-col
                         cols="12"
@@ -402,7 +420,7 @@
                         class="pa-1 text-md text-[#999999]"
                       >
                         <v-row dense class="d-flex aling-center">
-                          <v-col align="right"> {{$t('attendance')}}: </v-col>
+                          <v-col align="right"> {{ $t("attendance") }}: </v-col>
                           <v-col cols="auto">
                             <v-chip
                               class="font-bold"
@@ -427,7 +445,6 @@
                                     (v) => v.value === student.status
                                   )[0].label
                                 )
-                              
                               }}
                             </v-chip>
                           </v-col>
@@ -436,7 +453,9 @@
                     </v-row>
                     <v-row class="d-flex align-center">
                       <v-col cols="12" sm="4">
-                        <labelCustom :text="$t('developmental level')"></labelCustom>
+                        <labelCustom
+                          :text="$t('developmental level')"
+                        ></labelCustom>
                         <v-select
                           outlined
                           dense
@@ -529,7 +548,7 @@
                       $vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'
                     "
                   >
-                    {{$t("clear data")}}
+                    {{ $t("clear data") }}
                   </v-btn>
                 </v-col>
                 <v-col cols="12" sm="auto">
@@ -543,7 +562,7 @@
                       $vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'
                     "
                   >
-                    {{$t("save")}}
+                    {{ $t("save") }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -564,7 +583,12 @@
                 <v-card-text>
                   <v-row class="d-flex align-center">
                     <v-col cols="12" sm class="text-lg font-bold">
-                      {{ student.no }} {{ $i18n.locale == "th" ? student.fullname :  student.fullname_en }}
+                      {{ student.no }}
+                      {{
+                        $i18n.locale == "th"
+                          ? student.fullname
+                          : student.fullname_en
+                      }}
                     </v-col>
                     <v-col cols="12" sm="5" class="pa-1 text-md text-[#999999]">
                       <v-row dense class="d-flex aling-center">
@@ -601,7 +625,9 @@
                   </v-row>
                   <v-row class="d-flex align-center">
                     <v-col cols="12" sm>
-                      <labelCustom :text="$t('developmental level')"></labelCustom>
+                      <labelCustom
+                        :text="$t('developmental level')"
+                      ></labelCustom>
                       <v-select
                         outlined
                         dense
@@ -679,7 +705,7 @@
                       $vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'
                     "
                   >
-                    {{ $t('save') }}
+                    {{ $t("save") }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -694,7 +720,7 @@
                 <v-textarea
                   outlined
                   :rules="summary"
-                  :placeholder="$t('specify your opinion')+'...'"
+                  :placeholder="$t('specify your opinion') + '...'"
                   v-model="coach_check_in.summary"
                 ></v-textarea>
               </v-col>
@@ -705,7 +731,7 @@
                 <v-textarea
                   outlined
                   :rules="homework"
-                  :placeholder="$t('specify your opinion')+'...'"
+                  :placeholder="$t('specify your opinion') + '...'"
                   v-model="coach_check_in.homework"
                 ></v-textarea>
               </v-col>
@@ -864,7 +890,7 @@
                   cols="12"
                   class="flex align-center justify-center text-h5"
                 >
-                  {{$t('attach a photo or video file')}}
+                  {{ $t("attach a photo or video file") }}
                 </v-col>
               </v-row>
               <v-row>
@@ -874,7 +900,7 @@
                     class="underline"
                     color="#ff6b81"
                     @click="openFileSelector"
-                    >{{$t('upload attachment')}}</v-btn
+                    >{{ $t("upload attachment") }}</v-btn
                   >
                   <input
                     id="fileInput"
@@ -897,7 +923,7 @@
                 color="#ff6b81"
                 @click="clearTeachingNote"
               >
-                {{$t('clear data')}}
+                {{ $t("clear data") }}
               </v-btn>
             </v-col>
             <v-col cols="12" sm="6">
@@ -933,7 +959,7 @@
           <v-card-text>
             <v-row dense>
               <v-col align="center" class="text-lg font-bold">
-                {{ $t('additional comments')}}
+                {{ $t("additional comments") }}
               </v-col>
             </v-row>
             <v-row dense>
@@ -947,7 +973,7 @@
             </v-row>
             <div v-if="comment_dialog_tmp.attachment.length > 0">
               <v-row dense>
-                <v-col class="font-bold text-lg">{{ $t('attachments')}}</v-col>
+                <v-col class="font-bold text-lg">{{ $t("attachments") }}</v-col>
               </v-row>
               <v-card
                 flat
@@ -965,7 +991,7 @@
                         {{ file.originalFilesName }} </span
                       ><br />
                       <span class="text-caption"
-                        >{{ $t('file size')}} :
+                        >{{ $t("file size") }} :
                         {{ (file.filesSize / 1000000).toFixed(2) }} MB</span
                       >
                     </v-col>
@@ -1005,7 +1031,7 @@
                       class="underline"
                       color="#ff6b81"
                       @click="openGeneralfileInputSelector"
-                      >{{$t('upload attachment')}}</v-btn
+                      >{{ $t("upload attachment") }}</v-btn
                     >
                     <input
                       id="generalfileInput"
@@ -1021,7 +1047,9 @@
             </v-card>
             <div v-if="comment_dialog_tmp.files.length > 0" class="mb-3">
               <v-row dense>
-                <v-col class="font-bold text-lg"> {{$t('attachments')}}</v-col>
+                <v-col class="font-bold text-lg">
+                  {{ $t("attachments") }}</v-col
+                >
               </v-row>
               <v-divider class="my-2"></v-divider>
               <v-card
@@ -1040,7 +1068,7 @@
                       <span class="font-bold">{{ file.name }}</span
                       ><br />
                       <span class="text-caption"
-                        >{{ $t('file size') }} :
+                        >{{ $t("file size") }} :
                         {{ (file.size / 1000000).toFixed(2) }} MB</span
                       >
                     </v-col>
@@ -1075,7 +1103,7 @@
                   color="#ff6b81"
                   dark
                 >
-                {{ $t("agree") }}
+                  {{ $t("agree") }}
                 </v-btn>
               </v-col>
             </v-row>
@@ -1100,7 +1128,7 @@
           <v-card-text>
             <v-row dense>
               <v-col align="center" class="text-lg font-bold">
-                {{ $t('additional comments') }}
+                {{ $t("additional comments") }}
               </v-col>
             </v-row>
             <v-row dense>
@@ -1116,7 +1144,9 @@
               v-if="comment_potential_dialog_tmp.attachmentPotential.length > 0"
             >
               <v-row dense>
-                <v-col class="font-bold text-lg"> {{ $t('attachments') }} </v-col>
+                <v-col class="font-bold text-lg">
+                  {{ $t("attachments") }}
+                </v-col>
               </v-row>
               <v-card
                 flat
@@ -1136,7 +1166,7 @@
                         {{ file.originalFilesName }}</span
                       ><br />
                       <span class="text-caption"
-                        >{{ $t('file size') }} :
+                        >{{ $t("file size") }} :
                         {{ (file.filesSize / 1000000).toFixed(2) }} MB</span
                       >
                     </v-col>
@@ -1179,7 +1209,7 @@
                       class="underline"
                       color="#ff6b81"
                       @click="openPotentialfileInputSelector"
-                      >{{$t("upload attachment")}}</v-btn
+                      >{{ $t("upload attachment") }}</v-btn
                     >
                     <input
                       id="potentialfileInput"
@@ -1199,7 +1229,9 @@
               class="mb-3"
             >
               <v-row dense>
-                <v-col class="font-bold text-lg"> {{$t('attachments')}}</v-col>
+                <v-col class="font-bold text-lg">
+                  {{ $t("attachments") }}</v-col
+                >
               </v-row>
               <v-divider class="my-2"></v-divider>
               <v-card
@@ -1252,7 +1284,7 @@
                   color="#ff6b81"
                   dark
                 >
-                {{ $t("agree") }}
+                  {{ $t("agree") }}
                 </v-btn>
               </v-col>
             </v-row>
@@ -1276,7 +1308,7 @@
                   @click="show_attachment_dialog = !show_attachment_dialog"
                   ><v-icon>mdi-close</v-icon></v-btn
                 >
-                <span class="font-weight-bold">{{ $t('image example')}} </span>
+                <span class="font-weight-bold">{{ $t("image example") }} </span>
               </v-col>
             </v-row>
             <v-row>
@@ -1364,7 +1396,12 @@ export default {
         color: "#43A4F5",
         bg_color: "#CFE2F3",
       },
-      { label: "absent", value: "absent", color: "#F03D3E", bg_color: "#F4CCCC" },
+      {
+        label: "absent",
+        value: "absent",
+        color: "#F03D3E",
+        bg_color: "#F4CCCC",
+      },
     ],
     learners_form: false,
     potential_form: false,
@@ -1398,7 +1435,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "management");
-  } ,
+  },
   watch: {
     coach_check_in: function () {
       this.preview_summary_files = [];
@@ -1454,38 +1491,54 @@ export default {
       coach_check_in_is_loading: "CoachModules/getCoachCheckInIsLoading",
       student_check_in_is_loading: "CoachModules/getStudentCheckInIsLoading",
     }),
-    start_time(){ 
-      return [(val) => !!val || this.$t("please specify start time")]},
-    end_time(){ 
-      return [(val) => !!val || this.$t("please specify end time")]},
-    evolution(){ 
-      return [(val) => !!val || this.$t("please select developmental level")]},
-    interest(){ 
-      return [(val) => !!val || this.$t("please select your interest level")]},
-    interest_text(){ 
-      return [(val) => !!val > 0 || this.$t("please specify the level of interest")]},
-    summary(){ 
-      return [(val) => !!val > 0 || this.$t("please specify teaching notes")]},
-    homework(){ 
-      return [(val) => !!val > 0 || this.$t("please specify development / homework")]},
-    compensation_date(){ 
-      return [(val) => !!val ||  this.$t("please specify a compensation date")]
+    start_time() {
+      return [(val) => !!val || this.$t("please specify start time")];
     },
-    status_text(){
-      return [(val) => !!val || this.$t("please state your attendance status")]
+    end_time() {
+      return [(val) => !!val || this.$t("please specify end time")];
+    },
+    evolution() {
+      return [(val) => !!val || this.$t("please select developmental level")];
+    },
+    interest() {
+      return [(val) => !!val || this.$t("please select your interest level")];
+    },
+    interest_text() {
+      return [
+        (val) => !!val > 0 || this.$t("please specify the level of interest"),
+      ];
+    },
+    summary() {
+      return [(val) => !!val > 0 || this.$t("please specify teaching notes")];
+    },
+    homework() {
+      return [
+        (val) => !!val > 0 || this.$t("please specify development / homework"),
+      ];
+    },
+    compensation_date() {
+      return [(val) => !!val || this.$t("please specify a compensation date")];
+    },
+    status_text() {
+      return [(val) => !!val || this.$t("please state your attendance status")];
     },
     headers() {
       return [
         { text: this.$t("no."), align: "center", sortable: false, value: "no" },
         {
-          text: `${this.$t("first name")} - ${this.$t('last name')}`,
+          text: `${this.$t("first name")} - ${this.$t("last name")}`,
           align: "center",
           sortable: false,
           value: "fullname",
         },
-        { text: this.$t("package"), align: "center", sortable: false, value: "package" },
         {
-          text: this.$t("number of times"),
+          text: this.$t("package"),
+          align: "center",
+          sortable: false,
+          value: "package",
+        },
+        {
+          text: this.$t("number of times studied"),
           align: "center",
           sortable: false,
           value: "class_time",
@@ -1497,7 +1550,7 @@ export default {
           sortable: false,
           value: "actions",
         },
-      ]
+      ];
     },
     setFunctios() {
       this.GetCourse(this.$route.params.courseId);
@@ -1669,19 +1722,22 @@ export default {
       this.show_comment_potential_dialog = false;
     },
     GenDate(data) {
-      return new Date(data).toLocaleDateString(this.$i18n.locale == "th" ? "th-TH" : "en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        weekday: "long",
-      });
+      return new Date(data).toLocaleDateString(
+        this.$i18n.locale == "th" ? "th-TH" : "en-US",
+        {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          weekday: "long",
+        }
+      );
     },
     async saveSummary() {
       this.$refs.summary_form.validate();
       if (this.summary_form) {
         Swal.fire({
           icon: "question",
-          title: this.$t('want to save?'),
+          title: this.$t("want to save?"),
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: this.$t("agree"),
@@ -1705,7 +1761,7 @@ export default {
       if (this.potential_form) {
         Swal.fire({
           icon: "question",
-          title: this.$t('want to save?'),
+          title: this.$t("want to save?"),
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: this.$t("agree"),
@@ -1725,7 +1781,7 @@ export default {
     saveCreateTeachingNotes() {
       Swal.fire({
         icon: "question",
-        title: this.$t('want to save?'),
+        title: this.$t("want to save?"),
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: this.$t("agree"),
@@ -1744,11 +1800,11 @@ export default {
       if (this.learners_form) {
         Swal.fire({
           icon: "question",
-          title: this.$t('want to save?'),
+          title: this.$t("want to save?"),
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: this.$t("agree"),
-        cancelButtonText: this.$t("cancel"),
+          cancelButtonText: this.$t("cancel"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             await this.AssessmentStudent({
@@ -1783,7 +1839,7 @@ export default {
       if (this.validate_form) {
         Swal.fire({
           icon: "question",
-          title: this.$t('want to save?'),
+          title: this.$t("want to save?"),
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: this.$t("agree"),
@@ -1914,7 +1970,7 @@ export default {
             this.expanded_index.splice(index, 1);
           }
         });
-        item.compensation_date_str = null
+        item.compensation_date_str = null;
         item.compensationDate = null;
         item.compensationStartTime = null;
         item.compensationEndTime = null;

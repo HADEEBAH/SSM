@@ -372,7 +372,11 @@
                             style="color: #ff6b81"
                             class="font-bold text-xl"
                           >
-                            {{ get_donut?.sumTotalSuccess?.toLocaleString() }}
+                            {{
+                              get_donut?.sumTotalSuccess?.toLocaleString()
+                                ? get_donut?.sumTotalSuccess?.toLocaleString()
+                                : "0"
+                            }}
                           </span>
                           <span
                             style="
@@ -407,6 +411,8 @@
                           >
                             {{
                               get_donut?.sumTotalPending?.toLocaleString()
+                                ? get_donut?.sumTotalPending?.toLocaleString()
+                                : "0"
                             }}</span
                           >
                           <span
@@ -470,6 +476,8 @@
                         {{ $t("full courses") }}
                         <span style="font-weight: bold; color: #999999">{{
                           get_empty_course?.countClose
+                            ? get_empty_course?.countClose
+                            : "0"
                         }}</span>
                         {{ $t("courses") }}
                       </span>
@@ -483,6 +491,8 @@
                         {{ $t("course available") }}
                         <span style="font-weight: bold; color: #ff6b81">{{
                           get_empty_course?.countOpen
+                            ? get_empty_course?.countOpen
+                            : "0"
                         }}</span>
                         {{ $t("courses") }}
                       </span>
@@ -537,12 +547,16 @@
                         "
                         align="center"
                       >
-                        <span class="mr-2 font-bold">{{
-                          $t("full courses")
-                        }}</span>
+                        <span class="mr-2 font-bold">
+                          {{ $t("full courses") }}
+                        </span>
                         <v-badge
                           color="#999999"
-                          :content="get_empty_course?.countClose"
+                          :content="
+                            get_empty_course?.countClose
+                              ? get_empty_course?.countClose
+                              : '0'
+                          "
                           class="indent-5 font-bold"
                         >
                         </v-badge>
@@ -669,12 +683,16 @@
                         "
                         align="center"
                       >
-                        <span class="mr-2 font-bold">{{
-                          $t("course available")
-                        }}</span>
+                        <span class="mr-2 font-bold">
+                          {{ $t("course available") }}
+                        </span>
                         <v-badge
                           color="#ff6b81"
-                          :content="get_empty_course.countOpen"
+                          :content="
+                            get_empty_course.countOpen
+                              ? get_empty_course.countOpen
+                              : '0'
+                          "
                           class="indent-5 font-bold justify-center"
                         >
                         </v-badge>
