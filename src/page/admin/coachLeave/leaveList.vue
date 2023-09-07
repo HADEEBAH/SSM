@@ -1,9 +1,9 @@
 <template>
   <v-container>
-    <headerPage title="การอนุมัติลา" slot_tag>
+    <headerPage :title="$t('approval of leave')" slot_tag>
       <v-text-field
         v-model="search"
-        placeholder="ค้นหา"
+        :placeholder="$t('search')"
         prepend-inner-icon="mdi-magnify"
         outlined
         dense
@@ -17,7 +17,8 @@
           :class="$vuetify.breakpoint.smAndUp ? '' : 'w-full'"
           outlined
           color="#ff6b81"
-          ><v-icon>mdi-plus-circle-outline</v-icon>แบบฟอร์มขอลา</v-btn
+          ><v-icon>mdi-plus-circle-outline</v-icon
+          >{{ $t("leave request form") }}</v-btn
         >
       </v-col>
     </v-row>
@@ -58,7 +59,7 @@
                     ? coach_leaves.length
                     : coach_leaves.filter((v) => v.status === type.value).length
                 }}</v-col>
-                <v-col class="text-sm">รายการ</v-col>
+                <v-col class="text-sm">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
@@ -108,7 +109,7 @@
                     ? coach_leaves.length
                     : coach_leaves.filter((v) => v.status === type.value).length
                 }}</v-col>
-                <v-col class="text-sm">รายการ</v-col>
+                <v-col class="text-sm">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
@@ -142,12 +143,12 @@
           >
             <span class="w-full text-center">{{
               item.status == "pending"
-                ? "รออนุมัติ"
+                ? $t("waiting for approval")
                 : item.status === "approved"
-                ? "อนุมัติ"
+                ? $t("approved")
                 : item.status === "cancel"
-                ? "ยกเลิก"
-                : "ปฎิเสธ"
+                ? $t("cancel")
+                : $t("refuse")
             }}</span>
           </div>
         </template>
@@ -180,7 +181,7 @@
           </v-btn>
         </template>
         <template v-slot:[`no-results`]>
-          <div class="font-bold">ไม่พบข้อมูลในตาราง</div>
+          <div class="font-bold">{{ $t("no data found in table") }}</div>
         </template>
       </v-data-table>
     </v-card>
@@ -240,70 +241,160 @@ export default {
         },
       ],
     },
-    column: [
-      { text: "ลำดับ", align: "start", sortable: false, value: "count" },
-      { text: "รหัสโค้ช", align: "start", sortable: false, value: "accountId" },
-      {
-        text: "ชื่อ - นามสกุล",
-        align: "start",
-        sortable: false,
-        value: "fullnameTh",
-      },
-      {
-        text: "ประเภทการลา",
-        align: "start",
-        sortable: false,
-        value: "leaveTypeStr",
-      },
-      {
-        text: "วันเริ่มลา",
-        align: "start",
-        sortable: false,
-        value: "startDateStr",
-      },
-      {
-        text: "วันที่ส่งคำขอ",
-        align: "center",
-        sortable: false,
-        value: "createdDateStr",
-      },
-      { text: "สถานะ", align: "center", value: "actions", sortable: false },
-      { text: "", align: "center", value: "show", sortable: false },
-    ],
-    course_type: [
-      {
-        name: "ทั้งหมด",
-        value: "all",
-        img: "@/assets/coachLeave/all.png",
-      },
-      {
-        name: "อนุมัติ",
-        value: "approved",
-        img: "@/assets/coachLeave/accept.png",
-      },
-    ],
-    course_type_two: [
-      {
-        name: "รออนุมัติ",
-        value: "pending",
-        img: "@/assets/coachLeave/wait.png",
-      },
-      {
-        name: "ปฎิเสธ",
-        value: "reject",
-        img: "@/assets/coachLeave/disaccept.png",
-      },
-      {
-        name: "ยกเลิก",
-        value: "cancel",
-        img: "@/assets/coachLeave/all.png",
-      },
-    ],
+    // column: [
+    //   { text: "ลำดับ", align: "start", sortable: false, value: "count" },
+    //   { text: "รหัสโค้ช", align: "start", sortable: false, value: "accountId" },
+    //   {
+    //     text: "ชื่อ - นามสกุล",
+    //     align: "start",
+    //     sortable: false,
+    //     value: "fullnameTh",
+    //   },
+    //   {
+    //     text: "ประเภทการลา",
+    //     align: "start",
+    //     sortable: false,
+    //     value: "leaveTypeStr",
+    //   },
+    //   {
+    //     text: "วันเริ่มลา",
+    //     align: "start",
+    //     sortable: false,
+    //     value: "startDateStr",
+    //   },
+    //   {
+    //     text: "วันที่ส่งคำขอ",
+    //     align: "center",
+    //     sortable: false,
+    //     value: "createdDateStr",
+    //   },
+    //   { text: "สถานะ", align: "center", value: "actions", sortable: false },
+    //   { text: "", align: "center", value: "show", sortable: false },
+    // ],
+    // course_type: [
+    //   {
+    //     name: "ทั้งหมด",
+    //     value: "all",
+    //     img: "@/assets/coachLeave/all.png",
+    //   },
+    //   {
+    //     name: "อนุมัติ",
+    //     value: "approved",
+    //     img: "@/assets/coachLeave/accept.png",
+    //   },
+    // ],
+    // course_type_two: [
+    //   {
+    //     name: "รออนุมัติ",
+    //     value: "pending",
+    //     img: "@/assets/coachLeave/wait.png",
+    //   },
+    //   {
+    //     name: "ปฎิเสธ",
+    //     value: "reject",
+    //     img: "@/assets/coachLeave/disaccept.png",
+    //   },
+    //   {
+    //     name: "ยกเลิก",
+    //     value: "cancel",
+    //     img: "@/assets/coachLeave/all.png",
+    //   },
+    // ],
     coach_leave_arr: [],
   }),
   created() {
     this.GetLeavesAll();
     this.GetCoachs();
+  },
+  computed: {
+    ...mapGetters({
+      coach_leaves: "CoachModules/getCoachLeaves",
+      coach_leaves_is_loading: "CoachModules/getCoachLeavesIsLoading",
+      show_dialog_coach_leave_form: "CoachModules/getShowDialogCoachLeaveForm",
+    }),
+
+    column() {
+      return [
+        {
+          text: this.$t("no."),
+          align: "start",
+          sortable: false,
+          value: "count",
+        },
+        {
+          text: this.$t("coach code"),
+          align: "start",
+          sortable: false,
+          value: "accountId",
+        },
+        {
+          text: this.$t("first name - last name"),
+          align: "start",
+          sortable: false,
+          value: this.$i18n.locale == "th" ? "fullnameTh" : "fullnameEn",
+        },
+        {
+          text: this.$t("leave type"),
+          align: "start",
+          sortable: false,
+          value: this.$i18n.locale == "en" ? "leaveType" : "leaveTypeStr",
+        },
+        {
+          text: this.$t("leave start date"),
+          align: "start",
+          sortable: false,
+          value: "startDateStr",
+        },
+        {
+          text: this.$t("date of request"),
+          align: "center",
+          sortable: false,
+          value: "createdDateStr",
+        },
+        {
+          text: this.$t("status"),
+          align: "center",
+          value: "actions",
+          sortable: false,
+        },
+        { text: "", align: "center", value: "show", sortable: false },
+      ];
+    },
+
+    course_type() {
+      return [
+        {
+          name: this.$t("all"),
+          value: "all",
+          img: "@/assets/coachLeave/all.png",
+        },
+        {
+          name: this.$t("approved"),
+          value: "approved",
+          img: "@/assets/coachLeave/accept.png",
+        },
+      ];
+    },
+
+    course_type_two() {
+      return [
+        {
+          name: this.$t("waiting for approval"),
+          value: "pending",
+          img: "@/assets/coachLeave/wait.png",
+        },
+        {
+          name: this.$t("refuse"),
+          value: "reject",
+          img: "@/assets/coachLeave/disaccept.png",
+        },
+        {
+          name: this.$t("cancel"),
+          value: "cancel",
+          img: "@/assets/coachLeave/all.png",
+        },
+      ];
+    },
   },
   mounted() {},
   methods: {
@@ -364,13 +455,6 @@ export default {
         this.GetLeavesAll();
       }
     },
-  },
-  computed: {
-    ...mapGetters({
-      coach_leaves: "CoachModules/getCoachLeaves",
-      coach_leaves_is_loading: "CoachModules/getCoachLeavesIsLoading",
-      show_dialog_coach_leave_form: "CoachModules/getShowDialogCoachLeaveForm",
-    }),
   },
 };
 </script>

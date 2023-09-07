@@ -181,11 +181,11 @@ export default {
     async insertBannerList() {
       Swal.fire({
         icon: "question",
-        text: "คุณต้องการเพิ่มแบนเนอร์ใช่หรือไม่",
+        text: this.$t("do you want to add banner?"),
         showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.loading = true;
@@ -210,8 +210,8 @@ export default {
 
           Swal.fire({
             icon: "success",
-            title: "สำเร็จ",
-            text: "( เพิ่มแบนเนอร์เรียบร้อยแล้ว )",
+            title: this.$t("succeed"),
+            text: this.$t("banner added successfully"),
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
@@ -230,11 +230,10 @@ export default {
     async removeBannerFiles(id) {
       Swal.fire({
         icon: "question",
-        text: "คุณต้องการลบแบรนเนอร์ใช่หรือไม่",
-        showDenyButton: false,
+        text: this.$t("do you want to delete the banner?"),
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.GetDeleteBannerList(id);
@@ -242,8 +241,8 @@ export default {
 
           Swal.fire({
             icon: "success",
-            title: "สำเร็จ",
-            text: "( ลบแบนเนอร์เรียบร้อยแล้ว )",
+            title: this.$t("succeed"),
+            text: this.$t("banner successfully deleted"),
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,

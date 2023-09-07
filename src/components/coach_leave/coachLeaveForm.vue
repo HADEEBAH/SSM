@@ -1,7 +1,9 @@
 <template>
   <v-form ref="form_coach_leave" v-model="form_coach_leave">
     <v-card flat class="pa-0">
-      <v-card-title class="d-flex justify-center"> {{$t("leave request form")}}</v-card-title>
+      <v-card-title class="d-flex justify-center">
+        {{ $t("leave request form") }}</v-card-title
+      >
       <v-card-text>
         <!-- DATE LEAVE AND PERIOD -->
         <v-row dense v-if="admin">
@@ -56,7 +58,7 @@
                     @input="inputDate($event, 'start')"
                     @change="validateCoachLeave"
                     v-model="coach_leave_data.start_date"
-                    :locale="$i18n.locale == 'th'  ? 'th-TH' : 'en-US'"
+                    :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
@@ -98,7 +100,7 @@
                     @input="inputDate($event, 'end')"
                     @change="validateCoachLeave"
                     v-model="coach_leave_data.end_date"
-                    :locale="$i18n.locale == 'th'  ? 'th-TH' : 'en-US'"
+                    :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
@@ -107,7 +109,7 @@
         </v-row>
         <v-row dense>
           <v-col cols="12">
-            {{ $t('period') }}
+            {{ $t("period") }}
             <v-select
               :rules="rules.period"
               dense
@@ -129,7 +131,7 @@
         <!-- TYPE -->
         <v-row dense>
           <v-col cols="12">
-            {{ $t('leave type') }}
+            {{ $t("leave type") }}
             <v-select
               :rules="rules.type_leave"
               dense
@@ -161,7 +163,7 @@
                     >mdi-card-account-details-outline</v-icon
                   >
                 </v-col>
-                <v-col class="font-bold text-lg"> {{ $t('course') }} </v-col>
+                <v-col class="font-bold text-lg"> {{ $t("course") }} </v-col>
               </v-row>
               <v-divider class="my-2"></v-divider>
               <v-card
@@ -190,7 +192,7 @@
                   </v-radio-group>
                   <v-row dense>
                     <v-col>
-                      {{ $t('course name') }}
+                      {{ $t("course name") }}
                       <v-select
                         :rules="rules.course"
                         dense
@@ -228,7 +230,9 @@
                               )
                         "
                         item-value="accountId"
-                        :item-text="$i18n.locale == 'th'? 'fullNameTh' : 'fullNameEh'"
+                        :item-text="
+                          $i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEh'
+                        "
                         v-model="course.substitute_coach_id"
                       >
                       </v-select>
@@ -272,12 +276,12 @@
                           @input="
                             inputDateArr(course.compensation_date, course)
                           "
-                          :locale="$i18n.locale== 'th'? 'th-TH' : 'en-US'"
+                          :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
                         ></v-date-picker>
                       </v-menu>
                     </v-col>
                     <v-col cols="12" md="6">
-                      {{ $t('period') }}
+                      {{ $t("period") }}
                       <v-row dense class="mb-3">
                         <v-col class="px-2" cols="12" sm="6">
                           <v-text-field
@@ -371,7 +375,7 @@
             <v-row dense>
               <v-col align="center">
                 <v-btn outlined color="#FF6b81" @click="AddCourse(date)"
-                  ><v-icon>mdi-plus</v-icon>{{ $t('add a course') }}
+                  ><v-icon>mdi-plus</v-icon>{{ $t("add a course") }}
                 </v-btn>
               </v-col>
             </v-row>
@@ -442,7 +446,8 @@
                   <span class="font-bold">{{ file.name }}</span
                   ><br />
                   <span class="text-caption"
-                    >{{$t('file size')}} : {{ (file.size / 1000000).toFixed(2) }} MB</span
+                    >{{ $t("file size") }} :
+                    {{ (file.size / 1000000).toFixed(2) }} MB</span
                   >
                 </v-col>
                 <v-col cols="auto" class="pl-2">
@@ -457,9 +462,9 @@
 
         <v-row>
           <v-col cols="12" sm align="right">
-            <v-btn text color="#ff6b81" @click="closeDialogLeaveForm()"
-              >{{$t('cancel')}}</v-btn
-            >
+            <v-btn text color="#ff6b81" @click="closeDialogLeaveForm()">{{
+              $t("cancel")
+            }}</v-btn>
           </v-col>
           <v-col cols="12" sm="auto" align="right">
             <v-btn
@@ -494,33 +499,6 @@ export default {
     test_date: "",
     focusCompensationDate: "",
     today: new Date(),
-    rules: {
-      start_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันเริ่ม"],
-      period: [(val) => (val || "").length > 0 || "โปรดเลือกช่วงเวลา"],
-      type_leave: [(val) => (val || "").length > 0 || "โปรดเลือกประเภทการลา"],
-      type: [(val) => (val || "").length > 0 || "โปรดเลือกประเภท"],
-      end_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันสิ้นสุด"],
-      course: [(val) => (val || "").length > 0 || "โปรดเลือกคอร์ส"],
-      coach: [(val) => (val || "").length > 0 || "โปรดเลือกโค้ช"],
-      sub_coach: [(val) => (val || "").length > 0 || "โปรดเลือกผู้สอนแทน"],
-      compensation_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันที่"],
-      compensation_start_time: [
-        (val) => (val || "").length > 0 || "โปรดเลือกเวลาเริ่ม",
-      ],
-      compensation_end_time: [
-        (val) => (val || "").length > 0 || "โปรดเลือกเวลาสิ้นสุด",
-      ],
-    },
-    periods: [
-      { label: "ลาเต็มวัน", value: "full", start: 0, end: 23 },
-      { label: "ลาช่วงเช้า", value: "morning", start: 13, end: 23 },
-      { label: "ลาช่วงบ่าย", value: "afternoon", start: 0, end: 12 },
-    ],
-    leaveTypes: [
-      { label: "ลาป่วย", value: "sick" },
-      { label: "ลากิจ", value: "personal" },
-      { label: "ลาพักร้อน", value: "take annual leave" },
-    ],
     date_range_length: null,
     form_coach_leave: false,
     selected_files: [],
@@ -553,7 +531,6 @@ export default {
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
   },
-  mounted() {},
   watch: {
     "coach_leave_data.start_date": function () {
       if (this.coach_leave_data.start_date && this.coach_leave_data.end_date) {
@@ -566,6 +543,7 @@ export default {
       }
     },
   },
+
   computed: {
     ...mapGetters({
       coachs: "CourseModules/getCoachs",
@@ -573,43 +551,112 @@ export default {
       my_courses_leave: "CoachModules/getMyCoursesLeave",
       my_courses_leave_is_loading: "CoachModules/getMyCoursesLeaveIsLoading",
     }),
-    start_date(){
-      return [(val) => (val || "").length > 0 || this.$t("please select a start date")]
+
+    rules() {
+      return {
+        start_date: [
+          (val) =>
+            (val || "").length > 0 || this.$t("please select a start date"),
+        ],
+        period: [
+          (val) =>
+            (val || "").length > 0 || this.$t("please select a time period"),
+        ],
+        type_leave: [
+          (val) =>
+            (val || "").length > 0 || this.$t("please select leave type"),
+        ],
+        type: [
+          (val) => (val || "").length > 0 || this.$t("please select type"),
+        ],
+        end_date: [
+          (val) =>
+            (val || "").length > 0 || this.$t("please select an end date"),
+        ],
+        course: [
+          (val) => (val || "").length > 0 || this.$t("please select a course"),
+        ],
+        coach: [
+          (val) => (val || "").length > 0 || this.$t("please select a coach"),
+        ],
+        sub_coach: [
+          (val) =>
+            (val || "").length > 0 ||
+            this.$t("please select a substitute instructor"),
+        ],
+        compensation_date: [
+          (val) => (val || "").length > 0 || this.$t("please select a date"),
+        ],
+        compensation_start_time: [
+          (val) =>
+            (val || "").length > 0 || this.$t("please select a start time"),
+        ],
+        compensation_end_time: [
+          (val) =>
+            (val || "").length > 0 || this.$t("please select an end time"),
+        ],
+      };
     },
-    period(){
-      return [(val) => (val || "").length > 0 ||  this.$t("please select a time period")]
-    },
-    type_leave(){
-      return [(val) => (val || "").length > 0 || this.$t("please select leave type")]
-    },
-    type() {
-      return [(val) => (val || "").length > 0 || this.$t("please select type")]
-    },
-    end_date(){
-      return [(val) => (val || "").length > 0 ||  this.$t("please select an end date.")]
-    },
-    course(){
-      return [(val) => (val || "").length > 0 || this.$t("please select a course")]
-    },
-    coach(){
-      return [(val) => (val || "").length > 0 || this.$t("please select a coach")] 
-    },
-    sub_coach(){
-      return [(val) => (val || "").length > 0 || this.$t("please select a substitute instructor")]
-    },
-    compensation_date(){
-      return [(val) => (val || "").length > 0 ||  this.$t("please select a date")]
-    },
-    compensation_start_time(){ 
-      return [
-        (val) => (val || "").length > 0 || this.$t("please select a start time"),
-      ]
-    },
-    compensation_end_time(){
-      return [
-        (val) => (val || "").length > 0 || this.$t("please select an end time"),
-      ]
-    },
+
+    // start_date() {
+    //   return [
+    //     (val) =>
+    //       (val || "").length > 0 || this.$t("please select a start date"),
+    //   ];
+    // },
+    // period() {
+    //   return [
+    //     (val) =>
+    //       (val || "").length > 0 || this.$t("please select a time period"),
+    //   ];
+    // },
+    // type_leave() {
+    //   return [
+    //     (val) => (val || "").length > 0 || this.$t("please select leave type"),
+    //   ];
+    // },
+    // type() {
+    //   return [(val) => (val || "").length > 0 || this.$t("please select type")];
+    // },
+    // end_date() {
+    //   return [
+    //     (val) =>
+    //       (val || "").length > 0 || this.$t("please select an end date."),
+    //   ];
+    // },
+    // course() {
+    //   return [
+    //     (val) => (val || "").length > 0 || this.$t("please select a course"),
+    //   ];
+    // },
+    // coach() {
+    //   return [
+    //     (val) => (val || "").length > 0 || this.$t("please select a coach"),
+    //   ];
+    // },
+    // sub_coach() {
+    //   return [
+    //     (val) =>
+    //       (val || "").length > 0 ||
+    //       this.$t("please select a substitute instructor"),
+    //   ];
+    // },
+    // compensation_date() {
+    //   return [
+    //     (val) => (val || "").length > 0 || this.$t("please select a date"),
+    //   ];
+    // },
+    // compensation_start_time() {
+    //   return [
+    //     (val) =>
+    //       (val || "").length > 0 || this.$t("please select a start time"),
+    //   ];
+    // },
+    // compensation_end_time() {
+    //   return [
+    //     (val) => (val || "").length > 0 || this.$t("please select an end time"),
+    //   ];
+    // },
     validateCoachLeave() {
       let start_date = this.coach_leave_data.start_date ? true : false;
       let end_date = this.coach_leave_data.end_date ? true : false;
@@ -617,6 +664,21 @@ export default {
       let leave_type = this.coach_leave_data.leave_type ? true : false;
       let course = this.coach_leave_data.dates.length > 0;
       return !(start_date && end_date && period && leave_type && course);
+    },
+
+    periods() {
+      return [
+        { label: this.$t("full day leave"), value: "full" },
+        { label: this.$t("morning leave"), value: "morning" },
+        { label: this.$t("afternoon leave"), value: "afternoon" },
+      ];
+    },
+    leaveTypes() {
+      return [
+        { label: this.$t("sick leave"), value: "sick" },
+        { label: this.$t("personal"), value: "personal" },
+        { label: this.$t("take annual leave"), value: "take annual leave" },
+      ];
     },
   },
   methods: {
@@ -629,7 +691,7 @@ export default {
     }),
     inputDateArr(date, course) {
       course.compensation_date_str = new Date(date).toLocaleDateString(
-        this.$i18n.locale == 'th' ? "th-TH":"en-US",
+        this.$i18n.locale == "th" ? "th-TH" : "en-US",
         { year: "numeric", month: "long", day: "numeric" }
       );
     },
@@ -948,11 +1010,11 @@ export default {
       if (this.form_coach_leave) {
         Swal.fire({
           icon: "question",
-          title: "ต้องการส่งใบลาใช่หรือไม่ ?",
+          title: this.$t("do you want to submit a leave letter?"),
           showDenyButton: false,
           showCancelButton: true,
-          cancelButtonText: "ยกเลิก",
-          confirmButtonText: "ตกลง",
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             for (let date of this.coach_leave_data.dates) {

@@ -131,7 +131,7 @@
           <v-divider></v-divider>
           <v-list-item link @click="logOut">
             <v-list-item-icon><v-icon>mdi-login</v-icon></v-list-item-icon>
-            <v-list-item-title>ออกจากระบบ</v-list-item-title>
+            <v-list-item-title>{{ $t("logout") }}</v-list-item-title>
           </v-list-item>
         </template>
       </v-navigation-drawer>
@@ -221,22 +221,22 @@ export default {
   created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     //  Function called when the Google Translate Element script is loaded
-    // window.googleTranslateElementInit = () => {
-    //   new window.google.translate.TranslateElement(
-    //     {
-    //       pageLanguage: this.$i18n.locale, // Change to the default language of your website
-    //       includedLanguages: "en,th",
-    //     },
-    //     "google_translate_element"
-    //   );
-    // };
+    window.googleTranslateElementInit = () => {
+      new window.google.translate.TranslateElement(
+        {
+          pageLanguage: this.$i18n.locale, // Change to the default language of your website
+          includedLanguages: "en,th",
+        },
+        "google_translate_element"
+      );
+    };
 
     // // Load the Google Translate Element script dynamically
-    // const script = document.createElement("script");
-    // script.type = "text/javascript";
-    // script.src =
-    //   "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-    // document.head.appendChild(script);
+    const script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src =
+      "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+    document.head.appendChild(script);
   },
   mounted() {
     this.menu_drawer_list.forEach((list) => {

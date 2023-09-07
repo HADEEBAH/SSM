@@ -23,25 +23,25 @@
         </v-app-bar-nav-icon>
         <v-spacer></v-spacer>
         <v-app-bar-title class="font-bold">
-          {{ $t(titel_navber)}} 
+          {{ $t(titel_navber) }}
         </v-app-bar-title>
         <v-spacer></v-spacer>
         <div id="google_translate_element"></div>
-        <v-menu v-model="menu_locale"  offset-y>
+        <v-menu v-model="menu_locale" offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn text v-bind="attrs" v-on="on">
-              <label>{{ $i18n.locale == 'en' ? $t('english') : $t('thai') }}</label>
-              <v-icon dark >
-                mdi-web
-              </v-icon>
+              <label>{{
+                $i18n.locale == "en" ? $t("english") : $t("thai")
+              }}</label>
+              <v-icon dark> mdi-web </v-icon>
             </v-btn>
           </template>
           <v-card>
             <v-list-item @click="setLocale('en')">
-              {{ $t('english') }}
+              {{ $t("english") }}
             </v-list-item>
-            <v-list-item  @click="setLocale('th')">
-              {{ $t('thai') }} 
+            <v-list-item @click="setLocale('th')">
+              {{ $t("thai") }}
             </v-list-item>
           </v-card>
         </v-menu>
@@ -69,12 +69,12 @@
                 <v-toolbar dense elevation="0">
                   <v-row dense height="500">
                     <v-col cols="8">
-                      <div class="my-2 font-bold">{{ $t("notifications") }}</div>
+                      <div class="my-2 font-bold">
+                        {{ $t("notifications") }}
+                      </div>
                     </v-col>
                     <v-col cols="4" align="end">
-                      <v-icon size="32" color="#ff6b81">
-                        mdi-email
-                      </v-icon>
+                      <v-icon size="32" color="#ff6b81"> mdi-email </v-icon>
                     </v-col>
                   </v-row>
                 </v-toolbar>
@@ -141,18 +141,33 @@
             @click="$router.push({ name: 'CartList' })"
             >mdi-cart</v-icon
           >
-          <div >
+          <div>
             <div v-if="!$vuetify.breakpoint.smAndDown">
-              <v-avatar class="mx-2" size="24" v-if="profile_detail.image !== ''">
+              <v-avatar
+                class="mx-2"
+                size="24"
+                v-if="profile_detail.image !== ''"
+              >
                 <v-img :src="profile_detail.image" size="24" />
               </v-avatar>
               <v-avatar class="mx-2" size="24" v-else>
-                <v-img src="@/assets/navbar_user/default_image_profile.svg" size="24" />
+                <v-img
+                  src="@/assets/navbar_user/default_image_profile.svg"
+                  size="24"
+                />
               </v-avatar>
 
               <span class="text-white mx-2">
-                {{ $i18n.locale == 'th' ? show_profile_detail.firstNameTh : show_profile_detail.firstNameEng }}
-                {{ $i18n.locale == 'th' ? show_profile_detail.lastNameTh : show_profile_detail.lastNameEng}}
+                {{
+                  $i18n.locale == "th"
+                    ? show_profile_detail.firstNameTh
+                    : show_profile_detail.firstNameEng
+                }}
+                {{
+                  $i18n.locale == "th"
+                    ? show_profile_detail.lastNameTh
+                    : show_profile_detail.lastNameEng
+                }}
               </span>
             </div>
           </div>
@@ -169,9 +184,9 @@
             small
           >
             <v-icon>mdi-login</v-icon>
-            <template v-if="!$vuetify.breakpoint.smAndDown"
-              >{{ $t("login") }}</template
-            >
+            <template v-if="!$vuetify.breakpoint.smAndDown">{{
+              $t("login")
+            }}</template>
           </v-btn>
           <v-btn
             @click="$router.push({ name: 'Register' })"
@@ -180,7 +195,9 @@
             small
           >
             <v-icon>mdi-account-plus</v-icon>
-            <template v-if="!$vuetify.breakpoint.smAndDown">{{ $t('register')}}</template>
+            <template v-if="!$vuetify.breakpoint.smAndDown">{{
+              $t("register")
+            }}</template>
           </v-btn>
         </template>
       </v-app-bar>
@@ -219,8 +236,16 @@
             cols="12"
             class="flex align-center justify-center font-bold text-md"
           >
-            {{ $i18n.locale == 'th' ? show_profile_detail.firstNameTh : show_profile_detail.firstNameEng }}
-            {{ $i18n.locale == 'th' ? show_profile_detail.lastNameTh : show_profile_detail.lastNameEng}}
+            {{
+              $i18n.locale == "th"
+                ? show_profile_detail.firstNameTh
+                : show_profile_detail.firstNameEng
+            }}
+            {{
+              $i18n.locale == "th"
+                ? show_profile_detail.lastNameTh
+                : show_profile_detail.lastNameEng
+            }}
           </v-col>
           <v-col cols="12" class="flex align-center justify-center text-sm">
             {{ show_profile_detail.email }}
@@ -230,8 +255,13 @@
           <div v-for="(list, list_index) in menu_drawer_list" :key="list_index">
             <template v-if="list.to !== 'logOut'">
               <v-list-item
-                v-if=" list.to == 'StudentsSchedule' ?  checkrole(user_detail?.roles, list.roles) : 
-                list.roles.length > 0 ? list.roles.filter((v) => user_detail?.roles.includes(v)).length > 0 : true
+                v-if="
+                  list.to == 'StudentsSchedule'
+                    ? checkrole(user_detail?.roles, list.roles)
+                    : list.roles.length > 0
+                    ? list.roles.filter((v) => user_detail?.roles.includes(v))
+                        .length > 0
+                    : true
                 "
                 @click="nextpage(list)"
                 :class="
@@ -282,7 +312,7 @@
         <v-row dense align="center" class="mb-2">
           <v-col cols>
             <v-row dense>
-              <v-col class="font-bold text-sm">{{$t("contact us at")}}</v-col>
+              <v-col class="font-bold text-sm">{{ $t("contact us at") }}</v-col>
             </v-row>
             <v-row dense>
               <v-col cols="auto" class="font-bold">
@@ -354,17 +384,17 @@ export default {
     menu_drawer_list: [
       {
         icon: "mdi-account-circle",
-        title:"profile",
+        title: "profile",
         to: "UserProfile",
         params: null,
         roles: [],
       },
       {
         icon: "mdi-calendar-month",
-        title:"study schedule",
+        title: "study schedule",
         to: "StudentsSchedule",
         params: { action: "MySchedule" },
-        roles: ["R_1","R_2", "R_3"],
+        roles: ["R_1", "R_2", "R_3"],
       },
       {
         icon: "mdi-book-cog-outline",
@@ -399,7 +429,7 @@ export default {
       mobileNo: "",
       email: "",
     },
-    menu_locale : false,
+    menu_locale: false,
     notify: false,
     hints: true,
     alert: true,
@@ -408,7 +438,7 @@ export default {
   }),
 
   created() {
-    this.$i18n.locale = localStorage.getItem("lang")
+    this.$i18n.locale = localStorage.getItem("lang");
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail.account_id);
@@ -417,22 +447,22 @@ export default {
     if (this.user_detail?.account_id) {
       this.GetCartList(this.user_detail.account_id);
     }
-    // window.googleTranslateElementInit = () => {
-    //   new window.google.translate.TranslateElement(
-    //     {
-    //       pageLanguage: this.$i18n.locale, // Change to the default language of your website
-    //       includedLanguages: 'th,en',
-    //     },
-    //     'google_translate_element'
-    //   );
-    // };
+    window.googleTranslateElementInit = () => {
+      new window.google.translate.TranslateElement(
+        {
+          pageLanguage: this.$i18n.locale, // Change to the default language of your website
+          includedLanguages: "th,en",
+        },
+        "google_translate_element"
+      );
+    };
 
-    // // Load the Google Translate Element script dynamically
-    // const script = document.createElement('script');
-    // script.type = 'text/javascript';
-    // script.src =
-    //   '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-    // document.head.appendChild(script);
+    // Load the Google Translate Element script dynamically
+    const script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src =
+      "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+    document.head.appendChild(script);
   },
   beforeMount() {
     this.drawer = false;
@@ -484,17 +514,17 @@ export default {
       ReadNotifications: "NotificationsModules/ReadNotifications",
     }),
     setLocale(locale) {
-      this.$i18n.locale = locale
-      localStorage.setItem("lang",locale)
+      this.$i18n.locale = locale;
+      localStorage.setItem("lang", locale);
     },
-    checkrole(a,b){
-      let notFound = true; 
-      if(a.length > 0){
+    checkrole(a, b) {
+      let notFound = true;
+      if (a.length > 0) {
         if (b.includes(a[0])) {
           notFound = false;
         }
       }
-      return notFound
+      return notFound;
     },
     selectMenu(type, to, head) {
       if (type === "child" && head === this.active_menu) {
@@ -515,12 +545,12 @@ export default {
       this.ReadNotifications({
         notification_id: params.notificationId,
         account_id: params.accountId,
-        path: params.path
+        path: params.path,
       });
       if (params.path) {
         if (this.$route.path !== params.path) {
           // window.location.href = `http://localhost:8080${params.path}`
-          window.location = `${process.env.VUE_APP_URL}${params.path}`
+          window.location = `${process.env.VUE_APP_URL}${params.path}`;
         }
       }
     },
@@ -537,7 +567,6 @@ export default {
 };
 </script>
 <style scoped>
-
 .bg-navbar-user {
   background: linear-gradient(141.48deg, #ff8092 43%, #fdcb6e 85.47%);
 }
