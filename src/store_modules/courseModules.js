@@ -6,7 +6,7 @@ import VueCookie from "vue-cookie"
 import VueI18n from "../i18n";
 var XLSX = require("xlsx");
 function dayOfWeekArray(day) {
-  console.log(day)
+  // console.log(day)
   let days = day
   const weekdays = [
     VueI18n.t("sunday"),
