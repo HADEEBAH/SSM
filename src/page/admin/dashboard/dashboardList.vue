@@ -256,7 +256,17 @@
                       outlined
                       @input="selectYears()"
                       color="#ff6b81"
-                    ></v-select>
+                    >
+                      <template v-slot:no-data >
+                        <v-list-item>
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              {{ $t('no data found') }}
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </template>
+                    </v-select>
                   </v-col>
                   <!-- Month -->
                   <v-col cols="6" sm="6" md="6" lg="4">
@@ -269,7 +279,17 @@
                       outlined
                       @input="selectMunth()"
                       color="#ff6b81"
-                    ></v-select>
+                    >
+                      <template v-slot:no-data >
+                        <v-list-item>
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              {{ $t('no data found') }}
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </template>
+                    </v-select>
                   </v-col>
                 </v-row>
               </v-card-title>
@@ -332,7 +352,17 @@
                       outlined
                       @input="selectDonutYears()"
                       color="#ff6b81"
-                    ></v-select>
+                    >
+                      <template v-slot:no-data >
+                        <v-list-item>
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              {{ $t('no data found') }}
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </template>
+                    </v-select>
                   </v-col>
                   <!-- MONTH -->
                   <v-col cols="6" sm="6" md="6" lg="4">
@@ -345,7 +375,17 @@
                       outlined
                       @input="selectDonutMounth()"
                       color="#ff6b81"
-                    ></v-select>
+                    >
+                      <template v-slot:no-data >
+                        <v-list-item>
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              {{ $t('no data found') }}
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </template>
+                    </v-select>
                   </v-col>
                 </v-row>
               </v-card-title>
@@ -1064,12 +1104,12 @@ export default {
     )[0];
   },
   beforeMount() {},
-  mounted() {
+  async mounted() {
     this.selected_mounth = this.mapMonth;
     this.donut_mounth = this.mapMonth;
-    this.GetEmptyCourse();
-    this.GetCourseType();
-    this.GetPotential();
+    await this.GetEmptyCourse();
+    // await this.GetCourseType();
+    // await this.GetPotential();
   },
   methods: {
     ...mapActions({
