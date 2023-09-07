@@ -6,15 +6,16 @@ import VueCookie from "vue-cookie"
 import VueI18n from "../i18n";
 var XLSX = require("xlsx");
 function dayOfWeekArray(day) {
+  console.log(day)
   let days = day
   const weekdays = [
-    VueI18n.$t("sunday"),
-    VueI18n.$t("monday"),
-    VueI18n.$t("tuesday"),
-    VueI18n.$t("wednesday"),
-    VueI18n.$t("thursday"),
-    VueI18n.$t("friday"),
-    VueI18n.$t("saturday"),
+    VueI18n.t("sunday"),
+    VueI18n.t("monday"),
+    VueI18n.t("tuesday"),
+    VueI18n.t("wednesday"),
+    VueI18n.t("thursday"),
+    VueI18n.t("friday"),
+    VueI18n.t("saturday"),
   ];
   days.sort();
   let ranges = [];
