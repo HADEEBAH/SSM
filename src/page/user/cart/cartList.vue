@@ -399,7 +399,7 @@ export default {
                 cancelButtonText: this.$t("cancel"),
               });
             } else {
-              this.saveOrder().then(() => {
+              this.saveOrder({regis_type : ""}).then(() => {
                 for (const cart of this.cart_list) {
                   for (const id of cart.order_tmp_id) {
                     this.DeleteCart({

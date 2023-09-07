@@ -142,7 +142,7 @@
                 >
                   <template v-slot:no-data>
                     <v-list-item>
-                      <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
+                      <v-list-item-title> {{ $t("no data found") }} </v-list-item-title>
                     </v-list-item>
                   </template>
                   <template v-slot:item="{ item }">
@@ -1163,7 +1163,7 @@ export default {
                     path: null,
                   };
                   this.sendNotification(payload);
-                  this.saveOrder();
+                  this.saveOrder({regis_type : 'addStudent'});
                 } else {
                   let account = [];
                   let course_name_noti = [];
@@ -1202,7 +1202,7 @@ export default {
                     path: null,
                   };
                   this.sendNotification(payload);
-                  this.saveOrder();
+                  this.saveOrder({regis_type : "addStudent"});
                 }
               }
             });

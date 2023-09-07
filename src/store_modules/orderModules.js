@@ -268,37 +268,43 @@ const orderModules = {
                                 if (!students.some(v => v.account_id == student.userOneId)) {
                                     students.push({
                                         student_name: `${student.firstNameTh} ${student.lastNameTh}`,
+                                        student_name_en : `${student.firstNameEn} ${student.lastNameEn}`,
                                         account_id: student.userOneId
                                     })
                                 }
                             }
                             let inputDate = order.payment_status === "success" ? order.payment?.paymentDate : '';
-                            const year = parseInt(inputDate?.substring(0, 4)) + 543;
-                            const month = parseInt(inputDate?.substring(4, 6));
-                            const day = inputDate?.substring(6, 8);
-
-                            const monthNames = [
-                                "",
-                                "มกราคม",
-                                "กุมภาพันธ์",
-                                "มีนาคม",
-                                "เมษายน",
-                                "พฤษภาคม",
-                                "มิถุนายน",
-                                "กรกฎาคม",
-                                "สิงหาคม",
-                                "กันยายน",
-                                "ตุลาคม",
-                                "พฤศจิกายน",
-                                "ธันวาคม"
-                            ];
-
-                            const formatted = `${day} ${monthNames[month]} ${year}`;
-
-                            let cutTime = order.payment_status === "success" ? order.payment?.paymentTime : '';
-                            let HH = cutTime?.slice(0, 2);
-                            let mm = cutTime?.slice(2, 4);
-                            order.paid_date = order.payment_status === "success" ? `${formatted} ${HH + ":" + mm}` : ""
+                            if(inputDate){
+                                const year = parseInt(inputDate?.substring(0, 4)) + 543;
+                                const month = parseInt(inputDate?.substring(4, 6));
+                                const day = inputDate?.substring(6, 8);
+                                let cutTime = order.payment_status === "success" ? order.payment?.paymentTime : '';
+                                let HH = cutTime?.slice(0, 2);
+                                let mm = cutTime?.slice(2, 4);
+                                const formatted = `${year}-${month}-${day}`;
+                                order.paid_date = new Date(formatted).toLocaleDateString(VueI18n.locale == 'th' ? "th-Th" : "en-US",{
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                }) +" "+HH + ":" + mm
+                            }
+                            // const monthNames = [
+                            //     "",
+                            //     "มกราคม",
+                            //     "กุมภาพันธ์",
+                            //     "มีนาคม",
+                            //     "เมษายน",
+                            //     "พฤษภาคม",
+                            //     "มิถุนายน",
+                            //     "กรกฎาคม",
+                            //     "สิงหาคม",
+                            //     "กันยายน",
+                            //     "ตุลาคม",
+                            //     "พฤศจิกายน",
+                            //     "ธันวาคม"
+                            // ];
+                            // const formatted = `${day} ${monthNames[month]} ${year}`;
+                            // order.paid_date = order.payment_status === "success" ? `${formatted} ${HH + ":" + mm}` : ""
                             order.course_name = `${order.course?.courseNameTh}(${order.course?.courseNameEn})`
                             order.student_name = `${order.user?.firstNameTh} ${order.user?.lastNameTh}`
                         }
@@ -451,7 +457,7 @@ const orderModules = {
                 console.log(error)
             }
         },
-        async saveOrder(context) {
+        async saveOrder(context, { regis_type }) {
             context.commit("SetOrderIsLoading", true)
             try {
                 let order = context.state.order
@@ -477,6 +483,7 @@ const orderModules = {
                     paymentStatus: 'pending',
                     paymentType: order.payment_type,
                     totalPrice: 0,
+                    regisType : regis_type,
                 }
                 let total_price = 0
                 await order.courses.forEach((course) => {

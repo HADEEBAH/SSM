@@ -4,7 +4,7 @@
     <v-container v-if="!orders_is_loading">
       <v-row>
         <v-col cols="6" sm="6" align="start">
-          <headerPage title="การเงิน"></headerPage>
+          <headerPage :title="$t('finance')"></headerPage>
         </v-col>
         <v-col cols="6" sm="6" align="end">
           <v-btn
@@ -12,7 +12,7 @@
             color="#ff6b81"
             class="white--text"
             @click="ShowDialogExport"
-            >นำออกข้อมูล</v-btn
+            >{{$t('export')}}</v-btn
           >
         </v-col>
       </v-row>
@@ -23,7 +23,7 @@
             dense
             prepend-inner-icon="mdi-magnify"
             outlined
-            placeholder="ค้นหา"
+            :placeholder="$t('search')"
             v-model="search"
           ></v-text-field>
         </v-col>
@@ -31,7 +31,7 @@
       <v-row dense class="mb-3">
         <v-col cols="12" sm="4" @click="tab = 'all'">
           <img-card
-            title="ทั้งหมด"
+            :title="$t('all')"
             class="cursor-pointer"
             :class="tab === 'all' ? 'img-card-active' : ''"
             count="5"
@@ -45,14 +45,14 @@
               ></v-img>
             </template>
             <template v-slot:header>
-              <div class="font-bold">ทั้งหมด</div>
+              <div class="font-bold">{{$t('all')}}</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
                 <v-col align="center" class="text-3xl font-bold">{{
                   orders.length
                 }}</v-col>
-                <v-col class="text-sm">รายการ</v-col>
+                <v-col class="text-sm">{{$t('list')}}</v-col>
               </v-row>
             </template>
           </img-card>
@@ -70,14 +70,14 @@
               ></v-img>
             </template>
             <template v-slot:header>
-              <div class="font-bold">ชำระแล้ว</div>
+              <div class="font-bold">{{ $t("paid") }}</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
                 <v-col align="center" class="text-3xl font-bold">{{
                   orders.filter((v) => v.payment_status === "success").length
                 }}</v-col>
-                <v-col class="text-sm">รายการ</v-col>
+                <v-col class="text-sm">{{$t("list")}}</v-col>
               </v-row>
             </template>
           </img-card>
@@ -95,14 +95,14 @@
               ></v-img>
             </template>
             <template v-slot:header>
-              <div class="font-bold">รอดำเนินการ</div>
+              <div class="font-bold">{{ $t('pending') }}</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
                 <v-col align="center" class="text-3xl font-bold">{{
                   orders.filter((v) => v.payment_status === "pending").length
                 }}</v-col>
-                <v-col class="text-sm">รายการ</v-col>
+                <v-col class="text-sm">{{ $t("list")}}</v-col>
               </v-row>
             </template>
           </img-card>
@@ -138,11 +138,7 @@
             "
           >
             <span class="w-full text-center">{{
-              item.payment_status == "pending"
-                ? "รอดำเนินการ"
-                : item.payment_status === "success"
-                ? "ชำระเงินแล้ว"
-                : "ยกเลิก"
+              $t(item.payment_status) 
             }}</span>
           </div>
         </template>
@@ -158,13 +154,13 @@
                 params: { order_id: item.order_number },
               })
             "
-            >เพิ่มเติม</v-btn
+            >{{$t("see more")}}</v-btn
           >
         </template>
         <template v-slot:[`item.created_date`]="{ item }">
           <!-- {{ new Date(item.created_date).toLocaleDateString() }} -->
           {{
-            new Date(item.created_date).toLocaleDateString("th-TH", {
+            new Date(item.created_date).toLocaleDateString($i18n.locale == 'th' ? "th-TH" : "en-US", {
               year: "numeric",
               month: "long",
               day: "numeric",
@@ -172,7 +168,7 @@
           }}
         </template>
         <template v-slot:[`no-results`]>
-          <div class="font-bold">ไม่พบข้อมูลในตาราง</div>
+          <div class="font-bold">{{ $t("no data found in table") }}</div>
         </template>
       </v-data-table>
       <!-- DIALOG -->
@@ -188,19 +184,19 @@
           <v-card-title>
             <v-row dense>
               <v-col cols="12" align="center" class="font-semibold"
-                >นำออกข้อมูล</v-col
+                >{{ $t("export") }}</v-col
               >
             </v-row>
           </v-card-title>
           <!-- รายละเอียดคอร์สเรียน -->
-          <headerCard title="รายละเอียดคอร์สเรียน"></headerCard>
+          <headerCard :title="$t('course details')"></headerCard>
           <v-card-text class="py-0">
             <v-divider class="mb-3"></v-divider>
             <!-- 1 -->
             <v-row dense>
               <!-- ชื่อผู้เรียน -->
               <v-col cols="12" sm="6">
-                <label-custom text="ชื่อผู้เรียน"></label-custom>
+                <label-custom :text="$t('student name')"></label-custom>
                 <v-autocomplete
                   dense
                   v-model="export_filter.students"
@@ -211,14 +207,14 @@
                   item-text="fullname"
                   item-value="userOneId"
                   class="py-1"
-                  label="กรุณากรอกชื่อผู้เรียน"
+                  :label="$t('please enter the student name')"
                   outlined
                   color="#FF6B81"
                   item-color="#FF6B81"
                 >
                   <template v-slot:no-data>
                     <v-list-item>
-                      <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
+                      <v-list-item-title> {{$t("no data found")}} </v-list-item-title>
                     </v-list-item>
                   </template>
                   <template v-slot:selection="data">
@@ -227,7 +223,7 @@
                       :input-value="data.selected"
                       color="#FBF3F5"
                     >
-                      {{ `${data.item.firstNameTh} ${data.item.lastNameTh}` }}
+                      {{ $i18n.locale == 'th' ? `${data.item.firstNameTh} ${data.item.lastNameTh}` : `${data.item.firstNameEn} ${data.item.lastNameEn}` }}
                       <v-icon
                         @click="remove(data.item.userOneId)"
                         color="#ff6b81"
@@ -236,20 +232,20 @@
                     </v-chip>
                   </template>
                   <template v-slot:item="{ item }">
-                    {{ `${item.firstNameTh} ${item.lastNameTh}` }}
+                    {{ $i18n.locale == 'th' ? `${item.firstNameTh} ${item.lastNameTh}` : `${item.firstNameEn} ${item.lastNameEn}` }}
                   </template>
                 </v-autocomplete>
               </v-col>
               <!-- สถานะการชำเงิน -->
               <v-col cols="12" sm="6">
-                <label-custom text="สถานะการชำระเงิน"></label-custom>
+                <label-custom :text="$t('payment status')"></label-custom>
                 <v-autocomplete
                   dense
                   class="py-1"
                   :items="statusPayment"
-                  item-text="namePayment"
+                  :item-text="$i18n.locale == 'th' ? 'namePayment' : 'namePaymentEn'"
                   item-value="valuePayment"
-                  label="กรุณาเลือกสถานะ"
+                  :label="$t('please select a status')"
                   outlined
                   color="#FF6B81"
                   item-color="#FF6B81"
@@ -259,10 +255,10 @@
                 >
                   <template v-slot:selection="{ item, index }">
                     <v-chip dark v-if="index === 0" color="#FF6B81">
-                      <span>{{ item.namePayment }}</span>
+                      <span>{{ $i18n.locale == 'th' ? item.namePayment : item.namePaymentEn}}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
-                      (+{{ export_filter.payment_status.length - 1 }} others)
+                      (+{{ export_filter.payment_status.length - 1 }} {{ $t("others")}} )
                     </span>
                   </template>
                 </v-autocomplete>
@@ -272,14 +268,14 @@
             <v-row dense>
               <!-- ประเภทการชำระเงิน -->
               <v-col cols="12" sm="6">
-                <label-custom text="ประเภทการชำระเงิน"></label-custom>
+                <label-custom :text="$t('payment type')"></label-custom>
                 <v-autocomplete
                   dense
                   :items="typeOfPayment"
-                  item-text="name"
+                  :item-text="$i18n.locale =='th' ? 'name' : 'nameEn'"
                   item-value="value"
                   v-model="export_filter.payment_type"
-                  label="กรุณาเลือกประเภทการชำระเงิน"
+                  :label="$t('please select a payment type')"
                   outlined
                   multiple
                   hide-details
@@ -289,24 +285,24 @@
                 >
                   <template v-slot:selection="{ item, index }">
                     <v-chip dark v-if="index === 0" color="#FF6B81">
-                      <span>{{ item.name }}</span>
+                      <span>{{ $i18n.locale =='th' ? item.name : item.nameEn }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
-                      (+{{ export_filter.payment_type.length - 1 }} others)
+                      (+{{ export_filter.payment_type.length - 1 }} {{$t("others")}})
                     </span>
                   </template>
                 </v-autocomplete>
               </v-col>
               <!-- ชื่อคอร์ส -->
               <v-col cols="12" sm="6">
-                <label-custom text="ชื่อคอร์ส"></label-custom>
+                <label-custom :text="$t('course name')"></label-custom>
                 <v-autocomplete
                   dense
                   :items="courses"
                   item-text="course"
                   item-value="course_id"
                   v-model="export_filter.course_id"
-                  label="กรุณาเลือกชื่อคอร์ส"
+                  :label="$t('please select a course')"
                   outlined
                   multiple
                   hide-details
@@ -319,7 +315,7 @@
                       <span>{{ item.course }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
-                      (+{{ export_filter.course_id.length - 1 }} others)
+                      (+{{ export_filter.course_id.length - 1 }} {{$t("others")}})
                     </span>
                   </template>
                 </v-autocomplete>
@@ -703,14 +699,14 @@ export default {
     itemsPerPage: 10,
     show_dialog: false,
     statusPayment: [
-      { namePayment: "ชำระแล้ว", valuePayment: "success" },
-      { namePayment: "รอดำเนินการ", valuePayment: "pending" },
-      { namePayment: "ยกเลิก", valuePayment: "cancel" },
+      { namePayment: "ชำระแล้ว", namePaymentEn: "Paid",valuePayment: "success" },
+      { namePayment: "รอดำเนินการ", namePaymentEn: "Pending", valuePayment: "pending" },
+      { namePayment: "ยกเลิก", namePaymentEn: "Cancel", valuePayment: "cancel" },
     ],
     typeOfPayment: [
-      { name: "เงินสด", value: "cash" },
-      { name: "บัตรเครดิต / เดบิต", value: "Credit Card" },
-      { name: "โอนเงินเข้าบัญชี", value: "transfer" },
+      { name: "เงินสด", nameEn: "Cash", value: "cash" },
+      { name: "บัตรเครดิต / เดบิต", nameEn: "Credit Card", value: "Credit Card" },
+      { name: "โอนเงินเข้าบัญชี", nameEn: "Transfer", value: "transfer" },
     ],
     courseName: [],
     courseType: [
@@ -743,47 +739,6 @@ export default {
     selected: [],
     tab: "all",
     items: ["ทั้งหมด", "ชำระเงินแล้ว", "รอดำเนินการ"],
-    columns: [
-      {
-        text: "หมายเลขคำสั่งซื้อ",
-        align: "start",
-        sortable: false,
-        value: "order_number",
-        width: 150,
-      },
-      {
-        text: "ชื่อ-นามสกุลผู้เรียน",
-        align: "start",
-        sortable: false,
-        value: "student_name",
-      },
-      {
-        text: "ชื่อคอร์ส",
-        align: "start",
-        sortable: false,
-        value: "course_name",
-      },
-      { text: "ราคา", align: "start", sortable: false, value: "total_price" },
-      {
-        text: "สถานะการชำระ",
-        align: "start",
-        sortable: false,
-        value: "payment_status",
-      },
-      {
-        text: "วันที่ชำระ",
-        align: "start",
-        sortable: false,
-        value: "paid_date",
-      },
-      {
-        text: "วันที่สร้างเอกสาร",
-        align: "start",
-        sortable: false,
-        value: "created_date",
-      },
-      { text: "", align: "start", value: "actions", sortable: false },
-    ],
   }),
   created() {
     this.GetCoursesList();
@@ -912,6 +867,49 @@ export default {
       finance_filter: "FinanceModules/getFinanceFilter",
       finance_filter_loading: "FinanceModules/getFinanceLoading",
     }),
+    columns(){
+      return [
+        {
+          text: this.$t("order number"),
+          align: "start",
+          sortable: false,
+          value: "order_number",
+          width: 150,
+        },
+        {
+          text:  this.$t("first name - last name student"),
+          align: "start",
+          sortable: false,
+          value:"student_name",
+        },
+        {
+          text: this.$t("course name"),
+          align: "start",
+          sortable: false,
+          value: "course_name",
+        },
+        { text: this.$t("price"), align: "start", sortable: false, value: "total_price" },
+        {
+          text: this.$t("payment status"),
+          align: "start",
+          sortable: false,
+          value: "payment_status",
+        },
+        {
+          text: this.$t("payment date"),
+          align: "start",
+          sortable: false,
+          value: "paid_date",
+        },
+        {
+          text: this.$t("created date"),
+          align: "start",
+          sortable: false,
+          value: "created_date",
+        },
+        { text: "", align: "start", value: "actions", sortable: false },
+      ]
+    },
   },
   watch: {
     search_student(val) {
