@@ -1078,22 +1078,35 @@ export default {
       });
     },
     dayOfWeekArray(day) {
-      const daysOfWeek = [
-        "วันอาทิตย์",
-        "วันจันทร์",
-        "วันอังคาร",
-        "วันพุธ",
-        "วันพฤหัสบดี",
-        "วันศุกร์",
-        "วันเสาร์",
+      // console.log(day)
+      let days = day
+      const weekdays = [
+        this.$t("sunday"),
+        this.$t("monday"),
+        this.$t("tuesday"),
+        this.$t("wednesday"),
+        this.$t("thursday"),
+        this.$t("friday"),
+        this.$t("saturday"),
       ];
-
-      const validDays = day.filter((d) => d >= 0 && d <= 6);
-      if (validDays) {
-        const firstThreeDays = validDays.map((d) => daysOfWeek[d]);
-        return `${firstThreeDays.join(" , ")}`;
-      } else {
-        return "Invalid days";
+      days.sort();
+      let ranges = [];
+      if (days[0]) {
+        let rangeStart = parseInt(days[0]);
+        let prevDay = rangeStart;
+        for (let i = 1; i < days.length; i++) {
+          const day = parseInt(days[i]);
+          if (day === prevDay + 1) {
+            prevDay = day;
+          } else {
+            const rangeEnd = prevDay;
+            ranges.push({ start: rangeStart, end: rangeEnd });
+            rangeStart = day;
+            prevDay = day;
+          }
+        }
+        ranges.push({ start: rangeStart, end: prevDay });
+        return ranges.map(({ start, end }) => start === end ? weekdays[start] : `${weekdays[start]} - ${weekdays[end]}`).join(', ')
       }
     },
   },

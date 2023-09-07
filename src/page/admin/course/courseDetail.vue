@@ -607,7 +607,7 @@
                                 class="font-bold"
                               >
                                 {{$t("coach")}}:
-                                {{ `${coach.firstNameTh} ${coach.lastNameTh}` }}
+                                {{ $i18n.locale == 'th' ? `${coach.firstNameTh} ${coach.lastNameTh}` : `${coach.firstNameEn} ${coach.lastNameEn}` }}
                               </v-col>
                               <v-col
                                 cols="auto"
@@ -1154,7 +1154,7 @@
                       </v-row>
                     </template>
                     <template v-slot:[`item.fullname`]="{ item }">
-                      {{ $i18n.locale == 'th' ? `${item.firstNameTh} ${item.lastNameTh}` :  `${item.firstNameEn} ${item.lastNameEn}` }}
+                      {{ $i18n.locale == 'th' ? `${item.firstNameTh} ${item.lastNameTh}` :  `${item.firsNameEn} ${item.lastNameEn}` }}
                     </template>
                     <template v-slot:[`item.course_name`]="{ item }">
                       {{ `${item.courseNameTh}(${item.courseNameEn})` }}
@@ -1169,7 +1169,7 @@
                       }}
                     </template>
                     <template v-slot:[`item.coach`]="{ item }">
-                      {{ $i18n.locale == 'th' ? `${item.coachFirstNameTh} ${item.coachLastNameTh}` :  `${item.coachFirstNameEn} ${item.coachLastNameEn}` }}
+                      {{ $i18n.locale == 'th' ? `${item.coachFirstNameTh} ${item.coachLastNameTh}` :  `${item.coachFirsNameEn} ${item.coachLastNameEn}` }}
                     </template>
                     <template v-slot:[`item.createdDate`]="{ item }">
                       {{ genDate(item.createdDate) }}
@@ -1182,11 +1182,11 @@
                           item.status === 'waiting' ? '#58A144' : '#FCC419'
                         "
                         :color="
-                          item.status === 'รอการติดต่อ' ? '#F0F9EE' : '#FFF9E8'
+                          item.status === 'waiting' ? '#F0F9EE' : '#FFF9E8'
                         "
                         >{{
                           item.status === "waiting"
-                            ? "รอการติดต่อ"
+                            ? $t("waiting for contact")
                             : item.status
                         }}
                       </v-chip>
@@ -1207,7 +1207,7 @@
                           </v-btn>
                         </v-col>
                         <v-col class="text-[#ff6b81] font-bold"
-                          >รายชื่อโค้ช</v-col
+                          >{{$t('coach list')}}</v-col
                         >
                         <v-col cols="auto">
                           <v-text-field
@@ -1216,7 +1216,7 @@
                             dense
                             outlined
                             hide-details
-                            placeholder="ค้นหาชื่อนักเรียน, ชื่อโค้ช"
+                            :placeholder="$t('search for student name, coach name')"
                             prepend-inner-icon="mdi-magnify"
                             @input="
                               searchStudentPotential(search_student_potential)
@@ -1248,7 +1248,7 @@
                         <v-card-text>
                           <v-row>
                             <v-col class="font-bold" align="center">
-                              ไม่พบข้อมูล
+                              {{ $t('no data found') }}
                             </v-col>
                           </v-row>
                         </v-card-text>
@@ -1275,8 +1275,8 @@
                                 <v-icon color="#ff6b81">mdi-account</v-icon>
                               </v-col>
                               <v-col class="font-bold">
-                                โค้ช:
-                                {{ `${coach.firstNameTh} ${coach.lastNameTh}` }}
+                                {{ $t('coach') }}:
+                                {{ $i18n.locale == 'th' ? `${coach.firstNameTh} ${coach.lastNameTh}` : `${coach.firstNameEn} ${coach.lastNameEn}` }}
                               </v-col>
                               <v-col cols="auto">
                                 <v-icon
@@ -1312,7 +1312,7 @@
                                   <v-card-text>
                                     <v-row>
                                       <v-col class="font-bold" align="center">
-                                        ไม่พบข้อมูลนักเรียน
+                                        {{ $t('student information not found')}}
                                       </v-col>
                                     </v-row>
                                   </v-card-text>
@@ -1323,7 +1323,7 @@
                                   <v-col>
                                     <v-divider></v-divider>
                                   </v-col>
-                                  <v-col cols="auto">ข้อมูลนักเรียน</v-col>
+                                  <v-col cols="auto">{{$t("student information")}}</v-col>
                                   <v-col>
                                     <v-divider></v-divider>
                                   </v-col>
@@ -1334,16 +1334,16 @@
                                   >
                                     <v-row dense class="text-md font-bold">
                                       <v-col cols="1" align="center"
-                                        >ลำดับ</v-col
+                                        >{{ $t("no.") }}</v-col
                                       >
                                       <v-col cols align="center"
-                                        >ชื่อ - นามสกุล
+                                        >{{$t("first name")+' - '+$t("last name")}}
                                       </v-col>
                                       <v-col cols="2" align="center"
-                                        >ระยะเวลา
+                                        >{{ $t("period") }}
                                       </v-col>
                                       <v-col cols="2" align="center"
-                                        >จำนวนครั้ง
+                                        >{{ $t("number of times")}}
                                       </v-col>
                                       <v-col cols="4"></v-col>
                                     </v-row>
@@ -1396,7 +1396,7 @@
                                                 <v-icon
                                                   >mdi-check-decagram-outline
                                                 </v-icon>
-                                                ดูประเมิน
+                                                {{ $t("view evaluation") }}
                                               </v-btn>
                                             </v-col>
                                             <v-col class="pa-0">
@@ -1409,7 +1409,7 @@
                                                 <v-icon>
                                                   mdi-clipboard-text-search-outline
                                                 </v-icon>
-                                                ดูโปรไฟล์
+                                                {{ $t("view profile") }}
                                               </v-btn>
                                             </v-col>
                                           </v-row>
@@ -1448,7 +1448,7 @@
             </v-row>
             <v-row dense class="mb-3">
               <v-col align="center" class="font-bold text-lg">
-                การประเมิน
+                {{ $t("assessment")}}
               </v-col>
             </v-row>
             <v-card
@@ -1464,14 +1464,14 @@
                       src="@/assets/course/potential.png"
                     ></v-img>
                   </v-col>
-                  <v-col cols class="font-bold text-lg"> ประเมินภาพรวม </v-col>
+                  <v-col cols class="font-bold text-lg">{{ $t('assess the overview') }} </v-col>
                 </v-row>
                 <v-row>
                   <v-col>
                     <v-card flat>
                       <v-card-text class="bg-[#FBF3F5]">
                         <v-row dense>
-                          <v-col> ระดับพัฒนาการ </v-col>
+                          <v-col>{{ $t('developmental level') }} </v-col>
                         </v-row>
                         <v-row dense>
                           <v-col>
@@ -1508,7 +1508,7 @@
                         </v-row>
                         <v-row dense>
                           <v-col>
-                            <span class="text-[#999999]"> ระดับความสนใจ: </span>
+                            <span class="text-[#999999]"> {{ $t("interest level") }}: </span>
                             {{
                               student_data_assessment.Interest
                                 ? student_data_assessment.Interest
@@ -1518,7 +1518,7 @@
                         </v-row>
                         <v-row dense>
                           <v-col>
-                            <span class="text-[#999999]"> ความคิดเห็น: </span>
+                            <span class="text-[#999999]"> {{ $t("comments") }}: </span>
                             {{
                               student_data_assessment.remark
                                 ? student_data_assessment.remark
@@ -1528,7 +1528,7 @@
                         </v-row>
                         <v-row dense>
                           <v-col cols="12">
-                            <b>ไฟล์แนบ: </b>
+                            <b>{{ $t("attachments") }}: </b>
                             <v-card
                               @click="openFile(file.attachmentFiles)"
                               flat
@@ -1553,7 +1553,7 @@
                                     }}</span
                                     ><br />
                                     <span class="text-caption"
-                                      >ขนาดไฟล์ :
+                                      >{{ $t("file size") }} :
                                       {{
                                         (file.filesSize / 1000000).toFixed(2)
                                       }}
@@ -1584,7 +1584,7 @@
                     </v-col>
                     <v-col class="font-bold">
                       {{
-                        new Date(assess.date).toLocaleDateString("th-TH", {
+                        new Date(assess.date).toLocaleDateString($i18n.locale == 'th' ? "th-TH" : "en-US", {
                           year: "numeric",
                           month: "long",
                           day: "numeric",
@@ -1610,15 +1610,17 @@
                           ).length > 0
                         "
                         >{{
-                          check_in_status_options.filter(
-                            (v) => v.value === assess.status
-                          )[0].label
+                          $t(
+                              check_in_status_options.filter(
+                              (v) => v.value === assess.status
+                            )[0].label
+                          )
                         }}
                       </v-chip>
                     </v-col>
                   </v-row>
                   <v-row dense>
-                    <v-col> ระดับพัฒนาการ</v-col>
+                    <v-col> {{ $t("developmental level") }}</v-col>
                   </v-row>
                   <v-row dense>
                     <v-col>
@@ -1654,7 +1656,7 @@
                     </v-col>
                   </v-row>
                   <v-row dense>
-                    <v-col> ระดับความสนใจ</v-col>
+                    <v-col> {{$t("interest level")}}</v-col>
                   </v-row>
                   <v-row dense>
                     <v-col>
@@ -1691,7 +1693,7 @@
                   </v-row>
                   <v-row dense>
                     <v-col>
-                      <span class="text-[#999999]"> ความคิดเห็น: </span
+                      <span class="text-[#999999]"> {{$t("comments")}}: </span
                       >{{ assess.assessment.remark }}
                     </v-col>
                   </v-row>
@@ -1715,7 +1717,7 @@
                           }}</span
                           ><br />
                           <span class="text-caption"
-                            >ขนาดไฟล์ :
+                            >{{ $t("file size") }} :
                             {{ (file.filesSize / 1000000).toFixed(2) }}
                             MB</span
                           >
@@ -1737,7 +1739,7 @@
                       {{
                         new Date(
                           student_data_assessment.date
-                        ).toLocaleDateString("th-TH", {
+                        ).toLocaleDateString($i18n.locale == 'th' ? "th-TH" : "en-US", {
                           year: "numeric",
                           month: "long",
                           day: "numeric",
@@ -1763,15 +1765,17 @@
                           ).length > 0
                         "
                         >{{
-                          check_in_status_options.filter(
-                            (v) => v.value === student_data_assessment.status
-                          )[0].label
+                          $t(
+                            check_in_status_options.filter(
+                              (v) => v.value === student_data_assessment.status
+                            )[0].label
+                          )
                         }}
                       </v-chip>
                     </v-col>
                   </v-row>
                   <v-row dense>
-                    <v-col> ระดับพัฒนาการ </v-col>
+                    <v-col>{{ $t('developmental level')}} </v-col>
                   </v-row>
                   <v-row dense>
                     <v-col>
@@ -1807,7 +1811,7 @@
                     </v-col>
                   </v-row>
                   <v-row dense>
-                    <v-col> ระดับความสนใจ </v-col>
+                    <v-col>{{ $t("interest level") }}</v-col>
                   </v-row>
                   <v-row dense>
                     <v-col>
@@ -1844,7 +1848,7 @@
                   </v-row>
                   <v-row dense>
                     <v-col>
-                      <span class="text-[#999999]"> ความคิดเห็น: </span
+                      <span class="text-[#999999]"> {{$t("comments")}}: </span
                       >{{ student_data_assessment.assessment.remark }}
                     </v-col>
                   </v-row>
@@ -1869,7 +1873,7 @@
                           }}</span
                           ><br />
                           <span class="text-caption"
-                            >ขนาดไฟล์ :
+                            >{{$t("file size")}} :
                             {{ (file.filesSize / 1000000).toFixed(2) }}
                             MB</span
                           >
@@ -1890,7 +1894,7 @@
             >
               <v-card-text>
                 <v-row dense>
-                  <v-col align="center"> ไม่พบการประเมิน </v-col>
+                  <v-col align="center">{{ $t("assessment not found")}} </v-col>
                 </v-row>
               </v-card-text>
             </v-card>
@@ -1902,7 +1906,7 @@
                   depressed
                   dark
                   class="btn-size-lg"
-                  >ตกลง</v-btn
+                  >{{$t("agree")}}</v-btn
                 >
               </v-col>
             </v-row>
@@ -1954,36 +1958,9 @@ export default {
       { label: "ดี", value: "good", num_value: 4 },
       { label: "ปรับปรุง", value: "adjust", num_value: 3 },
     ],
-    column: [
-      {
-        text: "ชื่อ - นามสกุล",
-        align: "center",
-        sortable: false,
-        value: "fullname",
-      },
-      { text: "เบอร์โทรศัพท์", align: "center", sortable: false, value: "tel" },
-      {
-        text: "ชื่อคอร์ส",
-        align: "center",
-        sortable: false,
-        value: "course_name",
-      },
-      { text: "แพ็กเกจ", align: "center", sortable: false, value: "package" },
-      { text: "โค้ช", align: "center", sortable: false, value: "coach" },
-      {
-        text: "วันที่จอง",
-        align: "center",
-        sortable: false,
-        value: "createdDate",
-      },
-      { text: "สถานะ", align: "center", sortable: false, value: "status" },
-    ],
     selected_coach: "",
     selected_schedule: "",
-    breadcrumbs: [
-      { text: "จัดการคอร์สทั้งหมด", to: "CourseList" },
-      { text: "รายละเอียดคอร์สเรียน", to: "" },
-    ],
+   
     tab: "course",
     filter: {
       dow: "",
@@ -2015,20 +1992,20 @@ export default {
     student_data_assessment: {},
     check_in_status_options: [
       {
-        label: "ตรงเวลา",
+        label: "punctual",
         value: "punctual",
         color: "#58A144",
         bg_color: "#F0F9EE",
       },
-      { label: "สาย", value: "late", color: "#FCC419", bg_color: "#FFF9E8" },
-      { label: "ลา", value: "leave", color: "#43A4F5", bg_color: "#CFE2F3" },
+      { label: "late", value: "late", color: "#FCC419", bg_color: "#FFF9E8" },
+      { label: "leave", value: "leave", color: "#43A4F5", bg_color: "#CFE2F3" },
       {
-        label: "ลาฉุกเฉิน",
+        label: "emergency leave",
         value: "emergency leave",
         color: "#43A4F5",
         bg_color: "#CFE2F3",
       },
-      { label: "ขาด", value: "absent", color: "#F03D3E", bg_color: "#F4CCCC" },
+      { label: "absent", value: "absent", color: "#F03D3E", bg_color: "#F4CCCC" },
     ],
     selected_all_coach: false,
     selected_coach_potential: null,
@@ -2080,6 +2057,38 @@ export default {
       student_potential_list_is_loading:
         "CourseModules/getStudentPotentialListIsLoading",
     }),
+    breadcrumbs(){
+      return [
+        { text: this.$t("manage all courses"), to: "CourseList" },
+        { text: this.$t("course details"), to: "" },
+      ]
+    },
+    column(){
+      return [
+        {
+          text: this.$t("first name")+" - "+this.$t("last name"),
+          align: "center",
+          sortable: false,
+          value: "fullname",
+        },
+        { text: this.$t("phone number"), align: "center", sortable: false, value: "tel" },
+        {
+          text: this.$t("course name"),
+          align: "center",
+          sortable: false,
+          value: "course_name",
+        },
+        { text: this.$t("package"), align: "center", sortable: false, value: "package" },
+        { text: this.$t("coach"), align: "center", sortable: false, value: "coach" },
+        {
+          text: this.$t("reserve date"),
+          align: "center",
+          sortable: false,
+          value: "createdDate",
+        },
+        { text: this.$t("status"), align: "center", sortable: false, value: "status" },
+      ]
+    },
     setFunctions() {
       this.$store.dispatch(
         "CourseModules/GetCourse",
@@ -2297,26 +2306,35 @@ export default {
       data.checked = !data.checked;
     },
     dayOfWeekArray(day) {
-      const daysOfWeek = [
-        "วันอาทิตย์",
-        "วันจันทร์",
-        "วันอังคาร",
-        "วันพุธ",
-        "วันพฤหัสบดี",
-        "วันศุกร์",
-        "วันเสาร์",
+      // console.log(day)
+      let days = day.split(",")
+      const weekdays = [
+        this.$t("sunday"),
+        this.$t("monday"),
+        this.$t("tuesday"),
+        this.$t("wednesday"),
+        this.$t("thursday"),
+        this.$t("friday"),
+        this.$t("saturday"),
       ];
-      if (day.search(",") > -1) {
-        let day_arr = day.split(",");
-        const validDays = day_arr.filter((d) => d >= 0 && d <= 6);
-        if (validDays) {
-          const firstThreeDays = validDays.map((d) => daysOfWeek[d]);
-          return `${firstThreeDays.join(" , ")}`;
-        } else {
-          return "Invalid days";
+      days.sort();
+      let ranges = [];
+      if (days[0]) {
+        let rangeStart = parseInt(days[0]);
+        let prevDay = rangeStart;
+        for (let i = 1; i < days.length; i++) {
+          const day = parseInt(days[i]);
+          if (day === prevDay + 1) {
+            prevDay = day;
+          } else {
+            const rangeEnd = prevDay;
+            ranges.push({ start: rangeStart, end: rangeEnd });
+            rangeStart = day;
+            prevDay = day;
+          }
         }
-      } else {
-        return daysOfWeek[day];
+        ranges.push({ start: rangeStart, end: prevDay });
+        return ranges.map(({ start, end }) => start === end ? weekdays[start] : `${weekdays[start]} - ${weekdays[end]}`).join(', ')
       }
     },
     openFilePrivilegeSelector() {
@@ -2349,11 +2367,11 @@ export default {
         } else {
           Swal.fire({
             icon: "error",
-            text: "อัปโหลดเฉพาะไฟล์รูปภาพ(png, jpeg)เท่านั้น",
+            text: this.$t("upload only image files (png, jpeg) only"),
             showDenyButton: false,
             showCancelButton: false,
-            confirmButtonText: "ตกลง",
-            cancelButtonText: "ยกเลิก",
+            confirmButtonText: this.$t("agree"),
+            cancelButtonText: this.$t("cancel"),
           });
         }
       }
@@ -2403,11 +2421,11 @@ export default {
     removeArtworkFileData(data, index) {
       Swal.fire({
         icon: "question",
-        title: "ต้องการลบไฟล์นี้ใช่หรือไม่",
+        title: "do you want to delete this file?",
         showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.RemoveArkworkByArkworkId({ artwork_data: data });
@@ -2421,11 +2439,11 @@ export default {
     removePrivilegeFileData() {
       Swal.fire({
         icon: "question",
-        title: "ต้องการลบไฟล์นี้ใช่หรือไม่",
+        title: "do you want to delete this file?",
         showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.RemovePrivilageByCourseID({
@@ -2461,11 +2479,11 @@ export default {
       if (this.courseValidate) {
         Swal.fire({
           icon: "question",
-          title: "ต้องการแก้ไขคอร์สใช่มั้ย",
+          title: this.$t("do you want to edit your course?"),
           showDenyButton: false,
           showCancelButton: true,
-          confirmButtonText: "ตกลง",
-          cancelButtonText: "ยกเลิก",
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             this.UpdateCouserDetail({
@@ -2483,11 +2501,11 @@ export default {
       if (this.coachValidate) {
         Swal.fire({
           icon: "question",
-          title: "ต้องการแก้ไขคอร์สใช่มั้ย",
+          title: this.$t("do you want to edit your course?"),
           showDenyButton: false,
           showCancelButton: true,
-          confirmButtonText: "ตกลง",
-          cancelButtonText: "ยกเลิก",
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             this.UpdateCouserCoach({
@@ -2505,11 +2523,11 @@ export default {
       if (this.packageValidate) {
         Swal.fire({
           icon: "question",
-          title: "ต้องการแก้ไขคอร์สใช่มั้ย",
+          title: this.$t("do you want to edit your course?"),
           showDenyButton: false,
           showCancelButton: true,
-          confirmButtonText: "ตกลง",
-          cancelButtonText: "ยกเลิก",
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             this.UpdateCouserPackage({
@@ -2529,11 +2547,11 @@ export default {
     async CourseUpdateArkwork() {
       await Swal.fire({
         icon: "question",
-        title: "ต้องการแก้ไขคอร์สใช่มั้ย",
+        title: this.$t("do you want to edit your course?"),
         showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           await this.UpdateCourseArkwork({
@@ -2547,10 +2565,11 @@ export default {
     updateCourse() {
       Swal.fire({
         icon: "question",
-        title: "ต้องการแก้ไขคอร์สใช่มั้ย",
+        title:  this.$t("do you want to edit your course?"),
         showDenyButton: false,
         showCancelButton: false,
-        confirmButtonText: "ตกลง",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.UpdateCourse({ course_data: this.course_data });
