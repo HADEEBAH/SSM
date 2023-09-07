@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-container>
-      <header-page slot_tag title="จัดการคอร์สทั้งหมด">
+      <header-page slot_tag :title="$t('manage all courses')">
         <v-text-field
           class="w-full"
           outlined
@@ -9,7 +9,7 @@
           hide-details
           prepend-inner-icon="mdi-magnify"
           v-model="search"
-          placeholder="ค้นหา"
+          :placeholder="$t('search')"
         ></v-text-field>
       </header-page>
       <v-row class="mb-2">
@@ -26,14 +26,14 @@
               ></v-img>
             </template>
             <template v-slot:header>
-              <div class="font-bold">คอร์สทั้งหมด</div>
+              <div class="font-bold">{{$t('all courses')}}</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
                 <v-col align="center" class="text-3xl font-bold">{{
                   courses.length
                 }}</v-col>
-                <v-col class="text-sm">รายการ</v-col>
+                <v-col class="text-sm">{{$t('list')}}</v-col>
               </v-row>
             </template>
           </img-card>
@@ -51,14 +51,14 @@
               ></v-img>
             </template>
             <template v-slot:header>
-              <div class="font-bold">คอร์สทั่วไป</div>
+              <div class="font-bold">{{$t('general course')}}</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
                 <v-col align="center" class="text-3xl font-bold">{{
                   courses.filter((v) => v.course_type_id === "CT_1").length
                 }}</v-col>
-                <v-col class="text-sm">รายการ</v-col>
+                <v-col class="text-sm">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
@@ -76,14 +76,14 @@
               ></v-img>
             </template>
             <template v-slot:header>
-              <div class="font-bold">คอร์สระยะสั้น</div>
+              <div class="font-bold">{{ $t("short course") }}</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
                 <v-col align="center" class="text-3xl font-bold">{{
                   courses.filter((v) => v.course_type_id === "CT_2").length
                 }}</v-col>
-                <v-col class="text-sm">รายการ</v-col>
+                <v-col class="text-sm">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
@@ -102,7 +102,7 @@
       >
         <template v-slot:no-data>
           <v-row dense>
-            <v-col align="center"> ไม่พบข้อมูล </v-col>
+            <v-col align="center"> {{ $t("no data found") }} </v-col>
           </v-row>
         </template>
         <template v-slot:[`item.status`]="{ item }">
@@ -113,7 +113,7 @@
             hide-details
             item-color="pink"
             :items="status"
-            item-text="label"
+            :item-text="$i18n.locale == 'th' ? 'label' : 'label_en'"
             item-value="value"
             v-model="item.status"
           >
@@ -131,11 +131,13 @@
             "
           >
             <v-icon>mdi-text-box-search-outline</v-icon>
-            ดูรายละเอียด
+            {{  $t('view details') }}
           </v-btn>
         </template>
         <template v-slot:[`no-results`]>
-          <div class="font-bold">ไม่พบข้อมูลในตาราง</div>
+          <div class="font-bold">
+            {{ $t('no data found in table') }}
+          </div>
         </template>
       </v-data-table>
     </v-container>
@@ -156,32 +158,9 @@ export default {
     search: "",
     tab: "all",
     status: [
-      { label: "เปิดคอร์ส", value: "Active" },
-      { label: "ปิดคอร์สชั่วคราว", value: "TemporaryInActive" },
-      { label: "ปิดคอร์ส", value: "InActive" },
-    ],
-    column: [
-      { text: "ชื่อคอร์ส", align: "start", sortable: false, value: "course" },
-      {
-        text: "ชื่ออาณาจักร",
-        align: "start",
-        sortable: false,
-        value: "category",
-      },
-      {
-        text: "ประเภทคอร์ส",
-        align: "start",
-        sortable: false,
-        value: "course_type",
-      },
-      {
-        text: "วันเปิด-ปิดรับสมัคร",
-        align: "start",
-        sortable: false,
-        value: "course_open",
-      },
-      { text: "สถานะ", align: "center", sortable: false, value: "status" },
-      { text: "", align: "center", value: "actions", sortable: false },
+      { label: "เปิดคอร์ส", label_en: "Open", value: "Active" },
+      { label: "ปิดคอร์สชั่วคราว", label_en: "Temporarily closed", value: "TemporaryInActive" },
+      { label: "ปิดคอร์ส", label_en: "closed", value: "InActive" },
     ],
   }),
   created() {
@@ -197,6 +176,31 @@ export default {
     LoadingTable() {
       return !this.courses;
     },
+    column(){
+      return [
+        { text: this.$t("course name"), align: "start", sortable: false, value: "course" },
+        {
+          text:  this.$t("kingdom name"),
+          align: "start",
+          sortable: false,
+          value: "category",
+        },
+        {
+          text: this.$t("course type"),
+          align: "start",
+          sortable: false,
+          value: "course_type",
+        },
+        {
+          text: this.$t("open-close register date"),
+          align: "start",
+          sortable: false,
+          value: "course_open",
+        },
+        { text: this.$t("status"), align: "center", sortable: false, value: "status" },
+        { text: "", align: "center", value: "actions", sortable: false },
+      ]
+    }
   },
   methods: {
     ...mapActions({
@@ -215,12 +219,12 @@ export default {
               item.status = "Active";
               Swal.fire({
                 icon: "error",
-                title: "ไม่สามารถปิดคอร์สได้",
-                text: "เนื่องจากมีนักเรียนในคอร์ส",
+                title: this.$t("unable to close course"),
+                text: this.$t("because there are students in the course"),
                 showDenyButton: false,
                 showCancelButton: false,
-                confirmButtonText: "ตกลง",
-                cancelButtonText: "ยกเลิก",
+                confirmButtonText: this.$t('agree'),
+                cancelButtonText: this.$t('cancel'),
               });
             } else {
               this.UpdateStatusCourse({

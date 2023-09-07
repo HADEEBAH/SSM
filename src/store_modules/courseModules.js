@@ -8,13 +8,13 @@ var XLSX = require("xlsx");
 function dayOfWeekArray(day) {
   let days = day
   const weekdays = [
-    "วันอาทิตย์",
-    "วันจันทร์",
-    "วันอังคาร",
-    "วันพุธ",
-    "วันพฤหัสบดี",
-    "วันศุกร์",
-    "วันเสาร์",
+    VueI18n.$t("sunday"),
+    VueI18n.$t("monday"),
+    VueI18n.$t("tuesday"),
+    VueI18n.$t("wednesday"),
+    VueI18n.$t("thursday"),
+    VueI18n.$t("friday"),
+    VueI18n.$t("saturday"),
   ];
   days.sort();
   let ranges = [];
@@ -381,7 +381,7 @@ const CourseModules = {
                     end: dateLeave.teachCompensationEndTime,
                     startDate: coachDate.dates.startDate ? new Date(coachDate.dates.startDate).toLocaleDateString("th-TH") : '',
                     endDate: coachDate.dates.endDate ? new Date(coachDate.dates.endDate).toLocaleDateString("th-TH") : '',
-                    time: `${dateLeave.teachCompensationStartTime}น.-${dateLeave.teachCompensationEndTime}น.`,
+                    time: `${dateLeave.teachCompensationStartTime}-${dateLeave.teachCompensationEndTime} ${VueI18n.t("o'clock")}`,
                     cpo: coachDate.cpo ? coachDate.cpo : null,
                     cpoId: coachDate.cpo?.cpoId ? coachDate.cpo?.cpoId : null,
                     students: coachDate.studentArr,
@@ -398,7 +398,7 @@ const CourseModules = {
                     end: coachDate.time.end,
                     startDate: coachDate.dates.startDate ? new Date(coachDate.dates.startDate).toLocaleDateString("th-TH") : '',
                     endDate: coachDate.dates.endDate ? new Date(coachDate.dates.endDate).toLocaleDateString("th-TH") : '',
-                    time: `${coachDate.time.start}น.-${coachDate.time.end}น.`,
+                    time: `${coachDate.time.start}-${coachDate.time.end} ${VueI18n.t("o'clock")}`,
                     cpo: coachDate.cpo ? coachDate.cpo : null,
                     cpoId: coachDate.cpo?.cpoId ? coachDate.cpo?.cpoId : null,
                     students: coachDate.studentArr,
@@ -415,7 +415,7 @@ const CourseModules = {
                       timeId: null,
                       start: dateLeave.teachCompensationStartTime,
                       end: dateLeave.teachCompensationEndTime,
-                      time: `${dateLeave.teachCompensationStartTime}น.-${dateLeave.teachCompensationEndTime}น.`,
+                      time: `${dateLeave.teachCompensationStartTime}-${dateLeave.teachCompensationEndTime} ${VueI18n.t("o'clock")}`,
                       cpo: coachDate.cpo ? coachDate.cpo : null,
                       cpoId: coachDate.cpo?.cpoId ? coachDate.cpo?.cpoId : null,
                       students: coachDate.studentArr,
@@ -431,7 +431,7 @@ const CourseModules = {
                     timeId: coachDate.time.timeId,
                     start: coachDate.time.start,
                     end: coachDate.time.end,
-                    time: `${coachDate.time.start}${VueI18n.t("o'clock")} - ${coachDate.time.end}${VueI18n.t("o'clock")}`,
+                    time: `${coachDate.time.start} - ${coachDate.time.end} ${VueI18n.t("o'clock")}`,
                     cpo: coachDate.cpo ? coachDate.cpo : null,
                     cpoId: coachDate.cpo.cpoId ? coachDate.cpo.cpoId : null,
                     students: coachDate.studentArr,
@@ -619,7 +619,7 @@ const CourseModules = {
           await context.dispatch("GetCourse", course_id)
           Swal.fire({
             icon: "success",
-            title: VueI18n.t("agree"),
+            title: VueI18n.t("succeed"),
             text: VueI18n.t("the course has been edited"),
             timer: 3000,
             showDenyButton: false,
@@ -1001,7 +1001,7 @@ const CourseModules = {
             category_id: data.data.categoryId,
             category_name_th: data.data.categoryNameTh,
             course_open_date: data.data.courseOpenDate ? moment(data.data.courseOpenDate).format("YYYY-MM-DD") : "",
-            course_open_date_str: data.data.courseOpenDate ? new Date(data.data.courseOpenDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', }) : "",
+            course_open_date_str: data.data.courseOpenDate ? new Date(data.data.courseOpenDate).toLocaleDateString(VueI18n.locale == 'th' ? 'th-TH' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric', }) : "",
             menu_course_open_date: false,
             course_hours: data.data.coursePerTime,
             course_hours_obj: course_hours_object,
@@ -1018,8 +1018,8 @@ const CourseModules = {
             student_recived: data.data.courseStudentRecived,
             course_study_end_date: data.data.courseStudyEndDate,
             course_study_start_date: data.data.courseStudyStartDate,
-            course_study_end_date_str: data.data.courseStudyEndDate ? new Date(data.data.courseStudyEndDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', }) : null,
-            course_study_start_date_str: data.data.courseStudyStartDate ? new Date(data.data.courseStudyStartDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', }) : null,
+            course_study_end_date_str: data.data.courseStudyEndDate ? new Date(data.data.courseStudyEndDate).toLocaleDateString(VueI18n.locale == 'th' ? 'th-TH' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric', }) : null,
+            course_study_start_date_str: data.data.courseStudyStartDate ? new Date(data.data.courseStudyStartDate).toLocaleDateString(VueI18n.locale == 'th' ? 'th-TH' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric', }) : null,
             coachs: [],
             packages: [],
             privilege_file: null,
@@ -1056,6 +1056,7 @@ const CourseModules = {
                     "mm": endTimePart[1] ? endTimePart[1].padStart(2, '0') : "00"
                   }
                   class_dates.push({
+                    start_time: moment( time.start,"HH:mm"),
                     class_date_range: {
                       time_id: time.timeId ? time.timeId : null,
                       day_of_week_id: time.dayOfWeekId ? time.dayOfWeekId : null,
@@ -1102,8 +1103,8 @@ const CourseModules = {
                     menu_end_date: false,
                   },
                   class_date_range_str: {
-                    start_date: data.data.courseStudyStartDate ? new Date(data.data.courseStudyStartDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', }) : null,
-                    end_date: data.data.courseStudyStartDate ? new Date(data.data.courseStudyEndDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', }) : null,
+                    start_date: data.data.courseStudyStartDate ? new Date(data.data.courseStudyStartDate).toLocaleDateString(VueI18n.locale == 'th' ? 'th-TH' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric', }) : null,
+                    end_date: data.data.courseStudyStartDate ? new Date(data.data.courseStudyEndDate).toLocaleDateString(VueI18n.locale == 'th' ? 'th-TH' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric', }) : null,
                   },
                   register_date_range: {
                     start_date: data.data.courseRegisterStartDate ? moment(data.data.courseRegisterStartDate).format("YYYY-MM-DD") : null,
@@ -1112,8 +1113,8 @@ const CourseModules = {
                     menu_end_date: false,
                   },
                   register_date_range_str: {
-                    start_date: data.data.courseRegisterEndDate ? new Date(data.data.courseRegisterStartDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', }) : "",
-                    end_date: data.data.courseRegisterEndDate ? new Date(data.data.courseRegisterEndDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', }) : "",
+                    start_date: data.data.courseRegisterEndDate ? new Date(data.data.courseRegisterStartDate).toLocaleDateString(VueI18n.locale == 'th' ? 'th-TH' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric', }) : "",
+                    end_date: data.data.courseRegisterEndDate ? new Date(data.data.courseRegisterEndDate).toLocaleDateString(VueI18n.locale == 'th' ? 'th-TH' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric', }) : "",
                   },
                   period: {
                     start_time: data.data.coursePeriodStartDate ? data.data.coursePeriodStartDate : null,
@@ -1206,10 +1207,19 @@ const CourseModules = {
             }
           }
           if (payload.coachs.length > 0) {
+            
             for await (let coach of payload.coachs) {
-              coach.teach_day_data = teach_day_data.filter(v => v.course_coach_id === coach.course_coach_id)
+              let teach_day = teach_day_data.filter(v => v.course_coach_id === coach.course_coach_id)
+              teach_day.map((v)=>{
+                v.class_date.sort((a, b) => {
+                  const startTimeA = moment(a.start_time);
+                  const startTimeB = moment(b.start_time);
+                  return startTimeA - startTimeB;
+                });
+                return v
+              })
+              coach.teach_day_data = teach_day
             }
-
           }
 
           if (data.data.courseTypeId === "CT_1") {

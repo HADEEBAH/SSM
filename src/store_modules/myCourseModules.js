@@ -3,13 +3,13 @@ import VueCookie from "vue-cookie"
 function dayOfWeekArray(day) {
     let days = day
     const weekdays = [
-        "วันอาทิตย์",
-        "วันจันทร์",
-        "วันอังคาร",
-        "วันพุธ",
-        "วันพฤหัสบดี",
-        "วันศุกร์",
-        "วันเสาร์",
+        VueI18n.$t("sunday"),
+        VueI18n.$t("monday"),
+        VueI18n.$t("tuesday"),
+        VueI18n.$t("wednesday"),
+        VueI18n.$t("thursday"),
+        VueI18n.$t("friday"),
+        VueI18n.$t("saturday"),
     ];
     days.sort();
     let ranges = [];
