@@ -256,7 +256,17 @@
                       outlined
                       @input="selectYears()"
                       color="#ff6b81"
-                    ></v-select>
+                    >
+                      <template v-slot:no-data >
+                        <v-list-item>
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              {{ $t('no data found') }}
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </template>
+                    </v-select>
                   </v-col>
                   <!-- Month -->
                   <v-col cols="6" sm="6" md="6" lg="4">
@@ -269,7 +279,17 @@
                       outlined
                       @input="selectMunth()"
                       color="#ff6b81"
-                    ></v-select>
+                    >
+                      <template v-slot:no-data >
+                        <v-list-item>
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              {{ $t('no data found') }}
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </template>
+                    </v-select>
                   </v-col>
                 </v-row>
               </v-card-title>
@@ -332,7 +352,17 @@
                       outlined
                       @input="selectDonutYears()"
                       color="#ff6b81"
-                    ></v-select>
+                    >
+                      <template v-slot:no-data >
+                        <v-list-item>
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              {{ $t('no data found') }}
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </template>
+                    </v-select>
                   </v-col>
                   <!-- MONTH -->
                   <v-col cols="6" sm="6" md="6" lg="4">
@@ -345,7 +375,17 @@
                       outlined
                       @input="selectDonutMounth()"
                       color="#ff6b81"
-                    ></v-select>
+                    >
+                      <template v-slot:no-data >
+                        <v-list-item>
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              {{ $t('no data found') }}
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </template>
+                    </v-select>
                   </v-col>
                 </v-row>
               </v-card-title>
@@ -372,7 +412,11 @@
                             style="color: #ff6b81"
                             class="font-bold text-xl"
                           >
-                            {{ get_donut?.sumTotalSuccess?.toLocaleString() }}
+                            {{
+                              get_donut?.sumTotalSuccess?.toLocaleString()
+                                ? get_donut?.sumTotalSuccess?.toLocaleString()
+                                : "0"
+                            }}
                           </span>
                           <span
                             style="
@@ -407,6 +451,8 @@
                           >
                             {{
                               get_donut?.sumTotalPending?.toLocaleString()
+                                ? get_donut?.sumTotalPending?.toLocaleString()
+                                : "0"
                             }}</span
                           >
                           <span
@@ -470,6 +516,8 @@
                         {{ $t("full courses") }}
                         <span style="font-weight: bold; color: #999999">{{
                           get_empty_course?.countClose
+                            ? get_empty_course?.countClose
+                            : "0"
                         }}</span>
                         {{ $t("courses") }}
                       </span>
@@ -483,6 +531,8 @@
                         {{ $t("course available") }}
                         <span style="font-weight: bold; color: #ff6b81">{{
                           get_empty_course?.countOpen
+                            ? get_empty_course?.countOpen
+                            : "0"
                         }}</span>
                         {{ $t("courses") }}
                       </span>
@@ -537,12 +587,16 @@
                         "
                         align="center"
                       >
-                        <span class="mr-2 font-bold">{{
-                          $t("full courses")
-                        }}</span>
+                        <span class="mr-2 font-bold">
+                          {{ $t("full courses") }}
+                        </span>
                         <v-badge
                           color="#999999"
-                          :content="get_empty_course?.countClose"
+                          :content="
+                            get_empty_course?.countClose
+                              ? get_empty_course?.countClose
+                              : '0'
+                          "
                           class="indent-5 font-bold"
                         >
                         </v-badge>
@@ -669,12 +723,16 @@
                         "
                         align="center"
                       >
-                        <span class="mr-2 font-bold">{{
-                          $t("course available")
-                        }}</span>
+                        <span class="mr-2 font-bold">
+                          {{ $t("course available") }}
+                        </span>
                         <v-badge
                           color="#ff6b81"
-                          :content="get_empty_course.countOpen"
+                          :content="
+                            get_empty_course.countOpen
+                              ? get_empty_course.countOpen
+                              : '0'
+                          "
                           class="indent-5 font-bold justify-center"
                         >
                         </v-badge>

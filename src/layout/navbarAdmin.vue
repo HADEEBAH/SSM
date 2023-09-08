@@ -131,7 +131,7 @@
           <v-divider></v-divider>
           <v-list-item link @click="logOut">
             <v-list-item-icon><v-icon>mdi-login</v-icon></v-list-item-icon>
-            <v-list-item-title>ออกจากระบบ</v-list-item-title>
+            <v-list-item-title>{{ $t("logout") }}</v-list-item-title>
           </v-list-item>
         </template>
       </v-navigation-drawer>
@@ -231,7 +231,7 @@ export default {
       );
     };
 
-    // Load the Google Translate Element script dynamically
+    // // Load the Google Translate Element script dynamically
     const script = document.createElement("script");
     script.type = "text/javascript";
     script.src =

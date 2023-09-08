@@ -8,7 +8,7 @@
       <headerCard
         :icon="'mdi-card-account-details-outline'"
         :icon_color="'#FF6B81'"
-        :title="`แพ็กเกจที่ ${index + 1}`"
+        :title="`${$t('package')} ${index + 1}`"
       >
         <template slot="actions">
           <v-btn
@@ -26,7 +26,7 @@
           <v-card-text>
             <v-row dense>
               <v-col cols="12" sm="6">
-                <label-custom required text="แพ็กเกจ"></label-custom>
+                <label-custom required :text="$t('package')"></label-custom>
                 <v-autocomplete
                   dense
                   :disabled="disable"
@@ -43,7 +43,7 @@
                 >
                   <template v-slot:no-data>
                     <v-list-item>
-                      <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
+                      <v-list-item-title> {{ $t("no data found") }}</v-list-item-title>
                     </v-list-item>
                   </template>
                   <template v-slot:item="{ item }">
@@ -68,7 +68,7 @@
                 </v-autocomplete>
               </v-col>
               <v-col cols="12" sm="6">
-                <label-custom required text="จำนวนนักเรียน (คน)"></label-custom>
+                <label-custom required :text="`${$t('number of students')} (${$t('person')})`"></label-custom>
                 <v-text-field
                   suffix="คน"
                   type="number"
@@ -96,7 +96,7 @@
           <v-card-text>
             <v-row dense class="d-flex align-center">
               <v-col cols="12" sm="4">
-                <label-custom required text="ระยะเวลา"></label-custom>
+                <label-custom required :text="$t('period')"></label-custom>
                 <v-autocomplete
                   dense
                   :disabled="disable"
@@ -113,7 +113,7 @@
                 >
                   <template v-slot:no-data>
                     <v-list-item>
-                      <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
+                      <v-list-item-title> {{$t("no data found")}}</v-list-item-title>
                     </v-list-item>
                   </template>
                   <template v-slot:item="{ item }">
@@ -138,7 +138,7 @@
                 </v-autocomplete>
               </v-col>
               <v-col cols="12" sm="4">
-                <label-custom required text="จำนวนครั้ง/คน"></label-custom>
+                <label-custom required :text="$t('number of times/person')"></label-custom>
                 <v-text-field
                   class="input-text-right"
                   dense
@@ -148,7 +148,7 @@
                   @focus="$event.target.select()"
                   :rules="rules.options_amount"
                   type="number"
-                  placeholder="ระบุจำนวน ครั้ง/คน"
+                  :placeholder="$t('specify the number of times/person')"
                   v-model.number="option.amount"
                   @change="calNetPrice(option)"
                 ></v-text-field>
@@ -163,7 +163,7 @@
                   color="green"
                 >
                   <v-icon>mdi-plus-box-multiple</v-icon>
-                  เพิ่มระยะเวลา
+                  {{ $t("add period") }}
                 </v-btn>
               </v-col>
               <v-col cols="6" sm="2">
@@ -177,14 +177,14 @@
                     @click="removeOptions(package_data.options, option_index)"
                   >
                     <v-icon>mdi-delete-empty</v-icon>
-                    ลบระยะเวลา
+                    {{ $t('delete period') }}
                   </v-btn>
                 </template>
               </v-col>
             </v-row>
             <v-row dense>
               <v-col cols="12" sm="4">
-                <label-custom required text="ราคา/คน"></label-custom>
+                <label-custom required :text="`${$t('price')}/${$t('person')}`"></label-custom>
                 <v-text-field
                   class="input-text-right"
                   dense
@@ -194,7 +194,7 @@
                   :rules="rules.price_unit"
                   @focus="$event.target.select()"
                   type="number"
-                  placeholder="ระบุราคา บาท/คน"
+                  :placeholder="$t('specify price baht/person')"
                   v-model.number="option.price_unit"
                   @change="calNetPrice(option)"
                 ></v-text-field>
@@ -206,7 +206,7 @@
                       :disabled="disable"
                       v-model="option.discount"
                       @input="calNetPrice(option)"
-                      label="มีส่วนลด"
+                      :label="$t('there is a discount')"
                     ></v-checkbox>
                   </v-col>
                   <v-col cols="12" sm="5" class="pt-8">
@@ -217,7 +217,7 @@
                       :rules="rules.discount"
                       @focus="$event.target.select()"
                       :disabled="!option.discount || disable"
-                      placeholder="ระบุส่วนลด/บาท"
+                      :placeholder="$t('specify discount/baht')"
                       :outlined="option.discount || disable"
                       :filled="!option.discount || disable"
                       v-model.number="option.discount_price"
@@ -229,7 +229,7 @@
             </v-row>
             <v-row dense>
               <v-col>
-                <LabelCustom text="สิทธิ์พิเศษ"></LabelCustom>
+                <LabelCustom :text="$t('special rights')"></LabelCustom>
                 <v-textarea
                   dense
                   :disabled="disable"
@@ -247,15 +247,15 @@
             >
               <v-card-text>
                 <v-row>
-                  <v-col>เหลือราคา</v-col>
+                  <v-col>{{$t("price remaining")}}</v-col>
                   <v-col class="text-[#FF6B81] font-bold text-right">{{
                     option.net_price.toLocaleString()
                   }}</v-col>
-                  <v-col>บาท เฉลี่ย</v-col>
+                  <v-col>{{ $t("baht") }} {{$t("average")}}</v-col>
                   <v-col class="text-[#FF6B81] font-bold text-right">{{
                     option.net_price_unit.toLocaleString()
                   }}</v-col>
-                  <v-col>บาท/ครั้ง</v-col>
+                  <v-col>{{$t("baht")}}/{{$t("time")}}</v-col>
                 </v-row>
               </v-card-text>
             </v-card>
@@ -300,29 +300,29 @@ export default {
       return {
         packages: [
           function (val) {
-            return (val || "").length > 0 || "โปรดเลือกแพ็กเกจ";
+            return (val || "").length > 0 || this.$t("please select a package");
           },
         ],
         packages_student: [
           function (val) {
             return (val || "") > vm.minimum_students
               ? vm.minimum_students
-              : 0 || "โปรดระบุจำนวนนักเรียน";
+              : 0 || this.$t("please specify the number of students");
           },
         ],
         options: [
           function (val) {
-            return (val || "").length > 0 || "โปรดเลือกระยะเวลา";
+            return (val || "").length > 0 || this.$t("please select a period");
           },
         ],
         options_amount: [
           function (val) {
-            return (val || "") > 0 || "โปรดระบุจำนวนครั้ง/คน";
+            return (val || "") > 0 || this.$t("please specify the number of times/person");
           },
         ],
         price_unit: [
           function (val) {
-            return (val || "") > 0 || "โปรดระบุราคาต่อ/คน";
+            return (val || "") > 0 || this.$t("please specify price / person");
           },
         ],
       };

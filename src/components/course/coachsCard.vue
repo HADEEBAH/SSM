@@ -52,7 +52,7 @@
                   color="#FF6B81"
                   :items="coachsOptions(coach)"
                   item-value="accountId"
-                  :item-text="$i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEn'"
+                  :item-text="$i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEh'"
                   item-color="pink"
                   @change="findTeachDays(coach, coach_index)"
                   :rules="rules.course"
@@ -71,7 +71,7 @@
                           :class="
                             coach.coach_id === item.accountId ? 'font-bold' : ''
                           "
-                          >{{ $i18n.locale == 'th' ? item.fullNameTh : item.fullNameEn }}</span
+                          >{{ $i18n.locale == 'th' ? item.fullNameTh : item.fullNameEh }}</span
                         ></v-list-item-title
                       >
                     </v-list-item-content>
@@ -97,7 +97,7 @@
                   multiple
                   color="#FF6B81"
                   :items="filteredDays(coach_index, teach_day_index, state)"
-                  item-text="label"
+                  :item-text="$i18n.locale == 'th' ? 'label' : 'label_en'"
                   item-value="value"
                   :placeholder="$t('please select a time')"
                   v-model="teach_day.teach_day"
@@ -120,7 +120,7 @@
                       text-color="#ff6b81"
                       @click:close="removeChip(item, teach_day.teach_day)"
                     >
-                      <strong>{{ item.label }}</strong>
+                      <strong>{{ $i18n.locale == 'th' ? item.label : item.label_en }}</strong>
                     </v-chip>
                   </template>
                 </v-autocomplete>
@@ -174,8 +174,8 @@
               v-for="(class_date, class_date_index) in teach_day.class_date"
             >
               <v-row dense :key="`${class_date_index}-class-date`">
-                <v-col cols="12" sm="6">
-                  <label-custom required text="ช่วงเวลา"></label-custom>
+                <v-col cols="12" sm="5">
+                  <label-custom required :text="$t('period')"></label-custom>
                   <v-row dense class="mb-3">
                     <v-col class="px-2" cols="12" sm="6">
                       <v-text-field
@@ -238,7 +238,7 @@
                     </v-col>
                   </v-row>
                 </v-col>
-                <v-col cols="12" sm="2">
+                <v-col cols="12" sm="3">
                   <label-custom
                     required
                     :text="$t('acceptable students')"
@@ -334,13 +334,13 @@ export default {
     select_coachs: [],
     coachs_option: [],
     days_confix: [
-      { label: "sunday", value: 0 },
-      { label: "monday", value: 1 },
-      { label: "tuesday", value: 2 },
-      { label: "wednesday", value: 3 },
-      { label: "thursday", value: 4 },
-      { label: "friday", value: 5 },
-      { label: "saturday", value: 6 },
+      { label: "วันอาทิตย์", label_en : "Sunday", value: 0 },
+      { label: "วันจันทร์", label_en : "Monday",value: 1 },
+      { label: "วันอังคาร", label_en : "Tuesday",value: 2 },
+      { label: "วันพุธ", label_en : "Wednesday",value: 3 },
+      { label: "วันพฤหัสบดี", label_en : "Thursday",value: 4 },
+      { label: "วันศุกร์", label_en : "Friday",value: 5 },
+      { label: "วันเสาร์", label_en : "Saturday", value: 6 },
     ],
     rules: {
       course: [(val) => (val || "").length > 0 || "โปรดเลือกโค้ช"],
@@ -498,20 +498,6 @@ export default {
             });
           }
         }
-      }
-    },
-    width() {
-      switch (this.$vuetify.breakpoint.name) {
-        case "xs":
-          return 210;
-        case "sm":
-          return 147.5;
-        case "md":
-          return 180.5;
-        case "lg":
-          return 251.5;
-        case "xl":
-          return 401.75;
       }
     },
     removeCoach(coach, index) {
