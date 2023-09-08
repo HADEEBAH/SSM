@@ -33,7 +33,11 @@
                   <template v-slot:no-data>
                     <v-list-item>
                       <v-list-item-title>
-                        {{ search ? $t(`data not found`) : $t(`please enter the student's name`) }}
+                        {{
+                          search
+                            ? $t(`data not found`)
+                            : $t(`please enter the student's name`)
+                        }}
                       </v-list-item-title>
                     </v-list-item>
                   </template>
@@ -101,7 +105,7 @@
                         : "mdi-radiobox-blank"
                     }}</v-icon
                   >
-                  {{$t("general course")}}</v-btn
+                  {{ $t("general course") }}</v-btn
                 >
               </v-col>
               <!-- คอร์สระยะสั้น btn -->
@@ -117,7 +121,7 @@
                       ? "mdi-radiobox-marked"
                       : "mdi-radiobox-blank"
                   }}</v-icon>
-                  {{$t("short course")}}</v-btn
+                  {{ $t("short course") }}</v-btn
                 >
               </v-col>
             </v-row>
@@ -185,7 +189,9 @@
                 >
                   <template v-slot:no-data>
                     <v-list-item>
-                      <v-list-item-title> {{ $t("no data found") }} </v-list-item-title>
+                      <v-list-item-title>
+                        {{ $t("no data found") }}
+                      </v-list-item-title>
                     </v-list-item>
                   </template>
                   <template v-slot:item="{ item }">
@@ -519,21 +525,23 @@
         <v-row class="mb-3">
           <v-col align="center">
             <v-btn outlined class="" color="#ff6b81" @click="addCourse"
-              ><span class="mdi mdi-plus-circle-outline"
-                >{{ $t("add a course") }}</span
-              ></v-btn
+              ><span class="mdi mdi-plus-circle-outline">{{
+                $t("add a course")
+              }}</span></v-btn
             >
           </v-col>
         </v-row>
         <template v-if="order.courses.length > 0">
-          <div class="text-lg font-bold">{{$t("payment status")}}</div>
+          <div class="text-lg font-bold">{{ $t("payment status") }}</div>
           <v-divider class="mb-3"></v-divider>
           <v-row dense class="mb-3">
             <v-col cols="12" sm="8">
               <v-card class="text-xl" color="#FBF3F5">
                 <v-card-text>
                   <v-row>
-                    <v-col class="text-lg font-bold">{{$t("total price")}} :</v-col>
+                    <v-col class="text-lg font-bold"
+                      >{{ $t("total price") }} :</v-col
+                    >
                     <v-col
                       cols="auto"
                       class="text-lg font-bold text-pink-500"
@@ -544,7 +552,9 @@
                         )
                       }}</v-col
                     >
-                    <v-col cols="auto" class="text-lg font-bold">{{$t("baht")}}</v-col>
+                    <v-col cols="auto" class="text-lg font-bold">{{
+                      $t("baht")
+                    }}</v-col>
                   </v-row>
                 </v-card-text>
               </v-card>
@@ -579,7 +589,7 @@
                             ></v-img>
                           </v-avatar>
                         </v-col>
-                        <v-col> {{$t("already paid")}} </v-col>
+                        <v-col> {{ $t("already paid") }} </v-col>
                       </v-row>
                       <v-row dense v-if="order.payment_status === 'paid'">
                         <v-col cols="auto">
@@ -632,14 +642,21 @@
                           </v-autocomplete>
                         </v-col>
                         <v-col cols="auto">
-                          {{$t('payee')}} :
+                          {{ $t("payee") }} :
                           <span class="text-pink-500 font-medium">
                             <!-- {{
                             `${user_detail.first_name_th} ${user_detail.last_name_th}`
                           }} -->
-{{ $i18n.locale === 'th' ? user_detail.first_name_th + ' ' + user_detail.last_name_th : user_detail.first_name_en + ' ' + user_detail.last_name_en }}
-  
-                        </span>
+                            {{
+                              $i18n.locale === "th"
+                                ? user_detail.first_name_th +
+                                  " " +
+                                  user_detail.last_name_th
+                                : user_detail.first_name_en +
+                                  " " +
+                                  user_detail.last_name_en
+                            }}
+                          </span>
                         </v-col>
                       </v-row>
                     </v-col>
@@ -673,7 +690,7 @@
                         ></v-img>
                       </v-avatar>
                     </v-col>
-                    <v-col> {{$t("send payment notification")}} </v-col>
+                    <v-col> {{ $t("send payment notification") }} </v-col>
                   </v-row>
                 </v-card-text>
               </v-card>
@@ -701,7 +718,7 @@
               color="#ff6b81"
               @click="save()"
             >
-              {{$t("confirm")}}
+              {{ $t("confirm") }}
             </v-btn>
           </v-col>
         </v-row>
@@ -839,7 +856,7 @@ export default {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     this.GetCategorys();
   },
-  
+
   watch: {
     last_user_registered: function () {
       if (this.last_user_registered?.account_id) {
@@ -1153,17 +1170,20 @@ export default {
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
+                  await this.saveOrder();
 
-                  let payload = {
-                    notificationName: this.notification_name,
-                    notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(
-                      course_name_noti.length > 1 ? ", " : ""
-                    )} ให้คุณแล้ว (รอชำระเงิน)`,
-                    accountId: account,
-                    path: null,
-                  };
-                  this.sendNotification(payload);
-                  this.saveOrder();
+                  if (this.order_is_status) {
+                    let payload = {
+                      notificationName: this.notification_name,
+                      notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(
+                        course_name_noti.length > 1 ? ", " : ""
+                      )} ให้คุณแล้ว (รอชำระเงิน)`,
+                      accountId: account,
+                      path: null,
+                    };
+                    this.sendNotification(payload);
+                  }
+                  
                 } else {
                   let account = [];
                   let course_name_noti = [];
@@ -1266,13 +1286,14 @@ export default {
       username_list: "loginModules/getUsernameList",
       order_is_loading: "OrderModules/getOrderIsLoading",
       course_monitors: "CourseMonitorModules/getCourseMonitor",
+      order_is_status: "OrderModules/getOrderIsStatus",
     }),
     transfer() {
-     return [
+      return [
         { label: this.$t("transfer to account"), value: "transfer" },
         { label: this.$t("credit card"), value: "Credit Card" },
-        { label:this.$t("cash"), value: "cash" },
-      ]
+        { label: this.$t("cash"), value: "cash" },
+      ];
     },
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
