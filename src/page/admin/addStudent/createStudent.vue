@@ -877,6 +877,7 @@ export default {
       username_list: "loginModules/getUsernameList",
       order_is_loading: "OrderModules/getOrderIsLoading",
       course_monitors: "CourseMonitorModules/getCourseMonitor",
+      order_is_status: "OrderModules/getOrderIsStatus",
     }),
     transfer() {
       return [
@@ -1262,17 +1263,20 @@ export default {
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
+                  await this.saveOrder();
 
-                  let payload = {
-                    notificationName: this.notification_name,
-                    notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(
-                      course_name_noti.length > 1 ? ", " : ""
-                    )} ให้คุณแล้ว (รอชำระเงิน)`,
-                    accountId: account,
-                    path: null,
-                  };
-                  this.sendNotification(payload);
-                  this.saveOrder();
+                  if (this.order_is_status) {
+                    let payload = {
+                      notificationName: this.notification_name,
+                      notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(
+                        course_name_noti.length > 1 ? ", " : ""
+                      )} ให้คุณแล้ว (รอชำระเงิน)`,
+                      accountId: account,
+                      path: null,
+                    };
+                    this.sendNotification(payload);
+                  }
+                  
                 } else {
                   let account = [];
                   let course_name_noti = [];
