@@ -697,7 +697,7 @@
                 <v-col cols="12" sm="auto">
                   <v-btn
                     color="#ff6b81"
-                    @click="saveUpdateAssessmentPotential()"
+                    @click="saveUpdateAssessmentPotential(student_check_in)"
                     dark
                     depressed
                     dense
@@ -1773,7 +1773,13 @@ export default {
         });
       }
     },
-    async saveUpdateAssessmentPotential() {
+    async saveUpdateAssessmentPotential(item) {
+      let potential_student = []
+      await item.map((val) => {
+        if (val.totalDay - val.countCheckIn === 0) {
+          potential_student.push({ studentId: val.studentId });
+        }
+      });
       this.$refs.potential_form.validate();
       if (this.potential_form) {
         Swal.fire({
@@ -1791,6 +1797,16 @@ export default {
               date: this.$route.params.date,
               time_id: this.$route.params.timeId,
             });
+
+            if (potential_student.length > 0) {
+              let payload = {
+                notificationName: "แจ้งเตือนการประเมินศักยภาพผู้เรียน",
+                notificationDescription: `โค้ชประเมินศักยภาพผู้เรียนของคอร์ส ${this.course_data.course_name_th} เรียบร้อยแล้ว`,
+                accountId: potential_student,
+                path: null,
+              };
+              this.sendNotification(payload);
+            }
           }
         });
       }
