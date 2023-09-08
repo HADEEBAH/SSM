@@ -10,7 +10,7 @@
                 <headerCard
                   :icon="'mdi-card-account-details-outline'"
                   :icon_color="'#FF6B81'"
-                  :title="title"
+                  :title="$t('user information')"
                 ></headerCard>
                 <v-divider></v-divider>
 
@@ -18,7 +18,7 @@
                   <v-card-text>
                     <v-row>
                       <v-col cols="12" sm="6">
-                        <labelCustom text="Username"></labelCustom>
+                        <labelCustom :text="this.$t('username')"></labelCustom>
                         <v-text-field
                           v-model="show_by_id.userName"
                           dense
@@ -80,7 +80,9 @@
                       <v-col cols="12" sm="8" class="align-self-center">
                         <v-row>
                           <v-col cols="12" sm="6">
-                            <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
+                            <label-custom
+                              :text="this.$t('first name(thai)')"
+                            ></label-custom>
                             <v-text-field
                               :disabled="!isEnabled"
                               @keypress="validate($event, 'th')"
@@ -94,7 +96,7 @@
 
                           <v-col cols="12" sm="6">
                             <label-custom
-                              text="นามสกุล (ภาษาไทย)"
+                              :text="this.$t('last name(thai)')"
                             ></label-custom>
                             <v-text-field
                               :disabled="!isEnabled"
@@ -112,7 +114,7 @@
                         <v-row>
                           <v-col cols="12" sm="6">
                             <label-custom
-                              text="First Name (English)"
+                              :text="this.$t('first name(english)')"
                             ></label-custom>
                             <v-text-field
                               :disabled="!isEnabled"
@@ -126,7 +128,7 @@
                           </v-col>
                           <v-col cols="12" sm="6">
                             <label-custom
-                              text="Last Name (English)"
+                              :text="this.$t('last name(english)')"
                             ></label-custom>
                             <v-text-field
                               :disabled="!isEnabled"
@@ -143,7 +145,9 @@
 
                         <v-row>
                           <v-col cols="12" sm="6">
-                            <label-custom text="อีเมล"></label-custom>
+                            <label-custom
+                              :text="this.$t('email')"
+                            ></label-custom>
                             <v-text-field
                               disabled
                               @keypress="validate($event, 'en', 'number')"
@@ -156,7 +160,9 @@
                             </v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6">
-                            <label-custom text="เบอร์โทรศัพท์"></label-custom>
+                            <label-custom
+                              :text="this.$t('phone number')"
+                            ></label-custom>
                             <v-text-field
                               disabled
                               @keypress="validate($event, 'en', 'number')"
@@ -181,7 +187,7 @@
                 <headerCard
                   icon="mdi-card-account-details-outline"
                   icon_color="#FF6B81"
-                  :title="title2"
+                  :title="$t('permission management')"
                 ></headerCard>
                 <v-divider></v-divider>
 
@@ -189,12 +195,12 @@
                   <v-card-text class="mt-3">
                     <v-row class="mr-3 ml-3">
                       <v-col cols="12" sm="6">
-                        <label-custom text="บทบาทผู้ใช้งาน"></label-custom>
+                        <label-custom :text="$t('user role')"></label-custom>
                         <v-text-field
                           dense
                           outlined
                           disabled
-                          placeholder="ยังไม่มีบทบาทผู้ใช้งาน"
+                          :placeholder="this.$t('no user roles yet')"
                         >
                         </v-text-field>
                       </v-col>
@@ -242,7 +248,9 @@
                       <v-col cols="12" sm="8">
                         <v-row>
                           <v-col cols="12" sm="6">
-                            <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
+                            <label-custom
+                              :text="$t('first name(thai)')"
+                            ></label-custom>
                             <v-text-field
                               :disabled="!isEnabled"
                               @keypress="validate($event, 'th')"
@@ -256,7 +264,7 @@
 
                           <v-col cols="12" sm="6">
                             <label-custom
-                              text="นามสกุล (ภาษาไทย)"
+                              :text="$t('last name(thai)')"
                             ></label-custom>
                             <v-text-field
                               :disabled="!isEnabled"
@@ -274,7 +282,7 @@
                         <v-row>
                           <v-col cols="12" sm="6">
                             <label-custom
-                              text="First Name (English)"
+                              :text="$t('first name(english)')"
                             ></label-custom>
                             <v-text-field
                               :disabled="!isEnabled"
@@ -288,7 +296,7 @@
                           </v-col>
                           <v-col cols="12" sm="6">
                             <label-custom
-                              text="Last Name (English)"
+                              :text="$t('last name(english)')"
                             ></label-custom>
                             <v-text-field
                               :disabled="!isEnabled"
@@ -305,7 +313,7 @@
 
                         <v-row>
                           <v-col cols="12" sm="6">
-                            <label-custom text="อีเมล"></label-custom>
+                            <label-custom :text="$t('email')"></label-custom>
                             <v-text-field
                               disabled
                               @keypress="validate($event, 'en', 'number')"
@@ -318,7 +326,9 @@
                             </v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6">
-                            <label-custom text="เบอร์โทรศัพท์"></label-custom>
+                            <label-custom
+                              :text="$t('phone number')"
+                            ></label-custom>
                             <v-text-field
                               disabled
                               @keypress="validate($event, 'en', 'number')"
@@ -343,7 +353,7 @@
                 <headerCard
                   :icon="'mdi-card-account-details-outline'"
                   :icon_color="'#FF6B81'"
-                  :title="title2"
+                  :title="$t('permission management')"
                 ></headerCard>
                 <v-divider></v-divider>
 
@@ -351,7 +361,7 @@
                   <v-card-text class="mt-3">
                     <v-row class="mr-3 ml-3">
                       <v-col cols="12" sm="6">
-                        <label-custom text="บทบาทผู้ใช้งาน"></label-custom>
+                        <label-custom :text="$t('user role')"></label-custom>
 
                         <v-text-field
                           v-model="item.roleNameTh"
@@ -410,7 +420,7 @@
                                 <v-row>
                                   <v-col cols="12" sm="6">
                                     <label-custom
-                                      text="ชื่อ (ภาษาไทย)"
+                                      :text="$t('first name(thai)')"
                                     ></label-custom>
                                     <v-text-field
                                       :disabled="!isEnabled"
@@ -425,7 +435,7 @@
 
                                   <v-col cols="12" sm="6">
                                     <label-custom
-                                      text="นามสกุล (ภาษาไทย)"
+                                      :text="$t('last name(thai)')"
                                     ></label-custom>
                                     <v-text-field
                                       :disabled="!isEnabled"
@@ -443,7 +453,7 @@
                                 <v-row>
                                   <v-col cols="12" sm="6">
                                     <label-custom
-                                      text="First Name (English)"
+                                      :text="$t('first name(english)')"
                                     ></label-custom>
                                     <v-text-field
                                       :disabled="!isEnabled"
@@ -457,7 +467,7 @@
                                   </v-col>
                                   <v-col cols="12" sm="6">
                                     <label-custom
-                                      text="Last Name (English)"
+                                      :text="$t('last name(english)')"
                                     ></label-custom>
                                     <v-text-field
                                       :disabled="!isEnabled"
@@ -474,7 +484,10 @@
 
                                 <v-row>
                                   <v-col cols="12" sm="6">
-                                    <label-custom text="อีเมล"></label-custom>
+                                    <label-custom
+                                      t
+                                      :text="$t('email')"
+                                    ></label-custom>
                                     <v-text-field
                                       disabled
                                       @keypress="
@@ -490,7 +503,7 @@
                                   </v-col>
                                   <v-col cols="12" sm="6">
                                     <label-custom
-                                      text="เบอร์โทรศัพท์"
+                                      :text="$t('phone number')"
                                     ></label-custom>
                                     <v-text-field
                                       disabled
@@ -518,7 +531,7 @@
                         <headerCard
                           :icon="'mdi-card-account-details-outline'"
                           :icon_color="'#FF6B81'"
-                          :title="title2"
+                          :title="$t('permission management')"
                         ></headerCard>
                         <v-divider></v-divider>
 
@@ -527,7 +540,7 @@
                             <v-row>
                               <v-col cols="12" sm="6">
                                 <label-custom
-                                  text="บทบาทผู้ใช้งาน"
+                                  :text="$t('user role')"
                                 ></label-custom>
 
                                 <v-text-field
@@ -546,7 +559,7 @@
                         <headerCard
                           :icon="'mdi-human-male-boy'"
                           :icon_color="'#FF6B81'"
-                          :title="parent_detail"
+                          :title="$t('parent information')"
                         ></headerCard>
                         <v-divider></v-divider>
                       </v-col>
@@ -565,7 +578,7 @@
                             <v-row dense align="center">
                               <v-col cols="12" sm="6">
                                 <label-custom
-                                  text="Parent’s Username (English)"
+                                  :text="$t('username')"
                                 ></label-custom>
                                 <v-text-field
                                   v-model="relations.parent.parentUsername"
@@ -579,7 +592,7 @@
 
                               <v-col cols="12" sm="6">
                                 <label-custom
-                                  text="First Name (English)"
+                                  :text="$t('first name(english)')"
                                 ></label-custom>
                                 <v-text-field
                                   v-model="relations.parent.parentFirstnameEn"
@@ -592,7 +605,7 @@
                               </v-col>
                               <v-col cols="12" sm="6">
                                 <label-custom
-                                  text="Last Name (English)"
+                                  :text="$t('last name(english)')"
                                 ></label-custom>
                                 <v-text-field
                                   v-model="relations.parent.parentLastnameEn"
@@ -605,7 +618,7 @@
                               </v-col>
                               <v-col cols="12" sm="6">
                                 <label-custom
-                                  text="เบอร์โทรศัพท์"
+                                  :text="$t('phone number')"
                                 ></label-custom>
                                 <v-text-field
                                   v-model="relations.parent.parentTel"
@@ -630,7 +643,7 @@
                           >
                             <span class="text-lg font-bold">
                               <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                              ไม่พบข้อมูลของผู้ปกครอง
+                              {{ $t("parent information not found") }}
                             </span>
                           </v-card-text>
                         </v-card>
@@ -647,7 +660,7 @@
                         <headerCard
                           :icon="'mdi-calendar-today'"
                           :icon_color="'#FF6B81'"
-                          :title="title3"
+                          :title="$t('course')"
                         ></headerCard>
                         <v-divider></v-divider>
                       </v-col>
@@ -656,7 +669,7 @@
                         <v-text-field
                           dense
                           outlined
-                          label="ค้นหา"
+                          :label="$t('search')"
                           color="pink"
                           hide-details
                           v-model="search"
@@ -683,10 +696,15 @@
 
                           <template v-slot:[`item.courseType`]="{ item }">
                             {{
-                              item.cpo
+                              item.cpo.courseTypeNameTh
                                 ? item.cpo.courseTypeNameTh
                                 : "คอร์สระยะสั้น"
                             }}
+                            <!-- {{
+                              item.cpo
+                                ? item.cpo.courseTypeNameTh
+                                : "คอร์สระยะสั้น"
+                            }} -->
                           </template>
 
                           <template v-slot:[`item.timeLine`]="{ item }">
@@ -706,7 +724,7 @@
                         <headerCard
                           :icon="'mdi-book-account-outline'"
                           :icon_color="'#FF6B81'"
-                          title="พอร์ตโฟลิโอ"
+                          :title="$t('port')"
                         ></headerCard>
                         <v-divider></v-divider>
                       </v-col>
@@ -722,7 +740,9 @@
                           "
                         >
                           <v-icon>mdi-book-account-outline</v-icon>
-                          <span class="indent-2">ดูพอร์ตโฟลิโอ</span>
+                          <span class="indent-2">{{
+                            $t("view portfolio")
+                          }}</span>
                         </v-btn>
                       </v-col>
                     </v-row>
@@ -732,7 +752,7 @@
                         <headerCard
                           :icon="'mdi-file-certificate-outline'"
                           :icon_color="'#FF6B81'"
-                          title="การแข่งขันและเกียรติบัตร"
+                          :title="$t('competitions and certificates')"
                         ></headerCard>
                         <v-divider></v-divider>
                       </v-col>
@@ -742,6 +762,7 @@
                         <v-text-field
                           v-model="certificate_search"
                           @input="searchCertificate($event)"
+                          :label="$t('search')"
                           dense
                           outlined
                           prepend-inner-icon="mdi-magnify"
@@ -754,7 +775,7 @@
                           @click="DialogCertificate('', 'create')"
                         >
                           <v-icon>mdi-file-plus-outline</v-icon>
-                          เพิ่มการแข่งขันและเกียรติบัตร
+                          {{ $t("add competitions and certificates") }}
                         </v-btn>
                       </v-col>
                     </v-row>
@@ -766,7 +787,7 @@
                       <v-card-text>
                         <v-row>
                           <v-col cols="12" class="text-center">
-                            ไม่พบข้อมูลการแข่งขัน
+                            {{ $t("no match information found") }}
                           </v-col>
                         </v-row>
                       </v-card-text>
@@ -784,7 +805,7 @@
                                   {{ certificate.certificateName }}
                                 </v-col>
                                 <v-col>
-                                  วันที่แข่ง:
+                                  {{ $t("race day") }}:
                                   {{ genDate(certificate.certificateDate) }}
                                 </v-col>
                               </v-row>
@@ -823,7 +844,7 @@
                                   DialogCertificate(certificate, 'detail')
                                 "
                               >
-                                แสดงหนังสือรับรอง
+                                {{ $t("show certificate") }}
                               </v-btn>
                               <v-btn
                                 dark
@@ -833,7 +854,7 @@
                                 @click="DialogCertificate(certificate, 'edit')"
                               >
                                 <v-icon>mdi-plus</v-icon>
-                                เพิ่มหนังสือรับรอง
+                                {{ $t("add certificate") }}
                               </v-btn>
                             </v-col>
                             <v-col cols="auto">
@@ -865,7 +886,7 @@
                 <headerCard
                   :icon="'mdi-file-plus-outline'"
                   :icon_color="'#FF6B81'"
-                  :title="student_detail"
+                  :title="$t('student information')"
                 ></headerCard>
                 <v-divider></v-divider>
                 <v-card
@@ -878,9 +899,7 @@
                     <!-- Student Data -->
                     <v-row dense align="center">
                       <v-col cols="12" sm="6">
-                        <label-custom
-                          text="Student’s Username (English)"
-                        ></label-custom>
+                        <label-custom :text="$t('username')"></label-custom>
                         <v-text-field
                           v-model="data_item.student.studentUsername"
                           dense
@@ -892,7 +911,7 @@
                       </v-col>
                       <v-col cols="12" sm="6">
                         <label-custom
-                          text="First Name (English)"
+                          :text="$t('first name(english)')"
                         ></label-custom>
                         <v-text-field
                           v-model="data_item.student.studentFirstnameEn"
@@ -904,7 +923,9 @@
                         </v-text-field>
                       </v-col>
                       <v-col cols="12" sm="6">
-                        <label-custom text="Last Name (English)"></label-custom>
+                        <label-custom
+                          :text="$t('last name(english)')"
+                        ></label-custom>
                         <v-text-field
                           v-model="data_item.student.studentLastnameEn"
                           dense
@@ -915,7 +936,7 @@
                         </v-text-field>
                       </v-col>
                       <v-col cols="12" sm="6">
-                        <label-custom text="เบอร์โทรศัพท์"></label-custom>
+                        <label-custom :text="$t('phone number')"></label-custom>
                         <v-text-field
                           v-model="data_item.student.studentTel"
                           dense
@@ -950,7 +971,7 @@
                   >
                     <span class="text-lg font-bold">
                       <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                      ไม่พบข้อมูลของนักเรียน
+                      {{ $t("student information not found") }}
                     </span>
                   </v-card-text>
                 </v-card>
@@ -974,7 +995,12 @@
                   </template>
 
                   <template v-slot:[`item.courseType`]="{ item }">
-                    {{ item.cpo ? item.cpo.courseTypeNameTh : "คอร์สระยะสั้น" }}
+                    <!-- {{ item.cpo ? item.cpo.courseTypeNameTh : "คอร์สระยะสั้น" }} -->
+                    {{
+                      item.cpo.courseTypeNameTh
+                        ? item.cpo.courseTypeNameTh
+                        : "คอร์สระยะสั้น"
+                    }}
                   </template>
 
                   <template v-slot:[`item.timeLine`]="{ item }">
@@ -987,7 +1013,7 @@
                 <headerCard
                   :icon="'mdi-book-outline'"
                   :icon_color="'#FF6B81'"
-                  title="คอร์ส"
+                  :title="$t('courses')"
                 ></headerCard>
                 <v-divider></v-divider>
                 <v-data-table
@@ -998,7 +1024,9 @@
                 >
                   <template v-slot:no-data="">
                     <v-row>
-                      <v-col class="text-center"> ไม่พบคอร์ส </v-col>
+                      <v-col class="text-center">
+                        {{ $t("course not found") }}
+                      </v-col>
                     </v-row>
                   </template>
                 </v-data-table>
@@ -1026,7 +1054,7 @@
                   "
                 >
                   <v-icon size="18">mdi-pencil-outline</v-icon>
-                  <span>แก้ไข</span>
+                  <span>{{ $t("edit") }}</span>
                 </v-btn>
               </v-col>
 
@@ -1040,7 +1068,7 @@
                   color="error"
                   @click="cancel()"
                 >
-                  ยกเลิก
+                  {{ $t("cancel") }}
                 </v-btn>
               </v-col>
               <v-col v-if="isEnabled" sm="auto" cols="12">
@@ -1053,7 +1081,7 @@
                   color="#ff6b81"
                   @click="submitEdit()"
                 >
-                  บันทึก
+                  {{ $t("save") }}
                 </v-btn>
               </v-col>
             </v-row>
@@ -1085,16 +1113,16 @@
             </v-row>
           </v-card-title>
           <div class="mx-5 text-center mb-3 font-bold text-lg">
-            เพิ่มการแข่งขันและเกียรติบัตร
+            {{ $t("add competitions and certificates") }}
           </div>
           <v-row dense class="ml-5 mx-5">
             <v-col cols="12">
-              <LabelCustom required text="การแข่งขัน"></LabelCustom>
+              <LabelCustom required :text="$t('competition')"></LabelCustom>
               <v-text-field
                 ref="certificate_name"
                 dense
                 :disabled="certificate_data.state == 'create' ? false : true"
-                placeholder="กรุณาระบุชื่อการแข่งขัน"
+                :placeholder="$t('please specify the name of the competition')"
                 v-model="certificate_data.certificate_name"
                 outlined
                 :rules="rules.certificate_name"
@@ -1102,7 +1130,7 @@
               </v-text-field>
             </v-col>
             <v-col cols="12">
-              <LabelCustom required text="วันที่"></LabelCustom>
+              <LabelCustom required :text="$t('date')"></LabelCustom>
               <v-menu
                 v-model="certificate_data.menu_certificate_date"
                 :close-on-content-click="false"
@@ -1122,7 +1150,9 @@
                     v-model="certificate_data.certificate_date_src"
                     readonly
                     :rules="rules.certificate_date"
-                    placeholder="ระบุวันที่แข่งขัน"
+                    :placeholder="
+                      $t('please specify the date of the competition')
+                    "
                     v-bind="attrs"
                     v-on="on"
                   >
@@ -1163,14 +1193,13 @@
                     cols="12"
                     class="flex align-center justify-center text-h5"
                   >
-                    อัปโหลดเกียรติบัตร
+                    {{ $t("upload certificate") }}
                   </v-col>
                   <v-col
                     cols="12"
                     class="flex align-center justify-center text-caption"
                   >
-                    ( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ
-                    ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG )
+                    {{ $t("recommendation") }}
                   </v-col>
                   <v-col cols="12" class="flex align-center justify-center">
                     <v-btn
@@ -1178,7 +1207,7 @@
                       outlined
                       color="blue"
                       @click="openFileSelector"
-                      >เลือกไฟล์</v-btn
+                      >{{ $t("choose file") }}</v-btn
                     >
                     <input
                       id="inputFile"
@@ -1224,7 +1253,7 @@
               color="#ff6b81"
               @click="saveDialog()"
             >
-              บันทึก
+              {{ $t("save") }}
             </v-btn>
             <v-btn
               v-else
@@ -1233,7 +1262,7 @@
               color="#ff6b81"
               @click="certificate_dialog_show = false"
             >
-              ปิด
+              {{ $t("close") }}
             </v-btn>
           </div>
         </v-card>
@@ -1263,7 +1292,7 @@ export default {
   },
   data: () => ({
     tab: null,
-    items: ["ข้อมูลทั่วไป", "คอร์สเรียน", "การแข่งขันและเกียรติบัตร"],
+    // items: ["ข้อมูลทั่วไป", "คอร์สเรียน", "การแข่งขันและเกียรติบัตร"],
     show_certificates: false,
     course_search: "",
     certificate_search: "",
@@ -1281,75 +1310,75 @@ export default {
       state: "create",
     },
 
-    breadcrumbs: [],
-    roleCoachTable: [
-      { text: "ชื่อคอร์ส", value: "courseName", sortable: false },
-      { text: "ชื่ออาณาจักร", value: "categoryName", sortable: false },
-      { text: "ประเภท", value: "courseTypeName", sortable: false },
-    ],
-    roleParentTable: [
-      { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
-      { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
-      { text: "ชื่อคอร์ส", value: "courseNameTh", sortable: false },
-      { text: "แพ็กเกจ", value: "package", sortable: false },
-      { text: "โค้ช", value: "coachName", sortable: false },
-      { text: "ประเภท", value: "courseType", sortable: false },
-      { text: "ระยะเวลา", value: "timeLine", sortable: false },
-      { text: "วัน", value: "dates", sortable: false },
-      { text: "เวลาเริ่ม", value: "start", sortable: false },
-      { text: "เวลาสิ้นสุด", value: "end", sortable: false },
-    ],
-    roleStudentTable: [
-      { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
-      { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
-      { text: "ชื่อคอร์ส", value: "courseNameTh", sortable: false },
-      { text: "แพ็กเกจ", value: "package", sortable: false },
-      { text: "โค้ช", value: "coachName", sortable: false },
-      { text: "ประเภท", value: "courseType", sortable: false },
-      { text: "ระยะเวลา", value: "timeLine", sortable: false },
-      { text: "วัน", value: "dates", sortable: false },
-      { text: "เวลาเริ่ม", value: "start", sortable: false },
-      { text: "เวลาสิ้นสุด", value: "end", sortable: false },
-      { text: "ราคา", value: "price", sortable: false },
-    ],
+    // breadcrumbs: [],
+    // roleCoachTable: [
+    //   { text: "ชื่อคอร์ส", value: "courseName", sortable: false },
+    //   { text: "ชื่ออาณาจักร", value: "categoryName", sortable: false },
+    //   { text: "ประเภท", value: "courseTypeName", sortable: false },
+    // ],
+    // roleParentTable: [
+    //   { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
+    //   { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
+    //   { text: "ชื่อคอร์ส", value: "courseNameTh", sortable: false },
+    //   { text: "แพ็กเกจ", value: "package", sortable: false },
+    //   { text: "โค้ช", value: "coachName", sortable: false },
+    //   { text: "ประเภท", value: "courseType", sortable: false },
+    //   { text: "ระยะเวลา", value: "timeLine", sortable: false },
+    //   { text: "วัน", value: "dates", sortable: false },
+    //   { text: "เวลาเริ่ม", value: "start", sortable: false },
+    //   { text: "เวลาสิ้นสุด", value: "end", sortable: false },
+    // ],
+    // roleStudentTable: [
+    //   { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
+    //   { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
+    //   { text: "ชื่อคอร์ส", value: "courseNameTh", sortable: false },
+    //   { text: "แพ็กเกจ", value: "package", sortable: false },
+    //   { text: "โค้ช", value: "coachName", sortable: false },
+    //   { text: "ประเภท", value: "courseType", sortable: false },
+    //   { text: "ระยะเวลา", value: "timeLine", sortable: false },
+    //   { text: "วัน", value: "dates", sortable: false },
+    //   { text: "เวลาเริ่ม", value: "start", sortable: false },
+    //   { text: "เวลาสิ้นสุด", value: "end", sortable: false },
+    //   { text: "ราคา", value: "price", sortable: false },
+    // ],
 
-    rules: {
-      certificate_name: [
-        (val) => (val || "").length > 0 || "กรุณาระบุชื่อการแข่งขัน",
-        (val) =>
-          (val || "").length <= 50 ||
-          "กรุณาระบุชื่อการแข่งขันไม่เกิน 50 ตัวอักษร",
-      ],
-      certificate_date: [
-        (val) => (val || "").length > 0 || "กรุณาระบุวันที่แข่งขัน",
-      ],
-      name: [
-        (val) =>
-          (val || "").length > 0 ||
-          "ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบใหม่อีกครั้ง",
-      ],
-      username: [
-        () =>
-          !this.isMatch ? "ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบใหม่อีกครั้ง " : "",
-      ],
-      email: [
-        (value) => !!value || "Required.",
-        (value) => (value || "").length <= 20 || "Max 20 characters",
-        (value) => {
-          const pattern =
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-          return pattern.test(value) || "Invalid e-mail.";
-        },
-      ],
-    },
+    // rules: {
+    //   certificate_name: [
+    //     (val) => (val || "").length > 0 || "กรุณาระบุชื่อการแข่งขัน",
+    //     (val) =>
+    //       (val || "").length <= 50 ||
+    //       "กรุณาระบุชื่อการแข่งขันไม่เกิน 50 ตัวอักษร",
+    //   ],
+    //   certificate_date: [
+    //     (val) => (val || "").length > 0 || "กรุณาระบุวันที่แข่งขัน",
+    //   ],
+    //   name: [
+    //     (val) =>
+    //       (val || "").length > 0 ||
+    //       "ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบใหม่อีกครั้ง",
+    //   ],
+    //   username: [
+    //     () =>
+    //       !this.isMatch ? "ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบใหม่อีกครั้ง " : "",
+    //   ],
+    //   email: [
+    //     (value) => !!value || "Required.",
+    //     (value) => (value || "").length <= 20 || "Max 20 characters",
+    //     (value) => {
+    //       const pattern =
+    //         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    //       return pattern.test(value) || "Invalid e-mail.";
+    //     },
+    //   ],
+    // },
     search: "",
-    title: "ข้อมูลผู้ใช้งาน",
-    title2: "การจัดการสิทธิ์",
-    title3: "คอร์สเรียน",
-    parent_detail: "ข้อมูลผู้ปกครอง",
-    student_detail: "ข้อมูลนักเรียน",
-    addStudentData: "เพิ่มข้อมูลผู้ใช้นักเรียน",
-    addParentData: "เพิ่มข้อมูลผู้ใช้ของผู้ปกครอง",
+    // title: "ข้อมูลผู้ใช้งาน",
+    // title2: "การจัดการสิทธิ์",
+    // title3: "คอร์สเรียน",
+    // parent_detail: "ข้อมูลผู้ปกครอง",
+    // student_detail: "ข้อมูลนักเรียน",
+    // addStudentData: "เพิ่มข้อมูลผู้ใช้นักเรียน",
+    // addParentData: "เพิ่มข้อมูลผู้ใช้ของผู้ปกครอง",
     parent: {
       account_id: "",
       firstname_en: "",
@@ -1375,19 +1404,6 @@ export default {
     today: new Date(),
   }),
   created() {
-    if (this.$route?.params?.from === "Dashboard") {
-      this.breadcrumbs = [
-        { text: "แดชบอร์ด", to: "StudentList" },
-        { text: "จัดการผู้ใช้งาน", to: "UserList" },
-        { text: "เพิ่มผู้ใช้งาน", to: "" },
-      ];
-    } else {
-      this.breadcrumbs = [
-        { text: "จัดการผู้ใช้งาน", to: "UserList" },
-        { text: "เพิ่มผู้ใช้งาน", to: "" },
-      ];
-    }
-
     this.params = this.$route?.params?.account_id;
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
   },
@@ -1497,7 +1513,7 @@ export default {
     edit() {
       this.isDisabled = false;
       this.isEnabled = true;
-      this.buttonName = "บันทึก";
+      this.buttonName = this.$t("save");
     },
 
     checkData() {
@@ -1513,16 +1529,16 @@ export default {
       } else {
         this.isMatch = false;
         this.isNotMatch = true;
-        this.username_alert = "ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบใหม่อีกครั้ง ";
+        this.username_alert = this.$t("invalid username Please check again");
       }
     },
     submitEdit() {
       Swal.fire({
-        title: "คุณต้องการแก้ไขข้อมูลหรือไม่",
+        title: this.$t("do you want to edit the information?"),
         showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
@@ -1611,11 +1627,11 @@ export default {
         } else {
           Swal.fire({
             icon: "error",
-            text: "อัปโหลดเฉพาะไฟล์รูปภาพ(png, jpeg)เท่านั้น",
+            text: this.$t("upload only image files (png, jpeg) only"),
             showDenyButton: false,
             showCancelButton: false,
-            confirmButtonText: "ตกลง",
-            cancelButtonText: "ยกเลิก",
+            confirmButtonText: this.$t("agree"),
+            cancelButtonText: this.$t("cancel"),
           });
         }
       }
@@ -1666,11 +1682,11 @@ export default {
       // console.log(certificate_id)
       Swal.fire({
         icon: "question",
-        title: "คุณต้องการลบการแข่งนี้ใช่หรือไม่",
+        title: this.$t("do you want to delete this contest?"),
         showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.DeleteCertificate({
@@ -1774,11 +1790,11 @@ export default {
     addParent() {
       Swal.fire({
         icon: "question",
-        title: "คุณต้องการเพิ่มผู้ปกครองหรือไม่",
+        title: this.$t("do you want to add a parent?"),
         showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
@@ -1824,7 +1840,7 @@ export default {
             });
           }
         } else {
-          Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
+          Swal.fire(this.$t("your data will not be saved"), "", "info");
         }
       });
     },
@@ -1885,6 +1901,164 @@ export default {
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;
+    },
+
+    breadcrumbs() {
+      if (this.$route?.params?.from === "Dashboard") {
+        return [
+          { text: this.$t("dashboard"), to: "StudentList" },
+          { text: this.$t("manage user"), to: "UserList" },
+          { text: this.$t("add user"), to: "" },
+        ];
+      } else {
+        return [
+          { text: this.$t("manage user"), to: "UserList" },
+          { text: this.$t("add user"), to: "" },
+        ];
+      }
+    },
+
+    items() {
+      return [
+        this.$t("general information"),
+        this.$t("courses"),
+        this.$t("competitions and certificates"),
+      ];
+    },
+    roleCoachTable() {
+      return [
+        {
+          text: this.$t("course name"),
+          value: this.$i18n.locale == "th" ? "courseNameTh" : "courseNameEn",
+          sortable: false,
+        },
+        {
+          text: this.$t("kingdom name"),
+          value:
+            this.$i18n.locale == "th" ? "categoryNameTh" : "categoryNameEn",
+          sortable: false,
+        },
+        {
+          text: this.$t("course type"),
+          value:
+            this.$i18n.locale == "th" ? "courseTypeNameTh" : "courseTypeNameEn",
+          sortable: false,
+        },
+      ];
+    },
+    roleParentTable() {
+      return [
+        {
+          text: this.$t("first name"),
+          value:
+            this.$i18n.locale == "th"
+              ? "student.firstNameTh"
+              : "student.firstNameEng",
+          sortable: false,
+        },
+        {
+          text: this.$t("last name"),
+          value:
+            this.$i18n.locale == "th"
+              ? "student.lastNameTh"
+              : "student.lastNameEng",
+          sortable: false,
+        },
+        {
+          text: this.$t("course name"),
+          value: this.$i18n.locale == "th" ? "courseNameTh" : "courseNameEn",
+          sortable: false,
+        },
+        { text: this.$t("package"), value: "cpo.packageName", sortable: false },
+        { text: this.$t("coach"), value: "coachName", sortable: false },
+        {
+          text: this.$t("course type"),
+          value: "cpo.courseTypeNameTh",
+          sortable: false,
+        },
+        { text: this.$t("periods"), value: "cpo.optionName", sortable: false },
+        { text: this.$t("day"), value: "dates", sortable: false },
+        { text: this.$t("start time"), value: "start", sortable: false },
+        { text: this.$t("end time"), value: "end", sortable: false },
+      ];
+    },
+    roleStudentTable() {
+      return [
+        {
+          text: this.$t("first name"),
+          value:
+            this.$i18n.locale == "th"
+              ? "student.firstNameTh"
+              : "student.firstNameEng",
+          sortable: false,
+        },
+        {
+          text: this.$t("last name"),
+          value:
+            this.$i18n.locale == "th"
+              ? "student.lastNameTh"
+              : "student.lastNameEng",
+          sortable: false,
+        },
+        {
+          text: this.$t("course name"),
+          value: this.$i18n.locale == "th" ? "courseNameTh" : "courseNameEn",
+          sortable: false,
+        },
+        { text: this.$t("package"), value: "cpo.packageName", sortable: false },
+        {
+          text: this.$t("coach"),
+          value: this.$i18n.locale == "th" ? "coachNameTh" : "coachNameEn",
+          sortable: false,
+        },
+        {
+          text: this.$t("course type"),
+          value: "cpo.courseTypeNameTh",
+          sortable: false,
+        },
+        { text: this.$t("periods"), value: "cpo.optionName", sortable: false },
+        { text: this.$t("day"), value: "dates", sortable: false },
+        { text: this.$t("start time"), value: "start", sortable: false },
+        { text: this.$t("end time"), value: "end", sortable: false },
+        { text: this.$t("price"), value: "price", sortable: false },
+      ];
+    },
+    rules() {
+      return {
+        certificate_name: [
+          (val) =>
+            (val || "").length > 0 ||
+            this.$t("please specify the name of the competition"),
+          (val) =>
+            (val || "").length <= 50 ||
+            this.$t(
+              "please specify the name of the competition with no more than 50 characters"
+            ),
+        ],
+        certificate_date: [
+          (val) =>
+            (val || "").length > 0 ||
+            this.$t("please specify the date of the competition"),
+        ],
+        name: [
+          (val) =>
+            (val || "").length > 0 ||
+            this.$t("invalid username Please check again"),
+        ],
+        username: [
+          () =>
+            !this.isMatch ? this.$t("invalid username Please check again") : "",
+        ],
+        email: [
+          (value) => !!value || "Required.",
+          (value) => (value || "").length <= 20 || "Max 20 characters",
+          (value) => {
+            const pattern =
+              /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return pattern.test(value) || this.$t("invalid email");
+          },
+        ],
+      };
     },
   },
 

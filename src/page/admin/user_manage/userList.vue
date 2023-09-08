@@ -2,7 +2,7 @@
   <v-app>
     <v-container>
       <v-row dense>
-        <headerPage title="จัดการผู้ใช้งาน"></headerPage>
+        <headerPage :title="$t('manage user')"></headerPage>
         <v-card outlined>
           <v-card-text class="pa-2">
             <v-row dense class="d-flex align-center">
@@ -14,7 +14,7 @@
                 ></v-img>
               </v-col>
               <v-col cols="auto">
-                <label-custom text="ผู้ใช้งานทั้งหมด"></label-custom>
+                <label-custom :text="$t('all users')"></label-custom>
               </v-col>
               <v-col>
                 <v-avatar size="40" color="#FBF3F5"
@@ -35,7 +35,7 @@
               <v-text-field
                 dense
                 outlined
-                label="ค้นหา"
+                :label="$t('search')"
                 color="pink"
                 hide-details
                 v-model="search"
@@ -43,16 +43,16 @@
                 prepend-inner-icon="mdi-magnify"
               ></v-text-field>
             </v-col>
-            <label-custom v-if="!MobileSize" text="บทบาท"></label-custom>
+            <label-custom v-if="!MobileSize" :text="$t('role')"></label-custom>
             <v-col cols="12" sm="3">
-              <label-custom v-if="MobileSize" text="บทบาท"></label-custom>
+              <label-custom v-if="MobileSize" :text="$t('role')"></label-custom>
               <template>
                 <v-autocomplete
                   v-model="searchQuery"
                   :items="roles"
                   item-text="role"
                   item-value="roleNumber"
-                  placeholder="ทั้งหมด"
+                  :placeholder="$t('all')"
                   @input="FilterGetUserList(searchQuery)"
                   outlined
                   dense
@@ -104,7 +104,7 @@
                 @click="$router.push({ name: 'UserCreate' })"
               >
                 <v-icon left> mdi-plus </v-icon>
-                เพิ่มผู้ใช้
+                {{ $t("add user") }}
               </v-btn>
             </v-col>
           </v-row>
@@ -129,7 +129,11 @@
             </template>
 
             <template v-slot:[`item.roles`]="{ item }">
-              {{ item.roleNameTh }}
+              <div v-for="(items, ind_itm) in item.userRoles" :key="ind_itm">
+                {{
+                  $i18n.locale == "th" ? items.roleNameTh : items.roleNameEng
+                }}
+              </div>
             </template>
 
             <template v-slot:[`item.actions`]="{ item }">
@@ -144,7 +148,7 @@
                       account_id: item.accountId
                         ? item.accountId
                         : item.userOneId,
-                      from: 'userList' 
+                      from: 'userList',
                     },
                   })
                 "
@@ -163,7 +167,7 @@
                       account_id: item.accountId
                         ? item.accountId
                         : item.userOneId,
-                      from: 'userList' 
+                      from: 'userList',
                     },
                   })
                 "
@@ -185,7 +189,7 @@
             </template>
 
             <template v-slot:[`no-results`]>
-              <div class="font-bold">ไม่พบข้อมูลในตาราง</div>
+              <div class="font-bold">{{ $t("no data found in table") }}</div>
             </template>
           </v-data-table>
         </template>
@@ -221,30 +225,30 @@ export default {
       searchQuery: [],
       selectedRole: null, // Selected role from the autocomplete
 
-      roles: [
-        { role: "Super Admin", privilege: "superAdmin", roleNumber: "R_1" },
-        { role: "Admin", privilege: "admin", roleNumber: "R_2" },
-        { role: "โค้ช", privilege: "โค้ช", roleNumber: "R_3" },
-        { role: "ผู้ปกครอง", privilege: "ผู้ปกครอง", roleNumber: "R_4" },
-        { role: "นักเรียน", privilege: "นักเรียน", roleNumber: "R_5" },
-      ],
+      // roles: [
+      //   { role: "Super Admin", privilege: "superAdmin", roleNumber: "R_1" },
+      //   { role: "Admin", privilege: "admin", roleNumber: "R_2" },
+      //   { role: "โค้ช", privilege: "โค้ช", roleNumber: "R_3" },
+      //   { role: "ผู้ปกครอง", privilege: "ผู้ปกครอง", roleNumber: "R_4" },
+      //   { role: "นักเรียน", privilege: "นักเรียน", roleNumber: "R_5" },
+      // ],
       user_data: {
         users: "",
       },
-      headers: [
-        { text: "ลำดับ", value: "count", sortable: false, align: "start" },
-        { text: "ชื่อ", value: "firstNameTh", sortable: false, align: "start" },
-        {
-          text: "นามสกุล",
-          value: "lastNameTh",
-          sortable: false,
-          align: "start",
-        },
-        { text: "อีเมล", value: "email", sortable: false, align: "start" },
-        { text: "ผู้ใช้", value: "userName", sortable: false, align: "start" },
-        { text: "บทบาท", value: "roles", sortable: false },
-        { text: "จัดการ", value: "actions", sortable: false, align: "start" },
-      ],
+      // headers: [
+      //   { text: "ลำดับ", value: "count", sortable: false, align: "start" },
+      //   { text: "ชื่อ", value: "firstNameTh", sortable: false, align: "start" },
+      //   {
+      //     text: "นามสกุล",
+      //     value: "lastNameTh",
+      //     sortable: false,
+      //     align: "start",
+      //   },
+      //   { text: "อีเมล", value: "email", sortable: false, align: "start" },
+      //   { text: "ผู้ใช้", value: "userName", sortable: false, align: "start" },
+      //   { text: "บทบาท", value: "roles", sortable: false },
+      //   { text: "จัดการ", value: "actions", sortable: false, align: "start" },
+      // ],
       editedIndex: -1,
       editedItem: {
         number: "",
@@ -284,6 +288,86 @@ export default {
   },
   created() {
     this.GetUserList();
+  },
+
+  computed: {
+    ...mapGetters({
+      user_list: "UserModules/getUserList",
+      show_by_id: "UserModules/getShowById",
+      filter_role: "UserModules/getfilterGetUserList",
+    }),
+    formTitle() {
+      return this.editedIndex === -1 ? "Edit" : "Edit";
+    },
+    filteredKeys() {
+      return this.keys.filter((key) => key !== "Name");
+    },
+    MobileSize() {
+      const { xs } = this.$vuetify.breakpoint;
+      return !!xs;
+    },
+
+    icon() {
+      if (this.selected_all_bool) return "mdi-close-box";
+      if (
+        !this.selected_all_bool ||
+        this.searchQuery.length < this.roles.length
+      )
+        return "mdi-checkbox-blank-outline";
+      return "mdi-checkbox-blank-outline";
+    },
+    roles() {
+      return [
+        { role: "Super Admin", privilege: "superAdmin", roleNumber: "R_1" },
+        { role: "Admin", privilege: "admin", roleNumber: "R_2" },
+        { role: this.$t("coach"), privilege: "โค้ช", roleNumber: "R_3" },
+        { role: this.$t("parent"), privilege: "ผู้ปกครอง", roleNumber: "R_4" },
+        { role: this.$t("student"), privilege: "นักเรียน", roleNumber: "R_5" },
+      ];
+    },
+    headers() {
+      return [
+        {
+          text: this.$t("no."),
+          value: "count",
+          sortable: false,
+          align: "start",
+        },
+        {
+          text: this.$t("first name"),
+          // value: "firstNameTh",
+          value: this.$i18n.locale == "th" ? "firstNameTh" : "firstNameEn",
+          sortable: false,
+          align: "start",
+        },
+        {
+          text: this.$t("last name"),
+          // value: "lastNameEN",
+          value: this.$i18n.locale == "th" ? "lastNameTh" : "lastNameEN",
+          sortable: false,
+          align: "start",
+        },
+        {
+          text: this.$t("email"),
+          value: "email",
+          sortable: false,
+          align: "start",
+        },
+        {
+          text: this.$t("user"),
+          value: "userName",
+          sortable: false,
+          align: "start",
+        },
+        { text: this.$t("role"), value: "roles", sortable: false },
+        {
+          text: this.$t("manage"),
+          value: "actions",
+          sortable: false,
+          align: "start",
+        },
+      ];
+    },
   },
 
   methods: {
@@ -374,11 +458,11 @@ export default {
     async deleteAccount(account_id) {
       Swal.fire({
         icon: "question",
-        title: "คุณต้องลบข้อมูลหรือไม่",
+        title: this.$t("do you need to delete the data?"),
         showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
@@ -401,8 +485,8 @@ export default {
                 this.$store.dispatch("UserModules/GetUserList");
                 Swal.fire({
                   icon: "success",
-                  title: "สำเร็จ",
-                  text: "( ลบข้อมูลเรียบร้อยแล้ว )",
+                  title: this.$t("succeed"),
+                  text: this.$t("data has been successfully deleted"),
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,
@@ -423,11 +507,12 @@ export default {
           } catch (error) {
             Swal.fire({
               icon: "error",
-              title: "ลบข้อมูลไม่สำเร็จ",
+              title: this.$t("warning"),
+              text: this.$t("failed to delete data"),
             });
           }
         } else {
-          Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
+          Swal.fire(this.$t("your data will not be save"), "", "info");
         }
       });
     },
@@ -468,34 +553,6 @@ export default {
       } catch (error) {
         console.log(error);
       }
-    },
-  },
-
-  computed: {
-    ...mapGetters({
-      user_list: "UserModules/getUserList",
-      show_by_id: "UserModules/getShowById",
-      filter_role: "UserModules/getfilterGetUserList",
-    }),
-    formTitle() {
-      return this.editedIndex === -1 ? "Edit" : "Edit";
-    },
-    filteredKeys() {
-      return this.keys.filter((key) => key !== "Name");
-    },
-    MobileSize() {
-      const { xs } = this.$vuetify.breakpoint;
-      return !!xs;
-    },
-
-    icon() {
-      if (this.selected_all_bool) return "mdi-close-box";
-      if (
-        !this.selected_all_bool ||
-        this.searchQuery.length < this.roles.length
-      )
-        return "mdi-checkbox-blank-outline";
-      return "mdi-checkbox-blank-outline";
     },
   },
 };

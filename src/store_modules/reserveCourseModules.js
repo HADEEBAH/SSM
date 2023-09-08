@@ -32,7 +32,9 @@ const reserveCourseModules = {
             item.timeTh = moment(item.createdDate).format("HH:mm")
             item.courseFullName = `${item.courseName}(${item.courseNameEn})`
             item.studentFullName = `${item.studentData.firstNameTh} ${item.studentData.lastNameTh}`
+            item.studentFullNameEn = `${item.studentData.firstNameEn} ${item.studentData.lastNameEn}`
             item.createdByFullName = `${item.createdByData.firstNameTh} ${item.createdByData.lastNameTh}`
+            item.createdByFullNameEn = `${item.createdByData.firstNameEn} ${item.createdByData.lastNameEn}`
             item.tel = item.createdByData.tel
           })
           // console.log(data.data)
