@@ -33,7 +33,11 @@
                   <template v-slot:no-data>
                     <v-list-item>
                       <v-list-item-title>
-                        {{ search ? $t(`data not found`) : $t(`please enter the student's name`) }}
+                        {{
+                          search
+                            ? $t(`data not found`)
+                            : $t(`please enter the student's name`)
+                        }}
                       </v-list-item-title>
                     </v-list-item>
                   </template>
@@ -101,7 +105,7 @@
                         : "mdi-radiobox-blank"
                     }}</v-icon
                   >
-                  {{$t("general course")}}</v-btn
+                  {{ $t("general course") }}</v-btn
                 >
               </v-col>
               <!-- คอร์สระยะสั้น btn -->
@@ -117,7 +121,7 @@
                       ? "mdi-radiobox-marked"
                       : "mdi-radiobox-blank"
                   }}</v-icon>
-                  {{$t("short course")}}</v-btn
+                  {{ $t("short course") }}</v-btn
                 >
               </v-col>
             </v-row>
@@ -185,7 +189,9 @@
                 >
                   <template v-slot:no-data>
                     <v-list-item>
-                      <v-list-item-title> {{ $t("no data found") }} </v-list-item-title>
+                      <v-list-item-title>
+                        {{ $t("no data found") }}
+                      </v-list-item-title>
                     </v-list-item>
                   </template>
                   <template v-slot:item="{ item }">
@@ -221,7 +227,7 @@
               "
             >
               <v-col cols="12" sm="4">
-                <label-custom text="แพ็กเกจ"></label-custom>
+                <label-custom :text="$t('package')"></label-custom>
                 <v-autocomplete
                   item-value="package_id"
                   item-text="package"
@@ -231,14 +237,14 @@
                   :rules="rules.package"
                   v-model="course.package"
                   :items="course.course_data.packages"
-                  placeholder="เลือกแพ็กเกจ"
+                  :placeholder="$t('choose a package')"
                   outlined
                   @change="selectPackage(course)"
                 >
                 </v-autocomplete>
               </v-col>
               <v-col cols="12" sm="4" v-if="course.package">
-                <label-custom text="ระยะเวลา"></label-custom>
+                <label-custom :text="$t('periods')"></label-custom>
                 <v-autocomplete
                   dense
                   outlined
@@ -249,7 +255,7 @@
                       (v) => v.package_id == course.package
                     )[0].options
                   "
-                  placeholder="เลือกระยะเวลา"
+                  :placeholder="$t('choose duration')"
                   @change="Calprice(course)"
                   item-color="white"
                   color="pink"
@@ -289,7 +295,7 @@
                 </v-autocomplete>
               </v-col>
               <v-col v-if="course.option" cols="12" sm="2">
-                <label-custom text="จำนวนครั้ง"></label-custom>
+                <label-custom :text="$t('number of times')"></label-custom>
                 <v-text-field
                   dense
                   disabled
@@ -307,7 +313,7 @@
               "
             >
               <v-col cols="12" sm="2" v-if="course.option.amount">
-                <label-custom text="วัน"></label-custom>
+                <label-custom :text="$t('day')"></label-custom>
                 <v-autocomplete
                   dense
                   :rules="rules.day"
@@ -315,7 +321,7 @@
                   item-text="dayName"
                   item-value="dayName"
                   :items="course.course_data.days"
-                  placeholder="เลือกวัน"
+                  :placeholder="$t('pick a day')"
                   outlined
                   item-color="pink"
                   color="pink"
@@ -323,7 +329,7 @@
                 </v-autocomplete>
               </v-col>
               <v-col cols="12" sm="3" v-if="course.day">
-                <label-custom text="เวลา"></label-custom>
+                <label-custom :text="$t('times')"></label-custom>
                 <v-select
                   dense
                   :rules="rules.time"
@@ -333,7 +339,7 @@
                       (v) => v.dayName === course.day
                     )[0].times
                   "
-                  placeholder="เลือกเวลา"
+                  :placeholder="$t('choose a time')"
                   outlined
                   item-color="white"
                   @change="selectTime(course.time, course)"
@@ -343,7 +349,9 @@
                   </template>
                   <template v-slot:no-data>
                     <v-list-item>
-                      <v-list-item-title> ไม่พบข้อมูล </v-list-item-title>
+                      <v-list-item-title>
+                        {{ $t("data not found") }}
+                      </v-list-item-title>
                     </v-list-item>
                   </template>
                   <template v-slot:item="{ item }">
@@ -355,7 +363,8 @@
                               ? 'font-bold text-[#ff6b81]'
                               : 'text-[#000]'
                           "
-                          >{{ item.start }}-{{ item.end }}น.</span
+                          >{{ item.start }}-{{ item.end }}
+                          {{ $t("o'clock") }}</span
                         ></v-list-item-title
                       >
                     </v-list-item-content>
@@ -373,13 +382,13 @@
                 </v-select>
               </v-col>
               <v-col cols="12" sm="4" v-if="course.course_data && course.time">
-                <label-custom text="โค้ช"></label-custom>
+                <label-custom :text="$t('coach')"></label-custom>
                 <v-autocomplete
                   dense
                   :rules="rules.coach"
                   v-model="course.coach"
                   :items="course.time.timeData"
-                  placeholder="เลือกโค้ช"
+                  :placeholder="$t('choose a coach')"
                   item-color="pink"
                   outlined
                 >
@@ -417,7 +426,7 @@
                 </v-autocomplete>
               </v-col>
               <v-col cols="12" sm="3" v-if="course.coach">
-                <label-custom text="วันเริ่ม"></label-custom>
+                <label-custom :text="$t('start date')"></label-custom>
                 <v-menu
                   v-model="course.menu_start_date"
                   :close-on-content-click="false"
@@ -432,7 +441,7 @@
                       :rules="rules.start_date"
                       v-model="course.start_date_str"
                       readonly
-                      placeholder="เลือกวันเริ่ม"
+                      :placeholder="$t('start date')"
                       v-bind="attrs"
                       v-on="on"
                     >
@@ -457,7 +466,7 @@
               v-if="course.course_type_id == 'CT_2' && course.course_id"
             >
               <v-col cols="12" sm="4" v-if="course.course_type_id == 'CT_2'">
-                <label-custom text="วันที่"></label-custom>
+                <label-custom :text="$t('date')"></label-custom>
                 <v-text-field
                   v-if="course.course_id"
                   dense
@@ -467,17 +476,17 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="4">
-                <label-custom text="เวลา"></label-custom>
+                <label-custom :text="$t('times')"></label-custom>
                 <v-text-field
                   disabled
                   outlined
                   dense
-                  :value="`${course.time_str}น.`"
+                  :value="`${course.time_str}`"
                 >
                 </v-text-field>
               </v-col>
               <v-col cols="12" sm="4">
-                <label-custom text="โค้ช"></label-custom>
+                <label-custom :text="$t('coach')"></label-custom>
                 <v-text-field
                   dense
                   outlined
@@ -519,21 +528,23 @@
         <v-row class="mb-3">
           <v-col align="center">
             <v-btn outlined class="" color="#ff6b81" @click="addCourse"
-              ><span class="mdi mdi-plus-circle-outline"
-                >{{ $t("add a course") }}</span
-              ></v-btn
+              ><span class="mdi mdi-plus-circle-outline">{{
+                $t("add a course")
+              }}</span></v-btn
             >
           </v-col>
         </v-row>
         <template v-if="order.courses.length > 0">
-          <div class="text-lg font-bold">{{$t("payment status")}}</div>
+          <div class="text-lg font-bold">{{ $t("payment status") }}</div>
           <v-divider class="mb-3"></v-divider>
           <v-row dense class="mb-3">
             <v-col cols="12" sm="8">
               <v-card class="text-xl" color="#FBF3F5">
                 <v-card-text>
                   <v-row>
-                    <v-col class="text-lg font-bold">{{$t("total price")}} :</v-col>
+                    <v-col class="text-lg font-bold"
+                      >{{ $t("total price") }} :</v-col
+                    >
                     <v-col
                       cols="auto"
                       class="text-lg font-bold text-pink-500"
@@ -544,7 +555,9 @@
                         )
                       }}</v-col
                     >
-                    <v-col cols="auto" class="text-lg font-bold">{{$t("baht")}}</v-col>
+                    <v-col cols="auto" class="text-lg font-bold">{{
+                      $t("baht")
+                    }}</v-col>
                   </v-row>
                 </v-card-text>
               </v-card>
@@ -579,7 +592,7 @@
                             ></v-img>
                           </v-avatar>
                         </v-col>
-                        <v-col> {{$t("already paid")}} </v-col>
+                        <v-col> {{ $t("already paid") }} </v-col>
                       </v-row>
                       <v-row dense v-if="order.payment_status === 'paid'">
                         <v-col cols="auto">
@@ -602,7 +615,7 @@
                             <template v-slot:no-data>
                               <v-list-item>
                                 <v-list-item-title>
-                                  ไม่พบข้อมูล
+                                  {{ $t("no data found") }}
                                 </v-list-item-title>
                               </v-list-item>
                             </template>
@@ -632,14 +645,21 @@
                           </v-autocomplete>
                         </v-col>
                         <v-col cols="auto">
-                          {{$t('payee')}} :
+                          {{ $t("payee") }} :
                           <span class="text-pink-500 font-medium">
                             <!-- {{
                             `${user_detail.first_name_th} ${user_detail.last_name_th}`
                           }} -->
-{{ $i18n.locale === 'th' ? user_detail.first_name_th + ' ' + user_detail.last_name_th : user_detail.first_name_en + ' ' + user_detail.last_name_en }}
-  
-                        </span>
+                            {{
+                              $i18n.locale === "th"
+                                ? user_detail.first_name_th +
+                                  " " +
+                                  user_detail.last_name_th
+                                : user_detail.first_name_en +
+                                  " " +
+                                  user_detail.last_name_en
+                            }}
+                          </span>
                         </v-col>
                       </v-row>
                     </v-col>
@@ -673,7 +693,7 @@
                         ></v-img>
                       </v-avatar>
                     </v-col>
-                    <v-col> {{$t("send payment notification")}} </v-col>
+                    <v-col> {{ $t("send payment notification") }} </v-col>
                   </v-row>
                 </v-card-text>
               </v-card>
@@ -701,7 +721,7 @@
               color="#ff6b81"
               @click="save()"
             >
-              {{$t("confirm")}}
+              {{ $t("confirm") }}
             </v-btn>
           </v-col>
         </v-row>
@@ -732,12 +752,16 @@
             </v-col>
           </v-row>
         </v-card-title>
-        <dialogCard text="ยืนยันการชำระเงินเรียบร้อย"></dialogCard>
+        <dialogCard
+          :text="$t('confirmation of successful payments')"
+        ></dialogCard>
         <v-btn
           class="centerbtn mt-10"
           color="#ff6b81"
           @click="$router.push({ name: 'Finance' })"
-          ><div class="text-white">ดูสถานะการเงิน</div></v-btn
+          ><div class="text-white">
+            {{ $t("view financial status") }}
+          </div></v-btn
         >
       </v-card>
     </v-dialog>
@@ -785,22 +809,22 @@ export default {
     today: new Date(),
     selected: [""],
     pay: "",
-    rules: {
-      student: [(val) => (val || "").length > 0 || "โปรดเลือกผู้เรียน"],
-      category: [(val) => (val || "").length > 0 || "โปรดเลือกอาณาจักร"],
-      course: [(val) => (val || "").length > 0 || "โปรดเลือกคอร์สเรียน"],
-      package: [(val) => (val || "").length > 0 || "โปรดเลือกแพ็กเกจ"],
-      option: [(val) => (val.option_id ? true : false) || "โปรดเลือกระยะเวลา"],
-      day: [(val) => (val || "").length > 0 || "โปรดเลือกวันเรียน"],
-      time: [(val) => (val ? true : false) || "โปรดเลือกเวลาเรียน"],
-      coach: [(val) => (val.courseCoachId ? true : false) || "โปรดเลือกโค้ช"],
-      start_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันเริ่ม"],
-      price: [(val) => (val || "") > 0 || "โปรดเลือกระบุราคา"],
-      remark: [(val) => val.length < 256 || "หมายเหตุความยาวเกินกว่าที่กำหนด"],
-      payment_type: [
-        (val) => (val ? true : false || "โปรดเลือกช่องทางการชำระเงิน"),
-      ],
-    },
+    // rules: {
+    //   student: [(val) => (val || "").length > 0 || "โปรดเลือกผู้เรียน"],
+    //   category: [(val) => (val || "").length > 0 || "โปรดเลือกอาณาจักร"],
+    //   course: [(val) => (val || "").length > 0 || "โปรดเลือกคอร์สเรียน"],
+    //   package: [(val) => (val || "").length > 0 || "โปรดเลือกแพ็กเกจ"],
+    //   option: [(val) => (val.option_id ? true : false) || "โปรดเลือกระยะเวลา"],
+    //   day: [(val) => (val || "").length > 0 || "โปรดเลือกวันเรียน"],
+    //   time: [(val) => (val ? true : false) || "โปรดเลือกเวลาเรียน"],
+    //   coach: [(val) => (val.courseCoachId ? true : false) || "โปรดเลือกโค้ช"],
+    //   start_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันเริ่ม"],
+    //   price: [(val) => (val || "") > 0 || "โปรดเลือกระบุราคา"],
+    //   remark: [(val) => val.length < 256 || "หมายเหตุความยาวเกินกว่าที่กำหนด"],
+    //   payment_type: [
+    //     (val) => (val ? true : false || "โปรดเลือกช่องทางการชำระเงิน"),
+    //   ],
+    // },
   }),
   created() {
     if (this.order.courses.length == 0) {
@@ -839,7 +863,84 @@ export default {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     this.GetCategorys();
   },
-  
+  computed: {
+    ...mapGetters({
+      show_dialog_register_one_id: "RegisterModules/getShowDialogRegisterOneId",
+      order: "OrderModules/getOrder",
+      categorys: "CategoryModules/getCategorys",
+      course_data: "CourseModules/getCourseData",
+      courses: "CourseModules/getCourses",
+      packages: "CourseModules/getPackages",
+      last_user_registered: "RegisterModules/getLastUserRegistered",
+      username_list: "loginModules/getUsernameList",
+      order_is_loading: "OrderModules/getOrderIsLoading",
+      course_monitors: "CourseMonitorModules/getCourseMonitor",
+      order_is_status: "OrderModules/getOrderIsStatus",
+    }),
+    transfer() {
+      return [
+        { label: this.$t("transfer to account"), value: "transfer" },
+        { label: this.$t("credit card"), value: "Credit Card" },
+        { label: this.$t("cash"), value: "cash" },
+      ];
+    },
+    MobileSize() {
+      const { xs } = this.$vuetify.breakpoint;
+      return !!xs;
+    },
+    IpadSize() {
+      const { sm } = this.$vuetify.breakpoint;
+      return !!sm;
+    },
+    rules() {
+      return {
+        student: [
+          (val) => (val || "").length > 0 || this.$t("please select a student"),
+        ],
+        category: [
+          (val) => (val || "").length > 0 || this.$t("please select a kingdom"),
+        ],
+        course: [
+          (val) => (val || "").length > 0 || this.$t("please select a course"),
+        ],
+        package: [
+          (val) => (val || "").length > 0 || this.$t("please select a package"),
+        ],
+        option: [
+          (val) =>
+            (val.option_id ? true : false) || this.$t("please select a period"),
+        ],
+        day: [
+          (val) =>
+            (val || "").length > 0 || this.$t("please select a class day"),
+        ],
+        time: [
+          (val) =>
+            (val ? true : false) || this.$t("please select a class time"),
+        ],
+        coach: [
+          (val) =>
+            (val.courseCoachId ? true : false) ||
+            this.$t("please select a coach"),
+        ],
+        start_date: [
+          (val) =>
+            (val || "").length > 0 || this.$t("please select a start date"),
+        ],
+        price: [(val) => (val || "") > 0 || this.$t("please select a price")],
+        remark: [
+          (val) =>
+            val.length < 256 ||
+            this.$t("note that the length exceeds the limit"),
+        ],
+        payment_type: [
+          (val) =>
+            val ? true : false || this.$t("please choose a payment method"),
+        ],
+      };
+    },
+  },
+
   watch: {
     last_user_registered: function () {
       if (this.last_user_registered?.account_id) {
@@ -1043,7 +1144,9 @@ export default {
               2,
               "0"
             )}:${endTimePart[1].padStart(2, "0")}`;
-            course.time_str = `${period_start}-${period_end}`;
+            course.time_str = `${period_start}-${period_end} ${this.$t(
+              "o'clock"
+            )}`;
             course.price = parseInt(this.course_data.price_course);
             course.time = this.course_data.days_of_class[0].times[0];
             this.CalTotalPrice();
@@ -1098,30 +1201,35 @@ export default {
           if (studentFail) {
             Swal.fire({
               icon: "error",
-              title: "จำนวนนักเรียนไม่ถูกต้อง",
-              text: "จำนวนนักเรียนเกินกว่าจำนวนที่จะรับได้ใน Package",
+              title: this.$t("the number of students is incorrect"),
+              text: this.$t(
+                "the number of students exceeds the number of students allowed in the package"
+              ),
               showDenyButton: false,
               showCancelButton: true,
-              cancelButtonText: "ยกเลิก",
-              confirmButtonText: "ตกลง",
+              confirmButtonText: this.$t("agree"),
+              cancelButtonText: this.$t("cancel"),
             });
           } else if (isValiDateCourse.includes(false)) {
             Swal.fire({
               icon: "error",
-              title: "คอร์สที่เลือกเต็มแล้วไม่สามารถชำระเงินได้",
+              title: this.$t("something went wrong"),
+              text: this.$t(
+                "the selected course is full and payment cannot be made"
+              ),
               showDenyButton: false,
               showCancelButton: true,
-              cancelButtonText: "ยกเลิก",
-              confirmButtonText: "ตกลง",
+              confirmButtonText: this.$t("agree"),
+              cancelButtonText: this.$t("cancel"),
             });
           } else {
             Swal.fire({
               icon: "question",
-              title: "ต้องการเพิ่มผู้เรียนใช่หรือไม่",
+              title: this.$t("do you want to add students?"),
               showDenyButton: false,
               showCancelButton: true,
-              confirmButtonText: "ตกลง",
-              cancelButtonText: "ยกเลิก",
+              confirmButtonText: this.$t("agree"),
+              cancelButtonText: this.$t("cancel"),
             }).then(async (result) => {
               if (result.isConfirmed) {
                 if (this.order.payment_status === "warn") {
@@ -1153,6 +1261,7 @@ export default {
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
+                  await this.saveOrder();
 
                   let payload = {
                     notificationName: this.notification_name,
@@ -1252,35 +1361,6 @@ export default {
         payment_type: "",
         total_price: 0,
       });
-    },
-  },
-  computed: {
-    ...mapGetters({
-      show_dialog_register_one_id: "RegisterModules/getShowDialogRegisterOneId",
-      order: "OrderModules/getOrder",
-      categorys: "CategoryModules/getCategorys",
-      course_data: "CourseModules/getCourseData",
-      courses: "CourseModules/getCourses",
-      packages: "CourseModules/getPackages",
-      last_user_registered: "RegisterModules/getLastUserRegistered",
-      username_list: "loginModules/getUsernameList",
-      order_is_loading: "OrderModules/getOrderIsLoading",
-      course_monitors: "CourseMonitorModules/getCourseMonitor",
-    }),
-    transfer() {
-     return [
-        { label: this.$t("transfer to account"), value: "transfer" },
-        { label: this.$t("credit card"), value: "Credit Card" },
-        { label:this.$t("cash"), value: "cash" },
-      ]
-    },
-    MobileSize() {
-      const { xs } = this.$vuetify.breakpoint;
-      return !!xs;
-    },
-    IpadSize() {
-      const { sm } = this.$vuetify.breakpoint;
-      return !!sm;
     },
   },
 };

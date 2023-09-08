@@ -373,7 +373,7 @@ const coachModules = {
         })
       }
     },
-    async UpdateCheckInStudent(context, { students, course_id, date, time_id  }) {
+    async UpdateCheckInStudent(context, { students, course_id, date, time_id }) {
       try {
         context.commit("SetStudentCheckInIsLoading", true)
         let config = {
@@ -383,15 +383,15 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        students = students.map( v => {
-            v.compensationDate = v.compensationDate ? moment(new Date(v.compensationDate)).format("YYYY-MM-DD") : ''
-            v.compensationStartTime = v.compensationStartTime ? moment(v.compensationStartTime).format("HH:mm") : ''
-            v. compensationEndTime = v.compensationEndTime ? moment(v.compensationEndTime).format("HH:mm") : ''
-            return v
+        students = students.map(v => {
+          v.compensationDate = v.compensationDate ? moment(new Date(v.compensationDate)).format("YYYY-MM-DD") : ''
+          v.compensationStartTime = v.compensationStartTime ? moment(v.compensationStartTime).format("HH:mm") : ''
+          v.compensationEndTime = v.compensationEndTime ? moment(v.compensationEndTime).format("HH:mm") : ''
+          return v
         })
         // let localhost = "http://localhost:3000"
-        const {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/checkin/studentall`,students ,config)
-        if(data.statusCode == 200){
+        const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/checkin/studentall`, students, config)
+        if (data.statusCode == 200) {
           console.log(data)
           context.commit("SetStudentCheckInIsLoading", false)
           await Swal.fire({
@@ -460,7 +460,7 @@ const coachModules = {
         if (data.statusCode === 200) {
           let i = 1
           for await (let student of data.data) {
-            console.log("student",student)
+            console.log("student", student)
             student.no = i
             student.fullname = `${student.firstNameTh} ${student.lastNameTh}`
             student.fullname_en = `${student.firstNameEn} ${student.lastNameEn}`
@@ -584,7 +584,7 @@ const coachModules = {
                         coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
                         coach_en: `${user_detail.first_name_en} ${user_detail.last_name_en}`,
                         start_date: moment(startDate).format("YYYY-MM-DD"),
-                        start_date_str:  moment(startDate).format("YYYY-MM-DD"),
+                        start_date_str: moment(startDate).format("YYYY-MM-DD"),
                         start: moment(startDate).format("YYYY-MM-DD HH:mm"),
                         end: moment(endDate).format("YYYY-MM-DD HH:mm"),
                         start_time: start_time,
@@ -714,7 +714,7 @@ const coachModules = {
                       coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
                       coach_en: `${user_detail.first_name_en} ${user_detail.last_name_en}`,
                       start_date: moment(startDate).format("YYYY-MM-DD"),
-                      start_date_str:moment(startDate).format("YYYY-MM-DD"),
+                      start_date_str: moment(startDate).format("YYYY-MM-DD"),
                       start: moment(startDate).format("YYYY-MM-DD HH:mm"),
                       end: moment(endDate).format("YYYY-MM-DD HH:mm"),
                       start_time: start_time,
@@ -760,7 +760,7 @@ const coachModules = {
         if (data.statusCode == 200) {
           Swal.fire({
             icon: "success",
-             title: VueI18n.t("succeed"),
+            title: VueI18n.t("succeed"),
             text: `( ${VueI18n.t("saved")} )`,
             timer: 3000,
             timerProgressBar: true,
@@ -939,8 +939,8 @@ const coachModules = {
             context.commit("SetCoachLeaves", getLeaves.data.data)
             Swal.fire({
               icon: "success",
-              title: "สำเร็จ",
-              text: "( แก้ไขเรียบร้อยแล้ว )",
+              title: VueI18n.t("succeed"),
+              text: VueI18n.t("already edited"),
               timer: 3000,
               timerProgressBar: true,
               showCancelButton: false,
@@ -967,8 +967,8 @@ const coachModules = {
           if (coach_leave_data.status === "reject") {
             Swal.fire({
               icon: "success",
-              title: "สำเร็จ",
-              text: "( ยืนยันการปฎิเสธเรียบร้อยแล้ว )",
+              title: VueI18n.t("succeed"),
+              text: VueI18n.t("rejection confirmed"),
               timer: 3000,
               timerProgressBar: true,
               showCancelButton: false,
@@ -982,8 +982,8 @@ const coachModules = {
 
             Swal.fire({
               icon: "success",
-              title: "สำเร็จ",
-              text: "( ยืนยันการอนุมัติเรียบร้อยแล้ว )",
+              title: VueI18n.t("succeed"),
+              text: VueI18n.t("approval has been confirmed"),
               timer: 3000,
               timerProgressBar: true,
               showCancelButton: false,
@@ -1066,8 +1066,8 @@ const coachModules = {
         if (response.status === 400) {
           Swal.fire({
             icon: "warning",
-            title: "แจ้งเตือน",
-            text: "( กรุณาเลือกคอร์ส )",
+            title: VueI18n.t("warning"),
+            text: VueI18n.t("please choose a course"),
             showCancelButton: false,
             showConfirmButton: false,
             timer: 3000,

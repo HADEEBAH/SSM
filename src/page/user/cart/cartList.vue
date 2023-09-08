@@ -36,7 +36,11 @@
                           <v-col>
                             <v-row dense>
                               <v-col class="text-lg font-bold">
-                                {{ $i18n.locale == "th" ? item.course_name_th : item.course_name_en }}
+                                {{
+                                  $i18n.locale == "th"
+                                    ? item.course_name_th
+                                    : item.course_name_en
+                                }}
                               </v-col>
                               <v-col cols="auto">
                                 <v-checkbox
@@ -55,7 +59,12 @@
                                 sm="6"
                                 class="text-md font-semibold"
                               >
-                                {{ $t("coach") }} : {{ $i18n.locale =='th' ? item.coach_name : item.coach_name_en}}
+                                {{ $t("coach") }} :
+                                {{
+                                  $i18n.locale == "th"
+                                    ? item.coach_name
+                                    : item.coach_name_en
+                                }}
                               </v-col>
                               <v-col
                                 cols="12"
@@ -74,37 +83,43 @@
                       </v-col>
                     </v-row>
                     <v-row dense v-if="item.course_type_id === 'CT_1'">
-                      <v-col align="right" cols="8">{{ $t('number of times') }}</v-col>
+                      <v-col align="right" cols="8">{{
+                        $t("number of times studied")
+                      }}</v-col>
                       <v-col
                         align="right"
                         cols="4"
                         class="text-md font-semibold text-[#FF6B81]"
                       >
-                        {{ item.option.amount }} {{$t('time')}}</v-col
+                        {{ item.option.amount }} {{ $t("time") }}</v-col
                       >
                     </v-row>
                     <v-row dense>
-                      <v-col align="right" cols="8"> {{ $t('number of students') }}</v-col>
+                      <v-col align="right" cols="8">
+                        {{ $t("number of students") }}</v-col
+                      >
                       <v-col
                         align="right"
                         cols="4"
                         class="text-md font-semibold text-[#FF6B81]"
                       >
-                        {{ item.students.length }} {{ $t('person') }}</v-col
+                        {{ item.students.length }} {{ $t("person") }}</v-col
                       >
                     </v-row>
                     <v-row dense v-if="item.course_type_id === 'CT_1'">
-                      <v-col align="right" cols="8">{{ $t('discount') }}</v-col>
+                      <v-col align="right" cols="8">{{ $t("discount") }}</v-col>
                       <v-col
                         align="right"
                         cols="4"
                         class="text-md font-semibold text-[#FF6B81]"
                       >
-                        {{ item.option.discount_price }} {{$t('baht')}}</v-col
+                        {{ item.option.discount_price }} {{ $t("baht") }}</v-col
                       >
                     </v-row>
                     <v-row dense class="mb-3">
-                      <v-col align="right" cols="8"> {{ $t('paid price') }}</v-col>
+                      <v-col align="right" cols="8">
+                        {{ $t("paid price") }}</v-col
+                      >
                       <v-col
                         align="right"
                         cols="4"
@@ -115,7 +130,7 @@
                             ? item.option.net_price.toLocaleString()
                             : item.net_price.toLocaleString()
                         }}
-                         {{$t('baht')}}</v-col
+                        {{ $t("baht") }}</v-col
                       >
                     </v-row>
                     <div align="right">
@@ -123,7 +138,8 @@
                         outlined
                         color="red"
                         @click="removeCart(item.order_tmp_id)"
-                        ><v-icon> mdi-delete</v-icon> {{$t("delete item")}}</v-btn
+                        ><v-icon> mdi-delete</v-icon>
+                        {{ $t("delete item") }}</v-btn
                       >
                     </div>
                   </v-card-text>
@@ -136,8 +152,10 @@
           <v-col>
             <v-checkbox hide-details color="pink" v-model="policy">
               <template v-slot:label>
-                {{ $t('accept') }}
-                <a class="mx-2 font-weight-bold" @click="policy_show = true">  {{ $t('terms of service and privacy policy') }} </a>
+                {{ $t("accept") }}
+                <a class="mx-2 font-weight-bold" @click="policy_show = true">
+                  {{ $t("terms of service and privacy policy") }}
+                </a>
                 <!-- และ
                 <a class="mx-2 font-weight-bold"
                   >นโยบายความคุ้มครองข้อมูลส่วนบุคคล</a
@@ -158,12 +176,14 @@
             ></v-checkbox>
           </v-col>
           <v-col cols="6" sm="4">
-            {{ $t('total')}}
-            <b class="text-[#ff6b81]">{{ total_price.toLocaleString() }} {{$t('baht')}}</b>
+            {{ $t("total") }}
+            <b class="text-[#ff6b81]"
+              >{{ total_price.toLocaleString() }} {{ $t("baht") }}</b
+            >
           </v-col>
           <v-col cols="6" sm="4" align="end">
             <v-btn depressed dark color="#ff6b81" @click="savePayment">
-              {{ $t('cash out') }} ({{ count_selected_cart }})
+              {{ $t("cash out") }} ({{ count_selected_cart }})
             </v-btn>
           </v-col>
         </v-row>
@@ -197,9 +217,9 @@
             <v-col>
               <v-checkbox hide-details color="pink" v-model="policy">
                 <template v-slot:label>
-                  {{ $t('accept') }}
+                  {{ $t("accept") }}
                   <a class="mx-2 font-weight-bold">
-                    {{ $t('terms of service and privacy policy') }}
+                    {{ $t("terms of service and privacy policy") }}
                   </a>
                 </template>
               </v-checkbox>
@@ -215,7 +235,7 @@
                 text-color="#ff6b81"
                 @click="closePolicy()"
               >
-              {{ $t("cancel") }}
+                {{ $t("cancel") }}
               </v-btn>
             </v-col>
             <v-col>
@@ -225,7 +245,7 @@
                 color="#ff6b81"
                 @click="policy_show = false"
               >
-              {{ $t("agree") }}
+                {{ $t("agree") }}
               </v-btn>
             </v-col>
           </v-row>
@@ -284,7 +304,7 @@ export default {
     removeCart(cart_id) {
       Swal.fire({
         icon: "question",
-        title: this.$t('want to delete this item?'),
+        title: this.$t("want to delete this item?"),
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: this.$t("agree"),
@@ -392,7 +412,9 @@ export default {
             if (isValiDateCourse.includes(false)) {
               Swal.fire({
                 icon: "error",
-                title: this.$t('the selected course is full and payment cannot be made'),
+                title: this.$t(
+                  "the selected course is full and payment cannot be made"
+                ),
                 showDenyButton: false,
                 showCancelButton: true,
                 confirmButtonText: this.$t("agree"),

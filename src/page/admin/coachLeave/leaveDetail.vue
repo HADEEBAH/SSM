@@ -5,7 +5,11 @@
       <v-card-title>
         <v-row dense>
           <v-col cols="auto">
-            <span class="text-[#ff6b81]">{{ coach_leave.fullNameTh }}</span>
+            <span class="text-[#ff6b81]">{{
+              $i18n.locale == "th"
+                ? coach_leave.fullNameTh
+                : coach_leave.fullNameEn
+            }}</span>
           </v-col>
           <v-col cols="auto">
             <v-chip
@@ -31,12 +35,12 @@
             >
               {{
                 coach_leave.status == "pending"
-                  ? "รออนุมัติ"
+                  ? this.$t("waiting for approval")
                   : coach_leave.status === "approved"
-                  ? "อนุมัติ"
+                  ? this.$t("approved")
                   : coach_leave.status === "cancel"
-                  ? "ยกเลิก"
-                  : "ปฎิเสธ"
+                  ? this.$t("cancel")
+                  : this.$t("refuse")
               }}
             </v-chip>
           </v-col>
@@ -45,7 +49,7 @@
       <v-card-subtitle v-if="coach_leave.status === 'reject'">
         <v-row>
           <v-col>
-            <span class="text-[#999999]">สาเหตุการปฏิเสธ: </span>
+            <span class="text-[#999999]">{{ $t("reason for refusal") }}: </span>
             <span class="text-[#333333] font-semibold">{{
               coach_leave.remark_reject ? coach_leave.remark_reject : "-"
             }}</span>
@@ -57,19 +61,19 @@
           <v-card-text>
             <v-row dense>
               <v-col>
-                <span class="text-[#999999]">วันที่ลา:</span>
+                <span class="text-[#999999]">{{ $t("leave date") }}:</span>
                 <div class="text-[#2F3542] font-semibold mr-2">
                   {{ `${coach_leave.startThDate} - ${coach_leave.endThDate}` }}
                 </div>
               </v-col>
               <v-col>
-                <span class="text-[#999999] ml-2">ประเภทการลา:</span>
+                <span class="text-[#999999] ml-2">{{ $t("leave type") }}:</span>
                 <div class="text-[#2F3542] font-semibold ml-2">
                   {{ coach_leave.leaveTypeStr }}
                 </div>
               </v-col>
               <v-col>
-                <span class="text-[#999999]">ช่วงเวลา: </span>
+                <span class="text-[#999999]">{{ $t("period") }}: </span>
                 <div class="text-[#2F3542] font-semibold">
                   {{
                     periods.filter((v) => v.value == coach_leave.period)
@@ -81,7 +85,9 @@
                 </div>
               </v-col>
               <v-col>
-                <span class="text-[#999999]">วันที่ส่งคำขอ: </span>
+                <span class="text-[#999999]"
+                  >{{ $t("date of request") }}:
+                </span>
                 <div class="text-[#2F3542] font-semibold">
                   {{ coach_leave.createDateTh }}
                 </div>
@@ -111,12 +117,12 @@
             <v-card-text class="rounded-md border">
               <v-radio-group readonly v-model="course.type" row>
                 <v-radio
-                  label="มีผู้สอนแทน"
+                  :label="$t('have a substitute teacher')"
                   color="#ff6b81"
                   value="teach"
                 ></v-radio>
                 <v-radio
-                  label="ไม่มีผู้สอนแทน"
+                  :label="$t('there is no substitute teacher')"
                   color="#ff6b81"
                   value="date"
                 ></v-radio>
@@ -127,22 +133,27 @@
                     >mdi-card-account-details-outline</v-icon
                   >
                 </v-col>
-                <v-col class="font-bold text-lg"> คอร์ส </v-col>
+                <v-col class="font-bold text-lg"> {{ $t("courses") }} </v-col>
               </v-row>
               <v-divider class="my-2"></v-divider>
               <v-card flat>
                 <v-card-text class="border border-1 rounded-lg">
                   <v-row dense>
                     <v-col>
-                      <div>ชื่อคอร์ส</div>
+                      <div>{{ $t("course name") }}</div>
                       <div class="font-semibold pl-2">
-                        {{ `${course.courseNameTh}` }}
+                        {{
+                          $i18n.locale == "th"
+                            ? course.courseNameTh
+                            : course.courseNameEn
+                        }}
+                        <!-- {{ `${course.courseNameEn}` }} -->
                       </div>
                     </v-col>
                   </v-row>
                   <v-row dense v-if="course.type === 'teach'">
                     <v-col>
-                      <div>ผู้สอนแทน</div>
+                      <div>{{ $t("substitute teacher") }}</div>
                       <div class="font-semibold pl-2">
                         <v-select
                           dense
@@ -167,7 +178,7 @@
                   </v-row>
                   <v-row dense v-else-if="course.type === 'date'">
                     <v-col>
-                      วันที่ชดเชย
+                      {{ $t("compensation date") }}
                       <v-menu
                         :disabled="
                           coach_leave.status === 'pending' ? false : true
@@ -184,7 +195,7 @@
                             hide-details
                             v-model="course.compensationDate_str"
                             readonly
-                            placeholder="เลือกวันที่ชดเชย"
+                            :placeholder="$t('choose a compensation date')"
                             v-bind="attrs"
                             v-on="on"
                           >
@@ -210,7 +221,7 @@
                       </v-menu>
                     </v-col>
                     <v-col>
-                      ช่วงเวลา
+                      {{ $t("period") }}
                       <v-row
                         dense
                         class="mb-3"
@@ -303,15 +314,15 @@
         <v-card class="mb-3">
           <v-card-text>
             <v-row dense>
-              <v-col cols="12" class="text-[#999999] font-bold"
-                >เหตุผลการลา</v-col
-              >
+              <v-col cols="12" class="text-[#999999] font-bold">
+                {{ $t("reason for leave") }}
+              </v-col>
               <v-col class="text-[#333333] pl-5">{{
                 coach_leave.remark
               }}</v-col>
             </v-row>
             <v-row dense>
-              <v-col cols="12" class="font-bold">ไฟล์แนบ</v-col>
+              <v-col cols="12" class="font-bold">{{ $t("attachments") }}</v-col>
               <v-col>
                 <template v-if="coach_leave.attachments.length > 0">
                   <v-card
@@ -330,7 +341,7 @@
                           <span class="font-bold">{{ file.fileName }}</span>
                           <br />
                           <span class="text-caption"
-                            >ขนาดไฟล์ :
+                            >{{ $t("file size") }} :
                             {{ (file.size / 1000000).toFixed(2) }} MB</span
                           >
                         </v-col>
@@ -350,7 +361,7 @@
               outlined
               color="#ff6b81"
             >
-              ปฎิเสธ
+              {{ $t("refuse") }}
             </v-btn>
           </v-col>
           <v-col cols="auto">
@@ -360,7 +371,7 @@
               dark
               color="#ff6b81"
             >
-              อนุมัติ
+              {{ $t("approved") }}
             </v-btn>
           </v-col>
         </v-row>
@@ -384,7 +395,9 @@
           <v-card-title>
             <v-row dense>
               <v-col align="center">
-                <span class="text-[#D1392B] font-bold">ปฏิเสธคำขอลา</span>
+                <span class="text-[#D1392B] font-bold">{{
+                  $t("refuse leave request")
+                }}</span>
               </v-col>
             </v-row>
           </v-card-title>
@@ -401,12 +414,12 @@
             <v-form ref="user_form" v-model="user_form">
               <v-row>
                 <v-col>
-                  <label-custom text="เหตุผลการปฏิเสธ"></label-custom>
+                  <label-custom :text="$t('refusal reason')"></label-custom>
                   <v-textarea
                     v-model="coach_leave.remark_reject"
                     outlined
                     dense
-                    placeholder="กรอกรายละเอียด..."
+                    :placeholder="`${$t('enter details')}...`"
                   ></v-textarea>
                 </v-col>
               </v-row>
@@ -418,7 +431,7 @@
                   text
                   color="#ff6b81"
                   dark
-                  >ยกเลิก</v-btn
+                  >{{ $t("cancel") }}</v-btn
                 >
               </v-col>
 
@@ -428,7 +441,7 @@
                   color="#ff6b81"
                   @click="updateStatus('reject')"
                   :disabled="!coach_leave.remark_reject"
-                  >ตกลง</v-btn
+                  >{{ $t("agree") }}</v-btn
                 >
               </v-col>
             </v-row>
@@ -451,31 +464,22 @@ export default {
   components: { headerPage, LabelCustom, VueTimepicker, imgFileType },
   data: () => ({
     user_form: false,
-    periods: [
-      { label: "ลาเต็มวัน", value: "full" },
-      { label: "ลาช่วงเช้า", value: "morning" },
-      { label: "ลาช่วงบ่าย", value: "afternoon" },
-    ],
-    breadcrumbs: [
-      { text: "การลา", to: "LeaveList" },
-      { text: "รายละเอียด", to: "" },
-    ],
     item: { status: "pending" },
-    column: [
-      {
-        text: "ชื่อคอร์ส",
-        align: "start",
-        sortable: false,
-        value: "courseNameTh",
-      },
-      {
-        text: "ชื่อผู้แทน",
-        align: "start",
-        sortable: false,
-        value: "coach",
-        width: 400,
-      },
-    ],
+    // column: [
+    //   {
+    //     text: "ชื่อคอร์ส",
+    //     align: "start",
+    //     sortable: false,
+    //     value: "courseNameTh",
+    //   },
+    //   {
+    //     text: "ชื่อผู้แทน",
+    //     align: "start",
+    //     sortable: false,
+    //     value: "coach",
+    //     width: 400,
+    //   },
+    // ],
     show_disapproved: false,
   }),
   created() {
@@ -483,14 +487,29 @@ export default {
     this.GetLeavesDetail({ coach_leave_id: this.$route.params.coachleave_id });
   },
   mounted() {},
-  watch: {},
   computed: {
     ...mapGetters({
       coach_leave: "CoachModules/getCoachLeave",
       coachs: "CourseModules/getCoachs",
       coach_leaves_is_loading: "CoachModules/getCoachLeavesIsLoading",
     }),
+
+    periods() {
+      return [
+        { label: this.$t("full day leave"), value: "full" },
+        { label: this.$t("morning leave"), value: "morning" },
+        { label: this.$t("afternoon leave"), value: "afternoon" },
+      ];
+    },
+
+    breadcrumbs() {
+      return [
+        { text: this.$t("leaves"), to: "LeaveList" },
+        { text: this.$t("details"), to: "" },
+      ];
+    },
   },
+
   methods: {
     ...mapActions({
       GetLeavesDetail: "CoachModules/GetLeavesDetail",
@@ -562,15 +581,15 @@ export default {
         if (this.user_form) {
           let text =
             status === "reject"
-              ? "ต้องการปฏิเสธใบลานี้หรือไม่?"
-              : "ต้องการอนุมัติใบลานี้หรือไม่?";
+              ? this.$t("do you want to reject this leave?")
+              : this.$t("do you want to approve this leave?");
           Swal.fire({
             icon: "question",
             text: text,
             showDenyButton: false,
             showCancelButton: true,
-            confirmButtonText: "ตกลง",
-            cancelButtonText: "ยกเลิก",
+            confirmButtonText: this.$t("agree"),
+            cancelButtonText: this.$t("cancel"),
           }).then(async (result) => {
             if (result.isConfirmed) {
               this.coach_leave.status = status;
@@ -587,15 +606,15 @@ export default {
       if (this.user_form) {
         let text =
           status === "reject"
-            ? "ต้องการปฏิเสธใบลานี้หรือไม่?"
-            : "ต้องการอนุมัติใบลานี้หรือไม่?";
+            ? this.$t("do you want to reject this leave?")
+            : this.$t("do you want to approve this leave?");
         Swal.fire({
           icon: "question",
           text: text,
           showDenyButton: false,
           showCancelButton: true,
-          confirmButtonText: "ตกลง",
-          cancelButtonText: "ยกเลิก",
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             this.coach_leave.status = status;
