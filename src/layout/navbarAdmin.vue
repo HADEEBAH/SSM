@@ -8,7 +8,7 @@
           }}</v-icon>
         </v-app-bar-nav-icon>
         <v-spacer></v-spacer>
-        <div id="google_translate_element"></div>
+        <!-- <div id="google_translate_element"></div> -->
         <div class="mx-5">
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">

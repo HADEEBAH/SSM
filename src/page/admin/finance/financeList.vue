@@ -325,15 +325,15 @@
             <v-row dense>
               <!-- ประเภทคอร์ส -->
               <v-col cols="12" sm="6">
-                <label-custom text="ประเภทคอร์ส"></label-custom>
+                <label-custom :text="$t('course type')"></label-custom>
                 <v-autocomplete
                   dense
                   class="py-1"
                   :items="courseType"
-                  item-text="typeName"
+                  :item-text="$i18n.locale == 'th' ? 'typeName' : 'typeNameEn'"
                   item-value="typeOfValue"
                   v-model="export_filter.course_type_id"
-                  label="กรุณาเลือกประเภทคอร์ส"
+                  :label="$t('please select a course type')"
                   outlined
                   multiple
                   color="#FF6B81"
@@ -345,7 +345,7 @@
                       <span>{{ item.typeName }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
-                      (+{{ export_filter.course_type_id.length - 1 }} others)
+                      (+{{ export_filter.course_type_id.length - 1 }} {{$t("Others")}})
                     </span>
                   </template>
                 </v-autocomplete>
@@ -354,7 +354,7 @@
                 <v-row dense>
                   <!-- แพ็กเกจ -->
                   <v-col cols="12" sm="6" md="6">
-                    <label-custom text="แพ็กเกจ"></label-custom>
+                    <label-custom :text="$t('package')"></label-custom>
                     <v-autocomplete
                       dense
                       :items="packages"
@@ -362,7 +362,7 @@
                       item-value="packageId"
                       v-model="export_filter.package_id"
                       class="py-1"
-                      label="กรุณาเลือกแพ็กเกจ"
+                      :label="$t('please select a package')"
                       outlined
                       multiple
                       color="#FF6B81"
@@ -377,14 +377,14 @@
                           v-if="index === 1"
                           class="grey--text text-caption"
                         >
-                          (+{{ export_filter.package_id.length - 1 }} others)
+                          (+{{ export_filter.package_id.length - 1 }} {{ $t("others") }})
                         </span>
                       </template>
                     </v-autocomplete>
                   </v-col>
                   <!-- ระยะเวลาคอร์ส -->
                   <v-col cols="12" sm="6" md="6">
-                    <label-custom text="ระยะเวลาคอร์ส"></label-custom>
+                    <label-custom :text="$t('period')"></label-custom>
                     <v-autocomplete
                       dense
                       :items="options"
@@ -392,7 +392,7 @@
                       item-value="optionId"
                       v-model="export_filter.option_id"
                       class="py-1"
-                      label="กรุณาเลือกระยะเวลา"
+                      :label="$t('please select a period')"
                       outlined
                       multiple
                       color="#FF6B81"
@@ -407,7 +407,7 @@
                           v-if="index === 1"
                           class="grey--text text-caption"
                         >
-                          (+{{ export_filter.option_id.length - 1 }} others)
+                          (+{{ export_filter.option_id.length - 1 }} {{$t("others")}})
                         </span>
                       </template>
                     </v-autocomplete>
@@ -417,7 +417,7 @@
             </v-row>
           </v-card-text>
           <!-- รายละเอียดการชำระเงิน -->
-          <headerCard title="รายละเอียดการชำระเงิน"></headerCard>
+          <headerCard :title="$t('peyment detail')"></headerCard>
           <v-card-text class="py-0">
             <v-divider class="mb-3"></v-divider>
             <!-- วันที่สร้างเอกสาร -->
@@ -425,7 +425,7 @@
               <v-col cols="12" sm="6">
                 <v-row>
                   <v-col cols="12" sm="6">
-                    <label-custom text="วันที่สร้างเอกสาร"></label-custom>
+                    <label-custom :text="$t('created date')"></label-custom>
                     <v-menu
                       v-model="export_filter.select_date_doc_start"
                       :close-on-content-click="false"
@@ -448,7 +448,7 @@
                                   day: 'numeric',
                                 })
                           "
-                          label="เลือกระยะเวลาเริ่ม"
+                          :label="$t('please select a start time')"
                           outlined
                           prepend-icon="mdi-calendar"
                           readonly
@@ -461,13 +461,13 @@
                         :max="today"
                         v-model="export_filter.date_doc_start"
                         @input="export_filter.select_date_doc_start = false"
-                        locale="th-TH"
+                        :locale="$i18n.locale =='th' ? 'th-TH' : 'en-US'"
                       ></v-date-picker>
                     </v-menu>
                   </v-col>
 
                   <v-col cols="12" sm="6">
-                    <label-custom text=" ถึง"></label-custom>
+                    <label-custom :text="$t('to')"></label-custom>
                     <v-menu
                       v-model="export_filter.select_date_doc_end"
                       :close-on-content-click="false"
@@ -482,15 +482,9 @@
                           :value="
                             !export_filter.date_doc_end
                               ? export_filter.date_doc_end
-                              : new Date(
-                                  export_filter.date_doc_end
-                                ).toLocaleDateString('th-TH', {
-                                  year: 'numeric',
-                                  month: 'long',
-                                  day: 'numeric',
-                                })
+                              : GenDate(export_filter.date_doc_end)
                           "
-                          label="เลือกระยะเวลาสิ้นสุด"
+                          :label="$t('please select an end time')"
                           outlined
                           prepend-icon="mdi-calendar"
                           readonly
@@ -505,7 +499,7 @@
                         @input="export_filter.select_date_doc_end = false"
                         :min="export_filter.date_doc_start"
                         :max="today"
-                        locale="th-TH"
+                        :locale="$i18n.locale =='th' ? 'th-TH' : 'en-US'"
                       ></v-date-picker>
                     </v-menu>
                   </v-col>
@@ -516,7 +510,7 @@
               <v-col cols="12" sm="6">
                 <v-row>
                   <v-col cols="12" sm="6">
-                    <label-custom text="วันที่ชำระ"></label-custom>
+                    <label-custom :text="$t('payment date')"></label-custom>
                     <v-menu
                       v-model="export_filter.select_date_pay_start"
                       :close-on-content-click="false"
@@ -531,15 +525,9 @@
                           :value="
                             !export_filter.date_pay_start
                               ? export_filter.date_pay_start
-                              : new Date(
-                                  export_filter.date_pay_start
-                                ).toLocaleDateString('th-TH', {
-                                  year: 'numeric',
-                                  month: 'long',
-                                  day: 'numeric',
-                                })
+                              : GenDate(export_filter.date_pay_start)
                           "
-                          label="เลือกระยะเวลาเริ่ม"
+                          :label="$t('please select a start time')"
                           outlined
                           prepend-icon="mdi-calendar"
                           readonly
@@ -558,7 +546,7 @@
                   </v-col>
 
                   <v-col cols="12" sm="6">
-                    <label-custom text=" ถึง"></label-custom>
+                    <label-custom :text="$t('to')"></label-custom>
 
                     <v-menu
                       v-model="export_filter.select_date_pay_end"
@@ -574,15 +562,10 @@
                           :value="
                             !export_filter.date_pay_end
                               ? export_filter.date_pay_end
-                              : new Date(
-                                  export_filter.date_pay_end
-                                ).toLocaleDateString('th-TH', {
-                                  year: 'numeric',
-                                  month: 'long',
-                                  day: 'numeric',
-                                })
+                              :GenDate(export_filter.date_pay_end)
+                                
                           "
-                          label="เลือกระยะเวลาสิ้นสุด"
+                          :label="$t('please select an end time')"
                           outlined
                           prepend-icon="mdi-calendar"
                           readonly
@@ -597,7 +580,7 @@
                         @input="export_filter.select_date_pay_end = false"
                         :min="export_filter.date_pay_start"
                         :max="today"
-                        locale="th-TH"
+                        :locale="$i18n.locale =='th' ? 'th-TH' : 'en-US'"
                       ></v-date-picker>
                     </v-menu>
                   </v-col>
@@ -606,9 +589,9 @@
             </v-row>
             <v-row dense>
               <v-col cols="12" sm="6">
-                <label-custom text="มูลค่าบริการ"></label-custom>
+                <label-custom :text="$t('service value')"></label-custom>
                 <v-text-field
-                  label="กรุณากรอกมูลค่าบริการ"
+                  :label="$t('please enter the service value')"
                   outlined
                   dense
                   type="number"
@@ -617,9 +600,9 @@
                 </v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
-                <label-custom text="ถึง"></label-custom>
+                <label-custom :text="$t('to')"></label-custom>
                 <v-text-field
-                  label="กรุณากรอกมูลค่าบริการ"
+                  :label="$t('please enter the service value')"
                   outlined
                   dense
                   type="number"
@@ -640,7 +623,7 @@
             "
           >
             <div class="mdi mdi-chat-alert">
-              สามารถเลือกกรอกเฉพาะรายการที่ต้องการ Export
+              {{$t("you can choose to fill in only the items you want to export")}}
             </div>
           </v-card-text>
 
@@ -652,7 +635,7 @@
                 <v-row>
                   <v-col cols="12" sm="8" align="end">
                     <v-btn depressed @click="clearDateExport()"
-                      >ล้างข้อมูล</v-btn
+                      >{{ $t("clear data") }}</v-btn
                     ></v-col
                   >
                   <v-col cols="12" sm="4" align="end">
@@ -663,7 +646,7 @@
                       color="#ff6b81"
                       @click="Export()"
                     >
-                      เรียกดูทั้งหมด
+                      {{$t('view all')}}
                     </v-btn>
                   </v-col>
                 </v-row>
@@ -710,8 +693,8 @@ export default {
     ],
     courseName: [],
     courseType: [
-      { typeName: "คอร์สทั่วไป", typeOfValue: "CT_1" },
-      { typeName: "คอร์สระยะสั้น", typeOfValue: "CT_2" },
+      { typeName: "คอร์สทั่วไป", typeNameEn: "General course", typeOfValue: "CT_1" },
+      { typeName: "คอร์สระยะสั้น", typeNameEn: "Short course", typeOfValue: "CT_2" },
     ],
     export_filter: {
       course_id: [],
@@ -756,6 +739,15 @@ export default {
       financeFilter: "FinanceModules/financeFilter",
       searchNameUser: "loginModules/searchNameUser",
     }),
+    GenDate(date){
+      return new Date(date).toLocaleDateString(this.$i18n.locale == 'th' ? 'th-TH' : 'en-US', 
+      {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        calendar: 'buddhist'
+      })
+    },
     remove(item) {
       for (let i = 0; i < this.export_filter.students.length; i++) {
         if (this.export_filter.students[i] == item) {
@@ -880,7 +872,7 @@ export default {
           text:  this.$t("first name - last name student"),
           align: "start",
           sortable: false,
-          value:"student_name",
+          value: this.$i18n.locale == 'th' ? "student_name" : "student_name_en",
         },
         {
           text: this.$t("course name"),

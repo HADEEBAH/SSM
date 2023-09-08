@@ -288,25 +288,9 @@ const orderModules = {
                                     day: "numeric",
                                 }) +" "+HH + ":" + mm
                             }
-                            // const monthNames = [
-                            //     "",
-                            //     "มกราคม",
-                            //     "กุมภาพันธ์",
-                            //     "มีนาคม",
-                            //     "เมษายน",
-                            //     "พฤษภาคม",
-                            //     "มิถุนายน",
-                            //     "กรกฎาคม",
-                            //     "สิงหาคม",
-                            //     "กันยายน",
-                            //     "ตุลาคม",
-                            //     "พฤศจิกายน",
-                            //     "ธันวาคม"
-                            // ];
-                            // const formatted = `${day} ${monthNames[month]} ${year}`;
-                            // order.paid_date = order.payment_status === "success" ? `${formatted} ${HH + ":" + mm}` : ""
                             order.course_name = `${order.course?.courseNameTh}(${order.course?.courseNameEn})`
                             order.student_name = `${order.user?.firstNameTh} ${order.user?.lastNameTh}`
+                            order.student_name_en = `${order.user?.firstNameEng} ${order.user?.lastNameEng}`
                         }
                     }
                     context.commit("SetOrders", data.data)
@@ -343,6 +327,7 @@ const orderModules = {
                             })
                             data.data.student_name_list = student_name_list.join(', ')
                         }
+                        order_item.course.dayOfWeekNameStr = dayOfWeekArray(order_item.course.dayOfWeekName) 
                     }
                     if (data.data.payment?.paymentDate) {
                         if (data.data.payment.paymentDate) {
@@ -358,10 +343,8 @@ const orderModules = {
                             data.data.payment.paid_date = formattedDate
                         }
                     }
-
-                    await context.commit("SetOrderDetail", data.data)
-
-                    await context.commit("SetStudentListOrderDetail", student_list)
+                    context.commit("SetOrderDetail", data.data)
+                    context.commit("SetStudentListOrderDetail", student_list)
                 }
             }
             catch (error) {

@@ -6,10 +6,10 @@
         <v-card-text>
           <v-row>
             <v-col>
-              <rowData icon="mdi-notebook-outline" title="หมายเลขคำสั่งซื้อ"
+              <rowData icon="mdi-notebook-outline" :title="$t('order number')"
                 >: {{ `${$route.params.order_id}` }}</rowData
               >
-              <rowData icon="mdi-rename-box-outline" title="ชื่อผู้เรียน"
+              <rowData icon="mdi-rename-box-outline" :title="$t('student list')"
                 >: {{ order_detail.student_name_list }}</rowData
               >
             </v-col>
@@ -32,11 +32,7 @@
                 "
               >
                 {{
-                  order_detail.paymentStatus == "pending"
-                    ? "รอดำเนินการ"
-                    : order_detail.paymentStatus === "success"
-                    ? "ชำระเงินแล้ว"
-                    : "ยกเลิก"
+                  $t(order_detail.paymentStatus)
                 }}
               </v-chip>
             </v-col>
@@ -51,7 +47,7 @@
                 class="mb-3"
                 v-for="(data, index) in order_detail.orderItem"
                 :key="index"
-              >
+              > 
                 <v-card-title class="bg-[#FEFAFD]">
                   <v-img
                     class="headder-card-img pl-3"
@@ -60,7 +56,7 @@
                     max-width="176px"
                     src="@/assets/finance/Vector.png"
                   >
-                    <span class="font-bold text-base">คอร์สทั่วไป</span>
+                    <span class="font-bold text-base">{{ $t("general course") }}</span>
                   </v-img>
                   <v-img
                     class="headder-card-img pl-3"
@@ -69,7 +65,7 @@
                     max-width="176px"
                     src="@/assets/finance/Vector (1).png"
                   >
-                    <span class="font-bold text-base">คอร์สระยะสั้น</span>
+                    <span class="font-bold text-base">{{ $t("short course") }}</span>
                   </v-img>
                 </v-card-title>
                 <v-card-text class="bg-[#FEFAFD]">
@@ -78,22 +74,22 @@
                       <rowData
                         col_header="12"
                         col_detail="12"
-                        title="คอร์สเรียน"
+                        :title="$t('course')"
                       >
                         {{
-                          `${data.course.courseNameTh}(${data.course.courseNameEn})`
+                           `${data.course.courseNameTh}(${data.course.courseNameEn})`
                         }}</rowData
                       >
                     </v-col>
                     <v-col>
-                      <rowData col_header="12" col_detail="12" title="อาณาจักร">
-                        {{ data.course.categoryNameTh }}</rowData
+                      <rowData col_header="12" col_detail="12" :title="$t('kingdom')">
+                        {{$i18n.locale == "th" ? data.course.categoryNameTh :  data.course.categoryNameEng }}</rowData
                       >
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col>
-                      <rowData col_header="12" col_detail="12" title="โค้ช">
+                      <rowData col_header="12" col_detail="12" :title="$t('coach')">
                         {{ data.coachName }}</rowData
                       >
                     </v-col>
@@ -101,14 +97,10 @@
                       <rowData
                         col_header="12"
                         col_detail="12"
-                        title="วันที่เริ่ม"
+                        :title="$t('start date')"
                       >
                         {{
-                          new Date(data.startDate).toLocaleDateString("th-TH", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })
+                         GenDate(data.startDate)
                         }}</rowData
                       >
                     </v-col>
@@ -119,7 +111,7 @@
                         <rowData
                           col_header="12"
                           col_detail="12"
-                          title="แพ็กเกจ"
+                          :title="$t('package')"
                         >
                           {{ data.cpo.packageName }}</rowData
                         >
@@ -128,7 +120,7 @@
                         <rowData
                           col_header="12"
                           col_detail="12"
-                          title="ระยะเวลา"
+                          :title="$t('period')"
                         >
                           {{ data.cpo.optionName }}</rowData
                         >
@@ -137,26 +129,23 @@
                   </template>
                   <v-row>
                     <v-col>
-                      <rowData
-                        col_header="12"
-                        col_detail="12"
-                        title="วัน - เวลา"
-                      >
-                        {{
-                          `${dayOfWeekArray(data.course.dayOfWeekName)} (${
-                            data.course.start
-                          } - ${data.course.end})`
-                        }}</rowData
-                      >
+                      <v-row dense>
+                        <v-col cols="12" class="font-bold">
+                          {{ `${$t('day')} - ${$t('times')}` }}
+                        </v-col>
+                        <v-col cols="12">
+                          {{ `${data.course.dayOfWeekNameStr} (${ data.course.start} - ${data.course.end})` }}
+                        </v-col>
+                      </v-row>  
                     </v-col>
                     <v-col>
-                      <rowData col_header="12" col_detail="12" title="ราคา">
+                      <rowData col_header="12" col_detail="12" :title="$t('price')">
                         {{
                           parseInt(data.price).toLocaleString(undefined, {
                             minimumFractionDigits: 2,
                           })
                         }}
-                        บาท</rowData
+                        {{$t("baht")}}</rowData
                       >
                     </v-col>
                   </v-row>
@@ -170,36 +159,24 @@
             <v-card-text>
               <v-card class="mb-3">
                 <v-card-text class="bg-[#FFF5F6]">
-                  <rowData col_header="4" col_detail="8" title="ราคารวม"
+                  <rowData col_header="4" col_detail="8" :title="$t('total price')"
                     >:
                     <span class="w-full font-bold">{{
                       order_detail.totalPrice.toLocaleString(undefined, {
                         minimumFractionDigits: 2,
                       })
                     }}</span>
-                    บาท
+                    {{$t("baht")}}
                   </rowData>
                   <rowData
                     v-if="order_detail.payment?.paymentDate"
                     col_header="4"
                     col_detail="8"
-                    title="วันที่ชำระ"
+                    :title="$t('payment date')"
                     >:
                     {{
-                      new Date(
-                        order_detail.payment.paid_date
-                      ).toLocaleDateString("th-TH", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })
-                        ? new Date(
-                            order_detail.payment.paid_date
-                          ).toLocaleDateString("th-TH", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })
+                      order_detail.payment
+                        ? GenDate(order_detail.payment.paid_date)
                         : "-"
                     }}
                   </rowData>
@@ -207,15 +184,14 @@
                     v-if="order_detail.payment?.paymentDate"
                     col_header="4"
                     col_detail="8"
-                    title="เวลาที่ชำระ"
+                    :title="$t('payment time')"
                     >:
-
-                    {{ order_detail.payment.paid_date.slice(11, 16) }} น.
+                    {{ order_detail.payment.paid_date.slice(11, 16) }} {{ $t("o'clock") }}
                   </rowData>
                 </v-card-text>
               </v-card>
               <template v-if="order_detail.paymentStatus === 'success'">
-                <div class="font-bold">วิธีการชำระเงิน</div>
+                <div class="font-bold">{{ $t("payment method") }}</div>
                 <v-card
                   v-for="(status, index) in payment_status.filter(
                     (v) =>
@@ -273,14 +249,14 @@
                         </v-avatar>
                       </v-col>
                       <v-col>
-                        {{ status.text }}
+                        {{ $t(status.text) }}
                       </v-col>
                     </v-row>
                   </v-card-actions>
                 </v-card>
               </template>
               <template v-else-if="order_detail.paymentStatus !== 'cancel'">
-                <div class="font-bold mb-3">เลือกวิธีการชำระเงิน</div>
+                <div class="font-bold mb-3">{{$t("choose payment method")}}</div>
                 <v-card
                   v-for="(status, index) in payment_status"
                   :key="index"
@@ -324,11 +300,33 @@
                         </v-avatar>
                       </v-col>
                       <v-col>
-                        {{ status.text }}
+                        {{ $t(status.text) }}
                       </v-col>
                     </v-row>
                   </v-card-actions>
                 </v-card>
+              </template>
+              <template v-if="order_detail.paymentStatus === 'success'">
+                <v-row dense>
+                  <v-col class="font-bold">
+                    {{ $t('receipt language') }} 
+                  </v-col>
+                </v-row>
+                <v-radio-group
+                  v-model="pdf_lang"
+                  row
+                >
+                  <v-radio
+                    :label="$t('thai')"
+                    color="#ff6b81"
+                    value="th"
+                  ></v-radio>
+                  <v-radio
+                    :label="$t('english')"
+                    color="#ff6b81"
+                    value="en"
+                  ></v-radio>
+                </v-radio-group>
               </template>
             </v-card-text>
             <v-card-actions>
@@ -338,7 +336,7 @@
                 color="#ff6b81"
                 dark
                 @click="exportBill()"
-                >ออกใบเสร็จฉบับเต็ม</v-btn
+                >{{ $t('print receipt')}}</v-btn
               >
               <v-row dense v-else>
                 <v-col cols="12">
@@ -351,7 +349,7 @@
                     color="#ff6b81"
                     dark
                     @click="sendNotificationByAccount(student_list)"
-                    >ส่งการแจ้งเตือน</v-btn
+                    >{{ $t("send notification") }}</v-btn
                   >
                   <v-btn
                     v-if="
@@ -365,7 +363,7 @@
                     :disabled="order_detail.paymentStatus == 'cancel'"
                     dark
                     @click="confirmPayment()"
-                    >ยืนยันการชำระ</v-btn
+                    >{{ $t("confirm payment") }}</v-btn
                   >
                 </v-col>
                 <v-col cols="12">
@@ -376,7 +374,7 @@
                     color="#ff6b81"
                     :dark="!order_detail.paymentStatus == 'cancel'"
                     @click="cancelOrder()"
-                    >ยกเลิกการซื้อคอร์ส</v-btn
+                    >{{ $t("cancel course purchase") }}</v-btn
                   >
                 </v-col>
               </v-row>
@@ -396,7 +394,7 @@ import Swal from "sweetalert2";
 import mixin from "@/mixin";
 import pdfMake from "pdfmake";
 import pdfFonts from "@/assets/custom-fonts.js";
-import { convertToThaiBaht } from "@/functions/functions.js";
+import { convertToThaiBaht, convertToEnglishCurrency } from "@/functions/functions.js";
 import moment from "moment";
 export default {
   name: "financeDetail",
@@ -404,29 +402,25 @@ export default {
   mixins: [mixin],
   data: () => ({
     dialog_show: false,
-    payment_types: ["เงินสด", "บัตรเคตดิต", "โอนเข้าบัญชีโรงเรียน"],
-    breadcrumbs: [
-      { text: "การเงิน", to: "Finance" },
-      { text: "รายละเอียดเพิ่มเติม", to: "" },
-    ],
+    pdf_lang : "th",
     payment_status: [
       {
-        text: "ยังไม่ชำระเงิน",
+        text: "unpaid",
         img: "@/assets/finance/close.png",
         value: "unpaid",
       },
       {
-        text: "เครดิต/เดบิท",
+        text: "credit/debit",
         img: "@/assets/finance/card.png",
         value: "Credit Card",
       },
       {
-        text: "โอนเงินเข้าบัญชีโรงเรียน",
+        text: "transfer to school account",
         img: "@/assets/finance/mobile_cash.png",
         value: "transfer",
       },
       {
-        text: "เงินสด",
+        text: "cash",
         img: "@/assets/finance/cash.png",
         value: "cash",
       },
@@ -437,13 +431,21 @@ export default {
   created() {
     this.GetOrderDetail({ order_number: this.$route.params.order_id });
   },
-  mounted() {},
+  mounted() {
+    this.pdf_lang = this.$i18n.locale
+  },
   watch: {},
   computed: {
     ...mapGetters({
       order_detail: "OrderModules/getOrderDetail",
       student_list: "OrderModules/getStudentList",
     }),
+    breadcrumbs(){
+      return [
+        { text: this.$t("finance"), to: "Finance" },
+        { text: this.$t("more details"), to: "" },
+      ]
+    },
   },
   methods: {
     ...mapActions({
@@ -451,6 +453,15 @@ export default {
       updatePayment: "OrderModules/updatePayment",
       updateOrderStatus: "OrderModules/updateOrderStatus",
     }),
+    GenDate(date){
+      return new Date(date).toLocaleDateString(this.$i18n.locale == 'th' ? 'th-TH' : 'en-US', 
+      {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        calendar: 'buddhist'
+      })
+    },
     async exportBill() {
       if (this.order_detail.paymentStatus === "success") {
         // Define the image paths
@@ -535,14 +546,14 @@ export default {
                   width: "40%",
                   stack: [
                     {
-                      text: "ใบเสร็จรับเงิน",
+                      text: this.pdf_lang == 'th' ? "ใบเสร็จรับเงิน" : "receipt",
                       fontSize: 24,
                       color: "#318ce7",
                       bold: false,
                       alignment: "center",
                     },
                     {
-                      text: "ต้นฉบับ",
+                      text: this.pdf_lang == 'th' ? "ต้นฉบับ" : "original",
                       color: "#318ce7",
                       fontSize: 10,
                       bold: false,
@@ -562,13 +573,13 @@ export default {
                       ],
                     },
                     {
-                      text: `เลขที่: ${this.$route.params.order_id}`,
+                      text: `${this.pdf_lang == 'th' ? 'เลขที่' : 'No.'}: ${this.$route.params.order_id}`,
                       margin: [0, 5],
                       color: "#318ce7",
                       fontSize: 10,
                     },
                     {
-                      text: `วันที่: ${moment().format("DD/MM/YYYY")}`,
+                      text: `${this.pdf_lang == 'th' ?'วันที่' : 'Date'} : ${moment().format("DD/MM/YYYY")}`,
                       margin: [0, 5],
                       color: "#318ce7",
                       fontSize: 10,
@@ -597,7 +608,7 @@ export default {
                   width: "10%",
                   stack: [
                     {
-                      text: "ชื่อ-สกุล:",
+                      text: this.pdf_lang == 'th' ? "ชื่อ-สกุล :" : "Name :",
                       color: "#318ce7",
                       margin: [0, 5],
                     },
@@ -641,23 +652,23 @@ export default {
             {
               columns: [
                 {
-                  width: "40%",
-                  text: `(${convertToThaiBaht(this.order_detail.totalPrice)})`,
+                  width: "60%",
+                text: `(${this.pdf_lang == "th" ? convertToThaiBaht(this.order_detail.totalPrice) : convertToEnglishCurrency(this.order_detail.totalPrice)})`,
                   color: "#ff6b81",
                 },
                 {
                   columns: [
                     {
-                      width: "60%",
+                      width: "40%",
                       stack: [
                         {
-                          text: "รวมเป็นเงิน",
+                          text:  this.pdf_lang == 'th' ? "รวมเป็นเงิน" : "total price",
                           margin: [0, 5],
                           color: "#ff6b81",
                           alignment: "right",
                         },
                         {
-                          text: "จำนวนเงินรวมทั้งสิ้น",
+                          text:  this.pdf_lang == 'th' ? "จำนวนเงินรวมทั้งสิ้น" : "net price",
                           margin: [0, 5],
                           color: "#ff6b81",
                           alignment: "right",
@@ -670,7 +681,7 @@ export default {
                           text: `${this.order_detail.totalPrice.toLocaleString(
                             "en-US",
                             { minimumFractionDigits: 2 }
-                          )} บาท`,
+                          )} ${this.pdf_lang == 'th' ? 'บาท' : "Baht"}`,
                           margin: [0, 5],
                           color: "#ff6b81",
                           alignment: "right",
@@ -679,7 +690,7 @@ export default {
                           text: `${this.order_detail.totalPrice.toLocaleString(
                             "en-US",
                             { minimumFractionDigits: 2 }
-                          )} บาท`,
+                          )} ${this.pdf_lang == 'th' ? 'บาท' : "Baht"}`,
                           margin: [0, 5],
                           color: "#ff6b81",
                           alignment: "right",
@@ -695,7 +706,7 @@ export default {
             {
               absolutePosition: { x: 20, y: 600 },
               text: [
-                "การชำระเงินจะสมบูรณ์เมือบริษัทได้รับเงินเรียบร้อยแล้ว\t",
+                this.pdf_lang == 'th' ? "การชำระเงินจะสมบูรณ์เมือบริษัทได้รับเงินเรียบร้อยแล้ว\t":"Verification complete; company received payment\t",
                 {
                   text: `${
                     this.order_detail.paymentType === "cash"
@@ -704,9 +715,9 @@ export default {
                   }`,
                   style: "icon",
                 },
-                " เงินสด\t",
+                this.pdf_lang == 'th' ? " เงินสด\t" : " Cash\t",
                 { text: "\uF096", style: "icon" },
-                " เช็ค\t",
+                this.pdf_lang == 'th' ? " เช็ค\t" : " Cheque\t",
                 {
                   text: `${
                     ["transfer", "QR Code Payment"].includes(
@@ -717,7 +728,7 @@ export default {
                   }`,
                   style: "icon",
                 },
-                " โอนเงิน\t",
+                this.pdf_lang == 'th' ? " โอนเงิน\t" : " Transfer\t",
                 {
                   text: `${
                     ["Credit Card"].includes(this.order_detail.paymentType)
@@ -726,7 +737,7 @@ export default {
                   }`,
                   style: "icon",
                 },
-                " ช่องทางอื่นๆ",
+                this.pdf_lang == 'th' ? " ช่องทางอื่นๆ": " Other",
               ],
               fontSize: 12,
             },
@@ -735,7 +746,7 @@ export default {
               columns: [
                 {
                   width: "auto",
-                  text: "ช่องทาง",
+                  text: this.pdf_lang == 'th' ? "ช่องทาง" : "Method",
                   margin: [0, 5],
                 },
                 {
@@ -750,7 +761,7 @@ export default {
                 },
                 {
                   width: "auto",
-                  text: "วันที่",
+                  text: this.pdf_lang == 'th' ? "วันที่" : "Date" ,
                   margin: [0, 5],
                 },
                 // {
@@ -768,21 +779,21 @@ export default {
                 {
                   text: `${moment(this.order_detail.payment.paid_date).format(
                     "DD/MM/YYYY HH:mm"
-                  )}น.`,
+                  )} ${this.pdf_lang == 'th' ? "น." : ""}`,
                   margin: [0, 5],
                   color: "#ff6b81",
                   alignment: "center",
                 },
                 {
                   width: "auto",
-                  text: "จำนวนเงิน",
+                  text: this.pdf_lang == 'th' ? "จำนวนเงิน" : "Amount",
                   margin: [0, 5],
                 },
                 {
                   text: `${this.order_detail.totalPrice.toLocaleString(
                     "en-US",
                     { minimumFractionDigits: 2 }
-                  )} บาท`,
+                  )} ${this.pdf_lang == 'th' ? 'บาท' : "Baht"}`,
                   margin: [0, 5],
                   color: "#ff6b81",
                   alignment: "center",
@@ -797,13 +808,13 @@ export default {
                   stack: [
                     {
                       text: !this.order_detail.payment.recipient
-                        ? `${this.order_detail.created_by_data.firstNameTh} ${this.order_detail.created_by_data.lastNameTh}`
+                        ?  this.pdf_lang == 'th' ? `${this.order_detail.created_by_data.firstNameTh} ${this.order_detail.created_by_data.lastNameTh}` : `${this.order_detail.created_by_data.firstNameEng} ${this.order_detail.created_by_data.lastNameEng}`
                         : "\n",
                       margin: [0, 5],
                       alignment: "center",
                     },
                     {
-                      text: `ผู้จ่ายเงิน`,
+                      text: this.pdf_lang == 'th' ? `ผู้จ่ายเงิน` : "payer",
                       margin: [0, 5],
                       alignment: "center",
                     },
@@ -815,12 +826,12 @@ export default {
                     {
                       text: `${moment(this.order_detail.createdDate).format(
                         "DD/MM/YYYY HH:mm"
-                      )}น.`,
+                      )} ${this.pdf_lang == 'th' ? "น." : ""}`,
                       margin: [0, 5],
                       alignment: "center",
                     },
                     {
-                      text: `วันที่`,
+                      text: this.pdf_lang == 'th' ? "วันที่" : "Date",
                       margin: [0, 5],
                       alignment: "center",
                     },
@@ -838,13 +849,13 @@ export default {
                   stack: [
                     {
                       text: this.order_detail.payment.recipient
-                        ? `${this.order_detail.payment.recipient.firstNameTh} ${this.order_detail.payment.recipient.lastNameTh}`
+                        ?  this.pdf_lang == 'th' ? `${this.order_detail.payment.recipient.firstNameTh} ${this.order_detail.payment.recipient.lastNameTh}` : `${this.order_detail.payment.recipient.firstNameEng} ${this.order_detail.payment.recipient.lastNameEng}`
                         : "\n", //ต้องแก้
                       margin: [0, 5],
                       alignment: "center",
                     },
                     {
-                      text: `ผู้รับเงิน`,
+                      text: this.pdf_lang == 'th' ?`ผู้รับเงิน`:"Payee",
                       margin: [0, 5],
                       alignment: "center",
                     },
@@ -861,12 +872,12 @@ export default {
                       )} ${this.order_detail.payment.paid_date.slice(
                         11,
                         16
-                      )}น.`, //ต้องแก้
+                      )} ${this.pdf_lang == 'th' ? "น." : ""}`,
                       margin: [0, 5],
                       alignment: "center",
                     },
                     {
-                      text: `วันที่`,
+                      text: this.pdf_lang == 'th' ? "วันที่" : "Date",
                       margin: [0, 5],
                       alignment: "center",
                     },
@@ -898,22 +909,22 @@ export default {
       let row = [
         [
           {
-            text: "ลำดับ",
+            text: this.pdf_lang == 'th' ? "ลำดับ" : "No.",
             fillColor: "#dedede",
             alignment: "center",
           },
           {
-            text: "รายละเอียด",
+            text: this.pdf_lang == 'th' ? "รายละเอียด" : "Detail",
             fillColor: "#dedede",
             alignment: "center",
           },
           {
-            text: "จำนวน",
+            text: this.pdf_lang == 'th' ?  "จำนวน" : "Amount",
             fillColor: "#dedede",
             alignment: "center",
           },
           {
-            text: "ราคา(บาท)",
+            text:  this.pdf_lang == 'th' ? "ราคา(บาท)" : "Price(Baht)",
             fillColor: "#dedede",
             alignment: "center",
           },
@@ -929,7 +940,7 @@ export default {
           {
             stack: [
               {
-                text: `${course.course.courseNameTh}(${this.dayOfWeekArray(
+                text: `${this.pdf_lang == 'th' ? course.course.courseNameTh : course.course.courseNameEn}(${this.dayOfWeekArray(
                   course.course.dayOfWeekName
                 )} (${course.course.start} - ${course.course.end}))`,
                 color: "#ff6b81",
@@ -1046,12 +1057,12 @@ export default {
       this.order_detail.paymentStatus = "cancel";
       Swal.fire({
         icon: "question",
-        title: "การยกเลิกคำสั่งซื้อ",
-        text: `ต้องการยกเลิกคำสั่งซื้อหมายเลข ${this.order_detail.orderNumber}`,
+        title: this.$t("order cancellation"),
+        text: `${this.$t('want to cancel order no.')} ${this.order_detail.orderNumber}`,
         showDenyButton: false,
         showCancelButton: true,
-        cancelButtonText: "ยกเลิก",
-        confirmButtonText: "ตกลง",
+        cancelButtonText: this.$t("cancel"),
+        confirmButtonText: this.$t("agree"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.updateOrderStatus({ order_detail: this.order_detail });
@@ -1063,12 +1074,12 @@ export default {
     confirmPayment() {
       Swal.fire({
         icon: "question",
-        title: "ยืนยันการชำระเงิน",
-        text: "ยืนยันการชำระเงินใช่หรือไม่?",
+        title: this.$t("confirm payment"),
+        text: this.$t("do you want to confirm your payment?"),
         showDenyButton: false,
         showCancelButton: true,
-        cancelButtonText: "ยกเลิก",
-        confirmButtonText: "ตกลง",
+        cancelButtonText: this.$t("cancel"),
+        confirmButtonText: this.$t("agree"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.updatePayment({ order_data: this.order_detail });
@@ -1078,7 +1089,6 @@ export default {
       });
     },
     dayOfWeekArray(day) {
-      // console.log(day)
       let days = day
       const weekdays = [
         this.$t("sunday"),
