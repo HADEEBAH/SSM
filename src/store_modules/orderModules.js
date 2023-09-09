@@ -521,7 +521,7 @@ const orderModules = {
         console.log(error);
       }
     },
-    async saveOrder(context) {
+    async saveOrder(context,{ regis_type }) {
       context.commit("SetOrderIsLoading", true);
       try {
         let order = context.state.order;
@@ -545,12 +545,13 @@ const orderModules = {
           }
         }
         let payload = {
-          order_id: "",
-          courses: [],
-          created_by: order.created_by,
-          paymentStatus: "pending",
-          paymentType: order.payment_type,
-          totalPrice: 0,
+            order_id: "",
+            courses: [],
+            created_by: order.created_by,
+            paymentStatus: "pending",
+            paymentType: order.payment_type,
+            totalPrice: 0,
+            regisType : regis_type,
         };
         let total_price = 0;
         await order.courses.forEach((course) => {

@@ -190,6 +190,7 @@ const manageScheduleModules = {
 
           data.data.map((item) => {
             item.fullDateHolidaysTh = `${item.holidayDate} ${thaiMonths[parseInt(item.holidayMonth) - 1]} ${parseInt(item.holidayYears) + 543}`
+            item.fullDate = `${item.holidayYears}-${item.holidayMonth}-${item.holidayDate}`
             if (item.holidayStartTime && item.holidayEndTime) {
               item.ob_holidayStartTime = {
                 HH: item.holidayStartTime.split(":")[0],
@@ -324,6 +325,7 @@ const manageScheduleModules = {
         if (data.statusCode === 200) {
           let eventSchadule = [];
           data.data.map((item) => {
+            console.log(item)
             let times = null;
             let colors;
             if (item.type === "holiday") {

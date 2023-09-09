@@ -31,7 +31,7 @@
       :interval-count="24"
       :event-overlap-threshold="30"
       @click:event="selectedDate($event)"
-      locale="th-TH"
+      :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
     >
       <template v-slot:event="{ event }">
         {{ event.timed ?? event.timed }}
@@ -71,11 +71,11 @@
                         <label class="font-bold">{{ event.timed }} </label>
                       </v-row>
                       <v-row dense>
-                        <v-col> เรียนโดย: {{ event.name }} </v-col>
+                        <v-col> {{$t("study by")}}: {{ event.name }} </v-col>
                       </v-row>
                       <v-row dense>
                         <v-col class="text-sm">
-                          โค้ช: {{ event.subtitle }} <br />
+                          {{$t("coach")}}: {{ event.subtitle }} <br />
                           <div>
                             <v-btn
                               small
@@ -83,7 +83,7 @@
                               class="underline pa-0"
                               color="#ff6b81"
                               @click="ToStudentCourse(event)"
-                              >genTitleCalender ดูรายละเอียดคอร์สเรียน
+                              >{{ $t('view course details')}} 
                             </v-btn>
                           </div>
                         </v-col>
@@ -98,7 +98,7 @@
         <div v-else>
           <v-row>
             <v-col class="text-lg font-bold" align="center">
-              ไม่พบคอร์สเรียน
+              {{  $t("course not found") }}
             </v-col>
           </v-row>
         </div>
@@ -117,7 +117,7 @@
               </v-col>
               <v-col cols="12" align="center" class="font-weight-bold">
                 {{
-                  details.type == "holiday" ? "ข้อมูลวันหยุด" : "ข้อมูลวันเรียน"
+                  details.type == "holiday" ? $t("holiday information") : $t("class information")
                 }}
               </v-col>
             </v-row>
@@ -127,7 +127,7 @@
             <v-row dense>
               <v-col cols="12">
                 <label class="font-weight-bold">{{
-                  details.type == "holiday" ? "ชื่อวันหยุด" : "ชื่อคอร์ส"
+                  details.type == "holiday" ? $t("holiday name") : $t("course name")
                 }}</label>
                 <v-text-field
                   :value="details.name"
@@ -141,13 +141,14 @@
               </v-col>
               <!-- วันที่ -->
               <v-col cols="12">
-                <label class="font-weight-bold">วันที่</label>
+                <label class="font-weight-bold">{{ $t("date") }}</label>
                 <v-text-field
                   :value="
-                    new Date(details.start).toLocaleDateString('th-TH', {
+                    new Date(details.start).toLocaleDateString($i18n.locale == 'th' ? 'th-TH': 'en-US', {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric',
+                      calendar: 'buddhist'
                     })
                   "
                   hide-details
@@ -167,7 +168,7 @@
           <v-card-text>
             <v-row dense v-if="details.type == 'normal'">
               <v-col cols="12" sm="6">
-                <label class="font-weight-bold">เวลาเริ่ม</label>
+                <label class="font-weight-bold">{{$t('start time')}}</label>
                 <v-text-field
                   hide-details
                   dense
@@ -180,7 +181,7 @@
               </v-col>
 
               <v-col cols="12" sm="6">
-                <label class="font-weight-bold">เวลาสิ้นสุด</label>
+                <label class="font-weight-bold">{{ $t("end time") }}</label>
                 <v-text-field
                   hide-details
                   dense
@@ -195,7 +196,7 @@
 
             <v-row dense v-if="details.type == 'holiday'">
               <v-col cols="12" sm="6" v-if="details.allday === false">
-                <label class="font-weight-bold">เวลาเริ่ม</label>
+                <label class="font-weight-bold">{{$t('start time')}}</label>
                 <v-text-field
                   hide-details
                   dense
@@ -208,7 +209,7 @@
               </v-col>
 
               <v-col cols="12" sm="6" v-if="details.allday === false">
-                <label class="font-weight-bold">เวลาสิ้นสุด</label>
+                <label class="font-weight-bold">{{ $t("end time") }}</label>
                 <v-text-field
                   hide-details
                   dense
@@ -225,7 +226,7 @@
                   dense
                   outlined
                   readonly
-                  value="หยุดทั้งวัน"
+                  :value="$t('all days')"
                   color="#ff6b81"
                 >
                 </v-text-field
@@ -236,7 +237,7 @@
           <v-card-text>
             <v-row dense v-if="details.type == 'normal'">
               <v-col cols="12" sm="6">
-                <label class="font-weight-bold">โค้ช</label>
+                <label class="font-weight-bold">{{$t("coach")}}</label>
                 <v-text-field
                   dense
                   outlined
@@ -253,7 +254,7 @@
                 sm="6"
                 v-if="details.package && details.package !== 'leave'"
               >
-                <label class="font-weight-bold">แพ็กเกจ</label>
+                <label class="font-weight-bold">{{$t("package")}}</label>
                 <v-text-field
                   dense
                   outlined
@@ -265,7 +266,7 @@
                 </v-text-field>
               </v-col>
               <v-col cols="12" sm="6" v-if="details.package == 'leave'">
-                <label class="font-weight-bold">ชดเชยจาก</label>
+                <label class="font-weight-bold">{{$t("compensation from")}}</label>
                 <v-text-field
                   dense
                   outlined
@@ -279,12 +280,12 @@
             </v-row>
             <v-row v-if="details?.itmeData?.subCoachName">
               <v-col cols="12">
-                <label class="font-weight-bold">ผู้สอนแทน</label>
+                <label class="font-weight-bold">{{ $t('substitute coach') }}</label>
                 <v-text-field
                   dense
                   outlined
                   readonly
-                  :value="details?.itmeData?.subCoachName"
+                  :value="$i18n.locale == 'th' ? details?.itmeData?.subCoachName : details?.itmeData?.subCoachNameEn"
                   hide-details
                   color="#ff6b81"
                 >
@@ -360,17 +361,19 @@ export default {
       today.getMonth(),
       today.getDate() - today.getDay() + 6
     );
-    this.start_of_week = this.start_of_week.toLocaleDateString("th-TH", {
+    this.start_of_week = this.start_of_week.toLocaleDateString(this.$i18n.locale == 'th' ? "th-TH" : "en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",
       weekday: "long",
+      calendar: 'buddhist'
     });
-    this.end_of_week = this.end_of_week.toLocaleDateString("th-TH", {
+    this.end_of_week = this.end_of_week.toLocaleDateString(this.$i18n.locale == 'th' ? "th-TH" : "en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",
       weekday: "long",
+      calendar: 'buddhist'
     });
     this.ready = true;
   },
@@ -383,7 +386,7 @@ export default {
 
     convertDate(item) {
       const oriDate = new Date(item);
-      const fullDate = oriDate.toLocaleDateString("th-TH", {
+      const fullDate = oriDate.toLocaleDateString(this.$i18n.locale == 'th' ? "th-TH" : "en-US", {
         year: "numeric",
         month: "long",
         day: "numeric",

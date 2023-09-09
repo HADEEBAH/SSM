@@ -1536,7 +1536,7 @@ export default {
             this.changeOrderData(this.order);
             if (this.course_order.course_type_id == "CT_1") {
               if (this.course_order.day && this.course_order.time) {
-                this.saveOrder();
+                this.saveOrder({regis_type : ""});
               } else {
                 Swal.fire({
                   icon: "error",
@@ -1544,7 +1544,7 @@ export default {
                 });
               }
             } else {
-              this.saveOrder();
+              this.saveOrder({regis_type : ""});
             }
           }
         });
