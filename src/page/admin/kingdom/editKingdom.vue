@@ -1,8 +1,10 @@
 <template>
   <v-container>
     <v-form ref="category_form" v-model="category_form">
-      <headerPage title="แก้ไขอาณาจักร" class="my-5"></headerPage>
-      <label-custom text="อัปโหลดภาพหน้าปกอาณาจักร"></label-custom>
+      <headerPage :title="$t('edit the kingdom')" class="my-5"></headerPage>
+      <label-custom
+        :text="$t('upload the cover image of the kingdom')"
+      ></label-custom>
       <v-card style="border: dashed blue">
         <v-card-title primary-title align="end">
           <v-btn icon v-if="preview_url">
@@ -38,9 +40,9 @@
               />
               <v-row v-if="!preview_url">
                 <v-col cols="12" class="flex align-center justify-center mt-5">
-                  <v-btn outlined color="blue" @click="openFileSelector"
-                    >เลือกไฟล์</v-btn
-                  >
+                  <v-btn outlined color="blue" @click="openFileSelector">{{
+                    $t("select file")
+                  }}</v-btn>
                   <input
                     id="inputFile"
                     ref="fileInput"
@@ -65,12 +67,15 @@
       <br />
       <v-row dense>
         <v-col cols="12" sm="6">
-          <label-custom required text="ชื่ออาณาจักร(ภาษาไทย)"></label-custom>
+          <label-custom
+            required
+            :text="$t('name of kingdom (thai)')"
+          ></label-custom>
           <v-text-field
             :rules="rules.category_name_th"
             :disabled="showData"
             dense
-            placeholder="กรอกชื่ออาณาจักร"
+            :placeholder="$t('fill in the name of the kingdom')"
             outlined
             v-model="category.categoryNameTh"
             @keypress="validate($event, 'th')"
@@ -78,12 +83,15 @@
         </v-col>
 
         <v-col cols="12" sm="6">
-          <label-custom required text="ชื่ออาณาจักร(ภาษาอังกฤษ)"></label-custom>
+          <label-custom
+            required
+            :text="$t('name of kingdom (english)')"
+          ></label-custom>
           <v-text-field
             :rules="rules.category_name_en"
             :disabled="showData"
             dense
-            placeholder="กรอกชื่ออาณาจักร"
+            :placeholder="$t('fill in the name of the kingdom')"
             outlined
             v-model="category.categoryNameEng"
             @keypress="validate($event, 'en')"
@@ -92,12 +100,16 @@
 
         <v-row dense>
           <v-col cols="12" sm="6">
-            <label-custom required text="จัดสอนโดย"></label-custom>
+            <label-custom required :text="$t('organized by')"></label-custom>
             <v-text-field
               :rules="rules.taughtBy"
               :disabled="showData"
               dense
-              placeholder="ระบุสถาบันผู้จัดสอน เช่น ศูนย์ดนตรี Manila Tamarind"
+              :placeholder="
+                $t(
+                  'specify the teaching institution, e.g. Manila Tamarind Music Center'
+                )
+              "
               outlined
               v-model="category.taughtBy"
             ></v-text-field>
@@ -106,12 +118,12 @@
       </v-row>
       <v-row dense>
         <v-col cols="12">
-          <label-custom text="รายละเอียด"></label-custom>
+          <label-custom :text="$t('details')"></label-custom>
           <v-textarea
             :disabled="showData"
             dense
             class="form2"
-            placeholder="กรอกรายละเอียด..."
+            :placeholder="$t('fill in the details...')"
             auto-grow
             outlined
             v-model="category.categoryDescription"
@@ -126,7 +138,7 @@
           :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
           @click="showBtn()"
         >
-          <span class="mdi mdi-pencil-outline">แก้ไข</span>
+          <span class="mdi mdi-pencil-outline">{{ $t("edit") }}</span>
         </v-btn>
       </v-col>
       <div v-else>
@@ -138,7 +150,7 @@
               color="#ff6b81"
               @click="goToManageKingdomPage()"
             >
-              ยกเลิก
+              {{ $t("cancel") }}
             </v-btn>
           </v-col>
 
@@ -149,7 +161,7 @@
               color="#ff6b81"
               :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
               @click="openDialog()"
-              >บันทึก
+              >{{ $t("save") }}
             </v-btn>
           </v-col>
         </v-row>
@@ -168,9 +180,11 @@
             </v-col>
           </v-row>
         </v-card-title>
-        <dialogCard text="แก้ไขอาณาจักรเรียบร้อย"></dialogCard>
+        <dialogCard :text="$t('the kingdom has been edited')"></dialogCard>
         <div class="my-5 text-center">
-          <v-btn color="#ff6b81" @click="goToManageKingdomPage()"> ตกลง </v-btn>
+          <v-btn color="#ff6b81" @click="goToManageKingdomPage()">
+            {{ $t("agree") }}
+          </v-btn>
         </div>
       </v-card>
     </v-dialog>
@@ -198,22 +212,22 @@ export default {
     showData: true,
     dialog_show: false,
     category_form: false,
-    rules: {
-      category_name_th: [
-        (val) => (val || "").length > 0 || "โปรดระบุชื่ออาณาจักร(ภาษาไทย)",
-        (val) =>
-          val.length < 50 || "ชื่ออาณาจักร(ภาษาไทย)ความยาวเกินกว่าที่กำหนด",
-      ],
-      category_name_en: [
-        (val) => (val || "").length > 0 || "โปรดระบุชื่ออาณาจักร(ภาษาอังกฤษ)",
-        (val) =>
-          val.length < 50 || "ชื่ออาณาจักร(ภาษาอังกฤษ)ความยาวเกินกว่าที่กำหนด",
-      ],
-      taughtBy: [
-        (val) => (val || "").length > 0 || "โปรดระบุผู้จัดสอน",
-        (val) => val.length < 50 || "ผู้จัดสอนความยาวเกินกว่าที่กำหนด",
-      ],
-    },
+    // rules: {
+    //   category_name_th: [
+    //     (val) => (val || "").length > 0 || "โปรดระบุชื่ออาณาจักร(ภาษาไทย)",
+    //     (val) =>
+    //       val.length < 50 || "ชื่ออาณาจักร(ภาษาไทย)ความยาวเกินกว่าที่กำหนด",
+    //   ],
+    //   category_name_en: [
+    //     (val) => (val || "").length > 0 || "โปรดระบุชื่ออาณาจักร(ภาษาอังกฤษ)",
+    //     (val) =>
+    //       val.length < 50 || "ชื่ออาณาจักร(ภาษาอังกฤษ)ความยาวเกินกว่าที่กำหนด",
+    //   ],
+    //   taughtBy: [
+    //     (val) => (val || "").length > 0 || "โปรดระบุผู้จัดสอน",
+    //     (val) => val.length < 50 || "ผู้จัดสอนความยาวเกินกว่าที่กำหนด",
+    //   ],
+    // },
   }),
   mounted() {},
   created() {
@@ -258,11 +272,11 @@ export default {
         } else {
           Swal.fire({
             icon: "error",
-            text: "อัปโหลดเฉพาะไฟล์รูปภาพ(png, jpeg)เท่านั้น",
+            text: this.$t("upload only image files (png, jpeg) only"),
             showDenyButton: false,
             showCancelButton: false,
-            confirmButtonText: "ตกลง",
-            cancelButtonText: "ยกเลิก",
+            confirmButtonText: this.$t("agree"),
+            cancelButtonText: this.$t("cancel"),
           });
         }
       }
@@ -285,11 +299,11 @@ export default {
       if (this.category_form) {
         Swal.fire({
           icon: "question",
-          title: "คุณต้องการแก้ไขอาณาจักรหรือไม่",
+          title: this.$t("do you want to edit the kingdom?"),
           showDenyButton: false,
           showCancelButton: true,
-          confirmButtonText: "ตกลง",
-          cancelButtonText: "ยกเลิก",
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             try {
@@ -319,8 +333,8 @@ export default {
                 this.goToManageKingdomPage();
                 Swal.fire({
                   icon: "success",
-                  title: "สำเร็จ",
-                  text: "( แก้ไขอาณาจักรเรียบร้อยแล้ว )",
+                  title: this.$t("succeed"),
+                  text: this.$t("the kingdom has been edited"),
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,
@@ -351,6 +365,38 @@ export default {
       get() {
         return this.category;
       },
+    },
+    rules() {
+      return {
+        category_name_th: [
+          (val) =>
+            (val || "").length > 0 ||
+            this.$t("please specify the name of the kingdom (Thai language)"),
+          (val) =>
+            val.length < 50 ||
+            this.$t(
+              "kingdom name (Thai language) longer than specified length"
+            ),
+        ],
+        category_name_en: [
+          (val) =>
+            (val || "").length > 0 ||
+            this.$t("please specify the name of the kingdom (in English)"),
+          (val) =>
+            val.length < 50 ||
+            this.$t("kingdom name (English) longer than specified"),
+        ],
+        taughtBy: [
+          (val) =>
+            (val || "").length > 0 ||
+            this.$t("please specify the teaching organizer"),
+          (val) =>
+            val.length < 50 ||
+            this.$t(
+              "the organizer of the lesson is longer than the specified length"
+            ),
+        ],
+      };
     },
   },
 };

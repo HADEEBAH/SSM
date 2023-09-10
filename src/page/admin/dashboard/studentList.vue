@@ -292,7 +292,9 @@
               </v-btn>
             </v-col>
             <v-row dense>
-              <v-col cols="12" align="center"> รายละเอียดคอร์ส </v-col>
+              <v-col cols="12" align="center">
+                {{ $t("course details") }}
+              </v-col>
             </v-row>
           </v-row>
         </v-card-title>
@@ -303,7 +305,7 @@
             :key="data_index"
           >
             <label class="text-[#FF6B81] font-bold"
-              >คอร์สที่ {{ data_index + 1 }}</label
+              >{{ $t("courses at") }} {{ data_index + 1 }}</label
             >
             <!-- ชื่อคอร์ส -->
             <v-col cols="12">
@@ -313,7 +315,7 @@
                 readonly
                 dense
                 :value="data.courseNameTh"
-                label="ชื่อคอร์ส"
+                :label="$t('course name')"
                 color="#FF6B81"
               >
                 <template v-slot:append>
@@ -330,7 +332,7 @@
                 readonly
                 dense
                 :value="data.coachName"
-                label="ชื่อโค้ช"
+                :label="$t('coach name')"
                 color="#FF6B81"
               >
                 <template v-slot:append>
@@ -347,7 +349,7 @@
                 readonly
                 dense
                 :value="data.courseTypeNameTh"
-                label="ชนิดคอร์ส"
+                :label="$t('course type')"
                 color="#FF6B81"
               >
                 <template v-slot:append>
@@ -364,7 +366,7 @@
                 readonly
                 dense
                 :value="`${data.optionName} (${data.packageName})`"
-                label="แพ็กเกจ"
+                :label="$t('package')"
                 color="#FF6B81"
               >
                 <template v-slot:append>
@@ -392,7 +394,9 @@
               </v-btn>
             </v-col>
             <v-row dense>
-              <v-col cols="12" align="center"> รายละเอียดคอร์ส </v-col>
+              <v-col cols="12" align="center">
+                {{ $t("course details") }}
+              </v-col>
             </v-row>
           </v-row>
         </v-card-title>
@@ -410,7 +414,7 @@
                 readonly
                 dense
                 :value="item.courseNameTh"
-                label="ชื่อคอร์ส"
+                :label="$t('course name')"
                 color="#FF6B81"
               >
                 <template v-slot:append>
@@ -426,7 +430,7 @@
                 readonly
                 dense
                 :value="item.coachName"
-                label="โค้ช"
+                :label="$t('coach name')"
                 color="#FF6B81"
               >
                 <template v-slot:append>
@@ -446,7 +450,7 @@
                     (v) => v.value === item.status
                   )[0]?.label
                 "
-                label="สถานะคอร์ส"
+                :label="$t('course status')"
                 color="#FF6B81"
               >
                 <template v-slot:append>
@@ -462,7 +466,7 @@
                 readonly
                 dense
                 :value="`${item.optionName}  (${item.packageName})`"
-                label="แพ็กเกจ"
+                :label="$t('package')"
                 color="#FF6B81"
               >
                 <template v-slot:append>
@@ -479,7 +483,7 @@
                 readonly
                 dense
                 :value="item.courseTypeNameTh"
-                label="ชนิดคอร์ส"
+                :label="$t('course type')"
                 color="#FF6B81"
               >
                 <template v-slot:append>
@@ -496,7 +500,7 @@
                 readonly
                 dense
                 :value="item.fullDateTh"
-                label="วันที่จอง"
+                :label="$t('reserve date')"
                 color="#FF6B81"
               >
                 <template v-slot:append>

@@ -146,9 +146,7 @@
                 >
                   <template v-slot:no-data>
                     <v-list-item>
-                      <v-list-item-title>
-                        {{ $t("no data found") }}
-                      </v-list-item-title>
+                      <v-list-item-title> {{ $t("no data found") }} </v-list-item-title>
                     </v-list-item>
                   </template>
                   <template v-slot:item="{ item }">
@@ -1265,18 +1263,16 @@ export default {
                   this.changeOrderData(this.order);
                   await this.saveOrder();
 
-                  if (this.order_is_status) {
-                    let payload = {
-                      notificationName: this.notification_name,
-                      notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(
-                        course_name_noti.length > 1 ? ", " : ""
-                      )} ให้คุณแล้ว (รอชำระเงิน)`,
-                      accountId: account,
-                      path: null,
-                    };
-                    this.sendNotification(payload);
-                  }
-                  
+                  let payload = {
+                    notificationName: this.notification_name,
+                    notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(
+                      course_name_noti.length > 1 ? ", " : ""
+                    )} ให้คุณแล้ว (รอชำระเงิน)`,
+                    accountId: account,
+                    path: null,
+                  };
+                  this.sendNotification(payload);
+                  this.saveOrder({regis_type : 'addStudent'});
                 } else {
                   let account = [];
                   let course_name_noti = [];
@@ -1315,7 +1311,7 @@ export default {
                     path: null,
                   };
                   this.sendNotification(payload);
-                  this.saveOrder();
+                  this.saveOrder({regis_type : "addStudent"});
                 }
               }
             });

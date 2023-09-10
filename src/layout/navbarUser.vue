@@ -26,8 +26,8 @@
           {{ $t(titel_navber) }}
         </v-app-bar-title>
         <v-spacer></v-spacer>
-        <div id="google_translate_element"></div>
-        <v-menu v-model="menu_locale" offset-y>
+        <!-- <div id="google_translate_element"></div> -->
+        <v-menu v-model="menu_locale"  offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn text v-bind="attrs" v-on="on">
               <label>{{
