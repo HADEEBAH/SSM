@@ -82,7 +82,6 @@ const userModules = {
                         return val
                     })
                     context.commit("SetUserList", data.data)
-                    console.log("SetUserList", data.data);
                 } else {
                     throw { error: data }
                 }
@@ -114,7 +113,6 @@ const userModules = {
                         return val;
                     })
                     context.commit("SetfilterGetUserList", data.data)
-                    console.log("SetfilterGetUserList", data.data);
                 } else {
                     throw { error: data }
                 }
