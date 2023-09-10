@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <header-page slot_tag title="จัดการอาณาจักรทั้งหมด">
+    <header-page slot_tag :title="$t('manage the entire empire')">
       <v-text-field
         class="w-full"
         outlined
@@ -8,7 +8,7 @@
         hide-details
         prepend-inner-icon="mdi-magnify"
         v-model="search"
-        placeholder="ค้นหา"
+        :placeholder="$t('search')"
       ></v-text-field>
     </header-page>
 
@@ -32,14 +32,14 @@
             "
           >
             <v-icon>mdi-text-box-search-outline</v-icon>
-            ดูรายละเอียด
+            {{ $t("view details") }}
           </v-btn>
           <v-btn icon color="#ff6b81" @click="categoryDelete(item)">
             <v-icon>mdi-delete</v-icon>
           </v-btn>
         </template>
         <template v-slot:[`no-results`]>
-          <div class="font-bold">ไม่พบข้อมูลในตาราง</div>
+          <div class="font-bold">{{ $t("no data found in table") }}</div>
         </template>
       </v-data-table>
     </div>
@@ -55,22 +55,22 @@ export default {
     headerPage,
   },
   data: () => ({
-    column: [
-      {
-        text: "ชื่ออาณาจักร(ไทย)",
-        align: "start",
-        sortable: false,
-        value: "categoryNameTh",
-      },
-      {
-        text: "ชื่ออาณาจักร(อังกฤษ)",
-        align: "start",
-        sortable: false,
-        value: "categoryNameEng",
-      },
-      { text: "จัดสอนโดย", align: "start", sortable: false, value: "taughtBy" },
-      { text: "", align: "center", value: "actions", sortable: false },
-    ],
+    // column: [
+    //   {
+    //     text: "ชื่ออาณาจักร(ไทย)",
+    //     align: "start",
+    //     sortable: false,
+    //     value: "categoryNameTh",
+    //   },
+    //   {
+    //     text: "ชื่ออาณาจักร(อังกฤษ)",
+    //     align: "start",
+    //     sortable: false,
+    //     value: "categoryNameEng",
+    //   },
+    //   { text: "จัดสอนโดย", align: "start", sortable: false, value: "taughtBy" },
+    //   { text: "", align: "center", value: "actions", sortable: false },
+    // ],
     search: "",
   }),
   mounted() {
@@ -84,11 +84,15 @@ export default {
     categoryDelete(category) {
       Swal.fire({
         icon: "question",
-        title: `ต้องการลบ ${category.categoryNameTh}`,
+        title: `${this.$t("do you want to delete")} ${
+          this.$i18n.locale == "th"
+            ? category.categoryNameTh
+            : category.categoryNameEng
+        }?`,
         showDenyButton: false,
         showCancelButton: true,
-        cancelButtonText: "ยกเลิก",
-        confirmButtonText: "ตกลง",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.DeleteCategory({ category_id: category.categoryId });
@@ -102,6 +106,29 @@ export default {
     }),
     LoadingTable() {
       return !this.categorys;
+    },
+    column() {
+      return [
+        {
+          text: this.$t("name of kingdom (thai)"),
+          align: "start",
+          sortable: false,
+          value: "categoryNameTh",
+        },
+        {
+          text: this.$t("name of kingdom (english)"),
+          align: "start",
+          sortable: false,
+          value: "categoryNameEng",
+        },
+        {
+          text: this.$t("organized by"),
+          align: "start",
+          sortable: false,
+          value: "taughtBy",
+        },
+        { text: "", align: "center", value: "actions", sortable: false },
+      ];
     },
   },
 };

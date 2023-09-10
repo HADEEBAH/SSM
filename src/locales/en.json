@@ -119,6 +119,8 @@
     "course opening date": "Course opening date",
     "course type" : "Course type",
     "courses" : "Courses",
+    "courses at" : "Course",
+    "coach name" : "Coach name",
     "course information not found" : "Course information not found",
     "course status information not found":"Course status information not found",
     "currently our class is full of students. thank you for your interest in our course." : "Currently our class is full of students. Thank you for your interest in our course.",
@@ -182,10 +184,14 @@
     "do you want to reject this leave?": "Do you want to reject this leave?",
     "do you want to approve this leave?": "Do you want to approve this leave?",
     "do you want to submit a leave letter?":"Do you want to submit a leave letter?",
+    "do you want to delete": "Do you want to delete",
+    "do you want to build an kingdom?": "Do you want to build an kingdom?",
+    "do you want to edit the kingdom?": "Do you want to edit the kingdom?",
     "duplicate relationship": "Duplicate relationship",
     "duplicate user in this course Unable to register": "Duplicate user in this course Unable to register",
 
     "edit": "Edit",
+    "edit the kingdom": "Edit the kingdom",
     "english" : "English",
     "english first name" : "English first name",
     "english last name" : "English last name",
@@ -251,6 +257,9 @@
 
     "kingdom" : "Kingdom",
     "kingdom not found" : "Kingdom not found",
+    "kingdom name (Thai language) longer than specified length": "Kingdom name (Thai language) longer than specified length",
+    "kingdom name (English) longer than specified": "Kingdom name (English) longer than specified",
+
 
 
     "language" : "Language",
@@ -289,6 +298,8 @@
     "my teaching information" : "My teaching information",
     "manage tables" : "Manage tables",
     "mobile number must have at least 10 characters" : "Mobile number must have at least 10 characters",
+    "manage the entire empire": "Manage the entire empire",
+
     "more details" : "More details",
 
     "name of representative": "Name of representative",
@@ -315,6 +326,9 @@
     "number of times studied" : "Number of times studied",
     "number of times" : "Number of times",
     "number of times/person" : "Number of times/person",
+    "name of kingdom (thai)": "Name of kingdom (thai)",
+    "name of kingdom (english)": "Name of kingdom (english)",
+
 
     "o'clock" : "O'clock",
     "optional": "optional",
@@ -433,6 +447,9 @@
     "please upload an image file":"( Please upload an image file )",
     "please select a student": "Please select a student",
     "please choose a course" : "( Please choose a course )",
+    "please specify the name of the kingdom (Thai language)": "Please specify the name of the kingdom (Thai language)",
+    "please specify the name of the kingdom (in English)":"Please specify the name of the kingdom (in English)",
+    "please specify the teaching organizer": "Please specify the teaching organizer",
     "pick a day": "Pick a day",
     "profile" : "Profile",
     "profile has been edited": "( Profile has been edited )",
@@ -534,6 +551,7 @@
     "substitute teaching date" : "Substitute teaching date",
     "success" : "Success",
     "succeed":"Succeed",
+    "successfully deleted item": "( Successfully deleted item )",
     "successfully reserved a course Staff will contact you later": "( Successfully reserved a course Staff will contact you later )",
     "sunday":"Sunday",
     "short course": "Short course",
@@ -582,6 +600,9 @@
     "the English name format is invalid": "The English name format is invalid",
     "the number of students is incorrect" : "The number of students is incorrect",
     "the number of students exceeds the number of students allowed in the package":" ( The number of students exceeds the number of students allowed in the package )",
+    "the kingdom has been built" : "( The kingdom has been built )",
+    "the kingdom has been edited" : "( The kingdom has been edited )",
+    "the organizer of the lesson is longer than the specified length": "The organizer of the lesson is longer than the specified length",
     "there is a discount" : "There is a discount",
     "there are special privileges for monthly/term/yearly subscriptions" : "There are special privileges for monthly/term/yearly subscriptions",
     "there is no substitute teacher" : "There is no substitute teacher",
