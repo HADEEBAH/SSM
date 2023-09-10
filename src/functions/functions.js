@@ -163,6 +163,66 @@ export const convertToThaiBaht = (number) => {
 
     return thai_baht;
 }
+export const convertToEnglishCurrency = (number) => {
+    const ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+    const teens = ['eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+    const tens = ['', 'ten', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+    const thousandNames = ['', 'thousand', 'million', 'billion', 'trillion']; // You can extend this array for larger numbers if needed
+
+    const toWords = (num) => {
+        if (num === 0) return 'zero';
+
+        const parts = [];
+        let i = 0;
+
+        do {
+            const part = num % 1000;
+            if (part !== 0) {
+                parts.push(toWordsThreeDigits(part) + ' ' + thousandNames[i]);
+            }
+            num = Math.floor(num / 1000);
+            i++;
+        } while (num > 0);
+
+        return parts.reverse().join(' ');
+    };
+
+    const toWordsThreeDigits = (num) => {
+        const parts = [];
+
+        const hundredsDigit = Math.floor(num / 100);
+        if (hundredsDigit > 0) {
+            parts.push(ones[hundredsDigit] + ' hundred');
+        }
+
+        const lastTwoDigits = num % 100;
+        if (lastTwoDigits >= 20) {
+            parts.push(tens[Math.floor(lastTwoDigits / 10)]);
+            if (lastTwoDigits % 10 > 0) {
+                parts.push(ones[lastTwoDigits % 10]);
+            }
+        } else if (lastTwoDigits > 0) {
+            if (lastTwoDigits === 10) {
+                parts.push('ten');
+            } else {
+                parts.push(teens[lastTwoDigits - 11]);
+            }
+        }
+
+        return parts.join(' ');
+    };
+
+    const integerPart = Math.floor(number);
+    const decimalPart = Math.round((number - integerPart) * 100);
+
+    let englishCurrency = toWords(integerPart) + ' bath';
+
+    if (decimalPart > 0) {
+        englishCurrency += ' and ' + toWords(decimalPart) + ' satang';
+    }
+
+    return englishCurrency;
+};
 
 export const shortMonthToLongMonth = (shortMonth) => {
     const thaiMonths = {

@@ -175,7 +175,7 @@
             >
               <v-row dense class="font-bold">
                 <v-col cols="12">
-                  {{ $t("holiday") }} {{ item?.fullDateHolidaysTh }}
+                  {{ $t("holiday") }} {{ GenDate(item?.fullDate) }}
                 </v-col>
               </v-row>
 
@@ -207,7 +207,7 @@
           >
             <v-row dense>
               <v-col cols="6" sm="6" class="font-bold" style="color: #f19a5a">
-                {{ $t("holiday") }} {{ getHolidays?.fullDateHolidaysTh }}
+                {{ $t("holiday") }} {{ GenDate(getHolidays?.fullDate) }}
               </v-col>
               <v-col
                 cols="6"
@@ -258,7 +258,6 @@
                   <!-- วันที่ -->
                   <v-col cols="12" sm="8">
                     <label class="font-weight-bold">{{ $t("date") }}</label>
-
                     <v-menu
                       v-model="selectEditHolidaydates"
                       :close-on-content-click="false"
@@ -276,11 +275,7 @@
                           v-bind="attrs"
                           v-on="on"
                           color="#FF6B81"
-                          :value="
-                            holidaydatesTh
-                              ? holidaydatesTh
-                              : setDataEditDialog.fullDateHolidaysTh
-                          "
+                          v-model="holidaydatesTh"
                         ></v-text-field>
                       </template>
 
@@ -325,7 +320,7 @@
                         max-width: 141.5px;
                       "
                       @focus="SelectedStartDate($event)"
-                      :rules="rules.start_time"
+                      :rules="start_time"
                       :value="setDataEditDialog.holidayStartTime"
                     ></v-text-field>
                     <VueTimepicker
@@ -354,7 +349,7 @@
                         max-width: 141.5px;
                       "
                       @focus="SelectedStartDate($event)"
-                      :rules="rules.start_time"
+                      :rules="start_time"
                       :value="setDataEditDialog.holidayEndTime"
                     ></v-text-field>
                     <VueTimepicker
@@ -466,7 +461,7 @@
                             readonly
                             v-bind="attrs"
                             v-on="on"
-                            :rules="rules.dates"
+                            :rules="dates"
                             color="#FF6B81"
                             v-model="holidaydatesTh"
                           >
@@ -480,7 +475,7 @@
                               (selectHolidaydates = false)
                           "
                           :min="tomorrowDate()"
-                          locale="th-TH"
+                          :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
                         ></v-date-picker>
                       </v-menu>
                     </v-col>
@@ -514,7 +509,7 @@
                           max-width: 141.5px;
                         "
                         @focus="SelectedStartDate($event)"
-                        :rules="rules.compensation_start_time"
+                        :rules="compensation_start_time"
                         v-model="holidayStartTime"
                       >
                       </v-text-field>
@@ -545,7 +540,7 @@
                           max-width: 141.5px;
                         "
                         @focus="SelectedStartDate($event)"
-                        :rules="rules.compensation_end_time"
+                        :rules="compensation_end_time"
                         v-model="holidayEndTime"
                       >
                       </v-text-field>
@@ -575,7 +570,7 @@
                             'specify the name of the holiday, such as Songkran Day'
                           )
                         "
-                        :rules="rules.holiday_name"
+                        :rules="holiday_name"
                       ></v-textarea>
                     </v-col>
                   </v-row>
@@ -636,7 +631,7 @@
                   outlined
                   v-model="selectedCourse"
                   :items="get_filter_course"
-                  item-text="courseNameTh"
+                  :item-text="$i18n.locale == 'th' ? 'courseNameTh' : 'courseNameEn'"
                   item-value="courseId"
                   multiple
                   color="#FF6B81"
@@ -653,10 +648,10 @@
                   </template>
                   <template v-slot:selection="{ item, index }">
                     <v-chip v-if="index === 0">
-                      <span>{{ item.courseNameTh }}</span>
+                      <span>{{ $i18n.locale == 'th' ? item.courseNameTh : item.courseNameEn }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
-                      (+{{ selectedCourse.length - 1 }} others)
+                      (+{{ selectedCourse.length - 1 }} {{$t("others")}})
                     </span>
                   </template>
                 </v-autocomplete>
@@ -675,7 +670,7 @@
                   outlined
                   v-model="selectedCourseType"
                   :items="courseType"
-                  item-text="coursTypeName"
+                  :item-text="$i18n.locale == 'th' ? 'coursTypeName' : 'coursTypeNameEn'"
                   item-value="courseTypeValue"
                   multiple
                   color="#FF6B81"
@@ -692,10 +687,10 @@
                   </template>
                   <template v-slot:selection="{ item, index }">
                     <v-chip v-if="index === 0">
-                      <span>{{ item.coursTypeName }}</span>
+                      <span>{{$i18n.locale == 'th' ? item.coursTypeName : item.coursTypeNameEn }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
-                      (+{{ selectedCourseType.length - 1 }} others)
+                      (+{{ selectedCourseType.length - 1 }} {{$t("others")}})
                     </span>
                   </template>
                 </v-autocomplete>
@@ -708,12 +703,11 @@
                 >
                   <label class="font-weight-bold">{{ $t("coach") }}</label>
                 </v-badge>
-
                 <v-autocomplete
                   outlined
                   v-model="selectedCoach"
                   :items="get_coachs"
-                  item-text="fullNameTh"
+                  :item-text="$i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEh'"
                   item-value="accountId"
                   multiple
                   color="#FF6B81"
@@ -730,10 +724,10 @@
                   </template>
                   <template v-slot:selection="{ item, index }">
                     <v-chip v-if="index === 0">
-                      <span>{{ item.fullNameTh }}</span>
+                      <span>{{ $i18n.locale == 'th' ? item.fullNameTh : item.fullNameEh }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
-                      (+{{ selectedCoach.length - 1 }} others)
+                      (+{{ selectedCoach.length - 1 }} {{$t("others")}})
                     </span>
                   </template>
                 </v-autocomplete>
@@ -846,8 +840,8 @@ export default {
       "ธันวาคม",
     ],
     courseType: [
-      { coursTypeName: "คอร์สเต็ม", courseTypeValue: "Close" },
-      { coursTypeName: "คอร์สว่าง", courseTypeValue: "Open" },
+      { coursTypeName: "คอร์สเต็ม", coursTypeNameEn: "Full course", courseTypeValue: "Close" },
+      { coursTypeName: "คอร์สว่าง", coursTypeNameEn: "Course available",courseTypeValue: "Open" },
     ],
 
     show_dialog_holoday: false,
@@ -905,21 +899,6 @@ export default {
     time_frame: "month",
     nowDate: new Date().toISOString(),
     todayDate: new Date().toLocaleDateString(),
-
-    rules: {
-      dates: [
-        (val) =>
-          (val || "").length > 0 || "กรุณาเลือกอย่างน้อย 1 วันก่อนวันหยุด",
-      ],
-      compensation_start_time: [
-        (val) => (val || "").length > 0 || "โปรดเลือกเวลาเริ่ม",
-      ],
-      compensation_end_time: [
-        (val) => (val || "").length > 0 || "โปรดเลือกเวลาสิ้นสุด",
-      ],
-      holiday_name: [(val) => (val || "").length > 0 || "โปรดระบุชื่อวันหยุด"],
-    },
-
     setDataEditDialog: {},
     courseToday: [],
     resultSearchSchedule: null,
@@ -947,7 +926,12 @@ export default {
       GetFilterSchedule: "ManageScheduleModules/GetFilterSchedule",
       GetSearchSchedule: "ManageScheduleModules/GetSearchSchedule",
     }),
-
+    GenDate(date){
+      if(date){
+        let options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long',  calendar: "buddhist" }
+        return new Date(date).toLocaleDateString(this.$i18n.locale == 'th' ? "th-TH" : "en-US",options)
+      }
+    },
     checkHour(startTime) {
       let hour = [];
       let h = startTime.split(":")[0];
@@ -995,27 +979,8 @@ export default {
     },
 
     setHolidaydates(item) {
-      const thaiMonths = [
-        "มกราคม",
-        "กุมภาพันธ์",
-        "มีนาคม",
-        "เมษายน",
-        "พฤษภาคม",
-        "มิถุนายน",
-        "กรกฎาคม",
-        "สิงหาคม",
-        "กันยายน",
-        "ตุลาคม",
-        "พฤศจิกายน",
-        "ธันวาคม",
-      ];
-      if (item !== "") {
-        const newDate = new Date(item).toLocaleDateString("th-TH");
-        const date = newDate.split("/")[0];
-        const month = newDate.split("/")[1];
-        const year = newDate.split("/")[2];
-        this.holidaydatesTh = `${date} ${thaiMonths[month - 1]} ${year}`;
-      }
+      let options = { year: 'numeric', month: 'long', day: 'numeric',  calendar: "buddhist" }
+      this.holidaydatesTh = new Date(item).toLocaleDateString(this.$i18n.locale == 'th'? "th-TH" : "en-US",options)
     },
 
     async filterSchedules(courseId, coachId, status) {
@@ -1183,6 +1148,8 @@ export default {
     editHolidays(holiday) {
       this.show_dialog_edit_holoday = true;
       this.setDataEditDialog = { ...holiday };
+      let options = { year: 'numeric', month: 'long', day: 'numeric',  calendar: "buddhist" }
+      this.holidaydatesTh = new Date(holiday.fullDate).toLocaleDateString(this.$i18n.locale == 'th' ? "th-TH" : "en-US",options)
     },
 
     async editHolidaysData() {
@@ -1314,15 +1281,28 @@ export default {
       data_filter_schedule: "ManageScheduleModules/getFilterSchedule",
       data_search_schedule: "ManageScheduleModules/getSearchFilterSchedule",
     }),
-
+    dates(){
+      return [
+      (val) =>
+        (val || "").length > 0 || this.$t("please select at least 1 day before the holiday"),
+      ]
+    },
+    compensation_start_time(){ 
+      return [
+        (val) => (val || "").length > 0 || this.$t("please select a start time"),
+      ]
+    },
+    compensation_end_time(){
+      return [
+        (val) => (val || "").length > 0 || this.$t("please select an end time"),
+      ]
+    },
+    holiday_name(){
+      return [(val) => (val || "").length > 0 || this.$t("please specify the name of the holiday")]
+    },
     formattedDate() {
-      const date = new Date();
-      const day = this.thaiDaysOfWeek[date.getDay()];
-      const dateNumber = date.getDate();
-      const month = this.thaiMonths[date.getMonth()];
-      const year = date.getFullYear() + 543; // Add 543 to convert to Thai year
-
-      return `${day} ${dateNumber} ${month} ${year}`;
+      let date = new Date();
+      return date.toLocaleDateString(this.$i18n.locale == 'th' ? "th-TH": "en-US" ,{ year: 'numeric', month: 'long', day: 'numeric', weekday: 'long',  calendar: "buddhist", })
     },
   },
 };
