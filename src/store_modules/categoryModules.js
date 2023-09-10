@@ -85,7 +85,7 @@ const categoryModules = {
                     Swal.fire({
                         icon: "success",
                         title: VueI18n.t("succeed"),
-                        text: `( ${VueI18n.t("successfully deleted item")} )`,
+                        text: VueI18n.t("successfully deleted item"),
                         timer: 3000,
                         timerProgressBar: true,
                         showCancelButton: false,
