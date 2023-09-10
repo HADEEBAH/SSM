@@ -82,6 +82,7 @@ const userModules = {
                         return val
                     })
                     context.commit("SetUserList", data.data)
+                    console.log("SetUserList", data.data);
                 } else {
                     throw { error: data }
                 }
@@ -104,7 +105,7 @@ const userModules = {
                         'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                // let { data } = await axios.get(`http://localhost:3000/api/v1/getrole/filter?${query_roles}`, config)
+                // let { data } = await axios.get(`http://localhost:3000/api/v1/getrole/filter?${query_roles}`, config)  <------------------- ---------------->
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/getrole/filter?${query_roles}`, config)
 
                 if (data.statusCode === 200) {
@@ -113,6 +114,7 @@ const userModules = {
                         return val;
                     })
                     context.commit("SetfilterGetUserList", data.data)
+                    console.log("SetfilterGetUserList", data.data);
                 } else {
                     throw { error: data }
                 }
@@ -175,6 +177,10 @@ const userModules = {
                 // let { data } = await axios.get(`http://localhost:3000/api/v1/usermanagement/student/${student_id}`, config)
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/usermanagement/student/${student_id}`, config)
                 if (data.statusCode === 200) {
+                    data.data.map((items) => {
+                        items.coachNameTh = `${items.coach.firstNameTh} ${items.coach.lastNameTh}`
+                        items.coachNameEn = `${items.coach.firstNameEng} ${items.coach.lastNameEng}`
+                    })
                     context.commit("SetStudentSchedule", data.data)
                 } else {
                     throw { error: data }

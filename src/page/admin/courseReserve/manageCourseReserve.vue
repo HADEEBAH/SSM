@@ -84,7 +84,7 @@
       >
         <template v-slot:no-data>
           <v-row dense>
-            <v-col align="center"> ไม่พบข้อมูล </v-col>
+            <v-col align="center"> {{ $t("no data found") }} </v-col>
           </v-row>
         </template>
         <template v-slot:[`item.status`]="{ item }">
@@ -118,57 +118,57 @@ export default {
   data: () => ({
     type_selected: "all",
     search: "",
-    course_type: [
-      { name: "ทั้งหมด", value: "all" },
-      { name: "รอการติดต่อ", value: "waiting" },
-      { name: "ติดต่อแล้ว", value: "contacted" },
-      { name: "ยกเลิกการจอง", value: "cancel" },
-    ],
-    status: [
-      { label: "รอการติดต่อ", value: "waiting" },
-      { label: "ติดต่อแล้ว", value: "contacted" },
-      { label: "ยกเลิกการจอง", value: "cancel" },
-    ],
-    columns: [
-      {
-        text: "วันที่จอง",
-        align: "start",
-        sortable: true,
-        value: "dateTh",
-      },
-      {
-        text: "เวลาที่จอง",
-        align: "start",
-        sortable: false,
-        value: "timeTh",
-      },
-      {
-        text: "ชื่อคอร์ส",
-        align: "start",
-        sortable: false,
-        value: "courseFullName",
-      },
-      {
-        text: "ชื่อ-นามสกุลผู้เรียน",
-        align: "start",
-        sortable: false,
-        value: "studentFullName",
-      },
-      {
-        text: "ชื่อ-นามสกุลผู้จอง",
-        align: "start",
-        sortable: false,
-        value: "createdByFullName",
-      },
-      { text: "เบอร์ติดต่อ", align: "start", sortable: false, value: "tel" },
-      {
-        text: "สถานะการจอง",
-        align: "start",
-        sortable: false,
-        value: "status",
-      },
-      { text: "", align: "start", value: "actions", sortable: false },
-    ],
+    // course_type: [
+    //   { name: "ทั้งหมด", value: "all" },
+    //   { name: "รอการติดต่อ", value: "waiting" },
+    //   { name: "ติดต่อแล้ว", value: "contacted" },
+    //   { name: "ยกเลิกการจอง", value: "cancel" },
+    // ],
+    // status: [
+    //   { label: "รอการติดต่อ", value: "waiting" },
+    //   { label: "ติดต่อแล้ว", value: "contacted" },
+    //   { label: "ยกเลิกการจอง", value: "cancel" },
+    // ],
+    // columns: [
+    //   {
+    //     text: "วันที่จอง",
+    //     align: "start",
+    //     sortable: true,
+    //     value: "dateTh",
+    //   },
+    //   {
+    //     text: "เวลาที่จอง",
+    //     align: "start",
+    //     sortable: false,
+    //     value: "timeTh",
+    //   },
+    //   {
+    //     text: "ชื่อคอร์ส",
+    //     align: "start",
+    //     sortable: false,
+    //     value: "courseFullName",
+    //   },
+    //   {
+    //     text: "ชื่อ-นามสกุลผู้เรียน",
+    //     align: "start",
+    //     sortable: false,
+    //     value: "studentFullName",
+    //   },
+    //   {
+    //     text: "ชื่อ-นามสกุลผู้จอง",
+    //     align: "start",
+    //     sortable: false,
+    //     value: "createdByFullName",
+    //   },
+    //   { text: "เบอร์ติดต่อ", align: "start", sortable: false, value: "tel" },
+    //   {
+    //     text: "สถานะการจอง",
+    //     align: "start",
+    //     sortable: false,
+    //     value: "status",
+    //   },
+    //   { text: "", align: "start", value: "actions", sortable: false },
+    // ],
   }),
   created() {
     this.GetReserveList();
@@ -180,6 +180,72 @@ export default {
       reserve_list: "reserveCourseModules/reserveList",
       reserve_list_is_loading: "reserveCourseModules/reserveListIsLoading",
     }),
+    course_type() {
+      return [
+        { name: this.$t("all"), value: "all" },
+        { name: this.$t("waiting for contact"), value: "waiting" },
+        { name: this.$t("contacted"), value: "contacted" },
+        { name: this.$t("cancel reservation"), value: "cancel" },
+      ];
+    },
+    status() {
+      return [
+        { label: this.$t("waiting for contact"), value: "waiting" },
+        { label: this.$t("contacted"), value: "contacted" },
+        { label: this.$t("cancel reservation"), value: "cancel" },
+      ];
+    },
+    columns() {
+      return [
+        {
+          text: this.$t("reserve date"),
+          align: "start",
+          sortable: true,
+          value: "dateTh",
+        },
+        {
+          text: this.$t("booking time"),
+          align: "start",
+          sortable: false,
+          value: "timeTh",
+        },
+        {
+          text: this.$t("course name"),
+          align: "start",
+          sortable: false,
+          value: this.$i18n.locale == "th" ? "courseName" : "courseNameEn",
+        },
+        {
+          text: this.$t("first name - last name learner"),
+          align: "start",
+          sortable: false,
+          value:
+            this.$i18n.locale == "th" ? "studentFullName" : "studentFullNameEn",
+        },
+        {
+          text: this.$t("first name - last name booker"),
+          align: "start",
+          sortable: false,
+          value:
+            this.$i18n.locale == "th"
+              ? "createdByFullName"
+              : "createdByFullNameEn",
+        },
+        {
+          text: this.$t("contact number"),
+          align: "start",
+          sortable: false,
+          value: "tel",
+        },
+        {
+          text: this.$t("booking status"),
+          align: "start",
+          sortable: false,
+          value: "status",
+        },
+        { text: "", align: "start", value: "actions", sortable: false },
+      ];
+    },
   },
   methods: {
     ...mapActions({

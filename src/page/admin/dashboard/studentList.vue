@@ -144,7 +144,7 @@
       >
         <template v-slot:[`item.course`]="{ item }">
           <div text color="#FF6B81">
-            {{ `${item.courseCount} ${$t("course")}` }}
+            {{ `${item.courseCount} ${$t("courses")}` }}
           </div>
         </template>
 
@@ -180,7 +180,7 @@
         :search="search"
       >
         <template v-slot:[`item.course`]="{ item }">
-          {{ `${item.courseCount} คอร์ส` }}
+          {{ `${item.courseCount} ${$t("courses")}` }}
         </template>
 
         <template v-slot:[`item.actions`]="{ item }">
@@ -199,7 +199,7 @@
             "
           >
             <v-icon>mdi-text-box-search-outline</v-icon>
-            ดูรายละเอียดผู้เรียน
+            {{ $t("view student details") }}
           </v-btn>
         </template>
       </v-data-table>
@@ -217,7 +217,7 @@
         <template v-slot:[`item.courseDetail`]="{ item }">
           <v-btn text color="#FF6B81" @click="dialogDetailEnd(item)">
             <v-icon>mdi-text-box-search-outline</v-icon>
-            ดูรายละเอียดคอร์ส
+            {{ $t("view course details") }}
           </v-btn>
         </template>
 
@@ -237,7 +237,7 @@
             "
           >
             <v-icon>mdi-text-box-search-outline</v-icon>
-            ดูรายละเอียดผู้เรียน
+            {{ $t("view student details") }}
           </v-btn>
         </template>
       </v-data-table>
@@ -255,7 +255,7 @@
         <template v-slot:[`item.courseDetail`]="{ item }">
           <v-btn text color="#FF6B81" @click="dialogDetailBooked(item)">
             <v-icon>mdi-text-box-search-outline</v-icon>
-            ดูรายละเอียดคอร์ส
+            {{ $t("view course details") }}
           </v-btn>
         </template>
 
@@ -275,7 +275,7 @@
             "
           >
             <v-icon>mdi-text-box-search-outline</v-icon>
-            ดูรายละเอียดผู้เรียน
+            {{ $t("view student details") }}
           </v-btn>
         </template>
       </v-data-table>
@@ -528,48 +528,48 @@ export default {
     loadingOverlay,
   },
   data: () => ({
-    breadcrumbs: [
-      { text: "แดชบอร์ด", to: "Dashboard" },
-      { text: "รายชื่อนักเรียน", to: "" },
-    ],
+    // breadcrumbs: [
+    //   { text: "แดชบอร์ด", to: "Dashboard" },
+    //   { text: "รายชื่อนักเรียน", to: "" },
+    // ],
     search: "",
     tab: "allLearners",
-    data_tab_one: [
-      { text: "ชื่อ", value: "firstNameTh", sortable: false },
-      { text: "นามสกุล", value: "lastNameTh", sortable: false },
-      { text: "เบอร์โทรศัพท์", value: "tel", sortable: false },
-      { text: "อีเมล", value: "email", sortable: false },
-      { text: "ชื่อผู้ใช้", value: "username", sortable: false },
-      { text: "จำนวนคอร์ส", value: "course", sortable: false },
-      { text: "", align: "center", value: "actions", sortable: false },
-    ],
-    data_tab_two: [
-      { text: "ชื่อ", value: "firstNameTh", sortable: false },
-      { text: "นามสกุล", value: "lastNameTh", sortable: false },
-      { text: "เบอร์โทรศัพท์", value: "tel", sortable: false },
-      { text: "อีเมล", value: "email", sortable: false },
-      { text: "ชื่อผู้ใช้", value: "username", sortable: false },
-      { text: "จำนวนคอร์ส", value: "course", sortable: false },
-      { text: "", align: "center", value: "actions", sortable: false },
-    ],
-    data_tab_three: [
-      { text: "ชื่อ", value: "firstNameTh", sortable: false },
-      { text: "นามสกุล", value: "lasttNameTh", sortable: false },
-      { text: "เบอร์โทรศัพท์", value: "tel", sortable: false },
-      { text: "อีเมล", value: "email", sortable: false },
-      { text: "ชื่อผู้ใช้", value: "username", sortable: false },
-      { text: "รายละเอียดคอร์ส", value: "courseDetail", sortable: false },
-      { text: "", align: "center", value: "actions", sortable: false },
-    ],
-    data_tab_four: [
-      { text: "ชื่อ", value: "firstNameTh", sortable: false },
-      { text: "นามสกุล", value: "lastNameTh", sortable: false },
-      { text: "เบอร์โทรศัพท์", value: "tel", sortable: false },
-      { text: "อีเมล", value: "email", sortable: false },
-      { text: "ชื่อผู้ใช้", value: "username", sortable: false },
-      { text: "รายละเอียดคอร์ส", value: "courseDetail", sortable: false },
-      { text: "", align: "center", value: "actions", sortable: false },
-    ],
+    // data_tab_one: [
+    //   { text: "ชื่อ", value: "firstNameTh", sortable: false },
+    //   { text: "นามสกุล", value: "lastNameTh", sortable: false },
+    //   { text: "เบอร์โทรศัพท์", value: "tel", sortable: false },
+    //   { text: "อีเมล", value: "email", sortable: false },
+    //   { text: "ชื่อผู้ใช้", value: "username", sortable: false },
+    //   { text: "จำนวนคอร์ส", value: "course", sortable: false },
+    //   { text: "", align: "center", value: "actions", sortable: false },
+    // ],
+    // data_tab_two: [
+    //   { text: "ชื่อ", value: "firstNameTh", sortable: false },
+    //   { text: "นามสกุล", value: "lastNameTh", sortable: false },
+    //   { text: "เบอร์โทรศัพท์", value: "tel", sortable: false },
+    //   { text: "อีเมล", value: "email", sortable: false },
+    //   { text: "ชื่อผู้ใช้", value: "username", sortable: false },
+    //   { text: "จำนวนคอร์ส", value: "course", sortable: false },
+    //   { text: "", align: "center", value: "actions", sortable: false },
+    // ],
+    // data_tab_three: [
+    //   { text: "ชื่อ", value: "firstNameTh", sortable: false },
+    //   { text: "นามสกุล", value: "lasttNameTh", sortable: false },
+    //   { text: "เบอร์โทรศัพท์", value: "tel", sortable: false },
+    //   { text: "อีเมล", value: "email", sortable: false },
+    //   { text: "ชื่อผู้ใช้", value: "username", sortable: false },
+    //   { text: "รายละเอียดคอร์ส", value: "courseDetail", sortable: false },
+    //   { text: "", align: "center", value: "actions", sortable: false },
+    // ],
+    // data_tab_four: [
+    //   { text: "ชื่อ", value: "firstNameTh", sortable: false },
+    //   { text: "นามสกุล", value: "lastNameTh", sortable: false },
+    //   { text: "เบอร์โทรศัพท์", value: "tel", sortable: false },
+    //   { text: "อีเมล", value: "email", sortable: false },
+    //   { text: "ชื่อผู้ใช้", value: "username", sortable: false },
+    //   { text: "รายละเอียดคอร์ส", value: "courseDetail", sortable: false },
+    //   { text: "", align: "center", value: "actions", sortable: false },
+    // ],
 
     course_detail_dialog_booked: false,
     course_detail_dialog_end: false,
@@ -659,6 +659,73 @@ export default {
       get_potential_student_list: "DashboardModules/getPotentialStudentList",
       dashboard_loading: "DashboardModules/getloading",
     }),
+    breadcrumbs() {
+      return [
+        { text: this.$t("dashboard"), to: "Dashboard" },
+        { text: this.$t("student list"), to: "" },
+      ];
+    },
+    data_tab_one() {
+      return [
+        { text: this.$t("first name"), value: "firstNameTh", sortable: false },
+        { text: this.$t("last name"), value: "lastNameTh", sortable: false },
+        { text: this.$t("phone number"), value: "tel", sortable: false },
+        { text: this.$t("email"), value: "email", sortable: false },
+        { text: this.$t("username"), value: "username", sortable: false },
+        {
+          text: this.$t("number of courses"),
+          value: "course",
+          sortable: false,
+        },
+        { text: "", align: "center", value: "actions", sortable: false },
+      ];
+    },
+
+    data_tab_two() {
+      return [
+        { text: this.$t("first name"), value: "firstNameTh", sortable: false },
+        { text: this.$t("last name"), value: "lastNameTh", sortable: false },
+        { text: this.$t("phone number"), value: "tel", sortable: false },
+        { text: this.$t("email"), value: "email", sortable: false },
+        { text: this.$t("username"), value: "username", sortable: false },
+        {
+          text: this.$t("number of courses"),
+          value: "course",
+          sortable: false,
+        },
+        { text: "", align: "center", value: "actions", sortable: false },
+      ];
+    },
+    data_tab_three() {
+      return [
+        { text: this.$t("first name"), value: "firstNameTh", sortable: false },
+        { text: this.$t("last name"), value: "lastNameTh", sortable: false },
+        { text: this.$t("phone number"), value: "tel", sortable: false },
+        { text: this.$t("email"), value: "email", sortable: false },
+        { text: this.$t("username"), value: "username", sortable: false },
+        {
+          text: this.$t("course details"),
+          value: "courseDetail",
+          sortable: false,
+        },
+        { text: "", align: "center", value: "actions", sortable: false },
+      ];
+    },
+    data_tab_four() {
+      return [
+        { text: this.$t("first name"), value: "firstNameTh", sortable: false },
+        { text: this.$t("last name"), value: "lastNameTh", sortable: false },
+        { text: this.$t("phone number"), value: "tel", sortable: false },
+        { text: this.$t("email"), value: "email", sortable: false },
+        { text: this.$t("username"), value: "username", sortable: false },
+        {
+          text: this.$t("course details"),
+          value: "courseDetail",
+          sortable: false,
+        },
+        { text: "", align: "center", value: "actions", sortable: false },
+      ];
+    },
   },
 };
 </script>

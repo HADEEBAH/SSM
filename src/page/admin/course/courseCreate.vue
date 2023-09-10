@@ -164,7 +164,7 @@
                       outlined
                       color="blue"
                       @click="openFilePrivilegeSelector"
-                      >เลือกไฟล์</v-btn
+                      >{{$t('select file')}}</v-btn
                     >
                     <input
                       id="fileInputPrivilege"
@@ -248,7 +248,7 @@
                       style="display: none"
                     />
                     <v-btn outlined color="blue" @click="openFileArtworSelector"
-                      >เลือกไฟล์</v-btn
+                      >{{$t('select file')}}</v-btn
                     >
                   </v-col>
                 </v-row>

@@ -10,7 +10,7 @@
                 <headerCard
                   :icon="'mdi-card-account-details-outline'"
                   :icon_color="'#FF6B81'"
-                  :title="title"
+                  :title="this.$t('user information')"
                 ></headerCard>
                 <v-divider></v-divider>
 
@@ -18,7 +18,7 @@
                   <v-card-text>
                     <v-row>
                       <v-col cols="12" sm="4">
-                        <labelCustom text="Username"></labelCustom>
+                        <labelCustom :text="this.$t('username')"></labelCustom>
                         <v-text-field
                           :rules="rules.usernameRules"
                           dense
@@ -26,7 +26,7 @@
                           @keypress="validate($event, 'en-number')"
                           v-model="checkData.username"
                           @keyup.enter="checkDataRelation(checkData.username)"
-                          placeholder="Username"
+                          :placeholder="this.$t('username')"
                         >
                           <template v-slot:append>
                             <v-icon v-if="checkData.account_id" color="green"
@@ -41,11 +41,13 @@
                         class="align-self-center text-center"
                       >
                         <template v-if="!relation.account_id">
-                          <label> หากยังไม่มีบัญชีผู้ใช้กรุณา </label>
+                          <label>
+                            {{ $t("if you don't have an account yet, please") }}
+                          </label>
                           <label
                             class="text-[#ff6b81] underline cursor-pointer mt-5"
                             @click="registerParent"
-                            >สมัคร One ID</label
+                            >{{ $t("sign up for One ID") }}</label
                           >
                         </template>
                       </v-col>
@@ -102,7 +104,9 @@
                       <v-col cols="12" sm="6">
                         <v-row>
                           <v-col cols="12" sm="6">
-                            <label-custom text="ชื่อ (ภาษาไทย)"></label-custom>
+                            <label-custom
+                              :text="this.$t('first name(thai)')"
+                            ></label-custom>
                             <v-text-field
                               disabled
                               @keypress="validate($event, 'th')"
@@ -115,7 +119,7 @@
                           </v-col>
                           <v-col cols="12" sm="6">
                             <label-custom
-                              text="นามสกุล (ภาษาไทย)"
+                              :text="this.$t('last name(thai)')"
                             ></label-custom>
                             <v-text-field
                               disabled
@@ -132,7 +136,7 @@
                         <v-row>
                           <v-col cols="12" sm="6">
                             <label-custom
-                              text="First Name (English)"
+                              :text="this.$t('first name(english)')"
                             ></label-custom>
                             <v-text-field
                               disabled
@@ -146,7 +150,7 @@
                           </v-col>
                           <v-col cols="12" sm="6">
                             <label-custom
-                              text="Last Name (English)"
+                              :text="this.$t('last name(english)')"
                             ></label-custom>
                             <v-text-field
                               disabled
@@ -162,7 +166,9 @@
 
                         <v-row>
                           <v-col cols="12" sm="6">
-                            <label-custom text="อีเมล"></label-custom>
+                            <label-custom
+                              :text="this.$t('email')"
+                            ></label-custom>
                             <v-text-field
                               @keypress="validate($event, 'en', 'number')"
                               placeholder="-"
@@ -174,7 +180,9 @@
                             </v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6">
-                            <label-custom text="เบอร์โทรศัพท์"></label-custom>
+                            <label-custom
+                              :text="this.$t('phone number')"
+                            ></label-custom>
                             <v-text-field
                               disabled
                               @keypress="validate($event, 'number')"
@@ -198,14 +206,16 @@
                   class=""
                   :icon="'mdi-card-account-details-outline'"
                   :icon_color="'#FF6B81'"
-                  :title="titlePermissionManage"
+                  :title="this.$t('permission management')"
                 ></headerCard>
                 <v-divider></v-divider>
                 <v-card class="rounded-lg my-5" color="#FCFCFC">
                   <v-card-text>
                     <v-row class="mr-3 ml-3">
                       <v-col cols="12" sm="5">
-                        <label-custom text="บทบาทผู้ใช้งาน"></label-custom>
+                        <label-custom
+                          :text="this.$t('user role')"
+                        ></label-custom>
 
                         <v-autocomplete
                           disabled
@@ -216,7 +226,7 @@
                           :items="roles"
                           item-text="role"
                           item-value="roleNumber"
-                          placeholder="เลือกบทบาทผู้ใช้งาน"
+                          :placeholder="this.$t('select user role')"
                           item-color="#ff6b81"
                           color="#ff6b81"
                         >
@@ -243,8 +253,8 @@
                   :icon_color="'#FF6B81'"
                   :title="
                     global_role_code === 'R_4'
-                      ? 'เพิ่มข้อมูลนักเรียนในการดูแล'
-                      : 'เพิ่มข้อมูลผู้ปกครอง'
+                      ? this.$t('add student information in charge')
+                      : this.$t('add parent information')
                   "
                 ></headerCard>
                 <v-divider></v-divider>
@@ -262,13 +272,15 @@
                   <v-card-text>
                     <v-row dense align="center">
                       <v-col cols="12" sm="6">
-                        <label-custom
+                        <label-custom :text="$t('username')"></label-custom>
+
+                        <!-- <label-custom
                           :text="
                             global_role_code === 'R_4'
                               ? 'Student’s Username (English)'
                               : 'Parent’s Username (English)'
                           "
-                        ></label-custom>
+                        ></label-custom> -->
 
                         <v-text-field
                           v-if="global_role_code === 'R_4'"
@@ -289,7 +301,7 @@
 
                       <v-col cols="12" sm="6">
                         <label-custom
-                          text="First Name (English)"
+                          :text="$t('first name(english)')"
                         ></label-custom>
                         <v-text-field
                           v-if="global_role_code === 'R_4'"
@@ -309,7 +321,9 @@
                       </v-col>
 
                       <v-col cols="12" sm="6">
-                        <label-custom text="Last Name (English)"></label-custom>
+                        <label-custom
+                          :text="$t('last name(english)')"
+                        ></label-custom>
                         <v-text-field
                           v-if="global_role_code === 'R_4'"
                           outlined
@@ -328,7 +342,7 @@
                       </v-col>
 
                       <v-col cols="12" sm="6">
-                        <label-custom text="เบอร์โทรศัพท์"></label-custom>
+                        <label-custom :text="$t('phone number')"></label-custom>
                         <v-text-field
                           v-if="global_role_code === 'R_4'"
                           outlined
@@ -359,8 +373,10 @@
                       <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
                       {{
                         global_role_code === "R_4"
-                          ? "ไม่พบข้อมูลของนักเรียนในการดูแล"
-                          : "ไม่พบข้อมูลของผู้ปกครอง"
+                          ? this.$t(
+                              "can't find information on students in care"
+                            )
+                          : this.$t("parent information not found")
                       }}
                     </span>
                   </v-card-text>
@@ -378,7 +394,7 @@
                   color="#ff6b81"
                   @click="toUserDetail()"
                 >
-                  แก้ไข
+                  {{ $t("edit") }}
                 </v-btn>
               </v-col>
             </v-row>
@@ -400,7 +416,9 @@
         <header-card
           icon="mdi-card-account-details-outline"
           icon_color="#ff6b81"
-          :title="global_role_id === 'R_4' ? 'เพิ่มนักเรียน' : 'เพิ่มผู้ปกครอง'"
+          :title="
+            global_role_id === 'R_4' ? $t('add student') : $t('add parents')
+          "
         >
           <template #actions>
             <v-btn icon @click="closeDialog"><v-icon>mdi-close</v-icon></v-btn>
@@ -409,7 +427,7 @@
         <v-card-text>
           <v-row dense>
             <v-col cols="9">
-              <labelCustom text="Username"></labelCustom>
+              <labelCustom :text="this.$t('username')"></labelCustom>
               <v-text-field
                 :rules="rules.usernameRules"
                 dense
@@ -434,7 +452,7 @@
                     global_role_id === 'R_4' ? 'parent' : 'student'
                   )
                 "
-                placeholder="Username"
+                :placeholder="this.$t('username')"
               >
                 <template v-slot:append>
                   <v-icon v-if="relation.account_id" color="green"
@@ -443,11 +461,13 @@
                 </template>
               </v-text-field>
               <template v-if="!relation.account_id">
-                <label> หากยังไม่มีบัญชีผู้ใช้กรุณา </label>
+                <label>
+                  {{ $t("if you don't have an account yet, please") }}
+                </label>
                 <label
                   class="text-[#ff6b81] underline cursor-pointer mt-5"
                   @click="registerParent"
-                  >สมัคร One ID</label
+                  >{{ $t("sign up for One ID") }}</label
                 >
               </template>
             </v-col>
@@ -464,44 +484,48 @@
                 "
                 depressed
                 dark
-                >ตกลง</v-btn
+                >{{ $t("agree") }}</v-btn
               >
             </v-col>
           </v-row>
           <template>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom text="ชื่อ(ภาษาอังกฤษ)"></labelCustom>
+                <labelCustom
+                  :text="this.$t('first name(english)')"
+                ></labelCustom>
                 <v-text-field
                   disabled
                   dense
                   outlined
                   v-model="relation.firstname_en"
-                  placeholder="ชื่อภาษาอังกฤษ"
+                  :placeholder="this.$t('first name(english)')"
                 ></v-text-field>
               </v-col>
             </v-row>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom text="นามสกุล(ภาษาอังกฤษ)"></labelCustom>
+                <labelCustom
+                  :text="this.$t('last name(english)')"
+                ></labelCustom>
                 <v-text-field
                   disabled
                   dense
                   outlined
                   v-model="relation.lastname_en"
-                  placeholder="นามสกุลภาษาอังกฤษ"
+                  :placeholder="this.$t('last name(english)')"
                 ></v-text-field>
               </v-col>
             </v-row>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom text="เบอร์โทรศัพท์"></labelCustom>
+                <labelCustom :text="this.$t('phone number')"></labelCustom>
                 <v-text-field
                   disabled
                   dense
                   outlined
                   v-model="relation.tel"
-                  placeholder="เบอร์โทรศัพท์"
+                  :placeholder="this.$t('phone number')"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -515,7 +539,7 @@
                 class="w-full"
                 color="#ff6b81"
                 outlined
-                >ยกเลิก</v-btn
+                >{{ $t("cancel") }}</v-btn
               >
             </v-col>
             <v-col>
@@ -525,7 +549,7 @@
                 dark
                 depressed
                 @click="addRealions"
-                >บันทึก</v-btn
+                >{{ $t("save") }}</v-btn
               >
             </v-col>
           </v-row>
@@ -542,7 +566,7 @@
     >
       <registerDialogForm
         dialog
-        title="สมัคร One ID"
+        :title="this.$t('sign up for One ID')"
         :state="register_type"
       ></registerDialogForm>
     </v-dialog>
@@ -573,31 +597,31 @@ export default {
     seledtedRole: "",
     preview_img: "",
     send_image_profile: null,
-    rules: {
-      usernameRules: [
-        (val) =>
-          (val || "").length > 5 ||
-          "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => /[A-Za-z0-9 ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-        (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-          "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
-      ],
-      passwordRules: [
-        (val) =>
-          (val || "").length > 7 ||
-          "โปรดระบุรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => !/[ ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-      ],
-    },
-    title: "ข้อมูลผู้ใช้งาน",
-    titlePermissionManage: "การจัดการสิทธิ์",
+    // rules: {
+    //   usernameRules: [
+    //     (val) =>
+    //       (val || "").length > 5 ||
+    //       "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
+    //     (val) =>
+    //       (val || "").length < 20 ||
+    //       "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
+    //     (val) => /[A-Za-z0-9 ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+    //     (val) =>
+    //       !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+    //       "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
+    //   ],
+    //   passwordRules: [
+    //     (val) =>
+    //       (val || "").length > 7 ||
+    //       "โปรดระบุรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
+    //     (val) =>
+    //       (val || "").length < 20 ||
+    //       "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
+    //     (val) => !/[ ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+    //   ],
+    // },
+    // title: "ข้อมูลผู้ใช้งาน",
+    // titlePermissionManage: "การจัดการสิทธิ์",
     selectRoles: [],
     previewUrl: null,
     isCheckedRelation: false,
@@ -623,10 +647,10 @@ export default {
       image: "",
     },
 
-    breadcrumbs: [
-      { text: "จัดการผู้ใช้งาน", to: "UserList" },
-      { text: "เพิ่มผู้ใช้งาน", to: "" },
-    ],
+    // breadcrumbs: [
+    //   { text: "จัดการผู้ใช้งาน", to: "UserList" },
+    //   { text: "เพิ่มผู้ใช้งาน", to: "" },
+    // ],
 
     roles: [
       { role: "Super Admin", privilege: "superAdmin", roleNumber: "R_1" },
@@ -671,7 +695,7 @@ export default {
         params: {
           action: "edit",
           account_id: items.userOneId,
-          from: 'userList'
+          from: "userList",
         },
       });
     },
@@ -1058,6 +1082,45 @@ export default {
     IpadSize() {
       const { sm } = this.$vuetify.breakpoint;
       return !!sm;
+    },
+
+    breadcrumbs() {
+      return [
+        { text: this.$t("manage user"), to: "UserList" },
+        { text: this.$t("add user"), to: "" },
+      ];
+    },
+
+    rules() {
+      return {
+        usernameRules: [
+          (val) =>
+            (val || "").length > 5 ||
+            this.$t("please enter a username at least 6 characters long"),
+          (val) =>
+            (val || "").length < 20 ||
+            this.$t("please enter a username no longer than 20 characters"),
+          (val) =>
+            /[A-Za-z0-9 ]/g.test(val) ||
+            this.$t("the username cannot contain special characters"),
+          (val) =>
+            !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+            this.$t("username cannot contain emojis"),
+        ],
+        passwordRules: [
+          (val) =>
+            (val || "").length > 7 ||
+            this.$t(
+              "please enter a password that is at least 8 characters long"
+            ),
+          (val) =>
+            (val || "").length < 20 ||
+            this.$t("please enter a password of no more than 20 characters"),
+          (val) =>
+            !/[ ]/g.test(val) ||
+            this.$t("the username cannot contain special characters"),
+        ],
+      };
     },
   },
   watch: {

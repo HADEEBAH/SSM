@@ -10,7 +10,7 @@
                 <headerCard
                   :icon="'mdi-card-account-details-outline'"
                   :icon_color="'#FF6B81'"
-                  :title="title"
+                  :title="$t('user information')"
                 ></headerCard>
                 <v-divider></v-divider>
 
@@ -18,9 +18,13 @@
                   <v-card-text>
                     <v-row>
                       <v-col cols="12" sm="6">
-                        <label-custom text="Username(English)"></label-custom>
+                        <label-custom
+                          :text="this.$t('username')"
+                        ></label-custom>
                         <v-text-field
-                          placeholder="กรุณาระบุชื่อผู้ใช้งาน(ภาษาอังกฤษ)"
+                          :placeholder="
+                            this.$t('please enter your username (English)')
+                          "
                           @keypress="validate($event, 'en-number')"
                           v-model="show_by_id.userName"
                           hide-details
@@ -74,7 +78,7 @@
                                 color="#ff6b81"
                                 @click="openFileSelector"
                                 class="w-full white--text"
-                                >เพิ่มรูป</v-btn
+                                >{{ $t("add a picture") }}</v-btn
                               >
                               <v-btn
                                 v-if="preview_img !== ''"
@@ -82,7 +86,9 @@
                                 @click="removeImg"
                                 class="w-full white--text"
                               >
-                                <span class="mdi mdi-close">ยกเลิก</span>
+                                <span class="mdi mdi-close">{{
+                                  $t("cancel")
+                                }}</span>
                               </v-btn>
                             </v-img>
 
@@ -102,7 +108,7 @@
                                 color="#ff6b81"
                                 @click="openFileSelector"
                                 class="w-full white--text"
-                                >เปลี่ยนรูป</v-btn
+                                >{{ $t("change photo") }}</v-btn
                               >
                               <v-btn
                                 v-if="preview_img !== ''"
@@ -110,7 +116,9 @@
                                 @click="removeImg"
                                 class="w-full white--text"
                               >
-                                <span class="mdi mdi-close">ยกเลิก</span>
+                                <span class="mdi mdi-close">{{
+                                  $t("cancel")
+                                }}</span>
                               </v-btn>
                             </v-img>
                           </div>
@@ -129,7 +137,7 @@
                           <v-row>
                             <v-col cols="12" sm="6">
                               <label-custom
-                                text="ชื่อ (ภาษาไทย)"
+                                :text="this.$t('first name(thai)')"
                               ></label-custom>
 
                               <v-text-field
@@ -144,7 +152,7 @@
                             </v-col>
                             <v-col cols="12" sm="6">
                               <label-custom
-                                text="นามสกุล (ภาษาไทย)"
+                                :text="this.$t('last name(thai)')"
                               ></label-custom>
                               <v-text-field
                                 @keypress="validate($event, 'th-special')"
@@ -161,7 +169,7 @@
                           <v-row>
                             <v-col cols="12" sm="6">
                               <label-custom
-                                text="First Name (English)"
+                                :text="this.$t('first name(english)')"
                               ></label-custom>
                               <v-text-field
                                 v-bind:disabled="isDisabled"
@@ -176,7 +184,7 @@
                             </v-col>
                             <v-col cols="12" sm="6">
                               <label-custom
-                                text="Last Name (English)"
+                                :text="this.$t('last name(english)')"
                               ></label-custom>
                               <v-text-field
                                 v-bind:disabled="isDisabled"
@@ -192,7 +200,9 @@
                           </v-row>
                           <v-row>
                             <v-col cols="12" sm="6">
-                              <label-custom text="อีเมล"></label-custom>
+                              <label-custom
+                                :text="this.$t('email')"
+                              ></label-custom>
                               <v-text-field
                                 disabled
                                 placeholder="-"
@@ -203,7 +213,9 @@
                               </v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6">
-                              <label-custom text="เบอร์โทรศัพท์"></label-custom>
+                              <label-custom
+                                :text="this.$t('phone number')"
+                              ></label-custom>
                               <v-text-field
                                 disabled
                                 @keypress="validate($event, 'number')"
@@ -234,21 +246,23 @@
                 <headerCard
                   :icon="'mdi-card-account-details-outline'"
                   :icon_color="'#FF6B81'"
-                  :title="titlePermissionManage"
+                  :title="this.$t('permission management')"
                 ></headerCard>
                 <v-divider></v-divider>
                 <v-card class="rounded-lg my-3" color="#FCFCFC">
                   <v-card-text>
                     <v-row class="mr-3 ml-3">
                       <v-col cols="12" sm="5">
-                        <label-custom text="บทบาทผู้ใช้งาน"></label-custom>
+                        <label-custom
+                          :text="this.$t('user role')"
+                        ></label-custom>
                         <v-autocomplete
                           dense
                           v-model="seledtedRole"
                           :items="roles"
                           item-text="role"
                           item-value="roleNumber"
-                          label="กรุณาเลือกบทบาทผู้ใช้งาน"
+                          :label="this.$t('select user role')"
                           solo
                           item-color="#ff6b81"
                           color="#ff6b81"
@@ -277,23 +291,24 @@
             <v-row dense>
               <v-col cols="12">
                 <headerCard
+                  class=""
                   :icon="'mdi-card-account-details-outline'"
                   :icon_color="'#FF6B81'"
-                  :title="titlePermissionManage"
+                  :title="$t('permission management')"
                 ></headerCard>
                 <v-divider></v-divider>
                 <v-card class="rounded-lg mt-5" color="#FCFCFC">
                   <v-card-text class="mt-3">
                     <v-row class="mr-3 ml-3">
                       <v-col cols="12" sm="5">
-                        <label-custom text="บทบาทผู้ใช้งาน"></label-custom>
+                        <label-custom :text="$t('user role')"></label-custom>
                         <v-autocomplete
                           dense
                           v-model="seledtedRole"
                           :items="roles"
                           item-text="role"
                           item-value="roleNumber"
-                          label="กรุณาเลือกบทบาทผู้ใช้งาน"
+                          :label="$t('select user role')"
                           outlined
                           item-color="#ff6b81"
                           color="#ff6b81"
@@ -320,8 +335,8 @@
                   :icon_color="'#FF6B81'"
                   :title="
                     item.roleId === 'R_4'
-                      ? 'เพิ่มข้อมูลนักเรียนในการดูแล'
-                      : 'เพิ่มข้อมูลผู้ปกครอง'
+                      ? $t('add student information in charge')
+                      : $t('add parent information')
                   "
                 ></headerCard>
                 <v-divider></v-divider>
@@ -336,9 +351,9 @@
                     <span class="text-lg font-bold">
                       <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
                       {{
-                        item.roleId === "R_5"
-                          ? `ไม่พบข้อมูลของผู้ปกครอง`
-                          : `ไม่พบข้อมูลของนักเรียนในการดูแล`
+                        item.roleId === "R_4"
+                          ? $t("can't find information on students in care")
+                          : $t("parent information not found")
                       }}
                     </span>
                   </v-card-text>
@@ -366,13 +381,14 @@
                     </v-col>
                     <v-row dense align="center">
                       <v-col cols="12" sm="6">
-                        <label-custom
+                        <label-custom :text="$t('username')"></label-custom>
+                        <!-- <label-custom
                           :text="
                             item.roleId === 'R_4'
                               ? 'Student’s Username (English)'
                               : 'Parent’s Username (English)'
                           "
-                        ></label-custom>
+                        ></label-custom> -->
                         <v-text-field
                           outlined
                           dense
@@ -391,7 +407,7 @@
 
                       <v-col cols="12" sm="6">
                         <label-custom
-                          text="First Name (English)"
+                          :text="$t('first name(english)')"
                         ></label-custom>
                         <v-text-field
                           outlined
@@ -409,7 +425,9 @@
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12" sm="6">
-                        <label-custom text="Last Name (English)"></label-custom>
+                        <label-custom
+                          :text="$t('last name(english)')"
+                        ></label-custom>
                         <v-text-field
                           outlined
                           dense
@@ -426,7 +444,7 @@
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12" sm="6">
-                        <label-custom text="เบอร์โทรศัพท์"></label-custom>
+                        <label-custom :text="$t('phone number')"></label-custom>
                         <v-text-field
                           outlined
                           dense
@@ -457,8 +475,8 @@
                   v-model="isCheckedRelation"
                   :label="
                     item.roleId === 'R_4'
-                      ? 'ต้องการเพิ่มนักเรียนในการดูแล'
-                      : 'ต้องการเพิ่มผู้ปกครอง'
+                      ? $t('want to add students to supervision')
+                      : $t('want to add a parent')
                   "
                   value="Jacob"
                   color="pink"
@@ -479,19 +497,19 @@
                   <v-icon>mdi-plus-circle-outline</v-icon
                   >{{
                     item.roleId === "R_4"
-                      ? "เพิ่มข้อมูลนักเรียน"
-                      : "เพิ่มข้อมูลผู้ปกครอง"
+                      ? $t("add student")
+                      : $t("adtitleCourseDetaild parents")
                   }}</v-btn
                 >
               </v-col>
               <!-- ----------------------------------------------- -->
-
+              <!-- <pre>{{ student_schedule }}</pre> -->
               <!-- TABLE Role PARENT -->
               <v-col cols="12" v-if="item.roleId === 'R_4'">
                 <headerCard
                   :icon="'mdi-school-outline'"
                   :icon_color="'#FF6B81'"
-                  :title="titleCourseDetail"
+                  :title="$t('course information')"
                 ></headerCard>
                 <v-divider></v-divider>
                 <v-data-table
@@ -512,7 +530,7 @@
                 <headerCard
                   :icon="'mdi-school-outline'"
                   :icon_color="'#FF6B81'"
-                  :title="titleCourseDetail"
+                  :title="$t('course information')"
                 ></headerCard>
                 <v-divider></v-divider>
                 <v-data-table
@@ -537,7 +555,7 @@
               color="#ff6b81"
               @click="updateData(show_by_id.userOneId)"
             >
-              บันทึก
+              {{ $t("save") }}
             </v-btn>
           </v-col>
         </v-card>
@@ -559,7 +577,9 @@
             <v-icon class="text-[#ff6b81!important] mb-1"
               >mdi-card-account-details-outline</v-icon
             >
-            {{ global_role_id === "R_4" ? "เพิ่มนักเรียน" : "เพิ่มผู้ปกครอง" }}
+            {{
+              global_role_id === "R_4" ? $t("add student") : $t("add parents")
+            }}
           </v-toolbar-title>
 
           <v-spacer></v-spacer>
@@ -572,7 +592,7 @@
         <v-card-text class="pb-2">
           <v-row dense class="mb-5">
             <v-col cols="12">
-              <labelCustom required text="Username"></labelCustom>
+              <labelCustom required :text="this.$t('username')"></labelCustom>
               <v-text-field
                 :rules="rules.usernameRules"
                 dense
@@ -597,7 +617,7 @@
                     global_role_id === 'R_4' ? 'parent' : 'student'
                   )
                 "
-                placeholder="Username"
+                :placeholder="this.$t('username')"
               >
                 <template v-slot:append>
                   <v-icon v-if="relation.account_id" color="green"
@@ -619,48 +639,50 @@
                 </template>
               </v-text-field>
               <template v-if="!relation.account_id">
-                <label> หากยังไม่มีบัญชีผู้ใช้กรุณา </label>
+                <label>
+                  {{ $t("if you don't have an account yet, please") }}
+                </label>
                 <label
                   class="text-[#ff6b81] underline cursor-pointer mt-5"
                   @click="registerParent"
-                  >สมัคร One ID</label
+                  >{{ $t("sign up for One ID") }}</label
                 >
               </template>
             </v-col>
           </v-row>
           <v-row dense>
             <v-col cols="12">
-              <labelCustom text="ชื่อ(ภาษาอังกฤษ)"></labelCustom>
+              <labelCustom :text="this.$t('first name(english)')"></labelCustom>
               <v-text-field
                 disabled
                 dense
                 outlined
                 v-model="relation.firstname_en"
-                placeholder="ชื่อภาษาอังกฤษ"
+                :placeholder="this.$t('first name(english)')"
               ></v-text-field>
             </v-col>
           </v-row>
           <v-row dense>
             <v-col cols="12">
-              <labelCustom text="นามสกุล(ภาษาอังกฤษ)"></labelCustom>
+              <labelCustom :text="this.$t('last name(english)')"></labelCustom>
               <v-text-field
                 disabled
                 dense
                 outlined
                 v-model="relation.lastname_en"
-                placeholder="นามสกุลภาษาอังกฤษ"
+                :placeholder="this.$t('last name(english)')"
               ></v-text-field>
             </v-col>
           </v-row>
           <v-row dense>
             <v-col cols="12">
-              <labelCustom text="เบอร์โทรศัพท์"></labelCustom>
+              <labelCustom :text="this.$t('phone number')"></labelCustom>
               <v-text-field
                 disabled
                 dense
                 outlined
                 v-model="relation.tel"
-                placeholder="เบอร์โทรศัพท์"
+                :placeholder="this.$t('phone number')"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -673,7 +695,7 @@
                 class="w-full"
                 color="#ff6b81"
                 outlined
-                >ยกเลิก</v-btn
+                >{{ $t("cancel") }}</v-btn
               >
             </v-col>
             <v-col>
@@ -684,7 +706,7 @@
                 class="w-full"
                 depressed
                 @click="addRealions"
-                >บันทึก</v-btn
+                >{{ $t("save") }}</v-btn
               >
             </v-col>
           </v-row>
@@ -701,7 +723,7 @@
     >
       <registerDialogForm
         dialog
-        title="สมัคร One ID"
+        :title="this.$t('sign up for One ID')"
         :state="register_type"
       ></registerDialogForm>
     </v-dialog>
@@ -718,9 +740,11 @@
             </v-col>
           </v-row>
         </v-card-title>
-        <dialogCard text="แก้ไขข้อมูลเรียบร้อย"></dialogCard>
+        <dialogCard :text="$t('data has been edited')"></dialogCard>
         <div class="my-5 text-center">
-          <v-btn color="#ff6b81" @click="closeDialog"> ตกลง </v-btn>
+          <v-btn color="#ff6b81" @click="closeDialog">
+            {{ $t("agree") }}
+          </v-btn>
         </div>
       </v-card>
     </v-dialog>
@@ -737,7 +761,7 @@
             </v-col>
           </v-row>
         </v-card-title>
-        <dialogCard text="บันทึกข้อมูลสำเร็จ"></dialogCard>
+        <dialogCard :text="$t('save data successfully')"></dialogCard>
       </v-card>
     </v-dialog>
   </v-container>
@@ -795,138 +819,138 @@ export default {
       tel: "",
     },
 
-    roles: [
-      { role: "Super Admin", privilege: "superAdmin", roleNumber: "R_1" },
-      { role: "Admin", privilege: "admin", roleNumber: "R_2" },
-      { role: "โค้ช", privilege: "โค้ช", roleNumber: "R_3" },
-      { role: "ผู้ปกครอง", privilege: "ผู้ปกครอง", roleNumber: "R_4" },
-      { role: "นักเรียน", privilege: "นักเรียน", roleNumber: "R_5" },
-    ],
-    roleParentTable: [
-      { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
-      { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
-      { text: "ชื่อคอร์ส", value: "courseNameTh", sortable: false },
-      { text: "แพ็กเกจ", value: "cpo.packageName", sortable: false },
-      { text: "โค้ช", value: "coachName", sortable: false },
-      { text: "ประเภท", value: "cpo.courseTypeNameTh", sortable: false },
-      { text: "ระยะเวลา", value: "cpo.optionName", sortable: false },
-      { text: "วัน", value: "dates", sortable: false },
-      { text: "เวลาเริ่ม", value: "start", sortable: false },
-      { text: "เวลาสิ้นสุด", value: "end", sortable: false },
-    ],
-    roleStudentTable: [
-      { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
-      { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
-      { text: "ชื่อคอร์ส", value: "courseNameTh", sortable: false },
-      { text: "แพ็กเกจ", value: "cpo.packageName", sortable: false },
-      { text: "โค้ช", value: "coachName", sortable: false },
-      { text: "ประเภท", value: "cpo.courseTypeNameTh", sortable: false },
-      { text: "ระยะเวลา", value: "cpo.optionName", sortable: false },
-      { text: "วัน", value: "dates", sortable: false },
-      { text: "เวลาเริ่ม", value: "start", sortable: false },
-      { text: "เวลาสิ้นสุด", value: "end", sortable: false },
-      { text: "ราคา", value: "price", sortable: false },
-    ],
-    period: ["admin", "Super admin", "โค้ช", "ผู้ปกครอง"],
-    breadcrumbs: [
-      { text: "จัดการผู้ใช้งาน", to: "UserList" },
-      { text: "แก้ไขข้อมูลผู้ใช้งาน", to: "" },
-    ],
-    title: "ข้อมูลผู้ใช้งาน",
-    titlePermissionManage: "การจัดการสิทธิ์",
-    titleCourseDetail: "ข้อมูลคอร์สเรียน",
-    addStudentData: "เพิ่มข้อมูลผู้ใช้นักเรียน",
-    addParentData: "เพิ่มข้อมูลผู้ใช้ของผู้ปกครอง",
+    // roles: [
+    //   { role: "Super Admin", privilege: "superAdmin", roleNumber: "R_1" },
+    //   { role: "Admin", privilege: "admin", roleNumber: "R_2" },
+    //   { role: "โค้ช", privilege: "โค้ช", roleNumber: "R_3" },
+    //   { role: "ผู้ปกครอง", privilege: "ผู้ปกครอง", roleNumber: "R_4" },
+    //   { role: "นักเรียน", privilege: "นักเรียน", roleNumber: "R_5" },
+    // ],
+    // roleParentTable: [
+    //   { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
+    //   { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
+    //   { text: "ชื่อคอร์ส", value: "courseNameTh", sortable: false },
+    //   { text: "แพ็กเกจ", value: "cpo.packageName", sortable: false },
+    //   { text: "โค้ช", value: "coachName", sortable: false },
+    //   { text: "ประเภท", value: "cpo.courseTypeNameTh", sortable: false },
+    //   { text: "ระยะเวลา", value: "cpo.optionName", sortable: false },
+    //   { text: "วัน", value: "dates", sortable: false },
+    //   { text: "เวลาเริ่ม", value: "start", sortable: false },
+    //   { text: "เวลาสิ้นสุด", value: "end", sortable: false },
+    // ],
+    // roleStudentTable: [
+    //   { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
+    //   { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
+    //   { text: "ชื่อคอร์ส", value: "courseNameTh", sortable: false },
+    //   { text: "แพ็กเกจ", value: "cpo.packageName", sortable: false },
+    //   { text: "โค้ช", value: "coachName", sortable: false },
+    //   { text: "ประเภท", value: "cpo.courseTypeNameTh", sortable: false },
+    //   { text: "ระยะเวลา", value: "cpo.optionName", sortable: false },
+    //   { text: "วัน", value: "dates", sortable: false },
+    //   { text: "เวลาเริ่ม", value: "start", sortable: false },
+    //   { text: "เวลาสิ้นสุด", value: "end", sortable: false },
+    //   { text: "ราคา", value: "price", sortable: false },
+    // ],
+    // period: ["admin", "Super admin", "โค้ช", "ผู้ปกครอง"],
+    // breadcrumbs: [
+    //   { text: "จัดการผู้ใช้งาน", to: "UserList" },
+    //   { text: "แก้ไขข้อมูลผู้ใช้งาน", to: "" },
+    // ],
+    // title: "ข้อมูลผู้ใช้งาน",
+    // titlePermissionManage: "การจัดการสิทธิ์",
+    // titleCourseDetail: "ข้อมูลคอร์สเรียน",
+    // addStudentData: "เพิ่มข้อมูลผู้ใช้นักเรียน",
+    // addParentData: "เพิ่มข้อมูลผู้ใช้ของผู้ปกครอง",
     titleCreateRelation: "",
-    rules: {
-      firstNameThRules: [
-        (val) =>
-          (val || "").length > 1 ||
-          "โปรดระบุชื่อ (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุชื่อ (ภาษาไทย) ความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => /[ก-๏\s]/g.test(val) || "กรุณากรอกชื่อภาษาไทย",
-        (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-          "กรุณากรอกชื่อภาษาไทย",
-      ],
-      firstNameEnRules: [
-        (val) =>
-          (val || "").length > 1 ||
-          "โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => /[A-Za-z]/g.test(val) || "กรุณากรอกชื่อภาษาอังกฤษ",
-        (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-          "กรุณากรอกชื่อภาษาอังกฤษ",
-      ],
-      lastNameThRules: [
-        (val) =>
-          (val || "").length > 1 ||
-          "โปรดระบุนามสกุล (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุนามสกุล (ภาษาไทย) ความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => /[ก-๏\s]/g.test(val) || "กรุณากรอกนามสกุลภาษาไทย",
-        (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-          "กรุณากรอกสกุลภาษาไทย",
-      ],
-      lastNameEnRules: [
-        (val) =>
-          (val || "").length > 1 ||
-          "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => /[A-Za-z ]/g.test(val) || "กรุณากรอกนามสกุลภาษาอังกฤษ",
-        (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF ]/g.test(val) ||
-          "กรุณากรอกสกุลภาษาอังกฤษ",
-      ],
-      name: [
-        (val) =>
-          (val || "").length > 0 ||
-          "ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบใหม่อีกครั้ง",
-      ],
-      username: [
-        () =>
-          !this.isMatch ? "ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบใหม่อีกครั้ง " : "",
-      ],
-      email: [
-        (value) => !!value || "Required.",
-        (value) => (value || "").length <= 20 || "Max 20 characters",
-        (value) => {
-          const pattern =
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-          return pattern.test(value) || "Invalid e-mail.";
-        },
-      ],
-      usernameRules: [
-        (val) =>
-          (val || "").length > 5 ||
-          "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => /[A-Za-z0-9 ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-        (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-          "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
-      ],
-      passwordRules: [
-        (val) =>
-          (val || "").length > 7 ||
-          "โปรดระบุรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => !/[ ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-      ],
-    },
+    // rules: {
+    //   firstNameThRules: [
+    //     (val) =>
+    //       (val || "").length > 1 ||
+    //       "โปรดระบุชื่อ (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
+    //     (val) =>
+    //       (val || "").length < 20 ||
+    //       "โปรดระบุชื่อ (ภาษาไทย) ความยาวไม่เกิน 20 ตัวอักษร",
+    //     (val) => /[ก-๏\s]/g.test(val) || "กรุณากรอกชื่อภาษาไทย",
+    //     (val) =>
+    //       !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+    //       "กรุณากรอกชื่อภาษาไทย",
+    //   ],
+    //   firstNameEnRules: [
+    //     (val) =>
+    //       (val || "").length > 1 ||
+    //       "โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
+    //     (val) =>
+    //       (val || "").length < 20 ||
+    //       "โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
+    //     (val) => /[A-Za-z]/g.test(val) || "กรุณากรอกชื่อภาษาอังกฤษ",
+    //     (val) =>
+    //       !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+    //       "กรุณากรอกชื่อภาษาอังกฤษ",
+    //   ],
+    //   lastNameThRules: [
+    //     (val) =>
+    //       (val || "").length > 1 ||
+    //       "โปรดระบุนามสกุล (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
+    //     (val) =>
+    //       (val || "").length < 20 ||
+    //       "โปรดระบุนามสกุล (ภาษาไทย) ความยาวไม่เกิน 20 ตัวอักษร",
+    //     (val) => /[ก-๏\s]/g.test(val) || "กรุณากรอกนามสกุลภาษาไทย",
+    //     (val) =>
+    //       !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+    //       "กรุณากรอกสกุลภาษาไทย",
+    //   ],
+    //   lastNameEnRules: [
+    //     (val) =>
+    //       (val || "").length > 1 ||
+    //       "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
+    //     (val) =>
+    //       (val || "").length < 20 ||
+    //       "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
+    //     (val) => /[A-Za-z ]/g.test(val) || "กรุณากรอกนามสกุลภาษาอังกฤษ",
+    //     (val) =>
+    //       !/[\uD800-\uDBFF][\uDC00-\uDFFF ]/g.test(val) ||
+    //       "กรุณากรอกสกุลภาษาอังกฤษ",
+    //   ],
+    //   name: [
+    //     (val) =>
+    //       (val || "").length > 0 ||
+    //       "ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบใหม่อีกครั้ง",
+    //   ],
+    //   username: [
+    //     () =>
+    //       !this.isMatch ? "ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบใหม่อีกครั้ง " : "",
+    //   ],
+    //   email: [
+    //     (value) => !!value || "Required.",
+    //     (value) => (value || "").length <= 20 || "Max 20 characters",
+    //     (value) => {
+    //       const pattern =
+    //         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    //       return pattern.test(value) || "Invalid e-mail.";
+    //     },
+    //   ],
+    //   usernameRules: [
+    //     (val) =>
+    //       (val || "").length > 5 ||
+    //       "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
+    //     (val) =>
+    //       (val || "").length < 20 ||
+    //       "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
+    //     (val) => /[A-Za-z0-9 ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+    //     (val) =>
+    //       !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+    //       "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
+    //   ],
+    //   passwordRules: [
+    //     (val) =>
+    //       (val || "").length > 7 ||
+    //       "โปรดระบุรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
+    //     (val) =>
+    //       (val || "").length < 20 ||
+    //       "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
+    //     (val) => !/[ ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+    //   ],
+    // },
 
     clickCount: 0,
     isCheckedRelation: false,
@@ -1007,15 +1031,15 @@ export default {
       if (files.size > (10240 * 1024) / 2) {
         Swal.fire({
           icon: "warning",
-          title: "ขนาดไฟล์ใหญ่เกินไป",
-          text: "( กำหนดขนาดไม่เกิน 5MB )",
+          title: this.$t("the file size is too large"),
+          text: this.$t("set the size not to exceed 5MB"),
         });
         document.getElementById("fileInput").value = "";
       } else if (allowedExtension.indexOf(files.type) === -1) {
         Swal.fire({
           icon: "warning",
-          title: "รูปแบบไฟล์ไม่ถูกต้อง",
-          text: "( กรุณาอัปโหลดไฟล์รูปภาพ )",
+          title: this.$t("invalid file format"),
+          text: this.$t("please upload an image file"),
         });
         document.getElementById("fileInput").value = "";
       } else {
@@ -1042,7 +1066,7 @@ export default {
       } else {
         this.isMatch = false;
         this.isNotMatch = true;
-        this.username_alert = "ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบใหม่อีกครั้ง ";
+        this.username_alert = this.$t("invalid username Please check again");
       }
     },
 
@@ -1130,7 +1154,7 @@ export default {
       } else {
         Swal.fire({
           icon: "warning",
-          title: "ไม่มี username",
+          title: this.$t("username not found"),
         });
       }
     },
@@ -1138,11 +1162,11 @@ export default {
     addRealions() {
       Swal.fire({
         icon: "question",
-        title: "คุณต้องการเพิ่มความสัมพันธ์หรือไม่",
+        title: this.$t("do you want to increase your relationship?"),
         showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
@@ -1186,8 +1210,8 @@ export default {
                 this.GetDataRelationsManagement(this.show_by_id);
                 Swal.fire({
                   icon: "success",
-                  title: "สำเร็จ",
-                  text: "( บันทึกเรียบร้อยแล้ว )",
+                  title: this.$t("succeed"),
+                  text: this.$t("saved successfully"),
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,
@@ -1221,9 +1245,11 @@ export default {
               response?.data?.message === "studentId and parentId not found." ||
               response?.data?.message === "studentId not found."
             ) {
-              this.error_message = "ชื่อผู้ใช้ไม่ถูกต้อง";
+              this.error_message = this.$t(
+                "invalid username Please check again"
+              );
             } else if (response?.data?.message === "Duplicate relation.") {
-              this.error_message = "ความสัมพันธ์ซ้ำ";
+              this.error_message = this.$t("duplicate relationship");
             } else if (
               response?.data?.message ===
               "Student does not have the required role."
@@ -1233,15 +1259,18 @@ export default {
               response?.data?.message ===
               "Parent does not have the required role."
             ) {
-              this.error_message = "username นี้ยังไม่มีบทบาท";
+              this.error_message = this.$t(
+                "this username does not yet have a role"
+              );
             } else if (
               response?.data?.message ===
               "parentId and studentId must not be duplicate."
             ) {
-              this.error_message =
-                "ชื่อผู้ใช้ของผู้ปกครองและนักเรียนต้องไม่ซ้ำกัน";
+              this.error_message = this.$t(
+                "parent and student usernames must be unique"
+              );
             } else {
-              this.error_message = "เกิดข้อผิดพลาด";
+              this.error_message = this.$t("something went wrong");
             }
 
             Swal.fire({
@@ -1250,7 +1279,7 @@ export default {
             });
           }
         } else {
-          Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
+          Swal.fire(this.$t("your data will not be saved"), "", "info");
         }
       });
     },
@@ -1258,11 +1287,11 @@ export default {
     removeRelations(relations) {
       Swal.fire({
         icon: "question",
-        title: "คุณต้องการลบรายการนี้ใช่หรือไม่ ?",
+        title: this.$t("do you want to delete this item?"),
         showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.dialog_show = false;
@@ -1299,11 +1328,11 @@ export default {
       if (this.user_form) {
         Swal.fire({
           icon: "question",
-          title: "คุณต้องการแก้ไขข้อมูลหรือไม่",
+          title: this.$t("do you want to edit the information?"),
           showDenyButton: false,
           showCancelButton: true,
-          confirmButtonText: "ตกลง",
-          cancelButtonText: "ยกเลิก",
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             try {
@@ -1342,14 +1371,13 @@ export default {
                     params: {
                       action: "view",
                       account_id: this.$route.params.account_id,
-                      from: 'userList'
+                      from: "userList",
                     },
-                    
                   });
                   Swal.fire({
                     icon: "success",
-                    title: "สำเร็จ",
-                    text: "( บันทึกเรียบร้อยแล้ว )",
+                    title: this.$t("succeed"),
+                    text: this.$t("saved successfully"),
                     timer: 3000,
                     timerProgressBar: true,
                     showCancelButton: false,
@@ -1379,7 +1407,7 @@ export default {
                 response?.data?.message ===
                 "Can not change role relations is already."
               ) {
-                this.error_message = "ไม่สามารถเปลี่ยนบทบาทได้!";
+                this.error_message = this.$t("unable to change roles");
                 this.$router.push({
                   name: "UserDetail",
                   params: {
@@ -1391,12 +1419,14 @@ export default {
                 response?.data?.message ===
                 "Can not change Coach role, because Coach is teaching the course."
               ) {
-                this.error_message =
-                  "ไม่สามารถเปลี่ยนบทบาทได้ เนื่องจากโค้ชกำลังอยู่ในสถานะการสอน";
+                this.error_message = this.$t(
+                  "unable to change roles because the coach is in a teaching state"
+                );
               } else if (response?.data?.message === "User not found.") {
                 if (this.user_one_temp.userName !== "") {
-                  this.error_message =
-                    "ชื่อผู้ใช้ OneId ของคุณยังไม่มีอยู่ในระบบ";
+                  this.error_message = this.$t(
+                    "your One Id username does not yet exist in the system"
+                  );
                   this.checkUsernameOneid({
                     username: this.user_one_temp.userName,
                     status: null,
@@ -1416,29 +1446,31 @@ export default {
                     }
                   }, 1000);
                 } else {
-                  this.error_message = "ไม่พบผู้ใช้";
+                  this.error_message = this.$t("this user could not be found");
                 }
               } else {
-                this.error_message = "เกิดข้อผิดพลาด";
+                this.error_message = this.$t("something went wrong");
               }
               Swal.fire({
                 icon: `${
-                  this.error_message === "เกิดข้อผิดพลาด" ? "error" : "warning"
+                  this.error_message === this.$t("something went wrong")
+                    ? "error"
+                    : "warning"
                 }`,
                 title: `${
-                  this.error_message === "เกิดข้อผิดพลาด"
+                  this.error_message === this.$t("something went wrong")
                     ? this.error_message
                     : "คำเตือน"
                 }`,
                 text: `${
-                  this.error_message === "เกิดข้อผิดพลาด"
+                  this.error_message === this.$t("something went wrong")
                     ? ""
                     : `(${this.error_message})`
                 }`,
               });
             }
           } else {
-            Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
+            Swal.fire(this.$t("your data will not be saved"), "", "info");
           }
         });
       }
@@ -1488,6 +1520,221 @@ export default {
     IpadSize() {
       const { sm } = this.$vuetify.breakpoint;
       return !!sm;
+    },
+
+    breadcrumbs() {
+      return [
+        { text: this.$t("manage user"), to: "UserList" },
+        { text: this.$t("edit user information"), to: "" },
+      ];
+    },
+    roles() {
+      return [
+        { role: "Super Admin", privilege: "superAdmin", roleNumber: "R_1" },
+        { role: "Admin", privilege: "admin", roleNumber: "R_2" },
+        { role: this.$t("coach"), privilege: "โค้ช", roleNumber: "R_3" },
+        { role: this.$t("parent"), privilege: "ผู้ปกครอง", roleNumber: "R_4" },
+        { role: this.$t("student"), privilege: "นักเรียน", roleNumber: "R_5" },
+      ];
+    },
+    roleParentTable() {
+      return [
+        {
+          text: this.$t("first name"),
+          value:
+            this.$i18n.locale == "th"
+              ? "student.firstNameTh"
+              : "student.firstNameEng",
+          sortable: false,
+        },
+        {
+          text: this.$t("last name"),
+          value:
+            this.$i18n.locale == "th"
+              ? "student.lastNameTh"
+              : "student.lastNameEng",
+          sortable: false,
+        },
+        {
+          text: this.$t("course name"),
+          value: this.$i18n.locale == "th" ? "courseNameTh" : "courseNameEn",
+          sortable: false,
+        },
+        { text: this.$t("package"), value: "cpo.packageName", sortable: false },
+        { text: this.$t("coach"), value: "coachName", sortable: false },
+        {
+          text: this.$t("course type"),
+          value: "cpo.courseTypeNameTh",
+          sortable: false,
+        },
+        { text: this.$t("periods"), value: "cpo.optionName", sortable: false },
+        { text: this.$t("day"), value: "dates", sortable: false },
+        { text: this.$t("start time"), value: "start", sortable: false },
+        { text: this.$t("end time"), value: "end", sortable: false },
+      ];
+    },
+
+    roleStudentTable() {
+      return [
+        {
+          text: this.$t("first name"),
+          value:
+            this.$i18n.locale == "th"
+              ? "student.firstNameTh"
+              : "student.firstNameEng",
+          sortable: false,
+        },
+        {
+          text: this.$t("last name"),
+          value:
+            this.$i18n.locale == "th"
+              ? "student.lastNameTh"
+              : "student.lastNameEng",
+          sortable: false,
+        },
+        {
+          text: this.$t("course name"),
+          value: this.$i18n.locale == "th" ? "courseNameTh" : "courseNameEn",
+          sortable: false,
+        },
+        { text: this.$t("package"), value: "cpo.packageName", sortable: false },
+        {
+          text: this.$t("coach"),
+          value: this.$i18n.locale == "th" ? "coachNameTh" : "coachNameEn",
+          sortable: false,
+        },
+        {
+          text: this.$t("course type"),
+          value: "cpo.courseTypeNameTh",
+          sortable: false,
+        },
+        { text: this.$t("periods"), value: "cpo.optionName", sortable: false },
+        { text: this.$t("day"), value: "dates", sortable: false },
+        { text: this.$t("start time"), value: "start", sortable: false },
+        { text: this.$t("end time"), value: "end", sortable: false },
+        { text: this.$t("price"), value: "price", sortable: false },
+      ];
+    },
+
+    rules() {
+      return {
+        firstNameThRules: [
+          (val) =>
+            (val || "").length > 1 ||
+            this.$t(
+              "please enter your name (thai) with a length of at least 2 characters"
+            ),
+          (val) =>
+            (val || "").length < 20 ||
+            this.$t(
+              "please enter your name (thai) length not exceeding 20 characters"
+            ),
+          (val) =>
+            /[ก-๏\s]/g.test(val) || this.$t("please enter your thai name"),
+          (val) =>
+            !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+            this.$t("please enter your thai name"),
+        ],
+        firstNameEnRules: [
+          (val) =>
+            (val || "").length > 1 ||
+            this.$t(
+              "please enter your name (english), at least 2 characters long"
+            ),
+          (val) =>
+            (val || "").length < 20 ||
+            this.$t(
+              "please enter your name (english) length not exceeding 20 characters"
+            ),
+          (val) =>
+            /[A-Za-z]/g.test(val) ||
+            this.$t("please enter your name in english"),
+          (val) =>
+            !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+            this.$t("please enter your name in english"),
+        ],
+        lastNameThRules: [
+          (val) =>
+            (val || "").length > 1 ||
+            this.$t(
+              "please enter your last name (Thai), at least 2 characters long"
+            ),
+          (val) =>
+            (val || "").length < 20 ||
+            this.$t(
+              "please enter your last name (Thai) not more than 20 characters"
+            ),
+          (val) =>
+            /[ก-๏\s]/g.test(val) ||
+            this.$t("please enter your last name in thai"),
+          (val) =>
+            !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+            this.$t("please enter your last name in thai"),
+        ],
+        lastNameEnRules: [
+          (val) =>
+            (val || "").length > 1 ||
+            this.$t(
+              "please enter your last name (English), at least 2 characters long"
+            ),
+          (val) =>
+            (val || "").length < 20 ||
+            this.$t(
+              "please enter your last name (English). length not exceeding 20 characters"
+            ),
+          (val) =>
+            /[A-Za-z ]/g.test(val) ||
+            this.$t("please enter your last name in English"),
+          (val) =>
+            !/[\uD800-\uDBFF][\uDC00-\uDFFF ]/g.test(val) ||
+            this.$t("please enter your last name in English"),
+        ],
+        name: [
+          (val) =>
+            (val || "").length > 0 ||
+            this.$t("invalid username Please check again"),
+        ],
+        username: [
+          () =>
+            !this.isMatch ? this.$t("invalid username Please check again") : "",
+        ],
+        email: [
+          (value) => !!value || "Required.",
+          (value) => (value || "").length <= 20 || "Max 20 characters",
+          (value) => {
+            const pattern =
+              /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return pattern.test(value) || this.$t("invalid email");
+          },
+        ],
+        usernameRules: [
+          (val) =>
+            (val || "").length > 5 ||
+            this.$t("please enter a username at least 6 characters long"),
+          (val) =>
+            (val || "").length < 20 ||
+            this.$t("please enter a username no longer than 20 characters"),
+          (val) =>
+            /[A-Za-z0-9 ]/g.test(val) ||
+            this.$t("the username cannot contain special characters"),
+          (val) =>
+            !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+            this.$t("username cannot contain emojis"),
+        ],
+        passwordRules: [
+          (val) =>
+            (val || "").length > 7 ||
+            this.$t(
+              "please enter a password that is at least 8 characters long"
+            ),
+          (val) =>
+            (val || "").length < 20 ||
+            this.$t("please enter a password of no more than 20 characters"),
+          (val) =>
+            !/[ ]/g.test(val) ||
+            this.$t("the username cannot contain special characters"),
+        ],
+      };
     },
   },
   watch: {
