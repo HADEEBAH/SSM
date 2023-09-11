@@ -12,7 +12,7 @@
         <div class="mx-5">
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
-              <v-row v-bind="attrs" v-on="on">
+              <v-row v-bind="attrs" v-on="on" class="align-center">
                 <!-- <v-row class=""> -->
                 <v-menu v-model="menu_locale" offset-y>
                   <template v-slot:activator="{ on, attrs }">
