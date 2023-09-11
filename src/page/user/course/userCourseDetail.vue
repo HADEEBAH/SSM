@@ -310,11 +310,14 @@ export default {
         showDenyButton: false,
         showCancelButton: false,
         confirmButtonText: this.$t("agree"),
-      })
-      if (this.course_data.course_type_id === "CT_2") {
-        this.course_order.price = parseFloat(this.course_data.price_course);
-        this.CreateReserveCourse({ course_data: this.course_order });
-      }
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          if (this.course_data.course_type_id === "CT_2") {
+            this.course_order.price = parseFloat(this.course_data.price_course);
+            this.CreateReserveCourse({ course_data: this.course_order });
+          }
+        }
+      });
     },
     validateRegisterCourse(){
       // eslint-disable-next-line no-unused-vars
