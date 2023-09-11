@@ -29,18 +29,23 @@
         <!-- <div id="google_translate_element"></div> -->
         <v-menu v-model="menu_locale"  offset-y>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn text v-bind="attrs" v-on="on">
-              <label>{{
-                $i18n.locale == "en" ? $t("english") : $t("thai")
-              }}</label>
-              <v-icon dark> mdi-web </v-icon>
+            <v-btn class="mr-2"  text v-bind="attrs" v-on="on">
+              <v-img  class="mr-2" v-if="$i18n.locale == 'en'" src="@/assets/profile/usaFlag.png"></v-img>
+              <v-img  class="mr-2" v-else src="@/assets/profile/thaiFlag.png"></v-img>
+              <label>{{ $i18n.locale == "en" ? $t("english") : $t("thai")}}</label>
             </v-btn>
           </template>
           <v-card>
             <v-list-item @click="setLocale('en')">
+              <v-list-item-avatar size="sm">
+                <v-img src="@/assets/profile/usaFlag.png"></v-img>
+              </v-list-item-avatar>
               {{ $t("english") }}
             </v-list-item>
             <v-list-item @click="setLocale('th')">
+              <v-list-item-avatar size="sm">
+                <v-img src="@/assets/profile/thaiFlag.png"></v-img>
+              </v-list-item-avatar>
               {{ $t("thai") }}
             </v-list-item>
           </v-card>
