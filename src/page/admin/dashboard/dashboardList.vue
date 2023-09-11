@@ -34,10 +34,15 @@
                     class="font-bold text-lg"
                   >
                     {{
+                      get_student_value.countStudents
+                        ? get_student_value.countStudents
+                        : "0"
+                    }}
+                    <!-- {{
                       get_potential.countStudents
                         ? get_potential.countStudents
                         : "0"
-                    }}
+                    }} -->
                   </div>
                   <v-col align="center">
                     <div class="my-3">{{ $t("person") }}</div>
@@ -60,10 +65,16 @@
                     class="font-bold text-lg"
                   >
                     {{
+                      get_student_value.currentStudent.countStudentCurrent
+                        ? get_student_value.currentStudent.countStudentCurrent
+                        : "0"
+                    }}
+
+                    <!-- {{
                       get_potential.currentStudent?.countStudentCurrent
                         ? get_potential.currentStudent?.countStudentCurrent
                         : "0"
-                    }}
+                    }} -->
                   </div>
                   <v-col align="center">
                     <div class="my-3">{{ $t("person") }}</div>
@@ -86,10 +97,17 @@
                     class="font-bold text-lg"
                   >
                     {{
+                      get_student_value.potencialsStudent.countStudentPotencials
+                        ? get_student_value.potencialsStudent
+                            .countStudentPotencials
+                        : "0"
+                    }}
+
+                    <!-- {{
                       get_potential.potencialsStudent?.countStudentPotencials
                         ? get_potential.potencialsStudent.countStudentPotencials
                         : "0"
-                    }}
+                    }} -->
                   </div>
                   <v-col align="center">
                     <div class="my-3">{{ $t("person") }}</div>
@@ -112,10 +130,16 @@
                     class="font-bold text-lg"
                   >
                     {{
+                      get_student_value.countReserve.countStudent
+                        ? get_student_value.countReserve.countStudent
+                        : "0"
+                    }}
+
+                    <!-- {{
                       get_potential.countReserve?.countStudent
                         ? get_potential.countReserve.countStudent
                         : "0"
-                    }}
+                    }} -->
                   </div>
                   <v-col align="center">
                     <div class="my-3">{{ $t("person") }}</div>
@@ -216,8 +240,13 @@
                 style="color: #ff6b81; font-size: 30px; font-weight: 900"
               >
                 {{
-                  get_potential.countCoaches ? get_potential.countCoaches : "0"
+                  get_student_value.countCoaches
+                    ? get_student_value.countCoaches
+                    : "0"
                 }}
+                <!-- {{
+                  get_potential.countCoaches ? get_potential.countCoaches : "0"
+                }} -->
               </v-card-text>
               <v-card-text align="center"> {{ $t("person") }} </v-card-text>
             </v-row>
@@ -257,11 +286,11 @@
                       @input="selectYears()"
                       color="#ff6b81"
                     >
-                      <template v-slot:no-data >
+                      <template v-slot:no-data>
                         <v-list-item>
                           <v-list-item-content>
                             <v-list-item-title>
-                              {{ $t('no data found') }}
+                              {{ $t("no data found") }}
                             </v-list-item-title>
                           </v-list-item-content>
                         </v-list-item>
@@ -280,11 +309,11 @@
                       @input="selectMunth()"
                       color="#ff6b81"
                     >
-                      <template v-slot:no-data >
+                      <template v-slot:no-data>
                         <v-list-item>
                           <v-list-item-content>
                             <v-list-item-title>
-                              {{ $t('no data found') }}
+                              {{ $t("no data found") }}
                             </v-list-item-title>
                           </v-list-item-content>
                         </v-list-item>
@@ -353,11 +382,11 @@
                       @input="selectDonutYears()"
                       color="#ff6b81"
                     >
-                      <template v-slot:no-data >
+                      <template v-slot:no-data>
                         <v-list-item>
                           <v-list-item-content>
                             <v-list-item-title>
-                              {{ $t('no data found') }}
+                              {{ $t("no data found") }}
                             </v-list-item-title>
                           </v-list-item-content>
                         </v-list-item>
@@ -376,11 +405,11 @@
                       @input="selectDonutMounth()"
                       color="#ff6b81"
                     >
-                      <template v-slot:no-data >
+                      <template v-slot:no-data>
                         <v-list-item>
                           <v-list-item-content>
                             <v-list-item-title>
-                              {{ $t('no data found') }}
+                              {{ $t("no data found") }}
                             </v-list-item-title>
                           </v-list-item-content>
                         </v-list-item>
@@ -1108,6 +1137,7 @@ export default {
     this.selected_mounth = this.mapMonth;
     this.donut_mounth = this.mapMonth;
     await this.GetEmptyCourse();
+    this.get_student_value();
     // await this.GetCourseType();
     // await this.GetPotential();
   },
@@ -1115,10 +1145,11 @@ export default {
     ...mapActions({
       GetEmptyCourse: "DashboardModules/GetEmptyCourse",
       GetCourseType: "DashboardModules/GetCourseType",
-      GetPotential: "DashboardModules/GetPotential",
+      // GetPotential: "DashboardModules/GetPotential",
       GetDonut: "DashboardModules/GetDonut",
       GetGraf: "DashboardModules/GetGraf",
       FilterYears: "DashboardModules/FilterYears",
+      GetStudentValue: "DashboardModules/GetStudentValue",
     }),
 
     selectYears() {
@@ -1240,7 +1271,7 @@ export default {
       get_empty_course_open: "DashboardModules/getEmptyCourseOpen",
       get_empty_course_close: "DashboardModules/getEmptyCourseClose",
       get_course_type: "DashboardModules/getCourseType",
-      get_potential: "DashboardModules/getPotential",
+      // get_potential: "DashboardModules/getPotential",
       get_donut: "DashboardModules/getDonut",
       get_graf: "DashboardModules/getGraf",
       dashboard_loading: "DashboardModules/getloading",
@@ -1250,6 +1281,7 @@ export default {
       get_series_line_chart: "DashboardModules/getSeriesLineChart",
       get_labels_line_chart: "DashboardModules/getLabelsLineChart",
       get_labels_line_chart_month: "DashboardModules/getLabelsLineChartMonth",
+      get_student_value: "DashboardModules/getStudentValue",
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;

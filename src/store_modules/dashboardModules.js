@@ -48,7 +48,15 @@ const dashboardModules = {
     labels_chart: [],
     series_line_chart: [],
     labels_line_chart: [],
-    labels_line_chart_month: []
+    labels_line_chart_month: [],
+
+
+
+    get_student_value: [],
+    get_all_student_list: [],
+    get_current_student: [],
+    get_potential_student: [],
+    get_reserve_student: [],
 
   },
   mutations: {
@@ -96,7 +104,22 @@ const dashboardModules = {
     },
     SetGetPotentialStudentList(state, payload) {
       state.get_potential_student_list = payload
-    }
+    },
+    SetGetStudentValue(state, payload) {
+      state.get_student_value = payload
+    },
+    SetGetAllStudentList(state, payload) {
+      state.get_all_student_list = payload
+    },
+    SetGetCurrentStudent(state, payload) {
+      state.get_current_student = payload
+    },
+    SetGetPotentialStudent(state, payload) {
+      state.get_potential_student = payload
+    },
+    SetGetReserveStudent(state, payload) {
+      state.get_reserve_student = payload
+    },
 
   },
   actions: {
@@ -299,7 +322,105 @@ const dashboardModules = {
       } catch (error) {
         context.commit("SetFilterYears", [])
       }
-    }
+    },
+
+    async GetStudentValue(context) {
+      context.commit("SetGetLoading", true)
+
+      try {
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potencial-duplicate`)
+
+
+        if (data.statusCode === 200) {
+          context.commit("SetGetStudentValue", data.data)
+          context.commit("SetGetLoading", false)
+
+        }
+      } catch (error) {
+        context.commit("SetGetStudentValue", [])
+        context.commit("SetGetLoading", false)
+
+      }
+    },
+    async GetAllStudentList(context) {
+      context.commit("SetGetLoading", true)
+
+      try {
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/all-student/`)
+
+
+        if (data.statusCode === 200) {
+          context.commit("SetGetAllStudentList", data.data)
+          context.commit("SetGetLoading", false)
+
+        }
+      } catch (error) {
+        context.commit("SetGetAllStudentList", [])
+        context.commit("SetGetLoading", false)
+
+      }
+    },
+    async GetCurrentStudent(context) {
+      context.commit("SetGetLoading", true)
+
+      try {
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/current-student`)
+
+
+        if (data.statusCode === 200) {
+          context.commit("SetGetCurrentStudent", data.data)
+          context.commit("SetGetLoading", false)
+
+        }
+      } catch (error) {
+        context.commit("SetGetCurrentStudent", [])
+        context.commit("SetGetLoading", false)
+
+      }
+    },
+    async GetPotentialStudent(context) {
+      context.commit("SetGetLoading", true)
+
+      try {
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potential-student`)
+
+
+        if (data.statusCode === 200) {
+          context.commit("SetGetPotentialStudent", data.data)
+          context.commit("SetGetLoading", false)
+
+        }
+      } catch (error) {
+        context.commit("SetGetPotentialStudent", [])
+        context.commit("SetGetLoading", false)
+
+      }
+    },
+    async GetReserveStudent(context) {
+      context.commit("SetGetLoading", true)
+
+      try {
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/reserve-student`)
+
+
+        if (data.statusCode === 200) {
+          data.data.countReserve.studentList.map((items) => {
+            for (const item of items.course) {
+              item.fullDateTh = new Date(item.createdDate).toLocaleDateString(VueI18n.locale == 'th' ? 'th-TH' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+            }
+          })
+          context.commit("SetGetReserveStudent", data.data)
+          context.commit("SetGetLoading", false)
+
+        }
+      } catch (error) {
+        context.commit("SetGetReserveStudent", [])
+        context.commit("SetGetLoading", false)
+
+      }
+    },
+
+
   },
   getters: {
     getEmptyCourse(state) {
@@ -346,6 +467,21 @@ const dashboardModules = {
     },
     getPotentialStudentList(state) {
       return state.get_potential_student_list
+    },
+    getStudentValue(state) {
+      return state.get_student_value
+    },
+    getAllStudentList(state) {
+      return state.get_all_student_list
+    },
+    getCurrentStudent(state) {
+      return state.get_current_student
+    },
+    getPotentialStudent(state) {
+      return state.get_potential_student
+    },
+    getReserveStudent(state) {
+      return state.get_reserve_student
     },
 
   },

@@ -631,7 +631,9 @@
                   outlined
                   v-model="selectedCourse"
                   :items="get_filter_course"
-                  :item-text="$i18n.locale == 'th' ? 'courseNameTh' : 'courseNameEn'"
+                  :item-text="
+                    $i18n.locale == 'th' ? 'courseNameTh' : 'courseNameEn'
+                  "
                   item-value="courseId"
                   multiple
                   color="#FF6B81"
@@ -648,10 +650,14 @@
                   </template>
                   <template v-slot:selection="{ item, index }">
                     <v-chip v-if="index === 0">
-                      <span>{{ $i18n.locale == 'th' ? item.courseNameTh : item.courseNameEn }}</span>
+                      <span>{{
+                        $i18n.locale == "th"
+                          ? item.courseNameTh
+                          : item.courseNameEn
+                      }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
-                      (+{{ selectedCourse.length - 1 }} {{$t("others")}})
+                      (+{{ selectedCourse.length - 1 }} {{ $t("others") }})
                     </span>
                   </template>
                 </v-autocomplete>
@@ -670,7 +676,9 @@
                   outlined
                   v-model="selectedCourseType"
                   :items="courseType"
-                  :item-text="$i18n.locale == 'th' ? 'coursTypeName' : 'coursTypeNameEn'"
+                  :item-text="
+                    $i18n.locale == 'th' ? 'coursTypeName' : 'coursTypeNameEn'
+                  "
                   item-value="courseTypeValue"
                   multiple
                   color="#FF6B81"
@@ -687,10 +695,14 @@
                   </template>
                   <template v-slot:selection="{ item, index }">
                     <v-chip v-if="index === 0">
-                      <span>{{$i18n.locale == 'th' ? item.coursTypeName : item.coursTypeNameEn }}</span>
+                      <span>{{
+                        $i18n.locale == "th"
+                          ? item.coursTypeName
+                          : item.coursTypeNameEn
+                      }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
-                      (+{{ selectedCourseType.length - 1 }} {{$t("others")}})
+                      (+{{ selectedCourseType.length - 1 }} {{ $t("others") }})
                     </span>
                   </template>
                 </v-autocomplete>
@@ -707,7 +719,9 @@
                   outlined
                   v-model="selectedCoach"
                   :items="get_coachs"
-                  :item-text="$i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEh'"
+                  :item-text="
+                    $i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEh'
+                  "
                   item-value="accountId"
                   multiple
                   color="#FF6B81"
@@ -724,10 +738,12 @@
                   </template>
                   <template v-slot:selection="{ item, index }">
                     <v-chip v-if="index === 0">
-                      <span>{{ $i18n.locale == 'th' ? item.fullNameTh : item.fullNameEh }}</span>
+                      <span>{{
+                        $i18n.locale == "th" ? item.fullNameTh : item.fullNameEh
+                      }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
-                      (+{{ selectedCoach.length - 1 }} {{$t("others")}})
+                      (+{{ selectedCoach.length - 1 }} {{ $t("others") }})
                     </span>
                   </template>
                 </v-autocomplete>
@@ -840,8 +856,16 @@ export default {
       "ธันวาคม",
     ],
     courseType: [
-      { coursTypeName: "คอร์สเต็ม", coursTypeNameEn: "Full course", courseTypeValue: "Close" },
-      { coursTypeName: "คอร์สว่าง", coursTypeNameEn: "Course available",courseTypeValue: "Open" },
+      {
+        coursTypeName: "คอร์สเต็ม",
+        coursTypeNameEn: "Full course",
+        courseTypeValue: "Close",
+      },
+      {
+        coursTypeName: "คอร์สว่าง",
+        coursTypeNameEn: "Course available",
+        courseTypeValue: "Open",
+      },
     ],
 
     show_dialog_holoday: false,
@@ -926,10 +950,18 @@ export default {
       GetFilterSchedule: "ManageScheduleModules/GetFilterSchedule",
       GetSearchSchedule: "ManageScheduleModules/GetSearchSchedule",
     }),
-    GenDate(date){
-      if(date){
-        let options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long',  calendar: "buddhist" }
-        return new Date(date).toLocaleDateString(this.$i18n.locale == 'th' ? "th-TH" : "en-US",options)
+    GenDate(date) {
+      if (date) {
+        let options = {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          weekday: "long",
+        };
+        return new Date(date).toLocaleDateString(
+          this.$i18n.locale == "th" ? "th-TH" : "en-US",
+          options
+        );
       }
     },
     checkHour(startTime) {
@@ -979,8 +1011,15 @@ export default {
     },
 
     setHolidaydates(item) {
-      let options = { year: 'numeric', month: 'long', day: 'numeric',  calendar: "buddhist" }
-      this.holidaydatesTh = new Date(item).toLocaleDateString(this.$i18n.locale == 'th'? "th-TH" : "en-US",options)
+      let options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      this.holidaydatesTh = new Date(item).toLocaleDateString(
+        this.$i18n.locale == "th" ? "th-TH" : "en-US",
+        options
+      );
     },
 
     async filterSchedules(courseId, coachId, status) {
@@ -1148,8 +1187,15 @@ export default {
     editHolidays(holiday) {
       this.show_dialog_edit_holoday = true;
       this.setDataEditDialog = { ...holiday };
-      let options = { year: 'numeric', month: 'long', day: 'numeric',  calendar: "buddhist" }
-      this.holidaydatesTh = new Date(holiday.fullDate).toLocaleDateString(this.$i18n.locale == 'th' ? "th-TH" : "en-US",options)
+      let options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      this.holidaydatesTh = new Date(holiday.fullDate).toLocaleDateString(
+        this.$i18n.locale == "th" ? "th-TH" : "en-US",
+        options
+      );
     },
 
     async editHolidaysData() {
@@ -1281,28 +1327,42 @@ export default {
       data_filter_schedule: "ManageScheduleModules/getFilterSchedule",
       data_search_schedule: "ManageScheduleModules/getSearchFilterSchedule",
     }),
-    dates(){
+    dates() {
       return [
-      (val) =>
-        (val || "").length > 0 || this.$t("please select at least 1 day before the holiday"),
-      ]
+        (val) =>
+          (val || "").length > 0 ||
+          this.$t("please select at least 1 day before the holiday"),
+      ];
     },
-    compensation_start_time(){ 
+    compensation_start_time() {
       return [
-        (val) => (val || "").length > 0 || this.$t("please select a start time"),
-      ]
+        (val) =>
+          (val || "").length > 0 || this.$t("please select a start time"),
+      ];
     },
-    compensation_end_time(){
+    compensation_end_time() {
       return [
         (val) => (val || "").length > 0 || this.$t("please select an end time"),
-      ]
+      ];
     },
-    holiday_name(){
-      return [(val) => (val || "").length > 0 || this.$t("please specify the name of the holiday")]
+    holiday_name() {
+      return [
+        (val) =>
+          (val || "").length > 0 ||
+          this.$t("please specify the name of the holiday"),
+      ];
     },
     formattedDate() {
       let date = new Date();
-      return date.toLocaleDateString(this.$i18n.locale == 'th' ? "th-TH": "en-US" ,{ year: 'numeric', month: 'long', day: 'numeric', weekday: 'long',  calendar: "buddhist", })
+      return date.toLocaleDateString(
+        this.$i18n.locale == "th" ? "th-TH" : "en-US",
+        {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          weekday: "long",
+        }
+      );
     },
   },
 };
