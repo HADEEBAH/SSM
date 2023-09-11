@@ -593,7 +593,6 @@ export default {
     this.GetCurrentStudent();
     this.GetPotentialStudent();
     this.GetReserveStudent();
-    this.GetPotentialStudentList();
   },
   methods: {
     ...mapActions({
@@ -602,7 +601,6 @@ export default {
       GetCurrentStudent: "DashboardModules/GetCurrentStudent",
       GetPotentialStudent: "DashboardModules/GetPotentialStudent",
       GetReserveStudent: "DashboardModules/GetReserveStudent",
-      GetPotentialStudentList: "DashboardModules/GetPotentialStudentList",
     }),
 
     dialogDetailEnd(items) {
@@ -644,7 +642,6 @@ export default {
       get_current_student: "DashboardModules/getCurrentStudent",
       get_potential_student: "DashboardModules/getPotentialStudent",
       get_reserve_student: "DashboardModules/getReserveStudent",
-      get_potential_student_list: "DashboardModules/getPotentialStudentList",
     }),
     breadcrumbs() {
       return [
