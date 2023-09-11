@@ -443,6 +443,7 @@
     "please select a teaching date" : "โปรดเลือกวันสอน",
     "please select leave type" : "โปรดเลือกประเภทการลา",
     "please select type" : "โปรดเลือกประเภท",
+    "please select the compensation date again" : "โปรดเลือกวันที่ชดเชยอีกครั้ง",
     "please select your interest level" : "โปรดเลือกระดับความสนใจ",
     "please specify a compensation date": "โปรดระบุวันชดเชย",
     "please specify a location" : "โปรดระบุสถานที่",
@@ -469,6 +470,7 @@
     "please fill out the information correctly": "กรุณากรอกข้อมูลให้ถูกต้อง",
     "please select at least 1 day before the holiday": "กรุณาเลือกอย่างน้อย 1 วันก่อนวันหยุด",
     "please select a student": "โปรดเลือกผู้เรียน",
+    
     "please choose a course" : "( กรุณาเลือกคอร์ส )",
     "please enter your username (English)" : "กรุณาระบุชื่อผู้ใช้งาน(ภาษาอังกฤษ)",
     "please specify the name of the competition": "กรุณาระบุชื่อการแข่งขัน",

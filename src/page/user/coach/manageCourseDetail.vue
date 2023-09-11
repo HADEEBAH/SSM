@@ -1866,6 +1866,18 @@ export default {
         if (val.totalDay - val.countCheckIn === 1) {
           graduate_student_id.push({ studentId: val.studentId });
         }
+        if(!val.compensationDate){
+          Swal.fire({
+            icon: "question",
+            title: this.$t("please select the compensation date again"),
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonText: this.$t("agree"),
+            cancelButtonText: this.$t("cancel"),
+          })
+          val.compensationDate == ""
+          val.compensation_date_str == ""
+        }
       });
 
       this.$refs.validate_form.validate();
