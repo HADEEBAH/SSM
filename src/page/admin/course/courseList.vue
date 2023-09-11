@@ -106,7 +106,7 @@
           </v-row>
         </template>
         <template v-slot:[`item.status`]="{ item }">
-          <v-autocomplete
+          <v-select
             @change="updateStatusCourse(item, item.course_id, item.status)"
             dense
             outlined
@@ -117,7 +117,25 @@
             item-value="value"
             v-model="item.status"
           >
-          </v-autocomplete>
+          <template v-slot:selection="{ item }">
+            <v-list-item-title>
+              <v-icon :color="item.color">
+                {{item.icon  }}
+              </v-icon>
+              {{ $i18n.locale == 'th' ? item.label : item.label_en }} 
+            </v-list-item-title>
+          </template>
+            <template v-slot:item="{ props, item }">
+                <v-list-item-avatar v-bind="props">
+                  <v-icon :color="item.color">
+                    {{item.icon  }}
+                  </v-icon>
+                </v-list-item-avatar>
+                <v-list-item-title v-bind="props">
+                  {{ $i18n.locale == 'th' ? item.label : item.label_en }} 
+                </v-list-item-title>
+            </template>
+          </v-select>
         </template>
         <template v-slot:[`item.actions`]="{ item }">
           <v-btn
@@ -158,9 +176,9 @@ export default {
     search: "",
     tab: "all",
     status: [
-      { label: "เปิดคอร์ส", label_en: "Open", value: "Active" },
-      { label: "ปิดคอร์สชั่วคราว", label_en: "Temporarily closed", value: "TemporaryInActive" },
-      { label: "ปิดคอร์ส", label_en: "closed", value: "InActive" },
+      { label: "เปิดคอร์ส", label_en: "Open", value: "Active" , icon: "mdi-play-circle" , color: "green"},
+      { label: "ปิดคอร์สชั่วคราว", label_en: "Temporarily closed", value: "TemporaryInActive", icon:"mdi-pause-circle" , color: "#f1c232" },
+      { label: "ปิดคอร์ส", label_en: "closed", value: "InActive", icon:"mdi-close-circle" , color: "red"},
     ],
   }),
   created() {
