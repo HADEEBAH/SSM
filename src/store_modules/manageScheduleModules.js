@@ -2,7 +2,6 @@ import axios from "axios";
 import VueCookie from "vue-cookie";
 import Swal from "sweetalert2";
 import VueI18n from "../i18n";
-
 const manageScheduleModules = {
   namespaced: true,
   state: {
@@ -325,7 +324,6 @@ const manageScheduleModules = {
         if (data.statusCode === 200) {
           let eventSchadule = [];
           data.data.map((item) => {
-            console.log(item)
             let times = null;
             let colors;
             if (item.type === "holiday") {
@@ -376,7 +374,6 @@ const manageScheduleModules = {
               selectedDate: item.selectedDate,
               itmeData: item
             });
-
             dataInSchadule = eventSchadule;
           });
           context.commit("SetGetAllHolidaysIsLoading", false)
