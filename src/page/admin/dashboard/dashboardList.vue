@@ -5,6 +5,8 @@
 
       <headerPage :title="$t('dashboard')"></headerPage>
       <!-- TOP CARD -->
+      <!-- <pre>{{ get_student_value }}</pre> -->
+
       <v-row dense>
         <!-- STUDENT -->
         <v-col cols="12" sm="12" md="12" lg="7">
@@ -38,11 +40,6 @@
                         ? get_student_value.countStudents
                         : "0"
                     }}
-                    <!-- {{
-                      get_potential.countStudents
-                        ? get_potential.countStudents
-                        : "0"
-                    }} -->
                   </div>
                   <v-col align="center">
                     <div class="my-3">{{ $t("person") }}</div>
@@ -69,12 +66,6 @@
                         ? get_student_value.currentStudent.countStudentCurrent
                         : "0"
                     }}
-
-                    <!-- {{
-                      get_potential.currentStudent?.countStudentCurrent
-                        ? get_potential.currentStudent?.countStudentCurrent
-                        : "0"
-                    }} -->
                   </div>
                   <v-col align="center">
                     <div class="my-3">{{ $t("person") }}</div>
@@ -102,12 +93,6 @@
                             .countStudentPotencials
                         : "0"
                     }}
-
-                    <!-- {{
-                      get_potential.potencialsStudent?.countStudentPotencials
-                        ? get_potential.potencialsStudent.countStudentPotencials
-                        : "0"
-                    }} -->
                   </div>
                   <v-col align="center">
                     <div class="my-3">{{ $t("person") }}</div>
@@ -134,12 +119,6 @@
                         ? get_student_value.countReserve.countStudent
                         : "0"
                     }}
-
-                    <!-- {{
-                      get_potential.countReserve?.countStudent
-                        ? get_potential.countReserve.countStudent
-                        : "0"
-                    }} -->
                   </div>
                   <v-col align="center">
                     <div class="my-3">{{ $t("person") }}</div>
@@ -244,9 +223,6 @@
                     ? get_student_value.countCoaches
                     : "0"
                 }}
-                <!-- {{
-                  get_potential.countCoaches ? get_potential.countCoaches : "0"
-                }} -->
               </v-card-text>
               <v-card-text align="center"> {{ $t("person") }} </v-card-text>
             </v-row>
@@ -1137,7 +1113,7 @@ export default {
     this.selected_mounth = this.mapMonth;
     this.donut_mounth = this.mapMonth;
     await this.GetEmptyCourse();
-    this.get_student_value();
+    this.GetStudentValue();
     // await this.GetCourseType();
     // await this.GetPotential();
   },
