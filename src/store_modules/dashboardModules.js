@@ -165,31 +165,31 @@ const dashboardModules = {
       }
     },
 
-    async GetPotential(context) {
-      try {
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potencial/`)
-        // let { data } = await axios.get(`http://localhost:3000/api/v1/dashboard/potencial/`)
-        if (data.statusCode === 200) {
-          data.data.countReserve.studentList.map((items) => {
-            for (const item of items.course) {
-              item.fullDateTh = new Date(item.createdDate).toLocaleDateString(
-                "th-TH",
-                {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                }
-              )
-            }
-          })
-          await context.commit("SetGetLoading", false)
-          await context.commit("SetGetPotential", data.data)
-        }
+    // async GetPotential(context) {
+    //   try {
+    //     let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potencial/`)
+    //     // let { data } = await axios.get(`http://localhost:3000/api/v1/dashboard/potencial/`)
+    //     if (data.statusCode === 200) {
+    //       data.data.countReserve.studentList.map((items) => {
+    //         for (const item of items.course) {
+    //           item.fullDateTh = new Date(item.createdDate).toLocaleDateString(
+    //             "th-TH",
+    //             {
+    //               year: "numeric",
+    //               month: "long",
+    //               day: "numeric",
+    //             }
+    //           )
+    //         }
+    //       })
+    //       await context.commit("SetGetLoading", false)
+    //       await context.commit("SetGetPotential", data.data)
+    //     }
 
-      } catch (error) {
-        await context.commit("SetGetLoading", false)
-      }
-    },
+    //   } catch (error) {
+    //     await context.commit("SetGetLoading", false)
+    //   }
+    // },
 
     async GetPotentialStudentList(context) {
       context.commit("SetGetLoading", true)
