@@ -178,7 +178,7 @@ export default {
     status: [
       { label: "เปิดคอร์ส", label_en: "Open", value: "Active" , icon: "mdi-play-circle" , color: "green"},
       { label: "ปิดคอร์สชั่วคราว", label_en: "Temporarily closed", value: "TemporaryInActive", icon:"mdi-pause-circle" , color: "#f1c232" },
-      { label: "ปิดคอร์ส", label_en: "closed", value: "InActive", icon:"mdi-close-circle" , color: "red"},
+      { label: "ปิดคอร์ส", label_en: "Closed", value: "InActive", icon:"mdi-close-circle" , color: "red"},
     ],
   }),
   created() {
