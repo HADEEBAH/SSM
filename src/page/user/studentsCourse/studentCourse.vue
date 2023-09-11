@@ -8,7 +8,7 @@
       >
         <span class="text-lg font-bold">
           <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-          ยังไม่มีการเช็คอิน
+           {{ $t("no check in") }}
         </span>
       </v-card-text>
     </div>

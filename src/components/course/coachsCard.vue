@@ -55,7 +55,7 @@
                   :item-text="$i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEh'"
                   item-color="pink"
                   @change="findTeachDays(coach, coach_index)"
-                  :rules="rules.course"
+                  :rules="course"
                   :placeholder="$t('coach')"
                 >
                   <template v-slot:no-data>
@@ -91,7 +91,7 @@
                   :outlined="!disable"
                   :filled="disable"
                   chips
-                  :rules="rules.class_date"
+                  :rules="class_date"
                   deletable-chips
                   item-color="pink"
                   multiple
@@ -191,7 +191,7 @@
                             class_date.class_date_range.start_time
                           )
                         "
-                        :rules="rules.start_time"
+                        :rules="start_time"
                         v-model="class_date.class_date_range.start_time"
                       ></v-text-field>
                       <VueTimepicker
@@ -224,7 +224,7 @@
                         :filled="disable"
                         dense
                         style="position: absolute; z-index: 4"
-                        :rules="rules.end_time"
+                        :rules="end_time"
                         v-model="class_date.class_date_range.end_time"
                       ></v-text-field>
                       <VueTimepicker
@@ -252,7 +252,7 @@
                     type="number"
                     :suffix="$t('person')"
                     @focus="$event.target.select()"
-                    :rules="rules.students"
+                    :rules="students"
                     @change="ChangeCourseData(course_data)"
                     v-model="class_date.students"
                     :placeholder="$t('specify students who can accept')"
@@ -342,13 +342,6 @@ export default {
       { label: "วันศุกร์", label_en : "Friday",value: 5 },
       { label: "วันเสาร์", label_en : "Saturday", value: 6 },
     ],
-    rules: {
-      course: [(val) => (val || "").length > 0 || "โปรดเลือกโค้ช"],
-      class_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันที่"],
-      start_time: [(val) => (val || "").length > 0 || "โปรดเลือกเวลาเริ่ม"],
-      end_time: [(val) => (val || "").length > 0 || "โปรดเลือกเวลาสิ้นสุด"],
-      students: [(val) => (val || "") > 0 || "โปรดระบุจำนวนนักเรียน"],
-    },
   }),
 
   created() {
@@ -362,6 +355,21 @@ export default {
       teach_days: "CourseModules/getTeachDays",
       course_monitors: "CourseMonitorModules/getCourseMonitor",
     }),
+    course(){
+      return [(val) => (val || "").length > 0 || this.$t("please select a coach")]
+    },
+    class_date() {
+      return [(val) => (val || "").length > 0 || this.$t("please select a date")] 
+    },
+    start_time(){
+      return [(val) => (val || "").length > 0 || this.$t("please select a start time")]
+    },
+    end_time(){
+      return [(val) => (val || "").length > 0 || this.$t("please select an end time")]
+    },
+    students(){
+      return [(val) => (val || "") > 0 || this.$t("please specify the number of students")]
+    },
     setFunction() {
       if (this.course_data.course_id) {
         this.GetShortCourseMonitor({
