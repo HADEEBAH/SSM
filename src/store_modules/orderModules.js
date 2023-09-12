@@ -320,6 +320,7 @@ const orderModules = {
               }
               order.course_name = `${order.course?.courseNameTh}(${order.course?.courseNameEn})`;
               order.student_name = `${order.user?.firstNameTh} ${order.user?.lastNameTh}`;
+              order.student_name_en = `${order.user?.firstNameEng} ${order.user?.lastNameEng}`;
             }
           }
           context.commit("SetOrders", data.data);
@@ -348,22 +349,28 @@ const orderModules = {
         );
         if (data.statusCode == 200) {
           let student_name_list = [];
+          let student_name_list_en = []
           let student_list = [];
           for (const order_item of data.data.orderItem) {
+            if(order_item?.course?.dayOfWeekName){
+              order_item.course.dayOfWeekNameStr = dayOfWeekArray(order_item.course.dayOfWeekName)
+            }
             if (order_item.students.length > 0) {
               order_item.students.forEach((student) => {
-                if (
-                  !student_name_list.includes(
-                    `${student?.firstNameTh} ${student?.lastNameTh}`
-                  )
+                console.log(student)
+                if (!student_name_list.includes(`${student?.firstNameTh} ${student?.lastNameTh}` )
                 ) {
                   student_name_list.push(
                     `${student?.firstNameTh} ${student?.lastNameTh}`
                   );
+                  student_name_list_en.push(
+                    `${student?.firstNameEng} ${student?.lastNameEng}`
+                  )
                   student_list.push(student);
                 }
               });
               data.data.student_name_list = student_name_list.join(", ");
+              data.data.student_name_list_en = student_name_list_en.join(", ")
             }
           }
           if (data.data.payment?.paymentDate) {
