@@ -63,13 +63,13 @@
               <v-col>
                 <span class="text-[#999999]">{{ $t("leave date") }}:</span>
                 <div class="text-[#2F3542] font-semibold mr-2">
-                  {{ `${coach_leave.startThDate} - ${coach_leave.endThDate}` }}
+                  {{ `${GenDate(coach_leave.startDate)} - ${GenDate(coach_leave.endDate)}` }}
                 </div>
               </v-col>
               <v-col>
                 <span class="text-[#999999] ml-2">{{ $t("leave type") }}:</span>
                 <div class="text-[#2F3542] font-semibold ml-2">
-                  {{ coach_leave.leaveTypeStr }}
+                  {{ $t(coach_leave.leaveType) }}
                 </div>
               </v-col>
               <v-col>
@@ -89,7 +89,7 @@
                   >{{ $t("date of request") }}:
                 </span>
                 <div class="text-[#2F3542] font-semibold">
-                  {{ coach_leave.createDateTh }}
+                  {{ GenDate(coach_leave.createdDate) }}
                 </div>
               </v-col>
             </v-row>
@@ -105,7 +105,7 @@
               <v-icon color="#ff6b81">mdi-calendar-outline</v-icon>
             </v-col>
             <v-col class="font-bold text-lg">
-              {{ date.date ? GenDateStr(new Date(date.date)) : "-" }}
+              {{ date.date ? GenDate(new Date(date.date)) : "-" }}
             </v-col>
           </v-row>
           <v-card
@@ -193,7 +193,7 @@
                             dense
                             outlined
                             hide-details
-                            v-model="course.compensationDate_str"
+                            :value="GenDate(course.compensationDate_str)"
                             readonly
                             :placeholder="$t('choose a compensation date')"
                             v-bind="attrs"
@@ -545,6 +545,14 @@ export default {
       updateStatusCoachLeaveAndCoach:
         "CoachModules/updateStatusCoachLeaveAndCoach",
     }),
+    GenDate(date){
+      const options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      return new Date(date).toLocaleDateString(this.$i18n.locale == 'th' ? 'th-TH': 'en-US',options)
+    },
     ChengeTimeMin(time, index_course, index_date, type) {
       if (time.mm === "") {
         time.mm = "00";
@@ -635,17 +643,9 @@ export default {
         day: "numeric",
       };
       course.compensationDate_str = new Date(date).toLocaleDateString(
-        "th-TH",
+        this.$i18n.locale =='th' ? "th-TH" : "en-US",
         options
       );
-    },
-    GenDateStr(date) {
-      const options = {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      };
-      return date.toLocaleDateString("th-TH", options);
     },
     closeDisapprovedDialog() {
       this.show_disapproved = false;

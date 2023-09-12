@@ -303,42 +303,21 @@ const orderModules = {
                   });
                 }
               }
-              let inputDate =
-                order.payment_status === "success"
-                  ? order.payment?.paymentDate
-                  : "";
-              const year = parseInt(inputDate?.substring(0, 4)) + 543;
-              const month = parseInt(inputDate?.substring(4, 6));
-              const day = inputDate?.substring(6, 8);
-
-              const monthNames = [
-                "",
-                "มกราคม",
-                "กุมภาพันธ์",
-                "มีนาคม",
-                "เมษายน",
-                "พฤษภาคม",
-                "มิถุนายน",
-                "กรกฎาคม",
-                "สิงหาคม",
-                "กันยายน",
-                "ตุลาคม",
-                "พฤศจิกายน",
-                "ธันวาคม",
-              ];
-
-              const formatted = `${day} ${monthNames[month]} ${year}`;
-
-              let cutTime =
-                order.payment_status === "success"
-                  ? order.payment?.paymentTime
-                  : "";
-              let HH = cutTime?.slice(0, 2);
-              let mm = cutTime?.slice(2, 4);
-              order.paid_date =
-                order.payment_status === "success"
-                  ? `${formatted} ${HH + ":" + mm}`
-                  : "";
+              if(order.payment_status === "success"){
+                let inputDate = order.payment?.paymentDate
+                let cutTime =order.payment?.paymentTime
+                const year = parseInt(inputDate?.substring(0, 4));
+                const month = parseInt(inputDate?.substring(4, 6));
+                const day = inputDate?.substring(6, 8);
+                const formatted = `${year}-${month}-${day}`;
+                let HH = cutTime?.slice(0, 2);
+                let mm = cutTime?.slice(2, 4);
+                order.paid_date = `${formatted}`
+                order.paid_time = `${HH + ":" + mm}`
+              }else{
+                order.paid_date = ""
+                order.paid_time = ""
+              }
               order.course_name = `${order.course?.courseNameTh}(${order.course?.courseNameEn})`;
               order.student_name = `${order.user?.firstNameTh} ${order.user?.lastNameTh}`;
             }

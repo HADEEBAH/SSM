@@ -1008,23 +1008,14 @@ const coachModules = {
         };
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/detail/${coach_leave_id}`, config)
         if (data.statusCode == 200) {
-          const options = {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          };
-          data.data.startThDate = new Date(data.data.startDate).toLocaleDateString("th-TH", options)
-          data.data.endThDate = new Date(data.data.endDate).toLocaleDateString("th-TH", options)
-          data.data.createDateTh = new Date(data.data.createdDate).toLocaleDateString("th-TH", options)
           for (let date of data.data.dates) {
             for (let course of date.courses) {
               if (course.type === "date") {
-
                 let startPart = course.compensationStartTime.split(":")
                 let endPart = course.compensationEndTime.split(":")
                 course.menuCompensationDate = false
                 course.compensationDate = course.compensationDate ? new Date(course.compensationDate).toISOString().split('T')[0] : null,
-                  course.compensationDate_str = new Date(course.compensationDate).toLocaleDateString("th-TH", options)
+                  course.compensationDate_str = course.compensationDate
                 course.compensationStartTime = `${startPart[0] + ':' + startPart[1]}`
                 course.compensationStartTimeObj = { HH: startPart[0], mm: startPart[1] }
                 course.compensationEndTime = `${endPart[0] + ':' + endPart[1]}`

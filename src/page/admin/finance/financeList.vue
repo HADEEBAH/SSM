@@ -126,6 +126,9 @@
             })
           }}
         </template>
+        <template v-slot:[`item.paid_date`]="{ item }">
+          {{item.paid_date ? GenDate(item.paid_date)+""+item.paid_time : "" }}
+        </template>
         <template v-slot:[`item.payment_status`]="{ item }">
           <div
             class="d-flex align-center pa-1 rounded-lg"
@@ -440,13 +443,8 @@
                           :value="
                             !export_filter.date_doc_start
                               ? export_filter.date_doc_start
-                              : new Date(
-                                  export_filter.date_doc_start
-                                ).toLocaleDateString('th-TH', {
-                                  year: 'numeric',
-                                  month: 'long',
-                                  day: 'numeric',
-                                })
+                              : GenDate(export_filter.date_doc_start)
+                                
                           "
                           :label="$t('please select a start time')"
                           outlined
@@ -745,7 +743,6 @@ export default {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
-        calendar: 'buddhist'
       })
     },
     remove(item) {
