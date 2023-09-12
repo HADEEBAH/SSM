@@ -125,3 +125,7 @@ padding: 5px 10px; /* Add padding */
 body{
     top: 0px !important; 
 }
+.pdf-iframe{
+    position: relative; 
+    height: 93vh;
+}

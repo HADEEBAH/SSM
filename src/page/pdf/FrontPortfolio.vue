@@ -2,6 +2,14 @@
   <v-app>
     <v-container>
       <loadingOverlay :loading="true"></loadingOverlay>
+      <v-dialog v-model="pdf_open" fullscreen>
+        <v-card class="pa-2" align="right" >
+            <v-btn icon @click="CloseDialog()">
+              <v-icon>mdi-close</v-icon> 
+            </v-btn>
+            <iframe class="w-full pdf-iframe" id="printPdf" name="printPdf"></iframe>
+        </v-card>
+      </v-dialog>
     </v-container>
   </v-app>
 </template>
@@ -14,6 +22,7 @@ import { mapActions, mapGetters } from 'vuex'
     name: "FrontPortfolio",
     components: {loadingOverlay},
     data: () => ({
+      pdf_open: false,
     }),
     created() {
       this.GetUserById(this.$route.params.account_id)
@@ -25,6 +34,11 @@ import { mapActions, mapGetters } from 'vuex'
       ...mapActions({
         GetUserById : "UserModules/GetUserById",
       }),
+      CloseDialog(){
+        this.$router.push({
+          name: 'UserProfile',
+        })
+      },
       async exportPdf() {
         // Define the image paths
         let backgroundImagePath = require('@/assets/FrontPortfolio/bg-front.png');
@@ -151,14 +165,10 @@ import { mapActions, mapGetters } from 'vuex'
             profile : this.data_user_by_id.image ? this.data_user_by_id.imageUrl : defaultProfileImageDataUrl
           }
         }
-        //  pdfMake.createPdf(docDefinition).open({}, window);
-        let pdfDoc = pdfMake.createPdf(docDefinition);
-        pdfDoc.getBlob((blob) => {
-          var url = URL.createObjectURL(blob);
-          // Open the PDF in a new tab
-          window.open(url);
-          this.$router.push({name : "UserProfile"})
-        });
+        this.pdf_open = true
+        setTimeout(()=>{
+          pdfMake.createPdf(docDefinition).open({}, window.frames['printPdf']);
+        },500)
        
       },
       loadImageFromFile(filePath) {

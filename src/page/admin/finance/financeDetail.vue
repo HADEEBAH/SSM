@@ -10,7 +10,7 @@
                 >: {{ `${$route.params.order_id}` }}</rowData
               >
               <rowData icon="mdi-rename-box-outline" :title="$t('student list')"
-                >: {{ order_detail.student_name_list }}</rowData
+                >: {{ $i18n.locale == 'th' ? order_detail.student_name_list : order_detail.student_name_list_en }}</rowData
               >
             </v-col>
             <v-col cols="12" sm="auto">
@@ -402,6 +402,14 @@
           </v-card>
         </v-col>
       </v-row>
+      <v-dialog v-model="pdf_open" fullscreen>
+        <v-card class="pa-2" align="right" >
+            <v-btn icon @click="pdf_open=false">
+              <v-icon>mdi-close</v-icon> 
+            </v-btn>
+            <iframe class="w-full pdf-iframe" id="printPdf" name="printPdf"></iframe>
+        </v-card>
+      </v-dialog>
     </v-container>
   </v-app>
 </template>
@@ -424,6 +432,7 @@ export default {
   components: { headerPage, rowData },
   mixins: [mixin],
   data: () => ({
+    pdf_open: false,
     dialog_show: false,
     pdf_lang: "th",
     payment_status: [
@@ -457,7 +466,11 @@ export default {
   mounted() {
     this.pdf_lang = this.$i18n.locale;
   },
-  watch: {},
+  watch: {
+    "$i18n.locale": function(){
+      this.GetOrderDetail({ order_number: this.$route.params.order_id });
+    }
+  },
   computed: {
     ...mapGetters({
       order_detail: "OrderModules/getOrderDetail",
@@ -941,12 +954,10 @@ export default {
             },
           },
         };
-        let pdfDoc = pdfMake.createPdf(docDefinition);
-        pdfDoc.getBlob((blob) => {
-          var url = URL.createObjectURL(blob);
-          // Open the PDF in a new tab
-          window.open(url);
-        });
+        this.pdf_open = true
+        setTimeout(()=>{
+          pdfMake.createPdf(docDefinition).open({}, window.frames['printPdf']);
+        },500)
       }
     },
     GenCourseItem() {
