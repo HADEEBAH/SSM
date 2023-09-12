@@ -1057,7 +1057,7 @@ const CourseModules = {
                     "mm": endTimePart[1] ? endTimePart[1].padStart(2, '0') : "00"
                   }
                   class_dates.push({
-                    start_time: moment( time.start,"HH:mm"),
+                    start_time: moment(time.start, "HH:mm"),
                     class_date_range: {
                       time_id: time.timeId ? time.timeId : null,
                       day_of_week_id: time.dayOfWeekId ? time.dayOfWeekId : null,
@@ -1208,10 +1208,10 @@ const CourseModules = {
             }
           }
           if (payload.coachs.length > 0) {
-            
+
             for await (let coach of payload.coachs) {
               let teach_day = teach_day_data.filter(v => v.course_coach_id === coach.course_coach_id)
-              teach_day.map((v)=>{
+              teach_day.map((v) => {
                 v.class_date.sort((a, b) => {
                   const startTimeA = moment(a.start_time);
                   const startTimeB = moment(b.start_time);
@@ -1454,18 +1454,18 @@ const CourseModules = {
 
     },
     // COURSE :: POTENTIAL
-    async GetPotential(context, { course_id }) {
-      try {
-        let endpoint = `${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/potential/${course_id}`
-        //  let endpoint = `http://localhost:3000/api/v1/coachmanagement/course/potential/${course_id}`
-        let { data } = await axios.get(endpoint)
-        if (data.statusCode === 200) {
-          context.commit("SetCoursePotential", data.data)
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    },
+    // async GetPotential(context, { course_id }) {
+    //   try {
+    //     let endpoint = `${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/potential/${course_id}`
+    //     //  let endpoint = `http://localhost:3000/api/v1/coachmanagement/course/potential/${course_id}`
+    //     let { data } = await axios.get(endpoint)
+    //     if (data.statusCode === 200) {
+    //       context.commit("SetCoursePotential", data.data)
+    //     }
+    //   } catch (error) {
+    //     console.log(error)
+    //   }
+    // },
     // COURSE :: Delete Day Of Week
     async DeleteDayOfWeek(context, { day_of_week_id }) {
       try {

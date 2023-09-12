@@ -1764,7 +1764,6 @@ export default {
         year: "numeric",
         month: "long",
         day: "numeric",
-        calendar: "buddhist",
       };
       return date.toLocaleDateString(
         this.$i18n.locale == "th" ? "th-TH" : "en-US",
