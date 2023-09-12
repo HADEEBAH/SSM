@@ -77,6 +77,7 @@
     "can't find full course information" : "ไม่พบข้อมูลของคอร์สเต็ม",
     "can't find available course information" :"ไม่พบข้อมูลของคอร์สว่าง",
     "can't find information on students in care": "ไม่พบข้อมูลของนักเรียนในความดูแล",
+    "cannot register , The seats are full": "ไม่สามารถลงทะเบียนได้ ที่นั่งเต็มแล้ว",
     "cancel" : "ยกเลิก",
     "cancel course purchase" : "ยกเลิกการซื้อคอร์ส",
     "cancel reservation": "ยกเลิกการจอง",

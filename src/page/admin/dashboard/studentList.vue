@@ -18,7 +18,7 @@
       </v-col>
     </v-row>
     <!-- 4 TAB -->
-    <v-row dense class="mb-10" v-if="get_potential_student_list.countStudents">
+    <v-row dense class="mb-10">
       <!-- TAB 1  ผู้เรียนทั้งหมด-->
       <v-col cols="12" sm="6" md="6" lg="3" @click="tab = 'allLearners'">
         <img-card
@@ -35,7 +35,7 @@
           <template v-slot:detail>
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
-                {{ get_potential_student_list.countStudents }}
+                {{ get_all_student_list.countStudents }}
               </v-col>
               <v-col class="text-sm">{{ $t("person") }}</v-col>
             </v-row>
@@ -58,9 +58,7 @@
           <template v-slot:detail>
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
-                {{
-                  get_potential_student_list.currentStudent.countStudentCurrent
-                }}
+                {{ get_current_student.currentStudent.countStudentCurrent }}
               </v-col>
               <v-col class="text-sm">{{ $t("person") }}</v-col>
             </v-row>
@@ -94,8 +92,7 @@
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
                 {{
-                  get_potential_student_list.potencialsStudent
-                    .countStudentPotencials
+                  get_potential_student.potencialsStudent.countStudentPotencials
                 }}
               </v-col>
               <v-col class="text-sm">{{ $t("person") }}</v-col>
@@ -120,7 +117,7 @@
           <template v-slot:detail>
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
-                {{ get_potential_student_list.countReserve.studentList.length }}
+                {{ get_reserve_student.countReserve.studentList.length }}
               </v-col>
               <v-col class="text-sm">{{ $t("person") }}</v-col>
             </v-row>
@@ -128,12 +125,8 @@
         </img-card>
       </v-col>
     </v-row>
-
     <!-- Detail Tab 1 -->
-    <div
-      v-for="(items, index) in get_potential_student_list.studentAll"
-      :key="index"
-    >
+    <div v-for="(items, index) in get_all_student_list.studentAll" :key="index">
       <v-data-table
         :headers="data_tab_one"
         @page-count="pageCount = $event"
@@ -143,9 +136,7 @@
         v-if="tab == 'allLearners'"
       >
         <template v-slot:[`item.course`]="{ item }">
-          <div text color="#FF6B81">
-            {{ `${item.courseCount} ${$t("courses")}` }}
-          </div>
+          {{ `${item.courseCount} ${$t("courses")}` }}
         </template>
 
         <template v-slot:[`item.actions`]="{ item }">
@@ -176,7 +167,7 @@
         :headers="data_tab_two"
         @page-count="pageCount = $event"
         class="elevation-1 header-table"
-        :items="get_potential_student_list.currentStudent.studentList"
+        :items="get_current_student.currentStudent.studentList"
         :search="search"
       >
         <template v-slot:[`item.course`]="{ item }">
@@ -211,7 +202,7 @@
         :headers="data_tab_three"
         @page-count="pageCount = $event"
         class="elevation-1 header-table"
-        :items="get_potential_student_list.potencialsStudent.potencials"
+        :items="get_potential_student.potencialsStudent.potencials"
         :search="search"
       >
         <template v-slot:[`item.courseDetail`]="{ item }">
@@ -249,7 +240,7 @@
         :headers="data_tab_four"
         @page-count="pageCount = $event"
         class="elevation-1 header-table"
-        :items="get_potential_student_list.countReserve.studentList"
+        :items="get_reserve_student.countReserve.studentList"
         :search="search"
       >
         <template v-slot:[`item.courseDetail`]="{ item }">
@@ -314,7 +305,9 @@
                 outlined
                 readonly
                 dense
-                :value="data.courseNameTh"
+                :value="
+                  $i18n.locale == 'th' ? data.courseNameTh : data.courseNameEn
+                "
                 :label="$t('course name')"
                 color="#FF6B81"
               >
@@ -331,7 +324,9 @@
                 outlined
                 readonly
                 dense
-                :value="data.coachName"
+                :value="
+                  $i18n.locale == 'th' ? data.coachName : data.coachNameEn
+                "
                 :label="$t('coach name')"
                 color="#FF6B81"
               >
@@ -348,7 +343,11 @@
                 outlined
                 readonly
                 dense
-                :value="data.courseTypeNameTh"
+                :value="
+                  $i18n.locale == 'th'
+                    ? data.courseTypeNameTh
+                    : data.courseTypeNameEn
+                "
                 :label="$t('course type')"
                 color="#FF6B81"
               >
@@ -365,7 +364,9 @@
                 outlined
                 readonly
                 dense
-                :value="`${data.optionName} (${data.packageName})`"
+                :value="`${
+                  $i18n.locale == 'th' ? data.optionName : data.optionNameEn
+                } (${data.packageName})`"
                 :label="$t('package')"
                 color="#FF6B81"
               >
@@ -413,7 +414,9 @@
                 outlined
                 readonly
                 dense
-                :value="item.courseNameTh"
+                :value="
+                  $i18n.locale == 'th' ? item.courseNameTh : item.courseNameEn
+                "
                 :label="$t('course name')"
                 color="#FF6B81"
               >
@@ -429,7 +432,9 @@
                 outlined
                 readonly
                 dense
-                :value="item.coachName"
+                :value="
+                  $i18n.locale == 'th' ? item.coachName : item.coachNameEn
+                "
                 :label="$t('coach name')"
                 color="#FF6B81"
               >
@@ -465,7 +470,9 @@
                 outlined
                 readonly
                 dense
-                :value="`${item.optionName}  (${item.packageName})`"
+                :value="`${
+                  $i18n.locale == 'th' ? item.optionName : item.optionNameEn
+                }  (${item.packageName})`"
                 :label="$t('package')"
                 color="#FF6B81"
               >
@@ -482,7 +489,11 @@
                 outlined
                 readonly
                 dense
-                :value="item.courseTypeNameTh"
+                :value="
+                  $i18n.locale == 'th'
+                    ? item.courseTypeNameTh
+                    : item.courseTypeNameEn
+                "
                 :label="$t('course type')"
                 color="#FF6B81"
               >
@@ -499,7 +510,7 @@
                 outlined
                 readonly
                 dense
-                :value="item.fullDateTh"
+                :value="fulldate(item.createdDate)"
                 :label="$t('reserve date')"
                 color="#FF6B81"
               >
@@ -534,43 +545,6 @@ export default {
     // ],
     search: "",
     tab: "allLearners",
-    // data_tab_one: [
-    //   { text: "ชื่อ", value: "firstNameTh", sortable: false },
-    //   { text: "นามสกุล", value: "lastNameTh", sortable: false },
-    //   { text: "เบอร์โทรศัพท์", value: "tel", sortable: false },
-    //   { text: "อีเมล", value: "email", sortable: false },
-    //   { text: "ชื่อผู้ใช้", value: "username", sortable: false },
-    //   { text: "จำนวนคอร์ส", value: "course", sortable: false },
-    //   { text: "", align: "center", value: "actions", sortable: false },
-    // ],
-    // data_tab_two: [
-    //   { text: "ชื่อ", value: "firstNameTh", sortable: false },
-    //   { text: "นามสกุล", value: "lastNameTh", sortable: false },
-    //   { text: "เบอร์โทรศัพท์", value: "tel", sortable: false },
-    //   { text: "อีเมล", value: "email", sortable: false },
-    //   { text: "ชื่อผู้ใช้", value: "username", sortable: false },
-    //   { text: "จำนวนคอร์ส", value: "course", sortable: false },
-    //   { text: "", align: "center", value: "actions", sortable: false },
-    // ],
-    // data_tab_three: [
-    //   { text: "ชื่อ", value: "firstNameTh", sortable: false },
-    //   { text: "นามสกุล", value: "lasttNameTh", sortable: false },
-    //   { text: "เบอร์โทรศัพท์", value: "tel", sortable: false },
-    //   { text: "อีเมล", value: "email", sortable: false },
-    //   { text: "ชื่อผู้ใช้", value: "username", sortable: false },
-    //   { text: "รายละเอียดคอร์ส", value: "courseDetail", sortable: false },
-    //   { text: "", align: "center", value: "actions", sortable: false },
-    // ],
-    // data_tab_four: [
-    //   { text: "ชื่อ", value: "firstNameTh", sortable: false },
-    //   { text: "นามสกุล", value: "lastNameTh", sortable: false },
-    //   { text: "เบอร์โทรศัพท์", value: "tel", sortable: false },
-    //   { text: "อีเมล", value: "email", sortable: false },
-    //   { text: "ชื่อผู้ใช้", value: "username", sortable: false },
-    //   { text: "รายละเอียดคอร์ส", value: "courseDetail", sortable: false },
-    //   { text: "", align: "center", value: "actions", sortable: false },
-    // ],
-
     course_detail_dialog_booked: false,
     course_detail_dialog_end: false,
     detail_dialog_booked: "",
@@ -610,27 +584,23 @@ export default {
         color: "#58A144",
       },
     ],
-    course_status_options: [
-      {
-        label: "คอร์สเต็ม",
-        value: "Close",
-        color: "#A1A1A1",
-      },
-      {
-        label: "คอร์สว่าง",
-        value: "Open",
-        color: "#8CD977",
-      },
-    ],
     date_course_booked: "",
     potential_user_course: [],
   }),
   mounted() {
-    this.GetPotentialStudentList();
+    this.GetStudentValue();
+    this.GetAllStudentList();
+    this.GetCurrentStudent();
+    this.GetPotentialStudent();
+    this.GetReserveStudent();
   },
   methods: {
     ...mapActions({
-      GetPotentialStudentList: "DashboardModules/GetPotentialStudentList",
+      GetStudentValue: "DashboardModules/GetStudentValue",
+      GetAllStudentList: "DashboardModules/GetAllStudentList",
+      GetCurrentStudent: "DashboardModules/GetCurrentStudent",
+      GetPotentialStudent: "DashboardModules/GetPotentialStudent",
+      GetReserveStudent: "DashboardModules/GetReserveStudent",
     }),
 
     dialogDetailEnd(items) {
@@ -653,11 +623,25 @@ export default {
         );
       }
     },
+    fulldate(item) {
+      return new Date(item).toLocaleDateString(
+        this.$i18n.locale == "th" ? "th-TH" : "en-US",
+        {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }
+      );
+    },
   },
   computed: {
     ...mapGetters({
-      get_potential_student_list: "DashboardModules/getPotentialStudentList",
       dashboard_loading: "DashboardModules/getloading",
+      get_student_value: "DashboardModules/getStudentValue",
+      get_all_student_list: "DashboardModules/getAllStudentList",
+      get_current_student: "DashboardModules/getCurrentStudent",
+      get_potential_student: "DashboardModules/getPotentialStudent",
+      get_reserve_student: "DashboardModules/getReserveStudent",
     }),
     breadcrumbs() {
       return [
@@ -665,10 +649,32 @@ export default {
         { text: this.$t("student list"), to: "" },
       ];
     },
+    course_status_options() {
+      return [
+        {
+          label: this.$t("full courses"),
+          value: "Close",
+          color: "#A1A1A1",
+        },
+        {
+          label: this.$t("course available"),
+          value: "Open",
+          color: "#8CD977",
+        },
+      ];
+    },
     data_tab_one() {
       return [
-        { text: this.$t("first name"), value: "firstNameTh", sortable: false },
-        { text: this.$t("last name"), value: "lastNameTh", sortable: false },
+        {
+          text: this.$t("first name"),
+          value: this.$i18n.locale == "th" ? "firstNameTh" : "firstNameEng",
+          sortable: false,
+        },
+        {
+          text: this.$t("last name"),
+          value: this.$i18n.locale == "th" ? "lastNameTh" : "lastNameEng",
+          sortable: false,
+        },
         { text: this.$t("phone number"), value: "tel", sortable: false },
         { text: this.$t("email"), value: "email", sortable: false },
         { text: this.$t("username"), value: "username", sortable: false },
@@ -680,11 +686,18 @@ export default {
         { text: "", align: "center", value: "actions", sortable: false },
       ];
     },
-
     data_tab_two() {
       return [
-        { text: this.$t("first name"), value: "firstNameTh", sortable: false },
-        { text: this.$t("last name"), value: "lastNameTh", sortable: false },
+        {
+          text: this.$t("first name"),
+          value: this.$i18n.locale == "th" ? "firstNameTh" : "firstNameEng",
+          sortable: false,
+        },
+        {
+          text: this.$t("last name"),
+          value: this.$i18n.locale == "th" ? "lastNameTh" : "lastNameEng",
+          sortable: false,
+        },
         { text: this.$t("phone number"), value: "tel", sortable: false },
         { text: this.$t("email"), value: "email", sortable: false },
         { text: this.$t("username"), value: "username", sortable: false },
@@ -698,8 +711,16 @@ export default {
     },
     data_tab_three() {
       return [
-        { text: this.$t("first name"), value: "firstNameTh", sortable: false },
-        { text: this.$t("last name"), value: "lastNameTh", sortable: false },
+        {
+          text: this.$t("first name"),
+          value: this.$i18n.locale == "th" ? "firstNameTh" : "firstNameEng",
+          sortable: false,
+        },
+        {
+          text: this.$t("last name"),
+          value: this.$i18n.locale == "th" ? "lasttNameTh" : "lasttNameEng",
+          sortable: false,
+        },
         { text: this.$t("phone number"), value: "tel", sortable: false },
         { text: this.$t("email"), value: "email", sortable: false },
         { text: this.$t("username"), value: "username", sortable: false },
@@ -713,8 +734,16 @@ export default {
     },
     data_tab_four() {
       return [
-        { text: this.$t("first name"), value: "firstNameTh", sortable: false },
-        { text: this.$t("last name"), value: "lastNameTh", sortable: false },
+        {
+          text: this.$t("first name"),
+          value: this.$i18n.locale == "th" ? "firstNameTh" : "firstNameEng",
+          sortable: false,
+        },
+        {
+          text: this.$t("last name"),
+          value: this.$i18n.locale == "th" ? "lastNameTh" : "lastNameEng",
+          sortable: false,
+        },
         { text: this.$t("phone number"), value: "tel", sortable: false },
         { text: this.$t("email"), value: "email", sortable: false },
         { text: this.$t("username"), value: "username", sortable: false },

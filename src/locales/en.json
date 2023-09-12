@@ -78,6 +78,7 @@
     "can't find information on students in care": "Can't find information on students in care",
     "can't find full course information" :"Can't find full course information",
     "can't find available course information" :"Can't find available course information",
+    "cannot register , The seats are full": "Cannot register , The seats are full.",
     "cancel" : "Cancel",
     "cancel course purchase" : "Cancel course purchase",
     "cancel reservation": "Cancel reservation",

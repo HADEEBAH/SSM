@@ -167,7 +167,6 @@
               year: "numeric",
               month: "long",
               day: "numeric",
-              calendar: "buddhist",
             })
           }}
         </template>

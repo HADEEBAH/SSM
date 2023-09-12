@@ -300,29 +300,29 @@ export default {
       return {
         packages: [
           function (val) {
-            return (val || "").length > 0 || this.$t("please select a package");
+            return (val || "").length > 0 || vm.$t("please select a package");
           },
         ],
         packages_student: [
           function (val) {
             return (val || "") > vm.minimum_students
               ? vm.minimum_students
-              : 0 || this.$t("please specify the number of students");
+              : 0 || vm.$t("please specify the number of students");
           },
         ],
         options: [
           function (val) {
-            return (val || "").length > 0 || this.$t("please select a period");
+            return (val || "").length > 0 || vm.$t("please select a period");
           },
         ],
         options_amount: [
           function (val) {
-            return (val || "") > 0 || this.$t("please specify the number of times/person");
+            return (val || "") > 0 || vm.$t("please specify the number of times/person");
           },
         ],
         price_unit: [
           function (val) {
-            return (val || "") > 0 || this.$t("please specify price / person");
+            return (val || "") > 0 || vm.$t("please specify price / person");
           },
         ],
       };
