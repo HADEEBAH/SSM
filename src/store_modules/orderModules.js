@@ -819,7 +819,16 @@ const orderModules = {
             showCancelButton: false,
             confirmButtonText: VueI18n.t("agree"),
           });
-        } else {
+        } else if(error.response.data.message === "Cannot register , The seats are full."){
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t(
+              "cannot register , The seats are full"
+            ),
+            showCancelButton: false,
+            confirmButtonText: VueI18n.t("agree"),
+          });
+        }else{
           Swal.fire({
             icon: "error",
             title: VueI18n.t("something went wrong"),
