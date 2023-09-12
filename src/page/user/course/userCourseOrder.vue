@@ -913,20 +913,6 @@ export default {
     disable_add_to_cart: false,
     disable_checkout: false,
     coachSelect: false,
-    rules: {
-      // usernameRules: [
-      //   (val) =>
-      //     (val || "").length > 5 ||
-      //     "please enter a username at least 6 characters long",
-      //   (val) =>
-      //     (val || "").length < 20 ||
-      //     "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
-      //   (val) => /[A-Za-z0-9 ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-      //   (val) =>
-      //     !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-      //     "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
-      // ],
-    },
   }),
   created() {
     this.order_data = JSON.parse(localStorage.getItem("Order"));
@@ -1052,6 +1038,9 @@ export default {
       }
       this.dialog_parent = false;
     },
+    "$i18n.locale": function(){
+      this.GetCourse(this.order_data.course_id)
+    }
   },
   computed: {
     ...mapGetters({
@@ -1113,7 +1102,6 @@ export default {
       }
       return "";
     },
-
     validateButton() {
       if (this.course_order.coach_id) {
         this.GenMonitors();
@@ -1168,6 +1156,7 @@ export default {
       GetGeneralCourseMonitor: "CourseMonitorModules/GetGeneralCourseMonitor",
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
     }),
+   
     closePolicy() {
       this.policy = false;
       this.policy_show = false;
@@ -1320,25 +1309,6 @@ export default {
         }
       }
       return is_equal;
-    },
-    dayOfWeekArray(day) {
-      const daysOfWeek = [
-        "วันอาทิตย์",
-        "วันจันทร์",
-        "วันอังคาร",
-        "วันพุธ",
-        "วันพฤหัสบดี",
-        "วันศุกร์",
-        "วันเสาร์",
-      ];
-
-      const validDays = day.filter((d) => d >= 0 && d <= 6);
-      if (validDays) {
-        const firstThreeDays = validDays.map((d) => daysOfWeek[d]);
-        return `${firstThreeDays.join(" , ")}`;
-      } else {
-        return "Invalid days";
-      }
     },
     checkMaximumStudent() {
       let max = false;

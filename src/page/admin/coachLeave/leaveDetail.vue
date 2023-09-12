@@ -229,9 +229,7 @@
                       >
                         <v-col class="px-2" cols="12" sm="6">
                           <v-text-field
-                            :disabled="disable"
-                            :outlined="!disable"
-                            :filled="disable"
+                            outlined
                             dense
                             :style="`width:${width()}px;`"
                             style="
@@ -254,13 +252,27 @@
                             hide-clear-button
                             v-model="course.compensationStartTimeObj"
                             close-on-complete
+                            @change="
+                              ChengeTimeMin(
+                                course.compensationStartTimeObj,
+                                index,
+                                index_date,
+                                'start'
+                              )
+                            "
+                            :hour-range="
+                              checkHour(
+                                coach_leave.period,
+                                course.compensationDate,
+                                course,
+                                'start'
+                              )
+                            "
                           ></VueTimepicker>
                         </v-col>
                         <v-col class="px-2" cols="12" sm="6">
                           <v-text-field
-                            :disabled="disable"
-                            :outlined="!disable"
-                            :filled="disable"
+                            outlined
                             dense
                             :style="`width:${width()}px;`"
                             style="
@@ -283,6 +295,22 @@
                             hide-clear-button
                             v-model="course.compensationEndTimeObj"
                             close-on-complete
+                            @change="
+                              ChengeTimeMin(
+                                course.compensationEndTimeObj,
+                                index,
+                                index_date,
+                                'end'
+                              )
+                            "
+                             :hour-range="
+                              checkHour(
+                                coach_leave.period,
+                                course.compensationDate,
+                                course,
+                                'end'
+                              )
+                            "
                           ></VueTimepicker>
                         </v-col>
                       </v-row>
@@ -517,6 +545,69 @@ export default {
       updateStatusCoachLeaveAndCoach:
         "CoachModules/updateStatusCoachLeaveAndCoach",
     }),
+    ChengeTimeMin(time, index_course, index_date, type) {
+      if (time.mm === "") {
+        time.mm = "00";
+      }
+      if (type === "start") {
+        this.coach_leave.dates[index_date].courses[
+          index_course
+        ].compensationStartTime = `${time.HH}:${time.mm}`;
+      } else {
+        this.coach_leave.dates[index_date].courses[
+          index_course
+        ].compensationEndTime = `${time.HH}:${time.mm}`;
+      }
+    },
+    checkHour(period, date, course, type) {
+      if (date) {
+        if (
+          new Date(date) >= new Date(this.coach_leave.startDate) &&
+          new Date(date) <= new Date(this.coach_leave.endDate)
+        ) {
+          if (this.periods.filter((v) => v.value === period).length > 0) {
+            let hrs = [];
+            let start = this.periods.filter((v) => v.value === period)[0].start;
+            let end = this.periods.filter((v) => v.value === period)[0].end;
+            if (type && type === "end") {
+              if (course.compensationStartTimeObj.HH) {
+                for (let hr = 0; hr < 24; hr++) {
+                  if (
+                    hr > parseInt(course.compensationStartTimeObj.HH) &&
+                    hr <= end
+                  ) {
+                    hrs.push(hr);
+                  }
+                }
+              }
+            } else {
+              for (let hr = 0; hr < 24; hr++) {
+                if (hr >= start && hr <= end) {
+                  hrs.push(hr);
+                }
+              }
+            }
+            return hrs;
+          }
+        } else {
+          let hrs = [];
+          if (type && type === "end") {
+            if (course.compensationStartTimeObj.HH) {
+              for (let hr = 0; hr < 24; hr++) {
+                if (hr > parseInt(course.compensationStartTimeObj.HH)) {
+                  hrs.push(hr);
+                }
+              }
+            }
+          } else {
+            for (let hr = 0; hr < 24; hr++) {
+              hrs.push(hr);
+            }
+          }
+          return hrs;
+        }
+      }
+    },
     width() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
