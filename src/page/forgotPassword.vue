@@ -82,19 +82,6 @@
         >
       </v-col>
     </v-row>
-    <v-btn
-      @click="backToHome()"
-      text
-      dark
-      :class="
-        MobileSize
-          ? 'absolute top-[1%] right-[2%]'
-          : 'absolute top-[1%] right-[1%]'
-      "
-      color="#FF6B81"
-    >
-      <v-icon class="mr-2">mdi mdi-home</v-icon> {{ $t('return to home page') }}
-    </v-btn>
   </v-container>
 </template>
 <script>
