@@ -33,6 +33,7 @@
     "all courses" : "คอร์สทั้งหมด",
     "all students" : "ผู้เรียนทั้งหมด",
     "all users": "ผู้ใช้งานทั้งหมด",
+    "all year": "ทั้งปี",
     "already edited": "( แก้ไขเรียบร้อยแล้ว )",
     "already registered": "( ลงทะเบียนเรียบร้อยแล้ว )",
     "approved" : "อนุมัติ",
@@ -53,6 +54,8 @@
     "attachment from student assessment": "ไฟล์แนบจากประเมินนักเรียน",
     "available course information": "ข้อมูลคอร์สว่าง",
     "average" : "เฉลี่ย",
+    "april": "เมษายน",
+    "august": "สิงหาคม",
 
     "baht" : "บาท",
     "banner added successfully": "( เพิ่มแบนเนอร์เรียบร้อยแล้ว )",
@@ -204,6 +207,7 @@
     "do you want to edit the kingdom?": "คุณต้องการแก้ไขอาณาจักรหรือไม่?",
     "duplicate relationship": "ความสัมพันธ์ซ้ำกัน",
     "duplicate user in this course Unable to register": "ผู้ใช้ซ้ำกันในหลักสูตรนี้ ไม่สามารถลงทะเบียนได้",
+    "december":"ธันวาคม",
 
 
     "edit": "แก้ไข",
@@ -246,6 +250,7 @@
     "full course information": "ข้อมูลคอร์สเต็ม",
     "full day leave" : "ลาเต็มวัน",
     "friday" : "วันศุกร์",
+    "february": "กุมภาพันธ์",
 
     "graduating students": "ผู้เรียนที่ใกล้จบ",
     "general": "ทั่วไป",
@@ -277,6 +282,12 @@
     "income proportion": "สัดส่วนรายได้",
     "intervals and coaches have been corrected":"( แก้ไขช่วงเวลาและโค้ชเรียบร้อยแล้ว )",
     "is complete" : "เรียบร้อยแล้ว",
+
+
+    "january":"มกราคม",
+    "june": "มิถุนายน",
+    "july": "กรกฎาคม",
+
 
     "kingdom" : "อาณาจักร",
     "kingdom not found" : "ไม่พบอาณาจักร",
@@ -321,6 +332,8 @@
     "manage tables" : "จัดการตาราง",
     "mobile number must have at least 10 characters" : "หมายเลขมือถือต้องมีอย่างน้อย 10 ตัวอักษร",
     "manage the entire empire": "จัดการอาณาจักรทั้งหมด",
+    "march":"มีนาคม",
+    "may": "พฤษภาคม",
 
     "more details" : "รายละเอียดเพิ่มเติม",
     
@@ -353,6 +366,7 @@
     "nationality must not have emojis": "สันชาติต้องไม่มีอิโมจิ",
     "name of kingdom (thai)": "ชื่ออาณาจักร(ภาษาไทย)",
     "name of kingdom (english)": "ชื่ออาณาจักร(ภาษาอังกฤษ)",
+    "november": "พฤศจิกายน",
     
     "o'clock" : "น.",
     "open-close register date" : "วันเปิด-ปิดรับสมัคร",
@@ -362,6 +376,7 @@
     "order cancellation" : "การยกเลิกคำสั่งซื้อ",
     "order canceled successfully": "( ยกเลิกคำสั่งซื้อเรียบร้อยแล้ว )",
     "others" : "อื่นๆ",
+    "october": "ตุลาคม",
 
     "package" : "แพ็คเกจ",
     "page not found" : "ไม่พบหน้านี้",
@@ -602,6 +617,7 @@
     "start time": "เวลาเริ่ม",
     "specify the name of the holiday, such as Songkran Day" : "ระบุชื่อวันหยุด เช่น วันสงกรานต์",
     "show certificate": "แสดงหนังสือรับรอง",
+    "september": "กันยายน",
 
     "take annual leave" : "ลาพักร้อนประจำปี",
     "take up teaching" : "เข้าสอน",
