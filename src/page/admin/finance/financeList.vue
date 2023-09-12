@@ -12,7 +12,7 @@
             color="#ff6b81"
             class="white--text"
             @click="ShowDialogExport"
-            >{{$t('export')}}</v-btn
+            >{{ $t("export") }}</v-btn
           >
         </v-col>
       </v-row>
@@ -45,14 +45,14 @@
               ></v-img>
             </template>
             <template v-slot:header>
-              <div class="font-bold">{{$t('all')}}</div>
+              <div class="font-bold">{{ $t("all") }}</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
                 <v-col align="center" class="text-3xl font-bold">{{
                   orders.length
                 }}</v-col>
-                <v-col class="text-sm">{{$t('list')}}</v-col>
+                <v-col class="text-sm">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
@@ -77,7 +77,7 @@
                 <v-col align="center" class="text-3xl font-bold">{{
                   orders.filter((v) => v.payment_status === "success").length
                 }}</v-col>
-                <v-col class="text-sm">{{$t("list")}}</v-col>
+                <v-col class="text-sm">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
@@ -95,14 +95,14 @@
               ></v-img>
             </template>
             <template v-slot:header>
-              <div class="font-bold">{{ $t('pending') }}</div>
+              <div class="font-bold">{{ $t("pending") }}</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
                 <v-col align="center" class="text-3xl font-bold">{{
                   orders.filter((v) => v.payment_status === "pending").length
                 }}</v-col>
-                <v-col class="text-sm">{{ $t("list")}}</v-col>
+                <v-col class="text-sm">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
@@ -141,7 +141,7 @@
             "
           >
             <span class="w-full text-center">{{
-              $t(item.payment_status) 
+              $t(item.payment_status)
             }}</span>
           </div>
         </template>
@@ -157,17 +157,20 @@
                 params: { order_id: item.order_number },
               })
             "
-            >{{$t("see more")}}</v-btn
+            >{{ $t("see more") }}</v-btn
           >
         </template>
         <template v-slot:[`item.created_date`]="{ item }">
           <!-- {{ new Date(item.created_date).toLocaleDateString() }} -->
           {{
-            new Date(item.created_date).toLocaleDateString($i18n.locale == 'th' ? "th-TH" : "en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })
+            new Date(item.created_date).toLocaleDateString(
+              $i18n.locale == "th" ? "th-TH" : "en-US",
+              {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              }
+            )
           }}
         </template>
         <template v-slot:[`no-results`]>
@@ -186,9 +189,9 @@
           </v-row>
           <v-card-title>
             <v-row dense>
-              <v-col cols="12" align="center" class="font-semibold"
-                >{{ $t("export") }}</v-col
-              >
+              <v-col cols="12" align="center" class="font-semibold">{{
+                $t("export")
+              }}</v-col>
             </v-row>
           </v-card-title>
           <!-- รายละเอียดคอร์สเรียน -->
@@ -217,7 +220,9 @@
                 >
                   <template v-slot:no-data>
                     <v-list-item>
-                      <v-list-item-title> {{$t("no data found")}} </v-list-item-title>
+                      <v-list-item-title>
+                        {{ $t("no data found") }}
+                      </v-list-item-title>
                     </v-list-item>
                   </template>
                   <template v-slot:selection="data">
@@ -226,7 +231,11 @@
                       :input-value="data.selected"
                       color="#FBF3F5"
                     >
-                      {{ $i18n.locale == 'th' ? `${data.item.firstNameTh} ${data.item.lastNameTh}` : `${data.item.firstNameEn} ${data.item.lastNameEn}` }}
+                      {{
+                        $i18n.locale == "th"
+                          ? `${data.item.firstNameTh} ${data.item.lastNameTh}`
+                          : `${data.item.firstNameEn} ${data.item.lastNameEn}`
+                      }}
                       <v-icon
                         @click="remove(data.item.userOneId)"
                         color="#ff6b81"
@@ -235,7 +244,11 @@
                     </v-chip>
                   </template>
                   <template v-slot:item="{ item }">
-                    {{ $i18n.locale == 'th' ? `${item.firstNameTh} ${item.lastNameTh}` : `${item.firstNameEn} ${item.lastNameEn}` }}
+                    {{
+                      $i18n.locale == "th"
+                        ? `${item.firstNameTh} ${item.lastNameTh}`
+                        : `${item.firstNameEn} ${item.lastNameEn}`
+                    }}
                   </template>
                 </v-autocomplete>
               </v-col>
@@ -246,7 +259,9 @@
                   dense
                   class="py-1"
                   :items="statusPayment"
-                  :item-text="$i18n.locale == 'th' ? 'namePayment' : 'namePaymentEn'"
+                  :item-text="
+                    $i18n.locale == 'th' ? 'namePayment' : 'namePaymentEn'
+                  "
                   item-value="valuePayment"
                   :label="$t('please select a status')"
                   outlined
@@ -258,10 +273,15 @@
                 >
                   <template v-slot:selection="{ item, index }">
                     <v-chip dark v-if="index === 0" color="#FF6B81">
-                      <span>{{ $i18n.locale == 'th' ? item.namePayment : item.namePaymentEn}}</span>
+                      <span>{{
+                        $i18n.locale == "th"
+                          ? item.namePayment
+                          : item.namePaymentEn
+                      }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
-                      (+{{ export_filter.payment_status.length - 1 }} {{ $t("others")}} )
+                      (+{{ export_filter.payment_status.length - 1 }}
+                      {{ $t("others") }} )
                     </span>
                   </template>
                 </v-autocomplete>
@@ -275,7 +295,7 @@
                 <v-autocomplete
                   dense
                   :items="typeOfPayment"
-                  :item-text="$i18n.locale =='th' ? 'name' : 'nameEn'"
+                  :item-text="$i18n.locale == 'th' ? 'name' : 'nameEn'"
                   item-value="value"
                   v-model="export_filter.payment_type"
                   :label="$t('please select a payment type')"
@@ -288,10 +308,13 @@
                 >
                   <template v-slot:selection="{ item, index }">
                     <v-chip dark v-if="index === 0" color="#FF6B81">
-                      <span>{{ $i18n.locale =='th' ? item.name : item.nameEn }}</span>
+                      <span>{{
+                        $i18n.locale == "th" ? item.name : item.nameEn
+                      }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
-                      (+{{ export_filter.payment_type.length - 1 }} {{$t("others")}})
+                      (+{{ export_filter.payment_type.length - 1 }}
+                      {{ $t("others") }})
                     </span>
                   </template>
                 </v-autocomplete>
@@ -318,7 +341,8 @@
                       <span>{{ item.course }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
-                      (+{{ export_filter.course_id.length - 1 }} {{$t("others")}})
+                      (+{{ export_filter.course_id.length - 1 }}
+                      {{ $t("others") }})
                     </span>
                   </template>
                 </v-autocomplete>
@@ -348,7 +372,8 @@
                       <span>{{ item.typeName }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
-                      (+{{ export_filter.course_type_id.length - 1 }} {{$t("Others")}})
+                      (+{{ export_filter.course_type_id.length - 1 }}
+                      {{ $t("Others") }})
                     </span>
                   </template>
                 </v-autocomplete>
@@ -380,7 +405,8 @@
                           v-if="index === 1"
                           class="grey--text text-caption"
                         >
-                          (+{{ export_filter.package_id.length - 1 }} {{ $t("others") }})
+                          (+{{ export_filter.package_id.length - 1 }}
+                          {{ $t("others") }})
                         </span>
                       </template>
                     </v-autocomplete>
@@ -410,7 +436,8 @@
                           v-if="index === 1"
                           class="grey--text text-caption"
                         >
-                          (+{{ export_filter.option_id.length - 1 }} {{$t("others")}})
+                          (+{{ export_filter.option_id.length - 1 }}
+                          {{ $t("others") }})
                         </span>
                       </template>
                     </v-autocomplete>
@@ -459,7 +486,7 @@
                         :max="today"
                         v-model="export_filter.date_doc_start"
                         @input="export_filter.select_date_doc_start = false"
-                        :locale="$i18n.locale =='th' ? 'th-TH' : 'en-US'"
+                        :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
                       ></v-date-picker>
                     </v-menu>
                   </v-col>
@@ -497,7 +524,7 @@
                         @input="export_filter.select_date_doc_end = false"
                         :min="export_filter.date_doc_start"
                         :max="today"
-                        :locale="$i18n.locale =='th' ? 'th-TH' : 'en-US'"
+                        :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
                       ></v-date-picker>
                     </v-menu>
                   </v-col>
@@ -560,8 +587,7 @@
                           :value="
                             !export_filter.date_pay_end
                               ? export_filter.date_pay_end
-                              :GenDate(export_filter.date_pay_end)
-                                
+                              : GenDate(export_filter.date_pay_end)
                           "
                           :label="$t('please select an end time')"
                           outlined
@@ -578,7 +604,7 @@
                         @input="export_filter.select_date_pay_end = false"
                         :min="export_filter.date_pay_start"
                         :max="today"
-                        :locale="$i18n.locale =='th' ? 'th-TH' : 'en-US'"
+                        :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
                       ></v-date-picker>
                     </v-menu>
                   </v-col>
@@ -621,7 +647,11 @@
             "
           >
             <div class="mdi mdi-chat-alert">
-              {{$t("you can choose to fill in only the items you want to export")}}
+              {{
+                $t(
+                  "you can choose to fill in only the items you want to export"
+                )
+              }}
             </div>
           </v-card-text>
 
@@ -632,9 +662,9 @@
               <v-col cols="12" sm="6">
                 <v-row>
                   <v-col cols="12" sm="8" align="end">
-                    <v-btn depressed @click="clearDateExport()"
-                      >{{ $t("clear data") }}</v-btn
-                    ></v-col
+                    <v-btn depressed @click="clearDateExport()">{{
+                      $t("clear data")
+                    }}</v-btn></v-col
                   >
                   <v-col cols="12" sm="4" align="end">
                     <v-btn
@@ -644,7 +674,7 @@
                       color="#ff6b81"
                       @click="Export()"
                     >
-                      {{$t('view all')}}
+                      {{ $t("view all") }}
                     </v-btn>
                   </v-col>
                 </v-row>
@@ -680,19 +710,43 @@ export default {
     itemsPerPage: 10,
     show_dialog: false,
     statusPayment: [
-      { namePayment: "ชำระแล้ว", namePaymentEn: "Paid",valuePayment: "success" },
-      { namePayment: "รอดำเนินการ", namePaymentEn: "Pending", valuePayment: "pending" },
-      { namePayment: "ยกเลิก", namePaymentEn: "Cancel", valuePayment: "cancel" },
+      {
+        namePayment: "ชำระแล้ว",
+        namePaymentEn: "Paid",
+        valuePayment: "success",
+      },
+      {
+        namePayment: "รอดำเนินการ",
+        namePaymentEn: "Pending",
+        valuePayment: "pending",
+      },
+      {
+        namePayment: "ยกเลิก",
+        namePaymentEn: "Cancel",
+        valuePayment: "cancel",
+      },
     ],
     typeOfPayment: [
       { name: "เงินสด", nameEn: "Cash", value: "cash" },
-      { name: "บัตรเครดิต / เดบิต", nameEn: "Credit Card", value: "Credit Card" },
+      {
+        name: "บัตรเครดิต / เดบิต",
+        nameEn: "Credit Card",
+        value: "Credit Card",
+      },
       { name: "โอนเงินเข้าบัญชี", nameEn: "Transfer", value: "transfer" },
     ],
     courseName: [],
     courseType: [
-      { typeName: "คอร์สทั่วไป", typeNameEn: "General course", typeOfValue: "CT_1" },
-      { typeName: "คอร์สระยะสั้น", typeNameEn: "Short course", typeOfValue: "CT_2" },
+      {
+        typeName: "คอร์สทั่วไป",
+        typeNameEn: "General course",
+        typeOfValue: "CT_1",
+      },
+      {
+        typeName: "คอร์สระยะสั้น",
+        typeNameEn: "Short course",
+        typeOfValue: "CT_2",
+      },
     ],
     export_filter: {
       course_id: [],
@@ -856,7 +910,7 @@ export default {
       finance_filter: "FinanceModules/getFinanceFilter",
       finance_filter_loading: "FinanceModules/getFinanceLoading",
     }),
-    columns(){
+    columns() {
       return [
         {
           text: this.$t("order number"),
@@ -866,10 +920,10 @@ export default {
           width: 150,
         },
         {
-          text:  this.$t("first name - last name student"),
+          text: this.$t("first name - last name student"),
           align: "start",
           sortable: false,
-          value: this.$i18n.locale == 'th' ? "student_name" : "student_name_en",
+          value: this.$i18n.locale == "th" ? "student_name" : "student_name_en",
         },
         {
           text: this.$t("course name"),
@@ -877,7 +931,12 @@ export default {
           sortable: false,
           value: "course_name",
         },
-        { text: this.$t("price"), align: "start", sortable: false, value: "total_price" },
+        {
+          text: this.$t("price"),
+          align: "start",
+          sortable: false,
+          value: "total_price",
+        },
         {
           text: this.$t("payment status"),
           align: "start",
@@ -897,7 +956,7 @@ export default {
           value: "created_date",
         },
         { text: "", align: "start", value: "actions", sortable: false },
-      ]
+      ];
     },
   },
   watch: {

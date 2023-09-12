@@ -8,14 +8,20 @@
             hide-details
             dense
             prepend-inner-icon="mdi-magnify"
-            :placeholder="$t('find the learning course that interests you here')"
+            :placeholder="
+              $t('find the learning course that interests you here')
+            "
             v-model="search_course"
             @input="searchCourse($event)"
           ></v-text-field>
         </v-col>
       </v-row>
       <v-row dense>
-        <v-col class="text-lg font-bold">{{ $i18n.locale == 'th' ? category.categoryNameTh : category.categoryNameEng }}</v-col>
+        <v-col class="text-lg font-bold">{{
+          $i18n.locale == "th"
+            ? category.categoryNameTh
+            : category.categoryNameEng
+        }}</v-col>
       </v-row>
       <v-row dense>
         <v-col
@@ -39,7 +45,11 @@
                     : ' text-[#B3B3B3]'
                 "
                 class="font-bold mr-2"
-                >{{ $i18n.locale == 'th' ? type.course_type_name_th :  type.course_type_name_en }}</label
+                >{{
+                  $i18n.locale == "th"
+                    ? type.course_type_name_th
+                    : type.course_type_name_en
+                }}</label
               >
               <v-avatar
                 size="32"
@@ -96,7 +106,7 @@
                 <v-row>
                   <v-col class="pa-4" align="right">
                     <v-chip color="#F9B320" text-color="white">{{
-                      `${GerPeriod(course.period)} ${$t('hour')} `
+                      `${GerPeriod(course.period)} ${$t("hour")} `
                     }}</v-chip></v-col
                   >
                 </v-row>
@@ -123,7 +133,11 @@
                   class="d-flex align-center"
                 >
                   <v-col>{{
-                    `${$i18n.locale == 'th' ? course.course_name_th : course.course_name_en}`
+                    `${
+                      $i18n.locale == "th"
+                        ? course.course_name_th
+                        : course.course_name_en
+                    }`
                   }}</v-col>
                 </v-row>
               </v-card-title>
@@ -138,7 +152,9 @@
                     v-if="course.course_detail.length > 150"
                     class="text-red-500 cursor-pointer"
                     @click="course.show = !course.show"
-                    >{{ course.show ? $t('lesser') : $t('read more')+`...` }}</span
+                    >{{
+                      course.show ? $t("lesser") : $t("read more") + `...`
+                    }}</span
                   >
                 </div>
               </v-card-text>
@@ -151,7 +167,9 @@
           >
             <v-card outlined>
               <v-card-text align="center">
-                <span class="font-bold">{{$t('course information not found')}}</span>
+                <span class="font-bold">{{
+                  $t("course information not found")
+                }}</span>
               </v-card-text>
             </v-card>
           </v-col>
@@ -228,7 +246,7 @@ export default {
       GetCategory: "CategoryModules/GetCategory",
       changeCourseOrderData: "OrderModules/changeCourseOrderData",
       GetCoursesFilter: "CourseModules/GetCoursesFilter",
-      GetPotential: "CourseModules/GetPotential",
+      // GetPotential: "CourseModules/GetPotential",
     }),
     GerPeriod(period) {
       let str = period.toString();
@@ -257,11 +275,11 @@ export default {
         }
       });
     },
-    sumCouserPotential(courseData) {
-      if (!this.course_potential) {
-        this.GetPotential({ course_id: courseData.course_id });
-      }
-    },
+    // sumCouserPotential(courseData) {
+    //   if (!this.course_potential) {
+    //     this.GetPotential({ course_id: courseData.course_id });
+    //   }
+    // },
     CutWold(course) {
       return course.course_detail.slice(0, 122) + "...";
     },

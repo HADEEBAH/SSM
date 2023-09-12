@@ -71,11 +71,11 @@
                         <label class="font-bold">{{ event.timed }} </label>
                       </v-row>
                       <v-row dense>
-                        <v-col> {{$t("study by")}}: {{ event.name }} </v-col>
+                        <v-col> {{ $t("study by") }}: {{ event.name }} </v-col>
                       </v-row>
                       <v-row dense>
                         <v-col class="text-sm">
-                          {{$t("coach")}}: {{ event.subtitle }} <br />
+                          {{ $t("coach") }}: {{ event.subtitle }} <br />
                           <div>
                             <v-btn
                               small
@@ -83,7 +83,7 @@
                               class="underline pa-0"
                               color="#ff6b81"
                               @click="ToStudentCourse(event)"
-                              >{{ $t('view course details')}} 
+                              >{{ $t("view course details") }}
                             </v-btn>
                           </div>
                         </v-col>
@@ -98,7 +98,7 @@
         <div v-else>
           <v-row>
             <v-col class="text-lg font-bold" align="center">
-              {{  $t("course not found") }}
+              {{ $t("course not found") }}
             </v-col>
           </v-row>
         </div>
@@ -117,7 +117,9 @@
               </v-col>
               <v-col cols="12" align="center" class="font-weight-bold">
                 {{
-                  details.type == "holiday" ? $t("holiday information") : $t("class information")
+                  details.type == "holiday"
+                    ? $t("holiday information")
+                    : $t("class information")
                 }}
               </v-col>
             </v-row>
@@ -127,7 +129,9 @@
             <v-row dense>
               <v-col cols="12">
                 <label class="font-weight-bold">{{
-                  details.type == "holiday" ? $t("holiday name") : $t("course name")
+                  details.type == "holiday"
+                    ? $t("holiday name")
+                    : $t("course name")
                 }}</label>
                 <v-text-field
                   :value="details.name"
@@ -144,12 +148,14 @@
                 <label class="font-weight-bold">{{ $t("date") }}</label>
                 <v-text-field
                   :value="
-                    new Date(details.start).toLocaleDateString($i18n.locale == 'th' ? 'th-TH': 'en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                      calendar: 'buddhist'
-                    })
+                    new Date(details.start).toLocaleDateString(
+                      $i18n.locale == 'th' ? 'th-TH' : 'en-US',
+                      {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      }
+                    )
                   "
                   hide-details
                   outlined
@@ -168,7 +174,7 @@
           <v-card-text>
             <v-row dense v-if="details.type == 'normal'">
               <v-col cols="12" sm="6">
-                <label class="font-weight-bold">{{$t('start time')}}</label>
+                <label class="font-weight-bold">{{ $t("start time") }}</label>
                 <v-text-field
                   hide-details
                   dense
@@ -196,7 +202,7 @@
 
             <v-row dense v-if="details.type == 'holiday'">
               <v-col cols="12" sm="6" v-if="details.allday === false">
-                <label class="font-weight-bold">{{$t('start time')}}</label>
+                <label class="font-weight-bold">{{ $t("start time") }}</label>
                 <v-text-field
                   hide-details
                   dense
@@ -237,7 +243,7 @@
           <v-card-text>
             <v-row dense v-if="details.type == 'normal'">
               <v-col cols="12" sm="6">
-                <label class="font-weight-bold">{{$t("coach")}}</label>
+                <label class="font-weight-bold">{{ $t("coach") }}</label>
                 <v-text-field
                   dense
                   outlined
@@ -254,7 +260,7 @@
                 sm="6"
                 v-if="details.package && details.package !== 'leave'"
               >
-                <label class="font-weight-bold">{{$t("package")}}</label>
+                <label class="font-weight-bold">{{ $t("package") }}</label>
                 <v-text-field
                   dense
                   outlined
@@ -266,7 +272,9 @@
                 </v-text-field>
               </v-col>
               <v-col cols="12" sm="6" v-if="details.package == 'leave'">
-                <label class="font-weight-bold">{{$t("compensation from")}}</label>
+                <label class="font-weight-bold">{{
+                  $t("compensation from")
+                }}</label>
                 <v-text-field
                   dense
                   outlined
@@ -280,12 +288,18 @@
             </v-row>
             <v-row v-if="details?.itmeData?.subCoachName">
               <v-col cols="12">
-                <label class="font-weight-bold">{{ $t('substitute coach') }}</label>
+                <label class="font-weight-bold">{{
+                  $t("substitute coach")
+                }}</label>
                 <v-text-field
                   dense
                   outlined
                   readonly
-                  :value="$i18n.locale == 'th' ? details?.itmeData?.subCoachName : details?.itmeData?.subCoachNameEn"
+                  :value="
+                    $i18n.locale == 'th'
+                      ? details?.itmeData?.subCoachName
+                      : details?.itmeData?.subCoachNameEn
+                  "
                   hide-details
                   color="#ff6b81"
                 >
@@ -361,20 +375,24 @@ export default {
       today.getMonth(),
       today.getDate() - today.getDay() + 6
     );
-    this.start_of_week = this.start_of_week.toLocaleDateString(this.$i18n.locale == 'th' ? "th-TH" : "en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      weekday: "long",
-      calendar: 'buddhist'
-    });
-    this.end_of_week = this.end_of_week.toLocaleDateString(this.$i18n.locale == 'th' ? "th-TH" : "en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      weekday: "long",
-      calendar: 'buddhist'
-    });
+    this.start_of_week = this.start_of_week.toLocaleDateString(
+      this.$i18n.locale == "th" ? "th-TH" : "en-US",
+      {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        weekday: "long",
+      }
+    );
+    this.end_of_week = this.end_of_week.toLocaleDateString(
+      this.$i18n.locale == "th" ? "th-TH" : "en-US",
+      {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        weekday: "long",
+      }
+    );
     this.ready = true;
   },
 
@@ -386,17 +404,22 @@ export default {
 
     convertDate(item) {
       const oriDate = new Date(item);
-      const fullDate = oriDate.toLocaleDateString(this.$i18n.locale == 'th' ? "th-TH" : "en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      });
+      const fullDate = oriDate.toLocaleDateString(
+        this.$i18n.locale == "th" ? "th-TH" : "en-US",
+        {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }
+      );
       return fullDate;
     },
 
     genTitleCalender(title) {
       let title_part = title.split(" ");
-      return `${title_part[0]} ${parseFloat(title_part[1]) + 543}`;
+      return this.$i18n.locale == "th"
+        ? `${title_part[0]} ${parseFloat(title_part[1]) + 543}`
+        : `${title_part[0]} ${parseFloat(title_part[1])}`;
     },
     selectedDate(data) {
       this.details = data.event;

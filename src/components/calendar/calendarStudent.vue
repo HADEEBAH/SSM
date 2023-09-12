@@ -28,7 +28,7 @@
         :interval-count="24"
         :event-overlap-threshold="30"
         @click:event="selectedDate($event)"
-        locale="th-TH"
+        :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
       >
         <template v-if="type === 'week'" v-slot:day-body="{ week }">
           <div
@@ -48,7 +48,7 @@
       :event-color="(date) => (date[9] % 2 ? 'red' : 'yellow')"
       :events="functionEvents"
       @input="selectDate(focus)"
-      locale="th-TH"
+      :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
     ></v-date-picker>
     <v-bottom-sheet v-model="showModal">
       <div class="bg-white rounded-t-lg pa-4">
@@ -82,12 +82,13 @@
 
                       <v-row dense>
                         <v-col cols="12">
-                          {{$t("course")}}: <span class="font-bold">{{ event.name }}</span>
+                          {{ $t("course") }}:
+                          <span class="font-bold">{{ event.name }}</span>
                         </v-col>
                       </v-row>
                       <v-row dense>
                         <v-col class="text-sm">
-                          {{ $t("coach")}}:
+                          {{ $t("coach") }}:
                           <span class="font-bold">{{ event.subtitle }} </span
                           ><br />
                           <div>
@@ -119,7 +120,8 @@
                   </v-row>
                   <v-row dense>
                     <v-col cols="12">
-                      {{ $t("holiday") }}: <span class="font-bold">{{ event.name }}</span>
+                      {{ $t("holiday") }}:
+                      <span class="font-bold">{{ event.name }}</span>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -134,7 +136,7 @@
         <div v-else>
           <v-row>
             <v-col class="text-lg font-bold" align="center">
-              {{ $t("course not found")  }}
+              {{ $t("course not found") }}
             </v-col>
           </v-row>
         </div>
@@ -196,18 +198,24 @@ export default {
       today.getMonth(),
       today.getDate() - today.getDay() + 6
     );
-    this.start_of_week = this.start_of_week.toLocaleDateString(this.$i18n.locale == 'th'?"th-TH" : "en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      weekday: "long",
-    });
-    this.end_of_week = this.end_of_week.toLocaleDateString(this.$i18n.locale == 'th'?"th-TH" : "en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      weekday: "long",
-    });
+    this.start_of_week = this.start_of_week.toLocaleDateString(
+      this.$i18n.locale == "th" ? "th-TH" : "en-US",
+      {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        weekday: "long",
+      }
+    );
+    this.end_of_week = this.end_of_week.toLocaleDateString(
+      this.$i18n.locale == "th" ? "th-TH" : "en-US",
+      {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        weekday: "long",
+      }
+    );
     this.ready = true;
   },
   beforeUpdate() {
@@ -222,7 +230,10 @@ export default {
       let title_part = title.split(" ");
 
       if (title_part.length == 2) {
-        return `${title_part[0]} ${parseFloat(title_part[1]) + 543}`;
+        // return `${title_part[0]} ${parseFloat(title_part[1]) + 543}`;
+        return this.$i18n.locale == "th"
+          ? `${title_part[0]} ${parseFloat(title_part[1]) + 543}`
+          : `${title_part[0]} ${parseFloat(title_part[1])}`;
       } else if (title_part.length == 4) {
         return `${shortMonthToLongMonth(
           title_part[0]

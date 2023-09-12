@@ -4,9 +4,9 @@
     <template v-if="type === 'week'">
       <v-row dense>
         <v-col>
-          <v-btn text class="underline" color="#ff6b81" @click="goToday"
-            >{{  $t("click to go to the latest course to be taught") }}</v-btn
-          >
+          <v-btn text class="underline" color="#ff6b81" @click="goToday">{{
+            $t("click to go to the latest course to be taught")
+          }}</v-btn>
         </v-col>
       </v-row>
     </template>
@@ -131,7 +131,7 @@
         <div v-else>
           <v-row>
             <v-col class="text-lg font-bold" align="center">
-              {{$t("course not found")}}
+              {{ $t("course not found") }}
             </v-col>
           </v-row>
         </div>
@@ -169,14 +169,14 @@ export default {
         if (event.type === "holiday") {
           event.color = "#f19a5a";
         } else {
-          let eventTh = event.name
-          let eventEn = event.subtitle
-          if(this.$i18n.locale == "th"){
-            event.name = eventTh
-            event.subtitle = eventEn
-          }else{
-            event.name = eventEn
-            event.subtitle = eventTh
+          let eventTh = event.name;
+          let eventEn = event.subtitle;
+          if (this.$i18n.locale == "th") {
+            event.name = eventTh;
+            event.subtitle = eventEn;
+          } else {
+            event.name = eventEn;
+            event.subtitle = eventTh;
           }
           switch (new Date(event.start).getDay()) {
             case 0:
@@ -225,18 +225,24 @@ export default {
       today.getMonth(),
       today.getDate() - today.getDay() + 6
     );
-    this.start_of_week = this.start_of_week.toLocaleDateString(this.$i18n.locale == 'th' ? "th-TH": "en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      weekday: "long",
-    });
-    this.end_of_week = this.end_of_week.toLocaleDateString(this.$i18n.locale == 'th' ? "th-TH": "en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      weekday: "long",
-    });
+    this.start_of_week = this.start_of_week.toLocaleDateString(
+      this.$i18n.locale == "th" ? "th-TH" : "en-US",
+      {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        weekday: "long",
+      }
+    );
+    this.end_of_week = this.end_of_week.toLocaleDateString(
+      this.$i18n.locale == "th" ? "th-TH" : "en-US",
+      {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        weekday: "long",
+      }
+    );
     this.ready = true;
     this.scrollToTime();
     this.updateTime();
@@ -246,7 +252,10 @@ export default {
       let title_part = title.split(" ");
 
       if (title_part.length == 2) {
-        return `${title_part[0]} ${parseFloat(title_part[1]) + 543}`;
+        // return `${title_part[0]} ${parseFloat(title_part[1]) + 543}`;
+        return this.$i18n.locale == "th"
+          ? `${title_part[0]} ${parseFloat(title_part[1]) + 543}`
+          : `${title_part[0]} ${parseFloat(title_part[1])}`;
       } else if (title_part.length == 4) {
         return `${shortMonthToLongMonth(
           title_part[0]
