@@ -2016,6 +2016,7 @@ import Swal from "sweetalert2";
 import { CheckFileSize, dateDMY, dateFormatter } from "@/functions/functions";
 import imgFileType from "@/components/file_type/imgFileType.vue";
 import { mapGetters, mapActions } from "vuex";
+import mixin from "@/mixin";
 
 export default {
   name: "coureDetail",
@@ -2029,6 +2030,7 @@ export default {
     loadingOverlay,
     imgFileType,
   },
+  mixins: [mixin],
   data: () => ({
     courseValidate: false,
     coachValidate: false,
@@ -2608,7 +2610,31 @@ export default {
               course_id: this.course_data.course_id,
               course_data: this.course_data,
             });
-            console.log(student_list);
+            if (student_list.students?.length > 0) {
+              const options = {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              };
+              // for (const student_account of student_list.students) {
+              // console.log("student_account :>> ", student_account.studentId);
+
+              let payload = {
+                notificationName: "แจ้งเตือนเลื่อนวันเปิดเรียน",
+                notificationDescription: `จากวันที่ ${new Date(
+                  student_list.beforeDate
+                ).toLocaleDateString("th-TH", options)} ไปยังวันที่ ${new Date(
+                  student_list.afterDate
+                ).toLocaleDateString("th-TH", options)} คอร์ส ${
+                  this.course_data.course_name_th
+                }`,
+                accountId: student_list.students,
+                path: null,
+              };
+              this.sendNotification(payload);
+              // }
+            }
+
             this.course_edit = false;
           }
         });
