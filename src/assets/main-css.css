@@ -129,3 +129,14 @@ body{
     position: relative; 
     height: 93vh;
 }
+.auth-bar{
+    position: absolute;
+    top: 2%;
+    right: 0px;
+    width: 100%;
+}
+.form-register-page{
+    position: relative;
+    margin: 0px auto;
+    padding-top: 40px;
+}

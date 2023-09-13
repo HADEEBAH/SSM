@@ -1,12 +1,11 @@
 <template>
-  <div>
-    <div class="flex align-center justify-center my-10" style="width: 100%; height: 100%;">
-      <register-dialog-form
-          :style="$vuetify.breakpoint.smAndDown ? 'width: 85vw'  : 'width: 50vw'"
-          :title="$t('register')"
-      ></register-dialog-form>
-    </div>
-  </div>
+  <v-container>
+    <register-dialog-form
+      class="form-register-page"
+      :style="$vuetify.breakpoint.smAndUp ?'width: 60vw' :'width: 100%' "
+      :title="$t('register')"
+    ></register-dialog-form>
+  </v-container>
 </template>
   
   <script>

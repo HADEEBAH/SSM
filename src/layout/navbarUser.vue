@@ -164,12 +164,12 @@
 
               <span class="text-white mx-2">
                 {{
-                  $i18n.locale == "th"
+                  $i18n.locale == 'th'
                     ? show_profile_detail.firstNameTh
                     : show_profile_detail.firstNameEng
                 }}
                 {{
-                  $i18n.locale == "th"
+                  $i18n.locale == 'th'
                     ? show_profile_detail.lastNameTh
                     : show_profile_detail.lastNameEng
                 }}
@@ -443,7 +443,7 @@ export default {
   }),
 
   created() {
-    this.$i18n.locale = localStorage.getItem("lang");
+    this.$i18n.locale = localStorage.getItem("lang") ? localStorage.getItem("lang") : 'th';
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail.account_id);
