@@ -134,6 +134,7 @@ body{
     top: 2%;
     right: 0px;
     width: 100%;
+    z-index: 99;
 }
 .form-register-page{
     position: relative;
