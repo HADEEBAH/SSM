@@ -2,22 +2,30 @@
   <v-container>
     <v-row dense>
       <v-col cols="12" class="text-center m-auto my-5">
-        <v-img src="@/assets/changePassword/reset_password.svg" class="max-w-sm m-auto"/>
+        <v-img
+          src="@/assets/changePassword/reset_password.svg"
+          class="max-w-sm m-auto"
+        />
       </v-col>
       <v-col cols="12" class="text-center">
         <label class="font-weight-bold">
-          {{ $t("confirm new password") }}
+          {{ $t("reset password") }}
         </label>
       </v-col>
-      
+
       <v-col cols="12" class="text-center w-full">
         <v-text-field
           v-model="password"
           :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
-          :class="MobileSize ? 'w-[100%!important] m-[auto!important]' : 'w-[50%!important] m-[auto!important]'"
+          :class="
+            MobileSize
+              ? 'w-[100%!important] m-[auto!important]'
+              : 'w-[50%!important] m-[auto!important]'
+          "
           :label="$t('new password')"
           :type="show_password ? 'text' : 'password'"
           @click:append="show_password = !show_password"
+          @keypress="Validation($event, 'en-number')"
           color="#FF6B81"
           solo
           :rules="RulesPassword"
@@ -27,52 +35,56 @@
         <v-text-field
           v-model="confirm_password"
           :append-icon="show_confirm_password ? 'mdi-eye' : 'mdi-eye-off'"
-          :class="MobileSize ? 'w-[100%!important] m-[auto!important]' : 'w-[50%!important] m-[auto!important]'"
+          :class="
+            MobileSize
+              ? 'w-[100%!important] m-[auto!important]'
+              : 'w-[50%!important] m-[auto!important]'
+          "
           :label="$t('confirm new password')"
           :type="show_confirm_password ? 'text' : 'password'"
           @click:append="show_confirm_password = !show_confirm_password"
+          @keypress="Validation($event, 'en-number')"
           color="#FF6B81"
           solo
-          :rules="RulesPassword"
+          :rules="RulesRePassword"
         ></v-text-field>
       </v-col>
     </v-row>
-    <v-row dense class="text-center" >
-      <v-col cols="12" >
+    <v-row dense class="text-center">
+      <v-col cols="12">
         <v-btn
-        :disabled="loading"
-        :loading="loading"
-        @click="sendResetPassword()"
-        :class="MobileSize ? 'w-[100%!important] text-[#FF6B81!important] font-bold' : 'w-[50%!important] text-[#FF6B81!important] font-bold'"
-        color="#F0F2F5">{{ $t("confirm") }}</v-btn>
+          :disabled="loading"
+          :loading="loading"
+          @click="sendResetPassword()"
+          :class="
+            MobileSize
+              ? 'w-[100%!important] text-[#FF6B81!important] font-bold'
+              : 'w-[50%!important] text-[#FF6B81!important] font-bold'
+          "
+          color="#F0F2F5"
+          >{{ $t("confirm") }}</v-btn
+        >
       </v-col>
     </v-row>
 
-    <v-dialog 
-      v-model="otp_dialog" 
+    <v-dialog
+      v-model="otp_dialog"
       persistent
       :width="$vuetify.breakpoint.smAndUp ? `60vw` : ''"
     >
-      <v-card flat >
+      <v-card flat>
         <v-container>
           <v-row dense>
             <v-col class="pa-2" align="right">
-              <v-btn
-                icon
-                @click="otp_dialog = false"
-              >  
-                <v-icon color="red">
-                  mdi-close
-                </v-icon>
+              <v-btn icon @click="otp_dialog = false">
+                <v-icon color="red"> mdi-close </v-icon>
               </v-btn>
             </v-col>
           </v-row>
 
           <v-row dense>
             <v-col cols="12" class="text-center">
-              <label class="font-weight-bold">
-                {{$t("confirm")}} OTP
-              </label>
+              <label class="font-weight-bold"> {{ $t("confirm") }} OTP </label>
             </v-col>
           </v-row>
 
@@ -81,7 +93,11 @@
               <v-col cols="12" class="text-center">
                 <v-otp-input
                   v-model="otp"
-                  :class="MobileSize ? 'w-[100%!important] m-[auto!important]' : 'w-[50%!important] m-[auto!important]'"
+                  :class="
+                    MobileSize
+                      ? 'w-[100%!important] m-[auto!important]'
+                      : 'w-[50%!important] m-[auto!important]'
+                  "
                   length="6"
                 ></v-otp-input>
               </v-col>
@@ -90,7 +106,12 @@
           <v-card-actions>
             <v-row dense>
               <v-col align="right">
-                <v-btn outlined color="#ff6b81" text-color="#ff6b81" @click="otp_dialog = false">
+                <v-btn
+                  outlined
+                  color="#ff6b81"
+                  text-color="#ff6b81"
+                  @click="otp_dialog = false"
+                >
                   {{ $t("cancel") }}
                 </v-btn>
               </v-col>
@@ -104,135 +125,163 @@
         </v-container>
       </v-card>
     </v-dialog>
-    <v-btn @click="backToHome()" text dark :class="MobileSize ? 'absolute top-[1%] right-[2%]' : 'absolute top-[1%] right-[1%]' " color="#FF6B81">
+    <v-btn
+      @click="backToHome()"
+      text
+      dark
+      :class="
+        MobileSize
+          ? 'absolute top-[1%] right-[2%]'
+          : 'absolute top-[1%] right-[1%]'
+      "
+      color="#FF6B81"
+    >
       <v-icon class="mr-2">mdi mdi-home</v-icon> {{ $t("return to home page") }}
     </v-btn>
   </v-container>
 </template>
 <script>
-  import { mapActions, mapGetters } from "vuex";
-  import router from "@/router";
+import { mapActions, mapGetters } from "vuex";
+import router from "@/router";
+import { inputValidation } from "@/functions/functions";
+
 import Swal from "sweetalert2";
-  
-  export default {
-    data: () => ({
-      otp: "",
-      password: "",
-      confirm_password: "",
-      loading: false,
-      loading_otp: false,
-      otp_dialog: false,
 
-      show_password: false,
-      show_confirm_password: false,
+export default {
+  data: () => ({
+    otp: "",
+    password: "",
+    confirm_password: "",
+    loading: false,
+    loading_otp: false,
+    otp_dialog: false,
+
+    show_password: false,
+    show_confirm_password: false,
+  }),
+  methods: {
+    ...mapActions({
+      SendTypeForgotPassword: "ResetPasswordModules/SendTypeForgotPassword",
+      SendResetPasswordOtp: "ResetPasswordModules/SendResetPasswordOtp",
     }),
-    methods: {
-      ...mapActions({
-        SendTypeForgotPassword: "ResetPasswordModules/SendTypeForgotPassword",
-        SendResetPasswordOtp: "ResetPasswordModules/SendResetPasswordOtp"
-      }),
 
-      backToHome() {
-        router.push({ name: "UserKingdom" });
-      },
+    backToHome() {
+      router.push({ name: "UserKingdom" });
+    },
 
-      async sendResetPassword () {
-        this.loading = true
+    async sendResetPassword() {
+      this.loading = true;
 
-        if (this.password === "") {
-          this.loading = false
-          Swal.fire({
-            icon: "warning",
-            title: this.$t("the password is incorrect"),
-            text: this.$t("please enter your password again")
-          })
-        } else if (this.confirm_password === "") {
-          this.loading = false
-          Swal.fire({
-            icon: "warning",
-            title: this.$t("confirm password is incorrect"),
-            text: this.$t("please confirm the new password again")
-          })
-        } else if (this.password.length < 8) {
-          this.loading = false
-          Swal.fire({
-            icon: "warning",
-            title: this.$t("the password is incorrect"),
-            text: this.$t("please enter a password that is at least 8 characters long")
-          })
-        } else if (this.confirm_password.length < 8) {
-          this.loading = false
-          Swal.fire({
-            icon: "warning",
-          title:  this.$t("confirm password is incorrect"),
-            text: this.$t("please enter a password that is at least 8 characters long")
-          })
-        } else if (this.password !== this.confirm_password) {
-          this.loading = false
-          Swal.fire({
-            icon: "warning",
-            title: this.$t("passwords do not match"),
-            text: this.$t("please confirm your passwords are the same")
-          })
-        } else {
-          this.otp_dialog = true
-          this.loading = false
-        }
-      },
-
-      async confirmOtp () {
-        this.loading_otp = false
-        if (this.otp !== "" && this.otp.length === 6) {
-          this.loading_otp = false
-
-          const payload = {
-            otp: this.otp,
-            new_password: this.password,
-            confirm_new_password: this.confirm_password,
-          }
-          await this.SendResetPasswordOtp(payload)
-
-          if (this.responseResetPassword) {
-            this.otp_dialog = false
-            
-            Swal.fire({
-              icon: "success",
-              title: this.$t("succeed"),
-              text: this.$t("the password has been edited successfully"),
-              timer: 3000,
-              showConfirmButton: false,
-              timerProgressBar: true
-            }).finally(()=>{
-              router.push({ name: "Login" });
-            })
-
-          } else {
-            Swal.fire({
-              icon: "warning",
-              title: this.$t("OTP verification failed"),
-              text: this.$t("please enter OTP correctly")
-            })
-          }
-          this.loading_otp = false
-        }
+      if (this.password === "") {
+        this.loading = false;
+        Swal.fire({
+          icon: "warning",
+          title: this.$t("the password is incorrect"),
+          text: this.$t("please enter your password again"),
+        });
+      } else if (this.confirm_password === "") {
+        this.loading = false;
+        Swal.fire({
+          icon: "warning",
+          title: this.$t("confirm password is incorrect"),
+          text: this.$t("please confirm the new password again"),
+        });
+      } else if (this.password.length < 8) {
+        this.loading = false;
+        Swal.fire({
+          icon: "warning",
+          title: this.$t("the password is incorrect"),
+          text: this.$t(
+            "please enter a password that is at least 8 characters long"
+          ),
+        });
+      } else if (this.confirm_password.length < 8) {
+        this.loading = false;
+        Swal.fire({
+          icon: "warning",
+          title: this.$t("confirm password is incorrect"),
+          text: this.$t(
+            "please enter a password that is at least 8 characters long"
+          ),
+        });
+      } else if (this.password !== this.confirm_password) {
+        this.loading = false;
+        Swal.fire({
+          icon: "warning",
+          title: this.$t("passwords do not match"),
+          text: this.$t("please confirm your passwords are the same"),
+        });
+      } else {
+        this.otp_dialog = true;
+        this.loading = false;
       }
     },
-    computed: {
-      ...mapGetters({
-        responseResetPassword: "ResetPasswordModules/responseResetPassword",
-        responseResetPasswordMessage: "ResetPasswordModules/responseResetPasswordMessage",
-      }),
-      RulesPassword(){
-        return [
-          (val) =>
-            (val || "").length > 7 ||
-           this.$t("please enter a password that is at least 8 characters long"),
-        ]
-      },
-      MobileSize() {
-        const { xs } = this.$vuetify.breakpoint;
-        return !!xs;
-      },
-    }
-  };
+
+    async confirmOtp() {
+      this.loading_otp = false;
+      if (this.otp !== "" && this.otp.length === 6) {
+        this.loading_otp = false;
+
+        const payload = {
+          otp: this.otp,
+          new_password: this.password,
+          confirm_new_password: this.confirm_password,
+        };
+        await this.SendResetPasswordOtp(payload);
+
+        if (this.responseResetPassword) {
+          this.otp_dialog = false;
+
+          Swal.fire({
+            icon: "success",
+            title: this.$t("succeed"),
+            text: this.$t("the password has been edited successfully"),
+            timer: 3000,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          }).finally(() => {
+            router.push({ name: "Login" });
+          });
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: this.$t("OTP verification failed"),
+            text: this.$t("please enter OTP correctly"),
+          });
+        }
+        this.loading_otp = false;
+      }
+    },
+    Validation(e, type) {
+      inputValidation(e, type);
+    },
+  },
+  computed: {
+    ...mapGetters({
+      responseResetPassword: "ResetPasswordModules/responseResetPassword",
+      responseResetPasswordMessage:
+        "ResetPasswordModules/responseResetPasswordMessage",
+    }),
+    RulesPassword() {
+      return [
+        (val) =>
+          (val || "").length > 7 ||
+          this.$t("please enter a password that is at least 8 characters long"),
+      ];
+    },
+    RulesRePassword() {
+      return [
+        (val) =>
+          (val || "").length > 7 ||
+          this.$t(
+            "please enter a confirmation password that is at least 8 characters long"
+          ),
+      ];
+    },
+    MobileSize() {
+      const { xs } = this.$vuetify.breakpoint;
+      return !!xs;
+    },
+  },
+};
 </script>

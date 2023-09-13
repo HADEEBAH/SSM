@@ -172,6 +172,7 @@
           </v-card-text>
 
           <v-card-text>
+            <pre>{{ details }}</pre>
             <v-row dense v-if="details.type == 'normal'">
               <v-col cols="12" sm="6">
                 <label class="font-weight-bold">{{ $t("start time") }}</label>
@@ -271,6 +272,7 @@
                 >
                 </v-text-field>
               </v-col>
+              <pre>{{ !details.selectedDate }}</pre>
               <v-col cols="12" sm="6" v-if="details.package == 'leave'">
                 <label class="font-weight-bold">{{
                   $t("compensation from")
