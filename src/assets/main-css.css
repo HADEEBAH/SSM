@@ -151,3 +151,15 @@ body{
 .v-calendar .v-event.v-event-start.v-event-end .v-event-summary span{
     white-space: break-spaces;
 }
+.auth-bar{
+    position: absolute;
+    top: 2%;
+    right: 0px;
+    width: 100%;
+    z-index: 99;
+}
+.form-register-page{
+    position: relative;
+    margin: 0px auto;
+    padding-top: 40px;
+}
