@@ -253,6 +253,7 @@
     "filter":"Filter",
     "friday" : "Friday",
     "february": "February",
+    "from": "from",
 
 
     "graduating students": "Graduat Students",
@@ -358,6 +359,7 @@
     "no match information found": "No match information found",
     "no recording": "No recording",
     "no development/homework":"No development/homework",
+    "notification of postponement of school opening date": "Notification of postponement of school opening date",
     "note" : "Note",
     "note that the length exceeds the limit": "Note that the length exceeds the limit",
     "notification of course application":"Notification of course application",
@@ -515,8 +517,9 @@
     "policy":"Policy",
     "potential assessment":"Potential assessment",
     "parent and student usernames must be unique" : "Parent and student usernames must be unique",
-
     "print receipt" : "Print receipt",
+    "postpone the course opening date": "Postpone the course opening course",
+
 
 
     "reason for leave" : "Reason for leave",
@@ -680,6 +683,7 @@
     "thursday" : "Thursday",    
     "this course is not in pending status":"( This course is not in pending status )",
     "to" : "To",
+    "to day" : "to",
     "to you" : "to you",
     "to request leave" : "To request leave",
     "today's teaching program"  : "Today's teaching program",

@@ -1130,8 +1130,8 @@ export default {
   async mounted() {
     this.selected_mounth = this.mapMonth;
     this.donut_mounth = this.mapMonth;
-    await this.GetEmptyCourse();
-    this.GetStudentValue();
+    // await this.GetEmptyCourse();
+    await this.GetStudentValue();
     // await this.GetCourseType();
     // await this.GetPotential();
   },

@@ -25,7 +25,7 @@ export default {
       this.GetNotifications(data)
       notification.open({
         message: data.notificationName,
-        description:data.notificationDescription
+        description: data.notificationDescription
       });
     });
   },
@@ -33,7 +33,9 @@ export default {
     ...mapActions({ GetNotifications: "NotificationsModules/GetNotifications" }),
 
     async sendNotification(params, notify = false) {
+      console.log('params :>> ', params);
       this.socket.emit("events", params, (response) => {
+        console.log('response :>> ', response);
         if (response) {
           if (notify) {
             Swal.fire({
@@ -60,8 +62,8 @@ export default {
       });
     }
   },
-  watch:{
-    $route (to, from){
+  watch: {
+    $route(to, from) {
       if (to) {
         this.socket.disconnect()
       }

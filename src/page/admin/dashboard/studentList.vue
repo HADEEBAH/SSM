@@ -58,7 +58,7 @@
           <template v-slot:detail>
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
-                {{ get_current_student.currentStudent.countStudentCurrent }}
+                {{ get_current_student.currentStudent?.countStudentCurrent }}
               </v-col>
               <v-col class="text-sm">{{ $t("person") }}</v-col>
             </v-row>
@@ -92,7 +92,8 @@
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
                 {{
-                  get_potential_student.potencialsStudent.countStudentPotencials
+                  get_potential_student.potencialsStudent
+                    ?.countStudentPotencials
                 }}
               </v-col>
               <v-col class="text-sm">{{ $t("person") }}</v-col>
@@ -117,7 +118,7 @@
           <template v-slot:detail>
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
-                {{ get_reserve_student.countReserve.studentList.length }}
+                {{ get_reserve_student.countReserve?.studentList?.length }}
               </v-col>
               <v-col class="text-sm">{{ $t("person") }}</v-col>
             </v-row>
@@ -170,7 +171,7 @@
         :headers="data_tab_two"
         @page-count="pageCount = $event"
         class="elevation-1 header-table"
-        :items="get_current_student.currentStudent.studentList"
+        :items="get_current_student.currentStudent?.studentList"
         :search="search"
       >
         <template v-slot:no-results>
@@ -249,7 +250,7 @@
         :headers="data_tab_four"
         @page-count="pageCount = $event"
         class="elevation-1 header-table"
-        :items="get_reserve_student.countReserve.studentList"
+        :items="get_reserve_student.countReserve?.studentList"
         :search="search"
       >
         <template v-slot:no-results>

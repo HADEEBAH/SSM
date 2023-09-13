@@ -38,7 +38,7 @@ const dashboardModules = {
     get_empty_course_open: [],
     get_empty_course_close: [],
     get_course_type: {},
-    get_potential: {},
+    // get_potential: {},
     get_potential_student_list: {},
     get_donut: {},
     get_graf: [],
@@ -124,9 +124,40 @@ const dashboardModules = {
 
   },
   actions: {
-    async GetEmptyCourse(context) {
+
+    // student type 1
+    async GetStudentValue(context) {
       context.commit("SetGetLoading", true)
 
+      try {
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potencial-duplicate`)
+
+
+        if (data.statusCode === 200) {
+          context.commit("SetGetStudentValue", data.data)
+          await context.dispatch("GetCourseType")
+        }
+      } catch (error) {
+        context.commit("SetGetStudentValue", [])
+        context.commit("SetGetLoading", false)
+
+      }
+    },
+    // course type 2
+    async GetCourseType(context) {
+      try {
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/course-type`)
+        if (data.statusCode === 200) {
+          await context.commit("SetGetCourseType", data.data)
+          await context.dispatch("GetEmptyCourse")
+          // await context.dispatch("GetPotential")
+        }
+      } catch (error) {
+        await context.commit("SetGetLoading", false)
+      }
+    },
+    // 3
+    async GetEmptyCourse(context) {
       try {
         // let { data } = await axios.get(` http://localhost:3000/api/v1/dashboard/course-status`)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/course-status`)
@@ -143,84 +174,16 @@ const dashboardModules = {
               EmptyCourseClose.push(items)
             }
           })
-
+          await context.dispatch("SetGetCourseType")
           await context.commit("SetGetEmptyCourse", data.data)
           await context.commit("SetGetEmptyCourseOpen", EmptyCourseOpen)
           await context.commit("SetGetEmptyCourseClose", EmptyCourseClose)
-          await context.dispatch("GetCourseType")
-        }
-      } catch (error) {
-        await context.commit("SetGetLoading", false)
-      }
-    },
-
-    async GetCourseType(context) {
-      try {
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/course-type`)
-        if (data.statusCode === 200) {
-          await context.commit("SetGetCourseType", data.data)
-          await context.dispatch("GetPotential")
-        }
-      } catch (error) {
-        await context.commit("SetGetLoading", false)
-      }
-    },
-
-    // async GetPotential(context) {
-    //   try {
-    //     let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potencial/`)
-    //     // let { data } = await axios.get(`http://localhost:3000/api/v1/dashboard/potencial/`)
-    //     if (data.statusCode === 200) {
-    //       data.data.countReserve.studentList.map((items) => {
-    //         for (const item of items.course) {
-    //           item.fullDateTh = new Date(item.createdDate).toLocaleDateString(
-    //             "th-TH",
-    //             {
-    //               year: "numeric",
-    //               month: "long",
-    //               day: "numeric",
-    //             }
-    //           )
-    //         }
-    //       })
-    //       await context.commit("SetGetLoading", false)
-    //       await context.commit("SetGetPotential", data.data)
-    //     }
-
-    //   } catch (error) {
-    //     await context.commit("SetGetLoading", false)
-    //   }
-    // },
-
-    async GetPotentialStudentList(context) {
-      context.commit("SetGetLoading", true)
-
-      try {
-
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potencial/`)
-        // let { data } = await axios.get(`http://localhost:3000/api/v1/dashboard/potencial/`)
-        if (data.statusCode === 200) {
-          data.data.countReserve.studentList.map((items) => {
-            for (const item of items.course) {
-              item.fullDateTh = new Date(item.createdDate).toLocaleDateString(
-                "th-TH",
-                {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                }
-              )
-            }
-          })
           await context.commit("SetGetLoading", false)
-          await context.commit("SetGetPotentialStudentList", data.data)
         }
-
       } catch (error) {
         await context.commit("SetGetLoading", false)
       }
     },
-
 
     async GetDonut(context, item) {
       context.commit("SetGetLoading", true)
@@ -330,24 +293,7 @@ const dashboardModules = {
       }
     },
 
-    async GetStudentValue(context) {
-      context.commit("SetGetLoading", true)
 
-      try {
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potencial-duplicate`)
-
-
-        if (data.statusCode === 200) {
-          context.commit("SetGetStudentValue", data.data)
-          context.commit("SetGetLoading", false)
-
-        }
-      } catch (error) {
-        context.commit("SetGetStudentValue", [])
-        context.commit("SetGetLoading", false)
-
-      }
-    },
     async GetAllStudentList(context) {
       context.commit("SetGetLoading", true)
 
@@ -425,7 +371,60 @@ const dashboardModules = {
 
       }
     },
+    // async GetPotential(context) {
+    //   try {
+    //     let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potencial/`)
+    //     // let { data } = await axios.get(`http://localhost:3000/api/v1/dashboard/potencial/`)
+    //     if (data.statusCode === 200) {
+    //       data.data.countReserve.studentList.map((items) => {
+    //         for (const item of items.course) {
+    //           item.fullDateTh = new Date(item.createdDate).toLocaleDateString(
+    //             "th-TH",
+    //             {
+    //               year: "numeric",
+    //               month: "long",
+    //               day: "numeric",
+    //             }
+    //           )
+    //         }
+    //       })
+    //       await context.commit("SetGetLoading", false)
+    //       await context.commit("SetGetPotential", data.data)
+    //     }
 
+    //   } catch (error) {
+    //     await context.commit("SetGetLoading", false)
+    //   }
+    // },
+
+    // async GetPotentialStudentList(context) {
+    //   context.commit("SetGetLoading", true)
+
+    //   try {
+
+    //     let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potencial/`)
+    //     // let { data } = await axios.get(`http://localhost:3000/api/v1/dashboard/potencial/`)
+    //     if (data.statusCode === 200) {
+    //       data.data.countReserve.studentList.map((items) => {
+    //         for (const item of items.course) {
+    //           item.fullDateTh = new Date(item.createdDate).toLocaleDateString(
+    //             "th-TH",
+    //             {
+    //               year: "numeric",
+    //               month: "long",
+    //               day: "numeric",
+    //             }
+    //           )
+    //         }
+    //       })
+    //       await context.commit("SetGetLoading", false)
+    //       await context.commit("SetGetPotentialStudentList", data.data)
+    //     }
+
+    //   } catch (error) {
+    //     await context.commit("SetGetLoading", false)
+    //   }
+    // },
 
   },
   getters: {
@@ -441,9 +440,9 @@ const dashboardModules = {
     getCourseType(state) {
       return state.get_course_type
     },
-    getPotential(state) {
-      return state.get_potential
-    },
+    // getPotential(state) {
+    //   return state.get_potential
+    // },
     getDonut(state) {
       return state.get_donut
     },
