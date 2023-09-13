@@ -221,8 +221,6 @@
                 <v-row dense>
                   <v-col
                     cols="12"
-                    md="12"
-                    lg="4"
                     style="color: #ff6b81; font-weight: bold; margin-top: 8px"
                   >
                     <v-icon color="#ff6b81" class="mb-1"
@@ -232,7 +230,7 @@
                   </v-col>
 
                   <!-- Year -->
-                  <v-col cols="6" sm="6" md="6" lg="4">
+                  <v-col cols="6">
                     <v-select
                       v-model="selected_years"
                       :items="filter_years"
@@ -256,7 +254,7 @@
                     </v-select>
                   </v-col>
                   <!-- Month -->
-                  <v-col cols="6" sm="6" md="6" lg="4">
+                  <v-col cols="6">
                     <v-select
                       v-model="selected_mounth"
                       :items="thaiMonths"
@@ -288,7 +286,7 @@
                         ? get_graf.sumSuccess
                             .toString()
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                        : "ยังไม่มีข้อมูล"
+                        : "0"
                     }}
                   </div>
                   <!-- </v-badge> -->
@@ -319,8 +317,6 @@
                 <v-row dense>
                   <v-col
                     cols="12"
-                    md="12"
-                    lg="4"
                     style="color: #ff6b81; font-weight: bold; margin-top: 8px"
                   >
                     <v-icon color="#ff6b81" class="mb-2"
@@ -329,7 +325,7 @@
                     {{ $t("income proportion") }}
                   </v-col>
                   <!-- YEAR -->
-                  <v-col cols="6" sm="6" md="6" lg="4">
+                  <v-col cols="6">
                     <v-select
                       v-model="donut_years"
                       :items="filter_years"
@@ -352,7 +348,7 @@
                     </v-select>
                   </v-col>
                   <!-- MONTH -->
-                  <v-col cols="6" sm="6" md="6" lg="4">
+                  <v-col cols="6">
                     <v-select
                       v-model="donut_mounth"
                       :items="thaiMonths"
@@ -564,6 +560,7 @@
                       outlined
                       style="overflow-y: scroll; overflow-x: hidden"
                       height="400px"
+                      class="rounded-lg"
                     >
                       <v-card-text
                         style="
@@ -573,6 +570,7 @@
                           z-index: 1;
                         "
                         align="center"
+                        class="rounded-t-lg"
                       >
                         <span class="mr-2 font-bold">
                           {{ $t("full courses") }}
@@ -592,7 +590,7 @@
                       <v-card-text>
                         <v-card
                           outlined
-                          class="mb-3"
+                          class="mb-3 rounded-lg"
                           v-for="(item, index) in searchCourseClose(
                             search_course_close
                           )"
@@ -602,13 +600,24 @@
                             <v-row dense>
                               <v-col cols="12">
                                 <v-card-title class="font-bold">
-                                  {{ item.courseNameTh }}
-                                  <!-- {{ `${$i18n.locale == 'th' ? item.courseNameTh : item.courseNameEn}`}} -->
+                                  <!-- {{ item.courseNameTh }} -->
+                                  {{
+                                    `${
+                                      $i18n.locale == "th"
+                                        ? item.courseNameTh
+                                        : item.courseNameEn
+                                    }`
+                                  }}
                                 </v-card-title>
                               </v-col>
                               <v-col cols="12" sm="12" md="8">
                                 <v-card-subtitle class="mt-n7">
-                                  {{ `${item.courseTypeNameTh}`
+                                  {{
+                                    `${
+                                      $i18n.locale == "th"
+                                        ? item.courseTypeNameTh
+                                        : item.courseTypeNameEn
+                                    }`
                                   }}<span
                                     v-if="
                                       item.courseTypeNameTh == 'คอร์สทั่วไป'
@@ -700,6 +709,7 @@
                       outlined
                       style="overflow-y: scroll; overflow-x: hidden"
                       height="400px"
+                      class="rounded-lg"
                     >
                       <v-card-text
                         style="
@@ -709,6 +719,7 @@
                           z-index: 1;
                         "
                         align="center"
+                        class="rounded-t-lg"
                       >
                         <span class="mr-2 font-bold">
                           {{ $t("course available") }}
@@ -728,7 +739,7 @@
                       <v-card-text>
                         <v-card
                           outlined
-                          class="mb-3"
+                          class="mb-3 rounded-lg"
                           v-for="(item, index) in searchCourseOpen(
                             search_course_open
                           )"
@@ -737,13 +748,22 @@
                           <v-card-text class="pa-0">
                             <v-row dense>
                               <v-col cols="12">
-                                <v-card-title class="font-bold">{{
-                                  item.courseNameTh
-                                }}</v-card-title>
+                                <v-card-title class="font-bold">
+                                  {{
+                                    $i18n.locale == "th"
+                                      ? item.courseNameTh
+                                      : item.courseNameEn
+                                  }}</v-card-title
+                                >
                               </v-col>
                               <v-col cols="12" sm="12" md="8" lg="8">
                                 <v-card-subtitle class="mt-n7">
-                                  {{ `${item.courseTypeNameTh}`
+                                  {{
+                                    `${
+                                      $i18n.locale == "th"
+                                        ? item.courseTypeNameTh
+                                        : item.courseTypeNameEn
+                                    }`
                                   }}<span
                                     v-if="
                                       item.courseTypeNameTh == 'คอร์สทั่วไป'
@@ -875,7 +895,11 @@
                                 outlined
                                 readonly
                                 dense
-                                :value="items_dialog.courseNameTh"
+                                :value="
+                                  this.$i18n.locale == 'th'
+                                    ? items_dialog.courseNameTh
+                                    : items_dialog.courseNameEn
+                                "
                                 :label="$t('course name')"
                                 color="#FF6B81"
                               >
@@ -897,7 +921,11 @@
                                 outlined
                                 readonly
                                 dense
-                                :value="`${items_dialog.courseTypeNameTh} (${items_dialog.packageName})`"
+                                :value="`${
+                                  this.$i18n.locale == 'th'
+                                    ? items_dialog.courseTypeNameTh
+                                    : items_dialog.courseNameEn
+                                } (${items_dialog.courseTypeNameEn})`"
                                 :label="$t('package')"
                                 color="#FF6B81"
                               >
@@ -941,7 +969,15 @@
                                 outlined
                                 readonly
                                 dense
-                                :value="`${items_dialog.firstNameTh}  ${items_dialog.lastNameTh}`"
+                                :value="`${
+                                  this.$i18n.locale == 'th'
+                                    ? items_dialog.firstNameTh
+                                    : items_dialog.firstNameEn
+                                }  ${
+                                  this.$i18n.locale == 'th'
+                                    ? items_dialog.lastNameTh
+                                    : items_dialog.lastNameEn
+                                }`"
                                 :label="$t('first name - last name coach')"
                                 color="#FF6B81"
                               >
@@ -1024,18 +1060,18 @@ export default {
     totalSuccessDonut: 0,
     totalPendingDonut: 0,
     totalPriceDonut: 0,
-    course_close_options: [
-      {
-        label: "คอร์สเต็ม",
-        value: "Close",
-        color: "#999999",
-      },
-      {
-        label: "คอร์สว่าง",
-        value: "Open",
-        color: "#ff6b81",
-      },
-    ],
+    // course_close_options: [
+    //   {
+    //     label: "คอร์สเต็ม",
+    //     value: "Close",
+    //     color: "#999999",
+    //   },
+    //   {
+    //     label: "คอร์สว่าง",
+    //     value: "Open",
+    //     color: "#ff6b81",
+    //   },
+    // ],
 
     thaiMonths: [
       { name: "ทั้งปี", key: "", type: "month" },
@@ -1169,29 +1205,46 @@ export default {
     },
 
     customTooltip(series, seriesIndex, w) {
+      // let waiting for payment = ''
+      // let
       let item = w.globals;
       let color = item.colors[seriesIndex];
       return this.get_donut?.datas[seriesIndex]
         ? `
         <div class="pa-3 ml-auto" style='background-color: ${color}'>
           <h3 class="font-weight-bold">${item.seriesNames[seriesIndex]}</h3>
-          <i class="mdi mdi-circle " style="font-size:10px; color: #8cd977"></i> <span class="font-weight-bold">ที่ชำระแล้ว : </span>${this.get_donut?.datas[seriesIndex].stringSumSuccess} บาท<br/>
-        <i class="mdi mdi-circle " style="font-size:10px; color: #fcc419"></i> <span class="font-weight-bold">รอการชำระ : </span>${this.get_donut?.datas[seriesIndex].stringSumPending} บาท<br/>
-          <span class="font-weight-bold">รวม : </span>${this.get_donut?.datas[seriesIndex].stringTotal} บาท
+          <i class="mdi mdi-circle " style="font-size:10px; color: #8cd977"></i> <span class="font-weight-bold">
+            ${this.$t("paid")} :</span> ${
+            this.get_donut?.datas[seriesIndex].stringSumSuccess
+          } ${this.$t("baht")}<br/>
+        <i class="mdi mdi-circle " style="font-size:10px; color: #fcc419"></i> <span class="font-weight-bold">${this.$t(
+          "pending"
+        )} : </span>${
+            this.get_donut?.datas[seriesIndex].stringSumPending
+          } ${this.$t("baht")}<br/>
+          <span class="font-weight-bold">${this.$t("total")} : </span>${
+            this.get_donut?.datas[seriesIndex].stringTotal
+          } ${this.$t("baht")}
         </div>
       `
         : `
         <div class="pa-3 ml-auto" style='background-color: ${color}'>
           <h3 class="font-weight-bold">${item.seriesNames[seriesIndex]}</h3>
-          <i class="mdi mdi-circle " style="font-size:10px; color: #8cd977"></i> <span class="font-weight-bold">ที่ชำระแล้ว : </span>${this.get_donut?.otherTotal.sumSuccess
+          <i class="mdi mdi-circle " style="font-size:10px; color: #8cd977"></i> <span class="font-weight-bold"> ${this.$t(
+            "paid"
+          )} : </span>${this.get_donut?.otherTotal.sumSuccess
             .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} บาท<br/>
-          <i class="mdi mdi-circle " style="font-size:10px; color: #fcc419"></i> <span class="font-weight-bold">รอการชำระ : </span>${this.get_donut?.otherTotal.sumPending
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ${this.$t("baht")}<br/>
+          <i class="mdi mdi-circle " style="font-size:10px; color: #fcc419"></i> <span class="font-weight-bold">${this.$t(
+            "pending"
+          )} : </span>${this.get_donut?.otherTotal.sumPending
             .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} บาท<br/>
-          <span class="font-weight-bold">รวม : </span>${series[seriesIndex]
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ${this.$t("baht")}<br/>
+          <span class="font-weight-bold">${this.$t("total")} : </span>${series[
+            seriesIndex
+          ]
             .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} บาท
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ${this.$t("baht")}
         </div>
         `;
     },
@@ -1239,13 +1292,40 @@ export default {
       get_series_line_chart: "DashboardModules/getSeriesLineChart",
       get_labels_line_chart: "DashboardModules/getLabelsLineChart",
       get_labels_line_chart_month: "DashboardModules/getLabelsLineChartMonth",
+      labels_chart_en: "DashboardModules/getLabelsChartEn",
       get_student_value: "DashboardModules/getStudentValue",
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;
     },
+    // thaiMonths() {
+    //   return [
+    //     { name: this.$t("all year"), key: "", type: "month" },
+    //     { name: this.$t("january"), key: "01", type: "month" },
+    //     { name: this.$t("february"), key: "02", type: "month" },
+    //     { name: this.$t("march"), key: "03", type: "month" },
+    //     { name: this.$t("april"), key: "04", type: "month" },
+    //     { name: this.$t("may"), key: "05", type: "month" },
+    //     { name: this.$t("june"), key: "06", type: "month" },
+    //     { name: this.$t("july"), key: "07", type: "month" },
+    //     { name: this.$t("august"), key: "08", type: "month" },
+    //     { name: this.$t("september"), key: "09", type: "month" },
+    //     { name: this.$t("october"), key: "10", type: "month" },
+    //     { name: this.$t("november"), key: "11", type: "month" },
+    //     { name: this.$t("december"), key: "12", type: "month" },
+    //   ];
+    // },
     chartOptions() {
+      let income = "";
+      let baht = "";
+      if (this.$i18n.locale == "th") {
+        income = "รายได้";
+        baht = "บาท";
+      } else {
+        income = "Income";
+        baht = "Bath";
+      }
       let labels = [];
       if (this.get_graf.length !== 0) {
         if (this.get_graf.type == "month") {
@@ -1281,12 +1361,14 @@ export default {
               "<span>" +
               '<i class="mdi mdi-circle " style="font-size:10px; color: #ff6b81"></i>' +
               " " +
-              "รายได้ : " +
+              income +
+              " " +
               series[seriesIndex][dataPointIndex]
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
               "</span>" +
-              " บาท" +
+              " " +
+              baht +
               "</div>"
             );
           },
@@ -1320,7 +1402,10 @@ export default {
           "#ffc2c4",
           "#999999",
         ],
-        labels: this.get_labels_chart,
+        labels:
+          this.$i18n.locale == "th"
+            ? this.get_labels_chart
+            : this.labels_chart_en,
         chart: {
           type: "donut",
         },
@@ -1331,6 +1416,20 @@ export default {
             donut: {
               labels: {
                 show: true,
+                name: {
+                  show: true,
+                  fontSize: "18px",
+                  color: "#ff6b81",
+                },
+                value: {
+                  show: true,
+                  fontSize: "18px",
+                  color: "#373d3f",
+                  offsetY: 16,
+                  formatter: function (val) {
+                    return parseFloat(val).toLocaleString();
+                  },
+                },
                 total: {
                   show: true,
                   label: this.$t("total"),
@@ -1338,8 +1437,9 @@ export default {
                   fontSize: "18px",
                   formatter: function (w) {
                     let sumTotal = 0;
-                    for (const items of w.globals.seriesTotals) {
+                    for (let items of w.globals.seriesTotals) {
                       sumTotal = sumTotal + items;
+                      items = items.toLocaleString();
                     }
                     return sumTotal.toLocaleString();
                   },
@@ -1361,7 +1461,7 @@ export default {
           enabled: true,
           y: {
             formatter: function (val) {
-              return val;
+              return val.toLocaleString();
             },
           },
           custom: ({ series, seriesIndex, w }) => {
@@ -1391,12 +1491,26 @@ export default {
         dataLabels: {
           enabled: true,
         },
-        labels: ["คอร์สว่าง", "คอร์สเต็ม"],
+        labels: [this.$t("full courses"), this.$t("course available")],
         legend: {
           show: false,
         },
       };
       return pieChartOptions;
+    },
+    course_close_options() {
+      return [
+        {
+          label: this.$t("full courses"),
+          value: "Close",
+          color: "#999999",
+        },
+        {
+          label: this.$t("course available"),
+          value: "Open",
+          color: "#ff6b81",
+        },
+      ];
     },
   },
 };

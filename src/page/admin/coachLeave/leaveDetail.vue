@@ -63,13 +63,13 @@
               <v-col>
                 <span class="text-[#999999]">{{ $t("leave date") }}:</span>
                 <div class="text-[#2F3542] font-semibold mr-2">
-                  {{ `${coach_leave.startThDate} - ${coach_leave.endThDate}` }}
+                  {{ `${GenDate(coach_leave.startDate)} - ${GenDate(coach_leave.endDate)}` }}
                 </div>
               </v-col>
               <v-col>
                 <span class="text-[#999999] ml-2">{{ $t("leave type") }}:</span>
                 <div class="text-[#2F3542] font-semibold ml-2">
-                  {{ coach_leave.leaveTypeStr }}
+                  {{ $t(coach_leave.leaveType) }}
                 </div>
               </v-col>
               <v-col>
@@ -89,7 +89,7 @@
                   >{{ $t("date of request") }}:
                 </span>
                 <div class="text-[#2F3542] font-semibold">
-                  {{ coach_leave.createDateTh }}
+                  {{ GenDate(coach_leave.createdDate) }}
                 </div>
               </v-col>
             </v-row>
@@ -105,7 +105,7 @@
               <v-icon color="#ff6b81">mdi-calendar-outline</v-icon>
             </v-col>
             <v-col class="font-bold text-lg">
-              {{ date.date ? GenDateStr(new Date(date.date)) : "-" }}
+              {{ date.date ? GenDate(new Date(date.date)) : "-" }}
             </v-col>
           </v-row>
           <v-card
@@ -193,7 +193,7 @@
                             dense
                             outlined
                             hide-details
-                            v-model="course.compensationDate_str"
+                            :value="GenDate(course.compensationDate_str)"
                             readonly
                             :placeholder="$t('choose a compensation date')"
                             v-bind="attrs"
@@ -229,9 +229,7 @@
                       >
                         <v-col class="px-2" cols="12" sm="6">
                           <v-text-field
-                            :disabled="disable"
-                            :outlined="!disable"
-                            :filled="disable"
+                            outlined
                             dense
                             :style="`width:${width()}px;`"
                             style="
@@ -254,13 +252,27 @@
                             hide-clear-button
                             v-model="course.compensationStartTimeObj"
                             close-on-complete
+                            @change="
+                              ChengeTimeMin(
+                                course.compensationStartTimeObj,
+                                index,
+                                index_date,
+                                'start'
+                              )
+                            "
+                            :hour-range="
+                              checkHour(
+                                coach_leave.period,
+                                course.compensationDate,
+                                course,
+                                'start'
+                              )
+                            "
                           ></VueTimepicker>
                         </v-col>
                         <v-col class="px-2" cols="12" sm="6">
                           <v-text-field
-                            :disabled="disable"
-                            :outlined="!disable"
-                            :filled="disable"
+                            outlined
                             dense
                             :style="`width:${width()}px;`"
                             style="
@@ -283,6 +295,22 @@
                             hide-clear-button
                             v-model="course.compensationEndTimeObj"
                             close-on-complete
+                            @change="
+                              ChengeTimeMin(
+                                course.compensationEndTimeObj,
+                                index,
+                                index_date,
+                                'end'
+                              )
+                            "
+                             :hour-range="
+                              checkHour(
+                                coach_leave.period,
+                                course.compensationDate,
+                                course,
+                                'end'
+                              )
+                            "
                           ></VueTimepicker>
                         </v-col>
                       </v-row>
@@ -517,6 +545,77 @@ export default {
       updateStatusCoachLeaveAndCoach:
         "CoachModules/updateStatusCoachLeaveAndCoach",
     }),
+    GenDate(date){
+      const options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      return new Date(date).toLocaleDateString(this.$i18n.locale == 'th' ? 'th-TH': 'en-US',options)
+    },
+    ChengeTimeMin(time, index_course, index_date, type) {
+      if (time.mm === "") {
+        time.mm = "00";
+      }
+      if (type === "start") {
+        this.coach_leave.dates[index_date].courses[
+          index_course
+        ].compensationStartTime = `${time.HH}:${time.mm}`;
+      } else {
+        this.coach_leave.dates[index_date].courses[
+          index_course
+        ].compensationEndTime = `${time.HH}:${time.mm}`;
+      }
+    },
+    checkHour(period, date, course, type) {
+      if (date) {
+        if (
+          new Date(date) >= new Date(this.coach_leave.startDate) &&
+          new Date(date) <= new Date(this.coach_leave.endDate)
+        ) {
+          if (this.periods.filter((v) => v.value === period).length > 0) {
+            let hrs = [];
+            let start = this.periods.filter((v) => v.value === period)[0].start;
+            let end = this.periods.filter((v) => v.value === period)[0].end;
+            if (type && type === "end") {
+              if (course.compensationStartTimeObj.HH) {
+                for (let hr = 0; hr < 24; hr++) {
+                  if (
+                    hr > parseInt(course.compensationStartTimeObj.HH) &&
+                    hr <= end
+                  ) {
+                    hrs.push(hr);
+                  }
+                }
+              }
+            } else {
+              for (let hr = 0; hr < 24; hr++) {
+                if (hr >= start && hr <= end) {
+                  hrs.push(hr);
+                }
+              }
+            }
+            return hrs;
+          }
+        } else {
+          let hrs = [];
+          if (type && type === "end") {
+            if (course.compensationStartTimeObj.HH) {
+              for (let hr = 0; hr < 24; hr++) {
+                if (hr > parseInt(course.compensationStartTimeObj.HH)) {
+                  hrs.push(hr);
+                }
+              }
+            }
+          } else {
+            for (let hr = 0; hr < 24; hr++) {
+              hrs.push(hr);
+            }
+          }
+          return hrs;
+        }
+      }
+    },
     width() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
@@ -544,17 +643,9 @@ export default {
         day: "numeric",
       };
       course.compensationDate_str = new Date(date).toLocaleDateString(
-        "th-TH",
+        this.$i18n.locale =='th' ? "th-TH" : "en-US",
         options
       );
-    },
-    GenDateStr(date) {
-      const options = {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      };
-      return date.toLocaleDateString("th-TH", options);
     },
     closeDisapprovedDialog() {
       this.show_disapproved = false;

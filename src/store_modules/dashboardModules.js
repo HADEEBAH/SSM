@@ -49,9 +49,7 @@ const dashboardModules = {
     series_line_chart: [],
     labels_line_chart: [],
     labels_line_chart_month: [],
-
-
-
+    labels_chart_en: [],
     get_student_value: [],
     get_all_student_list: [],
     get_current_student: [],
@@ -104,6 +102,9 @@ const dashboardModules = {
     },
     SetGetPotentialStudentList(state, payload) {
       state.get_potential_student_list = payload
+    },
+    SetLabelsChartEn(state, payload) {
+      state.labels_chart_en = payload
     },
     SetGetStudentValue(state, payload) {
       state.get_student_value = payload
@@ -228,6 +229,8 @@ const dashboardModules = {
         let chart = []
         let series_chart = []
         let labels_chart = []
+        let labels_chart_en = []
+
         if (data?.statusCode === 200) {
           data.data.sumTotalSuccess = data.data.sumSuccess + data.data.otherTotal.sumSuccess
           data.data.sumTotalPending = data.data.sumPending + data.data.otherTotal.sumPending
@@ -247,10 +250,13 @@ const dashboardModules = {
             chart.map((items) => {
               series_chart.push(parseFloat(items.totalPrice))
               labels_chart.push(items.courseNameTh)
+              labels_chart_en.push(items.courseNameEn)
+
             })
           }
           context.commit("SetSeriesChart", series_chart)
           context.commit("SetLabelsChart", labels_chart)
+          context.commit("SetLabelsChartEn", labels_chart_en)
           context.commit("SetGetDonut", data.data)
           context.commit("SetGetLoading", false)
 
@@ -277,7 +283,7 @@ const dashboardModules = {
             let newDate = new Date(items.date).toLocaleDateString("en-CA")
             const date = new Date(items.date);
             const options = { weekday: 'long', timeZone: 'Asia/Bangkok', locale: 'th-TH' };
-            const dayName = date.toLocaleString('th-TH', options);
+            const dayName = date.toLocaleString(VueI18n.locale == 'th' ? 'th-TH' : 'en-US', options);
             items.date = newDate.split("-")[2]
             items.month = `${VueI18n.t("month")} ${newDate?.split("-")[1]}`
             items.year = newDate.split("-")[0]
@@ -456,6 +462,9 @@ const dashboardModules = {
     getLabelsChart(state) {
       return state.labels_chart
     },
+    getLabelsChartEn(state) {
+      return state.labels_chart_en
+    },
     getSeriesLineChart(state) {
       return state.series_line_chart
     },
@@ -483,6 +492,7 @@ const dashboardModules = {
     getReserveStudent(state) {
       return state.get_reserve_student
     },
+
 
   },
 };

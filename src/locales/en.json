@@ -32,6 +32,7 @@
     "amount to be paid" : "Amount to be paid",
     "all" : "All",
     "all days" : "All days",
+    "all year": "All year",
     "already deleted": "( Already deleted )",
     "already edited": "( Already edited )",
     "all courses" : "All courses",
@@ -54,6 +55,10 @@
     "attachment from student assessment": "Attachment from student assessment",
     "available course information": "Available course information",
     "average" : "Average",
+    "april": "April",
+    "august": "August",
+
+
 
     "baht" : "Baht",
     "banner added successfully": "( Banner added successfully )",
@@ -204,6 +209,8 @@
     "do you want to edit the kingdom?": "Do you want to edit the kingdom?",
     "duplicate relationship": "Duplicate relationship",
     "duplicate user in this course Unable to register": "Duplicate user in this course Unable to register",
+    "december":"December",
+
 
     "edit": "Edit",
     "edit user information": "Edit user information",
@@ -231,8 +238,8 @@
     "find the learning course that interests you here" : "Find the learning course that interests you here",
     "find the learning kingdom that interests you here" : "Find the learning kingdom that interests you here",
     "first name" : "First name",
-    "first name(english)" : "First name(english)",
-    "first name(thai)" : "First name (thai)",
+    "first name(english)" : "First name(English)",
+    "first name(thai)" : "First name (Thai)",
     "full" : "Full",
     "full course" : "Full course",
     "full courses" : "Full courses",
@@ -245,6 +252,8 @@
     "first name - last name": "First name - last name",
     "filter":"Filter",
     "friday" : "Friday",
+    "february": "February",
+
 
     "graduating students": "Graduat Students",
     "general": "General",
@@ -276,6 +285,10 @@
     "income proportion": "Income proportion",
     "intervals and coaches have been corrected":"( Intervals and coaches have been corrected )",
     "is complete" : "is complete",
+
+    "january":"January",
+    "june": "June",
+    "july": "July",
 
     "kingdom" : "Kingdom",
     "kingdom not found" : "Kingdom not found",
@@ -322,8 +335,11 @@
     "manage tables" : "Manage tables",
     "mobile number must have at least 10 characters" : "Mobile number must have at least 10 characters",
     "manage the entire empire": "Manage the entire empire",
-
     "more details" : "More details",
+    "march":"March",
+    "may": "May",
+
+
 
     "name of representative": "Name of representative",
     "nationality": "Nationality",
@@ -352,8 +368,11 @@
     "number of times" : "Number of times",
     "number of times/person" : "Number of times/person",
     "number of courses" : "Number of courses",
-    "name of kingdom (thai)": "Name of kingdom (thai)",
-    "name of kingdom (english)": "Name of kingdom (english)",
+    "name of kingdom (thai)": "Name of kingdom (Thai)",
+    "name of kingdom (english)": "Name of kingdom (English)",
+    "november": "November",
+
+
 
 
     "o'clock" : "O'clock",
@@ -364,6 +383,8 @@
     "order cancellation" : "Order cancellation",
     "order canceled successfully": "( Order canceled successfully )",
     "others" : "Others",
+    "october": "October",
+
 
 
     "package" : "Package",
@@ -465,8 +486,8 @@
     "please specify the number of students" : "Please specify the number of students",
     "please specify the number of times/person" : "Please specify the number of times/person",
     "please specify the level of interest" : "Please specify the level of interest", 
-    "please specify the course name (english)" : "Please specify the course name (english)", 
-    "please specify the course name (thai)" : "Please specify the course name (thai)",
+    "please specify the course name (english)" : "Please specify the course name (English)", 
+    "please specify the course name (thai)" : "Please specify the course name (Thai)",
     "please specify start time" : "Please specify start time",
     "please specify students who can be accepted" : "please specify students who can be accepted",
     "please upload only photo and video files" : "Please upload only photo and video files",
@@ -558,8 +579,8 @@
     "specify password" : "Specify password",
     "special rights" : "Special rights",
     "specify students who can accept" : "Specify students who can accept",
-    "specify the course name (english)": "Specify the course name (english)",
-    "specify the course name (thai)" : "Specify the course name (thai)",
+    "specify the course name (english)": "Specify the course name (English)",
+    "specify the course name (thai)" : "Specify the course name (Thai)",
     "specify the course opening date" : "Specify the course opening date", 
     "specify the place of study" : "Specify the place of study",
     "specify the number of times/person" : "Specify the number of times/person",
@@ -604,6 +625,8 @@
     "start time": "Start time",
     "specify the name of the holiday, such as Songkran Day": "Specify the name of the holiday, such as Songkran Day",
     "show certificate": "Show certificate",
+    "september": "September",
+
     
     
     "take annual leave" : "Take annual leave",
