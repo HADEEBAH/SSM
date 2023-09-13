@@ -434,6 +434,7 @@
     "please enter your username" : "โปรดระบุ ชื่อผู้ใช้ (username)",
     "please enter your password again" : "กรุณาระบุรหัสผ่านใหม่อีกครั้ง",
     "please enter your phone number" : "โปรดระบุ เบอร์โทรศัพท์",
+    "please enter your email" : "โปรดระบุ อีเมล",
     "please select developmental level" : "โปรดเลือกระดับพัฒนาการ",
     "please select a date" : "โปรดเลือกวันที่",
     "please choose a payment method" : "โปรดเลือกช่องทางการชำระเงิน",
@@ -507,13 +508,13 @@
     "policy":"นโยบาย",
     "potential assessment":"ผลประเมินศักยภาพ",
     "parent and student usernames must be unique" : "ชื่อผู้ใช้ของผู้ปกครองและนักเรียนต้องไม่ซ้ำกัน",
-    
     "print receipt" : "ออกใบเสร็จฉบับเต็ม",
 
     "receipt language" : "ใบเสร็จภาษา",
     "reason for leave" : "เหตุผลการลา",
     "read more":"อ่านต่อ",
     "reason for refusal": "สาเหตุการปฏิเสธ",
+    "reset password":"รีเซ็ตรหัสผ่าน",
     "race day": "วันที่แข่ง",
     "refuse": "ปฏิเสธ",
     "refuse leave request": "ปฏิเสธคำขอลา",

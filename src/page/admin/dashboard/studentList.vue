@@ -135,10 +135,13 @@
         :search="search"
         v-if="tab == 'allLearners'"
       >
+        <template v-slot:no-results>
+          <span>{{ $t("no data found in table") }}</span>
+        </template>
+
         <template v-slot:[`item.course`]="{ item }">
           {{ `${item.courseCount} ${$t("courses")}` }}
         </template>
-
         <template v-slot:[`item.actions`]="{ item }">
           <v-btn
             text
@@ -170,6 +173,9 @@
         :items="get_current_student.currentStudent.studentList"
         :search="search"
       >
+        <template v-slot:no-results>
+          <span>{{ $t("no data found in table") }}</span>
+        </template>
         <template v-slot:[`item.course`]="{ item }">
           {{ `${item.courseCount} ${$t("courses")}` }}
         </template>
@@ -205,6 +211,9 @@
         :items="get_potential_student.potencialsStudent.potencials"
         :search="search"
       >
+        <template v-slot:no-results>
+          <span>{{ $t("no data found in table") }}</span>
+        </template>
         <template v-slot:[`item.courseDetail`]="{ item }">
           <v-btn text color="#FF6B81" @click="dialogDetailEnd(item)">
             <v-icon>mdi-text-box-search-outline</v-icon>
@@ -243,6 +252,9 @@
         :items="get_reserve_student.countReserve.studentList"
         :search="search"
       >
+        <template v-slot:no-results>
+          <span>{{ $t("no data found in table") }}</span>
+        </template>
         <template v-slot:[`item.courseDetail`]="{ item }">
           <v-btn text color="#FF6B81" @click="dialogDetailBooked(item)">
             <v-icon>mdi-text-box-search-outline</v-icon>

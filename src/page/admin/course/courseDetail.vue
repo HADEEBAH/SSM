@@ -18,7 +18,7 @@
                 width="72"
                 src="@/assets/course/course.png"
               ></v-img>
-              <span class="text-lg font-bold"> {{$t("course")}} </span>
+              <span class="text-lg font-bold"> {{ $t("course") }} </span>
             </template>
           </img-card>
         </v-col>
@@ -39,7 +39,9 @@
                 width="72"
                 src="@/assets/course/time_and_coach.png"
               ></v-img>
-              <span class="text-lg font-bold"> {{$t("time and coach")}} </span>
+              <span class="text-lg font-bold">
+                {{ $t("time and coach") }}
+              </span>
             </template>
           </img-card>
         </v-col>
@@ -60,7 +62,7 @@
                 width="72"
                 src="@/assets/course/package.png"
               ></v-img>
-              <span class="text-lg font-bold"> {{$t("package")}} </span>
+              <span class="text-lg font-bold"> {{ $t("package") }} </span>
             </template>
           </img-card>
         </v-col>
@@ -125,7 +127,7 @@
                     class="white--text btn-size-lg"
                     depressed
                     @click="course_edit = true"
-                    >
+                  >
                     {{ $t("edit") }}
                   </v-btn>
                 </v-col>
@@ -146,7 +148,7 @@
                     class="white--text btn-size-lg"
                     depressed
                     @click="CourseUpdateDetail()"
-                    >
+                  >
                     {{ $t("save") }}
                   </v-btn>
                 </v-col>
@@ -188,7 +190,7 @@
                     class="white--text btn-size-lg"
                     depressed
                     @click="course_edit = true"
-                    >
+                  >
                     {{ $t("edit") }}
                   </v-btn>
                 </v-col>
@@ -200,7 +202,8 @@
                     class="btn-size-lg"
                     outlined
                     @click="cancelEdit()"
-                    > {{ $t("center") }}</v-btn
+                  >
+                    {{ $t("cancel") }}</v-btn
                   >
                 </v-col>
                 <v-col cols="auto">
@@ -238,7 +241,7 @@
                     class="white--text btn-size-lg"
                     depressed
                     @click="course_edit = true"
-                    >
+                  >
                     {{ $t("edit") }}
                   </v-btn>
                 </v-col>
@@ -250,10 +253,9 @@
                     class="btn-size-lg"
                     outlined
                     @click="cancelEdit()"
-                    >
-                    {{  $t("center") }}
-                    </v-btn
                   >
+                    {{ $t("cancel") }}
+                  </v-btn>
                 </v-col>
                 <v-col cols="auto">
                   <v-btn
@@ -261,8 +263,8 @@
                     class="white--text btn-size-lg"
                     depressed
                     @click="CourseUpdatePackage()"
-                    >
-                    {{$t("save") }}
+                  >
+                    {{ $t("save") }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -332,7 +334,13 @@
                       cols="12"
                       class="flex align-center justify-center text-caption"
                     >
-                      ( {{$t("suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file")}} )
+                      (
+                      {{
+                        $t(
+                          "suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file"
+                        )
+                      }}
+                      )
                     </v-col>
                     <v-col cols="12" class="flex align-center justify-center">
                       <v-btn
@@ -422,13 +430,19 @@
                       cols="12"
                       class="flex align-center justify-center text-h5"
                     >
-                      {{$t("upload Learning Journey")}}
+                      {{ $t("upload Learning Journey") }}
                     </v-col>
                     <v-col
                       cols="12"
                       class="flex align-center justify-center text-caption"
                     >
-                    ( {{$t("suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file")}} )
+                      (
+                      {{
+                        $t(
+                          "suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file"
+                        )
+                      }}
+                      )
                     </v-col>
                   </v-row>
                   <v-row dense>
@@ -460,8 +474,8 @@
                     class="white--text btn-size-lg"
                     depressed
                     @click="course_edit = true"
-                    >
-                    {{$t("edit")}}
+                  >
+                    {{ $t("edit") }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -472,7 +486,7 @@
                     class="btn-size-lg"
                     outlined
                     @click="cancelEdit()"
-                    >{{$t("center")}}</v-btn
+                    >{{ $t("cancel") }}</v-btn
                   >
                 </v-col>
                 <v-col cols="auto">
@@ -481,7 +495,7 @@
                     class="white--text btn-size-lg"
                     depressed
                     @click="CourseUpdateArkwork()"
-                    >
+                  >
                     {{ $t("save") }}
                   </v-btn>
                 </v-col>
@@ -492,9 +506,15 @@
               <v-row>
                 <v-col>
                   <v-tabs v-model="student_tab" color="#ff6b81" class="mb-3">
-                    <v-tab value="students in course">{{$t("students in the course")}}</v-tab>
-                    <v-tab value="student booking">{{$t("students reserve")}}</v-tab>
-                    <v-tab value="student potential">{{$t("students complete the course")}}</v-tab>
+                    <v-tab value="students in course">{{
+                      $t("students in the course")
+                    }}</v-tab>
+                    <v-tab value="student booking">{{
+                      $t("students reserve")
+                    }}</v-tab>
+                    <v-tab value="student potential">{{
+                      $t("students complete the course")
+                    }}</v-tab>
                   </v-tabs>
                 </v-col>
                 <v-col cols="auto">
@@ -506,7 +526,7 @@
                     :dark="coach_list.some((v) => v.checked === true)"
                     @click="exportStudents()"
                   >
-                    {{ $t('export') }}
+                    {{ $t("export") }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -524,9 +544,9 @@
                             }}</v-icon>
                           </v-btn>
                         </v-col>
-                        <v-col class="text-[#ff6b81] font-bold"
-                          >{{$t("coach list")}}</v-col
-                        >
+                        <v-col class="text-[#ff6b81] font-bold">{{
+                          $t("coach list")
+                        }}</v-col>
                         <v-col cols="auto">
                           <v-text-field
                             class="bg-white rounded-lg"
@@ -534,7 +554,9 @@
                             dense
                             outlined
                             hide-details
-                            :placeholder="$t('search for student name, coach name')"
+                            :placeholder="
+                              $t('search for student name, coach name')
+                            "
                             prepend-inner-icon="mdi-magnify"
                             @input="searchStudentList(search_student_list)"
                           ></v-text-field>
@@ -564,7 +586,7 @@
                         <v-card-text>
                           <v-row>
                             <v-col class="font-bold" align="center">
-                              {{ $t('no data found')}}
+                              {{ $t("no data found") }}
                             </v-col>
                           </v-row>
                         </v-card-text>
@@ -606,8 +628,12 @@
                                 @click="selectCoach(coach, coach_index)"
                                 class="font-bold"
                               >
-                                {{$t("coach")}}:
-                                {{ $i18n.locale == 'th' ? `${coach.firstNameTh} ${coach.lastNameTh}` : `${coach.firstNameEn} ${coach.lastNameEn}` }}
+                                {{ $t("coach") }}:
+                                {{
+                                  $i18n.locale == "th"
+                                    ? `${coach.firstNameTh} ${coach.lastNameTh}`
+                                    : `${coach.firstNameEn} ${coach.lastNameEn}`
+                                }}
                               </v-col>
                               <v-col
                                 cols="auto"
@@ -687,12 +713,20 @@
                                   @change="filterDateByCoach(coach_index)"
                                 >
                                   <template v-slot:selection="{ item }">
-                                    {{ `${item.start} - ${item.end} ${$t("o'clock")}` }}
+                                    {{
+                                      `${item.start} - ${item.end} ${$t(
+                                        "o'clock"
+                                      )}`
+                                    }}
                                   </template>
                                   <template v-slot:item="{ item }">
                                     <v-list-item-content>
                                       <v-list-item-title>
-                                        {{ `${item.start} - ${item.end} ${$t("o'clock")}` }}
+                                        {{
+                                          `${item.start} - ${item.end} ${$t(
+                                            "o'clock"
+                                          )}`
+                                        }}
                                       </v-list-item-title>
                                     </v-list-item-content>
                                   </template>
@@ -732,15 +766,17 @@
                               <v-col cols="auto">
                                 <div style="width: 44px"></div>
                               </v-col>
-                              <v-col cols="3" align="center"
-                                >{{ $t("day and date") }}</v-col
-                              >
-                              <v-col cols="3" align="center">{{$t("class time")}}</v-col>
+                              <v-col cols="3" align="center">{{
+                                $t("day and date")
+                              }}</v-col>
+                              <v-col cols="3" align="center">{{
+                                $t("class time")
+                              }}</v-col>
                               <v-col
                                 cols="3"
                                 align="center"
                                 v-if="course_data.course_type_id === 'CT_1'"
-                                >{{$t("package")}}</v-col
+                                >{{ $t("package") }}</v-col
                               >
                               <v-col align="right"></v-col>
                             </v-row>
@@ -872,7 +908,11 @@
                                                 class="font-bold"
                                                 align="center"
                                               >
-                                                {{$t("student information not found")}}
+                                                {{
+                                                  $t(
+                                                    "student information not found"
+                                                  )
+                                                }}
                                               </v-col>
                                             </v-row>
                                           </v-card-text>
@@ -886,11 +926,9 @@
                                           <v-col>
                                             <v-divider></v-divider>
                                           </v-col>
-                                          <v-col cols="auto"
-                                            >
+                                          <v-col cols="auto">
                                             {{ $t("student information") }}
-                                            </v-col
-                                          >
+                                          </v-col>
                                           <v-col>
                                             <v-divider></v-divider>
                                           </v-col>
@@ -903,11 +941,12 @@
                                               dense
                                               class="text-md font-bold"
                                             >
-                                              <v-col cols="1" align="center"
-                                                >{{$t("no.")}}</v-col
-                                              >
+                                              <v-col cols="1" align="center">{{
+                                                $t("no.")
+                                              }}</v-col>
                                               <v-col cols align="center">
-                                                {{$t("first name")}} - {{$t("last name")}}
+                                                {{ $t("first name") }} -
+                                                {{ $t("last name") }}
                                               </v-col>
                                               <v-col
                                                 cols="2"
@@ -934,7 +973,9 @@
                                                 align="center"
                                                 v-else
                                               >
-                                                {{$t("start date - end date")}}
+                                                {{
+                                                  $t("start date - end date")
+                                                }}
                                               </v-col>
                                               <v-col cols="4"></v-col>
                                             </v-row>
@@ -972,7 +1013,9 @@
                                                 </v-col>
                                                 <v-col cols align="center"
                                                   >{{
-                                                    $i18n.locale == 'th' ? `${student.firstNameTh} ${student.lastNameTh}` : `${student.firstNameEn} ${student.lastNameEn}`
+                                                    $i18n.locale == "th"
+                                                      ? `${student.firstNameTh} ${student.lastNameTh}`
+                                                      : `${student.firstNameEn} ${student.lastNameEn}`
                                                   }}
                                                 </v-col>
                                                 <v-col
@@ -1021,7 +1064,9 @@
                                                         <v-icon
                                                           >mdi-check-decagram-outline
                                                         </v-icon>
-                                                        {{$t("view evaluation")}}
+                                                        {{
+                                                          $t("view evaluation")
+                                                        }}
                                                       </v-btn>
                                                     </v-col>
                                                     <v-col class="pa-0">
@@ -1034,7 +1079,7 @@
                                                         <v-icon>
                                                           mdi-clipboard-text-search-outline
                                                         </v-icon>
-                                                        {{$t('view profile')}}
+                                                        {{ $t("view profile") }}
                                                       </v-btn>
                                                     </v-col>
                                                   </v-row>
@@ -1063,7 +1108,9 @@
                                                 </v-col>
                                                 <v-col cols align="center"
                                                   >{{
-                                                    $i18n.locale == 'th' ? `${student.firstNameTh} ${student.lastNameTh}` : `${student.firstNameEn} ${student.lastNameEn}`
+                                                    $i18n.locale == "th"
+                                                      ? `${student.firstNameTh} ${student.lastNameTh}`
+                                                      : `${student.firstNameEn} ${student.lastNameEn}`
                                                   }}
                                                 </v-col>
 
@@ -1108,7 +1155,9 @@
                                                         <v-icon
                                                           >mdi-check-decagram-outline
                                                         </v-icon>
-                                                        {{$t("view evaluation")}}
+                                                        {{
+                                                          $t("view evaluation")
+                                                        }}
                                                       </v-btn>
                                                     </v-col>
                                                     <v-col class="pa-0">
@@ -1121,7 +1170,7 @@
                                                         <v-icon>
                                                           mdi-clipboard-text-search-outline
                                                         </v-icon>
-                                                        {{$t('view profile')}}
+                                                        {{ $t("view profile") }}
                                                       </v-btn>
                                                     </v-col>
                                                   </v-row>
@@ -1150,11 +1199,17 @@
                   >
                     <template v-slot:no-data>
                       <v-row dense>
-                        <v-col align="center"> {{ $t("no data found") }} </v-col>
+                        <v-col align="center">
+                          {{ $t("no data found") }}
+                        </v-col>
                       </v-row>
                     </template>
                     <template v-slot:[`item.fullname`]="{ item }">
-                      {{ $i18n.locale == 'th' ? `${item.firstNameTh} ${item.lastNameTh}` :  `${item.firsNameEn} ${item.lastNameEn}` }}
+                      {{
+                        $i18n.locale == "th"
+                          ? `${item.firstNameTh} ${item.lastNameTh}`
+                          : `${item.firsNameEn} ${item.lastNameEn}`
+                      }}
                     </template>
                     <template v-slot:[`item.course_name`]="{ item }">
                       {{ `${item.courseNameTh}(${item.courseNameEn})` }}
@@ -1169,7 +1224,11 @@
                       }}
                     </template>
                     <template v-slot:[`item.coach`]="{ item }">
-                      {{ $i18n.locale == 'th' ? `${item.coachFirstNameTh} ${item.coachLastNameTh}` :  `${item.coachFirsNameEn} ${item.coachLastNameEn}` }}
+                      {{
+                        $i18n.locale == "th"
+                          ? `${item.coachFirstNameTh} ${item.coachLastNameTh}`
+                          : `${item.coachFirsNameEn} ${item.coachLastNameEn}`
+                      }}
                     </template>
                     <template v-slot:[`item.createdDate`]="{ item }">
                       {{ genDate(item.createdDate) }}
@@ -1206,9 +1265,9 @@
                             }}</v-icon>
                           </v-btn>
                         </v-col>
-                        <v-col class="text-[#ff6b81] font-bold"
-                          >{{$t('coach list')}}</v-col
-                        >
+                        <v-col class="text-[#ff6b81] font-bold">{{
+                          $t("coach list")
+                        }}</v-col>
                         <v-col cols="auto">
                           <v-text-field
                             v-model="search_student_potential"
@@ -1216,7 +1275,9 @@
                             dense
                             outlined
                             hide-details
-                            :placeholder="$t('search for student name, coach name')"
+                            :placeholder="
+                              $t('search for student name, coach name')
+                            "
                             prepend-inner-icon="mdi-magnify"
                             @input="
                               searchStudentPotential(search_student_potential)
@@ -1248,7 +1309,7 @@
                         <v-card-text>
                           <v-row>
                             <v-col class="font-bold" align="center">
-                              {{ $t('no data found') }}
+                              {{ $t("no data found") }}
                             </v-col>
                           </v-row>
                         </v-card-text>
@@ -1275,8 +1336,12 @@
                                 <v-icon color="#ff6b81">mdi-account</v-icon>
                               </v-col>
                               <v-col class="font-bold">
-                                {{ $t('coach') }}:
-                                {{ $i18n.locale == 'th' ? `${coach.firstNameTh} ${coach.lastNameTh}` : `${coach.firstNameEn} ${coach.lastNameEn}` }}
+                                {{ $t("coach") }}:
+                                {{
+                                  $i18n.locale == "th"
+                                    ? `${coach.firstNameTh} ${coach.lastNameTh}`
+                                    : `${coach.firstNameEn} ${coach.lastNameEn}`
+                                }}
                               </v-col>
                               <v-col cols="auto">
                                 <v-icon
@@ -1312,7 +1377,9 @@
                                   <v-card-text>
                                     <v-row>
                                       <v-col class="font-bold" align="center">
-                                        {{ $t('student information not found')}}
+                                        {{
+                                          $t("student information not found")
+                                        }}
                                       </v-col>
                                     </v-row>
                                   </v-card-text>
@@ -1323,7 +1390,9 @@
                                   <v-col>
                                     <v-divider></v-divider>
                                   </v-col>
-                                  <v-col cols="auto">{{$t("student information")}}</v-col>
+                                  <v-col cols="auto">{{
+                                    $t("student information")
+                                  }}</v-col>
                                   <v-col>
                                     <v-divider></v-divider>
                                   </v-col>
@@ -1333,17 +1402,21 @@
                                     class="pa-2 bg-[#FCE0E7] rounded-lg"
                                   >
                                     <v-row dense class="text-md font-bold">
-                                      <v-col cols="1" align="center"
-                                        >{{ $t("no.") }}</v-col
-                                      >
+                                      <v-col cols="1" align="center">{{
+                                        $t("no.")
+                                      }}</v-col>
                                       <v-col cols align="center"
-                                        >{{$t("first name")+' - '+$t("last name")}}
+                                        >{{
+                                          $t("first name") +
+                                          " - " +
+                                          $t("last name")
+                                        }}
                                       </v-col>
                                       <v-col cols="2" align="center"
                                         >{{ $t("period") }}
                                       </v-col>
                                       <v-col cols="2" align="center"
-                                        >{{ $t("number of times")}}
+                                        >{{ $t("number of times") }}
                                       </v-col>
                                       <v-col cols="4"></v-col>
                                     </v-row>
@@ -1448,7 +1521,7 @@
             </v-row>
             <v-row dense class="mb-3">
               <v-col align="center" class="font-bold text-lg">
-                {{ $t("assessment")}}
+                {{ $t("assessment") }}
               </v-col>
             </v-row>
             <v-card
@@ -1464,14 +1537,16 @@
                       src="@/assets/course/potential.png"
                     ></v-img>
                   </v-col>
-                  <v-col cols class="font-bold text-lg">{{ $t('assess the overview') }} </v-col>
+                  <v-col cols class="font-bold text-lg"
+                    >{{ $t("assess the overview") }}
+                  </v-col>
                 </v-row>
                 <v-row>
                   <v-col>
                     <v-card flat>
                       <v-card-text class="bg-[#FBF3F5]">
                         <v-row dense>
-                          <v-col>{{ $t('developmental level') }} </v-col>
+                          <v-col>{{ $t("developmental level") }} </v-col>
                         </v-row>
                         <v-row dense>
                           <v-col>
@@ -1508,7 +1583,9 @@
                         </v-row>
                         <v-row dense>
                           <v-col>
-                            <span class="text-[#999999]"> {{ $t("interest level") }}: </span>
+                            <span class="text-[#999999]">
+                              {{ $t("interest level") }}:
+                            </span>
                             {{
                               student_data_assessment.Interest
                                 ? student_data_assessment.Interest
@@ -1518,7 +1595,9 @@
                         </v-row>
                         <v-row dense>
                           <v-col>
-                            <span class="text-[#999999]"> {{ $t("comments") }}: </span>
+                            <span class="text-[#999999]">
+                              {{ $t("comments") }}:
+                            </span>
                             {{
                               student_data_assessment.remark
                                 ? student_data_assessment.remark
@@ -1584,11 +1663,14 @@
                     </v-col>
                     <v-col class="font-bold">
                       {{
-                        new Date(assess.date).toLocaleDateString($i18n.locale == 'th' ? "th-TH" : "en-US", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })
+                        new Date(assess.date).toLocaleDateString(
+                          $i18n.locale == "th" ? "th-TH" : "en-US",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          }
+                        )
                       }}
                     </v-col>
                     <v-col cols="auto">
@@ -1611,7 +1693,7 @@
                         "
                         >{{
                           $t(
-                              check_in_status_options.filter(
+                            check_in_status_options.filter(
                               (v) => v.value === assess.status
                             )[0].label
                           )
@@ -1656,7 +1738,7 @@
                     </v-col>
                   </v-row>
                   <v-row dense>
-                    <v-col> {{$t("interest level")}}</v-col>
+                    <v-col> {{ $t("interest level") }}</v-col>
                   </v-row>
                   <v-row dense>
                     <v-col>
@@ -1693,7 +1775,7 @@
                   </v-row>
                   <v-row dense>
                     <v-col>
-                      <span class="text-[#999999]"> {{$t("comments")}}: </span
+                      <span class="text-[#999999]"> {{ $t("comments") }}: </span
                       >{{ assess.assessment.remark }}
                     </v-col>
                   </v-row>
@@ -1739,11 +1821,14 @@
                       {{
                         new Date(
                           student_data_assessment.date
-                        ).toLocaleDateString($i18n.locale == 'th' ? "th-TH" : "en-US", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })
+                        ).toLocaleDateString(
+                          $i18n.locale == "th" ? "th-TH" : "en-US",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          }
+                        )
                       }}
                     </v-col>
                     <v-col cols="auto">
@@ -1775,7 +1860,7 @@
                     </v-col>
                   </v-row>
                   <v-row dense>
-                    <v-col>{{ $t('developmental level')}} </v-col>
+                    <v-col>{{ $t("developmental level") }} </v-col>
                   </v-row>
                   <v-row dense>
                     <v-col>
@@ -1848,7 +1933,7 @@
                   </v-row>
                   <v-row dense>
                     <v-col>
-                      <span class="text-[#999999]"> {{$t("comments")}}: </span
+                      <span class="text-[#999999]"> {{ $t("comments") }}: </span
                       >{{ student_data_assessment.assessment.remark }}
                     </v-col>
                   </v-row>
@@ -1873,7 +1958,7 @@
                           }}</span
                           ><br />
                           <span class="text-caption"
-                            >{{$t("file size")}} :
+                            >{{ $t("file size") }} :
                             {{ (file.filesSize / 1000000).toFixed(2) }}
                             MB</span
                           >
@@ -1894,7 +1979,9 @@
             >
               <v-card-text>
                 <v-row dense>
-                  <v-col align="center">{{ $t("assessment not found")}} </v-col>
+                  <v-col align="center"
+                    >{{ $t("assessment not found") }}
+                  </v-col>
                 </v-row>
               </v-card-text>
             </v-card>
@@ -1906,7 +1993,7 @@
                   depressed
                   dark
                   class="btn-size-lg"
-                  >{{$t("agree")}}</v-btn
+                  >{{ $t("agree") }}</v-btn
                 >
               </v-col>
             </v-row>
@@ -1960,7 +2047,7 @@ export default {
     ],
     selected_coach: "",
     selected_schedule: "",
-   
+
     tab: "course",
     filter: {
       dow: "",
@@ -2005,7 +2092,12 @@ export default {
         color: "#43A4F5",
         bg_color: "#CFE2F3",
       },
-      { label: "absent", value: "absent", color: "#F03D3E", bg_color: "#F4CCCC" },
+      {
+        label: "absent",
+        value: "absent",
+        color: "#F03D3E",
+        bg_color: "#F4CCCC",
+      },
     ],
     selected_all_coach: false,
     selected_coach_potential: null,
@@ -2057,37 +2149,57 @@ export default {
       student_potential_list_is_loading:
         "CourseModules/getStudentPotentialListIsLoading",
     }),
-    breadcrumbs(){
+    breadcrumbs() {
       return [
         { text: this.$t("manage all courses"), to: "CourseList" },
         { text: this.$t("course details"), to: "" },
-      ]
+      ];
     },
-    column(){
+    column() {
       return [
         {
-          text: this.$t("first name")+" - "+this.$t("last name"),
+          text: this.$t("first name") + " - " + this.$t("last name"),
           align: "center",
           sortable: false,
           value: "fullname",
         },
-        { text: this.$t("phone number"), align: "center", sortable: false, value: "tel" },
+        {
+          text: this.$t("phone number"),
+          align: "center",
+          sortable: false,
+          value: "tel",
+        },
         {
           text: this.$t("course name"),
           align: "center",
           sortable: false,
           value: "course_name",
         },
-        { text: this.$t("package"), align: "center", sortable: false, value: "package" },
-        { text: this.$t("coach"), align: "center", sortable: false, value: "coach" },
+        {
+          text: this.$t("package"),
+          align: "center",
+          sortable: false,
+          value: "package",
+        },
+        {
+          text: this.$t("coach"),
+          align: "center",
+          sortable: false,
+          value: "coach",
+        },
         {
           text: this.$t("reserve date"),
           align: "center",
           sortable: false,
           value: "createdDate",
         },
-        { text: this.$t("status"), align: "center", sortable: false, value: "status" },
-      ]
+        {
+          text: this.$t("status"),
+          align: "center",
+          sortable: false,
+          value: "status",
+        },
+      ];
     },
     setFunctions() {
       this.$store.dispatch(
@@ -2307,7 +2419,7 @@ export default {
     },
     dayOfWeekArray(day) {
       // console.log(day)
-      let days = day.split(",")
+      let days = day.split(",");
       const weekdays = [
         this.$t("sunday"),
         this.$t("monday"),
@@ -2334,7 +2446,13 @@ export default {
           }
         }
         ranges.push({ start: rangeStart, end: prevDay });
-        return ranges.map(({ start, end }) => start === end ? weekdays[start] : `${weekdays[start]} - ${weekdays[end]}`).join(', ')
+        return ranges
+          .map(({ start, end }) =>
+            start === end
+              ? weekdays[start]
+              : `${weekdays[start]} - ${weekdays[end]}`
+          )
+          .join(", ");
       }
     },
     openFilePrivilegeSelector() {
@@ -2474,7 +2592,7 @@ export default {
       });
       this.ChangeCourseData(this.course_data);
     },
-    CourseUpdateDetail() {
+    async CourseUpdateDetail() {
       this.$refs.course_form.validate();
       if (this.courseValidate) {
         Swal.fire({
@@ -2486,12 +2604,12 @@ export default {
           cancelButtonText: this.$t("cancel"),
         }).then(async (result) => {
           if (result.isConfirmed) {
-            this.UpdateCouserDetail({
+            let student_list = await this.UpdateCouserDetail({
               course_id: this.course_data.course_id,
               course_data: this.course_data,
-            }).then(() => {
-              this.course_edit = false;
             });
+            console.log(student_list);
+            this.course_edit = false;
           }
         });
       }
@@ -2565,7 +2683,7 @@ export default {
     updateCourse() {
       Swal.fire({
         icon: "question",
-        title:  this.$t("do you want to edit your course?"),
+        title: this.$t("do you want to edit your course?"),
         showDenyButton: false,
         showCancelButton: false,
         confirmButtonText: this.$t("agree"),
