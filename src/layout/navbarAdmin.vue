@@ -51,7 +51,7 @@
                 </div>
 
                 <span class="text-white">{{
-                  `${user_detail.first_name_en} ${user_detail.last_name_en}`
+                   $i18n.locale == "th" ? `${user_detail.first_name_th} ${user_detail.last_name_th}` : `${user_detail.first_name_en} ${user_detail.last_name_en}`
                 }}</span>
               </v-row>
             </template>

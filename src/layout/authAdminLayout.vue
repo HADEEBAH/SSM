@@ -1,11 +1,11 @@
 <template>
     <v-app>
-      <v-row dense>
-        <v-col class="text-right">
+      <v-row dense class="auth-bar">
+        <v-col cols="6" sm="" :class="$vuetify.breakpoint.smAndUp ? 'text-right' : 'text-left'">
           <v-menu v-model="menu_locale"  offset-y>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn text color="#ff6b81" v-bind="attrs" v-on="on">
-                <label>{{ $i18n.locale == 'en' ? $t('english') : $t('thai') }}</label>
+              <v-btn text :color="$vuetify.breakpoint.smAndUp?  '#ff6b81' : '#ffffff' " v-bind="attrs" v-on="on">
+                {{ $i18n.locale == 'en' ? $t('english') : $t('thai') }}
                 <v-icon dark >
                   mdi-web
                 </v-icon>
@@ -21,7 +21,7 @@
             </v-card>
           </v-menu>
         </v-col>
-        <v-col cols="auto">
+        <v-col cols="6" sm="auto" class="text-right">
           <v-btn
             @click="backToHome()"
             text
