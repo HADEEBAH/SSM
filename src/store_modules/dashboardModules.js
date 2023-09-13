@@ -55,6 +55,8 @@ const dashboardModules = {
     get_current_student: [],
     get_potential_student: [],
     get_reserve_student: [],
+    get_student_list_value: [],
+
 
   },
   mutations: {
@@ -121,6 +123,9 @@ const dashboardModules = {
     SetGetReserveStudent(state, payload) {
       state.get_reserve_student = payload
     },
+    SetGetStudentListValue(state, payload) {
+      state.get_student_list_value = payload
+    },
 
   },
   actions: {
@@ -174,7 +179,7 @@ const dashboardModules = {
               EmptyCourseClose.push(items)
             }
           })
-          await context.dispatch("SetGetCourseType")
+          // await context.dispatch("SetGetCourseType")
           await context.commit("SetGetEmptyCourse", data.data)
           await context.commit("SetGetEmptyCourseOpen", EmptyCourseOpen)
           await context.commit("SetGetEmptyCourseClose", EmptyCourseClose)
@@ -293,7 +298,23 @@ const dashboardModules = {
       }
     },
 
+    async GetStudentListValue(context) {
+      context.commit("SetGetLoading", true)
 
+      try {
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potencial-duplicate`)
+
+
+        if (data.statusCode === 200) {
+          context.commit("SetGetStudentListValue", data.data)
+          await context.dispatch("GetAllStudentList")
+        }
+      } catch (error) {
+        context.commit("SetGetStudentListValue", [])
+        context.commit("SetGetLoading", false)
+
+      }
+    },
     async GetAllStudentList(context) {
       context.commit("SetGetLoading", true)
 
@@ -304,6 +325,7 @@ const dashboardModules = {
         if (data.statusCode === 200) {
           context.commit("SetGetAllStudentList", data.data)
           context.commit("SetGetLoading", false)
+
 
         }
       } catch (error) {
@@ -322,6 +344,7 @@ const dashboardModules = {
         if (data.statusCode === 200) {
           context.commit("SetGetCurrentStudent", data.data)
           context.commit("SetGetLoading", false)
+
 
         }
       } catch (error) {
@@ -346,14 +369,13 @@ const dashboardModules = {
         context.commit("SetGetPotentialStudent", [])
         context.commit("SetGetLoading", false)
 
+
       }
     },
     async GetReserveStudent(context) {
       context.commit("SetGetLoading", true)
-
       try {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/reserve-student`)
-
 
         if (data.statusCode === 200) {
           data.data.countReserve.studentList.map((items) => {
@@ -371,6 +393,8 @@ const dashboardModules = {
 
       }
     },
+
+
     // async GetPotential(context) {
     //   try {
     //     let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potencial/`)
@@ -490,6 +514,9 @@ const dashboardModules = {
     },
     getReserveStudent(state) {
       return state.get_reserve_student
+    },
+    getStudentListValue(state) {
+      return state.get_student_list_value
     },
 
 
