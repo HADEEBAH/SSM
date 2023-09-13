@@ -35,7 +35,7 @@ import { mapActions, mapGetters } from 'vuex'
         GetUserById : "UserModules/GetUserById",
       }),
       CloseDialog(){
-        this.$router.push({
+        this.$router.replace({
           name: 'UserProfile',
         })
       },
