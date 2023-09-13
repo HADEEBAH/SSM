@@ -629,6 +629,7 @@ const CourseModules = {
             timerProgressBar: true,
           })
         }
+        return data
       } catch (error) {
         Swal.fire({
           icon: "error",

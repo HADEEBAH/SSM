@@ -8,7 +8,9 @@
         />
       </v-col>
       <v-col cols="12" class="text-center">
-        <label class="font-weight-bold"> {{$t('choose a method to change your password')}}</label>
+        <label class="font-weight-bold">
+          {{ $t("choose a method to change your password") }}</label
+        >
       </v-col>
       <v-col cols="12" class="text-center">
         <v-radio-group
@@ -40,13 +42,20 @@
               ? 'w-[100%!important] m-[auto!important]'
               : 'w-[50%!important] m-[auto!important]'
           "
-          :label="type === 'email' ? $t('specify email') : $t('specify phone number')"
+          :label="
+            type === 'email' ? $t('specify email') : $t('specify phone number')
+          "
           @input="type === 'email' ? '' : checkPhoneNumber()"
           :maxlength="type === 'email' ? 100 : 12"
-          @keypress="type === 'email' ? '' : Validation($event, 'number')"
+          @keypress="
+            type === 'email'
+              ? Validation($event, 'email')
+              : Validation($event, 'number')
+          "
           solo
           @paste="preventPaste"
           @copy="preventCopy"
+          :rules="rules.email"
         >
         </v-text-field>
       </v-col>
@@ -78,7 +87,7 @@
               : 'w-[50%!important] text-[#FF6B81!important] font-bold'
           "
           color="#F0F2F5"
-          >{{ $t('confirm') }}</v-btn
+          >{{ $t("confirm") }}</v-btn
         >
       </v-col>
     </v-row>
@@ -118,24 +127,24 @@ export default {
         });
         if (this.responseTypeForgotPassword) {
           this.loading = false;
-          if(this.type === "phone"){
+          if (this.type === "phone") {
             router.push({ name: "ResetPassword" });
-          }else{
+          } else {
             Swal.fire({
-              icon: 'success',
-              title: this.$t('succeed'),
-              text: `${this.$t('sent a password change link to')} ${this.value}`,
+              icon: "success",
+              title: this.$t("succeed"),
+              text: `${this.$t("sent a password change link to")} ${
+                this.value
+              }`,
               timer: 3000,
-              timerProgressBar: true
+              timerProgressBar: true,
             });
-            if(VueCookie.get("token")){
+            if (VueCookie.get("token")) {
               router.push({ name: "UserKingdom" });
-            }else{
+            } else {
               router.push({ name: "Login" });
             }
-            
           }
-          
         } else {
           this.loading = false;
           let error_message = "";
@@ -154,9 +163,9 @@ export default {
               this.responseTypeForgotPasswordMessage ===
               "username and Tel not found"
             ) {
-              error_message = this.$t('invalid username or phone number');
+              error_message = this.$t("invalid username or phone number");
             } else {
-              error_message = this.$t('something went wrong');
+              error_message = this.$t("something went wrong");
             }
           } else {
             if (
@@ -168,18 +177,21 @@ export default {
               this.responseTypeForgotPasswordMessage ===
               "Parameter missing. Required email parameter."
             ) {
-              error_message = this.$t("please enter your phone number");
+              error_message = this.$t("please enter your email");
             } else if (
               this.responseTypeForgotPasswordMessage ===
               "username and email not found."
             ) {
-              error_message = this.$t('invalid username or phone number');
+              error_message = this.$t("invalid username or phone number");
             } else {
-              error_message = this.$t('something went wrong');
+              error_message = this.$t("something went wrong");
             }
           }
           Swal.fire({
-            icon: error_message === this.$t("something went wrong") ? "error" : "warning",
+            icon:
+              error_message === this.$t("something went wrong")
+                ? "error"
+                : "warning",
             title: this.$t("warning"),
             text: `${error_message}`,
           });
@@ -192,8 +204,8 @@ export default {
       this.value = !x[2] ? x[1] : x[1] + "-" + x[2] + (x[3] ? "-" + x[3] : "");
     },
 
-    Validation(e, lang) {
-      inputValidation(e, lang);
+    Validation(e, type) {
+      inputValidation(e, type);
     },
 
     preventPaste(event) {
@@ -214,6 +226,19 @@ export default {
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;
+    },
+
+    rules() {
+      return {
+        email: [
+          (value) => (value || "").length <= 20 || "Max 20 characters",
+          (value) => {
+            const pattern =
+              /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return pattern.test(value) || this.$t("invalid email");
+          },
+        ],
+      };
     },
   },
 };

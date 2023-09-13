@@ -34,6 +34,11 @@ export const inputValidation = (e, type) => {
                 e.preventDefault()
             }
             break;
+        case "email":
+            if (!(/^[A-Za-z0-9@.]+$/).test(e.key)) {
+                e.preventDefault()
+            }
+            break;
     }
 }
 export const dateDMY = (date) => {
