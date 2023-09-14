@@ -201,6 +201,7 @@ export const convertToEnglishCurrency = (number) => {
         }
 
         const lastTwoDigits = num % 100;
+        console.log("lastTwoDigits",lastTwoDigits)
         if (lastTwoDigits >= 20) {
             parts.push(tens[Math.floor(lastTwoDigits / 10)]);
             if (lastTwoDigits % 10 > 0) {
@@ -209,6 +210,8 @@ export const convertToEnglishCurrency = (number) => {
         } else if (lastTwoDigits > 0) {
             if (lastTwoDigits === 10) {
                 parts.push('ten');
+            } else if(lastTwoDigits < 10){
+                parts.push(ones[lastTwoDigits])
             } else {
                 parts.push(teens[lastTwoDigits - 11]);
             }
