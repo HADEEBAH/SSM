@@ -20,7 +20,7 @@
     <!-- 4 TAB -->
     <v-row dense class="mb-10">
       <!-- TAB 1  ผู้เรียนทั้งหมด-->
-      <v-col cols="12" sm="6" md="6" lg="3" @click="tab = 'allLearners'">
+      <v-col cols="12" sm="6" md="6" lg="3" @click="clickTab('allLearners')">
         <img-card
           class="cursor-pointer drop-shadow-lg"
           :class="tab === 'allLearners' ? 'img-card-active' : ''"
@@ -35,7 +35,7 @@
           <template v-slot:detail>
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
-                {{ get_all_student_list.countStudents }}
+                {{ get_student_list_value.countStudents }}
               </v-col>
               <v-col class="text-sm">{{ $t("person") }}</v-col>
             </v-row>
@@ -43,7 +43,13 @@
         </img-card>
       </v-col>
       <!-- TAB 2 ผู้เรียนปัจจุบัน-->
-      <v-col cols="12" sm="6" md="6" lg="3" @click="tab = 'currentLearners'">
+      <v-col
+        cols="12"
+        sm="6"
+        md="6"
+        lg="3"
+        @click="clickTab('currentLearners')"
+      >
         <img-card
           class="cursor-pointer drop-shadow-lg"
           :class="tab === 'currentLearners' ? 'img-card-active' : ''"
@@ -58,7 +64,7 @@
           <template v-slot:detail>
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
-                {{ get_current_student.currentStudent.countStudentCurrent }}
+                {{ get_student_list_value.currentStudent?.countStudentCurrent }}
               </v-col>
               <v-col class="text-sm">{{ $t("person") }}</v-col>
             </v-row>
@@ -71,7 +77,7 @@
         sm="6"
         md="6"
         lg="3"
-        @click="tab = 'learnersNearingGrad'"
+        @click="clickTab('learnersNearingGrad')"
       >
         <img-card
           class="cursor-pointer drop-shadow-lg"
@@ -92,7 +98,8 @@
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
                 {{
-                  get_potential_student.potencialsStudent.countStudentPotencials
+                  get_student_list_value.potencialsStudent
+                    ?.countStudentPotencials
                 }}
               </v-col>
               <v-col class="text-sm">{{ $t("person") }}</v-col>
@@ -101,7 +108,7 @@
         </img-card>
       </v-col>
       <!-- TAB 4 ผู้เรียนจองคอร์ส-->
-      <v-col cols="12" sm="6" md="6" lg="3" @click="tab = 'learnersBooked'">
+      <v-col cols="12" sm="6" md="6" lg="3" @click="clickTab('learnersBooked')">
         <img-card
           class="cursor-pointer drop-shadow-lg"
           :class="tab === 'learnersBooked' ? 'img-card-active' : ''"
@@ -117,7 +124,7 @@
           <template v-slot:detail>
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
-                {{ get_reserve_student.countReserve.studentList.length }}
+                {{ get_student_list_value.countReserve?.countStudent }}
               </v-col>
               <v-col class="text-sm">{{ $t("person") }}</v-col>
             </v-row>
@@ -176,7 +183,7 @@
         :headers="data_tab_two"
         @page-count="pageCount = $event"
         class="elevation-1 header-table"
-        :items="get_current_student.currentStudent.studentList"
+        :items="get_current_student.currentStudent?.studentList"
         :search="search"
       >
         <template v-slot:no-results>
@@ -214,7 +221,7 @@
         :headers="data_tab_three"
         @page-count="pageCount = $event"
         class="elevation-1 header-table"
-        :items="get_potential_student.potencialsStudent.potencials"
+        :items="get_potential_student.potencialsStudent?.potencials"
         :search="search"
       >
         <template v-slot:no-results>
@@ -255,7 +262,7 @@
         :headers="data_tab_four"
         @page-count="pageCount = $event"
         class="elevation-1 header-table"
-        :items="get_reserve_student.countReserve.studentList"
+        :items="get_reserve_student.countReserve?.studentList"
         :search="search"
       >
         <template v-slot:no-results>
@@ -557,10 +564,6 @@ export default {
     loadingOverlay,
   },
   data: () => ({
-    // breadcrumbs: [
-    //   { text: "แดชบอร์ด", to: "Dashboard" },
-    //   { text: "รายชื่อนักเรียน", to: "" },
-    // ],
     search: "",
     tab: "allLearners",
     course_detail_dialog_booked: false,
@@ -606,15 +609,12 @@ export default {
     potential_user_course: [],
   }),
   mounted() {
-    this.GetStudentValue();
-    this.GetAllStudentList();
-    this.GetCurrentStudent();
-    this.GetPotentialStudent();
-    this.GetReserveStudent();
+    this.GetStudentListValue();
+    // this.GetAllStudentList();
   },
   methods: {
     ...mapActions({
-      GetStudentValue: "DashboardModules/GetStudentValue",
+      GetStudentListValue: "DashboardModules/GetStudentListValue",
       GetAllStudentList: "DashboardModules/GetAllStudentList",
       GetCurrentStudent: "DashboardModules/GetCurrentStudent",
       GetPotentialStudent: "DashboardModules/GetPotentialStudent",
@@ -651,11 +651,25 @@ export default {
         }
       );
     },
+    clickTab(item) {
+      this.tab = item;
+      if (item == "allLearners") {
+        this.GetAllStudentList();
+      } else if (item == "currentLearners") {
+        this.GetCurrentStudent();
+      } else if (item == "learnersNearingGrad") {
+        this.GetPotentialStudent();
+      } else if (item == "learnersBooked") {
+        this.GetReserveStudent();
+      } else {
+        this.$t("no data found in table");
+      }
+    },
   },
   computed: {
     ...mapGetters({
       dashboard_loading: "DashboardModules/getloading",
-      get_student_value: "DashboardModules/getStudentValue",
+      get_student_list_value: "DashboardModules/getStudentListValue",
       get_all_student_list: "DashboardModules/getAllStudentList",
       get_current_student: "DashboardModules/getCurrentStudent",
       get_potential_student: "DashboardModules/getPotentialStudent",

@@ -252,6 +252,8 @@
     "full day leave" : "ลาเต็มวัน",
     "friday" : "วันศุกร์",
     "february": "กุมภาพันธ์",
+    "from": "จากวันที่",
+
 
     "graduating students": "ผู้เรียนที่ใกล้จบ",
     "general": "ทั่วไป",
@@ -354,6 +356,7 @@
     "no development/homework":"ไม่มีพัฒนาการ / การบ้าน",
     "no attachment from student assessment" : "ไฟล์แนบจากประเมินนักเรียน",
     "no match information found": "ไม่พบข้อมูลการแข่งขัน",
+    "notification of postponement of school opening date": "แจ้งเตือนเลื่อนวันเปิดเรียน",
     "note" : "หมายเหตุ",
     "note that the length exceeds the limit": "หมายเหตุความยาวเกินกว่าที่กำหนด",
     "notification of course application":"แจ้งเตือนการสมัครคอร์สเรียน",
@@ -509,6 +512,7 @@
     "potential assessment":"ผลประเมินศักยภาพ",
     "parent and student usernames must be unique" : "ชื่อผู้ใช้ของผู้ปกครองและนักเรียนต้องไม่ซ้ำกัน",
     "print receipt" : "ออกใบเสร็จฉบับเต็ม",
+    "postpone the course opening date": "เลื่อนวันเปิดคอร์ส",
 
     "receipt language" : "ใบเสร็จภาษา",
     "reason for leave" : "เหตุผลการลา",
@@ -681,6 +685,7 @@
     "transaction time" : "เวลาทำรายการ",
     "transfer to school account" : "โอนเงินเข้าบัญชีโรงเรียน",
     "tuesday" : "วันอังคาร",
+    "to day" : "ไปวันที่",
 
     "unable to study on the specified date. because there are already classes on the specified date" : "ไม่สามารถเรียนชดเชยวันที่ระบุได้ เนื่องจากวันที่ระบุมีเรียนอยู่แล้ว",
     "unpaid" : "ยังไม่ชำระเงิน",

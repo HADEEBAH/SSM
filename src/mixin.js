@@ -25,7 +25,7 @@ export default {
       this.GetNotifications(data)
       notification.open({
         message: data.notificationName,
-        description:data.notificationDescription
+        description: data.notificationDescription
       });
     });
   },
@@ -60,8 +60,8 @@ export default {
       });
     }
   },
-  watch:{
-    $route (to, from){
+  watch: {
+    $route(to, from) {
       if (to) {
         this.socket.disconnect()
       }

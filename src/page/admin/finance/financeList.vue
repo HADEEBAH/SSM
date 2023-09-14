@@ -30,7 +30,7 @@
         </v-col>
       </v-row>
       <v-row dense class="mb-3">
-        <v-col cols="12" sm="4" @click="tab = 'all'">
+        <v-col cols="12" sm="3" @click="tab = 'all'">
           <img-card
             :title="$t('all')"
             class="cursor-pointer"
@@ -53,12 +53,12 @@
                 <v-col align="center" class="text-3xl font-bold">{{
                   orders.length
                 }}</v-col>
-                <v-col class="text-sm">{{ $t("list") }}</v-col>
+                <v-col class="text-sm text-right">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
         </v-col>
-        <v-col cols="12" sm="4" @click="tab = 'success'">
+        <v-col cols="12" sm="3" @click="tab = 'success'">
           <img-card
             class="cursor-pointer"
             :class="tab === 'success' ? 'img-card-active' : ''"
@@ -78,12 +78,12 @@
                 <v-col align="center" class="text-3xl font-bold">{{
                   orders.filter((v) => v.payment_status === "success").length
                 }}</v-col>
-                <v-col class="text-sm">{{ $t("list") }}</v-col>
+                <v-col class="text-sm text-right">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
         </v-col>
-        <v-col cols="12" sm="4" @click="tab = 'pending'">
+        <v-col cols="12" sm="3" @click="tab = 'pending'">
           <img-card
             class="cursor-pointer"
             :class="tab === 'pending' ? 'img-card-active' : ''"
@@ -103,7 +103,32 @@
                 <v-col align="center" class="text-3xl font-bold">{{
                   orders.filter((v) => v.payment_status === "pending").length
                 }}</v-col>
-                <v-col class="text-sm">{{ $t("list") }}</v-col>
+                <v-col class="text-sm text-right">{{ $t("list") }}</v-col>
+              </v-row>
+            </template>
+          </img-card>
+        </v-col>
+        <v-col cols="12" sm="3" @click="tab = 'cancel'">
+          <img-card
+            class="cursor-pointer"
+            :class="tab === 'cancel' ? 'img-card-active' : ''"
+          >
+            <template v-slot:img>
+              <v-img
+                max-height="90"
+                max-width="70"
+                src="@/assets/finance/file-cancel.png"
+              ></v-img>
+            </template>
+            <template v-slot:header>
+              <div class="font-bold">{{ $t("cancel") }}</div> 
+            </template>
+            <template v-slot:detail>
+              <v-row class="d-flex align-end">
+                <v-col align="center" class="text-3xl font-bold">{{
+                  orders.filter((v) => v.payment_status === "cancel").length
+                }}</v-col>
+                <v-col class="text-sm text-right">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
