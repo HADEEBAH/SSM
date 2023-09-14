@@ -55,7 +55,7 @@
           solo
           @paste="preventPaste"
           @copy="preventCopy"
-          :rules="rules.email"
+          :rules="type === 'email' ? rules.email : rules.phone_number"
         >
         </v-text-field>
       </v-col>
@@ -72,6 +72,7 @@
           @keypress="Validation($event, 'en-number')"
           @paste="preventPaste"
           @copy="preventCopy"
+          :rules="rules.usernameRules"
         ></v-text-field>
       </v-col>
     </v-row>
@@ -182,7 +183,7 @@ export default {
               this.responseTypeForgotPasswordMessage ===
               "username and email not found."
             ) {
-              error_message = this.$t("invalid username or phone number");
+              error_message = this.$t("invalid username or email");
             } else {
               error_message = this.$t("something went wrong");
             }
@@ -231,12 +232,30 @@ export default {
     rules() {
       return {
         email: [
-          (value) => (value || "").length <= 20 || "Max 20 characters",
           (value) => {
             const pattern =
               /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return pattern.test(value) || this.$t("invalid email");
           },
+        ],
+        usernameRules: [
+          (val) =>
+            (val || "").length > 5 ||
+            this.$t("please enter a username at least 6 characters long"),
+          (val) =>
+            (val || "").length < 20 ||
+            this.$t("please enter a username no longer than 20 characters"),
+          (val) =>
+            /[A-Za-z0-9 ]/g.test(val) ||
+            this.$t("the username cannot contain special characters"),
+          (val) =>
+            !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+            this.$t("username cannot contain emojis"),
+        ],
+        phone_number: [
+          (val) =>
+            ((val || "").length > 0 && val.length === 12) ||
+            this.$t("please enter a 10-digit phone number"),
         ],
       };
     },
