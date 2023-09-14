@@ -275,6 +275,7 @@
     "incomplete information": "ข้อมูลไม่ครบถ้วน",
     "invalid data" : "ข้อมูลไม่ถูกต้อง",
     "invalid username or phone number" : "ชื่อผู้ใช้หรือเบอร์โทรศัพท์ไม่ถูกต้อง",
+    "invalid username or email" : "ชื่อผู้ใช้หรืออีเมลไม่ถูกต้อง",
     "invalid file format": "รูปแบบไฟล์ไม่ถูกต้อง",
     "invalid last name thai format" : "รูปแบบนามสกุลภาษาไทยไม่ถูกต้อง",
     "invalid last name eng format" : "รูปแบบนามสกุลภาษาอังกฤษไม่ถูกต้อง",

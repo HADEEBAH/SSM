@@ -276,6 +276,7 @@
     "incomplete information": "Incomplete information",
     "invalid data" : "Invalid data",
     "invalid username or phone number" : "Invalid username or phone number",
+    "invalid username or email" : "Invalid username or email",
     "invalid file format": "Invalid file format",
     "invalid last name thai format" : "Invalid last name thai format",
     "invalid last name eng format" : "Invalid last name english format",

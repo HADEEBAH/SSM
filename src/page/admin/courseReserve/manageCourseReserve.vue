@@ -81,12 +81,21 @@
             : reserve_list.filter((v) => v.status === type_selected)
         "
         :search="search"
+        :sort-by="sortBy"
+        :sort-desc="sortDesc"
+        @update:sort-by="updateSortBy"
+        @update:sort-desc="updateSortDesc"
       >
         <template v-slot:no-data>
           <v-row dense>
             <v-col align="center"> {{ $t("no data found") }} </v-col>
           </v-row>
         </template>
+
+        <template v-slot:[`item.createdDate`]="{ item }">
+          {{ formatDate(item.createdDate) }}
+        </template>
+
         <template v-slot:[`item.status`]="{ item }">
           <v-autocomplete
             dense
@@ -118,57 +127,8 @@ export default {
   data: () => ({
     type_selected: "all",
     search: "",
-    // course_type: [
-    //   { name: "ทั้งหมด", value: "all" },
-    //   { name: "รอการติดต่อ", value: "waiting" },
-    //   { name: "ติดต่อแล้ว", value: "contacted" },
-    //   { name: "ยกเลิกการจอง", value: "cancel" },
-    // ],
-    // status: [
-    //   { label: "รอการติดต่อ", value: "waiting" },
-    //   { label: "ติดต่อแล้ว", value: "contacted" },
-    //   { label: "ยกเลิกการจอง", value: "cancel" },
-    // ],
-    // columns: [
-    //   {
-    //     text: "วันที่จอง",
-    //     align: "start",
-    //     sortable: true,
-    //     value: "dateTh",
-    //   },
-    //   {
-    //     text: "เวลาที่จอง",
-    //     align: "start",
-    //     sortable: false,
-    //     value: "timeTh",
-    //   },
-    //   {
-    //     text: "ชื่อคอร์ส",
-    //     align: "start",
-    //     sortable: false,
-    //     value: "courseFullName",
-    //   },
-    //   {
-    //     text: "ชื่อ-นามสกุลผู้เรียน",
-    //     align: "start",
-    //     sortable: false,
-    //     value: "studentFullName",
-    //   },
-    //   {
-    //     text: "ชื่อ-นามสกุลผู้จอง",
-    //     align: "start",
-    //     sortable: false,
-    //     value: "createdByFullName",
-    //   },
-    //   { text: "เบอร์ติดต่อ", align: "start", sortable: false, value: "tel" },
-    //   {
-    //     text: "สถานะการจอง",
-    //     align: "start",
-    //     sortable: false,
-    //     value: "status",
-    //   },
-    //   { text: "", align: "start", value: "actions", sortable: false },
-    // ],
+    sortBy: "date",
+    sortDesc: false,
   }),
   created() {
     this.GetReserveList();
@@ -199,9 +159,8 @@ export default {
       return [
         {
           text: this.$t("reserve date"),
+          value: "createdDate",
           align: "start",
-          sortable: true,
-          value: "dateTh",
         },
         {
           text: this.$t("booking time"),
@@ -269,6 +228,29 @@ export default {
         }
       });
     },
+
+    formatDate(dateString) {
+      const options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      return new Date(dateString).toLocaleDateString(
+        this.$i18n.locale == "th" ? "th-TH" : "en-US",
+        options
+      );
+    },
+
+    updateSortBy(value) {
+      this.sortBy = value;
+    },
+    updateSortDesc(value) {
+      this.sortDesc = value;
+    },
+    // formatDate(dateString) {
+    //   // Format the date using the toLocaleDateString method
+    //   return new Date(dateString).toLocaleDateString();
+    // },
   },
 };
 </script>
