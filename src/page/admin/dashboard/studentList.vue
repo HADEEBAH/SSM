@@ -135,6 +135,12 @@
         :search="search"
         v-if="tab == 'allLearners'"
       >
+        <!-- <template v-slot:[`header`]="{ data_tab_one }">
+          <th v-for="headerItem in data_tab_one" :key="headerItem.text">
+            <div class="text-end">{{ headerItem.text }}</div>
+          </th>
+        </template> -->
+
         <template v-slot:no-results>
           <span>{{ $t("no data found in table") }}</span>
         </template>
@@ -771,5 +777,12 @@ export default {
 };
 </script>
   
-  <style>
+  <style scoped>
+/* .text-center {
+  text-align: end;
+} */
+
+/* >>> .header-table .v-data-table-header tr {
+  text-align-last: center !important;
+} */
 </style>

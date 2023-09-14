@@ -34,13 +34,19 @@
             ></v-img>
           </v-col>
           <v-col cols="12" class="flex align-center justify-center text-h5">
-            {{ $t('upload the cover image of the course')}}
+            {{ $t("upload the cover image of the course") }}
           </v-col>
           <v-col
             cols="12"
             class="flex align-center justify-center text-caption"
           >
-            ( {{$t("suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file")}} )
+            (
+            {{
+              $t(
+                "suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file"
+              )
+            }}
+            )
           </v-col>
           <v-col
             cols="12"
@@ -48,8 +54,12 @@
           >
           </v-col>
           <v-col cols="12" class="flex align-center justify-center">
-            <v-btn outlined color="blue" @click="openFileSelector"
-              >{{ $t("select file")}}</v-btn
+            <v-btn
+              outlined
+              color="blue"
+              @click="openFileSelector"
+              :disabled="disable"
+              >{{ $t("select file") }}</v-btn
             >
             <input
               ref="fileInput"
@@ -70,7 +80,10 @@
         <v-divider class="mb-3"></v-divider>
         <v-row dense>
           <v-col cols="12" sm="6">
-            <label-custom required :text="$t('course name (thai)')"></label-custom>
+            <label-custom
+              required
+              :text="$t('course name (thai)')"
+            ></label-custom>
             <v-text-field
               dense
               :disabled="disable"
@@ -85,7 +98,10 @@
             ></v-text-field>
           </v-col>
           <v-col cols="12" sm="6">
-            <label-custom required :text="$t('course name (english)')"></label-custom>
+            <label-custom
+              required
+              :text="$t('course name (english)')"
+            ></label-custom>
             <v-text-field
               dense
               :disabled="disable"
@@ -109,7 +125,9 @@
               v-model="course_data.category_id"
               color="#FF6B81"
               :items="categorys"
-              :item-text="$i18n.locale == 'th' ? 'categoryNameTh' : 'categoryNameEng'"
+              :item-text="
+                $i18n.locale == 'th' ? 'categoryNameTh' : 'categoryNameEng'
+              "
               item-value="categoryId"
               item-color="pink"
               :disabled="disable"
@@ -120,7 +138,9 @@
             >
               <template v-slot:no-data>
                 <v-list-item>
-                  <v-list-item-title>{{ $t("no data found")}} </v-list-item-title>
+                  <v-list-item-title
+                    >{{ $t("no data found") }}
+                  </v-list-item-title>
                 </v-list-item>
               </template>
               <template v-slot:item="{ item }">
@@ -132,7 +152,11 @@
                           ? 'font-bold'
                           : ''
                       "
-                      >{{ $i18n.locale == 'th' ? item.categoryNameTh : item.categoryNameEng }}</span
+                      >{{
+                        $i18n.locale == "th"
+                          ? item.categoryNameTh
+                          : item.categoryNameEng
+                      }}</span
                     ></v-list-item-title
                   >
                 </v-list-item-content>
@@ -145,7 +169,10 @@
             </v-autocomplete>
           </v-col>
           <v-col cols="12" sm="6" v-if="course_data.course_type_id === 'CT_1'">
-            <label-custom required :text="$t('course opening date')"></label-custom>
+            <label-custom
+              required
+              :text="$t('course opening date')"
+            ></label-custom>
             <v-menu
               :disabled="disable"
               v-model="course_data.menu_course_open_date"
@@ -256,7 +283,9 @@
               <label-custom :text="$t('course details')"></label-custom>
               <vue-editor
                 :editorToolbar="customToolbar"
-                :placeholder="course_data.detail ? '' : $t('enter course details') + '...'"
+                :placeholder="
+                  course_data.detail ? '' : $t('enter course details') + '...'
+                "
                 :disabled="disable"
                 @text-change="ChangeCourseData(course_data)"
                 v-model="course_data.detail"
@@ -269,7 +298,9 @@
               <vue-editor
                 :editorToolbar="customToolbar"
                 :placeholder="
-                  course_data.music_performance ? '' :$t('enter details') + '...'
+                  course_data.music_performance
+                    ? ''
+                    : $t('enter details') + '...'
                 "
                 :disabled="disable"
                 @text-change="ChangeCourseData(course_data)"
@@ -283,7 +314,7 @@
               <vue-editor
                 :editorToolbar="customToolbar"
                 :placeholder="
-                  course_data.catification ? '' :$t('enter details') + '...'
+                  course_data.catification ? '' : $t('enter details') + '...'
                 "
                 :disabled="disable"
                 @text-change="ChangeCourseData(course_data)"
@@ -304,7 +335,7 @@
                 color="#FF6B81"
                 :items="coachs"
                 item-value="accountId"
-                :item-text="$i18n.locale == 'th'? 'fullNameTh' : 'fullNameEh'"
+                :item-text="$i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEh'"
                 item-color="pink"
                 :disabled="disable"
                 :outlined="!disable"
@@ -314,7 +345,9 @@
               >
                 <template v-slot:no-data>
                   <v-list-item>
-                    <v-list-item-title> {{ $t("no data found") }} </v-list-item-title>
+                    <v-list-item-title>
+                      {{ $t("no data found") }}
+                    </v-list-item-title>
                   </v-list-item>
                 </template>
                 <template v-slot:item="{ item }">
@@ -326,7 +359,11 @@
                             ? 'font-bold'
                             : ''
                         "
-                        >{{ $i18n.locale == 'th' ? `${item.firstNameTh} ${item.lastNameTh}` : `${item.firstNameEng} ${item.lastNameEng}` }}</span
+                        >{{
+                          $i18n.locale == "th"
+                            ? `${item.firstNameTh} ${item.lastNameTh}`
+                            : `${item.firstNameEng} ${item.lastNameEng}`
+                        }}</span
                       ></v-list-item-title
                     >
                   </v-list-item-content>
@@ -340,7 +377,10 @@
               </v-autocomplete>
             </v-col>
             <v-col cols="12" sm="6">
-              <label-custom required :text="`${$t('price')}/${$t('person')}`"></label-custom>
+              <label-custom
+                required
+                :text="`${$t('price')}/${$t('person')}`"
+              ></label-custom>
               <v-text-field
                 :placeholder="$t('specify price')"
                 dense
@@ -365,7 +405,10 @@
           <v-divider class="mb-3"></v-divider>
           <v-row dense>
             <v-col cols="12" sm="6">
-              <label-custom required :text="$t('admission date')"></label-custom>
+              <label-custom
+                required
+                :text="$t('admission date')"
+              ></label-custom>
               <v-row>
                 <v-col>
                   <v-menu
@@ -511,7 +554,9 @@
                       )
                     "
                   >
-                    <strong>{{ $i18n.locale == 'th' ? item.label : item.label_en }}</strong>
+                    <strong>{{
+                      $i18n.locale == "th" ? item.label : item.label_en
+                    }}</strong>
                   </v-chip>
                 </template>
               </v-autocomplete>
@@ -703,7 +748,7 @@
                 :outlined="!disable"
                 :filled="disable"
                 @change="ChangeCourseData(course_data)"
-                :placeholder="$t('enter course details')+'...'"
+                :placeholder="$t('enter course details') + '...'"
               ></v-textarea>
             </v-col>
           </v-row>
@@ -716,7 +761,7 @@
                 :outlined="!disable"
                 :filled="disable"
                 @change="ChangeCourseData(course_data)"
-                :placeholder="$t('enter details')+'...'"
+                :placeholder="$t('enter details') + '...'"
               ></v-textarea>
             </v-col>
           </v-row>
@@ -757,13 +802,13 @@ export default {
     today: new Date(),
     preview_url: null,
     days_confix: [
-      { label: "วันอาทิตย์", label_en : "Sunday", value: 0 },
-      { label: "วันจันทร์", label_en : "Monday",value: 1 },
-      { label: "วันอังคาร", label_en : "Tuesday",value: 2 },
-      { label: "วันพุธ", label_en : "Wednesday",value: 3 },
-      { label: "วันพฤหัสบดี", label_en : "Thursday",value: 4 },
-      { label: "วันศุกร์", label_en : "Friday",value: 5 },
-      { label: "วันเสาร์", label_en : "Saturday", value: 6 },
+      { label: "วันอาทิตย์", label_en: "Sunday", value: 0 },
+      { label: "วันจันทร์", label_en: "Monday", value: 1 },
+      { label: "วันอังคาร", label_en: "Tuesday", value: 2 },
+      { label: "วันพุธ", label_en: "Wednesday", value: 3 },
+      { label: "วันพฤหัสบดี", label_en: "Thursday", value: 4 },
+      { label: "วันศุกร์", label_en: "Friday", value: 5 },
+      { label: "วันเสาร์", label_en: "Saturday", value: 6 },
     ],
     customToolbar: [
       ["bold", "italic", "underline"],
@@ -853,63 +898,94 @@ export default {
     ...mapGetters({
       course_data: "CourseModules/getCourseData",
     }),
-    course_name_th(){
+    course_name_th() {
       return [
-        (val) => (val || "").length > 0 || this.$t("please specify the course name (thai)"),
         (val) =>
-          val.length < 256 || this.$t("the course name (thai) is longer than the specified length"),
-      ]
-    },
-    course_name_en(){ 
-      return [
-        (val) => (val || "").length > 0 || this.$t("please specify the course name (english)"),
+          (val || "").length > 0 ||
+          this.$t("please specify the course name (thai)"),
         (val) =>
-          val.length < 256 ||  this.$t("the course name (english) is longer than the specified length"),
-      ]
+          val.length < 256 ||
+          this.$t("the course name (thai) is longer than the specified length"),
+      ];
     },
-    kingdom(){
-      return [(val) => (val || "").length > 0 || this.$t("please select a kingdom")]
-    },
-    course_open_date(){
+    course_name_en() {
       return [
-        (val) => (val || "").length > 0 || this.$t("please select a course opening date"),
-      ]
+        (val) =>
+          (val || "").length > 0 ||
+          this.$t("please specify the course name (english)"),
+        (val) =>
+          val.length < 256 ||
+          this.$t(
+            "the course name (english) is longer than the specified length"
+          ),
+      ];
     },
-    course_hours(){ 
+    kingdom() {
+      return [
+        (val) => (val || "").length > 0 || this.$t("please select a kingdom"),
+      ];
+    },
+    course_open_date() {
+      return [
+        (val) =>
+          (val || "").length > 0 ||
+          this.$t("please select a course opening date"),
+      ];
+    },
+    course_hours() {
       return [
         (val) => (val || "") > 0 || this.$t("please specify class hours/time"),
-        (val) => val < 25 ||  this.$t("excessive study hours"),
-      ]
+        (val) => val < 25 || this.$t("excessive study hours"),
+      ];
     },
-    location(){
-      return [(val) => (val || "").length > 0 || this.$t("please specify a location")]
-    },
-    class_date(){
-      return [(val) => (val || "").length > 0 || this.$t("please select a date")]
-    },
-    coach(){
-      return [(val) => (val || "").length > 0 || this.$t("please specify a coach")]
-    },
-    start_date(){
-      return [(val) => (val || "").length > 0 || this.$t("please select a start date")]
-    },
-    end_date(){
-      return [(val) => (val || "").length > 0 || this.$t("please select an end date")]
-    },
-    start_time(){
-      return [(val) => (val || "").length > 0 || this.$t("please select a start time")]
-    },
-    end_time(){
-      return [(val) => (val || "").length > 0 || this.$t("please select an end time")]
-    },
-    student_recived(){
+    location() {
       return [
-        (val) => (val || "") > 0 || this.$t("please specify students who can be accepted"),
-        (val) => val < 1000 || this.$t("students who can accept more than the limit"),
-      ]
+        (val) => (val || "").length > 0 || this.$t("please specify a location"),
+      ];
     },
-    price(){
-      return [(val) => (val || "") > 0 || this.$t("please specify price")]
+    class_date() {
+      return [
+        (val) => (val || "").length > 0 || this.$t("please select a date"),
+      ];
+    },
+    coach() {
+      return [
+        (val) => (val || "").length > 0 || this.$t("please specify a coach"),
+      ];
+    },
+    start_date() {
+      return [
+        (val) =>
+          (val || "").length > 0 || this.$t("please select a start date"),
+      ];
+    },
+    end_date() {
+      return [
+        (val) => (val || "").length > 0 || this.$t("please select an end date"),
+      ];
+    },
+    start_time() {
+      return [
+        (val) =>
+          (val || "").length > 0 || this.$t("please select a start time"),
+      ];
+    },
+    end_time() {
+      return [
+        (val) => (val || "").length > 0 || this.$t("please select an end time"),
+      ];
+    },
+    student_recived() {
+      return [
+        (val) =>
+          (val || "") > 0 ||
+          this.$t("please specify students who can be accepted"),
+        (val) =>
+          val < 1000 || this.$t("students who can accept more than the limit"),
+      ];
+    },
+    price() {
+      return [(val) => (val || "") > 0 || this.$t("please specify price")];
     },
   },
   methods: {
