@@ -82,7 +82,6 @@
             </v-row>
           </div>
           <div v-else-if="courseDate()">
-            {{ courseDate().length }}
             <v-alert
               class="my-2"
               border="left"
@@ -1284,9 +1283,6 @@ export default {
       let getAllCourseDate = [];
       let success = "";
       let allCourse = [];
-      console.log(this.date_arr.length)
-      console.log(this.date_arr.length)
-      console.log(this.get_all_course.length)
       for (let [index, item] of this.date_arr.entries()) {
         for (const CourseDate of item) {
           getAllCourseDate.push(CourseDate);
