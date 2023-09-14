@@ -30,6 +30,10 @@
         @click:event="selectedDate($event)"
         :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
       >
+        <template v-slot:event="{ event }">
+          {{ event.start_time && event.end_time ? `${event.start_time} - ${event.end_time}` : '' }}
+          {{ event.start_time && event.end_time ? `\n${event.name}` : `${event.name}` }}
+        </template>
         <template v-if="type === 'week'" v-slot:day-body="{ week }">
           <div
             class="v-current-time"

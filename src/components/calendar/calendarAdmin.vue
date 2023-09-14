@@ -35,7 +35,7 @@
     >
       <template v-slot:event="{ event }">
         {{ event.timed ?? event.timed }}
-        {{ event.name }}
+        {{  event.timed ? `\n${event.name}` : `${event.name}` }}
       </template>
     </v-calendar>
 

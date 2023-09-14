@@ -64,7 +64,6 @@
               {{ formattedDate }}
             </div>
           </v-card-text>
-
           <div class="font-bold">{{ $t("course schedule") }}</div>
           <!-- ตารางวิชาเรียน -->
           <div
@@ -1284,17 +1283,22 @@ export default {
       let getAllCourseDate = [];
       let success = "";
       let allCourse = [];
-
       for (let [index, item] of this.date_arr.entries()) {
         for (const CourseDate of item) {
           getAllCourseDate.push(CourseDate);
           if (courseTodayDate == CourseDate) {
             success = true;
-            allCourse.push(this.get_all_course[index]);
+            if(allCourse.length == 0){
+              allCourse.push(this.get_all_course[index]);
+            }else if(!allCourse.some(v => v?.coachId == this.get_all_course[index]?.coachId && 
+            v?.courseId == this.get_all_course[index]?.courseId && 
+            v?.coursePackageOptionId == this.get_all_course[index]?.coursePackageOptionId && 
+            v?.timeId == this.get_all_course[index]?.timeId)){
+              allCourse.push(this.get_all_course[index]);
+            }
           }
         }
       }
-
       return success && allCourse;
     },
     AllHolidayDate() {
