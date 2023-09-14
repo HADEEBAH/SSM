@@ -128,6 +128,8 @@ const myCourseModules = {
                                     end: date.replace(" 00:00:00", "") + ' ' + course.period.end,
                                     name: data_local.roles.includes('R_5') ? `${course.courseNameTh}(${course.courseNameEng})` : `${course.student.firstNameTh}: ${course.courseNameTh}(${course.courseNameEng})`,
                                     timed: course.student.firstNameTh,
+                                    start_time :  course.period.start,
+                                    end_time : course.period.end,
                                     subtitle: course.coachName,
                                     courseId: course.courseId,
                                 })
@@ -141,6 +143,8 @@ const myCourseModules = {
                                         end: coachLaeve.teachCompensationDate + " " + coachLaeve.teachCompensationEndTime,
                                         name: data_local.roles.includes('R_5') ? `${course.courseNameTh}(${course.courseNameEng})` : `${course.student.firstNameTh}: ${course.courseNameTh}(${course.courseNameEng})`,
                                         timed: course.student.firstNameTh,
+                                        start_time : coachLaeve.teachCompensationStartTime,
+                                        end_time : coachLaeve.teachCompensationEndTime,
                                         subtitle: course.coachName,
                                         courseId: course.courseId,
                                     })
@@ -158,9 +162,9 @@ const myCourseModules = {
                                 name: holiday.holidayName,
                                 start_date: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
                                 start: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
-                                start_time: holiday.holidayStartTime ? holiday.holidayStartTime : null,
+                                // start_time: holiday.holidayStartTime ? holiday.holidayStartTime : null,
                                 end: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
-                                end_time: holiday.holidayEndTime ? holiday.holidayEndTime : null,
+                                // end_time: holiday.holidayEndTime ? holiday.holidayEndTime : null,
                                 subtitle: holiday.allDay,
                                 colors: "#f19a5a"
                             })

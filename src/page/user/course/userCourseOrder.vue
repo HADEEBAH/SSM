@@ -1219,22 +1219,11 @@ export default {
                 v.m_time_id == timeId
             );
             if (course_monitors_filter.length > 0) {
-              if (
-                this.course_order.students.length +
-                  course_monitors_filter[0].m_current_student <=
-                course_monitors_filter[0].m_maximum_student
+              if ( this.course_order.students.length + course_monitors_filter[0].m_current_student <= course_monitors_filter[0].m_maximum_student
               ) {
-                if (
-                  this.course_order.option.course_package_option_id ===
-                  course_monitors_filter[0].m_course_package_options_id
+                if ( this.course_order.option.course_package_option_id === course_monitors_filter[0].m_course_package_options_id
                 ) {
                   return course_monitors_filter[0]?.m_status;
-                } else if (
-                  course_monitors_filter[0]?.m_status === "Open" &&
-                  course_monitors_filter[0]?.m_current_student <=
-                    course_monitors_filter[0].m_maximum_student
-                ) {
-                  return "Open";
                 } else {
                   return "Close";
                 }

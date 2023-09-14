@@ -28,6 +28,7 @@
 }
 .header-table .v-data-table-header tr{
     background-color: #FCE0E7;
+
 }
 .header-table .v-data-table-header tr th span{
     color: #FF6b81;
@@ -134,6 +135,7 @@ body{
     white-space: pre-wrap;
     font-weight: bold;
     text-overflow: clip;
+    text-align: left;
     margin: 0px 3px 5px 3px !important;
     padding: 0px 0px 0px 3px;
     background-color: #fff !important;
@@ -150,6 +152,10 @@ body{
 }
 .v-calendar .v-event.v-event-start.v-event-end .v-event-summary span{
     white-space: break-spaces;
+}
+.v-calendar .v-event-timed {
+    white-space: pre;
+   overflow: hidden;
 }
 .auth-bar{
     position: absolute;
