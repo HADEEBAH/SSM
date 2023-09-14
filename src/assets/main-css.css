@@ -32,7 +32,6 @@
 }
 .header-table .v-data-table-header tr th span{
     color: #FF6b81;
-    text-align-last: center !important;
 }
 .img-card-active.v-card{
     background-color: #FDF7E3;
