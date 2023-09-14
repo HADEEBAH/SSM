@@ -225,30 +225,9 @@ export default {
       searchQuery: [],
       selectedRole: null, // Selected role from the autocomplete
 
-      // roles: [
-      //   { role: "Super Admin", privilege: "superAdmin", roleNumber: "R_1" },
-      //   { role: "Admin", privilege: "admin", roleNumber: "R_2" },
-      //   { role: "โค้ช", privilege: "โค้ช", roleNumber: "R_3" },
-      //   { role: "ผู้ปกครอง", privilege: "ผู้ปกครอง", roleNumber: "R_4" },
-      //   { role: "นักเรียน", privilege: "นักเรียน", roleNumber: "R_5" },
-      // ],
       user_data: {
         users: "",
       },
-      // headers: [
-      //   { text: "ลำดับ", value: "count", sortable: false, align: "start" },
-      //   { text: "ชื่อ", value: "firstNameTh", sortable: false, align: "start" },
-      //   {
-      //     text: "นามสกุล",
-      //     value: "lastNameTh",
-      //     sortable: false,
-      //     align: "start",
-      //   },
-      //   { text: "อีเมล", value: "email", sortable: false, align: "start" },
-      //   { text: "ผู้ใช้", value: "userName", sortable: false, align: "start" },
-      //   { text: "บทบาท", value: "roles", sortable: false },
-      //   { text: "จัดการ", value: "actions", sortable: false, align: "start" },
-      // ],
       editedIndex: -1,
       editedItem: {
         number: "",

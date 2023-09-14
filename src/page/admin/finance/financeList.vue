@@ -17,7 +17,8 @@
         </v-col>
       </v-row>
       <v-row dense class="mb-3">
-        <v-col>
+        <v-col cols="6" sm="6" align="start"> </v-col>
+        <v-col cols="12" sm="6" align="end">
           <v-text-field
             hide-details
             dense
@@ -152,7 +153,9 @@
           }}
         </template>
         <template v-slot:[`item.paid_date`]="{ item }">
-          {{item.paid_date ? GenDate(item.paid_date)+""+item.paid_time : "" }}
+          {{
+            item.paid_date ? GenDate(item.paid_date) + "" + item.paid_time : ""
+          }}
         </template>
         <template v-slot:[`item.payment_status`]="{ item }">
           <div
@@ -496,7 +499,6 @@
                             !export_filter.date_doc_start
                               ? export_filter.date_doc_start
                               : GenDate(export_filter.date_doc_start)
-                                
                           "
                           :label="$t('please select a start time')"
                           outlined
@@ -816,13 +818,15 @@ export default {
       financeFilter: "FinanceModules/financeFilter",
       searchNameUser: "loginModules/searchNameUser",
     }),
-    GenDate(date){
-      return new Date(date).toLocaleDateString(this.$i18n.locale == 'th' ? 'th-TH' : 'en-US', 
-      {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })
+    GenDate(date) {
+      return new Date(date).toLocaleDateString(
+        this.$i18n.locale == "th" ? "th-TH" : "en-US",
+        {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }
+      );
     },
     remove(item) {
       for (let i = 0; i < this.export_filter.students.length; i++) {
