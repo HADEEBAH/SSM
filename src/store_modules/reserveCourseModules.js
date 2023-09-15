@@ -63,13 +63,13 @@ const reserveCourseModules = {
             text: VueI18n.t("already edited"),
             timer: 3000,
             timerProgressBar: true,
-            showCancelButton: false,
+            showCancelButton: false,  
             showConfirmButton: false,
           })
           context.dispatch("GetReserveList")
         }
       } catch (error) {
-        // console.log(error)
+        context.dispatch("GetReserveList")
         if (error.response?.data.statusCode == 400) {
           if (error.response.data.message == "Cannot register , fail at course monitor , course-coach or seats are full") {
             Swal.fire({
