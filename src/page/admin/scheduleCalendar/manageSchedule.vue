@@ -205,12 +205,12 @@
             color="#ED7D2B"
           >
             <v-row dense>
-              <v-col cols="6" sm="6" class="font-bold" style="color: #f19a5a">
-                {{ $t("holiday") }} {{ GenDate(getHolidays?.fullDate) }}
+              <v-col cols="6" sm="" class="font-bold" style="color: #f19a5a">
+                {{ GenDate(getHolidays?.fullDate) }}
               </v-col>
               <v-col
                 cols="6"
-                sm="6"
+                sm="auto"
                 @click="editHolidays(getHolidays)"
                 align="end"
               >
@@ -955,7 +955,6 @@ export default {
           year: "numeric",
           month: "long",
           day: "numeric",
-          weekday: "long",
         };
         return new Date(date).toLocaleDateString(
           this.$i18n.locale == "th" ? "th-TH" : "en-US",
