@@ -640,12 +640,10 @@ export default {
       const options = {
         year: "numeric",
         month: "short",
-        day: "numeric",
+        day: "numeric"
       };
-      course.compensationDate_str = new Date(date).toLocaleDateString(
-        this.$i18n.locale =='th' ? "th-TH" : "en-US",
-        options
-      );
+      console.log(new Date(date).toLocaleDateString(this.$i18n.locale =='th' ? "th-TH" : "en-US", options))
+      course.compensationDate_str = date
     },
     closeDisapprovedDialog() {
       this.show_disapproved = false;
