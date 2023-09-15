@@ -1261,7 +1261,7 @@ export default {
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
-                  await this.saveOrder();
+                  await this.saveOrder({regis_type : 'addStudent'});
 
                   let payload = {
                     notificationName: this.notification_name,
@@ -1272,7 +1272,7 @@ export default {
                     path: null,
                   };
                   this.sendNotification(payload);
-                  this.saveOrder({regis_type : 'addStudent'});
+                  // this.saveOrder({regis_type : 'addStudent'});
                 } else {
                   let account = [];
                   let course_name_noti = [];
@@ -1311,7 +1311,7 @@ export default {
                     path: null,
                   };
                   this.sendNotification(payload);
-                  this.saveOrder({regis_type : "addStudent"});
+                  this.saveOrder({ regis_type : "addStudent" });
                 }
               }
             });

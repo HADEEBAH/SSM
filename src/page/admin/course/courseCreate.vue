@@ -22,7 +22,7 @@
                     ></v-img>
                   </v-col>
                   <v-col cols="8" sm="12">
-                    <label>{{$t("general course")}}</label>
+                    <label>{{$t("regular courses")}}</label>
                   </v-col>
                 </v-row>
               </template>
@@ -348,7 +348,7 @@ export default {
     },
     step_header_data: [
       "course",
-      "time and coach",
+      "duration/coach",
       "package",
       "special rights",
     ],

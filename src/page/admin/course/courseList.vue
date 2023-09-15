@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-container>
-      <header-page slot_tag :title="$t('manage all courses')">
+      <header-page slot_tag :title="$t('manage courses')">
         <v-text-field
           class="w-full"
           outlined
@@ -51,7 +51,7 @@
               ></v-img>
             </template>
             <template v-slot:header>
-              <div class="font-bold">{{$t('general course')}}</div>
+              <div class="font-bold">{{$t('regular courses')}}</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
@@ -104,6 +104,9 @@
           <v-row dense>
             <v-col align="center"> {{ $t("no data found") }} </v-col>
           </v-row>
+        </template>
+        <template v-slot:[`item.course_open`]="{item}">
+          {{ item.course_open_date ? `${GenDate(item.course_open_date)}`:`${GenDate(item.course_open_start_time)} - ${GenDate(item.course_open_end_time)}`}}
         </template>
         <template v-slot:[`item.status`]="{ item }">
           <v-select
@@ -198,16 +201,16 @@ export default {
       return [
         { text: this.$t("course name"), align: "start", sortable: false, value: "course" },
         {
-          text:  this.$t("kingdom name"),
+          text:  this.$t("wls name"),
           align: "start",
           sortable: false,
-          value: "category",
+          value:  this.$i18n.locale == "th" ? "category" : "category_en",
         },
         {
           text: this.$t("course type"),
           align: "start",
           sortable: false,
-          value: "course_type",
+          value: this.$i18n.locale == "th" ? "course_type" : "course_type_en",
         },
         {
           text: this.$t("open-close register date"),
@@ -225,6 +228,14 @@ export default {
       UpdateStatusCourse: "CourseModules/UpdateStatusCourse",
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
     }),
+    GenDate(date) {
+      const options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      return new Date(date).toLocaleDateString(this.$i18n.locale == "th" ? "th-TH":"en-US", options)
+    },
     updateStatusCourse(item, course_id, status) {
       if (status !== "Active") {
         this.GetShortCourseMonitor({ course_id: course_id }).then(async () => {
