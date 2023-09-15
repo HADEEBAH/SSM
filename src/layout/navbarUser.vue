@@ -389,7 +389,7 @@ export default {
     menu_drawer_list: [
       {
         icon: "mdi-account-circle",
-        title: "profile",
+        title: "my profile",
         to: "UserProfile",
         params: null,
         roles: [],
@@ -410,14 +410,14 @@ export default {
       },
       {
         icon: "mdi-history",
-        title: "registration history",
+        title: "my order",
         to: "orderHistory",
         params: null,
         roles: [],
       },
       {
         icon: "mdi-swap-horizontal-bold",
-        title: "admin page",
+        title: "administertor",
         to: "Dashboard",
         params: null,
         roles: ["R_1", "R_2"],

@@ -1,11 +1,11 @@
 <template>
   <v-app>
     <v-container>
-      <headerPage :title="$t(`create a kingdom`)"></headerPage>
+      <headerPage :title="$t(`wls setup`)"></headerPage>
       <v-row dense>
         <v-col>
           <label-custom
-            :text="$t(`upload the cover image of the kingdom`)"
+            :text="$t(`upload the cover image of wls`)"
           ></label-custom>
 
           <v-card class="mx-3" flat>
@@ -60,7 +60,7 @@
                     cols="12"
                     class="flex align-center justify-center text-h5"
                   >
-                    {{ $t(`upload the cover image of the kingdom`) }}
+                    {{ $t(`upload the cover image of wls`) }}
                   </v-col>
                   <v-col
                     cols="12"
@@ -95,19 +95,19 @@
       </v-row>
       <br />
 
-      <label-custom :text="$t(`kingdom details`)"></label-custom>
+      <label-custom :text="$t('wls course information')"></label-custom>
       <hr />
       <br />
 
       <v-row dense>
         <v-col cols="12" sm="6">
           <label-custom
-            :text="$t(`kingdom name (Thai language)`)"
+            :text="$t(`wls name (Thai)`)"
           ></label-custom>
 
           <v-text-field
             dense
-            :placeholder="$t(`fill in the name of the kingdom`)"
+            :placeholder="$t(`fill in wls`)"
             outlined
             v-model="kingdom.kingdom_name_th"
             @keypress="validate($event, 'th')"
@@ -115,12 +115,12 @@
         </v-col>
         <v-col cols="12" sm="6">
           <label-custom
-            :text="$t(`kingdom name (English language)`)"
+            :text="$t(`wls name (English)`)"
           ></label-custom>
 
           <v-text-field
             dense
-            :placeholder="$t(`fill in the name of the kingdom`)"
+            :placeholder="$t(`fill in wls name`)"
             outlined
             v-model="kingdom.kingdom_name_eng"
             @keypress="validate($event, 'en')"
@@ -130,7 +130,7 @@
 
       <v-row dense>
         <v-col cols="12" sm="6">
-          <label-custom :text="$t(`organized by`)"></label-custom>
+          <label-custom :text="$t('instructor')"></label-custom>
 
           <v-text-field
             dense
@@ -147,7 +147,7 @@
 
       <v-row dense>
         <v-col cols="12">
-          <label-custom :text="$t(`details`)"></label-custom>
+          <label-custom :text="$t('wls detailed description')"></label-custom>
 
           <v-textarea
             dense
@@ -193,7 +193,7 @@
           :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
           @click="showBtn()"
         >
-          <span class="mdi mdi-pencil-outline">แก้ไข</span>
+          <span class="mdi mdi-pencil-outline">{{ $t("edit") }}</span>
         </v-btn>
       </v-col>
       <v-dialog class="pa-2" width="50vw" v-model="dialog_show" persistent>
@@ -207,10 +207,10 @@
               </v-col>
             </v-row>
           </v-card-title>
-          <dialogCard text="สร้างอาณาจักรเรียบร้อย"></dialogCard>
+          <dialogCard :text="$t('completely build a wls')"></dialogCard>
           <div class="my-5 text-center">
             <v-btn color="#ff6b81" @click="goToManageKingdomPage()">
-              ตกลง
+              {{$t('agree')}}
             </v-btn>
           </div>
         </v-card>
@@ -297,7 +297,7 @@ export default {
     openDialog() {
       Swal.fire({
         icon: "question",
-        title: this.$t("do you want to build an kingdom?"),
+        title: this.$t("do you want to build an wls?"),
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: this.$t("agree"),
@@ -336,7 +336,7 @@ export default {
               Swal.fire({
                 icon: "success",
                 title: this.$t("succeed"),
-                text: this.$t("the kingdom has been built"),
+                text: this.$t("wls has been built"),
                 timer: 3000,
                 timerProgressBar: true,
                 showCancelButton: false,

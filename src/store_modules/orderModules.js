@@ -508,6 +508,7 @@ const orderModules = {
       }
     },
     async saveOrder(context,{ regis_type }) {
+      console.log(regis_type)
       context.commit("SetOrderIsLoading", true);
       try {
         let order = context.state.order;

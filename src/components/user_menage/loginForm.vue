@@ -18,7 +18,7 @@
           </div>
           <v-row v-else>
             <v-col class="text-2xl text-center text-bold text-black">
-              เข้าสู่ระบบ
+               {{$t('sign in')}}
             </v-col>
           </v-row>
           <v-row dense>
@@ -64,7 +64,7 @@
                 color="#ff6b81"
                 @click="login()"
               >
-              {{ $t("login")}}
+              {{ $t("sign in")}}
               </v-btn>
             </v-col>
             <v-col cols="12">
@@ -75,7 +75,7 @@
                 width="100%"
                 @click="toRegisterPage()"
               >
-              {{ $t("register")}}
+              {{ $t("register for an account")}}
               </v-btn>
             </v-col>
           </v-row>

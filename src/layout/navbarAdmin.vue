@@ -166,38 +166,38 @@ export default {
     menu_drawer_list: [
       { title: "dashboard", to: "Dashboard", child: [], roles: ["R_1", "R_2"] }, // to ให้ใส่ name ของ router
       {
-        title: "study schedule",
+        title: "class schedule",
         to: "ManageSchedule",
         child: [],
         roles: ["R_1", "R_2"],
       },
       {
-        title: "add a learner",
+        title: "add learner",
         to: "Student",
         child: [],
         roles: ["R_1", "R_2"],
       },
       {
-        title: "course",
+        title: "course registration",
         to: "",
         roles: ["R_1"],
         child: [
           {
-            title: "manage reservations",
+            title: "manage course booking",
             to: "CourseReserveList",
             roles: ["R_1"],
           },
-          { title: "manage all courses", to: "CourseList", roles: ["R_1"] },
-          { title: "create a course", to: "CourseCreate", roles: ["R_1"] },
+          { title: "manage courses", to: "CourseList", roles: ["R_1"] },
+          { title: "adding course", to: "CourseCreate", roles: ["R_1"] },
         ],
       },
       {
-        title: "kingdom",
+        title: "warraphat learning sphere",
         to: "",
         roles: ["R_1"],
         child: [
-          { title: "manage a kingdom", to: "ManageKingdom", roles: ["R_1"] },
-          { title: "create a kingdom", to: "Kingdom", roles: ["R_1"] },
+          { title: "customization", to: "ManageKingdom", roles: ["R_1"] },
+          { title: "wls setup", to: "Kingdom", roles: ["R_1"] },
         ],
       },
       { title: "finance", to: "Finance", child: [], roles: ["R_1", "R_2"] },
@@ -208,13 +208,13 @@ export default {
         child: [{ title: "manage user", to: "UserList", roles: ["R_1"] }],
       },
       {
-        title: "approval of leave",
+        title: "leave approval",
         to: "LeaveList",
         child: [],
         roles: ["R_1"],
       },
       {
-        title: "banner management",
+        title: "banner setting",
         to: "Banner",
         child: [],
         roles: ["R_1", "R_2"],

@@ -118,7 +118,7 @@
         </v-row>
         <v-row dense>
           <v-col cols="12" sm="6">
-            <label-custom required :text="$t('kingdom name')"></label-custom>
+            <label-custom required :text="$t('wls name')"></label-custom>
             <v-autocomplete
               dense
               :rules="kingdom"
@@ -134,7 +134,7 @@
               :outlined="!disable"
               :filled="disable"
               @change="ChangeCourseData(course_data)"
-              :placeholder="$t('specify kingdom name')"
+              :placeholder="$t('specify wls name')"
             >
               <template v-slot:no-data>
                 <v-list-item>
@@ -814,38 +814,6 @@ export default {
       ["bold", "italic", "underline"],
       [{ list: "ordered" }, { list: "bullet" }],
     ],
-    rules: {
-      course_name_th: [
-        (val) => (val || "").length > 0 || "โปรดระบุชื่อคอร์ส(ภาษาไทย)",
-        (val) =>
-          val.length < 256 || "ชื่อคอร์ส(ภาษาไทย)ความยาวเกินกว่าที่กำหนด",
-      ],
-      course_name_en: [
-        (val) => (val || "").length > 0 || "โปรดระบุชื่อคอร์ส(ภาษาอังกฤษ)",
-        (val) =>
-          val.length < 256 || "ชื่อคอร์ส(ภาษาอังกฤษ)ความยาวเกินกว่าที่กำหนด",
-      ],
-      kingdom: [(val) => (val || "").length > 0 || "โปรดเลือกอาณาจักร"],
-      course_open_date: [
-        (val) => (val || "").length > 0 || "โปรดเลือกวันที่เปิดคอร์ส",
-      ],
-      course_hours: [
-        (val) => (val || "") > 0 || "โปรดระบุชั่วโมงการเรียน/ครั้ง",
-        (val) => val < 25 || "ชั่วโมงการเรียนเกินกว่าที่กำหนด",
-      ],
-      location: [(val) => (val || "").length > 0 || "โปรดระบุสถานที่"],
-      class_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันที่"],
-      coach: [(val) => (val || "").length > 0 || "โปรดระบุโค้ช"],
-      start_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันที่เริ่ม"],
-      end_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันที่สิ้นสุด"],
-      start_time: [(val) => (val || "").length > 0 || "โปรดเลือกเวลาเริ่ม"],
-      end_time: [(val) => (val || "").length > 0 || "โปรดเลือกเวลาสิ้นสุด"],
-      student_recived: [
-        (val) => (val || "") > 0 || "โปรดระบุจำนวนนักเรียนที่รับได้",
-        (val) => val < 1000 || "จำนวนนักเรียนที่รับได้เกินกว่าที่กำหนด",
-      ],
-      price: [(val) => (val || "") > 0 || "โปรดระบุราคา"],
-    },
     course_open_date_str: "",
     register_date_range_str: {
       start_date: "",
@@ -922,7 +890,7 @@ export default {
     },
     kingdom() {
       return [
-        (val) => (val || "").length > 0 || this.$t("please select a kingdom"),
+        (val) => (val || "").length > 0 || this.$t("please select a wls"),
       ];
     },
     course_open_date() {
