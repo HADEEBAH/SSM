@@ -809,22 +809,6 @@ export default {
     today: new Date(),
     selected: [""],
     pay: "",
-    // rules: {
-    //   student: [(val) => (val || "").length > 0 || "โปรดเลือกผู้เรียน"],
-    //   category: [(val) => (val || "").length > 0 || "โปรดเลือกอาณาจักร"],
-    //   course: [(val) => (val || "").length > 0 || "โปรดเลือกคอร์สเรียน"],
-    //   package: [(val) => (val || "").length > 0 || "โปรดเลือกแพ็กเกจ"],
-    //   option: [(val) => (val.option_id ? true : false) || "โปรดเลือกระยะเวลา"],
-    //   day: [(val) => (val || "").length > 0 || "โปรดเลือกวันเรียน"],
-    //   time: [(val) => (val ? true : false) || "โปรดเลือกเวลาเรียน"],
-    //   coach: [(val) => (val.courseCoachId ? true : false) || "โปรดเลือกโค้ช"],
-    //   start_date: [(val) => (val || "").length > 0 || "โปรดเลือกวันเริ่ม"],
-    //   price: [(val) => (val || "") > 0 || "โปรดเลือกระบุราคา"],
-    //   remark: [(val) => val.length < 256 || "หมายเหตุความยาวเกินกว่าที่กำหนด"],
-    //   payment_type: [
-    //     (val) => (val ? true : false || "โปรดเลือกช่องทางการชำระเงิน"),
-    //   ],
-    // },
   }),
   created() {
     if (this.order.courses.length == 0) {
@@ -1262,17 +1246,17 @@ export default {
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
                   await this.saveOrder({regis_type : 'addStudent'});
-
-                  let payload = {
-                    notificationName: this.notification_name,
-                    notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(
-                      course_name_noti.length > 1 ? ", " : ""
-                    )} ให้คุณแล้ว (รอชำระเงิน)`,
-                    accountId: account,
-                    path: null,
-                  };
-                  this.sendNotification(payload);
-                  // this.saveOrder({regis_type : 'addStudent'});
+                  if(this.order_is_status){
+                    let payload = {
+                      notificationName: this.notification_name,
+                      notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(
+                        course_name_noti.length > 1 ? ", " : ""
+                      )} ให้คุณแล้ว (รอชำระเงิน)`,
+                      accountId: account,
+                      path: null,
+                    };
+                    this.sendNotification(payload);
+                  }
                 } else {
                   let account = [];
                   let course_name_noti = [];
@@ -1302,16 +1286,20 @@ export default {
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
-                  let payload = {
-                    notificationName: this.notification_name,
-                    notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(
-                      course_name_noti.length > 1 ? "และ" : ""
-                    )} ให้คุณแล้ว`,
-                    accountId: account,
-                    path: null,
-                  };
-                  this.sendNotification(payload);
-                  this.saveOrder({ regis_type : "addStudent" });
+                  await this.saveOrder({ regis_type : "addStudent" });
+                  if(this.order_is_status){
+                    let payload = {
+                      notificationName: this.notification_name,
+                      notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(
+                        course_name_noti.length > 1 ? "และ" : ""
+                      )} ให้คุณแล้ว`,
+                      accountId: account,
+                      path: null,
+                    };
+                    console.log('object :>> ', payload);
+                    this.sendNotification(payload);
+                  }
+                 
                 }
               }
             });
