@@ -890,7 +890,7 @@ export default {
     },
     kingdom() {
       return [
-        (val) => (val || "").length > 0 || this.$t("please select a kingdom"),
+        (val) => (val || "").length > 0 || this.$t("please select a wls"),
       ];
     },
     course_open_date() {

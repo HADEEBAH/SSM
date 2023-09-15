@@ -57,7 +57,7 @@
             sm="4"
             class="text-2xl align-self-center font-weight-bold"
           >
-          {{ $t("kingdom") }}  
+          {{ $t("warraphat learning sphere") }}  
           </v-col>
           <v-col cols="12" sm="8" style="text-align: -webkit-right">
             <v-text-field
@@ -68,7 +68,7 @@
               hide-details
               dense
               outlined
-              :label="$t('find the learning kingdom that interests you here')"
+              :label="$t('find the learning wls that interests you here')"
               prepend-inner-icon="mdi-magnify"
             />
           </v-col>
@@ -137,7 +137,7 @@
             v-if="searchKingdom(search_kingdom).length === 0"
             class="font-weight-bold text-center text-xl"
           >
-            {{$t("kingdom not found")}}
+            {{$t("wls not found")}}
           </v-col>
         </v-row>
         <loading-overlay :loading="categorys_is_loading"></loading-overlay>
@@ -195,7 +195,7 @@ export default {
   },
 
   mounted() {
-    this.$store.dispatch("NavberUserModules/changeTitleNavber", "kingdom");
+    this.$store.dispatch("NavberUserModules/changeTitleNavber", "warraphat learning sphere");
   },
 
   methods: {

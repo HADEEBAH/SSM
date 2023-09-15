@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <header-page slot_tag :title="$t('manage the entire empire')">
+    <header-page slot_tag :title="$t('customization')">
       <v-text-field
         class="w-full"
         outlined
@@ -55,22 +55,6 @@ export default {
     headerPage,
   },
   data: () => ({
-    // column: [
-    //   {
-    //     text: "ชื่ออาณาจักร(ไทย)",
-    //     align: "start",
-    //     sortable: false,
-    //     value: "categoryNameTh",
-    //   },
-    //   {
-    //     text: "ชื่ออาณาจักร(อังกฤษ)",
-    //     align: "start",
-    //     sortable: false,
-    //     value: "categoryNameEng",
-    //   },
-    //   { text: "จัดสอนโดย", align: "start", sortable: false, value: "taughtBy" },
-    //   { text: "", align: "center", value: "actions", sortable: false },
-    // ],
     search: "",
   }),
   mounted() {
@@ -110,19 +94,19 @@ export default {
     column() {
       return [
         {
-          text: this.$t("name of kingdom (thai)"),
+          text: this.$t("wls name (thai)"),
           align: "start",
           sortable: false,
           value: "categoryNameTh",
         },
         {
-          text: this.$t("name of kingdom (english)"),
+          text: this.$t("wls name (english)"),
           align: "start",
           sortable: false,
           value: "categoryNameEng",
         },
         {
-          text: this.$t("organized by"),
+          text: this.$t("instructor"),
           align: "start",
           sortable: false,
           value: "taughtBy",

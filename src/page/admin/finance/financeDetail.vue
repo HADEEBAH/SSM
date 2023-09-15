@@ -87,7 +87,7 @@
                       <rowData
                         col_header="12"
                         col_detail="12"
-                        :title="$t('kingdom')"
+                        :title="$t('warraphat learning sphere')"
                       >
                         {{
                           $i18n.locale == "th"

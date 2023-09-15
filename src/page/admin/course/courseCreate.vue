@@ -352,8 +352,6 @@ export default {
       "package",
       "special rights",
     ],
-    courses: ["โค้ชหนุ่ม", "โค้ชพอล"],
-    kingdoms: ["อาณาจักรศิลปะสมัยใหม่", "อาณาจักร P.E."],
     course_open_date_str: "",
     register_date_range_str: {
       start_date: "",

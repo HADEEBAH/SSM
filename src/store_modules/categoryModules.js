@@ -97,7 +97,7 @@ const categoryModules = {
                     if (error.response.data.message === "Cannot delete this category because of the course") {
                         Swal.fire({
                             icon: "error",
-                            title: VueI18n.t("this kingdom cannot be deleted because it has a course"),
+                            title: VueI18n.t("this wls cannot be deleted because it has a course"),
                             showDenyButton: false,
                             showCancelButton: false,
                             confirmButtonText: VueI18n.t("agree"),

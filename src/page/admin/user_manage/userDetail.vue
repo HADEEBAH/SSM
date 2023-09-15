@@ -1933,7 +1933,7 @@ export default {
           sortable: false,
         },
         {
-          text: this.$t("kingdom name"),
+          text: this.$t("wls name"),
           value:
             this.$i18n.locale == "th" ? "categoryNameTh" : "categoryNameEn",
           sortable: false,

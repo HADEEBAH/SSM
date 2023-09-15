@@ -128,14 +128,14 @@
             <!-- คอร์สทั่วไป detail -->
             <v-row dense>
               <v-col cols="12" sm="4">
-                <label-custom :text="$t(`kingdom`)"></label-custom>
+                <label-custom :text="$t(`wls`)"></label-custom>
                 <v-autocomplete
                   dense
                   item-value="categoryId"
                   item-text="categoryNameTh"
                   v-model="course.category_id"
                   :items="categorys"
-                  :placeholder="$t(`select kingdom`)"
+                  :placeholder="$t(`select wls`)"
                   :rules="rules.category"
                   outlined
                   color="pink"
@@ -898,7 +898,7 @@ export default {
           (val) => (val || "").length > 0 || this.$t("please select a student"),
         ],
         category: [
-          (val) => (val || "").length > 0 || this.$t("please select a kingdom"),
+          (val) => (val || "").length > 0 || this.$t("please select a wls"),
         ],
         course: [
           (val) => (val || "").length > 0 || this.$t("please select a course"),

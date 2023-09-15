@@ -417,7 +417,7 @@ export default {
       },
       {
         icon: "mdi-swap-horizontal-bold",
-        title: "admin page",
+        title: "administertor",
         to: "Dashboard",
         params: null,
         roles: ["R_1", "R_2"],

@@ -196,8 +196,8 @@ export default {
         to: "",
         roles: ["R_1"],
         child: [
-          { title: "wls setup", to: "ManageKingdom", roles: ["R_1"] },
-          { title: "customization", to: "Kingdom", roles: ["R_1"] },
+          { title: "customization", to: "ManageKingdom", roles: ["R_1"] },
+          { title: "wls setup", to: "Kingdom", roles: ["R_1"] },
         ],
       },
       { title: "finance", to: "Finance", child: [], roles: ["R_1", "R_2"] },
