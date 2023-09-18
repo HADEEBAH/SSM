@@ -242,7 +242,7 @@ export default {
     this.userData = JSON.parse(localStorage.getItem("userDetail"))
     this.$store.dispatch(
       "NavberUserModules/changeTitleNavber",
-      "registration history"
+      "my order"
     );
     this.getHistory();
   },

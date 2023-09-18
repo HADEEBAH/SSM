@@ -18,7 +18,7 @@
           </div>
           <v-row v-else>
             <v-col class="text-2xl text-center text-bold text-black">
-              เข้าสู่ระบบ
+              {{ $t("sign in") }}
             </v-col>
           </v-row>
           <v-row dense>
@@ -108,23 +108,6 @@ export default {
   data: () => ({
     show_password: false,
     logo: `${process.env.VUE_APP_URL}/logo.svg`,
-    // rules: {
-    //   usernameRules: [
-    //     (val) =>
-    //       (val || "").length > 5 ||
-    //       "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
-    //     (val) => /[A-Za-z0-9 ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-    //     (val) =>
-    //       !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-    //       "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
-    //   ],
-    //   passwordRules: [
-    //     (val) =>
-    //       (val || "").length > 7 ||
-    //       "โปรดระบุรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
-    //     (val) => !/[ ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-    //   ],
-    // },
   }),
   beforeMount() {
     if (this.$route.query.token) {

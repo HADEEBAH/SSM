@@ -115,7 +115,7 @@
                     ><v-icon color="#ff6b81">mdi-bookshelf</v-icon></v-col
                   >
                   <v-col>{{
-                    `${$t("kingdom")} : ${course.category_name}`
+                    `${$t("warraphat learning sphere")} : ${course.category_name}`
                   }}</v-col>
                 </v-row>
                 <v-row dense>
@@ -264,7 +264,7 @@
               <v-row dense>
                 <v-col cols="12">
                   <rowData mini icon="mdi-account"
-                    >{{ $t("kingdom") }} :
+                    >{{ $t("warraphat learning sphere") }} :
                     {{
                       $i18n.locale == "th"
                         ? course.category_name

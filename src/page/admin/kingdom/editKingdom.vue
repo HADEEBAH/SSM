@@ -1,9 +1,9 @@
 <template>
   <v-container>
     <v-form ref="category_form" v-model="category_form">
-      <headerPage :title="$t('edit the kingdom')" class="my-5"></headerPage>
+      <headerPage :title="$t('edit wls')" class="my-5"></headerPage>
       <label-custom
-        :text="$t('upload the cover image of the kingdom')"
+        :text="$t('upload the cover image of wls')"
       ></label-custom>
       <v-card style="border: dashed blue">
         <v-card-title primary-title align="end">
@@ -69,13 +69,13 @@
         <v-col cols="12" sm="6">
           <label-custom
             required
-            :text="$t('name of kingdom (thai)')"
+            :text="$t('wls name (thai)')"
           ></label-custom>
           <v-text-field
             :rules="rules.category_name_th"
             :disabled="showData"
             dense
-            :placeholder="$t('fill in the name of the kingdom')"
+            :placeholder="$t('fill in wls name')"
             outlined
             v-model="category.categoryNameTh"
             @keypress="validate($event, 'th')"
@@ -85,13 +85,13 @@
         <v-col cols="12" sm="6">
           <label-custom
             required
-            :text="$t('name of kingdom (english)')"
+            :text="$t('wls name (english)')"
           ></label-custom>
           <v-text-field
             :rules="rules.category_name_en"
             :disabled="showData"
             dense
-            :placeholder="$t('fill in the name of the kingdom')"
+            :placeholder="$t('fill in wls name')"
             outlined
             v-model="category.categoryNameEng"
             @keypress="validate($event, 'en')"
@@ -100,7 +100,7 @@
 
         <v-row dense>
           <v-col cols="12" sm="6">
-            <label-custom required :text="$t('organized by')"></label-custom>
+            <label-custom required :text="$t('instructor')"></label-custom>
             <v-text-field
               :rules="rules.taughtBy"
               :disabled="showData"
@@ -118,7 +118,7 @@
       </v-row>
       <v-row dense>
         <v-col cols="12">
-          <label-custom :text="$t('details')"></label-custom>
+          <label-custom :text="$t('wls detailed description')"></label-custom>
           <v-textarea
             :disabled="showData"
             dense
@@ -180,7 +180,7 @@
             </v-col>
           </v-row>
         </v-card-title>
-        <dialogCard :text="$t('the kingdom has been edited')"></dialogCard>
+        <dialogCard :text="$t('the wls has been edited')"></dialogCard>
         <div class="my-5 text-center">
           <v-btn color="#ff6b81" @click="goToManageKingdomPage()">
             {{ $t("agree") }}
@@ -212,22 +212,6 @@ export default {
     showData: true,
     dialog_show: false,
     category_form: false,
-    // rules: {
-    //   category_name_th: [
-    //     (val) => (val || "").length > 0 || "โปรดระบุชื่ออาณาจักร(ภาษาไทย)",
-    //     (val) =>
-    //       val.length < 50 || "ชื่ออาณาจักร(ภาษาไทย)ความยาวเกินกว่าที่กำหนด",
-    //   ],
-    //   category_name_en: [
-    //     (val) => (val || "").length > 0 || "โปรดระบุชื่ออาณาจักร(ภาษาอังกฤษ)",
-    //     (val) =>
-    //       val.length < 50 || "ชื่ออาณาจักร(ภาษาอังกฤษ)ความยาวเกินกว่าที่กำหนด",
-    //   ],
-    //   taughtBy: [
-    //     (val) => (val || "").length > 0 || "โปรดระบุผู้จัดสอน",
-    //     (val) => val.length < 50 || "ผู้จัดสอนความยาวเกินกว่าที่กำหนด",
-    //   ],
-    // },
   }),
   mounted() {},
   created() {
@@ -299,7 +283,7 @@ export default {
       if (this.category_form) {
         Swal.fire({
           icon: "question",
-          title: this.$t("do you want to edit the kingdom?"),
+          title: this.$t("do you want to edit wls?"),
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: this.$t("agree"),
@@ -334,7 +318,7 @@ export default {
                 Swal.fire({
                   icon: "success",
                   title: this.$t("succeed"),
-                  text: this.$t("the kingdom has been edited"),
+                  text: this.$t("wls has been edited"),
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,
@@ -371,20 +355,20 @@ export default {
         category_name_th: [
           (val) =>
             (val || "").length > 0 ||
-            this.$t("please specify the name of the kingdom (Thai language)"),
+            this.$t("please specify wls name (Thai)"),
           (val) =>
             val.length < 50 ||
             this.$t(
-              "kingdom name (Thai language) longer than specified length"
+              "wls name (Thai) longer than specified length"
             ),
         ],
         category_name_en: [
           (val) =>
             (val || "").length > 0 ||
-            this.$t("please specify the name of the kingdom (in English)"),
+            this.$t("please specify wls name (English)"),
           (val) =>
             val.length < 50 ||
-            this.$t("kingdom name (English) longer than specified"),
+            this.$t(" wls name (English) longer than specified"),
         ],
         taughtBy: [
           (val) =>

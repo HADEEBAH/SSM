@@ -54,8 +54,8 @@
           icon="mdi-account-group-outline"
         >
           {{
-            course_data.course_studant_amount
-              ? course_data.course_studant_amount
+            course_monitors?.length == 1
+              ? course_monitors[0].m_current_student
               : 0
           }}
           / {{ course_data.student_recived }} {{ $t("seat") }}</rowData
@@ -168,8 +168,8 @@
           >
             <v-btn
               v-if="
-                course_data.course_studant_amount
-                  ? course_data.course_studant_amount <
+                course_monitors?.length == 1
+                  ? course_monitors[0].m_current_student <
                     course_data.student_recived
                   : 0 < course_data.student_recived
               "
@@ -272,6 +272,7 @@ export default {
         course_id: this.order_data.course_id,
         cpo_id: null,
       });
+      this.GetShortCourseMonitor({course_id: this.order_data.course_id,})
     }
   },
   beforeMount() {
@@ -286,6 +287,7 @@ export default {
       course_order: "OrderModules/getCourseOrder",
       order: "OrderModules/getOrder",
       course_is_loading: "CourseModules/getCourseIsLoading",
+      course_monitors: "CourseMonitorModules/getCourseMonitor",
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
@@ -299,6 +301,8 @@ export default {
       changeOrderData: "OrderModules/changeOrderData",
       GetCourseStudent: "CourseModules/GetCourseStudent",
       CreateReserveCourse: "OrderModules/CreateReserveCourse",
+      GetGeneralCourseMonitor: "CourseMonitorModules/GetGeneralCourseMonitor",
+      GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
     }),
     getTime(time) {
       return moment(time).format("HH:mm");

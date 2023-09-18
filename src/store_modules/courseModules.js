@@ -913,13 +913,17 @@ const CourseModules = {
                 course_id: course.c_course_id,
                 category_id: course.c_category_id,
                 category: category.categoryNameTh ? category.categoryNameTh : "-",
+                category_en: category.categoryNameEng ? category.categoryNameEng : "-",
                 course_type: course.c_course_type_id === "CT_1" ? "คอร์สทั่วไป" : "คอร์สระยะสั้น",
-                course_type_en: course.c_course_type_id === "CT_1" ? VueI18n.t("general course") : VueI18n.t("short course"),
+                course_type_en: course.c_course_type_id === "CT_1" ? VueI18n.t("regular course") : VueI18n.t("short course"),
                 course_type_id: course.c_course_type_id,
                 course: `${course.c_course_name_th}(${course.c_course_name_en})`,
                 status: course.c_course_status,
                 isTruncated: true,
-                course_open: course.c_course_open_date ? new Date(course.c_course_open_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', }) : `${new Date(course.c_course_register_start_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', })} - ${new Date(course.c_course_register_end_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', })}`
+                course_open: course.c_course_open_date ? new Date(course.c_course_open_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', }) : `${new Date(course.c_course_register_start_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', })} - ${new Date(course.c_course_register_end_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric', })}`,
+                course_open_date : course.c_course_open_date,
+                course_open_start_time : course.c_course_register_start_date,
+                course_open_end_time : course.c_course_register_end_date,
               })
             } else {
               if (categorys.data.statusCode === 400 && categorys.data.message === "Category not found.") {

@@ -22,7 +22,7 @@
                     ></v-img>
                   </v-col>
                   <v-col cols="8" sm="12">
-                    <label>{{$t("general course")}}</label>
+                    <label>{{$t("regular courses")}}</label>
                   </v-col>
                 </v-row>
               </template>
@@ -348,12 +348,10 @@ export default {
     },
     step_header_data: [
       "course",
-      "time and coach",
+      "duration/coach",
       "package",
       "special rights",
     ],
-    courses: ["โค้ชหนุ่ม", "โค้ชพอล"],
-    kingdoms: ["อาณาจักรศิลปะสมัยใหม่", "อาณาจักร P.E."],
     course_open_date_str: "",
     register_date_range_str: {
       start_date: "",
