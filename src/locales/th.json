@@ -343,6 +343,12 @@
     "manage the entire empire": "จัดการอาณาจักรทั้งหมด",
     "march":"มีนาคม",
     "may": "พฤษภาคม",
+    "my order": "ประวัติการสั่งซื้อ",
+    "my account setting": "การจัดการ",
+    "my account": "หน้าผู้ใช้งาน",
+    "my profile": "โปรไฟล์",
+
+
 
     "more details" : "รายละเอียดเพิ่มเติม",
     
@@ -494,7 +500,6 @@
     "please fill out the information correctly": "กรุณากรอกข้อมูลให้ถูกต้อง",
     "please select at least 1 day before the holiday": "กรุณาเลือกอย่างน้อย 1 วันก่อนวันหยุด",
     "please select a student": "โปรดเลือกผู้เรียน",
-    
     "please choose a course" : "( กรุณาเลือกคอร์ส )",
     "please enter your username (English)" : "กรุณาระบุชื่อผู้ใช้งาน(ภาษาอังกฤษ)",
     "please specify the name of the competition": "กรุณาระบุชื่อการแข่งขัน",
@@ -535,6 +540,7 @@
     "register for a course" : "ลงทะเบียนคอร์สเรียน",
     "register for yourself" : "ลงทะเบียนเรียนให้ตัวเอง",
     "register to study for others" : "ลงทะเบียนเรียนให้ผู้อื่น",
+    "register for an account" : "ลงทะเบียน",
     "registration history" : "ประวัติการลงทะเบียน",
     "reject" : "ปฏิเสธ",
     "rejection confirmed": "( ยืนยันการปฏิเสธเรียบร้อยแล้ว )",
@@ -632,6 +638,8 @@
     "specify the name of the holiday, such as Songkran Day" : "ระบุชื่อวันหยุด เช่น วันสงกรานต์",
     "show certificate": "แสดงหนังสือรับรอง",
     "september": "กันยายน",
+    "sign in" : "เข้าสู่ระบบ",
+
 
     "take annual leave" : "ลาพักร้อนประจำปี",
     "take up teaching" : "เข้าสอน",

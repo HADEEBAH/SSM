@@ -27,12 +27,22 @@
         </v-app-bar-title>
         <v-spacer></v-spacer>
         <!-- <div id="google_translate_element"></div> -->
-        <v-menu v-model="menu_locale"  offset-y>
+        <v-menu v-model="menu_locale" offset-y>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn class="mr-2"  text v-bind="attrs" v-on="on">
-              <v-img  class="mr-2" v-if="$i18n.locale == 'en'" src="@/assets/profile/usaFlag.png"></v-img>
-              <v-img  class="mr-2" v-else src="@/assets/profile/thaiFlag.png"></v-img>
-              <label>{{ $i18n.locale == "en" ? $t("english") : $t("thai")}}</label>
+            <v-btn class="mr-2" text v-bind="attrs" v-on="on">
+              <v-img
+                class="mr-2"
+                v-if="$i18n.locale == 'en'"
+                src="@/assets/profile/usaFlag.png"
+              ></v-img>
+              <v-img
+                class="mr-2"
+                v-else
+                src="@/assets/profile/thaiFlag.png"
+              ></v-img>
+              <label>{{
+                $i18n.locale == "en" ? $t("english") : $t("thai")
+              }}</label>
             </v-btn>
           </template>
           <v-card>
@@ -164,12 +174,12 @@
 
               <span class="text-white mx-2">
                 {{
-                  $i18n.locale == 'th'
+                  $i18n.locale == "th"
                     ? show_profile_detail.firstNameTh
                     : show_profile_detail.firstNameEng
                 }}
                 {{
-                  $i18n.locale == 'th'
+                  $i18n.locale == "th"
                     ? show_profile_detail.lastNameTh
                     : show_profile_detail.lastNameEng
                 }}
@@ -403,7 +413,7 @@ export default {
       },
       {
         icon: "mdi-book-cog-outline",
-        title: "management",
+        title: "my account setting",
         to: "menageCourse",
         params: null,
         roles: ["R_3"],
@@ -443,7 +453,9 @@ export default {
   }),
 
   created() {
-    this.$i18n.locale = localStorage.getItem("lang") ? localStorage.getItem("lang") : 'th';
+    this.$i18n.locale = localStorage.getItem("lang")
+      ? localStorage.getItem("lang")
+      : "th";
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail.account_id);
