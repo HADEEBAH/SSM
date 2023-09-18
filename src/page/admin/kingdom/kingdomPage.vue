@@ -101,22 +101,18 @@
 
       <v-row dense>
         <v-col cols="12" sm="6">
-          <label-custom
-            :text="$t(`wls name (Thai)`)"
-          ></label-custom>
+          <label-custom :text="$t(`wls name (Thai)`)"></label-custom>
 
           <v-text-field
             dense
-            :placeholder="$t(`fill in wls`)"
+            :placeholder="$t(`fill in wls name`)"
             outlined
             v-model="kingdom.kingdom_name_th"
             @keypress="validate($event, 'th')"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
-          <label-custom
-            :text="$t(`wls name (English)`)"
-          ></label-custom>
+          <label-custom :text="$t(`wls name (English)`)"></label-custom>
 
           <v-text-field
             dense
@@ -210,7 +206,7 @@
           <dialogCard :text="$t('completely build a wls')"></dialogCard>
           <div class="my-5 text-center">
             <v-btn color="#ff6b81" @click="goToManageKingdomPage()">
-              {{$t('agree')}}
+              {{ $t("agree") }}
             </v-btn>
           </div>
         </v-card>
@@ -301,7 +297,7 @@ export default {
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: this.$t("agree"),
-        cancelButtonText: this.$t("cancel"),
+        cancelButtonText: this.$t("no"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {

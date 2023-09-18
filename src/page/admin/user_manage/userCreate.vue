@@ -1086,7 +1086,7 @@ export default {
 
     breadcrumbs() {
       return [
-        { text: this.$t("manage user"), to: "UserList" },
+        { text: this.$t("add accounts"), to: "UserList" },
         { text: this.$t("add user"), to: "" },
       ];
     },

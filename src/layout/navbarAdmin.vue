@@ -14,12 +14,22 @@
             <template v-slot:activator="{ on, attrs }">
               <v-row v-bind="attrs" v-on="on" class="align-center">
                 <!-- <v-row class=""> -->
-                <v-menu v-model="menu_locale" offset-y >
+                <v-menu v-model="menu_locale" offset-y>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn class="mr-2"  text v-bind="attrs" v-on="on">
-                      <v-img  class="mr-2" v-if="$i18n.locale == 'en'" src="@/assets/profile/usaFlag.png"></v-img>
-                      <v-img  class="mr-2" v-else src="@/assets/profile/thaiFlag.png"></v-img>
-                      <label>{{ $i18n.locale == "en" ? $t("english") : $t("thai")}}</label>
+                    <v-btn class="mr-2" text v-bind="attrs" v-on="on">
+                      <v-img
+                        class="mr-2"
+                        v-if="$i18n.locale == 'en'"
+                        src="@/assets/profile/usaFlag.png"
+                      ></v-img>
+                      <v-img
+                        class="mr-2"
+                        v-else
+                        src="@/assets/profile/thaiFlag.png"
+                      ></v-img>
+                      <label>{{
+                        $i18n.locale == "en" ? $t("english") : $t("thai")
+                      }}</label>
                     </v-btn>
                   </template>
                   <v-card>
@@ -51,7 +61,9 @@
                 </div>
 
                 <span class="text-white">{{
-                   $i18n.locale == "th" ? `${user_detail.first_name_th} ${user_detail.last_name_th}` : `${user_detail.first_name_en} ${user_detail.last_name_en}`
+                  $i18n.locale == "th"
+                    ? `${user_detail.first_name_th} ${user_detail.last_name_th}`
+                    : `${user_detail.first_name_en} ${user_detail.last_name_en}`
                 }}</span>
               </v-row>
             </template>
@@ -202,10 +214,10 @@ export default {
       },
       { title: "finance", to: "Finance", child: [], roles: ["R_1", "R_2"] },
       {
-        title: "manage user",
+        title: "add accounts",
         to: "",
         roles: ["R_1"],
-        child: [{ title: "manage user", to: "UserList", roles: ["R_1"] }],
+        child: [{ title: "add accounts", to: "UserList", roles: ["R_1"] }],
       },
       {
         title: "leave approval",
