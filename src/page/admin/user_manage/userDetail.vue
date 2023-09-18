@@ -1907,12 +1907,12 @@ export default {
       if (this.$route?.params?.from === "Dashboard") {
         return [
           { text: this.$t("dashboard"), to: "StudentList" },
-          { text: this.$t("manage user"), to: "UserList" },
+          { text: this.$t("add accounts"), to: "UserList" },
           { text: this.$t("add user"), to: "" },
         ];
       } else {
         return [
-          { text: this.$t("manage user"), to: "UserList" },
+          { text: this.$t("add accounts"), to: "UserList" },
           { text: this.$t("add user"), to: "" },
         ];
       }

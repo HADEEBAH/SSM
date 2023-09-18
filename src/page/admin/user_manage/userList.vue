@@ -2,7 +2,7 @@
   <v-app>
     <v-container>
       <v-row dense>
-        <headerPage :title="$t('manage user')"></headerPage>
+        <headerPage :title="$t('add accounts')"></headerPage>
         <v-card outlined>
           <v-card-text class="pa-2">
             <v-row dense class="d-flex align-center">
