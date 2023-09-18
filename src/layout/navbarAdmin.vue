@@ -214,10 +214,10 @@ export default {
       },
       { title: "finance", to: "Finance", child: [], roles: ["R_1", "R_2"] },
       {
-        title: "manage user",
+        title: "add accounts",
         to: "",
         roles: ["R_1"],
-        child: [{ title: "manage user", to: "UserList", roles: ["R_1"] }],
+        child: [{ title: "add accounts", to: "UserList", roles: ["R_1"] }],
       },
       {
         title: "leave approval",

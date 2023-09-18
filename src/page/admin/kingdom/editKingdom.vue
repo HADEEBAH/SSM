@@ -2,9 +2,7 @@
   <v-container>
     <v-form ref="category_form" v-model="category_form">
       <headerPage :title="$t('edit wls')" class="my-5"></headerPage>
-      <label-custom
-        :text="$t('upload the cover image of wls')"
-      ></label-custom>
+      <label-custom :text="$t('upload the cover image of wls')"></label-custom>
       <v-card style="border: dashed blue">
         <v-card-title primary-title align="end">
           <v-btn icon v-if="preview_url">
@@ -67,10 +65,7 @@
       <br />
       <v-row dense>
         <v-col cols="12" sm="6">
-          <label-custom
-            required
-            :text="$t('wls name (thai)')"
-          ></label-custom>
+          <label-custom required :text="$t('wls name (thai)')"></label-custom>
           <v-text-field
             :rules="rules.category_name_th"
             :disabled="showData"
@@ -354,13 +349,10 @@ export default {
       return {
         category_name_th: [
           (val) =>
-            (val || "").length > 0 ||
-            this.$t("please specify wls name (Thai)"),
+            (val || "").length > 0 || this.$t("please specify wls name (Thai)"),
           (val) =>
             val.length < 50 ||
-            this.$t(
-              "wls name (Thai) longer than specified length"
-            ),
+            this.$t("wls name (Thai) longer than specified length"),
         ],
         category_name_en: [
           (val) =>

@@ -22,7 +22,7 @@
                     ></v-img>
                   </v-col>
                   <v-col cols="8" sm="12">
-                    <label>{{$t("regular courses")}}</label>
+                    <label>{{ $t("regular courses") }}</label>
                   </v-col>
                 </v-row>
               </template>
@@ -41,7 +41,7 @@
                     ></v-img>
                   </v-col>
                   <v-col cols="8" sm="12">
-                    <label>{{$t("short course") }}</label>
+                    <label>{{ $t("short course") }}</label>
                   </v-col>
                 </v-row>
               </template>
@@ -85,7 +85,7 @@
                 <template v-slot:actions>
                   <v-btn outlined color="#FF6B81" @click="addCoach">
                     <v-icon>mdi-plus-circle-outline</v-icon>
-                    {{$t("add a coach")}}
+                    {{ $t("add a coach") }}
                   </v-btn>
                 </template>
               </headerCard>
@@ -107,7 +107,8 @@
                   outlined
                   color="#FF6B81"
                   @click="addPackage(course_data.packages)"
-                  ><v-icon>mdi-plus-circle-outline</v-icon>{{ $t("add a package") }}</v-btn
+                  ><v-icon>mdi-plus-circle-outline</v-icon
+                  >{{ $t("add package") }}</v-btn
                 >
               </v-col>
             </v-row>
@@ -151,20 +152,24 @@
                     cols="12"
                     class="flex align-center justify-center text-h5"
                   >
-                  {{$t("upload privileged images")}}
+                    {{ $t("upload privileged images") }}
                   </v-col>
                   <v-col
                     cols="12"
                     class="flex align-center justify-center text-caption"
-                  >                    
-                  {{$t("suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file")}}
+                  >
+                    {{
+                      $t(
+                        "suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file"
+                      )
+                    }}
                   </v-col>
                   <v-col cols="12" class="flex align-center justify-center">
                     <v-btn
                       outlined
                       color="blue"
                       @click="openFilePrivilegeSelector"
-                      >{{$t('select file')}}</v-btn
+                      >{{ $t("select file") }}</v-btn
                     >
                     <input
                       id="fileInputPrivilege"
@@ -232,8 +237,11 @@
                     cols="12"
                     class="flex align-center justify-center text-caption"
                   >
-                    
-                    {{$t("suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file")}}
+                    {{
+                      $t(
+                        "suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file"
+                      )
+                    }}
                   </v-col>
                 </v-row>
                 <v-row dense>
@@ -247,8 +255,11 @@
                       multiple
                       style="display: none"
                     />
-                    <v-btn outlined color="blue" @click="openFileArtworSelector"
-                      >{{$t('select file')}}</v-btn
+                    <v-btn
+                      outlined
+                      color="blue"
+                      @click="openFileArtworSelector"
+                      >{{ $t("select file") }}</v-btn
                     >
                   </v-col>
                 </v-row>
@@ -346,12 +357,7 @@ export default {
       option: "",
       package: "",
     },
-    step_header_data: [
-      "course",
-      "duration/coach",
-      "package",
-      "special rights",
-    ],
+    step_header_data: ["course", "duration/coach", "package", "special rights"],
     course_open_date_str: "",
     register_date_range_str: {
       start_date: "",
@@ -396,7 +402,7 @@ export default {
       course_data: "CourseModules/getCourseData",
       coachs: "CourseModules/getCoachs",
       categorys: "CategoryModules/getCategorys",
-    })
+    }),
   },
   methods: {
     ...mapActions({

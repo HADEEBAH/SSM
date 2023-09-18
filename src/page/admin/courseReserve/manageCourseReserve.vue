@@ -143,16 +143,16 @@ export default {
     course_type() {
       return [
         { name: this.$t("all"), value: "all" },
-        { name: this.$t("waiting for contact"), value: "waiting" },
-        { name: this.$t("contacted"), value: "contacted" },
-        { name: this.$t("cancel reservation"), value: "cancel" },
+        { name: this.$t("waiting"), value: "waiting" },
+        { name: this.$t("Confirmed"), value: "contacted" },
+        { name: this.$t("canceled"), value: "cancel" },
       ];
     },
     status() {
       return [
-        { label: this.$t("waiting for contact"), value: "waiting" },
-        { label: this.$t("contacted"), value: "contacted" },
-        { label: this.$t("cancel reservation"), value: "cancel" },
+        { label: this.$t("waiting"), value: "waiting" },
+        { label: this.$t("Confirmed"), value: "contacted" },
+        { label: this.$t("canceled"), value: "cancel" },
       ];
     },
     columns() {
@@ -214,11 +214,11 @@ export default {
     update(reserve_id, reserve_data) {
       Swal.fire({
         icon: "question",
-        title: `ต้องการเปลี่ยนสถานะใช่หรือไม่ ?`,
+        title: this.$t("do you want to change your status?"),
         showDenyButton: false,
         showCancelButton: true,
-        cancelButtonText: "ยกเลิก",
-        confirmButtonText: "ตกลง",
+        cancelButtonText: this.$t("cancel"),
+        confirmButtonText: this.$t("agree"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.UpdateStatusReserve({

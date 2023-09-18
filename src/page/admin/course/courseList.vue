@@ -26,14 +26,14 @@
               ></v-img>
             </template>
             <template v-slot:header>
-              <div class="font-bold">{{$t('all courses')}}</div>
+              <div class="font-bold">{{ $t("all courses") }}</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
                 <v-col align="center" class="text-3xl font-bold">{{
                   courses.length
                 }}</v-col>
-                <v-col class="text-sm">{{$t('list')}}</v-col>
+                <v-col class="text-sm">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
@@ -51,7 +51,7 @@
               ></v-img>
             </template>
             <template v-slot:header>
-              <div class="font-bold">{{$t('regular courses')}}</div>
+              <div class="font-bold">{{ $t("regular courses") }}</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
@@ -105,8 +105,14 @@
             <v-col align="center"> {{ $t("no data found") }} </v-col>
           </v-row>
         </template>
-        <template v-slot:[`item.course_open`]="{item}">
-          {{ item.course_open_date ? `${GenDate(item.course_open_date)}`:`${GenDate(item.course_open_start_time)} - ${GenDate(item.course_open_end_time)}`}}
+        <template v-slot:[`item.course_open`]="{ item }">
+          {{
+            item.course_open_date
+              ? `${GenDate(item.course_open_date)}`
+              : `${GenDate(item.course_open_start_time)} - ${GenDate(
+                  item.course_open_end_time
+                )}`
+          }}
         </template>
         <template v-slot:[`item.status`]="{ item }">
           <v-select
@@ -120,23 +126,23 @@
             item-value="value"
             v-model="item.status"
           >
-          <template v-slot:selection="{ item }">
-            <v-list-item-title>
-              <v-icon :color="item.color">
-                {{item.icon  }}
-              </v-icon>
-              {{ $i18n.locale == 'th' ? item.label : item.label_en }} 
-            </v-list-item-title>
-          </template>
+            <template v-slot:selection="{ item }">
+              <v-list-item-title>
+                <v-icon :color="item.color">
+                  {{ item.icon }}
+                </v-icon>
+                {{ $i18n.locale == "th" ? item.label : item.label_en }}
+              </v-list-item-title>
+            </template>
             <template v-slot:item="{ props, item }">
-                <v-list-item-avatar v-bind="props">
-                  <v-icon :color="item.color">
-                    {{item.icon  }}
-                  </v-icon>
-                </v-list-item-avatar>
-                <v-list-item-title v-bind="props">
-                  {{ $i18n.locale == 'th' ? item.label : item.label_en }} 
-                </v-list-item-title>
+              <v-list-item-avatar v-bind="props">
+                <v-icon :color="item.color">
+                  {{ item.icon }}
+                </v-icon>
+              </v-list-item-avatar>
+              <v-list-item-title v-bind="props">
+                {{ $i18n.locale == "th" ? item.label : item.label_en }}
+              </v-list-item-title>
             </template>
           </v-select>
         </template>
@@ -152,12 +158,12 @@
             "
           >
             <v-icon>mdi-text-box-search-outline</v-icon>
-            {{  $t('view details') }}
+            {{ $t("view details") }}
           </v-btn>
         </template>
         <template v-slot:[`no-results`]>
           <div class="font-bold">
-            {{ $t('no data found in table') }}
+            {{ $t("no data found in table") }}
           </div>
         </template>
       </v-data-table>
@@ -179,9 +185,27 @@ export default {
     search: "",
     tab: "all",
     status: [
-      { label: "เปิดคอร์ส", label_en: "Open", value: "Active" , icon: "mdi-play-circle" , color: "green"},
-      { label: "ปิดคอร์สชั่วคราว", label_en: "Temporarily closed", value: "TemporaryInActive", icon:"mdi-pause-circle" , color: "#f1c232" },
-      { label: "ปิดคอร์ส", label_en: "Closed", value: "InActive", icon:"mdi-close-circle" , color: "red"},
+      {
+        label: "เปิดคอร์ส",
+        label_en: "Open",
+        value: "Active",
+        icon: "mdi-play-circle",
+        color: "green",
+      },
+      {
+        label: "ปิดคอร์สชั่วคราว",
+        label_en: "Temporarily closed",
+        value: "TemporaryInActive",
+        icon: "mdi-pause-circle",
+        color: "#f1c232",
+      },
+      {
+        label: "ปิดคอร์ส",
+        label_en: "Closed",
+        value: "InActive",
+        icon: "mdi-close-circle",
+        color: "red",
+      },
     ],
   }),
   created() {
@@ -197,14 +221,19 @@ export default {
     LoadingTable() {
       return !this.courses;
     },
-    column(){
+    column() {
       return [
-        { text: this.$t("course name"), align: "start", sortable: false, value: "course" },
         {
-          text:  this.$t("wls name"),
+          text: this.$t("course name"),
           align: "start",
           sortable: false,
-          value:  this.$i18n.locale == "th" ? "category" : "category_en",
+          value: "course",
+        },
+        {
+          text: this.$t("wls name"),
+          align: "start",
+          sortable: false,
+          value: this.$i18n.locale == "th" ? "category" : "category_en",
         },
         {
           text: this.$t("course type"),
@@ -218,10 +247,15 @@ export default {
           sortable: false,
           value: "course_open",
         },
-        { text: this.$t("status"), align: "center", sortable: false, value: "status" },
+        {
+          text: this.$t("course status"),
+          align: "center",
+          sortable: false,
+          value: "status",
+        },
         { text: "", align: "center", value: "actions", sortable: false },
-      ]
-    }
+      ];
+    },
   },
   methods: {
     ...mapActions({
@@ -234,7 +268,10 @@ export default {
         month: "long",
         day: "numeric",
       };
-      return new Date(date).toLocaleDateString(this.$i18n.locale == "th" ? "th-TH":"en-US", options)
+      return new Date(date).toLocaleDateString(
+        this.$i18n.locale == "th" ? "th-TH" : "en-US",
+        options
+      );
     },
     updateStatusCourse(item, course_id, status) {
       if (status !== "Active") {
@@ -252,8 +289,8 @@ export default {
                 text: this.$t("because there are students in the course"),
                 showDenyButton: false,
                 showCancelButton: false,
-                confirmButtonText: this.$t('agree'),
-                cancelButtonText: this.$t('cancel'),
+                confirmButtonText: this.$t("agree"),
+                cancelButtonText: this.$t("cancel"),
               });
             } else {
               this.UpdateStatusCourse({
