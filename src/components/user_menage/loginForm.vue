@@ -35,7 +35,7 @@
               ></v-text-field>
             </v-col>
             <v-col cols="12" class="pa-0 text-bold text-black">
-              <label>{{$t("password")}}</label>
+              <label>{{ $t("password") }}</label>
               <v-text-field
                 @keypress="validate($event, 'en')"
                 dense
@@ -64,7 +64,7 @@
                 color="#ff6b81"
                 @click="login()"
               >
-              {{ $t("login")}}
+                {{ $t("sign in") }}
               </v-btn>
             </v-col>
             <v-col cols="12">
@@ -75,7 +75,7 @@
                 width="100%"
                 @click="toRegisterPage()"
               >
-              {{ $t("register")}}
+                {{ $t("register for an account") }}
               </v-btn>
             </v-col>
           </v-row>
@@ -84,10 +84,11 @@
             v-if="bottomtext"
             @click="forgot_password()"
           >
-            {{$t("forgot your password?")}}
+            {{ $t("forgot your password?") }}
           </div>
           <div v-else class="text-center mt-2">
-            {{ $t("don't have an account yet?") }} <span class="text_bottom">{{ $t("register")}}</span>
+            {{ $t("don't have an account yet?") }}
+            <span class="text_bottom">{{ $t("register") }}</span>
           </div>
         </v-card-text>
       </v-card>
@@ -136,24 +137,27 @@ export default {
       is_loading: "loginModules/getIsLoading",
     }),
     usernameRules() {
-      return  [
+      return [
         (val) =>
           (val || "").length > 5 ||
           this.$t("please enter a username at least 6 characters long"),
         (val) =>
           (val || "").length < 20 ||
           this.$t("please enter a username no longer than 20 characters"),
-        (val) => /[A-Za-z0-9 ]/g.test(val) || this.$t("the username cannot contain special characters"),
+        (val) =>
+          /[A-Za-z0-9 ]/g.test(val) ||
+          this.$t("the username cannot contain special characters"),
         (val) =>
           !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
           this.$t("username cannot contain emojis"),
-      ]
+      ];
     },
     passwordRules() {
-      return [ (val) =>
+      return [
+        (val) =>
           (val || "").length > 7 ||
           this.$t("please enter a password that is at least 8 characters long"),
-      ]
+      ];
     },
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;

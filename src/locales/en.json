@@ -23,7 +23,7 @@
     "accept" : "Accept",
     "acceptable students" : "Acceptable students",
     "accepted students/time" : "Accepted students/time/ครั้ง",
-    "admin page" : "Admin page",
+    "admin page" : "Administrator",
     "admission date" : "Admission date",
     "absent" : "Absent",
     "afternoon" : "Afternoon",
@@ -230,7 +230,7 @@
     "excessive study hours" : "Excessive study hours",
     "export" : "Export",
 
-    "forgot your password?" : "Forgot your password?",
+    "forgot your password?" : "Forgotten your password?",
     "file size" : "File size",
     "failed to resolve":"Failed to resolve",
     "failed to delete":"Failed to delete",
@@ -320,7 +320,7 @@
     "list" : "List",
     "list of parents" : "List of parents",
     "listed by" : "Listed by",
-    "logout" : "Logout",
+    "logout" : "Log Out",
     "login" : "Login",
 
     "management":"Management",
@@ -340,6 +340,11 @@
     "more details" : "More details",
     "march":"March",
     "may": "May",
+    "my order": "My Order",
+    "my account setting": "My Account Setting",
+    "my profile": "My Profile",
+    "my account": "My Account",
+
 
 
 
@@ -528,6 +533,7 @@
     "register":"Register",
     "register for" : "Register for",
     "register for a course" : "Register for a course",
+    "register for an account" : "Register for an account",
     "register for yourself" : "Register for yourself",
     "register to study for others" : "Register to study for others",
     "registration history" : "Registration history",
@@ -623,6 +629,8 @@
     "specify the name of the holiday, such as Songkran Day": "Specify the name of the holiday, such as Songkran Day",
     "show certificate": "Show certificate",
     "september": "September",
+    "sign in" : "Sign in",
+
 
     
     
