@@ -257,11 +257,11 @@
     "excessive study hours" : "Excessive study hours",
     "export" : "Export",
 
+    "file size" : "File size",
     "failed to resolve":"Failed to resolve",
     "failed to delete":"Failed to delete",
     "failed to delete data": "( Failed to delete data )",
     "february": "February",
-    "file size" : "File size",
     "finance":"Finance",
     "filter":"Filter",
     "fill in wls name":"Fill in WLS name",
@@ -346,7 +346,7 @@
     "list" : "List",
     "list of parents" : "List of parents",
     "listed by" : "Listed by",
-    "logout" : "Logout",
+    "logout" : "Log Out",
     "login" : "Login",
 
     "management":"Management",
@@ -373,6 +373,11 @@
     "mycourse": "My course",
     "my teaching" : "My teaching",
     "my teaching information" : "My teaching information",
+    "my account setting": "My Account Setting",
+    "my account": "My Account",
+
+
+
 
     "name of representative": "Name of representative",
     "nationality": "Nationality",
@@ -657,6 +662,7 @@
     "specify the name of the holiday, such as Songkran Day": "Specify the name of the holiday, such as Songkran Day",
     "show certificate": "Show certificate",
     "september": "September",
+
 
     "take annual leave" : "Take annual leave",
     "take up teaching" : "Take up teaching",

@@ -73,7 +73,7 @@
                 <v-list-item-icon>
                   <v-icon>mdi-account</v-icon>
                 </v-list-item-icon>
-                <v-list-item-title>{{ $t("user page") }}</v-list-item-title>
+                <v-list-item-title>{{ $t("my account") }}</v-list-item-title>
               </v-list-item>
             </v-list>
           </v-menu>
