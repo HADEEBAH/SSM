@@ -563,7 +563,7 @@
                           :src="
                             item_booked.courseImg
                               ? item_booked.courseImg
-                              : `@/assets/student_course/download.png`
+                              : require(`@/assets/student_course/download.png`)
                           "
                         />
                       </v-col>
@@ -769,7 +769,7 @@
                           :src="
                             item_booked.courseImg
                               ? item_booked.courseImg
-                              : `@/assets/student_course/download.png`
+                              : require(`@/assets/course/default_course_img.svg`)
                           "
                         />
                       </v-col>

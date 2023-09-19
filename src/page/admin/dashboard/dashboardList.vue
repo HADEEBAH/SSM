@@ -618,7 +618,8 @@
                                         ? item.courseTypeNameTh
                                         : item.courseTypeNameEn
                                     }`
-                                  }}<span
+                                  }}
+                                  <span
                                     v-if="
                                       item.courseTypeNameTh == 'คอร์สทั่วไป'
                                     "
@@ -664,12 +665,8 @@
                                   }}
                                 </v-card-subtitle>
                               </v-col>
-                              <v-col
-                                cols="12"
-                                sm="6"
-                                align="center"
-                                v-if="item.courseTypeNameTh == 'คอร์สทั่วไป'"
-                              >
+                              <!-- v-if="item.courseTypeNameTh == 'คอร์สทั่วไป'" -->
+                              <v-col cols="12" sm="6" align="center">
                                 <v-card-subtitle class="mt-n8">
                                   <div>
                                     <v-btn
@@ -764,7 +761,8 @@
                                         ? item.courseTypeNameTh
                                         : item.courseTypeNameEn
                                     }`
-                                  }}<span
+                                  }}
+                                  <span
                                     v-if="
                                       item.courseTypeNameTh == 'คอร์สทั่วไป'
                                     "
@@ -817,12 +815,8 @@
                                   }}
                                 </v-card-subtitle>
                               </v-col>
-                              <v-col
-                                cols="12"
-                                sm="6"
-                                align="center"
-                                v-if="item.courseTypeNameTh == 'คอร์สทั่วไป'"
-                              >
+                              <!-- v-if="item.courseTypeNameTh == 'คอร์สทั่วไป'" -->
+                              <v-col cols="12" sm="6" align="center">
                                 <v-card-subtitle class="mt-n8">
                                   <div>
                                     <v-btn
@@ -898,7 +892,11 @@
                                 :value="
                                   this.$i18n.locale == 'th'
                                     ? items_dialog.courseNameTh
+                                      ? items_dialog.courseNameTh
+                                      : '-'
                                     : items_dialog.courseNameEn
+                                    ? items_dialog.courseNameEn
+                                    : '-'
                                 "
                                 :label="$t('course name')"
                                 color="#FF6B81"
@@ -924,8 +922,16 @@
                                 :value="`${
                                   this.$i18n.locale == 'th'
                                     ? items_dialog.courseTypeNameTh
-                                    : items_dialog.courseNameEn
-                                } (${items_dialog.courseTypeNameEn})`"
+                                      ? items_dialog.courseTypeNameTh
+                                      : '-'
+                                    : items_dialog.courseTypeNameEn
+                                    ? items_dialog.courseTypeNameEn
+                                    : '-'
+                                } ${
+                                  items_dialog.packageName
+                                    ? `(${items_dialog.packageName})`
+                                    : ''
+                                }`"
                                 :label="$t('package')"
                                 color="#FF6B81"
                               >
@@ -972,11 +978,19 @@
                                 :value="`${
                                   this.$i18n.locale == 'th'
                                     ? items_dialog.firstNameTh
+                                      ? items_dialog.firstNameTh
+                                      : '-'
                                     : items_dialog.firstNameEn
+                                    ? items_dialog.firstNameEn
+                                    : '-'
                                 }  ${
                                   this.$i18n.locale == 'th'
                                     ? items_dialog.lastNameTh
+                                      ? items_dialog.lastNameTh
+                                      : '-'
                                     : items_dialog.lastNameEn
+                                    ? items_dialog.lastNameEn
+                                    : '-'
                                 }`"
                                 :label="$t('first name - last name coach')"
                                 color="#FF6B81"
@@ -1017,7 +1031,15 @@
                                 outlined
                                 readonly
                                 dense
-                                :value="`${items_dialog.currentStudent} / ${items_dialog.maximumStudent}`"
+                                :value="`${
+                                  items_dialog.currentStudent
+                                    ? items_dialog.currentStudent
+                                    : '0'
+                                } / ${
+                                  items_dialog.maximumStudent
+                                    ? items_dialog.maximumStudent
+                                    : '0'
+                                }`"
                                 :label="$t('seat')"
                                 color="#FF6B81"
                               >
@@ -1256,9 +1278,9 @@ export default {
     searchCourseClose(val) {
       if (val) {
         return this.get_empty_course_close.filter(
-          (v) => v.courseNameTh.indexOf(val) !== -1
-          // ||
-          // v.get_empty_course_open.indexOf(val) !== -1
+          (v) =>
+            v.courseNameTh.indexOf(val) !== -1 ||
+            v.courseNameEn.indexOf(val) !== -1
         );
       } else {
         return this.get_empty_course_close;
@@ -1267,9 +1289,9 @@ export default {
     searchCourseOpen(val) {
       if (val) {
         return this.get_empty_course_open.filter(
-          (v) => v.courseNameTh.indexOf(val) !== -1
-          // ||
-          // v.get_empty_course_open.indexOf(val) !== -1
+          (v) =>
+            v.courseNameTh.indexOf(val) !== -1 ||
+            v.courseNameEn.indexOf(val) !== -1
         );
       } else {
         return this.get_empty_course_open;
