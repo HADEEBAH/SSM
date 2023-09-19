@@ -268,9 +268,6 @@
                   <labelCustom :text="$t('username')+' (' + $t('optional') + ')'"></labelCustom>
                   <v-text-field
                     :disabled="!edit_parent"
-                    @blur="
-                      parent.username > 3 ? checkUsername(parent.username) : ''
-                    "
                     @keyup.enter="
                       parent.username > 3 ? checkUsername(parent.username) : ''
                     "
@@ -1075,7 +1072,7 @@ export default {
     },
     setFunctions() {
       this.GetReserceByCreatedBy({ account_id: this.user_login.account_id });
-      this.checkMaximumStudent();
+      // this.checkMaximumStudent();
       if (this.order_data) {
         if (this.order_data.course_type_id === "CT_1") {
           this.GetCourseStudent({
@@ -1308,7 +1305,8 @@ export default {
             this.course_order.students.length;
         }
       } else if (this.course_order.course_type_id === "CT_2") {
-        max = false;
+        // console.log()
+        max = this.course_data.student_recived <= this.course_order.students.length;
       }
       return max;
     },
