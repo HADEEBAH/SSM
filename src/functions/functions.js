@@ -2,40 +2,53 @@ import Swal from 'sweetalert2';
 import VueI18n from '../i18n';
 export const inputValidation = (e, type) => {
     switch (type) {
+        //เคสเป็น false มันจะไม่ทำงาน จะทำต่อเมื่อเป็นทรู
         case "th":
-            if ((/^[a-zA-Z]+$/).test(e.key)) {
+            if (!(/^[a-zA-Z]+$/).test(e.key) || e.keyCode === 8 || e.keyCode === 46 || e.keyCode === 9) {
+                // TODO
+            } else {
                 e.preventDefault()
             }
             break;
         case "th-special":
-            if (!(/^[ก-๏\t]+$/).test(e.key)) {
+            if ((/^[ก-๏\t]+$/).test(e.key) || e.keyCode === 8 || e.keyCode === 46 || e.keyCode === 9) {
+                // TODO
+            } else {
                 e.preventDefault()
             }
             break;
         case "en-special":
-            if (!(/^[A-Za-z\t]+$/u).test(e.key)) {
+            if ((/^[A-Za-z\t]+$/u).test(e.key) || e.keyCode === 8 || e.keyCode === 46 || e.keyCode === 9) {
+                // TODO
+            } else {
                 e.preventDefault()
             }
             break;
         case "en-number":
-            if (!(/^[A-Za-z0-9\t]+$/u).test(e.key)) {
+            if ((/^[A-Za-z0-9\t]+$/u).test(e.key) || e.keyCode === 8 || e.keyCode === 46 || e.keyCode === 9) {
+                // TODO
+            } else {
                 e.preventDefault()
             }
             break;
         case "en":
-            if ((/^[ก-๏\s]+$/u).test(e.key)) {
-                if (e.key !== " ") {
-                    e.preventDefault()
-                }
+            if (!(/^[ก-๏\s]+$/u).test(e.key) || e.keyCode === 8 || e.keyCode === 46 || e.keyCode === 9) {
+                // TODO
+            } else {
+                e.preventDefault()
             }
             break;
         case "number":
-            if (!(/^[0-9\t]*$/).test(e.key)) {
+            if ((/^[0-9\t]*$/).test(e.key) || e.keyCode === 8 || e.keyCode === 46 || e.keyCode === 9) {
+                // TODO
+            } else {
                 e.preventDefault()
             }
             break;
         case "email":
-            if (!(/^[A-Za-z0-9@.]+$/).test(e.key)) {
+            if ((/^[A-Za-z0-9@.]+$/).test(e.key) || e.keyCode === 8 || e.keyCode === 46 || e.keyCode === 9) {
+                // TODO
+            } else {
                 e.preventDefault()
             }
             break;
@@ -210,7 +223,7 @@ export const convertToEnglishCurrency = (number) => {
         } else if (lastTwoDigits > 0) {
             if (lastTwoDigits === 10) {
                 parts.push('ten');
-            } else if(lastTwoDigits < 10){
+            } else if (lastTwoDigits < 10) {
                 parts.push(ones[lastTwoDigits])
             } else {
                 parts.push(teens[lastTwoDigits - 11]);

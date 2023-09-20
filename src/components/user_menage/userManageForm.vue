@@ -25,7 +25,7 @@
                           :placeholder="
                             this.$t('please enter your username (English)')
                           "
-                          @keypress="validate($event, 'en-number')"
+                          @keydown="validate($event, 'en-number')"
                           v-model="show_by_id.userName"
                           hide-details
                           outlined
@@ -141,7 +141,7 @@
                               ></label-custom>
 
                               <v-text-field
-                                @keypress="validate($event, 'th-special')"
+                                @keydown="validate($event, 'th-special')"
                                 placeholder="-"
                                 v-model="show_by_id.firstNameTh"
                                 :rules="rules.firstNameThRules"
@@ -155,7 +155,7 @@
                                 :text="this.$t('last name(thai)')"
                               ></label-custom>
                               <v-text-field
-                                @keypress="validate($event, 'th-special')"
+                                @keydown="validate($event, 'th-special')"
                                 placeholder="-"
                                 v-model="show_by_id.lastNameTh"
                                 :rules="rules.lastNameThRules"
@@ -173,7 +173,7 @@
                               ></label-custom>
                               <v-text-field
                                 v-bind:disabled="isDisabled"
-                                @keypress="validate($event, 'en-special')"
+                                @keydown="validate($event, 'en-special')"
                                 placeholder="-"
                                 v-model="show_by_id.firstNameEng"
                                 :rules="rules.firstNameEnRules"
@@ -188,7 +188,7 @@
                               ></label-custom>
                               <v-text-field
                                 v-bind:disabled="isDisabled"
-                                @keypress="validate($event, 'en-special')"
+                                @keydown="validate($event, 'en-special')"
                                 placeholder="-"
                                 v-model="show_by_id.lastNameEng"
                                 :rules="rules.lastNameEnRules"
@@ -218,7 +218,7 @@
                               ></label-custom>
                               <v-text-field
                                 disabled
-                                @keypress="validate($event, 'number')"
+                                @keydown="validate($event, 'number')"
                                 v-model="show_by_id.mobileNo"
                                 :rules="rules.name"
                                 outlined
@@ -597,7 +597,7 @@
                 :rules="rules.usernameRules"
                 dense
                 outlined
-                @keypress="validate($event, 'en-number')"
+                @keydown="validate($event, 'en-number')"
                 v-model="relation.username"
                 @change="
                   checkUsername(

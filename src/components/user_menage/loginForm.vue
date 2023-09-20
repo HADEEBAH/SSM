@@ -25,7 +25,7 @@
             <v-col cols="12" class="pa-0 text-bold text-black">
               <label>{{ $t("username") }} / OneID</label>
               <v-text-field
-                @keypress="validate($event, 'en-number')"
+                @keydown="validate($event, 'en-number')"
                 dense
                 :rules="usernameRules"
                 required
@@ -37,7 +37,7 @@
             <v-col cols="12" class="pa-0 text-bold text-black">
               <label>{{ $t("password") }}</label>
               <v-text-field
-                @keypress="validate($event, 'en')"
+                @keydown="validate($event, 'en')"
                 dense
                 ref="password"
                 :type="show_password ? 'text' : 'password'"

@@ -108,7 +108,7 @@
             :placeholder="$t(`fill in wls name`)"
             outlined
             v-model="kingdom.kingdom_name_th"
-            @keypress="validate($event, 'th')"
+            @keydown="validate($event, 'th')"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -119,7 +119,7 @@
             :placeholder="$t(`fill in wls name`)"
             outlined
             v-model="kingdom.kingdom_name_eng"
-            @keypress="validate($event, 'en')"
+            @keydown="validate($event, 'en')"
           ></v-text-field>
         </v-col>
       </v-row>

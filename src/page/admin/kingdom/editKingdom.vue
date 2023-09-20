@@ -73,7 +73,7 @@
             :placeholder="$t('fill in wls name')"
             outlined
             v-model="category.categoryNameTh"
-            @keypress="validate($event, 'th')"
+            @keydown="validate($event, 'th')"
           ></v-text-field>
         </v-col>
 
@@ -89,7 +89,7 @@
             :placeholder="$t('fill in wls name')"
             outlined
             v-model="category.categoryNameEng"
-            @keypress="validate($event, 'en')"
+            @keydown="validate($event, 'en')"
           ></v-text-field>
         </v-col>
 
@@ -349,7 +349,8 @@ export default {
       return {
         category_name_th: [
           (val) =>
-            (val || "")?.length > 0 || this.$t("please specify wls name (Thai)"),
+            (val || "")?.length > 0 ||
+            this.$t("please specify wls name (Thai)"),
           (val) =>
             val?.length < 50 ||
             this.$t("wls name (Thai) longer than specified length"),

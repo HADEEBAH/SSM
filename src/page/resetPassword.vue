@@ -25,7 +25,7 @@
           :label="$t('new password')"
           :type="show_password ? 'text' : 'password'"
           @click:append="show_password = !show_password"
-          @keypress="Validation($event, 'en-number')"
+          @keydown="Validation($event, 'en-number')"
           color="#FF6B81"
           solo
           :rules="RulesPassword"
@@ -43,7 +43,7 @@
           :label="$t('confirm new password')"
           :type="show_confirm_password ? 'text' : 'password'"
           @click:append="show_confirm_password = !show_confirm_password"
-          @keypress="Validation($event, 'en-number')"
+          @keydown="Validation($event, 'en-number')"
           color="#FF6B81"
           solo
           :rules="RulesRePassword"
