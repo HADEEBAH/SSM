@@ -1,5 +1,5 @@
 # build stage
-FROM node:lts-alpine as build-stage
+FROM node:16.17.0-alpine as build-stage
 WORKDIR /app
 COPY package*.json ./
 
@@ -16,7 +16,7 @@ RUN apk add --update --no-cache \
 
 RUN npm install
 COPY . .
-ENV NODE_OPTIONS=--openssl-legacy-provider
+# ENV NODE_OPTIONS=--openssl-legacy-provider
 RUN npm run build
 
 # production stage
