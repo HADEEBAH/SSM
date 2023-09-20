@@ -389,6 +389,7 @@
     "november": "พฤศจิกายน",
     
     "o'clock" : "น.",
+    "outside the register date" : "อยู่นอกระยะเวลารับสมัครแล้ว",
     "open-close register date" : "วันเปิด-ปิดรับสมัคร",
     "optional": "ถ้ามี",
     "order number" : "หมายเลขคำสั่งซื้อ",
@@ -659,6 +660,7 @@
     "temporarily closed course" : "ปิดคอร์สชั่วคราว",
     "terms of service and privacy policy" : "เงื่อนไขการใช้บริการและนโยบายการคุ้มครองข้อมูลส่วนบุคคล",
     "thai" : "ไทย",
+    "the class period has ended" : "สิ้นสุดช่วงเวลาเรียนแล้ว",
     "the coach has successfully assessed the students" : "โค้ชได้ประเมินนักเรียนเรียบร้อยแล้ว",
     "the course name (english) is longer than the specified length" : "ชื่อคอร์ส(ภาษาอังกฤษ)ความยาวเกินกว่าที่กำหนด",
     "the course name (thai) is longer than the specified length" : "ชื่อคอร์ส(ภาษาไทย)ความยาวเกินกว่าที่กำหนด",
