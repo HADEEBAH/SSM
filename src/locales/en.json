@@ -412,6 +412,7 @@
 
     "o'clock" : "O'clock",
     "optional": "optional",
+    "outside the register date" : "Outside the register date",
     "open-close register date" : "Open-Close register date",
     "order number" : "Order number",
     "OTP verification failed" : "OTP verification failed",
@@ -676,6 +677,7 @@
     "temporarily closed course" : "temporarily closed course",
     "terms of service and privacy policy" : "Terms of Service and Privacy Policy",
     "thai" : "Thai",
+    "the class period has ended" : "The class period has ended",
     "the coach has successfully assessed the students" : "The coach has successfully assessed the students",
     "the course name (english) is longer than the specified length" : "The course name (English) is longer than the specified length",
     "the course name (thai) is longer than the specified length" : "The course name (Thai) is longer than the specified length",

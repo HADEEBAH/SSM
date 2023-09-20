@@ -357,7 +357,7 @@ const orderModules = {
             }
             if (order_item.students.length > 0) {
               order_item.students.forEach((student) => {
-                console.log(student)
+                // console.log(student)
                 if (!student_name_list.includes(`${student?.firstNameTh} ${student?.lastNameTh}` )
                 ) {
                   student_name_list.push(
@@ -508,7 +508,7 @@ const orderModules = {
       }
     },
     async saveOrder(context,{ regis_type }) {
-      console.log(regis_type)
+      // console.log(regis_type)
       context.commit("SetOrderIsLoading", true);
       try {
         let order = context.state.order;
@@ -522,12 +522,18 @@ const orderModules = {
         if (order.type !== "addStudent") {
           for await (const course of order.courses) {
             for await (const student of course.students) {
-              let { data } = await axios.post(
+              await axios.post(
                 `${process.env.VUE_APP_URL}/api/v1/account/add/username/one`,
                 student,
                 configs
               );
-              console.log(data);
+          
+            }
+          }
+        }else{
+          for await (const course of order.courses) {
+            if(course.course_type_id == "CT_2"){
+              course.start_date = moment(new Date()).format("YYYY-MM-DD")
             }
           }
         }
@@ -579,7 +585,7 @@ const orderModules = {
           });
           payload.courses.push({
             courseId: course.course_id,
-            coursePackageOptionId: course.option.course_package_option_id,
+            coursePackageOptionId: course.option.course_package_option_id ? course.option.course_package_option_id  : null,
             dayName: course.day?.dayName
               ? course.day.dayName
               : course.day.day
@@ -596,7 +602,7 @@ const orderModules = {
                 )[0].timeId
               : course.time.timeId,
             time: course.time,
-            startDate: course.start_date,
+            startDate: course.start_date ? course.start_date : moment(new Date()).format("YYYY-MM-DD"),
             remark: course.remark ? course.remark : "",
             price: course.option?.net_price
               ? course.option.net_price
@@ -760,7 +766,27 @@ const orderModules = {
       } catch (error) {
         context.commit("SetOrderIsLoading", false);
         context.commit("SetOrderIsStatus", false);
-        if (
+        if(error.response.data.message == "over study end date"){
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("unable to register"),
+            text: VueI18n.t(
+              "the class period has ended"
+            ),
+            showCancelButton: false,
+            confirmButtonText: VueI18n.t("agree"),
+          });
+        }else if( error.response.data.message == "over register date"){
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("unable to register"),
+            text: VueI18n.t(
+              "outside the register date"
+            ),
+            showCancelButton: false,
+            confirmButtonText: VueI18n.t("agree"),
+          });
+        }else if (
           error.response.data.message ==
           "Cannot register , fail at course monitor , course-coach or seats are full"
         ) {
