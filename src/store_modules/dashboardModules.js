@@ -253,6 +253,7 @@ const dashboardModules = {
             const options = { weekday: 'long', timeZone: 'Asia/Bangkok', locale: 'th-TH' };
             const dayName = date.toLocaleString(VueI18n.locale == 'th' ? 'th-TH' : 'en-US', options);
             items.date = newDate.split("-")[2]
+            // items.month = `เดือน ${newDate?.split("-")[1]}`
             items.month = `${VueI18n.t("month")} ${newDate?.split("-")[1]}`
             items.year = newDate.split("-")[0]
             items.thaiDayName = `${items.date} ${dayName}`

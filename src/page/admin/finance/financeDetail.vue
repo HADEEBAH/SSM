@@ -159,7 +159,7 @@
                         :title="$t('price')"
                       >
                         {{
-                          parseInt(data.price).toLocaleString(undefined, {
+                          parseInt(data.price)?.toLocaleString(undefined, {
                             minimumFractionDigits: 2,
                           })
                         }}
@@ -183,7 +183,7 @@
                     :title="$t('total price')"
                     >:
                     <span class="w-full font-bold">{{
-                      order_detail.totalPrice.toLocaleString(undefined, {
+                      order_detail.totalPrice?.toLocaleString(undefined, {
                         minimumFractionDigits: 2,
                       })
                     }}</span>
@@ -730,7 +730,7 @@ export default {
                     {
                       stack: [
                         {
-                          text: `${this.order_detail.totalPrice.toLocaleString(
+                          text: `${this.order_detail.totalPrice?.toLocaleString(
                             "en-US",
                             { minimumFractionDigits: 2 }
                           )} ${this.pdf_lang == "th" ? "บาท" : "Baht"}`,
@@ -739,7 +739,7 @@ export default {
                           alignment: "right",
                         },
                         {
-                          text: `${this.order_detail.totalPrice.toLocaleString(
+                          text: `${this.order_detail.totalPrice?.toLocaleString(
                             "en-US",
                             { minimumFractionDigits: 2 }
                           )} ${this.pdf_lang == "th" ? "บาท" : "Baht"}`,
@@ -844,7 +844,7 @@ export default {
                   margin: [0, 5],
                 },
                 {
-                  text: `${this.order_detail.totalPrice.toLocaleString(
+                  text: `${this.order_detail.totalPrice?.toLocaleString(
                     "en-US",
                     { minimumFractionDigits: 2 }
                   )} ${this.pdf_lang == "th" ? "บาท" : "Baht"}`,
@@ -1025,7 +1025,7 @@ export default {
           {
             text: `${(
               parseFloat(course.price) * course.students.length
-            ).toLocaleString(undefined, {
+            )?.toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}`,

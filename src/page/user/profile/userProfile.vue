@@ -102,7 +102,16 @@
             >mdi-file-certificate-outline</v-icon
           >
         </v-col>
-        <v-col cols="5" sm="6" align="left" class="mt-1" align-self="center">
+        <v-col
+          cols="5"
+          sm="6"
+          alopenAddRelationDialogStudent
+          information
+          in
+          chargeign="left"
+          class="mt-1"
+          align-self="center"
+        >
           {{ $t("competitions and certificates") }}
         </v-col>
         <v-col cols="3" sm="4" align="right" class="mt-1">
@@ -240,7 +249,7 @@
           <span class="mdi mdi-chevron-right"></span>
         </v-col>
       </v-row>
-<!-- 
+      <!-- 
       <v-row dense class="mt-3 cursor-pointer">
         <v-col cols="2" sm="1">
           <v-icon class="pa-2" color="#ff6b81">mdi mdi-earth</v-icon>
@@ -1280,7 +1289,10 @@ export default {
         "MyCourseModules/GetMyCourseStudentId",
         this.userRelationsAccountId
       );
-      this.$router.push({ name: "StudentsSchedule" });
+      this.$router.push({
+        name: "StudentsSchedule",
+        params: { action: "MyCourse" },
+      });
       this.GetStudentData(this.userRelationsAccountId);
     },
   },

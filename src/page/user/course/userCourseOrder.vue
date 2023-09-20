@@ -33,7 +33,13 @@
         </template>
         <template v-slot:header>
           <div class="text-md font-bold">
-            {{ `${ $i18n.locale == "th" ? course_data.course_name_th : course_data.course_name_en }` }}
+            {{
+              `${
+                $i18n.locale == "th"
+                  ? course_data.course_name_th
+                  : course_data.course_name_en
+              }`
+            }}
           </div>
           <div class="text-sm">{{ course_data.location }}</div>
         </template>
@@ -41,7 +47,9 @@
           <v-row dense>
             <v-col cols="12" sm="6" class="pa-0">
               <rowData mini col_detail="5" icon="mdi-clock-outline">
-                {{ course_data.course_hours }} {{$t("hrs.")}}/{{$t("time")}}</rowData
+                {{ course_data.course_hours }} {{ $t("hrs.") }}/{{
+                  $t("time")
+                }}</rowData
               >
             </v-col>
             <v-col
@@ -60,7 +68,9 @@
       <!-- SELECT CLASS DATE -->
       <template v-if="course_order.course_type_id == 'CT_1'">
         <v-row dense>
-          <v-col class="text-lg font-bold"> {{ $t('choose a course date') }} </v-col>
+          <v-col class="text-lg font-bold">
+            {{ $t("choose a course date") }}
+          </v-col>
         </v-row>
         <v-radio-group v-model="course_order.day" @change="resetTime">
           <v-row>
@@ -79,7 +89,9 @@
         </v-radio-group>
         <template v-if="course_order.day">
           <v-row>
-            <v-col class="text-lg font-bold">{{ $t('choose a class time') }}</v-col>
+            <v-col class="text-lg font-bold">{{
+              $t("choose a class time")
+            }}</v-col>
           </v-row>
           <v-radio-group v-model="course_order.time">
             <v-row>
@@ -103,7 +115,7 @@
         </template>
         <template v-if="course_order.time">
           <v-row>
-            <v-col class="text-lg font-bold">{{ $t('choose a coach')}}</v-col>
+            <v-col class="text-lg font-bold">{{ $t("choose a coach") }}</v-col>
           </v-row>
           <v-autocomplete
             dense
@@ -119,7 +131,9 @@
           >
             <template v-slot:no-data>
               <v-list-item>
-                <v-list-item-title> {{$t('no data found')}} </v-list-item-title>
+                <v-list-item-title>
+                  {{ $t("no data found") }}
+                </v-list-item-title>
               </v-list-item>
             </template>
             <template v-slot:item="{ item }">
@@ -153,7 +167,7 @@
       </template>
       <!-- REGISTER -->
       <v-row dense>
-        <v-col class="text-lg font-bold"> {{ $t('register for') }} </v-col>
+        <v-col class="text-lg font-bold"> {{ $t("register for") }} </v-col>
       </v-row>
       <v-row dense class="d-flex align-center">
         <v-col>
@@ -178,7 +192,8 @@
             outlined
             color="#ff6b81"
             @click="openDialogParent"
-            ><v-icon>mdi-plus-circle-outline</v-icon>{{$t('add parent information')}}</v-btn
+            ><v-icon>mdi-plus-circle-outline</v-icon
+            >{{ $t("add parent information") }}</v-btn
           >
         </v-col>
       </v-row>
@@ -202,7 +217,7 @@
               >mdi-card-account-details-outline</v-icon
             ></v-col
           >
-          <v-col class="text-lg font-bold">{{ $t('list of parents') }}</v-col>
+          <v-col class="text-lg font-bold">{{ $t("list of parents") }}</v-col>
         </v-row>
         <v-divider class="my-2"></v-divider>
         <v-row>
@@ -214,11 +229,12 @@
           >
             <v-card flat class="mb-3">
               <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
-                <div>{{$t('first name')}} - {{$t('last name')}}</div>
+                <div>{{ $t("first name") }} - {{ $t("last name") }}</div>
                 <div class="pl-2 font-semibold">
                   {{
-                    $i18n.locale == 'th' ? `${relation.parent.parentFirstnameTh} ${relation.parent.parentLastnameTh}` : 
-                    `${relation.parent.parentFirstnameEn} ${relation.parent.parentLastnameEn}`
+                    $i18n.locale == "th"
+                      ? `${relation.parent.parentFirstnameTh} ${relation.parent.parentLastnameTh}`
+                      : `${relation.parent.parentFirstnameEn} ${relation.parent.parentLastnameEn}`
                   }}
                 </div>
               </v-card-text>
@@ -245,7 +261,7 @@
                 >mdi-card-account-details-outline</v-icon
               ></v-col
             >
-            <v-col class="text-lg font-bold">{{ $t('parent') }}</v-col>
+            <v-col class="text-lg font-bold">{{ $t("parent") }}</v-col>
             <v-col cols="auto">
               <v-btn
                 @click="
@@ -265,7 +281,9 @@
             <v-card-text>
               <v-row dense class="d-flex align-center" v-if="!edit_parent">
                 <v-col cols="12" sm="6">
-                  <labelCustom :text="$t('username')+' (' + $t('optional') + ')'"></labelCustom>
+                  <labelCustom
+                    :text="$t('username') + ' (' + $t('optional') + ')'"
+                  ></labelCustom>
                   <v-text-field
                     :disabled="!edit_parent"
                     @keyup.enter="
@@ -287,13 +305,15 @@
                     color="#ff6b81"
                     @click="edit_parent = true"
                     ><v-icon>mdi-account-edit-outline</v-icon
-                    >{{ $t('edit parent information') }}</v-btn
+                    >{{ $t("edit parent information") }}</v-btn
                   >
                 </v-col>
               </v-row>
               <v-row dense v-if="edit_parent">
                 <v-col cols="6">
-                  <labelCustom :text="$t('username')+' (' + $t('optional') + ')'"></labelCustom>
+                  <labelCustom
+                    :text="$t('username') + ' (' + $t('optional') + ')'"
+                  ></labelCustom>
                   <v-text-field
                     :hide-details="!parent.account_id"
                     dense
@@ -319,11 +339,13 @@
                     </template>
                   </v-text-field>
                   <template v-if="!parent.account_id">
-                    <label> {{$t("if you don't have an account yet, please")}} </label>
+                    <label>
+                      {{ $t("if you don't have an account yet, please") }}
+                    </label>
                     <label
                       class="text-[#ff6b81] underline cursor-pointer mt-5"
                       @click="registerParent"
-                      >{{ $t('register') }} One ID</label
+                      >{{ $t("register") }} One ID</label
                     >
                   </template>
                 </v-col>
@@ -336,13 +358,17 @@
                     color="#ff6b81"
                     @click="checkUsername(parent.username)"
                     depressed
-                    >{{$t("agree")}}</v-btn
                   >
+                    {{ $t("agree") }}
+                  </v-btn>
                 </v-col>
               </v-row>
               <v-row dense>
                 <v-col cols="12" sm="4">
-                  <labelCustom required :text="$t('first name(english)')"></labelCustom>
+                  <labelCustom
+                    required
+                    :text="$t('first name(english)')"
+                  ></labelCustom>
                   <v-text-field
                     :disabled="user_data.length > 0 || !edit_parent"
                     dense
@@ -365,7 +391,10 @@
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="4">
-                  <labelCustom required :text="$t('phone number')"></labelCustom>
+                  <labelCustom
+                    required
+                    :text="$t('phone number')"
+                  ></labelCustom>
                   <v-text-field
                     :disabled="user_data.length > 0 || !edit_parent"
                     dense
@@ -393,7 +422,7 @@
             ></v-col
           >
           <v-col class="text-lg font-bold">{{
-            `${$t('learner')} ${index_student + 1}`
+            `${$t("learner")} ${index_student + 1}`
           }}</v-col>
           <v-col cols="auto">
             <v-btn @click="removeStudent(student)" small icon color="red" dark
@@ -405,14 +434,10 @@
           <v-card-text>
             <v-row dense class="d-flex align-start">
               <v-col cols="9" sm="5">
-                <labelCustom :text="$t('username')+' (' + $t('optional') + ')'"></labelCustom>
-                <v-text-field
-                  dense
-                  outlined
-                  :rules="usernameRules"
-                  @keypress="Validation($event, 'en-number')"
-                  v-model="student.username"
-                  @change="
+                <labelCustom
+                  :text="$t('username') + ' (' + $t('optional') + ')'"
+                ></labelCustom>
+                <!--   @change="
                     student.username.length > 3
                       ? checkUsername(
                           student.username,
@@ -420,7 +445,13 @@
                           index_student
                         )
                       : ''
-                  "
+                  " -->
+                <v-text-field
+                  dense
+                  outlined
+                  :rules="usernameRules"
+                  @keypress="Validation($event, 'en-number')"
+                  v-model="student.username"
                   @keyup.enter="
                     student.username.length > 3
                       ? checkUsername(
@@ -439,11 +470,13 @@
                   </template>
                 </v-text-field>
                 <template v-if="!student.account_id">
-                  <label> {{$t("if you don't have an account yet, please")}} </label>
+                  <label>
+                    {{ $t("if you don't have an account yet, please") }}
+                  </label>
                   <label
                     class="text-[#ff6b81] underline cursor-pointer mt-5"
                     @click="registerStudent"
-                    >{{$t("register")}} One ID</label
+                    >{{ $t("register") }} One ID</label
                   >
                 </template>
               </v-col>
@@ -458,14 +491,18 @@
                     checkUsername(student.username, 'student', index_student)
                   "
                   depressed
-                  >{{ $t("agree") }}</v-btn
                 >
+                  {{ $t("agree") }}
+                </v-btn>
               </v-col>
             </v-row>
             <template v-if="student.account_id">
               <v-row dense>
                 <v-col cols="12" sm="6">
-                  <labelCustom required :text="$t('first name(english)')"></labelCustom>
+                  <labelCustom
+                    required
+                    :text="$t('first name(english)')"
+                  ></labelCustom>
                   <v-text-field
                     :disabled="student.account_id ? true : false"
                     dense
@@ -490,7 +527,10 @@
               </v-row>
               <v-row dense>
                 <v-col cols="12" sm="6">
-                  <labelCustom required :text="$t('phone number')"></labelCustom>
+                  <labelCustom
+                    required
+                    :text="$t('phone number')"
+                  ></labelCustom>
                   <v-text-field
                     :disabled="student.account_id ? true : false"
                     dense
@@ -519,7 +559,7 @@
               dense
               color="#ff6b81"
             >
-              <v-icon>mdi-plus-circle-outline</v-icon> {{$t('add a learner')}}
+              <v-icon>mdi-plus-circle-outline</v-icon> {{ $t("add a learner") }}
             </v-btn>
           </v-col>
         </v-row>
@@ -528,8 +568,9 @@
         <v-col>
           <v-checkbox color="pink" v-model="policy" class="inline-block">
             <template v-slot:label>
-              {{ $t('accept') }}<a class="mx-2 font-weight-bold" @click="policy_show = true">
-                {{ $t('terms of service and privacy policy') }}
+              {{ $t("accept")
+              }}<a class="mx-2 font-weight-bold" @click="policy_show = true">
+                {{ $t("terms of service and privacy policy") }}
               </a>
             </template>
           </v-checkbox>
@@ -550,7 +591,7 @@
               dense
               color="#ff6b81"
               @click="addToCart"
-              >{{$t('add to cart')}}</v-btn
+              >{{ $t("add to cart") }}</v-btn
             >
             <v-btn
               v-else
@@ -560,7 +601,7 @@
               dense
               color="#ff6b81"
               @click="addToCart"
-              >{{$t('add to cart')}}</v-btn
+              >{{ $t("add to cart") }}</v-btn
             >
           </template>
           <template v-else>
@@ -571,7 +612,7 @@
               dense
               color="#ff6b81"
               @click="addToCart"
-              >{{$t('add to cart')}}</v-btn
+              >{{ $t("add to cart") }}</v-btn
             >
           </template>
         </v-col>
@@ -588,7 +629,7 @@
             dense
             @click="CreateReserve"
             :color="disable_checkout ? '#C4C4C4' : '#ff6b81'"
-            >{{$t('reserve')}}</v-btn
+            >{{ $t("reserve") }}</v-btn
           >
           <v-btn
             v-else-if="
@@ -603,7 +644,7 @@
             @click="checkOut"
             :color="disable_checkout ? '#C4C4C4' : '#ff6b81'"
           >
-          {{ $t('cash out') }}
+            {{ $t("cash out") }}
           </v-btn>
           <v-btn
             v-else
@@ -613,7 +654,7 @@
             dense
             @click="checkOut"
             :color="disable_checkout ? '#C4C4C4' : '#ff6b81'"
-            >{{ $t('cash out') }}</v-btn
+            >{{ $t("cash out") }}</v-btn
           >
         </v-col>
       </v-row>
@@ -644,7 +685,9 @@
         <v-card-text class="pb-2">
           <v-row dense>
             <v-col cols="9">
-              <labelCustom :text="$t('username')+' (' + $t('optional') + ')'"></labelCustom>
+              <labelCustom
+                :text="$t('username') + ' (' + $t('optional') + ')'"
+              ></labelCustom>
               <v-text-field
                 :rules="usernameRules"
                 dense
@@ -675,11 +718,13 @@
                 </template>
               </v-text-field>
               <template v-if="!parent.account_id">
-                <label> {{$t("if you don't have an account yet, please")}}</label>
+                <label>
+                  {{ $t("if you don't have an account yet, please") }}</label
+                >
                 <label
                   class="text-[#ff6b81] underline cursor-pointer mt-5"
                   @click="registerParent"
-                  >{{ $t('register') }} One ID</label
+                  >{{ $t("register") }} One ID</label
                 >
               </template>
             </v-col>
@@ -691,14 +736,18 @@
                 color="#ff6b81"
                 @click="checkUsername(parent.username)"
                 depressed
-                >{{ $t('agree') }}</v-btn
               >
+                {{ $t("agree") }}
+              </v-btn>
             </v-col>
           </v-row>
           <template>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom required :text="$t('first name(english)')"></labelCustom>
+                <labelCustom
+                  required
+                  :text="$t('first name(english)')"
+                ></labelCustom>
                 <v-text-field
                   disabled
                   dense
@@ -710,7 +759,10 @@
             </v-row>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom required :text="$t('last name(english)')"></labelCustom>
+                <labelCustom
+                  required
+                  :text="$t('last name(english)')"
+                ></labelCustom>
                 <v-text-field
                   disabled
                   dense
@@ -742,7 +794,7 @@
                 class="w-full"
                 color="#ff6b81"
                 outlined
-                >{{ $t('cancel') }}</v-btn
+                >{{ $t("cancel") }}</v-btn
               >
             </v-col>
             <v-col>
@@ -753,7 +805,7 @@
                 depressed
                 :disabled="!parent.account_id ? true : false"
                 @click="addParent"
-                >{{ $t('save') }}</v-btn
+                >{{ $t("save") }}</v-btn
               >
             </v-col>
           </v-row>
@@ -775,7 +827,10 @@
             </v-col>
           </v-row>
         </v-card-title>
-        <dialog-card checkmark :text="$t('the course has been successfully added to the cart')">
+        <dialog-card
+          checkmark
+          :text="$t('the course has been successfully added to the cart')"
+        >
           <template #btn>
             <v-btn
               depressed
@@ -784,7 +839,7 @@
               color="#ff6b81"
               dark
               @click="closeDialogCart"
-              >{{$t('agree')}}</v-btn
+              >{{ $t("agree") }}</v-btn
             >
           </template>
         </dialog-card>
@@ -799,7 +854,7 @@
     >
       <registerDialogForm
         dialog
-        :title="$t('register')+'One ID'"
+        :title="$t('register') + 'One ID'"
         :state="register_type"
       ></registerDialogForm>
     </v-dialog>
@@ -827,9 +882,9 @@
             <v-col>
               <v-checkbox hide-details color="pink" v-model="policy">
                 <template v-slot:label>
-                  {{ $t('accept') }}
+                  {{ $t("accept") }}
                   <a class="mx-2 font-weight-bold">
-                    {{ $t('terms of service and privacy policy') }}
+                    {{ $t("terms of service and privacy policy") }}
                   </a>
                 </template>
               </v-checkbox>
@@ -845,7 +900,7 @@
                 text-color="#ff6b81"
                 @click="closePolicy()"
               >
-                {{$t('cancel')}}
+                {{ $t("cancel") }}
               </v-btn>
             </v-col>
             <v-col>
@@ -855,7 +910,7 @@
                 color="#ff6b81"
                 @click="policy_show = false"
               >
-              {{$t('agree')}}
+                {{ $t("agree") }}
               </v-btn>
             </v-col>
           </v-row>
@@ -1035,9 +1090,9 @@ export default {
       }
       this.dialog_parent = false;
     },
-    "$i18n.locale": function(){
-      this.GetCourse(this.order_data.course_id)
-    }
+    "$i18n.locale": function () {
+      this.GetCourse(this.order_data.course_id);
+    },
   },
   computed: {
     ...mapGetters({
@@ -1057,18 +1112,20 @@ export default {
       reserve_list: "OrderModules/getReserveList",
     }),
     usernameRules() {
-      return  [
+      return [
         (val) =>
           (val || "").length > 5 ||
           this.$t("please enter a username at least 6 characters long"),
         (val) =>
           (val || "").length < 20 ||
           this.$t("please enter a username no longer than 20 characters"),
-        (val) => /[A-Za-z0-9 ]/g.test(val) || this.$t("the username cannot contain special characters"),
+        (val) =>
+          /[A-Za-z0-9 ]/g.test(val) ||
+          this.$t("the username cannot contain special characters"),
         (val) =>
           !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
           this.$t("username cannot contain emojis"),
-      ]
+      ];
     },
     setFunctions() {
       this.GetReserceByCreatedBy({ account_id: this.user_login.account_id });
@@ -1079,13 +1136,13 @@ export default {
             course_id: this.course_order.course_id,
             cpo_id: this.course_order.option.course_package_option_id,
           });
-          if(this.course_order.course_id){
+          if (this.course_order.course_id) {
             this.GetShortCourseMonitor({
               course_id: this.course_order.course_id,
             });
           }
         } else {
-          if(this.course_order.course_id){
+          if (this.course_order.course_id) {
             this.GetShortCourseMonitor({
               course_id: this.course_order.course_id,
             });
@@ -1153,7 +1210,7 @@ export default {
       GetGeneralCourseMonitor: "CourseMonitorModules/GetGeneralCourseMonitor",
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
     }),
-   
+
     closePolicy() {
       this.policy = false;
       this.policy_show = false;
@@ -1216,9 +1273,14 @@ export default {
                 v.m_time_id == timeId
             );
             if (course_monitors_filter.length > 0) {
-              if ( this.course_order.students.length + course_monitors_filter[0].m_current_student <= course_monitors_filter[0].m_maximum_student
+              if (
+                this.course_order.students.length +
+                  course_monitors_filter[0].m_current_student <=
+                course_monitors_filter[0].m_maximum_student
               ) {
-                if ( this.course_order.option.course_package_option_id === course_monitors_filter[0].m_course_package_options_id
+                if (
+                  this.course_order.option.course_package_option_id ===
+                  course_monitors_filter[0].m_course_package_options_id
                 ) {
                   return course_monitors_filter[0]?.m_status;
                 } else {
@@ -1250,7 +1312,7 @@ export default {
     CreateReserve() {
       Swal.fire({
         icon: "question",
-        title: this.$t('want to book this course?'),
+        title: this.$t("want to book this course?"),
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: this.$t("agree"),
@@ -1367,7 +1429,7 @@ export default {
     addToCart() {
       Swal.fire({
         icon: "question",
-        title: this.$t('want to add to cart?'),
+        title: this.$t("want to add to cart?"),
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: this.$t("agree"),
@@ -1400,16 +1462,16 @@ export default {
           // this.show_dialog_cart = true;
           Swal.fire({
             icon: "success",
-            title: this.$t('succeed'),
-            text: this.$t('the course has been successfully added to the cart'),
+            title: this.$t("succeed"),
+            text: this.$t("the course has been successfully added to the cart"),
             showCancelButton: false,
             showConfirmButton: false,
             showDenyButton: false,
             timer: 3000,
-            timerProgressBar: true
-          }).finally(()=>{
+            timerProgressBar: true,
+          }).finally(() => {
             this.$router.push({ name: "CartList" });
-          })
+          });
         }
       });
     },
@@ -1493,15 +1555,17 @@ export default {
             this.changeOrderData(this.order);
             if (this.course_order.course_type_id == "CT_1") {
               if (this.course_order.day && this.course_order.time) {
-                this.saveOrder({regis_type : ""});
+                this.saveOrder({ regis_type: "" });
               } else {
                 Swal.fire({
                   icon: "error",
-                  text: `${this.$t('invalid data')} ${this.course_order.day} : ${this.course_order.time}`,
+                  text: `${this.$t("invalid data")} ${
+                    this.course_order.day
+                  } : ${this.course_order.time}`,
                 });
               }
             } else {
-              this.saveOrder({regis_type : ""});
+              this.saveOrder({ regis_type: "" });
             }
           }
         });
@@ -1553,7 +1617,9 @@ export default {
               ) {
                 Swal.fire({
                   icon: "error",
-                  title: this.$t("this username has already been entered. please check again"),
+                  title: this.$t(
+                    "this username has already been entered. please check again"
+                  ),
                 });
               }
             }

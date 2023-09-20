@@ -82,7 +82,7 @@
                 larg
                 color="#FF6B81"
                 @click="removeCourse(course_index)"
-                v-if="order.courses.length >= 2"
+                v-if="order.courses?.length >= 2"
               >
                 mdi-delete
               </v-icon>
@@ -146,7 +146,9 @@
                 >
                   <template v-slot:no-data>
                     <v-list-item>
-                      <v-list-item-title> {{ $t("no data found") }} </v-list-item-title>
+                      <v-list-item-title>
+                        {{ $t("no data found") }}
+                      </v-list-item-title>
                     </v-list-item>
                   </template>
                   <template v-slot:item="{ item }">
@@ -534,7 +536,7 @@
             >
           </v-col>
         </v-row>
-        <template v-if="order.courses.length > 0">
+        <template v-if="order.courses?.length > 0">
           <div class="text-lg font-bold">{{ $t("payment status") }}</div>
           <v-divider class="mb-3"></v-divider>
           <v-row dense class="mb-3">
@@ -549,7 +551,7 @@
                       cols="auto"
                       class="text-lg font-bold text-pink-500"
                       >{{
-                        (order.total_price * students.length).toLocaleString(
+                        (order.total_price * students?.length).toLocaleString(
                           undefined,
                           { minimumFractionDigits: 2 }
                         )
@@ -715,9 +717,9 @@
           <v-col align="right" sm="auto" cols="12">
             <v-btn
               depressed
-              :disabled="!order.courses.length > 0"
+              :disabled="!order.courses?.length > 0"
               :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
-              :dark="order.courses.length > 0"
+              :dark="order.courses?.length > 0"
               color="#ff6b81"
               @click="save()"
             >
@@ -778,6 +780,7 @@ import { mapActions, mapGetters } from "vuex";
 import { dateFormatter, inputValidation } from "@/functions/functions";
 import Swal from "sweetalert2";
 import mixin from "@/mixin";
+import router from "@/router";
 
 export default {
   name: "addlearnPage",
@@ -811,7 +814,7 @@ export default {
     pay: "",
   }),
   created() {
-    if (this.order.courses.length == 0) {
+    if (this.order.courses?.length == 0) {
       this.order.courses.push({
         course_options: [],
         course_data: null,
@@ -879,16 +882,16 @@ export default {
     rules() {
       return {
         student: [
-          (val) => (val || "").length > 0 || this.$t("please select a student"),
+          (val) => (val || "")?.length > 0 || this.$t("please select a student"),
         ],
         category: [
-          (val) => (val || "").length > 0 || this.$t("please select a wls"),
+          (val) => (val || "")?.length > 0 || this.$t("please select a wls"),
         ],
         course: [
           (val) => (val || "").length > 0 || this.$t("please select a course"),
         ],
         package: [
-          (val) => (val || "").length > 0 || this.$t("please select a package"),
+          (val) => (val || "")?.length > 0 || this.$t("please select a package"),
         ],
         option: [
           (val) =>
@@ -896,7 +899,7 @@ export default {
         ],
         day: [
           (val) =>
-            (val || "").length > 0 || this.$t("please select a class day"),
+            (val || "")?.length > 0 || this.$t("please select a class day"),
         ],
         time: [
           (val) =>
@@ -909,12 +912,12 @@ export default {
         ],
         start_date: [
           (val) =>
-            (val || "").length > 0 || this.$t("please select a start date"),
+            (val || "")?.length > 0 || this.$t("please select a start date"),
         ],
         price: [(val) => (val || "") > 0 || this.$t("please select a price")],
         remark: [
           (val) =>
-            val.length < 256 ||
+            val?.length < 256 ||
             this.$t("note that the length exceeds the limit"),
         ],
         payment_type: [
@@ -942,7 +945,7 @@ export default {
       }
     },
     search(val) {
-      if (val.length > 3) {
+      if (val?.length > 3) {
         this.loading = true;
         this.searchNameUser({ search_name: val }).then(() => {
           this.loading = false;
@@ -1143,9 +1146,9 @@ export default {
         this.$refs.course_form.validate();
         let isValiDateCourse = [];
         let studentFail = false;
-        if (this.validate_form && this.course_monitors.length > 0) {
+        if (this.validate_form && this.course_monitors?.length > 0) {
           for (let course of this.order.courses) {
-            if (course.package_data.students < this.students.length) {
+            if (course.package_data.students < this.students?.length) {
               studentFail = true;
             } else {
               if (
@@ -1156,7 +1159,7 @@ export default {
                     v.courseMonitorEntity_day_of_week_id ===
                       course.time.dayOfWeekId &&
                     v.courseMonitorEntity_time_id === course.time.timeId
-                ).length > 0
+                )?.length > 0
               ) {
                 if (
                   this.course_monitors.some(
@@ -1168,7 +1171,7 @@ export default {
                         course.time.dayOfWeekId &&
                       v.courseMonitorEntity_time_id === course.time.timeId &&
                       v.courseMonitorEntity_current_student +
-                        course.students.length <=
+                        course.students?.length <=
                         v.courseMonitorEntity_maximum_student &&
                       v.courseMonitorEntity_status === "Open"
                   )
@@ -1245,17 +1248,18 @@ export default {
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
-                  await this.saveOrder({regis_type : 'addStudent'});
-                  if(this.order_is_status){
+                  await this.saveOrder({ regis_type: "addStudent" });
+                  if (this.order_is_status) {
                     let payload = {
                       notificationName: this.notification_name,
                       notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(
-                        course_name_noti.length > 1 ? ", " : ""
+                        course_name_noti?.length > 1 ? ", " : ""
                       )} ให้คุณแล้ว (รอชำระเงิน)`,
                       accountId: account,
                       path: null,
                     };
                     this.sendNotification(payload);
+                    router.replace({ name: "Finance" });
                   }
                 } else {
                   let account = [];
@@ -1286,20 +1290,19 @@ export default {
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
-                  await this.saveOrder({ regis_type : "addStudent" });
-                  if(this.order_is_status){
+                  await this.saveOrder({ regis_type: "addStudent" });
+                  if (this.order_is_status) {
                     let payload = {
                       notificationName: this.notification_name,
                       notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(
-                        course_name_noti.length > 1 ? "และ" : ""
+                        course_name_noti?.length > 1 ? "และ" : ""
                       )} ให้คุณแล้ว`,
                       accountId: account,
                       path: null,
                     };
-                    console.log('object :>> ', payload);
                     this.sendNotification(payload);
+                    router.replace({ name: "Finance" });
                   }
-                 
                 }
               }
             });
