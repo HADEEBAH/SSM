@@ -357,7 +357,7 @@ const orderModules = {
             }
             if (order_item.students.length > 0) {
               order_item.students.forEach((student) => {
-                console.log(student)
+                // console.log(student)
                 if (!student_name_list.includes(`${student?.firstNameTh} ${student?.lastNameTh}` )
                 ) {
                   student_name_list.push(
@@ -508,7 +508,7 @@ const orderModules = {
       }
     },
     async saveOrder(context,{ regis_type }) {
-      console.log(regis_type)
+      // console.log(regis_type)
       context.commit("SetOrderIsLoading", true);
       try {
         let order = context.state.order;
