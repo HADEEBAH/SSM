@@ -258,10 +258,10 @@ export default {
   computed: {
     isInputValid() {
       return (
-        this.kingdom.kingdom_name_th.trim().length > 0 &&
-        this.kingdom.kingdom_name_eng.trim().length > 0 &&
-        this.kingdom.learning_method.trim().length > 0 &&
-        this.kingdom.detail.trim().length > 0
+        this.kingdom.kingdom_name_th.trim()?.length > 0 &&
+        this.kingdom.kingdom_name_eng.trim()?.length > 0 &&
+        this.kingdom.learning_method.trim()?.length > 0 &&
+        this.kingdom.detail.trim()?.length > 0
       );
     },
   },

@@ -349,25 +349,25 @@ export default {
       return {
         category_name_th: [
           (val) =>
-            (val || "").length > 0 || this.$t("please specify wls name (Thai)"),
+            (val || "")?.length > 0 || this.$t("please specify wls name (Thai)"),
           (val) =>
-            val.length < 50 ||
+            val?.length < 50 ||
             this.$t("wls name (Thai) longer than specified length"),
         ],
         category_name_en: [
           (val) =>
-            (val || "").length > 0 ||
+            (val || "")?.length > 0 ||
             this.$t("please specify wls name (English)"),
           (val) =>
-            val.length < 50 ||
+            val?.length < 50 ||
             this.$t(" wls name (English) longer than specified"),
         ],
         taughtBy: [
           (val) =>
-            (val || "").length > 0 ||
+            (val || "")?.length > 0 ||
             this.$t("please specify the teaching organizer"),
           (val) =>
-            val.length < 50 ||
+            val?.length < 50 ||
             this.$t(
               "the organizer of the lesson is longer than the specified length"
             ),

@@ -713,7 +713,7 @@ const orderModules = {
                   timer: 3000,
                   timerProgressBar: true,
                 });
-                router.replace({ name: "Finance" });
+                // router.replace({ name: "Finance" });
                 localStorage.removeItem("Order");
                 context.commit("SetResetCourseData");
                 context.commit("SetOrder", {
@@ -739,7 +739,7 @@ const orderModules = {
                 timer: 3000,
                 timerProgressBar: true,
               });
-              router.replace({ name: "Finance" });
+              // router.replace({ name: "Finance" });
               localStorage.removeItem("Order");
               context.commit("SetResetCourseData");
               context.commit("SetOrder", {
