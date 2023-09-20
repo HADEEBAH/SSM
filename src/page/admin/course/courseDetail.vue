@@ -2621,13 +2621,11 @@ export default {
 
               let payload = {
                 notificationName: "แจ้งเตือนเลื่อนวันเปิดเรียน",
-                notificationDescription: `จากวันที่ ${new Date(
-                  student_list.beforeDate
-                ).toLocaleDateString("th-TH", options)} ไปยังวันที่ ${new Date(
-                  student_list.afterDate
-                ).toLocaleDateString("th-TH", options)} คอร์ส ${
+                notificationDescription: `คอร์ส ${
                   this.course_data.course_name_th
-                }`,
+                } เลื่อนเป็นวันที่ ${new Date(
+                  student_list.afterDate
+                )?.toLocaleDateString("th-TH", options)}`,
                 accountId: student_list.students,
                 path: null,
               };

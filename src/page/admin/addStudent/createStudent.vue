@@ -146,7 +146,9 @@
                 >
                   <template v-slot:no-data>
                     <v-list-item>
-                      <v-list-item-title> {{ $t("no data found") }} </v-list-item-title>
+                      <v-list-item-title>
+                        {{ $t("no data found") }}
+                      </v-list-item-title>
                     </v-list-item>
                   </template>
                   <template v-slot:item="{ item }">
@@ -1245,8 +1247,8 @@ export default {
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
-                  await this.saveOrder({regis_type : 'addStudent'});
-                  if(this.order_is_status){
+                  await this.saveOrder({ regis_type: "addStudent" });
+                  if (this.order_is_status) {
                     let payload = {
                       notificationName: this.notification_name,
                       notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(
@@ -1286,8 +1288,8 @@ export default {
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
-                  await this.saveOrder({ regis_type : "addStudent" });
-                  if(this.order_is_status){
+                  await this.saveOrder({ regis_type: "addStudent" });
+                  if (this.order_is_status) {
                     let payload = {
                       notificationName: this.notification_name,
                       notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(
@@ -1296,10 +1298,9 @@ export default {
                       accountId: account,
                       path: null,
                     };
-                    console.log('object :>> ', payload);
+                    // console.log("object :>> ", payload);
                     this.sendNotification(payload);
                   }
-                 
                 }
               }
             });
