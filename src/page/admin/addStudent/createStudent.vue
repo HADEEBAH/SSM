@@ -1298,7 +1298,7 @@ export default {
                       accountId: account,
                       path: null,
                     };
-                    console.log("object :>> ", payload);
+                    // console.log("object :>> ", payload);
                     this.sendNotification(payload);
                   }
                 }
