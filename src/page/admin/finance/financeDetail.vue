@@ -694,7 +694,7 @@ export default {
             {
               columns: [
                 {
-                  width: "60%",
+                  width: "55%",
                   text: `(${
                     this.pdf_lang == "th"
                       ? convertToThaiBaht(this.order_detail.totalPrice)
@@ -705,7 +705,7 @@ export default {
                 {
                   columns: [
                     {
-                      width: "40%",
+                      width: "45%",
                       stack: [
                         {
                           text:
