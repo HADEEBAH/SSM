@@ -1060,6 +1060,10 @@ export default {
               Swal.fire({
                 icon: "error",
                 title: this.$t("failed to delete"),
+                timer: 3000,
+                timerProgressBar: true,
+                showCancelButton: false,
+                showConfirmButton: false,
               });
             });
           this.dialog_show = false;
@@ -1267,6 +1271,10 @@ export default {
                   ? ""
                   : `(${this.error_message})`
               }`,
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
             }).then((result) => {
               if (result.isConfirmed) {
                 this.add_relation = false;

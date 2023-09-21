@@ -347,6 +347,10 @@ export default {
             Swal.fire({
               icon: "error",
               title: error.message,
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
             });
           }
         } else {
@@ -368,11 +372,12 @@ export default {
         } else {
           Swal.fire({
             icon: "error",
+            title: this.$t("something went wrong"),
             text: this.$t("upload only image files (png, jpeg) only"),
-            showDenyButton: false,
+            timer: 3000,
+            timerProgressBar: true,
             showCancelButton: false,
-            confirmButtonText: this.$t("agree"),
-            cancelButtonText: this.$t("cancel"),
+            showConfirmButton: false,
           });
         }
       }

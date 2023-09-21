@@ -717,7 +717,12 @@ export default {
       } else {
         Swal.fire({
           icon: "warning",
-          title: "ไม่มี username",
+          title: this.$t("something went wrong"),
+          text: this.$t("username not found"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
         });
       }
     },
@@ -769,7 +774,12 @@ export default {
       } else {
         Swal.fire({
           icon: "warning",
-          title: "ไม่มี username",
+          title: this.$t("something went wrong"),
+          text: this.$t("username not found"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
         });
       }
     },
@@ -791,15 +801,23 @@ export default {
       if (files.size > (10240 * 1024) / 2) {
         Swal.fire({
           icon: "warning",
-          title: "ขนาดไฟล์ใหญ่เกินไป",
-          text: "( กำหนดขนาดไม่เกิน 5MB )",
+          title: this.$t("the file size is too large"),
+          text: this.$t("set the size not to exceed 5MB"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
         });
         document.getElementById("fileInput").value = "";
       } else if (allowedExtension.indexOf(files.type) === -1) {
         Swal.fire({
           icon: "warning",
-          title: "รูปแบบไฟล์ไม่ถูกต้อง",
-          text: "( กรุณาอัปโหลดไฟล์รูปภาพ )",
+          title: this.$t("invalid file format"),
+          text: this.$t("please upload an image file"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
         });
         document.getElementById("fileInput").value = "";
       } else {
@@ -844,7 +862,7 @@ export default {
     addRealions() {
       Swal.fire({
         icon: "question",
-        title: "คุณต้องการเพิ่มความสัมพันธ์หรือไม่",
+        title: this.$t("do you want to increase your relationship?"),
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: "ตกลง",
@@ -905,8 +923,8 @@ export default {
 
                 Swal.fire({
                   icon: "success",
-                  title: "สำเร็จ",
-                  text: "( เพิ่มข้อมูลเรียบร้อยแล้ว )",
+                  title: this.$t("succeed"),
+                  text: this.$t("information added successfully"),
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,
@@ -926,8 +944,14 @@ export default {
               ) {
                 Swal.fire({
                   icon: "info",
-                  title: "เกิดข้อผิดพลาด",
-                  text: "บทบาทซ้ำกัน หรือ ผู้ใช้ยังไม่มีบทบาท",
+                  title: this.$t("something went wrong"),
+                  text: this.$t(
+                    "duplicate roles or the user does not yet have a role"
+                  ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
                 });
                 this.add_relations = false;
                 this.relation = {
@@ -940,7 +964,12 @@ export default {
               } else if (error.response.data.message == "Duplicate relation.") {
                 Swal.fire({
                   icon: "error",
-                  title: "Duplicate relation",
+                  title: this.$t("something went wrong"),
+                  text: this.$t("duplicate relationship"),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
                 });
                 this.add_relations = false;
                 this.relation = {
@@ -968,7 +997,7 @@ export default {
     submitData(account_id) {
       Swal.fire({
         icon: "question",
-        title: "คุณต้องการบันทึกหรือไม่",
+        title: this.$t("do you want to save it?"),
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: "ตกลง",
@@ -1012,8 +1041,8 @@ export default {
                 });
                 Swal.fire({
                   icon: "success",
-                  title: "สำเร็จ",
-                  text: "( บันทึกเรียบร้อยแล้ว )",
+                  title: this.$t("succeed"),
+                  text: this.$t("saved successfully"),
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,
@@ -1035,8 +1064,12 @@ export default {
               ) {
                 Swal.fire({
                   icon: "error",
-                  title: "เกิดข้อผิดพลาด",
-                  text: "USER นี้มีความสัมพันธ์แล้ว!",
+                  title: this.$t("something went wrong"),
+                  text: this.$t("this USER is already in a relationship"),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
                 }).then(async (result) => {
                   if (result.isConfirmed) {
                     this.$router.push({
@@ -1051,7 +1084,12 @@ export default {
           } catch (error) {
             Swal.fire({
               icon: "error",
-              title: "ข้อมูลผิดพลาด",
+              title: this.$t("something went wrong"),
+              text: this.$t("error information"),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
             });
           }
         } else {

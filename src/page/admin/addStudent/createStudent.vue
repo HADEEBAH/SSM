@@ -882,7 +882,8 @@ export default {
     rules() {
       return {
         student: [
-          (val) => (val || "")?.length > 0 || this.$t("please select a student"),
+          (val) =>
+            (val || "")?.length > 0 || this.$t("please select a student"),
         ],
         category: [
           (val) => (val || "")?.length > 0 || this.$t("please select a wls"),
@@ -891,7 +892,8 @@ export default {
           (val) => (val || "").length > 0 || this.$t("please select a course"),
         ],
         package: [
-          (val) => (val || "")?.length > 0 || this.$t("please select a package"),
+          (val) =>
+            (val || "")?.length > 0 || this.$t("please select a package"),
         ],
         option: [
           (val) =>
@@ -1192,10 +1194,10 @@ export default {
               text: this.$t(
                 "the number of students exceeds the number of students allowed in the package"
               ),
-              showDenyButton: false,
-              showCancelButton: true,
-              confirmButtonText: this.$t("agree"),
-              cancelButtonText: this.$t("cancel"),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
             });
           } else if (isValiDateCourse.includes(false)) {
             Swal.fire({
@@ -1204,10 +1206,10 @@ export default {
               text: this.$t(
                 "the selected course is full and payment cannot be made"
               ),
-              showDenyButton: false,
-              showCancelButton: true,
-              confirmButtonText: this.$t("agree"),
-              cancelButtonText: this.$t("cancel"),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
             });
           } else {
             Swal.fire({

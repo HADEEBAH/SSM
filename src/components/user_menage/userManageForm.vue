@@ -1033,6 +1033,10 @@ export default {
           icon: "warning",
           title: this.$t("the file size is too large"),
           text: this.$t("set the size not to exceed 5MB"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
         });
         document.getElementById("fileInput").value = "";
       } else if (allowedExtension.indexOf(files.type) === -1) {
@@ -1040,6 +1044,10 @@ export default {
           icon: "warning",
           title: this.$t("invalid file format"),
           text: this.$t("please upload an image file"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
         });
         document.getElementById("fileInput").value = "";
       } else {
@@ -1154,7 +1162,12 @@ export default {
       } else {
         Swal.fire({
           icon: "warning",
-          title: this.$t("username not found"),
+          title: this.$t("warning"),
+          text: this.$t("username not found"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
         });
       }
     },
@@ -1276,6 +1289,10 @@ export default {
             Swal.fire({
               icon: "error",
               title: this.error_message,
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
             });
           }
         } else {
@@ -1467,6 +1484,10 @@ export default {
                     ? ""
                     : `(${this.error_message})`
                 }`,
+                timer: 3000,
+                timerProgressBar: true,
+                showCancelButton: false,
+                showConfirmButton: false,
               });
             }
           } else {

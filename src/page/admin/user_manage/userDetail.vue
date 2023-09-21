@@ -1628,10 +1628,10 @@ export default {
           Swal.fire({
             icon: "error",
             text: this.$t("upload only image files (png, jpeg) only"),
-            showDenyButton: false,
+            timer: 3000,
+            timerProgressBar: true,
             showCancelButton: false,
-            confirmButtonText: this.$t("agree"),
-            cancelButtonText: this.$t("cancel"),
+            showConfirmButton: false,
           });
         }
       }
@@ -1837,6 +1837,10 @@ export default {
             Swal.fire({
               icon: "error",
               title: "Duplicate relation",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
             });
           }
         } else {

@@ -488,6 +488,10 @@ export default {
               icon: "error",
               title: this.$t("warning"),
               text: this.$t("failed to delete data"),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
             });
           }
         } else {

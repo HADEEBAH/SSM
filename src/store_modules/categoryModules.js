@@ -98,10 +98,10 @@ const categoryModules = {
                         Swal.fire({
                             icon: "error",
                             title: VueI18n.t("this wls cannot be deleted because it has a course"),
-                            showDenyButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
                             showCancelButton: false,
-                            confirmButtonText: VueI18n.t("agree"),
-                            cancelButtonText: VueI18n.t("cancel"),
+                            showConfirmButton: false,
                         })
                     }
                 }

@@ -92,10 +92,13 @@ const loginModules = {
                                     if (student.data.message === "study") {
                                         if (student.data.data.data.some(v => v.courseId === course_id)) {
                                             Swal.fire({
-                                                icon: "error",
-                                                title: VueI18n.t("duplicate user in this course Unable to register"),
+                                                icon: "warning",
+                                                title: VueI18n.t("warning"),
+                                                text: VueI18n.t("duplicate user in this course Unable to register"),
+                                                timer: 3000,
+                                                timerProgressBar: true,
                                                 showCancelButton: false,
-                                                confirmButtonText: VueI18n.t("agree"),
+                                                showConfirmButton: false,
                                             })
                                             if (type === 'student') {
                                                 context.commit("SetUserStudentData", [])
@@ -134,12 +137,12 @@ const loginModules = {
                     } else {
                         Swal.fire({
                             icon: "error",
-                            title: VueI18n.t("this user could not be found"),
-
-                            showDenyButton: false,
-                            showCancelButton: true,
-                            confirmButtonText: VueI18n.t("agree"),
-                            cancelButtonText: VueI18n.t("cancel"),
+                            title: VueI18n.t("something went wrong"),
+                            text: VueI18n.t("this user could not be found"),
+                            timer: 3000,
+                            timerProgressBar: true,
+                            showCancelButton: false,
+                            showConfirmButton: false,
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 if (type === 'student') {
@@ -157,12 +160,21 @@ const loginModules = {
                 if (error.response.data.message === "This username not found.") {
                     Swal.fire({
                         icon: "error",
-                        title: VueI18n.t("this user could not be found"),
+                        title: VueI18n.t("something went wrong"),
+                        text: VueI18n.t("this user could not be found"),
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
                     })
                 } else {
                     Swal.fire({
                         icon: "error",
-                        title: error.message
+                        title: error.message,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
                     })
                 }
             }
@@ -196,7 +208,12 @@ const loginModules = {
                 if (error.response.data.message === "This username not found.") {
                     Swal.fire({
                         icon: "error",
-                        title: VueI18n.t("this user could not be found"),
+                        title: VueI18n.t("something went wrong"),
+                        text: VueI18n.t("this user could not be found"),
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
                     }).then((result) => {
                         if (result.isConfirmed) {
                             if (type === 'student') {
@@ -209,7 +226,11 @@ const loginModules = {
                 } else {
                     Swal.fire({
                         icon: "error",
-                        title: error.message
+                        title: error.message,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
                     })
                 }
             }
@@ -275,6 +296,10 @@ const loginModules = {
                     Swal.fire({
                         icon: 'error',
                         title: VueI18n.t("something went wrong"),
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
                     })
                 }
             }
@@ -322,6 +347,10 @@ const loginModules = {
                 Swal.fire({
                     icon: 'error',
                     title: VueI18n.t("something went wrong"),
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showCancelButton: false,
+                    showConfirmButton: false,
 
                 })
                 router.replace({ name: "UserKingdom" })
