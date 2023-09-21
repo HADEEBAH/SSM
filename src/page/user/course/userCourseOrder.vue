@@ -291,7 +291,7 @@
                     "
                     dense
                     :rules="usernameRules"
-                    @keypress="Validation($event, 'en-number')"
+                    @keydown="Validation($event, 'en-number')"
                     outlined
                     v-model="parent.username"
                     :placeholder="$t('username')"
@@ -319,7 +319,7 @@
                     dense
                     outlined
                     :rules="usernameRules"
-                    @keypress="Validation($event, 'en-number')"
+                    @keydown="Validation($event, 'en-number')"
                     v-model="parent.username"
                     @change="
                       parent.username > 3 ? checkUsername(parent.username) : ''
@@ -450,7 +450,7 @@
                   dense
                   outlined
                   :rules="usernameRules"
-                  @keypress="Validation($event, 'en-number')"
+                  @keydown="Validation($event, 'en-number')"
                   v-model="student.username"
                   @keyup.enter="
                     student.username.length > 3
@@ -693,7 +693,7 @@
                 dense
                 outlined
                 v-model="parent.username"
-                @keypress="Validation($event, 'en-number')"
+                @keydown="Validation($event, 'en-number')"
                 @change="
                   parent.username.length > 3
                     ? checkUsername(parent.username)

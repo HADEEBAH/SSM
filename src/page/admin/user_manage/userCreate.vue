@@ -23,7 +23,7 @@
                           :rules="rules.usernameRules"
                           dense
                           outlined
-                          @keypress="validate($event, 'en-number')"
+                          @keydown="validate($event, 'en-number')"
                           v-model="checkData.username"
                           @keyup.enter="checkDataRelation(checkData.username)"
                           :placeholder="this.$t('username')"
@@ -109,7 +109,7 @@
                             ></label-custom>
                             <v-text-field
                               disabled
-                              @keypress="validate($event, 'th')"
+                              @keydown="validate($event, 'th')"
                               placeholder="-"
                               v-model="checkData.firstname_th"
                               outlined
@@ -123,7 +123,7 @@
                             ></label-custom>
                             <v-text-field
                               disabled
-                              @keypress="validate($event, 'th')"
+                              @keydown="validate($event, 'th')"
                               placeholder="-"
                               v-model="checkData.lastname_th"
                               outlined
@@ -140,7 +140,7 @@
                             ></label-custom>
                             <v-text-field
                               disabled
-                              @keypress="validate($event, 'en')"
+                              @keydown="validate($event, 'en')"
                               placeholder="-"
                               v-model="checkData.firstname_en"
                               outlined
@@ -154,7 +154,7 @@
                             ></label-custom>
                             <v-text-field
                               disabled
-                              @keypress="validate($event, 'en')"
+                              @keydown="validate($event, 'en')"
                               placeholder="-"
                               v-model="checkData.lastname_en"
                               outlined
@@ -170,7 +170,7 @@
                               :text="this.$t('email')"
                             ></label-custom>
                             <v-text-field
-                              @keypress="validate($event, 'en', 'number')"
+                              @keydown="validate($event, 'en', 'number')"
                               placeholder="-"
                               v-model="checkData.email"
                               outlined
@@ -185,7 +185,7 @@
                             ></label-custom>
                             <v-text-field
                               disabled
-                              @keypress="validate($event, 'number')"
+                              @keydown="validate($event, 'number')"
                               v-model="checkData.tel"
                               outlined
                               dense
@@ -433,7 +433,7 @@
                 dense
                 outlined
                 v-model="relation.username"
-                @keypress="validate($event, 'en-number')"
+                @keydown="validate($event, 'en-number')"
                 @change="
                   checkUsername(
                     relation.username,

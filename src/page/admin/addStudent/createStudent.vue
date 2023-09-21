@@ -508,7 +508,7 @@
                   v-model="course.price"
                   @change="CalTotalPrice()"
                   outlined
-                  @keypress="Validation($event, 'number')"
+                  @keydown="Validation($event, 'number')"
                   type="number"
                   color="pink"
                   :suffix="$t(`baht`)"
@@ -882,7 +882,8 @@ export default {
     rules() {
       return {
         student: [
-          (val) => (val || "")?.length > 0 || this.$t("please select a student"),
+          (val) =>
+            (val || "")?.length > 0 || this.$t("please select a student"),
         ],
         category: [
           (val) => (val || "")?.length > 0 || this.$t("please select a wls"),
@@ -891,7 +892,8 @@ export default {
           (val) => (val || "").length > 0 || this.$t("please select a course"),
         ],
         package: [
-          (val) => (val || "")?.length > 0 || this.$t("please select a package"),
+          (val) =>
+            (val || "")?.length > 0 || this.$t("please select a package"),
         ],
         option: [
           (val) =>

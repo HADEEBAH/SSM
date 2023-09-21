@@ -30,7 +30,7 @@
                   v-model="user_one_id.firstname_th"
                   :placeholder="$t('specify first name(Thai)')"
                   @change="changeUserOneId(user_one_id)"
-                  @keypress="Validation($event, 'th-special')"
+                  @keydown="Validation($event, 'th-special')"
                   outlined
                 ></v-text-field>
               </v-col>
@@ -44,7 +44,7 @@
                   v-model="user_one_id.lastname_th"
                   :placeholder="$t('specify last name(Thai)')"
                   @change="changeUserOneId(user_one_id)"
-                  @keypress="Validation($event, 'th-special')"
+                  @keydown="Validation($event, 'th-special')"
                   outlined
                 ></v-text-field>
               </v-col>
@@ -60,7 +60,7 @@
                   v-model="user_one_id.firstname_en"
                   :placeholder="$t('specify first name(english)')"
                   @change="changeUserOneId(user_one_id)"
-                  @keypress="Validation($event, 'en-special')"
+                  @keydown="Validation($event, 'en-special')"
                   outlined
                 ></v-text-field>
               </v-col>
@@ -74,7 +74,7 @@
                   v-model="user_one_id.lastname_en"
                   :placeholder="$t('specify last name(english)')"
                   @change="changeUserOneId(user_one_id)"
-                  @keypress="Validation($event, 'en-special')"
+                  @keydown="Validation($event, 'en-special')"
                   outlined
                 ></v-text-field>
               </v-col>
@@ -90,7 +90,7 @@
                   required
                   v-model="user_one_id.phone_number"
                   @input="checkPhoneNumber"
-                  @keypress="Validation($event, 'number')"
+                  @keydown="Validation($event, 'number')"
                   :placeholder="$t('specify phone number')"
                   @change="changeUserOneId(user_one_id)"
                   outlined
@@ -108,7 +108,7 @@
                   required
                   v-model="user_one_id.username"
                   :placeholder="$t('specify username')"
-                  @keypress="Validation($event, 'en-number')"
+                  @keydown="Validation($event, 'en-number')"
                   @change="changeUserOneId(user_one_id)"
                   outlined
                 ></v-text-field>
@@ -116,12 +116,12 @@
             </v-row>
             <v-row dense>
               <v-col>
-                <label>{{ $t('password') }}</label>
+                <label>{{ $t("password") }}</label>
                 <v-text-field
                   dense
                   autocomplete="off-autofill"
                   ref="password_rig"
-                  @keypress="Validation($event, 'en')"
+                  @keydown="Validation($event, 'en')"
                   :type="show_password ? 'text' : 'password'"
                   :rules="passwordRules"
                   required
@@ -139,15 +139,12 @@
             </v-row>
             <v-row dense>
               <v-col>
-                <label>{{  $t('confirm password') }}</label>
+                <label>{{ $t("confirm password") }}</label>
                 <v-text-field
                   dense
                   ref="confirm_password"
                   :type="show_confirm_password ? 'text' : 'password'"
-                  :rules="[
-                    confirm_password,
-                    confirmPasswordRule,
-                  ]"
+                  :rules="[confirm_password, confirmPasswordRule]"
                   required
                   v-model="user_one_id.confirm_password"
                   :placeholder="$t('confirm password')"
@@ -159,7 +156,7 @@
                   @click:append="show_confirm_password = !show_confirm_password"
                   @change="changeUserOneId(user_one_id)"
                   outlined
-                  @keypress="Validation($event, 'en')"
+                  @keydown="Validation($event, 'en')"
                 >
                 </v-text-field>
               </v-col>
@@ -174,7 +171,11 @@
                 >
                   <template v-slot:label>
                     <label>
-                      {{ $t('by opening an account, you acknowledge and agree to') }}
+                      {{
+                        $t(
+                          "by opening an account, you acknowledge and agree to"
+                        )
+                      }}
                       <a
                         @click="policy_show = true"
                         class="cursor-pointer underline text-[#FF6B81]"
@@ -239,9 +240,9 @@
                 <template v-slot:label>
                   <label>
                     {{ $t("accept") }}
-                    <a class="cursor-pointer underline text-[#FF6B81]"
-                      >{{ $t("terms of service and privacy policy") }}</a
-                    >
+                    <a class="cursor-pointer underline text-[#FF6B81]">{{
+                      $t("terms of service and privacy policy")
+                    }}</a>
                   </label>
                 </template>
               </v-checkbox>
@@ -299,9 +300,10 @@ export default {
     valid: true,
     show_password: false,
     show_confirm_password: false,
-    rules : {
-      match: (password) => (value) => value === password || "passwords do not match",
-    }
+    rules: {
+      match: (password) => (value) =>
+        value === password || "passwords do not match",
+    },
   }),
   created() {},
   mounted() {},
@@ -341,13 +343,18 @@ export default {
       user_one_id: "RegisterModules/getUserOneId",
       course_data: "CourseModules/getCourseData",
     }),
-    confirm_password(){
-      return (val) => (val && val.length > 7) || this.$t("please enter a confirmation password that is at least 8 characters long")
+    confirm_password() {
+      return (val) =>
+        (val && val.length > 7) ||
+        this.$t(
+          "please enter a confirmation password that is at least 8 characters long"
+        );
     },
     confirmPasswordRule() {
-      return (v) => v === this.user_one_id.password || this.$t("passwords do not match");
+      return (v) =>
+        v === this.user_one_id.password || this.$t("passwords do not match");
     },
-    phone_number(){
+    phone_number() {
       return [
         (val) =>
           ((val || "").length > 0 && val[0] === "0") ||
@@ -355,80 +362,108 @@ export default {
         (val) =>
           ((val || "").length > 0 && val.length === 12) ||
           this.$t("please enter a 10-digit phone number"),
-      ]
+      ];
     },
     usernameRules() {
       return [
         (val) =>
           (val || "").length > 5 ||
           this.$t("please enter a username at least 6 characters long"),
-        (val) => /[A-Za-z0-9 ]/g.test(val) || this.$t("the username cannot contain special characters"),
         (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) || this.$t("username cannot contain emojis"),
-      ]
+          /[A-Za-z0-9 ]/g.test(val) ||
+          this.$t("the username cannot contain special characters"),
+        (val) =>
+          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+          this.$t("username cannot contain emojis"),
+      ];
     },
-    firstNameThRules(){
+    firstNameThRules() {
       return [
         (val) =>
           (val || "").length > 1 ||
-          this.$t("please enter your name (thai) with a length of at least 2 characters"),
+          this.$t(
+            "please enter your name (thai) with a length of at least 2 characters"
+          ),
         (val) =>
           (val || "").length < 20 ||
-          this.$t( "please enter your name (thai) length not exceeding 20 characters"),
+          this.$t(
+            "please enter your name (thai) length not exceeding 20 characters"
+          ),
         (val) => /[ก-๏\s]/g.test(val) || "กรุณากรอกชื่อภาษาไทย",
         (val) =>
           !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-         this.$t("please enter your thai name"),
-      ]
+          this.$t("please enter your thai name"),
+      ];
     },
-    firstNameEnRules(){
+    firstNameEnRules() {
       return [
         (val) =>
           (val || "").length > 1 ||
-          this.$t("please enter your name (english), at least 2 characters long"),
+          this.$t(
+            "please enter your name (english), at least 2 characters long"
+          ),
         (val) =>
           (val || "").length < 20 ||
-          this.$t("please enter your name (english) length not exceeding 20 characters"),
-        (val) => /[A-Za-z]/g.test(val) || this.$t("please enter your name in english"),
+          this.$t(
+            "please enter your name (english) length not exceeding 20 characters"
+          ),
+        (val) =>
+          /[A-Za-z]/g.test(val) || this.$t("please enter your name in english"),
         (val) =>
           !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
           this.$t("please enter your name in english"),
-      ]
+      ];
     },
-    lastNameThRules(){
+    lastNameThRules() {
       return [
         (val) =>
           (val || "").length > 1 ||
-          this.$t("please enter your last name (Thai), at least 2 characters long"),
+          this.$t(
+            "please enter your last name (Thai), at least 2 characters long"
+          ),
         (val) =>
           (val || "").length < 20 ||
-          this.$t("please enter your last name (Thai) not more than 20 characters"),
-        (val) => /[ก-๏\s]/g.test(val) || this.$t("please enter your last name in thai"),
+          this.$t(
+            "please enter your last name (Thai) not more than 20 characters"
+          ),
+        (val) =>
+          /[ก-๏\s]/g.test(val) ||
+          this.$t("please enter your last name in thai"),
         (val) =>
           !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
           this.$t("please enter your last name in thai"),
-      ]
+      ];
     },
-    lastNameEnRules(){
+    lastNameEnRules() {
       return [
         (val) =>
           (val || "").length > 1 ||
-          this.$t("please enter your last name (English), at least 2 characters long"),
+          this.$t(
+            "please enter your last name (English), at least 2 characters long"
+          ),
         (val) =>
           (val || "").length < 20 ||
-          this.$t("please enter your last name (English). length not exceeding 20 characters"),
-        (val) => /[A-Za-z ]/g.test(val) || this.$t("please enter your last name in English"),
+          this.$t(
+            "please enter your last name (English). length not exceeding 20 characters"
+          ),
+        (val) =>
+          /[A-Za-z ]/g.test(val) ||
+          this.$t("please enter your last name in English"),
         (val) =>
           !/[\uD800-\uDBFF][\uDC00-\uDFFF ]/g.test(val) ||
           this.$t("please enter your last name in English"),
-      ]
-    }, 
-    passwordRules(){
+      ];
+    },
+    passwordRules() {
       return [
-        (val) =>(val || "").length > 7 || this.$t("please enter a password that is at least 8 characters long"),
-        (val) => !/[ ]/g.test(val) || this.$t("password must not contain special characters"),
-      ]
-    }, 
+        (val) =>
+          (val || "").length > 7 ||
+          this.$t("please enter a password that is at least 8 characters long"),
+        (val) =>
+          !/[ ]/g.test(val) ||
+          this.$t("password must not contain special characters"),
+      ];
+    },
   },
   watch: {},
 };

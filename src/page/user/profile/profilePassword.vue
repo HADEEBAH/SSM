@@ -11,7 +11,7 @@
         </v-col>
         <v-col cols="12" align="center">
           <v-text-field
-            @keypress="validate($event, 'en')"
+            @keydown="validate($event, 'en')"
             dense
             ref="password"
             :type="show_password ? 'text' : 'password'"
@@ -33,7 +33,6 @@
             class="pa-2"
             width="100%"
             depressed
-          
             :disabled="!isInputValid"
             :color="isInputValid ? '#ff6b81' : ''"
             @click="checkPassword()"
@@ -59,7 +58,6 @@ export default {
       ],
     },
 
-    
     show_password: false,
   }),
   mounted() {
@@ -67,25 +65,22 @@ export default {
   },
   methods: {
     ...mapActions({
-            ChangePassword: "ProfileModules/ChangePassword",
-        }),
+      ChangePassword: "ProfileModules/ChangePassword",
+    }),
     validate(e, type) {
       inputValidation(e, type);
     },
 
     checkPassword() {
-      this.$router.push({name: "ProfileResetPassword"})
-    }
-
+      this.$router.push({ name: "ProfileResetPassword" });
+    },
   },
   computed: {
     ...mapGetters({
-            password: "ProfileModules/getPassword"
-        }),
-        isInputValid() {
-      return (
-        this.password.old_password.trim().length > 7 
-      );
+      password: "ProfileModules/getPassword",
+    }),
+    isInputValid() {
+      return this.password.old_password.trim().length > 7;
     },
   },
 };

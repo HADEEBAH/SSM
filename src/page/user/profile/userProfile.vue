@@ -723,7 +723,7 @@
               <labelCustom :text="this.$t('username')"></labelCustom>
               <v-text-field
                 :rules="rules.usernameRules"
-                @keypress="validate($event, 'en')"
+                @keydown="validate($event, 'en')"
                 ref="username"
                 dense
                 outlined
