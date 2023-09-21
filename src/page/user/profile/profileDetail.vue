@@ -44,7 +44,7 @@
         <v-col cols="12" sm="6">
           <label-custom :text="$t('first name(thai)')"></label-custom>
           <v-text-field
-            @keypress="validate($event, 'th-special')"
+            @keydown="validate($event, 'th-special')"
             placeholder="-"
             v-model="profile_detail.firstNameTh"
             outlined
@@ -59,7 +59,7 @@
         <v-col cols="12" sm="6">
           <label-custom :text="$t('last name(thai)')"></label-custom>
           <v-text-field
-            @keypress="validate($event, 'th-special')"
+            @keydown="validate($event, 'th-special')"
             placeholder="-"
             v-model="profile_detail.lastNameTh"
             outlined
@@ -74,7 +74,7 @@
         <v-col cols="12" sm="6">
           <label-custom :text="$t('nationality')"></label-custom>
           <v-text-field
-            @keypress="validate($event, 'th-special')"
+            @keydown="validate($event, 'th-special')"
             placeholder="-"
             v-model="profile_detail.nation"
             outlined
@@ -87,7 +87,7 @@
         <v-col cols="12" sm="6">
           <label-custom :text="$t('phone number')"></label-custom>
           <v-text-field
-            @keypress="validate($event, 'th')"
+            @keydown="validate($event, 'number')"
             @input="checkPhoneNumber"
             maxlength="12"
             required

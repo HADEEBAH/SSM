@@ -73,7 +73,7 @@
             :placeholder="$t('fill in wls name')"
             outlined
             v-model="category.categoryNameTh"
-            @keypress="validate($event, 'th')"
+            @keydown="validate($event, 'th')"
           ></v-text-field>
         </v-col>
 
@@ -89,7 +89,7 @@
             :placeholder="$t('fill in wls name')"
             outlined
             v-model="category.categoryNameEng"
-            @keypress="validate($event, 'en')"
+            @keydown="validate($event, 'en')"
           ></v-text-field>
         </v-col>
 

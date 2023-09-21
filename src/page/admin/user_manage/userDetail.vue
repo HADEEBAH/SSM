@@ -85,7 +85,7 @@
                             ></label-custom>
                             <v-text-field
                               :disabled="!isEnabled"
-                              @keypress="validate($event, 'th')"
+                              @keydown="validate($event, 'th')"
                               placeholder="-"
                               v-model="show_by_id.firstNameTh"
                               outlined
@@ -100,7 +100,7 @@
                             ></label-custom>
                             <v-text-field
                               :disabled="!isEnabled"
-                              @keypress="validate($event, 'th')"
+                              @keydown="validate($event, 'th')"
                               placeholder="-"
                               v-model="show_by_id.lastNameTh"
                               :rules="rules.name"
@@ -118,7 +118,7 @@
                             ></label-custom>
                             <v-text-field
                               :disabled="!isEnabled"
-                              @keypress="validate($event, 'en')"
+                              @keydown="validate($event, 'en')"
                               placeholder="-"
                               v-model="show_by_id.firstNameEng"
                               :rules="rules.name"
@@ -132,7 +132,7 @@
                             ></label-custom>
                             <v-text-field
                               :disabled="!isEnabled"
-                              @keypress="validate($event, 'en')"
+                              @keydown="validate($event, 'en')"
                               placeholder="-"
                               v-model="show_by_id.lastNameEng"
                               :rules="rules.name"
@@ -150,7 +150,7 @@
                             ></label-custom>
                             <v-text-field
                               disabled
-                              @keypress="validate($event, 'en', 'number')"
+                              @keydown="validate($event, 'en', 'number')"
                               placeholder="-"
                               v-model="show_by_id.email"
                               :rules="rules.email"
@@ -165,7 +165,7 @@
                             ></label-custom>
                             <v-text-field
                               disabled
-                              @keypress="validate($event, 'en', 'number')"
+                              @keydown="validate($event, 'en', 'number')"
                               placeholder="-"
                               v-model="show_by_id.mobileNo"
                               :rules="rules.email"
@@ -253,7 +253,7 @@
                             ></label-custom>
                             <v-text-field
                               :disabled="!isEnabled"
-                              @keypress="validate($event, 'th')"
+                              @keydown="validate($event, 'th')"
                               placeholder="-"
                               v-model="show_by_id.firstNameTh"
                               outlined
@@ -268,7 +268,7 @@
                             ></label-custom>
                             <v-text-field
                               :disabled="!isEnabled"
-                              @keypress="validate($event, 'th')"
+                              @keydown="validate($event, 'th')"
                               placeholder="-"
                               v-model="show_by_id.lastNameTh"
                               :rules="rules.name"
@@ -286,7 +286,7 @@
                             ></label-custom>
                             <v-text-field
                               :disabled="!isEnabled"
-                              @keypress="validate($event, 'en')"
+                              @keydown="validate($event, 'en')"
                               placeholder="-"
                               v-model="show_by_id.firstNameEng"
                               :rules="rules.name"
@@ -300,7 +300,7 @@
                             ></label-custom>
                             <v-text-field
                               :disabled="!isEnabled"
-                              @keypress="validate($event, 'en')"
+                              @keydown="validate($event, 'en')"
                               placeholder="-"
                               v-model="show_by_id.lastNameEng"
                               :rules="rules.name"
@@ -316,7 +316,7 @@
                             <label-custom :text="$t('email')"></label-custom>
                             <v-text-field
                               disabled
-                              @keypress="validate($event, 'en', 'number')"
+                              @keydown="validate($event, 'en', 'number')"
                               placeholder="-"
                               v-model="show_by_id.email"
                               :rules="rules.email"
@@ -331,7 +331,7 @@
                             ></label-custom>
                             <v-text-field
                               disabled
-                              @keypress="validate($event, 'en', 'number')"
+                              @keydown="validate($event, 'en', 'number')"
                               placeholder="-"
                               v-model="show_by_id.mobileNo"
                               :rules="rules.email"
@@ -424,7 +424,7 @@
                                     ></label-custom>
                                     <v-text-field
                                       :disabled="!isEnabled"
-                                      @keypress="validate($event, 'th')"
+                                      @keydown="validate($event, 'th')"
                                       placeholder="-"
                                       v-model="show_by_id.firstNameTh"
                                       outlined
@@ -439,7 +439,7 @@
                                     ></label-custom>
                                     <v-text-field
                                       :disabled="!isEnabled"
-                                      @keypress="validate($event, 'th')"
+                                      @keydown="validate($event, 'th')"
                                       placeholder="-"
                                       v-model="show_by_id.lastNameTh"
                                       :rules="rules.name"
@@ -457,7 +457,7 @@
                                     ></label-custom>
                                     <v-text-field
                                       :disabled="!isEnabled"
-                                      @keypress="validate($event, 'en')"
+                                      @keydown="validate($event, 'en')"
                                       placeholder="-"
                                       v-model="show_by_id.firstNameEng"
                                       :rules="rules.name"
@@ -471,7 +471,7 @@
                                     ></label-custom>
                                     <v-text-field
                                       :disabled="!isEnabled"
-                                      @keypress="validate($event, 'en')"
+                                      @keydown="validate($event, 'en')"
                                       placeholder="-"
                                       v-model="show_by_id.lastNameEng"
                                       :rules="rules.name"
@@ -490,7 +490,7 @@
                                     ></label-custom>
                                     <v-text-field
                                       disabled
-                                      @keypress="
+                                      @keydown="
                                         validate($event, 'en', 'number')
                                       "
                                       placeholder="-"
@@ -507,7 +507,7 @@
                                     ></label-custom>
                                     <v-text-field
                                       disabled
-                                      @keypress="
+                                      @keydown="
                                         validate($event, 'en', 'number')
                                       "
                                       placeholder="-"

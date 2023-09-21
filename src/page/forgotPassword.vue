@@ -47,7 +47,7 @@
           "
           @input="type === 'email' ? '' : checkPhoneNumber()"
           :maxlength="type === 'email' ? 100 : 12"
-          @keypress="
+          @keydown="
             type === 'email'
               ? Validation($event, 'email')
               : Validation($event, 'number')
@@ -69,7 +69,7 @@
           "
           :label="$t('specify username')"
           solo
-          @keypress="Validation($event, 'en-number')"
+          @keydown="Validation($event, 'en-number')"
           @paste="preventPaste"
           @copy="preventCopy"
           :rules="rules.usernameRules"

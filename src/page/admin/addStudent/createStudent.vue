@@ -508,7 +508,7 @@
                   v-model="course.price"
                   @change="CalTotalPrice()"
                   outlined
-                  @keypress="Validation($event, 'number')"
+                  @keydown="Validation($event, 'number')"
                   type="number"
                   color="pink"
                   :suffix="$t(`baht`)"
@@ -1261,8 +1261,9 @@ export default {
                       path: null,
                     };
                     this.sendNotification(payload);
-                    router.replace({ name: "Finance" });
+                    // router.replace({ name: "Finance" });
                   }
+                  router.replace({ name: "Finance" });
                 } else {
                   let account = [];
                   let course_name_noti = [];
@@ -1303,8 +1304,9 @@ export default {
                       path: null,
                     };
                     this.sendNotification(payload);
-                    router.replace({ name: "Finance" });
+                    // router.replace({ name: "Finance" });
                   }
+                  router.replace({ name: "Finance" });
                 }
               }
             });
