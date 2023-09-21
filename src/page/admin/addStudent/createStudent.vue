@@ -1261,8 +1261,9 @@ export default {
                       path: null,
                     };
                     this.sendNotification(payload);
-                    router.replace({ name: "Finance" });
+                    // router.replace({ name: "Finance" });
                   }
+                  router.replace({ name: "Finance" });
                 } else {
                   let account = [];
                   let course_name_noti = [];
@@ -1303,8 +1304,9 @@ export default {
                       path: null,
                     };
                     this.sendNotification(payload);
-                    router.replace({ name: "Finance" });
+                    // router.replace({ name: "Finance" });
                   }
+                  router.replace({ name: "Finance" });
                 }
               }
             });
