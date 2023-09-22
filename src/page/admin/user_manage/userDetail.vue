@@ -1836,7 +1836,8 @@ export default {
           } catch (error) {
             Swal.fire({
               icon: "error",
-              title: "Duplicate relation",
+              title: this.$t("something went wrong"),
+              text: this.$t("duplicate relationship"),
               timer: 3000,
               timerProgressBar: true,
               showCancelButton: false,

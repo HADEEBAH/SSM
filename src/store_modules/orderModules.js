@@ -824,6 +824,9 @@ const orderModules = {
           Swal.fire({
             icon: "error",
             title: VueI18n.t(
+              "something went wrong"
+            ),
+            text: VueI18n.t(
               "duplicate user in this course Unable to register"
             ),
             timer: 3000,
@@ -837,6 +840,9 @@ const orderModules = {
           Swal.fire({
             icon: "error",
             title: VueI18n.t(
+              "something went wrong"
+            ),
+            text: VueI18n.t(
               "the price is not correct payment cannot be processed"
             ),
             timer: 3000,
@@ -848,6 +854,9 @@ const orderModules = {
           Swal.fire({
             icon: "error",
             title: VueI18n.t(
+              "something went wrong"
+            ),
+            text: VueI18n.t(
               "cannot register , The seats are full"
             ),
             timer: 3000,
@@ -940,6 +949,11 @@ const orderModules = {
         Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
         });
       }
     },
@@ -963,10 +977,13 @@ const orderModules = {
       } catch (error) {
         Swal.fire({
           icon: "error",
-          text: `${VueI18n.t("something went wrong")} ${error.message}`,
-          showDenyButton: false,
+          title: VueI18n.t("something went wrong"),
+          text: VueI18n.t("error.message"),
+          timer: 3000,
+          timerProgressBar: true,
           showCancelButton: false,
-          confirmButtonText: VueI18n.t("agree"),
+          showConfirmButton: false,
+
         });
       }
     },
@@ -999,6 +1016,7 @@ const orderModules = {
             } else {
               item.net_price = item.price * item.students.length;
             }
+
           }
           context.commit("SetCartList", data.data);
           setTimeout(() => {
@@ -1095,8 +1113,11 @@ const orderModules = {
         Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),
+          timer: 3000,
+          timerProgressBar: true,
           showCancelButton: false,
-          confirmButtonText: VueI18n.t("agree"),
+          showConfirmButton: false,
+
         });
       }
     },
@@ -1167,6 +1188,11 @@ const orderModules = {
         Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
         });
       }
     },
@@ -1181,10 +1207,13 @@ const orderModules = {
       } catch (error) {
         await Swal.fire({
           icon: "error",
-          text: `${VueI18n.t("something went wrong")} ${error.message}`,
-          showDenyButton: false,
+          title: VueI18n.t("something went wrong"),
+          text: VueI18n.t(error.message),
+          timer: 3000,
+          timerProgressBar: true,
           showCancelButton: false,
-          confirmButtonText: VueI18n.t("agree"),
+          showConfirmButton: false,
+
         });
       }
     },

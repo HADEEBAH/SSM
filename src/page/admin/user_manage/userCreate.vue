@@ -717,11 +717,7 @@ export default {
       } else {
         Swal.fire({
           icon: "warning",
-<<<<<<< HEAD
           title: this.$t("warning"),
-=======
-          title: this.$t("something went wrong"),
->>>>>>> develop
           text: this.$t("username not found"),
           timer: 3000,
           timerProgressBar: true,
@@ -778,11 +774,7 @@ export default {
       } else {
         Swal.fire({
           icon: "warning",
-<<<<<<< HEAD
           title: this.$t("warning"),
-=======
-          title: this.$t("something went wrong"),
->>>>>>> develop
           text: this.$t("username not found"),
           timer: 3000,
           timerProgressBar: true,
@@ -873,8 +865,8 @@ export default {
         title: this.$t("do you want to increase your relationship?"),
         showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
@@ -1009,8 +1001,8 @@ export default {
         title: this.$t("do you want to save it?"),
         showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
@@ -1074,15 +1066,11 @@ export default {
                 Swal.fire({
                   icon: "error",
                   title: this.$t("something went wrong"),
-<<<<<<< HEAD
-                  text: "USER นี้มีความสัมพันธ์แล้ว!",
-=======
                   text: this.$t("this USER is already in a relationship"),
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,
                   showConfirmButton: false,
->>>>>>> develop
                 }).then(async (result) => {
                   if (result.isConfirmed) {
                     this.$router.push({

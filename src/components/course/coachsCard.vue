@@ -723,8 +723,8 @@ export default {
         title: this.$t("do you want to delete this teaching time?"),
         showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.DeleteTime({ time_id: time_id }).then(() => {
@@ -742,8 +742,8 @@ export default {
         title: this.$t("do you want to delete this teaching day"),
         showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.DeleteDayOfWeek({ day_of_week_id: day_of_week_id }).then(() => {
