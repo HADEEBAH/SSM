@@ -1064,6 +1064,10 @@ export default {
             Swal.fire({
               icon: "error",
               title: this.$t("something went wrong"),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
             });
           }
         }
@@ -1139,6 +1143,10 @@ export default {
                   Swal.fire({
                     icon: "error",
                     title: this.$t("save failed"),
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showCancelButton: false,
+                    showConfirmButton: false,
                   });
                 }
               }
@@ -1223,7 +1231,6 @@ export default {
 
       Swal.fire({
         icon: "question",
-
         title: this.$t("do you want to edit your holiday?"),
         showDenyButton: false,
         showCancelButton: true,
@@ -1287,12 +1294,18 @@ export default {
           getAllCourseDate.push(CourseDate);
           if (courseTodayDate == CourseDate) {
             success = true;
-            if(allCourse.length == 0){
+            if (allCourse.length == 0) {
               allCourse.push(this.get_all_course[index]);
-            }else if(!allCourse.some(v => v?.coachId == this.get_all_course[index]?.coachId && 
-            v?.courseId == this.get_all_course[index]?.courseId && 
-            v?.coursePackageOptionId == this.get_all_course[index]?.coursePackageOptionId && 
-            v?.timeId == this.get_all_course[index]?.timeId)){
+            } else if (
+              !allCourse.some(
+                (v) =>
+                  v?.coachId == this.get_all_course[index]?.coachId &&
+                  v?.courseId == this.get_all_course[index]?.courseId &&
+                  v?.coursePackageOptionId ==
+                    this.get_all_course[index]?.coursePackageOptionId &&
+                  v?.timeId == this.get_all_course[index]?.timeId
+              )
+            ) {
               allCourse.push(this.get_all_course[index]);
             }
           }
