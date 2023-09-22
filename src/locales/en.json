@@ -233,8 +233,10 @@
     "do you want to build an wls?": "Do you want to create WLS?",
     "do you want to edit wls?": "Do you want to make change?",
     "do you want to change your status?": "Do you want to change your status?",
+    "do you want to save it?": "Do you want to save it?",
     "duplicate relationship": "Duplicate relationship",
     "duplicate user in this course Unable to register": "Duplicate user in this course Unable to register",
+    "duplicate roles or the user does not yet have a role" : "Duplicate roles or the user does not yet have a role",
     "duration/coach" : "Duration/Coach",
 
 
@@ -318,6 +320,7 @@
     "income" : "Income",
     "income proportion": "Income proportion",
     "intervals and coaches have been corrected":"( Intervals and coaches have been corrected )",
+    "information added successfully": "( Information added successfully )",
     "is complete" : "is complete",
 
     "january":"January",

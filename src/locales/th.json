@@ -218,9 +218,11 @@
     "do you want to build an wls?": "คุณต้องการสร้างอาณาจักรใช่หรือไม่?",
     "do you want to edit wls?": "คุณต้องการแก้ไขอาณาจักรหรือไม่?",
     "do you want to change your status?": "คุณต้องการเปลี่ยนสถานะใช่หรือไม่?",
+    "do you want to save it?": "คุณต้องการบันทึกหรือไม่?",
     "duration/coach" : "ช่วงเวลาและโค้ช",
     "duplicate relationship": "ความสัมพันธ์ซ้ำกัน",
     "duplicate user in this course Unable to register": "ผู้ใช้ซ้ำกันในหลักสูตรนี้ ไม่สามารถลงทะเบียนได้",
+    "duplicate roles or the user does not yet have a role" : "บทบาทซ้ำกัน หรือ ผู้ใช้ยังไม่มีบทบาท",
     "december":"ธันวาคม",
 
 
@@ -300,6 +302,7 @@
     "income" : "รายได้",
     "income proportion": "สัดส่วนรายได้",
     "intervals and coaches have been corrected":"( แก้ไขช่วงเวลาและโค้ชเรียบร้อยแล้ว )",
+    "information added successfully": "( เพิ่มข้อมูลเรียบร้อยแล้ว )",
     "is complete" : "เรียบร้อยแล้ว",
 
     "january":"มกราคม",
