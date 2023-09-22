@@ -137,9 +137,10 @@ const financeModules = {
             Swal.fire({
               icon: "error",
               title: VueI18n.t("data not found"),
-              showDenyButton: false,
+              timer: 3000,
+              timerProgressBar: true,
               showCancelButton: false,
-              confirmButtonText: VueI18n.t("agree"),
+              showConfirmButton: false,
             })
           }
         }

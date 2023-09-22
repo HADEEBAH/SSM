@@ -89,7 +89,7 @@
               :disabled="disable"
               :outlined="!disable"
               :filled="disable"
-              @keypress="inputName($event, 'th')"
+              @keydown="inputName($event, 'th')"
               :rules="course_name_th"
               @change="ChangeCourseData(course_data)"
               @focus="$event.target.select()"
@@ -108,7 +108,7 @@
               :outlined="!disable"
               :filled="disable"
               @focus="$event.target.select()"
-              @keypress="inputName($event, 'en')"
+              @keydown="inputName($event, 'en')"
               :rules="course_name_en"
               v-model="course_data.course_name_en"
               @change="ChangeCourseData(course_data)"
@@ -1138,10 +1138,10 @@ export default {
           Swal.fire({
             icon: "error",
             text: this.$t("upload only image files (png, jpeg) only"),
-            showDenyButton: false,
+            timer: 3000,
+            timerProgressBar: true,
             showCancelButton: false,
-            cancelButtonText: this.$t("cancel"),
-            confirmButtonText: this.$t("agree"),
+            showConfirmButton: false,
           });
         }
       }

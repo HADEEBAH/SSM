@@ -44,7 +44,7 @@
         <v-col cols="12" sm="6">
           <label-custom :text="$t('first name(thai)')"></label-custom>
           <v-text-field
-            @keypress="validate($event, 'th-special')"
+            @keydown="validate($event, 'th-special')"
             placeholder="-"
             v-model="profile_detail.firstNameTh"
             outlined
@@ -59,7 +59,7 @@
         <v-col cols="12" sm="6">
           <label-custom :text="$t('last name(thai)')"></label-custom>
           <v-text-field
-            @keypress="validate($event, 'th-special')"
+            @keydown="validate($event, 'th-special')"
             placeholder="-"
             v-model="profile_detail.lastNameTh"
             outlined
@@ -74,7 +74,7 @@
         <v-col cols="12" sm="6">
           <label-custom :text="$t('nationality')"></label-custom>
           <v-text-field
-            @keypress="validate($event, 'th-special')"
+            @keydown="validate($event, 'th-special')"
             placeholder="-"
             v-model="profile_detail.nation"
             outlined
@@ -87,7 +87,7 @@
         <v-col cols="12" sm="6">
           <label-custom :text="$t('phone number')"></label-custom>
           <v-text-field
-            @keypress="validate($event, 'th')"
+            @keydown="validate($event, 'number')"
             @input="checkPhoneNumber"
             maxlength="12"
             required
@@ -343,6 +343,10 @@ export default {
               Swal.fire({
                 icon: "error",
                 title: error.message,
+                timer: 3000,
+                timerProgressBar: true,
+                showCancelButton: false,
+                showConfirmButton: false,
               });
             }
           }
@@ -369,6 +373,10 @@ export default {
           icon: "warning",
           title: this.$t("the file size is too large"),
           text: this.$t("set the size not to exceed 5MB"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
         });
         document.getElementById("fileInput").value = "";
       } else if (allowedExtension.indexOf(files.type) === -1) {
@@ -376,6 +384,10 @@ export default {
           icon: "warning",
           title: this.$t("invalid file format"),
           text: this.$t("please upload an image file"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
         });
         document.getElementById("fileInput").value = "";
       } else {

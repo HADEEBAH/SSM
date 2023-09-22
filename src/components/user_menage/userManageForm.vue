@@ -25,7 +25,7 @@
                           :placeholder="
                             this.$t('please enter your username (English)')
                           "
-                          @keypress="validate($event, 'en-number')"
+                          @keydown="validate($event, 'en-number')"
                           v-model="show_by_id.userName"
                           hide-details
                           outlined
@@ -141,7 +141,7 @@
                               ></label-custom>
 
                               <v-text-field
-                                @keypress="validate($event, 'th-special')"
+                                @keydown="validate($event, 'th-special')"
                                 placeholder="-"
                                 v-model="show_by_id.firstNameTh"
                                 :rules="rules.firstNameThRules"
@@ -155,7 +155,7 @@
                                 :text="this.$t('last name(thai)')"
                               ></label-custom>
                               <v-text-field
-                                @keypress="validate($event, 'th-special')"
+                                @keydown="validate($event, 'th-special')"
                                 placeholder="-"
                                 v-model="show_by_id.lastNameTh"
                                 :rules="rules.lastNameThRules"
@@ -173,7 +173,7 @@
                               ></label-custom>
                               <v-text-field
                                 v-bind:disabled="isDisabled"
-                                @keypress="validate($event, 'en-special')"
+                                @keydown="validate($event, 'en-special')"
                                 placeholder="-"
                                 v-model="show_by_id.firstNameEng"
                                 :rules="rules.firstNameEnRules"
@@ -188,7 +188,7 @@
                               ></label-custom>
                               <v-text-field
                                 v-bind:disabled="isDisabled"
-                                @keypress="validate($event, 'en-special')"
+                                @keydown="validate($event, 'en-special')"
                                 placeholder="-"
                                 v-model="show_by_id.lastNameEng"
                                 :rules="rules.lastNameEnRules"
@@ -218,7 +218,7 @@
                               ></label-custom>
                               <v-text-field
                                 disabled
-                                @keypress="validate($event, 'number')"
+                                @keydown="validate($event, 'number')"
                                 v-model="show_by_id.mobileNo"
                                 :rules="rules.name"
                                 outlined
@@ -597,7 +597,7 @@
                 :rules="rules.usernameRules"
                 dense
                 outlined
-                @keypress="validate($event, 'en-number')"
+                @keydown="validate($event, 'en-number')"
                 v-model="relation.username"
                 @change="
                   checkUsername(
@@ -1033,6 +1033,10 @@ export default {
           icon: "warning",
           title: this.$t("the file size is too large"),
           text: this.$t("set the size not to exceed 5MB"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
         });
         document.getElementById("fileInput").value = "";
       } else if (allowedExtension.indexOf(files.type) === -1) {
@@ -1040,6 +1044,10 @@ export default {
           icon: "warning",
           title: this.$t("invalid file format"),
           text: this.$t("please upload an image file"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
         });
         document.getElementById("fileInput").value = "";
       } else {
@@ -1154,7 +1162,12 @@ export default {
       } else {
         Swal.fire({
           icon: "warning",
-          title: this.$t("username not found"),
+          title: this.$t("warning"),
+          text: this.$t("username not found"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
         });
       }
     },
@@ -1276,6 +1289,10 @@ export default {
             Swal.fire({
               icon: "error",
               title: this.error_message,
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
             });
           }
         } else {
@@ -1467,6 +1484,10 @@ export default {
                     ? ""
                     : `(${this.error_message})`
                 }`,
+                timer: 3000,
+                timerProgressBar: true,
+                showCancelButton: false,
+                showConfirmButton: false,
               });
             }
           } else {

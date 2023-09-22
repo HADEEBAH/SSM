@@ -47,7 +47,7 @@
           "
           @input="type === 'email' ? '' : checkPhoneNumber()"
           :maxlength="type === 'email' ? 100 : 12"
-          @keypress="
+          @keydown="
             type === 'email'
               ? Validation($event, 'email')
               : Validation($event, 'number')
@@ -69,7 +69,7 @@
           "
           :label="$t('specify username')"
           solo
-          @keypress="Validation($event, 'en-number')"
+          @keydown="Validation($event, 'en-number')"
           @paste="preventPaste"
           @copy="preventCopy"
           :rules="rules.usernameRules"
@@ -139,6 +139,8 @@ export default {
               }`,
               timer: 3000,
               timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
             });
             if (VueCookie.get("token")) {
               router.push({ name: "UserKingdom" });
@@ -195,6 +197,10 @@ export default {
                 : "warning",
             title: this.$t("warning"),
             text: `${error_message}`,
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
           });
         }
       }

@@ -287,10 +287,10 @@ export default {
                 icon: "error",
                 title: this.$t("unable to close course"),
                 text: this.$t("because there are students in the course"),
-                showDenyButton: false,
+                timer: 3000,
+                timerProgressBar: true,
                 showCancelButton: false,
-                confirmButtonText: this.$t("agree"),
-                cancelButtonText: this.$t("cancel"),
+                showConfirmButton: false,
               });
             } else {
               this.UpdateStatusCourse({

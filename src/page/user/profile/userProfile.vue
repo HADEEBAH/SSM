@@ -723,7 +723,7 @@
               <labelCustom :text="this.$t('username')"></labelCustom>
               <v-text-field
                 :rules="rules.usernameRules"
-                @keypress="validate($event, 'en')"
+                @keydown="validate($event, 'en')"
                 ref="username"
                 dense
                 outlined
@@ -1060,6 +1060,10 @@ export default {
               Swal.fire({
                 icon: "error",
                 title: this.$t("failed to delete"),
+                timer: 3000,
+                timerProgressBar: true,
+                showCancelButton: false,
+                showConfirmButton: false,
               });
             });
           this.dialog_show = false;
@@ -1267,6 +1271,10 @@ export default {
                   ? ""
                   : `(${this.error_message})`
               }`,
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
             }).then((result) => {
               if (result.isConfirmed) {
                 this.add_relation = false;

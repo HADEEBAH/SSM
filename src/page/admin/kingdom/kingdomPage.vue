@@ -108,7 +108,7 @@
             :placeholder="$t(`fill in wls name`)"
             outlined
             v-model="kingdom.kingdom_name_th"
-            @keypress="validate($event, 'th')"
+            @keydown="validate($event, 'th')"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -119,7 +119,7 @@
             :placeholder="$t(`fill in wls name`)"
             outlined
             v-model="kingdom.kingdom_name_eng"
-            @keypress="validate($event, 'en')"
+            @keydown="validate($event, 'en')"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -347,6 +347,10 @@ export default {
             Swal.fire({
               icon: "error",
               title: error.message,
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
             });
           }
         } else {
@@ -368,11 +372,12 @@ export default {
         } else {
           Swal.fire({
             icon: "error",
+            title: this.$t("something went wrong"),
             text: this.$t("upload only image files (png, jpeg) only"),
-            showDenyButton: false,
+            timer: 3000,
+            timerProgressBar: true,
             showCancelButton: false,
-            confirmButtonText: this.$t("agree"),
-            cancelButtonText: this.$t("cancel"),
+            showConfirmButton: false,
           });
         }
       }
