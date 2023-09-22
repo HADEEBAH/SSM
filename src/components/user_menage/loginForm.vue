@@ -37,9 +37,10 @@
             <v-col cols="12" class="pa-0 text-bold text-black">
               <label>{{ $t("password") }}</label>
               <v-text-field
-                @keydown="validate($event, 'en')"
                 dense
+                autocomplete="off-autofill"
                 ref="password"
+                @keydown="validate($event, 'en')"
                 :type="show_password ? 'text' : 'password'"
                 :rules="passwordRules"
                 required
