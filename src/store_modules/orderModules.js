@@ -764,7 +764,6 @@ const orderModules = {
           }
         }
       } catch (error) {
-        console.log('error :>> ', error);
         context.commit("SetOrderIsLoading", false);
         context.commit("SetOrderIsStatus", false);
         if (error.response.data.message == "over study end date") {
