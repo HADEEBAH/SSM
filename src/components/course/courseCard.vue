@@ -1138,10 +1138,10 @@ export default {
           Swal.fire({
             icon: "error",
             text: this.$t("upload only image files (png, jpeg) only"),
-            showDenyButton: false,
+            timer: 3000,
+            timerProgressBar: true,
             showCancelButton: false,
-            cancelButtonText: this.$t("cancel"),
-            confirmButtonText: this.$t("agree"),
+            showConfirmButton: false,
           });
         }
       }

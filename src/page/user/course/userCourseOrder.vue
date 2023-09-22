@@ -321,13 +321,7 @@
                     :rules="usernameRules"
                     @keydown="Validation($event, 'en-number')"
                     v-model="parent.username"
-                    @change="
-                      parent.username > 3 ? checkUsername(parent.username) : ''
-                    "
                     @keyup.enter="
-                      parent.username > 3 ? checkUsername(parent.username) : ''
-                    "
-                    @blur="
                       parent.username > 3 ? checkUsername(parent.username) : ''
                     "
                     placeholder="Username"
@@ -357,6 +351,7 @@
                     :loading="is_loading"
                     color="#ff6b81"
                     @click="checkUsername(parent.username)"
+                    @keyup.enter="checkUsername(parent.username)"
                     depressed
                   >
                     {{ $t("agree") }}
@@ -488,6 +483,9 @@
                   :disabled="student.username.length < 3"
                   color="#ff6b81"
                   @click="
+                    checkUsername(student.username, 'student', index_student)
+                  "
+                  @keyup.enter="
                     checkUsername(student.username, 'student', index_student)
                   "
                   depressed
@@ -704,11 +702,6 @@
                     ? checkUsername(parent.username)
                     : ''
                 "
-                @blur="
-                  parent.username.length > 3
-                    ? checkUsername(parent.username)
-                    : ''
-                "
                 :placeholder="$t('username')"
               >
                 <template v-slot:append>
@@ -735,6 +728,7 @@
                 :dark="!parent.username.length < 3"
                 color="#ff6b81"
                 @click="checkUsername(parent.username)"
+                @keyup.enter="checkUsername(parent.username)"
                 depressed
               >
                 {{ $t("agree") }}
@@ -1368,7 +1362,8 @@ export default {
         }
       } else if (this.course_order.course_type_id === "CT_2") {
         // console.log()
-        max = this.course_data.student_recived <= this.course_order.students.length;
+        max =
+          this.course_data.student_recived <= this.course_order.students.length;
       }
       return max;
     },
@@ -1616,10 +1611,15 @@ export default {
                 ).length > 1
               ) {
                 Swal.fire({
-                  icon: "error",
-                  title: this.$t(
+                  icon: "warning",
+                  title: this.$t("warning"),
+                  text: this.$t(
                     "this username has already been entered. please check again"
                   ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
                 });
               }
             }

@@ -717,7 +717,11 @@ export default {
       } else {
         Swal.fire({
           icon: "warning",
+<<<<<<< HEAD
           title: this.$t("warning"),
+=======
+          title: this.$t("something went wrong"),
+>>>>>>> develop
           text: this.$t("username not found"),
           timer: 3000,
           timerProgressBar: true,
@@ -774,7 +778,11 @@ export default {
       } else {
         Swal.fire({
           icon: "warning",
+<<<<<<< HEAD
           title: this.$t("warning"),
+=======
+          title: this.$t("something went wrong"),
+>>>>>>> develop
           text: this.$t("username not found"),
           timer: 3000,
           timerProgressBar: true,
@@ -862,7 +870,7 @@ export default {
     addRealions() {
       Swal.fire({
         icon: "question",
-        title: "คุณต้องการเพิ่มความสัมพันธ์หรือไม่",
+        title: this.$t("do you want to increase your relationship?"),
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: "ตกลง",
@@ -1066,7 +1074,15 @@ export default {
                 Swal.fire({
                   icon: "error",
                   title: this.$t("something went wrong"),
+<<<<<<< HEAD
                   text: "USER นี้มีความสัมพันธ์แล้ว!",
+=======
+                  text: this.$t("this USER is already in a relationship"),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+>>>>>>> develop
                 }).then(async (result) => {
                   if (result.isConfirmed) {
                     this.$router.push({
@@ -1081,7 +1097,12 @@ export default {
           } catch (error) {
             Swal.fire({
               icon: "error",
-              title: "ข้อมูลผิดพลาด",
+              title: this.$t("something went wrong"),
+              text: this.$t("error information"),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
             });
           }
         } else {

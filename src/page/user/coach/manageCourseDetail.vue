@@ -1750,7 +1750,7 @@ export default {
           cancelButtonText: this.$t("cancel"),
         }).then(async (result) => {
           if (result.isConfirmed) {
-            this.is_loading = true
+            this.is_loading = true;
             await this.UploadFileSummary({
               checkInCoach: this.coach_check_in,
               files: this.coach_check_in.summary_files,
@@ -1767,14 +1767,13 @@ export default {
                 path: null,
               };
               this.sendNotification(payload);
-
             }
           }
         });
       }
     },
     async saveUpdateAssessmentPotential(item) {
-      let potential_student = []
+      let potential_student = [];
       await item.map((val) => {
         if (val.totalDay - val.countCheckIn === 0) {
           potential_student.push({ studentId: val.studentId });
@@ -1866,17 +1865,17 @@ export default {
         if (val.totalDay - val.countCheckIn === 1) {
           graduate_student_id.push({ studentId: val.studentId });
         }
-        if(!val.compensationDate){
+        if (!val.compensationDate) {
           Swal.fire({
             icon: "question",
             title: this.$t("please select the compensation date again"),
-            showDenyButton: false,
-            showCancelButton: true,
-            confirmButtonText: this.$t("agree"),
-            cancelButtonText: this.$t("cancel"),
-          })
-          val.compensationDate == ""
-          val.compensation_date_str == ""
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+          val.compensationDate == "";
+          val.compensation_date_str == "";
         }
       });
 
@@ -2161,10 +2160,10 @@ export default {
           Swal.fire({
             icon: "error",
             title: this.$t("please upload only photo and video files"),
-            showDenyButton: false,
+            timer: 3000,
+            timerProgressBar: true,
             showCancelButton: false,
-            confirmButtonText: this.$t("agree"),
-            cancelButtonText: this.$t("cancel"),
+            showConfirmButton: false,
           });
         }
       }

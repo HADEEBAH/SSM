@@ -415,13 +415,13 @@ export default {
                 title: this.$t(
                   "the selected course is full and payment cannot be made"
                 ),
-                showDenyButton: false,
-                showCancelButton: true,
-                confirmButtonText: this.$t("agree"),
-                cancelButtonText: this.$t("cancel"),
+                timer: 3000,
+                timerProgressBar: true,
+                showCancelButton: false,
+                showConfirmButton: false,
               });
             } else {
-              this.saveOrder({regis_type : ""}).then(() => {
+              this.saveOrder({ regis_type: "" }).then(() => {
                 for (const cart of this.cart_list) {
                   for (const id of cart.order_tmp_id) {
                     this.DeleteCart({

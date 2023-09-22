@@ -1194,10 +1194,10 @@ export default {
               text: this.$t(
                 "the number of students exceeds the number of students allowed in the package"
               ),
-              showDenyButton: false,
-              showCancelButton: true,
-              confirmButtonText: this.$t("agree"),
-              cancelButtonText: this.$t("cancel"),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
             });
           } else if (isValiDateCourse.includes(false)) {
             Swal.fire({
@@ -1206,10 +1206,10 @@ export default {
               text: this.$t(
                 "the selected course is full and payment cannot be made"
               ),
-              showDenyButton: false,
-              showCancelButton: true,
-              confirmButtonText: this.$t("agree"),
-              cancelButtonText: this.$t("cancel"),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
             });
           } else {
             Swal.fire({

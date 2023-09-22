@@ -63,7 +63,7 @@ const reserveCourseModules = {
             text: VueI18n.t("already edited"),
             timer: 3000,
             timerProgressBar: true,
-            showCancelButton: false,  
+            showCancelButton: false,
             showConfirmButton: false,
           })
           context.dispatch("GetReserveList")
@@ -73,11 +73,13 @@ const reserveCourseModules = {
         if (error.response?.data.statusCode == 400) {
           if (error.response.data.message == "Cannot register , fail at course monitor , course-coach or seats are full") {
             Swal.fire({
-              icon: "error",
+              icon: "warning",
               title: VueI18n.t("unable to register"),
               text: VueI18n.t("unable to register Due to insufficient seats or the coach teaching in another package"),
+              timer: 3000,
+              timerProgressBar: true,
               showCancelButton: false,
-              confirmButtonText: VueI18n.t("agree"),
+              showConfirmButton: false,
             })
           } else if (error.response.data.message === "duplicate pending order") {
             Swal.fire({
