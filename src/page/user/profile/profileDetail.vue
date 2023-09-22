@@ -343,6 +343,10 @@ export default {
               Swal.fire({
                 icon: "error",
                 title: error.message,
+                timer: 3000,
+                timerProgressBar: true,
+                showCancelButton: false,
+                showConfirmButton: false,
               });
             }
           }
@@ -369,6 +373,10 @@ export default {
           icon: "warning",
           title: this.$t("the file size is too large"),
           text: this.$t("set the size not to exceed 5MB"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
         });
         document.getElementById("fileInput").value = "";
       } else if (allowedExtension.indexOf(files.type) === -1) {
@@ -376,6 +384,10 @@ export default {
           icon: "warning",
           title: this.$t("invalid file format"),
           text: this.$t("please upload an image file"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
         });
         document.getElementById("fileInput").value = "";
       } else {

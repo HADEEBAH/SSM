@@ -52,7 +52,9 @@
                   color="#FF6B81"
                   :items="coachsOptions(coach)"
                   item-value="accountId"
-                  :item-text="$i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEh'"
+                  :item-text="
+                    $i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEh'
+                  "
                   item-color="pink"
                   @change="findTeachDays(coach, coach_index)"
                   :rules="course"
@@ -60,7 +62,9 @@
                 >
                   <template v-slot:no-data>
                     <v-list-item>
-                      <v-list-item-title> {{ $t('no data found')}}</v-list-item-title>
+                      <v-list-item-title>
+                        {{ $t("no data found") }}</v-list-item-title
+                      >
                     </v-list-item>
                   </template>
                   <template v-slot:></template>
@@ -71,7 +75,11 @@
                           :class="
                             coach.coach_id === item.accountId ? 'font-bold' : ''
                           "
-                          >{{ $i18n.locale == 'th' ? item.fullNameTh : item.fullNameEh }}</span
+                          >{{
+                            $i18n.locale == "th"
+                              ? item.fullNameTh
+                              : item.fullNameEh
+                          }}</span
                         ></v-list-item-title
                       >
                     </v-list-item-content>
@@ -84,7 +92,10 @@
                 </v-autocomplete>
               </v-col>
               <v-col cols="12" sm="4">
-                <label-custom required :text="$t('teaching day')"></label-custom>
+                <label-custom
+                  required
+                  :text="$t('teaching day')"
+                ></label-custom>
                 <v-autocomplete
                   dense
                   :disabled="disable"
@@ -120,7 +131,9 @@
                       text-color="#ff6b81"
                       @click:close="removeChip(item, teach_day.teach_day)"
                     >
-                      <strong>{{ $i18n.locale == 'th' ? item.label : item.label_en }}</strong>
+                      <strong>{{
+                        $i18n.locale == "th" ? item.label : item.label_en
+                      }}</strong>
                     </v-chip>
                   </template>
                 </v-autocomplete>
@@ -134,7 +147,7 @@
                   @click="addTeachDay(coach)"
                 >
                   <v-icon>mdi-calendar-plus-outline</v-icon>
-                   {{ $t("add teaching day") }}
+                  {{ $t("add teaching day") }}
                 </v-btn>
               </v-col>
               <v-col cols="6" sm="2">
@@ -151,7 +164,7 @@
                       )
                     "
                     ><v-icon>mdi-calendar-plus-outline</v-icon>
-                    {{$t("delete teaching day")}}
+                    {{ $t("delete teaching day") }}
                   </v-btn>
                 </template>
                 <template v-else>
@@ -164,7 +177,7 @@
                       removeTeachDay(coach.teach_day_data, teach_day_index)
                     "
                     ><v-icon>mdi-calendar-plus-outline</v-icon>
-                    {{$t("delete teaching day")}}
+                    {{ $t("delete teaching day") }}
                   </v-btn>
                 </template>
               </v-col>
@@ -285,7 +298,7 @@
                       "
                     >
                       <v-icon>mdi-timer-minus-outline</v-icon>
-                      {{ $t('delete time') }}
+                      {{ $t("delete time") }}
                     </v-btn>
                   </template>
                   <template v-else>
@@ -299,7 +312,7 @@
                       "
                     >
                       <v-icon>mdi-timer-minus-outline</v-icon>
-                      {{ $t('delete time') }}
+                      {{ $t("delete time") }}
                     </v-btn>
                   </template>
                 </v-col>
@@ -334,13 +347,13 @@ export default {
     select_coachs: [],
     coachs_option: [],
     days_confix: [
-      { label: "วันอาทิตย์", label_en : "Sunday", value: 0 },
-      { label: "วันจันทร์", label_en : "Monday",value: 1 },
-      { label: "วันอังคาร", label_en : "Tuesday",value: 2 },
-      { label: "วันพุธ", label_en : "Wednesday",value: 3 },
-      { label: "วันพฤหัสบดี", label_en : "Thursday",value: 4 },
-      { label: "วันศุกร์", label_en : "Friday",value: 5 },
-      { label: "วันเสาร์", label_en : "Saturday", value: 6 },
+      { label: "วันอาทิตย์", label_en: "Sunday", value: 0 },
+      { label: "วันจันทร์", label_en: "Monday", value: 1 },
+      { label: "วันอังคาร", label_en: "Tuesday", value: 2 },
+      { label: "วันพุธ", label_en: "Wednesday", value: 3 },
+      { label: "วันพฤหัสบดี", label_en: "Thursday", value: 4 },
+      { label: "วันศุกร์", label_en: "Friday", value: 5 },
+      { label: "วันเสาร์", label_en: "Saturday", value: 6 },
     ],
   }),
 
@@ -355,20 +368,32 @@ export default {
       teach_days: "CourseModules/getTeachDays",
       course_monitors: "CourseMonitorModules/getCourseMonitor",
     }),
-    course(){
-      return [(val) => (val || "").length > 0 || this.$t("please select a coach")]
+    course() {
+      return [
+        (val) => (val || "").length > 0 || this.$t("please select a coach"),
+      ];
     },
     class_date() {
-      return [(val) => (val || "").length > 0 || this.$t("please select a date")] 
+      return [
+        (val) => (val || "").length > 0 || this.$t("please select a date"),
+      ];
     },
-    start_time(){
-      return [(val) => (val || "").length > 0 || this.$t("please select a start time")]
+    start_time() {
+      return [
+        (val) =>
+          (val || "").length > 0 || this.$t("please select a start time"),
+      ];
     },
-    end_time(){
-      return [(val) => (val || "").length > 0 || this.$t("please select an end time")]
+    end_time() {
+      return [
+        (val) => (val || "").length > 0 || this.$t("please select an end time"),
+      ];
     },
-    students(){
-      return [(val) => (val || "") > 0 || this.$t("please specify the number of students")]
+    students() {
+      return [
+        (val) =>
+          (val || "") > 0 || this.$t("please specify the number of students"),
+      ];
     },
     setFunction() {
       if (this.course_data.course_id) {
@@ -497,12 +522,12 @@ export default {
             e.target.click();
             Swal.fire({
               icon: "error",
-              title: "ไม่สามารถปิดวันสอนได้",
-              text: "เนื่องจากมีนักเรียนในคอร์ส",
-              showDenyButton: false,
+              title: this.$t("teaching days cannot be closed"),
+              text: this.$t("because there are students in the course"),
+              timer: 3000,
+              timerProgressBar: true,
               showCancelButton: false,
-              confirmButtonText: "ตกลง",
-              cancelButtonText: "ยกเลิก",
+              showConfirmButton: false,
             });
           }
         }
@@ -695,7 +720,7 @@ export default {
     removeTimeData(data, time_id) {
       Swal.fire({
         icon: "question",
-        title: "ต้องการลบเวลาสอนนี้ใช่หรือไม่",
+        title: this.$t("do you want to delete this teaching time?"),
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: "ตกลง",
@@ -714,7 +739,7 @@ export default {
     removeDayOfWeekData(data, day_of_week_id) {
       Swal.fire({
         icon: "question",
-        title: "ต้องการลบวันสอนนี้ใช่หรือไม่",
+        title: this.$t("do you want to delete this teaching day"),
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: "ตกลง",

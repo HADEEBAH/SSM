@@ -139,6 +139,8 @@ export default {
               }`,
               timer: 3000,
               timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
             });
             if (VueCookie.get("token")) {
               router.push({ name: "UserKingdom" });
@@ -195,6 +197,10 @@ export default {
                 : "warning",
             title: this.$t("warning"),
             text: `${error_message}`,
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
           });
         }
       }

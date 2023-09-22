@@ -218,9 +218,13 @@
     "do you want to build an wls?": "คุณต้องการสร้างอาณาจักรใช่หรือไม่?",
     "do you want to edit wls?": "คุณต้องการแก้ไขอาณาจักรหรือไม่?",
     "do you want to change your status?": "คุณต้องการเปลี่ยนสถานะใช่หรือไม่?",
+    "do you want to delete this teaching time?" : "คุณต้องการลบเวลาสอนนี้ใช่หรือไม่?",
+    "do you want to delete this teaching day?": "คุณต้องการลบวันสอนนี้ใช่หรือไม่?",
+    "do you want to save it?": "คุณต้องการบันทึกหรือไม่?",
     "duration/coach" : "ช่วงเวลาและโค้ช",
     "duplicate relationship": "ความสัมพันธ์ซ้ำกัน",
     "duplicate user in this course Unable to register": "ผู้ใช้ซ้ำกันในหลักสูตรนี้ ไม่สามารถลงทะเบียนได้",
+    "duplicate roles or the user does not yet have a role": "บทบาทซ้ำกัน หรือ ผู้ใช้ยังไม่มีบทบาท",
     "december":"ธันวาคม",
 
 
@@ -235,6 +239,7 @@
     "enter course details" : "กรอกรายละเอียดคอร์ส",
     "enter details" : "กรอกรายละเอียด",
     "enter password" : "ระบุรหัสผ่าน",
+    "error information": "ข้อมูลผิดพลาด",
     "enter username" : "ระบุชื่อผู้ใช้งาน",
     "email" : "อีเมล",
     "emergency leave" : "ลาฉุกเฉิน",
@@ -245,6 +250,7 @@
     "forgot your password?" : "ลืมรหัสผ่านใช่หรือไม่?",
     "forgotten your password?" : "ลืมรหัสผ่านใช่หรือไม่?",
     "file size" : "ขนาดไฟล์",
+    "file size must not exceed 5 MB": "ขนาดไฟล์ต้องไม่เกิน 5 MB",
     "failed to resolve":"แก้ไขไม่สำเร็จ",
     "failed to delete":"ลบไม่สำเร็จ",
     "failed to delete data": "( ลบข้อมูลไม่สำเร็จ )",
@@ -300,6 +306,7 @@
     "income" : "รายได้",
     "income proportion": "สัดส่วนรายได้",
     "intervals and coaches have been corrected":"( แก้ไขช่วงเวลาและโค้ชเรียบร้อยแล้ว )",
+    "information added successfully": "( เพิ่มข้อมูลเรียบร้อยแล้ว )",
     "is complete" : "เรียบร้อยแล้ว",
 
     "january":"มกราคม",
@@ -349,13 +356,8 @@
     "manage the entire empire": "จัดการอาณาจักรทั้งหมด",
     "march":"มีนาคม",
     "may": "พฤษภาคม",
-    "my order": "ประวัติการสั่งซื้อ",
     "my account setting": "การจัดการ",
     "my account": "หน้าผู้ใช้งาน",
-    "my profile": "โปรไฟล์",
-
-
-
     "more details" : "รายละเอียดเพิ่มเติม",
     
     "name of representative": "ชื่อผู้แทน",
@@ -389,7 +391,7 @@
     "november": "พฤศจิกายน",
     
     "o'clock" : "น.",
-    "outside the register date" : "อยู่นอกระยะเวลารับสมัครแล้ว",
+    "outside the register date" : "อยู่นอกระยะเวลารับสมัคร",
     "open-close register date" : "วันเปิด-ปิดรับสมัคร",
     "optional": "ถ้ามี",
     "order number" : "หมายเลขคำสั่งซื้อ",
@@ -515,6 +517,7 @@
     "please specify wls name (Thai)": "โปรดระบุชื่ออาณาจักร(ภาษาไทย)",
     "please specify wls name (English)":"โปรดระบุชื่ออาณาจักร(ภาษาอังกฤษ)",
     "please specify the teaching organizer": "โปรดระบุผู้จัดสอน",
+    "please attach file extensions jpg, jpeg, png": "( กรุณาแนบไฟล์นามสกุล jpg, jpeg, png )",
     "pick a day": "เลือกวัน",
     "press to enter the teaching time" : "กดเพื่อลงเวลาเข้าสอน",
     "price remaining" : "ราคาคงเหลือ",
@@ -547,7 +550,6 @@
     "register for a course" : "ลงทะเบียนคอร์สเรียน",
     "register for yourself" : "ลงทะเบียนเรียนให้ตัวเอง",
     "register to study for others" : "ลงทะเบียนเรียนให้ผู้อื่น",
-    "register for an account" : "ลงทะเบียน",
     "registration history" : "ประวัติการลงทะเบียน",
     "reject" : "ปฏิเสธ",
     "rejection confirmed": "( ยืนยันการปฏิเสธเรียบร้อยแล้ว )",
@@ -645,7 +647,6 @@
     "specify the name of the holiday, such as Songkran Day" : "ระบุชื่อวันหยุด เช่น วันสงกรานต์",
     "show certificate": "แสดงหนังสือรับรอง",
     "september": "กันยายน",
-    "sign in" : "เข้าสู่ระบบ",
 
 
     "take annual leave" : "ลาพักร้อนประจำปี",
@@ -693,10 +694,11 @@
     "this is because the applicant already has other positions": "เนื่องจากผู้สมัครมีตำแหน่งอื่นๆ อยู่แล้ว",
     "this wls cannot be deleted because it has a course" : "ไม่สามารถลบอาณาจักรนี้ได้เนื่องจากมีคอร์สเรียน",
     "this username has already been entered. please check again" : "ชื่อผู้ใช้นี้ถูกใส่ข้อมูลมาแล้ว กรุณาตรวจสอบอีกครั้ง",
-    "this user could not be found": "ไม่พบผู้ใช้นี้",  
+    "this user could not be found": "เนื่องจากไม่พบผู้ใช้นี้",  
     "this username does not yet have a role" : "username นี้ยังไม่มีบทบาท",
     "thursday" : "วันพฤหัสบดี",
     "this course is not in pending status":"( หลักสูตรนี้ไม่ได้อยู่ในสถานะรอดำเนินการ )",
+    "this USER is already in a relationship": "user นี้มีความสัมพันธ์แล้ว!",
     "to" : "ถึง",
     "to request leave" : "ลงเวลาเพื่อขอลา",
     "today's teaching program"  : "รายการสอนวันนี้",
@@ -708,6 +710,8 @@
     "transfer to school account" : "โอนเงินเข้าบัญชีโรงเรียน",
     "tuesday" : "วันอังคาร",
     "to day" : "ไปวันที่",
+    "teaching days cannot be closed": "ไม่สามารถปิดวันสอนได้",
+
 
     "unable to study on the specified date. because there are already classes on the specified date" : "ไม่สามารถเรียนชดเชยวันที่ระบุได้ เนื่องจากวันที่ระบุมีเรียนอยู่แล้ว",
     "unpaid" : "ยังไม่ชำระเงิน",
@@ -729,7 +733,7 @@
     "unable to change roles because the coach is in a teaching state": "ไม่สามารถเปลี่ยนบทบาทได้ เนื่องจากโค้ชกำลังอยู่ในสถานะการสอน",
     "unable to register": "ไม่สามารถลงทะเบียนได้",
     "unable to register Due to insufficient seats or the coach teaching in another package": "ไม่สามารถลงทะเบียนได้ เนื่องจากที่นั่งไม่เพียงพอ หรือ โค้ชมีสอนในแพ็กเกจอื่น",
-    "unable to register Because the course is already in your registration history":"ไม่สามารถลลงทะเบียนได้ เนื่องจากหลักสูตรนี้อยู่ในประวัติการลงทะเบียนของคุณแล้ว",
+    "unable to register Because the course is already in your registration history":"เนื่องจากหลักสูตรนี้อยู่ในประวัติการลงทะเบียนของคุณแล้ว",
    
 
     

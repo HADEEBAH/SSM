@@ -265,10 +265,10 @@ const coachModules = {
         await Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),
-          showDenyButton: false,
+          timer: 3000,
+          timerProgressBar: true,
           showCancelButton: false,
-          confirmButtonText: VueI18n.t("agree"),
-          cancelButtonText: VueI18n.t("cancel"),
+          showConfirmButton: false,
         })
         context.commit("SetStudentCheckInIsLoading", false)
       }
@@ -307,10 +307,10 @@ const coachModules = {
         Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),
-          showDenyButton: false,
+          timer: 3000,
+          timerProgressBar: true,
           showCancelButton: false,
-          confirmButtonText: VueI18n.t("agree"),
-          cancelButtonText: VueI18n.t("cancel"),
+          showConfirmButton: false,
         })
       }
     },
@@ -366,10 +366,10 @@ const coachModules = {
         Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),
-          showDenyButton: false,
+          timer: 3000,
+          timerProgressBar: true,
           showCancelButton: false,
-          confirmButtonText: VueI18n.t("agree"),
-          cancelButtonText: VueI18n.t("cancel"),
+          showConfirmButton: false,
         })
       }
     },
@@ -691,7 +691,7 @@ const coachModules = {
               const course_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course.courseId}`);
               if (course.coachLeaveCourses.length > 0) {
                 for await (const dates of course.coachLeaveCourses) {
-                  if(dates.type == "teach"){
+                  if (dates.type == "teach") {
                     let start_time = course.period.start;
                     let end_time = course.period.end;
                     const [start_hours, start_minutes] = start_time.split(":");

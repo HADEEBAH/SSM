@@ -117,8 +117,12 @@ export const CheckFileSize = (file, id) => { //check file รอ merge กับ
         key.value = ''
         Swal.fire({
             icon: "error",
-            text: "ขนาดไฟล์ต้องไม่เกิน 5 MB",
-            confirmButtonText: "ตกลง"
+            title: this.$t('something went wrong'),
+            text: this.$t('file size must not exceed 5 MB'),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
         })
         return false
     }
@@ -135,9 +139,12 @@ export const CheckFileSizeType = (file, id) => { //check file รอ merge ก�
         key.value = ""
         Swal.fire({
             icon: "error",
-            title: "รูปแบบไฟล์ไม่ถูกต้อง",
-            text: "( กรุณาแนบไฟล์นามสกุล jpg, jpeg, png )",
-            confirmButtonText: "ตกลง"
+            title: this.$t('invalid file format'),
+            text: this.$('please attach file extensions jpg, jpeg, png'),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
         })
         return false
     }

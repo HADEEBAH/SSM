@@ -634,6 +634,10 @@ const CourseModules = {
         Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
         })
       }
     },
@@ -728,6 +732,10 @@ const CourseModules = {
         Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
         })
       }
     },
@@ -790,6 +798,10 @@ const CourseModules = {
         Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
         })
       }
     },
@@ -820,6 +832,10 @@ const CourseModules = {
         Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
         })
       }
     },
@@ -850,6 +866,10 @@ const CourseModules = {
         Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
         })
       }
     },
@@ -894,6 +914,10 @@ const CourseModules = {
         Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
         })
       }
     },
@@ -1487,7 +1511,10 @@ const CourseModules = {
             Swal.fire({
               icon: "error",
               text: VueI18n.t("can't be deleted Because the enrollment"),
-              confirmButtonText: VueI18n.t("agree"),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
             })
           } else {
             Swal.fire({
@@ -1506,6 +1533,10 @@ const CourseModules = {
         Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
         })
       }
     },
@@ -1525,7 +1556,10 @@ const CourseModules = {
             Swal.fire({
               icon: "error",
               text: VueI18n.t("can't be deleted Because the enrollment"),
-              confirmButtonText: VueI18n.t("agree"),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
             })
           } else {
             Swal.fire({

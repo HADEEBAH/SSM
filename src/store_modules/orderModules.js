@@ -303,9 +303,9 @@ const orderModules = {
                   });
                 }
               }
-              if(order.payment_status === "success"){
+              if (order.payment_status === "success") {
                 let inputDate = order.payment?.paymentDate
-                let cutTime =order.payment?.paymentTime
+                let cutTime = order.payment?.paymentTime
                 const year = parseInt(inputDate?.substring(0, 4));
                 const month = parseInt(inputDate?.substring(4, 6));
                 const day = inputDate?.substring(6, 8);
@@ -314,7 +314,7 @@ const orderModules = {
                 let mm = cutTime?.slice(2, 4);
                 order.paid_date = `${formatted}`
                 order.paid_time = `${HH + ":" + mm}`
-              }else{
+              } else {
                 order.paid_date = ""
                 order.paid_time = ""
               }
@@ -352,13 +352,13 @@ const orderModules = {
           let student_name_list_en = []
           let student_list = [];
           for (const order_item of data.data.orderItem) {
-            if(order_item?.course?.dayOfWeekName){
+            if (order_item?.course?.dayOfWeekName) {
               order_item.course.dayOfWeekNameStr = dayOfWeekArray(order_item.course.dayOfWeekName)
             }
             if (order_item.students.length > 0) {
               order_item.students.forEach((student) => {
                 // console.log(student)
-                if (!student_name_list.includes(`${student?.firstNameTh} ${student?.lastNameTh}` )
+                if (!student_name_list.includes(`${student?.firstNameTh} ${student?.lastNameTh}`)
                 ) {
                   student_name_list.push(
                     `${student?.firstNameTh} ${student?.lastNameTh}`
@@ -452,13 +452,13 @@ const orderModules = {
               : "",
             dayOfWeekId: course?.time?.timeData
               ? course.time.timeData.filter(
-                  (v) => v.coach_id === course.coach_id
-                )[0].dayOfWeekId
+                (v) => v.coach_id === course.coach_id
+              )[0].dayOfWeekId
               : course.time.dayOfWeekId,
             timeId: course?.time?.timeData
               ? course.time.timeData.filter(
-                  (v) => v.coach_id === course.coach_id
-                )[0].timeId
+                (v) => v.coach_id === course.coach_id
+              )[0].timeId
               : course.time.timeId,
             time: course.time ? course.time : "",
             startDate: "",
@@ -507,7 +507,7 @@ const orderModules = {
         console.log(error);
       }
     },
-    async saveOrder(context,{ regis_type }) {
+    async saveOrder(context, { regis_type }) {
       // console.log(regis_type)
       context.commit("SetOrderIsLoading", true);
       try {
@@ -527,24 +527,24 @@ const orderModules = {
                 student,
                 configs
               );
-          
+
             }
           }
-        }else{
+        } else {
           for await (const course of order.courses) {
-            if(course.course_type_id == "CT_2"){
+            if (course.course_type_id == "CT_2") {
               course.start_date = moment(new Date()).format("YYYY-MM-DD")
             }
           }
         }
         let payload = {
-            order_id: "",
-            courses: [],
-            created_by: order.created_by,
-            paymentStatus: "pending",
-            paymentType: order.payment_type,
-            totalPrice: 0,
-            regisType : regis_type,
+          order_id: "",
+          courses: [],
+          created_by: order.created_by,
+          paymentStatus: "pending",
+          paymentType: order.payment_type,
+          totalPrice: 0,
+          regisType: regis_type,
         };
         let total_price = 0;
         await order.courses.forEach((course) => {
@@ -585,21 +585,21 @@ const orderModules = {
           });
           payload.courses.push({
             courseId: course.course_id,
-            coursePackageOptionId: course.option.course_package_option_id ? course.option.course_package_option_id  : null,
+            coursePackageOptionId: course.option.course_package_option_id ? course.option.course_package_option_id : null,
             dayName: course.day?.dayName
               ? course.day.dayName
               : course.day.day
-              ? dayOfWeekArray(course.day.day)
-              : "",
+                ? dayOfWeekArray(course.day.day)
+                : "",
             dayOfWeekId: course?.time?.timeData
               ? course.time.timeData.filter(
-                  (v) => v.coach_id === course.coach_id
-                )[0].dayOfWeekId
+                (v) => v.coach_id === course.coach_id
+              )[0].dayOfWeekId
               : course.time.dayOfWeekId,
             timeId: course?.time?.timeData
               ? course.time.timeData.filter(
-                  (v) => v.coach_id === course.coach_id
-                )[0].timeId
+                (v) => v.coach_id === course.coach_id
+              )[0].timeId
               : course.time.timeId,
             time: course.time,
             startDate: course.start_date ? course.start_date : moment(new Date()).format("YYYY-MM-DD"),
@@ -766,27 +766,31 @@ const orderModules = {
       } catch (error) {
         context.commit("SetOrderIsLoading", false);
         context.commit("SetOrderIsStatus", false);
-        if(error.response.data.message == "over study end date"){
+        if (error.response.data.message == "over study end date") {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("unable to register"),
             text: VueI18n.t(
               "the class period has ended"
             ),
+            timer: 3000,
+            timerProgressBar: true,
             showCancelButton: false,
-            confirmButtonText: VueI18n.t("agree"),
+            showConfirmButton: false,
           });
-        }else if( error.response.data.message == "over register date"){
+        } else if (error.response.data.message == "over register date") {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("unable to register"),
             text: VueI18n.t(
               "outside the register date"
             ),
+            timer: 3000,
+            timerProgressBar: true,
             showCancelButton: false,
-            confirmButtonText: VueI18n.t("agree"),
+            showConfirmButton: false,
           });
-        }else if (
+        } else if (
           error.response.data.message ==
           "Cannot register , fail at course monitor , course-coach or seats are full"
         ) {
@@ -796,8 +800,10 @@ const orderModules = {
             text: VueI18n.t(
               "unable to register Due to insufficient seats or the coach teaching in another package"
             ),
+            timer: 3000,
+            timerProgressBar: true,
             showCancelButton: false,
-            confirmButtonText: VueI18n.t("agree"),
+            showConfirmButton: false,
           });
         } else if (error.response.data.message === "duplicate pending order") {
           Swal.fire({
@@ -806,8 +812,10 @@ const orderModules = {
             text: VueI18n.t(
               "unable to register Because the course is already in your registration history"
             ),
+            timer: 3000,
+            timerProgressBar: true,
             showCancelButton: false,
-            confirmButtonText: VueI18n.t("agree"),
+            showConfirmButton: false,
           });
         } else if (
           error.response.data.message ===
@@ -818,8 +826,10 @@ const orderModules = {
             title: VueI18n.t(
               "duplicate user in this course Unable to register"
             ),
+            timer: 3000,
+            timerProgressBar: true,
             showCancelButton: false,
-            confirmButtonText: VueI18n.t("agree"),
+            showConfirmButton: false,
           });
         } else if (
           error.response.data.message === "The price is not correct!!"
@@ -829,24 +839,30 @@ const orderModules = {
             title: VueI18n.t(
               "the price is not correct payment cannot be processed"
             ),
+            timer: 3000,
+            timerProgressBar: true,
             showCancelButton: false,
-            confirmButtonText: VueI18n.t("agree"),
+            showConfirmButton: false,
           });
-        } else if(error.response.data.message === "Cannot register , The seats are full."){
+        } else if (error.response.data.message === "Cannot register , The seats are full.") {
           Swal.fire({
             icon: "error",
             title: VueI18n.t(
               "cannot register , The seats are full"
             ),
+            timer: 3000,
+            timerProgressBar: true,
             showCancelButton: false,
-            confirmButtonText: VueI18n.t("agree"),
+            showConfirmButton: false,
           });
-        }else{
+        } else {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("something went wrong"),
+            timer: 3000,
+            timerProgressBar: true,
             showCancelButton: false,
-            confirmButtonText: VueI18n.t("agree"),
+            showConfirmButton: false,
           });
         }
       }
@@ -1102,15 +1118,15 @@ const orderModules = {
           if (course_data.course_type_id === "CT_1") {
             payload.dayOfWeekId = course_data?.time?.timeData
               ? course_data.time.timeData.filter(
-                  (v) => v.coach_id === course_data.coach_id
-                )[0].dayOfWeekId
+                (v) => v.coach_id === course_data.coach_id
+              )[0].dayOfWeekId
               : course_data.time.dayOfWeekId;
             payload.coursePackageOptionId =
               course_data.option.course_package_option_id;
             payload.timeId = course_data?.time?.timeData
               ? course_data.time.timeData.filter(
-                  (v) => v.coach_id === course_data.coach_id
-                )[0].timeId
+                (v) => v.coach_id === course_data.coach_id
+              )[0].timeId
               : course_data.time.timeId;
           }
           let config = {
