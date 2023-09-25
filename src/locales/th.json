@@ -487,6 +487,7 @@
     "please specify a compensation date": "โปรดระบุวันชดเชย",
     "please specify a location" : "โปรดระบุสถานที่",
     "please specify a coach" : "โปรดระบุโค้ช",
+    "please specify the number of students at least" : "โปรดระบุจำนวนนักเรียนอย่างน้อย",
     "please specify the length of not less than 2 characters": "โปรดระบุสันชาติความยาวไม่น้อยกว่า 2 ตัวอักษร",
     "please specify your identity, length not exceeding 20 characters":"โปรดระบุสันชาติความยาวไม่เกิน 20 ตัวอักษร",
     "please specify development / homework" : "โปรดระบุพัฒนาการ / การบ้าน",
