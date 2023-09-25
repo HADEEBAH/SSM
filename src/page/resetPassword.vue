@@ -166,9 +166,10 @@ export default {
           title: this.$t("the password is incorrect"),
           text: this.$t("please enter your password again"),
           timer: 3000,
-          timerProgressBar: true,
+          showDenyButton: false,
           showCancelButton: false,
           showConfirmButton: false,
+          timerProgressBar: true,
         });
       } else if (this.confirm_password === "") {
         this.loading = false;
@@ -177,9 +178,10 @@ export default {
           title: this.$t("confirm password is incorrect"),
           text: this.$t("please confirm the new password again"),
           timer: 3000,
-          timerProgressBar: true,
+          showDenyButton: false,
           showCancelButton: false,
           showConfirmButton: false,
+          timerProgressBar: true,
         });
       } else if (this.password.length < 8) {
         this.loading = false;
@@ -190,9 +192,10 @@ export default {
             "please enter a password that is at least 8 characters long"
           ),
           timer: 3000,
-          timerProgressBar: true,
+          showDenyButton: false,
           showCancelButton: false,
           showConfirmButton: false,
+          timerProgressBar: true,
         });
       } else if (this.confirm_password.length < 8) {
         this.loading = false;
@@ -203,9 +206,10 @@ export default {
             "please enter a password that is at least 8 characters long"
           ),
           timer: 3000,
-          timerProgressBar: true,
+          showDenyButton: false,
           showCancelButton: false,
           showConfirmButton: false,
+          timerProgressBar: true,
         });
       } else if (this.password !== this.confirm_password) {
         this.loading = false;
@@ -214,9 +218,10 @@ export default {
           title: this.$t("passwords do not match"),
           text: this.$t("please confirm your passwords are the same"),
           timer: 3000,
-          timerProgressBar: true,
+          showDenyButton: false,
           showCancelButton: false,
           showConfirmButton: false,
+          timerProgressBar: true,
         });
       } else {
         this.otp_dialog = true;

@@ -119,7 +119,7 @@
             :placeholder="$t(`fill in wls name`)"
             outlined
             v-model="kingdom.kingdom_name_eng"
-            @keydown="validate($event, 'en')"
+            @keydown="validate($event, 'en-spcebar')"
           ></v-text-field>
         </v-col>
       </v-row>

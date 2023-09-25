@@ -108,7 +108,7 @@
               :outlined="!disable"
               :filled="disable"
               @focus="$event.target.select()"
-              @keydown="inputName($event, 'en')"
+              @keydown="inputName($event, 'en-spcebar')"
               :rules="course_name_en"
               v-model="course_data.course_name_en"
               @change="ChangeCourseData(course_data)"

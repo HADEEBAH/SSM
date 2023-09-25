@@ -1034,9 +1034,10 @@ export default {
           title: this.$t("the file size is too large"),
           text: this.$t("set the size not to exceed 5MB"),
           timer: 3000,
-          timerProgressBar: true,
+          showDenyButton: false,
           showCancelButton: false,
           showConfirmButton: false,
+          timerProgressBar: true,
         });
         document.getElementById("fileInput").value = "";
       } else if (allowedExtension.indexOf(files.type) === -1) {
@@ -1045,9 +1046,10 @@ export default {
           title: this.$t("invalid file format"),
           text: this.$t("please upload an image file"),
           timer: 3000,
-          timerProgressBar: true,
+          showDenyButton: false,
           showCancelButton: false,
           showConfirmButton: false,
+          timerProgressBar: true,
         });
         document.getElementById("fileInput").value = "";
       } else {
@@ -1165,9 +1167,10 @@ export default {
           title: this.$t("warning"),
           text: this.$t("username not found"),
           timer: 3000,
-          timerProgressBar: true,
+          showDenyButton: false,
           showCancelButton: false,
           showConfirmButton: false,
+          timerProgressBar: true,
         });
       }
     },
