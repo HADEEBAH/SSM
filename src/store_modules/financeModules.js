@@ -136,7 +136,8 @@ const financeModules = {
             context.commit("SetFinanceLoading", false)
             Swal.fire({
               icon: "error",
-              title: VueI18n.t("data not found"),
+              title: VueI18n.t("something went wrong"),
+              text: VueI18n.t("data not found"),
               timer: 3000,
               timerProgressBar: true,
               showCancelButton: false,
