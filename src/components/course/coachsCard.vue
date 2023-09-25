@@ -484,13 +484,23 @@ export default {
       if (
         parseInt(date.start_time_object.mm) +
           parseInt(this.course_data.course_hours_obj.mm) >
-        60
+        59
       ) {
         date.end_time_object.mm = `${
           parseInt(date.start_time_object.mm) +
           parseInt(this.course_data.course_hours_obj.mm) -
           60
         }`.padStart(2, "0");
+
+        if (parseInt(date.end_time_object.HH) + 1 >= 24) {
+          date.end_time_object.HH = `${
+            parseInt(date.end_time_object.HH) + 1 - 24
+          }`.padStart(2, "0");
+        } else {
+          date.end_time_object.HH = `${
+            parseInt(date.end_time_object.HH) + 1
+          }`.padStart(2, "0");
+        }
       } else {
         date.end_time_object.mm = `${
           parseInt(date.start_time_object.mm) +
