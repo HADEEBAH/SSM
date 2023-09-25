@@ -931,7 +931,7 @@ const orderModules = {
         // let localhost = "http://localhost:3002"
         let updateStartDate = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/update-orderid/${order_data.orderId}`,{},config)
         if(updateStartDate.data.statusCode == 200){
-          console.log(updateStartDate)
+          // console.log(updateStartDate)
           let payment_payload = {
             orderId: order_data.orderNumber,
             paymentType: order_data.paymentType,
