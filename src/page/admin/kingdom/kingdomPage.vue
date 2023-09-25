@@ -102,13 +102,13 @@
       <v-row dense>
         <v-col cols="12" sm="6">
           <label-custom :text="$t(`wls name (Thai)`)"></label-custom>
-
           <v-text-field
             dense
             :placeholder="$t(`fill in wls name`)"
             outlined
             v-model="kingdom.kingdom_name_th"
             @keydown="validate($event, 'th')"
+            @paste="preventPaste"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -384,6 +384,9 @@ export default {
     },
     validate(e, type) {
       inputValidation(e, type);
+    },
+    preventPaste(event) {
+      event.preventDefault();
     },
 
     showBtn() {

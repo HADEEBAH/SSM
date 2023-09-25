@@ -95,6 +95,7 @@
               @focus="$event.target.select()"
               v-model="course_data.course_name_th"
               :placeholder="$t('specify the course name (thai)')"
+              @paste="preventPaste"
             ></v-text-field>
           </v-col>
           <v-col cols="12" sm="6">
@@ -113,6 +114,7 @@
               v-model="course_data.course_name_en"
               @change="ChangeCourseData(course_data)"
               :placeholder="$t('specify the course name (english)')"
+              @paste="preventPaste"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -294,7 +296,7 @@
           </v-row>
           <v-row dense>
             <v-col cols="12">
-              <label-custom :text="$t('performance')"></label-custom>
+              <label-custom :text="'Music performance'"></label-custom>
               <vue-editor
                 :editorToolbar="customToolbar"
                 :placeholder="
@@ -310,7 +312,7 @@
           </v-row>
           <v-row dense>
             <v-col cols="12">
-              <label-custom :text="$t('certification')"></label-custom>
+              <label-custom :text="'Certification'"></label-custom>
               <vue-editor
                 :editorToolbar="customToolbar"
                 :placeholder="
@@ -1145,6 +1147,9 @@ export default {
           });
         }
       }
+    },
+    preventPaste(event) {
+      event.preventDefault();
     },
   },
 };

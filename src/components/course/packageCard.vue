@@ -81,6 +81,7 @@
                   @focus="$event.target.select()"
                   class="input-text-right"
                   dense
+                  :min="package_data.package_id == 'PACK_3'? 3 : 1"
                   v-model.number="package_data.students"
                 ></v-text-field>
               </v-col>
@@ -281,7 +282,7 @@ export default {
   data: () => ({
     packages_selected: [],
     options_selected: [],
-    minimum_students: 0,
+    minimum_students: 3,
   }),
   created() {},
   mounted() {
@@ -304,10 +305,8 @@ export default {
           },
         ],
         packages_student: [
-          function (val) {
-            return (val || "") > vm.minimum_students
-              ? vm.minimum_students
-              : 0 || vm.$t("please specify the number of students");
+          function (val) { 
+            return (val || "") >= vm.minimum_students || `${vm.$t("please specify the number of students at least")} ${vm.minimum_students} ${vm.$t("person")}`;
           },
         ],
         options: [
@@ -398,11 +397,14 @@ export default {
       let minimum_students_data = this.minimum_students;
       if (package_data === "PACK_1") {
         packages.students = 1;
-      } else if (package_data === "PACK_2") {
+        this.minimum_students = 1
+        } else if (package_data === "PACK_2") {
         packages.students = 2;
+        this.minimum_students = 2
       } else if (package_data === "PACK_3") {
         packages.students = 3;
         minimum_students_data = 3;
+        this.minimum_students = 3
       }
       return { packages, minimum_students_data };
     },

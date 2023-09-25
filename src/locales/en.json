@@ -517,6 +517,7 @@
     "please specify a coach" : "Please specify a coach",
     "please specify price": "Please specify price",
     "please specify price / person" : "Please specify price / person",
+    "please specify the number of students at least" : "Please specify the number of students at least",
     "please specify the length of not less than 2 characters": "Please specify the length of not less than 2 characters",
     "please specify your identity, length not exceeding 20 characters":"Please specify your identity, length not exceeding 20 characters",
     "please specify development / homework" : "Please specify development / homework",

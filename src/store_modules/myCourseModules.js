@@ -128,8 +128,8 @@ const myCourseModules = {
                                     end: date.replace(" 00:00:00", "") + ' ' + course.period.end,
                                     name: data_local.roles.includes('R_5') ? `${course.courseNameTh}(${course.courseNameEng})` : `${course.student.firstNameTh}: ${course.courseNameTh}(${course.courseNameEng})`,
                                     timed: course.student.firstNameTh,
-                                    start_time :  course.period.start,
-                                    end_time : course.period.end,
+                                    start_time: course.period.start,
+                                    end_time: course.period.end,
                                     subtitle: course.coachName,
                                     courseId: course.courseId,
                                 })
@@ -143,8 +143,8 @@ const myCourseModules = {
                                         end: coachLaeve.teachCompensationDate + " " + coachLaeve.teachCompensationEndTime,
                                         name: data_local.roles.includes('R_5') ? `${course.courseNameTh}(${course.courseNameEng})` : `${course.student.firstNameTh}: ${course.courseNameTh}(${course.courseNameEng})`,
                                         timed: course.student.firstNameTh,
-                                        start_time : coachLaeve.teachCompensationStartTime,
-                                        end_time : coachLaeve.teachCompensationEndTime,
+                                        start_time: coachLaeve.teachCompensationStartTime,
+                                        end_time: coachLaeve.teachCompensationEndTime,
                                         subtitle: course.coachName,
                                         courseId: course.courseId,
                                     })
@@ -243,6 +243,7 @@ const myCourseModules = {
                         item.createdByData = item.createdBy ? await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${item.createdBy}`, config) : null
                         item.StudentData = item.studentId ? await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${item.studentId}`, config) : null
                         item.coachData = item.coachId ? await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/${item.coachId}`, config) : null
+                        item.showData = false
                     }
 
                     for (const booked of data.data) {

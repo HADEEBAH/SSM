@@ -1032,7 +1032,14 @@ const orderModules = {
       try {
         // console.log(paymnet_data)
         // let localhost = "http://localhost:3002"
-        let updateStartDate = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/update-orderid/${paymnet_data.orderId}`)
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        let updateStartDate = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/update-orderid/${paymnet_data.orderId}`, {}, config)
         if (updateStartDate.data.statusCode == 200) {
           let payment_payload = {
             orderId: paymnet_data.orderNumber,
