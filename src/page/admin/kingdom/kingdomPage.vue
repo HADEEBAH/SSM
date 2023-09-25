@@ -149,7 +149,7 @@
           <v-textarea
             dense
             class="form2"
-            :placeholder="$t(`Fill in the details...`)"
+            :placeholder="$t(`fill in the details...`)"
             auto-grow
             outlined
             v-model="kingdom.detail"

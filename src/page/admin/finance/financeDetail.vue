@@ -411,6 +411,7 @@
         </v-card>
       </v-dialog>
     </v-container>
+    <loading-overlay :loading="orders_is_loading"></loading-overlay>
   </v-app>
 </template>
 
@@ -422,6 +423,7 @@ import Swal from "sweetalert2";
 import mixin from "@/mixin";
 import pdfMake from "pdfmake";
 import pdfFonts from "@/assets/custom-fonts.js";
+import loadingOverlay from "@/components/loading/loadingOverlay.vue";
 import {
   convertToThaiBaht,
   convertToEnglishCurrency,
@@ -429,7 +431,7 @@ import {
 import moment from "moment";
 export default {
   name: "financeDetail",
-  components: { headerPage, rowData },
+  components: { headerPage, rowData, loadingOverlay },
   mixins: [mixin],
   data: () => ({
     pdf_open: false,
@@ -473,6 +475,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      orders_is_loading : "OrderModules/getOrdersIsLoading",
       order_detail: "OrderModules/getOrderDetail",
       student_list: "OrderModules/getStudentList",
     }),

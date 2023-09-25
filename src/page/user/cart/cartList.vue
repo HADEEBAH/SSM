@@ -412,7 +412,8 @@ export default {
             if (isValiDateCourse.includes(false)) {
               Swal.fire({
                 icon: "error",
-                title: this.$t(
+                title: this.$t("something went wrong"),
+                text: this.$t(
                   "the selected course is full and payment cannot be made"
                 ),
                 timer: 3000,

@@ -342,7 +342,8 @@ export default {
             } catch (error) {
               Swal.fire({
                 icon: "error",
-                title: error.message,
+                title: this.$t("something went wrong"),
+                text: error.message,
                 timer: 3000,
                 timerProgressBar: true,
                 showCancelButton: false,

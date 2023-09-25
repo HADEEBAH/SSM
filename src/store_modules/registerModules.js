@@ -118,6 +118,11 @@ const RegisterModules = {
                 Swal.fire({
                     icon: "error",
                     title: VueI18n.t("failed to delete"),
+                    showDenyButton: false,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
                 })
             }
         },
@@ -218,7 +223,12 @@ const RegisterModules = {
                         Swal.fire({
                             icon: 'error',
                             title: `${VueI18n.t("please fill out the information correctly")}`,
-                            text: text ? text : response.data.message
+                            text: text ? text : response.data.message,
+                            showDenyButton: false,
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
                         })
                     }, 200)
 
@@ -226,6 +236,11 @@ const RegisterModules = {
                     Swal.fire({
                         icon: 'error',
                         title: VueI18n.t("something went wrong"),
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
                     })
                 }
             }
@@ -320,7 +335,12 @@ const RegisterModules = {
                         Swal.fire({
                             icon: 'error',
                             title: `${VueI18n.t("please fill out the information correctly")}`,
-                            text: text ? text : response.data.message
+                            text: text ? text : response.data.message,
+                            showDenyButton: false,
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
                         })
                     }, 200)
 
@@ -328,6 +348,12 @@ const RegisterModules = {
                     Swal.fire({
                         icon: 'error',
                         title: VueI18n.t("something went wrong"),
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+
                     })
                 }
             }
@@ -368,11 +394,21 @@ const RegisterModules = {
                     Swal.fire({
                         icon: 'error',
                         title: VueI18n.t("the username or password is incorrect"),
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
                     })
                 } else {
                     Swal.fire({
                         icon: 'error',
                         title: VueI18n.t("something went wrong"),
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
                     })
                 }
             }
