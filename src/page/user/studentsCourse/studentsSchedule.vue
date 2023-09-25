@@ -757,7 +757,7 @@
               <v-card
                 v-for="(item_booked, index_booked) in ReserveList()"
                 :key="`${index_booked}-reserve`"
-                @click="showCard(index, item_booked)"
+                @click="showCard(index_booked, item_booked)"
                 class="my-5 cursor-pointer"
               >
                 <v-card-text>
@@ -876,8 +876,9 @@
                       </v-col>
                     </v-row>
                   </div>
+                  <!-- card Detail -->
                   <div
-                    v-if="activeCard === index && !course_is_loading"
+                    v-if="activeCard === index_booked && !course_is_loading"
                     class="mt-3"
                   >
                     <v-card outlined>

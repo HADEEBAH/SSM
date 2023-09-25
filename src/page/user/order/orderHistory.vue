@@ -12,7 +12,7 @@
               class="rounded-lg border-2 border-[#ff6b81] text-lg font-bold"
               align="center"
             >
-            {{ $t("no data found") }}
+              {{ $t("no data found") }}
             </v-card-text>
           </v-card>
         </div>
@@ -35,7 +35,7 @@
                     color="#F0F9EE"
                     text-color="#58A144"
                   >
-                    {{ $t(order.paymentStatus)  }}
+                    {{ $t(order.paymentStatus) }}
                   </v-chip>
 
                   <v-chip
@@ -43,7 +43,7 @@
                     color="#FFF9E8"
                     text-color="#FCC419"
                   >
-                    {{ $t(order.paymentStatus)  }}
+                    {{ $t(order.paymentStatus) }}
                   </v-chip>
 
                   <v-chip
@@ -51,7 +51,7 @@
                     color="#FDECEC"
                     text-color="#F03D3E"
                   >
-                    {{ $t(order.paymentStatus)  }}
+                    {{ $t(order.paymentStatus) }}
                   </v-chip>
 
                   <v-chip v-else color="#FDECEC" text-color="#F03D3E">
@@ -91,13 +91,17 @@
                               cols="12"
                               sm="6"
                               class="align-self-center text-lg font-bold"
-                              >{{ $i18n.locale == 'th' ? course.courseNameTh :  course.courseNameEn }}</v-col
+                              >{{
+                                $i18n.locale == "th"
+                                  ? course.courseNameTh
+                                  : course.courseNameEn
+                              }}</v-col
                             >
                           </v-row>
                           <v-row dense>
                             <v-col class="text-md py-2" cols="12" sm="6">
                               <v-row dense>
-                                <v-col cols="auto">{{ $t('coach') }} : </v-col>
+                                <v-col cols="auto">{{ $t("coach") }} : </v-col>
                                 <v-col>{{
                                   course.coachName ? course.coachName : "-"
                                 }}</v-col>
@@ -105,7 +109,7 @@
                             </v-col>
                             <v-col class="text-md py-2" cols="12" sm="6">
                               <v-row dense>
-                                <v-col cols="auto">{{ $t('times') }} :</v-col>
+                                <v-col cols="auto">{{ $t("times") }} :</v-col>
                                 <v-col>{{
                                   `${
                                     course.timeStartOrder &&
@@ -117,7 +121,7 @@
                                     course.timeEndOrder !== ""
                                       ? course.timeEndOrder
                                       : "-"
-                                  } ${ $t("o'clock") }`
+                                  } ${$t("o'clock")}`
                                 }}</v-col>
                               </v-row>
                             </v-col>
@@ -134,7 +138,8 @@
                             @click="course.show_student = !course.show_student"
                             text
                             class="font-bold"
-                            >{{$t("show student list")}}<v-icon color="#ff6b81">{{
+                            >{{ $t("show student list")
+                            }}<v-icon color="#ff6b81">{{
                               course.show_student
                                 ? "mdi-chevron-up"
                                 : "mdi-chevron-down"
@@ -155,16 +160,25 @@
                             <v-card flat class="w-full my-2">
                               <v-card-text class="border-2 border-[#ff6b81]">
                                 <v-col cols="12" calign="start">
-                                  <span class="font-bold">{{ $t('first name') }} - {{$t('last name') }} : </span>
+                                  <span class="font-bold"
+                                    >{{ $t("first name") }} -
+                                    {{ $t("last name") }} :
+                                  </span>
                                   {{
-                                    $i18n.locale == "th" ? `${student.firstNameTh} ${student.lastNameTh}` : `${student.firstNameEng} ${student.lastNameEng}`
+                                    $i18n.locale == "th"
+                                      ? `${student.firstNameTh} ${student.lastNameTh}`
+                                      : `${student.firstNameEng} ${student.lastNameEng}`
                                   }}
                                 </v-col>
                                 <v-col cols="12" calign="start">
-                                  <span class="font-bold"> {{ $t('phone number') }} : </span>
+                                  <span class="font-bold">
+                                    {{ $t("phone number") }} :
+                                  </span>
                                   {{ `${student.mobileNo}` }} </v-col
                                 ><v-col cols="12" calign="start">
-                                  <span class="font-bold"> {{ $t('email') }} : </span>
+                                  <span class="font-bold">
+                                    {{ $t("email") }} :
+                                  </span>
                                   {{ `${student.email}` }}
                                 </v-col>
                               </v-card-text>
@@ -178,34 +192,47 @@
               </v-card>
               <v-row dense>
                 <v-col class="font-bold" align="right">
-                  {{ $t('transaction time') }}:
+                  {{ $t("transaction time") }}:
                 </v-col>
                 <v-col cols="5" align="right">
                   {{ genDate(order.createdDateStr) }}
                 </v-col>
               </v-row>
               <v-row dense>
-                <v-col class="font-bold" align="right"> {{$t('listed by')}}: </v-col>
+                <v-col class="font-bold" align="right">
+                  {{ $t("listed by") }}:
+                </v-col>
                 <v-col cols="5" align="right">
                   {{
-                    $i18n.locale == "th" ? `${order.createdByData.firstNameTh}  ${order.createdByData.lastNameTh}` : `${order.createdByData.firstNameEng}  ${order.createdByData.lastNameEng}`
+                    $i18n.locale == "th"
+                      ? `${order.createdByData.firstNameTh}  ${order.createdByData.lastNameTh}`
+                      : `${order.createdByData.firstNameEng}  ${order.createdByData.lastNameEng}`
                   }}
                 </v-col>
               </v-row>
               <v-row dense>
-                <v-col class="font-bold" align="right"> {{$t('paid price')}}: </v-col>
+                <v-col class="font-bold" align="right">
+                  {{ $t("paid price") }}:
+                </v-col>
                 <v-col cols="5" align="right">
-                  {{ order.totalPrice.toLocaleString() }} {{ $t('baht') }}
+                  {{ order.totalPrice.toLocaleString() }} {{ $t("baht") }}
                 </v-col>
               </v-row>
               <v-row dense>
                 <v-col
                   cols="auto"
                   align="right"
-                  v-if="order.paymentStatus === 'pending' &&  (order.createdByData.userOneId == userData.account_id )"
+                  v-if="
+                    order.paymentStatus === 'pending' &&
+                    order.createdByData.userOneId == userData.account_id
+                  "
                 >
-                  <v-btn @click="cancelOrder(order.orderId)" depressed dark color="#ff6b81"
-                    ><v-icon>mdi-close</v-icon>{{ $t('cancel') }}</v-btn
+                  <v-btn
+                    @click="cancelOrder(order.orderId)"
+                    depressed
+                    dark
+                    color="#ff6b81"
+                    ><v-icon>mdi-close</v-icon>{{ $t("cancel") }}</v-btn
                   >
                 </v-col>
                 <v-col
@@ -214,7 +241,8 @@
                   v-if="order.paymentStatus === 'pending'"
                 >
                   <v-btn @click="payment(order)" outlined color="#ff6b81"
-                    ><v-icon>mdi-cash</v-icon>{{ $t('proceed to payment')}}</v-btn
+                    ><v-icon>mdi-cash</v-icon
+                    >{{ $t("proceed to payment") }}</v-btn
                   >
                 </v-col>
               </v-row>
@@ -236,14 +264,11 @@ export default {
   data: () => ({
     panel: false,
     course_id_select: "",
-    userData : null
+    userData: null,
   }),
   mounted() {
-    this.userData = JSON.parse(localStorage.getItem("userDetail"))
-    this.$store.dispatch(
-      "NavberUserModules/changeTitleNavber",
-      "my order"
-    );
+    this.userData = JSON.parse(localStorage.getItem("userDetail"));
+    this.$store.dispatch("NavberUserModules/changeTitleNavber", "my order");
     this.getHistory();
   },
   watch: {},
@@ -255,18 +280,21 @@ export default {
   },
   methods: {
     ...mapActions({
-      userUpdateOrderCancelStatus : "OrderModules/userUpdateOrderCancelStatus",
+      userUpdateOrderCancelStatus: "OrderModules/userUpdateOrderCancelStatus",
       savePayment: "OrderModules/savePayment",
       getHistory: "OrderModules/getHistory",
     }),
     genDate(date) {
       const options = { year: "numeric", month: "long", day: "numeric" };
-      return new Date(date).toLocaleString(this.$i18n.locale == "th" ? 'th-TH' : "en-US", options)
+      return new Date(date).toLocaleString(
+        this.$i18n.locale == "th" ? "th-TH" : "en-US",
+        options
+      );
     },
-    cancelOrder(order_id){
+    cancelOrder(order_id) {
       Swal.fire({
         icon: "question",
-        title:  this.$t("want to cancel?"),
+        title: this.$t("want to cancel?"),
         showDenyButton: false,
         showCancelButton: true,
         cancelButtonText: this.$t("cancel"),
@@ -274,10 +302,10 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.userUpdateOrderCancelStatus({
-            order_id : order_id
-          })
+            order_id: order_id,
+          });
         }
-      })
+      });
     },
     payment(payment_data) {
       Swal.fire({
