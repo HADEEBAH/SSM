@@ -631,6 +631,7 @@ const orderModules = {
           },
         };
         // console.log(payload)
+        // let localhost = `http://localhost:3002`
         let { data } = await axios.post(
           `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,
           payload,
@@ -703,9 +704,10 @@ const orderModules = {
                 total: data.data.totalPrice,
                 recipient: user_data.account_id,
               };
-              let endpoint = process.env.VUE_APP_URL;
+              // let endpoint = "http://localhost:3003"
+              // let endpoint = process.env.VUE_APP_URL;
               let payment = await axios.patch(
-                `${endpoint}/api/v1/payment/data/${data.data.orderNumber}`,
+                `${process.env.VUE_APP_URL}/api/v1/payment/data/${data.data.orderNumber}`,
                 payment_payload
               );
               if (payment.data.statusCode === 200) {
@@ -735,6 +737,12 @@ const orderModules = {
                 context.commit("SetOrderIsLoading", false);
               }
             } else {
+              const order_enpoint = `${process.env.VUE_APP_URL}/api/v1/order/update/${data.data.orderNumber}`
+              const payment_payload = {
+                paymentType: "",
+                paymentStatus: "pending",
+              };
+              await axios.patch(order_enpoint,payment_payload)
               Swal.fire({
                 icon: "success",
                 title: VueI18n.t("succeed"),
@@ -911,6 +919,7 @@ const orderModules = {
       }
     },
     async updatePayment(context, { order_data }) {
+      context.commit("SetOrdersIsLoading", true)
       try {
         let config = {
           headers: {
@@ -919,72 +928,170 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let payment_payload = {
-          orderId: order_data.orderNumber,
-          paymentType: order_data.paymentType,
-          total: order_data.totalPrice,
-        };
-        let { data } = await axios.patch(
-          `${process.env.VUE_APP_URL}/api/v1/payment/data/${order_data.orderNumber}`,
-          payment_payload,
-          config
-        );
-        if (data.statusCode === 200) {
-          await Swal.fire({
-            icon: "success",
-            title: VueI18n.t("succeed"),
-            text: VueI18n.t("confirmation of successful payment"),
-            showDenyButton: false,
-            showCancelButton: false,
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-          }).finally(() => {
-            context.dispatch("GetOrderDetail", {
-              order_number: order_data.orderNumber,
+        // let localhost = "http://localhost:3002"
+        let updateStartDate = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/update-orderid/${order_data.orderId}`,{},config)
+        if(updateStartDate.data.statusCode == 200){
+          // console.log(updateStartDate)
+          let payment_payload = {
+            orderId: order_data.orderNumber,
+            paymentType: order_data.paymentType,
+            total: order_data.totalPrice,
+          };
+          let { data } = await axios.patch(
+            `${process.env.VUE_APP_URL}/api/v1/payment/data/${order_data.orderNumber}`,
+            payment_payload,
+            config
+          );
+          if (data.statusCode === 200) {
+            context.commit("SetOrdersIsLoading", false)
+            await Swal.fire({
+              icon: "success",
+              title: VueI18n.t("succeed"),
+              text: VueI18n.t("confirmation of successful payment"),
+              showDenyButton: false,
+              showCancelButton: false,
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+            }).finally(() => {
+              context.dispatch("GetOrderDetail", {
+                order_number: order_data.orderNumber,
+              });
             });
-          });
+          }
         }
       } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: VueI18n.t("something went wrong"),
-          showDenyButton: false,
-          showCancelButton: false,
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-        });
+        context.commit("SetOrdersIsLoading", false)
+        if(error.response.data.message == "over study end date"){
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("unable to register"),
+            text: VueI18n.t(
+              "the class period has ended"
+            ),
+            showCancelButton: false,
+            confirmButtonText: VueI18n.t("agree"),
+          });
+        }else if( error.response.data.message == "over register date"){
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("unable to register"),
+            text: VueI18n.t(
+              "outside the register date"
+            ),
+            showCancelButton: false,
+            confirmButtonText: VueI18n.t("agree"),
+          });
+        }else if (
+          error.response.data.message ==
+          "Cannot register , fail at course monitor , course-coach or seats are full"
+        ) {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("unable to register"),
+            text: VueI18n.t(
+              "unable to register Due to insufficient seats or the coach teaching in another package"
+            ),
+            showCancelButton: false,
+            confirmButtonText: VueI18n.t("agree"),
+          });
+        }else if(error.response.data.message === "Cannot register , The seats are full."){
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t(
+              "cannot register , The seats are full"
+            ),
+            showCancelButton: false,
+            confirmButtonText: VueI18n.t("agree"),
+          });
+        }else{
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("something went wrong"),
+            timer: 3000,
+            timerProgressBar: true,
+            showDenyButton: false,
+            showCancelButton: false,
+          });
+        }
       }
     },
     async savePayment(context, { paymnet_data }) {
       try {
-        let payment_payload = {
-          orderId: paymnet_data.orderNumber,
-          total: paymnet_data.totalPrice,
-          subtotal: 0.0,
-          vat: 0,
-          vatRate: 0,
-          orderDesc: "",
-        };
-        let { data } = await axios.post(
-          `${process.env.VUE_APP_URL}/api/v1/payment/code`,
-          payment_payload
-        );
-        if (data.statusCode === 201) {
-          window.location.href = data.data;
+        // console.log(paymnet_data)
+        // let localhost = "http://localhost:3002"
+        let updateStartDate = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/update-orderid/${paymnet_data.orderId}`)
+        if(updateStartDate.data.statusCode == 200){
+          let payment_payload = {
+            orderId: paymnet_data.orderNumber,
+            total: paymnet_data.totalPrice,
+            subtotal: 0.0,
+            vat: 0,
+            vatRate: 0,
+            orderDesc: "",
+          };
+          let { data } = await axios.post(
+            `${process.env.VUE_APP_URL}/api/v1/payment/code`,
+            payment_payload
+          );
+          if (data.statusCode === 201) {
+            window.location.href = data.data;
+          }
         }
+       
       } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: VueI18n.t("something went wrong"),
-          text: VueI18n.t("error.message"),
-          timer: 3000,
-          timerProgressBar: true,
-          showCancelButton: false,
-          showConfirmButton: false,
-
-        });
+        if(error.response.data.message == "over study end date"){
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("unable to register"),
+            text: VueI18n.t(
+              "the class period has ended"
+            ),
+            showCancelButton: false,
+            confirmButtonText: VueI18n.t("agree"),
+          });
+        }else if( error.response.data.message == "over register date"){
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("unable to register"),
+            text: VueI18n.t(
+              "outside the register date"
+            ),
+            showCancelButton: false,
+            confirmButtonText: VueI18n.t("agree"),
+          });
+        }else if (
+          error.response.data.message ==
+          "Cannot register , fail at course monitor , course-coach or seats are full"
+        ) {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("unable to register"),
+            text: VueI18n.t(
+              "unable to register Due to insufficient seats or the coach teaching in another package"
+            ),
+            showCancelButton: false,
+            confirmButtonText: VueI18n.t("agree"),
+          });
+        }else if(error.response.data.message === "Cannot register , The seats are full."){
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t(
+              "cannot register , The seats are full"
+            ),
+            showCancelButton: false,
+            confirmButtonText: VueI18n.t("agree"),
+          });
+        }else{
+          Swal.fire({
+            icon: "error",
+            text: `${VueI18n.t("something went wrong")} ${error.message}`,
+            showDenyButton: false,
+            showCancelButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+          });
+        }
       }
     },
     async GetCartList(context, account_id) {
