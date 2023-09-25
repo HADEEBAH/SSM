@@ -717,7 +717,7 @@ export default {
       } else {
         Swal.fire({
           icon: "warning",
-          title: this.$t("something went wrong"),
+          title: this.$t("warning"),
           text: this.$t("username not found"),
           timer: 3000,
           timerProgressBar: true,
@@ -774,7 +774,7 @@ export default {
       } else {
         Swal.fire({
           icon: "warning",
-          title: this.$t("something went wrong"),
+          title: this.$t("warning"),
           text: this.$t("username not found"),
           timer: 3000,
           timerProgressBar: true,
@@ -865,8 +865,8 @@ export default {
         title: this.$t("do you want to increase your relationship?"),
         showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
@@ -971,6 +971,7 @@ export default {
                   showCancelButton: false,
                   showConfirmButton: false,
                 });
+
                 this.add_relations = false;
                 this.relation = {
                   account_id: "",
@@ -1000,8 +1001,8 @@ export default {
         title: this.$t("do you want to save it?"),
         showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
