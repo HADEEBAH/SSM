@@ -74,6 +74,7 @@
             outlined
             v-model="category.categoryNameTh"
             @keydown="validate($event, 'th')"
+            @paste="preventPaste"
           ></v-text-field>
         </v-col>
 
@@ -90,6 +91,7 @@
             outlined
             v-model="category.categoryNameEng"
             @keydown="validate($event, 'en')"
+            @paste="preventPaste"
           ></v-text-field>
         </v-col>
 
@@ -338,6 +340,9 @@ export default {
           }
         });
       }
+    },
+    preventPaste(event) {
+      event.preventDefault();
     },
   },
   computed: {
