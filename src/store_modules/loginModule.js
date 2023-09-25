@@ -290,7 +290,12 @@ const loginModules = {
                 if (response.message === "Request failed with status code 401") {
                     Swal.fire({
                         icon: 'error',
-                        title: VueI18n.t("the username or password is incorrect"),
+                        title: VueI18n.t("something went wrong"),
+                        text: VueI18n.t("the username or password is incorrect"),
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
                     })
                 } else {
                     Swal.fire({

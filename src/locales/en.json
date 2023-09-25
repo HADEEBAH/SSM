@@ -233,12 +233,12 @@
     "do you want to build an wls?": "Do you want to create WLS?",
     "do you want to edit wls?": "Do you want to make change?",
     "do you want to change your status?": "Do you want to change your status?",
-    "do you want to delete this teaching time?" : "Do you want to delete this teaching time?",
-    "do you want to delete this teaching day?": "Do you want to delete this teaching day?",
     "do you want to save it?": "Do you want to save it?",
     "duplicate relationship": "Duplicate relationship",
     "duplicate user in this course Unable to register": "Duplicate user in this course Unable to register",
-    "duplicate roles or the user does not yet have a role": "Duplicate roles or the user does not yet have a role",
+    "duplicate roles or the user does not yet have a role" : "Duplicate roles or the user does not yet have a role",
+    "do you want to delete this teaching time?" : "Do you want to delete this teaching time?",
+    "do you want to delete this teaching day?": "Do you want to delete this teaching day?",
     "duration/coach" : "Duration/Coach",
 
 

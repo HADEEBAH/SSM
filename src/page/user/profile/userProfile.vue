@@ -1059,7 +1059,8 @@ export default {
             .catch(() => {
               Swal.fire({
                 icon: "error",
-                title: this.$t("failed to delete"),
+                title: this.$t("something went wrong"),
+                text: this.$t("failed to delete"),
                 timer: 3000,
                 timerProgressBar: true,
                 showCancelButton: false,
