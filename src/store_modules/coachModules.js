@@ -266,9 +266,10 @@ const coachModules = {
           icon: "error",
           title: VueI18n.t("something went wrong"),
           timer: 3000,
-          timerProgressBar: true,
+          showDenyButton: false,
           showCancelButton: false,
           showConfirmButton: false,
+          timerProgressBar: true,
         })
         context.commit("SetStudentCheckInIsLoading", false)
       }
@@ -308,9 +309,10 @@ const coachModules = {
           icon: "error",
           title: VueI18n.t("something went wrong"),
           timer: 3000,
-          timerProgressBar: true,
+          showDenyButton: false,
           showCancelButton: false,
           showConfirmButton: false,
+          timerProgressBar: true,
         })
       }
     },
@@ -367,9 +369,10 @@ const coachModules = {
           icon: "error",
           title: VueI18n.t("something went wrong"),
           timer: 3000,
-          timerProgressBar: true,
+          showDenyButton: false,
           showCancelButton: false,
           showConfirmButton: false,
+          timerProgressBar: true,
         })
       }
     },
