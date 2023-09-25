@@ -267,6 +267,7 @@ export default {
   }),
   created() {
     this.order_data = JSON.parse(localStorage.getItem("Order"));
+    this.changeCourseOrderData(this.order_data);
     if (this.order_data.course_type_id === "CT_2") {
       this.GetCourseStudent({
         course_id: this.order_data.course_id,
@@ -274,8 +275,6 @@ export default {
       });
       this.GetShortCourseMonitor({course_id: this.order_data.course_id,})
     }
-  },
-  beforeMount() {
     this.GetCourse(this.$route.params.course_id);
   },
   mounted() {

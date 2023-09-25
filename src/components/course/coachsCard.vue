@@ -565,7 +565,7 @@ export default {
       }
     },
     removeChip(item, value) {
-      value.splice(value.indexOf(item), 1);
+      value.splice(value.indexOf(item.value), 1);
     },
     disabledMinutes(hour, coachIndex, teachDayIndex) {
       const teach_days_used =
