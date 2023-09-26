@@ -1381,28 +1381,28 @@ export default {
     previewUrl: null,
     show_comment_dialog: false,
     tab_evaluate: "evaluate_students", // Evaluate students, Assess the learner's potential
-    check_in_status_options: [
-      {
-        label: "punctual",
-        value: "punctual",
-        color: "#58A144",
-        bg_color: "#F0F9EE",
-      },
-      { label: "late", value: "late", color: "#FCC419", bg_color: "#FFF9E8" },
-      { label: "leave", value: "leave", color: "#43A4F5", bg_color: "#CFE2F3" },
-      {
-        label: "emergency leave",
-        value: "emergency leave",
-        color: "#43A4F5",
-        bg_color: "#CFE2F3",
-      },
-      {
-        label: "absent",
-        value: "absent",
-        color: "#F03D3E",
-        bg_color: "#F4CCCC",
-      },
-    ],
+    // check_in_status_options: [
+    //   {
+    //     label: "punctual",
+    //     value: "punctual",
+    //     color: "#58A144",
+    //     bg_color: "#F0F9EE",
+    //   },
+    //   { label: "late", value: "late", color: "#FCC419", bg_color: "#FFF9E8" },
+    //   { label: "leave", value: "leave", color: "#43A4F5", bg_color: "#CFE2F3" },
+    //   {
+    //     label: "emergency leave",
+    //     value: "emergency leave",
+    //     color: "#43A4F5",
+    //     bg_color: "#CFE2F3",
+    //   },
+    //   {
+    //     label: "absent",
+    //     value: "absent",
+    //     color: "#F03D3E",
+    //     bg_color: "#F4CCCC",
+    //   },
+    // ],
     learners_form: false,
     potential_form: false,
     summary_form: false,
@@ -1560,6 +1560,35 @@ export default {
       });
 
       return "";
+    },
+    check_in_status_options() {
+      return [
+        {
+          label: this.$t("punctual"),
+          value: "punctual",
+          color: "#58A144",
+          bg_color: "#F0F9EE",
+        },
+        { label: "late", value: "late", color: "#FCC419", bg_color: "#FFF9E8" },
+        {
+          label: this.$t("leave"),
+          value: "leave",
+          color: "#43A4F5",
+          bg_color: "#CFE2F3",
+        },
+        {
+          label: this.$t("emergency leave"),
+          value: "emergency leave",
+          color: "#43A4F5",
+          bg_color: "#CFE2F3",
+        },
+        {
+          label: this.$t("absent"),
+          value: "absent",
+          color: "#F03D3E",
+          bg_color: "#F4CCCC",
+        },
+      ];
     },
   },
   methods: {
