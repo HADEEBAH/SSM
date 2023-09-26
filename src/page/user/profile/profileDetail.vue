@@ -27,7 +27,7 @@
                 @click="removeImg"
                 class="w-full white--text"
               >
-                <span class="mdi mdi-close">{{ $t("cancle") }}</span>
+                <span class="mdi mdi-close">{{ $t("cancel") }}</span>
               </v-btn>
             </v-img>
           </div>
@@ -132,7 +132,7 @@
             color="#ff6b81"
             @click="cancel()"
           >
-            <span>{{ $t("cancle") }}</span>
+            <span>{{ $t("cancel") }}</span>
           </v-btn>
         </v-col>
         <v-col cols="6" v-if="isEnabled">
@@ -172,7 +172,7 @@
                   outlined
                   color="#ff6b81"
                   @click="closeDialogPorfile(false)"
-                  >{{ $t("cancle") }}</v-btn
+                  >{{ $t("cancel") }}</v-btn
                 >
               </v-col>
               <v-col>

@@ -92,10 +92,11 @@
                 </v-autocomplete>
               </v-col>
               <v-col cols="12" sm="4">
-                <label-custom
+                <label-custom required :text="$t('5555')"></label-custom>
+                <!-- <label-custom
                   required
                   :text="$t('teaching day')"
-                ></label-custom>
+                ></label-custom> -->
                 <v-autocomplete
                   dense
                   :disabled="disable"
