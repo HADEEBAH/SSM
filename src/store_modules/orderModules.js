@@ -742,7 +742,7 @@ const orderModules = {
                 paymentType: "",
                 paymentStatus: "pending",
               };
-              await axios.patch(order_enpoint,payment_payload)
+              await axios.patch(order_enpoint, payment_payload)
               Swal.fire({
                 icon: "success",
                 title: VueI18n.t("succeed"),
@@ -929,8 +929,8 @@ const orderModules = {
           },
         };
         // let localhost = "http://localhost:3002"
-        let updateStartDate = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/update-orderid/${order_data.orderId}`,{},config)
-        if(updateStartDate.data.statusCode == 200){
+        let updateStartDate = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/update-orderid/${order_data.orderId}`, {}, config)
+        if (updateStartDate.data.statusCode == 200) {
           // console.log(updateStartDate)
           let payment_payload = {
             orderId: order_data.orderNumber,
@@ -962,27 +962,33 @@ const orderModules = {
         }
       } catch (error) {
         context.commit("SetOrdersIsLoading", false)
-        if(error.response.data.message == "over study end date"){
+        if (error.response.data.message == "over study end date") {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("unable to register"),
             text: VueI18n.t(
               "the class period has ended"
             ),
+            showDenyButton: false,
             showCancelButton: false,
-            confirmButtonText: VueI18n.t("agree"),
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
           });
-        }else if( error.response.data.message == "over register date"){
+        } else if (error.response.data.message == "over register date") {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("unable to register"),
             text: VueI18n.t(
               "outside the register date"
             ),
+            showDenyButton: false,
             showCancelButton: false,
-            confirmButtonText: VueI18n.t("agree"),
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
           });
-        }else if (
+        } else if (
           error.response.data.message ==
           "Cannot register , fail at course monitor , course-coach or seats are full"
         ) {
@@ -992,19 +998,25 @@ const orderModules = {
             text: VueI18n.t(
               "unable to register Due to insufficient seats or the coach teaching in another package"
             ),
+            showDenyButton: false,
             showCancelButton: false,
-            confirmButtonText: VueI18n.t("agree"),
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
           });
-        }else if(error.response.data.message === "Cannot register , The seats are full."){
+        } else if (error.response.data.message === "Cannot register , The seats are full.") {
           Swal.fire({
             icon: "error",
             title: VueI18n.t(
               "cannot register , The seats are full"
             ),
+            showDenyButton: false,
             showCancelButton: false,
-            confirmButtonText: VueI18n.t("agree"),
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
           });
-        }else{
+        } else {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("something went wrong"),
@@ -1027,8 +1039,8 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let updateStartDate = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/update-orderid/${paymnet_data.orderId}`,{}, config)
-        if(updateStartDate.data.statusCode == 200){
+        let updateStartDate = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/update-orderid/${paymnet_data.orderId}`, {}, config)
+        if (updateStartDate.data.statusCode == 200) {
           let payment_payload = {
             orderId: paymnet_data.orderNumber,
             total: paymnet_data.totalPrice,
@@ -1045,29 +1057,35 @@ const orderModules = {
             window.location.href = data.data;
           }
         }
-       
+
       } catch (error) {
-        if(error.response.data.message == "over study end date"){
+        if (error.response.data.message == "over study end date") {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("unable to register"),
             text: VueI18n.t(
               "the class period has ended"
             ),
+            showDenyButton: false,
             showCancelButton: false,
-            confirmButtonText: VueI18n.t("agree"),
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
           });
-        }else if( error.response.data.message == "over register date"){
+        } else if (error.response.data.message == "over register date") {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("unable to register"),
             text: VueI18n.t(
               "outside the register date"
             ),
+            showDenyButton: false,
             showCancelButton: false,
-            confirmButtonText: VueI18n.t("agree"),
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
           });
-        }else if (
+        } else if (
           error.response.data.message ==
           "Cannot register , fail at course monitor , course-coach or seats are full"
         ) {
@@ -1077,24 +1095,32 @@ const orderModules = {
             text: VueI18n.t(
               "unable to register Due to insufficient seats or the coach teaching in another package"
             ),
+            showDenyButton: false,
             showCancelButton: false,
-            confirmButtonText: VueI18n.t("agree"),
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
           });
-        }else if(error.response.data.message === "Cannot register , The seats are full."){
+        } else if (error.response.data.message === "Cannot register , The seats are full.") {
           Swal.fire({
             icon: "error",
             title: VueI18n.t(
               "cannot register , The seats are full"
             ),
-            showCancelButton: false,
-            confirmButtonText: VueI18n.t("agree"),
-          });
-        }else{
-          Swal.fire({
-            icon: "error",
-            text: `${VueI18n.t("something went wrong")} ${error.message}`,
             showDenyButton: false,
             showCancelButton: false,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("something went wrong"),
+            text: error.message,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
             timer: 3000,
             timerProgressBar: true,
           });
@@ -1215,10 +1241,10 @@ const orderModules = {
             icon: "success",
             title: VueI18n.t("succeed"),
             text: VueI18n.t("the transaction was completed successfully"),
+            timer: 3000,
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
-            timer: 3000,
             timerProgressBar: true,
           });
           context.dispatch("getHistory");
@@ -1228,9 +1254,10 @@ const orderModules = {
           icon: "error",
           title: VueI18n.t("something went wrong"),
           timer: 3000,
-          timerProgressBar: true,
+          showDenyButton: false,
           showCancelButton: false,
           showConfirmButton: false,
+          timerProgressBar: true,
 
         });
       }
@@ -1324,9 +1351,10 @@ const orderModules = {
           title: VueI18n.t("something went wrong"),
           text: VueI18n.t(error.message),
           timer: 3000,
-          timerProgressBar: true,
+          showDenyButton: false,
           showCancelButton: false,
           showConfirmButton: false,
+          timerProgressBar: true,
 
         });
       }

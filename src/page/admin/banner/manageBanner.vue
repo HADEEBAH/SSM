@@ -181,7 +181,7 @@ export default {
     async insertBannerList() {
       Swal.fire({
         icon: "question",
-        text: this.$t("do you want to add banner?"),
+        title: this.$t("do you want to add banner?"),
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: this.$t("agree"),
@@ -230,7 +230,7 @@ export default {
     async removeBannerFiles(id) {
       Swal.fire({
         icon: "question",
-        text: this.$t("do you want to delete the banner?"),
+        title: this.$t("do you want to delete the banner?"),
         showCancelButton: true,
         confirmButtonText: this.$t("agree"),
         cancelButtonText: this.$t("cancel"),
