@@ -1569,7 +1569,12 @@ export default {
           color: "#58A144",
           bg_color: "#F0F9EE",
         },
-        { label: "late", value: "late", color: "#FCC419", bg_color: "#FFF9E8" },
+        {
+          label: this.$t("late"),
+          value: "late",
+          color: "#FCC419",
+          bg_color: "#FFF9E8",
+        },
         {
           label: this.$t("leave"),
           value: "leave",
