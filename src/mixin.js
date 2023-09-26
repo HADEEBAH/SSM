@@ -44,6 +44,8 @@ export default {
               timerProgressBar: true,
               showCancelButton: false,
               showConfirmButton: false,
+              showDenyButton: false,
+
             })
           }
         } else {
@@ -55,6 +57,7 @@ export default {
             timerProgressBar: true,
             showCancelButton: false,
             showConfirmButton: false,
+            showDenyButton: false,
           })
         }
       });

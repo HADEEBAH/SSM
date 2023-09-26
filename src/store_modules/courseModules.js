@@ -635,9 +635,10 @@ const CourseModules = {
           icon: "error",
           title: VueI18n.t("something went wrong"),
           timer: 3000,
-          timerProgressBar: true,
+          showDenyButton: false,
           showCancelButton: false,
           showConfirmButton: false,
+          timerProgressBar: true,
         })
       }
     },
@@ -733,9 +734,10 @@ const CourseModules = {
           icon: "error",
           title: VueI18n.t("something went wrong"),
           timer: 3000,
-          timerProgressBar: true,
+          showDenyButton: false,
           showCancelButton: false,
           showConfirmButton: false,
+          timerProgressBar: true,
         })
       }
     },
@@ -799,9 +801,10 @@ const CourseModules = {
           icon: "error",
           title: VueI18n.t("something went wrong"),
           timer: 3000,
-          timerProgressBar: true,
+          showDenyButton: false,
           showCancelButton: false,
           showConfirmButton: false,
+          timerProgressBar: true,
         })
       }
     },
@@ -833,9 +836,10 @@ const CourseModules = {
           icon: "error",
           title: VueI18n.t("something went wrong"),
           timer: 3000,
-          timerProgressBar: true,
+          showDenyButton: false,
           showCancelButton: false,
           showConfirmButton: false,
+          timerProgressBar: true,
         })
       }
     },
@@ -867,9 +871,10 @@ const CourseModules = {
           icon: "error",
           title: VueI18n.t("something went wrong"),
           timer: 3000,
-          timerProgressBar: true,
+          showDenyButton: false,
           showCancelButton: false,
           showConfirmButton: false,
+          timerProgressBar: true,
         })
       }
     },
@@ -915,9 +920,10 @@ const CourseModules = {
           icon: "error",
           title: VueI18n.t("something went wrong"),
           timer: 3000,
-          timerProgressBar: true,
+          showDenyButton: false,
           showCancelButton: false,
           showConfirmButton: false,
+          timerProgressBar: true,
         })
       }
     },
@@ -1534,9 +1540,10 @@ const CourseModules = {
           icon: "error",
           title: VueI18n.t("something went wrong"),
           timer: 3000,
-          timerProgressBar: true,
+          showDenyButton: false,
           showCancelButton: false,
           showConfirmButton: false,
+          timerProgressBar: true,
         })
       }
     },
