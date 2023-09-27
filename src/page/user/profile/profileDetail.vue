@@ -167,15 +167,15 @@
               </v-col>
             </v-row>
             <v-row dense>
-              <v-col align="right">
+              <!-- <v-col align="right">
                 <v-btn
                   outlined
                   color="#ff6b81"
                   @click="closeDialogPorfile(false)"
                   >{{ $t("cancle") }}</v-btn
                 >
-              </v-col>
-              <v-col>
+              </v-col> -->
+              <v-col align="center">
                 <v-btn
                   depressed
                   color="#ff6b81"

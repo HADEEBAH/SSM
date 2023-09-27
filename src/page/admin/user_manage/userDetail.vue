@@ -710,6 +710,19 @@
                           <template v-slot:[`item.timeLine`]="{ item }">
                             {{ item.cpo ? item.cpo.optionName : "-" }}
                           </template>
+
+                          <template v-slot:[`no-results`]>
+                            <div class="font-bold">
+                              {{ $t("no data found in table") }}
+                            </div>
+                          </template>
+                          <template v-slot:no-data>
+                            <v-list-item>
+                              <v-list-item-title>
+                                {{ $t("no data found") }}
+                              </v-list-item-title>
+                            </v-list-item>
+                          </template>
                         </v-data-table>
                       </v-col>
                     </v-row>
@@ -1006,6 +1019,12 @@
                   <template v-slot:[`item.timeLine`]="{ item }">
                     {{ item.cpo ? item.cpo.optionName : "-" }}
                   </template>
+
+                  <template v-slot:[`no-results`]>
+                    <div class="font-bold">
+                      {{ $t("no data found in table") }}
+                    </div>
+                  </template>
                 </v-data-table>
               </v-col>
               <!-- TABLE R3 -->
@@ -1028,6 +1047,11 @@
                         {{ $t("course not found") }}
                       </v-col>
                     </v-row>
+                  </template>
+                  <template v-slot:[`no-results`]>
+                    <div class="font-bold">
+                      {{ $t("no data found in table") }}
+                    </div>
                   </template>
                 </v-data-table>
               </v-col>
@@ -1845,7 +1869,15 @@ export default {
             });
           }
         } else {
-          Swal.fire(this.$t("your data will not be saved"), "", "info");
+          Swal.fire({
+            icon: "info",
+            title: this.$t("cancel"),
+            text: this.$t("your data will not be saved"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
         }
       });
     },
