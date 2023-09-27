@@ -40,7 +40,7 @@
       >
         <template v-slot:event="{ event }">
           {{ event.start_time && event.end_time ? `${event.start_time} - ${event.end_time}` : '' }}
-          {{ event.start_time && event.end_time ? `\n${$i18n.locale == 'th' ? event.name : event.subtitle}` : `${event.name}` }}
+          {{ event.start_time && event.end_time ? `\n${event.name} (${event.subtitle})` : `${event.name}` }}
         </template>
         <template v-if="type === 'week'" v-slot:day-body="{ date, week }">
           <div

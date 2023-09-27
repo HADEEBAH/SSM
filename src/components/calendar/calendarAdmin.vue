@@ -35,7 +35,7 @@
     >
       <template v-slot:event="{ event }">
         {{ event.timed ?? event.timed }}
-        {{  event.timed ? `\n${event.name}` : `${event.name}` }}
+        {{  event.timed && event.itmeData.nameEn ? `\n${event.name}(${$t(event.itmeData.nameEn)})` : `${event.name}` }}
       </template>
     </v-calendar>
 
@@ -134,7 +134,7 @@
                     : $t("course name")
                 }}</label>
                 <v-text-field
-                  :value="details.name"
+                  :value="$i18n.locale == 'th' ? details.name : details.itmeData?.nameEn ? details.itmeData.nameEn : details.name"
                   outlined
                   readonly
                   dense
@@ -248,7 +248,7 @@
                   dense
                   outlined
                   readonly
-                  :value="details.coach"
+                  :value="$i18n.locale == 'th' ? details.itmeData.coachName : details.itmeData?.coachNameEn ? details.itmeData.coachNameEn : details.itmeData.coachName"
                   hide-details
                   color="#ff6b81"
                 >
