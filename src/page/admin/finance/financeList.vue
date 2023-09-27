@@ -121,7 +121,7 @@
               ></v-img>
             </template>
             <template v-slot:header>
-              <div class="font-bold">{{ $t("cancel") }}</div> 
+              <div class="font-bold">{{ $t("cancel") }}</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
@@ -445,7 +445,9 @@
                     <v-autocomplete
                       dense
                       :items="options"
-                      item-text="optionName"
+                      :item-text="
+                        $i18n.locale == 'th' ? 'optionName' : 'optionNameEn'
+                      "
                       item-value="optionId"
                       v-model="export_filter.option_id"
                       class="py-1"
@@ -458,7 +460,11 @@
                     >
                       <template v-slot:selection="{ item, index }">
                         <v-chip dark v-if="index === 0" color="#FF6B81">
-                          <span>{{ item.optionName }}</span>
+                          <span>{{
+                            $i18n.locale == "th"
+                              ? item.optionName
+                              : item.optionNameEn
+                          }}</span>
                         </v-chip>
                         <span
                           v-if="index === 1"

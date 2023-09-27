@@ -15,7 +15,7 @@
               :rules="rules.coach"
               :items="coachs"
               item-value="accountId"
-              item-text="fullNameTh"
+              :item-text="$i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEh'"
               @change="SelectedCoach()"
               v-model="coach_leave_data.coach_id"
             ></v-select>
@@ -880,7 +880,10 @@ export default {
               ) {
                 this.coach_leave_data.dates.push({
                   date: currentDate.toISOString().split("T")[0],
-                  date_str: currentDate.toLocaleDateString("th-TH", options),
+                  date_str: currentDate.toLocaleDateString(
+                    this.$i18n.locale == "th" ? "th-TH" : "en-US",
+                    options
+                  ),
                   courses: [
                     {
                       menu_compensation_date: false,
