@@ -818,140 +818,7 @@ export default {
       username: "",
       tel: "",
     },
-
-    // roles: [
-    //   { role: "Super Admin", privilege: "superAdmin", roleNumber: "R_1" },
-    //   { role: "Admin", privilege: "admin", roleNumber: "R_2" },
-    //   { role: "โค้ช", privilege: "โค้ช", roleNumber: "R_3" },
-    //   { role: "ผู้ปกครอง", privilege: "ผู้ปกครอง", roleNumber: "R_4" },
-    //   { role: "นักเรียน", privilege: "นักเรียน", roleNumber: "R_5" },
-    // ],
-    // roleParentTable: [
-    //   { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
-    //   { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
-    //   { text: "ชื่อคอร์ส", value: "courseNameTh", sortable: false },
-    //   { text: "แพ็กเกจ", value: "cpo.packageName", sortable: false },
-    //   { text: "โค้ช", value: "coachName", sortable: false },
-    //   { text: "ประเภท", value: "cpo.courseTypeNameTh", sortable: false },
-    //   { text: "ระยะเวลา", value: "cpo.optionName", sortable: false },
-    //   { text: "วัน", value: "dates", sortable: false },
-    //   { text: "เวลาเริ่ม", value: "start", sortable: false },
-    //   { text: "เวลาสิ้นสุด", value: "end", sortable: false },
-    // ],
-    // roleStudentTable: [
-    //   { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
-    //   { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
-    //   { text: "ชื่อคอร์ส", value: "courseNameTh", sortable: false },
-    //   { text: "แพ็กเกจ", value: "cpo.packageName", sortable: false },
-    //   { text: "โค้ช", value: "coachName", sortable: false },
-    //   { text: "ประเภท", value: "cpo.courseTypeNameTh", sortable: false },
-    //   { text: "ระยะเวลา", value: "cpo.optionName", sortable: false },
-    //   { text: "วัน", value: "dates", sortable: false },
-    //   { text: "เวลาเริ่ม", value: "start", sortable: false },
-    //   { text: "เวลาสิ้นสุด", value: "end", sortable: false },
-    //   { text: "ราคา", value: "price", sortable: false },
-    // ],
-    // period: ["admin", "Super admin", "โค้ช", "ผู้ปกครอง"],
-    // breadcrumbs: [
-    //   { text: "จัดการผู้ใช้งาน", to: "UserList" },
-    //   { text: "แก้ไขข้อมูลผู้ใช้งาน", to: "" },
-    // ],
-    // title: "ข้อมูลผู้ใช้งาน",
-    // titlePermissionManage: "การจัดการสิทธิ์",
-    // titleCourseDetail: "ข้อมูลคอร์สเรียน",
-    // addStudentData: "เพิ่มข้อมูลผู้ใช้นักเรียน",
-    // addParentData: "เพิ่มข้อมูลผู้ใช้ของผู้ปกครอง",
     titleCreateRelation: "",
-    // rules: {
-    //   firstNameThRules: [
-    //     (val) =>
-    //       (val || "").length > 1 ||
-    //       "โปรดระบุชื่อ (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
-    //     (val) =>
-    //       (val || "").length < 20 ||
-    //       "โปรดระบุชื่อ (ภาษาไทย) ความยาวไม่เกิน 20 ตัวอักษร",
-    //     (val) => /[ก-๏\s]/g.test(val) || "กรุณากรอกชื่อภาษาไทย",
-    //     (val) =>
-    //       !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-    //       "กรุณากรอกชื่อภาษาไทย",
-    //   ],
-    //   firstNameEnRules: [
-    //     (val) =>
-    //       (val || "").length > 1 ||
-    //       "โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
-    //     (val) =>
-    //       (val || "").length < 20 ||
-    //       "โปรดระบุชื่อ (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
-    //     (val) => /[A-Za-z]/g.test(val) || "กรุณากรอกชื่อภาษาอังกฤษ",
-    //     (val) =>
-    //       !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-    //       "กรุณากรอกชื่อภาษาอังกฤษ",
-    //   ],
-    //   lastNameThRules: [
-    //     (val) =>
-    //       (val || "").length > 1 ||
-    //       "โปรดระบุนามสกุล (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
-    //     (val) =>
-    //       (val || "").length < 20 ||
-    //       "โปรดระบุนามสกุล (ภาษาไทย) ความยาวไม่เกิน 20 ตัวอักษร",
-    //     (val) => /[ก-๏\s]/g.test(val) || "กรุณากรอกนามสกุลภาษาไทย",
-    //     (val) =>
-    //       !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-    //       "กรุณากรอกสกุลภาษาไทย",
-    //   ],
-    //   lastNameEnRules: [
-    //     (val) =>
-    //       (val || "").length > 1 ||
-    //       "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
-    //     (val) =>
-    //       (val || "").length < 20 ||
-    //       "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
-    //     (val) => /[A-Za-z ]/g.test(val) || "กรุณากรอกนามสกุลภาษาอังกฤษ",
-    //     (val) =>
-    //       !/[\uD800-\uDBFF][\uDC00-\uDFFF ]/g.test(val) ||
-    //       "กรุณากรอกสกุลภาษาอังกฤษ",
-    //   ],
-    //   name: [
-    //     (val) =>
-    //       (val || "").length > 0 ||
-    //       "ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบใหม่อีกครั้ง",
-    //   ],
-    //   username: [
-    //     () =>
-    //       !this.isMatch ? "ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบใหม่อีกครั้ง " : "",
-    //   ],
-    //   email: [
-    //     (value) => !!value || "Required.",
-    //     (value) => (value || "").length <= 20 || "Max 20 characters",
-    //     (value) => {
-    //       const pattern =
-    //         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    //       return pattern.test(value) || "Invalid e-mail.";
-    //     },
-    //   ],
-    //   usernameRules: [
-    //     (val) =>
-    //       (val || "").length > 5 ||
-    //       "โปรดระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
-    //     (val) =>
-    //       (val || "").length < 20 ||
-    //       "โปรดระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
-    //     (val) => /[A-Za-z0-9 ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-    //     (val) =>
-    //       !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-    //       "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
-    //   ],
-    //   passwordRules: [
-    //     (val) =>
-    //       (val || "").length > 7 ||
-    //       "โปรดระบุรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
-    //     (val) =>
-    //       (val || "").length < 20 ||
-    //       "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
-    //     (val) => !/[ ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
-    //   ],
-    // },
-
     clickCount: 0,
     isCheckedRelation: false,
     global_username: "",
@@ -1233,22 +1100,6 @@ export default {
                   showCancelButton: false,
                   showConfirmButton: false,
                 });
-                // Swal.fire({
-                //   icon: "success",
-                //   title: "บันทึกสำเร็จ",
-                // }).then(async (result) => {
-                //   if (result.isConfirmed) {
-                //     this.add_relations = false;
-                //     this.relation = {
-                //       account_id: "",
-                //       firstname_en: "",
-                //       lastname_en: "",
-                //       username: "",
-                //       tel: "",
-                //     };
-                //     this.GetDataRelationsManagement(this.show_by_id);
-                //   }
-                // });
               } else {
                 throw { error: data };
               }
@@ -1502,13 +1353,13 @@ export default {
 
     dayOfWeekName(days) {
       const daysOfWeek = [
-        "อาทิตย์",
-        "จันทร์",
-        "อังคาร",
-        "พุธ",
-        "พฤหัสบดี",
-        "ศุกร์",
-        "เสาร์",
+        this.$t("sunday"),
+        this.$t("monday"),
+        this.$t("tuesday"),
+        this.$t("wednesday"),
+        this.$t("thursday"),
+        this.$t("friday"),
+        this.$t("saturday"),
       ];
       const dayNames = [];
       for (let i = 0; i < days.length; i++) {
@@ -1554,8 +1405,12 @@ export default {
     },
     roles() {
       return [
-        { role: "Super Admin", privilege: "superAdmin", roleNumber: "R_1" },
-        { role: "Admin", privilege: "admin", roleNumber: "R_2" },
+        {
+          role: this.$t("super admin"),
+          privilege: "superAdmin",
+          roleNumber: "R_1",
+        },
+        { role: this.$t("admin"), privilege: "admin", roleNumber: "R_2" },
         { role: this.$t("coach"), privilege: "โค้ช", roleNumber: "R_3" },
         { role: this.$t("parent"), privilege: "ผู้ปกครอง", roleNumber: "R_4" },
         { role: this.$t("student"), privilege: "นักเรียน", roleNumber: "R_5" },
@@ -1588,10 +1443,18 @@ export default {
         { text: this.$t("coach"), value: "coachName", sortable: false },
         {
           text: this.$t("course type"),
-          value: "cpo.courseTypeNameTh",
+          value:
+            this.$i18n.locale == "th"
+              ? "cpo.courseTypeNameTh"
+              : "cpo.courseTypeNameEn",
           sortable: false,
         },
-        { text: this.$t("periods"), value: "cpo.optionName", sortable: false },
+        {
+          text: this.$t("periods"),
+          value:
+            this.$i18n.locale == "th" ? "cpo.optionName" : "cpo.optionNameEn",
+          sortable: false,
+        },
         { text: this.$t("day"), value: "dates", sortable: false },
         { text: this.$t("start time"), value: "start", sortable: false },
         { text: this.$t("end time"), value: "end", sortable: false },
@@ -1629,10 +1492,18 @@ export default {
         },
         {
           text: this.$t("course type"),
-          value: "cpo.courseTypeNameTh",
+          value:
+            this.$i18n.locale == "th"
+              ? "cpo.courseTypeNameTh"
+              : "cpo.courseTypeNameEn",
           sortable: false,
         },
-        { text: this.$t("periods"), value: "cpo.optionName", sortable: false },
+        {
+          text: this.$t("periods"),
+          value:
+            this.$i18n.locale == "th" ? "cpo.optionName" : "cpo.optionNameEn",
+          sortable: false,
+        },
         { text: this.$t("day"), value: "dates", sortable: false },
         { text: this.$t("start time"), value: "start", sortable: false },
         { text: this.$t("end time"), value: "end", sortable: false },

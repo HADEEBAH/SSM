@@ -1,6 +1,7 @@
 {   "a relationship cannot be established because they are in the same role" : "ไม่สามารถสร้างความสัมพันธ์ได้เนื่องจากอยู่ในบทบาทเดียวกัน",
     "admin has added a course for you":"แอดมินได้เพิ่มคอร์สเรียนให้คุณ",
     "admin applies for course": "แอดมินสมัครคอร์ส",
+    "admin" : "ผู้ดูแลระบบ",
     "add coach" : "เพิ่มโค้ช",
     "add user" : "เพิ่มผู้ใช้",
     "add learner" : "เพิ่มผู้เรียน",
@@ -648,6 +649,7 @@
     "specify the name of the holiday, such as Songkran Day" : "ระบุชื่อวันหยุด เช่น วันสงกรานต์",
     "show certificate": "แสดงหนังสือรับรอง",
     "september": "กันยายน",
+    "super admin": "ผู้ดูแลระบบขั้นสูง",
 
 
     "take annual leave" : "ลาพักร้อนประจำปี",
