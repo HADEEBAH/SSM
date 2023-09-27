@@ -1100,22 +1100,6 @@ export default {
                   showCancelButton: false,
                   showConfirmButton: false,
                 });
-                // Swal.fire({
-                //   icon: "success",
-                //   title: "บันทึกสำเร็จ",
-                // }).then(async (result) => {
-                //   if (result.isConfirmed) {
-                //     this.add_relations = false;
-                //     this.relation = {
-                //       account_id: "",
-                //       firstname_en: "",
-                //       lastname_en: "",
-                //       username: "",
-                //       tel: "",
-                //     };
-                //     this.GetDataRelationsManagement(this.show_by_id);
-                //   }
-                // });
               } else {
                 throw { error: data };
               }

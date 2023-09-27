@@ -988,52 +988,6 @@ export default {
           parseInt(hours.HH) + "." + parseInt(hours.mm);
       }
     },
-    // ChangeStartDate(date) {
-    //   if (!date.start_time_object.mm) {
-    //     date.start_time_object.mm = "00";
-    //   }
-    //   this.course_data.course_period_start_date = `${date.start_time_object.HH}:${date.start_time_object.mm}`;
-    //   if (
-    //     parseInt(date.start_time_object.HH) +
-    //       parseInt(this.course_data.course_hours_obj.HH) >=
-    //     24
-    //   ) {
-    //     date.end_time_object.HH =
-    //       "0" +
-    //       `${
-    //         parseInt(date.start_time_object.HH) +
-    //         parseInt(this.course_data.course_hours_obj.HH) -
-    //         24
-    //       }`.slice(-2);
-    //   } else {
-    //     date.end_time_object.HH = `${
-    //       "0" +
-    //       (parseInt(date.start_time_object.HH) +
-    //         parseInt(this.course_data.course_hours_obj.HH))
-    //     }`.slice(-2);
-    //   }
-    //   if (
-    //     parseInt(date.start_time_object.mm) +
-    //       parseInt(this.course_data.course_hours_obj.mm) >
-    //     60
-    //   ) {
-    //     date.end_time_object.mm = `${
-    //       "0" +
-    //       (parseInt(date.start_time_object.mm) +
-    //         parseInt(this.course_data.course_hours_obj.mm) -
-    //         60)
-    //     }`.slice(-2);
-    //   } else {
-    //     date.end_time_object.mm = `${
-    //       "0" +
-    //       (parseInt(date.start_time_object.mm) +
-    //         parseInt(this.course_data.course_hours_obj.mm))
-    //     }`.slice(-2);
-    //   }
-    //   date.start_time = `${date.start_time_object.HH}:${date.start_time_object.mm}`;
-    //   date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`;
-    //   this.course_data.course_period_end_date = date.end_time;
-    // },
     ChangeStartDate(date) {
       if (!date.start_time_object.mm) {
         date.start_time_object.mm = "00";
