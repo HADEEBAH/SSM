@@ -360,7 +360,6 @@ const manageScheduleModules = {
                 }
               }
             }
-            console.log(item)
             eventSchadule.push({
               name: item.name,
               start: item.startDate,
