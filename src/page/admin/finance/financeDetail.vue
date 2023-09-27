@@ -104,7 +104,7 @@
                         col_detail="12"
                         :title="$t('coach')"
                       >
-                        {{ data.coachName }}</rowData
+                        {{ $i18n.locale == 'th' ? data.coachName : data.coachNameEn }}</rowData
                       >
                     </v-col>
                     <v-col>
@@ -662,7 +662,7 @@ export default {
                 {
                   stack: [
                     {
-                      text: `${this.order_detail.student_name_list}`,
+                      text: this.pdf_lang == "th" ? `${this.order_detail.student_name_list}` : `${this.order_detail.student_name_list_en}`,
                       color: "#318ce7",
                       margin: [0, 5],
                     },

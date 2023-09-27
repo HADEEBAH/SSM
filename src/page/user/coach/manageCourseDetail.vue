@@ -34,7 +34,7 @@
               <v-row>
                 <v-col cols="12" sm>
                   <div class="text-md font-bold">
-                    {{ course_data.category_name_th }}
+                    {{ $i18n.locale == "th" ? course_data.category_name_th : course_data.category_name_en}}
                   </div>
                 </v-col>
                 <v-col cols="12" sm>
@@ -149,6 +149,9 @@
                 :expanded.sync="expanded_index"
                 :headers="headers"
               >
+                <template v-slot:[`item.fullname`]="{ item }">
+                  {{ $i18n.locale == 'th' ? item.firstNameTh+" "+item.lastNameTh :item.firstNameEn+" "+item.lastNameEn  }}
+                </template>
                 <template v-slot:[`item.actions`]="{ item }">
                   <div class="pt-5">
                     <v-select
@@ -440,11 +443,9 @@
                                 ).length > 0
                               "
                               >{{
-                                $t(
                                   check_in_status_options.filter(
                                     (v) => v.value === student.status
                                   )[0].label
-                                )
                               }}
                             </v-chip>
                           </v-col>
