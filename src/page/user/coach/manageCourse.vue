@@ -1021,7 +1021,7 @@
             :loading="student_list_load"
           >
             <template v-slot:[`item.firstName`]="{item}">
-              {{ $i18n.locale == "th" ? item.firstNameTh : item.lastNameTh }}
+              {{ $i18n.locale == "th" ? item.firstNameTh : item.firstNameEn }}
             </template>
             <template v-slot:[`item.lastName`]="{item}">
               {{ $i18n.locale == "th" ? item.lastNameTh : item.lastNameEn  }}
