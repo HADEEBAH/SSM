@@ -362,12 +362,15 @@
                     <v-row class="mr-3 ml-3">
                       <v-col cols="12" sm="6">
                         <label-custom :text="$t('user role')"></label-custom>
-
                         <v-text-field
-                          v-model="item.roleNameTh"
                           dense
                           outlined
                           disabled
+                          :value="
+                            $i18n.locale == 'th'
+                              ? item.roleNameTh
+                              : item.roleNameEng
+                          "
                         >
                         </v-text-field>
                       </v-col>
@@ -544,7 +547,11 @@
                                 ></label-custom>
 
                                 <v-text-field
-                                  v-model="item.roleNameTh"
+                                  :value="
+                                    $i18n.locale == 'th'
+                                      ? item.roleNameTh
+                                      : item.roleNameEng
+                                  "
                                   dense
                                   outlined
                                   disabled
@@ -677,7 +684,7 @@
                           prepend-inner-icon="mdi-magnify"
                         ></v-text-field>
                       </v-col>
-
+                      <!-- <pre>{{ student_schedule }}</pre> -->
                       <v-col cols="12">
                         <v-data-table
                           :headers="roleStudentTable"
@@ -748,7 +755,7 @@
                           @click="
                             $router.push({
                               name: 'FrontPortfolio',
-                              params: { account_id: user_login.account_id },
+                              params: { account_id: $route.params.account_id },
                             })
                           "
                         >
@@ -1316,7 +1323,6 @@ export default {
   },
   data: () => ({
     tab: null,
-    // items: ["ข้อมูลทั่วไป", "คอร์สเรียน", "การแข่งขันและเกียรติบัตร"],
     show_certificates: false,
     course_search: "",
     certificate_search: "",
@@ -1333,76 +1339,7 @@ export default {
       certificate_attachment: "",
       state: "create",
     },
-
-    // breadcrumbs: [],
-    // roleCoachTable: [
-    //   { text: "ชื่อคอร์ส", value: "courseName", sortable: false },
-    //   { text: "ชื่ออาณาจักร", value: "categoryName", sortable: false },
-    //   { text: "ประเภท", value: "courseTypeName", sortable: false },
-    // ],
-    // roleParentTable: [
-    //   { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
-    //   { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
-    //   { text: "ชื่อคอร์ส", value: "courseNameTh", sortable: false },
-    //   { text: "แพ็กเกจ", value: "package", sortable: false },
-    //   { text: "โค้ช", value: "coachName", sortable: false },
-    //   { text: "ประเภท", value: "courseType", sortable: false },
-    //   { text: "ระยะเวลา", value: "timeLine", sortable: false },
-    //   { text: "วัน", value: "dates", sortable: false },
-    //   { text: "เวลาเริ่ม", value: "start", sortable: false },
-    //   { text: "เวลาสิ้นสุด", value: "end", sortable: false },
-    // ],
-    // roleStudentTable: [
-    //   { text: "ชื่อ", value: "student.firstNameTh", sortable: false },
-    //   { text: "นามสกุล", value: "student.lastNameTh", sortable: false },
-    //   { text: "ชื่อคอร์ส", value: "courseNameTh", sortable: false },
-    //   { text: "แพ็กเกจ", value: "package", sortable: false },
-    //   { text: "โค้ช", value: "coachName", sortable: false },
-    //   { text: "ประเภท", value: "courseType", sortable: false },
-    //   { text: "ระยะเวลา", value: "timeLine", sortable: false },
-    //   { text: "วัน", value: "dates", sortable: false },
-    //   { text: "เวลาเริ่ม", value: "start", sortable: false },
-    //   { text: "เวลาสิ้นสุด", value: "end", sortable: false },
-    //   { text: "ราคา", value: "price", sortable: false },
-    // ],
-
-    // rules: {
-    //   certificate_name: [
-    //     (val) => (val || "").length > 0 || "กรุณาระบุชื่อการแข่งขัน",
-    //     (val) =>
-    //       (val || "").length <= 50 ||
-    //       "กรุณาระบุชื่อการแข่งขันไม่เกิน 50 ตัวอักษร",
-    //   ],
-    //   certificate_date: [
-    //     (val) => (val || "").length > 0 || "กรุณาระบุวันที่แข่งขัน",
-    //   ],
-    //   name: [
-    //     (val) =>
-    //       (val || "").length > 0 ||
-    //       "ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบใหม่อีกครั้ง",
-    //   ],
-    //   username: [
-    //     () =>
-    //       !this.isMatch ? "ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบใหม่อีกครั้ง " : "",
-    //   ],
-    //   email: [
-    //     (value) => !!value || "Required.",
-    //     (value) => (value || "").length <= 20 || "Max 20 characters",
-    //     (value) => {
-    //       const pattern =
-    //         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    //       return pattern.test(value) || "Invalid e-mail.";
-    //     },
-    //   ],
-    // },
     search: "",
-    // title: "ข้อมูลผู้ใช้งาน",
-    // title2: "การจัดการสิทธิ์",
-    // title3: "คอร์สเรียน",
-    // parent_detail: "ข้อมูลผู้ปกครอง",
-    // student_detail: "ข้อมูลนักเรียน",
-    // addStudentData: "เพิ่มข้อมูลผู้ใช้นักเรียน",
-    // addParentData: "เพิ่มข้อมูลผู้ใช้ของผู้ปกครอง",
     parent: {
       account_id: "",
       firstname_en: "",
@@ -1883,13 +1820,13 @@ export default {
     },
     dayOfWeekName(days) {
       const daysOfWeek = [
-        "อาทิตย์",
-        "จันทร์",
-        "อังคาร",
-        "พุธ",
-        "พฤหัสบดี",
-        "ศุกร์",
-        "เสาร์",
+        this.$t("sunday"),
+        this.$t("monday"),
+        this.$t("tuesday"),
+        this.$t("wednesday"),
+        this.$t("thursday"),
+        this.$t("friday"),
+        this.$t("saturday"),
       ];
       const dayNames = [];
       for (let i = 0; i < days.length; i++) {
@@ -2007,13 +1944,25 @@ export default {
           sortable: false,
         },
         { text: this.$t("package"), value: "cpo.packageName", sortable: false },
-        { text: this.$t("coach"), value: "coachName", sortable: false },
         {
-          text: this.$t("course type"),
-          value: "cpo.courseTypeNameTh",
+          text: this.$t("coach"),
+          value: this.$i18n.locale == "th" ? "coachNameTh" : "coachNameEn",
           sortable: false,
         },
-        { text: this.$t("periods"), value: "cpo.optionName", sortable: false },
+        {
+          text: this.$t("course type"),
+          value:
+            this.$i18n.locale == "th"
+              ? "cpo.courseTypeNameTh"
+              : "cpo.courseTypeNameEn",
+          sortable: false,
+        },
+        {
+          text: this.$t("periods"),
+          value:
+            this.$i18n.locale == "th" ? "cpo.optionName" : "cpo.optionNameEn",
+          sortable: false,
+        },
         { text: this.$t("day"), value: "dates", sortable: false },
         { text: this.$t("start time"), value: "start", sortable: false },
         { text: this.$t("end time"), value: "end", sortable: false },
@@ -2050,10 +1999,17 @@ export default {
         },
         {
           text: this.$t("course type"),
-          value: "cpo.courseTypeNameTh",
+          value:
+            this.$i18n.locale == "th"
+              ? "cpo.courseTypeNameTh"
+              : "cpo.courseTypeNameEn",
+        },
+        {
+          text: this.$t("periods"),
+          value:
+            this.$i18n.locale == "th" ? "cpo.optionName" : "cpo.optionNameEn",
           sortable: false,
         },
-        { text: this.$t("periods"), value: "cpo.optionName", sortable: false },
         { text: this.$t("day"), value: "dates", sortable: false },
         { text: this.$t("start time"), value: "start", sortable: false },
         { text: this.$t("end time"), value: "end", sortable: false },

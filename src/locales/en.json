@@ -2,6 +2,7 @@
     "a relationship cannot be established because they are in the same role" : "A relationship cannot be established because they are in the same role",
     "admin has added a course for you":"Admin has added a course for you",
     "admin applies for course": "Admin already applies course",
+    "admin" : "Admin",
     "add a package":"Add a package",
     "add a course":"Add a course",
     "add learner" : "Add Learner",
@@ -673,6 +674,8 @@
     "specify the name of the holiday, such as Songkran Day": "Specify the name of the holiday, such as Songkran Day",
     "show certificate": "Show certificate",
     "september": "September",
+    "super admin": "Super Admin",
+
 
 
     "take annual leave" : "Take annual leave",

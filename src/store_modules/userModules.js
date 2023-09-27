@@ -180,6 +180,7 @@ const userModules = {
                         items.coachNameEn = `${items.coach.firstNameEng} ${items.coach.lastNameEng}`
                     })
                     context.commit("SetStudentSchedule", data.data)
+
                 } else {
                     throw { error: data }
                 }
