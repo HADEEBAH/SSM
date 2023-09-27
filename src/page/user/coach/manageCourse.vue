@@ -932,7 +932,7 @@
                 <v-col cols="5" v-if="course.type !== 'date'"
                   >{{ $t("substitute teacher") }}:
                   {{
-                    `${course.substituteCoachFirstNameTh} ${course.substituteCoachLastNameTh}`
+                    $i18n.locale == 'th' ? `${course.substituteCoachFirstNameTh} ${course.substituteCoachLastNameTh}`: `${course.substituteCoachFirstNameEn} ${course.substituteCoachLastNameEn}`
                   }}</v-col
                 >
                 <v-col cols="5" v-if="course.type === 'date'"
@@ -940,7 +940,7 @@
                   {{
                     `${GenDateStr(new Date(course.compensationDate))}(${
                       course.compensationStartTime
-                    }:${course.compensationEndTime})น.`
+                    }:${course.compensationEndTime})${$t("o'clock")}`
                   }}
                 </v-col>
               </v-row>
@@ -1020,6 +1020,12 @@
             :items="student_list"
             :loading="student_list_load"
           >
+            <template v-slot:[`item.firstName`]="{item}">
+              {{ $i18n.locale == "th" ? item.firstNameTh : item.lastNameTh }}
+            </template>
+            <template v-slot:[`item.lastName`]="{item}">
+              {{ $i18n.locale == "th" ? item.lastNameTh : item.lastNameEn  }}
+            </template>
             <template v-slot:no-data>
               {{ $t("no data found in table") }}</template
             >
@@ -1649,13 +1655,13 @@ export default {
           text: this.$t("first name"),
           align: "start",
           sortable: false,
-          value: "firstNameTh",
+          value: "firstName",
         },
         {
           text: this.$t("last name"),
           align: "start",
           sortable: false,
-          value: "lastNameTh",
+          value: "lastName",
         },
         {
           text: this.$t("phone number"),
