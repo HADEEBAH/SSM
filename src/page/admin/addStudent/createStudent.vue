@@ -735,7 +735,7 @@
           <registerDialogForm
             state="student"
             dialog
-            title="สมัคร One ID"
+            :title="$t('sign up for One ID')"
           ></registerDialogForm>
         </v-dialog>
       </v-form>

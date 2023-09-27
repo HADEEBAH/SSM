@@ -1036,6 +1036,7 @@ const CourseModules = {
             course_img: data.data.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.courseImg}` : "",
             category_id: data.data.categoryId,
             category_name_th: data.data.categoryNameTh,
+            category_name_en: data.data.categoryNameEn,
             course_open_date: data.data.courseOpenDate ? moment(data.data.courseOpenDate).format("YYYY-MM-DD") : "",
             course_open_date_str: data.data.courseOpenDate ? new Date(data.data.courseOpenDate).toLocaleDateString(VueI18n.locale == 'th' ? 'th-TH' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric', }) : "",
             menu_course_open_date: false,
