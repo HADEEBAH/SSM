@@ -262,7 +262,7 @@
                       {{
                         $i18n.locale == "th"
                           ? `${data.item.firstNameTh} ${data.item.lastNameTh}`
-                          : `${data.item.firstNameEn} ${data.item.lastNameEn}`
+                          : `${data.item.firstNameEng} ${data.item.lastNameEng}`
                       }}
                       <v-icon
                         @click="remove(data.item.userOneId)"
@@ -275,7 +275,7 @@
                     {{
                       $i18n.locale == "th"
                         ? `${item.firstNameTh} ${item.lastNameTh}`
-                        : `${item.firstNameEn} ${item.lastNameEn}`
+                        : `${item.firstNameEng} ${item.lastNameEng}`
                     }}
                   </template>
                 </v-autocomplete>
@@ -305,7 +305,7 @@
                         $i18n.locale == "th"
                           ? item.namePayment
                           : item.namePaymentEn
-                      }}</span>
+                     }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
                       (+{{ export_filter.payment_status.length - 1 }}

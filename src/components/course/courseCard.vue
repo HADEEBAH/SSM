@@ -963,7 +963,7 @@ export default {
       ChangeCourseData: "CourseModules/ChangeCourseData",
     }),
     removeChip(item, value) {
-      value.splice(value.indexOf(item), 1);
+      value.splice(value.indexOf(item.value), 1);
     },
     StartDateRegisCourse(course_data) {
       this.course_data.coachs[0].register_date_range.end_date = "";
