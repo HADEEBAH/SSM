@@ -45,7 +45,7 @@
             }}</v-col>
           </v-row>
           <v-row>
-            <v-col cols="6" sm="4" align="left"> {{ $t('amount to be paid') }} :</v-col>
+            <v-col cols="6" sm="5" align="left"> {{ $t('amount to be paid') }} :</v-col>
             <v-col align="right"
               >{{
                 parseFloat(payload.receiveAmount).toLocaleString(undefined, {
@@ -136,7 +136,7 @@ export default {
       const year = date_str.substring(0, 4);
       const month = date_str.substring(4, 6);
       const day = date_str.substring(6, 8);
-      return new Date(`${year}-${month}-${day}`).toLocaleDateString("th-TH", {
+      return new Date(`${year}-${month}-${day}`).toLocaleDateString(this.$i18n.locale == 'th' ? "th-TH" : "en-US", {
         year: "numeric",
         month: "long",
         day: "numeric",

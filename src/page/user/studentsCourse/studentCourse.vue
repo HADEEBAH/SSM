@@ -109,16 +109,8 @@
               <v-row dense>
                 <v-col>
                   <v-chip dark color="#F9B320">
-                    <span
-                      v-for="(day_list, index_day) in my_course_detail.dates
-                        .day"
-                      :key="index_day"
-                    >
-                      {{
-                        dayOfWeekName(day_list) == ""
-                          ? "-"
-                          : dayOfWeekName(day_list)
-                      }}
+                    <span>
+                    {{ my_course_detail.dates.day_str}}
                     </span>
                     {{ my_course_detail.time.start }} -
                     {{ my_course_detail.time.end }} {{ $t("o'clock") }}
@@ -586,24 +578,6 @@ export default {
     openFile(file) {
       window.open(file, "_blank");
     },
-    dayOfWeekName(days) {
-      const daysOfWeek = [
-        "อาทิตย์",
-        "จันทร์",
-        "อังคาร",
-        "พุธ",
-        "พฤหัสบดี",
-        "ศุกร์",
-        "เสาร์",
-      ];
-      const dayNames = [];
-      for (let i = 0; i < days.length; i++) {
-        const dayIndex = days[i];
-        dayNames.push(daysOfWeek[dayIndex]);
-      }
-      return dayNames.join(" - ");
-    },
-
     showImg(item) {
       return `${process.env.VUE_APP_URL}/api/v1/files/${item}`;
     },
