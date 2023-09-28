@@ -119,7 +119,7 @@
           </v-expansion-panel>
           <v-expansion-panel v-if="course_data.course_type_id === 'CT_1'">
             <v-expansion-panel-header class="px-0 font-bold">
-              {{$t('performance')}}
+              {{ 'Music performance' }}
               <template v-slot:actions>
                 <v-icon color="#ff6b81"> $expand </v-icon>
               </template>
@@ -130,7 +130,7 @@
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-header class="px-0 font-bold">
-              {{  $t('certification')  }}
+              {{ 'Certification' }}
               <template v-slot:actions>
                 <v-icon color="#ff6b81"> $expand </v-icon>
               </template>
