@@ -71,10 +71,10 @@
           </v-text-field>
         </v-col>
         <!-- nationality -->
+        <!-- @keydown="validate($event, 'th-special')" -->
         <v-col cols="12" sm="6">
           <label-custom :text="$t('nationality')"></label-custom>
           <v-text-field
-            @keydown="validate($event, 'th-special')"
             placeholder="-"
             v-model="profile_detail.nation"
             outlined

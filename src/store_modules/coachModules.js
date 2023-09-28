@@ -945,7 +945,7 @@ const coachModules = {
             Swal.fire({
               icon: "success",
               title: VueI18n.t("succeed"),
-              text: VueI18n.t("already edited"),
+              text: VueI18n.t("the leave leave request form has been successfully canceled"),
               timer: 3000,
               timerProgressBar: true,
               showCancelButton: false,
