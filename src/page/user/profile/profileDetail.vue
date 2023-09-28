@@ -71,10 +71,10 @@
           </v-text-field>
         </v-col>
         <!-- nationality -->
+        <!-- @keydown="validate($event, 'th-special')" -->
         <v-col cols="12" sm="6">
           <label-custom :text="$t('nationality')"></label-custom>
           <v-text-field
-            @keydown="validate($event, 'th-special')"
             placeholder="-"
             v-model="profile_detail.nation"
             outlined
@@ -167,15 +167,15 @@
               </v-col>
             </v-row>
             <v-row dense>
-              <v-col align="right">
+              <!-- <v-col align="right">
                 <v-btn
                   outlined
                   color="#ff6b81"
                   @click="closeDialogPorfile(false)"
                   >{{ $t("cancel") }}</v-btn
                 >
-              </v-col>
-              <v-col>
+              </v-col> -->
+              <v-col align="center">
                 <v-btn
                   depressed
                   color="#ff6b81"

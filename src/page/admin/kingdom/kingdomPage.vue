@@ -354,7 +354,15 @@ export default {
             });
           }
         } else {
-          Swal.fire(this.$t("your data will not be saved"), "", "info");
+          Swal.fire({
+            icon: "info",
+            title: this.$t("cancel"),
+            text: this.$t("your data will not be saved"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
         }
       });
     },

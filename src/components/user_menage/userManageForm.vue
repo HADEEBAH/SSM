@@ -498,7 +498,7 @@
                   >{{
                     item.roleId === "R_4"
                       ? $t("add student")
-                      : $t("adtitleCourseDetaild parents")
+                      : $t("add parent information")
                   }}</v-btn
                 >
               </v-col>
@@ -1142,7 +1142,8 @@ export default {
 
             Swal.fire({
               icon: "error",
-              title: this.error_message,
+              title: this.$t("something went wrong"),
+              text: this.error_message,
               timer: 3000,
               timerProgressBar: true,
               showCancelButton: false,
@@ -1150,7 +1151,15 @@ export default {
             });
           }
         } else {
-          Swal.fire(this.$t("your data will not be saved"), "", "info");
+          Swal.fire({
+            icon: "info",
+            title: this.$t("cancel"),
+            text: this.$t("your data will not be saved"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
         }
       });
     },
@@ -1345,7 +1354,15 @@ export default {
               });
             }
           } else {
-            Swal.fire(this.$t("your data will not be saved"), "", "info");
+            Swal.fire({
+              icon: "info",
+              title: this.$t("cancel"),
+              text: this.$t("your data will not be saved"),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
           }
         });
       }

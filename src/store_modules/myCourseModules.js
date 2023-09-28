@@ -126,12 +126,13 @@ const myCourseModules = {
                                 dataCourseSchedule.dates.push({
                                     start: date.replace(" 00:00:00", "") + ' ' + course.period.start,
                                     end: date.replace(" 00:00:00", "") + ' ' + course.period.end,
-                                    name: data_local.roles.includes('R_5') ? `${course.courseNameTh}(${course.courseNameEng})` : `${course.student.firstNameTh}: ${course.courseNameTh}(${course.courseNameEng})`,
+                                    name: data_local.roles.includes('R_5') ? `${course.courseNameTh}(${course.courseNameEng})` : `${VueI18n.locale == 'th' ? course.student.firstNameTh : course.student.firstNameEng} : ${course.courseNameTh} (${course.courseNameEng})`,
                                     timed: course.student.firstNameTh,
                                     start_time: course.period.start,
                                     end_time: course.period.end,
                                     subtitle: course.coachName,
                                     courseId: course.courseId,
+                                    test1: course
                                 })
                             }
                         }
@@ -141,12 +142,14 @@ const myCourseModules = {
                                     dataCourseSchedule.dates.push({
                                         start: coachLaeve.teachCompensationDate + " " + coachLaeve.teachCompensationStartTime,
                                         end: coachLaeve.teachCompensationDate + " " + coachLaeve.teachCompensationEndTime,
-                                        name: data_local.roles.includes('R_5') ? `${course.courseNameTh}(${course.courseNameEng})` : `${course.student.firstNameTh}: ${course.courseNameTh}(${course.courseNameEng})`,
+                                        name: data_local.roles.includes('R_5') ? `${course.courseNameTh}(${course.courseNameEng})` : `${VueI18n.locale == 'th' ? course.student.firstNameTh : course.student.firstNameEng} : ${course.courseNameTh} (${course.courseNameEng})`,
                                         timed: course.student.firstNameTh,
                                         start_time: coachLaeve.teachCompensationStartTime,
                                         end_time: coachLaeve.teachCompensationEndTime,
                                         subtitle: course.coachName,
                                         courseId: course.courseId,
+                                        test2: course
+
                                     })
                                 }
                             }
@@ -282,7 +285,7 @@ const myCourseModules = {
                         }
                         data.data.potential = potential
                     }
-                    data.data.dates.day_str = dayOfWeekArray( data.data.dates.day)
+                    data.data.dates.day_str = dayOfWeekArray(data.data.dates.day)
 
                     context.commit("SetMyCourseDetail", data.data)
                     context.commit("SetCourseListIsLoading", false)

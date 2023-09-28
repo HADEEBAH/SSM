@@ -108,7 +108,7 @@
 
               <v-row dense>
                 <v-col cols="12" sm="6"
-                  >{{ $t("coach") }} : {{ item?.coachName }}
+                  >{{ $t("coach") }} : {{ $i18n.locale == 'th' ? item?.coachName : item?.coachNameEn }}
                 </v-col>
                 <v-col cols="12" sm="6">
                   <v-chip
@@ -236,178 +236,190 @@
           persistent
           max-width="600px"
         >
-          <v-card>
-            <v-container>
-              <v-card-title>
-                <v-row dense>
-                  <v-col class="absolute top-0 right-0" cols="12" align="end">
-                    <v-btn icon @click="closeDialog">
-                      <v-icon color="#ff6b81">mdi-close</v-icon>
-                    </v-btn>
-                  </v-col>
+          <v-form ref="form_dialog" v-model="form_dialog">
+            <v-card>
+              <v-container>
+                <v-card-title>
+                  <v-row dense>
+                    <v-col class="absolute top-0 right-0" cols="12" align="end">
+                      <v-btn icon @click="closeDialog">
+                        <v-icon color="#ff6b81">mdi-close</v-icon>
+                      </v-btn>
+                    </v-col>
 
-                  <v-col cols="12" align="center" class="font-bold">
-                    {{ $t("edit holiday") }}
-                  </v-col>
-                </v-row>
-              </v-card-title>
+                    <v-col cols="12" align="center" class="font-bold">
+                      {{ $t("edit holiday") }}
+                    </v-col>
+                  </v-row>
+                </v-card-title>
 
-              <v-card-text>
-                <v-row dense>
-                  <!-- วันที่ -->
-                  <v-col cols="12" sm="8">
-                    <label class="font-weight-bold">{{ $t("date") }}</label>
-                    <v-menu
-                      v-model="selectEditHolidaydates"
-                      :close-on-content-click="false"
-                      :nudge-right="40"
-                      transition="scale-transition"
-                      offset-y
-                      min-width="auto"
+                <v-card-text>
+                  <v-row dense>
+                    <!-- วันที่ -->
+                    <v-col cols="12" sm="8">
+                      <label class="font-weight-bold">{{ $t("date") }}</label>
+                      <v-menu
+                        v-model="selectEditHolidaydates"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="auto"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            dense
+                            outlined
+                            append-icon="mdi-calendar"
+                            readonly
+                            v-bind="attrs"
+                            v-on="on"
+                            color="#FF6B81"
+                            v-model="holidaydatesTh"
+                          ></v-text-field>
+                        </template>
+
+                        <v-date-picker
+                          v-model="editHolidayDates"
+                          @input="
+                            setHolidaydates(editHolidayDates),
+                              (selectEditHolidaydates = false)
+                          "
+                          :min="tomorrowDate()"
+                          locale="th-TH"
+                        ></v-date-picker>
+                      </v-menu>
+                    </v-col>
+                    <!-- Switch -->
+                    <v-col
+                      cols="12"
+                      sm="4"
+                      class="text-center align-self-center"
                     >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          dense
-                          outlined
-                          append-icon="mdi-calendar"
-                          readonly
-                          v-bind="attrs"
-                          v-on="on"
-                          color="#FF6B81"
-                          v-model="holidaydatesTh"
-                        ></v-text-field>
-                      </template>
+                      <v-switch
+                        v-model="setDataEditDialog.allDay"
+                        :label="$t('all days')"
+                        color="#FF6B81"
+                        inset
+                        @change="changeSwish(setDataEditDialog)"
+                      ></v-switch>
+                    </v-col>
+                  </v-row>
 
-                      <v-date-picker
-                        v-model="editHolidayDates"
-                        @input="
-                          setHolidaydates(editHolidayDates),
-                            (selectEditHolidaydates = false)
+                  <v-row dense v-if="setDataEditDialog.allDay === false">
+                    <!-- เวลาเริ่ม -->
+
+                    <v-col cols="12" sm="6">
+                      <label class="font-weight-bold">{{
+                        $t("start time")
+                      }}</label>
+                      <br />
+                      <!-- :rules="start_time" -->
+                      <v-text-field
+                        outlined
+                        dense
+                        style="
+                          position: absolute;
+                          display: block;
+                          z-index: 4;
+                          max-width: 141.5px;
                         "
-                        :min="tomorrowDate()"
-                        locale="th-TH"
-                      ></v-date-picker>
-                    </v-menu>
-                  </v-col>
-                  <!-- Switch -->
-                  <v-col cols="12" sm="4" class="text-center align-self-center">
-                    <v-switch
-                      v-model="setDataEditDialog.allDay"
-                      :label="$t('all days')"
-                      color="#FF6B81"
-                      inset
-                      @change="changeSwish(setDataEditDialog)"
-                    ></v-switch>
-                  </v-col>
-                </v-row>
+                        @focus="SelectedStartDate($event)"
+                        :rules="compensation_start_time"
+                        :value="setDataEditDialog.holidayStartTime"
+                      ></v-text-field>
+                      <VueTimepicker
+                        class="time-picker-hidden"
+                        hide-clear-button
+                        input-class="input-size-lg"
+                        advanced-keyboard
+                        @change="resetTimeEdit()"
+                        v-model="setDataEditDialog.ob_holidayStartTime"
+                        close-on-complete
+                      >
+                      </VueTimepicker>
+                    </v-col>
+                    <!-- เวลาสิ้นสุด -->
+                    <v-col cols="12" sm="6">
+                      <label class="font-weight-bold">{{
+                        $t("end time")
+                      }}</label>
+                      <br />
+                      <!-- :rules="start_time" -->
+                      <v-text-field
+                        outlined
+                        dense
+                        style="
+                          position: absolute;
+                          display: block;
+                          z-index: 4;
+                          max-width: 141.5px;
+                        "
+                        @focus="SelectedStartDate($event)"
+                        :rules="compensation_end_time"
+                        :value="setDataEditDialog.holidayEndTime"
+                      ></v-text-field>
+                      <VueTimepicker
+                        class="time-picker-hidden"
+                        hide-clear-button
+                        input-class="input-size-lg"
+                        advanced-keyboard
+                        @change="
+                          setDataEditDialog.holidayEndTime = `${setDataEditDialog.ob_holidayEndTime.HH} : ${setDataEditDialog.ob_holidayEndTime.mm}`
+                        "
+                        v-model="setDataEditDialog.ob_holidayEndTime"
+                        close-on-complete
+                        :hour-range="
+                          checkHourEdit(setDataEditDialog.ob_holidayStartTime)
+                        "
+                      >
+                      </VueTimepicker>
+                    </v-col>
+                  </v-row>
 
-                <v-row dense v-if="setDataEditDialog.allDay === false">
-                  <!-- เวลาเริ่ม -->
+                  <v-row dense>
+                    <v-col cols="12">
+                      <label class="font-weight-bold">{{
+                        $t("holiday name")
+                      }}</label>
+                      <v-textarea
+                        v-model="setDataEditDialog.holidayName"
+                        outlined
+                        :placeholder="
+                          $t(
+                            'specify the name of the holiday, such as Songkran Day'
+                          )
+                        "
+                        :rules="holiday_name"
+                      ></v-textarea>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
 
-                  <v-col cols="12" sm="6">
-                    <label class="font-weight-bold">{{
-                      $t("start time")
-                    }}</label>
-                    <br />
-                    <v-text-field
-                      outlined
-                      dense
-                      style="
-                        position: absolute;
-                        display: block;
-                        z-index: 4;
-                        max-width: 141.5px;
-                      "
-                      @focus="SelectedStartDate($event)"
-                      :rules="start_time"
-                      :value="setDataEditDialog.holidayStartTime"
-                    ></v-text-field>
-                    <VueTimepicker
-                      class="time-picker-hidden"
-                      hide-clear-button
-                      input-class="input-size-lg"
-                      advanced-keyboard
-                      @change="resetTimeEdit()"
-                      v-model="setDataEditDialog.ob_holidayStartTime"
-                      close-on-complete
-                    >
-                    </VueTimepicker>
-                  </v-col>
-                  <!-- เวลาสิ้นสุด -->
-                  <v-col cols="12" sm="6">
-                    <label class="font-weight-bold">{{ $t("end time") }}</label>
-                    <br />
-
-                    <v-text-field
-                      outlined
-                      dense
-                      style="
-                        position: absolute;
-                        display: block;
-                        z-index: 4;
-                        max-width: 141.5px;
-                      "
-                      @focus="SelectedStartDate($event)"
-                      :rules="start_time"
-                      :value="setDataEditDialog.holidayEndTime"
-                    ></v-text-field>
-                    <VueTimepicker
-                      class="time-picker-hidden"
-                      hide-clear-button
-                      input-class="input-size-lg"
-                      advanced-keyboard
-                      @change="
-                        setDataEditDialog.holidayEndTime = `${setDataEditDialog.ob_holidayEndTime.HH} : ${setDataEditDialog.ob_holidayEndTime.mm}`
-                      "
-                      v-model="setDataEditDialog.ob_holidayEndTime"
-                      close-on-complete
-                      :hour-range="
-                        checkHourEdit(setDataEditDialog.ob_holidayStartTime)
-                      "
-                    >
-                    </VueTimepicker>
-                  </v-col>
-                </v-row>
-
-                <v-row dense>
-                  <v-col cols="12">
-                    <label class="font-weight-bold">{{
-                      $t("holiday name")
-                    }}</label>
-                    <v-textarea
-                      v-model="setDataEditDialog.holidayName"
-                      outlined
-                      :placeholder="
-                        $t(
-                          'specify the name of the holiday, such as Songkran Day'
-                        )
-                      "
-                    ></v-textarea>
-                  </v-col>
-                </v-row>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-row dense>
-                  <v-col cols="6" align="center">
-                    <v-btn class="w-full" depressed @click="deleteHoliday">
-                      {{ $t("delete holiday") }}
-                    </v-btn>
-                  </v-col>
-                  <v-col cols="6" align="center">
-                    <v-btn
-                      depressed
-                      color="#FF6B81"
-                      class="white--text w-full"
-                      @click="editHolidaysData()"
-                    >
-                      {{ $t("save") }}
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-card-actions>
-            </v-container>
-          </v-card>
+                <v-card-actions>
+                  <v-row dense>
+                    <!-- Delete -->
+                    <v-col cols="6" align="center">
+                      <v-btn class="w-full" depressed @click="deleteHoliday">
+                        {{ $t("delete holiday") }}
+                      </v-btn>
+                    </v-col>
+                    <!-- Confirm -->
+                    <v-col cols="6" align="center">
+                      <v-btn
+                        depressed
+                        color="#FF6B81"
+                        class="white--text w-full"
+                        @click="editHolidaysData()"
+                      >
+                        {{ $t("save") }}
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-card-actions>
+              </v-container>
+            </v-card>
+          </v-form>
         </v-dialog>
       </v-row>
     </template>
@@ -1205,52 +1217,55 @@ export default {
     },
 
     async editHolidaysData() {
-      this.setDataEditDialog.holidayDate = this.editHolidayDates
-        ? this.editHolidayDates.split("-")[2]
-        : this.setDataEditDialog.holidayDate;
-      this.setDataEditDialog.holidayMonth = this.editHolidayDates
-        ? this.editHolidayDates.split("-")[1]
-        : this.setDataEditDialog.holidayMonth;
-      this.setDataEditDialog.holidayYears = this.editHolidayDates
-        ? this.editHolidayDates.split("-")[0]
-        : this.setDataEditDialog.holidayYears;
-      if (this.setDataEditDialog.allDay === true) {
-        this.setDataEditDialog.holidayStartTime = null;
-        this.setDataEditDialog.holidayEndTime = null;
-      } else {
-        this.setDataEditDialog.holidayStartTime =
-          this.setDataEditDialog.ob_holidayStartTime.HH +
-          ":" +
-          this.setDataEditDialog.ob_holidayStartTime.mm;
+      this.$refs.form_dialog.validate();
+      if (this.form_dialog) {
+        this.setDataEditDialog.holidayDate = this.editHolidayDates
+          ? this.editHolidayDates.split("-")[2]
+          : this.setDataEditDialog.holidayDate;
+        this.setDataEditDialog.holidayMonth = this.editHolidayDates
+          ? this.editHolidayDates.split("-")[1]
+          : this.setDataEditDialog.holidayMonth;
+        this.setDataEditDialog.holidayYears = this.editHolidayDates
+          ? this.editHolidayDates.split("-")[0]
+          : this.setDataEditDialog.holidayYears;
+        if (this.setDataEditDialog.allDay === true) {
+          this.setDataEditDialog.holidayStartTime = null;
+          this.setDataEditDialog.holidayEndTime = null;
+        } else {
+          this.setDataEditDialog.holidayStartTime =
+            this.setDataEditDialog.ob_holidayStartTime.HH +
+            ":" +
+            this.setDataEditDialog.ob_holidayStartTime.mm;
 
-        this.setDataEditDialog.holidayEndTime =
-          this.setDataEditDialog.ob_holidayEndTime.HH +
-          ":" +
-          this.setDataEditDialog.ob_holidayEndTime.mm;
-      }
-
-      Swal.fire({
-        icon: "question",
-        title: this.$t("do you want to edit your holiday?"),
-        showDenyButton: false,
-        showCancelButton: true,
-        confirmButtonText: this.$t("agree"),
-        cancelButtonText: this.$t("cancel"),
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            let payload = {};
-            payload = { ...this.setDataEditDialog };
-            this.GetEditHolidays(payload);
-            this.GetDataInSchedule();
-            this.show_dialog_edit_holoday = false;
-            this.editHolidayDates = null;
-            this.setDataEditDialog = {};
-          } catch (error) {
-            console.log(error);
-          }
+          this.setDataEditDialog.holidayEndTime =
+            this.setDataEditDialog.ob_holidayEndTime.HH +
+            ":" +
+            this.setDataEditDialog.ob_holidayEndTime.mm;
         }
-      });
+
+        Swal.fire({
+          icon: "question",
+          title: this.$t("do you want to edit your holiday?"),
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+              let payload = {};
+              payload = { ...this.setDataEditDialog };
+              this.GetEditHolidays(payload);
+              this.GetDataInSchedule();
+              this.show_dialog_edit_holoday = false;
+              this.editHolidayDates = null;
+              this.setDataEditDialog = {};
+            } catch (error) {
+              console.log(error);
+            }
+          }
+        });
+      }
     },
 
     tomorrowDate() {
