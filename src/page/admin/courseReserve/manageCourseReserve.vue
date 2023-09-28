@@ -91,11 +91,9 @@
             <v-col align="center"> {{ $t("no data found") }} </v-col>
           </v-row>
         </template>
-
         <template v-slot:[`item.createdDate`]="{ item }">
           {{ formatDate(item.createdDate) }}
         </template>
-
         <template v-slot:[`item.status`]="{ item }">
           <v-autocomplete
             dense
@@ -109,6 +107,12 @@
             v-model="item.status"
           >
           </v-autocomplete>
+        </template>
+        <!-- เมื่อค้นหาปล้วไม่มีข้อมูล -->
+        <template v-slot:[`no-results`]>
+          <div class="font-bold">
+            {{ $t("no data found in table") }}
+          </div>
         </template>
       </v-data-table>
     </v-card>

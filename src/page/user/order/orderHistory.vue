@@ -103,7 +103,13 @@
                               <v-row dense>
                                 <v-col cols="auto">{{ $t("coach") }} : </v-col>
                                 <v-col>{{
-                                  course.coachName ? course.coachName : "-"
+                                  $i18n.locale == "th"
+                                    ? course.coachName
+                                      ? course.coachName
+                                      : "-"
+                                    : course.coachNameEn
+                                    ? course.coachNameEn
+                                    : "-"
                                 }}</v-col>
                               </v-row>
                             </v-col>

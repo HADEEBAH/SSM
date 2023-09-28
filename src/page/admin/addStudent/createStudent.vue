@@ -162,13 +162,12 @@
                               ? 'font-bold'
                               : ''
                           "
-                        >
-                          {{
+                          >{{
                             $i18n.locale == "th"
                               ? item.categoryNameTh
                               : item.categoryNameEng
-                          }}
-                        </span></v-list-item-title
+                          }}</span
+                        ></v-list-item-title
                       >
                     </v-list-item-content>
                     <v-list-item-action>
@@ -214,14 +213,12 @@
                               ? 'font-bold'
                               : ''
                           "
-                        >
-                          <!-- {{ item.course_name_th }} -->
-                          {{
+                          >{{
                             $i18n.locale == "th"
                               ? item.course_name_th
                               : item.course_name_en
-                          }}
-                        </span></v-list-item-title
+                          }}</span
+                        ></v-list-item-title
                       >
                     </v-list-item-content>
                     <v-list-item-action>
@@ -283,7 +280,13 @@
                   color="pink"
                 >
                   <template v-slot:selection="data">
-                    {{ `${data.item.option_name}` }}
+                    {{
+                      `${
+                        $i18n.locale == "th"
+                          ? data.item.option_name
+                          : data.item.option_name_en
+                      }`
+                    }}
                   </template>
                   <template v-slot:item="{ item }">
                     <v-list-item-content>
@@ -294,7 +297,11 @@
                               ? 'font-bold text-[#ff6b81]'
                               : 'text-[#000]'
                           "
-                          >{{ item.option_name }}</span
+                          >{{
+                            $i18n.locale == "th"
+                              ? item.option_name
+                              : item.option_name_en
+                          }}</span
                         ></v-list-item-title
                       >
                     </v-list-item-content>
@@ -413,6 +420,7 @@
                   </template>
                 </v-select>
               </v-col>
+
               <v-col cols="12" sm="4" v-if="course.course_data && course.time">
                 <label-custom :text="$t('coach')"></label-custom>
                 <v-autocomplete
@@ -424,8 +432,21 @@
                   item-color="pink"
                   outlined
                 >
+                  <template v-slot:no-data>
+                    <v-list-item>
+                      <v-list-item-title>
+                        {{ $t("no data found") }}
+                      </v-list-item-title>
+                    </v-list-item>
+                  </template>
                   <template v-slot:selection="data">
-                    {{ `${data.item.coach_name}` }}
+                    {{
+                      `${
+                        $i18n.locale == "th"
+                          ? data.item.coach_name
+                          : data.item.coach_name_en
+                      }`
+                    }}
                   </template>
                   <template v-slot:item="{ item }">
                     <v-list-item-content>
@@ -436,7 +457,11 @@
                               ? 'font-bold  text-[#ff6b81]'
                               : ''
                           "
-                          >{{ item.coach_name }}</span
+                          >{{
+                            $i18n.locale == "th"
+                              ? item.coach_name
+                              : item.coach_name_en
+                          }}</span
                         ></v-list-item-title
                       >
                     </v-list-item-content>
@@ -488,7 +513,7 @@
                     :min="today.toISOString()"
                     v-model="course.start_date"
                     @input="inputDate($event, 'course open', course)"
-                    locale="th-TH"
+                    :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
@@ -523,7 +548,11 @@
                   dense
                   outlined
                   disabled
-                  :value="course.coach.coach_name"
+                  :value="
+                    $i18n.locale == 'th'
+                      ? course.coach.coach_name
+                      : course.coach.coach_name_en
+                  "
                 >
                 </v-text-field>
               </v-col>
@@ -1144,12 +1173,15 @@ export default {
             course.start_date = this.course_data.course_study_start_date;
             course.start_date_str = new Date(
               course.start_date
-            ).toLocaleDateString("th-TH", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            });
-
+            ).toLocaleDateString(
+              this.$i18n.locale == "th" ? "th-TH" : "en-US",
+              {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              }
+            );
+            console.log(this.course_data.coachs[0]);
             course.coach = this.course_data.coachs[0];
             let startTimePart =
               this.course_data.course_period_start_date.split(":");

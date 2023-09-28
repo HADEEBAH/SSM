@@ -381,12 +381,12 @@ export default {
     start_time() {
       return [
         (val) =>
-          (val || "").length > 0 || this.$t("please select a start time"),
+          (val || "").length == 5 || this.$t("please select a start time"),
       ];
     },
     end_time() {
       return [
-        (val) => (val || "").length > 0 || this.$t("please select an end time"),
+        (val) => (val || "").length == 5 || this.$t("please select an end time"),
       ];
     },
     students() {
