@@ -1131,6 +1131,7 @@ const CourseModules = {
                   coach_id: coach.accountId,
                   course_coach_id: coach.courseCoachId,
                   coach_name: `${coach.coachFirstNameTh} ${coach.coachLastNameTh}`,
+                  coach_name_en: `${coach.coachFirstNameEn} ${coach.coachLastNameEn}`,
                   teach_day_data: [],
                   teach_days_used: [],
                   class_date_range: {
@@ -1185,6 +1186,7 @@ const CourseModules = {
                           timeId: time.timeId,
                           courseCoachId: coach_date.courseCoachId,
                           coach_name: data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].coachFirstNameTh + " " + data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].coachLastNameTh,
+                          coach_name_en: data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].coachFirstNameEn + " " + data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].coachLastNameEn,
                           coach_id: data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].accountId
                         })
                       }
@@ -1210,6 +1212,7 @@ const CourseModules = {
                               timeId: time.timeId,
                               courseCoachId: coach_date.courseCoachId,
                               coach_name: data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].coachFirstNameTh + " " + data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].coachLastNameTh,
+                              coach_name_en: data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].coachFirstNameEn + " " + data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].coachLastNameEn,
                               coach_id: data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].accountId
                             }
                           )
@@ -1231,6 +1234,7 @@ const CourseModules = {
                               timeId: time.timeId,
                               courseCoachId: coach_date.courseCoachId,
                               coach_name: data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].coachFirstNameTh + " " + data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].coachLastNameTh,
+                              coach_name_en: data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].coachFirstNameEn + " " + data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].coachLastNameEn,
                               coach_id: data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].accountId
                             })
                           }
