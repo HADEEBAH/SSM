@@ -154,20 +154,26 @@
         </template>
         <template v-slot:[`item.startDateStr`]="{ item }">
           {{
-            new Date(item.startDate).toLocaleDateString($i18n.locale == 'th'?"th-TH":'en-US', {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })
+            new Date(item.startDate).toLocaleDateString(
+              $i18n.locale == "th" ? "th-TH" : "en-US",
+              {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              }
+            )
           }}
         </template>
         <template v-slot:[`item.createdDateStr`]="{ item }">
           {{
-            new Date(item.createdDate).toLocaleDateString($i18n.locale == 'th'?"th-TH":'en-US', {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })
+            new Date(item.createdDate).toLocaleDateString(
+              $i18n.locale == "th" ? "th-TH" : "en-US",
+              {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              }
+            )
           }}
         </template>
         <template v-slot:[`item.show`]="{ item }">
