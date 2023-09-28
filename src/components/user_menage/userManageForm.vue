@@ -498,7 +498,7 @@
                   >{{
                     item.roleId === "R_4"
                       ? $t("add student")
-                      : $t("adtitleCourseDetaild parents")
+                      : $t("add parent information")
                   }}</v-btn
                 >
               </v-col>

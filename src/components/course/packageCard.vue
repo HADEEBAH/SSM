@@ -106,7 +106,7 @@
                   v-model="option.period_package"
                   color="#FF6B81"
                   :rules="rules.options"
-                  item-text="optionName"
+                  :item-text="$i18n.locale == 'th' ? 'optionName' : 'optionNameEn'"
                   item-value="optionId"
                   :items="optionsList(index, option_index)"
                   item-color="pink"
@@ -126,7 +126,7 @@
                               ? 'font-bold'
                               : ''
                           "
-                          >{{ item.optionName }}</span
+                          >{{ $i18n.locale == 'th' ? item.optionName : item.optionNameEn }}</span
                         ></v-list-item-title
                       >
                     </v-list-item-content>

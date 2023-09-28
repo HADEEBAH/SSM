@@ -107,7 +107,7 @@
             <v-card-text align="center">
               <v-row dense>
                 <v-col class="text-lg font-bold"
-                  >{{ `${option.option_name}(${option.amount} ${$t('time')})` }}
+                  >{{ `${$i18n.locale == 'th' ? option.option_name : option.option_name_en }(${option.amount} ${$t('time')})` }}
                 </v-col>
               </v-row>
               <v-row dense>

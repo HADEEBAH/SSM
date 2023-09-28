@@ -575,7 +575,7 @@ export default {
                     },
                     { text: "(วรพัฒน์ เลิร์นนิ่ง สเฟียร์)", fontSize: 10 },
                     {
-                      text: "63 ถนน พัฒโนอุทิศ ตำบล หาดใหญ่ อำเภอหาดใหญ่ สงขลา 90110",
+                      text: this.pdf_lang == "th" ? "63 ถนน พัฒโนอุทิศ ตำบล หาดใหญ่ อำเภอหาดใหญ่ สงขลา 90110" : "63 Phatthano Uthit Road, Hat Yai Subdistrict, Hat Yai District, Songkhla 90110",
                       fontSize: 10,
                       margin: [0, 5],
                     },

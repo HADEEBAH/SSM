@@ -1033,7 +1033,7 @@
                                                   cols="2"
                                                   align="center"
                                                   v-else
-                                                  >{{ student.cpo?.optionName }}
+                                                  >{{ $i18n.locale == 'th' ? student.cpo?.optionName : student.cpo?.optionNameEn }}
                                                 </v-col>
                                                 <v-col
                                                   cols="2"
@@ -1122,7 +1122,7 @@
                                                     'CT_1'
                                                   "
                                                 >
-                                                  {{ date.cpo?.optionName }}
+                                                  {{$i18n.locale == 'th' ? date.cpo?.optionName : date.cpo?.optionNameEn}}
                                                 </v-col>
                                                 <v-col
                                                   cols="2"
@@ -1217,7 +1217,7 @@
                     <template v-slot:[`item.package`]="{ item }">
                       {{
                         `${item.packageName}-${
-                          item.optionName
+                          $i18n.locale == "th" ? item.optionName : item.optionNameEn
                         }/${dayOfWeekArray(item.dayOfWeekName)}${
                           item.startTime
                         }-${item.endTime}`
@@ -1446,7 +1446,7 @@
                                           }}
                                         </v-col>
                                         <v-col cols="2" align="center"
-                                          >{{ potential.cpo?.optionName }}
+                                          >{{ $i18n.locale =='th' ? potential.cpo?.optionName :  potential.cpo?.optionNameEn}}
                                         </v-col>
                                         <v-col cols="2" align="center">
                                           {{ potential.countCheckIn }}/{{

@@ -108,7 +108,7 @@
 
               <v-row dense>
                 <v-col cols="12" sm="6"
-                  >{{ $t("coach") }} : {{ item?.coachName }}
+                  >{{ $t("coach") }} : {{ $i18n.locale == 'th' ? item?.coachName : item?.coachNameEn }}
                 </v-col>
                 <v-col cols="12" sm="6">
                   <v-chip
