@@ -26,7 +26,13 @@
         </template>
         <template v-slot:header>
           <div class="text-md font-bold">
-            {{ `${ $i18n.locale == "th" ? course_data.course_name_th : course_data.course_name_en}` }}
+            {{
+              `${
+                $i18n.locale == "th"
+                  ? course_data.course_name_th
+                  : course_data.course_name_en
+              }`
+            }}
           </div>
           <div class="text-sm">{{ course_data.location }}</div>
         </template>
@@ -34,18 +40,26 @@
           <v-row dense>
             <v-col cols="12" sm="6" class="pa-0">
               <rowData mini col_detail="8" icon="mdi-clock-outline">
-                {{ course_data.course_hours }} {{$t('hrs.')}}/{{ $t('time') }}</rowData
+                {{ course_data.course_hours }} {{ $t("hrs.") }}/{{
+                  $t("time")
+                }}</rowData
               >
             </v-col>
           </v-row>
         </template>
       </ImgCard>
       <v-row dense>
-        <v-col cols="12" class="text-lg font-bold">{{ $t("choose a package") }}</v-col>
+        <v-col cols="12" class="text-lg font-bold">{{
+          $t("choose a package")
+        }}</v-col>
       </v-row>
       <v-row dense class="d-flex align-center">
         <v-col cols="8" sm class="text-sm text-[#ff6b81]"
-          >*{{$t("there are special privileges for monthly/term/yearly subscriptions")}}</v-col
+          >*{{
+            $t(
+              "there are special privileges for monthly/term/yearly subscriptions"
+            )
+          }}</v-col
         >
         <v-col cols="auto" sm="auto">
           <v-btn
@@ -54,7 +68,7 @@
             @click="show_dialog_privilege = true"
             class="white--text rounded-xl"
             depressed
-            >{{ $t('view special rights') }}</v-btn
+            >{{ $t("view special rights") }}</v-btn
           >
         </v-col>
       </v-row>
@@ -107,7 +121,13 @@
             <v-card-text align="center">
               <v-row dense>
                 <v-col class="text-lg font-bold"
-                  >{{ `${$i18n.locale == 'th' ? option.option_name : option.option_name_en }(${option.amount} ${$t('time')})` }}
+                  >{{
+                    `${
+                      $i18n.locale == "th"
+                        ? option.option_name
+                        : option.option_name_en
+                    }(${option.amount} ${$t("time")})`
+                  }}
                 </v-col>
               </v-row>
               <v-row dense>
@@ -118,7 +138,7 @@
                   <span class="text-5xl font-black">{{
                     option.total_price.toLocaleString()
                   }}</span>
-                  {{$t('baht')}}
+                  {{ $t("baht") }}
                 </v-col>
               </v-row>
               <v-row dense v-else>
@@ -129,7 +149,7 @@
                   <span class="text-5xl red--text font-black">{{
                     option.net_price.toLocaleString()
                   }}</span>
-                  {{$t('baht')}}
+                  {{ $t("baht") }}
                 </v-col>
               </v-row>
               <v-row dense>
@@ -148,7 +168,7 @@
                 @click="show_dialog_artwork = true"
               >
                 <v-col class="text-sm underline text-[#0076D6]">
-                  {{ $t('see more') }}
+                  {{ $t("see more") }}
                 </v-col>
               </v-row>
             </v-card-text>
@@ -161,7 +181,7 @@
                     class="w-full font-bold white--text"
                     color="#ff6b81"
                     @click="selectedPackage(option)"
-                    >{{ $t('register for a course') }}</v-btn
+                    >{{ $t("register for a course") }}</v-btn
                   >
                 </v-col>
               </v-row>
@@ -223,7 +243,7 @@
           <v-card-title>
             <v-row dense>
               <v-col cols="12" align="center" class="font-bold w-3">
-                {{ $t('learning journey')}}
+                {{ $t("learning journey") }}
               </v-col>
             </v-row>
           </v-card-title>

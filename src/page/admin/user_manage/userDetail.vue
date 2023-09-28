@@ -981,7 +981,7 @@
                 <headerCard
                   :icon="'mdi-file-plus-outline'"
                   :icon_color="'#FF6B81'"
-                  :title="student_detail"
+                  :title="$t('student information')"
                 ></headerCard>
                 <v-divider></v-divider>
 
@@ -1373,7 +1373,7 @@ export default {
     this.show_by_id.userRoles;
     setTimeout(() => {
       this.GetDataRelationsManagement(this.show_by_id);
-      if (this.show_by_id?.userRoles.some((v) => v.roleId == "R_3")) {
+      if (this.show_by_id.userRoles?.some((v) => v.roleId == "R_3")) {
         this.GetCourseCoachList({ account_id: this.params });
       }
     }, 500);

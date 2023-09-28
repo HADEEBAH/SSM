@@ -1142,7 +1142,8 @@ export default {
 
             Swal.fire({
               icon: "error",
-              title: this.error_message,
+              title: this.$t("something went wrong"),
+              text: this.error_message,
               timer: 3000,
               timerProgressBar: true,
               showCancelButton: false,
