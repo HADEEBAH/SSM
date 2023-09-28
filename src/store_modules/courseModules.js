@@ -1276,6 +1276,7 @@ const CourseModules = {
                 package_id: package_data.packageId,
                 option_id: package_data.optionId,
                 option_name: package_data.optionName,
+                option_name_en: package_data.optionNameEn,
                 period_package: package_data.optionId,
                 amount: package_data.hourPerTime,
                 price_unit: package_data.pricePerPerson,
