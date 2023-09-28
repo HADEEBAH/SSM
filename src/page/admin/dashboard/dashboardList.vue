@@ -234,8 +234,10 @@
                     <v-select
                       v-model="selected_years"
                       :items="filter_years"
-                      item-text="thaiYears"
                       item-value="usYears"
+                      :item-text="
+                        $i18n.locale == 'th' ? 'thaiYears' : 'usYears'
+                      "
                       return-object
                       dense
                       outlined
@@ -258,7 +260,7 @@
                     <v-select
                       v-model="selected_mounth"
                       :items="thaiMonths"
-                      item-text="name"
+                      :item-text="$i18n.locale == 'th' ? 'name' : 'nameEn'"
                       return-object
                       dense
                       outlined
@@ -274,6 +276,14 @@
                           </v-list-item-content>
                         </v-list-item>
                       </template>
+
+                      <!-- <template v-slot:selected="{ item }">
+                        <v-list-item-content>
+                          <v-list-item-title>
+                            {{ $i18n.locale == "th" ? item.name : item.nameEn }}
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </template> -->
                     </v-select>
                   </v-col>
                 </v-row>
@@ -329,8 +339,10 @@
                     <v-select
                       v-model="donut_years"
                       :items="filter_years"
-                      item-text="thaiYears"
                       item-value="usYears"
+                      :item-text="
+                        $i18n.locale == 'th' ? 'thaiYears' : 'usYears'
+                      "
                       dense
                       outlined
                       @input="selectDonutYears()"
@@ -345,6 +357,17 @@
                           </v-list-item-content>
                         </v-list-item>
                       </template>
+                      <!-- <template v-slot:selected="{ item }">
+                        <v-list-item-content>
+                          <v-list-item-title>
+                            {{
+                              $i18n.locale == "th"
+                                ? item.thaiYears
+                                : item.usYears
+                            }}
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </template> -->
                     </v-select>
                   </v-col>
                   <!-- MONTH -->
@@ -352,7 +375,7 @@
                     <v-select
                       v-model="donut_mounth"
                       :items="thaiMonths"
-                      item-text="name"
+                      :item-text="$i18n.locale == 'th' ? 'name' : 'nameEn'"
                       return-object
                       dense
                       outlined
@@ -1095,21 +1118,21 @@ export default {
     //   },
     // ],
 
-    thaiMonths: [
-      { name: "ทั้งปี", key: "", type: "month" },
-      { name: "มกราคม", key: "01", type: "month" },
-      { name: "กุมภาพันธ์", key: "02", type: "month" },
-      { name: "มีนาคม", key: "03", type: "month" },
-      { name: "เมษายน", key: "04", type: "month" },
-      { name: "พฤษภาคม", key: "05", type: "month" },
-      { name: "มิถุนายน", key: "06", type: "month" },
-      { name: "กรกฎาคม", key: "07", type: "month" },
-      { name: "สิงหาคม", key: "08", type: "month" },
-      { name: "กันยายน", key: "09", type: "month" },
-      { name: "ตุลาคม", key: "10", type: "month" },
-      { name: "พฤศจิกายน", key: "11", type: "month" },
-      { name: "ธันวาคม", key: "12", type: "month" },
-    ],
+    // thaiMonths: [
+    //   { name: "ทั้งปี", key: "", type: "month" },
+    //   { name: "มกราคม", key: "01", type: "month" },
+    //   { name: "กุมภาพันธ์", key: "02", type: "month" },
+    //   { name: "มีนาคม", key: "03", type: "month" },
+    //   { name: "เมษายน", key: "04", type: "month" },
+    //   { name: "พฤษภาคม", key: "05", type: "month" },
+    //   { name: "มิถุนายน", key: "06", type: "month" },
+    //   { name: "กรกฎาคม", key: "07", type: "month" },
+    //   { name: "สิงหาคม", key: "08", type: "month" },
+    //   { name: "กันยายน", key: "09", type: "month" },
+    //   { name: "ตุลาคม", key: "10", type: "month" },
+    //   { name: "พฤศจิกายน", key: "11", type: "month" },
+    //   { name: "ธันวาคม", key: "12", type: "month" },
+    // ],
 
     selected_mounth: "",
     donut_mounth: "",
@@ -1321,23 +1344,23 @@ export default {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;
     },
-    // thaiMonths() {
-    //   return [
-    //     { name: this.$t("all year"), key: "", type: "month" },
-    //     { name: this.$t("january"), key: "01", type: "month" },
-    //     { name: this.$t("february"), key: "02", type: "month" },
-    //     { name: this.$t("march"), key: "03", type: "month" },
-    //     { name: this.$t("april"), key: "04", type: "month" },
-    //     { name: this.$t("may"), key: "05", type: "month" },
-    //     { name: this.$t("june"), key: "06", type: "month" },
-    //     { name: this.$t("july"), key: "07", type: "month" },
-    //     { name: this.$t("august"), key: "08", type: "month" },
-    //     { name: this.$t("september"), key: "09", type: "month" },
-    //     { name: this.$t("october"), key: "10", type: "month" },
-    //     { name: this.$t("november"), key: "11", type: "month" },
-    //     { name: this.$t("december"), key: "12", type: "month" },
-    //   ];
-    // },
+    thaiMonths() {
+      return [
+        { name: "มกราคม", nameEn: "all year", key: "", type: "month" },
+        { name: "มกราคม", nameEn: "January", key: "01", type: "month" },
+        { name: "กุมภาพันธ์", nameEn: "February", key: "02", type: "month" },
+        { name: "มีนาคม", nameEn: "March", key: "03", type: "month" },
+        { name: "เมษายน", nameEn: "April", key: "04", type: "month" },
+        { name: "พฤษภาคม", nameEn: "May", key: "05", type: "month" },
+        { name: "มิถุนายน", nameEn: "June", key: "06", type: "month" },
+        { name: "กรกฎาคม", nameEn: "July", key: "07", type: "month" },
+        { name: "สิงหาคม", nameEn: "August", key: "08", type: "month" },
+        { name: "กันยายน", nameEn: "September", key: "09", type: "month" },
+        { name: "ตุลาคม", nameEn: "October", key: "10", type: "month" },
+        { name: "พฤศจิกายน", nameEn: "November", key: "11", type: "month" },
+        { name: "ธันวาคม", nameEn: "December", key: "12", type: "month" },
+      ];
+    },
     chartOptions() {
       let income = "";
       let baht = "";
