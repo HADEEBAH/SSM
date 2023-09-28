@@ -630,6 +630,10 @@ export default {
       ShowDialogCoachLeaveForm: "CoachModules/ShowDialogCoachLeaveForm",
     }),
     inputDateArr(date, course) {
+      course.compensation_start_time_obj = { HH:"", mm: ""}
+      course.compensation_start_time = ""
+      course.compensation_end_time_obj = { HH:"", mm: ""}
+      course.compensation_end_time = ""
       course.compensation_date_str = new Date(date).toLocaleDateString(
         this.$i18n.locale == "th" ? "th-TH" : "en-US",
         { year: "numeric", month: "long", day: "numeric" }
@@ -722,9 +726,6 @@ export default {
       }
     },
     ChengeTimeMin(time, index_course, index_date, type) {
-      if (time.mm === "") {
-        time.mm = "00";
-      }
       if (type === "start") {
         this.coach_leave_data.dates[index_date].courses[
           index_course
