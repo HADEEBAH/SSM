@@ -293,7 +293,7 @@ const dashboardModules = {
             items.usYears = items?.en
           })
           context.commit("SetFilterYears", data.data)
-          console.log('data.data :>> ', data.data);
+          // console.log('data.data :>> ', data.data);
         }
       } catch (error) {
         context.commit("SetFilterYears", [])
