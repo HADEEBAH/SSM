@@ -115,7 +115,7 @@
                     ><v-icon color="#ff6b81">mdi-bookshelf</v-icon></v-col
                   >
                   <v-col>{{
-                    `${$t("warraphat learning sphere")} : ${course.category_name}`
+                    `${$t("warraphat learning sphere")} : ${$i18n.locale == 'th' ? course.category_name :  course.category_name_en}`
                   }}</v-col>
                 </v-row>
                 <v-row dense>

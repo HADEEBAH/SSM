@@ -1090,13 +1090,13 @@ export default {
     },
     dayOfWeekName(days) {
       const daysOfWeek = [
-        "อาทิตย์",
-        "จันทร์",
-        "อังคาร",
-        "พุธ",
-        "พฤหัสบดี",
-        "ศุกร์",
-        "เสาร์",
+        this.$t("sunday"),
+        this.$t("monday"),
+        this.$t("tuesday"),
+        this.$t("wednesday"),
+        this.$t("thursday"),
+        this.$t("friday"),
+        this.$t("saturday"),
       ];
       const dayNames = [];
       for (let i = 0; i < days.length; i++) {

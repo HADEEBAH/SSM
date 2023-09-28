@@ -282,7 +282,7 @@ const myCourseModules = {
                         }
                         data.data.potential = potential
                     }
-
+                    data.data.dates.day_str = dayOfWeekArray( data.data.dates.day)
 
                     context.commit("SetMyCourseDetail", data.data)
                     context.commit("SetCourseListIsLoading", false)

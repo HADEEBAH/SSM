@@ -589,74 +589,14 @@ export default {
         ],
         compensation_start_time: [
           (val) =>
-            (val || "").length > 0 || this.$t("please select a start time"),
+            (val || "").length == 5 || this.$t("please select an end time"),
         ],
         compensation_end_time: [
           (val) =>
-            (val || "").length > 0 || this.$t("please select an end time"),
+            (val || "").length == 5 || this.$t("please select an end time"),
         ],
       };
     },
-
-    // start_date() {
-    //   return [
-    //     (val) =>
-    //       (val || "").length > 0 || this.$t("please select a start date"),
-    //   ];
-    // },
-    // period() {
-    //   return [
-    //     (val) =>
-    //       (val || "").length > 0 || this.$t("please select a time period"),
-    //   ];
-    // },
-    // type_leave() {
-    //   return [
-    //     (val) => (val || "").length > 0 || this.$t("please select leave type"),
-    //   ];
-    // },
-    // type() {
-    //   return [(val) => (val || "").length > 0 || this.$t("please select type")];
-    // },
-    // end_date() {
-    //   return [
-    //     (val) =>
-    //       (val || "").length > 0 || this.$t("please select an end date."),
-    //   ];
-    // },
-    // course() {
-    //   return [
-    //     (val) => (val || "").length > 0 || this.$t("please select a course"),
-    //   ];
-    // },
-    // coach() {
-    //   return [
-    //     (val) => (val || "").length > 0 || this.$t("please select a coach"),
-    //   ];
-    // },
-    // sub_coach() {
-    //   return [
-    //     (val) =>
-    //       (val || "").length > 0 ||
-    //       this.$t("please select a substitute instructor"),
-    //   ];
-    // },
-    // compensation_date() {
-    //   return [
-    //     (val) => (val || "").length > 0 || this.$t("please select a date"),
-    //   ];
-    // },
-    // compensation_start_time() {
-    //   return [
-    //     (val) =>
-    //       (val || "").length > 0 || this.$t("please select a start time"),
-    //   ];
-    // },
-    // compensation_end_time() {
-    //   return [
-    //     (val) => (val || "").length > 0 || this.$t("please select an end time"),
-    //   ];
-    // },
     validateCoachLeave() {
       let start_date = this.coach_leave_data.start_date ? true : false;
       let end_date = this.coach_leave_data.end_date ? true : false;
