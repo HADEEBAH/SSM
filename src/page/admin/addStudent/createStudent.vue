@@ -132,7 +132,9 @@
                 <v-autocomplete
                   dense
                   item-value="categoryId"
-                  item-text="categoryNameTh"
+                  :item-text="
+                    $i18n.locale == 'th' ? 'categoryNameTh' : 'categoryNameEng'
+                  "
                   v-model="course.category_id"
                   :items="categorys"
                   :placeholder="$t(`select wls`)"
@@ -160,8 +162,13 @@
                               ? 'font-bold'
                               : ''
                           "
-                          >{{ item.categoryNameTh }}</span
-                        ></v-list-item-title
+                        >
+                          {{
+                            $i18n.locale == "th"
+                              ? item.categoryNameTh
+                              : item.categoryNameEng
+                          }}
+                        </span></v-list-item-title
                       >
                     </v-list-item-content>
                     <v-list-item-action>
@@ -179,7 +186,9 @@
                 <v-autocomplete
                   dense
                   item-value="course_id"
-                  item-text="course_name_th"
+                  :item-text="
+                    $i18n.locale == 'th' ? 'course_name_th' : 'course_name_en'
+                  "
                   v-model="course.course_id"
                   :items="course.course_options"
                   :rules="rules.course"
@@ -205,8 +214,14 @@
                               ? 'font-bold'
                               : ''
                           "
-                          >{{ item.course_name_th }}</span
-                        ></v-list-item-title
+                        >
+                          <!-- {{ item.course_name_th }} -->
+                          {{
+                            $i18n.locale == "th"
+                              ? item.course_name_th
+                              : item.course_name_en
+                          }}
+                        </span></v-list-item-title
                       >
                     </v-list-item-content>
                     <v-list-item-action>
@@ -243,6 +258,11 @@
                   outlined
                   @change="selectPackage(course)"
                 >
+                  <template v-slot:no-data>
+                    <div class="mx-3 font-bold">
+                      {{ $t("no data available") }}
+                    </div>
+                  </template>
                 </v-autocomplete>
               </v-col>
               <v-col cols="12" sm="4" v-if="course.package">
@@ -294,6 +314,11 @@
                       >
                     </v-list-item-action>
                   </template>
+                  <template v-slot:no-data>
+                    <div class="mx-3 font-bold">
+                      {{ $t("no data available") }}
+                    </div>
+                  </template>
                 </v-autocomplete>
               </v-col>
               <v-col v-if="course.option" cols="12" sm="2">
@@ -328,6 +353,11 @@
                   item-color="pink"
                   color="pink"
                 >
+                  <template v-slot:no-data>
+                    <div class="mx-3 font-bold">
+                      {{ $t("no data available") }}
+                    </div>
+                  </template>
                 </v-autocomplete>
               </v-col>
               <v-col cols="12" sm="3" v-if="course.day">

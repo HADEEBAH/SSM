@@ -128,7 +128,13 @@
                   clearable
                   :label="$t('select your students here')"
                   @change="searchStudentCourse(search_course_detail)"
-                ></v-autocomplete>
+                >
+                  <template v-slot:no-data>
+                    <div class="mx-3 font-bold">
+                      {{ $t("no data available") }}
+                    </div>
+                  </template>
+                </v-autocomplete>
               </v-col>
             </v-row>
             <div v-for="(item, index) in my_course" :key="`${index}-my_course`">
@@ -438,7 +444,13 @@
                   hide-details
                   :label="$t('select your students here')"
                   @change="searchStudentCourse(search_course)"
-                ></v-autocomplete>
+                >
+                  <template v-slot:no-data>
+                    <div class="mx-3 font-bold">
+                      {{ $t("no data available") }}
+                    </div>
+                  </template>
+                </v-autocomplete>
               </v-col>
             </v-row>
             <v-row class="mb-2">
@@ -535,7 +547,13 @@
                   hide-details
                   :label="$t('select your students here')"
                   @change="searchStudentBooked(search_booked)"
-                ></v-autocomplete>
+                >
+                  <template v-slot:no-data>
+                    <div class="mx-3 font-bold">
+                      {{ $t("no data available") }}
+                    </div>
+                  </template>
+                </v-autocomplete>
               </v-col>
             </v-row>
             <v-card-text

@@ -29,21 +29,25 @@
         <v-row dense
           ><v-col class="text-lg font-bold">
             {{
-              `${$i18n.locale == 'th' ? course_data.course_name_th : course_data.course_name_en}`
+              `${
+                $i18n.locale == "th"
+                  ? course_data.course_name_th
+                  : course_data.course_name_en
+              }`
             }}
           </v-col>
         </v-row>
         <v-row dense>
-          <v-col class="text-md">{{ `${$t("by")} ${course_data.location}` }}</v-col>
+          <v-col class="text-md">{{
+            `${$t("by")} ${course_data.location}`
+          }}</v-col>
         </v-row>
         <v-row v-if="course_data.course_type_id === 'CT_2'" dense>
           <v-col cols="auto">
             <v-icon class="mr-2" color="#ff6b81">mdi-currency-usd</v-icon>
           </v-col>
           <v-col class="font-bold"
-            >{{
-              parseFloat(course_data.price_course).toLocaleString()
-            }}
+            >{{ parseFloat(course_data.price_course).toLocaleString() }}
             {{ $t("baht") }}/{{ $t("person") }}</v-col
           >
         </v-row>
@@ -65,7 +69,9 @@
           col_detail="5"
           mini
           icon="mdi-clock-time-four-outline"
-          >{{ course_data.course_hours }} {{ $t("hrs.") }}/{{ $t("time") }}</rowData
+          >{{ course_data.course_hours }} {{ $t("hrs.") }}/{{
+            $t("time")
+          }}</rowData
         >
         <v-row dense>
           <v-col cols="12" class="text-[#999999]">
@@ -75,51 +81,70 @@
         <v-expansion-panels flat>
           <v-expansion-panel v-if="course_data.course_type_id === 'CT_2'">
             <v-expansion-panel-header class="px-0 font-bold">
-              {{$t('date and time')}}
+              {{ $t("date and time") }}
               <template v-slot:actions>
                 <v-icon color="#ff6b81"> $expand </v-icon>
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content class="border-t pt-3">
               <v-row dense>
-                <v-col cols="auto" class="font-bold">{{ $t("admission date") }}:</v-col>
+                <v-col cols="auto" class="font-bold"
+                  >{{ $t("admission date") }}:</v-col
+                >
                 <v-col>
                   {{
                     new Date(
                       course_data.course_register_start_date
-                    ).toLocaleDateString( $i18n.locale == 'th' ? "th-TH" : "en-US", date_options)
-
+                    ).toLocaleDateString(
+                      $i18n.locale == "th" ? "th-TH" : "en-US",
+                      date_options
+                    )
                   }}
                   -
                   {{
                     new Date(
                       course_data.course_register_end_date
-                    ).toLocaleDateString($i18n.locale == 'th' ? "th-TH" : "en-US", date_options)
+                    ).toLocaleDateString(
+                      $i18n.locale == "th" ? "th-TH" : "en-US",
+                      date_options
+                    )
                   }}</v-col
                 >
               </v-row>
               <v-row dense>
-                <v-col cols="auto" class="font-bold">{{ $t('study date') }}:</v-col>
+                <v-col cols="auto" class="font-bold"
+                  >{{ $t("study date") }}:</v-col
+                >
                 <v-col
                   >{{
                     new Date(
                       course_data.course_study_start_date
-                    ).toLocaleDateString($i18n.locale == 'th' ? "th-TH" : "en-US", date_options)
+                    ).toLocaleDateString(
+                      $i18n.locale == "th" ? "th-TH" : "en-US",
+                      date_options
+                    )
                   }}
                   -
                   {{
                     new Date(
                       course_data.course_study_end_date
-                    ).toLocaleDateString($i18n.locale == 'th' ? "th-TH" : "en-US", date_options)
+                    ).toLocaleDateString(
+                      $i18n.locale == "th" ? "th-TH" : "en-US",
+                      date_options
+                    )
                   }}
-                  ({{ course_data.course_period_start_date }}-{{course_data.course_period_end_date}} {{ $t("o'clock")}})</v-col
+                  ({{ course_data.course_period_start_date }}-{{
+                    course_data.course_period_end_date
+                  }}
+                  {{ $t("o'clock") }})</v-col
                 >
               </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
           <v-expansion-panel v-if="course_data.course_type_id === 'CT_1'">
             <v-expansion-panel-header class="px-0 font-bold">
-              {{$t('performance')}}
+              <!-- {{$t('performance')}} -->
+              performance
               <template v-slot:actions>
                 <v-icon color="#ff6b81"> $expand </v-icon>
               </template>
@@ -130,7 +155,8 @@
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-header class="px-0 font-bold">
-              {{  $t('certification')  }}
+              <!-- {{ $t("certification") }} -->
+              certification
               <template v-slot:actions>
                 <v-icon color="#ff6b81"> $expand </v-icon>
               </template>
@@ -158,7 +184,7 @@
               "
               color="#ff6b81"
             >
-                {{ $t('choose a package') }}
+              {{ $t("choose a package") }}
             </v-btn>
           </v-col>
           <v-col
@@ -179,7 +205,7 @@
               @click="registerCourse"
               color="#ff6b81"
             >
-              {{$t("register for a course")}}
+              {{ $t("register for a course") }}
             </v-btn>
             <v-btn
               v-else
@@ -188,7 +214,7 @@
               class="w-full font-bold white--text"
               color="#ff6b81"
             >
-              {{ $t('full course') }}
+              {{ $t("full course") }}
             </v-btn>
           </v-col>
         </v-row>
@@ -212,7 +238,11 @@
         <v-card-text>
           <dialog-card
             :text="$t('the course is full')"
-            :subtitle="$t('currently our class is full of students. thank you for your interest in our course.')"
+            :subtitle="
+              $t(
+                'currently our class is full of students. thank you for your interest in our course.'
+              )
+            "
           >
             <template #img>
               <v-img
@@ -228,7 +258,7 @@
                 color="#ff6b81"
                 class="w-full"
                 dark
-                >{{ $t('agree') }}</v-btn
+                >{{ $t("agree") }}</v-btn
               >
             </template>
           </dialog-card>
@@ -273,7 +303,7 @@ export default {
         course_id: this.order_data.course_id,
         cpo_id: null,
       });
-      this.GetShortCourseMonitor({course_id: this.order_data.course_id,})
+      this.GetShortCourseMonitor({ course_id: this.order_data.course_id });
     }
     this.GetCourse(this.$route.params.course_id);
   },
@@ -322,12 +352,12 @@ export default {
         }
       });
     },
-    validateRegisterCourse(){
+    validateRegisterCourse() {
       // eslint-disable-next-line no-unused-vars
-      let tobay = moment(new Date()).format("YYYY-MM-DD")
-      
+      let tobay = moment(new Date()).format("YYYY-MM-DD");
+
       // return !moment(tobay).isBetween( this.course_data.course_register_start_date, this.course_data.course_register_end_date, null, '[]');
-      return false
+      return false;
     },
     registerCourse() {
       this.order.order_step = 1;
