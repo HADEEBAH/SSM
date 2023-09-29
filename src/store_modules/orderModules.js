@@ -1337,6 +1337,27 @@ const orderModules = {
         });
       }
     },
+    async GetReserceCourse(context, {course_id}){
+      try{
+        let { data } = await axios.get(
+          `${process.env.VUE_APP_URL}/api/v1/order/reserve/byCourse/${course_id}`
+        );
+        if (data.statusCode === 200) {
+          context.commit("SetReserveList", data.data);
+        }
+      }catch(error){
+        await Swal.fire({
+          icon: "error",
+          title: VueI18n.t("something went wrong"),
+          text: VueI18n.t(error.message),
+          timer: 3000,
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        });
+      }
+    },
     async GetReserceByCreatedBy(context, { account_id }) {
       try {
         let { data } = await axios.get(
@@ -1355,7 +1376,6 @@ const orderModules = {
           showCancelButton: false,
           showConfirmButton: false,
           timerProgressBar: true,
-
         });
       }
     },
