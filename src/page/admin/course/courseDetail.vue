@@ -1033,7 +1033,12 @@
                                                   cols="2"
                                                   align="center"
                                                   v-else
-                                                  >{{ $i18n.locale == 'th' ? student.cpo?.optionName : student.cpo?.optionNameEn }}
+                                                  >{{
+                                                    $i18n.locale == "th"
+                                                      ? student.cpo?.optionName
+                                                      : student.cpo
+                                                          ?.optionNameEn
+                                                  }}
                                                 </v-col>
                                                 <v-col
                                                   cols="2"
@@ -1122,7 +1127,11 @@
                                                     'CT_1'
                                                   "
                                                 >
-                                                  {{$i18n.locale == 'th' ? date.cpo?.optionName : date.cpo?.optionNameEn}}
+                                                  {{
+                                                    $i18n.locale == "th"
+                                                      ? date.cpo?.optionName
+                                                      : date.cpo?.optionNameEn
+                                                  }}
                                                 </v-col>
                                                 <v-col
                                                   cols="2"
@@ -1217,7 +1226,9 @@
                     <template v-slot:[`item.package`]="{ item }">
                       {{
                         `${item.packageName}-${
-                          $i18n.locale == "th" ? item.optionName : item.optionNameEn
+                          $i18n.locale == "th"
+                            ? item.optionName
+                            : item.optionNameEn
                         }/${dayOfWeekArray(item.dayOfWeekName)}${
                           item.startTime
                         }-${item.endTime}`
@@ -1446,7 +1457,11 @@
                                           }}
                                         </v-col>
                                         <v-col cols="2" align="center"
-                                          >{{ $i18n.locale =='th' ? potential.cpo?.optionName :  potential.cpo?.optionNameEn}}
+                                          >{{
+                                            $i18n.locale == "th"
+                                              ? potential.cpo?.optionName
+                                              : potential.cpo?.optionNameEn
+                                          }}
                                         </v-col>
                                         <v-col cols="2" align="center">
                                           {{ potential.countCheckIn }}/{{
