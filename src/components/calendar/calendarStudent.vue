@@ -198,6 +198,9 @@ export default {
       return this.cal ? this.cal.timeToY(this.cal.times.now) + "px" : "-10px";
     },
   },
+  created() {
+    this.colorOfDay();
+  },
   mounted() {
     let today = new Date();
     this.start_of_week = new Date(
