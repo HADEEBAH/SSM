@@ -1,7 +1,9 @@
 <template>
   <v-container>
     {{ setFunctions }}
-    <loading-overlay :loading="student_is_loading"></loading-overlay>
+    <loading-overlay
+      :loading="student_is_loading || student_booking_is_loading"
+    ></loading-overlay>
     <div>
       <label class="text-xl font-bold">{{
         $t("class schedule information")
@@ -161,7 +163,20 @@
                         class="w-full h-full rounded-lg"
                         cover
                         height="200"
-                      ></v-img>
+                      >
+                        <template v-slot:placeholder>
+                          <v-row
+                            class="fill-height ma-0"
+                            align="center"
+                            justify="center"
+                          >
+                            <v-progress-circular
+                              indeterminate
+                              color="#ff6b81"
+                            ></v-progress-circular>
+                          </v-row>
+                        </template>
+                      </v-img>
                     </v-col>
                     <!-- detail -->
                     <v-col cols="12" sm="3">
@@ -565,7 +580,7 @@
                 {{ $t("booking information not found") }}
               </span>
             </v-card-text>
-            <div v-if="ReserveList().length > 0">
+            <div v-else>
               <v-card
                 v-for="(item_booked, index_booked) in ReserveList()"
                 :key="`${index_booked}-reserve`"
@@ -577,13 +592,26 @@
                     <v-row dense>
                       <!-- img -->
                       <v-col cols="12" sm="2">
-                        <img
+                        <v-img
                           :src="
                             item_booked.courseImg
                               ? item_booked.courseImg
                               : require(`@/assets/student_course/download.png`)
                           "
-                        />
+                        >
+                          <template v-slot:placeholder>
+                            <v-row
+                              class="fill-height ma-0"
+                              align="center"
+                              justify="center"
+                            >
+                              <v-progress-circular
+                                indeterminate
+                                color="#ff6b81"
+                              ></v-progress-circular>
+                            </v-row>
+                          </template>
+                        </v-img>
                       </v-col>
                       <!-- detail -->
                       <v-col cols="12" sm="6">
@@ -1148,6 +1176,7 @@ export default {
       profile_user: "ProfileModules/getProfileUser",
       students: "ProfileModules/getStudents",
       student_is_loading: "MyCourseModules/getStudentsLoading",
+      student_booking_is_loading: "MyCourseModules/getStudentsBookingLoading",
       my_course: "MyCourseModules/getMyCourse",
     }),
     setFunctions() {

@@ -45,6 +45,7 @@ const myCourseModules = {
         my_course_student_id: '',
 
         student_is_loading: false,
+        student_booking_is_loading: false,
         course_list_is_loading: false,
 
         my_course: [],
@@ -71,6 +72,9 @@ const myCourseModules = {
         },
         SetStudentsLoading(state, payload) {
             state.student_is_loading = payload
+        },
+        SetStudentsBookingLoading(state, payload) {
+            state.student_booking_is_loading = payload
         },
         SetCourseListIsLoading(state, payload) {
             state.course_list_is_loading = payload
@@ -229,6 +233,8 @@ const myCourseModules = {
             }
         },
         async GetProfileBooked(context, account_id) {
+            context.commit("SetStudentsBookingLoading", true)
+
             try {
                 let config = {
                     headers: {
@@ -257,9 +263,12 @@ const myCourseModules = {
                 } else {
                     throw { error: data };
                 }
+                context.commit("SetStudentsBookingLoading", false)
 
             } catch (error) {
                 console.log(error);
+                context.commit("SetStudentsBookingLoading", false)
+
             }
         },
         async GetMyCourseDetail(context, { account_id, course_id }) {
@@ -352,6 +361,9 @@ const myCourseModules = {
         },
         getStudentsLoading(state) {
             return state.student_is_loading
+        },
+        getStudentsBookingLoading(state) {
+            return state.student_booking_is_loading
         },
         getCourseListIsLoading(state) {
             return state.course_list_is_loading

@@ -10,9 +10,13 @@
       <v-row class="row">
         <v-col cols="12">
           <div class="text-2xl font-bold text-white">
-            {{ $t("hello") }}  
+            {{ $t("hello") }}
             {{
-              profile_detail.firstNameTh ? $i18n.locale == 'th' ?  ", " + profile_detail.firstNameTh : ", " + profile_detail.firstNameEng : ''
+              profile_detail.firstNameTh
+                ? $i18n.locale == "th"
+                  ? ", " + profile_detail.firstNameTh
+                  : ", " + profile_detail.firstNameEng
+                : ""
             }}
           </div>
         </v-col>
@@ -57,7 +61,7 @@
             sm="4"
             class="text-2xl align-self-center font-weight-bold"
           >
-          {{ $t("warraphat learning sphere") }}  
+            {{ $t("warraphat learning sphere") }}
           </v-col>
           <v-col cols="12" sm="8" style="text-align: -webkit-right">
             <v-text-field
@@ -111,11 +115,15 @@
                 class="font-bold cursor-pointer"
                 @click="selectedCategory(item)"
               >
-                {{ $i18n.locale == "th" ? item.categoryNameTh : item.categoryNameEng}}
+                {{
+                  $i18n.locale == "th"
+                    ? item.categoryNameTh
+                    : item.categoryNameEng
+                }}
               </v-card-title>
 
               <v-card-subtitle>
-                <div class="mb-2">{{$t("by")}} {{ item.taughtBy }}</div>
+                <div class="mb-2">{{ $t("by") }} {{ item.taughtBy }}</div>
                 <div>
                   {{
                     item.show
@@ -126,7 +134,9 @@
                     v-if="item.categoryDescription.length > 15"
                     class="text-red-500 cursor-pointer"
                     @click="item.show = !item.show"
-                    >{{ item.show ? $t('lesser') : $t('read more')+`...` }}</span
+                    >{{
+                      item.show ? $t("lesser") : $t("read more") + `...`
+                    }}</span
                   >
                 </div>
               </v-card-subtitle>
@@ -137,7 +147,7 @@
             v-if="searchKingdom(search_kingdom).length === 0"
             class="font-weight-bold text-center text-xl"
           >
-            {{$t("wls not found")}}
+            {{ $t("wls not found") }}
           </v-col>
         </v-row>
         <loading-overlay :loading="categorys_is_loading"></loading-overlay>
@@ -195,7 +205,10 @@ export default {
   },
 
   mounted() {
-    this.$store.dispatch("NavberUserModules/changeTitleNavber", "warraphat learning sphere");
+    this.$store.dispatch(
+      "NavberUserModules/changeTitleNavber",
+      "warraphat learning sphere"
+    );
   },
 
   methods: {
