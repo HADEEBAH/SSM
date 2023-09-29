@@ -347,7 +347,7 @@ export default {
   },
   data: () => ({
     menu: false,
-    step: 3,
+    step: 1,
     steps: [false, false, false, false],
     file: null,
     dragOver: false,
