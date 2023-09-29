@@ -1132,7 +1132,9 @@ export default {
       ];
     },
     setFunctions() {
-      this.GetReserceByCreatedBy({ account_id: this.user_login.account_id });
+      if(this.course_order.course_id){
+        this.GetReserceCourse({ course_id: this.course_order.course_id });
+      }
       // this.checkMaximumStudent();
       if (this.order_data) {
         if (this.order_data.course_type_id === "CT_1") {
@@ -1213,6 +1215,7 @@ export default {
       GetReserceByCreatedBy: "OrderModules/GetReserceByCreatedBy",
       GetGeneralCourseMonitor: "CourseMonitorModules/GetGeneralCourseMonitor",
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
+      GetReserceCourse : "OrderModules/GetReserceCourse"
     }),
 
     closePolicy() {
@@ -1223,13 +1226,13 @@ export default {
       inputValidation(e, lang);
     },
     ValidateReserve() {
-      if (
-        this.reserve_list.filter(
-          (v) =>
-            v.courseId === this.course_order.course_id &&
-            v.coachId === this.course_order.coach_id
-        ).length > 0
-      ) {
+      let validate_reserve = []
+      if(this.course_order.students.length > 0){
+        for(let student  of this.course_order.students){
+          validate_reserve.push(this.reserve_list.some(v => v.studentId == student.account_id))
+        }
+      }
+      if ( validate_reserve.includes(true)) {
         return true;
       } else {
         return false;
