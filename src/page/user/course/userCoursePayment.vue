@@ -60,8 +60,7 @@
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })
-              }}
-              {{ $t("baht") }}</v-col
+              }} {{ $t("baht") }}</v-col
             >
           </v-row>
           <v-row>
@@ -74,7 +73,7 @@
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })
-              }}{{ $t("baht") }}</v-col
+              }} {{ $t("baht") }}</v-col
             >
           </v-row>
           <v-row dense>
