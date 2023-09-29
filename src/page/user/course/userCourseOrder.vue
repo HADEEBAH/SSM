@@ -1132,7 +1132,9 @@ export default {
       ];
     },
     setFunctions() {
-      this.GetReserceByCreatedBy({ account_id: this.user_login.account_id });
+      if(this.course_order.course_id){
+        this.GetReserceCourse({ course_id: this.course_order.course_id });
+      }
       // this.checkMaximumStudent();
       if (this.order_data) {
         if (this.order_data.course_type_id === "CT_1") {
@@ -1213,6 +1215,7 @@ export default {
       GetReserceByCreatedBy: "OrderModules/GetReserceByCreatedBy",
       GetGeneralCourseMonitor: "CourseMonitorModules/GetGeneralCourseMonitor",
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
+      GetReserceCourse : "OrderModules/GetReserceCourse"
     }),
 
     closePolicy() {
@@ -1223,13 +1226,13 @@ export default {
       inputValidation(e, lang);
     },
     ValidateReserve() {
-      if (
-        this.reserve_list.filter(
-          (v) =>
-            v.courseId === this.course_order.course_id &&
-            v.coachId === this.course_order.coach_id
-        ).length > 0
-      ) {
+      let validate_reserve = []
+      if(this.course_order.students.length > 0){
+        for(let student  of this.course_order.students){
+          validate_reserve.push(this.reserve_list.some(v => v.studentId == student.account_id))
+        }
+      }
+      if ( validate_reserve.includes(true)) {
         return true;
       } else {
         return false;
@@ -1314,7 +1317,11 @@ export default {
       return originalArray;
     },
     CreateReserve() {
-      this.$refs.form_coach.validate()
+      if(this.course_order.course_type_id == "CT_1"){
+        this.$refs.form_coach.validate()
+      }else{
+        this.validate_coach = true
+      }
       if(this.validate_coach){
         Swal.fire({
           icon: "question",
@@ -1436,53 +1443,61 @@ export default {
       this.$router.push({ name: "UserKingdom" });
     },
     addToCart() {
-      Swal.fire({
-        icon: "question",
-        title: this.$t("want to add to cart?"),
-        showDenyButton: false,
-        showCancelButton: true,
-        confirmButtonText: this.$t("agree"),
-        cancelButtonText: this.$t("cancel"),
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          if (this.course_order.course_type_id == "CT_2") {
-            let days_of_class = this.course_data.days_of_class[0];
-            this.course_order.time = days_of_class.times[0];
-            this.course_order.coach_name =
-              this.course_data.coachs[0].coach_name;
-            this.course_order.coach_id = this.course_data.coachs[0].coach_id;
-            this.course_order.coach = this.course_data.coachs[0].coach_id;
-          } else {
-            this.course_order.coach = this.course_order.coach_id;
-            this.course_order.coach_name =
-              this.course_order.time.timeData.filter(
-                (v) => v.coach_id === this.course_order.coach_id
-              )[0].coach_name;
+      if(this.course_order.course_type_id == "CT_1"){
+        this.$refs.form_coach.validate()
+      }else{
+        this.validate_coach = true
+      }
+      if(this.validate_coach){
+        Swal.fire({
+          icon: "question",
+          title: this.$t("want to add to cart?"),
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            if (this.course_order.course_type_id == "CT_2") {
+              let days_of_class = this.course_data.days_of_class[0];
+              this.course_order.time = days_of_class.times[0];
+              this.course_order.coach_name =
+                this.course_data.coachs[0].coach_name;
+              this.course_order.coach_id = this.course_data.coachs[0].coach_id;
+              this.course_order.coach = this.course_data.coachs[0].coach_id;
+            } else {
+              this.course_order.coach = this.course_order.coach_id;
+              this.course_order.coach_name =
+                this.course_order.time.timeData.filter(
+                  (v) => v.coach_id === this.course_order.coach_id
+                )[0].coach_name;
+            }
+            this.order.courses.push({ ...this.course_order });
+            this.order.created_by = this.user_login.account_id;
+            this.changeOrderData(this.order);
+            localStorage.setItem(
+              this.user_login.account_id,
+              JSON.stringify(this.order)
+            );
+            this.saveCart({ cart_data: this.order });
+            this.resetCourseData();
+            // this.show_dialog_cart = true;
+            Swal.fire({
+              icon: "success",
+              title: this.$t("succeed"),
+              text: this.$t("the course has been successfully added to the cart"),
+              showCancelButton: false,
+              showConfirmButton: false,
+              showDenyButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+            }).finally(() => {
+              this.$router.push({ name: "CartList" });
+            });
           }
-          this.order.courses.push({ ...this.course_order });
-          this.order.created_by = this.user_login.account_id;
-          this.changeOrderData(this.order);
-          localStorage.setItem(
-            this.user_login.account_id,
-            JSON.stringify(this.order)
-          );
-          this.saveCart({ cart_data: this.order });
-          this.resetCourseData();
-          // this.show_dialog_cart = true;
-          Swal.fire({
-            icon: "success",
-            title: this.$t("succeed"),
-            text: this.$t("the course has been successfully added to the cart"),
-            showCancelButton: false,
-            showConfirmButton: false,
-            showDenyButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-          }).finally(() => {
-            this.$router.push({ name: "CartList" });
-          });
-        }
-      });
+        });
+      }
+     
     },
     removeParent(student) {
       this.course_order.students
@@ -1507,7 +1522,11 @@ export default {
       this.dialog_parent = false;
     },
     checkOut() {
-      this.$refs.form_coach.validate()
+      if(this.course_order.course_type_id == "CT_1"){
+        this.$refs.form_coach.validate()
+      }else{
+        this.validate_coach = true
+      }
       if(this.validate_coach){
         if (!this.policy) {
           this.policy_show = true;
