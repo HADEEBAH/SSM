@@ -756,7 +756,7 @@
           </v-row>
           <v-row dense>
             <v-col cols="12">
-              <label-custom :text="$t('certification')"></label-custom>
+              <label-custom :text="'Certification'"></label-custom>
               <v-textarea
                 v-model="course_data.catification"
                 :disabled="disable"
@@ -942,7 +942,8 @@ export default {
     },
     end_time() {
       return [
-        (val) => (val || "").length == 5 || this.$t("please select an end time"),
+        (val) =>
+          (val || "").length == 5 || this.$t("please select an end time"),
       ];
     },
     student_recived() {

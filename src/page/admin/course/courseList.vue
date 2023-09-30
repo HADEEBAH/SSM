@@ -89,6 +89,7 @@
           </img-card>
         </v-col>
       </v-row>
+      <!-- <pre>{{ courses }}</pre> -->
       <v-data-table
         class="elevation-1 header-table"
         :headers="column"
@@ -227,7 +228,7 @@ export default {
           text: this.$t("course name"),
           align: "start",
           sortable: false,
-          value: "course",
+          value: this.$i18n.locale == "th" ? "courseTh" : "courseEn",
         },
         {
           text: this.$t("wls name"),
