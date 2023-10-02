@@ -1900,7 +1900,7 @@ export default {
         if (val.totalDay - val.countCheckIn === 1) {
           graduate_student_id.push({ studentId: val.studentId });
         }
-        if (!val.compensationDate) {
+        if (val.status === "leave" && !val.compensationDate) {
           Swal.fire({
             icon: "question",
             title: this.$t("please select the compensation date again"),
