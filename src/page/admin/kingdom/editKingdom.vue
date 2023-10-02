@@ -5,37 +5,53 @@
       <label-custom :text="$t('upload the cover image of wls')"></label-custom>
       <v-card style="border: dashed blue">
         <v-card-title primary-title align="end">
-          <v-btn icon v-if="preview_url">
+          <!-- <v-btn icon v-if="preview_url">
             <v-icon color="#ff6b81" @click="closeImage()"
               >mdi-close-circle</v-icon
             >
-          </v-btn>
+          </v-btn> -->
         </v-card-title>
         <v-card-text>
           <div v-if="category.categoryImg">
             <v-img
               v-if="showData"
-              style="
-                max-height: 105px;
-                max-width: 122px;
-                margin-left: auto;
-                margin-right: auto;
-              "
+              style="max-width: 200px; margin-left: auto; margin-right: auto"
               :src="showImg(category.categoryImg)"
             >
+              <template v-slot:placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular
+                    indeterminate
+                    color="#ff6b81"
+                  ></v-progress-circular>
+                </v-row>
+              </template>
             </v-img>
             <div v-else>
               <v-img
                 @click="openFileSelector"
                 class="text-right"
-                style="
-                  max-height: 105px;
-                  max-width: 122px;
-                  margin-left: auto;
-                  margin-right: auto;
-                "
+                style="max-width: 200px; margin-left: auto; margin-right: auto"
                 :src="preview_url ? preview_url : showImg(category.categoryImg)"
-              />
+              >
+                <template v-slot:placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular
+                      indeterminate
+                      color="#ff6b81"
+                    ></v-progress-circular>
+                  </v-row>
+                </template>
+                <v-btn icon v-if="preview_url">
+                  <v-icon color="#ff6b81" @click="closeImage()"
+                    >mdi-close-circle</v-icon
+                  >
+                </v-btn>
+              </v-img>
               <v-row v-if="!preview_url">
                 <v-col cols="12" class="flex align-center justify-center mt-5">
                   <v-btn outlined color="blue" @click="openFileSelector">{{
@@ -53,15 +69,74 @@
             </div>
           </div>
           <div v-else class="text-center">
-            <v-progress-circular
+            <!-- <v-progress-circular
               indeterminate
               :size="70"
               :width="7"
               color="#ff6b81"
-            ></v-progress-circular>
+            ></v-progress-circular> -->
+            <v-img
+              @click="openFileSelector"
+              class="text-right"
+              style="max-width: 200px; margin-left: auto; margin-right: auto"
+              align="right"
+              :src="preview_url ? preview_url : showImg(category.categoryImg)"
+            >
+              <v-btn icon v-if="preview_url">
+                <v-icon color="#ff6b81" @click="closeImage()"
+                  >mdi-close-circle</v-icon
+                >
+              </v-btn>
+            </v-img>
+            <v-row v-if="!preview_url">
+              <v-col cols="12" class="flex align-center justify-center">
+                <v-img
+                  src="@/assets/course/upload_file.png"
+                  max-height="105"
+                  max-width="122"
+                ></v-img>
+              </v-col>
+              <v-col cols="12" class="flex align-center justify-center text-h5">
+                {{ $t("upload the cover image of the course") }}
+              </v-col>
+              <v-col
+                cols="12"
+                class="flex align-center justify-center text-caption"
+              >
+                (
+                {{
+                  $t(
+                    "suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file"
+                  )
+                }}
+                )
+              </v-col>
+              <v-col
+                cols="12"
+                class="flex align-center justify-center text-caption"
+              >
+              </v-col>
+              <v-col cols="12" class="flex align-center justify-center mt-5">
+                <v-btn
+                  outlined
+                  color="blue"
+                  @click="openFileSelector"
+                  :disabled="showData"
+                  >{{ $t("select file") }}</v-btn
+                >
+                <input
+                  id="inputFile"
+                  ref="fileInput"
+                  type="file"
+                  @change="uploadFile($event)"
+                  style="display: none"
+                />
+              </v-col>
+            </v-row>
           </div>
         </v-card-text>
       </v-card>
+
       <br />
       <v-row dense>
         <v-col cols="12" sm="6">
