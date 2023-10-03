@@ -1780,7 +1780,6 @@ export default {
       window.open(file.attFilesUrl, "_blank");
     },
     openFile(file) {
-      console.log(file)
       if (file.attachmentPotentialId) {
         let url = `${process.env.VUE_APP_URL}/api/v1/files/${file.attachmentFiles}`;
         window.open(url, "_blank");
