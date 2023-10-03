@@ -369,8 +369,9 @@ export default {
         (val) =>
           (val || "").length > 5 ||
           this.$t("please enter a username at least 6 characters long"),
+        (val) => val.split(' ').length  <= 1  || this.$t("the username cannot contain special characters"),
         (val) =>
-          /[A-Za-z0-9 ]/g.test(val) ||
+          /[A-Za-z0-9]/.test(val) ||
           this.$t("the username cannot contain special characters"),
         (val) =>
           !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
@@ -389,10 +390,11 @@ export default {
           this.$t(
             "please enter your name (thai) length not exceeding 20 characters"
           ),
-        (val) => /[ก-๏\s]/g.test(val) || "กรุณากรอกชื่อภาษาไทย",
+        (val) => /[ก-๏\s]/g.test(val) || this.$t("please enter your name in thai"),
+        (val) => val.split(' ').length <= 1 || this.$t("please enter your name in thai"),
         (val) =>
           !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-          this.$t("please enter your thai name"),
+          this.$t("please enter your name in thai"),
       ];
     },
     firstNameEnRules() {
@@ -409,6 +411,7 @@ export default {
           ),
         (val) =>
           /[A-Za-z]/g.test(val) || this.$t("please enter your name in english"),
+        (val) => val.split(' ').length <= 1  || this.$t("please enter your name in english"),
         (val) =>
           !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
           this.$t("please enter your name in english"),
@@ -426,6 +429,7 @@ export default {
           this.$t(
             "please enter your last name (Thai) not more than 20 characters"
           ),
+        (val) => val.split(' ').length  <= 1  || this.$t("please enter your last name in thai"),
         (val) =>
           /[ก-๏\s]/g.test(val) ||
           this.$t("please enter your last name in thai"),
@@ -446,12 +450,13 @@ export default {
           this.$t(
             "please enter your last name (English). length not exceeding 20 characters"
           ),
+        (val) => val.split(' ').length <= 1  || this.$t("please enter your last name in english"),
         (val) =>
           /[A-Za-z ]/g.test(val) ||
-          this.$t("please enter your last name in English"),
+          this.$t("please enter your last name in english"),
         (val) =>
           !/[\uD800-\uDBFF][\uDC00-\uDFFF ]/g.test(val) ||
-          this.$t("please enter your last name in English"),
+          this.$t("please enter your last name in english"),
       ];
     },
     passwordRules() {

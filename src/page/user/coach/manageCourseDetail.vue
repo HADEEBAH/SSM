@@ -1093,7 +1093,7 @@
                   text
                   color="#ff6b81"
                 >
-                  {{ $t("clear date") }}
+                  {{ $t("clear data") }}
                 </v-btn>
               </v-col>
               <v-col cols="12" sm="6">
