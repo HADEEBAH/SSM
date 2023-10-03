@@ -2,21 +2,36 @@
     <v-app>
       <v-row dense class="auth-bar">
         <v-col cols="6" sm="" :class="$vuetify.breakpoint.smAndUp ? 'text-right' : 'text-left'">
-          <v-menu v-model="menu_locale"  offset-y>
+          <v-menu v-model="menu_locale" offset-y>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn text :color="$vuetify.breakpoint.smAndUp?  '#ff6b81' : '#ffffff' " v-bind="attrs" v-on="on">
-                {{ $i18n.locale == 'en' ? $t('english') : $t('thai') }}
-                <v-icon dark >
-                  mdi-web
-                </v-icon>
+              <v-btn :color="$vuetify.breakpoint.smAndUp?  '#ff6b81' : '#ffffff' " class="mr-2" text v-bind="attrs" v-on="on">
+                <v-img
+                  class="mr-2"
+                  v-if="$i18n.locale == 'en'"
+                  src="@/assets/profile/usaFlag.png"
+                ></v-img>
+                <v-img
+                  class="mr-2"
+                  v-else
+                  src="@/assets/profile/thaiFlag.png"
+                ></v-img>
+                <label>{{
+                  $i18n.locale == "en" ? $t("english") : $t("thai")
+                }}</label>
               </v-btn>
             </template>
             <v-card>
               <v-list-item @click="setLocale('en')">
-                {{ $t('english') }}
+                <v-list-item-avatar size="sm">
+                  <v-img src="@/assets/profile/usaFlag.png"></v-img>
+                </v-list-item-avatar>
+                {{ $t("english") }}
               </v-list-item>
-              <v-list-item  @click="setLocale('th')">
-                {{ $t('thai') }} 
+              <v-list-item @click="setLocale('th')">
+                <v-list-item-avatar size="sm">
+                  <v-img src="@/assets/profile/thaiFlag.png"></v-img>
+                </v-list-item-avatar>
+                {{ $t("thai") }}
               </v-list-item>
             </v-card>
           </v-menu>

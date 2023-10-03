@@ -82,7 +82,8 @@
       <v-row dense>
         <template v-if="!courses_is_loading">
           <v-col
-            cols="6"
+            cols="12"
+            sm="4"
             v-for="(course, course_index) in search_results.filter(
               (v) => v.course_type_id === type_selected
             ).length > 0
@@ -92,7 +93,7 @@
               : courses"
             :key="course_index"
           >
-            <v-card class="overflow-hidden h-full rounded-lg">
+            <v-card class="overflow-hidden h-full rounded-lg box-shadows">
               <v-img
                 @click="selectedCourse(course)"
                 :aspect-ratio="16 / 9"
