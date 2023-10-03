@@ -91,15 +91,13 @@
               v-for="(item, index) in courseDate()"
               :key="index"
             >
-              <!-- <pre>{{ item }}</pre> -->
               <v-row dense class="font-bold">
                 <v-col cols="12" sm="6">
-                  {{ item?.courseName?.courseNameTh }}
-                  <!-- {{
+                  {{
                     $i18n.locale == "th"
                       ? item?.courseName?.courseNameTh
                       : item?.courseName?.courseNameEng
-                  }} -->
+                  }}
                 </v-col>
                 <v-col cols="12" sm="6">
                   {{ item?.time?.start }} - {{ item?.time?.end }}</v-col

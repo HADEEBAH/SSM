@@ -125,7 +125,7 @@
               @change="coachSelected($event)"
               :rules="coachRules"
               :items="course_order.time.timeData"
-              item-text="coach_name"
+              :item-text="$i18n.locale == 'th' ? 'coach_name' : 'coach_name_en'"
               item-value="coach_id"
               item-color="pink"
               outlined
@@ -147,7 +147,7 @@
                           ? 'font-bold'
                           : ''
                       "
-                      >{{ item.coach_name }}
+                      >{{$i18n.locale == "th" ? item.coach_name : item.coach_name_en }}
                       {{
                         GenCoachNumberStudent(
                           item.coach_id,
