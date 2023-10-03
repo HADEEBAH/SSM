@@ -162,6 +162,14 @@
             {{ $t("view details") }}
           </v-btn>
         </template>
+        <template v-slot:[`item.delete`]="{ item }">
+          <v-btn
+            icon
+            color="#FF6B81"
+            @click="deleteCourse(item.course_id)">
+            <v-icon>mdi-delete</v-icon>
+          </v-btn>
+        </template>
         <template v-slot:[`no-results`]>
           <div class="font-bold">
             {{ $t("no data found in table") }}
@@ -255,6 +263,7 @@ export default {
           value: "status",
         },
         { text: "", align: "center", value: "actions", sortable: false },
+        { text: "", align: "center", value: "delete", sortable: false },
       ];
     },
   },
@@ -262,7 +271,44 @@ export default {
     ...mapActions({
       UpdateStatusCourse: "CourseModules/UpdateStatusCourse",
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
+      DeleteCourse : "CourseModules/DeleteCourse"
     }),
+    deleteCourse(course_id){
+      Swal.fire({
+        icon: "question",
+        title: this.$t("do you want to delete course?"),
+        showDenyButton: false,
+        showCancelButton: true,
+        cancelButtonText: this.$t("cancel"),
+        confirmButtonText: this.$t("agree"),
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          this.GetShortCourseMonitor({ course_id: course_id }).then(async () => {
+            if (this.course_monitors) {
+              let current_student = 0;
+              current_student = this.course_monitors.map(
+                (v) => (current_student += v.m_current_student)
+              );
+              if (current_student.some((v) => v > 0)) {
+                Swal.fire({
+                  icon: "error",
+                  title: this.$t("unable to delete course"),
+                  text: this.$t("because there are students in the course"),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else {
+                this.DeleteCourse({
+                  course_id : course_id
+                })
+              }
+            }
+          });
+        }
+      })
+    },
     GenDate(date) {
       const options = {
         year: "numeric",

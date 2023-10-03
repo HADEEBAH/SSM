@@ -8,7 +8,13 @@
       >
         <v-menu v-model="menu_locale" offset-y>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn class="mr-2" text v-bind="attrs" v-on="on">
+            <v-btn
+              :color="$vuetify.breakpoint.smAndUp ? '#ff6b81' : '#ffffff'"
+              class="mr-2"
+              text
+              v-bind="attrs"
+              v-on="on"
+            >
               <v-img
                 class="mr-2"
                 v-if="$i18n.locale == 'en'"
@@ -42,7 +48,7 @@
       </v-col>
       <v-col cols="6" sm="auto" class="text-right">
         <v-btn @click="backToHome()" text dark color="#FF6B81">
-          <v-icon class="ml-3">mdi mdi-home</v-icon>
+          <v-icon class="mr-2">mdi mdi-home</v-icon>
           {{ $t("return to home page") }}
         </v-btn>
       </v-col>

@@ -741,6 +741,43 @@ const CourseModules = {
         })
       }
     },
+    // COURSE :: DELETE COURSE 
+    async DeleteCourse(context,{course_id}){
+      try{
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/manage/remove-course/${course_id}`, config)
+        if(data.statusCode === 200){
+          await context.dispatch("GetCoursesList")
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("delete course success"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+  
+        }
+      }catch(error){
+        Swal.fire({
+          icon: "error",
+          title: VueI18n.t("something went wrong"),
+          timer: 3000,
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        })
+      }
+    },
     // COURSE :: UPDATE COURSE PACKAGE
     async UpdateCouserPackage(context, { course_id, course_data }) {
       try {

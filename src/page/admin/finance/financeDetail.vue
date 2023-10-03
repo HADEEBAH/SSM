@@ -134,7 +134,7 @@
                           col_detail="12"
                           :title="$t('period')"
                         >
-                          {{ data.cpo.optionName }}</rowData
+                          {{ $i18n.locale == "th" ? data.cpo.optionName : data.cpo.optionNameEn }}</rowData
                         >
                       </v-col>
                     </v-row>
