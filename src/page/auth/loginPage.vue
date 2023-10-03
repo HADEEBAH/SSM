@@ -7,7 +7,6 @@
       <loginForm image></loginForm>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -18,12 +17,12 @@ export default {
     loginForm,
   },
   data: () => ({
-    menu_locale:false
+    menu_locale: false,
   }),
   methods: {
     setLocale(locale) {
-      this.$i18n.locale = locale
-      localStorage.setItem("lang",locale)
+      this.$i18n.locale = locale;
+      localStorage.setItem("lang", locale);
     },
   },
 };

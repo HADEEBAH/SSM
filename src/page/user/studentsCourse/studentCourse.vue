@@ -1,14 +1,13 @@
 <template>
   <v-container>
     <loading-overlay :loading="course_list_is_loading"></loading-overlay>
-
     <div v-if="my_course_detail.countCheckIn == 0">
       <v-card-text
         class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
       >
         <span class="text-lg font-bold">
           <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-           {{ $t("no check in") }}
+          {{ $t("no check in") }}
         </span>
       </v-card-text>
     </div>
@@ -110,7 +109,7 @@
                 <v-col>
                   <v-chip dark color="#F9B320">
                     <span>
-                    {{ my_course_detail.dates.day_str}}
+                      {{ my_course_detail.dates.day_str }}
                     </span>
                     {{ my_course_detail.time.start }} -
                     {{ my_course_detail.time.end }} {{ $t("o'clock") }}
@@ -359,7 +358,6 @@
             </div>
             <v-expand-transition>
               <div v-show="day_list.show">
-                <!-- <pre>{{ day_list.dailySummary }}</pre> -->
                 <label class="font-bold mb-2 text-[#FF6B81]">
                   {{ $t("teaching summary notes") }}
                 </label>

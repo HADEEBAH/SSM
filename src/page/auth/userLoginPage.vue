@@ -1,12 +1,19 @@
 
 <template>
-  <div style="overflow-y: hidden;">
-  <v-app> 
-    <v-img src="@/assets/login/logo.png" class="logo" max-height="40" max-width="50" ></v-img>
+  <div style="overflow-y: hidden">
+    <v-app>
+      <v-img
+        src="@/assets/login/logo.png"
+        class="logo"
+        max-height="40"
+        max-width="50"
+      ></v-img>
       <v-container>
-       
-        <v-img src="@/assets/login/boy.png" :class="MobileSize? 'boysm' : 'boypc' "></v-img>
-        
+        <v-img
+          src="@/assets/login/boy.png"
+          :class="MobileSize ? 'boysm' : 'boypc'"
+        ></v-img>
+
         <v-row class="d-flex align-center justify-center">
           <v-col cols="12" sm="4">
             <loginForm
@@ -16,7 +23,7 @@
           </v-col>
         </v-row>
       </v-container>
-  </v-app>
+    </v-app>
   </div>
 </template>
   
@@ -55,35 +62,31 @@ export default {
   background-size: cover;
 }
 
-.logo{
+.logo {
   margin-top: 10px;
   margin-right: 5px;
 }
 
-.boysm{  
+.boysm {
   margin-top: 10px;
   margin: auto;
   display: block;
   max-height: 200px;
-   max-width: 150px; 
-
+  max-width: 150px;
 }
 
-.boypc{  
+.boypc {
   margin-top: 10px;
   margin: auto;
   display: block;
   max-height: 250px;
-   max-width: 200px; 
-
+  max-width: 200px;
 }
 
-.cardsm{
+.cardsm {
   margin-top: -30px;
 }
-.cardpc{
+.cardpc {
   margin-top: -80px;
 }
-
-
 </style>

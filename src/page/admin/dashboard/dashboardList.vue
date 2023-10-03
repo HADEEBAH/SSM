@@ -514,363 +514,390 @@
               <v-col cols="12" align="start">
                 <v-row dense class="my-2 pa-2">
                   <!-- PIE DOT DATA -->
-                  <!-- คอร์สเต็ม -->
-                  <v-col cols="12" sm="6" align="center">
-                    <div style="margin-right: 60px">
-                      <v-icon color="#999999">mdi-circle-medium</v-icon>
-                      <span class="text-xl">
-                        {{ $t("full courses") }}
-                        <span style="font-weight: bold; color: #999999">{{
-                          get_empty_course?.countClose
-                            ? get_empty_course?.countClose
-                            : "0"
-                        }}</span>
-                        {{ $t("courses") }}
-                      </span>
-                    </div>
-                  </v-col>
-                  <!-- คอร์สว่าง -->
-                  <v-col cols="12" sm="6" align="center">
-                    <div style="margin-right: 60px">
-                      <v-icon color="#ff6b81">mdi-circle-medium</v-icon>
-                      <span class="text-xl">
-                        {{ $t("course available") }}
-                        <span style="font-weight: bold; color: #ff6b81">{{
-                          get_empty_course?.countOpen
-                            ? get_empty_course?.countOpen
-                            : "0"
-                        }}</span>
-                        {{ $t("courses") }}
-                      </span>
-                    </div>
-                  </v-col>
 
-                  <v-col cols="12" sm="6" align="center">
-                    <v-text-field
-                      v-model="search_course_close"
-                      :class="`bg-white rounded-full ${
-                        !MobileSize ? 'w-3/5' : 'w-full'
-                      } `"
-                      hide-details
-                      dense
-                      outlined
-                      :label="$t('search full course name here')"
-                      prepend-inner-icon="mdi-magnify"
-                      color="#ff6b81"
-                    >
-                    </v-text-field>
-                  </v-col>
+                  <v-row>
+                    <!-- คอร์สเต็ม -->
+                    <v-col cols="12" sm="6">
+                      <!-- คอร์สเต็ม -->
+                      <v-row>
+                        <v-col cols="12" align="center">
+                          <div>
+                            <v-icon color="#999999">mdi-circle-medium</v-icon>
+                            <span class="text-xl">
+                              {{ $t("full courses") }}
+                              <span style="font-weight: bold; color: #999999">{{
+                                get_empty_course?.countClose
+                                  ? get_empty_course?.countClose
+                                  : "0"
+                              }}</span>
+                              {{ $t("courses") }}
+                            </span>
+                          </div>
+                        </v-col>
+                      </v-row>
 
-                  <v-col cols="12" sm="6" align="center">
-                    <v-text-field
-                      v-model="search_course_open"
-                      :class="`bg-white
+                      <!-- search คอร์สเต็ม -->
+                      <v-row>
+                        <v-col cols="12" align="center">
+                          <v-text-field
+                            v-model="search_course_close"
+                            :class="`bg-white rounded-full ${
+                              !MobileSize ? 'w-3/5' : 'w-full'
+                            } `"
+                            hide-details
+                            dense
+                            outlined
+                            :label="$t('search full course name here')"
+                            prepend-inner-icon="mdi-magnify"
+                            color="#ff6b81"
+                          >
+                          </v-text-field>
+                        </v-col>
+                      </v-row>
+
+                      <!-- COURSE CLOSE -->
+                      <v-col cols="12" class="my-2" :width="pieCardWidth()">
+                        <v-card
+                          outlined
+                          style="overflow-y: scroll; overflow-x: hidden"
+                          height="400px"
+                          class="rounded-lg"
+                        >
+                          <v-card-text
+                            style="
+                              background-color: #ffdde2;
+                              position: sticky;
+                              top: 0;
+                              z-index: 1;
+                            "
+                            align="center"
+                            class="rounded-t-lg"
+                          >
+                            <span class="mr-2 font-bold">
+                              {{ $t("full courses") }}
+                            </span>
+                            <v-badge
+                              color="#999999"
+                              :content="
+                                get_empty_course?.countClose
+                                  ? get_empty_course?.countClose
+                                  : '0'
+                              "
+                              class="indent-5 font-bold"
+                            >
+                            </v-badge>
+                          </v-card-text>
+
+                          <v-card-text>
+                            <v-card
+                              outlined
+                              class="mb-3 rounded-lg"
+                              v-for="(item, index) in searchCourseClose(
+                                search_course_close
+                              )"
+                              :key="index"
+                            >
+                              <v-card-text class="pa-0">
+                                <v-row dense>
+                                  <v-col cols="12">
+                                    <v-card-title class="font-bold">
+                                      <!-- {{ item.courseNameTh }} -->
+                                      {{
+                                        `${
+                                          $i18n.locale == "th"
+                                            ? item.courseNameTh
+                                            : item.courseNameEn
+                                        }`
+                                      }}
+                                    </v-card-title>
+                                  </v-col>
+                                  <v-col cols="12" sm="12" md="8">
+                                    <v-card-subtitle class="mt-n7">
+                                      {{
+                                        `${
+                                          $i18n.locale == "th"
+                                            ? item.courseTypeNameTh
+                                            : item.courseTypeNameEn
+                                        }`
+                                      }}
+                                      <span
+                                        v-if="
+                                          item.courseTypeNameTh == 'คอร์สทั่วไป'
+                                        "
+                                        >({{ item.packageName }})</span
+                                      >
+                                      <span
+                                        v-if="
+                                          item.courseTypeNameTh ==
+                                          'คอร์สระยะสั้น'
+                                        "
+                                      ></span>
+                                    </v-card-subtitle>
+                                  </v-col>
+                                  <v-col cols="12" sm="12" md="4" align="start">
+                                    <v-card-subtitle class="mt-n8">
+                                      <v-chip
+                                        dark
+                                        :color="
+                                          course_close_options.filter(
+                                            (v) => v.value === item.status
+                                          )[0].color
+                                        "
+                                      >
+                                        {{
+                                          course_close_options.filter(
+                                            (v) => v.value === item.status
+                                          ).length > 0
+                                            ? course_close_options.filter(
+                                                (v) => v.value === item.status
+                                              )[0].label
+                                            : "-"
+                                        }}
+                                      </v-chip>
+                                    </v-card-subtitle>
+                                  </v-col>
+                                  <v-col cols="12" sm="5">
+                                    <v-card-subtitle class="mt-n6">
+                                      <v-icon color="#ff6b81" class="mt-n2">
+                                        mdi-sofa-single-outline
+                                      </v-icon>
+                                      {{ $t("seat") }}
+                                      {{
+                                        ` ${item.currentStudent}/${item.maximumStudent}`
+                                      }}
+                                    </v-card-subtitle>
+                                  </v-col>
+                                  <!-- v-if="item.courseTypeNameTh == 'คอร์สทั่วไป'" -->
+                                  <v-col cols="12" sm="7" align="center">
+                                    <v-card-subtitle class="mt-n8">
+                                      <div>
+                                        <v-btn
+                                          text
+                                          color="#FF6B81"
+                                          @click="dialogDetail(item)"
+                                        >
+                                          <v-icon
+                                            >mdi-text-box-search-outline</v-icon
+                                          >
+                                          {{ $t("view details") }}
+                                        </v-btn>
+                                      </div>
+                                    </v-card-subtitle>
+                                  </v-col>
+                                </v-row>
+                              </v-card-text>
+                            </v-card>
+                          </v-card-text>
+                          <!-- ไม่พบข้อมูลของคอร์สนี้ -->
+                          <v-row
+                            v-if="
+                              searchCourseClose(search_course_close).length ===
+                              0
+                            "
+                          >
+                            <v-col align="center" class="text-lg font-bold">
+                              <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                              {{ $t("can't find full course information") }}
+                            </v-col>
+                          </v-row>
+                        </v-card>
+                      </v-col>
+                    </v-col>
+
+                    <!-- คอร์สว่าง -->
+                    <v-col cols="12" sm="6">
+                      <!-- คอร์สว่าง -->
+                      <v-row>
+                        <v-col cols="12" align="center">
+                          <div>
+                            <v-icon color="#ff6b81">mdi-circle-medium</v-icon>
+                            <span class="text-xl">
+                              {{ $t("course available") }}
+                              <span style="font-weight: bold; color: #ff6b81">{{
+                                get_empty_course?.countOpen
+                                  ? get_empty_course?.countOpen
+                                  : "0"
+                              }}</span>
+                              {{ $t("courses") }}
+                            </span>
+                          </div>
+                        </v-col>
+                      </v-row>
+
+                      <!-- search คอร์สว่าง -->
+                      <v-row>
+                        <v-col cols="12" align="center">
+                          <v-text-field
+                            v-model="search_course_open"
+                            :class="`bg-white
                     rounded-full ${!MobileSize ? 'w-3/5' : 'w-full'} `"
-                      hide-details
-                      dense
-                      outlined
-                      :label="$t('search available course name here')"
-                      prepend-inner-icon="mdi-magnify"
-                      color="#ff6b81"
-                    >
-                    </v-text-field>
-                  </v-col>
-
-                  <!-- PIE CARDs -->
-                  <!-- COURSE CLOSE -->
-                  <v-col cols="12" sm="6" class="my-2" :width="pieCardWidth()">
-                    <v-card
-                      outlined
-                      style="overflow-y: scroll; overflow-x: hidden"
-                      height="400px"
-                      class="rounded-lg"
-                    >
-                      <v-card-text
-                        style="
-                          background-color: #ffdde2;
-                          position: sticky;
-                          top: 0;
-                          z-index: 1;
-                        "
-                        align="center"
-                        class="rounded-t-lg"
-                      >
-                        <span class="mr-2 font-bold">
-                          {{ $t("full courses") }}
-                        </span>
-                        <v-badge
-                          color="#999999"
-                          :content="
-                            get_empty_course?.countClose
-                              ? get_empty_course?.countClose
-                              : '0'
-                          "
-                          class="indent-5 font-bold"
-                        >
-                        </v-badge>
-                      </v-card-text>
-
-                      <v-card-text>
-                        <v-card
-                          outlined
-                          class="mb-3 rounded-lg"
-                          v-for="(item, index) in searchCourseClose(
-                            search_course_close
-                          )"
-                          :key="index"
-                        >
-                          <v-card-text class="pa-0">
-                            <v-row dense>
-                              <v-col cols="12">
-                                <v-card-title class="font-bold">
-                                  <!-- {{ item.courseNameTh }} -->
-                                  {{
-                                    `${
-                                      $i18n.locale == "th"
-                                        ? item.courseNameTh
-                                        : item.courseNameEn
-                                    }`
-                                  }}
-                                </v-card-title>
-                              </v-col>
-                              <v-col cols="12" sm="12" md="8">
-                                <v-card-subtitle class="mt-n7">
-                                  {{
-                                    `${
-                                      $i18n.locale == "th"
-                                        ? item.courseTypeNameTh
-                                        : item.courseTypeNameEn
-                                    }`
-                                  }}
-                                  <span
-                                    v-if="
-                                      item.courseTypeNameTh == 'คอร์สทั่วไป'
-                                    "
-                                    >({{ item.packageName }})</span
-                                  >
-                                  <span
-                                    v-if="
-                                      item.courseTypeNameTh == 'คอร์สระยะสั้น'
-                                    "
-                                  ></span>
-                                </v-card-subtitle>
-                              </v-col>
-                              <v-col cols="12" sm="12" md="4" align="start">
-                                <v-card-subtitle class="mt-n8">
-                                  <v-chip
-                                    dark
-                                    :color="
-                                      course_close_options.filter(
-                                        (v) => v.value === item.status
-                                      )[0].color
-                                    "
-                                  >
-                                    {{
-                                      course_close_options.filter(
-                                        (v) => v.value === item.status
-                                      ).length > 0
-                                        ? course_close_options.filter(
-                                            (v) => v.value === item.status
-                                          )[0].label
-                                        : "-"
-                                    }}
-                                  </v-chip>
-                                </v-card-subtitle>
-                              </v-col>
-                              <v-col cols="12" sm="6">
-                                <v-card-subtitle class="mt-n6">
-                                  <v-icon color="#ff6b81" class="mt-n2">
-                                    mdi-sofa-single-outline
-                                  </v-icon>
-                                  {{ $t("seat") }}
-                                  {{
-                                    ` ${item.currentStudent}/${item.maximumStudent}`
-                                  }}
-                                </v-card-subtitle>
-                              </v-col>
-                              <!-- v-if="item.courseTypeNameTh == 'คอร์สทั่วไป'" -->
-                              <v-col cols="12" sm="6" align="center">
-                                <v-card-subtitle class="mt-n8">
-                                  <div>
-                                    <v-btn
-                                      text
-                                      color="#FF6B81"
-                                      @click="dialogDetail(item)"
-                                    >
-                                      <v-icon
-                                        >mdi-text-box-search-outline</v-icon
-                                      >
-                                      {{ $t("view details") }}
-                                    </v-btn>
-                                  </div>
-                                </v-card-subtitle>
-                              </v-col>
-                            </v-row>
-                          </v-card-text>
-                        </v-card>
-                      </v-card-text>
-                      <!-- ไม่พบข้อมูลของคอร์สนี้ -->
-                      <v-row
-                        v-if="
-                          searchCourseClose(search_course_close).length === 0
-                        "
-                      >
-                        <v-col align="center" class="text-lg font-bold">
-                          <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                          {{ $t("can't find full course information") }}
+                            hide-details
+                            dense
+                            outlined
+                            :label="$t('search available course name here')"
+                            prepend-inner-icon="mdi-magnify"
+                            color="#ff6b81"
+                          >
+                          </v-text-field>
                         </v-col>
                       </v-row>
-                    </v-card>
-                  </v-col>
 
-                  <!-- COURSE OPEN -->
-                  <v-col cols="12" sm="6" class="my-2" :width="pieCardWidth()">
-                    <v-card
-                      outlined
-                      style="overflow-y: scroll; overflow-x: hidden"
-                      height="400px"
-                      class="rounded-lg"
-                    >
-                      <v-card-text
-                        style="
-                          background-color: #ffdde2;
-                          position: sticky;
-                          top: 0;
-                          z-index: 1;
-                        "
-                        align="center"
-                        class="rounded-t-lg"
-                      >
-                        <span class="mr-2 font-bold">
-                          {{ $t("course available") }}
-                        </span>
-                        <v-badge
-                          color="#ff6b81"
-                          :content="
-                            get_empty_course.countOpen
-                              ? get_empty_course.countOpen
-                              : '0'
-                          "
-                          class="indent-5 font-bold justify-center"
-                        >
-                        </v-badge>
-                      </v-card-text>
-
-                      <v-card-text>
+                      <!-- COURSE OPEN -->
+                      <v-col cols="12" class="my-2" :width="pieCardWidth()">
                         <v-card
                           outlined
-                          class="mb-3 rounded-lg"
-                          v-for="(item, index) in searchCourseOpen(
-                            search_course_open
-                          )"
-                          :key="index"
+                          style="overflow-y: scroll; overflow-x: hidden"
+                          height="400px"
+                          class="rounded-lg"
                         >
-                          <v-card-text class="pa-0">
-                            <v-row dense>
-                              <v-col cols="12">
-                                <v-card-title class="font-bold">
-                                  {{
-                                    $i18n.locale == "th"
-                                      ? item.courseNameTh
-                                      : item.courseNameEn
-                                  }}</v-card-title
-                                >
-                              </v-col>
-                              <v-col cols="12" sm="12" md="8" lg="8">
-                                <v-card-subtitle class="mt-n7">
-                                  {{
-                                    `${
-                                      $i18n.locale == "th"
-                                        ? item.courseTypeNameTh
-                                        : item.courseTypeNameEn
-                                    }`
-                                  }}
-                                  <span
-                                    v-if="
-                                      item.courseTypeNameTh == 'คอร์สทั่วไป'
-                                    "
-                                    >({{ item.packageName }})</span
-                                  >
-                                  <span
-                                    v-if="
-                                      item.courseTypeNameTh == 'คอร์สระยะสั้น'
-                                    "
-                                  ></span>
-                                </v-card-subtitle>
-                              </v-col>
-                              <v-col
-                                cols="12"
-                                sm="12"
-                                md="4"
-                                lg="4"
-                                align="start"
-                              >
-                                <v-card-subtitle class="mt-n8">
-                                  <v-chip
-                                    dark
-                                    :color="
-                                      course_close_options.filter(
-                                        (v) => v.value === item.status
-                                      )[0].color
-                                    "
-                                  >
-                                    {{
-                                      course_close_options.filter(
-                                        (v) => v.value === item.status
-                                      ).length > 0
-                                        ? course_close_options.filter(
-                                            (v) => v.value === item.status
-                                          )[0].label
-                                        : "-"
-                                    }}
-                                  </v-chip>
-                                </v-card-subtitle>
-                              </v-col>
-
-                              <v-col cols="12" sm="6">
-                                <v-card-subtitle class="mt-n6">
-                                  <v-icon color="#ff6b81" class="mt-n2">
-                                    mdi-sofa-single-outline
-                                  </v-icon>
-                                  {{ $t("seat") }}
-                                  {{
-                                    ` ${item.currentStudent}/${item.maximumStudent}`
-                                  }}
-                                </v-card-subtitle>
-                              </v-col>
-                              <!-- v-if="item.courseTypeNameTh == 'คอร์สทั่วไป'" -->
-                              <v-col cols="12" sm="6" align="center">
-                                <v-card-subtitle class="mt-n8">
-                                  <div>
-                                    <v-btn
-                                      text
-                                      color="#FF6B81"
-                                      @click="dialogDetail(item)"
-                                    >
-                                      <v-icon
-                                        >mdi-text-box-search-outline</v-icon
-                                      >
-                                      {{ $t("view details") }}
-                                    </v-btn>
-                                  </div>
-                                </v-card-subtitle>
-                              </v-col>
-                            </v-row>
+                          <v-card-text
+                            style="
+                              background-color: #ffdde2;
+                              position: sticky;
+                              top: 0;
+                              z-index: 1;
+                            "
+                            align="center"
+                            class="rounded-t-lg"
+                          >
+                            <span class="mr-2 font-bold">
+                              {{ $t("course available") }}
+                            </span>
+                            <v-badge
+                              color="#ff6b81"
+                              :content="
+                                get_empty_course.countOpen
+                                  ? get_empty_course.countOpen
+                                  : '0'
+                              "
+                              class="indent-5 font-bold justify-center"
+                            >
+                            </v-badge>
                           </v-card-text>
-                        </v-card>
-                      </v-card-text>
 
-                      <!-- ไม่พบข้อมูลของคอร์สนี้ -->
-                      <v-row
-                        v-if="searchCourseOpen(search_course_open).length === 0"
-                      >
-                        <v-col align="center" class="text-lg font-bold">
-                          <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                          {{ $t("can't find available course information") }}
-                        </v-col>
-                      </v-row>
-                    </v-card>
-                  </v-col>
+                          <v-card-text>
+                            <v-card
+                              outlined
+                              class="mb-3 rounded-lg"
+                              v-for="(item, index) in searchCourseOpen(
+                                search_course_open
+                              )"
+                              :key="index"
+                            >
+                              <v-card-text class="pa-0">
+                                <v-row dense>
+                                  <v-col cols="12">
+                                    <v-card-title class="font-bold">
+                                      {{
+                                        $i18n.locale == "th"
+                                          ? item.courseNameTh
+                                          : item.courseNameEn
+                                      }}</v-card-title
+                                    >
+                                  </v-col>
+                                  <v-col cols="12" sm="12" md="8" lg="8">
+                                    <v-card-subtitle class="mt-n7">
+                                      {{
+                                        `${
+                                          $i18n.locale == "th"
+                                            ? item.courseTypeNameTh
+                                            : item.courseTypeNameEn
+                                        }`
+                                      }}
+                                      <span
+                                        v-if="
+                                          item.courseTypeNameTh == 'คอร์สทั่วไป'
+                                        "
+                                        >({{ item.packageName }})</span
+                                      >
+                                      <span
+                                        v-if="
+                                          item.courseTypeNameTh ==
+                                          'คอร์สระยะสั้น'
+                                        "
+                                      ></span>
+                                    </v-card-subtitle>
+                                  </v-col>
+                                  <v-col
+                                    cols="12"
+                                    sm="12"
+                                    md="4"
+                                    lg="4"
+                                    align="start"
+                                  >
+                                    <v-card-subtitle class="mt-n8">
+                                      <v-chip
+                                        dark
+                                        :color="
+                                          course_close_options.filter(
+                                            (v) => v.value === item.status
+                                          )[0].color
+                                        "
+                                      >
+                                        {{
+                                          course_close_options.filter(
+                                            (v) => v.value === item.status
+                                          ).length > 0
+                                            ? course_close_options.filter(
+                                                (v) => v.value === item.status
+                                              )[0].label
+                                            : "-"
+                                        }}
+                                      </v-chip>
+                                    </v-card-subtitle>
+                                  </v-col>
+
+                                  <v-col cols="12" sm="5">
+                                    <v-card-subtitle class="mt-n6">
+                                      <v-icon color="#ff6b81" class="mt-n2">
+                                        mdi-sofa-single-outline
+                                      </v-icon>
+                                      {{ $t("seat") }}
+                                      {{
+                                        ` ${item.currentStudent}/${item.maximumStudent}`
+                                      }}
+                                    </v-card-subtitle>
+                                  </v-col>
+                                  <!-- v-if="item.courseTypeNameTh == 'คอร์สทั่วไป'" -->
+                                  <v-col cols="12" sm="7" align="center">
+                                    <v-card-subtitle class="mt-n8">
+                                      <div>
+                                        <v-btn
+                                          text
+                                          color="#FF6B81"
+                                          @click="dialogDetail(item)"
+                                        >
+                                          <v-icon
+                                            >mdi-text-box-search-outline</v-icon
+                                          >
+                                          {{ $t("view details") }}
+                                        </v-btn>
+                                      </div>
+                                    </v-card-subtitle>
+                                  </v-col>
+                                </v-row>
+                              </v-card-text>
+                            </v-card>
+                          </v-card-text>
+
+                          <!-- ไม่พบข้อมูลของคอร์สนี้ -->
+                          <v-row
+                            v-if="
+                              searchCourseOpen(search_course_open).length === 0
+                            "
+                          >
+                            <v-col align="center" class="text-lg font-bold">
+                              <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                              {{
+                                $t("can't find available course information")
+                              }}
+                            </v-col>
+                          </v-row>
+                        </v-card>
+                      </v-col>
+                    </v-col>
+                  </v-row>
+
                   <!-- DIALOG COURSES -->
                   <v-dialog
                     v-model="dialog_course"
@@ -1105,34 +1132,6 @@ export default {
     totalSuccessDonut: 0,
     totalPendingDonut: 0,
     totalPriceDonut: 0,
-    // course_close_options: [
-    //   {
-    //     label: "คอร์สเต็ม",
-    //     value: "Close",
-    //     color: "#999999",
-    //   },
-    //   {
-    //     label: "คอร์สว่าง",
-    //     value: "Open",
-    //     color: "#ff6b81",
-    //   },
-    // ],
-
-    // thaiMonths: [
-    //   { name: "ทั้งปี", key: "", type: "month" },
-    //   { name: "มกราคม", key: "01", type: "month" },
-    //   { name: "กุมภาพันธ์", key: "02", type: "month" },
-    //   { name: "มีนาคม", key: "03", type: "month" },
-    //   { name: "เมษายน", key: "04", type: "month" },
-    //   { name: "พฤษภาคม", key: "05", type: "month" },
-    //   { name: "มิถุนายน", key: "06", type: "month" },
-    //   { name: "กรกฎาคม", key: "07", type: "month" },
-    //   { name: "สิงหาคม", key: "08", type: "month" },
-    //   { name: "กันยายน", key: "09", type: "month" },
-    //   { name: "ตุลาคม", key: "10", type: "month" },
-    //   { name: "พฤศจิกายน", key: "11", type: "month" },
-    //   { name: "ธันวาคม", key: "12", type: "month" },
-    // ],
 
     selected_mounth: "",
     donut_mounth: "",
@@ -1346,7 +1345,7 @@ export default {
     },
     thaiMonths() {
       return [
-        { name: "มกราคม", nameEn: "all year", key: "", type: "month" },
+        { name: "ทั้งปี", nameEn: "all year", key: "", type: "month" },
         { name: "มกราคม", nameEn: "January", key: "01", type: "month" },
         { name: "กุมภาพันธ์", nameEn: "February", key: "02", type: "month" },
         { name: "มีนาคม", nameEn: "March", key: "03", type: "month" },

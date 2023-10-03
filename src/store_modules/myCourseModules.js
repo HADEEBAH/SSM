@@ -283,6 +283,7 @@ const myCourseModules = {
                 }
                 // let { data } = await axios.get(`http://localhost:3000/api/v1/mycourse/checkin/student/${account_id}/course/${course_id}`, config);
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/checkin/student/${account_id}/course/${course_id}`, config);
+                console.log('data.data :>> ', data.data);
 
                 if (data.data && data.statusCode === 200) {
                     if (data.data.checkIn) {
@@ -293,8 +294,8 @@ const myCourseModules = {
                             }
                         }
                         data.data.potential = potential
+                        data.data.dates.day_str = dayOfWeekArray(data.data.dates.day)
                     }
-                    data.data.dates.day_str = dayOfWeekArray(data.data.dates.day)
 
                     context.commit("SetMyCourseDetail", data.data)
                     context.commit("SetCourseListIsLoading", false)
