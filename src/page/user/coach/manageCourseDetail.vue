@@ -392,7 +392,7 @@
                   student_check_in.filter(
                     (v) =>
                       v.type === 'general' &&
-                      (v.status == 'punctual' || v.status == 'late')
+                      (v.status == 'punctual' || v.status == 'late' || v.status == 'emergency leave' )
                   ).length > 0
                 "
               >
@@ -403,7 +403,7 @@
                   v-for="(student, index_student) in student_check_in.filter(
                     (v) =>
                       v.type === 'general' &&
-                      (v.status == 'punctual' || v.status == 'late')
+                      (v.status == 'punctual' || v.status == 'late' || v.status == 'emergency leave')
                   )"
                   :key="`${index_student}-student`"
                 >
@@ -1464,8 +1464,7 @@ export default {
           }
         }
         if (
-          check_in_data.status === "leave" ||
-          check_in_data.status === "special case"
+          check_in_data.status === "leave"
         ) {
           this.selectCheckInStatus(check_in_data, check_in_data.status);
           this.expanded_index.push(check_in_data);
@@ -2040,7 +2039,7 @@ export default {
       }`;
     },
     selectCheckInStatus(item, status) {
-      if (status === "leave" || status === "special case") {
+      if (status === "leave") {
         this.expanded_index.push(item);
       } else {
         this.expanded_index.forEach((expanded, index) => {

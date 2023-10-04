@@ -72,7 +72,7 @@ const financeModules = {
                 sumfail = sumfail + parseFloat(order.price)
               }
               reports.push({
-                "วันที่ออกเอกสาร": moment(order.created_date).format("DD/MM/YYYY HH:mm"),
+                "วันที่สร้าง": moment(order.created_date).format("DD/MM/YYYY HH:mm"),
                 "หมายเลขออเดอร์": order.order_number,
                 "สถานะ": order.payment_status,
                 "วันที่ชำระ": order.paid_date,
