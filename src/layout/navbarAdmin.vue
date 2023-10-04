@@ -215,9 +215,9 @@ export default {
       { title: "finance", to: "Finance", child: [], roles: ["R_1", "R_2"] },
       {
         title: "add accounts",
-        to: "",
+        to: "UserList",
         roles: ["R_1"],
-        child: [{ title: "add accounts", to: "UserList", roles: ["R_1"] }],
+        child: [],
       },
       {
         title: "leave approval",
