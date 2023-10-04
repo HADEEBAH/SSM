@@ -2,7 +2,6 @@
   <v-app>
     <v-container>
       <headerPage :title="$t(`wls setup`)"></headerPage>
-      <pre>{{ kingdom }}</pre>
       <v-row dense>
         <v-col>
           <label-custom
