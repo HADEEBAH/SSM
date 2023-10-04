@@ -63,6 +63,7 @@ const manageScheduleModules = {
         if (state.data_filter_schedule?.length > 0) {
           res = state.data_filter_schedule?.filter((items) =>
             (items.name && items.name?.indexOf(payload) !== -1) || (items.coach && items.coach?.indexOf(payload) !== -1) || (items.package && items.package?.indexOf(payload) !== -1)
+
           )
 
         } else if (state.data_in_schedule?.length > 0) {

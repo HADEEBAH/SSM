@@ -2,7 +2,10 @@
   <div>
     <!-- Upload file -->
     <v-card class="mx-3" flat>
-      <v-card-text class="border-dashed border-2 border-blue-600 rounded-lg">
+      <v-card-text
+        class="border-dashed border-2 rounded-lg"
+        style="border: dashed rgb(255, 107, 129)"
+      >
         <v-row v-if="preview_url">
           <v-col align="center" class="rounded-lg pa-0">
             <v-img :src="preview_url" style="max-width: 200px" align="right">
@@ -56,7 +59,7 @@
           <v-col cols="12" class="flex align-center justify-center">
             <v-btn
               outlined
-              color="blue"
+              color="#ff6b81"
               @click="openFileSelector"
               :disabled="disable"
               >{{ $t("select file") }}</v-btn
@@ -96,6 +99,7 @@
               v-model="course_data.course_name_th"
               :placeholder="$t('specify the course name (thai)')"
               @paste="preventPaste"
+              color="#ff6b81"
             ></v-text-field>
           </v-col>
           <v-col cols="12" sm="6">
@@ -115,6 +119,7 @@
               @change="ChangeCourseData(course_data)"
               :placeholder="$t('specify the course name (english)')"
               @paste="preventPaste"
+              color="#ff6b81"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -196,6 +201,7 @@
                   @change="ChangeCourseData(course_data)"
                   v-bind="attrs"
                   v-on="on"
+                  color="#ff6b81"
                 >
                   <template v-slot:append>
                     <v-icon
@@ -259,6 +265,7 @@
               :rules="location"
               v-model="course_data.location"
               :placeholder="$t('specify the place of study')"
+              color="#ff6b81"
             ></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" v-if="course_data.course_type_id === 'CT_2'">
@@ -275,6 +282,7 @@
               @focus="$event.target.select()"
               v-model="course_data.student_recived"
               :placeholder="$t('specify students who can accept')"
+              color="#ff6b81"
             ></v-text-field>
           </v-col>
         </v-row>

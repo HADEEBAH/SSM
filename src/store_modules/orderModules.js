@@ -1337,15 +1337,15 @@ const orderModules = {
         });
       }
     },
-    async GetReserceCourse(context, {course_id}){
-      try{
+    async GetReserceCourse(context, { course_id }) {
+      try {
         let { data } = await axios.get(
           `${process.env.VUE_APP_URL}/api/v1/order/reserve/byCourse/${course_id}`
         );
         if (data.statusCode === 200) {
           context.commit("SetReserveList", data.data);
         }
-      }catch(error){
+      } catch (error) {
         await Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),

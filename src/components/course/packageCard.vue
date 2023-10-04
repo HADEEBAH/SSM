@@ -43,7 +43,9 @@
                 >
                   <template v-slot:no-data>
                     <v-list-item>
-                      <v-list-item-title> {{ $t("no data found") }}</v-list-item-title>
+                      <v-list-item-title>
+                        {{ $t("no data found") }}</v-list-item-title
+                      >
                     </v-list-item>
                   </template>
                   <template v-slot:item="{ item }">
@@ -68,7 +70,10 @@
                 </v-autocomplete>
               </v-col>
               <v-col cols="12" sm="6">
-                <label-custom required :text="`${$t('number of students')} (${$t('person')})`"></label-custom>
+                <label-custom
+                  required
+                  :text="`${$t('number of students')} (${$t('person')})`"
+                ></label-custom>
                 <v-text-field
                   suffix="คน"
                   type="number"
@@ -81,7 +86,7 @@
                   @focus="$event.target.select()"
                   class="input-text-right"
                   dense
-                  :min="package_data.package_id == 'PACK_3'? 3 : 1"
+                  :min="package_data.package_id == 'PACK_3' ? 3 : 1"
                   v-model.number="package_data.students"
                 ></v-text-field>
               </v-col>
@@ -106,7 +111,9 @@
                   v-model="option.period_package"
                   color="#FF6B81"
                   :rules="rules.options"
-                  :item-text="$i18n.locale == 'th' ? 'optionName' : 'optionNameEn'"
+                  :item-text="
+                    $i18n.locale == 'th' ? 'optionName' : 'optionNameEn'
+                  "
                   item-value="optionId"
                   :items="optionsList(index, option_index)"
                   item-color="pink"
@@ -114,7 +121,9 @@
                 >
                   <template v-slot:no-data>
                     <v-list-item>
-                      <v-list-item-title> {{$t("no data found")}}</v-list-item-title>
+                      <v-list-item-title>
+                        {{ $t("no data found") }}</v-list-item-title
+                      >
                     </v-list-item>
                   </template>
                   <template v-slot:item="{ item }">
@@ -126,7 +135,11 @@
                               ? 'font-bold'
                               : ''
                           "
-                          >{{ $i18n.locale == 'th' ? item.optionName : item.optionNameEn }}</span
+                          >{{
+                            $i18n.locale == "th"
+                              ? item.optionName
+                              : item.optionNameEn
+                          }}</span
                         ></v-list-item-title
                       >
                     </v-list-item-content>
@@ -139,7 +152,10 @@
                 </v-autocomplete>
               </v-col>
               <v-col cols="12" sm="4">
-                <label-custom required :text="$t('number of times/person')"></label-custom>
+                <label-custom
+                  required
+                  :text="$t('number of times/person')"
+                ></label-custom>
                 <v-text-field
                   class="input-text-right"
                   dense
@@ -152,6 +168,7 @@
                   :placeholder="$t('specify the number of times/person')"
                   v-model.number="option.amount"
                   @change="calNetPrice(option)"
+                  color="#FF6B81"
                 ></v-text-field>
               </v-col>
               <v-col cols="6" sm="2">
@@ -178,14 +195,17 @@
                     @click="removeOptions(package_data.options, option_index)"
                   >
                     <v-icon>mdi-delete-empty</v-icon>
-                    {{ $t('delete period') }}
+                    {{ $t("delete period") }}
                   </v-btn>
                 </template>
               </v-col>
             </v-row>
             <v-row dense>
               <v-col cols="12" sm="4">
-                <label-custom required :text="`${$t('price')}/${$t('person')}`"></label-custom>
+                <label-custom
+                  required
+                  :text="`${$t('price')}/${$t('person')}`"
+                ></label-custom>
                 <v-text-field
                   class="input-text-right"
                   dense
@@ -198,6 +218,7 @@
                   :placeholder="$t('specify price baht/person')"
                   v-model.number="option.price_unit"
                   @change="calNetPrice(option)"
+                  color="#FF6B81"
                 ></v-text-field>
               </v-col>
               <v-col>
@@ -208,6 +229,7 @@
                       v-model="option.discount"
                       @input="calNetPrice(option)"
                       :label="$t('there is a discount')"
+                      color="#FF6B81"
                     ></v-checkbox>
                   </v-col>
                   <v-col cols="12" sm="5" class="pt-8">
@@ -223,6 +245,7 @@
                       :filled="!option.discount || disable"
                       v-model.number="option.discount_price"
                       @change="calNetPrice(option)"
+                      color="#FF6B81"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -237,6 +260,7 @@
                   :outlined="!disable"
                   :filled="disable"
                   v-model="option.privilege"
+                  color="#FF6B81"
                 ></v-textarea>
               </v-col>
             </v-row>
@@ -248,15 +272,15 @@
             >
               <v-card-text>
                 <v-row>
-                  <v-col>{{$t("price remaining")}}</v-col>
+                  <v-col>{{ $t("price remaining") }}</v-col>
                   <v-col class="text-[#FF6B81] font-bold text-right">{{
                     option.net_price.toLocaleString()
                   }}</v-col>
-                  <v-col>{{ $t("baht") }} {{$t("average")}}</v-col>
+                  <v-col>{{ $t("baht") }} {{ $t("average") }}</v-col>
                   <v-col class="text-[#FF6B81] font-bold text-right">{{
                     option.net_price_unit.toLocaleString()
                   }}</v-col>
-                  <v-col>{{$t("baht")}}/{{$t("time")}}</v-col>
+                  <v-col>{{ $t("baht") }}/{{ $t("time") }}</v-col>
                 </v-row>
               </v-card-text>
             </v-card>
@@ -305,8 +329,13 @@ export default {
           },
         ],
         packages_student: [
-          function (val) { 
-            return (val || "") >= vm.minimum_students || `${vm.$t("please specify the number of students at least")} ${vm.minimum_students} ${vm.$t("person")}`;
+          function (val) {
+            return (
+              (val || "") >= vm.minimum_students ||
+              `${vm.$t("please specify the number of students at least")} ${
+                vm.minimum_students
+              } ${vm.$t("person")}`
+            );
           },
         ],
         options: [
@@ -316,7 +345,10 @@ export default {
         ],
         options_amount: [
           function (val) {
-            return (val || "") > 0 || vm.$t("please specify the number of times/person");
+            return (
+              (val || "") > 0 ||
+              vm.$t("please specify the number of times/person")
+            );
           },
         ],
         price_unit: [
@@ -397,14 +429,14 @@ export default {
       let minimum_students_data = this.minimum_students;
       if (package_data === "PACK_1") {
         packages.students = 1;
-        this.minimum_students = 1
-        } else if (package_data === "PACK_2") {
+        this.minimum_students = 1;
+      } else if (package_data === "PACK_2") {
         packages.students = 2;
-        this.minimum_students = 2
+        this.minimum_students = 2;
       } else if (package_data === "PACK_3") {
         packages.students = 3;
         minimum_students_data = 3;
-        this.minimum_students = 3
+        this.minimum_students = 3;
       }
       return { packages, minimum_students_data };
     },

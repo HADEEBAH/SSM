@@ -165,7 +165,9 @@
                 ? 'bg-[#FFF9E8] text-[#FCC419]'
                 : item.payment_status === 'success'
                 ? 'bg-[#F0F9EE] text-[#58A144]'
-                : 'bg-[#ffeeee] text-[#f00808]'
+                : item.payment_status === 'fail'
+                ? 'bg-[#ffeeee] text-[#f00808]'
+                : ''
             "
           >
             <span class="w-full text-center">{{
@@ -305,7 +307,7 @@
                         $i18n.locale == "th"
                           ? item.namePayment
                           : item.namePaymentEn
-                     }}</span>
+                      }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
                       (+{{ export_filter.payment_status.length - 1 }}

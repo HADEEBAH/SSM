@@ -269,6 +269,7 @@
                     @change="ChangeCourseData(course_data)"
                     v-model="class_date.students"
                     :placeholder="$t('specify students who can accept')"
+                    color="#ff6b81"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="6" sm="2" class="d-flex align-center">
@@ -386,7 +387,8 @@ export default {
     },
     end_time() {
       return [
-        (val) => (val || "").length == 5 || this.$t("please select an end time"),
+        (val) =>
+          (val || "").length == 5 || this.$t("please select an end time"),
       ];
     },
     students() {

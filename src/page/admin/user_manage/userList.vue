@@ -77,7 +77,9 @@
                         </v-icon>
                       </v-list-item-action>
                       <v-list-item-content>
-                        <v-list-item-title> Select All </v-list-item-title>
+                        <v-list-item-title>
+                          {{ $t("select all") }}
+                        </v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
                     <v-divider class="mt-2"></v-divider>
@@ -297,8 +299,12 @@ export default {
     },
     roles() {
       return [
-        { role: "Super Admin", privilege: "superAdmin", roleNumber: "R_1" },
-        { role: "Admin", privilege: "admin", roleNumber: "R_2" },
+        {
+          role: this.$t("super admin"),
+          privilege: "superAdmin",
+          roleNumber: "R_1",
+        },
+        { role: this.$t("admin"), privilege: "admin", roleNumber: "R_2" },
         { role: this.$t("coach"), privilege: "โค้ช", roleNumber: "R_3" },
         { role: this.$t("parent"), privilege: "ผู้ปกครอง", roleNumber: "R_4" },
         { role: this.$t("student"), privilege: "นักเรียน", roleNumber: "R_5" },
