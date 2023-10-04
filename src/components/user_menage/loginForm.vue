@@ -99,7 +99,6 @@
 
 <script>
 import { inputValidation } from "@/functions/functions";
-
 import { mapActions, mapGetters } from "vuex";
 export default {
   props: {

@@ -190,7 +190,6 @@ const myCourseModules = {
                     } else {
                         context.commit("SetStudentData", data.data)
                     }
-                    console.log("246 => data", dataCourseSchedule)
                     context.commit("SetcourseSchedule", dataCourseSchedule);
                     context.commit("SetStudentsLoading", false)
                 } else {
@@ -259,7 +258,6 @@ const myCourseModules = {
                         booked.courseImg = booked.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${booked.courseImg}` : null
                     }
                     context.commit("SetProfileBooked", data.data)
-                    console.log("SetProfileBooked", data.data)
                 } else {
                     throw { error: data };
                 }
@@ -293,8 +291,8 @@ const myCourseModules = {
                             }
                         }
                         data.data.potential = potential
+                        data.data.dates.day_str = dayOfWeekArray(data.data.dates.day)
                     }
-                    data.data.dates.day_str = dayOfWeekArray(data.data.dates.day)
 
                     context.commit("SetMyCourseDetail", data.data)
                     context.commit("SetCourseListIsLoading", false)
