@@ -395,7 +395,6 @@ const coachModules = {
         // let localhost = "http://localhost:3000"
         const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/checkin/studentall`, students, config)
         if (data.statusCode == 200) {
-          console.log(data)
           context.commit("SetStudentCheckInIsLoading", false)
           await Swal.fire({
             icon: "success",
@@ -415,7 +414,6 @@ const coachModules = {
         }
         context.commit("SetStudentCheckInIsLoading", false)
       } catch ({ response }) {
-        console.log("error", response);
         context.commit("SetStudentCheckInIsLoading", false)
         if (response.status === 400) {
           Swal.fire({
@@ -463,7 +461,6 @@ const coachModules = {
         if (data.statusCode === 200) {
           let i = 1
           for await (let student of data.data) {
-            console.log("student", student)
             student.no = i
             student.fullname = `${student.firstNameTh} ${student.lastNameTh}`
             student.fullname_en = `${student.firstNameEn} ${student.lastNameEn}`

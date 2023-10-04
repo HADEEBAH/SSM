@@ -521,11 +521,13 @@
                   :key="`${index}-checkin`"
                 >
                   <v-card-text>
-                    <v-row>
-                      <v-col class="text-lg font-bold">
-                        {{ index + 1 }} . {{ student.fullname }}</v-col
+                    <v-row dense>
+                      <v-col cols="12" sm class="text-lg font-bold">
+                        {{ index + 1 }} . {{  $i18n.locale == "th"
+                          ? student.fullname
+                          : student.fullname_en }}</v-col
                       >
-                      <v-col align="center">
+                      <v-col cols="12" sm="auto"  align="center">
                         <v-row dense class="d-flex aling-center">
                           <v-col align="right"> {{ $t("attendance") }}: </v-col>
                           <v-col cols="auto">
@@ -558,7 +560,7 @@
                         </v-row>
                       </v-col>
                     </v-row>
-                    <v-row>
+                    <v-row dense>
                       <v-col align="left" class="font-semibold"
                         >{{ $t("developmental level") }}:
                         <v-rating
@@ -589,6 +591,7 @@
                       </v-col>
                       <v-col col="12" sm="auto">
                         <v-btn
+                          class="w-full"
                           outlined
                           @click="showPotentialComment(student)"
                           color="#ff6b81"
@@ -597,10 +600,10 @@
                         >
                       </v-col>
                     </v-row>
-                    <v-row>
+                    <v-row dense>
                       <v-col> {{ $t("interest level") }}</v-col>
                     </v-row>
-                    <v-row>
+                    <v-row dense>
                       <v-col class="font-semibold">
                         <span>
                           {{ student.potential.interest }}
@@ -1111,7 +1114,7 @@
           <v-card flat class="mb-3">
             <v-card-text class="border border-1 rounded-lg">
               <v-row>
-                <v-col>
+                <v-col cols="12" sm="6">
                   <div>{{ $t("leave date") }}</div>
                   <div class="font-semibold pl-2">
                     {{
@@ -1121,7 +1124,7 @@
                     }}
                   </div>
                 </v-col>
-                <v-col>
+                <v-col cols="12" sm="6">
                   <div>{{ $t("period") }}</div>
                   <div class="font-semibold pl-2">
                     {{ $t(edited_coach_leave_data.period) }}
