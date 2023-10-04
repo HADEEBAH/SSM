@@ -236,7 +236,7 @@ export default {
           text: this.$t("course name"),
           align: "start",
           sortable: false,
-          value: this.$i18n.locale == "th" ? "courseTh" : "courseEn",
+          value: this.$i18n.locale == "th" ? "course_th" : "course_en",
         },
         {
           text: this.$t("wls name"),
