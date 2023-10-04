@@ -355,7 +355,7 @@
                 <v-autocomplete
                   dense
                   :items="courses"
-                  item-text="course"
+                  :item-text="$i18n.locale == 'th' ? 'course_th' : 'course_en'"
                   item-value="course_id"
                   v-model="export_filter.course_id"
                   :label="$t('please select a course')"
@@ -368,7 +368,7 @@
                 >
                   <template v-slot:selection="{ item, index }">
                     <v-chip dark v-if="index === 0" color="#FF6B81">
-                      <span>{{ item.course }}</span>
+                      <span>{{ $i18n.locale == 'th' ? item.course_th : item.course_en }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
                       (+{{ export_filter.course_id.length - 1 }}
@@ -508,7 +508,7 @@
                               ? export_filter.date_doc_start
                               : GenDate(export_filter.date_doc_start)
                           "
-                          :label="$t('please select a start time')"
+                          :label="$t('please select a start date')"
                           outlined
                           prepend-icon="mdi-calendar"
                           readonly
@@ -544,7 +544,7 @@
                               ? export_filter.date_doc_end
                               : GenDate(export_filter.date_doc_end)
                           "
-                          :label="$t('please select an end time')"
+                          :label="$t('please select an end date')"
                           outlined
                           prepend-icon="mdi-calendar"
                           readonly
@@ -587,7 +587,7 @@
                               ? export_filter.date_pay_start
                               : GenDate(export_filter.date_pay_start)
                           "
-                          :label="$t('please select a start time')"
+                          :label="$t('please select a start date')"
                           outlined
                           prepend-icon="mdi-calendar"
                           readonly
@@ -624,7 +624,7 @@
                               ? export_filter.date_pay_end
                               : GenDate(export_filter.date_pay_end)
                           "
-                          :label="$t('please select an end time')"
+                          :label="$t('please select an end date')"
                           outlined
                           prepend-icon="mdi-calendar"
                           readonly
@@ -650,7 +650,7 @@
               <v-col cols="12" sm="6">
                 <label-custom :text="$t('service value')"></label-custom>
                 <v-text-field
-                  :label="$t('please enter the service value')"
+                  :label="$t('please enter the service value start')"
                   outlined
                   dense
                   type="number"
@@ -661,7 +661,7 @@
               <v-col cols="12" sm="6">
                 <label-custom :text="$t('to')"></label-custom>
                 <v-text-field
-                  :label="$t('please enter the service value')"
+                  :label="$t('please enter the service value end')"
                   outlined
                   dense
                   type="number"
