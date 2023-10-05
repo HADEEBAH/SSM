@@ -318,7 +318,9 @@ const orderModules = {
                 order.paid_date = ""
                 order.paid_time = ""
               }
-              order.course_name = `${order.course?.courseNameTh}(${order.course?.courseNameEn})`;
+              // order.course_name = `${order.course?.courseNameTh}(${order.course?.courseNameEn})`;
+              order.course_nameTh = order.course?.courseNameTh;
+              order.course_nameEn = order.course?.courseNameEn;
               order.student_name = `${order.user?.firstNameTh} ${order.user?.lastNameTh}`;
               order.student_name_en = `${order.user?.firstNameEng} ${order.user?.lastNameEng}`;
             }

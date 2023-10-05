@@ -402,6 +402,7 @@
                 type="number"
                 v-model="course_data.price_course"
                 @change="ChangeCourseData(course_data)"
+                color="#FF6B81"
               >
               </v-text-field>
             </v-col>
@@ -443,6 +444,7 @@
                         :placeholder="$t('choose start date')"
                         v-bind="attrs"
                         v-on="on"
+                        color="#FF6B81"
                       >
                         <template v-slot:append>
                           <v-icon
@@ -501,6 +503,7 @@
                         readonly
                         v-bind="attrs"
                         v-on="on"
+                        color="#FF6B81"
                       >
                         <template v-slot:append>
                           <v-icon
@@ -599,6 +602,7 @@
                         readonly
                         v-bind="attrs"
                         v-on="on"
+                        color="#FF6B81"
                       >
                         <template v-slot:append>
                           <v-icon
@@ -660,6 +664,7 @@
                         :placeholder="$t('choose an end date')"
                         v-bind="attrs"
                         v-on="on"
+                        color="#FF6B81"
                       >
                         <template v-slot:append>
                           <v-icon
@@ -706,6 +711,7 @@
                     "
                     :rules="start_time"
                     v-model="course_data.coachs[0].period.start_time"
+                    color="#FF6B81"
                   >
                   </v-text-field>
                   <VueTimepicker
@@ -717,6 +723,7 @@
                     @change="
                       ChangeStartDate(course_data.coachs[0].period, course_data)
                     "
+                    color="#FF6B81"
                   >
                   </VueTimepicker>
                 </v-col>
@@ -733,6 +740,7 @@
                     style="position: absolute; display: block; z-index: 4"
                     :rules="end_time"
                     v-model="course_data.coachs[0].period.end_time"
+                    color="#FF6B81"
                   >
                   </v-text-field>
                   <VueTimepicker
@@ -740,6 +748,7 @@
                     hide-clear-button
                     advanced-keyboard
                     v-model="course_data.coachs[0].period.end_time_object"
+                    color="#FF6B81"
                   >
                   </VueTimepicker>
                 </v-col>
@@ -759,6 +768,7 @@
                 :filled="disable"
                 @change="ChangeCourseData(course_data)"
                 :placeholder="$t('enter course details') + '...'"
+                color="#FF6B81"
               ></v-textarea>
             </v-col>
           </v-row>
@@ -772,6 +782,7 @@
                 :filled="disable"
                 @change="ChangeCourseData(course_data)"
                 :placeholder="$t('enter details') + '...'"
+                color="#FF6B81"
               ></v-textarea>
             </v-col>
           </v-row>

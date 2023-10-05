@@ -68,11 +68,7 @@
                       @click="selectedAll()"
                     >
                       <v-list-item-action>
-                        <v-icon
-                          :color="
-                            searchQuery.length > 0 ? 'indigo darken-4' : ''
-                          "
-                        >
+                        <v-icon :color="searchQuery.length > 0 ? 'pink' : ''">
                           {{ icon }}
                         </v-icon>
                       </v-list-item-action>

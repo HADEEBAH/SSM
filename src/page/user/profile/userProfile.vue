@@ -730,6 +730,7 @@
                 v-model="relation_user.username"
                 @change="checkUsername(relation_user.username)"
                 :placeholder="this.$t('username')"
+                color="#ff6b81"
               >
                 <template v-slot:append>
                   <v-icon v-if="relation_user.account_id" color="green"
@@ -770,6 +771,7 @@
                   outlined
                   v-model="relation_user.firstname_en"
                   :placeholder="$t('english first name')"
+                  color="#ff6b81"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -782,6 +784,7 @@
                   outlined
                   v-model="relation_user.lastname_en"
                   :placeholder="$t('english last name')"
+                  color="#ff6b81"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -794,6 +797,7 @@
                   outlined
                   v-model="relation_user.tel"
                   :placeholder="$t('phone number')"
+                  color="#ff6b81"
                 ></v-text-field>
               </v-col>
             </v-row>

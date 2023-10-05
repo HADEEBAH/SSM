@@ -16,6 +16,7 @@
           >
         </v-col>
       </v-row>
+      <!-- search -->
       <v-row dense class="mb-3">
         <v-col cols="6" sm="6" align="start"> </v-col>
         <v-col cols="12" sm="6" align="end">
@@ -26,11 +27,14 @@
             outlined
             :placeholder="$t('search')"
             v-model="search"
+            color="#ff6b81"
           ></v-text-field>
         </v-col>
       </v-row>
+
       <v-row dense class="mb-3">
-        <v-col cols="12" sm="3" @click="tab = 'all'">
+        <!-- บน -->
+        <v-col cols="12" sm="6" @click="tab = 'all'">
           <img-card
             :title="$t('all')"
             class="cursor-pointer"
@@ -58,7 +62,7 @@
             </template>
           </img-card>
         </v-col>
-        <v-col cols="12" sm="3" @click="tab = 'success'">
+        <v-col cols="12" sm="6" @click="tab = 'success'">
           <img-card
             class="cursor-pointer"
             :class="tab === 'success' ? 'img-card-active' : ''"
@@ -83,7 +87,8 @@
             </template>
           </img-card>
         </v-col>
-        <v-col cols="12" sm="3" @click="tab = 'pending'">
+        <!-- ล่าง -->
+        <v-col cols="12" sm="4" @click="tab = 'pending'">
           <img-card
             class="cursor-pointer"
             :class="tab === 'pending' ? 'img-card-active' : ''"
@@ -108,7 +113,7 @@
             </template>
           </img-card>
         </v-col>
-        <v-col cols="12" sm="3" @click="tab = 'cancel'">
+        <v-col cols="12" sm="4" @click="tab = 'cancel'">
           <img-card
             class="cursor-pointer"
             :class="tab === 'cancel' ? 'img-card-active' : ''"
@@ -117,7 +122,7 @@
               <v-img
                 max-height="90"
                 max-width="70"
-                src="@/assets/finance/file-cancel.png"
+                src="@/assets/finance/cancel.svg"
               ></v-img>
             </template>
             <template v-slot:header>
@@ -127,6 +132,31 @@
               <v-row class="d-flex align-end">
                 <v-col align="center" class="text-3xl font-bold">{{
                   orders.filter((v) => v.payment_status === "cancel").length
+                }}</v-col>
+                <v-col class="text-sm text-right">{{ $t("list") }}</v-col>
+              </v-row>
+            </template>
+          </img-card>
+        </v-col>
+        <v-col cols="12" sm="4" @click="tab = 'fail'">
+          <img-card
+            class="cursor-pointer"
+            :class="tab === 'fail' ? 'img-card-active' : ''"
+          >
+            <template v-slot:img>
+              <v-img
+                max-height="90"
+                max-width="70"
+                src="@/assets/finance/fail.png"
+              ></v-img>
+            </template>
+            <template v-slot:header>
+              <div class="font-bold">{{ $t("fail") }}</div>
+            </template>
+            <template v-slot:detail>
+              <v-row class="d-flex align-end">
+                <v-col align="center" class="text-3xl font-bold">{{
+                  orders.filter((v) => v.payment_status === "fail").length
                 }}</v-col>
                 <v-col class="text-sm text-right">{{ $t("list") }}</v-col>
               </v-row>
@@ -165,8 +195,10 @@
                 ? 'bg-[#FFF9E8] text-[#FCC419]'
                 : item.payment_status === 'success'
                 ? 'bg-[#F0F9EE] text-[#58A144]'
+                : item.payment_status === 'cancel'
+                ? 'bg-[#e8e8e8] text-[#636363]'
                 : item.payment_status === 'fail'
-                ? 'bg-[#ffeeee] text-[#f00808]'
+                ? 'bg-[#F4CCCC] text-[#F03D3E]'
                 : ''
             "
           >
@@ -368,7 +400,9 @@
                 >
                   <template v-slot:selection="{ item, index }">
                     <v-chip dark v-if="index === 0" color="#FF6B81">
-                      <span>{{ $i18n.locale == 'th' ? item.course_th : item.course_en }}</span>
+                      <span>{{
+                        $i18n.locale == "th" ? item.course_th : item.course_en
+                      }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
                       (+{{ export_filter.course_id.length - 1 }}
@@ -966,7 +1000,7 @@ export default {
           text: this.$t("course name"),
           align: "start",
           sortable: false,
-          value: "course_name",
+          value: this.$i18n.locale == "th" ? "course_nameTh" : "course_nameEn",
         },
         {
           text: this.$t("price"),
