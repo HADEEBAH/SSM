@@ -887,36 +887,49 @@ const orderModules = {
       }
     },
     async updateOrderStatus(context, { order_detail }) {
-      let payload = {
-        paymentStatus: order_detail.paymentStatus,
-        paymentType: order_detail.paymentType,
-      };
-      let config = {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-type": "Application/json",
-          Authorization: `Bearer ${VueCookie.get("token")}`,
-        },
-      };
-      let { data } = await axios.patch(
-        `${process.env.VUE_APP_URL}/api/v1/order/update/${order_detail.orderNumber}`,
-        payload,
-        config
-      );
-      if (data.statusCode === 200) {
-        await Swal.fire({
-          icon: "success",
-          title: VueI18n.t("succeed"),
-          text: VueI18n.t("order canceled successfully"),
+      try{
+        let payload = {
+          paymentStatus: order_detail.paymentStatus,
+          paymentType: order_detail.paymentType,
+        };
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        let { data } = await axios.patch(
+          `${process.env.VUE_APP_URL}/api/v1/order/update/${order_detail.orderNumber}`,
+          payload,
+          config
+        );
+        if (data.statusCode === 200) {
+          await Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("order canceled successfully"),
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+          }).finally(() => {
+            context.dispatch("GetOrderDetail", {
+              order_number: order_detail.orderNumber,
+            });
+          });
+        }
+      }catch(error){
+        Swal.fire({
+          icon: "error",
+          title: VueI18n.t("something went wrong"),
+          timer: 3000,
           showDenyButton: false,
           showCancelButton: false,
           showConfirmButton: false,
-          timer: 3000,
           timerProgressBar: true,
-        }).finally(() => {
-          context.dispatch("GetOrderDetail", {
-            order_number: order_detail.orderNumber,
-          });
+
         });
       }
     },
@@ -1224,8 +1237,12 @@ const orderModules = {
         context.commit("SetCartListIsLoading", false);
       }
     },
-    async userUpdateOrderCancelStatus(context, { order_id }) {
-      try {
+    async userUpdateOrderCancelStatus(context, { order_number }) {
+      try{
+        let payload = {
+          paymentStatus: "cancel",
+          paymentType: "",
+        };
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -1233,25 +1250,26 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        const updateOrder = await axios.patch(
-          `${process.env.VUE_APP_URL}/api/v1/order/updateStatus/${order_id}`,
-          {},
+        let { data } = await axios.patch(
+          `${process.env.VUE_APP_URL}/api/v1/order/update/${order_number}`,
+          payload,
           config
         );
-        if (updateOrder.data.statusCode === 200) {
+        if (data.statusCode === 200) {
           await Swal.fire({
             icon: "success",
             title: VueI18n.t("succeed"),
-            text: VueI18n.t("the transaction was completed successfully"),
-            timer: 3000,
+            text: VueI18n.t("order canceled successfully"),
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
+            timer: 3000,
             timerProgressBar: true,
+          }).finally(() => {
+            context.dispatch("getHistory")
           });
-          context.dispatch("getHistory");
         }
-      } catch (error) {
+      }catch(error){
         Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),
