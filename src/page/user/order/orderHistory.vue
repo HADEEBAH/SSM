@@ -249,7 +249,7 @@
                 >
                   <v-btn
                     :class="$vuetify.breakpoint.smAndUp ? '' : 'w-full'"
-                    @click="cancelOrder(order.orderId)"
+                    @click="cancelOrder(order.orderNumber)"
                     depressed
                     dark
                     color="#ff6b81"
@@ -258,7 +258,7 @@
                 </v-col>
                 <v-col
                   cols="12"
-                  sm="auto"
+                  sm
                   align="right"
                   v-if="order.paymentStatus === 'pending'"
                 >
@@ -315,7 +315,7 @@ export default {
         options
       );
     },
-    cancelOrder(order_id) {
+    cancelOrder(order_number) {
       Swal.fire({
         icon: "question",
         title: this.$t("want to cancel?"),
@@ -326,7 +326,7 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.userUpdateOrderCancelStatus({
-            order_id: order_id,
+            order_number: order_number,
           });
         }
       });
