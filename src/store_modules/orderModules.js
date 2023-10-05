@@ -318,7 +318,9 @@ const orderModules = {
                 order.paid_date = ""
                 order.paid_time = ""
               }
-              order.course_name = `${order.course?.courseNameTh}(${order.course?.courseNameEn})`;
+              // order.course_name = `${order.course?.courseNameTh}(${order.course?.courseNameEn})`;
+              order.course_nameTh = order.course?.courseNameTh;
+              order.course_nameEn = order.course?.courseNameEn;
               order.student_name = `${order.user?.firstNameTh} ${order.user?.lastNameTh}`;
               order.student_name_en = `${order.user?.firstNameEng} ${order.user?.lastNameEng}`;
             }
@@ -1337,15 +1339,15 @@ const orderModules = {
         });
       }
     },
-    async GetReserceCourse(context, {course_id}){
-      try{
+    async GetReserceCourse(context, { course_id }) {
+      try {
         let { data } = await axios.get(
           `${process.env.VUE_APP_URL}/api/v1/order/reserve/byCourse/${course_id}`
         );
         if (data.statusCode === 200) {
           context.commit("SetReserveList", data.data);
         }
-      }catch(error){
+      } catch (error) {
         await Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),

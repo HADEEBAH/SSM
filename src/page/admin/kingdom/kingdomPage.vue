@@ -10,7 +10,8 @@
 
           <v-card class="mx-3" flat>
             <v-card-text
-              class="border-dashed border-2 border-blue-600 rounded-lg"
+              class="border-dashed border-2 rounded-lg"
+              style="border: dashed rgb(255, 107, 129)"
             >
               <v-img
                 v-if="!enabled"
@@ -29,7 +30,7 @@
                   <v-col class="flex align-center justify-center">
                     <v-img
                       :src="preview_url"
-                      style="max-width: 150px"
+                      style="max-width: 200px"
                       class="text-right"
                     >
                       <v-btn icon>
@@ -75,8 +76,8 @@
                     )
                   </v-col>
                   <v-col cols="12" class="flex align-center justify-center">
-                    <v-btn outlined color="blue" @click="openFileSelector">{{
-                      $t("choose file")
+                    <v-btn outlined color="#ff6b81" @click="openFileSelector">{{
+                      $t("select file")
                     }}</v-btn>
                     <input
                       id="inputFile"
@@ -109,6 +110,7 @@
             v-model="kingdom.kingdom_name_th"
             @keydown="validate($event, 'th')"
             @paste="preventPaste"
+            color="#ff6b81"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -120,6 +122,7 @@
             outlined
             v-model="kingdom.kingdom_name_eng"
             @keydown="validate($event, 'en-spcebar')"
+            color="#ff6b81"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -137,6 +140,7 @@
             "
             outlined
             v-model="kingdom.learning_method"
+            color="#ff6b81"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -152,6 +156,7 @@
             auto-grow
             outlined
             v-model="kingdom.detail"
+            color="#ff6b81"
           ></v-textarea>
         </v-col>
       </v-row>

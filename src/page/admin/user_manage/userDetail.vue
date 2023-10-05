@@ -1393,16 +1393,16 @@ export default {
       this.user_data.isCardParentOpen = false;
     }
 
-    let re = localStorage.getItem("relations");
-    if (re) {
-      for (const item of JSON.parse(localStorage.getItem("relations"))) {
-        this.GetStudentData(item.student.studentId);
-      }
+    // let re = localStorage.getItem("relations");
+    // if (re) {
+    //   for (const item of JSON.parse(localStorage.getItem("relations"))) {
+    //     this.GetStudentData(item.student.studentId);
+    //   }
 
-      for (const item of JSON.parse(localStorage.getItem("relations"))) {
-        this.GetStudentSchedule(item.student.studentId);
-      }
-    }
+    //   for (const item of JSON.parse(localStorage.getItem("relations"))) {
+    //     this.GetStudentSchedule(item.student.studentId);
+    //   }
+    // }
   },
   methods: {
     ...mapActions({
