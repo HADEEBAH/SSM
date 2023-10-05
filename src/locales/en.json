@@ -272,6 +272,7 @@
     "excessive study hours" : "Excessive study hours",
     "export" : "Export",
 
+    "fail" : "Fail",
     "file size" : "File size",
     "file size must not exceed 5 MB": "File size must not exceed 5 MB",
     "failed to resolve":"Failed to resolve",
@@ -614,6 +615,7 @@
     "seat" : "Seat",
     "see more" : "See more",
     "set the size not to exceed 5MB": "( Set the size not to exceed 5MB )",
+    "select all": "Select All",
     "select file": "Select file",
     "select teaching information" : "Select teaching information",
     "select your students here": "Select your students here",

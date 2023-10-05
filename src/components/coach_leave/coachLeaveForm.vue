@@ -18,6 +18,7 @@
               :item-text="$i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEh'"
               @change="SelectedCoach()"
               v-model="coach_leave_data.coach_id"
+              color="#ff6b81"
             ></v-select>
           </v-col>
         </v-row>
@@ -44,6 +45,7 @@
                       :placeholder="$t('choose start date')"
                       v-bind="attrs"
                       v-on="on"
+                      color="#ff6b81"
                     >
                       <template v-slot:append>
                         <v-icon
@@ -59,6 +61,7 @@
                     @change="validateCoachLeave"
                     v-model="coach_leave_data.start_date"
                     :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
+                    color="#ff6b81"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
@@ -71,6 +74,7 @@
                   transition="scale-transition"
                   offset-y
                   min-width="auto"
+                  color="#ff6b81"
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
@@ -82,6 +86,7 @@
                       :placeholder="$t('choose an end date')"
                       v-bind="attrs"
                       v-on="on"
+                      color="#ff6b81"
                     >
                       <template v-slot:append>
                         <v-icon
@@ -101,6 +106,7 @@
                     @change="validateCoachLeave"
                     v-model="coach_leave_data.end_date"
                     :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
+                    color="#ff6b81"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
@@ -125,6 +131,7 @@
               item-text="label"
               item-value="value"
               v-model="coach_leave_data.period"
+              color="#ff6b81"
             ></v-select>
           </v-col>
         </v-row>
@@ -141,6 +148,7 @@
               item-value="value"
               v-model="coach_leave_data.leave_type"
               @change="validateCoachLeave"
+              color="#ff6b81"
             ></v-select>
           </v-col>
         </v-row>
@@ -210,6 +218,7 @@
                         @change="validateCoachLeave"
                         item-value="my_course_id"
                         item-text="course_name"
+                        color="#ff6b81"
                       ></v-select>
                     </v-col>
                   </v-row>
@@ -234,6 +243,7 @@
                           $i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEh'
                         "
                         v-model="course.substitute_coach_id"
+                        color="#ff6b81"
                       >
                       </v-select>
                     </v-col>
@@ -246,6 +256,7 @@
                         :close-on-content-click="false"
                         transition="scale-transition"
                         min-width="auto"
+                        color="#ff6b81"
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
@@ -258,6 +269,7 @@
                             v-bind="attrs"
                             v-on="on"
                             :value="course.compensation_date_str"
+                            color="#ff6b81"
                           >
                             <template v-slot:append>
                               <v-icon
@@ -277,6 +289,7 @@
                             inputDateArr(course.compensation_date, course)
                           "
                           :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
+                          color="#ff6b81"
                         ></v-date-picker>
                       </v-menu>
                     </v-col>
@@ -297,6 +310,7 @@
                             @focus="SelectedStartDate($event)"
                             :rules="rules.compensation_start_time"
                             v-model="course.compensation_start_time"
+                            color="#ff6b81"
                           >
                           </v-text-field>
                           <VueTimepicker
@@ -323,6 +337,7 @@
                               )
                             "
                             close-on-complete
+                            color="#ff6b81"
                           ></VueTimepicker>
                         </v-col>
                         <v-col class="px-2" cols="12" sm="6">
@@ -339,6 +354,7 @@
                             @focus="SelectedStartDate($event)"
                             :rules="rules.compensation_end_time"
                             v-model="course.compensation_end_time"
+                            color="#ff6b81"
                           >
                           </v-text-field>
                           <VueTimepicker

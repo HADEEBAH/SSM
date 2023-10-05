@@ -38,9 +38,9 @@
                 <v-scale-transition>
                   <v-icon
                     v-if="active"
-                    color="white"
                     size="48"
                     @click="removeBannerFiles(banner.bannerId)"
+                    color="#ff6b81"
                     >mdi-close-circle-outline</v-icon
                   >
                 </v-scale-transition>
@@ -124,7 +124,7 @@
           :loading="loading"
           :disabled="files_preview.length > 0 && disabled ? false : true"
           @click="insertBannerList()"
-          color="success"
+          color="#ff6b81"
           >{{ $t("save") }}</v-btn
         >
       </v-col>

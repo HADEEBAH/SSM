@@ -106,7 +106,10 @@
 
               <v-row dense>
                 <v-col cols="12" sm="6"
-                  >{{ $t("coach") }} : {{ $i18n.locale == 'th' ? item?.coachName : item?.coachNameEn }}
+                  >{{ $t("coach") }} :
+                  {{
+                    $i18n.locale == "th" ? item?.coachName : item?.coachNameEn
+                  }}
                 </v-col>
                 <v-col cols="12" sm="6">
                   <v-chip
@@ -325,6 +328,7 @@
                         @focus="SelectedStartDate($event)"
                         :rules="compensation_start_time"
                         :value="setDataEditDialog.holidayStartTime"
+                        color="#FF6B81"
                       ></v-text-field>
                       <VueTimepicker
                         class="time-picker-hidden"
@@ -334,6 +338,7 @@
                         @change="resetTimeEdit()"
                         v-model="setDataEditDialog.ob_holidayStartTime"
                         close-on-complete
+                        color="#FF6B81"
                       >
                       </VueTimepicker>
                     </v-col>
@@ -356,6 +361,7 @@
                         @focus="SelectedStartDate($event)"
                         :rules="compensation_end_time"
                         :value="setDataEditDialog.holidayEndTime"
+                        color="#FF6B81"
                       ></v-text-field>
                       <VueTimepicker
                         class="time-picker-hidden"
@@ -370,6 +376,7 @@
                         :hour-range="
                           checkHourEdit(setDataEditDialog.ob_holidayStartTime)
                         "
+                        color="#FF6B81"
                       >
                       </VueTimepicker>
                     </v-col>
@@ -389,6 +396,7 @@
                           )
                         "
                         :rules="holiday_name"
+                        color="#FF6B81"
                       ></v-textarea>
                     </v-col>
                   </v-row>
@@ -520,6 +528,7 @@
                         @focus="SelectedStartDate($event)"
                         :rules="compensation_start_time"
                         v-model="holidayStartTime"
+                        color="#FF6B81"
                       >
                       </v-text-field>
                       <VueTimepicker
@@ -530,6 +539,7 @@
                         v-model="holidayStartTime"
                         close-on-complete
                         @change="resetTime()"
+                        color="#FF6B81"
                       ></VueTimepicker>
                     </v-col>
                     <!-- เวลาสิ้นสุด -->
@@ -551,6 +561,7 @@
                         @focus="SelectedStartDate($event)"
                         :rules="compensation_end_time"
                         v-model="holidayEndTime"
+                        color="#FF6B81"
                       >
                       </v-text-field>
                       <VueTimepicker
@@ -562,6 +573,7 @@
                         v-model="holidayEndTime"
                         close-on-complete
                         :hour-range="checkHour(holidayStartTime)"
+                        color="#FF6B81"
                       ></VueTimepicker>
                     </v-col>
                   </v-row>
@@ -580,6 +592,7 @@
                           )
                         "
                         :rules="holiday_name"
+                        color="#FF6B81"
                       ></v-textarea>
                     </v-col>
                   </v-row>

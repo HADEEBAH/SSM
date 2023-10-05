@@ -55,7 +55,6 @@
                   </v-chip>
 
                   <v-chip v-else color="#FDECEC" text-color="#F03D3E">
-                    เกิดข้อผิดพลาด
                     {{ $t("something went wrong") }}
                   </v-chip>
                 </v-col>
@@ -66,148 +65,144 @@
                 v-for="(course, index_courses) in order.courses"
                 :key="`${index_courses}_courses`"
               >
-              <v-card-text>
-                <v-row>
-                  <v-col cols="12" sm="4" md="4" lg="4" class="pa-2">
-                    <v-img
-                      v-if="course.courseImg"
-                      :src="course.courseImg"
-                      cover
-                      height="180"
-                      class="rounded-lg h-full"
-                    />
-                    <img
-                      v-else
-                      src="@/assets/course/payment.png"
-                      height="160"
-                    />
-                  </v-col>
-                  <v-col cols="12" sm="8" md="8" lg="8">
-                    <v-row dense>
-                      <v-col class="">
-                        <v-row dense>
-                          <v-col
-                            cols="12"
-                            sm="6"
-                            class="align-self-center text-lg font-bold"
-                            >{{
-                              $i18n.locale == "th"
-                                ? course.courseNameTh
-                                : course.courseNameEn
-                            }}</v-col
-                          >
-                        </v-row>
-                        <v-row dense>
-                          <v-col class="text-md py-2" cols="12" sm="6">
-                            <v-row dense>
-                              <v-col cols="auto">{{ $t("coach") }} : </v-col>
-                              <v-col>{{
+                <v-card-text>
+                  <v-row>
+                    <v-col cols="12" sm="4" md="4" lg="4" class="pa-2">
+                      <v-img
+                        v-if="course.courseImg"
+                        :src="course.courseImg"
+                        cover
+                        height="180"
+                        class="rounded-lg h-full"
+                      />
+                      <img
+                        v-else
+                        src="@/assets/course/payment.png"
+                        height="160"
+                      />
+                    </v-col>
+                    <v-col cols="12" sm="8" md="8" lg="8">
+                      <v-row dense>
+                        <v-col class="">
+                          <v-row dense>
+                            <v-col
+                              cols="12"
+                              sm="6"
+                              class="align-self-center text-lg font-bold"
+                              >{{
                                 $i18n.locale == "th"
-                                  ? course.coachName
+                                  ? course.courseNameTh
+                                  : course.courseNameEn
+                              }}</v-col
+                            >
+                          </v-row>
+                          <v-row dense>
+                            <v-col class="text-md py-2" cols="12" sm="6">
+                              <v-row dense>
+                                <v-col cols="auto">{{ $t("coach") }} : </v-col>
+                                <v-col>{{
+                                  $i18n.locale == "th"
                                     ? course.coachName
+                                      ? course.coachName
+                                      : "-"
+                                    : course.coachNameEn
+                                    ? course.coachNameEn
                                     : "-"
-                                  : course.coachNameEn
-                                  ? course.coachNameEn
-                                  : "-"
-                              }}</v-col>
-                            </v-row>
-                          </v-col>
-                          <v-col class="text-md py-2" cols="12" sm="6">
-                            <v-row dense>
-                              <v-col cols="auto">{{ $t("times") }} :</v-col>
-                              <v-col>{{
-                                `${
-                                  course.timeStartOrder &&
-                                  course.timeStartOrder !== ""
-                                    ? course.timeStartOrder
-                                    : "-"
-                                } - ${
-                                  course.timeEndOrder &&
-                                  course.timeEndOrder !== ""
-                                    ? course.timeEndOrder
-                                    : "-"
-                                } ${$t("o'clock")}`
-                              }}</v-col>
-                            </v-row>
-                          </v-col>
-                        </v-row>
-                      </v-col>
-                    </v-row>
-                    <v-row
-                      dense
-                      :class="course.show_student ? 'mb-2' : ''"
-                      class="d-flex align-center"
-                    >
-                      <v-col align="center">
-                        <v-btn
-                          @click="course.show_student = !course.show_student"
-                          text
-                          class="font-bold"
-                          >{{ $t("show student list")
-                          }}<v-icon color="#ff6b81">{{
-                            course.show_student
-                              ? "mdi-chevron-up"
-                              : "mdi-chevron-down"
-                          }}</v-icon></v-btn
-                        >
-                      </v-col>
-                    </v-row>
-                    <v-expand-transition>
-                      <div
-                        v-if="course.show_student"
-                        class="rounded-md pa-2"
+                                }}</v-col>
+                              </v-row>
+                            </v-col>
+                            <v-col class="text-md py-2" cols="12" sm="6">
+                              <v-row dense>
+                                <v-col cols="auto">{{ $t("times") }} :</v-col>
+                                <v-col>{{
+                                  `${
+                                    course.timeStartOrder &&
+                                    course.timeStartOrder !== ""
+                                      ? course.timeStartOrder
+                                      : "-"
+                                  } - ${
+                                    course.timeEndOrder &&
+                                    course.timeEndOrder !== ""
+                                      ? course.timeEndOrder
+                                      : "-"
+                                  } ${$t("o'clock")}`
+                                }}</v-col>
+                              </v-row>
+                            </v-col>
+                          </v-row>
+                        </v-col>
+                      </v-row>
+                      <v-row
+                        dense
+                        :class="course.show_student ? 'mb-2' : ''"
+                        class="d-flex align-center"
                       >
-                        <v-row
-                          dense
-                          v-for="(student, index) in course.students"
-                          :key="`${index}-student`"
-                        >
-                          <v-card flat class="w-full mb-2">
-                            <v-card-text class="border-2 border-[#ff6b81]">
-                              <v-row dense>
-                                <v-col cols="12" sm="4" align="start">
-                                  <span class="font-bold"
-                                    >{{ $t("first name") }} -
-                                    {{ $t("last name") }} :
-                                  </span>
-                                </v-col>
-                                <v-col cols="12" sm="8" align="start">
-                                  {{
-                                    $i18n.locale == "th"
-                                      ? `${student.firstNameTh} ${student.lastNameTh}`
-                                      : `${student.firstNameEng} ${student.lastNameEng}`
-                                  }}
-                                </v-col>
-                              </v-row>
-                              <v-row dense>
-                                <v-col cols="12" sm="4" align="start">
-                                  <span class="font-bold">
-                                    {{ $t("phone number") }} :
-                                  </span>
-                                </v-col>
-                                <v-col cols="12" sm="8" align="start">
-                                  {{ `${student.mobileNo}` }} 
-                                </v-col>
-                              </v-row>
-                              <v-row dense>
-                                <v-col cols="12" sm="4" align="start">
-                                  <span class="font-bold">
-                                    {{ $t("email") }} :
-                                  </span>
-                                </v-col>
-                                <v-col cols="12" sm="8" align="start">
-                                  {{ `${student.email}` }}
-                                </v-col>
-                              </v-row>
-                            </v-card-text>
-                          </v-card>
-                        </v-row>
-                      </div>
-                    </v-expand-transition>
-                  </v-col>
-                </v-row>
-              </v-card-text>
-              
+                        <v-col align="center">
+                          <v-btn
+                            @click="course.show_student = !course.show_student"
+                            text
+                            class="font-bold"
+                            >{{ $t("show student list")
+                            }}<v-icon color="#ff6b81">{{
+                              course.show_student
+                                ? "mdi-chevron-up"
+                                : "mdi-chevron-down"
+                            }}</v-icon></v-btn
+                          >
+                        </v-col>
+                      </v-row>
+                      <v-expand-transition>
+                        <div v-if="course.show_student" class="rounded-md pa-2">
+                          <v-row
+                            dense
+                            v-for="(student, index) in course.students"
+                            :key="`${index}-student`"
+                          >
+                            <v-card flat class="w-full mb-2">
+                              <v-card-text class="border-2 border-[#ff6b81]">
+                                <v-row dense>
+                                  <v-col cols="12" sm="4" align="start">
+                                    <span class="font-bold"
+                                      >{{ $t("first name") }} -
+                                      {{ $t("last name") }} :
+                                    </span>
+                                  </v-col>
+                                  <v-col cols="12" sm="8" align="start">
+                                    {{
+                                      $i18n.locale == "th"
+                                        ? `${student.firstNameTh} ${student.lastNameTh}`
+                                        : `${student.firstNameEng} ${student.lastNameEng}`
+                                    }}
+                                  </v-col>
+                                </v-row>
+                                <v-row dense>
+                                  <v-col cols="12" sm="4" align="start">
+                                    <span class="font-bold">
+                                      {{ $t("phone number") }} :
+                                    </span>
+                                  </v-col>
+                                  <v-col cols="12" sm="8" align="start">
+                                    {{ `${student.mobileNo}` }}
+                                  </v-col>
+                                </v-row>
+                                <v-row dense>
+                                  <v-col cols="12" sm="4" align="start">
+                                    <span class="font-bold">
+                                      {{ $t("email") }} :
+                                    </span>
+                                  </v-col>
+                                  <v-col cols="12" sm="8" align="start">
+                                    {{ `${student.email}` }}
+                                  </v-col>
+                                </v-row>
+                              </v-card-text>
+                            </v-card>
+                          </v-row>
+                        </div>
+                      </v-expand-transition>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
               </v-card>
               <v-row dense>
                 <v-col class="font-bold" align="right">
@@ -249,7 +244,7 @@
                 >
                   <v-btn
                     :class="$vuetify.breakpoint.smAndUp ? '' : 'w-full'"
-                    @click="cancelOrder(order.orderId)"
+                    @click="cancelOrder(order.orderNumber)"
                     depressed
                     dark
                     color="#ff6b81"
@@ -258,13 +253,15 @@
                 </v-col>
                 <v-col
                   cols="12"
-                  sm="auto"
+                  sm
                   align="right"
                   v-if="order.paymentStatus === 'pending'"
                 >
-                  <v-btn 
-                  :class="$vuetify.breakpoint.smAndUp ? '' : 'w-full'"  
-                  @click="payment(order)" outlined color="#ff6b81"
+                  <v-btn
+                    :class="$vuetify.breakpoint.smAndUp ? '' : 'w-full'"
+                    @click="payment(order)"
+                    outlined
+                    color="#ff6b81"
                     ><v-icon>mdi-cash</v-icon
                     >{{ $t("proceed to payment") }}</v-btn
                   >
@@ -315,7 +312,7 @@ export default {
         options
       );
     },
-    cancelOrder(order_id) {
+    cancelOrder(order_number) {
       Swal.fire({
         icon: "question",
         title: this.$t("want to cancel?"),
@@ -326,7 +323,7 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.userUpdateOrderCancelStatus({
-            order_id: order_id,
+            order_number: order_number,
           });
         }
       });

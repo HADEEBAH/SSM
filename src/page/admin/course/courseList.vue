@@ -10,6 +10,7 @@
           prepend-inner-icon="mdi-magnify"
           v-model="search"
           :placeholder="$t('search')"
+          color="#FF6B81"
         ></v-text-field>
       </header-page>
       <v-row class="mb-2">
@@ -163,10 +164,7 @@
           </v-btn>
         </template>
         <template v-slot:[`item.delete`]="{ item }">
-          <v-btn
-            icon
-            color="#FF6B81"
-            @click="deleteCourse(item.course_id)">
+          <v-btn icon color="#FF6B81" @click="deleteCourse(item.course_id)">
             <v-icon>mdi-delete</v-icon>
           </v-btn>
         </template>
@@ -271,9 +269,9 @@ export default {
     ...mapActions({
       UpdateStatusCourse: "CourseModules/UpdateStatusCourse",
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
-      DeleteCourse : "CourseModules/DeleteCourse"
+      DeleteCourse: "CourseModules/DeleteCourse",
     }),
-    deleteCourse(course_id){
+    deleteCourse(course_id) {
       Swal.fire({
         icon: "question",
         title: this.$t("do you want to delete course?"),
@@ -283,31 +281,33 @@ export default {
         confirmButtonText: this.$t("agree"),
       }).then(async (result) => {
         if (result.isConfirmed) {
-          this.GetShortCourseMonitor({ course_id: course_id }).then(async () => {
-            if (this.course_monitors) {
-              let current_student = 0;
-              current_student = this.course_monitors.map(
-                (v) => (current_student += v.m_current_student)
-              );
-              if (current_student.some((v) => v > 0)) {
-                Swal.fire({
-                  icon: "error",
-                  title: this.$t("unable to delete course"),
-                  text: this.$t("because there are students in the course"),
-                  timer: 3000,
-                  timerProgressBar: true,
-                  showCancelButton: false,
-                  showConfirmButton: false,
-                });
-              } else {
-                this.DeleteCourse({
-                  course_id : course_id
-                })
+          this.GetShortCourseMonitor({ course_id: course_id }).then(
+            async () => {
+              if (this.course_monitors) {
+                let current_student = 0;
+                current_student = this.course_monitors.map(
+                  (v) => (current_student += v.m_current_student)
+                );
+                if (current_student.some((v) => v > 0)) {
+                  Swal.fire({
+                    icon: "error",
+                    title: this.$t("unable to delete course"),
+                    text: this.$t("because there are students in the course"),
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                  });
+                } else {
+                  this.DeleteCourse({
+                    course_id: course_id,
+                  });
+                }
               }
             }
-          });
+          );
         }
-      })
+      });
     },
     GenDate(date) {
       const options = {
