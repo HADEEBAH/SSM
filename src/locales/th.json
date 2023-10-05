@@ -24,6 +24,7 @@
     "add accounts":"จัดการผู้ใช้งาน",
     "adding course" : "สร้างคอร์สเรียน",
     "accept" : "ยอมรับ",
+    "accepts" : "บันทึก",
     "accepted students/time" : "จำนวนนักเรียนที่รับได้/ครั้ง",
     "acceptable students" : "นักเรียนที่รับได้",
     "admin page" : "หน้าผู้ดูแลระบบ",
@@ -53,6 +54,7 @@
     "attach a photo or video file" : "แนบไฟล์รูปภาพหรือวิดีโอ",
     "attachment not found" : "ไม่พบไฟล์แนบ",
     "attachments" : "ไฟล์แนบ",
+    "attachments file" : "ไฟล์แนบ",
     "all days" : "ทั้งวัน",
     "already deleted": "( ลบเรียบร้อยแล้ว )",
     "attached file from teaching summary notes":"ไฟล์แนบจากบันทึกสรุปการสอน",
@@ -179,6 +181,7 @@
     "date of request": "วันที่ส่งคำขอ",
     "data has been successfully deleted" : "( ลบข้อมูลเรียบร้อยแล้ว )",
     "data has been edited": "แก้ไขข้อมูลเรียบร้อย",
+    "delete Information": "ล้างข้อมูล",
     "delete course success" : "ลบคอร์สสำเร็จ",
     "delete holiday": "ลบวันหยุด",
     "delete period" : "ลบระยะเวลา",
@@ -224,11 +227,14 @@
     "do you want to delete this teaching time?" : "คุณต้องการลบเวลาสอนนี้ใช่หรือไม่?",
     "do you want to delete this teaching day?": "คุณต้องการลบวันสอนนี้ใช่หรือไม่?",
     "do you want to save it?": "คุณต้องการบันทึกหรือไม่?",
+    "duration": "ช่วงเวลา",
     "duration/coach" : "ช่วงเวลาและโค้ช",
     "duplicate relationship": "ความสัมพันธ์ซ้ำกัน",
     "duplicate user in this course Unable to register": "ผู้ใช้ซ้ำกันในหลักสูตรนี้ ไม่สามารถลงทะเบียนได้",
     "duplicate roles or the user does not yet have a role" : "บทบาทซ้ำกัน หรือ ผู้ใช้ยังไม่มีบทบาท",
     "december":"ธันวาคม",
+    "details of take leave": "รายละเอียดการลา",
+
 
 
     "edit": "แก้ไข",
@@ -292,6 +298,8 @@
     "holiday": "วันหยุด",
     "holiday name": "ชื่อวันหยุด",
     "holiday information" : "ข้อมูลวันหยุด",
+    "have teacher" : "มีผู้สอนแทน",
+
 
     "if you don't have an account yet, please" : "หากยังไม่มีบัญชีผู้ใช้กรุณา",
     "image example" : "ตัวอย่างภาพ",
@@ -370,6 +378,7 @@
     "no." : "ลำดับ",
     "no" : "ยกเลิก",
     "no check in" : "ยังไม่มีการเช็คอิน",
+    "no teacher" : "ไม่มีผู้สอนแทน",
     "no comment": "ไม่มีความคิดเห็น",
     "no attachments from teaching summary notes" : "ไม่มีไฟล์แนบจากบันทึกสรุปการสอน",
     "no data available": "ไม่พบข้อมูลที่สามารถใช้ได้",
@@ -589,6 +598,7 @@
     "send notification" : "ส่งการแจ้งเตือน",
     "send a leave letter" : "ส่งใบลา",
     "sent a password change link to" : "ได้ส่งลิงค์เปลี่ยนรหัสผ่านไปยัง",
+    "sent information" : "ส่งข้อมูล",
     "service value" : "มูลค่าบริการ",
     "show student list" : "แสดงรายการนักเรียน",
     "sign in" : "เข้าสู่ระบบ",
@@ -656,11 +666,14 @@
     "start time": "เวลาเริ่ม",
     "specify the name of the holiday, such as Songkran Day" : "ระบุชื่อวันหยุด เช่น วันสงกรานต์",
     "show certificate": "แสดงหนังสือรับรอง",
+    "show comment" : "แสดงความคิดเห็น",
     "september": "กันยายน",
     "super admin": "ผู้ดูแลระบบขั้นสูง",
 
-
+    
     "take annual leave" : "ลาพักร้อนประจำปี",
+    "take leave form" : "แบบฟอร์มการลา",
+    "take leave date": "วันที่ลา",
     "take up teaching" : "เข้าสอน",
     "teaching" : "เปิดสอน",
     "teaching day" : "วันสอน",
@@ -719,6 +732,7 @@
     "time" : "ครั้ง",
     "times" : "เวลา",
     "transaction time" : "เวลาทำรายการ",
+    "type of take leave": "ประเภทการลา",
     "transfer to school account" : "โอนเงินเข้าบัญชีโรงเรียน",
     "tuesday" : "วันอังคาร",
     "to day" : "ไปวันที่",

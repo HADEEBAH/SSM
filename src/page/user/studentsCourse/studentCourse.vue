@@ -366,8 +366,8 @@
                   <v-col cols="12" class="indent-3">
                     <b>{{ $t("teaching notes") }} : </b>
                     {{
-                      day_list.dailySummary.summary
-                        ? day_list.dailySummary.summary
+                      day_list.dailySummary?.summary
+                        ? day_list.dailySummary?.summary
                         : $t("no recording")
                     }}
                   </v-col>

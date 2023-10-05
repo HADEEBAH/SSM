@@ -23,7 +23,7 @@
           </v-row>
           <v-row dense>
             <v-col cols="12" class="pa-0 text-bold text-black">
-              <label>{{ $t("username") }} / OneID</label>
+              <label>{{ $t("username") }}</label>
               <v-text-field
                 @keydown="validate($event, 'en-number')"
                 dense
@@ -32,6 +32,7 @@
                 v-model="user_one_id.username"
                 :placeholder="$t('enter username')"
                 outlined
+                color="#ff6b81"
               ></v-text-field>
             </v-col>
             <v-col cols="12" class="pa-0 text-bold text-black">
@@ -52,6 +53,7 @@
                 @click:append="show_password = !show_password"
                 outlined
                 @keyup.enter="login()"
+                color="#ff6b81"
               ></v-text-field>
             </v-col>
           </v-row>
