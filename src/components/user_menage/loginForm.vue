@@ -18,7 +18,7 @@
           </div>
           <v-row v-else>
             <v-col class="text-2xl text-center text-bold text-black">
-              {{ $t("sign in") }}
+              {{ $t("login") }}
             </v-col>
           </v-row>
           <v-row dense>
@@ -67,7 +67,7 @@
                 color="#ff6b81"
                 @click="login()"
               >
-                {{ $t("sign in") }}
+                {{ $t("login") }}
               </v-btn>
             </v-col>
             <v-col cols="12">

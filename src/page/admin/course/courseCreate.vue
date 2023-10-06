@@ -22,7 +22,7 @@
                     ></v-img>
                   </v-col>
                   <v-col cols="8" sm="12">
-                    <label>{{ $t("regular courses") }}</label>
+                    <label>{{ $t("regular course") }}</label>
                   </v-col>
                 </v-row>
               </template>

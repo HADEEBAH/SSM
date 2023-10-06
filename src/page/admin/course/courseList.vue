@@ -52,7 +52,7 @@
               ></v-img>
             </template>
             <template v-slot:header>
-              <div class="font-bold">{{ $t("regular courses") }}</div>
+              <div class="font-bold">{{ $t("regular course") }}</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
