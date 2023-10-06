@@ -115,7 +115,11 @@
                     ><v-icon color="#ff6b81">mdi-bookshelf</v-icon></v-col
                   >
                   <v-col>{{
-                    `${$t("warraphat learning sphere")} : ${$i18n.locale == 'th' ? course.category_name :  course.category_name_en}`
+                    `${$t("warraphat learning sphere")} : ${
+                      $i18n.locale == "th"
+                        ? course.category_name
+                        : course.category_name_en
+                    }`
                   }}</v-col>
                 </v-row>
                 <v-row dense>
@@ -523,11 +527,14 @@
                   <v-card-text>
                     <v-row dense>
                       <v-col cols="12" sm class="text-lg font-bold">
-                        {{ index + 1 }} . {{  $i18n.locale == "th"
-                          ? student.fullname
-                          : student.fullname_en }}</v-col
+                        {{ index + 1 }} .
+                        {{
+                          $i18n.locale == "th"
+                            ? student.fullname
+                            : student.fullname_en
+                        }}</v-col
                       >
-                      <v-col cols="12" sm="auto"  align="center">
+                      <v-col cols="12" sm="auto" align="center">
                         <v-row dense class="d-flex aling-center">
                           <v-col align="right"> {{ $t("attendance") }}: </v-col>
                           <v-col cols="auto">
@@ -706,7 +713,7 @@
             outlined
             color="#ff6b81"
             ><v-icon>mdi-plus-circle-outline</v-icon
-            >{{ $t("leave request form") }}</v-btn
+            >{{ $t("take leave form") }}</v-btn
           >
         </v-col>
       </v-row>
@@ -935,7 +942,9 @@
                 <v-col cols="5" v-if="course.type !== 'date'"
                   >{{ $t("substitute teacher") }}:
                   {{
-                    $i18n.locale == 'th' ? `${course.substituteCoachFirstNameTh} ${course.substituteCoachLastNameTh}`: `${course.substituteCoachFirstNameEn} ${course.substituteCoachLastNameEn}`
+                    $i18n.locale == "th"
+                      ? `${course.substituteCoachFirstNameTh} ${course.substituteCoachLastNameTh}`
+                      : `${course.substituteCoachFirstNameEn} ${course.substituteCoachLastNameEn}`
                   }}</v-col
                 >
                 <v-col cols="5" v-if="course.type === 'date'"
@@ -1023,11 +1032,11 @@
             :items="student_list"
             :loading="student_list_load"
           >
-            <template v-slot:[`item.firstName`]="{item}">
+            <template v-slot:[`item.firstName`]="{ item }">
               {{ $i18n.locale == "th" ? item.firstNameTh : item.firstNameEn }}
             </template>
-            <template v-slot:[`item.lastName`]="{item}">
-              {{ $i18n.locale == "th" ? item.lastNameTh : item.lastNameEn  }}
+            <template v-slot:[`item.lastName`]="{ item }">
+              {{ $i18n.locale == "th" ? item.lastNameTh : item.lastNameEn }}
             </template>
             <template v-slot:no-data>
               {{ $t("no data found in table") }}</template
@@ -1490,19 +1499,6 @@ export default {
     select_date: `${new Date().getFullYear()}-${
       new Date().getMonth() + 1
     }-${new Date().getDate()}`,
-    // column: [
-    //   { text: "ลำดับ", align: "center", sortable: false, value: "count" },
-
-    //   { text: "วันที่", align: "start", sortable: false, value: "date" },
-    //   {
-    //     text: "ประเภทการลา",
-    //     align: "start",
-    //     sortable: false,
-    //     value: "leaveType",
-    //   },
-    //   { text: "สถานะ", align: "start", sortable: false, value: "status" },
-    //   { text: "", align: "right", sortable: false, value: "action" },
-    // ],
     student_list_header: [
       { text: "ลำดับ", align: "center", sortable: false, value: "index" },
 
@@ -1631,7 +1627,7 @@ export default {
           value: "date",
         },
         {
-          text: this.$t("leave type"),
+          text: this.$t("type of take leave"),
           align: "start",
           sortable: false,
           value: "leaveType",
@@ -1786,7 +1782,7 @@ export default {
       if (file.attachmentPotentialId) {
         let url = `${process.env.VUE_APP_URL}/api/v1/files/${file.attachmentFiles}`;
         window.open(url, "_blank");
-      }else if(file.attId){
+      } else if (file.attId) {
         let url = `${process.env.VUE_APP_URL}/api/v1/files/${file.attFiles}`;
         window.open(url, "_blank");
       }

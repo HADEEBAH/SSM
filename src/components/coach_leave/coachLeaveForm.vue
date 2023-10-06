@@ -24,7 +24,7 @@
         </v-row>
         <v-row dense>
           <v-col cols="12">
-            {{ $t("leave date") }}
+            {{ $t("take leave date") }}
             <v-row dense>
               <v-col cols="12" sm="6">
                 <v-menu
@@ -115,7 +115,7 @@
         </v-row>
         <v-row dense>
           <v-col cols="12">
-            {{ $t("period") }}
+            {{ $t("duration") }}
             <v-select
               :rules="rules.period"
               dense
@@ -138,7 +138,7 @@
         <!-- TYPE -->
         <v-row dense>
           <v-col cols="12">
-            {{ $t("leave type") }}
+            {{ $t("type of take leave") }}
             <v-select
               :rules="rules.type_leave"
               dense
@@ -188,12 +188,12 @@
                   </div>
                   <v-radio-group :rules="rules.type" v-model="course.type" row>
                     <v-radio
-                      :label="$t('have a substitute teacher')"
+                      :label="$t('have teacher')"
                       color="#ff6b81"
                       value="teach"
                     ></v-radio>
                     <v-radio
-                      :label="$t('there is no substitute teacher')"
+                      :label="$t('no teacher')"
                       color="#ff6b81"
                       value="date"
                     ></v-radio>
@@ -399,12 +399,8 @@
         </template>
         <v-row dense>
           <v-col>
-            {{ $t("leave details") }}
-            <v-textarea
-              v-model="coach_leave_data.remark"
-              outlined
-              color="#FF6b81"
-            ></v-textarea>
+            {{ $t("details of take leave") }}
+            <v-textarea v-model="coach_leave_data.remark" outlined></v-textarea>
           </v-col>
         </v-row>
         <v-card flat class="mb-3">
@@ -420,7 +416,7 @@
                 ></v-img>
               </v-col>
               <v-col cols="12" class="flex align-center justify-center text-lg">
-                {{ $t("attachments") }}
+                {{ $t("attachments file") }}
               </v-col>
               <v-col cols="12" class="flex align-center justify-center">
                 <v-btn
@@ -977,7 +973,7 @@ export default {
           title: this.$t("do you want to submit a leave letter?"),
           showDenyButton: false,
           showCancelButton: true,
-          confirmButtonText: this.$t("agree"),
+          confirmButtonText: this.$t("accept"),
           cancelButtonText: this.$t("cancel"),
         }).then(async (result) => {
           if (result.isConfirmed) {
