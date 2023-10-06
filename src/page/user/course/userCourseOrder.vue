@@ -116,7 +116,9 @@
         <template v-if="course_order.time">
           <v-form ref="form_coach" v-model="validate_coach">
             <v-row>
-              <v-col class="text-lg font-bold">{{ $t("choose a coach") }}</v-col>
+              <v-col class="text-lg font-bold">{{
+                $t("choose a coach")
+              }}</v-col>
             </v-row>
             <v-autocomplete
               dense
@@ -147,7 +149,11 @@
                           ? 'font-bold'
                           : ''
                       "
-                      >{{$i18n.locale == "th" ? item.coach_name : item.coach_name_en }}
+                      >{{
+                        $i18n.locale == "th"
+                          ? item.coach_name
+                          : item.coach_name_en
+                      }}
                       {{
                         GenCoachNumberStudent(
                           item.coach_id,
@@ -166,7 +172,6 @@
               </template>
             </v-autocomplete>
           </v-form>
-        
         </template>
       </template>
       <!-- REGISTER -->
@@ -1110,10 +1115,10 @@ export default {
       course_monitors: "CourseMonitorModules/getCourseMonitor",
       reserve_list: "OrderModules/getReserveList",
     }),
-    coachRules(){
+    coachRules() {
       return [
-        (val) => (val || "").length > 5 || this.$t("please select a coach")
-      ]
+        (val) => (val || "").length > 5 || this.$t("please select a coach"),
+      ];
     },
     usernameRules() {
       return [
@@ -1132,7 +1137,7 @@ export default {
       ];
     },
     setFunctions() {
-      if(this.course_order.course_id){
+      if (this.course_order.course_id) {
         this.GetReserceCourse({ course_id: this.course_order.course_id });
       }
       // this.checkMaximumStudent();
@@ -1215,7 +1220,7 @@ export default {
       GetReserceByCreatedBy: "OrderModules/GetReserceByCreatedBy",
       GetGeneralCourseMonitor: "CourseMonitorModules/GetGeneralCourseMonitor",
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
-      GetReserceCourse : "OrderModules/GetReserceCourse"
+      GetReserceCourse: "OrderModules/GetReserceCourse",
     }),
 
     closePolicy() {
@@ -1226,13 +1231,15 @@ export default {
       inputValidation(e, lang);
     },
     ValidateReserve() {
-      let validate_reserve = []
-      if(this.course_order.students.length > 0){
-        for(let student  of this.course_order.students){
-          validate_reserve.push(this.reserve_list.some(v => v.studentId == student.account_id))
+      let validate_reserve = [];
+      if (this.course_order.students.length > 0) {
+        for (let student of this.course_order.students) {
+          validate_reserve.push(
+            this.reserve_list.some((v) => v.studentId == student.account_id)
+          );
         }
       }
-      if ( validate_reserve.includes(true)) {
+      if (validate_reserve.includes(true)) {
         return true;
       } else {
         return false;
@@ -1317,12 +1324,12 @@ export default {
       return originalArray;
     },
     CreateReserve() {
-      if(this.course_order.course_type_id == "CT_1"){
-        this.$refs.form_coach.validate()
-      }else{
-        this.validate_coach = true
+      if (this.course_order.course_type_id == "CT_1") {
+        this.$refs.form_coach.validate();
+      } else {
+        this.validate_coach = true;
       }
-      if(this.validate_coach){
+      if (this.validate_coach) {
         Swal.fire({
           icon: "question",
           title: this.$t("want to book this course?"),
@@ -1339,7 +1346,8 @@ export default {
                   (v) => v.coach_id === this.course_order.coach_id
                 )[0].coach_name;
             } else {
-              this.course_order.time = this.course_data.days_of_class[0].times[0];
+              this.course_order.time =
+                this.course_data.days_of_class[0].times[0];
               this.course_order.coach_name =
                 this.course_data.coachs[0].coach_name;
               this.course_order.coach = this.course_data.coachs[0].coach_id;
@@ -1358,7 +1366,6 @@ export default {
           }
         });
       }
-     
     },
     checkApplyForYourselfRole() {
       let roles = ["R_1", "R_2", "R_3", "R_4"];
@@ -1443,12 +1450,12 @@ export default {
       this.$router.push({ name: "UserKingdom" });
     },
     addToCart() {
-      if(this.course_order.course_type_id == "CT_1"){
-        this.$refs.form_coach.validate()
-      }else{
-        this.validate_coach = true
+      if (this.course_order.course_type_id == "CT_1") {
+        this.$refs.form_coach.validate();
+      } else {
+        this.validate_coach = true;
       }
-      if(this.validate_coach){
+      if (this.validate_coach) {
         Swal.fire({
           icon: "question",
           title: this.$t("want to add to cart?"),
@@ -1485,7 +1492,9 @@ export default {
             Swal.fire({
               icon: "success",
               title: this.$t("succeed"),
-              text: this.$t("the course has been successfully added to the cart"),
+              text: this.$t(
+                "the course has been successfully added to the cart"
+              ),
               showCancelButton: false,
               showConfirmButton: false,
               showDenyButton: false,
@@ -1497,7 +1506,6 @@ export default {
           }
         });
       }
-     
     },
     removeParent(student) {
       this.course_order.students
@@ -1522,12 +1530,12 @@ export default {
       this.dialog_parent = false;
     },
     checkOut() {
-      if(this.course_order.course_type_id == "CT_1"){
-        this.$refs.form_coach.validate()
-      }else{
-        this.validate_coach = true
+      if (this.course_order.course_type_id == "CT_1") {
+        this.$refs.form_coach.validate();
+      } else {
+        this.validate_coach = true;
       }
-      if(this.validate_coach){
+      if (this.validate_coach) {
         if (!this.policy) {
           this.policy_show = true;
         } else {
@@ -1536,7 +1544,7 @@ export default {
             title: this.$t("proceed with payment?"),
             showDenyButton: false,
             showCancelButton: true,
-            confirmButtonText: this.$t("agree"),
+            confirmButtonText: this.$t("accepts"),
             cancelButtonText: this.$t("cancel"),
           }).then(async (result) => {
             if (result.isConfirmed) {
@@ -1555,7 +1563,8 @@ export default {
               } else {
                 //  CT_2
                 if (
-                  new Date(this.course_data.course_study_start_date) > new Date()
+                  new Date(this.course_data.course_study_start_date) >
+                  new Date()
                 ) {
                   this.course_order.start_date =
                     this.course_data.course_study_start_date;
@@ -1567,7 +1576,8 @@ export default {
                 this.course_order.coach_name =
                   this.course_data.coachs[0].coach_name;
                 this.course_order.coach = this.course_data.coachs[0].coach_id;
-                this.course_order.coach_id = this.course_data.coachs[0].coach_id;
+                this.course_order.coach_id =
+                  this.course_data.coachs[0].coach_id;
               }
               if (this.order.courses.length === 0) {
                 if (

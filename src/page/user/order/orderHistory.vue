@@ -43,7 +43,7 @@
                     color="#FFF9E8"
                     text-color="#FCC419"
                   >
-                    {{ $t(order.paymentStatus) }}
+                    {{ $t("waiting for payment") }}
                   </v-chip>
 
                   <v-chip
@@ -334,7 +334,7 @@ export default {
         title: this.$t("proceed with payment?"),
         showDenyButton: false,
         showCancelButton: true,
-        cancelButtonText: this.$t("cancel"),
+        cancelButtonText: this.$t("accepts"),
         confirmButtonText: this.$t("agree"),
       }).then(async (result) => {
         if (result.isConfirmed) {
