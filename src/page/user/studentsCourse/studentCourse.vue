@@ -16,18 +16,31 @@
         <v-card-text>
           <v-row dense>
             <!-- img -->
-            <v-col cols="12" sm="2">
+            <v-col cols="12" sm="4">
               <v-img
-                max-height="180"
+                :aspect-ratio="16 / 9"
+                class="rounded-lg"
                 :src="
                   my_course_detail.courseImg
                     ? my_course_detail.courseImg
                     : require(`@/assets/course/default_course_img.svg`)
                 "
+              >
+                <template v-slot:placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular
+                      indeterminate
+                      color="#ff6b81"
+                    ></v-progress-circular>
+                  </v-row> </template
               ></v-img>
             </v-col>
             <!-- detail -->
-            <v-col cols="12" sm="7">
+            <v-col cols="12" sm="4">
               <v-row dense>
                 <v-col class="text-lg font-bold">
                   {{
@@ -96,7 +109,7 @@
               </v-row>
             </v-col>
             <!-- circle -->
-            <v-col cols="12" sm="3" class="d-flex align-center justify-center">
+            <v-col cols="12" sm="4" class="d-flex align-center justify-center">
               <v-progress-circular
                 :rotate="-90"
                 :size="90"
@@ -154,7 +167,7 @@
                           ? evolution_options.filter(
                               (v) => v.value === potential.evolution
                             )[0].label
-                          : "-"
+                          : $t("no developmental grade")
                       }}
                     </span>
                   </v-col>
@@ -162,18 +175,29 @@
                 <v-row dense>
                   <v-col>
                     <b>{{ $t("interest level") }}:</b>
-                    {{ potential.interest }}
+                    {{
+                      potential.interest
+                        ? potential.interest
+                        : $t("no interest grade")
+                    }}
                   </v-col>
                 </v-row>
                 <v-row dense>
                   <v-col cols="12" align="start">
                     <b>{{ $t("comments from the coach") }}:</b>
-                    {{ potential.remark }}
+                    {{
+                      potential.remark
+                        ? potential.remark
+                        : $t("no coach comment")
+                    }}
                   </v-col>
                 </v-row>
                 <v-row dense>
                   <v-col cols="12">
                     <b>{{ $t("attachments") }}: </b>
+                    <span v-if="potential.attachmentPotential == ''">
+                      {{ $t("no attachment") }}
+                    </span>
                     <v-card
                       @click="openFile(file.attachmentFiles)"
                       flat
