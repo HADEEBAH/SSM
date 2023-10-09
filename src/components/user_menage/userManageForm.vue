@@ -225,7 +225,6 @@
                                 disabled
                                 @keydown="validate($event, 'number')"
                                 v-model="show_by_id.mobileNo"
-                                :rules="rules.name"
                                 outlined
                                 dense
                                 required

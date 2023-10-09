@@ -66,17 +66,6 @@
                       ? my_course_detail.student.lastNameTh
                       : my_course_detail.student.lastNameEng
                   }}
-
-                  <!-- {{
-                    !my_course_detail.student
-                      ? "-"
-                      : my_course_detail.student.firstNameTh
-                  }}
-                  {{
-                    !my_course_detail.student
-                      ? "-"
-                      : my_course_detail.student.lastNameTh
-                  }} -->
                 </v-col>
               </v-row>
               <v-row dense>
@@ -92,17 +81,6 @@
                       ? my_course_detail.createdBy.lastNameTh
                       : my_course_detail.createdBy.lastNameEng
                   }}
-
-                  <!-- {{
-                    !my_course_detail.createdBy
-                      ? "-"
-                      : my_course_detail.createdBy.firstNameTh
-                  }}
-                  {{
-                    !my_course_detail.createdBy
-                      ? "-"
-                      : my_course_detail.createdBy.lastNameTh
-                  }} -->
                 </v-col>
               </v-row>
               <v-row dense>
