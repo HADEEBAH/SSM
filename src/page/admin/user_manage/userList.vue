@@ -297,13 +297,12 @@ export default {
       return [
         {
           role: this.$t("super admin"),
-          privilege: "superAdmin",
           roleNumber: "R_1",
         },
-        { role: this.$t("admin"), privilege: "admin", roleNumber: "R_2" },
-        { role: this.$t("coach"), privilege: "โค้ช", roleNumber: "R_3" },
-        { role: this.$t("parent"), privilege: "ผู้ปกครอง", roleNumber: "R_4" },
-        { role: this.$t("student"), privilege: "นักเรียน", roleNumber: "R_5" },
+        { role: this.$t("admin"), roleNumber: "R_2" },
+        { role: this.$t("coach"), roleNumber: "R_3" },
+        { role: this.$t("parent"), roleNumber: "R_4" },
+        { role: this.$t("student"), roleNumber: "R_5" },
       ];
     },
     headers() {
