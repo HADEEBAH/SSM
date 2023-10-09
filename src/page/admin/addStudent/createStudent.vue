@@ -774,7 +774,7 @@
               :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
               color="#ff6b81"
             >
-              {{ $t("clear data") }}
+              {{ $t("cancel") }}
             </v-btn>
           </v-col>
           <v-col align="right" sm="auto" cols="12">
