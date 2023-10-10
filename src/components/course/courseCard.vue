@@ -10,7 +10,7 @@
           <v-col align="center" class="rounded-lg pa-0 my-3">
             <v-img
               :src="preview_url"
-              style="max-width: 300px"
+              style="max-width: 500px"
               :aspect-ratio="16 / 9"
               class="rounded-lg"
               align="right"

@@ -72,18 +72,19 @@
             "
           >
             <v-row dense>
-              <v-col cols="12" sm="auto">
+              <v-col cols="12" sm="4">
                 <v-img
-                  :contain="$vuetify.breakpoint.smAndUp"
+                  :aspect-ratio="16 / 9"
                   :cover="$vuetify.breakpoint.smAndUp"
-                  class="rounded-lg"
+                  :class="
+                    $vuetify.breakpoint.smAndUp ? 'rounded-lg' : 'rounded-lg'
+                  "
                   :src="
                     course.course_img || course.course_img !== ''
                       ? course.course_img
                       : require(`@/assets/course/default_course_img.svg`)
                   "
-                  max-height="160"
-                  :max-width="$vuetify.breakpoint.smAndUp ? 160 : ''"
+                  :max-width="$vuetify.breakpoint.smAndUp ? 500 : ''"
                 >
                   <template v-slot:placeholder>
                     <v-row
@@ -99,7 +100,7 @@
                   </template>
                 </v-img>
               </v-col>
-              <v-col>
+              <v-col cols="12" sm="8">
                 <v-row dense>
                   <v-col class="text-lg font-bold">{{
                     `${$i18n.locale == "th" ? course.name : course.subtitle}`
@@ -238,12 +239,13 @@
             <v-col cols="12" sm="4">
               <v-img
                 class="rounded-lg"
-                height="160"
+                style="max-width: 500px"
                 :src="
                   course.course_img || course.course_img !== ''
                     ? course.course_img
                     : require(`@/assets/course/default_course_img.svg`)
                 "
+                :aspect-ratio="16 / 9"
               >
                 <template v-slot:placeholder>
                   <v-row

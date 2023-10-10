@@ -26,6 +26,7 @@
                     :src="item.course_img"
                     :aspect-ratio="16 / 9"
                     class="rounded-lg my-5 mx-3"
+                    style="max-width: 500px"
                   >
                     <template v-slot:placeholder>
                       <v-row
