@@ -71,10 +71,23 @@
                       <v-img
                         v-if="course.courseImg"
                         :src="course.courseImg"
-                        cover
-                        height="180"
-                        class="rounded-lg h-full"
-                      />
+                        :aspect-ratio="16 / 9"
+                        class="rounded-lg"
+                        absolute
+                      >
+                        <template v-slot:placeholder>
+                          <v-row
+                            class="fill-height ma-0"
+                            align="center"
+                            justify="center"
+                          >
+                            <v-progress-circular
+                              indeterminate
+                              color="#ff6b81"
+                            ></v-progress-circular>
+                          </v-row>
+                        </template>
+                      </v-img>
                       <img
                         v-else
                         src="@/assets/course/payment.png"

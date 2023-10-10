@@ -20,21 +20,35 @@
           >
             <v-card class="rounded-lg mt-5">
               <v-row dense>
-                <v-col cols="3">
+                <!-- img -->
+                <v-col cols="12" sm="4">
                   <v-img
                     :src="item.course_img"
-                    cover
-                    height="270"
-                    class="w-full h-full rounded-l-lg"
-                  />
+                    :aspect-ratio="16 / 9"
+                    class="rounded-lg my-5 mx-3"
+                  >
+                    <template v-slot:placeholder>
+                      <v-row
+                        class="fill-height ma-0"
+                        align="center"
+                        justify="center"
+                      >
+                        <v-progress-circular
+                          indeterminate
+                          color="#ff6b81"
+                        ></v-progress-circular>
+                      </v-row>
+                    </template>
+                  </v-img>
                 </v-col>
-                <v-col>
+                <v-col cols="12" sm="8">
                   <v-card-text>
                     <v-row dense>
                       <v-col cols="12">
                         <v-row dense>
                           <v-col>
                             <v-row dense>
+                              <!-- course_name -->
                               <v-col class="text-lg font-bold">
                                 {{
                                   $i18n.locale == "th"
@@ -42,6 +56,7 @@
                                     : item.course_name_en
                                 }}
                               </v-col>
+                              <!-- card_checkbox -->
                               <v-col cols="auto">
                                 <v-checkbox
                                   class="card_checkbox"
@@ -54,6 +69,7 @@
                               </v-col>
                             </v-row>
                             <v-row dense>
+                              <!-- coach -->
                               <v-col
                                 cols="12"
                                 sm="6"

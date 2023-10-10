@@ -160,9 +160,8 @@
                             ? showImg(item.courseImg)
                             : require(`@/assets/course/default_course_img.svg`)
                         "
-                        class="w-full h-full rounded-lg"
-                        cover
-                        height="200"
+                        class="rounded-lg"
+                        :aspect-ratio="16 / 9"
                       >
                         <template v-slot:placeholder>
                           <v-row
@@ -323,9 +322,20 @@
                           ? showImg(item.courseImg)
                           : require(`@/assets/course/default_course_img.svg`)
                       "
-                      class="w-full h-full rounded-lg"
-                      cover
-                      height="200"
+                      class="rounded-lg"
+                      :aspect-ratio="16 / 9"
+                    >
+                      <template v-slot:placeholder>
+                        <v-row
+                          class="fill-height ma-0"
+                          align="center"
+                          justify="center"
+                        >
+                          <v-progress-circular
+                            indeterminate
+                            color="#ff6b81"
+                          ></v-progress-circular>
+                        </v-row> </template
                     ></v-img>
                   </v-col>
                   <!-- detail -->
@@ -593,6 +603,7 @@
                       <!-- img -->
                       <v-col cols="12" sm="2">
                         <v-img
+                          :aspect-ratio="16 / 9"
                           :src="
                             item_booked.courseImg
                               ? item_booked.courseImg
