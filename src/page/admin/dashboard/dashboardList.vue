@@ -1540,7 +1540,7 @@ export default {
         dataLabels: {
           enabled: true,
         },
-        labels: [this.$t("full courses"), this.$t("course available")],
+        labels: [this.$t("course available"), this.$t("full courses")],
         legend: {
           show: false,
         },

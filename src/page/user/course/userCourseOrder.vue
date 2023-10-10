@@ -13,8 +13,7 @@
                     ? course_data.course_img
                     : require(`@/assets/course/default_course_img.svg`)
                 "
-                max-height="122"
-                max-width="122"
+                aspect-ratio="16/9"
               >
                 <template v-slot:placeholder>
                   <v-row

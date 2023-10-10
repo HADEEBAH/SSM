@@ -259,7 +259,7 @@
                 <v-img
                   @click="SelectedImg(artwork.attachmentUrl)"
                   :src="artwork.attachmentUrl"
-                  aspect-ratio="1"
+                  :aspect-ratio="16 / 9"
                   class="bg-grey-lighten-2 cursor-pointer"
                   cover
                   width="350px"
@@ -302,7 +302,7 @@
               <v-col cols="12" class="webkit-center">
                 <v-img
                   :src="img_selected"
-                  aspect-ratio="1"
+                  :aspect-ratio="16 / 9"
                   contain
                   max-width="500px"
                   class="bg-grey-lighten-2"

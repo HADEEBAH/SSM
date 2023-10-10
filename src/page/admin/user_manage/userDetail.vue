@@ -154,7 +154,6 @@
                               @keydown="validate($event, 'en', 'number')"
                               placeholder="-"
                               v-model="show_by_id.email"
-                              :rules="rules.email"
                               outlined
                               dense
                             >
@@ -169,7 +168,6 @@
                               @keydown="validate($event, 'en', 'number')"
                               placeholder="-"
                               v-model="show_by_id.mobileNo"
-                              :rules="rules.email"
                               outlined
                               dense
                               required
@@ -321,7 +319,6 @@
                               @keydown="validate($event, 'en', 'number')"
                               placeholder="-"
                               v-model="show_by_id.email"
-                              :rules="rules.email"
                               outlined
                               dense
                             >
@@ -336,7 +333,6 @@
                               @keydown="validate($event, 'en', 'number')"
                               placeholder="-"
                               v-model="show_by_id.mobileNo"
-                              :rules="rules.email"
                               outlined
                               dense
                               required
@@ -501,7 +497,6 @@
                                       "
                                       placeholder="-"
                                       v-model="show_by_id.email"
-                                      :rules="rules.email"
                                       outlined
                                       dense
                                     >
@@ -518,7 +513,6 @@
                                       "
                                       placeholder="-"
                                       v-model="show_by_id.mobileNo"
-                                      :rules="rules.email"
                                       outlined
                                       dense
                                       required

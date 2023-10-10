@@ -1,19 +1,15 @@
 <template>
   <v-container class="h-full">
     <v-row class="h-full">
-      <v-col cols="12" sm="6" :class="MobileSize ? '' : 'h-full'">
+      <v-col cols="12" sm="6">
         <v-img
-          contain
-          :class="`${
-            MobileSize ? 'rounded-lg mb-3 max-h-[180px]' : 'rounded-lg mb-3'
-          } max-h-[576px] max-w-[1024px]`"
+          :aspect-ratio="16 / 9"
+          class="rounded-lg"
           :src="
             course_data.course_img || course_data.course_img !== ''
               ? course_data.course_img
               : require(`@/assets/course/default_course_img.svg`)
           "
-          max-height="500"
-          max-width="500"
         >
           <template v-slot:placeholder>
             <v-row class="fill-height ma-0" align="center" justify="center">
