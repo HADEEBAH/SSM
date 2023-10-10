@@ -30,8 +30,9 @@
                   <v-col class="flex align-center justify-center">
                     <v-img
                       :src="preview_url"
-                      style="max-width: 200px"
-                      class="text-right"
+                      style="max-width: 300px"
+                      class="text-right rounded-lg"
+                      :aspect-ratio="16 / 9"
                     >
                       <v-btn icon>
                         <v-icon color="#ff6b81" @click="closeImage()"
@@ -278,6 +279,8 @@ export default {
     },
     closeImage() {
       this.preview_url = null;
+      this.showImg = null;
+      this.file = null;
     },
     openFileSelector() {
       this.$refs.fileInput.click();

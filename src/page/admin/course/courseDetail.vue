@@ -110,6 +110,7 @@
         <v-card-text>
           <v-tabs-items v-model="tab">
             <!-- COURSE -->
+
             <v-tab-item value="course">
               <v-form ref="course_form" v-model="courseValidate">
                 <course-card
@@ -288,8 +289,10 @@
                             ? course_data.course_img_privilege
                             : preview_privilege_url
                         "
+                        style="max-width: 300px"
+                        :aspect-ratio="16 / 9"
+                        class="rounded-lg"
                         contain
-                        style="max-width: 200px"
                         align="right"
                       >
                         <v-btn
@@ -342,7 +345,10 @@
                       }}
                       )
                     </v-col>
-                    <v-col cols="12" class="flex align-center justify-center">
+                    <v-col
+                      cols="12"
+                      class="flex align-center justify-center mt-5"
+                    >
                       <v-btn
                         outlined
                         color="blue"
@@ -381,8 +387,9 @@
                         v-if="file?.artworkCourseId"
                         :src="file.attachmentUrl"
                         contain
-                        max-height="200"
-                        max-width="200"
+                        style="max-width: 300px"
+                        :aspect-ratio="16 / 9"
+                        class="rounded-lg"
                         align="right"
                       >
                         <v-btn
@@ -397,9 +404,10 @@
                       <v-img
                         v-else
                         :src="file"
+                        style="max-width: 300px"
+                        :aspect-ratio="16 / 9"
+                        class="rounded-lg"
                         contain
-                        max-height="200"
-                        max-width="200"
                         align="right"
                       >
                         <v-btn

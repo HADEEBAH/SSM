@@ -72,6 +72,7 @@
                                 ? show_by_id.image
                                 : require(`@/assets/userManagePage/default_img_update_profile.svg`)
                             "
+                            :aspect-ratio="16 / 9"
                           >
                           </v-img>
                         </div>
@@ -240,6 +241,7 @@
                                 ? show_by_id.image
                                 : require(`@/assets/userManagePage/default_img_update_profile.svg`)
                             "
+                            :aspect-ratio="16 / 9"
                           >
                           </v-img>
                         </div>
@@ -414,6 +416,7 @@
                                         ? show_by_id.image
                                         : require(`@/assets/userManagePage/default_img_update_profile.svg`)
                                     "
+                                    :aspect-ratio="16 / 9"
                                   >
                                   </v-img>
                                 </div>
@@ -1210,7 +1213,8 @@
           <template v-if="certificate_data.state !== 'detail'">
             <v-card class="mx-5 my-5" flat>
               <v-card-text
-                class="border-dashed border-2 border-blue-600 rounded-lg"
+                class="border-dashed border-2 rounded-lg my-3"
+                style="border: dashed rgb(255, 107, 129)"
               >
                 <v-row>
                   <v-col cols="12" class="flex align-center justify-center">
@@ -1236,7 +1240,7 @@
                     <v-btn
                       :disabled="certificate_data.fileName ? true : false"
                       outlined
-                      color="blue"
+                      color="#ff6b81"
                       @click="openFileSelector"
                       >{{ $t("choose file") }}</v-btn
                     >
@@ -1272,8 +1276,26 @@
             </v-card>
           </template>
           <div v-else class="pa-3">
-            <v-card flat>
-              <v-img :src="certificate_data.certificate_attachment"></v-img>
+            <v-card flat align="center">
+              <v-img
+                :src="certificate_data.certificate_attachment"
+                class="rounded-lg"
+                :aspect-ratio="16 / 9"
+                style="max-width: 500px"
+              >
+                <template v-slot:placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular
+                      indeterminate
+                      color="#ff6b81"
+                    ></v-progress-circular>
+                  </v-row>
+                </template>
+              </v-img>
             </v-card>
           </div>
           <div class="text-center mx-5 mb-5">

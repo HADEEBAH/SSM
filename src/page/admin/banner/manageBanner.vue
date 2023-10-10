@@ -34,6 +34,7 @@
                 class="h-full rounded-lg max-h-[400px!important]"
                 :src="banner.bannerPath"
                 :alt="banner.bannerName"
+                :aspect-ratio="16 / 9"
               >
                 <v-scale-transition>
                   <v-icon
@@ -91,12 +92,13 @@
                 cover
                 class="h-full rounded-lg max-h-[400px!important]"
                 :src="banner"
+                :aspect-ratio="16 / 9"
               >
                 <v-scale-transition>
                   <v-icon
                     @click="removeBannerFilesPreview(index)"
                     v-if="active"
-                    color="white"
+                    color="#ff6b81"
                     size="48"
                     >mdi-close-circle-outline</v-icon
                   >

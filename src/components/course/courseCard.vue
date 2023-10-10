@@ -7,8 +7,14 @@
         style="border: dashed rgb(255, 107, 129)"
       >
         <v-row v-if="preview_url">
-          <v-col align="center" class="rounded-lg pa-0">
-            <v-img :src="preview_url" style="max-width: 200px" align="right">
+          <v-col align="center" class="rounded-lg pa-0 my-3">
+            <v-img
+              :src="preview_url"
+              style="max-width: 300px"
+              :aspect-ratio="16 / 9"
+              class="rounded-lg"
+              align="right"
+            >
               <v-btn
                 v-if="!disable"
                 icon
