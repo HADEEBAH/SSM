@@ -24,6 +24,7 @@
     </v-container>
 
     <v-card
+     
       class="rounded-xl pa-2"
       :style="
         !MobileSize
@@ -34,6 +35,7 @@
           : ''
       "
     >
+    <v-row dense ref="banner_bar">
       <v-carousel
         class="rounded-xl max-w-[1920px!important] max-h-[1080px!important]"
         cycle
@@ -54,8 +56,10 @@
           </v-img>
         </v-carousel-item>
       </v-carousel>
+    </v-row>
+     
       <v-card-text>
-        <v-row>
+        <v-row ref="filter_bar">
           <v-col
             cols="12"
             sm="4"
@@ -77,7 +81,7 @@
             />
           </v-col>
         </v-row>
-        <v-row>
+        <v-row ref="category_list">
           <v-col
             cols="6"
             md="4"
@@ -150,6 +154,15 @@
             {{ $t("wls not found") }}
           </v-col>
         </v-row>
+        <v-row v-if="isLoading">
+          <v-col cols="12"  align="center" >
+            <v-progress-circular
+              indeterminate
+              color="#ff6b81"
+              size="50"
+            ></v-progress-circular>
+          </v-col>
+        </v-row>
         <loading-overlay :loading="categorys_is_loading"></loading-overlay>
       </v-card-text>
     </v-card>
@@ -190,9 +203,13 @@ export default {
     data_search_kingdom: [],
     item_data: "",
     showingFullText: false,
+    isLoading: true,
+    isStopLoading : false,
+    countDatePerPage : 0
   }),
 
   created() {
+    this.$store.dispatch("CategoryModules/GetCategoryCourse",{limit : 12, page: 1});
     this.dataStorage = JSON.parse(localStorage.getItem("userDetail"));
     if (this.dataStorage) {
       this.GetAll(this.dataStorage.account_id);
@@ -203,8 +220,11 @@ export default {
   beforeMount() {
     this.GetBannerList();
   },
-
+  destroyed() {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
   mounted() {
+    window.addEventListener('scroll', this.handleScroll);
     this.$store.dispatch(
       "NavberUserModules/changeTitleNavber",
       "warraphat learning sphere"
@@ -213,13 +233,37 @@ export default {
 
   methods: {
     ...mapActions({
+      GetCategoryCourse: "CategoryModules/GetCategoryCourse",
       changeCourseOrderData: "OrderModules/changeCourseOrderData",
-      createKingdom: "OrderModules/createKingdom",
       GetAll: "ProfileModules/GetAll",
       GetProfileDetail: "ProfileModules/GetProfileDetail",
       logOut: "loginModules/logOut",
       GetBannerList: "BannerModules/GetBannerList",
     }),
+    handleScroll() {
+      const distanceFromBottom = window.innerHeight + window.scrollY - document.body.offsetHeight;
+      if(this.$refs.category_list && this.$refs.banner_bar && this.$refs.filter_bar){
+        let banner_bar = this.$refs.banner_bar.getBoundingClientRect().bottom > 0 ? this.$refs.banner_bar.getBoundingClientRect().bottom : 0
+        let filter_bar =  this.$refs.filter_bar.getBoundingClientRect().bottom > 0 ? this.$refs.filter_bar.getBoundingClientRect().bottom : 0
+        const scrollThreshold = (this.$refs.category_list.getBoundingClientRect().bottom + banner_bar + filter_bar)
+        if (distanceFromBottom > scrollThreshold + (400 * this.category_option.page)) {
+          this.loadMoreData();
+        }
+      }
+    },
+    loadMoreData() {
+      this.countDatePerPage = this.category_option.count
+      if(!this.isStopLoading){
+          this.GetCategoryCourse({limit : this.category_option.limit, page: this.category_option.page + 1}).then(()=>{
+            if(this.countDatePerPage === this.category_option.count){
+              setTimeout(() => {
+                this.isLoading = false;
+              }, 1000);
+                this.isStopLoading = true
+            }
+          })
+      }
+    },
     height() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
@@ -262,6 +306,7 @@ export default {
 
   computed: {
     ...mapGetters({
+      category_option:"CategoryModules/getCategoryOption",
       course_order: "OrderModules/getCourseOrder",
       categorys: "CategoryModules/getCategorys",
       categorys_is_loading: "CategoryModules/getCategorysIsLoading",
@@ -270,7 +315,6 @@ export default {
       banner_list: "BannerModules/getBannerList",
     }),
     setFunctions() {
-      this.$store.dispatch("CategoryModules/GetCategoryCourse");
       if (this.dataStorage) {
         this.GetProfileDetail(this.dataStorage.account_id);
       }

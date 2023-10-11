@@ -92,8 +92,12 @@ const orderModules = {
     order_history: [],
     order_history_is_loading: false,
     order_is_status: false,
+    cart_list_option : {}
   },
   mutations: {
+    SetCartListOption(state, payload){
+      state.cart_list_option = payload
+    },
     SetOrderHistory(state, payload) {
       state.order_history = payload;
     },
@@ -1127,8 +1131,10 @@ const orderModules = {
         }
       }
     },
-    async GetCartList(context, account_id) {
-      context.commit("SetCartListIsLoading", true);
+    async GetCartList(context,{account_id, limit, page}) {
+      if(page == 1){
+        context.commit("SetCartListIsLoading", true);
+      }
       try {
         let config = {
           headers: {
@@ -1137,8 +1143,9 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
+        // let localhost = "http://localhost:3002"
         let { data } = await axios.get(
-          `${process.env.VUE_APP_URL}/api/v1/order/cart/${account_id}`,
+          `${process.env.VUE_APP_URL}/api/v1/order/cart/${account_id}/limit?limit=${limit}&page=${page}`,
           config
         );
         if (data.statusCode === 200) {
@@ -1159,6 +1166,7 @@ const orderModules = {
 
           }
           context.commit("SetCartList", data.data);
+          context.commit("SetCartListOption",{limit : limit, page: page, count : data.data.length})
           setTimeout(() => {
             context.commit("SetCartListIsLoading", false);
           }, 200);
@@ -1386,6 +1394,9 @@ const orderModules = {
     },
     orderHistoryIsLoading(state) {
       return state.order_history_is_loading;
+    },
+    getCartListOption(state){
+      return state.cart_list_option 
     },
     getReserveList(state) {
       return state.reserve_list;

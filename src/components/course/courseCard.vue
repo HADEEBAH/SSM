@@ -268,6 +268,7 @@
             ></label-custom>
             <v-text-field
               dense
+              :rules="student_recived"
               :disabled="disable"
               :outlined="!disable"
               :filled="disable"
@@ -386,6 +387,7 @@
               <v-text-field
                 :placeholder="$t('specify price')"
                 dense
+                :rules="price"
                 :disabled="disable"
                 :outlined="!disable"
                 :filled="disable"
@@ -948,15 +950,13 @@ export default {
     },
     student_recived() {
       return [
-        (val) =>
-          (val || "") > 0 ||
-          this.$t("please specify students who can be accepted"),
-        (val) =>
-          val < 1000 || this.$t("students who can accept more than the limit"),
+        val => console.log(val),
+        (val) => val > 0 || this.$t("please specify students who can be accepted"),
+        (val) => val < 1000 || this.$t("students who can accept more than the limit"),
       ];
     },
     price() {
-      return [(val) => (val || "") > 0 || this.$t("please specify price")];
+      return [(val) => val > 0 || this.$t("please specify price")];
     },
   },
   methods: {

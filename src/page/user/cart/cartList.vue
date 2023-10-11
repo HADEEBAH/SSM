@@ -12,7 +12,7 @@
         </v-col>
       </v-row>
       <div v-if="cart_list.length > 0">
-        <v-row class="mb-16">
+        <v-row class="mb-16" ref="cart_list">
           <v-col
             cols="12"
             v-for="(item, index_item) in cart_list"
@@ -148,6 +148,15 @@
             </v-card>
           </v-col>
         </v-row>
+        <v-row v-if="isLoading">
+          <v-col cols="12"  align="center" >
+            <v-progress-circular
+              indeterminate
+              color="#ff6b81"
+              size="50"
+            ></v-progress-circular>
+          </v-col>
+        </v-row>
         <v-row dense>
           <v-col>
             <v-checkbox hide-details color="pink" v-model="policy">
@@ -279,14 +288,23 @@ export default {
     count_selected_cart: 0,
     total_price: 0,
     user_login: {},
+    isLoading: false,
+    isStopLoading : false,
+    countDatePerPage : 0
   }),
-  created() {},
-  mounted() {
-    this.$store.dispatch("NavberUserModules/changeTitleNavber", "cart");
+  created() { 
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
+    this.GetCartList({account_id : this.user_login.account_id, limit : 2, page : 1});
+  },
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll);
+    this.$store.dispatch("NavberUserModules/changeTitleNavber", "cart");
     this.cart_list.map((val) => {
       val.checked = false;
     });
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.handleScroll);
   },
 
   methods: {
@@ -300,6 +318,38 @@ export default {
     closePolicy() {
       this.policy = false;
       this.policy_show = false;
+    },
+    handleScroll() {
+      const distanceFromBottom = window.innerHeight + window.scrollY - document.body.offsetHeight;
+      if(this.$refs.cart_list){
+        const scrollThreshold = (this.$refs.cart_list.getBoundingClientRect().bottom )
+        if (distanceFromBottom > scrollThreshold) {
+          if(!this.isLoading){
+            this.loadMoreData();
+          }
+          
+        }
+      }
+    },
+    loadMoreData() {
+      this.isLoading = true
+      console.log(this.countDatePerPage)
+      this.countDatePerPage = this.cart_list_option.count
+      console.log("countDatePerPage",this.countDatePerPage)
+      if(!this.isStopLoading){
+          this.GetCartList({account_id : this.user_login.account_id, limit : this.cart_list_option.limit, page: this.cart_list_option.page + 1}).then(()=>{
+            setTimeout(() => {
+              if(this.countDatePerPage === this.cart_list_option.count){
+                  console.log("count",this.cart_list_option.count)
+                  this.isLoading = false;
+                  this.isStopLoading = true
+              }else{
+                this.isStopLoading = false
+                this.isLoading = true
+              }
+            }, 3000);
+          })
+      }
     },
     removeCart(cart_id) {
       Swal.fire({
@@ -441,6 +491,7 @@ export default {
 
   computed: {
     ...mapGetters({
+      cart_list_option : "OrderModules/getCartListOption",
       cart_list: "OrderModules/getCartList",
       cart_list_is_loading: "OrderModules/getCartListIsLoading",
       course_order: "OrderModules/getCourseOrder",
@@ -449,7 +500,7 @@ export default {
       order: "OrderModules/getOrder",
     }),
     setFunctions() {
-      this.GetCartList(this.user_login.account_id);
+     
       return "";
     },
     MobileSize() {

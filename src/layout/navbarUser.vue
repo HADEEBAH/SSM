@@ -462,7 +462,7 @@ export default {
     }
     this.active_menu = this.$route.name;
     if (this.user_detail?.account_id) {
-      this.GetCartList(this.user_detail.account_id);
+      this.GetCartList({account_id : this.user_detail.account_id,limit: 12 , page :1});
     }
     // window.googleTranslateElementInit = () => {
     //   new window.google.translate.TranslateElement(
@@ -489,7 +489,7 @@ export default {
       this.GetProfileDetail(this.user_detail.account_id);
     }
     if (this.user_detail?.account_id) {
-      this.GetCartList(this.user_detail.account_id);
+      this.GetCartList({account_id :this.user_detail.account_id, limit : 12, page:1 });
       this.GetNotificationsAll(this.user_detail.account_id);
     }
 
