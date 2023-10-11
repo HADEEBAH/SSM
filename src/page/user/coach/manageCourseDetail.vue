@@ -5,7 +5,7 @@
       <v-card flat>
         <v-card-text class="bg-[#FBF3F5] border">
           <v-row>
-            <v-col cols="auto">
+            <v-col cols="12" sm="4">
               <v-img
                 class="rounded-lg"
                 :src="
@@ -13,8 +13,8 @@
                     ? course_data.course_img
                     : require(`@/assets/course/default_course_img.svg`)
                 "
-                max-height="120"
-                max-width="120"
+                style="max-width: 500px"
+                :aspect-ratio="16 / 9"
               >
                 <template v-slot:placeholder>
                   <v-row
@@ -30,7 +30,7 @@
                 </template>
               </v-img>
             </v-col>
-            <v-col>
+            <v-col cols="12" sm="8">
               <v-row>
                 <v-col cols="12" sm>
                   <div class="text-md font-bold">
@@ -860,9 +860,9 @@
                       >
                       <v-img
                         :src="file"
-                        cover
-                        max-height="200"
-                        width="100%"
+                        style="max-width: 500px"
+                        :aspect-ratio="16 / 9"
+                        class="rounded-lg"
                         align="center"
                       >
                         <template v-slot:placeholder>
@@ -1325,7 +1325,8 @@
                 <v-img
                   contain
                   :src="files_attachment_dialog"
-                  class="max-h-[400px] max-w-400px"
+                  class="max-h-[400px] max-w-400px rounded-lg"
+                  :aspect-ratio="16 / 9"
                 >
                   <template v-slot:placeholder>
                     <v-row
