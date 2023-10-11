@@ -32,6 +32,7 @@
                   @change="changeUserOneId(user_one_id)"
                   @keydown="Validation($event, 'th-special')"
                   outlined
+                  color="#FF6B81"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
@@ -46,6 +47,7 @@
                   @change="changeUserOneId(user_one_id)"
                   @keydown="Validation($event, 'th-special')"
                   outlined
+                  color="#FF6B81"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -62,6 +64,7 @@
                   @change="changeUserOneId(user_one_id)"
                   @keydown="Validation($event, 'en-special')"
                   outlined
+                  color="#FF6B81"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
@@ -76,6 +79,7 @@
                   @change="changeUserOneId(user_one_id)"
                   @keydown="Validation($event, 'en-special')"
                   outlined
+                  color="#FF6B81"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -94,6 +98,7 @@
                   :placeholder="$t('specify phone number')"
                   @change="changeUserOneId(user_one_id)"
                   outlined
+                  color="#FF6B81"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -111,6 +116,7 @@
                   @keydown="Validation($event, 'en-number')"
                   @change="changeUserOneId(user_one_id)"
                   outlined
+                  color="#FF6B81"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -133,6 +139,7 @@
                   :placeholder="$t('specify password')"
                   @change="changeUserOneId(user_one_id)"
                   outlined
+                  color="#FF6B81"
                 >
                 </v-text-field>
               </v-col>
@@ -157,6 +164,7 @@
                   @change="changeUserOneId(user_one_id)"
                   outlined
                   @keydown="Validation($event, 'en')"
+                  color="#FF6B81"
                 >
                 </v-text-field>
               </v-col>
@@ -369,7 +377,9 @@ export default {
         (val) =>
           (val || "").length > 5 ||
           this.$t("please enter a username at least 6 characters long"),
-        (val) => val.split(' ').length  <= 1  || this.$t("the username cannot contain special characters"),
+        (val) =>
+          val.split(" ").length <= 1 ||
+          this.$t("the username cannot contain special characters"),
         (val) =>
           /[A-Za-z0-9]/.test(val) ||
           this.$t("the username cannot contain special characters"),
@@ -390,8 +400,11 @@ export default {
           this.$t(
             "please enter your name (thai) length not exceeding 20 characters"
           ),
-        (val) => /[ก-๏\s]/g.test(val) || this.$t("please enter your name in thai"),
-        (val) => val.split(' ').length <= 1 || this.$t("please enter your name in thai"),
+        (val) =>
+          /[ก-๏\s]/g.test(val) || this.$t("please enter your name in thai"),
+        (val) =>
+          val.split(" ").length <= 1 ||
+          this.$t("please enter your name in thai"),
         (val) =>
           !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
           this.$t("please enter your name in thai"),
@@ -411,7 +424,9 @@ export default {
           ),
         (val) =>
           /[A-Za-z]/g.test(val) || this.$t("please enter your name in english"),
-        (val) => val.split(' ').length <= 1  || this.$t("please enter your name in english"),
+        (val) =>
+          val.split(" ").length <= 1 ||
+          this.$t("please enter your name in english"),
         (val) =>
           !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
           this.$t("please enter your name in english"),
@@ -429,7 +444,9 @@ export default {
           this.$t(
             "please enter your last name (Thai) not more than 20 characters"
           ),
-        (val) => val.split(' ').length  <= 1  || this.$t("please enter your last name in thai"),
+        (val) =>
+          val.split(" ").length <= 1 ||
+          this.$t("please enter your last name in thai"),
         (val) =>
           /[ก-๏\s]/g.test(val) ||
           this.$t("please enter your last name in thai"),
@@ -450,7 +467,9 @@ export default {
           this.$t(
             "please enter your last name (English). length not exceeding 20 characters"
           ),
-        (val) => val.split(' ').length <= 1  || this.$t("please enter your last name in english"),
+        (val) =>
+          val.split(" ").length <= 1 ||
+          this.$t("please enter your last name in english"),
         (val) =>
           /[A-Za-z ]/g.test(val) ||
           this.$t("please enter your last name in english"),

@@ -7,6 +7,7 @@
         prepend-inner-icon="mdi-magnify"
         outlined
         dense
+        color="#ff6b81"
       >
       </v-text-field>
     </headerPage>
@@ -199,12 +200,16 @@
       <v-card class="pa-1">
         <v-row dense>
           <v-col class="pa-0" align="right">
-            <v-btn @click="closeDialogLeaveForm" icon color="#ff6b81"
+            <v-btn
+              @click="closeDialogLeaveForm"
+              icon
+              color="#ff6b81"
+              class="mb-2"
               ><v-icon>mdi-close</v-icon></v-btn
             >
           </v-col>
         </v-row>
-        <coachLeaveForm admin></coachLeaveForm>
+        <coachLeaveForm admin class="mt-3"></coachLeaveForm>
       </v-card>
     </v-dialog>
   </v-container>
@@ -246,65 +251,6 @@ export default {
         },
       ],
     },
-    // column: [
-    //   { text: "ลำดับ", align: "start", sortable: false, value: "count" },
-    //   { text: "รหัสโค้ช", align: "start", sortable: false, value: "accountId" },
-    //   {
-    //     text: "ชื่อ - นามสกุล",
-    //     align: "start",
-    //     sortable: false,
-    //     value: "fullnameTh",
-    //   },
-    //   {
-    //     text: "ประเภทการลา",
-    //     align: "start",
-    //     sortable: false,
-    //     value: "leaveTypeStr",
-    //   },
-    //   {
-    //     text: "วันเริ่มลา",
-    //     align: "start",
-    //     sortable: false,
-    //     value: "startDateStr",
-    //   },
-    //   {
-    //     text: "วันที่ส่งคำขอ",
-    //     align: "center",
-    //     sortable: false,
-    //     value: "createdDateStr",
-    //   },
-    //   { text: "สถานะ", align: "center", value: "actions", sortable: false },
-    //   { text: "", align: "center", value: "show", sortable: false },
-    // ],
-    // course_type: [
-    //   {
-    //     name: "ทั้งหมด",
-    //     value: "all",
-    //     img: "@/assets/coachLeave/all.png",
-    //   },
-    //   {
-    //     name: "อนุมัติ",
-    //     value: "approved",
-    //     img: "@/assets/coachLeave/accept.png",
-    //   },
-    // ],
-    // course_type_two: [
-    //   {
-    //     name: "รออนุมัติ",
-    //     value: "pending",
-    //     img: "@/assets/coachLeave/wait.png",
-    //   },
-    //   {
-    //     name: "ปฎิเสธ",
-    //     value: "reject",
-    //     img: "@/assets/coachLeave/disaccept.png",
-    //   },
-    //   {
-    //     name: "ยกเลิก",
-    //     value: "cancel",
-    //     img: "@/assets/coachLeave/all.png",
-    //   },
-    // ],
     coach_leave_arr: [],
   }),
   created() {

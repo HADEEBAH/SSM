@@ -432,10 +432,12 @@
                             "
                           >
                             {{ $t("baht") }} ({{
-                              (
-                                (get_donut.sumTotalSuccess * 100) /
-                                (get_donut.sumTotalPending +
-                                  get_donut.sumSuccess)
+                              ((get_donut.sumTotalSuccess * 100) /
+                              (get_donut.sumTotalPending + get_donut.sumSuccess)
+                                ? (get_donut.sumTotalSuccess * 100) /
+                                  (get_donut.sumTotalPending +
+                                    get_donut.sumSuccess)
+                                : "0"
                               )?.toLocaleString("us-us", {
                                 maximumFractionDigits: 2,
                               })
@@ -469,10 +471,13 @@
                             "
                           >
                             {{ $t("baht") }} ({{
-                              (
-                                (get_donut.sumTotalPending * 100) /
-                                (get_donut.sumTotalPending +
-                                  get_donut.sumTotalSuccess)
+                              ((get_donut.sumTotalPending * 100) /
+                              (get_donut.sumTotalPending +
+                                get_donut.sumTotalSuccess)
+                                ? (get_donut.sumTotalPending * 100) /
+                                  (get_donut.sumTotalPending +
+                                    get_donut.sumTotalSuccess)
+                                : "0"
                               )?.toLocaleString("us-us", {
                                 maximumFractionDigits: 2,
                               })
@@ -1535,7 +1540,7 @@ export default {
         dataLabels: {
           enabled: true,
         },
-        labels: [this.$t("full courses"), this.$t("course available")],
+        labels: [this.$t("course available"), this.$t("full courses")],
         legend: {
           show: false,
         },

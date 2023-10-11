@@ -27,6 +27,7 @@
                           v-model="checkData.username"
                           @keyup.enter="checkDataRelation(checkData.username)"
                           :placeholder="this.$t('username')"
+                          color="#FF6B81"
                         >
                           <template v-slot:append>
                             <v-icon v-if="checkData.account_id" color="green"
@@ -453,6 +454,7 @@
                   )
                 "
                 :placeholder="this.$t('username')"
+                color="#ff6b81"
               >
                 <template v-slot:append>
                   <v-icon v-if="relation.account_id" color="green"
@@ -500,6 +502,7 @@
                   outlined
                   v-model="relation.firstname_en"
                   :placeholder="this.$t('first name(english)')"
+                  color="#ff6b81"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -514,6 +517,7 @@
                   outlined
                   v-model="relation.lastname_en"
                   :placeholder="this.$t('last name(english)')"
+                  color="#ff6b81"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -526,6 +530,7 @@
                   outlined
                   v-model="relation.tel"
                   :placeholder="this.$t('phone number')"
+                  color="#ff6b81"
                 ></v-text-field>
               </v-col>
             </v-row>

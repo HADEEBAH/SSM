@@ -10,7 +10,12 @@
                 >: {{ `${$route.params.order_id}` }}</rowData
               >
               <rowData icon="mdi-rename-box-outline" :title="$t('student list')"
-                >: {{ $i18n.locale == 'th' ? order_detail.student_name_list : order_detail.student_name_list_en }}</rowData
+                >:
+                {{
+                  $i18n.locale == "th"
+                    ? order_detail.student_name_list
+                    : order_detail.student_name_list_en
+                }}</rowData
               >
             </v-col>
             <v-col cols="12" sm="auto">
@@ -79,7 +84,9 @@
                         :title="$t('course')"
                       >
                         {{
-                          `${data.course.courseNameTh}(${data.course.courseNameEn})`
+                          $i18n.locale == "th"
+                            ? data.course.courseNameTh
+                            : data.course.courseNameEn
                         }}</rowData
                       >
                     </v-col>
@@ -104,7 +111,11 @@
                         col_detail="12"
                         :title="$t('coach')"
                       >
-                        {{ $i18n.locale == 'th' ? data.coachName : data.coachNameEn }}</rowData
+                        {{
+                          $i18n.locale == "th"
+                            ? data.coachName
+                            : data.coachNameEn
+                        }}</rowData
                       >
                     </v-col>
                     <v-col>
@@ -134,7 +145,11 @@
                           col_detail="12"
                           :title="$t('period')"
                         >
-                          {{ $i18n.locale == "th" ? data.cpo.optionName : data.cpo.optionNameEn }}</rowData
+                          {{
+                            $i18n.locale == "th"
+                              ? data.cpo.optionName
+                              : data.cpo.optionNameEn
+                          }}</rowData
                         >
                       </v-col>
                     </v-row>
@@ -403,11 +418,15 @@
         </v-col>
       </v-row>
       <v-dialog v-model="pdf_open" fullscreen>
-        <v-card class="pa-2" align="right" >
-            <v-btn icon @click="pdf_open=false">
-              <v-icon>mdi-close</v-icon> 
-            </v-btn>
-            <iframe class="w-full pdf-iframe" id="printPdf" name="printPdf"></iframe>
+        <v-card class="pa-2" align="right">
+          <v-btn icon @click="pdf_open = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <iframe
+            class="w-full pdf-iframe"
+            id="printPdf"
+            name="printPdf"
+          ></iframe>
         </v-card>
       </v-dialog>
     </v-container>
@@ -469,13 +488,13 @@ export default {
     this.pdf_lang = this.$i18n.locale;
   },
   watch: {
-    "$i18n.locale": function(){
+    "$i18n.locale": function () {
       this.GetOrderDetail({ order_number: this.$route.params.order_id });
-    }
+    },
   },
   computed: {
     ...mapGetters({
-      orders_is_loading : "OrderModules/getOrdersIsLoading",
+      orders_is_loading: "OrderModules/getOrdersIsLoading",
       order_detail: "OrderModules/getOrderDetail",
       student_list: "OrderModules/getStudentList",
     }),
@@ -575,7 +594,10 @@ export default {
                     },
                     { text: "(วรพัฒน์ เลิร์นนิ่ง สเฟียร์)", fontSize: 10 },
                     {
-                      text: this.pdf_lang == "th" ? "63 ถนน พัฒโนอุทิศ ตำบล หาดใหญ่ อำเภอหาดใหญ่ สงขลา 90110" : "63 Phatthano Uthit Road, Hat Yai Subdistrict, Hat Yai District, Songkhla 90110",
+                      text:
+                        this.pdf_lang == "th"
+                          ? "63 ถนน พัฒโนอุทิศ ตำบล หาดใหญ่ อำเภอหาดใหญ่ สงขลา 90110"
+                          : "63 Phatthano Uthit Road, Hat Yai Subdistrict, Hat Yai District, Songkhla 90110",
                       fontSize: 10,
                       margin: [0, 5],
                     },
@@ -662,7 +684,10 @@ export default {
                 {
                   stack: [
                     {
-                      text: this.pdf_lang == "th" ? `${this.order_detail.student_name_list}` : `${this.order_detail.student_name_list_en}`,
+                      text:
+                        this.pdf_lang == "th"
+                          ? `${this.order_detail.student_name_list}`
+                          : `${this.order_detail.student_name_list_en}`,
                       color: "#318ce7",
                       margin: [0, 5],
                     },
@@ -957,10 +982,10 @@ export default {
             },
           },
         };
-        this.pdf_open = true
-        setTimeout(()=>{
-          pdfMake.createPdf(docDefinition).open({}, window.frames['printPdf']);
-        },500)
+        this.pdf_open = true;
+        setTimeout(() => {
+          pdfMake.createPdf(docDefinition).open({}, window.frames["printPdf"]);
+        }, 500);
       }
     },
     GenCourseItem() {

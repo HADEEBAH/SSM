@@ -97,7 +97,7 @@
                 ></v-img>
               </v-col>
               <v-col cols="12" class="flex align-center justify-center text-h5">
-                {{ $t("upload the cover image of the course") }}
+                {{ $t("upload the cover image of wls") }}
               </v-col>
               <v-col
                 cols="12"

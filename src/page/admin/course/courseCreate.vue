@@ -22,7 +22,7 @@
                     ></v-img>
                   </v-col>
                   <v-col cols="8" sm="12">
-                    <label>{{ $t("regular courses") }}</label>
+                    <label>{{ $t("regular course") }}</label>
                   </v-col>
                 </v-row>
               </template>
@@ -120,7 +120,8 @@
             <v-card class="mx-3" flat>
               <headerCard :title="$t(`special rights`)"></headerCard>
               <v-card-text
-                class="border-dashed border-2 border-blue-600 rounded-lg"
+                class="border-dashed rounded-lg"
+                style="border: dashed rgb(255, 107, 129)"
               >
                 <v-row v-if="preview_privilege_url">
                   <v-col align="center" class="rounded-lg pa-0">
@@ -167,7 +168,7 @@
                   <v-col cols="12" class="flex align-center justify-center">
                     <v-btn
                       outlined
-                      color="blue"
+                      color="#FF6B81"
                       @click="openFilePrivilegeSelector"
                       >{{ $t("select file") }}</v-btn
                     >
@@ -184,7 +185,8 @@
               </v-card-text>
               <headerCard title="Learning Journey"></headerCard>
               <v-card-text
-                class="border-dashed border-2 border-blue-600 rounded-lg"
+                class="border-dashed border-2 rounded-lg"
+                style="border: dashed rgb(255, 107, 129)"
               >
                 <v-row
                   v-if="
@@ -257,7 +259,7 @@
                     />
                     <v-btn
                       outlined
-                      color="blue"
+                      color="#FF6B81"
                       @click="openFileArtworSelector"
                       >{{ $t("select file") }}</v-btn
                     >

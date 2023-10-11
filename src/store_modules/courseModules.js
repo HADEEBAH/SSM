@@ -742,8 +742,8 @@ const CourseModules = {
       }
     },
     // COURSE :: DELETE COURSE 
-    async DeleteCourse(context,{course_id}){
-      try{
+    async DeleteCourse(context, { course_id }) {
+      try {
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -752,7 +752,7 @@ const CourseModules = {
           }
         }
         let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/manage/remove-course/${course_id}`, config)
-        if(data.statusCode === 200){
+        if (data.statusCode === 200) {
           await context.dispatch("GetCoursesList")
           Swal.fire({
             icon: "success",
@@ -764,9 +764,9 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
-  
+
         }
-      }catch(error){
+      } catch (error) {
         Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),

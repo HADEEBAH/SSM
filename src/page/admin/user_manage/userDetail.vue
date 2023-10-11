@@ -153,7 +153,6 @@
                               @keydown="validate($event, 'en', 'number')"
                               placeholder="-"
                               v-model="show_by_id.email"
-                              :rules="rules.email"
                               outlined
                               dense
                             >
@@ -168,7 +167,6 @@
                               @keydown="validate($event, 'en', 'number')"
                               placeholder="-"
                               v-model="show_by_id.mobileNo"
-                              :rules="rules.email"
                               outlined
                               dense
                               required
@@ -319,7 +317,6 @@
                               @keydown="validate($event, 'en', 'number')"
                               placeholder="-"
                               v-model="show_by_id.email"
-                              :rules="rules.email"
                               outlined
                               dense
                             >
@@ -334,7 +331,6 @@
                               @keydown="validate($event, 'en', 'number')"
                               placeholder="-"
                               v-model="show_by_id.mobileNo"
-                              :rules="rules.email"
                               outlined
                               dense
                               required
@@ -498,7 +494,6 @@
                                       "
                                       placeholder="-"
                                       v-model="show_by_id.email"
-                                      :rules="rules.email"
                                       outlined
                                       dense
                                     >
@@ -515,7 +510,6 @@
                                       "
                                       placeholder="-"
                                       v-model="show_by_id.mobileNo"
-                                      :rules="rules.email"
                                       outlined
                                       dense
                                       required
@@ -1393,16 +1387,16 @@ export default {
       this.user_data.isCardParentOpen = false;
     }
 
-    let re = localStorage.getItem("relations");
-    if (re) {
-      for (const item of JSON.parse(localStorage.getItem("relations"))) {
-        this.GetStudentData(item.student.studentId);
-      }
+    // let re = localStorage.getItem("relations");
+    // if (re) {
+    //   for (const item of JSON.parse(localStorage.getItem("relations"))) {
+    //     this.GetStudentData(item.student.studentId);
+    //   }
 
-      for (const item of JSON.parse(localStorage.getItem("relations"))) {
-        this.GetStudentSchedule(item.student.studentId);
-      }
-    }
+    //   for (const item of JSON.parse(localStorage.getItem("relations"))) {
+    //     this.GetStudentSchedule(item.student.studentId);
+    //   }
+    // }
   },
   methods: {
     ...mapActions({

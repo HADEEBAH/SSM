@@ -382,6 +382,7 @@
                   outlined
                   item-color="white"
                   @change="selectTime(course.time, course)"
+                  color="#FF6B81"
                 >
                   <template v-slot:selection="data">
                     {{ `${data.item.start}-${data.item.end}น.` }}
@@ -431,6 +432,7 @@
                   :placeholder="$t('choose a coach')"
                   item-color="pink"
                   outlined
+                  color="#FF6B81"
                 >
                   <template v-slot:no-data>
                     <v-list-item>
@@ -501,6 +503,7 @@
                       :placeholder="$t('start date')"
                       v-bind="attrs"
                       v-on="on"
+                      color="#FF6B81"
                     >
                       <template v-slot:append>
                         <v-icon :color="course.start_date ? '#FF6B81' : ''"
@@ -581,6 +584,7 @@
                   auto-grow
                   :rules="rules.remark"
                   outlined
+                  color="#ff6b81"
                 ></v-textarea>
               </v-col>
             </v-row>
@@ -770,7 +774,7 @@
               :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
               color="#ff6b81"
             >
-              {{ $t("clear data") }}
+              {{ $t("cancel") }}
             </v-btn>
           </v-col>
           <v-col align="right" sm="auto" cols="12">

@@ -14,6 +14,7 @@
           outlined
           :placeholder="$t('search')"
           v-model="search"
+          color="#FF6B81"
         ></v-text-field>
       </v-col>
     </v-row>

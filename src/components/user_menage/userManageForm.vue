@@ -147,6 +147,7 @@
                                 :rules="rules.firstNameThRules"
                                 outlined
                                 dense
+                                color="#ff6b81"
                               >
                               </v-text-field>
                             </v-col>
@@ -161,6 +162,7 @@
                                 :rules="rules.lastNameThRules"
                                 outlined
                                 dense
+                                color="#ff6b81"
                               >
                               </v-text-field>
                             </v-col>
@@ -179,6 +181,7 @@
                                 :rules="rules.firstNameEnRules"
                                 outlined
                                 dense
+                                color="#ff6b81"
                               >
                               </v-text-field>
                             </v-col>
@@ -194,6 +197,7 @@
                                 :rules="rules.lastNameEnRules"
                                 outlined
                                 dense
+                                color="#ff6b81"
                               >
                               </v-text-field>
                             </v-col>
@@ -209,6 +213,7 @@
                                 v-model="show_by_id.email"
                                 outlined
                                 dense
+                                color="#ff6b81"
                               >
                               </v-text-field>
                             </v-col>
@@ -220,12 +225,12 @@
                                 disabled
                                 @keydown="validate($event, 'number')"
                                 v-model="show_by_id.mobileNo"
-                                :rules="rules.name"
                                 outlined
                                 dense
                                 required
                                 @input="checkPhoneNumber"
                                 maxlength="12"
+                                color="#ff6b81"
                               >
                               </v-text-field>
                             </v-col>
@@ -618,6 +623,7 @@
                   )
                 "
                 :placeholder="this.$t('username')"
+                color="#ff6b81"
               >
                 <template v-slot:append>
                   <v-icon v-if="relation.account_id" color="green"
@@ -659,6 +665,7 @@
                 outlined
                 v-model="relation.firstname_en"
                 :placeholder="this.$t('first name(english)')"
+                color="#ff6b81"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -671,6 +678,7 @@
                 outlined
                 v-model="relation.lastname_en"
                 :placeholder="this.$t('last name(english)')"
+                color="#ff6b81"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -683,6 +691,7 @@
                 outlined
                 v-model="relation.tel"
                 :placeholder="this.$t('phone number')"
+                color="#ff6b81"
               ></v-text-field>
             </v-col>
           </v-row>
