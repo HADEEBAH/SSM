@@ -43,72 +43,6 @@
       </template>
     </v-calendar>
 
-    <!-- MONTH -->
-
-    <v-bottom-sheet v-model="showModal">
-      <div class="bg-white rounded-t-lg pa-4">
-        <v-row dense>
-          <v-col class="flex align-center">
-            <label class="text-lg font-bold ma-2">{{
-              new Date(focus).toLocaleDateString("th-TH", {
-                day: "numeric",
-                weekday: "long",
-              })
-            }}</label>
-            <v-divider></v-divider>
-          </v-col>
-        </v-row>
-        <div v-if="event_date.length >= 0">
-          <template>
-            <div v-for="(event, event_index) in event_date" :key="event_index">
-              <v-card flat>
-                <v-card-text class="border-2 border-[#ff6b81]">
-                  <v-row dense>
-                    <v-col cols="auto" class="text-sm text-[#999999]">
-                      {{ `${event.start_time}` }}<br />{{ `${event.end_time}` }}
-                    </v-col>
-                    <v-col cols="auto">
-                      <v-icon small :color="event.color">mdi-circle</v-icon>
-                    </v-col>
-                    <v-col>
-                      <v-row dense>
-                        <label class="font-bold">{{ event.timed }} </label>
-                      </v-row>
-                      <v-row dense>
-                        <v-col> {{ $t("study by") }}: {{ event.name }} </v-col>
-                      </v-row>
-                      <v-row dense>
-                        <v-col class="text-sm">
-                          {{ $t("coach") }}: {{ event.subtitle }} <br />
-                          <div>
-                            <v-btn
-                              small
-                              text
-                              class="underline pa-0"
-                              color="#ff6b81"
-                              @click="ToStudentCourse(event)"
-                              >{{ $t("view course details") }}
-                            </v-btn>
-                          </div>
-                        </v-col>
-                      </v-row>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-card>
-            </div>
-          </template>
-        </div>
-        <div v-else>
-          <v-row>
-            <v-col class="text-lg font-bold" align="center">
-              {{ $t("course not found") }}
-            </v-col>
-          </v-row>
-        </div>
-      </div>
-    </v-bottom-sheet>
-
     <v-dialog v-model="dialog_detail" persistent max-width="600px">
       <v-card>
         <v-container>
@@ -356,11 +290,7 @@ export default {
     holidaySwitch: true,
   }),
 
-  watch: {
-    events(val) {
-      this.event_date.push(val);
-    },
-  },
+  watch: {},
   computed: {
     ...mapGetters({
       get_all_holidays: "ManageScheduleModules/getAllHolidays",
@@ -441,29 +371,7 @@ export default {
       this.details = data.event;
       this.dialog_detail = true;
     },
-    selectDate(date) {
-      this.event_date = [];
-      this.showModal = true;
-      this.events.forEach((event) => {
-        let [start, start_time] = event.start.split(" ");
-        let [end, end_time] = event.end.split(" ");
-        if (start_time !== "Invalid date" && end_time !== "Invalid date") {
-          if (start === end && start === date) {
-            this.event_date.push({
-              timed: event.timed,
-              name: event.name,
-              subtitle: event.subtitle,
-              coach: event.coach,
-              start_time: start_time,
-              end_time: end_time,
-              color: event.color,
-              courseId: event.courseId,
-            });
-          }
-        }
-      });
-    },
-
+  
     goToday() {
       this.focus = new Date();
     },

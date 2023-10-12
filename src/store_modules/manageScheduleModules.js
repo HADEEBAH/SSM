@@ -128,25 +128,26 @@ const manageScheduleModules = {
     async GetAllCourse(context) {
       context.commit("SetGetAllCourseIsLoading", true)
       try {
-        let config = {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Content-type": "Application/json",
-            Authorization: `Bearer ${VueCookie.get("token")}`,
-          },
-        };
+        // let config = {
+        //   headers: {
+        //     "Access-Control-Allow-Origin": "*",
+        //     "Content-type": "Application/json",
+        //     Authorization: `Bearer ${VueCookie.get("token")}`,
+        //   },
+        // };
 
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/admincourse/`, config)
-
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/admincourse/`, config)
+        let { data } = await axios.get(`http://localhost:3000/api/v1/schedule/admin`)
         if (data.statusCode === 200) {
           let arr_tmp = [];
 
           for await (let items of data.data) {
             arr_tmp.push(items.dates.date || items.dates.dates);
           }
-          await context.commit("SetGetDateArray", arr_tmp);
-          await context.commit("SetGetAllCourseIsLoading", false)
-          await context.commit("SetGetAllCourse", data.data);
+          context.commit("SetGetDateArray", arr_tmp);
+          context.commit("SetGetAllCourseIsLoading", false)
+          context.commit("SetGetAllCourse", data.data);
+         
         }
       } catch (error) {
         context.commit("SetGetAllCourseIsLoading", false)
@@ -321,7 +322,9 @@ const manageScheduleModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/admincourse/courseholiday`, config);
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/admincourse/courseholiday`, config);
+        let { data } = await axios.get(`http://localhost:3000/api/v1/schedule/courseholiday`, config);
+        
         if (data.statusCode === 200) {
           let eventSchadule = [];
           data.data.map((item) => {
