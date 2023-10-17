@@ -536,10 +536,11 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let user_detail = JSON.parse(localStorage.getItem("userDetail"));
-        const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${coach_id}`, config);
-        if (data.statusCode == 200) {
-          let courses_task = [];
+        // let user_detail = JSON.parse(localStorage.getItem("userDetail"));
+        // const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${coach_id}`, config);
+        let courses_task = [];
+        const { data } = await axios.get(`http://localhost:3000/api/v1/schedule/coach/${coach_id}`, config);
+        if(data.statusCode == 200){
           let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
           if (holidays.data.statusCode === 200) {
             for await (let holiday of holidays.data.data) {
@@ -553,190 +554,250 @@ const coachModules = {
           }
           for await (const course of data.data) {
             const course_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course.courseId}`);
-            if (course_data.data.statusCode === 200) {
-              if (course.coachLeaveCourses.length > 0) {
-                for await (const leaveCourse of course.coachLeaveCourses) {
-                  let startDate = null
-                  let endDate = null
-                  let start_time = null
-                  let end_time = null
-                  if (leaveCourse.teachCompensationDate && leaveCourse.teachCompensationStartTime && leaveCourse.teachCompensationEndTime) {
-                    start_time = leaveCourse.teachCompensationStartTime;
-                    end_time = leaveCourse.teachCompensationEndTime;
-                    const [start_hours, start_minutes] = start_time.split(":");
-                    const [end_hours, end_minutes] = end_time.split(":");
-                    startDate = new Date(leaveCourse.teachCompensationDate);
-                    startDate.setHours(start_hours);
-                    startDate.setMinutes(start_minutes);
-                    endDate = new Date(leaveCourse.teachCompensationDate);
-                    endDate.setHours(end_hours);
-                    endDate.setMinutes(end_minutes);
-                    if (courses_task.filter(v => v.course_id === course.courseId && v.time_id === course.timeId && v.day_of_week_id === course.dayOfWeekId && v.start_date === moment(startDate).format("YYYY-MM-DD")).length === 0) {
-                      courses_task.push({
-                        course_package_name: course.packageName,
-                        course_option_name: course.optionName,
-                        name: course.courseNameTh,
-                        subtitle: course.courseNameEng,
-                        course_id: course.courseId,
-                        time_id: course.timeId,
-                        type: course?.compType ? course?.compType : null,
-                        day_of_week_id: course.dayOfWeekId,
-                        coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
-                        coach_en: `${user_detail.first_name_en} ${user_detail.last_name_en}`,
-                        start_date: moment(startDate).format("YYYY-MM-DD"),
-                        start_date_str: moment(startDate).format("YYYY-MM-DD"),
-                        start: moment(startDate).format("YYYY-MM-DD HH:mm"),
-                        end: moment(endDate).format("YYYY-MM-DD HH:mm"),
-                        start_time: start_time,
-                        end_time: end_time,
-                        category_name: course_data.data.data.categoryNameTh,
-                        category_name_en: course_data.data.data.categoryNameEn,
-                        course_img: course_data.data.data.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}` : "",
-                        course_per_time: course_data.data.data.coursePerTime,
-                        show_summary: false,
-                        show_assessment: false,
-                        show_assessment_pantential: false,
-                      });
-                    }
-                  }
-                }
-              }
-              if (course.dates.date) {
-                for (const dates of course.dates.date) {
-                  let start_time = course.period.start;
-                  let end_time = course.period.end;
-                  const [start_hours, start_minutes] = start_time.split(":");
-                  const [end_hours, end_minutes] = end_time.split(":");
-                  const startDate = new Date(dates);
-                  startDate.setHours(start_hours);
-                  startDate.setMinutes(start_minutes);
-                  const endDate = new Date(dates);
-                  endDate.setHours(end_hours);
-                  endDate.setMinutes(end_minutes);
-                  if (courses_task.filter(v => v.course_id === course.courseId && v.time_id === course.timeId && v.day_of_week_id === course.dayOfWeekId && v.start_date === moment(startDate).format("YYYY-MM-DD")).length === 0) {
-                    courses_task.push({
-                      course_package_name: course.packageName,
-                      course_option_name: course.optionName,
-                      name: course_data.data.data.courseNameTh,
-                      subtitle: course_data.data.data.courseNameEn,
-                      course_id: course.courseId,
-                      time_id: course.timeId,
-                      type: course?.compType ? course?.compType : null,
-                      day_of_week_id: course.dayOfWeekId,
-                      coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
-                      coach_en: `${user_detail.first_name_en} ${user_detail.last_name_en}`,
-                      start_date: moment(startDate).format("YYYY-MM-DD"),
-                      start_date_str: moment(startDate).format("YYYY-MM-DD"),
-                      start: moment(startDate).format("YYYY-MM-DD HH:mm"),
-                      end: moment(endDate).format("YYYY-MM-DD HH:mm"),
-                      start_time: start_time,
-                      end_time: end_time,
-                      category_name: course_data.data.data.categoryNameTh,
-                      category_name_en: course_data.data.data.categoryNameEn,
-                      course_img: course_data.data.data.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}` : "",
-                      course_per_time: course_data.data.data.coursePerTime,
-                      show_summary: false,
-                      show_assessment: false,
-                      show_assessment_pantential: false,
-                    });
-                  }
-                }
-              } else if (course.dates.dates) {
-                for await (const dates of course.dates.dates) {
-                  let start_time = course.period.start;
-                  let end_time = course.period.end;
-                  const [start_hours, start_minutes] = start_time.split(":");
-                  const [end_hours, end_minutes] = end_time.split(":");
-                  const startDate = new Date(dates);
-                  startDate.setHours(start_hours);
-                  startDate.setMinutes(start_minutes);
-                  const endDate = new Date(dates);
-                  endDate.setHours(end_hours);
-                  endDate.setMinutes(end_minutes);
-                  if (courses_task.filter(v => v.course_id === course.courseId && v.time_id === course.timeId && v.day_of_week_id === course.dayOfWeekId && v.start_date === moment(startDate).format("YYYY-MM-DD")).length === 0) {
-                    courses_task.push({
-                      name: course.courseNameTh,
-                      subtitle: course.courseNameEn,
-                      course_id: course.courseId,
-                      time_id: course.timeId,
-                      day_of_week_id: course.dayOfWeekId,
-                      type: course?.compType ? course?.compType : null,
-                      coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
-                      coach_en: `${user_detail.first_name_en} ${user_detail.last_name_en}`,
-                      start_date: moment(startDate).format("YYYY-MM-DD"),
-                      start_date_str: moment(startDate).format("YYYY-MM-DD"),
-                      start: moment(startDate).format("YYYY-MM-DD HH:mm"),
-                      end: moment(endDate).format("YYYY-MM-DD HH:mm"),
-                      start_time: start_time,
-                      end_time: end_time,
-                      category_name: course_data.data.data.categoryNameTh,
-                      category_name_en: course_data.data.data.categoryNameEn,
-                      course_package_name: data.data.packageName,
-                      course_img: course_data.data.data.courseImg
-                        ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}`
-                        : "",
-                      course_per_time: course_data.data.data.coursePerTime,
-                      show_summary: false,
-                      show_assessment: false,
-                      show_assessment_pantential: false,
-                    });
-                  }
-                }
+            if(course_data.data.statusCode == 200){
+              for(const date of course.dates.date){
+                let start_time = course.period.start;
+                let end_time = course.period.end;
+                const [start_hours, start_minutes] = start_time.split(":");
+                const [end_hours, end_minutes] = end_time.split(":");
+                const startDate = new Date(date);
+                startDate.setHours(start_hours);
+                startDate.setMinutes(start_minutes);
+                const endDate = new Date(date);
+                endDate.setHours(end_hours);
+                endDate.setMinutes(end_minutes);
+                courses_task.push({
+                  course_option_name: course.optionName,
+                  name: course_data.data.data.courseNameTh,
+                  subtitle: course_data.data.data.courseNameEn,
+                  course_id: course.courseId,
+                  time_id: course.timeId,
+                  type: course?.compType ? course?.compType : null,
+                  day_of_week_id: course.dayOfWeekId,
+                  coach: course.coachName,
+                  coach_en: course.coachNameEn,
+                  start_date: moment(startDate).format("YYYY-MM-DD"),
+                  start_date_str: moment(startDate).format("YYYY-MM-DD"),
+                  start: moment(startDate).format("YYYY-MM-DD HH:mm"),
+                  end: moment(endDate).format("YYYY-MM-DD HH:mm"),
+                  start_time: start_time,
+                  end_time: end_time,
+                  category_name: course_data.data.data.categoryNameTh,
+                  category_name_en: course_data.data.data.categoryNameEn,
+                  course_package_name: course.packageName,
+                  course_img: course_data.data.data.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}` : "",
+                  course_per_time: course.hour_per_time,
+                  show_summary: false,
+                  show_assessment: false,
+                  show_assessment_pantential: false,
+                });
               }
             }
           }
-          const sub_coach = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/subcoach/${coach_id}`, config);
-          if (sub_coach.data.statusCode === 200) {
-            for await (const course of sub_coach.data.data) {
-              const course_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course.courseId}`);
-              if (course.coachLeaveCourses.length > 0) {
-                for await (const dates of course.coachLeaveCourses) {
-                  if (dates.type == "teach") {
-                    let start_time = course.period.start;
-                    let end_time = course.period.end;
-                    const [start_hours, start_minutes] = start_time.split(":");
-                    const [end_hours, end_minutes] = end_time.split(":");
-                    const startDate = new Date(dates.selectedDate);
-                    startDate.setHours(start_hours);
-                    startDate.setMinutes(start_minutes);
-                    const endDate = new Date(dates.selectedDate);
-                    endDate.setHours(end_hours);
-                    endDate.setMinutes(end_minutes);
-                    if (courses_task.filter(v => v.course_id === course.courseId && v.time_id === course.timeId && v.day_of_week_id === course.dayOfWeekId && v.start_date === moment(startDate).format("YYYY-MM-DD")).length === 0) {
-                      courses_task.push({
-                        course_package_name: course.packageName,
-                        course_option_name: course.optionName,
-                        name: course.courseNameTh,
-                        subtitle: course.courseNameEn,
-                        course_id: course.courseId,
-                        time_id: course.timeId,
-                        day_of_week_id: course.dayOfWeekId,
-                        type: course?.compType ? course?.compType : null,
-                        coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
-                        coach_en: `${user_detail.first_name_en} ${user_detail.last_name_en}`,
-                        start_date: moment(startDate).format("YYYY-MM-DD"),
-                        start_date_str: moment(startDate).format("YYYY-MM-DD"),
-                        start: moment(startDate).format("YYYY-MM-DD HH:mm"),
-                        end: moment(endDate).format("YYYY-MM-DD HH:mm"),
-                        start_time: start_time,
-                        end_time: end_time,
-                        category_name: course_data.data.data.categoryNameTh,
-                        category_name_en: course_data.data.data.categoryNameEn,
-                        course_img: course_data.data.data.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}` : "",
-                        course_per_time: course_data.data.data.coursePerTime,
-                        show_summary: false,
-                        show_assessment: false,
-                        show_assessment_pantential: false,
-                      });
-                    }
-                  }
-                }
-              }
-            }
-          }
-          context.commit("SetMyCourses", courses_task);
-          context.commit("SetMyCoursesIsLoading", false);
         }
+        context.commit("SetMyCourses", courses_task);
+        context.commit("SetMyCoursesIsLoading", false);
+        // if (data.statusCode == 200) {
+        //   let courses_task = [];
+        //   let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
+        //   if (holidays.data.statusCode === 200) {
+        //     for await (let holiday of holidays.data.data) {
+        //       courses_task.push({
+        //         type: 'holiday',
+        //         name: holiday.holidayName,
+        //         start_date: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
+        //         start: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`
+        //       });
+        //     }
+        //   }
+        //   for await (const course of data.data) {
+        //     console.log(course.dates.date)
+        //     const course_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course.courseId}`);
+        //     if (course_data.data.statusCode === 200) {
+        //       if (course.coachLeaveCourses.length > 0) {
+        //         for await (const leaveCourse of course.coachLeaveCourses) {
+        //           let startDate = null
+        //           let endDate = null
+        //           let start_time = null
+        //           let end_time = null
+        //           if (leaveCourse.teachCompensationDate && leaveCourse.teachCompensationStartTime && leaveCourse.teachCompensationEndTime) {
+        //             start_time = leaveCourse.teachCompensationStartTime;
+        //             end_time = leaveCourse.teachCompensationEndTime;
+        //             const [start_hours, start_minutes] = start_time.split(":");
+        //             const [end_hours, end_minutes] = end_time.split(":");
+        //             startDate = new Date(leaveCourse.teachCompensationDate);
+        //             startDate.setHours(start_hours);
+        //             startDate.setMinutes(start_minutes);
+        //             endDate = new Date(leaveCourse.teachCompensationDate);
+        //             endDate.setHours(end_hours);
+        //             endDate.setMinutes(end_minutes);
+        //             if (courses_task.filter(v => v.course_id === course.courseId && v.time_id === course.timeId && v.day_of_week_id === course.dayOfWeekId && v.start_date === moment(startDate).format("YYYY-MM-DD")).length === 0) {
+        //               courses_task.push({
+        //                 course_package_name: course.packageName,
+        //                 course_option_name: course.optionName,
+        //                 name: course.courseNameTh,
+        //                 subtitle: course.courseNameEng,
+        //                 course_id: course.courseId,
+        //                 time_id: course.timeId,
+        //                 type: course?.compType ? course?.compType : null,
+        //                 day_of_week_id: course.dayOfWeekId,
+        //                 coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
+        //                 coach_en: `${user_detail.first_name_en} ${user_detail.last_name_en}`,
+        //                 start_date: moment(startDate).format("YYYY-MM-DD"),
+        //                 start_date_str: moment(startDate).format("YYYY-MM-DD"),
+        //                 start: moment(startDate).format("YYYY-MM-DD HH:mm"),
+        //                 end: moment(endDate).format("YYYY-MM-DD HH:mm"),
+        //                 start_time: start_time,
+        //                 end_time: end_time,
+        //                 category_name: course_data.data.data.categoryNameTh,
+        //                 category_name_en: course_data.data.data.categoryNameEn,
+        //                 course_img: course_data.data.data.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}` : "",
+        //                 course_per_time: course_data.data.data.coursePerTime,
+        //                 show_summary: false,
+        //                 show_assessment: false,
+        //                 show_assessment_pantential: false,
+        //               });
+        //             }
+        //           }
+        //         }
+        //       }
+        //       if (course.dates.date) {
+        //         for (const dates of course.dates.date) {
+        //           let start_time = course.period.start;
+        //           let end_time = course.period.end;
+        //           const [start_hours, start_minutes] = start_time.split(":");
+        //           const [end_hours, end_minutes] = end_time.split(":");
+        //           const startDate = new Date(dates);
+        //           startDate.setHours(start_hours);
+        //           startDate.setMinutes(start_minutes);
+        //           const endDate = new Date(dates);
+        //           endDate.setHours(end_hours);
+        //           endDate.setMinutes(end_minutes);
+        //           if (courses_task.filter(v => v.course_id === course.courseId && v.time_id === course.timeId && v.day_of_week_id === course.dayOfWeekId && v.start_date === moment(startDate).format("YYYY-MM-DD")).length === 0) {
+        //             courses_task.push({
+        //               course_package_name: course.packageName,
+        //               course_option_name: course.optionName,
+        //               name: course_data.data.data.courseNameTh,
+        //               subtitle: course_data.data.data.courseNameEn,
+        //               course_id: course.courseId,
+        //               time_id: course.timeId,
+        //               type: course?.compType ? course?.compType : null,
+        //               day_of_week_id: course.dayOfWeekId,
+        //               coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
+        //               coach_en: `${user_detail.first_name_en} ${user_detail.last_name_en}`,
+        //               start_date: moment(startDate).format("YYYY-MM-DD"),
+        //               start_date_str: moment(startDate).format("YYYY-MM-DD"),
+        //               start: moment(startDate).format("YYYY-MM-DD HH:mm"),
+        //               end: moment(endDate).format("YYYY-MM-DD HH:mm"),
+        //               start_time: start_time,
+        //               end_time: end_time,
+        //               category_name: course_data.data.data.categoryNameTh,
+        //               category_name_en: course_data.data.data.categoryNameEn,
+        //               course_img: course_data.data.data.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}` : "",
+        //               course_per_time: course_data.data.data.coursePerTime,
+        //               show_summary: false,
+        //               show_assessment: false,
+        //               show_assessment_pantential: false,
+        //             });
+        //           }
+        //         }
+        //       } else if (course.dates.dates) {
+        //         for await (const dates of course.dates.dates) {
+        //           let start_time = course.period.start;
+        //           let end_time = course.period.end;
+        //           const [start_hours, start_minutes] = start_time.split(":");
+        //           const [end_hours, end_minutes] = end_time.split(":");
+        //           const startDate = new Date(dates);
+        //           startDate.setHours(start_hours);
+        //           startDate.setMinutes(start_minutes);
+        //           const endDate = new Date(dates);
+        //           endDate.setHours(end_hours);
+        //           endDate.setMinutes(end_minutes);
+        //           if (courses_task.filter(v => v.course_id === course.courseId && v.time_id === course.timeId && v.day_of_week_id === course.dayOfWeekId && v.start_date === moment(startDate).format("YYYY-MM-DD")).length === 0) {
+        //             courses_task.push({
+        //               name: course.courseNameTh,
+        //               subtitle: course.courseNameEn,
+        //               course_id: course.courseId,
+        //               time_id: course.timeId,
+        //               day_of_week_id: course.dayOfWeekId,
+        //               type: course?.compType ? course?.compType : null,
+        //               coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
+        //               coach_en: `${user_detail.first_name_en} ${user_detail.last_name_en}`,
+        //               start_date: moment(startDate).format("YYYY-MM-DD"),
+        //               start_date_str: moment(startDate).format("YYYY-MM-DD"),
+        //               start: moment(startDate).format("YYYY-MM-DD HH:mm"),
+        //               end: moment(endDate).format("YYYY-MM-DD HH:mm"),
+        //               start_time: start_time,
+        //               end_time: end_time,
+        //               category_name: course_data.data.data.categoryNameTh,
+        //               category_name_en: course_data.data.data.categoryNameEn,
+        //               course_package_name: data.data.packageName,
+        //               course_img: course_data.data.data.courseImg
+        //                 ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}`
+        //                 : "",
+        //               course_per_time: course_data.data.data.coursePerTime,
+        //               show_summary: false,
+        //               show_assessment: false,
+        //               show_assessment_pantential: false,
+        //             });
+        //           }
+        //         }
+        //       }
+        //     }
+        //   }
+        //   const sub_coach = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/subcoach/${coach_id}`, config);
+        //   if (sub_coach.data.statusCode === 200) {
+        //     for await (const course of sub_coach.data.data) {
+        //       const course_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course.courseId}`);
+        //       if (course.coachLeaveCourses.length > 0) {
+        //         for await (const dates of course.coachLeaveCourses) {
+        //           if (dates.type == "teach") {
+        //             let start_time = course.period.start;
+        //             let end_time = course.period.end;
+        //             const [start_hours, start_minutes] = start_time.split(":");
+        //             const [end_hours, end_minutes] = end_time.split(":");
+        //             const startDate = new Date(dates.selectedDate);
+        //             startDate.setHours(start_hours);
+        //             startDate.setMinutes(start_minutes);
+        //             const endDate = new Date(dates.selectedDate);
+        //             endDate.setHours(end_hours);
+        //             endDate.setMinutes(end_minutes);
+        //             if (courses_task.filter(v => v.course_id === course.courseId && v.time_id === course.timeId && v.day_of_week_id === course.dayOfWeekId && v.start_date === moment(startDate).format("YYYY-MM-DD")).length === 0) {
+        //               courses_task.push({
+        //                 course_package_name: course.packageName,
+        //                 course_option_name: course.optionName,
+        //                 name: course.courseNameTh,
+        //                 subtitle: course.courseNameEn,
+        //                 course_id: course.courseId,
+        //                 time_id: course.timeId,
+        //                 day_of_week_id: course.dayOfWeekId,
+        //                 type: course?.compType ? course?.compType : null,
+        //                 coach: `${user_detail.first_name_th} ${user_detail.last_name_th}`,
+        //                 coach_en: `${user_detail.first_name_en} ${user_detail.last_name_en}`,
+        //                 start_date: moment(startDate).format("YYYY-MM-DD"),
+        //                 start_date_str: moment(startDate).format("YYYY-MM-DD"),
+        //                 start: moment(startDate).format("YYYY-MM-DD HH:mm"),
+        //                 end: moment(endDate).format("YYYY-MM-DD HH:mm"),
+        //                 start_time: start_time,
+        //                 end_time: end_time,
+        //                 category_name: course_data.data.data.categoryNameTh,
+        //                 category_name_en: course_data.data.data.categoryNameEn,
+        //                 course_img: course_data.data.data.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}` : "",
+        //                 course_per_time: course_data.data.data.coursePerTime,
+        //                 show_summary: false,
+        //                 show_assessment: false,
+        //                 show_assessment_pantential: false,
+        //               });
+        //             }
+        //           }
+        //         }
+        //       }
+        //     }
+        //   }
+        //   console.log("courses_task",courses_task)
+        //   context.commit("SetMyCourses", courses_task);
+        //   context.commit("SetMyCoursesIsLoading", false);
+        // }
       } catch (error) {
         context.commit("SetMyCoursesIsLoading", false);
       }
@@ -964,7 +1025,8 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coach/leave/coach/status/${coach_leave_id}`, coach_leave_data, config)
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.patch(`${localhost}/api/v1/coach/leave/coach/status/${coach_leave_id}`, coach_leave_data, config)
         if (data.statusCode == 200) {
           if (coach_leave_data.status === "reject") {
             Swal.fire({

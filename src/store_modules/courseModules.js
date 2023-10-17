@@ -40,6 +40,7 @@ function dayOfWeekArray(day) {
 const CourseModules = {
   namespaced: true,
   state: {
+    no_check_in_student_list : [],
     course_types: [],
     courses_is_loading: false,
     course_is_loading: false,
@@ -151,6 +152,9 @@ const CourseModules = {
 
   },
   mutations: {
+    SetNoChackInStudentList(state,paylaod){
+      state.no_check_in_student_list = paylaod
+    },
     SetStudentPotentialListIsLoading(state, value) {
       state.student_potential_list_is_loading = value
     },
@@ -366,12 +370,15 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/course/${course_id}`, config)
+        let localhost = `http://localhost:3000/api/v1/schedule/manage-course/${course_id}`
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/course/${course_id}`, config)
+        let {data} = await axios.get(`${localhost}`, config)
         if (data.statusCode === 200) {
+          console.log(data)
           for await (let coach of data.data) {
             coach.checked = false
             let datesList = []
-            let coachDate = coach.allDates
+            let coachDate = coach
             if (!coachDate.cpo?.cpoId) {
               if (coachDate?.coachLeaveDate) {
                 for await (const dateLeave of coachDate?.coachLeaveDate) {
@@ -465,9 +472,17 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/date/${date}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/date/${date}`, config)  
         if (data.statusCode === 200) {
-          context.commit("SetStudentList", data.data)
+          if(data.data.length > 0){
+            context.commit("SetStudentList", data.data)
+          }else{
+            let scheduleStudent = await axios.get(`http://localhost:3000/api/v1/schedule/manage-course-student/${course_id}/${date}`, config)
+            if(scheduleStudent.data.statusCode == 200){
+              context.commit("SetNoChackInStudentList", scheduleStudent.data.data)
+            }
+          }
+          
           context.commit("SetStudentListIsLoadIng", false)
         }
       } catch (error) {
@@ -613,9 +628,9 @@ const CourseModules = {
         if (typeof course_data.course_img == "object") {
           payloadData.append("img_url", course_data.course_img)
         }
-        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-course/${course_id}`, payloadData, config)
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.patch(`${localhost}/api/v1/manage/update-course/${course_id}`, payloadData, config)
         if (data.statusCode === 200) {
-
           await context.dispatch("GetArtworkByCourse", { course_id: course_id })
           await context.dispatch("GetCourse", course_id)
           Swal.fire({
@@ -631,15 +646,30 @@ const CourseModules = {
           return await data.data
         }
       } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: VueI18n.t("something went wrong"),
-          timer: 3000,
-          showDenyButton: false,
-          showCancelButton: false,
-          showConfirmButton: false,
-          timerProgressBar: true,
-        })
+        if (error.response.data.message == "the current student more than course student recived") {
+          Swal.fire({
+            icon: "error",
+            title :  VueI18n.t("can not update course"),
+            text: VueI18n.t(error.response.data.message),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          context.dispatch("GetCourse",course_id)
+        }else{
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("something went wrong"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
+      
       }
     },
     // COURSE :: UPDATE COURSE COACH
@@ -820,7 +850,8 @@ const CourseModules = {
         })
         let payloadData = new FormData()
         payloadData.append("payload", JSON.stringify(payload))
-        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-cpo/${course_id}`, payloadData, config)
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.patch(`${localhost}/api/v1/manage/update-cpo/${course_id}`, payloadData, config)
         if (data.statusCode === 200) {
           Swal.fire({
             icon: "success",
@@ -834,15 +865,29 @@ const CourseModules = {
           })
         }
       } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: VueI18n.t("something went wrong"),
-          timer: 3000,
-          showDenyButton: false,
-          showCancelButton: false,
-          showConfirmButton: false,
-          timerProgressBar: true,
-        })
+        if (error.response.data.message == "the current student more than course student recived") {
+          Swal.fire({
+            icon: "error",
+            title :  VueI18n.t("can not update course"),
+            text: VueI18n.t(error.response.data.message),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          context.dispatch("GetCourse",course_id)
+        }else{
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("something went wrong"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
       }
     },
     // COURSE :: DELETE ARKWORK ID
@@ -1778,6 +1823,9 @@ const CourseModules = {
     }
   },
   getters: {
+    getNoChackInStudentList(state){
+      return state.no_check_in_student_list
+    },
     getStudentPotentialListIsLoading(state) {
       return state.student_potential_list_is_loading
     },

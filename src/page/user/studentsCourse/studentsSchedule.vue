@@ -1171,11 +1171,9 @@ export default {
       this.show_detail = true;
     },
   },
-
   beforeDestroy() {
     localStorage.removeItem("userRelationsAccountId");
   },
-
   computed: {
     ...mapGetters({
       student_data: "MyCourseModules/getStudentData",
