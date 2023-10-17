@@ -539,7 +539,8 @@ const coachModules = {
         // let user_detail = JSON.parse(localStorage.getItem("userDetail"));
         // const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${coach_id}`, config);
         let courses_task = [];
-        const { data } = await axios.get(`http://localhost:3000/api/v1/schedule/coach/${coach_id}`, config);
+        // const { data } = await axios.get(`http://localhost:3000/api/v1/schedule/coach/${coach_id}`, config);
+        const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/coach/${coach_id}`, config);
         if(data.statusCode == 200){
           let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
           if (holidays.data.statusCode === 200) {
@@ -1025,8 +1026,8 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.patch(`${localhost}/api/v1/coach/leave/coach/status/${coach_leave_id}`, coach_leave_data, config)
+        // let localhost = "http://localhost:3000"
+        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coach/leave/coach/status/${coach_leave_id}`, coach_leave_data, config)
         if (data.statusCode == 200) {
           if (coach_leave_data.status === "reject") {
             Swal.fire({

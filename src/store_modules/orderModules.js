@@ -706,8 +706,8 @@ const orderModules = {
                 total: data.data.totalPrice,
                 recipient: user_data.account_id,
               };
-              let endpoint = "http://localhost:3003"
-              // let endpoint = process.env.VUE_APP_URL;
+              // let endpoint = "http://localhost:3003"
+              let endpoint = process.env.VUE_APP_URL;
               let payment = await axios.patch(
                 `${endpoint}/api/v1/payment/data/${data.data.orderNumber}`,
                 payment_payload
