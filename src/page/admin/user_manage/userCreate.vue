@@ -89,6 +89,7 @@
                                 ? checkData.image
                                 : require(`@/assets/userManagePage/default_img_update_profile.svg`)
                             "
+                            :aspect-ratio="16 / 9"
                           >
                           </v-img>
                         </div>

@@ -127,8 +127,9 @@
                   <v-col align="center" class="rounded-lg pa-0">
                     <v-img
                       :src="preview_privilege_url"
-                      contain
-                      style="max-width: 200px"
+                      style="max-width: 300px"
+                      :aspect-ratio="16 / 9"
+                      class="rounded-lg"
                       align="right"
                     >
                       <v-btn
@@ -202,9 +203,9 @@
                   >
                     <v-img
                       :src="file"
-                      contain
-                      max-height="200"
-                      max-width="200"
+                      style="max-width: 300px"
+                      :aspect-ratio="16 / 9"
+                      class="rounded-lg"
                       align="right"
                     >
                       <v-btn
