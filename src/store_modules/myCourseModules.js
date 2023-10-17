@@ -130,12 +130,9 @@ const myCourseModules = {
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/student/${type}/${account_id}`, config);
                 // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
                 if (data.statusCode === 200) {
-                    console.log(data.data)
                     for await (let course of data.data) {
-                        console.log("course >>",course)
                         // course.day_name = course.dates.day ? dayOfWeekArray(course.dates.day) : course.dates.day
                         for (const date of course.dates.date) {
-                            console.log("course >>",date)
                             // if (course.period.start !== "Invalid date" && course.period.end !== "Invalid date") {
                             // }
                             dataCourseSchedule.dates.push({
@@ -147,7 +144,7 @@ const myCourseModules = {
                                 end_time: course.period.end,
                                 subtitle: `${course.coachName}(${course.coachNameEn})`,
                                 courseId: course.courseId,
-                                test1: course
+                                // test1: course
                             })
                         }
                     }

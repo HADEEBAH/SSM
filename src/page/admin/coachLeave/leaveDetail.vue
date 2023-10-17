@@ -642,7 +642,7 @@ export default {
         month: "short",
         day: "numeric"
       };
-      console.log(new Date(date).toLocaleDateString(this.$i18n.locale =='th' ? "th-TH" : "en-US", options))
+      // console.log(new Date(date).toLocaleDateString(this.$i18n.locale =='th' ? "th-TH" : "en-US", options))
       course.compensationDate_str = date
     },
     closeDisapprovedDialog() {

@@ -374,7 +374,6 @@ const CourseModules = {
         // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/course/${course_id}`, config)
         let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course/${course_id}`, config)
         if (data.statusCode === 200) {
-          console.log(data)
           for await (let coach of data.data) {
             coach.checked = false
             let datesList = []

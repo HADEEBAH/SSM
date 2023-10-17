@@ -263,7 +263,6 @@ export default {
       }
     },
     selectedDate(data) {
-      console.log("data :>> ", data);
       if (!data.event.type) {
         this.$router.push({
           name: "StudentCourse",
@@ -308,7 +307,6 @@ export default {
       });
     },
     colorOfDay() {
-      console.log(this.events)
       this.events.forEach((event) => {
         if (event?.type === "holiday") {
           event.color = "#f19a5a";
