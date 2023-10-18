@@ -12,7 +12,7 @@
         </v-col>
       </v-row>
       <div v-if="cart_list.length > 0">
-        <v-row class="mb-16" ref="cart_list">
+        <v-row class="mb-5" ref="cart_list">
           <v-col
             cols="12"
             v-for="(item, index_item) in cart_list"
@@ -23,7 +23,11 @@
                 <!-- img -->
                 <v-col cols="12" sm="4">
                   <v-img
-                    :src="item.course_img"
+                    :src="
+                      item.course_img
+                        ? item.course_img
+                        : require(`@/assets/course/default_course_img.svg`)
+                    "
                     :aspect-ratio="16 / 9"
                     class="rounded-lg my-5 mx-3"
                     style="max-width: 500px"
@@ -165,7 +169,7 @@
             </v-card>
           </v-col>
         </v-row>
-        <v-row v-if="isLoading">
+        <v-row v-if="isDataReceived">
           <v-col cols="12" align="center">
             <v-progress-circular
               indeterminate
@@ -307,21 +311,25 @@ export default {
     user_login: {},
     isLoading: true,
     isStopLoading: false,
+    scrollTop: 0,
     countDatePerPage: 0,
+    isDataReceived: false,
+    waitingProcess: false,
+    sameHistoryLength: false,
   }),
   created() {
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
-    this.GetCartList({
-      account_id: this.user_login.account_id,
-      limit: 3,
-      page: 1,
-    });
   },
   mounted() {
     window.addEventListener("scroll", this.handleScroll);
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "cart");
     this.cart_list.map((val) => {
       val.checked = false;
+    });
+    this.GetCartList({
+      account_id: this.user_login.account_id,
+      limit: 5,
+      page: 1,
     });
   },
   destroyed() {
@@ -341,34 +349,76 @@ export default {
       this.policy = false;
       this.policy_show = false;
     },
+    // handleScroll() {
+    //   const distanceFromBottom =
+    //     window.innerHeight + window.scrollY - document.body.offsetHeight;
+    //   if (this.$refs.cart_list) {
+    //     const scrollThreshold =
+    //       this.$refs.cart_list.getBoundingClientRect().bottom;
+    //     if (distanceFromBottom > scrollThreshold) {
+    //       this.loadMoreData();
+    //     }
+    //   }
+    // },
     handleScroll() {
-      const distanceFromBottom =
-        window.innerHeight + window.scrollY - document.body.offsetHeight;
-      if (this.$refs.cart_list) {
-        const scrollThreshold =
-          this.$refs.cart_list.getBoundingClientRect().bottom;
-        if (distanceFromBottom > scrollThreshold) {
-          this.loadMoreData();
+      this.scrollTop = window.scrollY; // ตัวเลขเมื่อ scroll ตัวเลขเริ่มนับจากบนสุด = 0
+      let device = document.body.offsetHeight - 56; // ค่าของหน้าจอ device
+      let ref = this.$refs.cart_list?.clientHeight; // ค่ามาจาก ref
+      let countA = this.scrollTop + device;
+
+      if (countA >= ref && !this.sameHistoryLength) {
+        this.loadMoreData();
+      }
+
+      if (countA < ref) {
+        this.sameHistoryLength = false;
+      }
+    },
+    async loadMoreData() {
+      this.countDatePerPage = this.cart_list?.length;
+
+      if (!this.isDataReceived) {
+        this.isDataReceived = true;
+
+        if (!this.waitingProcess) {
+          this.waitingProcess = true;
+
+          await this.GetCartList({
+            account_id: this.user_login?.account_id,
+            limit: this.cart_list_option.limit,
+            page: this.cart_list_option.page + 1,
+          });
+
+          this.isDataReceived = false;
+          this.waitingProcess = false;
+
+          if (this.cart_list?.length === this.countDatePerPage) {
+            this.sameHistoryLength = true;
+          } else {
+            this.sameHistoryLength = false;
+          }
         }
       }
     },
-    loadMoreData() {
-      this.countDatePerPage = this.cart_list_option.count;
-      if (!this.isStopLoading) {
-        this.GetCartList({
-          account_id: this.user_login.account_id,
-          limit: this.cart_list_option.limit,
-          page: this.cart_list_option.page + 1,
-        }).then(() => {
-          if (this.countDatePerPage === this.cart_list_option.count) {
-            setTimeout(() => {
-              this.isLoading = false;
-            }, 1000);
-            this.isStopLoading = true;
-          }
-        });
-      }
-    },
+
+    // loadMoreData() {
+    //   this.countDatePerPage = this.cart_list_option.count;
+    //   if (!this.isStopLoading) {
+    //     this.GetCartList({
+    //       account_id: this.user_login.account_id,
+    //       limit: this.cart_list_option.limit,
+    //       page: this.cart_list_option.page + 1,
+    //     }).then(() => {
+    //       if (this.countDatePerPage === this.cart_list_option.count) {
+    //         setTimeout(() => {
+    //           this.isLoading = false;
+    //         }, 1000);
+    //         this.isStopLoading = true;
+    //       }
+    //     });
+    //   }
+    // },
+
     removeCart(cart_id) {
       Swal.fire({
         icon: "question",

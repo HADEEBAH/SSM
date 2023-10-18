@@ -346,8 +346,6 @@ export default {
     scrollTop: 0,
     countDatePerPage: 0,
     isDataReceived: false,
-    previousData: [],
-    data: [],
     waitingProcess: false,
     sameHistoryLength: false,
   }),
