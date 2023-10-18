@@ -733,9 +733,9 @@ const orderModules = {
                 recipient: user_data.account_id,
               };
               // let endpoint = "http://localhost:3003"
-              // let endpoint = process.env.VUE_APP_URL;
+              let endpoint = process.env.VUE_APP_URL;
               let payment = await axios.patch(
-                `${process.env.VUE_APP_URL}/api/v1/payment/data/${data.data.orderNumber}`,
+                `${endpoint}/api/v1/payment/data/${data.data.orderNumber}`,
                 payment_payload
               );
               if (payment.data.statusCode === 200) {

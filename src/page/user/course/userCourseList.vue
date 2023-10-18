@@ -82,7 +82,7 @@
       <v-row dense ref="course_list">
         <template v-if="!courses_is_loading">
           <v-col
-            cols="12"
+            cols="6"
             sm="4"
             v-for="(course, course_index) in search_results.filter(
               (v) => v.course_type_id === type_selected
@@ -177,7 +177,8 @@
         </template>
         <template v-else>
           <v-col
-            cols="4"
+            cols="6"
+            sm="4"
             v-for="(course, course_index) in 6"
             :key="course_index"
           >

@@ -95,18 +95,37 @@
           {{ formatDate(item.createdDate) }}
         </template>
         <template v-slot:[`item.status`]="{ item }">
-          <v-autocomplete
+          <v-select
+            @change="update(item.reserveId, item)"
             dense
             outlined
             hide-details
-            @change="update(item.reserveId, item)"
             item-color="pink"
             :items="status"
             item-text="label"
             item-value="value"
             v-model="item.status"
           >
-          </v-autocomplete>
+            <template v-slot:selection="{ item }">
+              <v-list-item-title>
+                <v-icon :color="item.color">
+                  {{ item.icon }}
+                </v-icon>
+                {{ item.label }}
+              </v-list-item-title>
+            </template>
+
+            <template v-slot:item="{ props, item }">
+              <v-list-item-avatar v-bind="props">
+                <v-icon :color="item.color">
+                  {{ item.icon }}
+                </v-icon>
+              </v-list-item-avatar>
+              <v-list-item-title v-bind="props">
+                {{ item.label }}
+              </v-list-item-title>
+            </template>
+          </v-select>
         </template>
         <!-- เมื่อค้นหาปล้วไม่มีข้อมูล -->
         <template v-slot:[`no-results`]>
@@ -154,9 +173,24 @@ export default {
     },
     status() {
       return [
-        { label: this.$t("waiting"), value: "waiting" },
-        { label: this.$t("Confirmed"), value: "contacted" },
-        { label: this.$t("canceled"), value: "cancel" },
+        {
+          label: this.$t("waiting"),
+          value: "waiting",
+          icon: "mdi-timer-sand-complete",
+          color: "#f1c232",
+        },
+        {
+          label: this.$t("Confirmed"),
+          value: "contacted",
+          icon: "mdi-check-circle",
+          color: "green",
+        },
+        {
+          label: this.$t("canceled"),
+          value: "cancel",
+          icon: "mdi-close-circle",
+          color: "red",
+        },
       ];
     },
     columns() {

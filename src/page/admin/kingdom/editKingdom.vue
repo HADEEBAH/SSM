@@ -3,20 +3,19 @@
     <v-form ref="category_form" v-model="category_form">
       <headerPage :title="$t('edit wls')" class="my-5"></headerPage>
       <label-custom :text="$t('upload the cover image of wls')"></label-custom>
-      <v-card style="border: dashed blue">
-        <v-card-title primary-title align="end">
-          <!-- <v-btn icon v-if="preview_url">
-            <v-icon color="#ff6b81" @click="closeImage()"
-              >mdi-close-circle</v-icon
-            >
-          </v-btn> -->
-        </v-card-title>
+      <v-card
+        class="border-dashed border-2 rounded-lg my-3"
+        style="border: dashed rgb(255, 107, 129)"
+      >
+        <v-card-title primary-title align="end"> </v-card-title>
         <v-card-text>
           <div v-if="category.categoryImg">
             <v-img
               v-if="showData"
-              style="max-width: 200px; margin-left: auto; margin-right: auto"
+              style="max-width: 300px; margin-left: auto; margin-right: auto"
               :src="showImg(category.categoryImg)"
+              :aspect-ratio="16 / 9"
+              class="rounded-lg"
             >
               <template v-slot:placeholder>
                 <v-row class="fill-height ma-0" align="center" justify="center">
@@ -30,9 +29,10 @@
             <div v-else>
               <v-img
                 @click="openFileSelector"
-                class="text-right"
-                style="max-width: 200px; margin-left: auto; margin-right: auto"
+                class="text-right rounded-lg"
+                style="max-width: 300px; margin-left: auto; margin-right: auto"
                 :src="preview_url ? preview_url : showImg(category.categoryImg)"
+                :aspect-ratio="16 / 9"
               >
                 <template v-slot:placeholder>
                   <v-row
@@ -46,15 +46,10 @@
                     ></v-progress-circular>
                   </v-row>
                 </template>
-                <v-btn icon v-if="preview_url">
-                  <v-icon color="#ff6b81" @click="closeImage()"
-                    >mdi-close-circle</v-icon
-                  >
-                </v-btn>
               </v-img>
               <v-row v-if="!preview_url">
-                <v-col cols="12" class="flex align-center justify-center mt-5">
-                  <v-btn outlined color="blue" @click="openFileSelector">{{
+                <v-col cols="12" class="flex align-center justify-center my-5">
+                  <v-btn outlined color="#ff6b81" @click="openFileSelector">{{
                     $t("select file")
                   }}</v-btn>
                   <input
@@ -68,26 +63,30 @@
               </v-row>
             </div>
           </div>
-          <div v-else class="text-center">
-            <!-- <v-progress-circular
-              indeterminate
-              :size="70"
-              :width="7"
-              color="#ff6b81"
-            ></v-progress-circular> -->
-            <v-img
-              @click="openFileSelector"
-              class="text-right"
-              style="max-width: 200px; margin-left: auto; margin-right: auto"
-              align="right"
-              :src="preview_url ? preview_url : showImg(category.categoryImg)"
-            >
-              <v-btn icon v-if="preview_url">
-                <v-icon color="#ff6b81" @click="closeImage()"
-                  >mdi-close-circle</v-icon
+          <div v-else>
+            <v-row v-if="preview_url">
+              <v-col class="flex align-center justify-center">
+                <v-img
+                  @click="openFileSelector"
+                  class="text-right rounded-lg"
+                  style="
+                    max-width: 300px;
+                    margin-left: auto;
+                    margin-right: auto;
+                  "
+                  align="right"
+                  :src="
+                    preview_url ? preview_url : showImg(category.categoryImg)
+                  "
                 >
-              </v-btn>
-            </v-img>
+                  <v-btn icon v-if="preview_url">
+                    <v-icon color="#ff6b81" @click="closeImage()"
+                      >mdi-close-circle</v-icon
+                    >
+                  </v-btn>
+                </v-img>
+              </v-col>
+            </v-row>
             <v-row v-if="!preview_url">
               <v-col cols="12" class="flex align-center justify-center">
                 <v-img
@@ -116,10 +115,10 @@
                 class="flex align-center justify-center text-caption"
               >
               </v-col>
-              <v-col cols="12" class="flex align-center justify-center mt-5">
+              <v-col cols="12" class="flex align-center justify-center">
                 <v-btn
                   outlined
-                  color="blue"
+                  color="#ff6b81"
                   @click="openFileSelector"
                   :disabled="showData"
                   >{{ $t("select file") }}</v-btn
@@ -295,6 +294,7 @@ export default {
 
     closeImage() {
       this.preview_url = null;
+      this.file = null;
     },
     closeDialog() {
       this.dialog_show = false;

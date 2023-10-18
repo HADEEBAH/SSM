@@ -7,8 +7,14 @@
         style="border: dashed rgb(255, 107, 129)"
       >
         <v-row v-if="preview_url">
-          <v-col align="center" class="rounded-lg pa-0">
-            <v-img :src="preview_url" style="max-width: 200px" align="right">
+          <v-col align="center" class="rounded-lg pa-0 my-3">
+            <v-img
+              :src="preview_url"
+              style="max-width: 500px"
+              :aspect-ratio="16 / 9"
+              class="rounded-lg"
+              align="right"
+            >
               <v-btn
                 v-if="!disable"
                 icon
@@ -1001,8 +1007,8 @@ export default {
         .getElementsByTagName("input")[0]
         .focus();
     },
-    ChangeHours(hours, course_hours) {
-      console.log("couser_hours", course_hours);
+    ChangeHours(hours) {
+      // console.log("couser_hours", course_hours);
       if (hours) {
         this.course_data.course_hours =
           parseInt(hours.HH) + "." + parseInt(hours.mm);

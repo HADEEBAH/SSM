@@ -344,7 +344,9 @@ const loginModules = {
                     if (route.name === "Login") {
                         router.replace({ name: "UserKingdom" })
                     } else {
-                        window.location.href = `${process.env.VUE_APP_URL}${route.path}`
+                        // window.location.href = `${process.env.VUE_APP_URL}${route.path}`
+                        window.location.href = `http://localhost:8080${route.path}`
+                        // alert(`http://localhost:8080${route.path}`)
                     }
                 }
             } catch (response) {
