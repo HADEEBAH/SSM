@@ -357,6 +357,8 @@ const loginModules = {
                                 }else{
                                     router.replace({ name: "UserKingdom" })
                                 }
+                            }else{
+                                window.location.href = `${process.env.VUE_APP_URL}${route.path}`
                             }   
                           
                         }
