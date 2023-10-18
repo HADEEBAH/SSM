@@ -15,6 +15,13 @@ router.beforeEach((to, from, next) => {
   window.scrollTo({
     top: 0,
   })
+
+  if(to.query.token){
+    VueCookie.delete("token")
+    localStorage.removeItem("userDetail")
+    localStorage.removeItem("Order")
+    localStorage.removeItem("relations")
+  }
   if (!VueCookie.get("token")) {
     localStorage.removeItem("userDetail")
   }

@@ -1007,8 +1007,8 @@ export default {
         .getElementsByTagName("input")[0]
         .focus();
     },
-    ChangeHours(hours, course_hours) {
-      console.log("couser_hours", course_hours);
+    ChangeHours(hours) {
+      // console.log("couser_hours", course_hours);
       if (hours) {
         this.course_data.course_hours =
           parseInt(hours.HH) + "." + parseInt(hours.mm);

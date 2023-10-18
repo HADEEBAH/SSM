@@ -120,45 +120,33 @@ const myCourseModules = {
                     }
                 }
                 const dataCourseSchedule = { dates: [] };
-                // let { data } = await axios.get(` http://localhost:3000/api/v1/mycourse/student/${account_id}`, config);
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
+                let type = "student"
+                if(data_local.roles.includes('R_4')){
+                    type = "parent"
+                }else if(data_local.roles.includes('R_5')){
+                    type = "student"
+                }
+                
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/student/${type}/${account_id}`, config);
+                // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
                 if (data.statusCode === 200) {
                     for await (let course of data.data) {
-                        course.day_name = course.dates.day ? dayOfWeekArray(course.dates.day) : course.dates.day
+                        // course.day_name = course.dates.day ? dayOfWeekArray(course.dates.day) : course.dates.day
                         for (const date of course.dates.date) {
-                            if (course.period.start !== "Invalid date" && course.period.end !== "Invalid date") {
-                                dataCourseSchedule.dates.push({
-                                    start: date.replace(" 00:00:00", "") + ' ' + course.period.start,
-                                    end: date.replace(" 00:00:00", "") + ' ' + course.period.end,
-                                    name: data_local.roles.includes('R_5') ? `${course.courseNameTh}(${course.courseNameEng})` : `${VueI18n.locale == 'th' ? course.student.firstNameTh : course.student.firstNameEng} : ${course.courseNameTh} (${course.courseNameEng})`,
-                                    timed: course.student.firstNameTh,
-                                    start_time: course.period.start,
-                                    end_time: course.period.end,
-                                    subtitle: course.coachName,
-                                    courseId: course.courseId,
-                                    test1: course
-                                })
-                            }
+                            // if (course.period.start !== "Invalid date" && course.period.end !== "Invalid date") {
+                            // }
+                            dataCourseSchedule.dates.push({
+                                start: date + ' ' + course.period.start,
+                                end: date + ' ' + course.period.end,
+                                name: data_local.roles.includes('R_5') ? `${course.courseName.courseNameTh}(${course.courseName.courseNameEn})` : `${VueI18n.locale == 'th' ? course.studentName : course.studentNameEn} : ${course.courseName.courseNameTh} (${course.courseName.courseNameEn})`,
+                                timed: course.studentName,
+                                start_time: course.period.start,
+                                end_time: course.period.end,
+                                subtitle: `${course.coachName}(${course.coachNameEn})`,
+                                courseId: course.courseId,
+                                // test1: course
+                            })
                         }
-                        if (course?.coachLeave) {
-                            for (let coachLaeve of course?.coachLeave) {
-                                if (coachLaeve.teachCompensationStartTime && coachLaeve.teachCompensationEndTime) {
-                                    dataCourseSchedule.dates.push({
-                                        start: coachLaeve.teachCompensationDate + " " + coachLaeve.teachCompensationStartTime,
-                                        end: coachLaeve.teachCompensationDate + " " + coachLaeve.teachCompensationEndTime,
-                                        name: data_local.roles.includes('R_5') ? `${course.courseNameTh}(${course.courseNameEng})` : `${VueI18n.locale == 'th' ? course.student.firstNameTh : course.student.firstNameEng} : ${course.courseNameTh} (${course.courseNameEng})`,
-                                        timed: course.student.firstNameTh,
-                                        start_time: coachLaeve.teachCompensationStartTime,
-                                        end_time: coachLaeve.teachCompensationEndTime,
-                                        subtitle: course.coachName,
-                                        courseId: course.courseId,
-                                        test2: course
-
-                                    })
-                                }
-                            }
-                        }
-
                     }
 
                     let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);

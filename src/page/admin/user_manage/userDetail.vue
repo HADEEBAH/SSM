@@ -1614,7 +1614,7 @@ export default {
       }
     },
     removeFile() {
-      console.log("removeFile");
+      // console.log("removeFile");
       this.certificate_data.file = null;
       this.certificate_data.fileName = "";
     },
@@ -1644,7 +1644,7 @@ export default {
           });
         }
       } else if (this.certificate_data.state == "edit") {
-        console.log(this.certificate_data);
+        // console.log(this.certificate_data);
         this.UpdateCertificate({
           certificate_data: {
             ...this.certificate_data,

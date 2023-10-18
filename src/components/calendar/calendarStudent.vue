@@ -161,7 +161,7 @@ import { mapActions, mapGetters } from "vuex";
 import { shortMonthToLongMonth } from "@/functions/functions";
 
 export default {
-  name: "calendarCoach",
+  name: "calendarStudent",
   props: {
     type: { type: String, default: "month" },
     events: { type: Array },
@@ -198,9 +198,9 @@ export default {
       return this.cal ? this.cal.timeToY(this.cal.times.now) + "px" : "-10px";
     },
   },
-  created() {
-    this.colorOfDay();
-  },
+  // created() {
+  //   this.colorOfDay();
+  // },
   mounted() {
     let today = new Date();
     this.start_of_week = new Date(
@@ -263,7 +263,6 @@ export default {
       }
     },
     selectedDate(data) {
-      console.log("data :>> ", data);
       if (!data.event.type) {
         this.$router.push({
           name: "StudentCourse",
@@ -309,7 +308,7 @@ export default {
     },
     colorOfDay() {
       this.events.forEach((event) => {
-        if (event.type === "holiday") {
+        if (event?.type === "holiday") {
           event.color = "#f19a5a";
         } else {
           switch (new Date(event.start).getDay()) {

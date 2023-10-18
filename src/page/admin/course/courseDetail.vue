@@ -586,7 +586,7 @@
                         search_student_list
                           ? search_student_datas.length === 0
                           : coach_list?.filter(
-                              (v) => v.allDates?.studentArr.length > 0
+                              (v) => v?.studentArr.length > 0
                             ).length === 0
                       "
                     >
@@ -605,12 +605,12 @@
                         v-for="(coach, coach_index) in search_student_list
                           ? search_student_datas
                           : coach_list?.filter(
-                              (v) => v.allDates?.studentArr.length > 0
+                              (v) => v?.studentArr.length > 0
                             )"
                         :key="`${coach_index}-coach_index`"
                       >
                         <v-card
-                          v-if="coach.allDates?.studentArr.length > 0"
+                          v-if="coach?.studentArr.length > 0"
                           outlined
                           dense
                           class="rounded-lg cursor-pointer mb-3 bg-[#FCFCFC]"
@@ -639,8 +639,8 @@
                                 {{ $t("coach") }}:
                                 {{
                                   $i18n.locale == "th"
-                                    ? `${coach.firstNameTh} ${coach.lastNameTh}`
-                                    : `${coach.firstNameEn} ${coach.lastNameEn}`
+                                    ? `${coach.coachName}`
+                                    : `${coach.coachNameEn}`
                                 }}
                               </v-col>
                               <v-col
@@ -768,7 +768,7 @@
                               class="mb-3 font-bold"
                               v-if="
                                 coach.datesList.length > 0 &&
-                                coach.allDates.studentArr.length > 0
+                                coach.studentArr.length > 0
                               "
                             >
                               <v-col cols="auto">
@@ -791,7 +791,7 @@
                             <v-card
                               v-if="
                                 coach.datesList.length === 0 ||
-                                coach.allDates.studentArr.length === 0
+                                coach.studentArr.length === 0
                               "
                               outlined
                               class="my-3"
@@ -806,7 +806,7 @@
                             <div
                               v-if="
                                 coach.datesList.length > 0 &&
-                                coach.allDates.studentArr.length > 0
+                                coach.studentArr.length > 0
                               "
                             >
                               <div
@@ -1101,6 +1101,7 @@
                                             </v-card-text>
                                           </v-card>
                                         </div>
+                                        <!-- NO student check in -->
                                         <div v-else>
                                           <v-card
                                             class="mb-2"
@@ -1108,9 +1109,10 @@
                                             dense
                                             v-for="(
                                               student, student_index
-                                            ) in date.students"
+                                            ) in no_check_in_student_list"
                                             :key="`${student_index}-index`"
                                           >
+                                          <!-- {{student }} -->
                                             <v-card-text class="pa-2">
                                               <v-row
                                                 dense
@@ -1122,8 +1124,8 @@
                                                 <v-col cols align="center"
                                                   >{{
                                                     $i18n.locale == "th"
-                                                      ? `${student.firstNameTh} ${student.lastNameTh}`
-                                                      : `${student.firstNameEn} ${student.lastNameEn}`
+                                                      ? `${student.studentName}`
+                                                      : `${student.studentNameEn}`
                                                   }}
                                                 </v-col>
 
@@ -1137,8 +1139,8 @@
                                                 >
                                                   {{
                                                     $i18n.locale == "th"
-                                                      ? date.cpo?.optionName
-                                                      : date.cpo?.optionNameEn
+                                                      ? student.optionName
+                                                      : student.optionNameEn
                                                   }}
                                                 </v-col>
                                                 <v-col
@@ -1320,7 +1322,7 @@
                         search_student_potential
                           ? search_student_potential_datas.length === 0
                           : coach_list.filter(
-                              (v) => v.allDates.studentPotentialArr.length > 0
+                              (v) => v.studentPotentialArr.length > 0
                             ).length === 0
                       "
                     >
@@ -1339,7 +1341,7 @@
                         v-for="(coach, coach_index) in search_student_potential
                           ? search_student_potential_datas
                           : coach_list.filter(
-                              (v) => v.allDates.studentPotentialArr.length > 0
+                              (v) => v.studentPotentialArr.length > 0
                             )"
                         :key="`${coach_index}-potential_index`"
                       >
@@ -2171,8 +2173,8 @@ export default {
       student_list_is_loading: "CourseModules/getStudentListIsLoading",
       student_reserve_list: "CourseModules/getStudentReserveList",
       student_potential_list: "CourseModules/getStudentPotentialList",
-      student_potential_list_is_loading:
-        "CourseModules/getStudentPotentialListIsLoading",
+      student_potential_list_is_loading:"CourseModules/getStudentPotentialListIsLoading",
+      no_check_in_student_list:"CourseModules/getNoChackInStudentList",
     }),
     breadcrumbs() {
       return [
@@ -2260,13 +2262,13 @@ export default {
       let coach_list_search = [];
       const regex = new RegExp(search.trim(), "i");
       for (let coach of this.coach_list.filter(
-        (v) => v.allDates.studentPotentialArr.length > 0
+        (v) => v.studentPotentialArr.length > 0
       )) {
         const coach_full_name = `${coach.firstNameTh} ${coach.lastNameTh}`;
         if (coach_full_name.search(regex) > -1) {
           coach_list_search.push(coach);
         }
-        for (let student of coach.allDates.studentPotentialArr) {
+        for (let student of coach.studentPotentialArr) {
           const student_full_name = `${student.firstNameTh} ${student.lastNameTh}`;
           if (student_full_name.search(regex) > -1) {
             if (
@@ -2287,13 +2289,13 @@ export default {
       let coach_list_search = [];
       const regex = new RegExp(search.trim(), "i");
       for (let coach of this.coach_list.filter(
-        (v) => v.allDates.studentArr.length > 0
+        (v) => v.studentArr.length > 0
       )) {
         const coach_full_name = `${coach.firstNameTh} ${coach.lastNameTh}`;
         if (coach_full_name.search(regex) > -1) {
           coach_list_search.push(coach);
         }
-        for (let student of coach.allDates.studentArr) {
+        for (let student of coach.studentArr) {
           const student_full_name = `${student.firstNameTh} ${student.lastNameTh}`;
           if (student_full_name.search(regex) > -1) {
             if (
@@ -2357,7 +2359,7 @@ export default {
       let dow = [];
       this.dow_option = [];
       if (selected_coach >= 0) {
-        let coach = this.coach_list[selected_coach].allDates;
+        let coach = this.coach_list[selected_coach];
         for await (const day of coach.dates.day) {
           if (dow.length === 0) {
             dow.push(this.day_option.filter((v) => v.value == day)[0]);
@@ -2371,7 +2373,7 @@ export default {
     async filterPackageCoach(selected_coach) {
       this.package_option = [];
       if (selected_coach >= 0) {
-        let coach = this.coach_list[selected_coach].allDates;
+        let coach = this.coach_list[selected_coach];
         if (this.package_option.length === 0) {
           this.package_option.push(coach.cpo);
         } else if (
@@ -2386,7 +2388,7 @@ export default {
     async filterTimeCoach(selected_coach) {
       this.time_option = [];
       if (selected_coach >= 0) {
-        let coach = this.coach_list[selected_coach].allDates;
+        let coach = this.coach_list[selected_coach];
         if (this.time_option.length > 0) {
           this.time_option.push(coach.time);
         } else if (
@@ -2634,7 +2636,7 @@ export default {
               course_id: this.course_data.course_id,
               course_data: this.course_data,
             });
-            if (student_list.students?.length > 0) {
+            if (student_list?.students?.length > 0) {
               const options = {
                 year: "numeric",
                 month: "long",
