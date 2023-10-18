@@ -40,6 +40,7 @@ function dayOfWeekArray(day) {
       )
       .join(", ");
   }
+
 }
 const orderModules = {
   namespaced: true,
@@ -79,6 +80,7 @@ const orderModules = {
       payment_type: "",
       total_price: 0,
     },
+
     orders: [],
     order_detail: {},
     order_is_loading: false,
@@ -92,8 +94,17 @@ const orderModules = {
     order_history: [],
     order_history_is_loading: false,
     order_is_status: false,
+    cart_list_option: {},
+    amount_cart_list: [],
+    history_list: [],
+    history_list_is_loading: false,
+    history_list_option: {},
+
+
+
   },
   mutations: {
+
     SetOrderHistory(state, payload) {
       state.order_history = payload;
     },
@@ -120,6 +131,9 @@ const orderModules = {
     },
     SetCartList(state, payload) {
       state.cart_list = payload;
+    },
+    SetCartListOption(state, payload) {
+      state.cart_list_option = payload
     },
     SetCartListIsLoading(state, payload) {
       state.cart_list_is_loading = payload;
@@ -165,6 +179,18 @@ const orderModules = {
     },
     SetOrderIsStatus(state, payload) {
       state.order_is_status = payload;
+    },
+    SetAmountCartList(state, payload) {
+      state.amount_cart_list = payload;
+    },
+    SetHistoryList(state, payload) {
+      state.history_list = payload;
+    },
+    SetHistoryListOption(state, payload) {
+      state.history_list_option = payload
+    },
+    SetHistoryListIsLoading(state, payload) {
+      state.history_list_is_loading = payload;
     },
   },
   actions: {
@@ -887,7 +913,7 @@ const orderModules = {
       }
     },
     async updateOrderStatus(context, { order_detail }) {
-      try{
+      try {
         let payload = {
           paymentStatus: order_detail.paymentStatus,
           paymentType: order_detail.paymentType,
@@ -920,7 +946,7 @@ const orderModules = {
             });
           });
         }
-      }catch(error){
+      } catch (error) {
         Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),
@@ -1142,8 +1168,10 @@ const orderModules = {
         }
       }
     },
-    async GetCartList(context, account_id) {
-      context.commit("SetCartListIsLoading", true);
+    async GetCartList(context, { account_id, limit, page }) {
+      if (page == 1) {
+        context.commit("SetCartListIsLoading", true);
+      }
       try {
         let config = {
           headers: {
@@ -1152,14 +1180,16 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
+        // let localhost = "http://localhost:3002"
         let { data } = await axios.get(
-          `${process.env.VUE_APP_URL}/api/v1/order/cart/${account_id}`,
+          // `${localhost}/api/v1/order/cart/${account_id}/limit?limit=${limit}&page=${page}`,
+          `${process.env.VUE_APP_URL}/api/v1/order/cart/${account_id}/limit?limit=${limit}&page=${page}`,
+
           config
         );
         if (data.statusCode === 200) {
           for await (const item of data.data) {
-            item.course_img = `${process.env.VUE_APP_URL}/api/v1/files/${item.course_img}`;
-
+            item.course_img = item.course_img ? `${process.env.VUE_APP_URL}/api/v1/files/${item.course_img}` : null;
             if (item.course_type_id === "CT_1") {
               let discount = item.option.discount
                 ? item.option.discount_price
@@ -1174,6 +1204,7 @@ const orderModules = {
 
           }
           context.commit("SetCartList", data.data);
+          context.commit("SetCartListOption", { limit: limit, page: page, count: data.data.length })
           setTimeout(() => {
             context.commit("SetCartListIsLoading", false);
           }, 200);
@@ -1238,7 +1269,7 @@ const orderModules = {
       }
     },
     async userUpdateOrderCancelStatus(context, { order_number }) {
-      try{
+      try {
         let payload = {
           paymentStatus: "cancel",
           paymentType: "",
@@ -1269,7 +1300,7 @@ const orderModules = {
             context.dispatch("getHistory")
           });
         }
-      }catch(error){
+      } catch (error) {
         Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),
@@ -1399,6 +1430,117 @@ const orderModules = {
         });
       }
     },
+    async GetAmountCartList(context, { account_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        let { data } = await axios.get(
+          `${process.env.VUE_APP_URL}/api/v1/order/cart/${account_id}`,
+          config
+        );
+        if (data.statusCode === 200) {
+          context.commit("SetAmountCartList", data.data);
+        } else {
+          throw { error: data };
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async GetHistoryList(context, { limit, page }) {
+
+      if (page == 1) {
+        context.commit("SetOrderHistoryIsLoading", true);
+      }
+
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        let { data } = await axios.get(
+          `${process.env.VUE_APP_URL}/api/v1/order/history/limit?limit=${limit}&page=${page}`,
+          config
+        )
+        // let mapHistory = [];
+        if (data.statusCode === 200) {
+          data.data.map((items) => {
+            const options = { year: "numeric", month: "long", day: "numeric" };
+            const thaiLocale = "th-TH";
+            items.thaiDate = new Date(items.createdDate).toLocaleString(
+              thaiLocale,
+              options
+            );
+          });
+          for (const item of data.data) {
+            if (item.courseImg && item.courseImg !== "") {
+              item.courseImg = process.env.VUE_APP_URL.concat(
+                `/api/v1/files/${item.courseImg}`
+              );
+              item.show_student = false;
+            }
+            // if (
+            //   data.data.filter((v) => v.orderNumber == item.orderNumber)
+            //     .length > 0
+            // ) {
+            //   let courses = [];
+            //   for await (const course of data.data.filter(
+            //     (v) => v.orderNumber == item.orderNumber
+            //   )) {
+            //     if (!courses.some((v) => v.orderItemId == course.orderItemId)) {
+            //       courses.push(course);
+            //     }
+            //   }
+            //   const options = {
+            //     year: "numeric",
+            //     month: "long",
+            //     day: "numeric",
+            //   };
+            //   const thaiLocale = "th-TH";
+
+            //   if (!mapHistory.some((v) => v.orderId === item.orderId)) {
+            //     mapHistory.push({
+            //       orderId: item.orderId,
+            //       orderNumber: item.orderNumber,
+            //       paymentStatus: item.paymentStatus,
+            //       courses: courses,
+            //       totalPrice: item.totalPrice,
+            //       createdDate: new Date(item.createdDate).toLocaleString(
+            //         thaiLocale,
+            //         options
+            //       ),
+            //       createdDateStr: moment(new Date(item.createdDate)).format(
+            //         "YYYY-MM-DD"
+            //       ),
+            //       createdByData: item.createdByData,
+            //     });
+            //   }
+            // }
+          }
+          // context.commit("SetOrderHistory", mapHistory);
+          context.commit("SetHistoryList", data.data);
+          context.commit("SetHistoryListOption", { limit: limit, page: page, count: data.data.length })
+
+
+          setTimeout(() => {
+            context.commit("SetOrderHistoryIsLoading", false);
+          }, 200);
+        } else {
+          throw { error: data };
+        }
+      } catch (error) {
+        context.commit("SetOrderHistoryIsLoading", false);
+      }
+
+    },
   },
   getters: {
     orderHistory(state) {
@@ -1407,6 +1549,7 @@ const orderModules = {
     orderHistoryIsLoading(state) {
       return state.order_history_is_loading;
     },
+
     getReserveList(state) {
       return state.reserve_list;
     },
@@ -1434,17 +1577,32 @@ const orderModules = {
     getRelations(state) {
       return state.relations;
     },
+    getStudentList(state) {
+      return state.student_list;
+    },
     getCartList(state) {
       return state.cart_list;
     },
-    getStudentList(state) {
-      return state.student_list;
+    getCartListOption(state) {
+      return state.cart_list_option
     },
     getCartListIsLoading(state) {
       return state.cart_list_is_loading;
     },
     getOrderIsStatus(state) {
       return state.order_is_status;
+    },
+    getAmountCartList(state) {
+      return state.amount_cart_list;
+    },
+    getHistoryList(state) {
+      return state.history_list;
+    },
+    getHistoryListOption(state) {
+      return state.history_list_option
+    },
+    getHistoryListIsLoading(state) {
+      return state.history_list_is_loading;
     },
   },
 };

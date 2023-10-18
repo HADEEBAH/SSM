@@ -5,12 +5,16 @@ import VueI18n from "../i18n";
 const categoryModules = {
     namespaced: true,
     state: {
+        category_option: {},
         categorys: [],
         category: {},
         category_is_loading: false,
         categorys_is_loading: false,
     },
     mutations: {
+        SetCategoryOption(state, payload) {
+            state.category_option = payload
+        },
         SetCategorys(state, payload) {
             state.categorys = payload
         },
@@ -37,16 +41,19 @@ const categoryModules = {
                 context.commit("SetCategorysIsLoading", false)
             }
         },
-        async GetCategoryCourse(context) {
-            context.commit("SetCategorysIsLoading", true)
+        async GetCategoryCourse(context, { limit, page }) {
+            if (page == 1) {
+                context.commit("SetCategorysIsLoading", true)
+            }
             try {
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category/course`)
+                // let localhost = "http://localhost:3000"
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category/limit?limit=${limit}&page=${page}`)
                 if (data.statusCode === 200) {
                     let categorys = data.data
-
                     for await (let category of categorys) {
                         category.show = false
                     }
+                    context.commit('SetCategoryOption', { limit: limit, page: page, count: data.data.length })
                     context.commit("SetCategorys", categorys)
                     context.commit("SetCategorysIsLoading", false)
                 }
@@ -110,6 +117,9 @@ const categoryModules = {
         }
     },
     getters: {
+        getCategoryOption(state) {
+            return state.category_option
+        },
         getCategorys(state) {
             return state.categorys
         },

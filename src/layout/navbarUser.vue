@@ -140,10 +140,10 @@
           </v-menu>
 
           <v-badge
-            v-if="cart_list.length > 0"
+            v-if="amount_cart_list.length > 0"
             class="mr-5"
             color="red"
-            :content="cart_list.length"
+            :content="amount_cart_list.length"
           >
             <v-icon dark @click="$router.push({ name: 'CartList' })"
               >mdi-cart</v-icon
@@ -461,9 +461,12 @@ export default {
       this.GetProfileDetail(this.user_detail.account_id);
     }
     this.active_menu = this.$route.name;
-    if (this.user_detail?.account_id) {
-      this.GetCartList(this.user_detail.account_id);
-    }
+    this.GetAmountCartList({ account_id: this.user_detail.account_id });
+
+    // if (this.user_detail?.account_id) {
+    //   this.GetCartList({account_id : this.user_detail.account_id,limit: 12 , page :1});
+    // }
+
     // window.googleTranslateElementInit = () => {
     //   new window.google.translate.TranslateElement(
     //     {
@@ -489,13 +492,14 @@ export default {
       this.GetProfileDetail(this.user_detail.account_id);
     }
     if (this.user_detail?.account_id) {
-      this.GetCartList(this.user_detail.account_id);
+      // this.GetCartList({account_id :this.user_detail.account_id, limit : 12, page:1 });
       this.GetNotificationsAll(this.user_detail.account_id);
     }
 
     setTimeout(() => {
       this.alertVisible = false;
     }, 3000); // Set the timeout to 3 seconds
+    this.GetAmountCartList({ account_id: this.user_detail.account_id });
   },
   beforeUpdate() {
     this.show_profile_detail.firstNameTh = this.profile_detail.firstNameTh;
@@ -515,6 +519,7 @@ export default {
       get_notifications_all: "NotificationsModules/getNotificationsAll",
       notifications_read: "NotificationsModules/readNotifications",
       loading: "LoadingModules/getLoading",
+      amount_cart_list: "OrderModules/getAmountCartList",
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
@@ -529,6 +534,7 @@ export default {
       GetNotifications: "NotificationsModules/GetNotifications",
       GetNotificationsAll: "NotificationsModules/GetNotificationsAll",
       ReadNotifications: "NotificationsModules/ReadNotifications",
+      GetAmountCartList: "OrderModules/GetAmountCartList",
     }),
     setLocale(locale) {
       this.$i18n.locale = locale;

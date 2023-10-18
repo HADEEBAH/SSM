@@ -281,6 +281,7 @@
             ></label-custom>
             <v-text-field
               dense
+              :rules="student_recived"
               :disabled="disable"
               :outlined="!disable"
               :filled="disable"
@@ -400,6 +401,7 @@
               <v-text-field
                 :placeholder="$t('specify price')"
                 dense
+                :rules="price"
                 :disabled="disable"
                 :outlined="!disable"
                 :filled="disable"
@@ -974,14 +976,13 @@ export default {
     student_recived() {
       return [
         (val) =>
-          (val || "") > 0 ||
-          this.$t("please specify students who can be accepted"),
+          val > 0 || this.$t("please specify students who can be accepted"),
         (val) =>
           val < 1000 || this.$t("students who can accept more than the limit"),
       ];
     },
     price() {
-      return [(val) => (val || "") > 0 || this.$t("please specify price")];
+      return [(val) => val > 0 || this.$t("please specify price")];
     },
   },
   methods: {
@@ -1008,7 +1009,6 @@ export default {
         .focus();
     },
     ChangeHours(hours) {
-      // console.log("couser_hours", course_hours);
       if (hours) {
         this.course_data.course_hours =
           parseInt(hours.HH) + "." + parseInt(hours.mm);
