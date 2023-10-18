@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-container >
+    <v-container>
       <v-row dense>
         <v-col cols="12">
           <v-text-field
@@ -228,12 +228,12 @@ export default {
     }
   },
   mounted() {
-    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener("scroll", this.handleScroll);
     this.GetCategory(this.$route.params.category_id);
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "course");
   },
   destroyed() {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener("scroll", this.handleScroll);
   },
   watch: {},
   computed: {
@@ -246,7 +246,6 @@ export default {
       course_types: "CourseModules/getCourseTypes",
       course_potential: "CourseModules/getCoursePotential",
     }),
-
   },
   methods: {
     ...mapActions({
@@ -257,12 +256,12 @@ export default {
       // GetPotential: "CourseModules/GetPotential",
     }),
     handleScroll() {
-      const distanceFromBottom = window.innerHeight + window.scrollY - document.body.offsetHeight;
-      const scrollThreshold = this.$refs.course_list.getBoundingClientRect().bottom
-      console.log("scrollThreshold", scrollThreshold)
-      if(!this.isLoading){
+      const distanceFromBottom =
+        window.innerHeight + window.scrollY - document.body.offsetHeight;
+      const scrollThreshold =
+        this.$refs.course_list.getBoundingClientRect().bottom;
+      if (!this.isLoading) {
         if (distanceFromBottom > scrollThreshold) {
-          console.log("loading", distanceFromBottom)
           this.loadMoreData();
         }
       }

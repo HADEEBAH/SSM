@@ -975,9 +975,10 @@ export default {
     },
     student_recived() {
       return [
-        val => console.log(val),
-        (val) => val > 0 || this.$t("please specify students who can be accepted"),
-        (val) => val < 1000 || this.$t("students who can accept more than the limit"),
+        (val) =>
+          val > 0 || this.$t("please specify students who can be accepted"),
+        (val) =>
+          val < 1000 || this.$t("students who can accept more than the limit"),
       ];
     },
     price() {
@@ -1008,7 +1009,6 @@ export default {
         .focus();
     },
     ChangeHours(hours) {
-      // console.log("couser_hours", course_hours);
       if (hours) {
         this.course_data.course_hours =
           parseInt(hours.HH) + "." + parseInt(hours.mm);
