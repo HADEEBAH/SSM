@@ -360,7 +360,7 @@ export default {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "my order");
     window.addEventListener("scroll", this.handleScroll);
     this.GetHistoryList({
-      account_id: this.user_login?.account_id,
+      // account_id: this.user_login?.account_id,
       limit: 6,
       page: 1,
     });
