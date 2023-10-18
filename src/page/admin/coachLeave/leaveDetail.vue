@@ -637,12 +637,6 @@ export default {
         .focus();
     },
     InputDate(date, course) {
-      const options = {
-        year: "numeric",
-        month: "short",
-        day: "numeric"
-      };
-      // console.log(new Date(date).toLocaleDateString(this.$i18n.locale =='th' ? "th-TH" : "en-US", options))
       course.compensationDate_str = date
     },
     closeDisapprovedDialog() {
