@@ -165,7 +165,7 @@
           </v-col>
         </v-row>
         <v-row v-if="isLoading">
-          <v-col cols="12"  align="center" >
+          <v-col cols="12" align="center">
             <v-progress-circular
               indeterminate
               color="#ff6b81"
@@ -304,23 +304,27 @@ export default {
     count_selected_cart: 0,
     total_price: 0,
     user_login: {},
-    isLoading: false,
-    isStopLoading : false,
-    countDatePerPage : 0
+    isLoading: true,
+    isStopLoading: false,
+    countDatePerPage: 0,
   }),
-  created() { 
+  created() {
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
-    this.GetCartList({account_id : this.user_login.account_id, limit : 2, page : 1});
+    this.GetCartList({
+      account_id: this.user_login.account_id,
+      limit: 3,
+      page: 1,
+    });
   },
   mounted() {
-    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener("scroll", this.handleScroll);
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "cart");
     this.cart_list.map((val) => {
       val.checked = false;
     });
   },
   destroyed() {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener("scroll", this.handleScroll);
   },
 
   methods: {
@@ -330,41 +334,38 @@ export default {
       changeOrderData: "OrderModules/changeOrderData",
       DeleteCart: "OrderModules/DeleteCart",
       GetAllCourseMonitor: "CourseMonitorModules/GetAllCourseMonitor",
+      GetAmountCartList: "OrderModules/GetAmountCartList",
     }),
     closePolicy() {
       this.policy = false;
       this.policy_show = false;
     },
     handleScroll() {
-      const distanceFromBottom = window.innerHeight + window.scrollY - document.body.offsetHeight;
-      if(this.$refs.cart_list){
-        const scrollThreshold = (this.$refs.cart_list.getBoundingClientRect().bottom )
+      const distanceFromBottom =
+        window.innerHeight + window.scrollY - document.body.offsetHeight;
+      if (this.$refs.cart_list) {
+        const scrollThreshold =
+          this.$refs.cart_list.getBoundingClientRect().bottom;
         if (distanceFromBottom > scrollThreshold) {
-          if(!this.isLoading){
-            this.loadMoreData();
-          }
-          
+          this.loadMoreData();
         }
       }
     },
     loadMoreData() {
-      this.isLoading = true
-      console.log(this.countDatePerPage)
-      this.countDatePerPage = this.cart_list_option.count
-      console.log("countDatePerPage",this.countDatePerPage)
-      if(!this.isStopLoading){
-          this.GetCartList({account_id : this.user_login.account_id, limit : this.cart_list_option.limit, page: this.cart_list_option.page + 1}).then(()=>{
+      this.countDatePerPage = this.cart_list_option.count;
+      if (!this.isStopLoading) {
+        this.GetCartList({
+          account_id: this.user_login.account_id,
+          limit: this.cart_list_option.limit,
+          page: this.cart_list_option.page + 1,
+        }).then(() => {
+          if (this.countDatePerPage === this.cart_list_option.count) {
             setTimeout(() => {
-              if(this.countDatePerPage === this.cart_list_option.count){
-                  console.log("count",this.cart_list_option.count)
-                  this.isLoading = false;
-                  this.isStopLoading = true
-              }else{
-                this.isStopLoading = false
-                this.isLoading = true
-              }
-            }, 3000);
-          })
+              this.isLoading = false;
+            }, 1000);
+            this.isStopLoading = true;
+          }
+        });
       }
     },
     removeCart(cart_id) {
@@ -377,6 +378,7 @@ export default {
         cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
+          this.GetAmountCartList({ account_id: this.user_login.account_id });
           if (cart_id.length > 0) {
             for await (const id of cart_id) {
               this.DeleteCart({
@@ -507,16 +509,16 @@ export default {
 
   computed: {
     ...mapGetters({
-      cart_list_option : "OrderModules/getCartListOption",
+      cart_list_option: "OrderModules/getCartListOption",
       cart_list: "OrderModules/getCartList",
       cart_list_is_loading: "OrderModules/getCartListIsLoading",
       course_order: "OrderModules/getCourseOrder",
       categorys_is_loading: "CategoryModules/getCategorysIsLoading",
       course_monitors: "CourseMonitorModules/getCourseMonitor",
       order: "OrderModules/getOrder",
+      amount_cart_list: "OrderModules/getAmountCartList",
     }),
     setFunctions() {
-     
       return "";
     },
     MobileSize() {

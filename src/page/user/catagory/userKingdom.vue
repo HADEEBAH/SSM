@@ -24,7 +24,6 @@
     </v-container>
 
     <v-card
-     
       class="rounded-xl pa-2"
       :style="
         !MobileSize
@@ -35,29 +34,29 @@
           : ''
       "
     >
-    <v-row dense ref="banner_bar">
-      <v-carousel
-        class="rounded-xl max-w-[1920px!important] max-h-[1080px!important]"
-        cycle
-        height="auto"
-        hide-delimiter-background
-        hide-delimiters
-      >
-        <v-carousel-item
-          v-for="(slide, i) in banner_list"
-          :key="i"
-          class="max-w-[1920px] max-h-[1080px]"
+      <v-row dense ref="banner_bar">
+        <v-carousel
+          class="rounded-xl max-w-[1920px!important] max-h-[1080px!important]"
+          cycle
+          height="auto"
+          hide-delimiter-background
+          hide-delimiters
         >
-          <v-img
-            :src="slide.bannerPath"
-            :aspect-ratio="16 / 9"
+          <v-carousel-item
+            v-for="(slide, i) in banner_list"
+            :key="i"
             class="max-w-[1920px] max-h-[1080px]"
           >
-          </v-img>
-        </v-carousel-item>
-      </v-carousel>
-    </v-row>
-     
+            <v-img
+              :src="slide.bannerPath"
+              :aspect-ratio="16 / 9"
+              class="max-w-[1920px] max-h-[1080px]"
+            >
+            </v-img>
+          </v-carousel-item>
+        </v-carousel>
+      </v-row>
+
       <v-card-text>
         <v-row ref="filter_bar">
           <v-col
@@ -132,10 +131,10 @@
                   {{
                     item.show
                       ? `${item.categoryDescription}`
-                      : `${item.categoryDescription.slice(0, 15).trim()}`
+                      : `${item.categoryDescription?.slice(0, 15).trim()}`
                   }}
                   <span
-                    v-if="item.categoryDescription.length > 15"
+                    v-if="item.categoryDescription?.length > 15"
                     class="text-red-500 cursor-pointer"
                     @click="item.show = !item.show"
                     >{{
@@ -155,7 +154,7 @@
           </v-col>
         </v-row>
         <v-row v-if="isLoading">
-          <v-col cols="12"  align="center" >
+          <v-col cols="12" align="center">
             <v-progress-circular
               indeterminate
               color="#ff6b81"
@@ -204,12 +203,15 @@ export default {
     item_data: "",
     showingFullText: false,
     isLoading: true,
-    isStopLoading : false,
-    countDatePerPage : 0
+    isStopLoading: false,
+    countDatePerPage: 0,
   }),
 
   created() {
-    this.$store.dispatch("CategoryModules/GetCategoryCourse",{limit : 12, page: 1});
+    this.$store.dispatch("CategoryModules/GetCategoryCourse", {
+      limit: 12,
+      page: 1,
+    });
     this.dataStorage = JSON.parse(localStorage.getItem("userDetail"));
     if (this.dataStorage) {
       this.GetAll(this.dataStorage.account_id);
@@ -221,10 +223,10 @@ export default {
     this.GetBannerList();
   },
   destroyed() {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener("scroll", this.handleScroll);
   },
   mounted() {
-    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener("scroll", this.handleScroll);
     this.$store.dispatch(
       "NavberUserModules/changeTitleNavber",
       "warraphat learning sphere"
@@ -241,27 +243,47 @@ export default {
       GetBannerList: "BannerModules/GetBannerList",
     }),
     handleScroll() {
-      const distanceFromBottom = window.innerHeight + window.scrollY - document.body.offsetHeight;
-      if(this.$refs.category_list && this.$refs.banner_bar && this.$refs.filter_bar){
-        let banner_bar = this.$refs.banner_bar.getBoundingClientRect().bottom > 0 ? this.$refs.banner_bar.getBoundingClientRect().bottom : 0
-        let filter_bar =  this.$refs.filter_bar.getBoundingClientRect().bottom > 0 ? this.$refs.filter_bar.getBoundingClientRect().bottom : 0
-        const scrollThreshold = (this.$refs.category_list.getBoundingClientRect().bottom + banner_bar + filter_bar)
-        if (distanceFromBottom > scrollThreshold + (400 * this.category_option.page)) {
+      const distanceFromBottom =
+        window.innerHeight + window.scrollY - document.body.offsetHeight;
+      if (
+        this.$refs.category_list &&
+        this.$refs.banner_bar &&
+        this.$refs.filter_bar
+      ) {
+        let banner_bar =
+          this.$refs.banner_bar.getBoundingClientRect().bottom > 0
+            ? this.$refs.banner_bar.getBoundingClientRect().bottom
+            : 0;
+        let filter_bar =
+          this.$refs.filter_bar.getBoundingClientRect().bottom > 0
+            ? this.$refs.filter_bar.getBoundingClientRect().bottom
+            : 0;
+        const scrollThreshold =
+          this.$refs.category_list.getBoundingClientRect().bottom +
+          banner_bar +
+          filter_bar;
+        if (
+          distanceFromBottom >
+          scrollThreshold + 400 * this.category_option.page
+        ) {
           this.loadMoreData();
         }
       }
     },
     loadMoreData() {
-      this.countDatePerPage = this.category_option.count
-      if(!this.isStopLoading){
-          this.GetCategoryCourse({limit : this.category_option.limit, page: this.category_option.page + 1}).then(()=>{
-            if(this.countDatePerPage === this.category_option.count){
-              setTimeout(() => {
-                this.isLoading = false;
-              }, 1000);
-                this.isStopLoading = true
-            }
-          })
+      this.countDatePerPage = this.category_option.count;
+      if (!this.isStopLoading) {
+        this.GetCategoryCourse({
+          limit: this.category_option.limit,
+          page: this.category_option.page + 1,
+        }).then(() => {
+          if (this.countDatePerPage === this.category_option.count) {
+            setTimeout(() => {
+              this.isLoading = false;
+            }, 1000);
+            this.isStopLoading = true;
+          }
+        });
       }
     },
     height() {
@@ -306,7 +328,7 @@ export default {
 
   computed: {
     ...mapGetters({
-      category_option:"CategoryModules/getCategoryOption",
+      category_option: "CategoryModules/getCategoryOption",
       course_order: "OrderModules/getCourseOrder",
       categorys: "CategoryModules/getCategorys",
       categorys_is_loading: "CategoryModules/getCategorysIsLoading",

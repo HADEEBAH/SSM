@@ -5,14 +5,14 @@ import VueI18n from "../i18n";
 const categoryModules = {
     namespaced: true,
     state: {
-        category_option : {},
+        category_option: {},
         categorys: [],
         category: {},
         category_is_loading: false,
         categorys_is_loading: false,
     },
     mutations: {
-        SetCategoryOption(state, payload){
+        SetCategoryOption(state, payload) {
             state.category_option = payload
         },
         SetCategorys(state, payload) {
@@ -41,8 +41,8 @@ const categoryModules = {
                 context.commit("SetCategorysIsLoading", false)
             }
         },
-        async GetCategoryCourse(context,{limit, page}) {
-            if(page == 1){
+        async GetCategoryCourse(context, { limit, page }) {
+            if (page == 1) {
                 context.commit("SetCategorysIsLoading", true)
             }
             try {
@@ -53,7 +53,7 @@ const categoryModules = {
                     for await (let category of categorys) {
                         category.show = false
                     }
-                    context.commit('SetCategoryOption',{limit :limit, page: page, count: data.data.length})
+                    context.commit('SetCategoryOption', { limit: limit, page: page, count: data.data.length })
                     context.commit("SetCategorys", categorys)
                     context.commit("SetCategorysIsLoading", false)
                 }
@@ -117,7 +117,7 @@ const categoryModules = {
         }
     },
     getters: {
-        getCategoryOption(state){
+        getCategoryOption(state) {
             return state.category_option
         },
         getCategorys(state) {
