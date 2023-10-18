@@ -79,7 +79,7 @@
           </v-card>
         </v-col>
       </v-row>
-      <v-row dense>
+      <v-row dense ref="course_list">
         <template v-if="!courses_is_loading">
           <v-col
             cols="6"
@@ -200,6 +200,7 @@ export default {
     search_course: "",
     search_results: [],
     loading: true,
+    offsetTop: null,
     course_type: [
       {
         course_type_id: "CT_1",
@@ -227,8 +228,12 @@ export default {
     }
   },
   mounted() {
+    window.addEventListener("scroll", this.handleScroll);
     this.GetCategory(this.$route.params.category_id);
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "course");
+  },
+  destroyed() {
+    window.removeEventListener("scroll", this.handleScroll);
   },
   watch: {},
   computed: {
@@ -250,6 +255,23 @@ export default {
       GetCoursesFilter: "CourseModules/GetCoursesFilter",
       // GetPotential: "CourseModules/GetPotential",
     }),
+    handleScroll() {
+      const distanceFromBottom =
+        window.innerHeight + window.scrollY - document.body.offsetHeight;
+      const scrollThreshold =
+        this.$refs.course_list.getBoundingClientRect().bottom;
+      if (!this.isLoading) {
+        if (distanceFromBottom > scrollThreshold) {
+          this.loadMoreData();
+        }
+      }
+    },
+    loadMoreData() {
+      this.isLoading = true;
+      setTimeout(() => {
+        this.isLoading = false;
+      }, 1000);
+    },
     GerPeriod(period) {
       let str = period.toString();
       let part_period = str.split(".");
