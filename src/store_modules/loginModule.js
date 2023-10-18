@@ -328,7 +328,7 @@ const loginModules = {
                     let payload = {
                         account_id: data.data.account_id,
                         email: data.data.email,
-                        username: context.state.user_one_id.username,
+                        username: data.data.username,
                         password: context.state.user_one_id.password,
                         first_name_en: data.data.first_name_en,
                         first_name_th: data.data.first_name_th,
@@ -344,8 +344,8 @@ const loginModules = {
                     if (route.name === "Login") {
                         router.replace({ name: "UserKingdom" })
                     } else {
-                        // window.location.href = `${process.env.VUE_APP_URL}${route.path}`
-                        window.location.href = `http://localhost:8080${route.path}`
+                        window.location.href = `${process.env.VUE_APP_URL}${route.path}`
+                        // window.location.href = `http://localhost:8080${route.path}`
                         // alert(`http://localhost:8080${route.path}`)
                     }
                 }
