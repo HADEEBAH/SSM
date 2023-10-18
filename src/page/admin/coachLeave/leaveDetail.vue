@@ -63,7 +63,11 @@
               <v-col>
                 <span class="text-[#999999]">{{ $t("leave date") }}:</span>
                 <div class="text-[#2F3542] font-semibold mr-2">
-                  {{ `${GenDate(coach_leave.startDate)} - ${GenDate(coach_leave.endDate)}` }}
+                  {{
+                    `${GenDate(coach_leave.startDate)} - ${GenDate(
+                      coach_leave.endDate
+                    )}`
+                  }}
                 </div>
               </v-col>
               <v-col>
@@ -303,7 +307,7 @@
                                 'end'
                               )
                             "
-                             :hour-range="
+                            :hour-range="
                               checkHour(
                                 coach_leave.period,
                                 course.compensationDate,
@@ -545,13 +549,16 @@ export default {
       updateStatusCoachLeaveAndCoach:
         "CoachModules/updateStatusCoachLeaveAndCoach",
     }),
-    GenDate(date){
+    GenDate(date) {
       const options = {
         year: "numeric",
         month: "long",
         day: "numeric",
       };
-      return new Date(date).toLocaleDateString(this.$i18n.locale == 'th' ? 'th-TH': 'en-US',options)
+      return new Date(date).toLocaleDateString(
+        this.$i18n.locale == "th" ? "th-TH" : "en-US",
+        options
+      );
     },
     ChengeTimeMin(time, index_course, index_date, type) {
       if (time.mm === "") {
@@ -637,13 +644,13 @@ export default {
         .focus();
     },
     InputDate(date, course) {
-      const options = {
-        year: "numeric",
-        month: "short",
-        day: "numeric"
-      };
+      // const options = {
+      //   year: "numeric",
+      //   month: "short",
+      //   day: "numeric"
+      // };
       // console.log(new Date(date).toLocaleDateString(this.$i18n.locale =='th' ? "th-TH" : "en-US", options))
-      course.compensationDate_str = date
+      course.compensationDate_str = date;
     },
     closeDisapprovedDialog() {
       this.show_disapproved = false;
