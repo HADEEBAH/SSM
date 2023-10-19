@@ -4,7 +4,7 @@
     <!-- <loading-overlay
       :loading="student_is_loading || student_booking_is_loading"
     ></loading-overlay> -->
-    <loading-overlay :loading="testloading"></loading-overlay>
+    <loading-overlay :loading="loading_overlay"></loading-overlay>
     <div>
       <label class="text-xl font-bold">{{
         $t("class schedule information")
@@ -1093,7 +1093,7 @@ export default {
     isDataReceived: false,
     waitingProcess: false,
     sameHistoryLength: false,
-    testloading: true,
+    loading_overlay: true,
     relations_account: "",
   }),
   beforeCreate() {
@@ -1118,23 +1118,23 @@ export default {
     window.addEventListener("scroll", this.handleScroll);
 
     if (this.user_detail.roles?.includes("R_5")) {
-      this.GetStudentData(this.user_detail.account_id);
+      await this.GetStudentData(this.user_detail.account_id);
       await this.GetProfileBooked({
         account_id: this.user_detail?.account_id,
         limit: 2,
         page: 1,
       });
-      this.testloading = false;
+      this.loading_overlay = false;
     }
 
     if (this.user_detail.roles?.includes("R_4")) {
-      this.GetStudentData(this.user_detail.account_id);
+      await this.GetStudentData(this.user_detail.account_id);
       await this.GetProfileBooked({
         account_id: this.user_detail?.account_id,
         limit: 2,
         page: 1,
       });
-      this.testloading = false;
+      this.loading_overlay = false;
     }
   },
   beforeUpdate() {
@@ -1216,13 +1216,13 @@ export default {
 
     async searchStudentBooked(studentId) {
       this.relations_account = studentId;
-      this.testloading = true;
+      this.loading_overlay = true;
       await this.GetProfileBooked({
         account_id: studentId,
         limit: this.reserve_option.limit,
         page: 1,
       });
-      this.testloading = false;
+      this.loading_overlay = false;
     },
 
     handleScroll() {
