@@ -82,7 +82,7 @@
                   "
                   :outlined="!disable"
                   :filled="disable"
-                  :rules="rules.packages_student"
+                  :rules="packages_student(package_data.students, index)"
                   @focus="$event.target.select()"
                   class="input-text-right"
                   dense
@@ -272,15 +272,25 @@
             >
               <v-card-text>
                 <v-row>
-                  <v-col>{{ $t("price remaining") }}</v-col>
-                  <v-col class="text-[#FF6B81] font-bold text-right">{{
-                    option.net_price.toLocaleString()
-                  }}</v-col>
-                  <v-col>{{ $t("baht") }} {{ $t("average") }}</v-col>
-                  <v-col class="text-[#FF6B81] font-bold text-right">{{
-                    option.net_price_unit.toLocaleString()
-                  }}</v-col>
-                  <v-col>{{ $t("baht") }}/{{ $t("time") }}</v-col>
+                  <v-col cols="12" sm="6">
+                    <v-row dense>
+                      <v-col cols>{{ $t("price remaining") }}</v-col>
+                      <v-col cols="auto" class="text-[#FF6B81] font-bold text-right">{{
+                        option.net_price.toLocaleString()
+                      }}</v-col>
+                      <v-col cols="auto">{{ $t("baht") }} 
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                  <v-col cols="12" sm="6">
+                    <v-row dense>
+                      <v-col>{{ $t("average") }}</v-col>
+                      <v-col class="text-[#FF6B81] font-bold text-right">{{
+                        option.net_price_unit.toLocaleString()
+                      }}</v-col>
+                      <v-col>{{ $t("baht") }}/{{ $t("time") }}</v-col>
+                    </v-row>
+                  </v-col>
                 </v-row>
               </v-card-text>
             </v-card>
@@ -306,7 +316,7 @@ export default {
   data: () => ({
     packages_selected: [],
     options_selected: [],
-    minimum_students: 3,
+    minimum_students: 0,
   }),
   created() {},
   mounted() {
@@ -326,16 +336,6 @@ export default {
         packages: [
           function (val) {
             return (val || "").length > 0 || vm.$t("please select a package");
-          },
-        ],
-        packages_student: [
-          function (val) {
-            return (
-              (val || "") >= vm.minimum_students ||
-              `${vm.$t("please specify the number of students at least")} ${
-                vm.minimum_students
-              } ${vm.$t("person")}`
-            );
           },
         ],
         options: [
@@ -358,11 +358,30 @@ export default {
         ],
       };
     },
+    
+        
   },
   methods: {
     ...mapActions({
       ChangeCourseData: "CourseModules/ChangeCourseData",
     }),
+    packages_student (val, index) {
+      let package_id = this.course_data.packages[index].package_id
+      let minimum_students = 0
+      if (package_id === "PACK_1") {
+        minimum_students = 1
+      } else if (package_id === "PACK_2") {
+        minimum_students = 2
+      } else if (package_id === "PACK_3") {
+        minimum_students = 3
+      }
+      return ( [
+        (val || "") >= minimum_students ||
+        `${this.$t("please specify the number of students at least")} ${
+          minimum_students
+        } ${this.$t("person")}`
+       ] );
+    },
     packageList(package_index) {
       let used_package = [];
       let current_package = this.course_data.packages[package_index].package_id;
@@ -429,14 +448,14 @@ export default {
       let minimum_students_data = this.minimum_students;
       if (package_data === "PACK_1") {
         packages.students = 1;
-        this.minimum_students = 1;
+        packages.minimum_students = 1
       } else if (package_data === "PACK_2") {
         packages.students = 2;
-        this.minimum_students = 2;
+        packages.minimum_students = 3
       } else if (package_data === "PACK_3") {
         packages.students = 3;
         minimum_students_data = 3;
-        this.minimum_students = 3;
+        packages.minimum_students = 3
       }
       return { packages, minimum_students_data };
     },
