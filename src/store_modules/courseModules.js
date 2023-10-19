@@ -472,10 +472,15 @@ const CourseModules = {
           }
         }
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/date/${date}`, config)  
+        
         if (data.statusCode === 200) {
+          console.log(data.data)
           if(data.data.length > 0){
             context.commit("SetStudentList", data.data)
+            context.commit("SetNoChackInStudentList", [])
           }else{
+            context.commit("SetStudentList", [])
+            // let localhost = "http://localhost:3000"
             let scheduleStudent = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course-student/${course_id}/${date}`, config)
             if(scheduleStudent.data.statusCode == 200){
               context.commit("SetNoChackInStudentList", scheduleStudent.data.data)
