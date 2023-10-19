@@ -180,7 +180,7 @@ export default {
           color: "#f1c232",
         },
         {
-          label: this.$t("Confirmed"),
+          label: this.$t("confirmed"),
           value: "contacted",
           icon: "mdi-check-circle",
           color: "green",
