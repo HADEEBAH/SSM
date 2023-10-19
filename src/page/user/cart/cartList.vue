@@ -327,7 +327,6 @@ export default {
       val.checked = false;
     });
     this.GetCartList({
-      account_id: this.user_login.account_id,
       limit: 5,
       page: 1,
     });
@@ -349,17 +348,6 @@ export default {
       this.policy = false;
       this.policy_show = false;
     },
-    // handleScroll() {
-    //   const distanceFromBottom =
-    //     window.innerHeight + window.scrollY - document.body.offsetHeight;
-    //   if (this.$refs.cart_list) {
-    //     const scrollThreshold =
-    //       this.$refs.cart_list.getBoundingClientRect().bottom;
-    //     if (distanceFromBottom > scrollThreshold) {
-    //       this.loadMoreData();
-    //     }
-    //   }
-    // },
     handleScroll() {
       this.scrollTop = window.scrollY; // ตัวเลขเมื่อ scroll ตัวเลขเริ่มนับจากบนสุด = 0
       let device = document.body.offsetHeight - 56; // ค่าของหน้าจอ device
@@ -384,7 +372,6 @@ export default {
           this.waitingProcess = true;
 
           await this.GetCartList({
-            account_id: this.user_login?.account_id,
             limit: this.cart_list_option.limit,
             page: this.cart_list_option.page + 1,
           });
@@ -400,25 +387,6 @@ export default {
         }
       }
     },
-
-    // loadMoreData() {
-    //   this.countDatePerPage = this.cart_list_option.count;
-    //   if (!this.isStopLoading) {
-    //     this.GetCartList({
-    //       account_id: this.user_login.account_id,
-    //       limit: this.cart_list_option.limit,
-    //       page: this.cart_list_option.page + 1,
-    //     }).then(() => {
-    //       if (this.countDatePerPage === this.cart_list_option.count) {
-    //         setTimeout(() => {
-    //           this.isLoading = false;
-    //         }, 1000);
-    //         this.isStopLoading = true;
-    //       }
-    //     });
-    //   }
-    // },
-
     removeCart(cart_id) {
       Swal.fire({
         icon: "question",

@@ -5,7 +5,7 @@
       MobileSize ? `background-size: contain;` : `background-size: cover;`
     "
   >
-    <v-container fluid class="my-5">
+    <v-container fluid class="my-5" ref="hello">
       {{ setFunctions }}
       <v-row class="row">
         <v-col cols="12">
@@ -147,13 +147,13 @@
           </v-col>
           <v-col
             cols="12"
-            v-if="searchKingdom(search_kingdom).length === 0"
+            v-if="searchKingdom(search_kingdom)?.length === 0"
             class="font-weight-bold text-center text-xl"
           >
             {{ $t("wls not found") }}
           </v-col>
         </v-row>
-        <v-row v-if="isLoading">
+        <v-row v-if="isDataReceived">
           <v-col cols="12" align="center">
             <v-progress-circular
               indeterminate
@@ -204,14 +204,14 @@ export default {
     showingFullText: false,
     isLoading: true,
     isStopLoading: false,
+    scrollTop: 0,
     countDatePerPage: 0,
+    isDataReceived: false,
+    waitingProcess: false,
+    sameHistoryLength: false,
   }),
 
   created() {
-    this.$store.dispatch("CategoryModules/GetCategoryCourse", {
-      limit: 12,
-      page: 1,
-    });
     this.dataStorage = JSON.parse(localStorage.getItem("userDetail"));
     if (this.dataStorage) {
       this.GetAll(this.dataStorage.account_id);
@@ -231,6 +231,10 @@ export default {
       "NavberUserModules/changeTitleNavber",
       "warraphat learning sphere"
     );
+    this.$store.dispatch("CategoryModules/GetCategoryCourse", {
+      limit: 12,
+      page: 1,
+    });
   },
 
   methods: {
@@ -242,50 +246,52 @@ export default {
       logOut: "loginModules/logOut",
       GetBannerList: "BannerModules/GetBannerList",
     }),
+
     handleScroll() {
-      const distanceFromBottom =
-        window.innerHeight + window.scrollY - document.body.offsetHeight;
-      if (
-        this.$refs.category_list &&
-        this.$refs.banner_bar &&
-        this.$refs.filter_bar
-      ) {
-        let banner_bar =
-          this.$refs.banner_bar.getBoundingClientRect().bottom > 0
-            ? this.$refs.banner_bar.getBoundingClientRect().bottom
-            : 0;
-        let filter_bar =
-          this.$refs.filter_bar.getBoundingClientRect().bottom > 0
-            ? this.$refs.filter_bar.getBoundingClientRect().bottom
-            : 0;
-        const scrollThreshold =
-          this.$refs.category_list.getBoundingClientRect().bottom +
-          banner_bar +
-          filter_bar;
-        if (
-          distanceFromBottom >
-          scrollThreshold + 400 * this.category_option.page
-        ) {
-          this.loadMoreData();
+      this.scrollTop = window.scrollY; // ตัวเลขเมื่อ scroll ตัวเลขเริ่มนับจากบนสุด = 0
+      let ref = this.$refs.category_list?.clientHeight; // ค่ามาจาก ref detail
+      let banner = this.$refs.banner_bar?.clientHeight; // ค่ามาจาก ref banner
+      let filter = this.$refs.filter_bar?.clientHeight; // ค่ามาจาก ref filter
+      let hello = this.$refs.hello?.clientHeight; // ค่ามาจาก ref filter
+      let device = document.body.offsetHeight - (56 + hello + banner + filter); // ค่าของหน้าจอ device
+      let countA = this.scrollTop + device;
+
+      if (countA >= ref && !this.sameHistoryLength) {
+        this.loadMoreData();
+      }
+
+      if (countA < ref) {
+        this.sameHistoryLength = false;
+      }
+    },
+
+    async loadMoreData() {
+      this.countDatePerPage = this.category_list?.length;
+
+      if (!this.isDataReceived) {
+        this.isDataReceived = true;
+
+        if (!this.waitingProcess) {
+          this.waitingProcess = true;
+
+          await this.GetCategoryCourse({
+            account_id: this.user_login?.account_id,
+            limit: this.category_option.limit,
+            page: this.category_option.page + 1,
+          });
+
+          this.isDataReceived = false;
+          this.waitingProcess = false;
+
+          if (this.category_list?.length === this.countDatePerPage) {
+            this.sameHistoryLength = true;
+          } else {
+            this.sameHistoryLength = false;
+          }
         }
       }
     },
-    loadMoreData() {
-      this.countDatePerPage = this.category_option.count;
-      if (!this.isStopLoading) {
-        this.GetCategoryCourse({
-          limit: this.category_option.limit,
-          page: this.category_option.page + 1,
-        }).then(() => {
-          if (this.countDatePerPage === this.category_option.count) {
-            setTimeout(() => {
-              this.isLoading = false;
-            }, 1000);
-            this.isStopLoading = true;
-          }
-        });
-      }
-    },
+
     height() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":

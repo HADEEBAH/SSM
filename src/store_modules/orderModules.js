@@ -95,7 +95,7 @@ const orderModules = {
     order_history_is_loading: false,
     order_is_status: false,
     cart_list_option: {},
-    amount_cart_list: [],
+    amount_cart_list: 0,
     history_list: [],
     history_list_is_loading: false,
     history_list_option: {},
@@ -1168,7 +1168,7 @@ const orderModules = {
         }
       }
     },
-    async GetCartList(context, { account_id, limit, page }) {
+    async GetCartList(context, { limit, page }) {
       if (page == 1) {
         context.commit("SetCartListIsLoading", true);
       }
@@ -1180,10 +1180,8 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // let localhost = "http://localhost:3002"
         let { data } = await axios.get(
-          // `${localhost}/api/v1/order/cart/${account_id}/limit?limit=${limit}&page=${page}`,
-          `${process.env.VUE_APP_URL}/api/v1/order/cart/${account_id}/limit?limit=${limit}&page=${page}`,
+          `${process.env.VUE_APP_URL}/api/v1/order/cart/limit?limit=${limit}&page=${page}`,
 
           config
         );
@@ -1215,7 +1213,7 @@ const orderModules = {
         context.commit("SetCartListIsLoading", false);
       }
     },
-    async DeleteCart(context, { cart_id, account_id }) {
+    async DeleteCart(context, { cart_id }) {
       context.commit("SetCartListIsLoading", true);
       try {
         let config = {
@@ -1239,7 +1237,7 @@ const orderModules = {
             },
           };
           let carts = await axios.get(
-            `${process.env.VUE_APP_URL}/api/v1/order/cart/${account_id}`,
+            `${process.env.VUE_APP_URL}/api/v1/order/cart/limit?limit=${5}&page=${1}`,
             config
           );
           if (carts.data.statusCode === 200) {
@@ -1430,7 +1428,7 @@ const orderModules = {
         });
       }
     },
-    async GetAmountCartList(context, { account_id }) {
+    async GetAmountCartList(context) {
       try {
         let config = {
           headers: {
@@ -1440,7 +1438,7 @@ const orderModules = {
           },
         };
         let { data } = await axios.get(
-          `${process.env.VUE_APP_URL}/api/v1/order/cart/${account_id}`,
+          `${process.env.VUE_APP_URL}/api/v1/order/cart/badge`,
           config
         );
         if (data.statusCode === 200) {
@@ -1452,7 +1450,7 @@ const orderModules = {
         console.log(error);
       }
     },
-    async GetHistoryList(context, { account_id, limit, page }) {
+    async GetHistoryList(context, { limit, page }) {
 
       if (page == 1) {
         context.commit("SetOrderHistoryIsLoading", true);
@@ -1467,7 +1465,8 @@ const orderModules = {
           },
         };
         let { data } = await axios.get(
-          `${process.env.VUE_APP_URL}/api/v1/order/${account_id}/limit?limit=${limit}&page=${page}`,
+          // `${process.env.VUE_APP_URL}/api/v1/order/${account_id}/limit?limit=${limit}&page=${page}`,
+          `${process.env.VUE_APP_URL}/api/v1/order/history/limit?limit=${limit}&page=${page}`,
           config
         )
         // let mapHistory = [];
@@ -1487,45 +1486,7 @@ const orderModules = {
               );
               item.show_student = false;
             }
-            // if (
-            //   data.data.filter((v) => v.orderNumber == item.orderNumber)
-            //     .length > 0
-            // ) {
-            //   let courses = [];
-            //   for await (const course of data.data.filter(
-            //     (v) => v.orderNumber == item.orderNumber
-            //   )) {
-            //     if (!courses.some((v) => v.orderItemId == course.orderItemId)) {
-            //       courses.push(course);
-            //     }
-            //   }
-            //   const options = {
-            //     year: "numeric",
-            //     month: "long",
-            //     day: "numeric",
-            //   };
-            //   const thaiLocale = "th-TH";
-
-            //   if (!mapHistory.some((v) => v.orderId === item.orderId)) {
-            //     mapHistory.push({
-            //       orderId: item.orderId,
-            //       orderNumber: item.orderNumber,
-            //       paymentStatus: item.paymentStatus,
-            //       courses: courses,
-            //       totalPrice: item.totalPrice,
-            //       createdDate: new Date(item.createdDate).toLocaleString(
-            //         thaiLocale,
-            //         options
-            //       ),
-            //       createdDateStr: moment(new Date(item.createdDate)).format(
-            //         "YYYY-MM-DD"
-            //       ),
-            //       createdByData: item.createdByData,
-            //     });
-            //   }
-            // }
           }
-          // context.commit("SetOrderHistory", mapHistory);
           context.commit("SetHistoryList", data.data);
           context.commit("SetHistoryListOption", { limit: limit, page: page, count: data.data.length })
 
