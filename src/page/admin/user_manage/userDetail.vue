@@ -189,7 +189,6 @@
                   :title="$t('permission management')"
                 ></headerCard>
                 <v-divider></v-divider>
-
                 <v-card class="rounded-lg my-5" color="#FCFCFC">
                   <v-card-text class="mt-3">
                     <v-row class="mr-3 ml-3">
@@ -215,10 +214,7 @@
               <v-col
                 cols="12"
                 v-if="
-                  item.roleId == 'R_1' ||
-                  item.roleId == 'R_2' ||
-                  item.roleId == 'R_3' ||
-                  item.roleId == 'R_4'
+                ['R_1','R_2','R_3','R_4'].some(v => v == item.roleId)
                 "
               >
                 <!-- Role admin || Role coach || Parent -->
@@ -1145,7 +1141,7 @@
           </div>
           <v-row dense class="ml-5 mx-5">
             <v-col cols="12">
-              <LabelCustom required :text="$t('competition')"></LabelCustom>
+              <LabelCustom required :text="$t('competition name')"></LabelCustom>
               <v-text-field
                 ref="certificate_name"
                 dense
@@ -1379,6 +1375,8 @@ export default {
     params: "",
     relations: [],
     today: new Date(),
+    rules_certificate_date : [],
+    rules_certificate_name : []
   }),
   created() {
     this.params = this.$route?.params?.account_id;
@@ -1579,15 +1577,40 @@ export default {
           certificate_attachment: certificate.certificateAttachment,
           state: state,
         };
-      }
-
+      } 
+     
       this.certificate_dialog_show = true;
+      this.rules_certificate_name = [
+        (val) =>
+          (val || "").length > 0 ||
+          this.$t("please specify the name of the competition"),
+        (val) =>
+          (val || "").length <= 50 ||
+          this.$t(
+            "please specify the name of the competition with no more than 50 characters"
+          ),
+      ]
+      this.rules_certificate_date = [
+        (val) =>
+            (val || "").length > 0 ||
+            this.$t("please specify the date of the competition"),
+      ]
     },
     closeDialog() {
       this.certificate_dialog_show = false;
       this.certificate_show = false;
       this.addCertificate_dialog_show = false;
-      this.certificate_data = {};
+      this.certificate_data = {
+        certificate_name: "",
+        certificate_date: "",
+        certificate_date_src: "",
+        menu_certificate_date: false,
+        file: null,
+        fileName: null,
+        preview_url: "",
+        certificate_attachment: "",
+        state: "create",
+      };
     },
     uploadFile(event) {
       this.certificate_data.file = this.$refs.fileInput.files[0];
@@ -1600,7 +1623,7 @@ export default {
           reader.onload = (e) => {
             this.certificate_data.preview_url = e.target.result;
           };
-          reader.readAsDataURL(this.file);
+          reader.readAsDataURL(this.certificate_data.file);
         } else {
           Swal.fire({
             icon: "error",
@@ -1617,6 +1640,7 @@ export default {
       // console.log("removeFile");
       this.certificate_data.file = null;
       this.certificate_data.fileName = "";
+      this.certificate_data.preview_url= null
     },
     showImg(item) {
       return `${process.env.VUE_APP_URL}/api/v1/files/${item}`;
@@ -1642,18 +1666,22 @@ export default {
               account_id: this.params,
             },
           });
+          this.certificate_dialog_show = false;
         }
       } else if (this.certificate_data.state == "edit") {
         // console.log(this.certificate_data);
-        this.UpdateCertificate({
-          certificate_data: {
-            ...this.certificate_data,
-            account_id: this.params,
-          },
-          certificate_id: this.certificate_data.certificate_id,
-        });
+        this.$refs.certificate_form.validate();
+        if (this.certificate_form) {
+          this.UpdateCertificate({
+            certificate_data: {
+              ...this.certificate_data,
+              account_id: this.params,
+            },
+            certificate_id: this.certificate_data.certificate_id,
+          });
+        this.certificate_dialog_show = false;
+        }
       }
-      this.certificate_dialog_show = false;
     },
     removeCertificate(certificate_id) {
       // console.log(certificate_id)

@@ -1465,7 +1465,6 @@ const orderModules = {
           },
         };
         let { data } = await axios.get(
-          // `${process.env.VUE_APP_URL}/api/v1/order/${account_id}/limit?limit=${limit}&page=${page}`,
           `${process.env.VUE_APP_URL}/api/v1/order/history/limit?limit=${limit}&page=${page}`,
           config
         )

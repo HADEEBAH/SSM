@@ -125,8 +125,8 @@ export const CheckFileSize = (file, id) => { //check file รอ merge กับ
         key.value = ''
         Swal.fire({
             icon: "error",
-            title: this.$t('something went wrong'),
-            text: this.$t('file size must not exceed 5 MB'),
+            title: VueI18n.t('something went wrong'),
+            text: VueI18n.t('file size must not exceed 5 MB'),
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -147,8 +147,8 @@ export const CheckFileSizeType = (file, id) => { //check file รอ merge ก�
         key.value = ""
         Swal.fire({
             icon: "error",
-            title: this.$t('invalid file format'),
-            text: this.$('please attach file extensions jpg, jpeg, png'),
+            title: VueI18n.t('invalid file format'),
+            text: VueI18n.t('please attach file extensions jpg, jpeg, png'),
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,

@@ -1034,12 +1034,12 @@ export default {
               },
               {
                 text: `${
-                  course?.cpo?.packageName ? course.cpo.packageName : ""
+                  course?.cpo?.packageName ?  course.cpo.packageName : ""
                 }`,
                 color: "#ff6b81",
               },
               {
-                text: `${course?.cpo?.optionName ? course.cpo.optionName : ""}`,
+                text: `${course?.cpo?.optionName ? this.pdf_lang == "th" ? course.cpo.optionName : course.cpo.optionNameEn : ""}`,
                 color: "#ff6b81",
               },
             ],

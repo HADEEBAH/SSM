@@ -1,11 +1,28 @@
 <template>
     <v-card :flat="flat" :outlined="outlined">
         <v-card-text :class="`bg-[${color}]`">
-            <v-row>
+            <v-row v-if="!vertical_detail">
                 <v-col :cols="vertical ? '12':'auto'" align="center">
                     <slot name="img"></slot>
                 </v-col>
                 <v-col v-if="!vertical">
+                    <v-row dense>
+                        <v-col>
+                            <slot name="header"></slot>
+                        </v-col>
+                    </v-row>
+                    <v-row dense class="d-flex align-center">
+                        <v-col>
+                             <slot name="detail"></slot>
+                        </v-col>
+                    </v-row>
+                </v-col>
+            </v-row>
+            <v-row v-else>
+                <v-col cols="12" sm="auto" align="center">
+                    <slot name="img"></slot>
+                </v-col>
+                <v-col >
                     <v-row dense>
                         <v-col>
                             <slot name="header"></slot>
@@ -30,6 +47,7 @@
         outlined : {type: Boolean},
         color : {type: String},
         vertical : {type: Boolean, default: false},  
+        vertical_detail : {type: Boolean, default: false},
     },
     components: {},
     data: () => ({}),

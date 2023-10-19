@@ -96,7 +96,7 @@
                   {{
                     $i18n.locale == "th"
                       ? item?.courseName?.courseNameTh
-                      : item?.courseName?.courseNameEng
+                      : item?.courseName?.courseNameEn
                   }}
                 </v-col>
                 <v-col cols="12" sm="6">

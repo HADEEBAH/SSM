@@ -2,7 +2,7 @@
   <v-app>
     {{ SetFunction }}
     <v-container>
-      <ImgCard color="#FEFBFC" outlined class="mb-3">
+      <ImgCard vertical_detail color="#FEFBFC" outlined class="mb-3">
         <template v-slot:img>
           <v-img
             contain

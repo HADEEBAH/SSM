@@ -125,13 +125,16 @@ const myCourseModules = {
                 const dataCourseSchedule = { dates: [] };
                 let type = "student"
                 if (data_local.roles.includes('R_4')) {
-                    type = "parent"
+                    if (account_id == data_local.account_id) {
+                        type = "parent"
+                    } else {
+                        type = "student"
+                    }
                 } else if (data_local.roles.includes('R_5')) {
                     type = "student"
                 }
 
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/student/${type}/${account_id}`, config);
-                // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
                 if (data.statusCode === 200) {
                     for await (let course of data.data) {
                         // course.day_name = course.dates.day ? dayOfWeekArray(course.dates.day) : course.dates.day
@@ -169,18 +172,22 @@ const myCourseModules = {
 
                         }
                     }
-                    if (data_local.roles.includes('R_4')) {
-                        let MyCourse = []
-                        for await (const item of data.data) {
-                            if (MyCourse.filter(v => v.orderItemId === item.orderItemId).length === 0) {
-                                MyCourse.push(item)
+                    let mycourse = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
+                    if (mycourse.data.statusCode === 200) {
+                        if (data_local.roles.includes('R_4')) {
+                            let MyCourse = []
+                            for await (const item of mycourse.data.data) {
+                                if (MyCourse.filter(v => v.orderItemId === item.orderItemId).length === 0) {
+                                    MyCourse.push(item)
+                                }
                             }
+                            context.commit("SetMyCourse", MyCourse)
+                            context.commit("SetMyCourseStudentId", '')
+                        } else {
+                            context.commit("SetStudentData", mycourse.data.data)
                         }
-                        context.commit("SetMyCourse", MyCourse)
-                        context.commit("SetMyCourseStudentId", '')
-                    } else {
-                        context.commit("SetStudentData", data.data)
                     }
+
                     context.commit("SetcourseSchedule", dataCourseSchedule);
                     context.commit("SetStudentsLoading", false)
                 } else {
