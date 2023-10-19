@@ -2,33 +2,27 @@
   <v-app>
     <v-container>
       {{ setFunctions }}
-      <ImgCard color="#FEFBFC" outlined class="mb-3">
+      <ImgCard vertical_detail color="#FEFBFC" outlined class="mb-3">
         <template v-slot:img>
-          <v-row dense class="d-flex align-center h-full">
-            <v-col>
-              <v-img
-                class="rounded-lg"
-                :src="
-                  course_data.course_img || course_data.course_img !== ''
-                    ? course_data.course_img
-                    : require(`@/assets/course/default_course_img.svg`)
-                "
-                aspect-ratio="16/9"
-              >
-                <template v-slot:placeholder>
-                  <v-row
-                    class="fill-height ma-0"
-                    align="center"
-                    justify="center"
-                  >
-                    <v-progress-circular
-                      indeterminate
-                      color="#ff6b81"
-                    ></v-progress-circular>
-                  </v-row> </template
-              ></v-img>
-            </v-col>
-          </v-row>
+          <v-img
+            contain
+            class="rounded-lg"
+            :src="
+              course_data.course_img || course_data.course_img !== ''
+                ? course_data.course_img
+                : require(`@/assets/course/default_course_img.svg`)
+            "
+            max-height="140"
+            max-width="140"
+          >
+            <template v-slot:placeholder>
+              <v-row class="fill-height ma-0" align="center" justify="center">
+                <v-progress-circular
+                  indeterminate
+                  color="#ff6b81"
+                ></v-progress-circular>
+              </v-row> </template
+          ></v-img>
         </template>
         <template v-slot:header>
           <div class="text-md font-bold">
