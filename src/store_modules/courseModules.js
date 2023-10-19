@@ -474,7 +474,7 @@ const CourseModules = {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/date/${date}`, config)  
         
         if (data.statusCode === 200) {
-          console.log(data.data)
+          // console.log(data.data)
           if(data.data.length > 0){
             context.commit("SetStudentList", data.data)
             context.commit("SetNoChackInStudentList", [])
