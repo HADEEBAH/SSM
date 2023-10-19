@@ -1360,8 +1360,8 @@
                                 {{ $t("coach") }}:
                                 {{
                                   $i18n.locale == "th"
-                                    ? `${coach.firstNameTh} ${coach.lastNameTh}`
-                                    : `${coach.firstNameEn} ${coach.lastNameEn}`
+                                    ? `${coach.coachName}`
+                                    : `${coach.coachNameEn}`
                                 }}
                               </v-col>
                               <v-col cols="auto">
@@ -2264,7 +2264,7 @@ export default {
       for (let coach of this.coach_list.filter(
         (v) => v.studentPotentialArr.length > 0
       )) {
-        const coach_full_name = `${coach.firstNameTh} ${coach.lastNameTh}`;
+        const coach_full_name = `${coach.coachNmae}`;
         if (coach_full_name.search(regex) > -1) {
           coach_list_search.push(coach);
         }

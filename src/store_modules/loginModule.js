@@ -344,7 +344,25 @@ const loginModules = {
                     if (route.name === "Login") {
                         router.replace({ name: "UserKingdom" })
                     } else {
-                        window.location.href = `${process.env.VUE_APP_URL}${route.path}`
+                        if(roles.length > 0){
+                            if(route.name == "StudentsSchedule"){
+                               if(roles.some(v => ['R_4','R_5'].some(v))){
+                                    window.location.href = `${process.env.VUE_APP_URL}${route.path}`
+                                }else{
+                                    router.replace({ name: "UserKingdom" })
+                                }
+                            }else if(route.name == "menageCourse"){
+                               if(roles.some(v => ['R_3'].some(v))){
+                                    window.location.href = `${process.env.VUE_APP_URL}${route.path}`
+                                }else{
+                                    router.replace({ name: "UserKingdom" })
+                                }
+                            }else{
+                                window.location.href = `${process.env.VUE_APP_URL}${route.path}`
+                            }   
+                          
+                        }
+                       
                         // window.location.href = `http://localhost:8080${route.path}`
                         // alert(`http://localhost:8080${route.path}`)
                     }
