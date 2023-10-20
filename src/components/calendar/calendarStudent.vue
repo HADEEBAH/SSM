@@ -273,7 +273,7 @@ export default {
     selectDate(date) {
       this.event_date = [];
       this.showModal = true;
-      this.events.forEach((event) => {
+      this.events?.forEach((event) => {
         let [start, start_time] = event.start.split(" ");
         let [end, end_time] = event.end.split(" ");
         if (start_time !== "Invalid date" && end_time !== "Invalid date") {
@@ -307,7 +307,7 @@ export default {
       });
     },
     colorOfDay() {
-      this.events.forEach((event) => {
+      this.events?.forEach((event) => {
         if (event?.type === "holiday") {
           event.color = "#f19a5a";
         } else {
@@ -353,7 +353,7 @@ export default {
     },
     functionEvents(date) {
       let events_data = [];
-      this.events.forEach((event) => {
+      this.events?.forEach((event) => {
         let [date_event] = event.start.split(" ");
         let [year, month, day] = date_event.split("-");
         events_data.push({

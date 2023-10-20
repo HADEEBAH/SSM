@@ -40,7 +40,7 @@ function dayOfWeekArray(day) {
 const CourseModules = {
   namespaced: true,
   state: {
-    no_check_in_student_list : [],
+    no_check_in_student_list: [],
     course_types: [],
     courses_is_loading: false,
     course_is_loading: false,
@@ -149,10 +149,11 @@ const CourseModules = {
     student_reserve_list: [],
     student_potential_list: [],
     student_potential_list_is_loading: false,
+    filter_course_option: {}
 
   },
   mutations: {
-    SetNoChackInStudentList(state,paylaod){
+    SetNoChackInStudentList(state, paylaod) {
       state.no_check_in_student_list = paylaod
     },
     SetStudentPotentialListIsLoading(state, value) {
@@ -312,7 +313,10 @@ const CourseModules = {
     },
     ChangeDataUpdate(state, payload) {
       state.sendUpdate = payload
-    }
+    },
+    SetFilterCourseOption(state, payload) {
+      state.filter_course_option = payload
+    },
   },
   actions: {
     // COURSE TYPES
@@ -372,7 +376,7 @@ const CourseModules = {
         }
         // let localhost = `http://localhost:3000/api/v1/schedule/manage-course/${course_id}`
         // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/course/${course_id}`, config)
-        let {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course/${course_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course/${course_id}`, config)
         if (data.statusCode === 200) {
           for await (let coach of data.data) {
             coach.checked = false
@@ -471,22 +475,22 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/date/${date}`, config)  
-        
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/date/${date}`, config)
+
         if (data.statusCode === 200) {
           // console.log(data.data)
-          if(data.data.length > 0){
+          if (data.data.length > 0) {
             context.commit("SetStudentList", data.data)
             context.commit("SetNoChackInStudentList", [])
-          }else{
+          } else {
             context.commit("SetStudentList", [])
             // let localhost = "http://localhost:3000"
             let scheduleStudent = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course-student/${course_id}/${date}`, config)
-            if(scheduleStudent.data.statusCode == 200){
+            if (scheduleStudent.data.statusCode == 200) {
               context.commit("SetNoChackInStudentList", scheduleStudent.data.data)
             }
           }
-          
+
           context.commit("SetStudentListIsLoadIng", false)
         }
       } catch (error) {
@@ -653,7 +657,7 @@ const CourseModules = {
         if (error.response.data.message == "the current student more than course student recived") {
           Swal.fire({
             icon: "error",
-            title :  VueI18n.t("can not update course"),
+            title: VueI18n.t("can not update course"),
             text: VueI18n.t(error.response.data.message),
             timer: 3000,
             showDenyButton: false,
@@ -661,8 +665,8 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
-          context.dispatch("GetCourse",course_id)
-        }else{
+          context.dispatch("GetCourse", course_id)
+        } else {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("something went wrong"),
@@ -673,7 +677,7 @@ const CourseModules = {
             timerProgressBar: true,
           })
         }
-      
+
       }
     },
     // COURSE :: UPDATE COURSE COACH
@@ -872,7 +876,7 @@ const CourseModules = {
         if (error.response.data.message == "the current student more than course student recived") {
           Swal.fire({
             icon: "error",
-            title :  VueI18n.t("can not update course"),
+            title: VueI18n.t("can not update course"),
             text: VueI18n.t(error.response.data.message),
             timer: 3000,
             showDenyButton: false,
@@ -880,8 +884,8 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
-          context.dispatch("GetCourse",course_id)
-        }else{
+          context.dispatch("GetCourse", course_id)
+        } else {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("something went wrong"),
@@ -1534,8 +1538,11 @@ const CourseModules = {
       }
     },
     // COURSE :: FILTER
-    async GetCoursesFilter(context, { category_id, status, course_type_id }) {
-      context.commit("SetCoursesIsLoading", true)
+    async GetCoursesFilter(context, { category_id, status, course_type_id, limit, page }) {
+      if (page == 1) {
+
+        context.commit("SetCoursesIsLoading", true)
+      }
       try {
         if (status) {
           status = "Active"
@@ -1543,7 +1550,7 @@ const CourseModules = {
         if (!course_type_id) {
           course_type_id = 'CT_1'
         }
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/filter?category_id=${category_id}&status=${status}&course_type_id=${course_type_id}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/limit?category_id=${category_id}&status=${status}&course_type_id=${course_type_id}&limit=${limit}&page=${page}`)
         if (data.statusCode === 200) {
           for (const course of data.data) {
             let course_studant_amount = 0
@@ -1569,6 +1576,7 @@ const CourseModules = {
               }
             }
           }
+          context.commit("SetFilterCourseOption", { limit: limit, page: page, count: data.data.length })
           context.commit("SetCoursesIsLoading", false)
           context.commit("SetCourses", data.data)
         } else {
@@ -1827,7 +1835,7 @@ const CourseModules = {
     }
   },
   getters: {
-    getNoChackInStudentList(state){
+    getNoChackInStudentList(state) {
       return state.no_check_in_student_list
     },
     getStudentPotentialListIsLoading(state) {
@@ -1892,7 +1900,10 @@ const CourseModules = {
     },
     getCoursePotential(state) {
       return state.course_potential
-    }
+    },
+    getFilterCourseOption(state) {
+      return state.filter_course_option
+    },
   },
 };
 

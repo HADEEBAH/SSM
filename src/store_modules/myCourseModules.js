@@ -51,6 +51,7 @@ const myCourseModules = {
         my_course: [],
         my_schadule: [],
         student_reserve: [],
+        reserve_option: {},
         /////////////////////////ยุทธ/////////////////////////
         student_course: []
     },
@@ -97,6 +98,9 @@ const myCourseModules = {
         ResetMycourse(state) {
             state.my_course = []
         },
+        SetReserveOption(state, payload) {
+            state.reserve_option = payload
+        },
         /////////////////////////ยุทธ/////////////////////////
         SetStudentCourse(state, payload) {
             state.student_course = payload
@@ -106,7 +110,6 @@ const myCourseModules = {
         courseSchedule(context) {
             context.commit("SetcourseSchedule");
         },
-
         async GetStudentData(context, account_id) {
             context.commit("SetStudentsLoading", true)
             context.commit("ResetMycourse")
@@ -121,16 +124,16 @@ const myCourseModules = {
                 }
                 const dataCourseSchedule = { dates: [] };
                 let type = "student"
-                if(data_local.roles.includes('R_4')){
-                    if(account_id == data_local.account_id){
+                if (data_local.roles.includes('R_4')) {
+                    if (account_id == data_local.account_id) {
                         type = "parent"
-                    }else{
+                    } else {
                         type = "student"
                     }
-                }else if(data_local.roles.includes('R_5')){
+                } else if (data_local.roles.includes('R_5')) {
                     type = "student"
                 }
-                
+
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/student/${type}/${account_id}`, config);
                 if (data.statusCode === 200) {
                     for await (let course of data.data) {
@@ -184,7 +187,7 @@ const myCourseModules = {
                             context.commit("SetStudentData", mycourse.data.data)
                         }
                     }
-                   
+
                     context.commit("SetcourseSchedule", dataCourseSchedule);
                     context.commit("SetStudentsLoading", false)
                 } else {
@@ -195,7 +198,6 @@ const myCourseModules = {
                 context.commit("SetStudentsLoading", false)
             }
         },
-
         async GetStudentReserve(context, account_id) {
             try {
                 let config = {
@@ -226,8 +228,11 @@ const myCourseModules = {
                 console.log(error);
             }
         },
-        async GetProfileBooked(context, account_id) {
-            context.commit("SetStudentsBookingLoading", true)
+
+        async GetProfileBooked(context, { account_id, limit, page }) {
+            if (page == 1) {
+                context.commit("SetStudentsBookingLoading", true)
+            }
 
             try {
                 let config = {
@@ -238,7 +243,8 @@ const myCourseModules = {
                     }
                 }
 
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/by/${account_id}`, config);
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/${account_id}/limit?limit=${limit}&page=${page}`, config);
+                // https://waraphat.alldemics.com/api/v1/order/reserve/337552592218227/limit?limit=2&page=1
                 if (data.statusCode === 200) {
                     for await (const item of data.data) {
                         let arrayNumbers = item.dayOfWeekName.split(",").map(String);
@@ -253,10 +259,15 @@ const myCourseModules = {
                         booked.courseImg = booked.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${booked.courseImg}` : null
                     }
                     context.commit("SetProfileBooked", data.data)
+                    context.commit("SetReserveOption", { limit: limit, page: page, count: data.data.length })
+
+
+
                 } else {
                     throw { error: data };
                 }
                 context.commit("SetStudentsBookingLoading", false)
+
 
             } catch (error) {
                 console.log(error);
@@ -315,7 +326,6 @@ const myCourseModules = {
 
 
         },
-
         /////////////////////////ยุทธ/////////////////////////
         async GetStudentCourse(context, account_id) { // ดึงคอร์สของนักเรียนในการดูแบ
             try {
@@ -366,6 +376,9 @@ const myCourseModules = {
         },
         getMyCourse(state) {
             return state.my_course
+        },
+        getReserveOption(state) {
+            return state.reserve_option
         },
         /////////////////////////ยุทธ/////////////////////////
         getStudentCourse(state) {

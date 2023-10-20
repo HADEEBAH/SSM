@@ -1,7 +1,8 @@
 <template>
   <v-app>
     <v-container>
-      <v-row dense>
+      <!-- seasrch -->
+      <v-row dense ref="seasrch">
         <v-col cols="12">
           <v-text-field
             outlined
@@ -16,14 +17,16 @@
           ></v-text-field>
         </v-col>
       </v-row>
-      <v-row dense>
+      <!-- categoryName -->
+      <v-row dense ref="category_name">
         <v-col class="text-lg font-bold">{{
           $i18n.locale == "th"
             ? category.categoryNameTh
             : category.categoryNameEng
         }}</v-col>
       </v-row>
-      <v-row dense>
+      <!-- courseType -->
+      <v-row dense ref="course_type">
         <v-col
           cols="6"
           v-for="(type, type_index) in course_types"
@@ -79,6 +82,7 @@
           </v-card>
         </v-col>
       </v-row>
+      <!-- Detail -->
       <v-row dense ref="course_list">
         <template v-if="!courses_is_loading">
           <v-col
@@ -150,7 +154,7 @@
                     v-html="course.course_detail.slice(0, 150).trim()"
                   ></div>
                   <span
-                    v-if="course.course_detail.length > 150"
+                    v-if="course.course_detail?.length > 150"
                     class="text-red-500 cursor-pointer"
                     @click="course.show = !course.show"
                     >{{
@@ -188,6 +192,15 @@
           </v-col>
         </template>
       </v-row>
+      <v-row v-if="isDataReceived">
+        <v-col cols="12" align="center">
+          <v-progress-circular
+            indeterminate
+            color="#ff6b81"
+            size="50"
+          ></v-progress-circular>
+        </v-col>
+      </v-row>
     </v-container>
   </v-app>
 </template>
@@ -216,14 +229,15 @@ export default {
       },
     ],
     type_selected: "CT_1",
+    scrollTop: 0,
+    countDatePerPage: 0,
+    isDataReceived: false,
+    waitingProcess: false,
+    sameHistoryLength: false,
   }),
   created() {
     this.GetCourseTypes({ category_id: this.$route.params.category_id });
-    this.$store.dispatch("CourseModules/GetCoursesFilter", {
-      category_id: this.$route.params.category_id,
-      status: "Active",
-    });
-    if (this.course_types.length > 0) {
+    if (this.course_types?.length > 0) {
       this.type_selected = this.course_types[0].course_type_id;
     }
   },
@@ -231,11 +245,16 @@ export default {
     window.addEventListener("scroll", this.handleScroll);
     this.GetCategory(this.$route.params.category_id);
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "course");
+    this.$store.dispatch("CourseModules/GetCoursesFilter", {
+      category_id: this.$route.params.category_id,
+      status: "Active",
+      limit: 12,
+      page: 1,
+    });
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll);
   },
-  watch: {},
   computed: {
     ...mapGetters({
       courses_type_is_loading: "CourseModules/getCourseTypeIsLoading",
@@ -245,6 +264,7 @@ export default {
       category: "CategoryModules/getCategory",
       course_types: "CourseModules/getCourseTypes",
       course_potential: "CourseModules/getCoursePotential",
+      filter_course_option: "CourseModules/getFilterCourseOption",
     }),
   },
   methods: {
@@ -255,23 +275,57 @@ export default {
       GetCoursesFilter: "CourseModules/GetCoursesFilter",
       // GetPotential: "CourseModules/GetPotential",
     }),
+
     handleScroll() {
-      const distanceFromBottom =
-        window.innerHeight + window.scrollY - document.body.offsetHeight;
-      const scrollThreshold =
-        this.$refs.course_list.getBoundingClientRect().bottom;
-      if (!this.isLoading) {
-        if (distanceFromBottom > scrollThreshold) {
-          this.loadMoreData();
+      this.scrollTop = window.scrollY; // ตัวเลขเมื่อ scroll ตัวเลขเริ่มนับจากบนสุด = 0
+      let ref_seasrch = this.$refs.seasrch?.clientHeight; // ค่ามาจาก ref_seasrch
+      let ref_category_name = this.$refs.category_name?.clientHeight; // ค่ามาจาก ref_category_name
+      let ref_course_type = this.$refs.course_type?.clientHeight; // ค่ามาจาก ref_course_type
+      let ref_course_list = this.$refs.course_list?.clientHeight; // ค่ามาจาก ref_detail
+      let device = document.body.offsetHeight - 56; // ค่าของหน้าจอ device
+      let del_ref_seasrch = device - ref_seasrch; //
+      let del_category_name = del_ref_seasrch - ref_category_name;
+      let del_course_type = del_category_name - ref_course_type;
+      let total_del = del_course_type;
+      let countA = this.scrollTop + total_del;
+
+      if (countA >= ref_course_list && !this.sameHistoryLength) {
+        this.loadMoreData();
+      }
+
+      if (countA < ref_course_list) {
+        this.sameHistoryLength = false;
+      }
+    },
+
+    async loadMoreData() {
+      this.countDatePerPage = this.course_list?.length;
+
+      if (!this.isDataReceived) {
+        this.isDataReceived = true;
+
+        if (!this.waitingProcess) {
+          this.waitingProcess = true;
+
+          await this.GetCoursesFilter({
+            category_id: this.$route.params.category_id,
+            status: "Active",
+            limit: this.filter_course_option.limit,
+            page: this.filter_course_option.page + 1,
+          });
+
+          this.isDataReceived = false;
+          this.waitingProcess = false;
+
+          if (this.course_list?.length === this.countDatePerPage) {
+            this.sameHistoryLength = true;
+          } else {
+            this.sameHistoryLength = false;
+          }
         }
       }
     },
-    loadMoreData() {
-      this.isLoading = true;
-      setTimeout(() => {
-        this.isLoading = false;
-      }, 1000);
-    },
+
     GerPeriod(period) {
       let str = period.toString();
       let part_period = str.split(".");
@@ -314,6 +368,8 @@ export default {
         category_id: this.$route.params.category_id,
         status: "Active",
         course_type_id: course_type.course_type_id,
+        limit: 6,
+        page: 1,
       });
     },
     selectedCourse(course) {

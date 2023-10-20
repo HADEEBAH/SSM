@@ -315,16 +315,6 @@
             ></v-progress-circular>
           </v-col>
         </v-row>
-        <!-- <div v-if="history_list.length >= 0">
-          <v-card class="my-3" flat>
-            <v-card-text
-              class="rounded-lg border-2 border-[#ff6b81] text-lg font-bold"
-              align="center"
-            >
-              {{ $t("no data found") }}
-            </v-card-text>
-          </v-card>
-        </div> -->
       </template>
     </v-container>
   </v-app>
