@@ -167,7 +167,7 @@ export default {
       return [
         { name: this.$t("all"), value: "all" },
         { name: this.$t("waiting"), value: "waiting" },
-        { name: this.$t("Confirmed"), value: "contacted" },
+        { name: this.$t("confirmed"), value: "contacted" },
         { name: this.$t("canceled"), value: "cancel" },
       ];
     },

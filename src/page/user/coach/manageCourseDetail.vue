@@ -88,7 +88,7 @@
           >
             <template v-if="coach_check_in.checkInCoachId">
               <v-icon class="mr-2">mdi-check-circle</v-icon>
-              {{ $t("take up teaching") }}
+              {{ $t("teaching check in") }}
             </template>
             <template v-else>
               <v-icon class="mr-2">mdi-clock-edit-outline</v-icon>

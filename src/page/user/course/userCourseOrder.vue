@@ -219,7 +219,7 @@
               >mdi-card-account-details-outline</v-icon
             ></v-col
           >
-          <v-col class="text-lg font-bold">{{ $t("list of parents") }}</v-col>
+          <v-col class="text-lg font-bold">{{ $t("parents list") }}</v-col>
         </v-row>
         <v-divider class="my-2"></v-divider>
         <v-row>
