@@ -164,7 +164,7 @@ import { mapActions } from "vuex";
 export default {
   name: "navbarAdmin",
   data: () => ({
-    navbar_img: `${process.env.VUE_APP_URL}/navbar_img.svg`,
+    navbar_img: `${process.env.VUE_APP_URL}/navbar_img.png`,
     logo: `${process.env.VUE_APP_URL}/logo.svg`,
     menu: false,
     drawer: false,
