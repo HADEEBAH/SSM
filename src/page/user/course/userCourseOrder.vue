@@ -1329,7 +1329,7 @@ export default {
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: this.$t("agree"),
-          cancelButtonText: this.$t("cancel"),
+          cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             if (this.course_order.course_type_id == "CT_1") {
@@ -1455,7 +1455,7 @@ export default {
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: this.$t("agree"),
-          cancelButtonText: this.$t("cancel"),
+          cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             if (this.course_order.course_type_id == "CT_2") {

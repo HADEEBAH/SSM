@@ -424,7 +424,7 @@ export default {
         title: this.$t("want to cancel?"),
         showDenyButton: false,
         showCancelButton: true,
-        cancelButtonText: this.$t("cancel"),
+        cancelButtonText: this.$t("no"),
         confirmButtonText: this.$t("agree"),
       }).then(async (result) => {
         if (result.isConfirmed) {
@@ -440,7 +440,7 @@ export default {
         title: this.$t("proceed with payment?"),
         showDenyButton: false,
         showCancelButton: true,
-        cancelButtonText: this.$t("accepts"),
+        cancelButtonText: this.$t("no"),
         confirmButtonText: this.$t("agree"),
       }).then(async (result) => {
         if (result.isConfirmed) {

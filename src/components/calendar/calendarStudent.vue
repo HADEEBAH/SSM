@@ -77,7 +77,7 @@
         </v-row>
         <div v-if="event_date.length >= 0">
           <template>
-            <div v-for="(event, event_index) in event_date" :key="event_index">
+            <div v-for="(event, event_index) in event_date" :key="`${event_index}-event`">
               <v-card flat v-if="!event.type">
                 <v-card-text class="border-2 border-[#ff6b81]">
                   <v-row dense>
@@ -90,7 +90,7 @@
 
                     <v-col>
                       {{ $t("study by") }}:
-                      <span class="font-bold">{{ event.timed }}</span>
+                      <span class="font-bold">{{ $i18n.locale == "th" ? event.timed : event.studentNameEn}}</span>
 
                       <v-row dense>
                         <v-col cols="12">
@@ -133,7 +133,7 @@
                   <v-row dense>
                     <v-col cols="12">
                       {{ $t("holiday") }}:
-                      <span class="font-bold">{{ event.name }}</span>
+                      <span class="font-bold">{{event.name }}</span>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -280,6 +280,7 @@ export default {
           if (!event.type) {
             if (start === end && start === date) {
               this.event_date.push({
+                studentNameEn : event.studentNameEn,
                 timed: event.timed,
                 name: event.name,
                 subtitle: event.subtitle,
