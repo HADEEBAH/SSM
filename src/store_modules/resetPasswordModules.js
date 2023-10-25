@@ -31,7 +31,6 @@ const resetPasswordModules = {
     async SendTypeForgotPassword (context, {type, value, username = null}) {
 
       try {
-        // const endpoint = type === "phone" ? `http://localhost:3000/api/v1/password/reset-phone` : `http://localhost:3000/api/v1/password/reset-email`
         const endpoint = type === "phone" ? `${process.env.VUE_APP_URL}/api/v1/password/reset-phone` : `${process.env.VUE_APP_URL}/api/v1/password/reset-email`
         const payload = {
           username:username,
@@ -56,7 +55,6 @@ const resetPasswordModules = {
     async SendResetPasswordOtp (context, payload) {
 
       try {
-        // const endpoint = `http://localhost:3000/api/v1/password/confirm-otp`
         const endpoint = `${process.env.VUE_APP_URL}/api/v1/password/confirm-otp`
   
         const config = {

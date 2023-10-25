@@ -22,7 +22,6 @@ const reserveCourseModules = {
     async GetReserveList(context) {
       context.commit("SetReserveListIsLoading", true)
       try {
-        // let localhost = "http://localhost:3002"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/getAll-studentDetail`)
         if (data.statusCode === 200) {
           data.data.map((item) => {
@@ -54,7 +53,6 @@ const reserveCourseModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // let localhost = "http://localhost:3002"
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/reserve/update/${reserve_id}`, reserve_data, config)
         if (data.statusCode == 200) {
           await Swal.fire({

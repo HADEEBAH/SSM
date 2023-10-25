@@ -46,7 +46,6 @@ const categoryModules = {
                 context.commit("SetCategorysIsLoading", true)
             }
             try {
-                // let localhost = "http://localhost:3000"
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category/limit?limit=${limit}&page=${page}`)
                 if (data.statusCode === 200) {
                     let categorys = data.data

@@ -427,7 +427,6 @@ export default {
           },
         };
         await axios.get(
-          // `http://localhost:3000/api/v1/getrole/query?roleId=${role}&roleId=${role}`,
           `${process.env.VUE_APP_URL}/api/v1/usermanagement/search?role=${role}`,
           config
         );
@@ -537,7 +536,6 @@ export default {
           },
         };
         let { data } = await axios.get(
-          // `http://localhost:3000/api/v1/getrole/filter?${this.query_roles}`,
           `${process.env.VUE_APP_URL}/api/v1/usermanagement/search?role=${role}`,
           config
         );

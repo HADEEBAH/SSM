@@ -574,7 +574,6 @@ export default {
       });
       if (params.path) {
         if (this.$route.path !== params.path) {
-          // window.location.href = `http://localhost:8080${params.path}`
           window.location = `${process.env.VUE_APP_URL}${params.path}`;
         }
       }

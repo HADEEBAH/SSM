@@ -659,7 +659,6 @@ const orderModules = {
           },
         };
         // console.log(payload)
-        // let localhost = `http://localhost:3002`
         let { data } = await axios.post(
           `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,
           payload,
@@ -732,7 +731,6 @@ const orderModules = {
                 total: data.data.totalPrice,
                 recipient: user_data.account_id,
               };
-              // let endpoint = "http://localhost:3003"
               let endpoint = process.env.VUE_APP_URL;
               let payment = await axios.patch(
                 `${endpoint}/api/v1/payment/data/${data.data.orderNumber}`,
@@ -969,7 +967,6 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // let localhost = "http://localhost:3002"
         let updateStartDate = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/update-orderid/${order_data.orderId}`, {}, config)
         if (updateStartDate.data.statusCode == 200) {
           // console.log(updateStartDate)
@@ -1071,8 +1068,6 @@ const orderModules = {
     },
     async savePayment(context, { paymnet_data }) {
       try {
-        // console.log(paymnet_data)
-        // let localhost = "http://localhost:3002"
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
