@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <header-page slot_tag :title="$t(`manage reservations`)">
+    <header-page slot_tag :title="$t(`manage course booking`)">
       <v-text-field
         class="w-full"
         outlined
@@ -255,7 +255,7 @@ export default {
         title: this.$t("do you want to change your status?"),
         showDenyButton: false,
         showCancelButton: true,
-        cancelButtonText: this.$t("cancel"),
+        cancelButtonText: this.$t("no"),
         confirmButtonText: this.$t("agree"),
       }).then(async (result) => {
         if (result.isConfirmed) {
@@ -263,6 +263,8 @@ export default {
             reserve_id: reserve_id,
             reserve_data: reserve_data,
           });
+        }else{
+          this.GetReserveList();
         }
       });
     },

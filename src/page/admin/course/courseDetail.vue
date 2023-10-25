@@ -2571,7 +2571,7 @@ export default {
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: this.$t("agree"),
-        cancelButtonText: this.$t("cancel"),
+        cancelButtonText: this.$t("no"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.RemoveArkworkByArkworkId({ artwork_data: data });
@@ -2589,7 +2589,7 @@ export default {
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: this.$t("agree"),
-        cancelButtonText: this.$t("cancel"),
+        cancelButtonText: this.$t("no"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.RemovePrivilageByCourseID({
@@ -2629,7 +2629,7 @@ export default {
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: this.$t("agree"),
-          cancelButtonText: this.$t("cancel"),
+          cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             let student_list = await this.UpdateCouserDetail({
@@ -2673,7 +2673,7 @@ export default {
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: this.$t("agree"),
-          cancelButtonText: this.$t("cancel"),
+          cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             this.UpdateCouserCoach({
@@ -2695,7 +2695,7 @@ export default {
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: this.$t("agree"),
-          cancelButtonText: this.$t("cancel"),
+          cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             this.UpdateCouserPackage({
@@ -2719,7 +2719,7 @@ export default {
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: this.$t("agree"),
-        cancelButtonText: this.$t("cancel"),
+        cancelButtonText: this.$t("no"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           await this.UpdateCourseArkwork({
@@ -2737,7 +2737,7 @@ export default {
         showDenyButton: false,
         showCancelButton: false,
         confirmButtonText: this.$t("agree"),
-        cancelButtonText: this.$t("cancel"),
+        cancelButtonText: this.$t("no"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.UpdateCourse({ course_data: this.course_data });

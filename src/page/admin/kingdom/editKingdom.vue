@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <v-form ref="category_form" v-model="category_form">
-      <headerPage :title="$t('edit wls')" class="my-5"></headerPage>
-      <label-custom :text="$t('upload the cover image of wls')"></label-custom>
+      <headerPage :title="$t('registration changing section')" class="my-5"></headerPage>
+      <label-custom :text="$t('upload the cover')"></label-custom>
       <v-card
         class="border-dashed border-2 rounded-lg my-3"
         style="border: dashed rgb(255, 107, 129)"
@@ -96,7 +96,7 @@
                 ></v-img>
               </v-col>
               <v-col cols="12" class="flex align-center justify-center text-h5">
-                {{ $t("upload the cover image of wls") }}
+                {{ $t("upload the cover") }}
               </v-col>
               <v-col
                 cols="12"
@@ -359,7 +359,7 @@ export default {
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: this.$t("agree"),
-          cancelButtonText: this.$t("cancel"),
+          cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             try {
@@ -410,7 +410,14 @@ export default {
               });
             }
           } else {
-            Swal.fire("ข้อมูลของคุณจะไม่บันทึก", "", "info");
+            Swal.fire({
+                icon: "info",
+                title: this.$t("your data will not be saved"),
+                timer: 3000,
+                timerProgressBar: true,
+                showCancelButton: false,
+                showConfirmButton: false,
+              });
           }
         });
       }
@@ -445,7 +452,7 @@ export default {
             this.$t("please specify wls name (English)"),
           (val) =>
             val?.length < 50 ||
-            this.$t(" wls name (English) longer than specified"),
+            this.$t("wls name (English) longer than specified"),
         ],
         taughtBy: [
           (val) =>
