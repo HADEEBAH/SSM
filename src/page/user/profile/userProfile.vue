@@ -1214,7 +1214,6 @@ export default {
             }
 
             let { data } = await axios.post(
-              // `http://localhost:3000/api/v1/relations/user`,
               `${process.env.VUE_APP_URL}/api/v1/relations/user`,
               payload,
               config

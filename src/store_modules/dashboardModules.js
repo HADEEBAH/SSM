@@ -164,7 +164,6 @@ const dashboardModules = {
     // 3
     async GetEmptyCourse(context) {
       try {
-        // let { data } = await axios.get(` http://localhost:3000/api/v1/dashboard/course-status`)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/course-status`)
 
         let EmptyCourseOpen = []
@@ -400,7 +399,6 @@ const dashboardModules = {
     // async GetPotential(context) {
     //   try {
     //     let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potencial/`)
-    //     // let { data } = await axios.get(`http://localhost:3000/api/v1/dashboard/potencial/`)
     //     if (data.statusCode === 200) {
     //       data.data.countReserve.studentList.map((items) => {
     //         for (const item of items.course) {
@@ -429,7 +427,6 @@ const dashboardModules = {
     //   try {
 
     //     let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potencial/`)
-    //     // let { data } = await axios.get(`http://localhost:3000/api/v1/dashboard/potencial/`)
     //     if (data.statusCode === 200) {
     //       data.data.countReserve.studentList.map((items) => {
     //         for (const item of items.course) {

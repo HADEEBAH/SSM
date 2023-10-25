@@ -374,7 +374,6 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        // let localhost = `http://localhost:3000/api/v1/schedule/manage-course/${course_id}`
         // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/course/${course_id}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course/${course_id}`, config)
         if (data.statusCode === 200) {
@@ -484,7 +483,6 @@ const CourseModules = {
             context.commit("SetNoChackInStudentList", [])
           } else {
             context.commit("SetStudentList", [])
-            // let localhost = "http://localhost:3000"
             let scheduleStudent = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course-student/${course_id}/${date}`, config)
             if (scheduleStudent.data.statusCode == 200) {
               context.commit("SetNoChackInStudentList", scheduleStudent.data.data)
@@ -636,7 +634,6 @@ const CourseModules = {
         if (typeof course_data.course_img == "object") {
           payloadData.append("img_url", course_data.course_img)
         }
-        // let localhost = "http://localhost:3000"
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-course/${course_id}`, payloadData, config)
         if (data.statusCode === 200) {
           await context.dispatch("GetArtworkByCourse", { course_id: course_id })
@@ -858,7 +855,6 @@ const CourseModules = {
         })
         let payloadData = new FormData()
         payloadData.append("payload", JSON.stringify(payload))
-        // let localhost = "http://localhost:3000"
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-cpo/${course_id}`, payloadData, config)
         if (data.statusCode === 200) {
           Swal.fire({
@@ -1593,7 +1589,6 @@ const CourseModules = {
     // async GetPotential(context, { course_id }) {
     //   try {
     //     let endpoint = `${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/potential/${course_id}`
-    //     //  let endpoint = `http://localhost:3000/api/v1/coachmanagement/course/potential/${course_id}`
     //     let { data } = await axios.get(endpoint)
     //     if (data.statusCode === 200) {
     //       context.commit("SetCoursePotential", data.data)

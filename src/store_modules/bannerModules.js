@@ -15,7 +15,6 @@ const bannerModules = {
       try {
         let { data } = await axios.get(
           `${process.env.VUE_APP_URL}/api/v1/banner`
-          // `http://localhost:3000/api/v1/banner`
         );
         if (data.statusCode === 200) {
           context.commit("SetBannerList", data.data);
@@ -36,7 +35,6 @@ const bannerModules = {
           }
         }
         let { data } = await axios.post(
-          // `http://localhost:3000/api/v1/banner`, payload ,config
           `${process.env.VUE_APP_URL}/api/v1/banner`, payload, config
         );
         if (data.statusCode === 201) {
@@ -57,7 +55,6 @@ const bannerModules = {
           }
         }
         let { data } = await axios.delete(
-          // `http://localhost:3000/api/v1/banner/${id}`, config
           `${process.env.VUE_APP_URL}/api/v1/banner/${id}`, config
         );
         if (data.statusCode === 200) {

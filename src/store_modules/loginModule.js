@@ -87,8 +87,7 @@ const loginModules = {
                         if (type === 'student') {
                             let roles = ["R_1", "R_2", "R_3"]
                             if (!data.data.roles || !roles.includes(data.data.roles?.roleId)) {
-                                let localehost = "http://localhost:3000"
-                                let student = await axios.get(`${localehost}/api/v1/account/username-potencial/${data.data.userOneId}`)
+                                let student = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/username-potencial/${data.data.userOneId}`)
                                 if (student.data.statusCode === 200) {
                                     if (student.data.message === "study") {
                                         if (student.data.data.data.some(v => v.courseId === course_id && v.paymentStatus !== "cancel")) {
@@ -363,9 +362,6 @@ const loginModules = {
                             }   
                           
                         }
-                       
-                        // window.location.href = `http://localhost:8080${route.path}`
-                        // alert(`http://localhost:8080${route.path}`)
                     }
                 }
             } catch (response) {

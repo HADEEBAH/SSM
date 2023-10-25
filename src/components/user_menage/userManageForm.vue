@@ -1249,7 +1249,6 @@ export default {
               bodyFormData.append("image", this.send_image_profile);
               bodyFormData.append("payload", JSON.stringify(payload));
               let { data } = await axios.patch(
-                // `http://localhost:3000/api/v1/usermanagement/update/${account_id}`,
                 `${process.env.VUE_APP_URL}/api/v1/usermanagement/update/${account_id}`,
                 bodyFormData,
                 config
