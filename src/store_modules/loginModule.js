@@ -389,7 +389,7 @@ const loginModules = {
                 showDenyButton: false,
                 showCancelButton: true,
                 confirmButtonText: VueI18n.t("agree"),
-                cancelButtonText: VueI18n.t("cancel"),
+                cancelButtonText: VueI18n.t("no"),
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     VueCookie.delete("token")

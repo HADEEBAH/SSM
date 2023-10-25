@@ -23,7 +23,7 @@
           </v-row>
           <v-row dense>
             <v-col cols="12" class="pa-0 text-bold text-black">
-              <label>{{ $t("username") }}</label>
+              <label>{{ $t("username/oneid") }}</label>
               <v-text-field
                 @keydown="validate($event, 'en-number')"
                 dense
@@ -87,7 +87,7 @@
             v-if="bottomtext"
             @click="forgot_password()"
           >
-            {{ $t("forgot your password?") }}
+            {{ $t("forgotten your password?") }}
           </div>
           <div v-else class="text-center mt-2">
             {{ $t("don't have an account yet?") }}

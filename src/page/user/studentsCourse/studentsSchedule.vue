@@ -324,7 +324,7 @@
                     ></v-img>
                   </v-col>
                   <!-- detail -->
-                  <v-col cols="12" sm="3">
+                  <v-col cols="12" sm="4">
                     <v-row dense>
                       <v-col class="text-lg font-bold">
                         {{
@@ -385,7 +385,7 @@
                       </v-col>
                     </v-row>
                     <v-row dense>
-                      <v-col>
+                      <v-col cols="12">
                         <v-chip color="#F9B320" dark>
                           {{
                             `${item.day_name} ${item.period.start} - ${
@@ -399,7 +399,7 @@
                   <!-- circle -->
                   <v-col
                     cols="12"
-                    sm="4"
+                    sm="3"
                     class="d-flex align-center justify-center"
                   >
                     <v-progress-circular
@@ -1125,15 +1125,19 @@ export default {
         page: 1,
       });
       this.loading_overlay = false;
-    }
-
-    if (this.user_detail.roles?.includes("R_4")) {
+    }else if (this.user_detail.roles?.includes("R_4")) {
       await this.GetStudentData(this.user_detail.account_id);
       await this.GetProfileBooked({
         account_id: this.user_detail?.account_id,
         limit: 2,
         page: 1,
       });
+      this.loading_overlay = false;
+    }else{
+      this.$router.push({
+        name: 'StudentsSchedule',
+        params: { action: 'MyBooking' },
+      })
       this.loading_overlay = false;
     }
   },

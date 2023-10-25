@@ -137,15 +137,13 @@ const myCourseModules = {
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/student/${type}/${account_id}`, config);
                 if (data.statusCode === 200) {
                     for await (let course of data.data) {
-                        // course.day_name = course.dates.day ? dayOfWeekArray(course.dates.day) : course.dates.day
                         for (const date of course.dates.date) {
-                            // if (course.period.start !== "Invalid date" && course.period.end !== "Invalid date") {
-                            // }
                             dataCourseSchedule.dates.push({
                                 start: date + ' ' + course.period.start,
                                 end: date + ' ' + course.period.end,
                                 name: data_local.roles.includes('R_5') ? `${course.courseName.courseNameTh}(${course.courseName.courseNameEn})` : `${VueI18n.locale == 'th' ? course.studentName : course.studentNameEn} : ${course.courseName.courseNameTh} (${course.courseName.courseNameEn})`,
                                 timed: course.studentName,
+                                studentNameEn : course.studentNameEn,
                                 start_time: course.period.start,
                                 end_time: course.period.end,
                                 subtitle: `${course.coachName}(${course.coachNameEn})`,
@@ -174,6 +172,9 @@ const myCourseModules = {
                     }
                     let mycourse = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
                     if (mycourse.data.statusCode === 200) {
+                        for(let course of mycourse.data.data){
+                            course.day_name = course.dates.day ? dayOfWeekArray(course.dates.day) : course.dates.day
+                        }
                         if (data_local.roles.includes('R_4')) {
                             let MyCourse = []
                             for await (const item of mycourse.data.data) {
