@@ -463,7 +463,7 @@
                   text
                   color="#ff6b81"
                   dark
-                  >{{ $t("cancel") }}</v-btn
+                  >{{ $t("no") }}</v-btn
                 >
               </v-col>
 
@@ -679,7 +679,7 @@ export default {
             showDenyButton: false,
             showCancelButton: true,
             confirmButtonText: this.$t("agree"),
-            cancelButtonText: this.$t("cancel"),
+            cancelButtonText: this.$t("no"),
           }).then(async (result) => {
             if (result.isConfirmed) {
               this.coach_leave.status = status;
@@ -704,7 +704,7 @@ export default {
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: this.$t("agree"),
-          cancelButtonText: this.$t("cancel"),
+          cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             this.coach_leave.status = status;

@@ -47,7 +47,7 @@
                       :input-value="data.selected"
                       color="#FBF3F5"
                     >
-                      {{ `${data.item.firstNameTh} ${data.item.lastNameTh}` }}
+                      {{ $i18n.locale == 'th' ? `${data.item.firstNameTh} ${data.item.lastNameTh}` : `${data.item.firstNameEng} ${data.item.lastNameEng}` }}
                       <v-icon
                         @click="remove(data.item.userOneId)"
                         color="#ff6b81"
@@ -56,7 +56,7 @@
                     </v-chip>
                   </template>
                   <template v-slot:item="{ item }">
-                    {{ `${item.firstNameTh} ${item.lastNameTh}` }}
+                    {{  $i18n.locale == 'th' ? `${item.firstNameTh} ${item.lastNameTh}` : `${item.firstNameEng} ${item.lastNameEng}` }}
                   </template>
                 </v-autocomplete>
               </v-col>
@@ -1318,11 +1318,11 @@ export default {
           } else {
             Swal.fire({
               icon: "question",
-              title: this.$t("do you want to add students?"),
+              title: this.$t("do you want to add learner?"),
               showDenyButton: false,
               showCancelButton: true,
               confirmButtonText: this.$t("agree"),
-              cancelButtonText: this.$t("cancel"),
+              cancelButtonText: this.$t("no"),
             }).then(async (result) => {
               if (result.isConfirmed) {
                 if (this.order.payment_status === "warn") {

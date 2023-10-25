@@ -1055,7 +1055,7 @@ export default {
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: this.$t("agree"),
-        cancelButtonText: this.$t("cancel"),
+        cancelButtonText: this.$t("no"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
@@ -1110,7 +1110,7 @@ export default {
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: this.$t("agree"),
-          cancelButtonText: this.$t("cancel"),
+          cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             try {
@@ -1260,7 +1260,7 @@ export default {
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: this.$t("agree"),
-          cancelButtonText: this.$t("cancel"),
+          cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             try {
