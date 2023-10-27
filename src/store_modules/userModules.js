@@ -4,19 +4,7 @@ import VueCookie from "vue-cookie"
 const userModules = {
     namespaced: true,
     state: {
-        user_list: [
-            {
-                accountId: "",
-                email: "",
-                firstNameTh: "",
-                lastNameTh: "",
-                firstNameEn: "",
-                lastNameEN: "",
-                userName: "",
-                tel: ""
-            }
-        ],
-
+        user_list: [],
         filter_role: [],
         query_roles: "",
         filter_role_is_loading: false,
@@ -79,7 +67,8 @@ const userModules = {
 
 
                 if (data.statusCode === 200) {
-                    data.data?.map((val, i) => {
+                    // console.log('data.data.data :>> ', data.data.data);
+                    data.data?.data.map((val, i) => {
                         val.index = i + 1
                         val.userRoles?.map((value) => {
                             val.roleNameTh = value.roleNameTh

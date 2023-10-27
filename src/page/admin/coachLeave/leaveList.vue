@@ -1,6 +1,8 @@
 <template>
   <v-container>
+    <loading-overlay :loading="coach_leaves_is_loadings"> </loading-overlay>
     <headerPage :title="$t('approval of leave')" slot_tag>
+      <!-- search -->
       <v-text-field
         v-model="search"
         :placeholder="$t('search')"
@@ -23,174 +25,261 @@
         >
       </v-col>
     </v-row>
-
-    <v-row class="mb-2">
-      <template v-for="(type, type_index) in course_type">
-        <v-col
-          cols="12"
-          sm="6"
-          :key="`${type_index}-type`"
-          @click="typeSelected(type.value)"
+    <v-row dense class="my-5">
+      <!-- TAB 1  all-->
+      <v-col cols="12" sm="6" @click="(tabs = ''), clickTab()">
+        <img-card
+          :class="
+            tabs === ''
+              ? 'img-card-active cursor-pointer drop-shadow-lg'
+              : 'cursor-pointer drop-shadow-lg'
+          "
+          style="border-radius: 16px"
         >
-          <img-card
-            class="cursor-pointer"
-            :class="type_selected === type.value ? 'img-card-active' : ''"
-          >
-            <template v-slot:img>
-              <v-img
-                v-if="type.value == 'all'"
-                max-height="90"
-                max-width="70"
-                src="@/assets/coachLeave/all.png"
-              ></v-img>
-              <v-img
-                v-if="type.value == 'approved'"
-                max-height="90"
-                max-width="70"
-                src="@/assets/coachLeave/accept.png"
-              ></v-img>
-            </template>
-            <template v-slot:header>
-              <div class="font-bold">{{ type.name }}</div>
-            </template>
-            <template v-slot:detail>
-              <v-row class="d-flex align-end">
-                <v-col align="center" class="text-3xl font-bold">{{
-                  type.value === "all"
-                    ? coach_leaves.length
-                    : coach_leaves.filter((v) => v.status === type.value).length
-                }}</v-col>
-                <v-col class="text-sm">{{ $t("list") }}</v-col>
-              </v-row>
-            </template>
-          </img-card>
-        </v-col>
-      </template>
+          <template v-slot:img>
+            <v-img
+              max-height="90"
+              max-width="70"
+              src="@/assets/coachLeave/all.png"
+            ></v-img>
+          </template>
+          <template v-slot:header>
+            <div class="font-bold">{{ $t("all") }}</div>
+          </template>
+          <template v-slot:detail>
+            <v-row class="d-flex align-end">
+              <v-col align="center" class="text-3xl font-bold">
+                {{ coach_leaves_all.amount ? coach_leaves_all.amount : 0 }}
+              </v-col>
+              <v-col class="text-sm">{{ $t("list") }}</v-col>
+            </v-row>
+          </template>
+        </img-card>
+      </v-col>
+      <!-- TAB 2 approved-->
+      <v-col cols="12" sm="6" @click="(tabs = 'approved'), clickTab()">
+        <img-card
+          class="cursor-pointer drop-shadow-lg"
+          :class="tabs === 'approved' ? 'img-card-active' : ''"
+          style="border-radius: 16px"
+        >
+          <template v-slot:img>
+            <v-img
+              max-height="90"
+              max-width="70"
+              src="@/assets/coachLeave/accept.png"
+            ></v-img>
+          </template>
+          <template v-slot:header>
+            <div class="font-bold">{{ $t("approved") }}</div>
+          </template>
+          <template v-slot:detail>
+            <v-row class="d-flex align-end">
+              <v-col align="center" class="text-3xl font-bold">
+                {{
+                  coach_leaves_all.amountApproved
+                    ? coach_leaves_all.amountApproved
+                    : 0
+                }}
+              </v-col>
+              <v-col class="text-sm">{{ $t("list") }}</v-col>
+            </v-row>
+          </template>
+        </img-card>
+      </v-col>
+    </v-row>
+    <v-row dense class="my-5">
+      <!-- TAB 3 waiting for approval-->
+      <v-col cols="12" sm="4" @click="(tabs = 'pending'), clickTab()">
+        <img-card
+          class="cursor-pointer drop-shadow-lg"
+          :class="tabs === 'pending' ? 'img-card-active' : ''"
+          style="border-radius: 16px"
+        >
+          <template v-slot:img>
+            <v-img
+              max-height="90"
+              max-width="70"
+              src="@/assets/coachLeave/wait.png"
+            ></v-img>
+          </template>
+          <template v-slot:header>
+            <div class="font-bold">{{ $t("waiting for approval") }}</div>
+          </template>
+          <template v-slot:detail>
+            <v-row class="d-flex align-end">
+              <v-col align="center" class="text-3xl font-bold">
+                {{
+                  coach_leaves_all.amountPending
+                    ? coach_leaves_all.amountPending
+                    : 0
+                }}
+              </v-col>
+              <v-col class="text-sm">{{ $t("list") }}</v-col>
+            </v-row>
+          </template>
+        </img-card>
+      </v-col>
+      <!-- TAB 4 reject-->
+      <v-col cols="12" sm="4" @click="(tabs = 'reject'), clickTab()">
+        <img-card
+          class="cursor-pointer drop-shadow-lg"
+          :class="tabs === 'reject' ? 'img-card-active' : ''"
+          style="border-radius: 16px"
+        >
+          <template v-slot:img>
+            <v-img
+              max-height="90"
+              max-width="70"
+              src="@/assets/coachLeave/disaccept.png"
+            ></v-img>
+          </template>
+
+          <template v-slot:header>
+            <div class="font-bold">{{ $t("reject") }}</div>
+          </template>
+          <template v-slot:detail>
+            <v-row class="d-flex align-end">
+              <v-col align="center" class="text-3xl font-bold">
+                {{
+                  coach_leaves_all.amountReject
+                    ? coach_leaves_all.amountReject
+                    : 0
+                }}
+              </v-col>
+              <v-col class="text-sm">{{ $t("list") }}</v-col>
+            </v-row>
+          </template>
+        </img-card>
+      </v-col>
+      <!-- TAB 5 cancel-->
+      <v-col cols="12" sm="4" @click="(tabs = 'cancel'), clickTab()">
+        <img-card
+          class="cursor-pointer drop-shadow-lg"
+          :class="tabs === 'cancel' ? 'img-card-active' : ''"
+          style="border-radius: 16px"
+        >
+          <template v-slot:img>
+            <v-img
+              max-height="90"
+              max-width="70"
+              src="@/assets/coachLeave/cancel.svg"
+            ></v-img>
+          </template>
+
+          <template v-slot:header>
+            <div class="font-bold">{{ $t("cancel") }}</div>
+          </template>
+          <template v-slot:detail>
+            <v-row class="d-flex align-end">
+              <v-col align="center" class="text-3xl font-bold">
+                {{
+                  coach_leaves_all.amountCancel
+                    ? coach_leaves_all.amountCancel
+                    : 0
+                }}
+              </v-col>
+              <v-col class="text-sm">{{ $t("list") }}</v-col>
+            </v-row>
+          </template>
+        </img-card>
+      </v-col>
     </v-row>
 
-    <v-row class="mb-2">
-      <template v-for="(type, type_index) in course_type_two">
-        <v-col
-          cols="12"
-          sm="4"
-          :key="`${type_index}-type`"
-          @click="typeSelected(type.value)"
+    <!-- new table -->
+    <template>
+      <div>
+        <v-data-table
+          :search="search"
+          class="elevation-1 header-table"
+          :items="coach_leaves_all.leaveList"
+          :server-items-length="coach_leaves_all.count"
+          :options.sync="options"
+          :headers="column"
+          :items-per-page="itemsPerPage"
+          ref="coach_leave"
+          :footer-props="{
+            'disable-pagination': disable_pagination_btn,
+          }"
         >
-          <img-card
-            class="cursor-pointer"
-            :class="type_selected === type.value ? 'img-card-active' : ''"
-          >
-            <template v-slot:img>
-              <v-img
-                v-if="type.value == 'pending'"
-                max-height="90"
-                max-width="70"
-                src="@/assets/coachLeave/wait.png"
-              ></v-img>
-              <v-img
-                v-if="type.value == 'reject'"
-                max-height="90"
-                max-width="70"
-                src="@/assets/coachLeave/disaccept.png"
-              ></v-img>
-              <v-img
-                v-if="type.value == 'cancel'"
-                max-height="90"
-                max-width="70"
-                src="@/assets/coachLeave/cancel.svg"
-              ></v-img>
-            </template>
-            <template v-slot:header>
-              <div class="font-bold">{{ type.name }}</div>
-            </template>
-            <template v-slot:detail>
-              <v-row class="d-flex align-end">
-                <v-col align="center" class="text-3xl font-bold">{{
-                  type.value === "all"
-                    ? coach_leaves.length
-                    : coach_leaves.filter((v) => v.status === type.value).length
-                }}</v-col>
-                <v-col class="text-sm">{{ $t("list") }}</v-col>
-              </v-row>
-            </template>
-          </img-card>
-        </v-col>
-      </template>
-    </v-row>
-    <!-- TABLE -->
-    <v-card class="my-5">
-      <v-data-table
-        :search="search"
-        class="elevation-1 header-table"
-        :items="coach_leave_arr.length > 0 ? coach_leave_arr : coach_leaves"
-        :loading="coach_leaves_is_loading"
-        :headers="column"
-        hide-no-data
-      >
-        <template v-slot:[`item.count`]="{ item }"> {{ item.index }} </template>
+          <template v-slot:[`item.count`]="{ item }">
+            {{ item.number }}
+          </template>
 
-        <template v-slot:[`item.actions`]="{ item }">
-          <div
-            class="d-flex align-center pa-1 rounded-lg"
-            :class="
-              item.status === 'pending'
-                ? 'bg-[#FFF9E8] text-[#FCC419]'
-                : item.status === 'approved'
-                ? 'bg-[#F0F9EE] text-[#58A144]'
-                : item.status === 'cancel'
-                ? 'bg-[#e8e8e8] text-[#636363]'
-                : 'bg-[#ffeeee] text-[#f00808]'
-            "
-          >
-            <span class="w-full text-center">{{
-              item.status == "pending"
-                ? $t("waiting for approval")
-                : item.status === "approved"
-                ? $t("approved")
-                : item.status === "cancel"
-                ? $t("cancel")
-                : $t("refuse")
-            }}</span>
-          </div>
-        </template>
-        <template v-slot:[`item.startDateStr`]="{ item }">
-          {{
-            new Date(item.startDate).toLocaleDateString(
-              $i18n.locale == "th" ? "th-TH" : "en-US",
-              {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              }
-            )
-          }}
-        </template>
-        <template v-slot:[`item.createdDateStr`]="{ item }">
-          {{
-            new Date(item.createdDate).toLocaleDateString(
-              $i18n.locale == "th" ? "th-TH" : "en-US",
-              {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              }
-            )
-          }}
-        </template>
-        <template v-slot:[`item.show`]="{ item }">
-          <v-btn
-            @click="showDetail(item.coachLeaveId)"
-            class="mr-3"
-            icon
-            color="#ff6b81"
-            ><v-icon>mdi-eye-outline</v-icon>
-          </v-btn>
-        </template>
-        <template v-slot:[`no-results`]>
-          <div class="font-bold">{{ $t("no data found in table") }}</div>
-        </template>
-      </v-data-table>
-    </v-card>
+          <template v-slot:no-data>
+            <v-row
+              class="fill-height ma-0 pa-5"
+              align="center"
+              justify="center"
+            >
+              <v-progress-circular
+                indeterminate
+                color="#ff6b81"
+              ></v-progress-circular>
+            </v-row>
+          </template>
+
+          <template v-slot:[`item.actions`]="{ item }">
+            <div
+              class="d-flex align-center pa-1 rounded-lg"
+              :class="
+                item.status === 'pending'
+                  ? 'bg-[#FFF9E8] text-[#FCC419]'
+                  : item.status === 'approved'
+                  ? 'bg-[#F0F9EE] text-[#58A144]'
+                  : item.status === 'cancel'
+                  ? 'bg-[#e8e8e8] text-[#636363]'
+                  : 'bg-[#ffeeee] text-[#f00808]'
+              "
+            >
+              <span class="w-full text-center">{{
+                item.status == "pending"
+                  ? $t("waiting for approval")
+                  : item.status === "approved"
+                  ? $t("approved")
+                  : item.status === "cancel"
+                  ? $t("cancel")
+                  : $t("refuse")
+              }}</span>
+            </div>
+          </template>
+          <template v-slot:[`item.startDateStr`]="{ item }">
+            {{
+              new Date(item.startDate).toLocaleDateString(
+                $i18n.locale == "th" ? "th-TH" : "en-US",
+                {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                }
+              )
+            }}
+          </template>
+          <template v-slot:[`item.createdDateStr`]="{ item }">
+            {{
+              new Date(item.createdDate).toLocaleDateString(
+                $i18n.locale == "th" ? "th-TH" : "en-US",
+                {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                }
+              )
+            }}
+          </template>
+          <template v-slot:[`item.show`]="{ item }">
+            <v-btn
+              @click="showDetail(item.coachLeaveId)"
+              class="mr-3"
+              icon
+              color="#ff6b81"
+              ><v-icon>mdi-eye-outline</v-icon>
+            </v-btn>
+          </template>
+        </v-data-table>
+      </div>
+    </template>
+
     <v-dialog
       persistent
       :width="$vuetify.breakpoint.smAndUp ? '70vw' : ''"
@@ -220,46 +309,75 @@ import headerPage from "@/components/header/headerPage.vue";
 import imgCard from "@/components/course/imgCard.vue";
 import { mapActions, mapGetters } from "vuex";
 import coachLeaveForm from "@/components/coach_leave/coachLeaveForm.vue";
+import loadingOverlay from "@/components/loading/loadingOverlay.vue";
+
 export default {
   components: {
     headerPage,
     imgCard,
     coachLeaveForm,
+    loadingOverlay,
   },
-  data: () => ({
-    type_selected: "all",
-    search: "",
-    coach_leave_data: {
-      menu_start_date: false,
-      start_date: null,
-      start_date_str: "",
-      menu_end_date: false,
-      end_date: null,
-      end_date_str: "",
-      period: "",
-      coach_id: "",
-      remark: "",
-      status: "",
-      leave_type: "",
-      courses: [
-        {
-          my_course_id: "",
-          course_id: "",
-          substitute_coach_id: "",
-          day_of_week_id: "",
-          time_id: "",
-        },
-      ],
+
+  data() {
+    return {
+      disable_pagination_btn: false,
+      total_array_data: 0,
+      array_data: [],
+      loading: true,
+      options: {},
+      startIndex: 0,
+      endIndex: 0,
+      page: 1,
+      itemsPerPage: 10,
+      pageStart: 1,
+      pageCount: 0,
+      // tab: "all",
+      tabs: "",
+      type_selected: "all",
+      search: "",
+      coach_leave_data: {
+        menu_start_date: false,
+        start_date: null,
+        start_date_str: "",
+        menu_end_date: false,
+        end_date: null,
+        end_date_str: "",
+        period: "",
+        coach_id: "",
+        remark: "",
+        status: "",
+        leave_type: "",
+        courses: [
+          {
+            my_course_id: "",
+            course_id: "",
+            substitute_coach_id: "",
+            day_of_week_id: "",
+            time_id: "",
+          },
+        ],
+      },
+      coach_leave_arr: [],
+      coach_leaves_is_loadings: true,
+      tabs_temp: "",
+      tabs_change: false,
+    };
+  },
+  watch: {
+    options: {
+      handler() {
+        this.loadItems();
+      },
     },
-    coach_leave_arr: [],
-  }),
+  },
+
   created() {
-    this.GetLeavesAll();
     this.GetCoachs();
   },
   computed: {
     ...mapGetters({
-      coach_leaves: "CoachModules/getCoachLeaves",
+      coach_leaves_all: "CoachModules/getNewCoachLeaves",
       coach_leaves_is_loading: "CoachModules/getCoachLeavesIsLoading",
       show_dialog_coach_leave_form: "CoachModules/getShowDialogCoachLeaveForm",
     }),
@@ -347,11 +465,17 @@ export default {
       ];
     },
   },
-  mounted() {},
+
   methods: {
+    onIntersect(entries) {
+      let index = entries[0].target.textContent;
+      if (index == this.dtRowTo) {
+        this.dtRowTo += this.dtRowIncr;
+      }
+    },
     ...mapActions({
       GetCoachs: "CourseModules/GetCoachs",
-      GetLeavesAll: "CoachModules/GetLeavesAll",
+      GetNewLeavesAll: "CoachModules/GetNewLeavesAll",
       ShowDialogCoachLeaveForm: "CoachModules/ShowDialogCoachLeaveForm",
     }),
     showLeaveForm() {
@@ -363,6 +487,7 @@ export default {
         params: { coachleave_id: coach_leave_id },
       });
     },
+
     closeDialogLeaveForm() {
       this.selected_files = [];
       this.ShowDialogCoachLeaveForm(false);
@@ -391,20 +516,44 @@ export default {
         ],
       };
     },
-    typeSelected(type) {
-      this.type_selected = type;
-      this.coach_leave_arr = [];
-      if (type !== "all") {
-        this.coach_leave_arr = this.coach_leaves.filter(
-          (items) => type === items.status
-        );
 
-        this.coach_leave_arr.map((items, i) => {
-          items.index = i + 1;
-        });
-      } else {
-        this.GetLeavesAll();
+    async clickTab() {
+      if (this.tabs_temp !== this.tabs) {
+        this.tabs_change = true;
       }
+      await this.loadItems(this.tabs);
+    },
+
+    async loadItems(status) {
+      this.tabs =
+        !status || status === "" ? (this.tabs === "" ? "" : this.tabs) : status;
+
+      if (this.tabs_temp !== this.tabs) {
+        this.tabs_change = true;
+      }
+      this.tabs_temp = this.tabs;
+
+      this.loading = true;
+      await this.moreData(this.tabs);
+      this.loading = false;
+    },
+
+    async moreData(status) {
+      let { page, itemsPerPage } = this.options;
+      this.disable_pagination_btn = true;
+      this.coach_leaves_all.leaveList = [];
+      await this.GetNewLeavesAll({
+        limit: itemsPerPage,
+        page: this.tabs_change ? 1 : page,
+        status: status,
+      });
+      if (this.tabs_change) {
+        this.$refs.coach_leave.$props.options.page = 1;
+      }
+
+      this.disable_pagination_btn = false;
+      this.tabs_change = false;
+      this.coach_leaves_is_loadings = false;
     },
   },
 };
