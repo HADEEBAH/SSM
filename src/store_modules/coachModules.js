@@ -1121,7 +1121,9 @@ const coachModules = {
         console.log(error)
       }
     },
-    async GetLeavesByAccountId(context, { account_id }) {
+    async GetLeavesByAccountId(context, { limit, page, status }) {
+      let startIndex = 0;
+      let endIndex = 0;
       context.commit("SetCoachLeavesIsLoading", true)
 
       try {
@@ -1132,15 +1134,22 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${account_id}`, config)
+        let localhost = "http://localhost:3000"
+
+        let { data } = await axios.get(`${localhost}/api/v1/coach/leave/coach-limit?limit=${limit}&page=${page}&status=${status}`, config)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${account_id}`, config)
         if (data.statusCode === 200) {
-          data.data.map((val, i) => {
+          data.data?.leavesList.map((val, i) => {
             val.index = i + 1
             return val
           })
 
-          context.commit("SetCoachLeaves", data.data)
-          context.commit("SetCoachLeavesIsLoading", false)
+          startIndex = (page - 1) * limit;
+          endIndex = page * limit;
+          data.data.leavesList = data.data?.leavesList.slice(startIndex, endIndex)
+          data.data.count = status === 'approved' ? data.data.amountApproved : (status === 'pending' ? data.data.amountPending : (status === 'reject' ? data.data.amountReject : (status === 'cancel' ? data.data.amountCancel : data.data.amount)))
+          await context.commit("SetCoachLeaves", data.data)
+          await context.commit("SetCoachLeavesIsLoading", false)
 
         }
       } catch (error) {
