@@ -303,7 +303,9 @@ const orderModules = {
         console.log(error);
       }
     },
-    async GetOrders(context) {
+    async GetOrders(context, { limit, page, status }) {
+      let startIndex = 0;
+      let endIndex = 0;
       context.commit("SetOrdersIsLoading", true);
       try {
         let config = {
@@ -314,13 +316,22 @@ const orderModules = {
           },
         };
         let students = [];
-        let { data } = await axios.get(
-          `${process.env.VUE_APP_URL}/api/v1/adminpayment/`,
-          config
-        );
+        let localhost = "http://localhost:3000"
+
+        // let { data } = await axios.get(
+        //   `${process.env.VUE_APP_URL}/api/v1/adminpayment/`,
+        //   config
+        // );
+        let { data } = await axios.get(`${localhost}/api/v1/adminpayment/limit?limit=${limit}&page=${page}&status=${status}`, config);
         if (data.statusCode === 200) {
-          if (data.data.length > 0) {
-            for await (let order of data.data) {
+
+          startIndex = (page - 1) * limit;
+          endIndex = page * limit;
+          data.data.financeList = data.data?.financeList.slice(startIndex, endIndex)
+          data.data.count = status === 'success' ? data.data?.amountSuccess : (status === 'pending' ? data.data?.amountPending : (status === 'cancel' ? data.data?.amountCancel : (status === 'fail' ? data.data?.amountFail : data.data?.amount)))
+          if (data.data?.financeList?.length > 0) {
+            for await (let order of data.data?.financeList) {
+
               for await (const student of order.student) {
                 if (!students.some((v) => v.account_id == student.userOneId)) {
                   students.push({
@@ -351,11 +362,14 @@ const orderModules = {
               order.student_name_en = `${order.user?.firstNameEng} ${order.user?.lastNameEng}`;
             }
           }
+
           context.commit("SetOrders", data.data);
           context.commit("SetStudents", students);
           context.commit("SetOrdersIsLoading", false);
         } else {
-          context.commit("SetOrdersIsLoading", true);
+          // context.commit("SetOrdersIsLoading", true);
+          context.commit("SetOrdersIsLoading", false);
+
           throw { error: data };
         }
       } catch (error) {

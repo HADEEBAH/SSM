@@ -927,7 +927,7 @@ const coachModules = {
           startIndex = (page - 1) * limit;
           endIndex = page * limit;
           data.data.leaveList = data.data?.leaveList.slice(startIndex, endIndex)
-          data.data.count = status === 'approved' ? data.data.amountApproved : (status === 'pending' ? data.data.amountPending : (status === 'reject' ? data.data.amountReject : (status === 'reject' ? data.data.amountReject : (status === 'cancel' ? data.data.amountCancel : data.data.amount))))
+          data.data.count = status === 'approved' ? data.data.amountApproved : (status === 'pending' ? data.data.amountPending : (status === 'reject' ? data.data.amountReject : (status === 'cancel' ? data.data.amountCancel : data.data.amount)))
           await context.commit("SetNewCoachLeaves", data.data)
           await context.commit("SetCoachLeavesIsLoading", false)
         }
