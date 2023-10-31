@@ -4,19 +4,7 @@ import VueCookie from "vue-cookie"
 const userModules = {
     namespaced: true,
     state: {
-        user_list: [
-            {
-                accountId: "",
-                email: "",
-                firstNameTh: "",
-                lastNameTh: "",
-                firstNameEn: "",
-                lastNameEN: "",
-                userName: "",
-                tel: ""
-            }
-        ],
-
+        user_list: [],
         filter_role: [],
         query_roles: "",
         filter_role_is_loading: false,
@@ -60,7 +48,10 @@ const userModules = {
             context.commit("SetUserOneTemp", user_one_data)
         },
 
-        async GetUserList(context) {
+        async GetUserList(context, { limit, page }) {
+            //     console.log('limit :>> ', limit);
+            //     console.log('page :>> ', page);
+            // async GetUserList(context) {
             try {
                 let config = {
                     headers: {
@@ -69,11 +60,17 @@ const userModules = {
                         'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/usermanagement`, config)
+                let localhost = "http://localhost:3000"
+                let { data } = await axios.get(`${localhost}/api/v1/usermanagement/limit?limit=${limit}&page=${page}`, config)
+                // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/usermanagement/limit?limit=${limit}&page=${page}`, config)
+                // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/usermanagement`, config)
+
+
                 if (data.statusCode === 200) {
-                    data.data.map((val, i) => {
+                    // console.log('data.data.data :>> ', data.data.data);
+                    data.data?.data.map((val, i) => {
                         val.index = i + 1
-                        val.userRoles.map((value) => {
+                        val.userRoles?.map((value) => {
                             val.roleNameTh = value.roleNameTh
                             val.roleNameTh = value.roleNameTh
                             val.roleNameTh = value.roleNameTh

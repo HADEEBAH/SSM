@@ -19,7 +19,10 @@
         </v-btn>
       </v-col>
     </v-row>
+    <!-- TAB 1 -->
     <div v-if="tab === 'teaching list'">
+      <loading-overlay :loading="my_courses_is_loading"> </loading-overlay>
+
       <v-row class="mb-2">
         <v-col cols="12" align="center">
           <v-card flat width="340px">
@@ -184,6 +187,7 @@
         </v-row>
       </template>
     </div>
+    <!-- TAB 2 -->
     <div v-if="tab === 'my teaching'">
       <v-row>
         <v-col cols="auto"> {{ $t("my teaching information") }} : </v-col>
@@ -706,7 +710,10 @@
         </v-expand-transition>
       </v-card>
     </div>
+    <!-- TAB 3 -->
     <div v-if="tab === 'request leave'">
+      <loading-overlay :loading="coach_leaves_is_loadings"> </loading-overlay>
+      <!-- leave form -->
       <v-row>
         <v-col align="right">
           <v-btn
@@ -719,12 +726,16 @@
           >
         </v-col>
       </v-row>
+      <!-- tab_selected -->
       <v-row dense>
-        <v-col cols="12" sm="7" @click="SelectedStatus('all')">
+        <v-col cols="12" sm="7" @click="(tab_selected = ''), clickTab()">
           <img-card
-            :color="select_status == 'all' ? '#FBF3F5' : '#ffffff'"
-            class="cursor-pointer"
-            :class="tab === 'all' ? 'img-card-active' : ''"
+            :class="
+              tab_selected === ''
+                ? 'img-card-active cursor-pointer drop-shadow-lg'
+                : 'cursor-pointer drop-shadow-lg'
+            "
+            style="border-radius: 16px"
           >
             <template v-slot:img>
               <v-img
@@ -734,23 +745,28 @@
               ></v-img>
             </template>
             <template v-slot:header>
-              <div class="font-bold text-center">{{ $t("all") }}</div>
+              <div class="font-bold">{{ $t("all") }}</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
-                <v-col align="end" class="text-3xl font-bold">{{
-                  coach_leaves.length
-                }}</v-col>
+                <v-col align="center" class="text-3xl font-bold">
+                  {{ coach_leaves.amount ? coach_leaves.amount : 0 }}
+                </v-col>
                 <v-col class="text-sm">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
         </v-col>
-        <v-col cols="12" sm="5" @click="SelectedStatus('approved')">
+        <!-- tab2 -->
+        <v-col
+          cols="12"
+          sm="5"
+          @click="(tab_selected = 'approved'), clickTab()"
+        >
           <img-card
-            :color="select_status == 'approved' ? '#FBF3F5' : '#ffffff'"
-            class="cursor-pointer"
-            :class="tab === 'all' ? 'img-card-active' : ''"
+            class="cursor-pointer drop-shadow-lg"
+            :class="tab_selected === 'approved' ? 'img-card-active' : ''"
+            style="border-radius: 16px"
           >
             <template v-slot:img>
               <v-img
@@ -760,27 +776,31 @@
               ></v-img>
             </template>
             <template v-slot:header>
-              <div class="font-bold text-center text-[#57A363]">
-                {{ $t("approved") }}
-              </div>
+              <div class="font-bold">{{ $t("approved") }}</div>
             </template>
             <template v-slot:detail>
-              <v-row class="d-flex align-end mb-1">
-                <v-col align="end" class="text-3xl font-bold text-[#57A363]">{{
-                  coach_leaves.filter((v) => v.status === "approved").length
-                }}</v-col>
+              <v-row class="d-flex align-end">
+                <v-col align="center" class="text-3xl font-bold">
+                  {{
+                    coach_leaves.amountApproved
+                      ? coach_leaves.amountApproved
+                      : 0
+                  }}
+                </v-col>
                 <v-col class="text-sm">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
         </v-col>
       </v-row>
+      <!-- tab_selected -->
       <v-row dense class="mb-3">
-        <v-col cols="12" sm="4" @click="SelectedStatus('pending')">
+        <!-- TAB 3 waiting for approval-->
+        <v-col cols="12" sm="4" @click="(tab_selected = 'pending'), clickTab()">
           <img-card
-            :color="select_status == 'pending' ? '#FBF3F5' : '#ffffff'"
-            class="cursor-pointer"
-            :class="tab === 'all' ? 'img-card-active' : ''"
+            class="cursor-pointer drop-shadow-lg"
+            :class="tab_selected === 'pending' ? 'img-card-active' : ''"
+            style="border-radius: 16px"
           >
             <template v-slot:img>
               <v-img
@@ -790,25 +810,26 @@
               ></v-img>
             </template>
             <template v-slot:header>
-              <div class="font-bold text-center text-[#FCC419]">
-                {{ $t("waiting for approval") }}
-              </div>
+              <div class="font-bold">{{ $t("waiting for approval") }}</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
-                <v-col align="end" class="text-3xl font-bold text-[#FCC419]">{{
-                  coach_leaves.filter((v) => v.status === "pending").length
-                }}</v-col>
+                <v-col align="center" class="text-3xl font-bold">
+                  {{
+                    coach_leaves.amountPending ? coach_leaves.amountPending : 0
+                  }}
+                </v-col>
                 <v-col class="text-sm">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
         </v-col>
-        <v-col cols="12" sm="4" @click="SelectedStatus('reject')">
+        <!-- TAB 4 reject-->
+        <v-col cols="12" sm="4" @click="(tab_selected = 'reject'), clickTab()">
           <img-card
-            :color="select_status == 'reject' ? '#FBF3F5' : '#ffffff'"
-            class="cursor-pointer"
-            :class="tab === 'all' ? 'img-card-active' : ''"
+            class="cursor-pointer drop-shadow-lg"
+            :class="tab_selected === 'reject' ? 'img-card-active' : ''"
+            style="border-radius: 16px"
           >
             <template v-slot:img>
               <v-img
@@ -817,26 +838,28 @@
                 src="@/assets/leave/non-approve.png"
               ></v-img>
             </template>
+
             <template v-slot:header>
-              <div class="font-bold text-center text-[#F03D3E]">
-                {{ $t("reject") }}
-              </div>
+              <div class="font-bold">{{ $t("reject") }}</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
-                <v-col align="end" class="text-3xl font-bold text-[#F03D3E]">{{
-                  coach_leaves.filter((v) => v.status === "reject").length
-                }}</v-col>
+                <v-col align="center" class="text-3xl font-bold">
+                  {{
+                    coach_leaves.amountReject ? coach_leaves.amountReject : 0
+                  }}
+                </v-col>
                 <v-col class="text-sm">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
         </v-col>
-        <v-col cols="12" sm="4" @click="SelectedStatus('cancel')">
+        <!-- TAB 5 cancel-->
+        <v-col cols="12" sm="4" @click="(tab_selected = 'cancel'), clickTab()">
           <img-card
-            :color="select_status == 'cancel' ? '#FBF3F5' : '#ffffff'"
-            class="cursor-pointer"
-            :class="tab === 'all' ? 'img-card-active' : ''"
+            class="cursor-pointer drop-shadow-lg"
+            :class="tab_selected === 'cancel' ? 'img-card-active' : ''"
+            style="border-radius: 16px"
           >
             <template v-slot:img>
               <v-img
@@ -845,39 +868,59 @@
                 src="@/assets/leave/cancel.png"
               ></v-img>
             </template>
+
             <template v-slot:header>
-              <div class="font-bold text-center text-[#999999]">
-                {{ $t("cancel") }}
-              </div>
+              <div class="font-bold">{{ $t("cancel") }}</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
-                <v-col align="end" class="text-3xl font-bold text-[#999999]">{{
-                  coach_leaves.filter((v) => v.status === "cancel").length
-                }}</v-col>
+                <v-col align="center" class="text-3xl font-bold">
+                  {{
+                    coach_leaves.amountCancel ? coach_leaves.amountCancel : 0
+                  }}
+                </v-col>
                 <v-col class="text-sm">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
         </v-col>
       </v-row>
+      <!-- TABLE -->
       <v-data-table
         class="elevation-1 header-table"
         :headers="column"
-        :items="
-          select_status == 'all'
-            ? coach_leaves
-            : coach_leaves.filter((v) => v.status === select_status)
-        "
+        :items="coach_leaves.leavesList"
         :single-expand="singleExpand"
         :expanded.sync="expanded"
         item-key="coachLeaveId"
         show-expand
-        :loading="coach_leaves_is_loading"
+        :items-per-page="itemsPerPage"
+        :server-items-length="coach_leaves.count"
+        :options.sync="options"
+        ref="coach_leaves"
+        :footer-props="{
+          'disable-pagination': disable_pagination_btn,
+        }"
       >
-        <template v-slot:no-data>
+        <!-- <template v-slot:no-data>
           {{ $t("leave information not found") }}
+        </template> -->
+
+        <template v-slot:[`no-results`]>
+          <div class="font-bold">
+            {{ $t("no data found in table") }}
+          </div>
         </template>
+
+        <template v-slot:no-data>
+          <v-row class="fill-height ma-0 pa-5" align="center" justify="center">
+            <v-progress-circular
+              indeterminate
+              color="#ff6b81"
+            ></v-progress-circular>
+          </v-row>
+        </template>
+
         <template v-slot:[`item.count`]="{ item }">
           {{ item.index }}
         </template>
@@ -963,7 +1006,10 @@
         </template>
       </v-data-table>
     </div>
+    <!-- TAB 4 -->
     <div v-if="tab === 'student lists'">
+      <loading-overlay :loading="student_list_load"> </loading-overlay>
+
       <v-row>
         <v-col cols="auto"> {{ $t("my teaching information") }} :</v-col>
         <v-col class="font-bold">
@@ -1028,11 +1074,11 @@
       <!-- TABLE -->
       <v-card>
         <v-card-text>
+          <!-- :loading="student_list_load" -->
           <v-data-table
             class="elevation-1 header-table"
             :headers="studentListHeader"
             :items="student_list"
-            :loading="student_list_load"
           >
             <template v-slot:[`item.firstName`]="{ item }">
               {{ $i18n.locale == "th" ? item.firstNameTh : item.firstNameEn }}
@@ -1428,6 +1474,8 @@ import { mapActions, mapGetters } from "vuex";
 import coachLeaveForm from "@/components/coach_leave/coachLeaveForm.vue";
 import router from "@/router";
 import imgFileType from "@/components/file_type/imgFileType.vue";
+import loadingOverlay from "@/components/loading/loadingOverlay.vue";
+
 export default {
   name: "menageCourse",
   components: {
@@ -1438,6 +1486,7 @@ export default {
     labelCustom,
     coachLeaveForm,
     imgFileType,
+    loadingOverlay,
   },
   data: () => ({
     form_coach_leave: false,
@@ -1520,16 +1569,6 @@ export default {
       },
     ],
     previewUrl: null,
-    // periods: [
-    //   { label: "ลาเต็มวัน", value: "full" },
-    //   { label: "ลาช่วงเช้า", value: "morning" },
-    //   { label: "ลาช่วงบ่าย", value: "afternoon" },
-    // ],
-    // leaveTypes: [
-    //   { label: "ลาป่วย", value: "sick" },
-    //   { label: "ลากิจ", value: "personal" },
-    //   { label: "ลาพักร้อน", value: "take annual leave" },
-    // ],
     coach_leave_data: {
       menu_start_date: false,
       start_date: null,
@@ -1564,7 +1603,27 @@ export default {
     select_status: "all",
     coach_leaves_arr: [],
     test: "",
+    options: {},
+    tab_selected: "",
+    tabs_temp: "",
+    tabs_change: false,
+    disable_pagination_btn: false,
+    coach_leaves_is_loadings: true,
+    page: 1,
+    itemsPerPage: 10,
   }),
+
+  watch: {
+    // tab: function () {
+    //   this.GetMyCourses({ coach_id: this.user_detail.account_id });
+    //   this.my_courses_is_loading = false;
+    // },
+    options: {
+      handler() {
+        this.loadItems();
+      },
+    },
+  },
 
   created() {
     this.resetStudentList();
@@ -1573,12 +1632,14 @@ export default {
       this.loginShareToken(this.$route);
     }
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    this.GetMyCourses({ coach_id: this.user_detail.account_id });
-    this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
+    // this.GetMyCourses({ coach_id: this.user_detail.account_id });
+    // this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
     this.GetCoachs();
   },
 
   mounted() {
+    this.GetMyCourses({ coach_id: this.user_detail.account_id });
+    this.my_courses_is_loading = false;
     if (
       this.user_detail?.roles?.filter(
         (val) => val === "R_3" || val === "R_2" || val === "R_1"
@@ -1593,11 +1654,7 @@ export default {
 
     this.GetLoading(false);
   },
-  watch: {
-    tab: function () {
-      this.GetMyCourses({ coach_id: this.user_detail.account_id });
-    },
-  },
+
   computed: {
     ...mapGetters({
       my_courses: "CoachModules/getMyCourses",
@@ -1678,12 +1735,12 @@ export default {
         },
       ];
     },
-    SetFunctionsComputed() {
-      this.GetMyCourses({ coach_id: this.user_detail.account_id });
-      this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
-      this.GetCoachs();
-      return "";
-    },
+    // SetFunctionsComputed() {
+    //   this.GetMyCourses({ coach_id: this.user_detail.account_id });
+    //   this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
+    //   this.GetCoachs();
+    //   return "";
+    // },
     genToday() {
       return moment(new Date()).format("YYYY-MM-DD");
     },
@@ -1965,6 +2022,50 @@ export default {
         return this.my_courses.filter((v) => !v.type);
       }
     },
+
+    async clickTab() {
+      if (this.tabs_temp !== this.tab_selected) {
+        this.tabs_change = true;
+      }
+      await this.loadItems(this.tab_selected);
+    },
+
+    async loadItems(status) {
+      this.tab_selected =
+        !status || status === ""
+          ? this.tab_selected === ""
+            ? ""
+            : this.tab_selected
+          : status;
+
+      if (this.tabs_temp !== this.tab_selected) {
+        this.tabs_change = true;
+      }
+      this.tabs_temp = this.tab_selected;
+
+      this.loading = true;
+      await this.moreData(this.tab_selected);
+      this.loading = false;
+    },
+
+    async moreData(status) {
+      let { page, itemsPerPage } = this.options;
+      this.disable_pagination_btn = true;
+      this.coach_leaves.leavesList = [];
+      await this.GetLeavesByAccountId({
+        limit: itemsPerPage,
+        page: this.tabs_change ? 1 : page,
+        status: status,
+      });
+      if (this.tabs_change) {
+        this.$refs.coach_leaves.$props.options.page = 1;
+      }
+
+      this.disable_pagination_btn = false;
+      this.tabs_change = false;
+      this.coach_leaves_is_loadings = false;
+    },
+
     // filterMycourseStudent() {
     //   if (this.filter_course_student) {
     //     return this.my_courses.filter(

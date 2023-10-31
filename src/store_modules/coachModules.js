@@ -19,9 +19,14 @@ const coachModules = {
     student_check_in_is_loading: false,
     coach_check_in_is_loading: false,
     coach_leaves: [],
+    coach_leaves_all: [],
     coach_leaves_is_loading: false,
     attachment_leave: [],
     coach_leave: {},
+    coach_leave_approved: {},
+    coach_leave_pending: {},
+    coach_leave_reject: {},
+    coach_leave_cancel: {},
     show_dialog_coach_leave_form: false,
     student_list: [],
     student_list_load: false,
@@ -43,11 +48,26 @@ const coachModules = {
     SetCoachLeave(state, payload) {
       state.coach_leave = payload
     },
+    SetCoachLeaveApproved(state, payload) {
+      state.coach_leave_approved = payload
+    },
+    SetCoachLeavePending(state, payload) {
+      state.coach_leave_pending = payload
+    },
+    SetCoachLeaveReject(state, payload) {
+      state.coach_leave_reject = payload
+    },
+    SetCoachLeaveCancel(state, payload) {
+      state.coach_leave_cancel = payload
+    },
     SetCoachLeaves(state, payload) {
       state.coach_leaves = payload
     },
+    SetNewCoachLeaves(state, payload) {
+      state.coach_leaves_all = payload
+    },
     SetCoachLeavesIsLoading(state, value) {
-      state.coach_leaves_is_loading = value
+      state.coach_leave_is_loading = value
     },
     SetCoach(state, payload) {
       state.coach = payload;
@@ -275,8 +295,6 @@ const coachModules = {
       }
     },
     async CreateTeachingNotes(context, { check_in_coach_id, check_in_coach_data }) {
-
-
       try {
         let config = {
           headers: {
@@ -538,7 +556,7 @@ const coachModules = {
         // let user_detail = JSON.parse(localStorage.getItem("userDetail"));
         let courses_task = [];
         const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/coach/${coach_id}`, config);
-        if(data.statusCode == 200){
+        if (data.statusCode == 200) {
           let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
           if (holidays.data.statusCode === 200) {
             for await (let holiday of holidays.data.data) {
@@ -552,8 +570,8 @@ const coachModules = {
           }
           for await (const course of data.data) {
             const course_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course.courseId}`);
-            if(course_data.data.statusCode == 200){
-              for(const date of course.dates.date){
+            if (course_data.data.statusCode == 200) {
+              for (const date of course.dates.date) {
                 let start_time = course.period.start;
                 let end_time = course.period.end;
                 const [start_hours, start_minutes] = start_time.split(":");
@@ -856,8 +874,8 @@ const coachModules = {
         console.log(error)
       }
     },
-    // COACH LEAVE 
-    async GetLeavesAll(context) {
+    // COACH LEAVE All 
+    async GetLeavesAll(context, { limit, page }) {
       context.commit("SetCoachLeavesIsLoading", true)
       try {
         let config = {
@@ -867,13 +885,15 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave`, config)
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${localhost}/api/v1/coach/leave/limit?limit=${limit}&page=${page}`, config)
+
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave`, config)
         if (data.statusCode == 200) {
-          data.data.map((val, i) => {
+          data.data?.leaveList?.map((val, i) => {
             val.index = i + 1
             return val
           })
-
           context.commit("SetCoachLeaves", data.data)
           context.commit("SetCoachLeavesIsLoading", false)
         }
@@ -881,6 +901,146 @@ const coachModules = {
         context.commit("SetCoachLeavesIsLoading", false)
       }
     },
+    // NEW COACH LEAVE All 
+    async GetNewLeavesAll(context, { limit, page, status }) {
+      let startIndex = 0;
+      let endIndex = 0;
+
+      context.commit("SetCoachLeavesIsLoading", true)
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${localhost}/api/v1/coach/leave/limits?limit=${limit}&page=${page}&status=${status}`, config)
+
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave`, config)
+        if (data.statusCode === 200) {
+
+          startIndex = (page - 1) * limit;
+          endIndex = page * limit;
+          data.data.leaveList = data.data?.leaveList.slice(startIndex, endIndex)
+          data.data.count = status === 'approved' ? data.data.amountApproved : (status === 'pending' ? data.data.amountPending : (status === 'reject' ? data.data.amountReject : (status === 'cancel' ? data.data.amountCancel : data.data.amount)))
+          await context.commit("SetNewCoachLeaves", data.data)
+          await context.commit("SetCoachLeavesIsLoading", false)
+        }
+      } catch (error) {
+        context.commit("SetCoachLeavesIsLoading", false)
+      }
+    },
+    // COACH LEAVE Approved
+    async GetCoachLeaveApproved(context, { limit, page }) {
+      context.commit("SetCoachLeavesIsLoading", true)
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${localhost}/api/v1/coach/leave/approved-limit/?limit=${limit}&page=${page}`, config)
+
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/approved-limit/?limit=${limit}&page=${page}`, config)
+        if (data.statusCode == 200) {
+          data.data?.leaveList?.map((val, i) => {
+            val.index = i + 1
+            return val
+          })
+          context.commit("SetCoachLeaveApproved", data.data)
+          context.commit("SetCoachLeavesIsLoading", false)
+        }
+      } catch (error) {
+        context.commit("SetCoachLeavesIsLoading", false)
+      }
+    },
+    // COACH LEAVE Pending
+    async GetCoachLeavePending(context, { limit, page }) {
+      context.commit("SetCoachLeavesIsLoading", true)
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${localhost}/api/v1/coach/leave/pending-limit/?limit=${limit}&page=${page}`, config)
+
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/pending-limit/?limit=${limit}&page=${page}`, config)
+        if (data.statusCode == 200) {
+          data.data?.leaveList?.map((val, i) => {
+            val.index = i + 1
+            return val
+          })
+          context.commit("SetCoachLeavePending", data.data)
+          context.commit("SetCoachLeavesIsLoading", false)
+        }
+      } catch (error) {
+        context.commit("SetCoachLeavesIsLoading", false)
+      }
+    },
+    // COACH LEAVE Reject
+    async GetCoachLeaveReject(context, { limit, page }) {
+      context.commit("SetCoachLeavesIsLoading", true)
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${localhost}/api/v1/coach/leave/reject-limit/?limit=${limit}&page=${page}`, config)
+
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/reject-limit/?limit=${limit}&page=${page}`, config)
+        if (data.statusCode == 200) {
+          data.data?.leaveList?.map((val, i) => {
+            val.index = i + 1
+            return val
+          })
+          context.commit("SetCoachLeaveReject", data.data)
+          context.commit("SetCoachLeavesIsLoading", false)
+        }
+      } catch (error) {
+        context.commit("SetCoachLeavesIsLoading", false)
+      }
+    },
+    // COACH LEAVE Cancel
+    async GetCoachLeaveCancel(context, { limit, page }) {
+      context.commit("SetCoachLeavesIsLoading", true)
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${localhost}/api/v1/coach/leave/cancel-limit/?limit=${limit}&page=${page}`, config)
+
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/cancel-limit/?limit=${limit}&page=${page}`, config)
+        if (data.statusCode == 200) {
+          data.data?.leaveList?.map((val, i) => {
+            val.index = i + 1
+            return val
+          })
+          context.commit("SetCoachLeaveCancel", data.data)
+          context.commit("SetCoachLeavesIsLoading", false)
+        }
+      } catch (error) {
+        context.commit("SetCoachLeavesIsLoading", false)
+      }
+    },
+
     async SaveCoachLeave(context, { coach_leave_data, files, admin }) {
       try {
         let user_detail = JSON.parse(localStorage.getItem("userDetail"))
@@ -958,7 +1118,9 @@ const coachModules = {
         console.log(error)
       }
     },
-    async GetLeavesByAccountId(context, { account_id }) {
+    async GetLeavesByAccountId(context, { limit, page, status }) {
+      let startIndex = 0;
+      let endIndex = 0;
       context.commit("SetCoachLeavesIsLoading", true)
 
       try {
@@ -969,15 +1131,22 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${account_id}`, config)
+        let localhost = "http://localhost:3000"
+
+        let { data } = await axios.get(`${localhost}/api/v1/coach/leave/coach-limit?limit=${limit}&page=${page}&status=${status}`, config)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${account_id}`, config)
         if (data.statusCode === 200) {
-          data.data.map((val, i) => {
+          data.data?.leavesList.map((val, i) => {
             val.index = i + 1
             return val
           })
 
-          context.commit("SetCoachLeaves", data.data)
-          context.commit("SetCoachLeavesIsLoading", false)
+          startIndex = (page - 1) * limit;
+          endIndex = page * limit;
+          data.data.leavesList = data.data?.leavesList.slice(startIndex, endIndex)
+          data.data.count = status === 'approved' ? data.data.amountApproved : (status === 'pending' ? data.data.amountPending : (status === 'reject' ? data.data.amountReject : (status === 'cancel' ? data.data.amountCancel : data.data.amount)))
+          await context.commit("SetCoachLeaves", data.data)
+          await context.commit("SetCoachLeavesIsLoading", false)
 
         }
       } catch (error) {
@@ -1091,7 +1260,6 @@ const coachModules = {
         console.log(error)
       }
     },
-
     async GetstudentList(context, { coach_id, course_id, type }) {
 
       context.commit("SetStudentListLoading", true)
@@ -1157,7 +1325,6 @@ const coachModules = {
     getMyCoursesIsLoading(state) {
       return state.my_courses_is_loading;
     },
-
     getCoachCheckIn(state) {
       return state.coach_check_in
     },
@@ -1167,8 +1334,23 @@ const coachModules = {
     getCoachLeave(state) {
       return state.coach_leave
     },
+    getCoachLeaveApproved(state) {
+      return state.coach_leave_approved
+    },
+    getCoachLeavePending(state) {
+      return state.coach_leave_pending
+    },
+    getCoachLeaveReject(state) {
+      return state.coach_leave_reject
+    },
+    getCoachLeaveCancel(state) {
+      return state.coach_leave_cancel
+    },
     getCoachLeaves(state) {
       return state.coach_leaves
+    },
+    getNewCoachLeaves(state) {
+      return state.coach_leaves_all
     },
     getCoachLeavesIsLoading(state) {
       return state.coach_leaves_is_loading

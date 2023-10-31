@@ -1,7 +1,8 @@
 <template>
   <v-app>
-    <loading-overlay :loading="orders_is_loading"></loading-overlay>
-    <v-container v-if="!orders_is_loading">
+    <loading-overlay :loading="orders_is_loadings"></loading-overlay>
+    <!-- v-if="!orders_is_loading" -->
+    <v-container>
       <v-row>
         <v-col cols="6" sm="6" align="start">
           <headerPage :title="$t('finance')"></headerPage>
@@ -34,13 +35,14 @@
 
       <v-row dense class="mb-3">
         <!-- บน -->
-        <v-col cols="12" sm="6" @click="tab = 'all'">
+        <v-col cols="12" sm="6" @click="(tab_selected = ''), clickTab()">
           <img-card
-            :title="$t('all')"
-            class="cursor-pointer"
-            :class="tab === 'all' ? 'img-card-active' : ''"
-            count="5"
-            units="รายการ"
+            :class="
+              tab_selected === ''
+                ? 'img-card-active cursor-pointer drop-shadow-lg'
+                : 'cursor-pointer drop-shadow-lg'
+            "
+            style="border-radius: 16px"
           >
             <template v-slot:img>
               <v-img
@@ -54,18 +56,19 @@
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
-                <v-col align="center" class="text-3xl font-bold">{{
-                  orders.length
-                }}</v-col>
-                <v-col class="text-sm text-right">{{ $t("list") }}</v-col>
+                <v-col align="center" class="text-3xl font-bold">
+                  {{ orders.amount ? orders.amount : 0 }}
+                </v-col>
+                <v-col class="text-sm">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
         </v-col>
-        <v-col cols="12" sm="6" @click="tab = 'success'">
+        <v-col cols="12" sm="6" @click="(tab_selected = 'success'), clickTab()">
           <img-card
-            class="cursor-pointer"
-            :class="tab === 'success' ? 'img-card-active' : ''"
+            class="cursor-pointer drop-shadow-lg"
+            :class="tab_selected === 'success' ? 'img-card-active' : ''"
+            style="border-radius: 16px"
           >
             <template v-slot:img>
               <v-img
@@ -79,19 +82,22 @@
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
-                <v-col align="center" class="text-3xl font-bold">{{
-                  orders.filter((v) => v.payment_status === "success").length
-                }}</v-col>
-                <v-col class="text-sm text-right">{{ $t("list") }}</v-col>
+                <v-col align="center" class="text-3xl font-bold">
+                  {{ orders.amountSuccess ? orders.amountSuccess : 0 }}
+                </v-col>
+                <v-col class="text-sm">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
         </v-col>
+
         <!-- ล่าง -->
-        <v-col cols="12" sm="4" @click="tab = 'pending'">
+        <!-- TAB 3-->
+        <v-col cols="12" sm="4" @click="(tab_selected = 'pending'), clickTab()">
           <img-card
-            class="cursor-pointer"
-            :class="tab === 'pending' ? 'img-card-active' : ''"
+            class="cursor-pointer drop-shadow-lg"
+            :class="tab_selected === 'pending' ? 'img-card-active' : ''"
+            style="border-radius: 16px"
           >
             <template v-slot:img>
               <v-img
@@ -105,43 +111,49 @@
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
-                <v-col align="center" class="text-3xl font-bold">{{
-                  orders.filter((v) => v.payment_status === "pending").length
-                }}</v-col>
-                <v-col class="text-sm text-right">{{ $t("list") }}</v-col>
+                <v-col align="center" class="text-3xl font-bold">
+                  {{ orders.amountPending ? orders.amountPending : 0 }}
+                </v-col>
+                <v-col class="text-sm">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
         </v-col>
-        <v-col cols="12" sm="4" @click="tab = 'cancel'">
+        <!-- TAB 4 reject-->
+        <v-col cols="12" sm="4" @click="(tab_selected = 'cancel'), clickTab()">
           <img-card
-            class="cursor-pointer"
-            :class="tab === 'cancel' ? 'img-card-active' : ''"
+            class="cursor-pointer drop-shadow-lg"
+            :class="tab_selected === 'cancel' ? 'img-card-active' : ''"
+            style="border-radius: 16px"
           >
             <template v-slot:img>
               <v-img
                 max-height="90"
                 max-width="70"
-                src="@/assets/finance/cancel.svg"
+                src="@/assets/leave/cancel.png"
               ></v-img>
             </template>
+
             <template v-slot:header>
               <div class="font-bold">{{ $t("cancel") }}</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
-                <v-col align="center" class="text-3xl font-bold">{{
-                  orders.filter((v) => v.payment_status === "cancel").length
-                }}</v-col>
-                <v-col class="text-sm text-right">{{ $t("list") }}</v-col>
+                <v-col align="center" class="text-3xl font-bold">
+                  {{ orders.amountCancel ? orders.amountCancel : 0 }}
+                </v-col>
+                <v-col class="text-sm">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
         </v-col>
-        <v-col cols="12" sm="4" @click="tab = 'fail'">
+
+        <!-- TAB 5 cancel-->
+        <v-col cols="12" sm="4" @click="(tab_selected = 'fail'), clickTab()">
           <img-card
-            class="cursor-pointer"
-            :class="tab === 'fail' ? 'img-card-active' : ''"
+            class="cursor-pointer drop-shadow-lg"
+            :class="tab_selected === 'fail' ? 'img-card-active' : ''"
+            style="border-radius: 16px"
           >
             <template v-slot:img>
               <v-img
@@ -150,30 +162,37 @@
                 src="@/assets/finance/fail.png"
               ></v-img>
             </template>
+
             <template v-slot:header>
               <div class="font-bold">{{ $t("fail") }}</div>
             </template>
             <template v-slot:detail>
               <v-row class="d-flex align-end">
-                <v-col align="center" class="text-3xl font-bold">{{
-                  orders.filter((v) => v.payment_status === "fail").length
-                }}</v-col>
-                <v-col class="text-sm text-right">{{ $t("list") }}</v-col>
+                <v-col align="center" class="text-3xl font-bold">
+                  {{ orders.amountFail ? orders.amountFail : 0 }}
+                </v-col>
+                <v-col class="text-sm">{{ $t("list") }}</v-col>
               </v-row>
             </template>
           </img-card>
         </v-col>
       </v-row>
+
       <v-data-table
         v-model="selected"
         :headers="columns"
-        :items="
-          tab == 'all' ? orders : orders.filter((v) => v.payment_status === tab)
-        "
+        :items="orders.financeList"
         item-key="order_number"
         :search="search"
         show-select
         class="elevation-1 header-table"
+        :items-per-page="itemsPerPage"
+        :server-items-length="orders.count"
+        :options.sync="options"
+        ref="orders"
+        :footer-props="{
+          'disable-pagination': disable_pagination_btn,
+        }"
       >
         <template v-slot:[`item.total_price`]="{ item }">
           {{
@@ -476,11 +495,12 @@
                     </v-autocomplete>
                   </v-col>
                   <!-- ระยะเวลาคอร์ส -->
+                  <pre>{{ options_data }}</pre>
                   <v-col cols="12" sm="6" md="6">
                     <label-custom :text="$t('period')"></label-custom>
                     <v-autocomplete
                       dense
-                      :items="options"
+                      :items="options_data"
                       :item-text="
                         $i18n.locale == 'th' ? 'optionName' : 'optionNameEn'
                       "
@@ -776,7 +796,6 @@ export default {
     search: "",
     today: new Date().toISOString(),
     search_student: null,
-    itemsPerPage: 10,
     show_dialog: false,
     statusPayment: [
       {
@@ -843,14 +862,98 @@ export default {
     selected: [],
     tab: "all",
     items: ["ทั้งหมด", "ชำระเงินแล้ว", "รอดำเนินการ"],
+    options: {},
+    tab_selected: "",
+    tabs_temp: "",
+    tabs_change: false,
+    disable_pagination_btn: false,
+    orders_is_loadings: true,
+    page: 1,
+    itemsPerPage: 10,
   }),
+  watch: {
+    options: {
+      handler() {
+        this.loadItems();
+      },
+    },
+
+    search_student(val) {
+      if (val.length > 3) {
+        this.loading = true;
+        this.searchNameUser({ search_name: val }).then(() => {
+          this.loading = false;
+        });
+      }
+    },
+  },
   created() {
     this.GetCoursesList();
     this.GetOptions();
     this.GetPackages();
-    this.GetOrders();
+    // this.GetOrders();
   },
-  mounted() {},
+  computed: {
+    ...mapGetters({
+      orders: "OrderModules/getOrders",
+      orders_is_loading: "OrderModules/getOrdersIsLoading",
+      courses: "CourseModules/getCourses",
+      students: "OrderModules/getStudents",
+      username_list: "loginModules/getUsernameList",
+      packages: "CourseModules/getPackages",
+      options_data: "CourseModules/getOptions",
+      finance_filter: "FinanceModules/getFinanceFilter",
+      finance_filter_loading: "FinanceModules/getFinanceLoading",
+    }),
+    columns() {
+      return [
+        {
+          text: this.$t("order number"),
+          align: "start",
+          sortable: false,
+          value: "order_number",
+          width: 150,
+        },
+        {
+          text: this.$t("first name - last name student"),
+          align: "start",
+          sortable: false,
+          value: this.$i18n.locale == "th" ? "student_name" : "student_name_en",
+        },
+        {
+          text: this.$t("course name"),
+          align: "start",
+          sortable: false,
+          value: this.$i18n.locale == "th" ? "course_nameTh" : "course_nameEn",
+        },
+        {
+          text: this.$t("price"),
+          align: "start",
+          sortable: false,
+          value: "total_price",
+        },
+        {
+          text: this.$t("payment status"),
+          align: "start",
+          sortable: false,
+          value: "payment_status",
+        },
+        {
+          text: this.$t("payment date"),
+          align: "start",
+          sortable: false,
+          value: "paid_date",
+        },
+        {
+          text: this.$t("created date"),
+          align: "start",
+          sortable: false,
+          value: "created_date",
+        },
+        { text: "", align: "start", value: "actions", sortable: false },
+      ];
+    },
+  },
   methods: {
     ...mapActions({
       GetOrders: "OrderModules/GetOrders",
@@ -968,76 +1071,47 @@ export default {
         service_charge_end: "",
       };
     },
-  },
-  computed: {
-    ...mapGetters({
-      orders: "OrderModules/getOrders",
-      orders_is_loading: "OrderModules/getOrdersIsLoading",
-      courses: "CourseModules/getCourses",
-      students: "OrderModules/getStudents",
-      username_list: "loginModules/getUsernameList",
-      packages: "CourseModules/getPackages",
-      options: "CourseModules/getOptions",
-      finance_filter: "FinanceModules/getFinanceFilter",
-      finance_filter_loading: "FinanceModules/getFinanceLoading",
-    }),
-    columns() {
-      return [
-        {
-          text: this.$t("order number"),
-          align: "start",
-          sortable: false,
-          value: "order_number",
-          width: 150,
-        },
-        {
-          text: this.$t("first name - last name student"),
-          align: "start",
-          sortable: false,
-          value: this.$i18n.locale == "th" ? "student_name" : "student_name_en",
-        },
-        {
-          text: this.$t("course name"),
-          align: "start",
-          sortable: false,
-          value: this.$i18n.locale == "th" ? "course_nameTh" : "course_nameEn",
-        },
-        {
-          text: this.$t("price"),
-          align: "start",
-          sortable: false,
-          value: "total_price",
-        },
-        {
-          text: this.$t("payment status"),
-          align: "start",
-          sortable: false,
-          value: "payment_status",
-        },
-        {
-          text: this.$t("payment date"),
-          align: "start",
-          sortable: false,
-          value: "paid_date",
-        },
-        {
-          text: this.$t("created date"),
-          align: "start",
-          sortable: false,
-          value: "created_date",
-        },
-        { text: "", align: "start", value: "actions", sortable: false },
-      ];
-    },
-  },
-  watch: {
-    search_student(val) {
-      if (val.length > 3) {
-        this.loading = true;
-        this.searchNameUser({ search_name: val }).then(() => {
-          this.loading = false;
-        });
+    async clickTab() {
+      if (this.tabs_temp !== this.tab_selected) {
+        this.tabs_change = true;
       }
+      await this.loadItems(this.tab_selected);
+    },
+
+    async loadItems(status) {
+      this.tab_selected =
+        !status || status === ""
+          ? this.tab_selected === ""
+            ? ""
+            : this.tab_selected
+          : status;
+
+      if (this.tabs_temp !== this.tab_selected) {
+        this.tabs_change = true;
+      }
+      this.tabs_temp = this.tab_selected;
+
+      this.loading = true;
+      await this.moreData(this.tab_selected);
+      this.loading = false;
+    },
+
+    async moreData(status) {
+      let { page, itemsPerPage } = this.options;
+      this.disable_pagination_btn = true;
+      this.orders.financeList = [];
+      await this.GetOrders({
+        limit: itemsPerPage,
+        page: this.tabs_change ? 1 : page,
+        status: status,
+      });
+      if (this.tabs_change) {
+        this.$refs.orders.$props.options.page = 1;
+      }
+
+      this.disable_pagination_btn = false;
+      this.tabs_change = false;
+      this.orders_is_loadings = false;
     },
   },
 };

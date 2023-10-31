@@ -19,7 +19,7 @@
               <v-col>
                 <v-avatar size="40" color="#FBF3F5"
                   ><div class="pink--text">
-                    {{ user_list.length }}
+                    {{ user_list.amount }}
                   </div></v-avatar
                 >
               </v-col>
@@ -32,6 +32,8 @@
         <v-card-text class="border">
           <v-row class="d-flex align-center">
             <v-col>
+              <!-- @input="search_data(search)" -->
+
               <v-text-field
                 dense
                 outlined
@@ -39,8 +41,8 @@
                 color="pink"
                 hide-details
                 v-model="search"
-                @input="search_data(search)"
                 prepend-inner-icon="mdi-magnify"
+                @input="search_data(search)"
               ></v-text-field>
             </v-col>
             <label-custom v-if="!MobileSize" :text="$t('role')"></label-custom>
@@ -112,15 +114,17 @@
         <template>
           <v-data-table
             :headers="headers"
-            :items="user_list"
+            :items="user_list.data?.slice(startIndex, endIndex)"
+            :options.sync="options"
             :search="search"
             :selectedRole="selectedRole"
             :page.sync="page"
             :items-per-page="itemsPerPage"
             :page-count="pageCount"
             loading-text="Loading... Please wait"
-            :loading="user_list.length < 0"
+            :loading="loading"
             class="elevation-1 header-table"
+            :server-items-length="user_list.amount"
           >
             <template v-slot:[`item.count`]="{ item }">
               {{ item.index }}
@@ -176,6 +180,7 @@
                 class="ml-5"
                 small
                 color="#FF6B81"
+                search
                 @click="
                   deleteAccount(
                     item.accountId ? item.accountId : item.userOneId
@@ -187,7 +192,22 @@
             </template>
 
             <template v-slot:[`no-results`]>
-              <div class="font-bold">{{ $t("no data found in table") }}</div>
+              <div class="font-bold">
+                {{ $t("no data found in table") }}
+              </div>
+            </template>
+
+            <template v-slot:no-data>
+              <v-row
+                class="fill-height ma-0 pa-5"
+                align="center"
+                justify="center"
+              >
+                <v-progress-circular
+                  indeterminate
+                  color="#ff6b81"
+                ></v-progress-circular>
+              </v-row>
             </template>
           </v-data-table>
         </template>
@@ -212,6 +232,12 @@ export default {
   },
   data() {
     return {
+      totalDesserts: 0,
+      desserts: [],
+      loading: true,
+      options: {},
+      startIndex: 0,
+      endIndex: 0,
       search: "",
       dialog: false,
       dialogDelete: false,
@@ -226,6 +252,7 @@ export default {
       user_data: {
         users: "",
       },
+
       editedIndex: -1,
       editedItem: {
         number: "",
@@ -257,14 +284,19 @@ export default {
     dialogDelete(val) {
       val || this.closeDelete();
     },
+    options: {
+      handler() {
+        this.loadItems();
+      },
+      deep: true,
+    },
   },
 
   mounted() {
-    this.$store.dispatch("UserModules/GetUserList");
-    this.local_data = JSON.parse(localStorage.getItem("userDetail"));
-  },
-  created() {
-    this.GetUserList();
+    this.GetUserList({
+      limit: 10,
+      page: 1,
+    });
   },
 
   computed: {
@@ -356,6 +388,52 @@ export default {
       GetShowById: "UserModules/GetShowById",
       FilterGetUserList: "UserModules/FilterGetUserList",
     }),
+
+    async loadItems() {
+      this.loading = true;
+      await this.moreData().then((data) => {
+        this.desserts = data.items;
+        this.totalDesserts = data.total;
+        this.loading = false;
+      });
+    },
+
+    async moreData() {
+      return new Promise((resolve) => {
+        const { sortBy, sortDesc, page, itemsPerPage } = this.options;
+
+        // Fetch the new data, e.g., from an API
+        const newItems = Array.from(
+          this.GetUserList({ limit: itemsPerPage, page: page })
+        );
+
+        // Perform sorting, if needed
+        if (sortBy.length === 1 && sortDesc.length === 1) {
+          newItems.sort((a, b) => {
+            const sortA = a[sortBy[0]];
+            const sortB = b[sortBy[0]];
+
+            return sortDesc[0]
+              ? sortB.localeCompare(sortA)
+              : sortA.localeCompare(sortB);
+          });
+        }
+
+        // Calculate the total count
+        const total = newItems.length;
+
+        // Slice the new data to match the current page and itemsPerPage
+        this.startIndex = (page - 1) * itemsPerPage;
+        this.endIndex = page * itemsPerPage;
+        const items = newItems;
+        // Simulate a delay before resolving the promise (for example, 1000 milliseconds)
+
+        resolve({
+          items,
+          total,
+        });
+      });
+    },
 
     editItem(item) {
       this.editedIndex = this.datausers.indexOf(item);
@@ -471,14 +549,6 @@ export default {
                   showCancelButton: false,
                   showConfirmButton: false,
                 });
-                // Swal.fire({
-                //   icon: "success",
-                //   title: "ลบข้อมูลสำเร็จ",
-                // }).then(async (result) => {
-                //   if (result.isConfirmed) {
-                //     this.$store.dispatch("UserModules/GetUserList");
-                //   }
-                // });
               }
             } else {
               throw { message: data.message };
