@@ -243,7 +243,7 @@ const manageScheduleModules = {
             timerProgressBar: true,
           });
           context.dispatch("GetAllHolidays");
-          context.dispatch("GetDataInSchedule");
+          context.dispatch("GetDataInSchedule",{month: new Date().getMonth()+1 , yaer:new Date().getFullYear()});
         } else {
           Swal.fire({
             icon: "warning",
@@ -311,7 +311,7 @@ const manageScheduleModules = {
       }
     },
 
-    async GetDataInSchedule(context) {
+    async GetDataInSchedule(context,{month, year}) {
       let dataInSchadule = [];
       context.commit("SetGetAllHolidaysIsLoading", true)
       try {
@@ -323,7 +323,8 @@ const manageScheduleModules = {
           },
         };
         // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/admincourse/courseholiday`, config);
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/courseholiday`, config);
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/courseholiday`, config);
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/courseholiday-limit?month=${month}&year=${year}`, config);
         
         if (data.statusCode === 200) {
           let eventSchadule = [];
