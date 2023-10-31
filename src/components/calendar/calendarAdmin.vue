@@ -32,6 +32,7 @@
       :event-overlap-threshold="30"
       @click:event="selectedDate($event)"
       :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
+      @change="GetSchedule"
     >
       <template v-slot:event="{ event }">
         {{ event.timed ?? event.timed }}
@@ -347,7 +348,12 @@ export default {
       GetAllHolidays: "ManageScheduleModules/GetAllHolidays",
       GetDataInSchedule: "ManageScheduleModules/GetDataInSchedule",
     }),
-
+    GetSchedule({start}){
+      if(!this.data_search_schedule && !this.data_filter_schedule){
+        this.GetDataInSchedule({month: start.month , year: start.year})
+      }
+     
+    },
     convertDate(item) {
       const oriDate = new Date(item);
       const fullDate = oriDate.toLocaleDateString(
