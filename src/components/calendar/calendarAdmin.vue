@@ -349,7 +349,10 @@ export default {
       GetDataInSchedule: "ManageScheduleModules/GetDataInSchedule",
     }),
     GetSchedule({start}){
-      this.GetDataInSchedule({month: start.month , year: start.year})
+      if(!this.data_search_schedule && !this.data_filter_schedule){
+        this.GetDataInSchedule({month: start.month , year: start.year})
+      }
+     
     },
     convertDate(item) {
       const oriDate = new Date(item);

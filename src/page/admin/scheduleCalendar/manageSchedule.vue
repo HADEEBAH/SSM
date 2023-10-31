@@ -39,7 +39,8 @@
       </v-col>
     </v-row>
     <v-row>
-      <!-- <v-col
+      <v-col
+        v-if="get_all_holidays_is_loading || get_all_course_is_loading"
         cols="12"
         md="8"
         sm="8"
@@ -51,8 +52,8 @@
           color="#ff6b81"
           indeterminate
         ></v-progress-circular>
-      </v-col> -->
-      <v-col cols="12" md="8" sm="8">
+      </v-col>
+      <v-col v-show="!get_all_holidays_is_loading && !get_all_course_is_loading" cols="12" md="8" sm="8">
         <calendarAdmin></calendarAdmin>
       </v-col>
       <v-col cols="12" md="4" sm="4">
@@ -65,7 +66,8 @@
           </v-card-text>
           <div class="font-bold">{{ $t("course schedule") }}</div>
           <!-- ตารางวิชาเรียน -->
-          <!-- <div
+          <div
+            v-if="get_all_holidays_is_loading || get_all_course_is_loading"
             class="pa-2"
           >
             <v-row>
@@ -78,8 +80,8 @@
                 ></v-progress-circular>
               </v-col>
             </v-row>
-          </div> -->
-          <div v-if="courseDate()">
+          </div>
+          <div v-else-if="courseDate()">
             <v-alert
               class="my-2"
               border="left"
@@ -962,8 +964,11 @@ export default {
       GetDataInSchedule: "ManageScheduleModules/GetDataInSchedule",
       GetFilterSchedule: "ManageScheduleModules/GetFilterSchedule",
       GetSearchSchedule: "ManageScheduleModules/GetSearchSchedule",
+      ResetFilte: "ManageScheduleModules/ResetFilte",
+      ResetSearch: "ManageScheduleModules/ResetSearch",
     }),
     ClarData(){
+      this.ResetFilte()
       this.GetDataInSchedule({
         month: new Date().getMonth()+1,
         year: new Date().getFullYear()
