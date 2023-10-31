@@ -54,11 +54,17 @@ const manageScheduleModules = {
     SetDataFilterSchedule(state, payload) {
       state.data_filter_schedule = payload;
     },
+    ResetFilterSchedule(state){
+      state.data_filter_schedule = null
+    },
+    ResetSearchFilterSchedule(state){
+      state.data_search_schedule = null
+    },
     SetSearchFilterSchedule(state, payload) {
       let res = null
       let eventSchadule = []
       let dataInSchadule = []
-
+      console.log(payload)
       if (payload !== "") {
         if (state.data_filter_schedule?.length > 0) {
           res = state.data_filter_schedule?.filter((items) =>
@@ -67,6 +73,7 @@ const manageScheduleModules = {
           )
 
         } else if (state.data_in_schedule?.length > 0) {
+          console.log(state.data_in_schedule)
           res = state.data_in_schedule?.filter((items) =>
             (items.name && items.name?.indexOf(payload) !== -1) || (items.coach && items.coach?.indexOf(payload) !== -1) || (items.package && items.package?.indexOf(payload) !== -1)
           )
@@ -89,6 +96,7 @@ const manageScheduleModules = {
               startTime: item.startTime,
               endTime: item.endTime,
               selectedDate: item.selectedDate,
+              itmeData: item
             });
 
             dataInSchadule = eventSchadule;
@@ -103,6 +111,12 @@ const manageScheduleModules = {
     },
   },
   actions: {
+    ResetFilte(context){
+      context.commit("ResetFilterSchedule")
+    },
+    ResetSearch(context){
+      context.commit("ResetSearchFilterSchedule")
+    },
     async GetFilterCourse(context) {
       try {
         let config = {
@@ -243,7 +257,7 @@ const manageScheduleModules = {
             timerProgressBar: true,
           });
           context.dispatch("GetAllHolidays");
-          context.dispatch("GetDataInSchedule");
+          context.dispatch("GetDataInSchedule",{month: new Date().getMonth()+1 , yaer:new Date().getFullYear()});
         } else {
           Swal.fire({
             icon: "warning",
@@ -311,7 +325,7 @@ const manageScheduleModules = {
       }
     },
 
-    async GetDataInSchedule(context) {
+    async GetDataInSchedule(context,{month, year}) {
       let dataInSchadule = [];
       context.commit("SetGetAllHolidaysIsLoading", true)
       try {
@@ -323,7 +337,8 @@ const manageScheduleModules = {
           },
         };
         // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/admincourse/courseholiday`, config);
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/courseholiday`, config);
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/courseholiday`, config);
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/courseholiday-limit?month=${month}&year=${year}`, config);
         
         if (data.statusCode === 200) {
           let eventSchadule = [];

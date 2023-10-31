@@ -194,8 +194,8 @@
         <v-col class="font-bold">
           {{
             $i18n.locale == "th"
-              ? profile_detail.firstNameTh
-              : profile_detail.firstNameEng
+              ? `${profile_detail.firstNameTh} ${profile_detail.lastNameTh}`
+              :`${profile_detail.firstNameEng} ${profile_detail.lastNameEng}`
           }}
         </v-col>
       </v-row>
@@ -1015,8 +1015,8 @@
         <v-col class="font-bold">
           {{
             $i18n.locale == "th"
-              ? profile_detail.firstNameTh
-              : profile_detail.firstNameEng
+            ? `${profile_detail.firstNameTh} ${profile_detail.lastNameTh}`
+              :`${profile_detail.firstNameEng} ${profile_detail.lastNameEng}`
           }}
         </v-col>
       </v-row>

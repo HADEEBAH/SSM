@@ -315,16 +315,6 @@
             ></v-progress-circular>
           </v-col>
         </v-row>
-        <!-- <div v-if="history_list.length >= 0">
-          <v-card class="my-3" flat>
-            <v-card-text
-              class="rounded-lg border-2 border-[#ff6b81] text-lg font-bold"
-              align="center"
-            >
-              {{ $t("no data found") }}
-            </v-card-text>
-          </v-card>
-        </div> -->
       </template>
     </v-container>
   </v-app>
@@ -434,7 +424,7 @@ export default {
         title: this.$t("want to cancel?"),
         showDenyButton: false,
         showCancelButton: true,
-        cancelButtonText: this.$t("cancel"),
+        cancelButtonText: this.$t("no"),
         confirmButtonText: this.$t("agree"),
       }).then(async (result) => {
         if (result.isConfirmed) {
@@ -450,7 +440,7 @@ export default {
         title: this.$t("proceed with payment?"),
         showDenyButton: false,
         showCancelButton: true,
-        cancelButtonText: this.$t("accepts"),
+        cancelButtonText: this.$t("no"),
         confirmButtonText: this.$t("agree"),
       }).then(async (result) => {
         if (result.isConfirmed) {

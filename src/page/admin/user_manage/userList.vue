@@ -505,7 +505,6 @@ export default {
           },
         };
         await axios.get(
-          // `http://localhost:3000/api/v1/getrole/query?roleId=${role}&roleId=${role}`,
           `${process.env.VUE_APP_URL}/api/v1/usermanagement/search?role=${role}`,
           config
         );
@@ -520,7 +519,7 @@ export default {
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: this.$t("agree"),
-        cancelButtonText: this.$t("cancel"),
+        cancelButtonText: this.$t("no"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
@@ -607,7 +606,6 @@ export default {
           },
         };
         let { data } = await axios.get(
-          // `http://localhost:3000/api/v1/getrole/filter?${this.query_roles}`,
           `${process.env.VUE_APP_URL}/api/v1/usermanagement/search?role=${role}`,
           config
         );

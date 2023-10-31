@@ -82,7 +82,6 @@ const UserManageModules = {
   actions: {
     async GetCertificateCount(context, { account_id }) {
       try {
-        // let localhost = "http://localhost:3000"
         const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/certificate/count/${account_id}`)
         if (data.statusCode == 200) {
           // console.log(data.data)
@@ -94,7 +93,6 @@ const UserManageModules = {
     },
     async GetCourseCoachList(context, { account_id }) {
       try {
-        // let localhost = "http://localhost:3000"
         const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/usermanagement/course-coach/list?accountId=${account_id}`)
         if (data.statusCode == 200) {
           let courseCoachList = data.data.map(v => {
@@ -129,7 +127,6 @@ const UserManageModules = {
     },
     async GetCertificateListByAccount(context, { account_id }) {
       try {
-        // let localhost = "http://localhost:3000"
         const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/certificate/${account_id}`)
         if (data.statusCode == 200) {
           // console.log(data)
@@ -156,7 +153,6 @@ const UserManageModules = {
         let payloadData = new FormData()
         payloadData.append("payload", JSON.stringify(payload))
         payloadData.append("img_url", certificate_data.file)
-        // let localhost = "http://localhost:3000"
         const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/certificate`, payloadData, config)
         if (data.statusCode == 201) {
           // console.log(data)
@@ -195,7 +191,6 @@ const UserManageModules = {
         let payloadData = new FormData()
         payloadData.append("payload", JSON.stringify(payload))
         payloadData.append("img_url", certificate_data.file)
-        // let localhost = "http://localhost:3000"
         const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/certificate/${certificate_id}`, payloadData, config)
         if (data.statusCode == 200) {
           Swal.fire({
@@ -223,7 +218,6 @@ const UserManageModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // let localhost = "http://localhost:3000"
         const { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/certificate/${cartificate_id}`, config)
         if (data.statusCode == 200) {
           Swal.fire({

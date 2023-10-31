@@ -88,7 +88,7 @@
           >
             <template v-if="coach_check_in.checkInCoachId">
               <v-icon class="mr-2">mdi-check-circle</v-icon>
-              {{ $t("take up teaching") }}
+              {{ $t("teaching check in") }}
             </template>
             <template v-else>
               <v-icon class="mr-2">mdi-clock-edit-outline</v-icon>
@@ -558,10 +558,10 @@
                     outlined
                     dense
                     :class="
-                      $vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'
+                      $vuetify.breakpoint.smAndUp ? '': 'w-full'
                     "
                   >
-                    {{ $t("clear data") }}
+                    {{ $t("delete information") }}
                   </v-btn>
                 </v-col>
                 <v-col cols="12" sm="auto">
@@ -702,7 +702,7 @@
                       $vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'
                     "
                   >
-                    {{ $t("clear data") }}
+                    {{ $t("delete information") }}
                   </v-btn>
                 </v-col>
                 <v-col cols="12" sm="auto">
@@ -932,7 +932,7 @@
                 color="#ff6b81"
                 @click="clearTeachingNote"
               >
-                {{ $t("clear data") }}
+                {{ $t("delete information") }}
               </v-btn>
             </v-col>
             <v-col cols="12" sm="6">
@@ -1101,7 +1101,7 @@
                   text
                   color="#ff6b81"
                 >
-                  {{ $t("additional comments") }}
+                  {{ $t("delete information") }}
                 </v-btn>
               </v-col>
               <v-col cols="12" sm="6">
@@ -1282,7 +1282,7 @@
                   text
                   color="#ff6b81"
                 >
-                  {{ $t("clear data") }}
+                  {{ $t("delete information") }}
                 </v-btn>
               </v-col>
               <v-col cols="12" sm="6">
@@ -1788,7 +1788,7 @@ export default {
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: this.$t("agree"),
-          cancelButtonText: this.$t("cancel"),
+          cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             this.is_loading = true;
@@ -1828,7 +1828,7 @@ export default {
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: this.$t("agree"),
-          cancelButtonText: this.$t("cancel"),
+          cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             await this.UpdateAssessmentPotential({
@@ -1858,7 +1858,7 @@ export default {
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: this.$t("agree"),
-        cancelButtonText: this.$t("cancel"),
+        cancelButtonText: this.$t("no"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.CreateTeachingNotes({
@@ -1877,7 +1877,7 @@ export default {
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: this.$t("agree"),
-          cancelButtonText: this.$t("cancel"),
+          cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             await this.AssessmentStudent({
@@ -1927,8 +1927,8 @@ export default {
           title: this.$t("want to save?"),
           showDenyButton: false,
           showCancelButton: true,
-          confirmButtonText: this.$t("accepts"),
-          cancelButtonText: this.$t("cancel"),
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             this.UpdateCheckInStudent({
@@ -1976,7 +1976,7 @@ export default {
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: this.$t("agree"),
-          cancelButtonText: this.$t("cancel"),
+          cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             this.check_in = true;
@@ -2084,7 +2084,7 @@ export default {
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: this.$t("agree"),
-        cancelButtonText: this.$t("cancel"),
+        cancelButtonText: this.$t("no"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.DeleteAssessmentPotentialFile({
@@ -2110,7 +2110,7 @@ export default {
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: this.$t("agree"),
-        cancelButtonText: this.$t("cancel"),
+        cancelButtonText: this.$t("no"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.DeleteAssessmentFile({ att_assessment_id: file.attId }).then(
@@ -2224,7 +2224,7 @@ export default {
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: this.$t("agree"),
-        cancelButtonText: this.$t("cancel"),
+        cancelButtonText: this.$t("no"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           await this.DeleteSummaryFile({ att_assessment_id: file.attId }).then(

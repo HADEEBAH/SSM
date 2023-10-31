@@ -90,7 +90,7 @@ const loginModules = {
                                 let student = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/username-potencial/${data.data.userOneId}`)
                                 if (student.data.statusCode === 200) {
                                     if (student.data.message === "study") {
-                                        if (student.data.data.data.some(v => v.courseId === course_id)) {
+                                        if (student.data.data.data.some(v => v.courseId === course_id && v.paymentStatus !== "cancel")) {
                                             Swal.fire({
                                                 icon: "warning",
                                                 title: VueI18n.t("warning"),
@@ -362,9 +362,6 @@ const loginModules = {
                             }   
                           
                         }
-                       
-                        // window.location.href = `http://localhost:8080${route.path}`
-                        // alert(`http://localhost:8080${route.path}`)
                     }
                 }
             } catch (response) {
@@ -392,7 +389,7 @@ const loginModules = {
                 showDenyButton: false,
                 showCancelButton: true,
                 confirmButtonText: VueI18n.t("agree"),
-                cancelButtonText: VueI18n.t("cancel"),
+                cancelButtonText: VueI18n.t("no"),
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     VueCookie.delete("token")

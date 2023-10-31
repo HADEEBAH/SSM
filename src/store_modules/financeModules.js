@@ -116,7 +116,6 @@ const financeModules = {
                 'Authorization': `Bearer ${VueCookie.get("token")}`
               }
             }
-            // let localhost = 'http://localhost:3000'
             let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/admincourse/export-log`, {}, config)
             console.log(data)
             var workbook = XLSX.utils.book_new();

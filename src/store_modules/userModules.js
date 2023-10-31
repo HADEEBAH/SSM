@@ -101,7 +101,7 @@ const userModules = {
                         'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                // let { data } = await axios.get(`http://localhost:3000/api/v1/getrole/filter?${query_roles}`, config)  <------------------- ---------------->
+                
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/getrole/filter?${query_roles}`, config)
 
                 if (data.statusCode === 200) {
@@ -169,7 +169,6 @@ const userModules = {
                         'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                // let { data } = await axios.get(`http://localhost:3000/api/v1/usermanagement/student/${student_id}`, config)
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/usermanagement/student/${student_id}`, config)
                 if (data.statusCode === 200) {
                     data.data.map((items) => {

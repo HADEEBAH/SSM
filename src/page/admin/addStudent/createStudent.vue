@@ -47,7 +47,7 @@
                       :input-value="data.selected"
                       color="#FBF3F5"
                     >
-                      {{ `${data.item.firstNameTh} ${data.item.lastNameTh}` }}
+                      {{ $i18n.locale == 'th' ? `${data.item.firstNameTh} ${data.item.lastNameTh}` : `${data.item.firstNameEng} ${data.item.lastNameEng}` }}
                       <v-icon
                         @click="remove(data.item.userOneId)"
                         color="#ff6b81"
@@ -56,7 +56,7 @@
                     </v-chip>
                   </template>
                   <template v-slot:item="{ item }">
-                    {{ `${item.firstNameTh} ${item.lastNameTh}` }}
+                    {{  $i18n.locale == 'th' ? `${item.firstNameTh} ${item.lastNameTh}` : `${item.firstNameEng} ${item.lastNameEng}` }}
                   </template>
                 </v-autocomplete>
               </v-col>
@@ -513,7 +513,7 @@
                     </v-text-field>
                   </template>
                   <v-date-picker
-                    :min="today.toISOString()"
+                    :min="minStartDate(course.course_data.course_open_date)"
                     v-model="course.start_date"
                     @input="inputDate($event, 'course open', course)"
                     :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
@@ -844,6 +844,7 @@ import { dateFormatter, inputValidation } from "@/functions/functions";
 import Swal from "sweetalert2";
 import mixin from "@/mixin";
 import router from "@/router";
+import moment from 'moment';
 
 export default {
   name: "addlearnPage",
@@ -907,6 +908,36 @@ export default {
         parents: [],
         students: [],
       });
+    }else{
+      this.order.courses = [{
+        course_options: [],
+        course_data: null,
+        apply_for_yourself: false,
+        apply_for_others: false,
+        course_id: "",
+        course_type: "",
+        course_type_id: "CT_1",
+        category_id: "",
+        package: "",
+        package_data: null,
+        option: {},
+        option_data: "",
+        period: 0,
+        times_in_class: 0,
+        day: "",
+        time: "",
+        coach: "",
+        manu_start_date: true,
+        start_date_str: "",
+        start_date: "",
+        start_day: "",
+        price: 0,
+        detail: "",
+        remark: "",
+        selected: true,
+        parents: [],
+        students: [],
+      }]
     }
   },
   mounted() {
@@ -1030,6 +1061,13 @@ export default {
       searchNameUser: "loginModules/searchNameUser",
       GetAllCourseMonitor: "CourseMonitorModules/GetAllCourseMonitor",
     }),
+    minStartDate(startDate){
+      let date = new Date()
+      if(moment(startDate).isSameOrAfter(date)){
+        date = new Date(startDate)
+      } 
+      return date.toISOString()
+    },
     Validation(e, lang) {
       inputValidation(e, lang);
     },
@@ -1280,11 +1318,11 @@ export default {
           } else {
             Swal.fire({
               icon: "question",
-              title: this.$t("do you want to add students?"),
+              title: this.$t("do you want to add learner?"),
               showDenyButton: false,
               showCancelButton: true,
               confirmButtonText: this.$t("agree"),
-              cancelButtonText: this.$t("cancel"),
+              cancelButtonText: this.$t("no"),
             }).then(async (result) => {
               if (result.isConfirmed) {
                 if (this.order.payment_status === "warn") {

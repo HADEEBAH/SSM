@@ -478,12 +478,17 @@
 
         <v-row>
           <v-col cols="12" sm align="right">
-            <v-btn text color="#ff6b81" @click="closeDialogLeaveForm()">{{
+            <v-btn 
+              text 
+              :class="$vuetify.breakpoint.smAndUp ? '' : 'w-full'"
+              color="#ff6b81" 
+              @click="closeDialogLeaveForm()">{{
               $t("cancel")
             }}</v-btn>
           </v-col>
           <v-col cols="12" sm="auto" align="right">
             <v-btn
+              :class="$vuetify.breakpoint.smAndUp ? '' : 'w-full'"
               depressed
               :disabled="validateCoachLeave"
               :dark="!validateCoachLeave"
@@ -802,7 +807,7 @@ export default {
             my_course_data.push({
               my_course_id: `${course.courseId}|${course.dayOfWeekId}|${course.timeId}`,
               cousre_id: course.courseId,
-              course_name: `${course.courseNameTh} ${course.start} - ${course.end}น.`,
+              course_name: `${this.$i18n.locale == "th" ? course.courseNameTh : course.courseNameEn} ${course.start} - ${course.end}น.`,
               time_id: course.timeId,
               day_of_week_id: course.dayOfWeekId,
               day_of_week_name: course.dayOfWeekName,
@@ -973,8 +978,8 @@ export default {
           title: this.$t("do you want to submit a leave letter?"),
           showDenyButton: false,
           showCancelButton: true,
-          confirmButtonText: this.$t("accept"),
-          cancelButtonText: this.$t("cancel"),
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             for (let date of this.coach_leave_data.dates) {

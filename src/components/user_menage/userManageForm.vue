@@ -1249,7 +1249,6 @@ export default {
               bodyFormData.append("image", this.send_image_profile);
               bodyFormData.append("payload", JSON.stringify(payload));
               let { data } = await axios.patch(
-                // `http://localhost:3000/api/v1/usermanagement/update/${account_id}`,
                 `${process.env.VUE_APP_URL}/api/v1/usermanagement/update/${account_id}`,
                 bodyFormData,
                 config
@@ -1290,6 +1289,7 @@ export default {
                   this.GetShowById(this.$route.params.account_id);
                 }
               } else {
+                
                 throw { message: data.data };
               }
             } catch ({ response }) {
@@ -1312,6 +1312,14 @@ export default {
                 this.error_message = this.$t(
                   "unable to change roles because the coach is in a teaching state"
                 );
+                this.$router.push({
+                  name: "UserDetail",
+                  params: {
+                    action: "view",
+                    account_id: this.$route.params.account_id,
+                    from: "userList",
+                  },
+                });
               } else if (response?.data?.message === "User not found.") {
                 if (this.user_one_temp.userName !== "") {
                   this.error_message = this.$t(

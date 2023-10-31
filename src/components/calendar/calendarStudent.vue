@@ -77,7 +77,7 @@
         </v-row>
         <div v-if="event_date.length >= 0">
           <template>
-            <div v-for="(event, event_index) in event_date" :key="event_index">
+            <div v-for="(event, event_index) in event_date" :key="`${event_index}-event`">
               <v-card flat v-if="!event.type">
                 <v-card-text class="border-2 border-[#ff6b81]">
                   <v-row dense>
@@ -90,7 +90,7 @@
 
                     <v-col>
                       {{ $t("study by") }}:
-                      <span class="font-bold">{{ event.timed }}</span>
+                      <span class="font-bold">{{ $i18n.locale == "th" ? event.timed : event.studentNameEn}}</span>
 
                       <v-row dense>
                         <v-col cols="12">
@@ -133,7 +133,7 @@
                   <v-row dense>
                     <v-col cols="12">
                       {{ $t("holiday") }}:
-                      <span class="font-bold">{{ event.name }}</span>
+                      <span class="font-bold">{{event.name }}</span>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -273,13 +273,14 @@ export default {
     selectDate(date) {
       this.event_date = [];
       this.showModal = true;
-      this.events.forEach((event) => {
+      this.events?.forEach((event) => {
         let [start, start_time] = event.start.split(" ");
         let [end, end_time] = event.end.split(" ");
         if (start_time !== "Invalid date" && end_time !== "Invalid date") {
           if (!event.type) {
             if (start === end && start === date) {
               this.event_date.push({
+                studentNameEn : event.studentNameEn,
                 timed: event.timed,
                 name: event.name,
                 subtitle: event.subtitle,
@@ -307,7 +308,7 @@ export default {
       });
     },
     colorOfDay() {
-      this.events.forEach((event) => {
+      this.events?.forEach((event) => {
         if (event?.type === "holiday") {
           event.color = "#f19a5a";
         } else {
@@ -353,7 +354,7 @@ export default {
     },
     functionEvents(date) {
       let events_data = [];
-      this.events.forEach((event) => {
+      this.events?.forEach((event) => {
         let [date_event] = event.start.split(" ");
         let [year, month, day] = date_event.split("-");
         events_data.push({

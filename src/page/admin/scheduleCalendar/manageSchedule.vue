@@ -53,7 +53,7 @@
           indeterminate
         ></v-progress-circular>
       </v-col>
-      <v-col v-else cols="12" md="8" sm="8">
+      <v-col v-show="!get_all_holidays_is_loading && !get_all_course_is_loading" cols="12" md="8" sm="8">
         <calendarAdmin></calendarAdmin>
       </v-col>
       <v-col cols="12" md="4" sm="4">
@@ -67,8 +67,8 @@
           <div class="font-bold">{{ $t("course schedule") }}</div>
           <!-- ตารางวิชาเรียน -->
           <div
-            class="pa-2"
             v-if="get_all_holidays_is_loading || get_all_course_is_loading"
+            class="pa-2"
           >
             <v-row>
               <v-col align="center">
@@ -754,7 +754,7 @@
                   <template v-slot:no-data>
                     <v-list-item>
                       <v-list-item-title>
-                        {{ $t("coach information not foun") }}
+                        {{ $t("coach information not found") }}
                       </v-list-item-title>
                     </v-list-item>
                   </template>
@@ -773,13 +773,7 @@
                 <v-row>
                   <v-col cols="12" sm="6" align="center">
                     <v-btn
-                      @click="
-                        GetDataInSchedule(),
-                          (filter_dialog = false),
-                          (selectedCourseType = []),
-                          (selectedCourse = []),
-                          (selectedCoach = [])
-                      "
+                      @click="ClarData()"
                       depressed
                       outlined
                       :color="'#ff6b81'"
@@ -958,7 +952,6 @@ export default {
   mounted() {
     this.GetCoachs();
     this.GetFilterCourse();
-    this.GetDataInSchedule();
   },
   methods: {
     ...mapActions({
@@ -971,7 +964,20 @@ export default {
       GetDataInSchedule: "ManageScheduleModules/GetDataInSchedule",
       GetFilterSchedule: "ManageScheduleModules/GetFilterSchedule",
       GetSearchSchedule: "ManageScheduleModules/GetSearchSchedule",
+      ResetFilte: "ManageScheduleModules/ResetFilte",
+      ResetSearch: "ManageScheduleModules/ResetSearch",
     }),
+    ClarData(){
+      this.ResetFilte()
+      this.GetDataInSchedule({
+        month: new Date().getMonth()+1,
+        year: new Date().getFullYear()
+      })
+      this.filter_dialog = false
+      this.selectedCourseType = []
+      this.selectedCourse = []
+      this.selectedCoach = []
+    },
     GenDate(date) {
       if (date) {
         let options = {
@@ -1055,7 +1061,7 @@ export default {
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: this.$t("agree"),
-        cancelButtonText: this.$t("cancel"),
+        cancelButtonText: this.$t("no"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
@@ -1072,7 +1078,10 @@ export default {
             );
             if (data.statusCode === 200) {
               (this.show_dialog_edit_holoday = false), this.GetAllHolidays();
-              this.GetDataInSchedule();
+              this.GetDataInSchedule({
+                month: new Date().getMonth()+1,
+                year: new Date().getFullYear()
+              })
               Swal.fire({
                 icon: "success",
                 title: this.$t("succeed"),
@@ -1110,7 +1119,7 @@ export default {
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: this.$t("agree"),
-          cancelButtonText: this.$t("cancel"),
+          cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             try {
@@ -1148,7 +1157,10 @@ export default {
               this.holidayEndTime = "";
               this.nameHoliday = "";
               this.GetAllHolidays();
-              this.GetDataInSchedule();
+              this.GetDataInSchedule({
+                month: new Date().getMonth()+1,
+                year: new Date().getFullYear()
+              })
               this.holidaydatesTh = "";
 
               if (data.statusCode === 201) {
@@ -1260,14 +1272,17 @@ export default {
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: this.$t("agree"),
-          cancelButtonText: this.$t("cancel"),
+          cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             try {
               let payload = {};
               payload = { ...this.setDataEditDialog };
               this.GetEditHolidays(payload);
-              this.GetDataInSchedule();
+              this.GetDataInSchedule({
+                month: new Date().getMonth()+1,
+                year: new Date().getFullYear()
+              })
               this.show_dialog_edit_holoday = false;
               this.editHolidayDates = null;
               this.setDataEditDialog = {};

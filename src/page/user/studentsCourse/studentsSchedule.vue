@@ -1,9 +1,10 @@
 <template>
-  <v-container>
+  <v-container ref="profile_booked">
     {{ setFunctions }}
-    <loading-overlay
+    <!-- <loading-overlay
       :loading="student_is_loading || student_booking_is_loading"
-    ></loading-overlay>
+    ></loading-overlay> -->
+    <loading-overlay :loading="loading_overlay"></loading-overlay>
     <div>
       <label class="text-xl font-bold">{{
         $t("class schedule information")
@@ -112,7 +113,7 @@
       <v-expand-x-transition transition="scale-transition">
         <div v-if="$route.params.action == 'MyCourse'">
           <!-- Role Parent -->
-          <div v-if="data_local.roles.includes('R_4')">
+          <div v-if="data_local.roles?.includes('R_4')">
             <v-row dense class="mb-3">
               <v-col cols="12">
                 <v-autocomplete
@@ -208,24 +209,14 @@
                           >
                           {{
                             $i18n.locale == "th"
-                              ? item.student.firstNameTh
-                              : item.student.firstNameEng
+                              ? item.student?.firstNameTh
+                              : item.student?.firstNameEng
                           }}
                           {{
                             $i18n.locale == "th"
-                              ? item.student.lastNameTh
-                              : item.student.lastNameEng
+                              ? item.student?.lastNameTh
+                              : item.student?.lastNameEng
                           }}
-                          <!-- {{
-                            !item.student.firstNameTh
-                              ? "-"
-                              : item.student.firstNameTh
-                          }}
-                          {{
-                            !item.student.lastNameTh
-                              ? "-"
-                              : item.student.lastNameTh
-                          }} -->
                         </v-col>
                       </v-row>
                       <v-row dense>
@@ -235,20 +226,14 @@
                           >
                           {{
                             $i18n.locale == "th"
-                              ? item.createdBy.firstNameTh
-                              : item.createdBy.firstNameEng
+                              ? item.createdBy?.firstNameTh
+                              : item.createdBy?.firstNameEng
                           }}
                           {{
                             $i18n.locale == "th"
-                              ? item.createdBy.lastNameTh
-                              : item.createdBy.lastNameEng
+                              ? item.createdBy?.lastNameTh
+                              : item.createdBy?.lastNameEng
                           }}
-                          <!-- {{
-                            !item.createdBy ? "-" : item.createdBy.firstNameTh
-                          }}
-                          {{
-                            !item.createdBy ? "-" : item.createdBy.lastNameTh
-                          }} -->
                         </v-col>
                       </v-row>
                       <v-row dense>
@@ -287,7 +272,7 @@
             </div>
           </div>
           <!-- Role Student -->
-          <div v-if="data_local.roles.includes('R_5')">
+          <div v-if="data_local.roles?.includes('R_5')">
             <v-card v-if="student_data.length == 0">
               <v-card-text
                 class="text-center border-2 border-[#ff6b81] rounded-lg"
@@ -339,7 +324,7 @@
                     ></v-img>
                   </v-col>
                   <!-- detail -->
-                  <v-col cols="12" sm="3">
+                  <v-col cols="12" sm="4">
                     <v-row dense>
                       <v-col class="text-lg font-bold">
                         {{
@@ -372,24 +357,14 @@
                         >
                         {{
                           $i18n.locale == "th"
-                            ? item.student.firstNameTh
-                            : item.student.firstNameEng
+                            ? item.student?.firstNameTh
+                            : item.student?.firstNameEng
                         }}
                         {{
                           $i18n.locale == "th"
-                            ? item.student.lastNameTh
-                            : item.student.lastNameEng
+                            ? item.student?.lastNameTh
+                            : item.student?.lastNameEng
                         }}
-                        <!-- {{
-                          !item.student.firstNameTh
-                            ? "-"
-                            : item.student.firstNameTh
-                        }}
-                        {{
-                          !item.student.lastNameTh
-                            ? "-"
-                            : item.student.lastNameTh
-                        }} -->
                       </v-col>
                     </v-row>
                     <v-row dense>
@@ -399,20 +374,18 @@
                         >
                         {{
                           $i18n.locale == "th"
-                            ? item.createdBy.firstNameTh
-                            : item.createdBy.firstNameEng
+                            ? item.createdBy?.firstNameTh
+                            : item.createdBy?.firstNameEng
                         }}
                         {{
                           $i18n.locale == "th"
-                            ? item.createdBy.lastNameTh
-                            : item.createdBy.lastNameEng
+                            ? item.createdBy?.lastNameTh
+                            : item.createdBy?.lastNameEng
                         }}
-                        <!-- {{ !item.createdBy ? "-" : item.createdBy.firstNameTh }}
-                        {{ !item.createdBy ? "-" : item.createdBy.lastNameTh }} -->
                       </v-col>
                     </v-row>
                     <v-row dense>
-                      <v-col>
+                      <v-col cols="12">
                         <v-chip color="#F9B320" dark>
                           {{
                             `${item.day_name} ${item.period.start} - ${
@@ -426,7 +399,7 @@
                   <!-- circle -->
                   <v-col
                     cols="12"
-                    sm="4"
+                    sm="3"
                     class="d-flex align-center justify-center"
                   >
                     <v-progress-circular
@@ -451,7 +424,7 @@
       <v-expand-x-transition transition="scale-transition">
         <div v-if="$route.params.action == 'MySchedule'">
           <!-- Role parent -->
-          <div v-if="data_local.roles.includes('R_4')">
+          <div v-if="data_local.roles?.includes('R_4')">
             <v-row class="mb-3">
               <v-col cols="12">
                 <v-autocomplete
@@ -515,7 +488,7 @@
             </div>
           </div>
           <!-- Role Student -->
-          <div v-if="data_local.roles.includes('R_5')">
+          <div v-if="data_local.roles?.includes('R_5')">
             <v-row class="mb-2">
               <v-col cols="12" align="center">
                 <v-card flat width="340px">
@@ -555,7 +528,8 @@
       <v-expand-x-transition transition="scale-transition">
         <div v-if="$route.params.action == 'MyBooking'">
           <!-- Role Parent -->
-          <div v-if="data_local.roles.includes('R_4')">
+          <div v-if="data_local.roles?.includes('R_4')">
+            <!-- search -->
             <v-row class="mb-3">
               <v-col cols="12">
                 <v-autocomplete
@@ -578,9 +552,29 @@
                       {{ $t("no data available") }}
                     </div>
                   </template>
+                  <template v-slot:item="{ item }">
+                    <v-list-item-content>
+                      <v-list-item-title
+                        ><span
+                          :class="
+                            course_data.coachs[0].coach_id === item.accountId
+                              ? 'font-bold'
+                              : ''
+                          "
+                        >
+                          {{
+                            $i18n.locale == "th"
+                              ? `${item.studentFirstnameTh} ${item.studentLastnameTh}`
+                              : `${item.studentFirstnameEn} ${item.studentLastnameEn}`
+                          }}</span
+                        ></v-list-item-title
+                      >
+                    </v-list-item-content>
+                  </template>
                 </v-autocomplete>
               </v-col>
             </v-row>
+            <!-- length == 0 -->
             <v-card-text
               class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
               v-if="ReserveList().length == 0"
@@ -590,18 +584,19 @@
                 {{ $t("booking information not found") }}
               </span>
             </v-card-text>
+            <!-- details -->
             <div v-else>
-              <v-card
-                v-for="(item_booked, index_booked) in ReserveList()"
-                :key="`${index_booked}-reserve`"
-                @click="showCard(index, item_booked)"
-                class="mb-3 cursor-pointer"
-              >
-                <v-card-text>
-                  <div>
+              <v-row dense>
+                <v-card
+                  v-for="(item_booked, index_booked) in ReserveList()"
+                  :key="`${index_booked}-reserve`"
+                  @click="showCard(index, item_booked)"
+                  class="mb-3 cursor-pointer w-full"
+                >
+                  <v-card-text>
                     <v-row dense>
                       <!-- img -->
-                      <v-col cols="12" sm="2">
+                      <v-col cols="12" sm="3">
                         <v-img
                           :aspect-ratio="16 / 9"
                           :src="
@@ -609,6 +604,7 @@
                               ? item_booked.courseImg
                               : require(`@/assets/student_course/download.png`)
                           "
+                          style="max-width: 300px"
                         >
                           <template v-slot:placeholder>
                             <v-row
@@ -625,7 +621,7 @@
                         </v-img>
                       </v-col>
                       <!-- detail -->
-                      <v-col cols="12" sm="6">
+                      <v-col cols="12" sm="5">
                         <v-col class="text-lg font-bold">
                           {{
                             $i18n.locale == "th"
@@ -639,14 +635,14 @@
                           >
                           {{
                             $i18n.locale == "th"
-                              ? item_booked.coachData.data.data.firstNameTh
-                              : item_booked.coachData.data.data.firstNameEng
+                              ? item_booked.coachData?.data.data?.firstNameTh
+                              : item_booked.coachData?.data.data?.firstNameEng
                           }}
 
                           {{
                             $i18n.locale == "th"
-                              ? item_booked.coachData.data.data.lastNameTh
-                              : item_booked.coachData.data.data.lastNameEng
+                              ? item_booked.coachData?.data.data?.lastNameTh
+                              : item_booked.coachData?.data.data?.lastNameEng
                           }}
                         </v-col>
                         <v-col class="text-slate-400">
@@ -655,13 +651,13 @@
                           >
                           {{
                             $i18n.locale == "th"
-                              ? item_booked.StudentData.data.data.firstNameTh
-                              : item_booked.StudentData.data.data.firstNameEng
+                              ? item_booked.StudentData?.data.data?.firstNameTh
+                              : item_booked.StudentData?.data.data?.firstNameEng
                           }}
                           {{
                             $i18n.locale == "th"
-                              ? item_booked.StudentData.data.data.lastNameTh
-                              : item_booked.StudentData.data.data.lastNameEng
+                              ? item_booked.StudentData?.data.data?.lastNameTh
+                              : item_booked.StudentData?.data.data?.lastNameEng
                           }}
                         </v-col>
 
@@ -671,13 +667,16 @@
                           >
                           {{
                             $i18n.locale == "th"
-                              ? item_booked.createdByData.data.data.firstNameTh
-                              : item_booked.createdByData.data.data.firstNameEng
+                              ? item_booked.createdByData?.data.data
+                                  ?.firstNameTh
+                              : item_booked.createdByData?.data.data
+                                  ?.firstNameEng
                           }}
                           {{
                             $i18n.locale == "th"
-                              ? item_booked.createdByData.data.data.lastNameTh
-                              : item_booked.createdByData.data.data.lastNameEng
+                              ? item_booked.createdByData?.data.data?.lastNameTh
+                              : item_booked.createdByData?.data.data
+                                  ?.lastNameEng
                           }}
                         </v-col>
 
@@ -734,73 +733,84 @@
                         </v-row>
                       </v-col>
                     </v-row>
-                  </div>
-                  <div
-                    v-if="activeCard === index && !course_is_loading"
-                    class="mt-3"
-                  >
-                    <v-card>
-                      <v-row dense class="pa-3">
-                        <v-col
-                          cols="12"
-                          md="12"
-                          sm="12"
-                          class="text-lg font-bold"
-                        >
-                          {{
-                            $i18n.locale == "th"
-                              ? course_data.course_name_th
-                              : course_data.course_name_en
-                          }}
-                        </v-col>
-                        <v-col cols="12" md="12" sm="12">
-                          <span
-                            class="mdi mdi-calendar-today"
-                            style="color: #ff6b81"
-                          ></span>
-                          {{ item_booked.day_name }}
-                        </v-col>
+                    <!-- data details -->
+                    <div
+                      v-if="activeCard === index && !course_is_loading"
+                      class="mt-3"
+                    >
+                      <v-card>
+                        <v-row dense class="pa-3">
+                          <v-col
+                            cols="12"
+                            md="12"
+                            sm="12"
+                            class="text-lg font-bold"
+                          >
+                            {{
+                              $i18n.locale == "th"
+                                ? course_data.course_name_th
+                                : course_data.course_name_en
+                            }}
+                          </v-col>
+                          <v-col cols="12" md="12" sm="12">
+                            <span
+                              class="mdi mdi-calendar-today"
+                              style="color: #ff6b81"
+                            ></span>
+                            {{ item_booked.day_name }}
+                          </v-col>
 
-                        <v-col cols="12" md="12" sm="12">
-                          <span
-                            class="mdi mdi-clock-outline"
-                            style="color: #ff6b81"
-                          ></span>
-                          {{ course_data.course_hours }} {{ $t("hrs./time") }}
-                        </v-col>
+                          <v-col cols="12" md="12" sm="12">
+                            <span
+                              class="mdi mdi-clock-outline"
+                              style="color: #ff6b81"
+                            ></span>
+                            {{ course_data.course_hours }}
+                            {{ $t("hrs./time") }}
+                          </v-col>
 
-                        <v-col cols="12" md="12" sm="12" class="text-lg">
-                          {{ course_data.detail }}
-                        </v-col>
-                        <v-col cols="12" md="12" sm="12">
-                          <div class="mt-8">
-                            <label-custom
-                              text="Music performance"
-                            ></label-custom>
-                          </div>
-                          <v-divider class=""></v-divider>
-                          <span class="pa-2">
-                            {{ course_data.music_performance }}
-                          </span>
-                        </v-col>
-                        <v-col cols="12" md="12" sm="12">
-                          <div class="mt-8">
-                            <label-custom text="Certification"></label-custom>
-                          </div>
-                          <v-divider class=""></v-divider>
-                          <span class="pa-2">
-                            {{ course_data.catification }}
-                          </span>
-                        </v-col>
-                      </v-row>
-                    </v-card>
-                  </div>
-                </v-card-text>
-              </v-card>
+                          <v-col cols="12" md="12" sm="12" class="text-lg">
+                            {{ course_data.detail }}
+                          </v-col>
+                          <v-col cols="12" md="12" sm="12">
+                            <div class="mt-8">
+                              <label-custom
+                                text="Music performance"
+                              ></label-custom>
+                            </div>
+                            <v-divider class=""></v-divider>
+                            <span class="pa-2">
+                              {{ course_data.music_performance }}
+                            </span>
+                          </v-col>
+                          <v-col cols="12" md="12" sm="12">
+                            <div class="mt-8">
+                              <label-custom text="Certification"></label-custom>
+                            </div>
+                            <v-divider class=""></v-divider>
+                            <span class="pa-2">
+                              {{ course_data.catification }}
+                            </span>
+                          </v-col>
+                        </v-row>
+                      </v-card>
+                    </div>
+                  </v-card-text>
+                </v-card>
+              </v-row>
+              <v-row v-if="isDataReceived">
+                <v-col cols="12" align="center">
+                  <v-progress-circular
+                    indeterminate
+                    color="#ff6b81"
+                    size="50"
+                  ></v-progress-circular>
+                </v-col>
+              </v-row>
             </div>
           </div>
           <!-- Role student -->
-          <div v-if="!data_local.roles.includes('R_4')">
+          <div v-if="!data_local.roles?.includes('R_4')">
             <v-card-text
               class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
               v-if="ReserveList().length == 0"
@@ -810,28 +820,43 @@
                 {{ $t("booking information not found") }}
               </span>
             </v-card-text>
-            <div v-else>
-              <v-card
-                v-for="(item_booked, index_booked) in ReserveList()"
-                :key="`${index_booked}-reserve`"
-                @click="showCard(index_booked, item_booked)"
-                class="my-5 cursor-pointer"
-              >
-                <v-card-text>
-                  <div>
+            <div v-if="profile_booked.length >= 1">
+              <v-row dense>
+                <v-card
+                  v-for="(item_booked, index_booked) in ReserveList()"
+                  :key="`${index_booked}-reserve`"
+                  @click="showCard(index_booked, item_booked)"
+                  class="my-3 cursor-pointer w-full"
+                >
+                  <v-card-text>
                     <v-row dense>
                       <!-- img -->
-                      <v-col cols="12" sm="2">
-                        <img
+                      <v-col cols="12" sm="3">
+                        <v-img
+                          :aspect-ratio="16 / 9"
                           :src="
                             item_booked.courseImg
                               ? item_booked.courseImg
-                              : require(`@/assets/course/default_course_img.svg`)
+                              : require(`@/assets/student_course/download.png`)
                           "
-                        />
+                          style="max-width: 300px"
+                        >
+                          <template v-slot:placeholder>
+                            <v-row
+                              class="fill-height ma-0"
+                              align="center"
+                              justify="center"
+                            >
+                              <v-progress-circular
+                                indeterminate
+                                color="#ff6b81"
+                              ></v-progress-circular>
+                            </v-row>
+                          </template>
+                        </v-img>
                       </v-col>
                       <!-- detail -->
-                      <v-col cols="12" sm="6">
+                      <v-col cols="12" sm="5">
                         <v-col class="text-lg font-bold">
                           {{
                             $i18n.locale == "th"
@@ -845,14 +870,14 @@
                           >
                           {{
                             $i18n.locale == "th"
-                              ? item_booked.coachData.data.data.firstNameTh
-                              : item_booked.coachData.data.data.firstNameEng
+                              ? item_booked.coachData?.data.data?.firstNameTh
+                              : item_booked.coachData?.data.data?.firstNameEng
                           }}
 
                           {{
                             $i18n.locale == "th"
-                              ? item_booked.coachData.data.data.lastNameTh
-                              : item_booked.coachData.data.data.lastNameEng
+                              ? item_booked.coachData?.data.data?.lastNameTh
+                              : item_booked.coachData?.data.data?.lastNameEng
                           }}
                         </v-col>
                         <v-col class="text-slate-400">
@@ -861,13 +886,13 @@
                           >
                           {{
                             $i18n.locale == "th"
-                              ? item_booked.StudentData.data.data.firstNameTh
-                              : item_booked.StudentData.data.data.firstNameEng
+                              ? item_booked.StudentData?.data.data?.firstNameTh
+                              : item_booked.StudentData?.data.data?.firstNameEng
                           }}
                           {{
                             $i18n.locale == "th"
-                              ? item_booked.StudentData.data.data.lastNameTh
-                              : item_booked.StudentData.data.data.lastNameEng
+                              ? item_booked.StudentData?.data.data?.lastNameTh
+                              : item_booked.StudentData?.data.data?.lastNameEng
                           }}
                         </v-col>
 
@@ -878,24 +903,28 @@
 
                           {{
                             $i18n.locale == "th"
-                              ? item_booked.createdByData.data.data.firstNameTh
-                              : item_booked.createdByData.data.data.firstNameEng
+                              ? item_booked.createdByData?.data.data
+                                  ?.firstNameTh
+                              : item_booked.createdByData?.data.data
+                                  ?.firstNameEng
                           }}
                           {{
                             $i18n.locale == "th"
-                              ? item_booked.createdByData.data.data.lastNameTh
-                              : item_booked.createdByData.data.data.lastNameEng
+                              ? item_booked.createdByData?.data.data?.lastNameTh
+                              : item_booked.createdByData?.data.data
+                                  ?.lastNameEng
                           }}
                         </v-col>
 
                         <v-col>
                           <v-chip color="#F9B320" dark>
-                            {{ item_booked.day_name }} {{ item_booked.start }} -
-                            {{ item_booked.end }} {{ $t("o'clock") }}
+                            {{ item_booked.day_name }}
+                            {{ item_booked.start }} - {{ item_booked.end }}
+                            {{ $t("o'clock") }}
                           </v-chip>
                         </v-col>
                       </v-col>
-                      <!-- circle -->
+                      <!-- ship -->
                       <v-col
                         cols="12"
                         sm="4"
@@ -932,74 +961,83 @@
                         </v-row>
                       </v-col>
                     </v-row>
-                  </div>
-                  <!-- card Detail -->
-                  <div
-                    v-if="activeCard === index_booked && !course_is_loading"
-                    class="mt-3"
-                  >
-                    <v-card outlined>
-                      <v-row dense class="pa-3">
-                        <v-col
-                          cols="12"
-                          md="12"
-                          sm="12"
-                          class="text-lg font-bold"
-                        >
-                          {{
-                            $i18n.locale == "th"
-                              ? course_data.course_name_th
-                              : course_data.course_name_en
-                          }}
-                          <!-- {{
+                    <!-- card Detail -->
+                    <div
+                      v-if="activeCard === index_booked && !course_is_loading"
+                      class="mt-3"
+                    >
+                      <v-card outlined>
+                        <v-row dense class="pa-3">
+                          <v-col
+                            cols="12"
+                            md="12"
+                            sm="12"
+                            class="text-lg font-bold"
+                          >
+                            {{
+                              $i18n.locale == "th"
+                                ? course_data.course_name_th
+                                : course_data.course_name_en
+                            }}
+                            <!-- {{
                             `${course_data.course_name_th} (${course_data.course_name_en})`
                           }} -->
-                        </v-col>
-                        <v-col cols="12" md="12" sm="12">
-                          <span
-                            class="mdi mdi-calendar-today"
-                            style="color: #ff6b81"
-                          ></span>
-                          {{ item_booked.day_name }}
-                        </v-col>
+                          </v-col>
+                          <v-col cols="12" md="12" sm="12">
+                            <span
+                              class="mdi mdi-calendar-today"
+                              style="color: #ff6b81"
+                            ></span>
+                            {{ item_booked.day_name }}
+                          </v-col>
 
-                        <v-col cols="12" md="12" sm="12">
-                          <span
-                            class="mdi mdi-clock-outline"
-                            style="color: #ff6b81"
-                          ></span>
-                          {{ course_data.course_hours }} {{ $t("hrs./time") }}
-                        </v-col>
+                          <v-col cols="12" md="12" sm="12">
+                            <span
+                              class="mdi mdi-clock-outline"
+                              style="color: #ff6b81"
+                            ></span>
+                            {{ course_data.course_hours }} {{ $t("hrs./time") }}
+                          </v-col>
 
-                        <v-col cols="12" md="12" sm="12" class="text-lg">
-                          <div v-html="course_data.detail"></div>
-                        </v-col>
-                        <v-col cols="12" md="12" sm="12">
-                          <div class="mt-8">
-                            <label-custom
-                              text="Music performance"
-                            ></label-custom>
-                          </div>
-                          <v-divider class=""></v-divider>
-                          <span class="pa-2">
-                            <div v-html="course_data.music_performance"></div>
-                          </span>
-                        </v-col>
+                          <v-col cols="12" md="12" sm="12" class="text-lg">
+                            <div v-html="course_data.detail"></div>
+                          </v-col>
+                          <v-col cols="12" md="12" sm="12">
+                            <div class="mt-8">
+                              <label-custom
+                                text="Music performance"
+                              ></label-custom>
+                            </div>
+                            <v-divider class=""></v-divider>
+                            <span class="pa-2">
+                              <div v-html="course_data.music_performance"></div>
+                            </span>
+                          </v-col>
 
-                        <v-col cols="12" md="12" sm="12">
-                          <div class="mt-8">
-                            <label-custom text="Certification"></label-custom>
-                          </div>
-                          <v-divider class=""></v-divider>
-                          <span class="pa-2">
-                            <div v-html="course_data.catification"></div>
-                          </span>
-                        </v-col>
-                      </v-row>
-                    </v-card>
-                  </div>
-                </v-card-text>
-              </v-card>
+                          <v-col cols="12" md="12" sm="12">
+                            <div class="mt-8">
+                              <label-custom text="Certification"></label-custom>
+                            </div>
+                            <v-divider class=""></v-divider>
+                            <span class="pa-2">
+                              <div v-html="course_data.catification"></div>
+                            </span>
+                          </v-col>
+                        </v-row>
+                      </v-card>
+                    </div>
+                  </v-card-text>
+                </v-card>
+              </v-row>
+              <v-row v-if="isDataReceived">
+                <v-col cols="12" align="center">
+                  <v-progress-circular
+                    indeterminate
+                    color="#ff6b81"
+                    size="50"
+                  ></v-progress-circular>
+                </v-col>
+              </v-row>
             </div>
           </div>
         </div>
@@ -1050,7 +1088,13 @@ export default {
     user_detail: {},
     clearable: false,
     userRelationsAccountId: "",
-    user_details: localStorage.getItem("userDetail"),
+    scrollTop: 0,
+    countDatePerPage: 0,
+    isDataReceived: false,
+    waitingProcess: false,
+    sameHistoryLength: false,
+    loading_overlay: true,
+    relations_account: "",
   }),
   beforeCreate() {
     localStorage.removeItem("userRelationsAccountId");
@@ -1060,27 +1104,94 @@ export default {
       this.loginShareToken(this.$route);
     }
   },
-
-  beforeMount() {
+  beforeDestroy() {
+    localStorage.removeItem("userRelationsAccountId");
+  },
+  destroyed() {
+    window.removeEventListener("scroll", this.handleScroll);
+  },
+  async beforeMount() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
   },
-
-  mounted() {
+  async mounted() {
     this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
+    window.addEventListener("scroll", this.handleScroll);
 
-    if (
-      this.user_detail.roles.includes("R_5") ||
-      this.user_detail.roles.includes("R_4")
-    ) {
-      this.GetStudentData(this.user_detail.account_id);
+    if (this.user_detail.roles?.includes("R_5")) {
+      await this.GetStudentData(this.user_detail.account_id);
+      await this.GetProfileBooked({
+        account_id: this.user_detail?.account_id,
+        limit: 2,
+        page: 1,
+      });
+      this.loading_overlay = false;
+    }else if (this.user_detail.roles?.includes("R_4")) {
+      await this.GetStudentData(this.user_detail.account_id);
+      await this.GetProfileBooked({
+        account_id: this.user_detail?.account_id,
+        limit: 2,
+        page: 1,
+      });
+      this.loading_overlay = false;
+    }else{
+      this.$router.push({
+        name: 'StudentsSchedule',
+        params: { action: 'MyBooking' },
+      })
+      this.loading_overlay = false;
     }
   },
-
   beforeUpdate() {
     this.$store.dispatch(
       "NavberUserModules/changeTitleNavber",
       "class schedule information"
     );
+  },
+
+  computed: {
+    ...mapGetters({
+      student_data: "MyCourseModules/getStudentData",
+      itemTime: "MyCourseModules/getcourseSchedule",
+      profile_booked: "MyCourseModules/getProfileBooked",
+      student_reserve: "MyCourseModules/getStudentReserve",
+      course_data: "CourseModules/getCourseData",
+      course_is_loading: "CourseModules/getCourseIsLoading",
+      profile_user: "ProfileModules/getProfileUser",
+      students: "ProfileModules/getStudents",
+      student_is_loading: "MyCourseModules/getStudentsLoading",
+      student_booking_is_loading: "MyCourseModules/getStudentsBookingLoading",
+      my_course: "MyCourseModules/getMyCourse",
+      reserve_option: "MyCourseModules/getReserveOption",
+    }),
+    setFunctions() {
+      if (this.user_detail.roles.includes("R_5")) {
+        this.GetAll(this.user_detail.account_id);
+      } else if (this.user_detail.roles.includes("R_4")) {
+        this.GetAll(this.user_detail.account_id);
+      }
+
+      return "";
+    },
+    MobileSize() {
+      const { xs } = this.$vuetify.breakpoint;
+      return !!xs;
+    },
+    IpadSize() {
+      const { sm } = this.$vuetify.breakpoint;
+      return !!sm;
+    },
+
+    cal() {
+      return this.ready ? this.$refs.calendar : null;
+    },
+
+    time_frame_list() {
+      return [
+        { label: this.$t("daily"), value: "day" },
+        { label: this.$t("weekly"), value: "week" },
+        { label: this.$t("monthly"), value: "month" },
+      ];
+    },
   },
   methods: {
     ...mapActions({
@@ -1091,21 +1202,6 @@ export default {
       loginShareToken: "loginModules/loginShareToken",
       GetCourse: "CourseModules/GetCourse",
     }),
-    prev() {
-      this.$refs.calendar.prev();
-    },
-    next() {
-      this.$refs.calendar.next();
-    },
-
-    showCard(index, course) {
-      this.GetCourse(course.courseId);
-      if (this.activeCard !== index) {
-        this.activeCard = index;
-      } else {
-        this.activeCard = null;
-      }
-    },
 
     async searchStudentCourse(studentId) {
       if (studentId !== null) {
@@ -1123,8 +1219,81 @@ export default {
     },
 
     async searchStudentBooked(studentId) {
-      await this.GetProfileBooked(studentId);
+      this.relations_account = studentId;
+      this.loading_overlay = true;
+      await this.GetProfileBooked({
+        account_id: studentId,
+        limit: this.reserve_option.limit,
+        page: 1,
+      });
+      this.loading_overlay = false;
     },
+
+    handleScroll() {
+      this.scrollTop = window.scrollY; // ตัวเลขเมื่อ scroll ตัวเลขเริ่มนับจากบนสุด = 0
+      let device = document.body.offsetHeight - 56; // ค่าของหน้าจอ device
+      let ref = this.$refs.profile_booked?.clientHeight; // ค่ามาจาก ref
+      let countA = this.scrollTop + device;
+
+      if (countA >= ref && !this.sameHistoryLength) {
+        this.loadMoreData();
+      }
+
+      if (countA < ref) {
+        this.sameHistoryLength = false;
+      }
+    },
+    async loadMoreData() {
+      this.countDatePerPage = this.profile_booked?.length;
+
+      if (!this.isDataReceived) {
+        this.isDataReceived = true;
+
+        if (!this.waitingProcess) {
+          this.waitingProcess = true;
+
+          if (this.user_detail.roles?.includes("R_4")) {
+            await this.GetProfileBooked({
+              account_id: this.relations_account,
+              limit: this.reserve_option.limit,
+              page: this.reserve_option.page + 1,
+            });
+            this.isDataReceived = false;
+            this.waitingProcess = false;
+          } else {
+            await this.GetProfileBooked({
+              account_id: this.user_detail?.account_id,
+              limit: this.reserve_option.limit,
+              page: this.reserve_option.page + 1,
+            });
+            this.isDataReceived = false;
+            this.waitingProcess = false;
+          }
+          if (this.profile_booked?.length === this.countDatePerPage) {
+            this.sameHistoryLength = true;
+          } else {
+            this.sameHistoryLength = false;
+          }
+        }
+      }
+    },
+
+    prev() {
+      this.$refs.calendar.prev();
+    },
+    next() {
+      this.$refs.calendar.next();
+    },
+
+    showCard(index, course) {
+      this.GetCourse(course.courseId);
+      if (this.activeCard !== index) {
+        this.activeCard = index;
+      } else {
+        this.activeCard = null;
+      }
+    },
+
     ReserveList() {
       let reserveList = [];
       if (this.profile_booked) {
@@ -1169,54 +1338,6 @@ export default {
 
     showData() {
       this.show_detail = true;
-    },
-  },
-  beforeDestroy() {
-    localStorage.removeItem("userRelationsAccountId");
-  },
-  computed: {
-    ...mapGetters({
-      student_data: "MyCourseModules/getStudentData",
-      itemTime: "MyCourseModules/getcourseSchedule",
-      profile_booked: "MyCourseModules/getProfileBooked",
-      student_reserve: "MyCourseModules/getStudentReserve",
-      course_data: "CourseModules/getCourseData",
-      course_is_loading: "CourseModules/getCourseIsLoading",
-      profile_user: "ProfileModules/getProfileUser",
-      students: "ProfileModules/getStudents",
-      student_is_loading: "MyCourseModules/getStudentsLoading",
-      student_booking_is_loading: "MyCourseModules/getStudentsBookingLoading",
-      my_course: "MyCourseModules/getMyCourse",
-    }),
-    setFunctions() {
-      if (this.user_detail.roles.includes("R_5")) {
-        this.GetAll(this.user_detail.account_id);
-      } else if (this.user_detail.roles.includes("R_4")) {
-        this.GetAll(this.user_detail.account_id);
-      }
-
-      this.GetProfileBooked(this.user_detail.account_id);
-      return "";
-    },
-    MobileSize() {
-      const { xs } = this.$vuetify.breakpoint;
-      return !!xs;
-    },
-    IpadSize() {
-      const { sm } = this.$vuetify.breakpoint;
-      return !!sm;
-    },
-
-    cal() {
-      return this.ready ? this.$refs.calendar : null;
-    },
-
-    time_frame_list() {
-      return [
-        { label: this.$t("daily"), value: "day" },
-        { label: this.$t("weekly"), value: "week" },
-        { label: this.$t("monthly"), value: "month" },
-      ];
     },
   },
 };

@@ -5,7 +5,7 @@
       <v-row dense>
         <v-col>
           <label-custom
-            :text="$t(`upload the cover image of wls`)"
+            :text="$t(`upload the cover`)"
           ></label-custom>
 
           <v-card class="mx-3" flat>
@@ -62,7 +62,7 @@
                     cols="12"
                     class="flex align-center justify-center text-h5"
                   >
-                    {{ $t(`upload the cover image of wls`) }}
+                    {{ $t(`upload the cover`) }}
                   </v-col>
                   <v-col
                     cols="12"

@@ -140,10 +140,10 @@
           </v-menu>
 
           <v-badge
-            v-if="amount_cart_list.length > 0"
+            v-if="amount_cart_list > 0"
             class="mr-5"
             color="red"
-            :content="amount_cart_list.length"
+            :content="amount_cart_list"
           >
             <v-icon dark @click="$router.push({ name: 'CartList' })"
               >mdi-cart</v-icon
@@ -458,10 +458,11 @@ export default {
       : "th";
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     if (this.user_detail?.account_id) {
-      this.GetProfileDetail(this.user_detail.account_id);
+      this.GetProfileDetail(this.user_detail?.account_id);
     }
     this.active_menu = this.$route.name;
-    this.GetAmountCartList({ account_id: this.user_detail.account_id });
+    this.GetAmountCartList();
+    // this.GetAmountCartList({ account_id: this.user_detail?.account_id });
 
     // if (this.user_detail?.account_id) {
     //   this.GetCartList({account_id : this.user_detail.account_id,limit: 12 , page :1});
@@ -489,17 +490,18 @@ export default {
   },
   mounted() {
     if (this.user_detail?.account_id) {
-      this.GetProfileDetail(this.user_detail.account_id);
+      this.GetProfileDetail(this.user_detail?.account_id);
     }
     if (this.user_detail?.account_id) {
       // this.GetCartList({account_id :this.user_detail.account_id, limit : 12, page:1 });
-      this.GetNotificationsAll(this.user_detail.account_id);
+      this.GetNotificationsAll(this.user_detail?.account_id);
     }
 
     setTimeout(() => {
       this.alertVisible = false;
     }, 3000); // Set the timeout to 3 seconds
-    this.GetAmountCartList({ account_id: this.user_detail.account_id });
+    this.GetAmountCartList();
+    // this.GetAmountCartList({ account_id: this.user_detail?.account_id });
   },
   beforeUpdate() {
     this.show_profile_detail.firstNameTh = this.profile_detail.firstNameTh;
@@ -572,7 +574,6 @@ export default {
       });
       if (params.path) {
         if (this.$route.path !== params.path) {
-          // window.location.href = `http://localhost:8080${params.path}`
           window.location = `${process.env.VUE_APP_URL}${params.path}`;
         }
       }

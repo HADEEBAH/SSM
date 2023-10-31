@@ -219,7 +219,7 @@
               >mdi-card-account-details-outline</v-icon
             ></v-col
           >
-          <v-col class="text-lg font-bold">{{ $t("list of parents") }}</v-col>
+          <v-col class="text-lg font-bold">{{ $t("parents list") }}</v-col>
         </v-row>
         <v-divider class="my-2"></v-divider>
         <v-row>
@@ -1329,7 +1329,7 @@ export default {
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: this.$t("agree"),
-          cancelButtonText: this.$t("cancel"),
+          cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             if (this.course_order.course_type_id == "CT_1") {
@@ -1455,7 +1455,7 @@ export default {
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: this.$t("agree"),
-          cancelButtonText: this.$t("cancel"),
+          cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             if (this.course_order.course_type_id == "CT_2") {

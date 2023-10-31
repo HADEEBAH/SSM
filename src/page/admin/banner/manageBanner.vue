@@ -123,6 +123,7 @@
     <v-row dense class="float-right">
       <v-col cols="12">
         <v-btn
+          dark
           :loading="loading"
           :disabled="files_preview.length > 0 && disabled ? false : true"
           @click="insertBannerList()"
@@ -187,7 +188,7 @@ export default {
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: this.$t("agree"),
-        cancelButtonText: this.$t("cancel"),
+        cancelButtonText: this.$t("no"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.loading = true;
@@ -235,7 +236,7 @@ export default {
         title: this.$t("do you want to delete the banner?"),
         showCancelButton: true,
         confirmButtonText: this.$t("agree"),
-        cancelButtonText: this.$t("cancel"),
+        cancelButtonText: this.$t("no"),
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.GetDeleteBannerList(id);
