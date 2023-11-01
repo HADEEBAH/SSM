@@ -1181,9 +1181,13 @@ export default {
     },
 
     async addRelations() {
+      let text = this.$t("do you want to add a parent?")
+      if(this.profile_detail?.userRoles?.roleId === "R_4"){
+        text = this.$t("do you want to add a student?")
+      }
       Swal.fire({
         icon: "question",
-        title: this.$t("do you want to add a parent?"),
+        title: text,
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: this.$t("agree"),
