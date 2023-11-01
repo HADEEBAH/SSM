@@ -462,7 +462,7 @@
     "please enter a password that is at least 8 characters long" : "กรุณาระบุรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
     "please enter a password of no more than 20 characters" : "กรุณาระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
     "please enter a username at least 6 characters long" : "กรุณาระบุชื่อผู้ใช้ความยาวไม่น้อยกว่า 6 ตัวอักษร",
-    "please enter a username no longer than 20 characters" : "กรุณาระบุชื่อผู้ใชความยาวไม่เกิน 20 ตัวอักษร",
+    "please enter a username no longer than 30 characters" : "กรุณาระบุชื่อผู้ใชความยาวไม่เกิน 30 ตัวอักษร",
     "please enter OTP correctly" : "กรุณาระบุ OTP ให้ถูกต้อง",
     "please enter the student name" : "กรุณากรอกชื่อผู้เรียน",
     "please enter the service value" : "กรุณากรอกมูลค่าบริการ",
