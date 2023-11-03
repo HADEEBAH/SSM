@@ -1,8 +1,11 @@
 <template>
   <v-container>
-    <header-page :title="$t('select teaching information')"></header-page>
+    <header-page
+      :title="$t('select teaching information')"
+      ref="headeres"
+    ></header-page>
 
-    <v-row dense class="mb-3">
+    <v-row dense class="mb-3" ref="selectTab">
       <v-col
         cols="12"
         sm="3"
@@ -2033,7 +2036,6 @@ export default {
     },
 
     async loadItems(status) {
-      console.log("status :>> ", status);
       this.tab_selected =
         !status || status === ""
           ? this.tab_selected === ""
@@ -2052,7 +2054,6 @@ export default {
     },
     async moreData(status) {
       let { page, itemsPerPage } = this.options;
-      console.log("this.options :>> ", this.options);
       this.disable_pagination_btn = true;
       this.coach_leaves.leavesList = [];
       await this.GetLeavesByAccountId({
@@ -2074,7 +2075,9 @@ export default {
       let ref = this.$refs.my_courses?.clientHeight; // ค่ามาจาก ref
       let information = this.$refs.information?.clientHeight; // ค่ามาจาก ref information
       let choose = this.$refs.choose?.clientHeight; // ค่ามาจาก ref choose
-      let device = document.body.offsetHeight - (56 + information + choose); // ค่าของหน้าจอ device
+      let selectTab = this.$refs.selectTab?.clientHeight; // ค่ามาจาก ref selectTab
+      let device =
+        document.body.offsetHeight - (56 + information + choose + selectTab); // ค่าของหน้าจอ device
       let countA = this.scrollTop + device;
       if (countA >= ref && !this.sameCourseLength) {
         this.loadMoreData();

@@ -819,7 +819,6 @@ export default {
           }
         });
       }
-      console.log("my_course_data :>> ", my_course_data);
       return my_course_data;
     },
     async GenDates() {
