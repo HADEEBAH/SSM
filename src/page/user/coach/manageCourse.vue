@@ -246,14 +246,16 @@
             :key="`${course_index}-course`"
           >
             <!-- <pre>{{ course }}</pre> -->
-            <v-card-text class="bg-[#FBF3F5]">
+            <v-card-text class="bg-[#FBF3F5] my-2">
               <v-row dense>
                 <v-col cols="12" sm="4">
                   <v-img
                     class="rounded-lg"
                     style="max-width: 500px"
                     :src="
-                      course.course_img || course.course_img !== ''
+                      course.course_img &&
+                      course.course_img !== '' &&
+                      course.course_img !== null
                         ? course.course_img
                         : require(`@/assets/course/default_course_img.svg`)
                     "
@@ -1783,6 +1785,13 @@ export default {
 
         await this.GetCourseCoachList();
         this.loading_tab_two = false;
+      } else if (val === "request leave") {
+        await this.GetLeavesByAccountId({
+          limit: 10,
+          page: 1,
+          status: "",
+        });
+        this.coach_leaves_is_loadings = false;
       }
     },
     async handleInput(item) {
@@ -1824,21 +1833,6 @@ export default {
       this.loading = true;
       await this.loadItemsTable(this.filter_course_student);
       this.loading = false;
-    },
-    SelectedStatus(status) {
-      this.select_status = status;
-      this.coach_leaves_arr = [];
-
-      if (status !== "all") {
-        this.coach_leave_arr = this.coach_leaves.filter(
-          (items) => status === items.status
-        );
-        this.coach_leave_arr.map((items, i) => {
-          items.index = i + 1;
-        });
-      } else {
-        this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
-      }
     },
     GenDateStr(date) {
       const options = {
@@ -2037,7 +2031,9 @@ export default {
       }
       await this.loadItems(this.tab_selected);
     },
+
     async loadItems(status) {
+      console.log("status :>> ", status);
       this.tab_selected =
         !status || status === ""
           ? this.tab_selected === ""
@@ -2056,10 +2052,11 @@ export default {
     },
     async moreData(status) {
       let { page, itemsPerPage } = this.options;
+      console.log("this.options :>> ", this.options);
       this.disable_pagination_btn = true;
       this.coach_leaves.leavesList = [];
       await this.GetLeavesByAccountId({
-        limit: itemsPerPage,
+        limit: this.tabs_change ? 10 : itemsPerPage,
         page: this.tabs_change ? 1 : page,
         status: status,
       });
@@ -2246,12 +2243,6 @@ export default {
         },
       ];
     },
-    // SetFunctionsComputed() {
-    //   this.GetMyCourses({ coach_id: this.user_detail.account_id });
-    //   this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
-    //   this.GetCoachs();
-    //   return "";
-    // },
     genToday() {
       return moment(new Date()).format("YYYY-MM-DD");
     },
